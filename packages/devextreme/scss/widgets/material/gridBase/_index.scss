@@ -269,11 +269,6 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           width: $material-grid-base-command-edit-column-width;
           min-width: $material-grid-base-command-edit-column-width;
 
-          .dx-link:not(.dx-link-icon) {
-            margin: 0 $material-command-edit-text-margin;
-            min-width: 20px;
-          }
-
           &.dx-command-edit-with-icons {
             width: $material-grid-base-command-edit-column-with-icons-width;
             min-width: $material-grid-base-command-edit-column-with-icons-width;

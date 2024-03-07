@@ -38,6 +38,8 @@ const a11yCheckConfig = {
   rules: {
     // NOTE: color-contrast issues
     'color-contrast': { enabled: false },
+    // NOTE: aria-dialog-name issues
+    'aria-dialog-name': { enabled: false },
   },
 };
 

@@ -1,6 +1,4 @@
 /* eslint-disable max-classes-per-file */
-// TODO Move DataGrid's summary methods to the DataGrid
-// TODO Move virtual scrolling related methods to the virtual_scrolling
 import { move } from '@js/animation/translator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
@@ -23,7 +21,6 @@ import type {
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
-import type { ColumnsView } from '../views/m_columns_view';
 import { normalizeWidth } from '../views/m_columns_view';
 import type { ResizingController } from '../views/m_grid_view';
 import type { RowsView } from '../views/m_rows_view';
@@ -75,26 +72,18 @@ const normalizeColumnWidths = function (fixedColumns, widths: number[], fixedWid
 };
 
 // View
-const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class BaseFixedColumnsExtender extends Base {
-  protected _isFixedTableRendering!: boolean;
-
-  protected _isFixedColumns!: boolean;
-
-  protected _fixedTableElement: any;
-
-  protected _fixedScrollTimeout: any;
-
-  public init(): void {
+const baseFixedColumns = (Base: ModuleType<any>) => class BaseFixedColumnsExtender extends Base {
+  init() {
     super.init();
     this._isFixedTableRendering = false;
     this._isFixedColumns = false;
   }
 
-  protected _createCol(column) {
+  _createCol(column) {
     return super._createCol(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== COMMAND_TRANSPARENT)));
   }
 
-  private _correctColumnIndicesForFixedColumns(fixedColumns, change) {
+  _correctColumnIndicesForFixedColumns(fixedColumns, change) {
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const transparentColspan = fixedColumns[transparentColumnIndex].colspan;
     const columnIndices = change && change.columnIndices;
@@ -115,7 +104,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  private _partialUpdateFixedTable(fixedColumns) {
+  _partialUpdateFixedTable(fixedColumns) {
     const fixedTableElement = this._fixedTableElement;
     const $rows = this._getRowElementsCore(fixedTableElement);
     const $colgroup = fixedTableElement.children('colgroup');
@@ -127,7 +116,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  private _partialUpdateFixedRow($row, fixedColumns) {
+  _partialUpdateFixedRow($row, fixedColumns) {
     const cellElements = $row.get(0).childNodes;
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const transparentColumn = fixedColumns[transparentColumnIndex];
@@ -143,7 +132,6 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
 
     if ($row.hasClass(GROUP_ROW_CLASS)) {
-      // @ts-expect-error RowsView's method
       groupCellOptions = this._getGroupCellOptions({
         row: $row.data('options'),
         columns: this._columnsController.getVisibleColumns(),
@@ -166,7 +154,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  protected _renderTable(options) {
+  _renderTable(options) {
     let $fixedTable;
     const fixedColumns = this.getFixedColumns();
 
@@ -206,11 +194,11 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return $table;
   }
 
-  protected _renderRow($table, options) {
+  _renderRow($table, options) {
     let fixedCorrection;
     let { cells } = options.row;
 
-    super._renderRow.apply(this, arguments as any);
+    super._renderRow.apply(this, arguments);
 
     if (this._isFixedTableRendering && cells && cells.length) {
       fixedCorrection = 0;
@@ -228,7 +216,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  protected _createCell(options) {
+  _createCell(options) {
     const that = this;
     const { column } = options;
     const columnCommand = column && column.command;
@@ -269,12 +257,12 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return $cell;
   }
 
-  protected _getContent(isFixedTableRendering) {
-    return isFixedTableRendering ? this._fixedTableElement?.parent() : super._getContent.apply(this, arguments as any);
+  _getContent(isFixedTableRendering) {
+    return isFixedTableRendering ? this._fixedTableElement?.parent() : super._getContent.apply(this, arguments);
   }
 
-  protected _wrapTableInScrollContainer($table, isFixedTableRendering) {
-    const $scrollContainer = super._wrapTableInScrollContainer.apply(this, arguments as any);
+  _wrapTableInScrollContainer($table, isFixedTableRendering) {
+    const $scrollContainer = super._wrapTableInScrollContainer.apply(this, arguments);
 
     if (this._isFixedTableRendering || isFixedTableRendering) {
       $scrollContainer.addClass(this.addWidgetPrefix(CONTENT_FIXED_CLASS));
@@ -283,7 +271,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return $scrollContainer;
   }
 
-  protected _renderCellContent($cell, options) {
+  _renderCellContent($cell, options) {
     let isEmptyCell;
     const { column } = options;
     const isFixedTableRendering = this._isFixedTableRendering;
@@ -301,15 +289,11 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
         isEmptyCell = false;
         if (options.row.summaryCells && options.row.summaryCells.length) {
           const columns = this._columnsController.getVisibleColumns();
-          // @ts-expect-error DataGrid's method
-          const alignByFixedColumnCellCount = this._getAlignByColumnCellCount
-            // @ts-expect-error DataGrid's method
-            ? this._getAlignByColumnCellCount(column.colspan, {
-              columns,
-              row: options.row,
-              isFixed: true,
-            })
-            : 0;
+          const alignByFixedColumnCellCount = this._getAlignByColumnCellCount ? this._getAlignByColumnCellCount(column.colspan, {
+            columns,
+            row: options.row,
+            isFixed: true,
+          }) : 0;
 
           if (alignByFixedColumnCellCount > 0) {
             const transparentColumnIndex = getTransparentColumnIndex(this._columnsController.getFixedColumns());
@@ -330,12 +314,12 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
 
     if (column.command !== COMMAND_TRANSPARENT) {
-      super._renderCellContent.apply(this, arguments as any);
+      super._renderCellContent.apply(this, arguments);
     }
   }
 
   _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
-    const cellElements = super._getCellElementsCore.apply(this, arguments as any);
+    const cellElements = super._getCellElementsCore.apply(this, arguments);
 
     const isGroupRow = cellElements?.parent().hasClass(GROUP_ROW_CLASS);
     const headerRowIndex = this.name === 'columnHeadersView' ? rowIndex : undefined; // TODO
@@ -370,7 +354,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getColumnWidths(fixedTableElement?: any) {
+  getColumnWidths(fixedTableElement?: any) {
     const result = super.getColumnWidths();
     const fixedColumns = this.getFixedColumns();
     const fixedWidths = this._fixedTableElement && result.length
@@ -380,14 +364,14 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return normalizeColumnWidths(fixedColumns, result, fixedWidths);
   }
 
-  public getTableElement(isFixedTableRendering?) {
+  getTableElement(isFixedTableRendering?) {
     isFixedTableRendering = this._isFixedTableRendering || isFixedTableRendering;
     const tableElement = isFixedTableRendering ? this._fixedTableElement : super.getTableElement();
 
     return tableElement;
   }
 
-  public setTableElement(tableElement, isFixedTableRendering) {
+  setTableElement(tableElement, isFixedTableRendering) {
     if (this._isFixedTableRendering || isFixedTableRendering) {
       this._fixedTableElement = tableElement.addClass(POINTER_EVENTS_NONE_CLASS);
     } else {
@@ -395,7 +379,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  public getColumns(rowIndex) {
+  getColumns(rowIndex) {
     const $tableElement = this.getTableElement();
 
     if (this._isFixedTableRendering) {
@@ -405,7 +389,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return super.getColumns(rowIndex, $tableElement);
   }
 
-  public getRowIndex($row) {
+  getRowIndex($row) {
     const $fixedTable = this._fixedTableElement;
 
     if ($fixedTable && $fixedTable.find($row).length) {
@@ -415,8 +399,8 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return super.getRowIndex($row);
   }
 
-  public getTableElements() {
-    let result = super.getTableElements.apply(this, arguments as any);
+  getTableElements() {
+    let result = super.getTableElements.apply(this, arguments);
 
     if (this._fixedTableElement) {
       result = $([result.get(0), this._fixedTableElement.get(0)] as any);
@@ -425,11 +409,11 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return result;
   }
 
-  protected getFixedColumns(rowIndex?) {
+  getFixedColumns(rowIndex?) {
     return this._columnsController.getFixedColumns(rowIndex);
   }
 
-  protected getFixedColumnsOffset() {
+  getFixedColumnsOffset() {
     let offset = { left: 0, right: 0 };
     let $transparentColumn;
 
@@ -446,19 +430,19 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return offset;
   }
 
-  protected getTransparentColumnElement() {
+  getTransparentColumnElement() {
     return this._fixedTableElement && this._fixedTableElement.find(`.${POINTER_EVENTS_NONE_CLASS}`).first();
   }
 
-  protected getFixedTableElement() {
+  getFixedTableElement() {
     return this._fixedTableElement;
   }
 
-  private isFixedColumns() {
+  isFixedColumns() {
     return this._isFixedColumns;
   }
 
-  protected _resizeCore() {
+  _resizeCore() {
     super._resizeCore();
     this.synchronizeRows();
   }
@@ -515,13 +499,13 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     });
   }
 
-  private _getClientHeight(element) {
+  _getClientHeight(element) {
     const boundingClientRectElement = element.getBoundingClientRect && getBoundingRect(element);
 
     return boundingClientRectElement && boundingClientRectElement.height ? boundingClientRectElement.height : element.clientHeight;
   }
 
-  private synchronizeRows() {
+  synchronizeRows() {
     const rowHeights: any[] = [];
     const fixedRowHeights: any[] = [];
     let rowIndex;
@@ -563,7 +547,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public setScrollerSpacing(width, hWidth?) {
+  setScrollerSpacing(width, hWidth?) {
     const rtlEnabled = this.option('rtlEnabled');
 
     super.setScrollerSpacing(width);
@@ -575,19 +559,17 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 };
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  private _getRowVisibleColumns(rowIndex) {
+  _getRowVisibleColumns(rowIndex) {
     if (this._isFixedTableRendering) {
       return this.getFixedColumns(rowIndex);
     }
-    // TODO Check that this method exists in runtime
-    // @ts-expect-error A method with this name doesn't exist in js folder at all
     return super._getRowVisibleColumns(rowIndex);
   }
 
-  public getContextMenuItems(options) {
+  getContextMenuItems(options) {
     const { column } = options;
-    const columnFixingOptions: any = this.option('columnFixing');
-    let items: any = super.getContextMenuItems(options);
+    const columnFixingOptions = this.option('columnFixing');
+    let items = super.getContextMenuItems(options);
 
     if (options.row && options.row.rowType === 'header') {
       if (columnFixingOptions.enabled === true && column && column.allowFixing) {
@@ -612,7 +594,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
           }
         };
 
-        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         items = items || [];
         items.push(
           {
@@ -635,14 +616,14 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return items;
   }
 
-  private getFixedColumnElements(rowIndex?) {
+  getFixedColumnElements(rowIndex?) {
     const that = this;
 
     if (isDefined(rowIndex)) {
       return this._fixedTableElement && this._getRowElements(this._fixedTableElement).eq(rowIndex).children();
     }
 
-    const columnElements: any = that.getColumnElements();
+    const columnElements = that.getColumnElements();
     const $transparentColumnElement = that.getTransparentColumnElement();
     if (columnElements && $transparentColumnElement && $transparentColumnElement.length) {
       const transparentColumnIndex = getTransparentColumnIndex(that.getFixedColumns());
@@ -652,7 +633,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return columnElements;
   }
 
-  public getColumnWidths() {
+  getColumnWidths() {
     const that = this;
     let fixedWidths;
     const result = super.getColumnWidths();
@@ -672,22 +653,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExtender extends baseFixedColumns(Base) {
-  public dispose() {
-    super.dispose.apply(this, arguments as any);
-    clearTimeout(this._fixedScrollTimeout);
-  }
-
-  public optionChanged(args) {
-    const that = this;
-
-    super.optionChanged(args);
-
-    if (args.name === 'hoverStateEnabled' && that._isFixedColumns) {
-      args.value ? this._attachHoverEvents() : this._detachHoverEvents();
-    }
-  }
-
-  private _detachHoverEvents() {
+  _detachHoverEvents() {
     const element = this.element();
 
     if (this._fixedTableElement && this._tableElement) {
@@ -695,7 +661,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  private _attachHoverEvents() {
+  _attachHoverEvents() {
     if (this._fixedTableElement && this._tableElement) {
       eventsEngine.on(this.element(), 'mouseover mouseout', '.dx-data-row', this.createAction((args) => {
         const { event } = args;
@@ -710,9 +676,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  private _getScrollDelay() {
-    // @ts-expect-error m_virtual_scrolling method
-    const hasResizeTimeout = this._resizingController?.hasResizeTimeout();
+  _getScrollDelay() {
+    const hasResizeTimeout = this.getController('resizing')?.hasResizeTimeout();
 
     if (hasResizeTimeout) {
       return this.option('scrolling.updateTimeout');
@@ -721,7 +686,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return browser.mozilla ? 60 : 0;
   }
 
-  public _findContentElement(isFixedTableRendering) {
+  _findContentElement(isFixedTableRendering) {
     let $content;
     let scrollTop;
     const contentClass = this.addWidgetPrefix(CONTENT_CLASS);
@@ -785,7 +750,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return super._findContentElement();
   }
 
-  protected _updateScrollable() {
+  _updateScrollable() {
     super._updateScrollable();
 
     const scrollable = this.getScrollable();
@@ -799,7 +764,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     this._updateFixedTablePosition(scrollTop);
   }
 
-  protected _renderContent(contentElement, tableElement, isFixedTableRendering) {
+  _renderContent(contentElement, tableElement, isFixedTableRendering) {
     if (this._isFixedTableRendering || isFixedTableRendering) {
       return contentElement
         .empty()
@@ -810,7 +775,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return super._renderContent(contentElement, tableElement);
   }
 
-  protected _getGroupCellOptions(options) {
+  _getGroupCellOptions(options) {
     if (this._isFixedTableRendering) {
       return super._getGroupCellOptions(extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
     }
@@ -818,22 +783,19 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return super._getGroupCellOptions(options);
   }
 
-  protected _renderGroupedCells($row, options) {
+  _renderGroupedCells($row, options) {
     return super._renderGroupedCells($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
   }
 
-  private _renderGroupSummaryCells($row, options) {
+  _renderGroupSummaryCells($row, options) {
     if (this._isFixedTableRendering) {
-      // @ts-expect-error DataGrid's method
       super._renderGroupSummaryCells($row, extend({}, options, { columns: this._columnsController.getVisibleColumns() }));
     } else {
-      // @ts-expect-error DataGrid's method
       super._renderGroupSummaryCells($row, options);
     }
   }
 
-  private _hasAlignByColumnSummaryItems(columnIndex, options) {
-    // @ts-expect-error DataGrid's method
+  _hasAlignByColumnSummaryItems(columnIndex, options) {
     const result = super._hasAlignByColumnSummaryItems.apply(this, arguments);
     const column = options.columns[columnIndex];
 
@@ -844,12 +806,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return result && (!this._isFixedColumns || !column.fixed);
   }
 
-  private _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+  _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
     let alignByFixedColumnCellCount;
 
     if (this._isFixedTableRendering) {
       options.isFixed = true;
-      // @ts-expect-error DataGrid's method
       alignByFixedColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
       options.isFixed = false;
 
@@ -866,11 +827,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
       alignByColumnCellCount = alignByFixedColumnCellCount;
     }
 
-    // @ts-expect-error DataGrid's method
     super._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
   }
 
-  private _getSummaryCellIndex(columnIndex, columns) {
+  _getSummaryCellIndex(columnIndex, columns) {
     if (this._isFixedTableRendering) {
       const transparentColumnIndex = getTransparentColumnIndex(columns);
 
@@ -881,11 +841,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
       return columnIndex;
     }
 
-    // @ts-expect-error DataGrid's method
     return super._getSummaryCellIndex.apply(this, arguments);
   }
 
-  protected _renderCore(change) {
+  _renderCore(change) {
     this._detachHoverEvents();
 
     const deferred = super._renderCore(change);
@@ -901,7 +860,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return deferred;
   }
 
-  protected setAriaOwns(headerTableId, footerTableId, isFixed) {
+  setAriaOwns(headerTableId, footerTableId, isFixed) {
     if (isFixed) {
       const contentFixedClass = this.addWidgetPrefix(CONTENT_FIXED_CLASS);
       const $contentFixedElement = this.element()?.children(`.${contentFixedClass}`);
@@ -911,18 +870,28 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
         this.setAria('owns', `${headerTableId ?? ''} ${$fixedTableElement.attr('id') ?? ''} ${footerTableId ?? ''}`.trim(), $contentFixedElement);
       }
     } else {
-      super.setAriaOwns.apply(this, arguments as any);
+      super.setAriaOwns.apply(this, arguments);
     }
   }
 
-  public setRowsOpacity(columnIndex, value) {
+  setRowsOpacity(columnIndex, value) {
     super.setRowsOpacity(columnIndex, value);
 
     const $rows = this._getRowElements(this._fixedTableElement);
     this._setRowsOpacityCore($rows, this.getFixedColumns(), columnIndex, value);
   }
 
-  public getCellIndex($cell) {
+  optionChanged(args) {
+    const that = this;
+
+    super.optionChanged(args);
+
+    if (args.name === 'hoverStateEnabled' && that._isFixedColumns) {
+      args.value ? this._attachHoverEvents() : this._detachHoverEvents();
+    }
+  }
+
+  getCellIndex($cell) {
     const $fixedTable = this._fixedTableElement;
     let cellIndex = 0;
 
@@ -946,23 +915,24 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
       return cellIndex;
     }
 
-    return super.getCellIndex.apply(this, arguments as any);
+    return super.getCellIndex.apply(this, arguments);
   }
 
-  private _updateFixedTablePosition(scrollTop, needFocus?) {
+  _updateFixedTablePosition(scrollTop, needFocus?) {
     if (this._fixedTableElement && this._tableElement) {
       let $focusedElement;
+      const editorFactory = this.getController('editorFactory');
 
       this._fixedTableElement.parent().scrollTop(scrollTop);
 
-      if (needFocus && this._editorFactoryController) {
-        $focusedElement = this._editorFactoryController.focus();
-        $focusedElement && this._editorFactoryController.focus($focusedElement);
+      if (needFocus && editorFactory) {
+        $focusedElement = editorFactory.focus();
+        $focusedElement && editorFactory.focus($focusedElement);
       }
     }
   }
 
-  public setScrollerSpacing(vWidth, hWidth) {
+  setScrollerSpacing(vWidth, hWidth) {
     const that = this;
     const styles = { marginBottom: 0 };
     const $fixedContent = that.element().children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
@@ -979,7 +949,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  private _getElasticScrollTop(e) {
+  _getElasticScrollTop(e) {
     let elasticScrollTop = 0;
 
     if (e.scrollOffset.top < 0) {
@@ -995,7 +965,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     return Math.floor(elasticScrollTop);
   }
 
-  private _applyElasticScrolling(e) {
+  _applyElasticScrolling(e) {
     if (this._fixedTableElement) {
       const elasticScrollTop = this._getElasticScrollTop(e);
 
@@ -1007,31 +977,34 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFixedColumnsExten
     }
   }
 
-  protected _handleScroll(e) {
+  _handleScroll(e) {
     this._updateFixedTablePosition(e.scrollOffset.top, true);
     this._applyElasticScrolling(e);
     super._handleScroll(e);
   }
 
-  private _updateContentPosition(isRender) {
-    // @ts-expect-error m_virtual_scrolling method
+  _updateContentPosition(isRender) {
     super._updateContentPosition.apply(this, arguments);
     if (!isRender) {
       this._updateFixedTablePosition(this._scrollTop);
     }
   }
 
-  protected _afterRowPrepared(e) {
+  _afterRowPrepared(e) {
     if (this._isFixedTableRendering) return;
     super._afterRowPrepared(e);
   }
 
-  public _scrollToElement($element) {
+  _scrollToElement($element) {
     super._scrollToElement($element, this.getFixedColumnsOffset());
+  }
+
+  dispose() {
+    super.dispose.apply(this, arguments);
+    clearTimeout(this._fixedScrollTimeout);
   }
 };
 
-// TODO Move this view to the DataGrid
 const footerView = (Base: ModuleType<any>) => class FooterViewFixedColumnsExtender extends baseFixedColumns(Base) {};
 
 const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsByColumns) {
@@ -1049,7 +1022,7 @@ const normalizeColumnIndicesByPoints = function (columns, fixedColumns, pointsBy
 };
 
 const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class DraggingHeaderColumnFixingExtender extends Base {
-  public _generatePointsByColumns(options) {
+  _generatePointsByColumns(options) {
     const visibleColumns = options.columns;
     const { targetDraggingPanel } = options;
 
@@ -1069,10 +1042,9 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
     return super._generatePointsByColumns(options);
   }
 
-  protected _pointCreated(point, columns, location, sourceColumn) {
+  _pointCreated(point, columns, location, sourceColumn) {
     const result = super._pointCreated.apply(this, arguments as any);
     const targetColumn = columns[point.columnIndex];
-    // @ts-expect-error
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if (!result && location === 'headers' && $transparentColumn && $transparentColumn.length) {
@@ -1095,14 +1067,13 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerColumnFixingExtender extends Base {
   _pointsByFixedColumns: any;
 
-  protected _generatePointsByColumns() {
+  _generatePointsByColumns() {
     const that = this;
     const columnsController = that._columnsController;
     const columns = columnsController && that._columnsController.getVisibleColumns();
     const fixedColumns = columnsController && that._columnsController.getFixedColumns();
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const correctIndex = columns.length - fixedColumns.length;
-    // @ts-expect-error
     const cells = that._columnHeadersView.getFixedColumnElements();
 
     super._generatePointsByColumns();
@@ -1119,8 +1090,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     }
   }
 
-  protected _getTargetPoint(pointsByColumns, currentX, deltaX) {
-    // @ts-expect-error
+  _getTargetPoint(pointsByColumns, currentX, deltaX) {
     const $transparentColumn = this._columnHeadersView.getTransparentColumnElement();
 
     if ($transparentColumn && $transparentColumn.length) {
@@ -1136,14 +1106,11 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
 };
 
 const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnFixingExtender extends Base {
-  protected _setAriaOwns() {
+  _setAriaOwns() {
     super._setAriaOwns.apply(this, arguments as any);
 
-    // @ts-expect-error
     const headerFixedTable = this._columnHeadersView?.getFixedTableElement();
-    // @ts-expect-error
     const footerFixedTable = this._footerView?.getFixedTableElement();
-    // @ts-expect-error
     this._rowsView?.setAriaOwns(headerFixedTable?.attr('id'), footerFixedTable?.attr('id'), true);
   }
 };

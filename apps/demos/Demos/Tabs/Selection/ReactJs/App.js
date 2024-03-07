@@ -13,7 +13,7 @@ class EmployeeInfo extends React.Component {
       <div className="employee-info">
         <img
           alt={text}
-          className="employee-photo"
+          className="employee-photo dx-theme-border-color"
           src={picture}
         />
         <p className="employee-notes">

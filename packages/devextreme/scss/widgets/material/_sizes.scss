@@ -78,11 +78,3 @@ $material-base-border-width: 1px !default;
 $base-border-radius: $material-base-border-radius !default;
 
 $material-base-standard-texteditor-input-horizontal-padding: 0 !default;
-
-:root {
-  --dx-component-height: #{$material-base-inline-widget-height};
-  --dx-font-size: #{$material-base-font-size};
-  --dx-border-width: #{$material-base-border-width};
-  --dx-border-radius: #{$material-base-border-radius};
-  --dx-font-size-icon: #{$material-base-icon-size};
-}

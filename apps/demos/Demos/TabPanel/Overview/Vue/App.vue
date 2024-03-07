@@ -2,6 +2,7 @@
   <div class="tabpanel-demo">
     <div class="widget-container">
       <DxTabPanel
+        class="dx-theme-background-color"
         width="100%"
         height="418"
         item-template="tabPanelItem"
@@ -88,10 +89,6 @@ const iconPosition = ref(iconPositions[0]);
   flex-grow: 1;
   min-width: 360px;
   padding: 16px 32px;
-}
-
-.tabpanel-demo .dx-tabpanel {
-  background-color: var(--dx-component-color-bg);
 }
 
 .dx-theme-material .widget-container {

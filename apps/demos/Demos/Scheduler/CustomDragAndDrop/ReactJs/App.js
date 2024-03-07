@@ -57,7 +57,7 @@ const App = () => {
           {state.tasks.map((task) => (
             <Draggable
               key={task.text}
-              className="item dx-card"
+              className="item dx-card dx-theme-text-color dx-theme-background-color"
               clone={true}
               group={draggingGroupName}
               data={task}

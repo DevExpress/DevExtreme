@@ -153,9 +153,9 @@ QUnit.test('Root appending and removing on set options', function(assert) {
     assert.deepEqual(updateLayout.lastCall.args, [], 'layout');
 
     function reset() {
-        updateLayout.resetHistory();
-        linkAppend.resetHistory();
-        linkRemove.resetHistory();
+        updateLayout.reset();
+        linkAppend.reset();
+        linkRemove.reset();
     }
 });
 
@@ -186,9 +186,9 @@ QUnit.test('Root appending and removing on set interaction', function(assert) {
     assert.deepEqual(updateLayout.lastCall.args, [], 'layout');
 
     function reset() {
-        updateLayout.resetHistory();
-        linkAppend.resetHistory();
-        linkRemove.resetHistory();
+        updateLayout.reset();
+        linkAppend.reset();
+        linkRemove.reset();
     }
 });
 
@@ -211,9 +211,9 @@ QUnit.test('Root appending and removing on projection event', function(assert) {
     assert.deepEqual(updateLayout.lastCall.args, [], 'layout');
 
     function reset() {
-        updateLayout.resetHistory();
-        linkAppend.resetHistory();
-        linkRemove.resetHistory();
+        updateLayout.reset();
+        linkAppend.reset();
+        linkRemove.reset();
     }
 });
 
@@ -372,7 +372,7 @@ QUnit.test('resize - hide', function(assert) {
 QUnit.test('resize - when disabled', function(assert) {
     this.controlBar.setInteraction({});
     this.controlBar.setOptions({ enabled: false });
-    this.root.attr.resetHistory();
+    this.root.attr.reset();
 
     this.controlBar.resize({});
 

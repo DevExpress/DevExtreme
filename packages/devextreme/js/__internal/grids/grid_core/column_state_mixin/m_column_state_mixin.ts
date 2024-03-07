@@ -2,8 +2,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
 
-import type { View } from '../m_modules';
-import type { InternalGrid } from '../m_types';
+import type { InternalGrid, View } from '../m_types';
 
 const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
@@ -17,10 +16,7 @@ export interface ColumnStateMixinRequirements {
 }
 
 export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMixinRequirements>(Base: T) => class extends Base {
-  /**
-   * @extended header_filter_core
-   */
-  protected _applyColumnState(options) {
+  _applyColumnState(options) {
     const that = this;
     const rtlEnabled = this.option('rtlEnabled');
     const columnAlignment = that._getColumnAlignment(options.column.alignment, rtlEnabled);
@@ -28,7 +24,6 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     const isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS);
     const $indicatorsContainer = that._createIndicatorContainer(parameters, isGroupPanelItem);
     const $span = $('<span>').addClass(that._getIndicatorClassName(options.name));
-    // TODO getController
     const columnsController = that.component?.getController('columns');
     const indicatorAlignment = columnsController?.getHeaderContentAlignment(columnAlignment) || columnAlignment;
 
@@ -41,20 +36,19 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     return $span;
   }
 
-  /**
-   * @extended header_filter_core
-   */
   // @ts-expect-error
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _getIndicatorClassName(name: string): string {}
+  _getIndicatorClassName(name: string): string {
 
-  private _getColumnAlignment(alignment, rtlEnabled) {
+  }
+
+  _getColumnAlignment(alignment, rtlEnabled) {
     rtlEnabled = rtlEnabled || this.option('rtlEnabled');
 
     return alignment && alignment !== 'center' ? alignment : getDefaultAlignment(rtlEnabled);
   }
 
-  private _createIndicatorContainer(options, ignoreIndicatorAlignment) {
+  _createIndicatorContainer(options, ignoreIndicatorAlignment) {
     let $indicatorsContainer = this._getIndicatorContainer(options.rootElement);
     const indicatorAlignment = options.columnAlignment === 'left' ? 'right' : 'left';
 
@@ -67,27 +61,24 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     return $indicatorsContainer.css('float', options.showColumnLines && !ignoreIndicatorAlignment ? indicatorAlignment : null);
   }
 
-  protected _getIndicatorContainer($cell) {
+  _getIndicatorContainer($cell) {
     return $cell && $cell.find(`.${COLUMN_INDICATORS_CLASS}`);
   }
 
-  private _getIndicatorElements($cell) {
+  _getIndicatorElements($cell) {
     const $indicatorContainer = this._getIndicatorContainer($cell);
 
     return $indicatorContainer && $indicatorContainer.children();
   }
 
-  /**
-   * @extended header_filter_core
-   */
-  protected _renderIndicator(options) {
+  _renderIndicator(options) {
     const $container = options.container;
     const $indicator = options.indicator;
 
     $container && $indicator && $container.append($indicator);
   }
 
-  protected _updateIndicators(indicatorName) {
+  _updateIndicators(indicatorName) {
     const that = this;
     // @ts-expect-error
     const columns = that.getColumns();
@@ -109,7 +100,7 @@ export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMix
     }
   }
 
-  protected _updateIndicator($cell, column, indicatorName): any {
+  _updateIndicator($cell, column, indicatorName) {
     if (!column.command) {
       return this._applyColumnState({
         name: indicatorName,

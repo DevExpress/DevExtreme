@@ -587,7 +587,7 @@ QUnit.module('Selection', { beforeEach: setupModule, afterEach: teardownModule }
         assert.strictEqual(this.getVisibleRows().length, 1, 'row count');
 
         // act
-        load.resetHistory();
+        load.reset();
         this.selectRows([2]);
 
         // assert

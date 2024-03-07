@@ -829,7 +829,7 @@ QUnit.module('Point views', {
         const point = createPoint(this.series, this.data, this.options);
         point.translate();
         point.draw(this.renderer, this.groups);
-        point.graphic.stub('attr').resetHistory();
+        point.graphic.stub('attr').reset();
 
         this.point = point;
 

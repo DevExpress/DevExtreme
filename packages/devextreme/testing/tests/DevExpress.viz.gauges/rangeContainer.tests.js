@@ -29,9 +29,7 @@ const environment = {
         this.container = new vizMocks.Element();
         this.translator = new Translator1D();
         this.themeManager = new themeManagerModule.ThemeManager({});
-
-        const originalCreatePalette = this.themeManager.createPalette;
-        sinon.stub(this.themeManager, 'createPalette').callsFake(originalCreatePalette);
+        sinon.stub(this.themeManager, 'createPalette', this.themeManager.createPalette);
         this.rangeContainer = new TestRangeContainer({
             renderer: this.renderer,
             container: this.container,

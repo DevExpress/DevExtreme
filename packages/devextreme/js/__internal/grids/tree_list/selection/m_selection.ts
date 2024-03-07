@@ -65,14 +65,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
 
   _isSelectionNormalizing: any;
 
-  protected _updateSelectColumn = noop;
+  _updateSelectColumn = noop;
 
-  public init() {
+  init() {
     super.init.apply(this, arguments as any);
     this._selectionStateByKey = {};
   }
 
-  protected _getSelectionConfig() {
+  _getSelectionConfig() {
     const config = super._getSelectionConfig.apply(this, arguments as any);
 
     const { plainItems } = config;
@@ -101,14 +101,12 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     const that = this;
     const rowsView = that.component.getView('rowsView');
 
-    // @ts-expect-error
     const $checkbox = rowsView._renderSelectCheckBox($container, {
       value: model.row.isSelected,
       row: model.row,
       column: model.column,
     });
 
-    // @ts-expect-error
     rowsView._attachCheckBoxClickEvent($checkbox);
   }
 
@@ -164,7 +162,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return undefined;
   }
 
-  public selectAll() {
+  selectAll() {
     const visibleKeys = this._getSelectAllNodeKeys().filter((key) => !this.isRowSelected(key));
 
     this.focusedItemIndex(-1);
@@ -172,7 +170,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return this.selectRows(visibleKeys, true);
   }
 
-  public deselectAll() {
+  deselectAll() {
     const visibleKeys = this._getSelectAllNodeKeys();
 
     this.focusedItemIndex(-1);
@@ -395,12 +393,12 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  protected _updateSelectedItems(args) {
+  _updateSelectedItems(args) {
     this.updateSelectionState(args);
     super._updateSelectedItems(args);
   }
 
-  protected _fireSelectionChanged() {
+  _fireSelectionChanged() {
     if (!this._isSelectionNormalizing) {
       super._fireSelectionChanged.apply(this, arguments as any);
     }
@@ -534,7 +532,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return selectedRowKeys;
   }
 
-  public getSelectedRowsData(mode) {
+  getSelectedRowsData(mode) {
     const that = this;
     const dataController = that._dataController;
     const selectedKeys = this.getSelectedRowKeys(mode) || [];
@@ -588,7 +586,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     this._renderSelectAllCheckBox($cell);
   }
 
-  protected _isSortableElement($target) {
+  _isSortableElement($target) {
     return super._isSortableElement($target) && !$target.closest(`.${SELECT_CHECKBOX_CLASS}`).length;
   }
 };

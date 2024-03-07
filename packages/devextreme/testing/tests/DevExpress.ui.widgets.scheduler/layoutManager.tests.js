@@ -1815,7 +1815,7 @@ QUnit.test('Full-size appointment should not have empty class in "auto" mode', f
         }
     );
 
-    const getHeightStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentDefaultHeight').callsFake(function() {
+    const getHeightStub = sinon.stub(this.instance.getRenderingStrategyInstance(), '_getAppointmentDefaultHeight', function() {
         return 18;
     });
 

@@ -21,7 +21,3 @@ $generic-toolbar-padding: 0 !default;
 $generic-toolbar-item-spacing: 5px !default;
 $generic-toolbar-label-font-size: $generic-m-font-size !default;
 $generic-toolbar-section-padding: 15px !default;
-
-:root {
-  --dx-toolbar-height: #{$generic-toolbar-height};
-}

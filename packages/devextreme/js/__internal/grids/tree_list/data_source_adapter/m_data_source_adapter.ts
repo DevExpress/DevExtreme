@@ -259,7 +259,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return gridCoreUtils.combineFilters(parentIdFilters, 'or');
   }
 
-  protected _customizeRemoteOperations(options, operationTypes) {
+  _customizeRemoteOperations(options, operationTypes) {
     super._customizeRemoteOperations.apply(this, arguments as any);
 
     options.remoteOperations.paging = false;
@@ -311,10 +311,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return parentIdsToLoad;
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _handleCustomizeStoreLoadOptions(options) {
+  _handleCustomizeStoreLoadOptions(options) {
     const rootValue: any = this.option('rootValue');
     const parentIdExpr = this.option('parentIdExpr');
     let { parentIds } = options.storeLoadOptions;
@@ -467,7 +464,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     }
   }
 
-  protected _getKeyInfo() {
+  _getKeyInfo() {
     return {
       key: () => 'key',
       keyOf: (data) => data.key,
@@ -490,7 +487,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return processedChanges;
   }
 
-  protected _handleChanging(e) {
+  _handleChanging(e) {
     super._handleChanging.apply(this, arguments as any);
 
     const processChanges = (changes) => {
@@ -501,7 +498,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     e.postProcessChanges = processChanges;
   }
 
-  protected _applyBatch(changes) {
+  _applyBatch(changes) {
     const processedChanges = this._processChanges(changes);
 
     super._applyBatch(processedChanges);
@@ -547,7 +544,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return baseChanges;
   }
 
-  protected _needToCopyDataObject() {
+  _needToCopyDataObject() {
     return false;
   }
 
@@ -573,7 +570,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return baseChanges;
   }
 
-  protected _handleDataLoaded(options) {
+  _handleDataLoaded(options) {
     const data = options.data = this._convertDataToPlainStructure(options.data);
     if (!options.remoteOperations.filtering && options.loadOptions.filter) {
       options.fullData = queryByOptions(query(options.data), { sort: options.loadOptions && options.loadOptions.sort }).toArray();
@@ -659,7 +656,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     this._totalItemsCount = resultData.length;
   }
 
-  protected _handleDataLoadedCore(options) {
+  _handleDataLoadedCore(options) {
     const that = this;
     const { data } = options;
     const filter = options.storeLoadOptions.filter || options.loadOptions.filter;
@@ -691,7 +688,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     super._handleDataLoadedCore(options);
   }
 
-  protected _handlePush({ changes }) {
+  _handlePush({ changes }) {
     const reshapeOnPush = this._dataSource._reshapeOnPush;
     const isNeedReshape = reshapeOnPush && !!changes.length;
 
@@ -751,7 +748,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return this._rootNode;
   }
 
-  protected totalItemsCount() {
+  totalItemsCount() {
     return this._totalItemsCount + this._totalCountCorrection;
   }
 
@@ -775,7 +772,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     return indexExpandedNodeKey >= 0;
   }
 
-  protected _changeRowExpandCore(key) {
+  _changeRowExpandCore(key) {
     const expandedRowKeys = (this.option('expandedRowKeys') as any[]).slice();
     const indexExpandedNodeKey = gridCoreUtils.getIndexByKey(key, expandedRowKeys, null);
 
@@ -788,7 +785,7 @@ class DataSourceAdapterTreeList extends DataSourceAdapter {
     this.option('expandedRowKeys', expandedRowKeys);
   }
 
-  protected changeRowExpand(key) {
+  changeRowExpand(key) {
     this._changeRowExpandCore(key);
     // @ts-expect-error
     return this._isNodesInitializing ? new Deferred().resolve() : this.load();

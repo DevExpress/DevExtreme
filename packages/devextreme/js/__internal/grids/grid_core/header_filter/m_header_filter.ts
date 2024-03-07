@@ -20,7 +20,6 @@ import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_pane
 import Modules from '@ts/grids/grid_core/m_modules';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import gridCoreUtils from '../m_utils';
 import {
   allowHeaderFiltering,
@@ -98,22 +97,22 @@ const getFormatOptions = function (value, column, currentLevel) {
   return result;
 };
 
-export class HeaderFilterController extends Modules.ViewController {
-  private _columnsController!: ColumnsController;
+class HeaderFilterController extends Modules.ViewController {
+  _columnsController: any;
 
-  private _dataController!: DataController;
+  _dataController: any;
 
-  private _headerFilterView!: HeaderFilterView;
+  _headerFilterView: any;
 
-  private _currentColumn: any;
+  _currentColumn: any;
 
-  public init() {
+  init() {
     this._columnsController = this.getController('columns');
     this._dataController = this.getController('data');
-    this._headerFilterView = this.getView('headerFilterView');
+    this._headerFilterView = this.getView('headerFilterView' as any);
   }
 
-  private _updateSelectedState(items, column) {
+  _updateSelectedState(items, column) {
     let i = items.length;
     const isExclude = column.filterType === 'exclude';
 
@@ -128,7 +127,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private _normalizeGroupItem(item, currentLevel, options) {
+  _normalizeGroupItem(item, currentLevel, options) {
     let value;
     let displayValue;
     const { path } = options;
@@ -165,7 +164,7 @@ export class HeaderFilterController extends Modules.ViewController {
     return item;
   }
 
-  private getHeaderItemText(displayValue, column, currentLevel, headerFilterOptions) {
+  getHeaderItemText(displayValue, column, currentLevel, headerFilterOptions) {
     let text = gridCoreUtils.formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
 
     if (!text) {
@@ -175,7 +174,7 @@ export class HeaderFilterController extends Modules.ViewController {
     return text;
   }
 
-  private _processGroupItems(groupItems, currentLevel, path, options) {
+  _processGroupItems(groupItems, currentLevel, path, options) {
     const that = this;
     let displaySelector;
     let valueSelector;
@@ -212,7 +211,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private getDataSource(column) {
+  getDataSource(column) {
     const dataSource = this._dataController.dataSource();
     const remoteGrouping = dataSource?.remoteOperations().grouping;
     const group = gridCoreUtils.getHeaderFilterGroupParameters(column, remoteGrouping);
@@ -305,19 +304,17 @@ export class HeaderFilterController extends Modules.ViewController {
     return options.dataSource;
   }
 
-  public getCurrentColumn() {
+  getCurrentColumn() {
     return this._currentColumn;
   }
 
-  public showHeaderFilterMenu(columnIndex, isGroupPanel) {
+  showHeaderFilterMenu(columnIndex, isGroupPanel) {
     const columnsController = this._columnsController;
     const column = extend(true, {}, this._columnsController.getColumns()[columnIndex]);
     if (column) {
       const visibleIndex = columnsController.getVisibleIndex(columnIndex);
-      // TODO getView
-      const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView');
+      const view = isGroupPanel ? this.getView('headerPanel') : this.getView('columnHeadersView' as any);
       const $columnElement = view.getColumnElements()
-        // @ts-expect-error
         .eq(isGroupPanel ? column.groupIndex : visibleIndex);
 
       this.showHeaderFilterMenuBase({
@@ -334,7 +331,7 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private showHeaderFilterMenuBase(options) {
+  showHeaderFilterMenuBase(options) {
     const that = this;
     const { column } = options;
 
@@ -347,17 +344,18 @@ export class HeaderFilterController extends Modules.ViewController {
       extend(options, column, {
         type: groupInterval && groupInterval.length > 1 ? 'tree' : 'list',
         remoteFiltering,
-        onShowing: (e) => {
+        onShowing(e) {
           const dxResizableInstance = e.component.$overlayContent().dxResizable('instance');
 
           dxResizableInstance && dxResizableInstance.option('onResizeEnd', (e) => {
-            let headerFilterByColumn = this._columnsController.columnOption(options.dataField, 'headerFilter');
+            const columnsController = that.getController('columns');
+            let headerFilterByColumn = columnsController.columnOption(options.dataField, 'headerFilter');
 
             headerFilterByColumn = headerFilterByColumn || {};
             headerFilterByColumn.width = e.width;
             headerFilterByColumn.height = e.height;
 
-            this._columnsController.columnOption(options.dataField, 'headerFilter', headerFilterByColumn, true);
+            columnsController.columnOption(options.dataField, 'headerFilter', headerFilterByColumn, true);
           });
         },
         onHidden: () => {
@@ -377,13 +375,13 @@ export class HeaderFilterController extends Modules.ViewController {
     }
   }
 
-  private hideHeaderFilterMenu() {
+  hideHeaderFilterMenu() {
     this._headerFilterView.hideHeaderFilterMenu();
   }
 }
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewHeaderFilterExtender extends headerFilterMixin(Base) {
-  protected _renderCellContent($cell, options) {
+  _renderCellContent($cell, options) {
     const that = this;
     let $headerFilterIndicator;
     const { column } = options;
@@ -399,36 +397,36 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       $headerFilterIndicator && that._subscribeToIndicatorEvent($headerFilterIndicator, column, 'headerFilter');
     }
 
-    super._renderCellContent.apply(this, arguments as any);
+    super._renderCellContent.apply(this, arguments);
   }
 
-  private _subscribeToIndicatorEvent($indicator, column, indicatorName) {
+  _subscribeToIndicatorEvent($indicator, column, indicatorName) {
     if (indicatorName === 'headerFilter') {
       eventsEngine.on($indicator, clickEventName, this.createAction((e) => {
         e.event.stopPropagation();
         saveFocusedElementInfo($indicator, this);
-        this._headerFilterController.showHeaderFilterMenu(column.index, false);
+        this.getController('headerFilter').showHeaderFilterMenu(column.index, false);
       }));
     }
   }
 
-  protected _updateIndicator($cell, column, indicatorName) {
+  _updateIndicator($cell, column, indicatorName) {
     const $indicator = super._updateIndicator($cell, column, indicatorName);
 
     $indicator && this._subscribeToIndicatorEvent($indicator, column, indicatorName);
   }
 
-  private _updateHeaderFilterIndicators() {
+  _updateHeaderFilterIndicators() {
     if (this.option('headerFilter.visible')) {
       this._updateIndicators('headerFilter');
     }
   }
 
-  private _needUpdateFilterIndicators() {
+  _needUpdateFilterIndicators() {
     return true;
   }
 
-  protected _columnOptionChanged(e) {
+  _columnOptionChanged(e) {
     const { optionNames } = e;
     const isFilterRowAndHeaderFilterValuesChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterValue']);
     const isHeaderFilterValuesAndTypeChanged = gridCoreUtils.checkChanges(optionNames, ['filterValues', 'filterType']);
@@ -448,7 +446,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFilterExtender extends headerFilterMixin(Base) {
-  private _createGroupPanelItem($rootElement, groupColumn) {
+  _createGroupPanelItem($rootElement, groupColumn) {
     const that = this;
     const $item = super._createGroupPanelItem.apply(that, arguments);
     let $headerFilterIndicator;
@@ -470,7 +468,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelHeaderFi
         const { event } = e;
 
         event.stopPropagation();
-        this._headerFilterController.showHeaderFilterMenu(groupColumn.index, true);
+        that.getController('headerFilter').showHeaderFilterMenu(groupColumn.index, true);
       }));
     }
 
@@ -483,11 +481,11 @@ export function invertFilterExpression(filter) {
 }
 
 const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
-  private skipCalculateColumnFilters() {
+  skipCalculateColumnFilters() {
     return false;
   }
 
-  protected _calculateAdditionalFilter() {
+  _calculateAdditionalFilter() {
     if (this.skipCalculateColumnFilters()) {
       return super._calculateAdditionalFilter();
     }
@@ -495,7 +493,7 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
     const that = this;
     const filters = [super._calculateAdditionalFilter()];
     const columns = that._columnsController.getVisibleColumns(null, true);
-    const headerFilterController = this._headerFilterController;
+    const headerFilterController = that.getController('headerFilter' as any);
     const currentColumn = headerFilterController.getCurrentColumn();
 
     each(columns, (_, column) => {

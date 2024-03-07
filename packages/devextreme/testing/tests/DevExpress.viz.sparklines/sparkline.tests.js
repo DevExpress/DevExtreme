@@ -42,9 +42,9 @@ QUnit.begin(function() {
     }));
 
     QUnit.testStart(function() {
-        translator2DModule.Translator2D.resetHistory();
-        rendererModule.Renderer.resetHistory();
-        seriesModule.Series.resetHistory();
+        translator2DModule.Translator2D.reset();
+        rendererModule.Renderer.reset();
+        seriesModule.Series.reset();
     });
 
     const environment = {
@@ -1892,7 +1892,7 @@ QUnit.begin(function() {
         };
         const sparkline = this.createSparkline(options);
 
-        this.renderer.resize.resetHistory();
+        this.renderer.resize.reset();
 
         this.$container.width(300);
         this.$container.height(40);
@@ -1915,7 +1915,7 @@ QUnit.begin(function() {
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
 
-        this.renderer.resize.resetHistory();
+        this.renderer.resize.reset();
 
         sparkline.option('size', { width: 300, height: 100 });
 
@@ -2065,7 +2065,7 @@ QUnit.begin(function() {
     QUnit.module('drawn', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
+            sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
         },
         afterEach: function() {
             environment.afterEach.call(this);
@@ -2099,7 +2099,7 @@ QUnit.begin(function() {
     QUnit.module('drawn with async data', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
+            sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
             this.data = new DataSource();
             this.isLoadedStub = sinon.stub(this.data, 'isLoaded');
         },

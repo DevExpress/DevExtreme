@@ -689,6 +689,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
     QUnit.test('Command buttons should contains aria-label accessibility attribute if rendered as icons (T755185)', function(assert) {
         // arrange
         const columnsWrapper = treeListWrapper.columns;
+        const clock = sinon.useFakeTimers();
         const treeList = createTreeList({
             dataSource: [
                 { id: 0, parentId: -1, c0: 'c0' },
@@ -708,7 +709,7 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             }
         });
 
-        this.clock.tick(10);
+        clock.tick(10);
 
         // assert
         columnsWrapper.getCommandButtons().each((_, button) => {
@@ -723,6 +724,8 @@ QUnit.module('Initialization', defaultModuleConfig, () => {
             const ariaLabel = $(button).attr('aria-label');
             assert.ok(ariaLabel && ariaLabel.length, `aria-label '${ariaLabel}'`);
         });
+
+        clock.restore();
     });
 
     // T632028
@@ -2053,7 +2056,7 @@ QUnit.module('Scroll', defaultModuleConfig, () => {
         assert.equal($(treeList.getCellElement(0, 0)).text(), '0', 'first row first cell');
         assert.equal($(treeList.getCellElement(1, 0)).text(), '1', 'second row first cell');
 
-        loadSpy.resetHistory();
+        loadSpy.reset();
     });
 
     // T991320

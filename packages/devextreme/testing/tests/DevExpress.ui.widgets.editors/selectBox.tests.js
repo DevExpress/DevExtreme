@@ -2850,23 +2850,28 @@ QUnit.module('search', moduleSetup, () => {
         });
 
         QUnit.test('item selection even if new search is in progress (T1027535)', function(assert) {
+            const clock = sinon.useFakeTimers();
             fx.off = false;
             const searchTimeout = 500;
 
-            this.reinit({ searchTimeout });
+            try {
+                this.reinit({ searchTimeout });
 
-            this.keyboard.type('1');
-            this.clock.tick(searchTimeout);
+                this.keyboard.type('1');
+                clock.tick(searchTimeout);
 
-            this.keyboard.type('2');
-            const $firstItem = this.getListItems().eq(0);
-            $firstItem.trigger('dxclick');
-            this.clock.tick(searchTimeout);
+                this.keyboard.type('2');
+                const $firstItem = this.getListItems().eq(0);
+                $firstItem.trigger('dxclick');
+                clock.tick(searchTimeout);
 
-            const $overlayContent = $(this.instance.content()).parent();
+                const $overlayContent = $(this.instance.content()).parent();
 
-            assert.ok($overlayContent.hasClass('dx-state-invisible'), 'popup is not visible');
-            assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+                assert.ok($overlayContent.hasClass('dx-state-invisible'), 'popup is not visible');
+                assert.strictEqual(this.getListItems().length, this.items.length, 'search was canceled');
+            } finally {
+                clock.restore();
+            }
         });
 
         QUnit.test('item adding when acceptCustomValue is true', function(assert) {
@@ -3322,44 +3327,50 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('Value should not be null after focusOut during loading (T600537)', function(assert) {
-        const array = [
-            { id: 1, text: 'Text 1' },
-            { id: 2, text: 'Text 2' },
-            { id: 3, text: 'Text 3' }
-        ];
-        const dataSource = new DataSource({
-            key: 'id',
-            load: () => {
-                return array;
-            },
-            byKey: (key) => {
-                const d = $.Deferred();
+        const clock = sinon.useFakeTimers();
 
-                setTimeout(() => {
-                    d.resolve(array.filter((item) => {
-                        return item.id === key;
-                    })[0]);
-                }, 300);
+        try {
+            const array = [
+                { id: 1, text: 'Text 1' },
+                { id: 2, text: 'Text 2' },
+                { id: 3, text: 'Text 3' }
+            ];
+            const dataSource = new DataSource({
+                key: 'id',
+                load: () => {
+                    return array;
+                },
+                byKey: (key) => {
+                    const d = $.Deferred();
 
-                return d.promise();
-            }
-        });
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: dataSource,
-            value: 1,
-            valueExpr: 'id',
-            displayExpr: 'text',
-            allowClearing: true,
-            searchEnabled: true
-        });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                    setTimeout(() => {
+                        d.resolve(array.filter((item) => {
+                            return item.id === key;
+                        })[0]);
+                    }, 300);
 
-        $input.focus();
-        $input.focusout();
+                    return d.promise();
+                }
+            });
+            const $selectBox = $('#selectBox').dxSelectBox({
+                dataSource: dataSource,
+                value: 1,
+                valueExpr: 'id',
+                displayExpr: 'text',
+                allowClearing: true,
+                searchEnabled: true
+            });
+            const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        this.clock.tick(300);
+            $input.focus();
+            $input.focusout();
 
-        assert.equal($selectBox.dxSelectBox('option', 'value'), 1, 'value is not null');
+            clock.tick(300);
+
+            assert.equal($selectBox.dxSelectBox('option', 'value'), 1, 'value is not null');
+        } finally {
+            clock.restore();
+        }
     });
 
     // T494140
@@ -3662,6 +3673,7 @@ QUnit.module('search substitution', {
     // T434197
     QUnit.test('search timeout should be cleared if new search have been initiated', function(assert) {
         const loadHandler = sinon.spy();
+        const clock = sinon.useFakeTimers();
         const $selectBox = $('<div>').appendTo('body');
 
         try {
@@ -3680,13 +3692,14 @@ QUnit.module('search substitution', {
             const $dropDownButton = $selectBox.find(toSelector(DX_DROP_DOWN_BUTTON));
 
             kb.type('2');
-            this.clock.tick(60);
+            clock.tick(60);
 
             $($dropDownButton).trigger('dxclick');
 
-            this.clock.tick(100);
+            clock.tick(100);
             assert.equal(loadHandler.callCount, 1, 'dataSource should be loaded once');
         } finally {
+            clock.restore();
             $selectBox.remove();
         }
     });
@@ -3902,6 +3915,7 @@ QUnit.module('search substitution', {
             assert.ok(true, 'the test is not actual for non-desktop devices');
             return;
         }
+        const clock = sinon.useFakeTimers();
         const dataSource = [
             { id: 1, text: 'test1' },
             { id: 2, text: 'test2' },
@@ -3922,17 +3936,21 @@ QUnit.module('search substitution', {
 
         const listItem = $('.dx-list').find(toSelector(LIST_ITEM_CLASS)).eq(1);
 
-        listItem.trigger('dxpointerdown');
-        this.clock.tick(10);
-        let $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        try {
+            listItem.trigger('dxpointerdown');
+            clock.tick(10);
+            let $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        assert.equal($input.val(), '', 'input value should not be changed when selection is not complete');
+            assert.equal($input.val(), '', 'input value should not be changed when selection is not complete');
 
-        listItem.trigger('dxclick');
-        $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            listItem.trigger('dxclick');
+            $input = this.$selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        assert.equal($input.val(), '2', 'input value should be changed after selection complete');
-        this.clock.tick(100000);
+            assert.equal($input.val(), '2', 'input value should be changed after selection complete');
+            clock.tick(100000);
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.testInActiveWindow('the first list item should be focused while searching', function(assert) {

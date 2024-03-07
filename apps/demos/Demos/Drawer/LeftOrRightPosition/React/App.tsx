@@ -45,7 +45,7 @@ const App = () => {
 
   return (
     <div className="flex-container">
-      <Toolbar items={toolbarItems} id="toolbar" />
+      <Toolbar items={toolbarItems} id="toolbar" className="dx-theme-background-color" />
       <Drawer
         opened={opened}
         openedStateMode={openedStateMode}
@@ -55,7 +55,7 @@ const App = () => {
         closeOnOutsideClick={onOutsideClick}
         height={400}
       >
-        <div id="content">
+        <div id="content" className="dx-theme-background-color">
           {HTMLReactParser(text)}
         </div>
       </Drawer>

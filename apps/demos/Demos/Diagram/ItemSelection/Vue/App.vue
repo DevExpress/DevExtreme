@@ -9,7 +9,7 @@
       <DxNodes
         :data-source="dataSource"
         :key-expr="'ID'"
-        :text-expr="textExpression"
+        :text-expr="'Full_Name'"
         :parent-key-expr="'Head_ID'"
       >
         <DxAutoLayout
@@ -30,7 +30,7 @@
 <script setup lang="ts">
 import { ref } from 'vue';
 import {
-  DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel, DxDiagramTypes,
+  DxDiagram, DxNodes, DxAutoLayout, DxToolbox, DxPropertiesPanel,
 } from 'devextreme-vue/diagram';
 import ArrayStore from 'devextreme/data/array_store';
 import service from './data.ts';
@@ -41,12 +41,10 @@ const dataSource = new ArrayStore({
 });
 const selectedItemNames = ref('Nobody has been selected');
 
-const textExpression = 'Full_Name';
-
-function onContentReady(e: DxDiagramTypes.ContentReadyEvent) {
+function onContentReady(e) {
   const diagram = e.component;
   // preselect some shape
-  const items = diagram.getItems().filter(({ itemType, dataItem }) => itemType === 'shape' && (dataItem[textExpression] === 'Greta Sims'));
+  const items = diagram.getItems().filter(({ itemType, text }) => itemType === 'shape' && (text === 'Greta Sims'));
   if (items.length > 0) {
     diagram.setSelectedItems(items);
     diagram.scrollToItem(items[0]);

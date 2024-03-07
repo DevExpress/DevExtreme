@@ -27,11 +27,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
-import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
-import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
-import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
-import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -159,98 +155,27 @@ export const normalizeWidth = (width: string | number | undefined): string | und
 };
 
 export class ColumnsView extends ColumnStateMixin(modules.View) {
-  protected _tableElement: any;
+  _tableElement: any;
 
-  protected _scrollLeft: any;
+  _scrollLeft: any;
 
-  private _delayedTemplates: any;
+  _delayedTemplates: any;
 
-  private _templateDeferreds: any;
+  _templateDeferreds: any;
 
-  private _templateTimeouts: any;
+  _templateTimeouts: any;
 
-  private _templatesCache: any;
+  _templatesCache: any;
 
-  protected _requireReady: any;
+  _requireReady: any;
 
-  public scrollChanged: any;
+  scrollChanged: any;
 
-  protected _columnsController!: ColumnsController;
+  _columnsController!: ColumnsController;
 
-  protected _dataController!: DataController;
+  _dataController!: DataController;
 
-  protected _adaptiveColumnsController!: AdaptiveColumnsController;
-
-  protected _columnChooserController!: ColumnChooserController;
-
-  protected _editorFactoryController!: EditorFactory;
-
-  protected _selectionController!: SelectionController;
-
-  protected _columnChooserView!: ColumnChooserView;
-
-  public init() {
-    this._scrollLeft = -1;
-    this._columnsController = this.getController('columns');
-    this._dataController = this.getController('data');
-    this._adaptiveColumnsController = this.getController('adaptiveColumns');
-    this._columnChooserController = this.getController('columnChooser');
-    this._editorFactoryController = this.getController('editorFactory');
-    this._selectionController = this.getController('selection');
-    this._columnChooserView = this.getView('columnChooserView');
-    this._delayedTemplates = [];
-    this._templateDeferreds = new Set();
-    this._templatesCache = {};
-    this._templateTimeouts = new Set();
-    this.createAction('onCellClick');
-    this.createAction('onRowClick');
-    this.createAction('onCellDblClick');
-    this.createAction('onRowDblClick');
-    this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
-    this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-    this.createAction('onRowPrepared', {
-      excludeValidators: ['disabled', 'readOnly'],
-      category: 'rendering',
-      afterExecute: (e) => {
-        this._afterRowPrepared(e);
-      },
-    });
-
-    this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
-    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
-  }
-
-  public dispose() {
-    if (hasWindow()) {
-      const window = getWindow();
-
-      this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
-      this._templateTimeouts?.clear();
-    }
-  }
-
-  public optionChanged(args) {
-    super.optionChanged(args);
-
-    // eslint-disable-next-line default-case
-    switch (args.name) {
-      case 'cellHintEnabled':
-      case 'onCellPrepared':
-      case 'onRowPrepared':
-      case 'onCellHoverChanged':
-        this._invalidate(true, true);
-        args.handled = true;
-        break;
-      case 'keyboardNavigation':
-        if (args.fullName === 'keyboardNavigation.enabled') {
-          this._invalidate(true, true);
-        }
-        args.handled = true;
-        break;
-    }
-  }
-
-  protected _createScrollableOptions() {
+  _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
     let useNativeScrolling = that.option('scrolling.useNative');
@@ -275,16 +200,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return options;
   }
 
-  public _updateCell($cell, parameters) {
+  _updateCell($cell, parameters) {
     if (parameters.rowType) {
       this._cellPrepared($cell, parameters);
     }
   }
 
-  /**
-   * @extended: column_fixing, editing
-   */
-  protected _createCell(options) {
+  _createCell(options) {
     const { column } = options;
     const alignment = column.alignment || getDefaultAlignment(this.option('rtlEnabled'));
 
@@ -328,27 +250,18 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell;
   }
 
-  /**
-   * @extended: selection
-   */
-  protected _createRow(rowObject, tagName?) {
+  _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
     const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
-
-    if (tagName === 'tr') {
-      this.setAria('role', 'row', $element);
-    }
+    this.setAria('role', 'row', $element);
     return $element;
   }
 
-  protected _isAltRow(row) {
+  _isAltRow(row) {
     return row && row.dataIndex % 2 === 1;
   }
 
-  /**
-   * @extended: selection
-   */
-  protected _createTable(columns, isAppend?) {
+  _createTable(columns, isAppend) {
     const $table = $('<table>')
       .addClass(this.addWidgetPrefix(TABLE_CLASS))
       .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
@@ -483,16 +396,19 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $table;
   }
 
-  /**
-   * @extended: editing
-   */
-  protected _rowPointerDown(e?: any) {}
+  _rowPointerDown(e?: any) {
 
-  protected _rowClick() {}
+  }
 
-  protected _rowDblClick() {}
+  _rowClick() {
 
-  protected _createColGroup(columns) {
+  }
+
+  _rowDblClick() {
+
+  }
+
+  _createColGroup(columns) {
     const colgroupElement = $('<colgroup>');
 
     for (let i = 0; i < columns.length; i++) {
@@ -505,10 +421,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return colgroupElement;
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  protected _createCol(column) {
+  _createCol(column) {
     let width = column.visibleWidth || column.width;
 
     if (width === 'adaptiveHidden') {
@@ -521,10 +434,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return col;
   }
 
-  /**
-   * @extended: keyboard_navigation, virtual_scrolling
-   */
-  public renderDelayedTemplates(change?) {
+  renderDelayedTemplates(change?) {
     const delayedTemplates = this._delayedTemplates;
     const syncTemplates = delayedTemplates.filter((template) => !template.async);
     const asyncTemplates = delayedTemplates.filter((template) => template.async);
@@ -535,7 +445,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._renderDelayedTemplatesCoreAsync(asyncTemplates);
   }
 
-  private _renderDelayedTemplatesCoreAsync(templates) {
+  _renderDelayedTemplatesCoreAsync(templates) {
     if (templates.length) {
       const templateTimeout = getWindow().setTimeout(() => {
         this._templateTimeouts.delete(templateTimeout);
@@ -546,7 +456,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  private _renderDelayedTemplatesCore(templates, isAsync, change?) {
+  _renderDelayedTemplatesCore(templates, isAsync, change?) {
     const date = new Date();
 
     while (templates.length) {
@@ -576,7 +486,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _processTemplate(template, options?) {
+  _processTemplate(template, options?) {
     const that = this;
     let renderingTemplate;
 
@@ -615,7 +525,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return renderingTemplate;
   }
 
-  public renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
+  renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
     const isDataRow = options.rowType === 'data';
@@ -662,17 +572,17 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  protected _getBodies(tableElement) {
+  _getBodies(tableElement) {
     return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
   }
 
-  protected _needWrapRow($tableElement) {
+  _needWrapRow($tableElement) {
     const hasRowTemplate = !!this.option().rowTemplate;
 
     return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${ROW_CLASS}`).length;
   }
 
-  protected _wrapRowIfNeed($table, $row, isRefreshing?) {
+  _wrapRowIfNeed($table, $row, isRefreshing?) {
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
@@ -687,15 +597,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $row;
   }
 
-  private _appendRow($table, $row, appendTemplate?) {
+  _appendRow($table, $row, appendTemplate?) {
     appendTemplate = appendTemplate || appendElementTemplate;
     appendTemplate.render({ content: $row, container: $table });
   }
 
-  /**
-   * @extended: column_fixing, filter_row, row_dragging, virtual_columns
-   */
-  protected _resizeCore() {
+  _resizeCore() {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
@@ -704,10 +611,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  /**
-   * @extended: column_fixing, header_panel, virtual_column
-   */
-  protected _renderCore(e?) {
+  _renderCore(e?) {
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {
@@ -715,10 +619,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  protected _renderTable(options) {
+  _renderTable(options) {
     options = options || {};
 
     options.columns = this._columnsController.getVisibleColumns();
@@ -730,7 +631,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $table;
   }
 
-  protected _renderRows($table, options) {
+  _renderRows($table, options) {
     const that = this;
     const rows = that._getRows(options.change);
     const columnIndices = options.change && options.change.columnIndices || [];
@@ -741,10 +642,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  protected _renderRow($table, options) {
+  _renderRow($table, options) {
     if (!options.columnIndices) {
       options.row.cells = [];
     }
@@ -762,11 +660,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
-  protected _needRenderCell(columnIndex, columnIndices) {
+  _needRenderCell(columnIndex, columnIndices) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
   }
 
-  protected _renderCells($row, options) {
+  _renderCells($row, options) {
     const that = this;
     let columnIndex = 0;
     const { row } = options;
@@ -787,7 +685,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _updateCells($rowElement, $newRowElement, columnIndices) {
+  _updateCells($rowElement, $newRowElement, columnIndices) {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
@@ -807,10 +705,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     copyAttributes($rowElement.get(0), $newRowElement.get(0));
   }
 
-  /**
-   * @extended: editing
-   */
-  protected _setCellAriaAttributes($cell, cellOptions) {
+  _setCellAriaAttributes($cell, cellOptions) {
     if (cellOptions.rowType !== 'freeSpace') {
       this.setAria('role', 'gridcell', $cell);
 
@@ -820,7 +715,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  protected _renderCell($row, options) {
+  _renderCell($row, options) {
     const cellOptions = this._getCellOptions(options);
 
     if (options.columnIndices) {
@@ -843,10 +738,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell;
   }
 
-  /**
-   * @extended: column_fixing, editing_form_based, filter_row, header_filter
-   */
-  protected _renderCellContent($cell, options, renderOptions) {
+  _renderCellContent($cell, options, renderOptions) {
     const template = this._getCellTemplate(options);
 
     when(!template || this.renderTemplate($cell, template, options, undefined, renderOptions.change)).done(() => {
@@ -854,15 +746,15 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  protected _getCellTemplate(options?): any {
+  _getCellTemplate(options?): any {
 
   }
 
-  protected _getRows(change?) {
+  _getRows(change?) {
     return [] as any[];
   }
 
-  protected _getCellOptions(options): any {
+  _getCellOptions(options): any {
     const cellOptions = {
       column: options.column,
       columnIndex: options.columnIndex,
@@ -875,7 +767,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return cellOptions;
   }
 
-  public _addWatchMethod(options, source?) {
+  _addWatchMethod(options, source?) {
     if (!this.option('repaintChangesOnly')) return;
 
     const watchers: any[] = [];
@@ -936,22 +828,19 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return options;
   }
 
-  /**
-   * @extended: adaptivity, editing, validating
-   */
-  public _cellPrepared(cell, options) {
+  _cellPrepared(cell, options) {
     options.cellElement = getPublicElement($(cell));
     this.executeAction('onCellPrepared', options);
   }
 
-  protected _rowPrepared($row, options, row?) {
+  _rowPrepared($row, options, row?) {
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);
     this.executeAction('onRowPrepared', options);
   }
 
-  protected _columnOptionChanged(e) {
+  _columnOptionChanged(e) {
     const { optionNames } = e;
 
     if (gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
@@ -967,50 +856,84 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  /**
-   * @extended: column_fixing, editing
-   */
-  public getCellIndex($cell, rowIndex?) {
+  getCellIndex($cell) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  public getTableElements() {
+  getTableElements() {
     // @ts-expect-error
     return this._tableElement || $();
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  public getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
+  getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
     return this._tableElement;
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  public setTableElement(tableElement, isFixedTableRendering?) {
+  setTableElement(tableElement, isFixedTableRendering?) {
     this._tableElement = tableElement;
   }
 
-  protected _afterRowPrepared(e?) {}
+  optionChanged(args) {
+    super.optionChanged(args);
 
-  /**
-   * @extended: header_panel
-   */
-  protected _handleDataChanged(e) {
+    // eslint-disable-next-line default-case
+    switch (args.name) {
+      case 'cellHintEnabled':
+      case 'onCellPrepared':
+      case 'onRowPrepared':
+      case 'onCellHoverChanged':
+        this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'keyboardNavigation':
+        if (args.fullName === 'keyboardNavigation.enabled') {
+          this._invalidate(true, true);
+        }
+        args.handled = true;
+        break;
+    }
   }
 
-  public callbackNames() {
+  init() {
+    this._scrollLeft = -1;
+    this._columnsController = this.getController('columns');
+    this._dataController = this.getController('data');
+    this._delayedTemplates = [];
+    this._templateDeferreds = new Set();
+    this._templatesCache = {};
+    this._templateTimeouts = new Set();
+    this.createAction('onCellClick');
+    this.createAction('onRowClick');
+    this.createAction('onCellDblClick');
+    this.createAction('onRowDblClick');
+    this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+    this.createAction('onRowPrepared', {
+      excludeValidators: ['disabled', 'readOnly'],
+      category: 'rendering',
+      afterExecute: (e) => {
+        this._afterRowPrepared(e);
+      },
+    });
+
+    this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
+    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
+  }
+
+  _afterRowPrepared(e?) {
+
+  }
+
+  _handleDataChanged(e) {
+  }
+
+  callbackNames() {
     return ['scrollChanged'];
   }
 
-  protected _updateScrollLeftPosition() {
+  _updateScrollLeftPosition() {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
@@ -1019,7 +942,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  public scrollTo(pos) {
+  scrollTo(pos) {
     const $element = this.element();
     const $scrollContainer = $element && $element.children(`.${this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)}`).not(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
 
@@ -1029,14 +952,11 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  protected _getContent(isFixedTableRendering?) {
+  _getContent(isFixedTableRendering?) {
     return this._tableElement?.parent();
   }
 
-  private _removeContent(isFixedTableRendering) {
+  _removeContent(isFixedTableRendering) {
     const $scrollContainer = this._getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
@@ -1044,10 +964,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  protected _wrapTableInScrollContainer($table, isFixedTableRendering?) {
+  _wrapTableInScrollContainer($table, isFixedTableRendering?) {
     const $scrollContainer = $('<div>');
     const useNative = this.option('scrolling.useNative');
 
@@ -1073,12 +990,12 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $scrollContainer;
   }
 
-  private needWaitAsyncTemplates() {
+  needWaitAsyncTemplates() {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
-  public waitAsyncTemplates(forceWaiting = false) {
+  waitAsyncTemplates(forceWaiting = false) {
     // @ts-expect-error
     const result = new Deferred();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
@@ -1103,7 +1020,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return result.promise();
   }
 
-  protected _updateContent($newTableElement, change, isFixedTableRendering?) {
+  _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
       this.setTableElement($newTableElement, isFixedTableRendering);
@@ -1111,7 +1028,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  public _findContentElement(isFixedTableRendering?: any): any {}
+  _findContentElement() {
+
+  }
 
   _getWidths($cellElements?: dxElementWrapper): number[] {
     if (!$cellElements) {
@@ -1140,10 +1059,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return result;
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  public getColumnWidths($tableElement?: dxElementWrapper): number[] {
+  getColumnWidths($tableElement?: dxElementWrapper): number[] {
     (this.option('forceApplyBindings') || noop)();
 
     $tableElement = $tableElement ?? this.getTableElement();
@@ -1174,7 +1090,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return [];
   }
 
-  protected getVisibleColumnIndex(columnIndex, rowIndex) {
+  getVisibleColumnIndex(columnIndex, rowIndex) {
     return columnIndex;
   }
 
@@ -1232,10 +1148,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  /**
-   * @extended: editing_form_based
-   */
-  public getCellElements(rowIndex): dxElementWrapper | undefined {
+  getCellElements(rowIndex): dxElementWrapper | undefined {
     return this._getCellElementsCore(rowIndex);
   }
 
@@ -1249,10 +1162,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $row.children();
   }
 
-  /**
-   * @extended: adaptivity
-   */
-  public _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
+  _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
     const $cells = this.getCellElements(rowIndex);
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
@@ -1265,7 +1175,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $cell.length > 0 ? $cell : undefined;
   }
 
-  private _getRowElement(rowIndex) {
+  _getRowElement(rowIndex) {
     const that = this;
     // @ts-expect-error
     let $rowElement = $();
@@ -1291,7 +1201,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  public getRowElement(rowIndex) {
+  getRowElement(rowIndex) {
     const $rows = this._getRowElement(rowIndex);
     let elements: any = [];
 
@@ -1306,10 +1216,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return elements;
   }
 
-  /**
-   * @extended: editing_form_based
-   */
-  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     if (isString(columnIdentifier)) {
       const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
       return this._columnsController.getVisibleIndex(columnIndex);
@@ -1318,16 +1225,13 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIdentifier;
   }
 
-  public getColumnElements() {}
+  getColumnElements() {}
 
-  public getColumns(rowIndex?, $tableElement?) {
+  getColumns(rowIndex?) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
-  /**
-   * @extended: adaptivity
-   */
-  public getCell(cellPosition, rows?, cells?) {
+  getCell(cellPosition, rows?, cells?) {
     const $rows = rows || this._getRowElements();
     let $cells;
 
@@ -1342,7 +1246,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
   }
 
-  private getRowsCount() {
+  getRowsCount() {
     const tableElement = this.getTableElement();
 
     if (tableElement && tableElement.length === 1) {
@@ -1351,7 +1255,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return 0;
   }
 
-  protected _getRowElementsCore(tableElement) {
+  _getRowElementsCore(tableElement) {
     tableElement = tableElement || this.getTableElement();
 
     if (tableElement) {
@@ -1366,25 +1270,19 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return $();
   }
 
-  public _getRowElements(tableElement?) {
+  _getRowElements(tableElement?) {
     return this._getRowElementsCore(tableElement);
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  public getRowIndex($row) {
+  getRowIndex($row) {
     return this._getRowElements().index($row);
   }
 
-  protected getBoundingRect() { }
+  getBoundingRect() { }
 
-  public getName() { }
+  getName() { }
 
-  /**
-   * @extended: column_fixing
-   */
-  public setScrollerSpacing(width) {
+  setScrollerSpacing(width) {
     const that = this;
     const $element = that.element();
     const rtlEnabled = that.option('rtlEnabled');
@@ -1395,7 +1293,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     });
   }
 
-  protected isScrollbarVisible(isHorizontal) {
+  isScrollbarVisible(isHorizontal) {
     const $element = this.element();
     const $tableElement = this._tableElement;
 
@@ -1406,7 +1304,16 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return false;
   }
 
-  public isDisposed() {
+  isDisposed() {
     return this.component?._disposed;
+  }
+
+  dispose() {
+    if (hasWindow()) {
+      const window = getWindow();
+
+      this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
+      this._templateTimeouts?.clear();
+    }
   }
 }

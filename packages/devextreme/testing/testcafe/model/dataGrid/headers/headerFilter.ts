@@ -3,7 +3,6 @@ import List from '../../list';
 
 const CLASS = {
   filterMenu: 'dx-header-filter-menu',
-  content: 'dx-overlay-content',
   list: 'dx-list',
   button: 'dx-button',
 };
@@ -19,9 +18,5 @@ export default class HeaderFilter {
 
   getButtons(): Selector {
     return this.element.find(`.${CLASS.button}`);
-  }
-
-  getContent(): Selector {
-    return this.element.find(`.${CLASS.content}`);
   }
 }

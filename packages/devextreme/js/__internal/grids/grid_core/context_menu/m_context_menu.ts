@@ -17,11 +17,11 @@ const viewName = {
 const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
 export class ContextMenuController extends modules.ViewController {
-  public init() {
+  init() {
     this.createAction('onContextMenuPreparing');
   }
 
-  public getContextMenuItems(dxEvent) {
+  getContextMenuItems(dxEvent) {
     if (!dxEvent) {
       return false;
     }
@@ -34,6 +34,7 @@ export class ContextMenuController extends modules.ViewController {
     let menuItems;
 
     each(VIEW_NAMES, function () {
+      // @ts-expect-error
       const view = that.getView(this);
       $element = view && view.element();
 
@@ -48,15 +49,14 @@ export class ContextMenuController extends modules.ViewController {
           targetElement: getPublicElement($targetElement),
           target: viewName[this],
           rowIndex,
-          // @ts-expect-error
           row: view._getRows()[rowIndex],
           columnIndex,
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
-        // @ts-expect-error
         options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
+        // @ts-expect-error
         that.executeAction('onContextMenuPreparing', options);
         that._contextMenuPrepared(options);
         menuItems = options.items;
@@ -72,24 +72,16 @@ export class ContextMenuController extends modules.ViewController {
     return menuItems;
   }
 
-  /**
-   * @extended: selection
-   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _contextMenuPrepared(options) {}
+  _contextMenuPrepared(options) {
+
+  }
 }
 
-export class ContextMenuView extends modules.View {
-  private _contextMenuController!: ContextMenuController;
-
-  public init() {
-    super.init();
-
-    this._contextMenuController = this.getController('contextMenu');
-  }
-
-  protected _renderCore() {
-    const $element = this.element().addClass(CONTEXT_MENU);
+class ContextMenuView extends modules.View {
+  _renderCore() {
+    const that = this;
+    const $element = that.element().addClass(CONTEXT_MENU);
 
     this.setAria('role', 'presentation', $element);
 
@@ -97,10 +89,11 @@ export class ContextMenuView extends modules.View {
       $element,
       ContextMenu,
       {
-        onPositioning: (actionArgs) => {
+        onPositioning(actionArgs) {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
-          const items = this._contextMenuController.getContextMenuItems(event);
+          // @ts-expect-error
+          const items = that.getController('contextMenu').getContextMenuItems(event);
 
           if (items) {
             contextMenuInstance.option('items', items);
@@ -115,8 +108,8 @@ export class ContextMenuView extends modules.View {
           params.itemData?.onItemClick?.(params);
         },
 
-        cssClass: this.getWidgetContainerClass(),
-        target: this.component.$element(),
+        cssClass: that.getWidgetContainerClass(),
+        target: that.component.$element(),
       },
     );
   }

@@ -245,11 +245,11 @@ const environment = {
         this.createLayoutManager.resetHistory();
         this.createLayoutManager.restore();
 
-        trackerModule.ChartTracker.resetHistory();
-        legendModule.Legend.resetHistory();
-        exportModule.ExportMenu.resetHistory();
+        trackerModule.ChartTracker.reset();
+        legendModule.Legend.reset();
+        exportModule.ExportMenu.reset();
 
-        stubLayoutManager.layoutElements.resetHistory();
+        stubLayoutManager.layoutElements.reset();
     },
     createPolarChart: function(options) {
         const polarChart = new dxPolarChart(this.$container, options);

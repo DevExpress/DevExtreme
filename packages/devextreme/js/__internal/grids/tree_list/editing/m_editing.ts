@@ -21,7 +21,7 @@ const SELECT_CHECKBOX_CLASS = 'dx-select-checkbox';
 const DATA_EDIT_DATA_INSERT_TYPE = 'insert';
 
 class EditingController extends editingModule.controllers.editing {
-  protected _generateNewItem(key) {
+  _generateNewItem(key) {
     const item: any = super._generateNewItem(key);
 
     item.data = {
@@ -34,11 +34,11 @@ class EditingController extends editingModule.controllers.editing {
     return item;
   }
 
-  protected _isProcessedItem() {
+  _isProcessedItem() {
     return true;
   }
 
-  protected _setInsertAfterOrBeforeKey(change, parentKey) {
+  _setInsertAfterOrBeforeKey(change, parentKey) {
     if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
       change.insertAfterKey = parentKey;
     } else {
@@ -47,7 +47,7 @@ class EditingController extends editingModule.controllers.editing {
     }
   }
 
-  protected _getLoadedRowIndex(items, change) {
+  _getLoadedRowIndex(items, change) {
     const dataController = this.getController('data');
     const dataSourceAdapter = dataController.dataSource();
     const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
@@ -84,7 +84,7 @@ class EditingController extends editingModule.controllers.editing {
     return result;
   }
 
-  protected _getEditingButtons(options) {
+  _getEditingButtons(options) {
     // @ts-expect-error
     const buttons = super._getEditingButtons.apply(this, arguments);
 
@@ -95,7 +95,7 @@ class EditingController extends editingModule.controllers.editing {
     return buttons;
   }
 
-  protected _beforeSaveEditData(change) {
+  _beforeSaveEditData(change) {
     const dataController = this._dataController;
     // @ts-expect-error
     const result = super._beforeSaveEditData.apply(this, arguments);
@@ -127,7 +127,7 @@ class EditingController extends editingModule.controllers.editing {
     return super.addRow.call(this, key);
   }
 
-  protected _addRowCore(data, parentKey, oldEditRowIndex) {
+  _addRowCore(data, parentKey, oldEditRowIndex) {
     const rootValue = this.option('rootValue');
     const dataController = this.getController('data');
     const dataSourceAdapter = dataController.dataSource();
@@ -153,7 +153,7 @@ class EditingController extends editingModule.controllers.editing {
     return super._addRowCore.call(this, data, parentKey, oldEditRowIndex);
   }
 
-  protected _initNewRow(options, parentKey?) {
+  _initNewRow(options, parentKey?) {
     const dataController = this.getController('data');
     const dataSourceAdapter = dataController.dataSource();
     const parentIdSetter = dataSourceAdapter.createParentIdSetter();
@@ -173,7 +173,7 @@ class EditingController extends editingModule.controllers.editing {
     return super._needToCloseEditableCell.apply(this, arguments) || $targetElement.closest(`.${TREELIST_EXPAND_ICON_CONTAINER_CLASS}`).length && this.isEditing();
   }
 
-  protected getButtonLocalizationNames() {
+  getButtonLocalizationNames() {
     const names = super.getButtonLocalizationNames.apply(this);
     // @ts-expect-error
     names.add = 'dxTreeList-editingAddRowToNode';

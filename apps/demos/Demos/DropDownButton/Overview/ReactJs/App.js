@@ -159,7 +159,7 @@ const App = () => {
           </Toolbar>
         </div>
         <div
-          className="dx-field"
+          className={color ? 'dx-field' : 'dx-field dx-theme-text-color'}
           style={{
             color,
             textAlign: alignment,

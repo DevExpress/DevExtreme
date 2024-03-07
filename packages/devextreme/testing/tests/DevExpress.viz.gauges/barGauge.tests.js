@@ -105,7 +105,7 @@ const environment = {
     },
     afterEach: function() {
         this.$container.remove();
-        rendererModule.Renderer.resetHistory();
+        rendererModule.Renderer.reset();
         this.renderer = null;
     },
     getBarsGroup: function() {
@@ -1207,7 +1207,7 @@ QUnit.test('set values', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.resetHistory();
+    spy.reset();
 
     gauge.values([10, '20', 30]);
 
@@ -1222,7 +1222,7 @@ QUnit.test('set "values" option', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.resetHistory();
+    spy.reset();
 
     gauge.option('values', [10, '20', 30]);
 
@@ -1237,7 +1237,7 @@ QUnit.test('set values - scalar', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.resetHistory();
+    spy.reset();
 
     gauge.values(80);
 
@@ -1252,7 +1252,7 @@ QUnit.test('set values - not valid', function(assert) {
         values: [60, 70],
         onDrawn: spy
     });
-    spy.resetHistory();
+    spy.reset();
 
     gauge.values({});
 

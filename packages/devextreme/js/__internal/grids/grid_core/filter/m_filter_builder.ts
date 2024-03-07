@@ -5,43 +5,19 @@ import FilterBuilder from '@js/ui/filter_builder';
 import Popup from '@js/ui/popup/ui.popup';
 import ScrollView from '@js/ui/scroll_view';
 import { restoreFocus } from '@js/ui/shared/accessibility';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 
 import modules from '../m_modules';
 
-export class FilterBuilderView extends modules.View {
+class FilterBuilderView extends modules.View {
   private _filterBuilderPopup: any;
 
   private _filterBuilder: any;
 
-  private _columnsController!: ColumnsController;
-
-  private _filterSyncController!: FilterSyncController;
-
-  public init() {
-    super.init();
-    this._columnsController = this.getController('columns');
-    this._filterSyncController = this.getController('filterSync');
-  }
-
-  public optionChanged(args) {
-    switch (args.name) {
-      case 'filterBuilder':
-      case 'filterBuilderPopup':
-        this._invalidate();
-        args.handled = true;
-        break;
-      default:
-        super.optionChanged(args);
-    }
-  }
-
-  protected _renderCore() {
+  _renderCore() {
     this._updatePopupOptions();
   }
 
-  private _updatePopupOptions() {
+  _updatePopupOptions() {
     if (this.option('filterBuilderPopup.visible')) {
       this._initPopup();
     } else if (this._filterBuilderPopup) {
@@ -49,7 +25,7 @@ export class FilterBuilderView extends modules.View {
     }
   }
 
-  private _disposePopup() {
+  _disposePopup() {
     if (this._filterBuilderPopup) {
       this._filterBuilderPopup.dispose();
       this._filterBuilderPopup = undefined;
@@ -60,7 +36,7 @@ export class FilterBuilderView extends modules.View {
     }
   }
 
-  private _initPopup() {
+  _initPopup() {
     const that = this;
 
     that._disposePopup();
@@ -83,21 +59,22 @@ export class FilterBuilderView extends modules.View {
     }));
   }
 
-  private _getPopupContentTemplate(contentElement) {
+  _getPopupContentTemplate(contentElement) {
     const $contentElement = $(contentElement);
     const $filterBuilderContainer = $('<div>').appendTo($(contentElement));
 
     this._filterBuilder = this._createComponent($filterBuilderContainer, FilterBuilder, extend({
       value: this.option('filterValue'),
-      fields: this._columnsController.getFilteringColumns(),
+      fields: this.getController('columns').getFilteringColumns(),
     }, this.option('filterBuilder'), {
-      customOperations: this._filterSyncController.getCustomFilterOperations(),
+      // @ts-expect-error
+      customOperations: this.getController('filterSync').getCustomFilterOperations(),
     }));
 
     this._createComponent($contentElement, ScrollView, { direction: 'both' });
   }
 
-  private _getPopupToolbarItems() {
+  _getPopupToolbarItems() {
     const that = this;
     return [
       {
@@ -125,6 +102,18 @@ export class FilterBuilderView extends modules.View {
         },
       },
     ];
+  }
+
+  optionChanged(args) {
+    switch (args.name) {
+      case 'filterBuilder':
+      case 'filterBuilderPopup':
+        this._invalidate();
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+    }
   }
 }
 

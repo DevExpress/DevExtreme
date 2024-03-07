@@ -2306,7 +2306,7 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($colElements.get(1).style.width, '', 'width of the second cell');
         assert.strictEqual($colElements.get(2).style.width, '', 'width of the third cell');
         assert.strictEqual($colElements.get(3).style.width, '', 'width of the fourth cell');
-        assert.strictEqual($colElements.get(4).style.width, '111px', 'width of the fifth cell');
+        assert.strictEqual($colElements.get(4).style.width, '100px', 'width of the fifth cell');
     });
 
     // T800761

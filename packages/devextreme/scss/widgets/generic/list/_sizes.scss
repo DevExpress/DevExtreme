@@ -47,8 +47,3 @@ $generic-list-border-width: 1px !default;
   $generic-list-searchbox-margin-bottom: 3px !default;
   $generic-list-item-vertical-padding: 5px !default;
 }
-
-:root {
-  --dx-list-item-padding-inline: #{$generic-list-item-horizontal-padding};
-  --dx-list-item-padding-block: #{$generic-list-item-vertical-padding};
-} 

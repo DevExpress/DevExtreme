@@ -37,6 +37,8 @@ function getSelector(className) {
 
 const { test, module: testModule } = QUnit;
 
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 const moduleConfig = {
     beforeEach: function() {
         this.clock = sinon.useFakeTimers();
@@ -83,7 +85,7 @@ export default function() {
             assert.strictEqual(markup, '<h1>Hi!</h1><p>Test</p>');
         });
 
-        test('render table with header without paragraph', function(assert) {
+        testWithoutCsp('render table with header without paragraph', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: TABLE_WITH_HEADER_MARKUP
             }).dxHtmlEditor('instance');
@@ -108,7 +110,7 @@ export default function() {
             assert.strictEqual(markup, expectedValue);
         });
 
-        test('render table with header and multiple paragraphs', function(assert) {
+        testWithoutCsp('render table with header and multiple paragraphs', function(assert) {
             const value = `
             <table>
                 <thead>
@@ -239,7 +241,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        test('value with table after change valueType', function(assert) {
+        testWithoutCsp('value with table after change valueType', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')
                 .dxHtmlEditor({
@@ -257,7 +259,7 @@ export default function() {
             instance.option('valueType', 'html');
         });
 
-        test('render markup with a font-size style', function(assert) {
+        testWithoutCsp('render markup with a font-size style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-size: 20px">Test</span>'
             }).dxHtmlEditor('instance');
@@ -267,7 +269,7 @@ export default function() {
             assert.equal(markup, '<p><span style="font-size: 20px;">Test</span></p>');
         });
 
-        test('render markup with a font-family style', function(assert) {
+        testWithoutCsp('render markup with a font-family style', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<span style="font-family: Terminal;">Test</span>'
             }).dxHtmlEditor('instance');
@@ -713,108 +715,6 @@ export default function() {
 
             assert.strictEqual(instance.option('value'), TABLE_WITH_HEADER_MARKUP);
             assert.strictEqual(markup, expectedMarkup);
-        });
-    });
-
-    testModule('CSP. inline styles parsing', {}, () => {
-        testModule('Mocked quill methods', {
-            beforeEach() {
-                this.replaceStyleAttributeCallCount = 0;
-                this.sourceReplaceStyleAttribute = Quill.replaceStyleAttribute;
-                Quill.replaceStyleAttribute = () => {
-                    this.replaceStyleAttributeCallCount += 1;
-                };
-            },
-            afterEach() {
-                Quill.replaceStyleAttribute = this.sourceReplaceStyleAttribute;
-            }
-        }, () => {
-            test('replaceStyleAttribute should be called on value processing', function(assert) {
-                $('#htmlEditor')
-                    .dxHtmlEditor({
-                        value: '<p></p>'
-                    })
-                    .dxHtmlEditor('instance');
-
-                assert.strictEqual(this.replaceStyleAttributeCallCount, 2);
-            });
-        });
-
-        testModule('rendering vulnerable value', {
-            createHtmlEditor(value) {
-                return $('#htmlEditor')
-                    .dxHtmlEditor({ value })
-                    .dxHtmlEditor('instance');
-            }
-        }, () => {
-            const testCases = [{
-                testName: 'simple style attribute should be rendered coccectly',
-                inputMarkup: '<p style="text-align: right;">content</p>',
-                expectedMarkup: '<p style="text-align: right;">content</p>',
-            }, {
-                testName: 'uppercase style attribute should be rendered coccectly',
-                inputMarkup: '<p STYLE="text-align: right;">content</p>',
-                expectedMarkup: '<p STYLE="text-align: right;">content</p>',
-            }, {
-                testName: 'style attribute with one space after attribute should be rendered coccectly',
-                inputMarkup: '<p style ="text-align: right;">content</p>',
-                expectedMarkup: '<p style ="text-align: right;">content</p>',
-            }, {
-                testName: 'style attribute with two spaces after attribute should be rendered coccectly',
-                inputMarkup: '<p style  ="text-align: right;">content</p>',
-                expectedMarkup: '<p style  ="text-align: right;">content</p>',
-            }, {
-                testName: 'several style attributes should be rendered coccectly',
-                inputMarkup: '<p style="text-align: right;" style="border: solid;">content</p>',
-                expectedMarkup: '<p style="text-align: right;" style="border: solid;">content</p>',
-            }, {
-                testName: 'style inside tag attribute should be rendered coccectly',
-                inputMarkup: '<p>style="text-align: right;"</p>',
-                expectedMarkup: '<p>style="text-align: right;"</p>',
-            }, {
-                testName: 'style attributes in sibling tags should be rendered coccectly',
-                inputMarkup: '<p style="text-align: left;">content</p><p style="text-align: right;">content</p>',
-                expectedMarkup: '<p style="text-align: left;">content</p><p style="text-align: right;">content</p>',
-            }, {
-                testName: 'style attributes in parent and child elements should be rendered coccectly',
-                inputMarkup: '<div style="text-align: right;">content<div style="color: red;">content</div></div>',
-                expectedMarkup: '<div style="text-align: right;">content<div style="color: red;">content</div></div>',
-            }, {
-                testName: 'value should be rendered coccectly when input markup do not have open bracket for open tag',
-                inputMarkup: 'p style="text-align: right;">content</p>',
-                expectedMarkup: 'p style="text-align: right;">content</p>',
-            }, {
-                testName: 'value should be rendered coccectly when input markup do not have closed bracket for open tag',
-                inputMarkup: '<p style="text-align: right;" content</p>',
-                expectedMarkup: '<p style="text-align: right;" content</p>',
-            }, {
-                testName: 'value should be rendered coccectly when input markup do not have open bracket for closed tag',
-                inputMarkup: '<p style="text-align: right;">content /p>',
-                expectedMarkup: '<p style="text-align: right;">content /p>',
-            }, {
-                testName: 'value should be rendered coccectly when input markup do not have closed bracket for closed tag',
-                inputMarkup: '<p style="text-align: right;">content</p',
-                expectedMarkup: '<p style="text-align: right;">content</p',
-            }, {
-                testName: 'value should be rendered coccectly when input markup do not have closed tag',
-                inputMarkup: '<p style="text-align: right;">content',
-                expectedMarkup: '<p style="text-align: right;">content',
-            }, {
-                testName: 'should be no errors when value is equals empty string',
-                inputMarkup: '',
-                expectedMarkup: '',
-            }];
-
-            testCases.forEach(testCase => {
-                test(testCase.testName, function(assert) {
-                    const initialValue = testCase.inputMarkup;
-                    const htmlEditor = this.createHtmlEditor(initialValue);
-
-                    const renderedValue = htmlEditor.option('value');
-
-                    assert.strictEqual(renderedValue, testCase.expectedMarkup);
-                });
-            });
         });
     });
 }

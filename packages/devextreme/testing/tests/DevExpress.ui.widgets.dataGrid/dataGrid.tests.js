@@ -1402,7 +1402,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         this.clock.tick(10);
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
-        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
     });
 
     QUnit.test('Column auto width should be calculated after cell is rendered in react', function(assert) {
@@ -3417,7 +3417,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
             dataSource: [],
             columns: ['id', 'name']
         });
-        onColumnsChanging.resetHistory();
+        onColumnsChanging.reset();
 
         // act
         dataGrid.columnOption('name', 'visible', false);
@@ -5066,7 +5066,7 @@ QUnit.module('templates', baseModuleConfig, () => {
 
         try {
             // arrange
-            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate').callsFake(function(selector) {
+            getTemplateStub = sinon.stub(DataGrid.prototype, '_getTemplate', function(selector) {
                 return {
                     render: function(options) {
                         setTimeout(() => {
@@ -5249,11 +5249,11 @@ QUnit.module('Modules', {
     QUnit.test('register controller', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                test: class extends gridCore.Controller {
-                    test() {
+                test: gridCore.Controller.inherit({
+                    test: function() {
                         return 'test';
                     }
-                }
+                })
             }
         });
         const dataGrid = createDataGrid({});
@@ -5265,7 +5265,7 @@ QUnit.module('Modules', {
     QUnit.test('register controller with incorrect base class', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                test: class {}
+                test: Class.inherit({})
             }
         });
         try {
@@ -5278,7 +5278,7 @@ QUnit.module('Modules', {
     QUnit.test('register controller with registered name', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                data: class extends gridCore.Controller {}
+                data: gridCore.Controller.inherit({})
             }
         });
         try {
@@ -5292,8 +5292,8 @@ QUnit.module('Modules', {
         gridCore.registerModule('test', {
             extenders: {
                 controllers: {
-                    data: (Base) => class extends Base {
-                        test() {
+                    data: {
+                        test: function() {
                             return 'test';
                         }
                     }
@@ -5308,11 +5308,11 @@ QUnit.module('Modules', {
     QUnit.test('register view', function(assert) {
         gridCore.registerModule('test', {
             views: {
-                test: class extends gridCore.View {
-                    test() {
+                test: gridCore.View.inherit({
+                    test: function() {
                         return 'test';
                     }
-                }
+                })
             }
         });
         const dataGrid = createDataGrid({});
@@ -5324,7 +5324,7 @@ QUnit.module('Modules', {
     QUnit.test('register view with incorrect base class', function(assert) {
         gridCore.registerModule('test', {
             views: {
-                test: class {}
+                test: Class.inherit({})
             }
         });
         try {
@@ -5337,7 +5337,7 @@ QUnit.module('Modules', {
     QUnit.test('register view with registered name', function(assert) {
         gridCore.registerModule('test', {
             views: {
-                rowsView: class extends gridCore.View {}
+                rowsView: gridCore.View.inherit({})
             }
         });
         try {
@@ -5351,8 +5351,8 @@ QUnit.module('Modules', {
         gridCore.registerModule('test', {
             extenders: {
                 views: {
-                    rowsView: (Base) => class extends Base {
-                        test() {
+                    rowsView: {
+                        test: function() {
                             return 'test';
                         }
                     }
@@ -5399,14 +5399,14 @@ QUnit.module('Modules', {
     QUnit.test('Controller public methods', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                test: class extends gridCore.Controller {
-                    publicMethods() {
+                test: gridCore.Controller.inherit({
+                    publicMethods: function() {
                         return ['testMethod'];
-                    }
-                    testMethod() {
+                    },
+                    testMethod: function() {
                         return 'test';
                     }
-                }
+                })
             }
         });
         const dataGrid = createDataGrid({});
@@ -5417,11 +5417,11 @@ QUnit.module('Modules', {
     QUnit.test('controller public methods does not exist', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                test: class extends gridCore.Controller {
-                    publicMethods() {
+                test: gridCore.Controller.inherit({
+                    publicMethods: function() {
                         return ['testMethod'];
                     }
-                }
+                })
             }
         });
         try {
@@ -5435,14 +5435,14 @@ QUnit.module('Modules', {
     QUnit.test('controller public methods already registered', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                test: class extends gridCore.Controller {
-                    publicMethods() {
+                test: gridCore.Controller.inherit({
+                    publicMethods: function() {
                         return ['refresh'];
-                    }
-                    refresh() {
+                    },
+                    refresh: function() {
                         return 'testRefresh';
                     }
-                }
+                })
             }
         });
         try {
@@ -5456,14 +5456,14 @@ QUnit.module('Modules', {
     QUnit.test('view public methods', function(assert) {
         gridCore.registerModule('test', {
             views: {
-                test: class extends gridCore.View {
-                    publicMethods() {
+                test: gridCore.View.inherit({
+                    publicMethods: function() {
                         return ['testMethod'];
-                    }
-                    testMethod() {
+                    },
+                    testMethod: function() {
                         return 'test';
                     }
-                }
+                })
             }
         });
         const dataGrid = createDataGrid({});
@@ -5474,11 +5474,11 @@ QUnit.module('Modules', {
     QUnit.test('callbacks registration', function(assert) {
         gridCore.registerModule('test', {
             controllers: {
-                test: class extends gridCore.Controller {
-                    callbackNames() {
+                test: gridCore.Controller.inherit({
+                    callbackNames: function() {
                         return ['callback1', 'callback2'];
                     }
-                }
+                })
             }
         });
         const dataGrid = createDataGrid({});

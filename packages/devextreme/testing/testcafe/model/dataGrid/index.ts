@@ -49,7 +49,6 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
-  loadPanelWrapper: 'dx-loadpanel-wrapper',
   revertTooltip: 'revert-tooltip',
   invalidMessage: 'invalid-message',
 
@@ -196,10 +195,6 @@ export default class DataGrid extends Widget {
 
   getOverlay(): Overlay {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
-  }
-
-  getLoadPanel(): Overlay {
-    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -550,16 +545,6 @@ export default class DataGrid extends Widget {
           getInstance,
         },
       },
-    )();
-  }
-
-  apiBeginCustomLoading(messageText: string): Promise<void> {
-    const { getInstance } = this;
-    return ClientFunction(
-      () => {
-        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
-      },
-      { dependencies: { getInstance, messageText } },
     )();
   }
 

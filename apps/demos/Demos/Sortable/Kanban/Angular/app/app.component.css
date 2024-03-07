@@ -12,7 +12,6 @@
 }
 
 .list-title {
-  color: var(--dx-color-text);
   font-size: 16px;
   padding: 10px;
   padding-left: 30px;
@@ -31,9 +30,8 @@
 }
 
 .card {
-  color: var(--dx-color-text);
   position: relative;
-  background-color: var(--dx-component-color-bg);
+  background-color: white;
   box-sizing: border-box;
   width: 230px;
   padding: 10px 20px;

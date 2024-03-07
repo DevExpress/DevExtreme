@@ -10,11 +10,6 @@
 .segment-size,
 .loaded-size {
   margin-left: 3px;
-  color: var(--dx-color-primary);
-}
-
-.total-size {
-  color: var(--dx-color-primary);
 }
 
 .note {

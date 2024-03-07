@@ -31,7 +31,7 @@ $(() => {
     itemTemplate(data, index, element) {
       const $note = $('<div>')
         .addClass('employee-info')
-        .append($(`<img alt="${data.text}" class="employee-photo" src="${data.picture}"/>`))
+        .append($(`<img alt="${data.text}" class="employee-photo dx-theme-border-color" src="${data.picture}"/>`))
         .append($('<p>').addClass('employee-notes').append($(`<b>Position: ${data.position}</b><br/>`)).append(data.notes));
 
       element.append($note);

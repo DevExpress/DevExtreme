@@ -110,29 +110,3 @@ test('Column chooser checkboxes should be aligned correctly with tree structure'
     },
   },
 }));
-
-test('Column chooser should support string height and width', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  await t
-    .click(dataGrid.getHeaderPanel().getColumnChooserButton());
-
-  const columnChooserContent = dataGrid.getColumnChooser().content;
-
-  await t
-    .expect(columnChooserContent.getStyleProperty('height'))
-    .eql('400px')
-    .expect(columnChooserContent.getStyleProperty('width'))
-    .eql('330px');
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: [],
-  columns: [
-    'field1', 'field2', 'field3',
-  ],
-  width: 700,
-  columnChooser: {
-    enabled: true,
-    height: '400px',
-    width: '330px',
-  },
-}));

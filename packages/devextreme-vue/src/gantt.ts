@@ -367,10 +367,10 @@ const DxColumnHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: [Number, String],
+    height: Number,
     search: Object,
     searchMode: String,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
@@ -609,13 +609,13 @@ const DxHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: [Number, String],
+    height: Number,
     search: Object,
     searchMode: String,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxHeaderFilter as any).$_optionName = "headerFilter";

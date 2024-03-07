@@ -15,10 +15,8 @@ import messageLocalization from '@js/localization/message';
 import Selection from '@js/ui/selection/selection';
 import errors from '@js/ui/widget/ui.errors';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
-import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { DataController } from '../data_controller/m_data_controller';
@@ -38,10 +36,8 @@ const SHOW_CHECKBOXES_MODE = 'selection.showCheckBoxesMode';
 const SELECTION_MODE = 'selection.mode';
 
 const processLongTap = function (that, dxEvent) {
-  // TODO getView
-  const rowsView = that.getView('rowsView');
-  // TODO getController
   const selectionController = that.getController('selection');
+  const rowsView = that.getView('rowsView');
   const $row = $(dxEvent.target).closest(`.${DATA_ROW_CLASS}`);
   const rowIndex = rowsView.getRowIndex($row);
 
@@ -90,7 +86,6 @@ const isSeveralRowsSelected = function (that, selectionFilter) {
 
 const selectionCellTemplate = (container, options) => {
   const { component } = options;
-  // TODO getView
   const rowsView = component.getView('rowsView');
 
   if (component.option('renderAsync') && !component.option('selection.deferred')) {
@@ -103,7 +98,6 @@ const selectionCellTemplate = (container, options) => {
 const selectionHeaderTemplate = (container, options) => {
   const { column } = options;
   const $cellElement = $(container);
-  // TODO getView
   const columnHeadersView = options.component.getView('columnHeadersView');
 
   $cellElement.addClass(EDITOR_CELL_CLASS);
@@ -112,11 +106,7 @@ const selectionHeaderTemplate = (container, options) => {
 };
 
 export class SelectionController extends modules.Controller {
-  protected _dataController!: DataController;
-
-  private _columnsController!: ColumnsController;
-
-  protected _stateStoringController!: StateStoringController;
+  _dataController!: DataController;
 
   private _selectionMode?: string;
 
@@ -124,13 +114,13 @@ export class SelectionController extends modules.Controller {
 
   private _selection!: Selection;
 
-  public selectionChanged: any;
+  selectionChanged: any;
 
   private _selectedItemsInternalChange?: boolean;
 
   private _dataPushedHandler: any;
 
-  public init() {
+  init() {
     // @ts-expect-error
     const { deferred, selectAllMode, mode } = this.option('selection') ?? {};
     if (this.option('scrolling.mode') === 'infinite' && !deferred && mode === 'multiple' && selectAllMode === 'allPages') {
@@ -138,8 +128,6 @@ export class SelectionController extends modules.Controller {
     }
 
     this._dataController = this.getController('data');
-    this._columnsController = this.getController('columns');
-    this._stateStoringController = this.getController('stateStoring');
     this._selectionMode = mode;
     this._isSelectionWithCheckboxes = false;
 
@@ -153,12 +141,12 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  private _handleDataPushed(changes) {
+  _handleDataPushed(changes) {
     this._deselectRemovedOnPush(changes);
     this._updateSelectedOnPush(changes);
   }
 
-  private _deselectRemovedOnPush(changes) {
+  _deselectRemovedOnPush(changes) {
     const isDeferredSelection = this.option('selection.deferred');
 
     let removedKeys = changes
@@ -177,7 +165,7 @@ export class SelectionController extends modules.Controller {
     removedKeys.length && this.deselectRows(removedKeys);
   }
 
-  private _updateSelectedOnPush(changes) {
+  _updateSelectedOnPush(changes) {
     const isDeferredSelection = this.option('selection.deferred');
 
     if (isDeferredSelection) {
@@ -194,12 +182,9 @@ export class SelectionController extends modules.Controller {
     } as any);
   }
 
-  /**
-   * @extended: TreeList's selection
-   */
-  protected _getSelectionConfig() {
+  _getSelectionConfig() {
     const dataController = this._dataController;
-    const columnsController = this._columnsController;
+    const columnsController = this.getController('columns');
     const selectionOptions: any = this.option('selection') ?? {};
     const { deferred } = selectionOptions;
     const scrollingMode = this.option('scrolling.mode');
@@ -273,8 +258,8 @@ export class SelectionController extends modules.Controller {
     };
   }
 
-  protected _updateSelectColumn() {
-    const columnsController = this._columnsController;
+  _updateSelectColumn() {
+    const columnsController = this.getController('columns');
     const isSelectColumnVisible = this.isSelectColumnVisible();
 
     columnsController.addCommandColumn({
@@ -293,16 +278,13 @@ export class SelectionController extends modules.Controller {
     columnsController.columnOption('command:select', 'visible', isSelectColumnVisible);
   }
 
-  private _createSelection() {
+  _createSelection() {
     const options = this._getSelectionConfig();
 
     return new Selection(options);
   }
 
-  /**
-   * @extended: state_storing, TreeList's selection
-   */
-  protected _fireSelectionChanged(options?) {
+  _fireSelectionChanged(options?) {
     const argument = this.option('selection.deferred')
       ? { selectionFilter: this.option('selectionFilter') }
       : { selectedRowKeys: this.option('selectedRowKeys') };
@@ -314,7 +296,7 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  public _updateCheckboxesState(options) {
+  _updateCheckboxesState(options) {
     const { isDeferredMode } = options;
     const { selectionFilter } = options;
     const { selectedItemKeys } = options;
@@ -329,10 +311,7 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  /**
-   * @extended: TreeList's selection
-   */
-  protected _updateSelectedItems(args) {
+  _updateSelectedItems(args) {
     const that = this;
     let selectionChangedOptions;
     const isDeferredMode = that.option('selection.deferred');
@@ -382,7 +361,7 @@ export class SelectionController extends modules.Controller {
     that._fireSelectionChanged(selectionChangedOptions);
   }
 
-  private getChangedItemIndexes(items) {
+  getChangedItemIndexes(items) {
     const that = this;
     const itemIndexes: any[] = [];
     const isDeferredSelection = this.option('selection.deferred');
@@ -399,11 +378,11 @@ export class SelectionController extends modules.Controller {
     return itemIndexes;
   }
 
-  protected callbackNames() {
+  callbackNames() {
     return ['selectionChanged'];
   }
 
-  public optionChanged(args) {
+  optionChanged(args) {
     super.optionChanged(args);
 
     // eslint-disable-next-line default-case
@@ -432,7 +411,7 @@ export class SelectionController extends modules.Controller {
           });
         }
 
-        this._columnsController.updateColumns();
+        this.getController('columns').updateColumns();
         args.handled = true;
         break;
       }
@@ -451,30 +430,27 @@ export class SelectionController extends modules.Controller {
     }
   }
 
-  public publicMethods() {
+  publicMethods() {
     return ['selectRows', 'deselectRows', 'selectRowsByIndexes', 'getSelectedRowKeys', 'getSelectedRowsData', 'clearSelection', 'selectAll', 'deselectAll', 'startSelectionWithCheckboxes', 'stopSelectionWithCheckboxes', 'isRowSelected'];
   }
 
-  public isRowSelected(arg) {
+  isRowSelected(arg) {
     return this._selection.isItemSelected(arg);
   }
 
-  public isSelectColumnVisible() {
+  isSelectColumnVisible() {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this.option(SHOW_CHECKBOXES_MODE) === 'onClick' || this._isSelectionWithCheckboxes);
   }
 
-  private _isOnePageSelectAll() {
+  _isOnePageSelectAll() {
     return this.option('selection.selectAllMode') === 'page';
   }
 
-  public isSelectAll() {
+  isSelectAll() {
     return this._selection.getSelectAllState(this._isOnePageSelectAll());
   }
 
-  /**
-   * @extended: TreeList's selection
-   */
-  public selectAll() {
+  selectAll() {
     if (this.option(SHOW_CHECKBOXES_MODE) === 'onClick') {
       this.startSelectionWithCheckboxes();
     }
@@ -482,18 +458,15 @@ export class SelectionController extends modules.Controller {
     return this._selection.selectAll(this._isOnePageSelectAll());
   }
 
-  /**
-   * @extended: TreeList's selection
-   */
-  public deselectAll() {
+  deselectAll() {
     return this._selection.deselectAll(this._isOnePageSelectAll());
   }
 
-  private clearSelection() {
+  clearSelection() {
     return this.selectedItemKeys([]);
   }
 
-  public refresh() {
+  refresh() {
     const selectedRowKeys = this.option('selectedRowKeys') ?? [];
 
     if (!this.option('selection.deferred') && selectedRowKeys.length) {
@@ -504,27 +477,24 @@ export class SelectionController extends modules.Controller {
     return new Deferred().resolve().promise();
   }
 
-  protected selectedItemKeys(value, preserve?, isDeselect?, isSelectAll?) {
+  selectedItemKeys(value, preserve?, isDeselect?, isSelectAll?) {
     return this._selection.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected getSelectedRowKeys(mode?) {
+  // eslint-disable-next-line
+  getSelectedRowKeys(mode?) {
     return this._selection.getSelectedItemKeys();
   }
 
-  /**
-   * @extended: TreeList's selection
-   */
-  protected selectRows(keys, preserve?) {
+  selectRows(keys, preserve?) {
     return this.selectedItemKeys(keys, preserve);
   }
 
-  protected deselectRows(keys) {
+  deselectRows(keys) {
     return this.selectedItemKeys(keys, true, true);
   }
 
-  private selectRowsByIndexes(indexes) {
+  selectRowsByIndexes(indexes) {
     const items = this._dataController.items();
     const keys: any[] = [];
 
@@ -541,19 +511,16 @@ export class SelectionController extends modules.Controller {
     return this.selectRows(keys);
   }
 
-  /**
-   * @extended: TreeList's selection
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public getSelectedRowsData(mode?) {
+  // eslint-disable-next-line
+  getSelectedRowsData(mode?) {
     return this._selection.getSelectedItems();
   }
 
-  public loadSelectedItemsWithFilter() {
+  loadSelectedItemsWithFilter() {
     return this._selection.loadSelectedItemsWithFilter();
   }
 
-  public changeItemSelection(visibleItemIndex, keys, setFocusOnly?) {
+  changeItemSelection(visibleItemIndex, keys, setFocusOnly?) {
     keys = keys || {};
     if (this.isSelectionWithCheckboxes()) {
       keys.control = true;
@@ -562,7 +529,7 @@ export class SelectionController extends modules.Controller {
     return this._selection.changeItemSelection(loadedItemIndex, keys, setFocusOnly);
   }
 
-  public focusedItemIndex(itemIndex) {
+  focusedItemIndex(itemIndex) {
     const that = this;
 
     if (isDefined(itemIndex)) {
@@ -574,11 +541,11 @@ export class SelectionController extends modules.Controller {
     return undefined;
   }
 
-  public isSelectionWithCheckboxes() {
+  isSelectionWithCheckboxes() {
     return this.option(SELECTION_MODE) === 'multiple' && (this.option(SHOW_CHECKBOXES_MODE) === 'always' || this._isSelectionWithCheckboxes);
   }
 
-  public startSelectionWithCheckboxes() {
+  startSelectionWithCheckboxes() {
     const that = this;
 
     if (that.option(SELECTION_MODE) === 'multiple' && !that.isSelectionWithCheckboxes()) {
@@ -589,7 +556,7 @@ export class SelectionController extends modules.Controller {
     return false;
   }
 
-  private stopSelectionWithCheckboxes() {
+  stopSelectionWithCheckboxes() {
     const that = this;
 
     if (that._isSelectionWithCheckboxes) {
@@ -602,33 +569,36 @@ export class SelectionController extends modules.Controller {
 }
 
 export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => class DataControllerSelectionExtender extends Base {
-  public init() {
+  init() {
+    const selectionController = this.getController('selection');
     const isDeferredMode = this.option('selection.deferred');
 
     super.init.apply(this, arguments as any);
 
     if (isDeferredMode) {
-      this._selectionController._updateCheckboxesState({
+      selectionController._updateCheckboxesState({
         isDeferredMode: true,
         selectionFilter: this.option('selectionFilter'),
       });
     }
   }
 
-  protected _loadDataSource() {
+  _loadDataSource() {
     const that = this;
 
     return super._loadDataSource().always(() => {
-      that._selectionController.refresh();
+      that.getController('selection').refresh();
     });
   }
 
-  protected _processDataItem(item, options) {
-    const hasSelectColumn = this._selectionController.isSelectColumnVisible();
+  _processDataItem(item, options) {
+    const that = this;
+    const selectionController = that.getController('selection');
+    const hasSelectColumn = selectionController.isSelectColumnVisible();
     const isDeferredSelection = options.isDeferredSelection = options.isDeferredSelection === undefined ? this.option('selection.deferred') : options.isDeferredSelection;
     const dataItem = super._processDataItem.apply(this, arguments as any);
 
-    dataItem.isSelected = this._selectionController.isRowSelected(isDeferredSelection ? dataItem.data : dataItem.key);
+    dataItem.isSelected = selectionController.isRowSelected(isDeferredSelection ? dataItem.data : dataItem.key);
 
     if (hasSelectColumn && dataItem.values) {
       for (let i = 0; i < options.visibleColumns.length; i++) {
@@ -641,14 +611,14 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return dataItem;
   }
 
-  public refresh(options) {
+  refresh(options) {
     const that = this;
     // @ts-expect-error
     const d = new Deferred();
 
     super.refresh.apply(this, arguments as any).done(() => {
       if (!options || options.selection) {
-        that._selectionController.refresh().done(d.resolve).fail(d.reject);
+        that.getController('selection').refresh().done(d.resolve).fail(d.reject);
       } else {
         d.resolve();
       }
@@ -658,16 +628,16 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
   }
 
   // eslint-disable-next-line
-  protected _handleDataChanged(e?) {
+  _handleDataChanged(e?) {
     const hasLoadOperation = this.hasLoadOperation();
     super._handleDataChanged.apply(this, arguments as any);
 
     if (hasLoadOperation && !this._repaintChangesOnly) {
-      this._selectionController.focusedItemIndex(-1);
+      this.getController('selection').focusedItemIndex(-1);
     }
   }
 
-  protected _applyChange(change) {
+  _applyChange(change) {
     if (change && change.changeType === 'updateSelection') {
       change.items.forEach((item, index) => {
         const currentItem = this._items[index];
@@ -682,7 +652,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
     return super._applyChange.apply(this, arguments as any);
   }
 
-  protected _endUpdateCore() {
+  _endUpdateCore() {
     const changes = this._changes;
     const isUpdateSelection = changes.length > 1 && changes.every((change) => change.changeType === 'updateSelection');
     if (isUpdateSelection) {
@@ -694,7 +664,7 @@ export const dataSelectionExtenderMixin = (Base: ModuleType<DataController>) => 
 };
 
 const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMenuControllerSelectionExtender extends Base {
-  protected _contextMenuPrepared(options) {
+  _contextMenuPrepared(options) {
     const dxEvent = options.event;
 
     if (dxEvent.originalEvent && dxEvent.originalEvent.type !== 'dxhold' || options.items && options.items.length > 0) return;
@@ -704,20 +674,21 @@ const contextMenu = (Base: ModuleType<ContextMenuController>) => class ContextMe
 };
 
 export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersSelectionExtender extends Base {
-  public init() {
+  init() {
+    const that = this;
     super.init();
-    this._selectionController.selectionChanged.add(this._updateSelectAllValue.bind(this));
+    that.getController('selection').selectionChanged.add(that._updateSelectAllValue.bind(that));
   }
 
-  private _updateSelectAllValue() {
+  _updateSelectAllValue() {
     const that = this;
     const $element = that.element();
     const $editor = $element && $element.find(`.${SELECT_CHECKBOX_CLASS}`);
 
     if ($element && $editor.length && that.option('selection.mode') === 'multiple') {
-      const selectAllValue = that._selectionController.isSelectAll();
+      const selectAllValue = that.getController('selection').isSelectAll();
       const hasSelection = selectAllValue !== false;
-      const isVisible = that.option('selection.allowSelectAll') ? !that._dataController.isEmpty() : hasSelection;
+      const isVisible = that.option('selection.allowSelectAll') ? !that.getController('data').isEmpty() : hasSelection;
 
       $editor.dxCheckBox('instance').option({
         visible: isVisible,
@@ -726,7 +697,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     }
   }
 
-  protected _handleDataChanged(e) {
+  _handleDataChanged(e) {
     super._handleDataChanged(e);
 
     if (!e || e.changeType === 'refresh' || (e.repaintChangesOnly && e.changeType === 'update')) {
@@ -736,9 +707,10 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     }
   }
 
-  protected _renderSelectAllCheckBox($container, column?) {
+  _renderSelectAllCheckBox($container, column?) {
     const that = this;
-    const isEmptyData = that._dataController.isEmpty();
+    const selectionController = that.getController('selection');
+    const isEmptyData = that.getController('data').isEmpty();
 
     const groupElement = $('<div>')
       .appendTo($container)
@@ -746,28 +718,28 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
 
     that.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectAll'), groupElement);
 
-    that._editorFactoryController.createEditor(groupElement, extend({}, column, {
+    that.getController('editorFactory').createEditor(groupElement, extend({}, column, {
       parentType: 'headerRow',
       dataType: 'boolean',
-      value: this._selectionController.isSelectAll(),
+      value: selectionController.isSelectAll(),
       editorOptions: {
-        visible: !isEmptyData && (that.option('selection.allowSelectAll') || this._selectionController.isSelectAll() !== false),
+        visible: !isEmptyData && (that.option('selection.allowSelectAll') || selectionController.isSelectAll() !== false),
       },
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
       tabIndex: that.option('useLegacyKeyboardNavigation') ? -1 : that.option('tabIndex') || 0,
-      setValue: (value, e) => {
+      setValue(value, e) {
         const allowSelectAll = that.option('selection.allowSelectAll');
         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
         e.component.option('visible', allowSelectAll || e.component.option('value') !== false);
 
-        if (!e.event || this._selectionController.isSelectAll() === value) {
+        if (!e.event || selectionController.isSelectAll() === value) {
           return;
         }
 
         if (e.value && !allowSelectAll) {
           e.component.option('value', false);
         } else {
-          e.value ? this._selectionController.selectAll() : this._selectionController.deselectAll();
+          e.value ? selectionController.selectAll() : selectionController.deselectAll();
         }
 
         e.event.preventDefault();
@@ -777,7 +749,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
     return groupElement;
   }
 
-  private _attachSelectAllCheckBoxClickEvent($element) {
+  _attachSelectAllCheckBoxClickEvent($element) {
     eventsEngine.on($element, clickEventName, this.createAction((e) => {
       const { event } = e;
 
@@ -791,7 +763,7 @@ export const columnHeadersSelectionExtenderMixin = (Base: ModuleType<ColumnHeade
 };
 
 export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => class RowsViewSelectionExtender extends Base {
-  private renderSelectCheckBoxContainer($container, options) {
+  renderSelectCheckBoxContainer($container, options) {
     if (options.rowType === 'data' && !options.row.isNewRow) {
       $container.addClass(EDITOR_CELL_CLASS);
       this._attachCheckBoxClickEvent($container);
@@ -802,14 +774,14 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     }
   }
 
-  private _renderSelectCheckBox(container, options) {
+  _renderSelectCheckBox(container, options) {
     const groupElement = $('<div>')
       .addClass(SELECT_CHECKBOX_CLASS)
       .appendTo(container);
 
     this.setAria('label', messageLocalization.format('dxDataGrid-ariaSelectRow'), groupElement);
 
-    this._editorFactoryController.createEditor(groupElement, extend({}, options.column, {
+    this.getController('editorFactory').createEditor(groupElement, extend({}, options.column, {
       parentType: 'dataRow',
       dataType: 'boolean',
       lookup: null,
@@ -826,17 +798,18 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     return groupElement;
   }
 
-  private _attachCheckBoxClickEvent($element) {
+  _attachCheckBoxClickEvent($element) {
     eventsEngine.on($element, clickEventName, this.createAction(function (e) {
+      const selectionController = this.getController('selection');
       const { event } = e;
       const rowIndex = this.getRowIndex($(event.currentTarget).closest(`.${ROW_CLASS}`));
 
       if (rowIndex >= 0) {
-        this._selectionController.startSelectionWithCheckboxes();
-        this._selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
+        selectionController.startSelectionWithCheckboxes();
+        selectionController.changeItemSelection(rowIndex, { shift: event.shiftKey });
 
         if ($(event.target).closest(`.${SELECT_CHECKBOX_CLASS}`).length) {
-          this._dataController.updateItems({
+          this.getController('data').updateItems({
             changeType: 'updateSelection',
             itemIndexes: [rowIndex],
           });
@@ -845,7 +818,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     }));
   }
 
-  protected _update(change) {
+  _update(change) {
     const that = this;
     const tableElements = that.getTableElements();
 
@@ -876,7 +849,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     }
   }
 
-  protected _createTable() {
+  _createTable() {
     const that = this;
     const selectionMode = that.option('selection.mode');
     const $table = super._createTable.apply(that, arguments as any);
@@ -902,7 +875,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     return $table;
   }
 
-  protected _createRow(row) {
+  _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
 
     if (row) {
@@ -924,14 +897,14 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     super._rowClick(e);
   }
 
-  protected _rowClick(e) {
+  _rowClick(e) {
     const that = this;
     const dxEvent = e.event;
     const isSelectionDisabled = $(dxEvent.target).closest(`.${SELECTION_DISABLED_CLASS}`).length;
 
     if (!that.isClickableElement($(dxEvent.target))) {
       if (!isSelectionDisabled && (that.option(SELECTION_MODE) !== 'multiple' || that.option(SHOW_CHECKBOXES_MODE) !== 'always')) {
-        if (that._selectionController.changeItemSelection(e.rowIndex, {
+        if (that.getController('selection').changeItemSelection(e.rowIndex, {
           control: isCommandKeyPressed(dxEvent),
           shift: dxEvent.shiftKey,
         })) {
@@ -943,22 +916,22 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     }
   }
 
-  private isClickableElement($target) {
+  isClickableElement($target) {
     const isCommandSelect = $target.closest(`.${COMMAND_SELECT_CLASS}`).length;
 
     return !!isCommandSelect;
   }
 
-  protected _renderCore(change) {
+  _renderCore(change) {
     const deferred = super._renderCore(change);
     this._updateCheckboxesClass();
     return deferred;
   }
 
-  private _updateCheckboxesClass() {
+  _updateCheckboxesClass() {
     const tableElements = this.getTableElements();
-    const isCheckBoxesHidden = this._selectionController.isSelectColumnVisible()
-      && !this._selectionController.isSelectionWithCheckboxes();
+    const selectionController = this.getController('selection');
+    const isCheckBoxesHidden = selectionController.isSelectColumnVisible() && !selectionController.isSelectionWithCheckboxes();
 
     each(tableElements, (_, tableElement) => {
       $(tableElement).toggleClass(CHECKBOXES_HIDDEN_CLASS, isCheckBoxesHidden);

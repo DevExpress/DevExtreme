@@ -412,6 +412,7 @@ QUnit.module('typing', moduleConfig, () => {
 
     QUnit.test('TextEditor with mask option should firing the \'onChange\' event', function(assert) {
         const handler = sinon.stub();
+        const clock = sinon.useFakeTimers();
 
         const $textEditor = $('#texteditor').dxTextEditor({
             onChange: handler,
@@ -425,7 +426,7 @@ QUnit.module('typing', moduleConfig, () => {
         keyboard.caret(0);
 
         $input.triggerHandler('focus');
-        this.clock.tick(10);
+        clock.tick(10);
 
         keyboard.type('123').press('enter');
         assert.equal(handler.callCount, 1, '\'change\' event is fired on enter after value change');
@@ -440,6 +441,7 @@ QUnit.module('typing', moduleConfig, () => {
         $input.triggerHandler('focus');
         $input.triggerHandler('blur');
         assert.equal(handler.callCount, 2, '\'change\' event is not fired after focus out without value change');
+        clock.restore();
     });
 
     QUnit.test('TextEditor with mask option should work correctly with autofill in webkit browsers (T869537)', function(assert) {
@@ -448,6 +450,7 @@ QUnit.module('typing', moduleConfig, () => {
             return;
         }
 
+        const clock = sinon.useFakeTimers();
         let inputMatchesStub;
 
         try {
@@ -470,10 +473,11 @@ QUnit.module('typing', moduleConfig, () => {
                 .beforeInput(testText)
                 .input();
 
-            this.clock.tick(10);
+            clock.tick(10);
             assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
             assert.equal(textEditor.option('isValid'), true, 'isValid is true');
         } finally {
+            clock.restore();
             inputMatchesStub && inputMatchesStub.restore();
         }
     });
@@ -1510,7 +1514,7 @@ QUnit.module('value', moduleConfig, () => {
         const textEditor = $textEditor.dxTextEditor('instance');
 
         textEditor.option('value', '1');
-        valueChangedHandler.resetHistory();
+        valueChangedHandler.reset();
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);

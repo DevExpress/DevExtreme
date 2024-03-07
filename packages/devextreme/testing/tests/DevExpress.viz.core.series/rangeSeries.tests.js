@@ -45,7 +45,7 @@ const createSeries = function(options, renderSettings) {
         incidentOccurred: noop
     }, renderSettings);
 
-    renderer.stub('g').resetHistory();
+    renderer.stub('g').reset();
     return new Series(renderSettings, options);
 };
 

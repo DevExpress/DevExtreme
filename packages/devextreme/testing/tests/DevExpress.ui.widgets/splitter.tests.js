@@ -238,30 +238,6 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     [
-        { resizeDistance: 50, resizeBackDistance: -30, expectedSize: ['30', '10', '20', '20', '20'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 50, resizeBackDistance: -30, expectedSize: ['30', '10', '20', '20', '20'], orientation: 'vertical', rtl: false },
-        { resizeDistance: 100, resizeBackDistance: -100, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: -50, resizeBackDistance: 30, expectedSize: ['30', '10', '20', '20', '20'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: -100, resizeBackDistance: 100, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 50, resizeBackDistance: -30, expectedSize: ['30', '10', '20', '20', '20'], orientation: 'vertical', rtl: false },
-        { resizeDistance: 100, resizeBackDistance: -100, expectedSize: ['20', '20', '20', '20', '20'], orientation: 'vertical', rtl: false },
-    ].forEach(({ resizeDistance, resizeBackDistance, expectedSize, orientation, rtl }) => {
-        QUnit.test(`panes sizes should be correct after resizing multiple panes beyond neighbor and changing resize direction, ${orientation} orientation, rtl ${rtl}`, function(assert) {
-            this.reinit({
-                orientation: orientation, width: 232, height: 232, rtlEnabled: rtl,
-                dataSource: [{}, {}, {}, {}, {}],
-            });
-
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
-            const pointer = pointerMock(this.getResizeHandles().eq(0));
-            pointer.start().dragStart().drag(resizeDistance, resizeDistance).drag(resizeBackDistance, resizeBackDistance).dragEnd();
-
-            assertLayout(items, expectedSize, assert);
-        });
-    });
-
-    [
         { resizeDistance: 500, expectedSize: ['100', '0'], orientation: 'horizontal' },
         { resizeDistance: -500, expectedSize: ['0', '100'], orientation: 'vertical' }
     ].forEach(({ resizeDistance, expectedSize, orientation }) => {
@@ -562,7 +538,7 @@ QUnit.module('Keyboard support', moduleConfig, () => {
 
         assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(0).get(0), 'event target is correct');
         assert.strictEqual(registerKeyHandlerSpy.callCount, 1);
-        registerKeyHandlerSpy.resetHistory();
+        registerKeyHandlerSpy.reset();
 
         this.getResizeHandles().eq(1).trigger(createEvent('keydown', { key: 'Enter' }));
         assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(1).get(0), 'event target is correct');

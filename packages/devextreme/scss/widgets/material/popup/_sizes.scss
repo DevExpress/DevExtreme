@@ -35,7 +35,3 @@ $material-popup-focused-content-shadow: 0 8px 40px 6px color.change($base-shadow
   $material-popup-bottom-toolbar-height: 44px !default;
   $material-popup-toolbar-height: 42px !default;
 }
-
-:root {
-  --dx-popup-toolbar-item-padding-inline: #{$material-popup-toolbar-item-spacing};
-}

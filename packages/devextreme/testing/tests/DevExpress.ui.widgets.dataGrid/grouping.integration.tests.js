@@ -1136,7 +1136,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         });
 
         this.clock.tick(10);
-        calculateCellValue.resetHistory();
+        calculateCellValue.reset();
 
         // act
         dataGrid.state(null);

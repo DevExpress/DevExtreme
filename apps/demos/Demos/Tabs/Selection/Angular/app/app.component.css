@@ -27,7 +27,6 @@
   flex-shrink: 0;
   object-fit: contain;
   margin-right: 24px;
-  border-color: var(--dx-color-border);
 }
 
 ::ng-deep .employee-notes b {

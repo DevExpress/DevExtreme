@@ -1303,7 +1303,7 @@ QUnit.test('should not fire any errors after promise was resolved on demand (T11
     treeView.expandItem(1);
 
     try {
-        const stub = sinon.stub(LoadIndicator, 'getInstance').callsFake(() => {
+        const stub = sinon.stub(LoadIndicator, 'getInstance', () => {
             stub.restore();
             return undefined;
         });
@@ -1537,7 +1537,7 @@ module('Loadindicator', () => {
                     clock.tick(400);
 
                     const $toggleItem = treeView.getToggleItemVisibility(treeView.getNodes().eq(0));
-                    contentReadyHandler.resetHistory();
+                    contentReadyHandler.reset();
 
                     eventsEngine.trigger($toggleItem, 'dxclick');
                     eventsEngine.trigger($toggleItem, 'dxclick');

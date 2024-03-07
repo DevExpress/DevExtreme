@@ -112,7 +112,7 @@ QUnit.test('serialization ISO8601 dates', function(assert) {
 
     let timezoneOffset = -180;
 
-    sinon.stub(date, 'getTimezoneOffset').callsFake(function() {
+    sinon.stub(date, 'getTimezoneOffset', function() {
         return timezoneOffset;
     });
 

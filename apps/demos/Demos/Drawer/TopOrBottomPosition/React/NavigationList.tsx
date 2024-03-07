@@ -8,7 +8,7 @@ function NavigationList() {
     <div className="list">
       <List
         dataSource={navigation}
-        className="panel-list"
+        className="panel-list dx-theme-typography-background-color"
         height={200}
       />
     </div>

@@ -11,7 +11,7 @@ class TreeListResizingController extends ResizingController {
     super._toggleBestFitMode(isBestFit);
 
     const $rowsTable = this._rowsView.getTableElement();
-    $rowsTable!.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
+    $rowsTable.find('.dx-treelist-cell-expandable').toggleClass(this.addWidgetPrefix('best-fit'), isBestFit);
   }
 }
 

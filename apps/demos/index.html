@@ -82,22 +82,22 @@
 
         const selectedData = treeList?.getSelectedRowsData("leavesOnly");
         if (selectedData?.length) {
-          pathParts[1] = selectedData[0].Widget;
-          pathParts[2] = selectedData[0].Name;
+          pathParts[2] = selectedData[0].Widget;
+          pathParts[3] = selectedData[0].Name;
         }
 
-        approach = approach ?? pathParts[3];
+        approach = approach ?? pathParts[4];
         platform = platform ?? platformsByApproach[approach];
         language = language ?? languages.typescript;
 
         isLanguageSwitcherVisible = isLanguageSwitchingSupported(platform);
 
-        theme = theme ?? pathParts[4];
-        widget = pathParts[1];
-        name = pathParts[2];
+        theme = theme ?? pathParts[5];
+        widget = pathParts[2];
+        name = pathParts[3];
 
-        pathParts[3] = approach;
-        pathParts[4] = theme;
+        pathParts[4] = approach;
+        pathParts[5] = theme;
 
         const link = pathParts.slice(0, -1).join("/");
 

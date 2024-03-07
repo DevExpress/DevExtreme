@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
-import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 fixture('DataGrid.CustomNewRecordPosition')
   .page('http://localhost:8080/')
-  .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+  .beforeEach(async (t) => {
+    await t
+      .resizeWindow(900, 600);
   });
 
 const newRowPositionOptions = ['first', 'last', 'pageTop', 'pageBottom', 'viewportTop', 'viewportBottom'];
@@ -36,7 +36,7 @@ const newRowPositionTestTemplate = ({ newRowPosition, pageNumber }) => async (t)
   await setNewRowPosition(t, newRowPosition);
   await clickAddButton(t);
 
-  await testScreenshot(t, takeScreenshot, `datagrid_CustomNewRecordPosition_${newRowPosition}_added.png`);
+  await takeScreenshot(`datagrid_CustomNewRecordPosition_${newRowPosition}_added.png`);
 
   await clickCancelButton(t);
 
@@ -68,7 +68,7 @@ runManualTest('DataGrid', 'CustomNewRecordPosition', ['jQuery', 'React', 'Vue', 
     await t
       .click('.dx-command-edit .dx-link.dx-icon-add');
 
-    await testScreenshot(t, takeScreenshot, 'datagrid_CustomNewRecordPosition_insertAfterKey_clicked.png');
+    await takeScreenshot('datagrid_CustomNewRecordPosition_insertAfterKey_clicked.png');
 
     await t
       .expect(compareResults.isValid())

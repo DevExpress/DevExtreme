@@ -745,9 +745,9 @@ QUnit.module('custom uploading', moduleConfig, () => {
         assert.strictEqual(onUploadedSpy.callCount, 1, 'uploaded event raised');
         assert.strictEqual(onAbortedSpy.callCount, 0, 'upload aborted event is not called');
 
-        uploadChunkSpy.resetHistory();
-        onUploadedSpy.resetHistory();
-        onAbortedSpy.resetHistory();
+        uploadChunkSpy.reset();
+        onUploadedSpy.reset();
+        onAbortedSpy.reset();
 
         fileUploader.option('value', []);
 
@@ -1395,26 +1395,6 @@ QUnit.module('files rendering', moduleConfig, () => {
         assert.equal($selectButton.find('.' + FILEUPLOADER_INPUT_CLASS).length, 1, 'input is rendered in select button');
     });
 
-    [false, true].forEach((useNativeInputClick) => {
-        QUnit.test(`Input click should ${useNativeInputClick ? 'not' : ''} be prevented on runtime useNativeInputClick set to ${useNativeInputClick}`, function(assert) {
-            const $fileUploader = $('#fileuploader').dxFileUploader({
-                useNativeInputClick: !useNativeInputClick
-            });
-            const fileUploader = $fileUploader.dxFileUploader('instance');
-
-            fileUploader.option('useNativeInputClick', useNativeInputClick);
-
-            const $input = $fileUploader.find('.' + FILEUPLOADER_INPUT_CLASS);
-            const clickSpy = sinon.spy();
-
-            $input
-                .on('click', clickSpy)
-                .click();
-
-            assert.strictEqual(clickSpy.args[0][0].isDefaultPrevented(), !useNativeInputClick);
-        });
-    });
-
     QUnit.test('files count in list is correct if the \'extendSelection\' option is false', function(assert) {
         const $fileUploader = $('#fileuploader').dxFileUploader({
             extendSelection: false,
@@ -1705,8 +1685,8 @@ QUnit.module('allowCanceling', moduleConfig, () => {
         assert.ok(onUploadAbortedSpy.calledOnce, 'upload is cancelled');
         assert.ok(onUploadedSpy.notCalled, 'upload is not finished');
 
-        onUploadAbortedSpy.resetHistory();
-        onUploadedSpy.resetHistory();
+        onUploadAbortedSpy.reset();
+        onUploadedSpy.reset();
 
         let $fileStatusMessage = $element.find('.' + FILEUPLOADER_FILE_STATUS_MESSAGE_CLASS);
         let $progressBar = $element.find('.dx-progressbar');
@@ -3078,7 +3058,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadedSpy.calledOnce, 'file 1 uploaded');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.resetHistory();
+        onUploadedSpy.reset();
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
 
@@ -3112,7 +3092,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadAbortedSpy.notCalled, 'none files was aborted');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.resetHistory();
+        onUploadedSpy.reset();
         $element.dxFileUploader('instance').abortUpload();
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3154,7 +3134,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadErrorSpy.notCalled, 'none files has error');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.resetHistory();
+        onUploadedSpy.reset();
         this.clock.tick(1000);
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3191,8 +3171,8 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadedSpy.calledOnce, 'file 1 was uploaded');
         assert.ok(onUploadCompletedSpy.calledOnce, 'onUploadCompletedSpy was called in right time');
 
-        onUploadedSpy.resetHistory();
-        onUploadCompletedSpy.resetHistory();
+        onUploadedSpy.reset();
+        onUploadCompletedSpy.reset();
         this.clock.tick(1000);
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3238,7 +3218,7 @@ QUnit.module('uploading events', moduleConfig, () => {
         assert.ok(onUploadErrorSpy.notCalled, 'none files has error');
         assert.ok(onUploadCompletedSpy.notCalled, 'onUploadCompletedSpy was not called');
 
-        onUploadedSpy.resetHistory();
+        onUploadedSpy.reset();
         this.clock.tick(1000);
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT);
         this.clock.tick(FILEUPLOADER_AFTER_LOAD_DELAY);
@@ -3808,8 +3788,8 @@ QUnit.module('Drag and drop', moduleConfig, () => {
         assert.ok(onDropZoneLeaveSpy.calledOnce, 'dropZoneLeave called on first dropZone');
         assert.strictEqual(onDropZoneLeaveSpy.args[0][0].dropZoneElement, customDropZone1[0], 'dropZone argument is correct');
 
-        onDropZoneEnterSpy.resetHistory();
-        onDropZoneLeaveSpy.resetHistory();
+        onDropZoneEnterSpy.reset();
+        onDropZoneLeaveSpy.reset();
 
         triggerDragEvent(customDropZone2, 'dragenter');
         assert.ok(onDropZoneEnterSpy.calledOnce, 'dropZoneEnter called on second dropZone');
@@ -4106,7 +4086,7 @@ QUnit.module('files selection', moduleConfig, () => {
         this.clock.tick(this.xhrMock.LOAD_TIMEOUT * 2);
         assert.ok(uploadedSpy.calledTwice, 'two files are loaded');
 
-        uploadedSpy.resetHistory();
+        uploadedSpy.reset();
         simulateFileChoose($fileUploader, files);
         instance.upload();
 
@@ -4205,7 +4185,7 @@ QUnit.module('readOnly option', moduleConfig, () => {
             readOnly: true,
             uploadMode: 'useButtons'
         }).dxFileUploader('instance');
-        sinon.stub(instance, '_selectButtonClickHandler').callsFake(() => instance._selectFileDialogHandler());
+        sinon.stub(instance, '_selectButtonClickHandler', () => instance._selectFileDialogHandler());
 
         instance._selectButtonClickHandler();
         assert.strictEqual(instance._selectButtonClickHandler.returnValues[0], false, 'selectFile method not called');

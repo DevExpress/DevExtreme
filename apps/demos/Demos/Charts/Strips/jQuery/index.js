@@ -18,7 +18,7 @@ $(() => {
       },
       strips: [{
         label: {
-          text: 'Above average high',
+          text: 'Above average',
           font: {
             color: highAverageColor,
           },
@@ -28,7 +28,7 @@ $(() => {
       },
       {
         label: {
-          text: 'Below average low',
+          text: 'Below average',
           font: {
             color: lowAverageColor,
           },
@@ -48,7 +48,7 @@ $(() => {
     export: {
       enabled: true,
     },
-    title: 'Temperature (high) in September, &#176;F',
+    title: 'Temperature in September',
     legend: {
       visible: false,
     },

@@ -147,10 +147,4 @@ $texteditor-filled-bg-focused: $texteditor-filled-bg !default;
 $texteditor-label-color: $texteditor-placeholder-color;
 $texteditor-label-color-focused: $base-accent;
 
-:root {
-  --dx-texteditor-color-text: #{$texteditor-color}; 
-  --dx-texteditor-color-label: #{$texteditor-label-color};
-}
-
-
   

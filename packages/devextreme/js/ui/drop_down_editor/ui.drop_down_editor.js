@@ -33,8 +33,6 @@ const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 
-const OVERLAY_CONTENT_LABEL = 'Dropdown';
-
 const isIOs = devices.current().platform === 'ios';
 
 const DropDownEditor = TextBox.inherit({
@@ -555,13 +553,6 @@ const DropDownEditor = TextBox.inherit({
 
         this._renderPopup();
         this._renderPopupContent();
-        this._setPopupAriaLabel();
-    },
-
-    _setPopupAriaLabel() {
-        const $overlayContent = this._popup.$overlayContent();
-
-        this.setAria('label', OVERLAY_CONTENT_LABEL, $overlayContent);
     },
 
     _renderPopupContent: noop,

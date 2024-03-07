@@ -110,12 +110,15 @@ $(() => {
           items: [
             {
               text: 'Text Document',
+              extension: '.txt',
             },
             {
               text: 'RTF Document',
+              extension: '.rtf',
             },
             {
               text: 'Spreadsheet',
+              extension: '.xls',
             },
           ],
         },
@@ -127,21 +130,25 @@ $(() => {
         {
           text: 'Category',
           icon: 'tags',
-          beginGroup: true,
           items: [
             {
               text: 'Work',
+              category: 'Work',
             },
             {
               text: 'Important',
+              category: 'Important',
             },
             {
               text: 'Home',
+              category: 'Home',
             },
             {
               text: 'None',
+              category: '',
             },
           ],
+          beginGroup: true,
         },
         'refresh',
       ],
@@ -150,12 +157,11 @@ $(() => {
 
   function onItemClick(args) {
     let updated = false;
-    const { extension, category } = getItemInfo(args.itemData.text);
 
-    if (extension) {
-      updated = createFile(extension, args.fileSystemItem);
-    } else if (category !== undefined) {
-      updated = updateCategory(category, args.fileSystemItem, args.viewArea);
+    if (args.itemData.extension) {
+      updated = createFile(args.itemData.extension, args.fileSystemItem);
+    } else if (args.itemData.category !== undefined) {
+      updated = updateCategory(args.itemData.category, args.fileSystemItem, args.viewArea);
     }
 
     if (updated) {

@@ -72,13 +72,12 @@ jobs:
       fail-fast: false
       matrix:
         STRATEGY: [screenshots, accessibility]
-        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
     runs-on: ubuntu-latest
-    name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
+    name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}
     timeout-minutes: 30
 
     steps:
@@ -133,7 +132,6 @@ jobs:
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
-        THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
@@ -152,7 +150,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: screenshots
-        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+        path: apps/demos/testing/artifacts/compared-screenshots/*
         if-no-files-found: ignore
 
     - name: Copy accessibility report

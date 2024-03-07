@@ -13,24 +13,8 @@ import sortingMixin from './m_sorting_mixin';
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = 'dxDataGridColumnHeadersView';
 
-// TODO improve types of this mixin
-//  Now all members - protected by default (it may be wrong)
-// TODO getController
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewSortingExtender extends sortingMixin(Base) {
-  public optionChanged(args) {
-    const that = this;
-
-    switch (args.name) {
-      case 'sorting':
-        that._invalidate();
-        args.handled = true;
-        break;
-      default:
-        super.optionChanged(args);
-    }
-  }
-
-  protected _createRow(row) {
+  _createRow(row) {
     const $row = super._createRow(row);
 
     if (row.rowType === 'header') {
@@ -42,7 +26,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return $row;
   }
 
-  private _processHeaderAction(event, $row) {
+  _processHeaderAction(event, $row) {
     if ($(event.currentTarget).parent().get(0) !== $row.get(0)) {
       return;
     }
@@ -82,7 +66,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  protected _renderCellContent($cell, options) {
+  _renderCellContent($cell, options) {
     const that = this;
     const { column } = options;
 
@@ -98,7 +82,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     super._renderCellContent.apply(this, arguments);
   }
 
-  protected _columnOptionChanged(e) {
+  _columnOptionChanged(e) {
     const { changeTypes } = e;
 
     if (changeTypes.length === 1 && changeTypes.sorting) {
@@ -108,10 +92,8 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
     super._columnOptionChanged(e);
   }
-};
 
-const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelSortingExtender extends sortingMixin(Base) {
-  public optionChanged(args) {
+  optionChanged(args) {
     const that = this;
 
     switch (args.name) {
@@ -123,8 +105,10 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelSortingE
         super.optionChanged(args);
     }
   }
+};
 
-  protected _createGroupPanelItem($rootElement, groupColumn) {
+const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelSortingExtender extends sortingMixin(Base) {
+  _createGroupPanelItem($rootElement, groupColumn) {
     const that = this;
     const $item = super._createGroupPanelItem(...arguments);
 
@@ -147,8 +131,21 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelSortingE
     return $item;
   }
 
-  private _processGroupItemAction(groupColumnIndex) {
+  _processGroupItemAction(groupColumnIndex) {
     setTimeout(() => this.getController('columns').changeSortOrder(groupColumnIndex));
+  }
+
+  optionChanged(args) {
+    const that = this;
+
+    switch (args.name) {
+      case 'sorting':
+        that._invalidate();
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+    }
   }
 };
 

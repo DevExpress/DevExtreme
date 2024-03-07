@@ -12,7 +12,6 @@ import Editor from '@js/ui/editor/editor';
 import Menu from '@js/ui/menu';
 import Overlay from '@js/ui/overlay/ui.overlay';
 import { selectView } from '@js/ui/shared/accessibility';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 
 import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { ColumnsResizerViewController } from '../columns_resizing_reordering/m_columns_resizing_reordering';
@@ -181,42 +180,16 @@ const updateFilterValue = function (that, options) {
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewFilterRowExtender extends Base {
   private _filterRangeOverlayInstance: any;
 
-  private _applyFilterViewController!: ApplyFilterViewController;
+  private _applyFilterViewController: any;
 
-  public init() {
-    super.init();
-    this._applyFilterViewController = this.getController('applyFilter');
-  }
-
-  public optionChanged(args) {
-    switch (args.name) {
-      case 'filterRow':
-      case 'showColumnLines':
-        this._invalidate(true, true);
-        args.handled = true;
-        break;
-      case 'syncLookupFilterValues':
-        if (args.value) {
-          this.updateLookupDataSource();
-        } else {
-          this.render();
-        }
-        args.handled = true;
-        break;
-      default:
-        super.optionChanged(args);
-        break;
-    }
-  }
-
-  private _updateEditorValue(column, $editorContainer) {
+  _updateEditorValue(column, $editorContainer) {
     const that = this;
     const editor = getEditorInstance($editorContainer);
 
     editor && editor.option('value', getFilterValue(that, column.index, $editorContainer));
   }
 
-  protected _columnOptionChanged(e) {
+  _columnOptionChanged(e) {
     const that = this;
     const { optionNames } = e;
     let $cell;
@@ -267,27 +240,33 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     super._columnOptionChanged(e);
   }
 
-  protected _renderCore() {
+  _renderCore() {
     this._filterRangeOverlayInstance = null;
     // @ts-expect-error
     return super._renderCore.apply(this, arguments);
   }
 
-  protected _resizeCore() {
+  _resizeCore() {
     // @ts-expect-error
     super._resizeCore.apply(this, arguments);
     this._filterRangeOverlayInstance?.repaint();
   }
 
-  private isFilterRowVisible() {
+  isFilterRowVisible() {
     return this._isElementVisible(this.option('filterRow'));
   }
 
-  public isVisible() {
+  isVisible() {
     return super.isVisible() || this.isFilterRowVisible();
   }
 
-  private _initFilterRangeOverlay($cell, column) {
+  init() {
+    super.init();
+    // @ts-expect-error
+    this._applyFilterViewController = this.getController('applyFilter');
+  }
+
+  _initFilterRangeOverlay($cell, column) {
     const that = this;
     const sharedData = {};
     const $editorContainer = $cell.find('.dx-editor-container');
@@ -364,13 +343,13 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     });
   }
 
-  private _updateFilterRangeOverlay(options) {
+  _updateFilterRangeOverlay(options) {
     const overlayInstance = this._filterRangeOverlayInstance;
 
     overlayInstance && overlayInstance.option(options);
   }
 
-  private _showFilterRange($cell, column) {
+  _showFilterRange($cell, column) {
     const that = this;
     const $overlay = $cell.children(`.${that.addWidgetPrefix(FILTER_RANGE_OVERLAY_CLASS)}`);
     let overlayInstance = $overlay.length && $overlay.data('dxOverlay');
@@ -388,17 +367,17 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  private _hideFilterRange() {
+  _hideFilterRange() {
     const overlayInstance = this._filterRangeOverlayInstance;
 
     overlayInstance && overlayInstance.hide();
   }
 
-  private getFilterRangeOverlayInstance() {
+  getFilterRangeOverlayInstance() {
     return this._filterRangeOverlayInstance;
   }
 
-  protected _createRow(row) {
+  _createRow(row) {
     const $row = super._createRow(row);
 
     if (row.rowType === 'filter') {
@@ -412,7 +391,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return $row;
   }
 
-  protected _getRows() {
+  _getRows() {
     const result = super._getRows();
 
     if (this.isFilterRowVisible()) {
@@ -422,7 +401,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return result;
   }
 
-  private _renderFilterCell(cell, options) {
+  _renderFilterCell(cell, options) {
     const that = this;
     const { column } = options;
     const $cell = $(cell);
@@ -453,7 +432,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  protected _renderCellContent($cell, options) { // TODO _getCellTemplate
+  _renderCellContent($cell, options) { // TODO _getCellTemplate
     const that = this;
     const { column } = options;
 
@@ -472,7 +451,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     super._renderCellContent.apply(this, arguments);
   }
 
-  private _getEditorOptions($editorContainer, column) {
+  _getEditorOptions($editorContainer, column) {
     const that = this;
     const accessibilityOptions = {
       editorOptions: {
@@ -506,7 +485,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return result;
   }
 
-  private _getFilterInputAccessibilityAttributes(column) {
+  _getFilterInputAccessibilityAttributes(column) {
     const columnAriaLabel = messageLocalization.format('dxDataGrid-ariaFilterCell');
     if (this.component.option('showColumnHeaders')) {
       return {
@@ -517,15 +496,18 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return { 'aria-label': columnAriaLabel };
   }
 
-  private _renderEditor($editorContainer, options) {
+  _renderEditor($editorContainer, options) {
     $editorContainer.empty();
     const $element = $('<div>').appendTo($editorContainer);
-    const dataSource = this._dataController.dataSource();
+    const editorController = this.getController('editorFactory');
+    const dataSource = this.getController('data').dataSource();
+    // @ts-expect-error
+    const filterRowController = this.getController('applyFilter');
 
     if (options.lookup && this.option('syncLookupFilterValues')) {
-      this._applyFilterViewController.setCurrentColumnForFiltering(options);
-      const filter = this._dataController.getCombinedFilter();
-      this._applyFilterViewController.setCurrentColumnForFiltering(null);
+      filterRowController.setCurrentColumnForFiltering(options);
+      const filter = this.getController('data').getCombinedFilter();
+      filterRowController.setCurrentColumnForFiltering(null);
 
       const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(options, dataSource, filter);
       const lookupOptions = {
@@ -535,12 +517,12 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
           dataSource: lookupDataSource,
         },
       };
-      return this._editorFactoryController.createEditor($element, lookupOptions);
+      return editorController.createEditor($element, lookupOptions);
     }
-    return this._editorFactoryController.createEditor($element, options);
+    return editorController.createEditor($element, options);
   }
 
-  private _renderFilterRangeContent($cell, column) {
+  _renderFilterRangeContent($cell, column) {
     const that = this;
     const $editorContainer = $cell.find(`.${EDITOR_CONTAINER_CLASS}`).first();
 
@@ -558,7 +540,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     that._updateFilterRangeContent($cell, getRangeTextByFilterValue(that, column));
   }
 
-  private _updateFilterRangeContent($cell, value) {
+  _updateFilterRangeContent($cell, value) {
     const $filterRangeContent = $cell.find(`.${FILTER_RANGE_CONTENT_CLASS}`);
 
     if ($filterRangeContent.length) {
@@ -570,7 +552,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  private _updateFilterOperationChooser($menu, column, $editorContainer) {
+  _updateFilterOperationChooser($menu, column, $editorContainer) {
     const that = this;
     let isCellWasFocused;
     const restoreFocus = function () {
@@ -578,8 +560,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       menu && menu.option('focusedElement', null);
       isCellWasFocused && that._focusEditor($editorContainer);
     };
-
-    const editorFactoryController = this._editorFactoryController;
 
     that._createComponent($menu, Menu, {
       // @ts-expect-error
@@ -643,7 +623,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       },
       onSubmenuShowing() {
         isCellWasFocused = that._isEditorFocused($editorContainer);
-        editorFactoryController.loseFocus();
+        that.getController('editorFactory').loseFocus();
       },
       onSubmenuHiding() {
         // @ts-expect-error
@@ -662,17 +642,17 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     });
   }
 
-  private _isEditorFocused($container) {
+  _isEditorFocused($container) {
     return $container.hasClass(FOCUSED_CLASS) || $container.parents(`.${FOCUSED_CLASS}`).length;
   }
 
-  private _focusEditor($container) {
-    this._editorFactoryController.focus($container);
+  _focusEditor($container) {
+    this.getController('editorFactory').focus($container);
     // @ts-expect-error
     eventsEngine.trigger($container.find(EDITORS_INPUT_SELECTOR), 'focus');
   }
 
-  private _renderFilterOperationChooser($container, column, $editorContainer) {
+  _renderFilterOperationChooser($container, column, $editorContainer) {
     const that = this;
     let $menu;
 
@@ -683,7 +663,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  private _getFilterOperationMenuItems(column) {
+  _getFilterOperationMenuItems(column) {
     const that = this;
     let result = [{}];
     const filterRowOptions = that.option('filterRow');
@@ -712,7 +692,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     return result;
   }
 
-  protected _handleDataChanged(e) {
+  _handleDataChanged(e) {
     const dataSource = this._dataController?.dataSource?.();
     const lastLoadOptions = dataSource?.lastLoadOptions?.();
 
@@ -724,7 +704,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
     }
   }
 
-  private updateLookupDataSource(filterChanged?) {
+  updateLookupDataSource(filterChanged?) {
     if (!this.option('syncLookupFilterValues')) {
       return;
     }
@@ -757,7 +737,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 
         const editorDataSource = editor.option('dataSource');
         const shouldUpdateFilter = !filterChanged
-          || !equalByValue(editorDataSource.__dataGridSourceFilter || null, filter);
+                        || !equalByValue(editorDataSource.__dataGridSourceFilter || null, filter);
 
         if (shouldUpdateFilter) {
           const lookupDataSource = gridCoreUtils.getWrappedLookupDataSource(column, dataSource, filter);
@@ -766,25 +746,46 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
       }
     });
   }
+
+  optionChanged(args) {
+    switch (args.name) {
+      case 'filterRow':
+      case 'showColumnLines':
+        this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'syncLookupFilterValues':
+        if (args.value) {
+          this.updateLookupDataSource();
+        } else {
+          this.render();
+        }
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+        break;
+    }
+  }
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerFilterRowExtender extends Base {
-  private skipCalculateColumnFilters() {
+  skipCalculateColumnFilters() {
     return false;
   }
 
-  protected _calculateAdditionalFilter() {
+  _calculateAdditionalFilter() {
     if (this.skipCalculateColumnFilters()) {
       return super._calculateAdditionalFilter();
     }
 
     const filters = [super._calculateAdditionalFilter()];
     const columns = this._columnsController.getVisibleColumns(null, true);
-
-    const applyFilterController = this._applyFilterController;
+    // @ts-expect-error
+    const filterRowController = this.getController('applyFilter');
 
     each(columns, function () {
-      const shouldSkip = applyFilterController.getCurrentColumnForFiltering()?.index === this.index;
+      const shouldSkip = filterRowController.getCurrentColumnForFiltering()?.index === this.index;
       if (this.allowFiltering && this.calculateFilterExpression && isDefined(this.filterValue) && !shouldSkip) {
         const filter = this.createFilterExpression(this.filterValue, this.selectedFilterOperation || this.defaultFilterOperation, 'filterRow');
         filters.push(filter);
@@ -795,56 +796,50 @@ const data = (Base: ModuleType<DataController>) => class DataControllerFilterRow
   }
 };
 
-export class ApplyFilterViewController extends modules.ViewController {
+class ApplyFilterViewController extends modules.ViewController {
   private _headerPanel: any;
 
   private _currentColumn: any;
 
-  private _columnsController!: ColumnsController;
-
-  public init() {
-    this._columnsController = this.getController('columns');
-  }
-
-  private _getHeaderPanel() {
+  _getHeaderPanel() {
     if (!this._headerPanel) {
-      // TODO getView
       this._headerPanel = this.getView('headerPanel');
     }
     return this._headerPanel;
   }
 
-  public setHighLight($element, value) {
+  setHighLight($element, value) {
     if (isOnClickApplyFilterMode(this)) {
       $element
-      && $element.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)
-      && $element.closest(`.${EDITOR_CELL_CLASS}`).toggleClass(FILTER_MODIFIED_CLASS, value);
+            && $element.toggleClass(HIGHLIGHT_OUTLINE_CLASS, value)
+            && $element.closest(`.${EDITOR_CELL_CLASS}`).toggleClass(FILTER_MODIFIED_CLASS, value);
       this._getHeaderPanel().enableApplyButton(value);
     }
   }
 
-  public applyFilter() {
-    const columns = this._columnsController.getColumns();
+  applyFilter() {
+    const columnsController = this.getController('columns');
+    const columns = columnsController.getColumns();
 
-    this._columnsController.beginUpdate();
+    columnsController.beginUpdate();
     for (let i = 0; i < columns.length; i++) {
       const column = columns[i];
       if (column.bufferedFilterValue !== undefined) {
-        this._columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
+        columnsController.columnOption(i, 'filterValue', column.bufferedFilterValue);
         column.bufferedFilterValue = undefined;
       }
       if (column.bufferedSelectedFilterOperation !== undefined) {
-        this._columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
+        columnsController.columnOption(i, 'selectedFilterOperation', column.bufferedSelectedFilterOperation);
         column.bufferedSelectedFilterOperation = undefined;
       }
     }
-    this._columnsController.endUpdate();
+    columnsController.endUpdate();
     this.removeHighLights();
   }
 
-  private removeHighLights() {
+  removeHighLights() {
     if (isOnClickApplyFilterMode(this)) {
-      // TODO getView
+      // @ts-expect-error
       const columnHeadersViewElement = this.getView('columnHeadersView').element();
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${HIGHLIGHT_OUTLINE_CLASS}`).removeClass(HIGHLIGHT_OUTLINE_CLASS);
       columnHeadersViewElement.find(`.${this.addWidgetPrefix(FILTER_ROW_CLASS)} .${FILTER_MODIFIED_CLASS}`).removeClass(FILTER_MODIFIED_CLASS);
@@ -852,24 +847,23 @@ export class ApplyFilterViewController extends modules.ViewController {
     }
   }
 
-  public setCurrentColumnForFiltering(column) {
+  setCurrentColumnForFiltering(column) {
     this._currentColumn = column;
   }
 
-  public getCurrentColumnForFiltering() {
+  getCurrentColumnForFiltering() {
     return this._currentColumn;
   }
 }
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class FilterRowColumnsResizerExtender extends Base {
-  protected _startResizing() {
+  _startResizing() {
     const that = this;
 
     // @ts-expect-error
     super._startResizing.apply(that, arguments);
 
     if (that.isResizing()) {
-      // @ts-expect-error
       const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
       if (overlayInstance) {
@@ -882,17 +876,15 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
     }
   }
 
-  protected _endResizing() {
+  _endResizing() {
     const that = this;
     let $cell;
 
     if (that.isResizing()) {
-      // @ts-expect-error
       const overlayInstance = that._columnHeadersView.getFilterRangeOverlayInstance();
 
       if (overlayInstance) {
         $cell = overlayInstance.$element().closest('td');
-        // @ts-expect-error
         that._columnHeadersView._updateFilterRangeOverlay({ width: getOuterWidth($cell, true) + CORRECT_FILTER_RANGE_OVERLAY_WIDTH });
         overlayInstance.$content().show();
       }
@@ -906,7 +898,7 @@ const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class
 const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingController extends Base {
   private _needUpdateLookupDataSource: any;
 
-  public updateFieldValue(options) {
+  updateFieldValue(options) {
     if (options.column.lookup) {
       this._needUpdateLookupDataSource = true;
     }
@@ -915,9 +907,8 @@ const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingC
     return super.updateFieldValue.apply(this, arguments);
   }
 
-  protected _afterSaveEditData(cancel?) {
+  _afterSaveEditData(cancel?) {
     if (this._needUpdateLookupDataSource && !cancel) {
-      // TODO getView
       // @ts-expect-error
       this.getView('columnHeadersView')?.updateLookupDataSource();
     }
@@ -927,7 +918,7 @@ const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingC
     return super._afterSaveEditData.apply(this, arguments);
   }
 
-  protected _afterCancelEditData() {
+  _afterCancelEditData() {
     this._needUpdateLookupDataSource = false;
     // @ts-expect-error
     return super._afterCancelEditData.apply(this, arguments);
@@ -935,31 +926,16 @@ const editing = (Base: ModuleType<EditingController>) => class FilterRowEditingC
 };
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPanel extends Base {
-  private _applyFilterViewController!: ApplyFilterViewController;
+  private _applyFilterViewController: any;
 
-  public init() {
-    super.init();
-    this._dataController = this.getController('data');
-    this._applyFilterViewController = this.getController('applyFilter');
-  }
-
-  public optionChanged(args) {
-    if (args.name === 'filterRow') {
-      this._invalidate();
-      args.handled = true;
-    } else {
-      super.optionChanged(args);
-    }
-  }
-
-  protected _getToolbarItems() {
+  _getToolbarItems() {
     const items = super._getToolbarItems();
     const filterItem = this._prepareFilterItem();
 
     return filterItem.concat(items);
   }
 
-  private _prepareFilterItem() {
+  _prepareFilterItem() {
     const that = this;
     const filterItem: object[] = [];
 
@@ -996,17 +972,33 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class FilterRowHeaderPane
     return filterItem;
   }
 
-  private _isShowApplyFilterButton() {
+  _isShowApplyFilterButton() {
     const filterRowOptions = this.option('filterRow');
     return !!filterRowOptions?.visible && filterRowOptions.applyFilter === 'onClick';
   }
 
-  private enableApplyButton(value) {
+  init() {
+    super.init();
+    this._dataController = this.getController('data');
+    // @ts-expect-error
+    this._applyFilterViewController = this.getController('applyFilter');
+  }
+
+  enableApplyButton(value) {
     this.setToolbarItemDisabled('applyFilterButton', !value);
   }
 
-  public isVisible() {
+  isVisible() {
     return super.isVisible() || this._isShowApplyFilterButton();
+  }
+
+  optionChanged(args) {
+    if (args.name === 'filterRow') {
+      this._invalidate();
+      args.handled = true;
+    } else {
+      super.optionChanged(args);
+    }
   }
 };
 

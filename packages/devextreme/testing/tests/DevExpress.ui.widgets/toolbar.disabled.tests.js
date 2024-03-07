@@ -114,8 +114,8 @@ const openDropDownMenuIfExist = (toolbar) => {
             };
 
             const checkClickHandlers = ($item, toolbarDisabled, itemDisabled, itemOptionsDisabled) => {
-                itemClickHandler.resetHistory();
-                buttonClickHandler.resetHistory();
+                itemClickHandler.reset();
+                buttonClickHandler.reset();
 
                 eventsEngine.trigger($item, 'dxclick');
 

@@ -2874,7 +2874,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.height]
      */
-    height?: number | string;
+    height?: number;
     /**
      * [descr:GridBaseOptions.columnChooser.mode]
      */
@@ -2903,7 +2903,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.width]
      */
-    width?: number | string;
+    width?: number;
     /**
      * [descr:GridBaseOptions.columnChooser.sortOrder]
      */
@@ -3010,7 +3010,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.height]
      */
-    height?: number | string;
+    height?: number;
     /**
      * [descr:GridBaseColumn.headerFilter.search]
      */
@@ -3023,7 +3023,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.width]
      */
-    width?: number | string;
+    width?: number;
   };
   /**
    * [descr:ColumnHeaderFilterSearchConfig]
@@ -4072,7 +4072,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.headerFilter.height]
      */
-    height?: number | string;
+    height?: number;
     /**
      * [descr:GridBaseOptions.headerFilter.search]
      */
@@ -4093,7 +4093,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.headerFilter.width]
      */
-    width?: number | string;
+    width?: number;
   };
   export type HeaderFilterGroupInterval =
     | 'day'
@@ -4183,7 +4183,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.height]
      */
-    height?: number | string;
+    height?: number;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorSrc]
      */
@@ -4211,7 +4211,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.width]
      */
-    width?: number | string;
+    width?: number;
   };
   /**
    * [descr:NewRowInfo]

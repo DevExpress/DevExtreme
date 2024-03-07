@@ -1,7 +1,7 @@
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
 import {
@@ -9,19 +9,18 @@ import {
   runTestAtPage,
   shouldRunFramework,
   shouldRunTestAtIndex,
-  globalReadFrom,
-  changeTheme,
-  waitForAngularLoading,
-  shouldRunTest,
 } from '../utils/visual-tests/matrix-test-helper';
-import {
-  getThemePostfix,
-  THEME,
-} from '../utils/visual-tests/helpers/theme-utils';
-
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
 
+const globalReadFrom = (basePath, relativePath, mapCallback) => {
+  const absolute = join(basePath, relativePath);
+  if (existsSync(absolute)) {
+    const result = readFileSync(absolute, 'utf8');
+    return (mapCallback && result && mapCallback(result)) || result;
+  }
+  return null;
+};
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
   const result = eval(code);
@@ -32,6 +31,17 @@ const execCode = ClientFunction((code) => {
 
   return Promise.resolve();
 });
+const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
+  let demoAppCounter = 0;
+  const demoAppIntervalHandle = setInterval(() => {
+    const demoApp = document.querySelector('demo-app');
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+      setTimeout(resolve, 1000);
+      clearInterval(demoAppIntervalHandle);
+    }
+    demoAppCounter += 1;
+  }, 1000);
+}));
 
 const injectStyle = (style) => `
     var style = document.createElement('style'); 
@@ -78,25 +88,6 @@ const getTestSpecificSkipRules = (testName) => {
     default:
       return [];
   }
-};
-
-const SKIPPED_TESTS = {
-  Angular: {
-    DataGrid: [
-      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
-    ],
-    Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-    ],
-  },
-  React: {
-    DataGrid: [
-      { demo: 'SignalRService', themes: [THEME.material] },
-    ],
-    Scheduler: [
-      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-    ],
-  },
 };
 
 ['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
@@ -175,8 +166,6 @@ const SKIPPED_TESTS = {
       }
     }
 
-    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-
     runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
@@ -186,7 +175,6 @@ const SKIPPED_TESTS = {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
-
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
@@ -218,14 +206,7 @@ const SKIPPED_TESTS = {
           await t.expect(error).notOk();
           await t.expect(results.violations.length === 0).ok(createReport(results.violations));
         } else {
-          const testTheme = process.env.THEME;
-
-          if (!shouldRunTest(approach, index, widgetName, demoName, SKIPPED_TESTS)) {
-            return;
-          }
-
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
-
+          const comparisonResult = await compareScreenshot(t, `${testName}.png`, undefined, comparisonOptions);
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {
             // eslint-disable-next-line no-console

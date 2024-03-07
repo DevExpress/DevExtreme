@@ -21,79 +21,79 @@ import {
 } from './m_data_source_adapter_utils';
 
 export default class DataSourceAdapter extends modules.Controller {
-  protected _dataSource: any;
+  _dataSource: any;
 
-  private _remoteOperations: any;
+  _remoteOperations: any;
 
-  private _isLastPage!: boolean;
+  _isLastPage!: boolean;
 
-  private _hasLastPage!: boolean;
+  _hasLastPage!: boolean;
 
-  private _currentTotalCount: any;
+  _currentTotalCount: any;
 
-  protected _items: any;
+  _items: any;
 
-  private _cachedData: any;
+  _cachedData: any;
 
-  protected _cachedStoreData: any;
+  _cachedStoreData: any;
 
-  private _cachedPagingData: any;
+  _cachedPagingData: any;
 
-  private _lastOperationTypes: any;
+  _lastOperationTypes: any;
 
-  private _eventsStrategy: any;
+  _eventsStrategy: any;
 
-  protected _totalCountCorrection: any;
+  _totalCountCorrection: any;
 
-  protected _isLoadingAll: any;
+  _isLoadingAll: any;
 
-  protected _lastLoadOptions: any;
+  _lastLoadOptions: any;
 
-  private _dataIndexGetter: any;
+  _dataIndexGetter: any;
 
-  private _isRefreshing: any;
+  _isRefreshing: any;
 
-  private _loadingOperationTypes: any;
+  _loadingOperationTypes: any;
 
-  private _isRefreshed: any;
+  _isRefreshed: any;
 
-  private _lastOperationId: any;
+  _lastOperationId: any;
 
-  private _operationTypes: any;
+  _operationTypes: any;
 
-  private _isCustomLoading: any;
+  _isCustomLoading: any;
 
-  protected changed: any;
+  changed: any;
 
-  protected loadingChanged: any;
+  loadingChanged: any;
 
-  private loadError: any;
+  loadError: any;
 
-  private customizeStoreLoadOptions: any;
+  customizeStoreLoadOptions: any;
 
-  private changing: any;
+  changing: any;
 
-  private pushed: any;
+  pushed: any;
 
-  private _dataChangedHandler!: (e: any) => any;
+  _dataChangedHandler!: (e: any) => any;
 
-  private _customizeStoreLoadOptionsHandler!: (e: any) => any;
+  _customizeStoreLoadOptionsHandler!: (e: any) => any;
 
-  private _dataLoadedHandler!: (e: any) => any;
+  _dataLoadedHandler!: (e: any) => any;
 
-  private _loadingChangedHandler!: (e: any) => any;
+  _loadingChangedHandler!: (e: any) => any;
 
-  private _loadErrorHandler!: (e: any) => any;
+  _loadErrorHandler!: (e: any) => any;
 
-  private _pushHandler!: (e: any) => any;
+  _pushHandler!: (e: any) => any;
 
-  private _changingHandler!: (e: any) => any;
+  _changingHandler!: (e: any) => any;
 
-  protected store!: () => any;
+  store!: () => any;
 
-  private readonly group!: (args?: any) => any;
+  group!: (args?: any) => any;
 
-  public init(dataSource?, remoteOperations?) {
+  init(dataSource?, remoteOperations?) {
     const that = this;
 
     that._dataSource = dataSource;
@@ -140,7 +140,11 @@ export default class DataSourceAdapter extends modules.Controller {
     });
   }
 
-  public dispose(isSharedDataSource?) {
+  remoteOperations() {
+    return this._remoteOperations;
+  }
+
+  dispose(isSharedDataSource?) {
     const that = this;
     const dataSource = that._dataSource;
     const store = dataSource.store();
@@ -158,17 +162,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected remoteOperations() {
-    return this._remoteOperations;
-  }
-
-  /**
-   * @extended: virtual_scrolling
-   */
-  public refresh(options, operationTypes) {
+  refresh(options, operationTypes) {
     const that = this;
     const dataSource = that._dataSource;
 
@@ -179,25 +173,22 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  private resetCurrentTotalCount() {
+  resetCurrentTotalCount() {
     this._currentTotalCount = 0;
     this._totalCountCorrection = 0;
   }
 
-  protected resetCache() {
+  resetCache() {
     this._cachedStoreData = undefined;
     this._cachedPagingData = undefined;
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected resetPagesCache(isLiveUpdate?) {
+  // eslint-disable-next-line
+  resetPagesCache(isLiveUpdate?) {
     this._cachedData = createEmptyCachedData();
   }
 
-  private _needClearStoreDataCache() {
+  _needClearStoreDataCache() {
     const remoteOperations = this.remoteOperations();
     const operationTypes = calculateOperationTypes(this._lastLoadOptions || {}, {});
     const isLocalOperations = Object.keys(remoteOperations).every((operationName) => !operationTypes[operationName] || !remoteOperations[operationName]);
@@ -205,7 +196,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return !isLocalOperations;
   }
 
-  private push(changes, fromStore) {
+  push(changes, fromStore) {
     const store = this.store();
 
     if (this._needClearStoreDataCache()) {
@@ -232,7 +223,7 @@ export default class DataSourceAdapter extends modules.Controller {
     this.pushed.fire(changes);
   }
 
-  private getDataIndexGetter() {
+  getDataIndexGetter() {
     if (!this._dataIndexGetter) {
       let indexByKey;
       let storeData;
@@ -254,24 +245,15 @@ export default class DataSourceAdapter extends modules.Controller {
     return this._dataIndexGetter;
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _getKeyInfo() {
+  _getKeyInfo() {
     return this.store();
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _needToCopyDataObject() {
+  _needToCopyDataObject() {
     return true;
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _applyBatch(changes, fromStore?) {
+  _applyBatch(changes, fromStore?) {
     const keyInfo = this._getKeyInfo();
     const dataSource = this._dataSource;
     const groupCount = gridCoreUtils.normalizeSortingInfo(this.group()).length;
@@ -314,19 +296,16 @@ export default class DataSourceAdapter extends modules.Controller {
     changes.splice(0, changes.length);
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _handlePush({ changes }) {
+  _handlePush({ changes }) {
     this.push(changes, true);
   }
 
-  protected _handleChanging(e) {
+  _handleChanging(e) {
     this.changing.fire(e);
     this._applyBatch(e.changes, true);
   }
 
-  private _needCleanCacheByOperation(operationType, remoteOperations) {
+  _needCleanCacheByOperation(operationType, remoteOperations) {
     const operationTypesByOrder = ['filtering', 'sorting', 'paging'];
     const operationTypeIndex = operationTypesByOrder.indexOf(operationType);
     const currentOperationTypes = operationTypeIndex >= 0 ? operationTypesByOrder.slice(operationTypeIndex) : [operationType];
@@ -334,10 +313,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return currentOperationTypes.some((operationType) => remoteOperations[operationType]);
   }
 
-  /**
-   * @extended: virtual_scrolling, TreeLists's data_source_adapter, DataGrid's m_grouping
-   */
-  protected _customizeRemoteOperations(options, operationTypes) {
+  _customizeRemoteOperations(options, operationTypes) {
     let cachedStoreData = this._cachedStoreData;
     let cachedPagingData = this._cachedPagingData;
     let cachedData = this._cachedData;
@@ -384,7 +360,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  protected _handleCustomizeStoreLoadOptions(options) {
+  _handleCustomizeStoreLoadOptions(options) {
     this._handleDataLoading(options);
     if (!(options.data?.length === 0)) {
       // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -392,10 +368,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected _handleDataLoading(options) {
+  _handleDataLoading(options) {
     const dataSource = this._dataSource;
     const lastLoadOptions = this._lastLoadOptions;
 
@@ -450,7 +423,7 @@ export default class DataSourceAdapter extends modules.Controller {
     this._handleDataLoadingCore(options);
   }
 
-  private _handleDataLoadingCore(options) {
+  _handleDataLoadingCore(options) {
     const { remoteOperations } = options;
 
     options.loadOptions = {};
@@ -479,10 +452,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _handleDataLoaded(options) {
+  _handleDataLoaded(options) {
     const { loadOptions } = options;
     const localPaging = options.remoteOperations && !options.remoteOperations.paging;
     const { cachedData } = options;
@@ -576,10 +546,7 @@ export default class DataSourceAdapter extends modules.Controller {
     options.storeLoadOptions = options.originalStoreLoadOptions;
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected _handleDataLoadedCore(options) {
+  _handleDataLoadedCore(options) {
     if (options.remoteOperations && !options.remoteOperations.paging && Array.isArray(options.data)) {
       if (options.skip !== undefined) {
         options.data = options.data.slice(options.skip);
@@ -590,17 +557,11 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  /**
-   * @extended virtual_scrolling
-   */
-  protected _handleLoadingChanged(isLoading) {
+  _handleLoadingChanged(isLoading) {
     this.loadingChanged.fire(isLoading);
   }
 
-  /**
-   * @extended virtual_scrolling
-   */
-  protected _handleLoadError(error) {
+  _handleLoadError(error) {
     this.loadError.fire(error);
     this.changed.fire({
       changeType: 'loadError',
@@ -608,17 +569,11 @@ export default class DataSourceAdapter extends modules.Controller {
     });
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected _loadPageSize() {
+  _loadPageSize() {
     return this.pageSize();
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected _handleDataChanged(args) {
+  _handleDataChanged(args) {
     let currentTotalCount;
     const dataSource = this._dataSource;
     let isLoading = false;
@@ -669,7 +624,7 @@ export default class DataSourceAdapter extends modules.Controller {
     }
   }
 
-  private _scheduleCustomLoadCallbacks(deferred) {
+  _scheduleCustomLoadCallbacks(deferred) {
     const that = this;
 
     that._isCustomLoading = true;
@@ -678,71 +633,58 @@ export default class DataSourceAdapter extends modules.Controller {
     });
   }
 
-  private loadingOperationTypes() {
+  loadingOperationTypes() {
     return this._loadingOperationTypes;
   }
 
-  private operationTypes() {
+  operationTypes() {
     return this._operationTypes;
   }
 
-  private lastLoadOptions() {
+  lastLoadOptions() {
     return this._lastLoadOptions || {};
   }
 
-  private isLastPage() {
+  isLastPage() {
     return this._isLastPage;
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected _dataSourceTotalCount() {
+  _dataSourceTotalCount() {
     return this._dataSource.totalCount();
   }
 
-  /**
-   * @extended: virtual_scrolling, TreeLists's data_source_adapter
-   */
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _changeRowExpandCore(path?: any) {}
+  _changeRowExpandCore(path?: any) {
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected changeRowExpand(path?: any): any {}
+  changeRowExpand(path?: any): any {
 
-  private totalCount() {
+  }
+
+  totalCount() {
     // eslint-disable-next-line radix
     return parseInt((this._currentTotalCount || this._dataSourceTotalCount()) + this._totalCountCorrection);
   }
 
-  private totalCountCorrection() {
+  totalCountCorrection() {
     return this._totalCountCorrection;
   }
 
-  /**
-   * @extended: virtual_scrolling
-   * @protected
-   */
-  protected items(): any {}
+  items(): any {
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected itemsCount() {
+  }
+
+  itemsCount() {
     return this._dataSource.items().length;
   }
 
-  /**
-   * @extended: TreeLists's data_source_adapter
-   */
-  protected totalItemsCount() {
+  totalItemsCount() {
     return this.totalCount();
   }
 
-  protected pageSize() {
+  pageSize() {
     const dataSource = this._dataSource;
 
     if (!arguments.length && !dataSource.paginate()) {
@@ -751,7 +693,7 @@ export default class DataSourceAdapter extends modules.Controller {
     return dataSource.pageSize.apply(dataSource, arguments);
   }
 
-  protected pageCount() {
+  pageCount() {
     const that = this;
     const count = that.totalItemsCount() - that._totalCountCorrection;
     const pageSize = that.pageSize();
@@ -762,11 +704,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return 1;
   }
 
-  protected hasKnownLastPage() {
+  hasKnownLastPage() {
     return this._hasLastPage || this._dataSource.totalCount() >= 0;
   }
 
-  protected loadFromStore(loadOptions, store?) {
+  loadFromStore(loadOptions, store?) {
     const dataSource = this._dataSource;
     // @ts-expect-error
     const d = new Deferred();
@@ -786,14 +728,11 @@ export default class DataSourceAdapter extends modules.Controller {
     return d;
   }
 
-  protected isCustomLoading() {
+  isCustomLoading() {
     return !!this._isCustomLoading;
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected load(options?) {
+  load(options?) {
     const that = this;
     const dataSource = that._dataSource;
     // @ts-expect-error
@@ -849,25 +788,20 @@ export default class DataSourceAdapter extends modules.Controller {
     return dataSource.load();
   }
 
-  /**
-   * @extended: virtual_scrolling
-   */
-  protected reload(full) {
+  reload(full) {
     return full ? this._dataSource.reload() : this._dataSource.load();
   }
 
-  private getCachedStoreData() {
+  getCachedStoreData() {
     return this._cachedStoreData;
   }
 
-  /**
-   * @exended: virtual_scrolling
-   */
-  protected isLoaded(): any {}
+  isLoaded(): any {
 
-  /**
-   * @extended: virtual_scrolling
-   */
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected pageIndex(pageIndex?) {}
+  pageIndex(pageIndex?) {
+
+  }
 }

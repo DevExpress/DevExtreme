@@ -51,53 +51,52 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   _$popupContent: any;
 
-  public init() {
+  init() {
     this._editForm = null;
     this._updateEditFormDeferred = null;
 
     super.init();
   }
 
-  private isFormOrPopupEditMode() {
+  isFormOrPopupEditMode() {
     return this.isPopupEditMode() || this.isFormEditMode();
   }
 
-  private isPopupEditMode() {
+  isPopupEditMode() {
     const editMode = this.option('editing.mode');
     return editMode === EDIT_MODE_POPUP;
   }
 
-  private isFormEditMode() {
+  isFormEditMode() {
     const editMode = this.option('editing.mode');
     return editMode === EDIT_MODE_FORM;
   }
 
-  protected getFirstEditableColumnIndex() {
+  getFirstEditableColumnIndex() {
     const firstFormItem = this._firstFormItem;
 
     if (this.isFormEditMode() && firstFormItem) {
       const editRowKey = this.option(EDITING_EDITROWKEY_OPTION_NAME);
       const editRowIndex = this._dataController.getRowIndexByKey(editRowKey);
       const $editFormElements = this._rowsView.getCellElements(editRowIndex);
-      // @ts-expect-error
       return this._rowsView._getEditFormEditorVisibleIndex($editFormElements, firstFormItem.column);
     }
 
     return super.getFirstEditableColumnIndex();
   }
 
-  public getEditFormRowIndex() {
+  getEditFormRowIndex() {
     return this.isFormOrPopupEditMode() ? this._getVisibleEditRowIndex() : super.getEditFormRowIndex();
   }
 
-  protected _isEditColumnVisible() {
+  _isEditColumnVisible() {
     const result = super._isEditColumnVisible();
     const editingOptions: any = this.option('editing');
 
     return this.isFormOrPopupEditMode() ? editingOptions.allowUpdating || result : result;
   }
 
-  protected _handleDataChanged(args) {
+  _handleDataChanged(args) {
     if (this.isPopupEditMode()) {
       const editRowKey = this.option('editing.editRowKey');
       const hasEditRow = args?.items?.some((item) => equalByValue(item.key, editRowKey));
@@ -112,7 +111,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._handleDataChanged(args);
   }
 
-  protected getPopupContent() {
+  getPopupContent() {
     const popupVisible = this._editPopup?.option('visible');
 
     if (this.isPopupEditMode() && popupVisible) {
@@ -120,7 +119,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _showAddedRow(rowIndex) {
+  _showAddedRow(rowIndex) {
     if (this.isPopupEditMode()) {
       this._showEditPopup(rowIndex);
     } else {
@@ -128,7 +127,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _cancelEditDataCore() {
+  _cancelEditDataCore() {
     super._cancelEditDataCore();
 
     if (this.isPopupEditMode()) {
@@ -137,7 +136,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
+  _updateEditRowCore(row, skipCurrentRow, isCustomSetCellValue) {
     const editForm = this._editForm;
 
     if (this.isPopupEditMode()) {
@@ -156,7 +155,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _showEditPopup(rowIndex, repaintForm?) {
+  _showEditPopup(rowIndex, repaintForm?) {
     const isMobileDevice = devices.current().deviceType !== 'desktop';
     const editPopupClass = this.addWidgetPrefix(EDIT_POPUP_CLASS);
     const popupOptions = extend(
@@ -199,7 +198,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._showEditPopup(rowIndex, repaintForm);
   }
 
-  protected _getPopupEditFormTemplate(rowIndex) {
+  _getPopupEditFormTemplate(rowIndex) {
     // @ts-expect-error
     const row = this.component.getVisibleRows()[rowIndex];
     const templateOptions = {
@@ -224,7 +223,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
   }
 
-  protected _repaintEditPopup() {
+  _repaintEditPopup() {
     const rowIndex = this._getVisibleEditRowIndex();
 
     if (rowIndex >= 0) {
@@ -239,11 +238,11 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _hideEditPopup() {
+  _hideEditPopup() {
     this._editPopup?.option('visible', false);
   }
 
-  public optionChanged(args) {
+  optionChanged(args) {
     if (args.name === 'editing' && this.isFormOrPopupEditMode()) {
       const { fullName } = args;
 
@@ -259,7 +258,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super.optionChanged(args);
   }
 
-  private _handleFormOptionChange(args) {
+  _handleFormOptionChange(args) {
     if (this.isFormEditMode()) {
       const editRowIndex = this._getVisibleEditRowIndex();
       if (editRowIndex >= 0) {
@@ -273,7 +272,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  private _handlePopupOptionChange(args) {
+  _handlePopupOptionChange(args) {
     const editPopup = this._editPopup;
     if (editPopup) {
       const popupOptionName = args.fullName.slice(EDITING_POPUP_OPTION_NAME.length + 1);
@@ -285,10 +284,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  /**
-   * interface override
-   */
-  public renderFormEditorTemplate(detailCellOptions, item, formTemplateOptions, container, isReadOnly?) {
+  renderFormEditorTemplate(detailCellOptions, item, formTemplateOptions, container, isReadOnly?) {
     const that = this;
     const $container = $(container);
     const { column } = item;
@@ -324,7 +320,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return cellOptions;
   }
 
-  private getFormEditorTemplate(cellOptions, item) {
+  getFormEditorTemplate(cellOptions, item) {
     const column = this.component.columnOption(item.name || item.dataField);
 
     return (options, container) => {
@@ -358,7 +354,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
   }
 
-  private getEditFormOptions(detailOptions) {
+  getEditFormOptions(detailOptions) {
     const editFormOptions = (this as any)._getValidationGroupsInForm?.(detailOptions);
     const userCustomizeItem = this.option('editing.form.customizeItem');
     const editFormItemClass = this.addWidgetPrefix(EDIT_FORM_ITEM_CLASS);
@@ -366,7 +362,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     const isCustomEditorType = {};
 
     if (!items) {
-      const columns = this._columnsController.getColumns();
+      const columns = this.getController('columns').getColumns();
       items = [];
       each(columns, (_, column) => {
         if (!column.isBand && !column.type) {
@@ -428,7 +424,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     });
   }
 
-  private getEditFormTemplate() {
+  getEditFormTemplate() {
     return ($container, detailOptions, options) => {
       const editFormOptions = this.option(EDITING_FORM_OPTION_NAME);
       const baseEditFormOptions = this.getEditFormOptions(detailOptions);
@@ -455,15 +451,15 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     };
   }
 
-  private getEditForm() {
+  getEditForm() {
     return this._editForm;
   }
 
-  protected _endUpdateCore() {
+  _endUpdateCore() {
     this._updateEditFormDeferred?.resolve();
   }
 
-  protected _beforeEndSaving(changes) {
+  _beforeEndSaving(changes) {
     super._beforeEndSaving(changes);
 
     if (this.isPopupEditMode()) {
@@ -471,7 +467,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
+  _processDataItemCore(item, change, key, columns, generateDataValues) {
     const { type } = change;
 
     if (this.isPopupEditMode() && type === DATA_EDIT_DATA_INSERT_TYPE) {
@@ -481,7 +477,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._processDataItemCore(item, change, key, columns, generateDataValues);
   }
 
-  protected _editRowFromOptionChangedCore(rowIndices, rowIndex) {
+  _editRowFromOptionChangedCore(rowIndices, rowIndex) {
     const isPopupEditMode = this.isPopupEditMode();
 
     super._editRowFromOptionChangedCore(rowIndices, rowIndex, isPopupEditMode);
@@ -493,15 +489,15 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 };
 
 const data = (Base: ModuleType<DataController>) => class DataEditingFormBasedExtender extends Base {
-  private _updateEditItem(item) {
-    // @ts-expect-error
+  _editingController: any;
+
+  _updateEditItem(item) {
     if (this._editingController.isFormEditMode()) {
       item.rowType = 'detail';
     }
   }
 
-  protected _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
-    // @ts-expect-error
+  _getChangedColumnIndices(oldItem, newItem, visibleRowIndex, isLiveUpdate) {
     if (isLiveUpdate === false && newItem.isEditing && this._editingController.isFormEditMode()) {
       return;
     }
@@ -511,8 +507,9 @@ const data = (Base: ModuleType<DataController>) => class DataEditingFormBasedExt
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedExtender extends Base {
-  protected _renderCellContent($cell, options) {
-    // @ts-expect-error
+  _editingController: any;
+
+  _renderCellContent($cell, options) {
     if (options.rowType === 'data' && this._editingController.isPopupEditMode() && options.row.visible === false) {
       return;
     }
@@ -520,10 +517,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     super._renderCellContent.apply(this, arguments as any);
   }
 
-  public getCellElements(rowIndex): dxElementWrapper | undefined {
+  getCellElements(rowIndex): dxElementWrapper | undefined {
     const $cellElements = super.getCellElements(rowIndex);
     const editingController = this._editingController;
-    // @ts-expect-error
     const editForm = editingController.getEditForm();
     const editFormRowIndex = editingController.getEditFormRowIndex();
 
@@ -534,7 +530,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     return $cellElements;
   }
 
-  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     const editFormRowIndex = this._editingController.getEditFormRowIndex();
 
     if (editFormRowIndex === rowIndex && isString(columnIdentifier)) {
@@ -545,7 +541,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     return super._getVisibleColumnIndex.apply(this, arguments as any);
   }
 
-  private _getEditFormEditorVisibleIndex($cells, column) {
+  _getEditFormEditorVisibleIndex($cells, column) {
     let visibleIndex: any = -1;
 
     // @ts-expect-error
@@ -559,14 +555,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     return visibleIndex;
   }
 
-  private _isFormItem(parameters) {
+  _isFormItem(parameters) {
     const isDetailRow = parameters.rowType === 'detail' || parameters.rowType === 'detailAdaptive';
-    // @ts-expect-error
     const isPopupEditing = parameters.rowType === 'data' && this._editingController.isPopupEditMode();
     return (isDetailRow || isPopupEditing) && parameters.item;
   }
 
-  public _updateCell($cell, parameters) {
+  _updateCell($cell, parameters) {
     if (this._isFormItem(parameters)) {
       // @ts-expect-error Badly typed based class
       this._formItemPrepared(parameters, $cell);
@@ -575,14 +570,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingFormBasedE
     }
   }
 
-  protected _updateContent() {
+  _updateContent() {
     const editingController = this._editingController;
-    // @ts-expect-error
     const oldEditForm = editingController.getEditForm();
     const validationGroup = oldEditForm?.option('validationGroup');
     const deferred = super._updateContent.apply(this, arguments as any);
     return deferred.done(() => {
-      // @ts-expect-error
       const newEditForm = editingController.getEditForm();
       if (validationGroup && newEditForm && newEditForm !== oldEditForm) {
         newEditForm.option('validationGroup', validationGroup);

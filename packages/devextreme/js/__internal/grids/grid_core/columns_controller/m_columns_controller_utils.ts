@@ -69,15 +69,12 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
   }
 };
 
-export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?, createdColumnCount?) {
+export const createColumnsFromOptions = function (that: ColumnsController, columnsOptions, bandColumn?) {
   let result: any = [];
 
   if (columnsOptions) {
     each(columnsOptions, (index, columnOptions) => {
-      const currentIndex = (createdColumnCount ?? 0) + result.length;
-      const userStateColumnOptions = that._columnsUserState
-        && checkUserStateColumn(columnOptions, that._columnsUserState[currentIndex])
-        && that._columnsUserState[currentIndex];
+      const userStateColumnOptions = that._columnsUserState && checkUserStateColumn(columnOptions, that._columnsUserState[index]) && that._columnsUserState[index];
       const column: any = createColumn(that, columnOptions, userStateColumnOptions, bandColumn);
 
       if (column) {
@@ -87,7 +84,7 @@ export const createColumnsFromOptions = function (that: ColumnsController, colum
         result.push(column);
 
         if (column.columns) {
-          result = result.concat(createColumnsFromOptions(that, column.columns, column, result.length));
+          result = result.concat(createColumnsFromOptions(that, column.columns, column));
           delete column.columns;
           column.hasColumns = true;
         }

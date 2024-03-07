@@ -1,4 +1,4 @@
-/* eslint-disable max-classes-per-file */
+import Class from '@js/core/class';
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
@@ -73,8 +73,7 @@ const OPERATORS = {
   notOr: '!or',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
-const EditorFactory = EditorFactoryMixin(class {});
+const EditorFactory = Class.inherit(EditorFactoryMixin);
 
 class FilterBuilder extends Widget<any> {
   _disableInvalidateForValue!: boolean;
@@ -457,7 +456,7 @@ class FilterBuilder extends Widget<any> {
               // @ts-expect-error
               $valueButton.remove();
             }
-            $operationButton.text(currentOperation.text);
+            $operationButton.html(currentOperation.text);
             this._updateFilter();
           }
         },
@@ -508,7 +507,7 @@ class FilterBuilder extends Widget<any> {
             that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
             const caption = getFullCaption(item, e.component.option('items'));
-            $fieldButton.text(caption);
+            $fieldButton.html(caption);
             this._updateFilter();
           }
         },

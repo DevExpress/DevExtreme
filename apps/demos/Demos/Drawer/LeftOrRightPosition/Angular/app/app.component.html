@@ -1,5 +1,9 @@
 <div class="flex-container">
-  <dx-toolbar [items]="toolbarContent" id="toolbar"></dx-toolbar>
+  <dx-toolbar
+    [items]="toolbarContent"
+    id="toolbar"
+    class="dx-theme-background-color"
+  ></dx-toolbar>
   <dx-drawer
     [openedStateMode]="selectedOpenMode"
     [position]="selectedPosition"
@@ -11,7 +15,7 @@
   >
     <div *dxTemplate="let data of 'template'" style="width: 200px">
       <dx-list
-        class="panel-list"
+        class="panel-list dx-theme-typography-background-color"
         [elementAttr]="listElementAttr"
         [dataSource]="navigation"
         [hoverStateEnabled]="false"
@@ -20,7 +24,11 @@
       >
       </dx-list>
     </div>
-    <div id="content" [innerHTML]="text"></div>
+    <div
+      id="content"
+      class="dx-theme-background-color"
+      [innerHTML]="text"
+    ></div>
   </dx-drawer>
   <div class="options">
     <div class="caption">Options</div>

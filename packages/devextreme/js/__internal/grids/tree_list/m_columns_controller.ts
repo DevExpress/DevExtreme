@@ -4,7 +4,7 @@ import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/
 import treeListCore from './m_core';
 
 class TreeListColumnsController extends ColumnsController {
-  public _getFirstItems(dataSourceAdapter) {
+  _getFirstItems(dataSourceAdapter) {
     return super._getFirstItems(dataSourceAdapter).map((node) => node.data);
   }
 

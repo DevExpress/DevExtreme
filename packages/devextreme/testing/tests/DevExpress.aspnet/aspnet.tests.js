@@ -610,7 +610,7 @@
                 url: 'ctrl/action',
                 callback: function(options) {
                     assert.equal(options.url, 'ctrl/action');
-                    assert.deepEqual(options.data, { prop: 'val', id: 1 });
+                    assert.deepEqual(options.data, { prop: 'val' });
                     assert.equal(options.dataType, 'json');
                     assert.equal(options.method, 'POST');
                 }
@@ -618,10 +618,9 @@
 
             aspnet.sendValidationRequest(
                 'prop',
-                { value: 'val', data: { id: 1 } },
+                'val',
                 'ctrl/action',
-                'POST',
-                ['id']
+                'POST'
             );
         });
 
@@ -636,10 +635,8 @@
 
                 aspnet.sendValidationRequest(
                     'prop',
-                    { value: 'val' },
-                    'url',
-                    undefined,
-                    []
+                    'val',
+                    'url'
                 ).done(function(response) {
                     assert.strictEqual(response, responseValue);
                     done();
@@ -657,10 +654,8 @@
 
             aspnet.sendValidationRequest(
                 'prop',
-                { value: 'val' },
-                'url',
-                undefined,
-                []
+                'val',
+                'url'
             ).done(function(response) {
                 assert.deepEqual(response, {
                     isValid: false,
@@ -682,10 +677,8 @@
 
             aspnet.sendValidationRequest(
                 'prop',
-                { value: 'val' },
-                'url',
-                undefined,
-                []
+                'val',
+                'url'
             ).fail(function(response) {
                 assert.deepEqual(response, {
                     isValid: false,

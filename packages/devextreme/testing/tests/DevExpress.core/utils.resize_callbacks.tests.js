@@ -176,13 +176,13 @@ QUnit.test('callbacks should be fired with changed dimensions', function(assert)
     const callback = sinon.spy();
     this.callbacks.add(callback);
 
-    callback.resetHistory();
+    callback.reset();
     this.fakeWindow.innerWidth = 500;
     this.triggerResize(false);
 
     assert.ok(callback.calledWith('width'), 'callback is called for width only');
 
-    callback.resetHistory();
+    callback.reset();
     this.fakeWindow.innerHeight = 500;
     this.triggerResize(false);
 

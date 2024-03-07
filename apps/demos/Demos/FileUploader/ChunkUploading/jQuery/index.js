@@ -33,7 +33,7 @@ function getValueInKb(value) {
 }
 function createSpan(text, className) {
   const result = document.createElement('SPAN');
-  if (className) { result.className = className; }
+  if (className) { result.className = `${className} dx-theme-accent-as-text-color`; }
   result.innerText = text;
   return result;
 }

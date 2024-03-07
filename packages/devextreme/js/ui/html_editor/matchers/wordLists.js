@@ -3,8 +3,8 @@ function getListType(matches) {
     return prefix.match(/\S+\./) ? 'ordered' : 'bullet';
 }
 
-function getIndent(node, msStyleAttributeName) {
-    const style = node.getAttribute(msStyleAttributeName);
+function getIndent(node) {
+    const style = node.getAttribute('style');
 
     if(style) {
         const level = style
@@ -24,7 +24,6 @@ function removeNewLineChar(operations) {
 
 const getMatcher = (quill) => {
     const Delta = quill.import('delta');
-    const msStyleAttributeName = quill.MS_LIST_DATA_KEY;
 
     return (node, delta) => {
         const ops = delta.ops.slice();
@@ -32,7 +31,7 @@ const getMatcher = (quill) => {
         const insertOperation = ops[0];
         insertOperation.insert = insertOperation.insert.replace(/^\s+/, '');
         const listDecoratorMatches = insertOperation.insert.match(/^(\S+)\s+/);
-        const indent = listDecoratorMatches && getIndent(node, msStyleAttributeName);
+        const indent = listDecoratorMatches && getIndent(node);
 
         if(!listDecoratorMatches || indent === false) {
             return delta;

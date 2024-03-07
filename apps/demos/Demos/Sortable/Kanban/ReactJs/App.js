@@ -36,7 +36,7 @@ function reorderItem(array, fromIdx, toIdx) {
 const taskStatuses = ['Not Started', 'Need Assistance', 'In Progress', 'Deferred', 'Completed'];
 const employeesRecord = getEmployeesMap(employees);
 const Card = ({ task, employeesMap }) => (
-  <div className="card dx-card">
+  <div className="card dx-card dx-theme-text-color dx-theme-background-color">
     <div className={`card-priority priority-${task.Task_Priority}`}></div>
     <div className="card-subject">{task.Task_Subject}</div>
     <div className="card-assignee">{employeesMap[task.Task_Assigned_Employee_ID]}</div>
@@ -46,7 +46,7 @@ const List = ({
   title, index, tasks, employeesMap, onTaskDrop,
 }) => (
   <div className="list">
-    <div className="list-title">{title}</div>
+    <div className="list-title dx-theme-text-color">{title}</div>
     <ScrollView
       className="scrollable-list"
       direction="vertical"

@@ -1,4 +1,3 @@
-import $ from '@js/core/renderer';
 import type { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
 
 import Guid from '../../../core/guid';
@@ -15,12 +14,6 @@ import {
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
-const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
-const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
-const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
-const ICON_CLASS = 'dx-icon';
-const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
-
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
 const RESIZE_DIRECTION = {
@@ -38,9 +31,6 @@ class ResizeHandle extends (Widget as any) {
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
-      showResizableIcon: true,
-      showCollapsePrev: true,
-      showCollapseNext: true,
     });
   }
 
@@ -55,50 +45,10 @@ class ResizeHandle extends (Widget as any) {
   _initMarkup(): void {
     super._initMarkup();
 
-    this._renderResizeHandleContent();
+    this._toggleDirectionClass();
+    this.$element().addClass(RESIZE_HANDLE_CLASS);
 
     this._setAriaAttributes();
-  }
-
-  _renderResizeHandleContent(): void {
-    this.$element().addClass(RESIZE_HANDLE_CLASS);
-    this._toggleDirectionClass();
-
-    this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
-    this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
-    this._$collapseNextButton = $('<div>').addClass(this._getIconClass('next')).appendTo(this.$element());
-
-    this._setResizeHandleContentVisibility();
-  }
-
-  _getIconClass(iconType: string): string {
-    switch (iconType) {
-      case 'prev':
-        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
-      case 'next':
-        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
-      case 'icon':
-      default:
-        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} dx-icon-overflow`;
-    }
-  }
-
-  _getCollapseIconClass(isNextButton: boolean): string {
-    const isHorizontal = this._isHorizontalDirection();
-
-    if (isNextButton) {
-      return `dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
-    }
-
-    return `dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
-  }
-
-  _setResizeHandleContentVisibility(): void {
-    const { showCollapsePrev, showCollapseNext, showResizableIcon } = this.option();
-
-    this._$collapsePrevButton.toggleClass(STATE_INVISIBLE_CLASS, !showCollapsePrev);
-    this._$resizeHandle.toggleClass(STATE_INVISIBLE_CLASS, !showResizableIcon);
-    this._$collapseNextButton.toggleClass(STATE_INVISIBLE_CLASS, !showCollapseNext);
   }
 
   _setAriaAttributes(): void {
@@ -193,10 +143,6 @@ class ResizeHandle extends (Widget as any) {
         this._toggleDirectionClass();
         this._detachEventHandlers();
         this._attachEventHandlers();
-        break;
-      case 'showResizableIcon':
-      case 'showCollapsePrev':
-      case 'showCollapseNext':
         break;
       case 'onResize':
       case 'onResizeStart':

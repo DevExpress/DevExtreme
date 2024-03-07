@@ -133,10 +133,7 @@ $(() => {
     const template = $('<div></div>');
 
     if (itemData.color) {
-      $('<div>')
-        .addClass('item-badge')
-        .css('background-color', itemData.color)
-        .appendTo(template);
+      template.append(`<div class='item-badge' style='background-color:${itemData.color};'></div>`);
     }
     template.append(itemData.text);
     return template;

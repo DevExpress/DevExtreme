@@ -28,7 +28,3 @@ $generic-popup-toolbarbottom-padding: null !default;
   $generic-popup-toolbartop-padding: 2px 10px !default;
   $generic-popup-toolbarbottom-padding: 10px !default;
 }
-
-:root {
-  --dx-popup-toolbar-item-padding-inline: #{$generic-popup-toolbar-item-spacing};
-}

@@ -12,28 +12,18 @@ import { ATTRIBUTES, CLASSES } from './const';
 import { GridCoreRowDraggingDom } from './dom';
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtender extends Base {
-  public init() {
+  init() {
     super.init.apply(this, arguments as any);
     this._updateHandleColumn();
   }
 
-  public optionChanged(args) {
-    if (args.name === 'rowDragging') {
-      this._updateHandleColumn();
-      this._invalidate(true, true);
-      args.handled = true;
-    }
-
-    super.optionChanged.apply(this, arguments as any);
-  }
-
-  private _allowReordering() {
+  _allowReordering() {
     const rowDragging = this.option('rowDragging');
 
     return !!(rowDragging && (rowDragging.allowReordering || rowDragging.allowDropInsideItem || rowDragging.group));
   }
 
-  private _updateHandleColumn() {
+  _updateHandleColumn() {
     const rowDragging: any = this.option('rowDragging');
     const allowReordering = this._allowReordering();
     const columnsController = this._columnsController;
@@ -54,7 +44,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     columnsController?.columnOption('type:drag', 'visible', isHandleColumnVisible);
   }
 
-  protected _renderContent() {
+  _renderContent() {
     const rowDragging: any = this.option('rowDragging');
     const allowReordering = this._allowReordering();
     const $content = super._renderContent.apply(this, arguments as any);
@@ -103,7 +93,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
         dropFeedbackMode: 'indicate',
       }, rowDragging, {
         onDragStart: (e) => {
-          // TODO getController
           this.getController('keyboardNavigation')?._resetFocusedCell();
 
           const row = e.component.getVisibleRows()[e.fromIndex];
@@ -147,7 +136,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     return $content;
   }
 
-  protected _renderCore(e) {
+  _renderCore(e) {
     super._renderCore.apply(this, arguments as any);
 
     if (e && e.changeType === 'update'
@@ -159,7 +148,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     }
   }
 
-  private _updateSortable() {
+  _updateSortable() {
     const offset = this._dataController.getRowIndexOffset();
     // @ts-expect-error
     const offsetDiff = offset - this._previousOffset;
@@ -180,12 +169,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     this._previousOffset = offset;
   }
 
-  protected _resizeCore() {
+  _resizeCore() {
     super._resizeCore.apply(this, arguments as any);
     this._updateSortable();
   }
 
-  private _getDraggableGridOptions(options) {
+  _getDraggableGridOptions(options) {
     const gridOptions = this.option();
     const columns = this.getColumns();
     const $rowElement = $(this.getRowElement(options.rowIndex));
@@ -217,13 +206,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     };
   }
 
-  private _synchronizeScrollLeftPosition(gridInstance) {
+  _synchronizeScrollLeftPosition(gridInstance) {
     const scrollable = gridInstance?.getScrollable();
 
     scrollable?.scrollTo({ x: this._scrollLeft });
   }
 
-  private _getDraggableRowTemplate() {
+  _getDraggableRowTemplate() {
     return (options) => {
       const $rootElement = this.component.$element();
       const $dataGridContainer = $('<div>');
@@ -245,10 +234,20 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
     };
   }
 
-  private _getHandleTemplate() {
+  _getHandleTemplate() {
     return GridCoreRowDraggingDom.createHandleTemplateFunc(
       (string) => this.addWidgetPrefix(string),
     );
+  }
+
+  optionChanged(args) {
+    if (args.name === 'rowDragging') {
+      this._updateHandleColumn();
+      this._invalidate(true, true);
+      args.handled = true;
+    }
+
+    super.optionChanged.apply(this, arguments as any);
   }
 };
 

@@ -68,6 +68,8 @@ const TABLE_OPERATIONS = [
     'deleteTable'
 ];
 
+const testWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.test : QUnit.skip;
+
 const simpleModuleConfig = {
     beforeEach: function() {
         fx.off = true;
@@ -1864,7 +1866,7 @@ testModule('Toolbar items state update', {
             });
         });
 
-        test('state of the items in menu should be synchronized after toolbar repaint (t1117604)', function(assert) {
+        testWithoutCsp('state of the items in menu should be synchronized after toolbar repaint (t1117604)', function(assert) {
             this.options.items = this.mapToMenuItems(TABLE_OPERATIONS);
             const toolbar = new Toolbar(this.quillMock, this.options);
             this.quillMock.getFormat = () => ({ table: true });

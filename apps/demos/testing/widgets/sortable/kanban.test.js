@@ -1,7 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
-import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const CLASSES = {
   listTitle: '.list-title',
@@ -10,8 +9,9 @@ const CLASSES = {
 
 fixture('Sortable.Kanban')
   .page('http://localhost:8080/')
-  .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 600];
+  .beforeEach(async (t) => {
+    await t
+      .resizeWindow(900, 600);
   });
 
 runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
@@ -19,7 +19,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag(Selector(CLASSES.listTitle).nth(0), 600, 50, { speed: 0.5 });
-    await testScreenshot(t, takeScreenshot, 'kanban_list_drag-n-drop.png');
+    await takeScreenshot('kanban_list_drag-n-drop.png');
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -31,7 +31,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag(Selector(CLASSES.card).nth(3), 25, 200, { speed: 0.5 });
-    await testScreenshot(t, takeScreenshot, 'kanban_card_drag-n-drop_same-column.png');
+    await takeScreenshot('kanban_card_drag-n-drop_same-column.png');
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
@@ -43,7 +43,7 @@ runManualTest('Sortable', 'Kanban', ['jQuery', 'React', 'Vue', 'Angular'], (test
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.drag(Selector(CLASSES.card).nth(3), 300, 150, { speed: 0.5 });
-    await testScreenshot(t, takeScreenshot, 'kanban_card_drag-n-drop_different-column.png');
+    await takeScreenshot('kanban_card_drag-n-drop_different-column.png');
 
     await t.expect(compareResults.isValid())
       .ok(compareResults.errorMessages());

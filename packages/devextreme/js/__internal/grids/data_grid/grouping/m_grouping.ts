@@ -160,7 +160,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  protected _customizeRemoteOperations(options, operationTypes) {
+  _customizeRemoteOperations(options, operationTypes) {
     const { remoteOperations } = options;
 
     if (options.storeLoadOptions.group) {
@@ -208,7 +208,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     that.createAction('onRowCollapsed');
   }
 
-  protected _beforeProcessItems(items) {
+  _beforeProcessItems(items) {
     const groupColumns = this._columnsController.getGroupColumns();
 
     items = super._beforeProcessItems(items);
@@ -218,7 +218,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return items;
   }
 
-  protected _processItem(item, options) {
+  _processItem(item, options) {
     if (isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0) {
       item = this._processGroupItem(item, options);
       options.dataIndex = 0;
@@ -428,6 +428,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
         },
         name: 'groupPanel',
         onItemRendered: () => {
+          // @ts-expect-error
           isRendered && this.renderCompleted.fire();
           isRendered = true;
         },
@@ -451,6 +452,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     const columnIndex = column && column.index;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
+      // @ts-expect-error
       this.getController('headerFilter').showHeaderFilterMenu(columnIndex, true);
     } else {
       // @ts-expect-error
@@ -497,6 +499,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
       if ($groupPanel && $groupPanel.length) {
         this._updateGroupPanelContent($groupPanel);
         this.updateToolbarDimensions();
+        // @ts-expect-error
         this.renderCompleted.fire();
       }
     }
@@ -521,13 +524,13 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     }
   }
 
-  protected allowDragging(column?): boolean {
+  allowDragging(column?): boolean {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column);
   }
 
-  public getColumnElements() {
+  getColumnElements() {
     const $element = this.element();
     return $element && $element.find(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
   }

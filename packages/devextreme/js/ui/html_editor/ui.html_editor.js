@@ -24,7 +24,6 @@ import ConverterController from './converterController';
 import getWordMatcher from './matchers/wordLists';
 import FormDialog from './ui/formDialog';
 import config from '../../core/config';
-import { getQuill } from './quill_importer';
 
 // STYLE htmlEditor
 
@@ -190,13 +189,7 @@ const HtmlEditor = Editor.inherit({
         const frameDocument = frameWindow.document;
         const frameDocumentBody = frameDocument.body;
 
-        const quill = getQuill();
-
-        // NOTE: Operations with style attribute is required
-        // to prevent a 'unsafe-inline' CSP error in DOMParser.
-        const valueWithoutStyles = quill.replaceStyleAttribute(value);
-
-        frameDocumentBody.innerHTML = valueWithoutStyles;
+        frameDocumentBody.innerHTML = value;
 
         const removeInlineHandlers = (element) => {
             if(element.attributes) {

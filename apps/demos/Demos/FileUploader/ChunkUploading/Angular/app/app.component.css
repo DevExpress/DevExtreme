@@ -10,11 +10,6 @@
 ::ng-deep .segment-size,
 ::ng-deep .loaded-size {
   margin-left: 3px;
-  color: var(--dx-color-primary);
-}
-
-::ng-deep .total-size {
-  color: var(--dx-color-primary);
 }
 
 ::ng-deep .note {

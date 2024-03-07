@@ -30,8 +30,6 @@ const DX_BUTTON_CLASS = 'dx-button';
 const DX_BUTTON_TEXT_CLASS = 'dx-button-text';
 const DX_ICON_RIGHT_CLASS = 'dx-icon-right';
 
-const OVERLAY_CONTENT_LABEL = 'Dropdown';
-
 const DropDownButton = Widget.inherit({
 
     _getDefaultOptions() {
@@ -67,8 +65,6 @@ const DropDownButton = Widget.inherit({
             splitButton: false,
 
             showArrowIcon: true,
-
-            template: null,
 
             text: '',
 
@@ -233,23 +229,6 @@ const DropDownButton = Widget.inherit({
         });
     },
 
-    _getButtonTemplate() {
-        const { template, splitButton, showArrowIcon } = this.option();
-
-        if(template) {
-            return template;
-        }
-
-        return (splitButton || !showArrowIcon) ?
-            'content' : ({ text, icon }, buttonContent) => {
-                const $firstIcon = getImageContainer(icon);
-                const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
-                const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
-
-                $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
-            };
-    },
-
     _actionButtonConfig() {
         const { icon, text, type } = this.option();
 
@@ -257,7 +236,6 @@ const DropDownButton = Widget.inherit({
             text,
             icon,
             type,
-            template: this._getButtonTemplate(),
             elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
         };
     },
@@ -297,12 +275,23 @@ const DropDownButton = Widget.inherit({
 
     _buttonGroupOptions() {
         const {
+            splitButton,
+            showArrowIcon,
             focusStateEnabled,
             hoverStateEnabled,
             stylingMode,
             accessKey,
-            tabIndex,
+            tabIndex
         } = this.option();
+
+        const buttonTemplate = (splitButton || !showArrowIcon) ?
+            'content' : ({ text, icon }, buttonContent) => {
+                const $firstIcon = getImageContainer(icon);
+                const $textContainer = text ? $('<span>').text(text).addClass(DX_BUTTON_TEXT_CLASS) : undefined;
+                const $secondIcon = getImageContainer('spindown').addClass(DX_ICON_RIGHT_CLASS);
+
+                $(buttonContent).append($firstIcon, $textContainer, $secondIcon);
+            };
 
         return extend({
             items: this._getButtonGroupItems(),
@@ -311,6 +300,7 @@ const DropDownButton = Widget.inherit({
             height: '100%',
             selectionMode: 'none',
             onKeyboardHandled: (e) => this._keyboardHandler(e),
+            buttonTemplate,
             focusStateEnabled,
             hoverStateEnabled,
             stylingMode,
@@ -426,7 +416,6 @@ const DropDownButton = Widget.inherit({
         this._popup = this._createComponent($popup, Popup, this._popupOptions());
         this._popup.$content().addClass(DROP_DOWN_BUTTON_CONTENT);
         this._popup.$wrapper().addClass(DROP_DOWN_BUTTON_POPUP_WRAPPER_CLASS);
-        this._popup.$overlayContent().attr('aria-label', OVERLAY_CONTENT_LABEL);
         this._popup.on('hiding', this._popupHidingHandler.bind(this));
         this._popup.on('showing', this._popupShowingHandler.bind(this));
         this._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
@@ -742,9 +731,6 @@ const DropDownButton = Widget.inherit({
                 break;
             case 'tabIndex':
                 this._updateButtonGroup(name, value);
-                break;
-            case 'template':
-                this._renderButtonGroup();
                 break;
             default:
                 this.callBase(args);

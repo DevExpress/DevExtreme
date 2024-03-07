@@ -33,7 +33,7 @@ export const labelEnvironment = $.extend({}, environment, {
 
         const that = this;
 
-        sinon.stub(labelModule, 'Label').callsFake(function() {
+        sinon.stub(labelModule, 'Label', function() {
             const stub = new stubLabel();
             stub.stub('isVisible').returns(true);
             stub.stub('getBoundingRect').returns(that.labelBoxes[(labelBoxesIndex++) % that.labelBoxes.length]);

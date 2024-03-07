@@ -744,59 +744,65 @@ QUnit.test('Show warning (W1002) when select items that don\'t exist', function(
 });
 
 QUnit.test('selection should work with custom store without filter implementation', function(assert) {
-    const selectionChangedHandler = function(args) {
-        assert.deepEqual(args.selectedItems, [{ id: 2, text: 'Item 2' }], 'selectedItems is right');
-        assert.deepEqual(args.selectedItemKeys, [2], 'selectedItemsKeys is right');
-        assert.deepEqual(args.addedItemKeys, [2], 'addedItemKeys is right');
-        assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
-    };
+    const clock = sinon.useFakeTimers();
 
-    const dataSource = new DataSource({
-        store: new CustomStore({
-            load: function() {
-                const d = $.Deferred();
-                const items = [
-                    { id: 1, text: 'Item 1' },
-                    { id: 2, text: 'Item 2' }
-                ];
+    try {
+        const selectionChangedHandler = function(args) {
+            assert.deepEqual(args.selectedItems, [{ id: 2, text: 'Item 2' }], 'selectedItems is right');
+            assert.deepEqual(args.selectedItemKeys, [2], 'selectedItemsKeys is right');
+            assert.deepEqual(args.addedItemKeys, [2], 'addedItemKeys is right');
+            assert.deepEqual(args.removedItemKeys, [], 'removedItemKeys is right');
+        };
 
-                setTimeout(function() {
-                    d.resolve(items);
-                }, 0);
+        const dataSource = new DataSource({
+            store: new CustomStore({
+                load: function() {
+                    const d = $.Deferred();
+                    const items = [
+                        { id: 1, text: 'Item 1' },
+                        { id: 2, text: 'Item 2' }
+                    ];
 
-                return d.promise();
+                    setTimeout(function() {
+                        d.resolve(items);
+                    }, 0);
+
+                    return d.promise();
+                },
+                key: 'id'
+            })
+        });
+
+        const selection = new Selection({
+            onSelectionChanged: selectionChangedHandler,
+            key: function() {
+                const store = dataSource && dataSource.store();
+                return store && store.key();
             },
-            key: 'id'
-        })
-    });
+            keyOf: function(item) {
+                const store = dataSource.store();
+                return store && store.keyOf(item);
+            },
+            load: function(options) {
+                return dataSource && dataSource.store().load(options);
+            },
+            dataFields: function() {
+                return dataSource.select();
+            },
+            plainItems: function() {
+                return dataSource.items();
+            },
+            filter: function() {
+                return dataSource && dataSource.filter();
+            }
+        });
 
-    const selection = new Selection({
-        onSelectionChanged: selectionChangedHandler,
-        key: function() {
-            const store = dataSource && dataSource.store();
-            return store && store.key();
-        },
-        keyOf: function(item) {
-            const store = dataSource.store();
-            return store && store.keyOf(item);
-        },
-        load: function(options) {
-            return dataSource && dataSource.store().load(options);
-        },
-        dataFields: function() {
-            return dataSource.select();
-        },
-        plainItems: function() {
-            return dataSource.items();
-        },
-        filter: function() {
-            return dataSource && dataSource.filter();
-        }
-    });
-
-    dataSource.load();
-    selection.selectedItemKeys(2);
-    this.clock.tick(10);
+        dataSource.load();
+        selection.selectedItemKeys(2);
+        clock.tick(10);
+    } finally {
+        clock.restore();
+    }
 });
 
 QUnit.test('selection should works with case-sensitive keys if select item is on current page', function(assert) {
@@ -2261,7 +2267,7 @@ QUnit.module('filter length restriction', {
 
         this.dataSource.load();
 
-        this.load.resetHistory();
+        this.load.reset();
 
         this.createDeferredSelection = function(data, options) {
             return createDeferredSelection(data, options, this.dataSource);

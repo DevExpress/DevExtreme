@@ -104,7 +104,7 @@ const TestPointerElement = TestElement.inherit({
 (function circularGauge() {
     rendererModule.Renderer = sinon.stub();
 
-    sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
+    sinon.stub(axisModule, 'Axis', function(parameters) {
         const axis = new vizMocks.Axis(parameters);
         axis.measureLabels = sinon.stub().returns({
             width: 30,
@@ -131,8 +131,8 @@ const TestPointerElement = TestElement.inherit({
         },
         afterEach: function() {
             this.renderer = null;
-            axisModule.Axis.resetHistory();
-            rendererModule.Renderer.resetHistory();
+            axisModule.Axis.reset();
+            rendererModule.Renderer.reset();
         }
     };
     const canvas = {
@@ -575,7 +575,7 @@ const TestPointerElement = TestElement.inherit({
         const gauge = new dxCircularGauge(this.container, { centerTemplate: firstCenterTemplate });
 
         const centerTemplateGroup = gauge._renderer.g.getCall(10).returnValue;
-        centerTemplateGroup.clear.resetHistory();
+        centerTemplateGroup.clear.reset();
 
         gauge.option('centerTemplate', secondCenterTemplate);
 
@@ -588,8 +588,8 @@ const TestPointerElement = TestElement.inherit({
         const gauge = new dxCircularGauge(this.container, { centerTemplate: centerTemplate, value: 10 });
 
         const centerTemplateGroup = this.renderer.g.getCall(10).returnValue;
-        centerTemplateGroup.clear.resetHistory();
-        centerTemplate.resetHistory();
+        centerTemplateGroup.clear.reset();
+        centerTemplate.reset();
 
         gauge.option('value', 13);
 
@@ -602,8 +602,8 @@ const TestPointerElement = TestElement.inherit({
         const gauge = new dxCircularGauge(this.container, { centerTemplate: centerTemplate, subvalues: [3, 4] });
 
         const centerTemplateGroup = this.renderer.g.getCall(10).returnValue;
-        centerTemplateGroup.clear.resetHistory();
-        centerTemplate.resetHistory();
+        centerTemplateGroup.clear.reset();
+        centerTemplate.reset();
 
         gauge.option('subvalues', [5]);
 

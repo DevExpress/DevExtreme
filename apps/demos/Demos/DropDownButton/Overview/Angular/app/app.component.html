@@ -109,6 +109,7 @@
           <i
             *ngFor="let iconColor of colors"
             class="color dx-icon dx-icon-square"
+            [ngClass]="{ 'dx-theme-text-color': !iconColor }"
             [style.color]="iconColor"
             (click)="onColorClick(iconColor)"
           ></i>

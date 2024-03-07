@@ -1,7 +1,7 @@
 import {
   readdirSync, lstatSync, existsSync, copyFileSync,
 } from 'fs';
-import { join, resolve, basename } from 'path';
+import { join, resolve } from 'path';
 import { argv } from 'process';
 
 const PATH_TO_CURRENT_ETALONS = argv[2];
@@ -56,7 +56,7 @@ function processFolder(currentDir, allEtalons) {
   const currentDirrectoryFolders = getAllDirs(currentDir);
 
   for (let dir of currentDirrectoryFolders) {
-    const folderName = basename(dir);
+    const folderName = dir.split('/').at(-1);
     const continueProcessFolders = folderName === ETALONS_FOLDER_NAME
       ? processEtalonFolder(dir, allEtalons)
       : processFolder(dir, allEtalons);
@@ -92,7 +92,6 @@ function checkFilesAfterCopy(allEtalonsMap) {
   if (allEtalonsMap.size === 0) {
     console.log('all screenshots were moved');
   } else {
-    console.log(`${allEtalonsMap.size} etalons were not copied`);
     allEtalonsMap.forEach((value, key) => {
       console.log(`File "${key}" is not copied`);
     });

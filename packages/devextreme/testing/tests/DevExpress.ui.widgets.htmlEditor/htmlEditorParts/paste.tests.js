@@ -39,6 +39,8 @@ const MS_INVALID_LIST_PARAGRAPH = '<p class=\'MsoListParagraphCxSpFirst\'><span>
 
 const { module: testModule, test } = QUnit;
 
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? testModule : testModule.skip;
+
 export default function() {
     testModule('Paste from MS Word', {
         beforeEach: function() {
@@ -94,7 +96,7 @@ export default function() {
         });
     });
 
-    testModule('Text with decoration', () => {
+    moduleWithoutCsp('Text with decoration', () => {
         test('paste text with text-decoration style', function(assert) {
             const done = assert.async();
             const instance = $('#htmlEditor')

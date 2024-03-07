@@ -24,13 +24,8 @@ import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
-import type { ColumnChooserView } from '../column_chooser/m_column_chooser';
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
-import type { ColumnsController } from '../columns_controller/m_columns_controller';
-import type { HeaderPanel } from '../header_panel/m_header_panel';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
-import type { PagerView } from '../pager/m_pager';
 
 const COLUMNS_SEPARATOR_CLASS = 'columns-separator';
 const COLUMNS_SEPARATOR_TRANSPARENT = 'columns-separator-transparent';
@@ -51,59 +46,32 @@ const DRAGGING_DELTA = 5;
 const COLUMN_OPACITY = 0.5;
 
 const allowResizing = function (that) {
-  // TODO getController
   return that.option('allowColumnResizing') || that.getController('columns').isColumnOptionUsed('allowResizing');
 };
 
 const allowReordering = function (that) {
-  // TODO getController
   return that.option('allowColumnReordering') || that.getController('columns').isColumnOptionUsed('allowReordering');
 };
 
-export class TrackerView extends modules.View {
+class TrackerView extends modules.View {
   private _positionChanged: any;
 
-  private _tablePositionController!: TablePositionViewController;
+  private _tablePositionController: any;
 
-  public init() {
-    super.init();
-
-    this._tablePositionController = this.getController('tablePosition');
-    this._subscribeToCallback();
-  }
-
-  public dispose() {
-    this._unsubscribeFromCallback();
-    super.dispose();
-  }
-
-  public optionChanged(args) {
-    if (args.name === 'allowColumnResizing') {
-      this._unsubscribeFromCallback();
-
-      if (args.value) {
-        this._subscribeToCallback();
-        this._invalidate();
-      }
-    }
-
-    super.optionChanged(args);
-  }
-
-  protected _renderCore() {
+  _renderCore() {
     const deferred = super._renderCore();
     this.element().addClass(this.addWidgetPrefix(TRACKER_CLASS));
     this.hide();
     return deferred;
   }
 
-  private _unsubscribeFromCallback() {
+  _unsubscribeFromCallback() {
     if (this._positionChanged) {
       this._tablePositionController.positionChanged.remove(this._positionChanged);
     }
   }
 
-  private _subscribeToCallback() {
+  _subscribeToCallback() {
     const that = this;
 
     that._positionChanged = function (position) {
@@ -116,29 +84,54 @@ export class TrackerView extends modules.View {
     this._tablePositionController.positionChanged.add(that._positionChanged);
   }
 
-  public isVisible() {
+  optionChanged(args) {
+    if (args.name === 'allowColumnResizing') {
+      this._unsubscribeFromCallback();
+
+      if (args.value) {
+        this._subscribeToCallback();
+        this._invalidate();
+      }
+    }
+
+    super.optionChanged(args);
+  }
+
+  init() {
+    super.init();
+    this._tablePositionController = this.getController('tablePosition' as any);
+    this._subscribeToCallback();
+  }
+
+  isVisible() {
     return allowResizing(this);
   }
 
-  private show() {
+  show() {
     this.element().show();
   }
 
-  private hide() {
+  hide() {
     this.element() && this.element().hide();
   }
 
-  private setHeight(value) {
+  setHeight(value) {
     setHeight(this.element(), value);
+  }
+
+  dispose() {
+    this._unsubscribeFromCallback();
+    super.dispose();
   }
 }
 
-export class SeparatorView extends modules.View {
+class SeparatorView extends modules.View {
   protected _isShown?: boolean;
 
-  protected _renderSeparator() { }
+  _renderSeparator() { }
 
-  protected _renderCore(options?) {
+  _renderCore(options?) {
+    // @ts-expect-error
     const deferred = super._renderCore(options);
     this._isShown = true;
     this._renderSeparator();
@@ -146,15 +139,15 @@ export class SeparatorView extends modules.View {
     return deferred;
   }
 
-  public show() {
+  show() {
     this._isShown = true;
   }
 
-  public hide() {
+  hide() {
     this._isShown = false;
   }
 
-  private height(value) {
+  height(value) {
     const $element = this.element();
     if ($element) {
       if (isDefined(value)) {
@@ -165,7 +158,7 @@ export class SeparatorView extends modules.View {
     }
   }
 
-  public width(value?) {
+  width(value) {
     const $element = this.element();
     if ($element) {
       if (isDefined(value)) {
@@ -177,10 +170,10 @@ export class SeparatorView extends modules.View {
   }
 }
 
-export class ColumnsSeparatorView extends SeparatorView {
+class ColumnsSeparatorView extends SeparatorView {
   private _positionChanged: any;
 
-  private _tablePositionController!: TablePositionViewController;
+  private _tablePositionController: any;
 
   private _isTransparent?: boolean;
 
@@ -190,19 +183,43 @@ export class ColumnsSeparatorView extends SeparatorView {
   private _testCursorName?: string;
   /// #ENDDEBUG
 
-  public init() {
-    super.init();
+  _renderSeparator() {
+    super._renderSeparator();
 
-    this._tablePositionController = this.getController('tablePosition');
-    this._init();
+    const $element = this.element();
+    $element.addClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_CLASS));
   }
 
-  public dispose() {
-    this._unsubscribeFromCallback();
-    super.dispose();
+  _subscribeToCallback() {
+    const that = this;
+    let $element;
+
+    that._positionChanged = function (position) {
+      $element = that.element();
+      if ($element) {
+        $element.css({ top: position.top });
+        setHeight($element, position.height);
+      }
+    };
+    that._tablePositionController.positionChanged.add(that._positionChanged);
   }
 
-  public optionChanged(args) {
+  _unsubscribeFromCallback() {
+    this._positionChanged && this._tablePositionController.positionChanged.remove(this._positionChanged);
+  }
+
+  _init() {
+    this._isTransparent = allowResizing(this);
+    if (this.isVisible()) {
+      this._subscribeToCallback();
+    }
+  }
+
+  isVisible() {
+    return this.option('showColumnHeaders') && (allowReordering(this) || allowResizing(this));
+  }
+
+  optionChanged(args) {
     if (args.name === 'allowColumnResizing') {
       if (args.value) {
         this._init();
@@ -218,43 +235,13 @@ export class ColumnsSeparatorView extends SeparatorView {
     super.optionChanged(args);
   }
 
-  protected _renderSeparator() {
-    super._renderSeparator();
-
-    const $element = this.element();
-    $element.addClass(this.addWidgetPrefix(COLUMNS_SEPARATOR_CLASS));
+  init() {
+    super.init();
+    this._tablePositionController = this.getController('tablePosition' as any);
+    this._init();
   }
 
-  private _subscribeToCallback() {
-    const that = this;
-    let $element;
-
-    that._positionChanged = function (position) {
-      $element = that.element();
-      if ($element) {
-        $element.css({ top: position.top });
-        setHeight($element, position.height);
-      }
-    };
-    that._tablePositionController.positionChanged.add(that._positionChanged);
-  }
-
-  private _unsubscribeFromCallback() {
-    this._positionChanged && this._tablePositionController.positionChanged.remove(this._positionChanged);
-  }
-
-  private _init() {
-    this._isTransparent = allowResizing(this);
-    if (this.isVisible()) {
-      this._subscribeToCallback();
-    }
-  }
-
-  public isVisible() {
-    return this.option('showColumnHeaders') && (allowReordering(this) || allowResizing(this));
-  }
-
-  public show() {
+  show() {
     const that = this;
     const $element = this.element();
 
@@ -268,7 +255,7 @@ export class ColumnsSeparatorView extends SeparatorView {
     super.show();
   }
 
-  public hide(force?) {
+  hide(force?) {
     const $element = this.element();
     const columnsSeparatorTransparent = this.addWidgetPrefix(COLUMNS_SEPARATOR_TRANSPARENT);
 
@@ -287,7 +274,7 @@ export class ColumnsSeparatorView extends SeparatorView {
     super.hide();
   }
 
-  private moveByX(outerX) {
+  moveByX(outerX) {
     const $element = this.element();
     if ($element) {
       $element.css('left', outerX === null ? 0 : outerX - this._parentElement().offset().left);
@@ -297,7 +284,7 @@ export class ColumnsSeparatorView extends SeparatorView {
     }
   }
 
-  private changeCursor(cursorName) {
+  changeCursor(cursorName) {
     cursorName = isDefined(cursorName) ? cursorName : '';
     const $element = this.element();
     if ($element) {
@@ -307,26 +294,32 @@ export class ColumnsSeparatorView extends SeparatorView {
       /// #ENDDEBUG
     }
   }
+
+  dispose() {
+    this._unsubscribeFromCallback();
+    super.dispose();
+  }
 }
 
-export class BlockSeparatorView extends SeparatorView {
-  public init() {
+class BlockSeparatorView extends SeparatorView {
+  init() {
+    const that = this;
+
     super.init();
 
-    const dataController = this.getController('data');
-    dataController.loadingChanged.add((isLoading) => {
+    this.getController('data').loadingChanged.add((isLoading) => {
       if (!isLoading) {
-        this.hide();
+        that.hide();
       }
     });
   }
 
-  protected _renderSeparator() {
+  _renderSeparator() {
     super._renderSeparator();
     this.element().addClass(BLOCK_SEPARATOR_CLASS).html('&nbsp;');
   }
 
-  public hide() {
+  hide() {
     const that = this;
     const $parent = this._parentElement();
     const $element = this.element();
@@ -342,14 +335,14 @@ export class BlockSeparatorView extends SeparatorView {
     super.hide();
   }
 
-  public isVisible() {
+  isVisible() {
     const groupPanelOptions: any = this.option('groupPanel');
     const columnChooserOptions = this.option('columnChooser');
 
     return (groupPanelOptions && groupPanelOptions.visible) || (columnChooserOptions && columnChooserOptions.enabled);
   }
 
-  public show(targetLocation?) {
+  show(targetLocation?) {
     const that = this;
     const $element = this.element();
     const startAnimate = function (toOptions) {
@@ -383,14 +376,12 @@ export class BlockSeparatorView extends SeparatorView {
   }
 }
 
-export class DraggingHeaderView extends modules.View {
+class DraggingHeaderView extends modules.View {
   private _isDragging?: boolean;
 
   private _controller!: DraggingHeaderViewController;
 
-  private _columnsResizerViewController!: ColumnsResizerViewController;
-
-  private _columnsController!: ColumnsController;
+  private _columnsResizerViewController: any;
 
   private _dragOptions: any;
 
@@ -402,29 +393,11 @@ export class DraggingHeaderView extends modules.View {
   private _testPointsByColumns: any;
   /// #ENDDEBUG
 
-  public init() {
-    super.init();
-
-    const dataController = this.getController('data');
-    this._controller = this.getController('draggingHeader');
-    this._columnsResizerViewController = this.getController('columnsResizer');
-    this._columnsController = this.getController('columns');
-    this._isDragging = false;
-
-    dataController.loadingChanged.add((isLoading) => {
-      const element = this.element();
-
-      if (!isLoading && element) {
-        element.hide();
-      }
-    });
-  }
-
-  public isDragging() {
+  isDragging() {
     return this._isDragging;
   }
 
-  private _getDraggingPanelByPos(pos) {
+  _getDraggingPanelByPos(pos) {
     const that = this;
     let result;
 
@@ -444,13 +417,13 @@ export class DraggingHeaderView extends modules.View {
     return result;
   }
 
-  protected _renderCore() {
+  _renderCore() {
     this.element()
       .addClass(`${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)} ${this.addWidgetPrefix(CELL_CONTENT_CLASS)} ${WIDGET_CLASS}`)
       .hide();
   }
 
-  private _resetTargetColumnOptions() {
+  _resetTargetColumnOptions() {
     const params = this._dropOptions;
 
     params.targetColumnIndex = -1;
@@ -460,7 +433,7 @@ export class DraggingHeaderView extends modules.View {
     delete params.posY;
   }
 
-  private _getVisibleIndexObject(rowIndex, visibleIndex) {
+  _getVisibleIndexObject(rowIndex, visibleIndex) {
     if (isDefined(rowIndex)) {
       return {
         columnIndex: visibleIndex,
@@ -471,20 +444,38 @@ export class DraggingHeaderView extends modules.View {
     return visibleIndex;
   }
 
-  public dispose() {
+  dispose() {
     const element = this.element();
 
     this._dragOptions = null;
     element && element.parent().find(`.${this.addWidgetPrefix(DRAGGING_HEADER_CLASS)}`).remove();
   }
 
-  public isVisible() {
-    const commonColumnSettings = this._columnsController.getCommonSettings();
+  isVisible() {
+    const columnsController = this.getController('columns');
+    const commonColumnSettings = columnsController.getCommonSettings();
 
     return this.option('showColumnHeaders') && (allowReordering(this) || commonColumnSettings.allowGrouping || commonColumnSettings.allowHiding);
   }
 
-  public dragHeader(options) {
+  init() {
+    const that = this;
+
+    super.init();
+    this._controller = this.getController('draggingHeader');
+    this._columnsResizerViewController = this.getController('columnsResizer');
+    this._isDragging = false;
+
+    this.getController('data').loadingChanged.add((isLoading) => {
+      const element = that.element();
+
+      if (!isLoading && element) {
+        element.hide();
+      }
+    });
+  }
+
+  dragHeader(options) {
     const that = this;
     const { columnElement } = options;
     const isCommandColumn = !!options.sourceColumn.type;
@@ -522,7 +513,7 @@ export class DraggingHeaderView extends modules.View {
     that.element().appendTo(swatchContainer.getSwatchContainer(columnElement));
   }
 
-  public moveHeader(args) {
+  moveHeader(args) {
     const e = args.event;
     const { that } = e.data;
     const eventData = getEventData(e);
@@ -548,7 +539,7 @@ export class DraggingHeaderView extends modules.View {
     }
   }
 
-  public dockHeader(eventData) {
+  dockHeader(eventData) {
     const that = this;
     const targetDraggingPanel = that._getDraggingPanelByPos(eventData);
     const controller = that._controller;
@@ -604,7 +595,7 @@ export class DraggingHeaderView extends modules.View {
     }
   }
 
-  private dropHeader(args) {
+  dropHeader(args) {
     const e = args.event;
     const { that } = e.data;
     const controller = that._controller;
@@ -629,15 +620,15 @@ const isNextColumnResizingMode = function (that) {
 };
 
 export class ColumnsResizerViewController extends modules.ViewController {
-  protected _columnHeadersView!: ColumnHeadersView;
+  protected _columnHeadersView: any;
 
   private _$parentContainer: any;
 
-  public _targetPoint: any;
+  protected readonly _targetPoint: any;
 
   private _resizingInfo: any;
 
-  protected _columnsController!: ColumnsController;
+  _columnsController: any;
 
   private _pointsByColumns: any;
 
@@ -647,9 +638,9 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _endResizingHandler: any;
 
-  private _columnsSeparatorView!: ColumnsSeparatorView;
+  private _columnsSeparatorView: any;
 
-  private _rowsView!: RowsView;
+  private _rowsView: any;
 
   private readonly _scrollRight: any;
 
@@ -659,41 +650,13 @@ export class ColumnsResizerViewController extends modules.ViewController {
 
   private _scrollLeft?: number;
 
-  private _trackerView!: TrackerView;
+  private _trackerView: any;
 
-  private _tablePositionController!: TablePositionViewController;
+  private _tablePositionController: any;
 
-  private _editorFactoryController!: EditorFactory;
+  private _draggingHeaderView: any;
 
-  private _draggingHeaderView!: DraggingHeaderView;
-
-  public init() {
-    this._subscribesToCallbacks = [];
-
-    if (allowResizing(this)) {
-      this._init();
-    }
-  }
-
-  public dispose() {
-    this._unsubscribes();
-    super.dispose();
-  }
-
-  public optionChanged(args) {
-    super.optionChanged(args);
-
-    if (args.name === 'allowColumnResizing') {
-      if (args.value) {
-        this._init();
-        this._subscribeToEvents();
-      } else {
-        this._unsubscribes();
-      }
-    }
-  }
-
-  private _isHeadersRowArea(posY) {
+  _isHeadersRowArea(posY) {
     if (this._columnHeadersView) {
       const element = this._columnHeadersView.element();
 
@@ -706,14 +669,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return false;
   }
 
-  private _isRtlParentStyle() {
+  _isRtlParentStyle() {
     return this.option('rtlEnabled') && this._$parentContainer?.parent().css('direction') === 'rtl';
   }
 
-  /**
-   * @extended: adaptivity
-   */
-  protected _pointCreated(point, cellsLength, columns) {
+  _pointCreated(point, cellsLength, columns) {
     const isNextColumnMode = isNextColumnResizingMode(this);
     const rtlEnabled = this.option('rtlEnabled');
     const isRtlParentStyle = this._isRtlParentStyle();
@@ -729,10 +689,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return true;
   }
 
-  /**
-   * @extended: column_fixing
-   */
-  protected _getTargetPoint(pointsByColumns, currentX, deltaX) {
+  _getTargetPoint(pointsByColumns, currentX, deltaX) {
     if (pointsByColumns) {
       for (let i = 0; i < pointsByColumns.length; i++) {
         if (pointsByColumns[i].x === pointsByColumns[0].x && pointsByColumns[i + 1] && pointsByColumns[i].x === pointsByColumns[i + 1].x) {
@@ -746,7 +703,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return null;
   }
 
-  private _moveSeparator(args) {
+  _moveSeparator(args) {
     const e = args.event;
     const that = e.data;
     const columnsSeparatorWidth = that._columnsSeparatorView.width();
@@ -803,10 +760,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
-  /**
-   * @extended: filter_row
-   */
-  protected _endResizing(args) {
+  _endResizing(args) {
     const e = args.event;
     const that = e.data;
 
@@ -824,14 +778,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
-  /**
-   * @extended: adaptivity
-   */
-  protected _getNextColumnIndex(currentColumnIndex) {
+  _getNextColumnIndex(currentColumnIndex) {
     return currentColumnIndex + 1;
   }
 
-  private _setupResizingInfo(posX) {
+  _setupResizingInfo(posX) {
     const that = this;
     const currentColumnIndex = that._targetPoint.columnIndex;
     const nextColumnIndex = that._getNextColumnIndex(currentColumnIndex);
@@ -847,10 +798,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     };
   }
 
-  /**
-   * @extended: filter_row
-   */
-  protected _startResizing(args) {
+  _startResizing(args) {
     const e = args.event;
     const that = e.data;
     const eventData = getEventData(e);
@@ -892,15 +840,11 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
 
     if (this.isResizing()) {
-      this._editorFactoryController.loseFocus();
+      this.getController('editorFactory').loseFocus();
     }
   }
 
-  /**
-   * @extended: column_fixing
-   * @protected
-   */
-  protected _generatePointsByColumns() {
+  _generatePointsByColumns() {
     const that = this;
     const columns = that._columnsController ? that._columnsController.getVisibleColumns() : [];
     const cells = that._columnHeadersView.getColumnElements();
@@ -913,7 +857,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     that._pointsByColumns = pointsByColumns;
   }
 
-  private _unsubscribeFromEvents() {
+  _unsubscribeFromEvents() {
     this._moveSeparatorHandler && eventsEngine.off(domAdapter.getDocument(), addNamespace(pointerEvents.move, MODULE_NAMESPACE), this._moveSeparatorHandler);
     this._startResizingHandler && eventsEngine.off(this._$parentContainer, addNamespace(pointerEvents.down, MODULE_NAMESPACE), this._startResizingHandler);
     if (this._endResizingHandler) {
@@ -922,7 +866,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     }
   }
 
-  private _subscribeToEvents() {
+  _subscribeToEvents() {
     this._moveSeparatorHandler = this.createAction(this._moveSeparator);
     this._startResizingHandler = this.createAction(this._startResizing);
     this._endResizingHandler = this.createAction(this._endResizing);
@@ -933,7 +877,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     eventsEngine.on(domAdapter.getDocument(), addNamespace(pointerEvents.up, MODULE_NAMESPACE), this, this._endResizingHandler);
   }
 
-  private _updateColumnsWidthIfNeeded(posX) {
+  _updateColumnsWidthIfNeeded(posX) {
     let deltaX;
     let needUpdate = false;
     let contentWidth = this._rowsView.contentWidth();
@@ -1076,7 +1020,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     return needUpdate;
   }
 
-  private _subscribeToCallback(callback, handler) {
+  _subscribeToCallback(callback, handler) {
     callback.add(handler);
     this._subscribesToCallbacks.push({
       callback,
@@ -1084,7 +1028,7 @@ export class ColumnsResizerViewController extends modules.ViewController {
     });
   }
 
-  private _unsubscribeFromCallbacks() {
+  _unsubscribeFromCallbacks() {
     for (let i = 0; i < this._subscribesToCallbacks.length; i++) {
       const subscribe = this._subscribesToCallbacks[i];
       subscribe.callback.remove(subscribe.handler);
@@ -1093,71 +1037,95 @@ export class ColumnsResizerViewController extends modules.ViewController {
     this._subscribesToCallbacks = [];
   }
 
-  private _unsubscribes() {
+  _unsubscribes() {
     this._unsubscribeFromEvents();
     this._unsubscribeFromCallbacks();
   }
 
-  private _init() {
-    const generatePointsByColumnsHandler = () => {
-      if (!this._isResizing) {
-        this.pointsByColumns(null);
+  _init() {
+    const that = this;
+    const generatePointsByColumnsHandler = function () {
+      if (!that._isResizing) {
+        that.pointsByColumns(null);
       }
     };
-    const generatePointsByColumnsScrollHandler = (offset) => {
-      if (this._scrollLeft !== offset.left) {
-        this._scrollLeft = offset.left;
-        this.pointsByColumns(null);
+    const generatePointsByColumnsScrollHandler = function (offset) {
+      if (that._scrollLeft !== offset.left) {
+        that._scrollLeft = offset.left;
+        that.pointsByColumns(null);
       }
     };
 
-    // TODO: Move this controllers/views initialization to public init() method.
-    this._columnsSeparatorView = this.getView('columnsSeparatorView');
-    this._columnHeadersView = this.getView('columnHeadersView');
-    this._trackerView = this.getView('trackerView');
-    this._rowsView = this.getView('rowsView');
-    this._columnsController = this.getController('columns');
-    this._tablePositionController = this.getController('tablePosition');
-    this._editorFactoryController = this.getController('editorFactory');
-    this._draggingHeaderView = this.component.getView('draggingHeaderView');
+    // @ts-expect-error
+    that._columnsSeparatorView = that.getView('columnsSeparatorView');
+    // @ts-expect-error
+    that._columnHeadersView = that.getView('columnHeadersView');
+    // @ts-expect-error
+    that._trackerView = that.getView('trackerView');
+    that._rowsView = that.getView('rowsView');
+    that._columnsController = that.getController('columns');
+    // @ts-expect-error
+    that._tablePositionController = that.getController('tablePosition');
+    that._$parentContainer = that.component.$element();
+    // @ts-expect-error
+    that._draggingHeaderView = that.component.getView('draggingHeaderView');
 
-    this._$parentContainer = this.component.$element();
-
-    this._subscribeToCallback(this._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
-    this._subscribeToCallback(this._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);
-    this._subscribeToCallback(this._columnsSeparatorView.renderCompleted, () => {
-      this._unsubscribeFromEvents();
-      this._subscribeToEvents();
+    that._subscribeToCallback(that._columnHeadersView.renderCompleted, generatePointsByColumnsHandler);
+    that._subscribeToCallback(that._columnHeadersView.resizeCompleted, generatePointsByColumnsHandler);
+    that._subscribeToCallback(that._columnsSeparatorView.renderCompleted, () => {
+      that._unsubscribeFromEvents();
+      that._subscribeToEvents();
     });
-    this._subscribeToCallback(this._rowsView.renderCompleted, () => {
-      this._rowsView.scrollChanged.remove(generatePointsByColumnsScrollHandler);
-      this._rowsView.scrollChanged.add(generatePointsByColumnsScrollHandler);
+    that._subscribeToCallback(that._rowsView.renderCompleted, () => {
+      that._rowsView.scrollChanged.remove(generatePointsByColumnsScrollHandler);
+      that._rowsView.scrollChanged.add(generatePointsByColumnsScrollHandler);
     });
 
-    let previousScrollbarVisibility = this._rowsView.getScrollbarWidth() !== 0;
+    let previousScrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
     let previousTableHeight = 0;
 
-    this._subscribeToCallback(this._tablePositionController.positionChanged, (e) => {
-      if (this._isResizing && !this._rowsView.isResizing) {
-        const scrollbarVisibility = this._rowsView.getScrollbarWidth() !== 0;
+    // @ts-expect-error
+    that._subscribeToCallback(that.getController('tablePosition').positionChanged, (e) => {
+      if (that._isResizing && !that._rowsView.isResizing) {
+        const scrollbarVisibility = that._rowsView.getScrollbarWidth() !== 0;
         if (previousScrollbarVisibility !== scrollbarVisibility || (previousTableHeight && previousTableHeight !== e.height)) {
           previousScrollbarVisibility = scrollbarVisibility;
           previousTableHeight = e.height;
 
-          this.component.updateDimensions();
+          that.component.updateDimensions();
         } else {
-          this._rowsView.updateFreeSpaceRowHeight();
+          that._rowsView.updateFreeSpaceRowHeight();
         }
       }
       previousTableHeight = e.height;
     });
   }
 
-  public isResizing() {
+  optionChanged(args) {
+    super.optionChanged(args);
+
+    if (args.name === 'allowColumnResizing') {
+      if (args.value) {
+        this._init();
+        this._subscribeToEvents();
+      } else {
+        this._unsubscribes();
+      }
+    }
+  }
+
+  isResizing() {
     return this._isResizing;
   }
 
-  private pointsByColumns(value) {
+  init() {
+    this._subscribesToCallbacks = [];
+    if (allowResizing(this)) {
+      this._init();
+    }
+  }
+
+  pointsByColumns(value) {
     if (value !== undefined) {
       this._pointsByColumns = value;
     } else {
@@ -1167,41 +1135,28 @@ export class ColumnsResizerViewController extends modules.ViewController {
       return this._pointsByColumns;
     }
   }
+
+  dispose() {
+    this._unsubscribes();
+    super.dispose();
+  }
 }
 
-export class TablePositionViewController extends modules.ViewController {
-  private _columnsResizerController!: ColumnsResizerViewController;
+class TablePositionViewController extends modules.ViewController {
+  private _columnHeadersView: any;
 
-  private _columnHeadersView!: ColumnHeadersView;
+  private _rowsView: any;
 
-  private _rowsView!: RowsView;
+  private readonly positionChanged: any;
 
-  public readonly positionChanged: any;
-
-  private _pagerView!: PagerView;
+  private _pagerView: any;
 
   constructor(component) {
     super(component);
     this.positionChanged = Callbacks();
   }
 
-  public init() {
-    super.init();
-
-    this._columnsResizerController = this.getController('columnsResizer');
-    this._columnHeadersView = this.getView('columnHeadersView');
-    this._rowsView = this.getView('rowsView');
-    this._pagerView = this.getView('pagerView');
-
-    this._rowsView.resizeCompleted.add(() => {
-      if (this.option('allowColumnResizing')) {
-        const targetPoint = this._columnsResizerController._targetPoint;
-        this.update(targetPoint ? targetPoint.y : null);
-      }
-    });
-  }
-
-  public update(top) {
+  update(top) {
     const that = this;
     const params: any = {};
     const $element = that._columnHeadersView.element();
@@ -1211,14 +1166,13 @@ export class TablePositionViewController extends modules.ViewController {
     const columnsHeadersHeight = that._columnHeadersView ? that._columnHeadersView.getHeight() : 0;
     const scrollBarWidth = that._rowsView.getScrollbarWidth(true);
     const rowsHeight = that._rowsView ? that._rowsView.height() - scrollBarWidth : 0;
-    // TODO getView
+    const columnsResizerController = that.component.getController('columnsResizer');
+    // @ts-expect-error
     const draggingHeaderView = that.component.getView('draggingHeaderView');
 
     params.height = columnsHeadersHeight;
 
-    const isDraggingOrResizing = this._columnsResizerController.isResizing()
-      // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-      || draggingHeaderView.isDragging();
+    const isDraggingOrResizing = columnsResizerController.isResizing() || draggingHeaderView.isDragging();
 
     if (isDraggingOrResizing) {
       params.height += rowsHeight - diffOffsetTop;
@@ -1230,68 +1184,50 @@ export class TablePositionViewController extends modules.ViewController {
 
     that.positionChanged.fire(params);
   }
+
+  init() {
+    const that = this;
+
+    super.init();
+
+    // @ts-expect-error
+    that._columnHeadersView = this.getView('columnHeadersView');
+    that._rowsView = this.getView('rowsView');
+    // @ts-expect-error
+    that._pagerView = this.getView('pagerView');
+
+    that._rowsView.resizeCompleted.add(() => {
+      if (that.option('allowColumnResizing')) {
+        const targetPoint = that.getController('columnsResizer')._targetPoint;
+
+        that.update(targetPoint ? targetPoint.y : null);
+      }
+    });
+  }
 }
 
 export class DraggingHeaderViewController extends modules.ViewController {
-  private _columnsController!: ColumnsController;
+  private _columnsController: any;
 
-  private _tablePositionController!: TablePositionViewController;
+  private _columnsSeparatorView: any;
 
-  private _columnsSeparatorView!: ColumnsSeparatorView;
-
-  private _blockSeparatorView!: BlockSeparatorView;
+  private _blockSeparatorView: any;
 
   private _animationColumnIndex?: number;
 
-  private _columnHeadersView!: ColumnHeadersView;
+  _columnHeadersView: any;
 
-  private _draggingHeaderView!: DraggingHeaderView;
+  private _draggingHeaderView: any;
 
-  private _rowsView!: RowsView;
+  private _rowsView: any;
 
-  private _headerPanelView!: HeaderPanel;
+  private _headerPanelView: any;
 
-  private _columnChooserView!: ColumnChooserView;
+  private _columnChooserView: any;
 
   private isCustomGroupColumnPosition?: boolean;
 
-  public init() {
-    super.init();
-
-    this._columnsController = this.getController('columns');
-    this._tablePositionController = this.getController('tablePosition');
-    this._columnHeadersView = this.getView('columnHeadersView');
-    this._columnsSeparatorView = this.getView('columnsSeparatorView');
-    this._draggingHeaderView = this.getView('draggingHeaderView');
-    this._rowsView = this.getView('rowsView');
-    this._blockSeparatorView = this.getView('blockSeparatorView');
-    this._headerPanelView = this.getView('headerPanel');
-    this._columnChooserView = this.getView('columnChooserView');
-
-    const subscribeToEvents = () => {
-      if (this._draggingHeaderView) {
-        const draggingPanels = [this._columnChooserView, this._columnHeadersView, this._headerPanelView];
-
-        this._unsubscribeFromEvents(this._draggingHeaderView, draggingPanels);
-        this._subscribeToEvents(this._draggingHeaderView, draggingPanels);
-      }
-    };
-
-    this._columnHeadersView.renderCompleted.add(subscribeToEvents);
-    this._headerPanelView && this._headerPanelView.renderCompleted.add(subscribeToEvents);
-    this._columnChooserView && this._columnChooserView.renderCompleted.add(subscribeToEvents);
-  }
-
-  public dispose() {
-    if (this._draggingHeaderView) {
-      this._unsubscribeFromEvents(this._draggingHeaderView, [this._columnChooserView, this._columnHeadersView, this._headerPanelView]);
-    }
-  }
-
-  /**
-   * @extended: column_fixing
-   */
-  public _generatePointsByColumns(options) {
+  _generatePointsByColumns(options) {
     const that = this;
 
     this.isCustomGroupColumnPosition = this.checkIsCustomGroupColumnPosition(options);
@@ -1317,7 +1253,6 @@ export class DraggingHeaderViewController extends modules.ViewController {
   }
 
   /**
-   * @extended: adaptivity, column_fixing
    * Function that is used to filter column points, it's called for each point
    * @param point Point that we are checking
    * @param columns All columns in the given location
@@ -1361,7 +1296,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     }
   }
 
-  private _subscribeToEvents(draggingHeader, draggingPanels) {
+  _subscribeToEvents(draggingHeader, draggingPanels) {
     const that = this;
 
     each(draggingPanels, (_, draggingPanel) => {
@@ -1413,7 +1348,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     });
   }
 
-  private _unsubscribeFromEvents(draggingHeader, draggingPanels) {
+  _unsubscribeFromEvents(draggingHeader, draggingPanels) {
     const that = this;
 
     each(draggingPanels, (_, draggingPanel) => {
@@ -1434,11 +1369,11 @@ export class DraggingHeaderViewController extends modules.ViewController {
     });
   }
 
-  private _getSeparator(targetLocation) {
+  _getSeparator(targetLocation) {
     return targetLocation === 'headers' ? this._columnsSeparatorView : this._blockSeparatorView;
   }
 
-  private hideSeparators(type?) {
+  hideSeparators(type?) {
     const blockSeparator = this._blockSeparatorView;
     const columnsSeparator = this._columnsSeparatorView;
 
@@ -1447,11 +1382,43 @@ export class DraggingHeaderViewController extends modules.ViewController {
     type !== 'block' && columnsSeparator && columnsSeparator.hide();
   }
 
-  private allowDrop(parameters) {
+  init() {
+    const that = this;
+
+    super.init();
+    that._columnsController = that.getController('columns');
+
+    // @ts-expect-error
+    that._columnHeadersView = that.getView('columnHeadersView');
+    // @ts-expect-error
+    that._columnsSeparatorView = that.getView('columnsSeparatorView');
+    // @ts-expect-error
+    that._draggingHeaderView = that.getView('draggingHeaderView');
+    that._rowsView = that.getView('rowsView');
+    // @ts-expect-error
+    that._blockSeparatorView = that.getView('blockSeparatorView');
+    that._headerPanelView = that.getView('headerPanel');
+    that._columnChooserView = that.getView('columnChooserView');
+
+    const subscribeToEvents = function () {
+      if (that._draggingHeaderView) {
+        const draggingPanels = [that._columnChooserView, that._columnHeadersView, that._headerPanelView];
+
+        that._unsubscribeFromEvents(that._draggingHeaderView, draggingPanels);
+        that._subscribeToEvents(that._draggingHeaderView, draggingPanels);
+      }
+    };
+
+    that._columnHeadersView.renderCompleted.add(subscribeToEvents);
+    that._headerPanelView && that._headerPanelView.renderCompleted.add(subscribeToEvents);
+    that._columnChooserView && that._columnChooserView.renderCompleted.add(subscribeToEvents);
+  }
+
+  allowDrop(parameters) {
     return this._columnsController.allowMoveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
   }
 
-  public drag(parameters) {
+  drag(parameters) {
     const { sourceIndex } = parameters;
     const { sourceLocation } = parameters;
     const { sourceColumnElement } = parameters;
@@ -1468,7 +1435,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     }
   }
 
-  public dock(parameters) {
+  dock(parameters) {
     const that = this;
     const targetColumnIndex = isObject(parameters.targetColumnIndex) ? parameters.targetColumnIndex.columnIndex : parameters.targetColumnIndex;
     const { sourceLocation } = parameters;
@@ -1494,8 +1461,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
           showSeparator();
         } else {
           that.hideSeparators('block');
-          that._tablePositionController.update(parameters.posY);
           // @ts-expect-error
+          that.getController('tablePosition').update(parameters.posY);
           separator.moveByX(parameters.posX - separator.width());
           separator.show();
         }
@@ -1505,7 +1472,7 @@ export class DraggingHeaderViewController extends modules.ViewController {
     }
   }
 
-  private drop(parameters) {
+  drop(parameters) {
     const { sourceColumnElement } = parameters;
 
     if (sourceColumnElement) {
@@ -1524,20 +1491,27 @@ export class DraggingHeaderViewController extends modules.ViewController {
       this._columnsController.moveColumn(parameters.sourceColumnIndex, parameters.targetColumnIndex, parameters.sourceLocation, parameters.targetLocation);
     }
   }
+
+  dispose() {
+    if (this._draggingHeaderView) {
+      this._unsubscribeFromEvents(this._draggingHeaderView, [this._columnChooserView, this._columnHeadersView, this._headerPanelView]);
+    }
+  }
 }
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewColumnsResizingExtender extends Base {
-  protected _needUpdateRowHeight(itemCount) {
+  _needUpdateRowHeight(itemCount) {
     const wordWrapEnabled = this.option('wordWrapEnabled');
-    const isResizing = this._columnsResizerController.isResizing();
+    const columnsResizerController = this.getController('columnsResizer');
+    const isResizing = columnsResizerController.isResizing();
 
-    return super._needUpdateRowHeight.apply(this, arguments as any) || itemCount > 0 && !!wordWrapEnabled && !!isResizing;
+    return super._needUpdateRowHeight.apply(this, arguments as any) || itemCount > 0 && wordWrapEnabled && isResizing;
   }
 };
 
 const editorFactory = (Base: ModuleType<EditorFactory>) => class EditorFactoryColumnsResizingExtender extends Base {
-  protected renderFocusOverlay() {
-    if (this._columnsResizerController.isResizing()) {
+  renderFocusOverlay() {
+    if (this.getController('columnsResizer').isResizing()) {
       return;
     }
 

@@ -7,7 +7,7 @@
   <dxo-nodes
     [dataSource]="dataSource"
     keyExpr="ID"
-    [textExpr]="textExpression"
+    textExpr="Full_Name"
     parentKeyExpr="Head_ID"
   >
     <dxo-auto-layout type="tree"></dxo-auto-layout>
@@ -20,7 +20,7 @@
   <span>
     {{
       selectedItems && selectedItems.length
-        ? (selectedItems | stringifyItems : textExpression)
+        ? (selectedItems | stringifyItems)
         : "Nobody has been selected"
     }}
   </span>

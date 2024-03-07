@@ -110,7 +110,9 @@ testModule('Markdown converter', () => {
     });
 });
 
-testModule('Custom list', {
+const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
+
+moduleWithoutCsp('Custom list', {
     before: function() {
         const Quill = getQuill();
         this.originalList = Quill.import('formats/list');

@@ -512,7 +512,7 @@ QUnit.module('actions', moduleConfig, () => {
             disabled: true
         });
 
-        onUpdatedHandler.resetHistory();
+        onUpdatedHandler.reset();
 
         $scrollView.dxScrollView('instance').finishLoading();
         pointerMock($scrollView.find('.content1')).start().down();
@@ -1194,7 +1194,7 @@ QUnit.module('api', moduleConfig, () => {
             useNative: false,
             onUpdated: onUpdatedHandler
         });
-        onUpdatedHandler.resetHistory();
+        onUpdatedHandler.reset();
 
         $scrollView.dxScrollView('release');
 
@@ -1771,11 +1771,16 @@ QUnit.module('native pullDown strategy', {
             onUpdated: onUpdatedHandler
         });
 
-        onUpdatedHandler.resetHistory();
+        onUpdatedHandler.reset();
 
-        $scrollView.dxScrollView('release');
-        this.clock.tick(400);
-        assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        const clock = sinon.useFakeTimers();
+        try {
+            $scrollView.dxScrollView('release');
+            clock.tick(400);
+            assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('scroll fires with correct arguments', function(assert) {
@@ -2085,11 +2090,16 @@ QUnit.module('native swipeDown strategy', {
             onUpdated: onUpdatedHandler
         });
 
-        onUpdatedHandler.resetHistory();
+        onUpdatedHandler.reset();
 
-        $scrollView.dxScrollView('instance').release();
-        this.clock.tick(800);
-        assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        const clock = sinon.useFakeTimers();
+        try {
+            $scrollView.dxScrollView('instance').release();
+            clock.tick(800);
+            assert.equal(onUpdatedHandler.callCount, isRenovatedScrollView ? 0 : 1, 'update fired');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('scroll fires with correct arguments', function(assert) {

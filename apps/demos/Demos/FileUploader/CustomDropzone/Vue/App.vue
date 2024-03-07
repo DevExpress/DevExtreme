@@ -5,8 +5,8 @@
       id="dropzone-external"
       class="flex-box"
       :class="[isDropZoneActive
-        ? 'dropzone-active'
-        : '']"
+        ? 'dx-theme-accent-as-border-color dropzone-active'
+        : 'dx-theme-border-color']"
     >
       <img
         id="dropzone-image"
@@ -96,11 +96,10 @@ function onUploadStarted() {
 #dropzone-external {
   width: 350px;
   height: 350px;
-  background-color: rgb(183 183 183 / 10%);
+  background-color: rgba(183, 183, 183, 0.1);
   border-width: 2px;
   border-style: dashed;
   padding: 10px;
-  border-color: var(--dx-color-border);
 }
 
 #dropzone-external > * {
@@ -109,7 +108,6 @@ function onUploadStarted() {
 
 #dropzone-external.dropzone-active {
   border-style: solid;
-  border-color: var(--dx-color-primary);
 }
 
 .widget-container > span {

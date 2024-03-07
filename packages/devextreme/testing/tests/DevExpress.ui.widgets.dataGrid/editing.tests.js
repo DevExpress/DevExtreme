@@ -2789,7 +2789,7 @@ QUnit.module('Editing', {
             startEditAction: 'dblClick'
         });
         rowsView.render(that.gridContainer);
-        allowUpdating.resetHistory();
+        allowUpdating.reset();
 
         // act
         that.gridContainer.find('td').first().trigger('click');
@@ -8511,7 +8511,7 @@ QUnit.module('Editing with real dataController', {
         $testElement.find('.dx-texteditor-input').first().val('Test11');
         $testElement.find('.dx-texteditor-input').first().trigger('change');
 
-        template.resetHistory();
+        template.reset();
         that.editingController.closeEditCell();
         that.clock.tick(10);
 

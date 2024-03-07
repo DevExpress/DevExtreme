@@ -30,12 +30,21 @@ export class AppComponent {
         items: [
           {
             text: 'Text Document',
+            options: {
+              extension: '.txt',
+            },
           },
           {
             text: 'RTF Document',
+            options: {
+              extension: '.rtf',
+            },
           },
           {
             text: 'Spreadsheet',
+            options: {
+              extension: '.xls',
+            },
           },
         ],
       },
@@ -48,19 +57,30 @@ export class AppComponent {
       {
         text: 'Category',
         icon: 'tags',
-        beginGroup: true,
         items: [
           {
             text: 'Work',
+            options: {
+              category: 'Work',
+            },
           },
           {
             text: 'Important',
+            options: {
+              category: 'Important',
+            },
           },
           {
             text: 'Home',
+            options: {
+              category: 'Home',
+            },
           },
           {
             text: 'None',
+            options: {
+              category: '',
+            },
           },
         ],
       },
@@ -68,17 +88,15 @@ export class AppComponent {
     onItemClick: this.onItemClick.bind(this),
   };
 
-  private service: Service;
-
   constructor(service: Service) {
-    this.service = service;
     this.fileItems = service.getFileItems();
     this.onItemClick = this.onItemClick.bind(this);
   }
 
-  onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent): void {
+  onItemClick({ itemData, viewArea, fileSystemItem }: DxFileManagerTypes.ContextMenuItemClickEvent) {
     let updated = false;
-    const { extension, category } = this.service.getItemInfo(itemData.text);
+    const extension = itemData.options ? itemData.options.extension : undefined;
+    const category = itemData.options ? itemData.options.category : undefined;
 
     if (extension) {
       updated = this.createFile(extension, fileSystemItem);

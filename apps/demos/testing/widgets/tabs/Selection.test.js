@@ -1,7 +1,6 @@
 import { Selector as $ } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
-import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TAB_CLASS = 'dx-tab';
@@ -12,8 +11,9 @@ const LIST_ITEM_CLASS = 'dx-list-item';
 
 fixture('Tabs.Selection')
   .page('http://localhost:8080/')
-  .before(async (ctx) => {
-    ctx.initialWindowSize = [900, 1200];
+  .beforeEach(async (t) => {
+    await t
+      .resizeWindow(900, 1200);
   });
 
 runManualTest('Tabs', 'Selection', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
@@ -24,14 +24,14 @@ runManualTest('Tabs', 'Selection', ['jQuery', 'React', 'Vue', 'Angular'], (test)
       .click($(`.${TABS_WRAPPER_CLASS} .${TAB_CLASS}`).nth(1))
       .wait(200);
 
-    await testScreenshot(t, takeScreenshot, 'tabs_second_item_selection.png');
+    await takeScreenshot('tabs_second_item_selection.png');
 
     await t
       .click($(`.${SELECT_BOX_CONTAINER_CLASS} .${SELECTBOX_CLASS}`).nth(0))
       .click($(`.${SELECTBOX_POPUP_WRAPPER_CLASS} .${LIST_ITEM_CLASS}`).nth(2))
       .wait(200);
 
-    await testScreenshot(t, takeScreenshot, 'tabs_third_item_selection.png');
+    await takeScreenshot('tabs_third_item_selection.png');
 
     await t
       .expect(compareResults.isValid())

@@ -48,7 +48,7 @@ export default function App() {
   return (
     <div className="widget-container flex-box">
       <span>Profile Picture</span>
-      <div id="dropzone-external" className={`flex-box ${isDropZoneActive ? 'dropzone-active' : ''}`}>
+      <div id="dropzone-external" className={`flex-box ${isDropZoneActive ? 'dx-theme-accent-as-border-color dropzone-active' : 'dx-theme-border-color'}`}>
         {imageSource && <img id="dropzone-image" src={imageSource} alt="" />}
         {textVisible && (
           <div id="dropzone-text" className="flex-box">

@@ -11,10 +11,6 @@
   padding: 16px 32px;
 }
 
-.tabpanel-demo .dx-tabpanel {
-  background-color: var(--dx-component-color-bg);
-}
-
 .dx-theme-material .widget-container {
   background-color: rgba(191, 191, 191, 0.15);
 }

@@ -179,7 +179,7 @@ QUnit.module('Integration: Resources', moduleConfig, () => {
             resources: resources,
             dataSource: dataSource,
             currentDate: new Date(2015, 1, 9)
-        }, this.clock);
+        });
 
         scheduler.appointments.click();
         scheduler.tooltip.clickOnItem();

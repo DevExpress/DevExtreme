@@ -44,7 +44,3 @@ $fluent-popup-focused-content-shadow: null !default;
   $fluent-popup-content-shadow: 0 0 8px 0 $popup-content-shadow-color1, 0 32px 64px 0 $popup-content-shadow-color2 !default;
   $fluent-popup-focused-content-shadow: 0 0 12px 0 $popup-focused-content-shadow-color, 0 32px 64px 0 $popup-focused-content-shadow-color !default;
 }
-
-:root { 
-  --dx-popup-toolbar-item-padding-inline: #{$fluent-popup-toolbar-item-spacing}; 
-} 

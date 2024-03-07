@@ -48,7 +48,7 @@ QUnit.module(`Selection for items: ${JSON.stringify(items)}, `, () => {
         }
 
         resetSelectedChangedSpy() {
-            this.selectionChangedHandler.resetHistory();
+            this.selectionChangedHandler.reset();
         }
 
         _getButtonGroupItem(index) {

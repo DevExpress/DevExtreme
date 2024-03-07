@@ -51,7 +51,7 @@ const createSeries = function(options, renderSettings) {
         incidentOccurred: noop
     }, renderSettings);
 
-    renderer.stub('g').resetHistory();
+    renderer.stub('g').reset();
 
     return new Series(renderSettings, options);
 };
@@ -1900,7 +1900,7 @@ function setDiscreteType(series) {
         // act
 
         series.draw(true);
-        this.renderer.stub('path').lastCall.returnValue.attr.resetHistory();
+        this.renderer.stub('path').lastCall.returnValue.attr.reset();
 
         series.resetApplyingAnimation(true);
 
@@ -1931,7 +1931,7 @@ function setDiscreteType(series) {
         series.resetApplyingAnimation(true);
         series.draw(true);
 
-        this.renderer.stub('path').lastCall.returnValue.attr.resetHistory();
+        this.renderer.stub('path').lastCall.returnValue.attr.reset();
 
         // second drawing
         series.draw(true);

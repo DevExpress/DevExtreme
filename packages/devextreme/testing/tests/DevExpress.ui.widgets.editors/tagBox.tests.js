@@ -5116,7 +5116,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        fieldTemplateSpy.resetHistory();
+        fieldTemplateSpy.reset();
         keyboardMock($tagBox.find('.dx-texteditor-input'))
             .focus()
             .press('down');
@@ -7068,7 +7068,7 @@ QUnit.module('maxFilterQueryLength', {
         };
 
         this.stubLogger = (assert) => {
-            this.stub = sinon.stub(uiErrors, 'log').callsFake((warning) => {
+            this.stub = sinon.stub(uiErrors, 'log', (warning) => {
                 assert.strictEqual(warning, 'W1019', 'warning is correct');
             });
         };
@@ -7132,6 +7132,8 @@ QUnit.module('regression', {
     }
 }, () => {
     QUnit.test('Selection refreshing process should wait for the items data will be loaded from the data source (T673636)', function(assert) {
+        const clock = sinon.useFakeTimers();
+
         const tagBox = $('#tagBox').dxTagBox({
             valueExpr: 'id',
             dataSource: {
@@ -7148,8 +7150,9 @@ QUnit.module('regression', {
         tagBox.option('value', [1]);
 
         assert.notOk(tagBox.option('selectedItems').length);
-        this.clock.tick(10);
+        clock.tick(10);
         assert.ok(tagBox.option('selectedItems').length);
+        clock.restore();
     });
 
     QUnit.test('should render function item template that returns default template\'s name (T726777)', function(assert) {

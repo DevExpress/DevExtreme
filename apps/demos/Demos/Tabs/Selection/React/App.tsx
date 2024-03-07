@@ -21,7 +21,7 @@ class EmployeeInfo extends React.Component<{
 
     return (
       <div className="employee-info">
-        <img alt={text} className="employee-photo" src={picture} />
+        <img alt={text} className="employee-photo dx-theme-border-color" src={picture} />
         <p className="employee-notes">
           <b>Position: {position}</b><br />
           {notes}

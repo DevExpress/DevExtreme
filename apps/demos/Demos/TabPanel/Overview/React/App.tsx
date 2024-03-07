@@ -34,6 +34,7 @@ const App = () => {
     <div className="tabpanel-demo">
       <div className="widget-container">
         <TabPanel
+          className="dx-theme-background-color"
           width="100%"
           height={418}
           animationEnabled={true}

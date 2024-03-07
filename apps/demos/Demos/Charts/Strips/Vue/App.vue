@@ -4,7 +4,7 @@
     :customize-point="customizePoint"
     :customize-label="customizeLabel"
     :data-source="dataSource"
-    title="Temperature (high) in September, &#176;F"
+    title="Temperature in September"
   >
     <DxSeries
       argument-field="day"
@@ -18,7 +18,7 @@
         :start-value="highAverage"
         color="rgba(255,155,85,0.15)"
       >
-        <DxLabel text="Above average high">
+        <DxLabel text="Above average">
           <DxFont :color="highAverageColor"/>
         </DxLabel>
       </DxStrip>
@@ -26,7 +26,7 @@
         :end-value="lowAverage"
         color="rgba(97,153,230,0.10)"
       >
-        <DxLabel text="Below average low">
+        <DxLabel text="Below average">
           <DxFont :color="lowAverageColor"/>
         </DxLabel>
       </DxStrip>

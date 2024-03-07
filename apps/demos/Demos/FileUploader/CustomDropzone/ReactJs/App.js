@@ -55,7 +55,11 @@ export default function App() {
       <span>Profile Picture</span>
       <div
         id="dropzone-external"
-        className={`flex-box ${isDropZoneActive ? 'dropzone-active' : ''}`}
+        className={`flex-box ${
+          isDropZoneActive
+            ? 'dx-theme-accent-as-border-color dropzone-active'
+            : 'dx-theme-border-color'
+        }`}
       >
         {imageSource && (
           <img

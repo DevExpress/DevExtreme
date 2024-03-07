@@ -572,7 +572,7 @@ module('Events', {
                         text: 'Test'
                     }, 'e.appointmentData arg should be equal with deleted appointment');
                 }
-            }, this.clock);
+            });
 
             scheduler.appointmentList[0].click();
             scheduler.tooltip.clickOnDeleteButton();
@@ -760,52 +760,46 @@ module('ArraySore(auto generated id)', moduleConfig, () => {
     });
 
     test('onAppointmentDelete[*] events should be work right', function(assert) {
-        const clock = sinon.useFakeTimers();
+        const dataSource = new DataSource({
+            store: new ArrayStore({
+                data: [{
+                    id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
+                    startDate: new Date(2020, 6, 10, 1),
+                    endDate: new Date(2020, 6, 10, 2),
+                    text: 'Test'
+                }],
+                key: 'id'
+            }),
+        });
 
-        try {
-            const dataSource = new DataSource({
-                store: new ArrayStore({
-                    data: [{
-                        id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
-                        startDate: new Date(2020, 6, 10, 1),
-                        endDate: new Date(2020, 6, 10, 2),
-                        text: 'Test'
-                    }],
-                    key: 'id'
-                }),
-            });
+        const scheduler = createWrapper({
+            dataSource,
+            views: ['day'],
+            currentView: 'day',
+            currentDate: new Date(2020, 6, 10),
+            height: 600,
+            onAppointmentDeleting: e => {
+                assert.deepEqual(e.appointmentData, {
+                    id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
+                    startDate: new Date(2020, 6, 10, 1),
+                    endDate: new Date(2020, 6, 10, 2),
+                    text: 'Test'
+                }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleting event');
+            },
+            onAppointmentDeleted: e => {
+                assert.deepEqual(e.appointmentData, {
+                    id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
+                    startDate: new Date(2020, 6, 10, 1),
+                    endDate: new Date(2020, 6, 10, 2),
+                    text: 'Test'
+                }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleted event');
+            }
+        });
 
-            const scheduler = createWrapper({
-                dataSource,
-                views: ['day'],
-                currentView: 'day',
-                currentDate: new Date(2020, 6, 10),
-                height: 600,
-                onAppointmentDeleting: e => {
-                    assert.deepEqual(e.appointmentData, {
-                        id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
-                        startDate: new Date(2020, 6, 10, 1),
-                        endDate: new Date(2020, 6, 10, 2),
-                        text: 'Test'
-                    }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleting event');
-                },
-                onAppointmentDeleted: e => {
-                    assert.deepEqual(e.appointmentData, {
-                        id: 'bc0eadf8-608a-491f-9f23-e5a8100352e7',
-                        startDate: new Date(2020, 6, 10, 1),
-                        endDate: new Date(2020, 6, 10, 2),
-                        text: 'Test'
-                    }, 'Appointment should be equal with dataSource appointment on onAppointmentDeleted event');
-                }
-            }, clock);
+        scheduler.appointmentList[0].click();
+        scheduler.tooltip.clickOnDeleteButton();
 
-            scheduler.appointmentList[0].click();
-            scheduler.tooltip.clickOnDeleteButton();
-
-            assert.expect(2);
-        } finally {
-            clock.restore();
-        }
+        assert.expect(2);
     });
 
     test('onAppointmentUpdate[*] events should be work right', function(assert) {

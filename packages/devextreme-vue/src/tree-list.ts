@@ -706,7 +706,7 @@ const DxColumnChooser = createConfigurationComponent({
     container: {},
     emptyPanelText: String,
     enabled: Boolean,
-    height: [Number, String],
+    height: Number,
     mode: String,
     position: Object,
     search: Object,
@@ -714,7 +714,7 @@ const DxColumnChooser = createConfigurationComponent({
     selection: Object,
     sortOrder: String,
     title: String,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxColumnChooser as any).$_optionName = "columnChooser";
@@ -807,10 +807,10 @@ const DxColumnHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: [Number, String],
+    height: Number,
     search: Object,
     searchMode: String,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
@@ -1603,13 +1603,13 @@ const DxHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: [Number, String],
+    height: Number,
     search: Object,
     searchMode: String,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxHeaderFilter as any).$_optionName = "headerFilter";
@@ -1736,14 +1736,14 @@ const DxLoadPanel = createConfigurationComponent({
   },
   props: {
     enabled: [Boolean, String],
-    height: [Number, String],
+    height: Number,
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,
     showIndicator: Boolean,
     showPane: Boolean,
     text: String,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxLoadPanel as any).$_optionName = "loadPanel";
@@ -2479,12 +2479,12 @@ const DxTreeListHeaderFilter = createConfigurationComponent({
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    height: [Number, String],
+    height: Number,
     search: Object,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: [Number, String]
+    width: Number
   }
 });
 (DxTreeListHeaderFilter as any).$_optionName = "headerFilter";

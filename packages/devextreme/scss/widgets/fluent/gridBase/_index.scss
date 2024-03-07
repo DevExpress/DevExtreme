@@ -291,11 +291,6 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           width: $fluent-grid-base-command-edit-column-width;
           min-width: $fluent-grid-base-command-edit-column-width;
 
-          .dx-link:not(.dx-link-icon) {
-            margin: 0 $fluent-command-edit-text-margin;
-            min-width: 20px;
-          }
-
           &.dx-command-edit-with-icons {
             width: $fluent-grid-base-command-edit-column-with-icons-width;
             min-width: $fluent-grid-base-command-edit-column-with-icons-width;

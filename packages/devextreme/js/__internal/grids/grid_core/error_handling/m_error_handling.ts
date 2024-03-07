@@ -4,14 +4,10 @@ import { each } from '@js/core/utils/iterator';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
-import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
-import type { ResizingController } from '@ts/grids/grid_core/views/m_grid_view';
 
-import type { ColumnHeadersView } from '../column_headers/m_column_headers';
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import type { ModuleType } from '../m_types';
-import type { RowsView } from '../views/m_rows_view';
 
 const ERROR_ROW_CLASS = 'dx-error-row';
 const ERROR_MESSAGE_CLASS = 'dx-error-message';
@@ -19,22 +15,20 @@ const ERROR_CLOSEBUTTON_CLASS = 'dx-closebutton';
 const ACTION_CLASS = 'action';
 
 export class ErrorHandlingController extends modules.ViewController {
-  private _resizingController!: ResizingController;
+  private _columnHeadersView: any;
 
-  private _columnsController!: ColumnsController;
+  private _rowsView: any;
 
-  private _columnHeadersView!: ColumnHeadersView;
+  init() {
+    const that = this;
 
-  private _rowsView!: RowsView;
-
-  public init() {
-    this._resizingController = this.getController('resizing');
-    this._columnsController = this.getController('columns');
-    this._columnHeadersView = this.getView('columnHeadersView');
-    this._rowsView = this.getView('rowsView');
+    // @ts-expect-error
+    that._columnHeadersView = that.getView('columnHeadersView');
+    that._rowsView = that.getView('rowsView');
   }
 
-  private _createErrorRow(error, $tableElements?) {
+  _createErrorRow(error, $tableElements?) {
+    const that = this;
     let $errorRow;
     let $closeButton;
     const $errorMessage = this._renderErrorMessage(error);
@@ -43,9 +37,9 @@ export class ErrorHandlingController extends modules.ViewController {
       $errorRow = $('<tr>')
         .attr('role', 'row')
         .addClass(ERROR_ROW_CLASS);
-      $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(this.addWidgetPrefix(ACTION_CLASS));
+      $closeButton = $('<div>').addClass(ERROR_CLOSEBUTTON_CLASS).addClass(that.addWidgetPrefix(ACTION_CLASS));
 
-      eventsEngine.on($closeButton, clickEventName, this.createAction((args) => {
+      eventsEngine.on($closeButton, clickEventName, that.createAction((args) => {
         const e = args.event;
         let $errorRow;
         const errorRowIndex = $(e.currentTarget).closest(`.${ERROR_ROW_CLASS}`).index();
@@ -53,16 +47,16 @@ export class ErrorHandlingController extends modules.ViewController {
         e.stopPropagation();
         each($tableElements, (_, tableElement) => {
           $errorRow = $(tableElement).children('tbody').children('tr').eq(errorRowIndex);
-          this.removeErrorRow($errorRow);
+          that.removeErrorRow($errorRow);
         });
 
-        this._resizingController?.fireContentReadyAction?.();
+        that.getController('resizing') && that.getController('resizing').fireContentReadyAction();
       }));
 
       $('<td>')
         // @ts-expect-errors
         .attr({
-          colSpan: this._columnsController.getVisibleColumns().length,
+          colSpan: that.getController('columns').getVisibleColumns().length,
           role: 'gridcell',
         })
         .prepend($closeButton)
@@ -75,7 +69,7 @@ export class ErrorHandlingController extends modules.ViewController {
     return $errorMessage;
   }
 
-  private _renderErrorMessage(error) {
+  _renderErrorMessage(error) {
     const message = error.url ? error.message.replace(error.url, '') : error.message || error;
     const $message = $('<div>')
       .attr('role', 'alert')
@@ -90,7 +84,7 @@ export class ErrorHandlingController extends modules.ViewController {
     return $message;
   }
 
-  public renderErrorRow(error, rowIndex, $popupContent) {
+  renderErrorRow(error, rowIndex, $popupContent) {
     const that = this;
     let $errorMessageElement;
     let $firstErrorRow;
@@ -126,12 +120,13 @@ export class ErrorHandlingController extends modules.ViewController {
       }
     });
 
-    this._resizingController?.fireContentReadyAction?.();
+    const resizingController = that.getController('resizing');
+    resizingController && resizingController.fireContentReadyAction();
 
     return $firstErrorRow;
   }
 
-  public removeErrorRow($row?) {
+  removeErrorRow($row?) {
     if (!$row) {
       const $columnHeaders = this._columnHeadersView && this._columnHeadersView.element();
       $row = $columnHeaders && $columnHeaders.find(`.${ERROR_ROW_CLASS}`);
@@ -143,7 +138,7 @@ export class ErrorHandlingController extends modules.ViewController {
     $row && $row.hasClass(ERROR_ROW_CLASS) && $row.remove();
   }
 
-  public optionChanged(args) {
+  optionChanged(args) {
     switch (args.name) {
       case 'errorRowEnabled':
         args.handled = true;
@@ -155,22 +150,28 @@ export class ErrorHandlingController extends modules.ViewController {
 }
 
 const data = (Base: ModuleType<DataController>) => class ErrorHandlingDataControllerExtends extends Base {
-  public init() {
+  init() {
+    const that = this;
+
+    const errorHandlingController = that.getController('errorHandling');
+
     super.init();
 
-    this.dataErrorOccurred.add((error, $popupContent) => {
-      if (this.option('errorRowEnabled')) {
-        this._errorHandlingController.renderErrorRow(error, undefined, $popupContent);
+    that.dataErrorOccurred.add((error, $popupContent) => {
+      if (that.option('errorRowEnabled')) {
+        errorHandlingController.renderErrorRow(error, undefined, $popupContent);
       }
     });
-
-    this.changed.add((e) => {
+    that.changed.add((e) => {
       if (e && e.changeType === 'loadError') {
         return;
       }
 
-      if (this._editingController && !this._editingController.hasChanges()) {
-        this._errorHandlingController?.removeErrorRow?.();
+      const errorHandlingController = that.getController('errorHandling');
+      const editingController = that.getController('editing');
+
+      if (editingController && !editingController.hasChanges()) {
+        errorHandlingController && errorHandlingController.removeErrorRow();
       }
     });
   }

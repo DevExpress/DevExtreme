@@ -69,6 +69,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
     // T1103925
     QUnit.test('GroupPanel should have a maxWidth when empty', function(assert) {
         // arrange
+        const clock = sinon.useFakeTimers();
         const dataGrid = $('#dataGrid').dxDataGrid({
             dataSource: {
                 store: [
@@ -88,7 +89,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const $dataGrid = $(dataGrid.element());
 
-        this.clock.tick(10);
+        clock.tick(10);
         const container = $dataGrid.find('.dx-toolbar-label');
 
         assert.equal(container.length, 1);

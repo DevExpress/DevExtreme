@@ -55,7 +55,7 @@ QUnit.begin(function() {
 });
 
 QUnit.testStart(function() {
-    stubSelectStrategy.resetHistory();
+    stubSelectStrategy.reset();
     StubMapLayerElement.items = [];
 });
 
@@ -259,19 +259,19 @@ QUnit.test('Set options when data is set', function(assert) {
         }
     });
     this.context.grouping = { g1: 1, g2: 2 };
-    this.tracker.reset.resetHistory();
+    this.tracker.reset.reset();
 
     const strategy = stubSelectStrategy.lastCall.returnValue;
-    stubSelectStrategy.resetHistory();
-    strategy.reset.resetHistory();
-    strategy.setup.resetHistory();
-    strategy.arrange.resetHistory();
-    strategy.updateGrouping.resetHistory();
+    stubSelectStrategy.reset();
+    strategy.reset.reset();
+    strategy.setup.reset();
+    strategy.arrange.reset();
+    strategy.updateGrouping.reset();
     const items = StubMapLayerElement.items;
     StubMapLayerElement.items = [];
-    this.context.root.clear.resetHistory();
+    this.context.root.clear.reset();
     const labelRoot = this.context.labelRoot = new vizMocks.Element();
-    this.themeManager.theme.resetHistory();
+    this.themeManager.theme.reset();
 
     this.layer.setOptions({ tag: 'tag' });
 
@@ -297,17 +297,17 @@ QUnit.test('Set options when data is set and type is changed', function(assert) 
         }
     });
 
-    this.tracker.reset.resetHistory();
+    this.tracker.reset.reset();
     let strategy = stubSelectStrategy.lastCall.returnValue;
-    stubSelectStrategy.resetHistory();
-    strategy.reset.resetHistory();
-    strategy.setup.resetHistory();
-    strategy.arrange.resetHistory();
-    strategy.updateGrouping.resetHistory();
+    stubSelectStrategy.reset();
+    strategy.reset.reset();
+    strategy.setup.reset();
+    strategy.arrange.reset();
+    strategy.updateGrouping.reset();
     StubMapLayerElement.items = [];
-    this.context.root.clear.resetHistory();
+    this.context.root.clear.reset();
     const labelRoot = this.context.labelRoot = new vizMocks.Element();
-    this.themeManager.theme.resetHistory();
+    this.themeManager.theme.reset();
 
     this.layer.setOptions({ tag: 'tag', type: 'test-type-2' });
 
@@ -332,17 +332,17 @@ QUnit.test('Set options when data is set and element type is changed', function(
         }
     });
 
-    this.tracker.reset.resetHistory();
+    this.tracker.reset.reset();
     let strategy = stubSelectStrategy.lastCall.returnValue;
-    stubSelectStrategy.resetHistory();
-    strategy.reset.resetHistory();
-    strategy.setup.resetHistory();
-    strategy.arrange.resetHistory();
-    strategy.updateGrouping.resetHistory();
+    stubSelectStrategy.reset();
+    strategy.reset.reset();
+    strategy.setup.reset();
+    strategy.arrange.reset();
+    strategy.updateGrouping.reset();
     StubMapLayerElement.items = [];
-    this.context.root.clear.resetHistory();
+    this.context.root.clear.reset();
     const labelRoot = this.context.labelRoot = new vizMocks.Element();
-    this.themeManager.theme.resetHistory();
+    this.themeManager.theme.reset();
 
     this.layer.setOptions({ tag: 'tag', elementType: 'test-element-type-2' });
 
@@ -368,19 +368,19 @@ QUnit.test('Set options with same data when data is set', function(assert) {
         dataSource: ds
     });
     this.context.grouping = { g1: 1, g2: 2 };
-    this.tracker.reset.resetHistory();
+    this.tracker.reset.reset();
 
     const strategy = stubSelectStrategy.lastCall.returnValue;
-    stubSelectStrategy.resetHistory();
-    strategy.reset.resetHistory();
-    strategy.setup.resetHistory();
-    strategy.arrange.resetHistory();
-    strategy.updateGrouping.resetHistory();
+    stubSelectStrategy.reset();
+    strategy.reset.reset();
+    strategy.setup.reset();
+    strategy.arrange.reset();
+    strategy.updateGrouping.reset();
     const items = StubMapLayerElement.items;
     StubMapLayerElement.items = [];
-    this.context.root.clear.resetHistory();
+    this.context.root.clear.reset();
     const labelRoot = this.context.labelRoot = new vizMocks.Element();
-    this.themeManager.theme.resetHistory();
+    this.themeManager.theme.reset();
 
     this.layer.setOptions({ dataSource: ds });
 
@@ -558,10 +558,10 @@ QUnit.test('Selection restoring', function(assert) {
 QUnit.test('Update', function(assert) {
     this.layer.setOptions({ dataSource: this.data });
     $.each(StubMapLayerElement.items, function(i, item) {
-        item.project.resetHistory();
-        item.draw.resetHistory();
-        item.transform.resetHistory();
-        item.refresh.resetHistory();
+        item.project.reset();
+        item.draw.reset();
+        item.transform.reset();
+        item.refresh.reset();
     });
     this.layer.setOptions({ tag: 'option' });
 
@@ -593,10 +593,10 @@ QUnit.module('Methods and callbacks', {
         this.layer.setOptions({ dataSource: this.data });
         this.items = StubMapLayerElement.items;
         $.each(this.items, function(_, item) {
-            item.project.resetHistory();
-            item.draw.resetHistory();
-            item.transform.resetHistory();
-            item.refresh.resetHistory();
+            item.project.reset();
+            item.draw.reset();
+            item.transform.reset();
+            item.refresh.reset();
         });
     },
 
@@ -717,7 +717,7 @@ QUnit.test('Labels group', function(assert) {
     const context = this.context;
     const strategy = stubSelectStrategy.lastCall.returnValue;
     this.projection.stub('getTransform').returns({ tag: 'transform' });
-    this.renderer.g.resetHistory();
+    this.renderer.g.reset();
 
     strategy.hasLabelsGroup = false;
     this.layer.setOptions();
@@ -738,7 +738,7 @@ QUnit.test('Labels group', function(assert) {
     assert.deepEqual(labelGroup.linkOn.lastCall.args, [this.container, { name: 'test-layer-labels', after: 'test-layer' }], 'group is linked');
     assert.deepEqual(labelGroup.linkAppend.lastCall.args, [], 'group is appended');
 
-    this.renderer.g.resetHistory();
+    this.renderer.g.reset();
     this.layer.setOptions({ label: { enabled: false } });
     assert.strictEqual(context.hasSeparateLabel, false, 'state - 4');
     assert.strictEqual(this.renderer.g.lastCall, null, 'group is not created - 4');

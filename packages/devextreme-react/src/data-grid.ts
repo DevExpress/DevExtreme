@@ -508,10 +508,10 @@ type IColumnProps = React.PropsWithChildren<{
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-    height?: number | string;
+    height?: number;
     search?: ColumnHeaderFilterSearchConfig;
     searchMode?: "contains" | "startswith" | "equals";
-    width?: number | string;
+    width?: number;
   };
   hidingPriority?: number;
   isBand?: boolean;
@@ -631,7 +631,7 @@ type IColumnChooserProps = React.PropsWithChildren<{
   container?: any | string;
   emptyPanelText?: string;
   enabled?: boolean;
-  height?: number | string;
+  height?: number;
   mode?: "dragAndDrop" | "select";
   position?: PositionConfig;
   search?: ColumnChooserSearchConfig;
@@ -639,7 +639,7 @@ type IColumnChooserProps = React.PropsWithChildren<{
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: "asc" | "desc";
   title?: string;
-  width?: number | string;
+  width?: number;
 }>
 class ColumnChooser extends NestedOption<IColumnChooserProps> {
   public static OptionName = "columnChooser";
@@ -712,10 +712,10 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number | string;
+  height?: number;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number | string;
+  width?: number;
 }>
 class ColumnHeaderFilter extends NestedOption<IColumnHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -828,7 +828,7 @@ class CustomRule extends NestedOption<ICustomRuleProps> {
 type IDataGridHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  height?: number | string;
+  height?: number;
   search?: HeaderFilterSearchConfig;
   searchTimeout?: number;
   texts?: Record<string, any> | {
@@ -837,7 +837,7 @@ type IDataGridHeaderFilterProps = React.PropsWithChildren<{
     ok?: string;
   };
   visible?: boolean;
-  width?: number | string;
+  width?: number;
 }>
 class DataGridHeaderFilter extends NestedOption<IDataGridHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -1543,10 +1543,10 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number | string;
+  height?: number;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number | string;
+  width?: number;
   searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
@@ -1659,14 +1659,14 @@ class Label extends NestedOption<ILabelProps> {
 // DataGrid
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean | "auto";
-  height?: number | string;
+  height?: number;
   indicatorSrc?: string;
   shading?: boolean;
   shadingColor?: string;
   showIndicator?: boolean;
   showPane?: boolean;
   text?: string;
-  width?: number | string;
+  width?: number;
 }>
 class LoadPanel extends NestedOption<ILoadPanelProps> {
   public static OptionName = "loadPanel";

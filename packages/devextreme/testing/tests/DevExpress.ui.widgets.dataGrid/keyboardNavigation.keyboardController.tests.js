@@ -751,7 +751,7 @@ QUnit.module('Keyboard controller', {
         assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
 
         // arrange
-        onSpy.resetHistory();
+        onSpy.reset();
 
         // act
         navigationController.option('keyboardNavigation.enabled', false);
@@ -798,7 +798,7 @@ QUnit.module('Keyboard controller', {
         assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'not subscribed to the "keydown" event');
 
         // arrange
-        onSpy.resetHistory();
+        onSpy.reset();
 
         // act
         navigationController.option('keyboardNavigation.enabled', true);
