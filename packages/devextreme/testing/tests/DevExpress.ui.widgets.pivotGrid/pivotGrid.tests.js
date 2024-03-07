@@ -6679,9 +6679,8 @@ QUnit.module('Vertical headers', {
 
     ['instantly', 'onDemand'].forEach(applyChangesMode => {
         ['row', 'column'].forEach(changedArea => {
-            function createPivotGridAndExpandHeaderItem(fieldsChooserFieldsUpdater) {
+            function createPivotGridAndExpandHeaderItem(fieldsChooserFieldsUpdater, clock) {
                 fx.off = true;
-                const clock = sinon.useFakeTimers();
                 const grid = $('#pivotGrid').dxPivotGrid({
                     fieldChooser: {
                         applyChangesMode: applyChangesMode
@@ -6712,7 +6711,6 @@ QUnit.module('Vertical headers', {
 
                     fieldsChooserFieldsUpdater(fieldChooser);
                 });
-                clock.restore();
                 fx.off = false;
             }
 
@@ -6727,7 +6725,7 @@ QUnit.module('Vertical headers', {
                         assert.deepEqual(state.rowExpandedPaths, []);
                         assert.deepEqual(state.columnExpandedPaths, [['column1']]);
                     }
-                });
+                }, this.clock);
             });
 
             QUnit.test(`Remove first item from the ${changedArea} area must clear the expandedPath (T928525)`, function(assert) {
@@ -6744,7 +6742,7 @@ QUnit.module('Vertical headers', {
 
                     assert.deepEqual(newState.rowExpandedPaths, []);
                     assert.deepEqual(newState.columnExpandedPaths, []);
-                });
+                }, this.clock);
             });
 
             QUnit.test(`Append new item to the start of the ${changedArea} area must clear the expandedPath (T928525)`, function(assert) {
@@ -6765,7 +6763,7 @@ QUnit.module('Vertical headers', {
 
                     assert.deepEqual(newState.rowExpandedPaths, []);
                     assert.deepEqual(newState.columnExpandedPaths, []);
-                });
+                }, this.clock);
             });
 
             QUnit.test(`Append new item to the end of ${changedArea} area must keep the expandedPath (T928525)`, function(assert) {
@@ -6789,7 +6787,7 @@ QUnit.module('Vertical headers', {
                         assert.deepEqual(newState.rowExpandedPaths, []);
                         assert.deepEqual(newState.columnExpandedPaths, [['column1']]);
                     }
-                });
+                }, this.clock);
             });
 
             QUnit.test(`Swapping items in the ${changedArea} area must clear the expandedPath (T928525)`, function(assert) {
@@ -6808,13 +6806,12 @@ QUnit.module('Vertical headers', {
 
                     assert.deepEqual(newState.rowExpandedPaths, []);
                     assert.deepEqual(newState.columnExpandedPaths, []);
-                });
+                }, this.clock);
             });
         });
 
-        function createGridAndTestFieldChooser(testAction) {
+        function createGridAndTestFieldChooser(testAction, clock) {
             fx.off = true;
-            const clock = sinon.useFakeTimers();
             const grid = $('#pivotGrid').dxPivotGrid({
                 fieldChooser: {
                     applyChangesMode: applyChangesMode
@@ -6864,7 +6861,7 @@ QUnit.module('Vertical headers', {
 
                 assert.deepEqual(optionState.rowExpandedPaths, [['row1']]);
                 assert.deepEqual(optionState.columnExpandedPaths, [['column1']]);
-            });
+            }, this.clock);
         });
 
         QUnit.test(`applyChangesMode=${applyChangesMode}. fieldChooser.option(state, newState). fieldChooser.cancelChanges()`, function(assert) {
@@ -6888,7 +6885,7 @@ QUnit.module('Vertical headers', {
 
                 assert.deepEqual(optionState.rowExpandedPaths, applyChangesMode === 'instantly' ? [['row1']] : []);
                 assert.deepEqual(optionState.columnExpandedPaths, applyChangesMode === 'instantly' ? [['column1']] : []);
-            });
+            }, this.clock);
         });
 
         QUnit.test(`applyChangesMode=${applyChangesMode}. onOptionChanged must be fired if dataSource changed`, function(assert) {
@@ -6904,7 +6901,7 @@ QUnit.module('Vertical headers', {
                 clock.tick(10);
 
                 assert.equal(isEventTriggered, true, 'event is triggered');
-            });
+            }, this.clock);
         });
 
         QUnit.test(`applyChangesMode=${applyChangesMode}. pivotGrid.dataSource.state(newState) multiple times`, function(assert) {
@@ -6925,7 +6922,7 @@ QUnit.module('Vertical headers', {
                 } else {
                     assert.equal(dataSourceEventsCount, 0, 'dataSource is not reloaded');
                 }
-            });
+            }, this.clock);
         });
     });
 

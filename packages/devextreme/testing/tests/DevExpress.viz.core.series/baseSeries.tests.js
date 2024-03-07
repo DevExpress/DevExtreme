@@ -1282,8 +1282,8 @@ QUnit.test('Update marker group', function(assert) {
     series.updateData([{ arg: 1, val: 22 }, { arg: 2, val: 33 }, { arg: 3, val: 11 }, { arg: 4, val: 44 }, { arg: 5, val: 55 }, { arg: 6, val: 66 }]);
 
     series.draw(true);
-    series._markersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     series.draw(true);
 
@@ -1313,8 +1313,8 @@ QUnit.test('marker group style after updating', function(assert) {
 
     series.draw(true);
 
-    series._markersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     const newOptions = $.extend(true, {}, appliedOptions);
     newOptions.point.color = 'green';
@@ -1383,11 +1383,11 @@ QUnit.test('Update marker group. Financial', function(assert) {
 
     series.draw(true);
 
-    series._markersGroup.defaultMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionMarkersGroup.stub('attr').reset();
-    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.defaultMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     series.draw(true);
 
@@ -1416,11 +1416,11 @@ QUnit.test('marker group style after updating. Financial', function(assert) {
 
     series.draw(true);
 
-    series._markersGroup.defaultMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionMarkersGroup.stub('attr').reset();
-    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').reset();
-    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._markersGroup.defaultMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.defaultPositiveMarkersGroup.stub('attr').resetHistory();
+    series._markersGroup.reductionPositiveMarkersGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     const newOptions = $.extend(true, {}, appliedOptions);
     newOptions.color = 'green';
@@ -1472,8 +1472,8 @@ QUnit.test('Update label group', function(assert) {
 
     series.draw(false);
 
-    series._labelsGroup.stub('attr').reset();
-    this.renderer.stub('g').reset();
+    series._labelsGroup.stub('attr').resetHistory();
+    this.renderer.stub('g').resetHistory();
 
     series.draw(false);
 
@@ -4828,7 +4828,7 @@ QUnit.test('call event pipe on clearHover', function(assert) {
     series.updateData([{ arg: 1, val: 1 }]);
     series.createPoints();
     series.getAllPoints()[0].isHovered.returns(true);
-    eventPipe.reset();
+    eventPipe.resetHistory();
     // act
     series.clearPointHover();
     // assert
@@ -4977,7 +4977,7 @@ QUnit.test('Hover series in hovered state', function(assert) {
     const eventTrigger = sinon.spy();
     const series = createSeries({}, { eventTrigger: eventTrigger });
     series.hover();
-    eventTrigger.reset();
+    eventTrigger.resetHistory();
     // act
     series.hover();
     // assert
@@ -5002,7 +5002,7 @@ QUnit.test('Call pointHover twice', function(assert) {
     series.createPoints();
 
     series.getAllPoints()[0].isHovered.returns(true);
-    eventTrigger.reset();
+    eventTrigger.resetHistory();
     // act
     series.hoverPoint(series.getAllPoints()[0]);
     // assert

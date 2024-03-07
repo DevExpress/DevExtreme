@@ -109,13 +109,13 @@ function createAxisStubs() {
 }
 
 function resetAxisStubs(axis) {
-    axis.draw.reset();
+    axis.draw.resetHistory();
     axis.getMargins.resetHistory();
     axis.estimateMargins.resetHistory();
-    axis.updateSize.reset();
-    axis.shift.reset();
-    axis.createTicks.reset();
-    axis.drawScaleBreaks.reset();
+    axis.updateSize.resetHistory();
+    axis.shift.resetHistory();
+    axis.createTicks.resetHistory();
+    axis.drawScaleBreaks.resetHistory();
 }
 
 QUnit.module('Canvas processing', environment);
@@ -1780,7 +1780,7 @@ QUnit.test('Do not recalculate canvas on zooming - only draw axes in old canvas'
     const valAxisStub = this.axisStub.getCall(1).returnValue;
     resetAxisStubs(valAxisStub);
 
-    scrollBar.updateSize.reset();
+    scrollBar.updateSize.resetHistory();
 
     // act
     chart.zoomArgument(2, 9);
@@ -1853,7 +1853,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas, resizePanes
     const valAxisStub = this.axisStub.getCall(1).returnValue;
     resetAxisStubs(valAxisStub);
 
-    scrollBar.updateSize.reset();
+    scrollBar.updateSize.resetHistory();
 
     // act
     chart.zoomArgument(2, 9);
@@ -1926,7 +1926,7 @@ QUnit.test('Recalculate canvas on zooming - draw axes in new canvas (support of 
     const valAxisStub = this.axisStub.getCall(1).returnValue;
     resetAxisStubs(valAxisStub);
 
-    scrollBar.updateSize.reset();
+    scrollBar.updateSize.resetHistory();
 
     // act
     chart.zoomArgument(2, 9);
@@ -3296,7 +3296,7 @@ QUnit.test('Recalculate canvas on zooming, axis labels hide due to adaptiveLayou
     const valAxisStub = this.axisStub.getCall(1).returnValue;
     resetAxisStubs(valAxisStub);
 
-    scrollBar.updateSize.reset();
+    scrollBar.updateSize.resetHistory();
 
     // act
     chart.zoomArgument(2, 9);

@@ -40,7 +40,7 @@ const environment = {
         const axesContainerGroup = this.renderer.g();
         const gridGroup = this.renderer.g();
 
-        this.renderer.g.reset();
+        this.renderer.g.resetHistory();
         this.incidentOccurred = sinon.spy();
 
         this.axis = new Axis($.extend(true, {

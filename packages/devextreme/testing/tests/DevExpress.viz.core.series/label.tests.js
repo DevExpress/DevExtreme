@@ -190,7 +190,7 @@ QUnit.test('Hide', function(assert) {
     const label = this.createLabel();
 
     label.show();
-    label._group.stub('attr').reset();
+    label._group.stub('attr').resetHistory();
 
     // act
     label.hide();
@@ -1006,7 +1006,7 @@ QUnit.test('Set options on empty text', function(assert) {
         return '';
     };
     label.setData({ argument: 10, value: 10 });
-    label._group.stub('attr').reset();
+    label._group.stub('attr').resetHistory();
     label.setOptions(this.options);
     label.show();
 
