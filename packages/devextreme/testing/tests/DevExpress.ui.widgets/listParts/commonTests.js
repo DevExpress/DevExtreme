@@ -40,6 +40,8 @@ const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
 const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
+const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
+const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -4304,17 +4306,42 @@ QUnit.module('Accessibility', () => {
         });
     });
 
-    QUnit.test('List item delete button shoul not have role, aria-label, tabindex attributes if itemDeleteMode is static', function(assert) {
-        $('#list').dxList({
+    const checkButtonAttributes = (assert, $button) => {
+        ['role', 'aria-label', 'tabindex'].forEach(attribute => {
+            assert.strictEqual($button.attr(attribute), undefined, `${attribute} is not set`);
+        });
+    };
+
+    [STATIC_DELETE_BUTTON_CLASS, TOGGLE_DELETE_SWITCH_CLASS].forEach(buttonClass => {
+        const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
+
+        QUnit.test(`List item ${itemDeleteMode} button should not have role, aria-label, tabindex`, function(assert) {
+            $('#list').dxList({
+                itemDeleteMode,
+                items: ['text 1'],
+                allowItemDeleting: true,
+            });
+
+            const $button = $(`.${buttonClass}`);
+
+            checkButtonAttributes(assert, $button);
+        });
+    });
+
+    QUnit.test('List item switchable button should not have role, aria-label, tabindex', function(assert) {
+        const $list = $('#list').dxList({
             items: ['text 1'],
-            itemDeleteMode: 'static',
+            itemDeleteMode: 'slideButton',
             allowItemDeleting: true,
         });
 
-        const $deleteButton = $(`.${STATIC_DELETE_BUTTON_CLASS}`);
+        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $item = $items.eq(0);
 
-        assert.strictEqual($deleteButton.attr('role'), undefined, 'role is not set');
-        assert.strictEqual($deleteButton.attr('aria-label'), undefined, 'aria-label is not set');
-        assert.strictEqual($deleteButton.attr('tabindex'), undefined, 'tabindex is not set');
+        pointerMock($item).start().swipeEnd(1);
+
+        const $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
+
+        checkButtonAttributes(assert, $switchableButton);
     });
 });
