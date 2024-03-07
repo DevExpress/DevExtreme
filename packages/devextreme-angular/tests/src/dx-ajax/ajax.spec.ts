@@ -74,6 +74,20 @@ describe('Ajax request using DxAjaxModule', () => {
     httpTestingControllerMock?.verify();
   });
 
+  it('request should be correctly timeouted', (done) => {
+    const url = 'http://somefakedomain1221.com/json-url';
+
+    ajax.sendRequest({
+      url,
+      timeout: 1,
+    }).fail((error) => {
+      expect(error?.statusText).toEqual('timeout');
+      done();
+    });
+
+    httpTestingControllerMock.expectOne(url);
+  });
+
   it('dataSource load() should be intercepted', (done) => {
     const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
     const url = 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems';
@@ -167,7 +181,7 @@ describe('Ajax request using DxAjaxModule', () => {
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
   });
 
-  it('script cross domain request (not interceptable) should create script element with src = url ', (done) => {
+  it('script cross domain request (not interceptable) should create script element with src = url', (done) => {
     const document = domAdapter.getDocument();
     const createElementOrig = document.createElement.bind(document);
 

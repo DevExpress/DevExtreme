@@ -139,7 +139,7 @@ function getRequestCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrog
       );
     },
     error(error: HttpErrorResponse) {
-      let errorStatus = error?.message === TIMEOUT ? TIMEOUT : 'error';
+      let errorStatus = error?.statusText || 'error';
 
       errorStatus = options.dataType === 'json' && error.message.includes('parsing')
         ? PARSER_ERROR
@@ -254,7 +254,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Opti
   request.pipe.apply(request, [
     takeUntil(destroy$) as any,
     ...options.timeout
-      ? [timeoutWith(options.timeout, throwError(() => ({ message: TIMEOUT }))) as any]
+      ? [timeoutWith(options.timeout, throwError({ statusText: TIMEOUT, status: 0, ok: false })) as any]
       : [],
   ]).subscribe(
     subscriptionCallbacks(options, deferred, xhrSurrogate),
