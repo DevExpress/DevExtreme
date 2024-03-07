@@ -19,6 +19,7 @@ import {
   findLastIndexOfVisibleItem,
   getCurrentLayout,
   getDimensionByOrientation,
+  getElementItemsSizeSum,
   getInitialLayout,
   getNewLayout,
   setFlexProp, updateItemsSize,
@@ -74,8 +75,14 @@ class Splitter extends (CollectionWidget as any) {
     this.$element().addClass(SPLITTER_CLASS);
 
     this._toggleOrientationClass();
+    const items = this.option('items');
 
-    this._layout = getInitialLayout(this.option('items'));
+    // todo: refactoring
+    const handlesCount = Math.max(items.filter((p) => p.visible !== false).length - 1, 0);
+    const width = this.option('width') - handlesCount * 8;
+    const elementSize = width || getElementItemsSizeSum(this.$element(), this.option('orientation'), handlesCount);
+
+    this._layout = getInitialLayout(items, elementSize);
 
     super._initMarkup();
   }

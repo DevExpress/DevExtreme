@@ -52,6 +52,60 @@ QUnit.module('Resizing', moduleConfig, () => {
     QUnit.module('Pane sizing', moduleConfig, () => {
         ['horizontal', 'vertical'].forEach(orientation => {
             [
+                { dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }], expectedSize: ['30', '60', '10'], orientation },
+                { dataSource: [{ }, { }, { size: '248px' }, { } ], expectedSize: ['25', '25', '25', '25'], orientation },
+                { dataSource: [{ size: '248px' }, { }, { size: '248px' }, { } ], expectedSize: ['25', '25', '25', '25'], orientation },
+                { dataSource: [{ size: '248' }, { }, { size: '496px' }, { } ], expectedSize: ['25', '12.5', '50', '12.5'], orientation },
+                { dataSource: [{ size: 252 }, { visible: false }, { } ], expectedSize: ['25', '75'], orientation },
+                { dataSource: [{ visible: false }, { visible: false }, { size: '504px' }, { } ], expectedSize: ['50', '50'], orientation },
+                { dataSource: [{ visible: false }, { visible: false }, { }, { size: 504 } ], expectedSize: ['50', '50'], orientation },
+                { dataSource: [{ size: 126 }, { size: 126 }, { visible: false }], expectedSize: ['12.5', '87.5'], orientation },
+                { dataSource: [{ size: '504' }, { size: '23133px' } ], expectedSize: ['50', '50'], orientation },
+                { dataSource: [{ size: '504232px' }, { size: '3px' } ], expectedSize: ['100', '0'], orientation },
+                { dataSource: [{ size: '504232px' }, { } ], expectedSize: ['100', '0'], orientation },
+                { dataSource: [ { size: 0 }, { size: 128 } ], expectedSize: ['0', '100'], orientation },
+                { dataSource: [ { size: 0 }, { size: 2 } ], expectedSize: ['0', '100'], orientation },
+                { dataSource: [ { size: '0px' }, { size: 128 } ], expectedSize: ['0', '100'], orientation },
+
+            ].forEach(({ dataSource, expectedSize, orientation }) => {
+                QUnit.test(`pane should respect size option in pixels, ${orientation} orientation`, function(assert) {
+                    this.reinit({
+                        width: 1016,
+                        height: 1016,
+                        dataSource,
+                        orientation,
+                    });
+
+                    const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+                    assertLayout(items, expectedSize, assert);
+                });
+            });
+        });
+
+        // todo: more use cases
+        ['horizontal', 'vertical'].forEach(orientation => {
+            [
+                { dataSource: [{ size: '25%' }, { size: '25%' }, { size: '248px' }, { } ], expectedSize: ['25', '25', '25', '25'], orientation },
+                { dataSource: [{ size: '50%' }, { size: '25%' }, { size: 248 }, { } ], expectedSize: ['50', '25', '25', '0'], orientation },
+            ].forEach(({ dataSource, expectedSize, orientation }) => {
+                QUnit.test(`pane should respect size option when both pixels and percents are used, ${orientation} orientation`, function(assert) {
+                    this.reinit({
+                        width: 1016,
+                        height: 1016,
+                        dataSource,
+                        orientation,
+                    });
+
+                    const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+                    assertLayout(items, expectedSize, assert);
+                });
+            });
+        });
+
+        ['horizontal', 'vertical'].forEach(orientation => {
+            [
                 { dataSource: [{ size: '30%' }, { size: '60%' }, { size: '10%' }], expectedSize: ['30', '60', '10'], orientation },
                 { dataSource: [{ }, { }, { }, { } ], expectedSize: ['25', '25', '25', '25'], orientation },
                 { dataSource: [{ }, { size: '10%' }, { }, { } ], expectedSize: ['30', '10', '30', '30'], orientation },
@@ -62,7 +116,8 @@ QUnit.module('Resizing', moduleConfig, () => {
                 { dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false } ], expectedSize: ['40', '60'], orientation },
                 { dataSource: [{ size: '30%' }, { size: '200%' } ], expectedSize: ['30', '70'], orientation },
                 { dataSource: [{ size: '320%' }, { size: '200%' } ], expectedSize: ['100', '0'], orientation },
-                { dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ], expectedSize: ['30', '20', '50', '0', '0'], orientation: 'horizontal' },
+                { dataSource: [{ size: '10%' }, { size: '10%' }, { visible: false }], expectedSize: ['10', '90'], orientation },
+                { dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ], expectedSize: ['30', '20', '50', '0', '0'], orientation },
                 { dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' } ], expectedSize: ['30', '25', '45'], orientation },
                 { dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' } ], expectedSize: [ '25', '75'], orientation },
                 { dataSource: [{ size: '0%' }, { size: '1%' } ], expectedSize: ['0', '100'], orientation },

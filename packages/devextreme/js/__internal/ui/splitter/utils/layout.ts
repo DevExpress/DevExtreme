@@ -3,10 +3,11 @@ import $ from '@js/core/renderer';
 import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
-import { isString } from '@js/core/utils/type';
+import { isNumeric, isString } from '@js/core/utils/type';
 import type { dxSplitterItem as Item } from 'devextreme/ui/splitter';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -129,17 +130,50 @@ function isPercentWidth(size: string | number): boolean {
   return isString(size) && size.endsWith('%');
 }
 
-export function getInitialLayout(panes: Item[]): number[] {
+// eslint-disable-next-line class-methods-use-this
+function isPixelWidth(size: string | number): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return isNumeric(size) || (isString(size) && size.endsWith('px'));
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function calculatePercentage(totalSize, size) {
+  if (totalSize === 0) {
+    return 0;
+  }
+
+  const percentage = (size / totalSize) * 100;
+  return percentage;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getPercentSize(size: string | number, totalPanesSize: number): number {
+  const isPixel = isPixelWidth(size);
+  const sizeNumber = parseFloat(size as string);
+
+  if (isPixel) {
+    return calculatePercentage(totalPanesSize, sizeNumber);
+  }
+
+  const isPercentage = isPercentWidth(size);
+  if (isPercentage) {
+    return sizeNumber;
+  }
+  return 0;
+}
+
+export function getInitialLayout(panes: Item[], totalPanesSize: number): number[] {
   const layout: number[] = [];
   let totalSize = 0;
   let sizeOverflow = false;
 
   // eslint-disable-next-line no-restricted-syntax
   for (const pane of panes) {
-    if (pane.visible === false || sizeOverflow) {
+    if (pane.visible === false || sizeOverflow || pane.size === 0) {
       layout.push(0);
-    } else if (pane.size && isPercentWidth(pane.size)) {
-      let percentSize = parseFloat(pane.size as string);
+      // todo: refactor
+    } else if (pane.size && (isPercentWidth(pane.size) || isPixelWidth(pane.size))) {
+      let percentSize = getPercentSize(pane.size, totalPanesSize);
       percentSize = Math.min(100 - totalSize, percentSize);
       totalSize += percentSize;
       layout.push(percentSize);
@@ -152,7 +186,7 @@ export function getInitialLayout(panes: Item[]): number[] {
     }
   }
 
-  const noSizePanes = panes.filter((p) => p.visible !== false && !p.size);
+  const noSizePanes = panes.filter((p) => p.visible !== false && !p.size && p.size !== 0);
 
   if (noSizePanes.length) {
     const remainingSpace = Math.max(100 - totalSize, 0);
@@ -163,10 +197,19 @@ export function getInitialLayout(panes: Item[]): number[] {
       }
     });
   } else if (totalSize < 100) {
-    layout[layout.length - 1] += 100 - totalSize;
-  } else if (totalSize > 100) {
-    layout[layout.length - 1] = 100 - (totalSize - layout[layout.length - 1]);
+    layout[findLastIndexOfVisibleItem(panes)] += 100 - totalSize;
   }
 
   return layout;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getElementItemsSizeSum($element, orientation, handlesCount): number {
+  const splitterSize = $element.get(0).getBoundingClientRect();
+  const size: number = orientation === ORIENTATION.horizontal
+    ? splitterSize.width : splitterSize.height;
+
+  const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
+
+  return size - handlesSizeSum;
 }
