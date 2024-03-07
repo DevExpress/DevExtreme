@@ -87,7 +87,6 @@ const getContentTypeHeader = function(options) {
 };
 
 const getAcceptHeader = function(options) {
-
     const dataType = options.dataType || '*';
     const scriptAccept = 'text/javascript, application/javascript, application/ecmascript, application/x-ecmascript';
     const accepts = {
@@ -99,6 +98,7 @@ const getAcceptHeader = function(options) {
         jsonp: scriptAccept,
         script: scriptAccept
     };
+
     extendFromObject(accepts, options.accepts, true);
 
     return accepts[dataType] ?
@@ -132,7 +132,6 @@ const getJsonpOptions = function(options) {
 };
 
 const getRequestOptions = function(options, headers) {
-
     let params = options.data;
     const paramsAlreadyString = typeof params === 'string';
     let url = options.url || window.location.href;
@@ -197,6 +196,5 @@ export {
     getAcceptHeader,
     evalScript,
     evalCrossDomainScript,
-    appendToHead,
     getMethod,
 };

@@ -13,37 +13,30 @@ import ODataStore from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
 
-const ctx: Record<string, any> = {};
+const interceptors: Record<string, () => void> = {};
 
-ctx.interceptorFn = () => {};
+interceptors.interceptorFn = () => {};
 
 jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
 @Injectable()
 export class TestInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler) {
-    ctx.interceptorFn();
+    interceptors.interceptorFn();
     return next.handle(req);
   }
 }
 
-const createBlobFile = function (name: string, size: number, type?: string) {
+const createBlobFile = function (name: string, size: number) {
   return {
     name,
     size,
-    type: type || 'image/png',
-    blob: (function (filesize) {
-      let str = '';
-
-      while (str.length < filesize) {
-        str += 'a';
-      }
-      return new Blob([str], { type: 'application/octet-binary' });
-    }(size)),
-    slice(startPos, endPos) {
+    type: 'image/png',
+    lastModifiedDate: new Date().getTime(),
+    blob: new Blob(['0'.repeat(size)], { type: 'application/octet-binary' }),
+    slice(startPos: number, endPos: number) {
       return this.blob.slice(startPos, endPos);
     },
-    lastModifiedDate: new Date().getTime(),
   };
 };
 
@@ -82,8 +75,7 @@ describe('Ajax request using DxAjaxModule', () => {
   });
 
   it('dataSource load() should be intercepted', (done) => {
-    // eslint-disable-next-line no-restricted-globals
-    const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
+    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
     const url = 'https://js.devexpress.com/Demos/WidgetsGallery/odata/HierarchicalItems';
     const dataSource = new DataSource({
       store: new ODataStore({
@@ -106,7 +98,7 @@ describe('Ajax request using DxAjaxModule', () => {
   });
 
   it('fileUploader have to upload file and interceptor is called', (done) => {
-    const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
+    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
 
     const callbacks = {
       onBeforeSend() {},
@@ -148,7 +140,7 @@ describe('Ajax request using DxAjaxModule', () => {
   });
 
   it('JSONP cross domain request should be intercepted', (done) => {
-    const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
+    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
     const url = 'http://somefakedomain1221.com/json-url';
     const dataSource = new DataSource({
       store: new ODataStore({
@@ -175,7 +167,7 @@ describe('Ajax request using DxAjaxModule', () => {
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
   });
 
-  it('script cross domain request should be ok (not intercepted)', (done) => {
+  it('script cross domain request (not interceptable) should create script element with src = url ', (done) => {
     const document = domAdapter.getDocument();
     const createElementOrig = document.createElement.bind(document);
 

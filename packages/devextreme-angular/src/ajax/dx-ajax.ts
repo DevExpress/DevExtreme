@@ -15,6 +15,11 @@ import {
 } from 'devextreme/core/utils/ajax_utils';
 
 type Result = Promise<any> & { abort: () => void };
+interface Options {
+  url: string;
+  [key: string]: any;
+}
+
 interface XHRSurrogate {
   type?: string; // needs only for testing
   aborted: boolean;
@@ -30,7 +35,7 @@ const STATUS_ABORT = 0;
 const CONTENT_TYPE = 'Content-Type';
 const URLENCODED = 'application/x-www-form-urlencoded';
 
-function assignResponseProps(xhrSurrogate, response) {
+function assignResponseProps(xhrSurrogate: XHRSurrogate, response: HttpResponse<any> | HttpErrorResponse) {
   const getResponseHeader = (name: string) => response.headers.get(name);
 
   function makeResponseText() {
@@ -53,15 +58,15 @@ function assignResponseProps(xhrSurrogate, response) {
   return xhrSurrogate;
 }
 
-function isNeedScriptEvaluation(options) {
+function isNeedScriptEvaluation(options: Options) {
   return options.dataType === 'script';
 }
 
-function isUsedJSONP(options) {
+function isUsedJSONP(options: Options) {
   return options.dataType === 'jsonp';
 }
 
-function getRequestHeaders(options) {
+function getRequestHeaders(options: Options) {
   const headers = getAjaxRequestHeaders(options);
   const { upload } = options;
 
@@ -81,11 +86,11 @@ function getRequestHeaders(options) {
   }, {});
 }
 
-function isGetMethod(options) {
+function isGetMethod(options: Options) {
   return (options.method || 'get').toLowerCase() === 'get';
 }
 
-function patchOptions(options) {
+function patchOptions(options: Options) {
   const patchedOptions = { ...options };
 
   if (options.cache === undefined) {
@@ -116,7 +121,7 @@ function sendRequestByScript(url: string, deferred, xhrSurrogate: XHRSurrogate, 
   return result;
 }
 
-function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogate: XHRSurrogate) {
+function getRequestCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrogate) {
   return {
     next(response: HttpResponse<any>) {
       if (isUsedJSONP(options)) {
@@ -180,7 +185,7 @@ function getUploadCallbacks(options: Record<string, any>, deferred, xhrSurrogate
   };
 }
 
-export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Record<string, any>) => {
+export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Options) => {
   const destroy$ = new Subject<void>();
   const deferred = Deferred();
   const method = (sendOptions.method || 'get').toLowerCase();
