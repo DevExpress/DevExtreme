@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Ładowanie...",
         "dxList-nextButtonText": "Więcej",
         "dxList-selectAll": "Wybierz wszystko",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Usuń",
         "dxListEditDecorator-more": "Więcej",
 

@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Nahrávám...",
         "dxList-nextButtonText": "Více",
         "dxList-selectAll": "Vybrat vše",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Smazat",
         "dxListEditDecorator-more": "Více",
 
