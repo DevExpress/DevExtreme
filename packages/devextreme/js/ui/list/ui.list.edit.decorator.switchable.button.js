@@ -41,7 +41,7 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
 
         this._$buttonContainer = $buttonContainer;
 
-        this._updateButtonAttributes($button);
+        // this._updateButtonAttributes($button);
     },
 
     _enablePositioning: function($itemElement) {
@@ -131,7 +131,7 @@ registerDecorator(
             $container.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
             $container.append($toggle);
 
-            this._updateButtonAttributes($toggle);
+            // this._updateButtonAttributes($toggle);
         }
 
     })

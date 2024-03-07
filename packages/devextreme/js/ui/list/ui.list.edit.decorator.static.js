@@ -29,7 +29,7 @@ registerDecorator(
                 .addClass(STATIC_DELETE_BUTTON_CONTAINER_CLASS)
                 .append($button);
 
-            this._updateButtonAttributes($button);
+            // this._updateButtonAttributes($button);
         },
 
         _deleteItem: function($itemElement) {
