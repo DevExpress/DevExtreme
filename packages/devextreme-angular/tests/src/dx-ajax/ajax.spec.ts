@@ -1,13 +1,16 @@
 import { TestBed } from '@angular/core/testing';
+import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
   HttpRequest, HttpInterceptor, HTTP_INTERCEPTORS, HttpHandler,
 } from '@angular/common/http';
 import { Component, Injectable, ViewChild } from '@angular/core';
+
+import domAdapter from 'devextreme/core/dom_adapter';
 import { DxAjaxModule } from 'devextreme-angular/ajax';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
+import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
 
 const ctx: Record<string, any> = {};
@@ -105,13 +108,30 @@ describe('Ajax request using DxAjaxModule', () => {
   it('fileUploader have to upload file and interceptor is called', (done) => {
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
 
+    const callbacks = {
+      onBeforeSend() {},
+      onProgress() {},
+      onUploadStarted() {},
+      onUploaded() {},
+    };
+
+    const beforeSendSpy = spyOn(callbacks, 'onBeforeSend');
+    const onProgressSpy = spyOn(callbacks, 'onProgress');
+    const onUploadStartedSpy = spyOn(callbacks, 'onUploadStarted');
+    const onUploadedSpy = spyOn(callbacks, 'onUploaded');
+
     const fixture = TestBed.createComponent(TestFileUploaderComponent);
     fixture.detectChanges();
 
     const { instance } = fixture.componentInstance.fileUploader;
+
+    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb]));
+
     instance.upload();
 
     expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
+    expect(beforeSendSpy).toHaveBeenCalledTimes(1);
+    expect(onUploadStartedSpy).toHaveBeenCalledTimes(1);
 
     const req = httpTestingControllerMock.expectOne('https://js.devexpress.com/Demos/NetCore/FileUploader/Upload');
 
@@ -119,12 +139,15 @@ describe('Ajax request using DxAjaxModule', () => {
 
     setTimeout(() => {
       const resultText = instance.element().querySelector('.dx-fileuploader-file-status-message')?.textContent;
+
+      expect(onProgressSpy).toHaveBeenCalledTimes(1);
+      expect(onUploadedSpy).toHaveBeenCalledTimes(1);
       expect(resultText).toEqual('Uploaded');
       done();
     }, 500);
   });
 
-  it('Script request (cross domain)', (done) => {
+  it('JSONP cross domain request should be intercepted', (done) => {
     const interceptorFnSpy = spyOn(ctx, 'interceptorFn');
     const url = 'http://somefakedomain1221.com/json-url';
     const dataSource = new DataSource({
@@ -150,5 +173,31 @@ describe('Ajax request using DxAjaxModule', () => {
     expect(reqs[0].request.method).toBe('JSONP');
     expect(callbackName).toBe('JSONP_CALLBACK');
     expect(dataSource.items()).toEqual([{ id: 0, text: 'TEST' }]);
+  });
+
+  it('script cross domain request should be ok (not intercepted)', (done) => {
+    const document = domAdapter.getDocument();
+    const createElementOrig = document.createElement.bind(document);
+
+    let scriptEl;
+
+    spyOn(document, 'createElement').and.callFake((...args) => {
+      const el = createElementOrig(...args);
+      if (args[0] === 'script') {
+        scriptEl = el;
+      }
+
+      return el;
+    });
+
+    const url = 'http://somefakedomain1221.com/json-url/script';
+
+    ajax.sendRequest({
+      url,
+      dataType: 'script',
+    }).fail(() => {
+      expect(scriptEl?.src).toContain(url);
+      done();
+    });
   });
 });

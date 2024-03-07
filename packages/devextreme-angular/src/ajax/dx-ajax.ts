@@ -119,14 +119,17 @@ function sendRequestByScript(url: string, deferred, xhrSurrogate: XHRSurrogate, 
 function getRequestCallbacks(options: Record<string, any>, deferred, xhrSurrogate: XHRSurrogate) {
   return {
     next(response: HttpResponse<any>) {
+      if (isUsedJSONP(options)) {
+        return deferred.resolve(response, 'success', assignResponseProps(xhrSurrogate, response));
+      }
+
       if (isNeedScriptEvaluation(options)) {
         evalScript(response.body);
       }
 
-      const isJSONP = isUsedJSONP(options);
       return deferred.resolve(
-        isJSONP ? response : response.body,
-        isJSONP || response.body ? 'success' : NO_CONTENT,
+        response.body,
+        response.body ? 'success' : NO_CONTENT,
         assignResponseProps(xhrSurrogate, response),
       );
     },
