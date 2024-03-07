@@ -2,7 +2,7 @@
   <div>
     <div id="chat-window">
       <div
-        class="message dx-theme-background-color"
+        class="message"
         tabindex="0"
       >
         <div class="photo">
@@ -26,7 +26,7 @@
       </div>
       <br>
       <div
-        class="message dx-theme-background-color"
+        class="message"
         tabindex="0"
       >
         <div class="photo">
@@ -48,7 +48,7 @@
       </div>
       <br>
       <div
-        class="message dx-theme-background-color"
+        class="message"
         tabindex="0"
       >
         <div class="photo">
@@ -118,7 +118,7 @@ const mentions = ref([{
 
 .message {
   height: 85px;
-  background-color: inherit;
+  background-color: var(--dx-component-color-bg);
   display: inline-block;
   max-width: 60%;
   border-radius: 5px;

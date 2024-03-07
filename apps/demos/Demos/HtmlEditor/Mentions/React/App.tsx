@@ -13,7 +13,7 @@ export default function App() {
   return (
     <div>
       <div id="chat-window">
-        <div className="message dx-theme-background-color" tabIndex={0}>
+        <div className="message" tabIndex={0}>
           <div className="photo">
             <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
           </div>
@@ -28,7 +28,7 @@ export default function App() {
           </div>
         </div>
         <br />
-        <div className="message dx-theme-background-color" tabIndex={0}>
+        <div className="message" tabIndex={0}>
           <div className="photo">
             <img alt="John Heart" src="../../../../images/mentions/John-Heart.png" />
           </div>
@@ -44,7 +44,7 @@ export default function App() {
           </div>
         </div>
         <br />
-        <div className="message dx-theme-background-color" tabIndex={0}>
+        <div className="message" tabIndex={0}>
           <div className="photo">
             <img alt="Kevin Carter" src="../../../../images/mentions/Kevin-Carter.png" />
           </div>

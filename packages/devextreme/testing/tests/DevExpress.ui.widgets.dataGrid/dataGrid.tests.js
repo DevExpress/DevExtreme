@@ -1402,7 +1402,7 @@ QUnit.module('Async render', baseModuleConfig, () => {
         this.clock.tick(10);
 
         assert.equal(buttonTemplateCallCount, 1, 'template is rendered asynchronously');
-        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test\u00A0', 'template is applied');
+        assert.equal($(dataGrid.getCellElement(0, 0)).text(), 'Test', 'template is applied');
     });
 
     QUnit.test('Column auto width should be calculated after cell is rendered in react', function(assert) {

@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const LIST_SELECTOR = '#list.dx-draggable';
 const LIST_ITEM_SELECTOR = '.dx-card.dx-draggable';
@@ -12,9 +13,8 @@ const DRAG_MOUSE_OPTIONS = { speed: 0.5 };
 
 fixture('Scheduler.CustomDragAndDrop')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t
-      .resizeWindow(900, 600);
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 [
@@ -36,7 +36,7 @@ fixture('Scheduler.CustomDragAndDrop')
       } = createScreenshotsComparer(t);
 
       await t.dragToElement(fromSelector, toSelector, DRAG_MOUSE_OPTIONS);
-      await takeScreenshot(`scheduler_custom-dnd_${fromName}_${toName}.png`);
+      await testScreenshot(t, takeScreenshot, `scheduler_custom-dnd_${fromName}_${toName}.png`);
 
       await t
         .expect(compareResults.isValid())

@@ -46,7 +46,7 @@ const employeesRecord = getEmployeesMap(employees);
 
 const Card: React.FC<{ task: Task, employeesMap: Record<string, string> }> = ({
   task, employeesMap,
-}) => <div className="card dx-card dx-theme-text-color dx-theme-background-color">
+}) => <div className="card dx-card">
   <div className={`card-priority priority-${task.Task_Priority}`}></div>
   <div className="card-subject">{task.Task_Subject}</div>
   <div className="card-assignee">{employeesMap[task.Task_Assigned_Employee_ID]}</div>
@@ -55,7 +55,7 @@ const Card: React.FC<{ task: Task, employeesMap: Record<string, string> }> = ({
 const List: React.FC<{ title, index, tasks, employeesMap, onTaskDrop }> = ({
   title, index, tasks, employeesMap, onTaskDrop,
 }) => <div className="list">
-  <div className="list-title dx-theme-text-color">{title}</div>
+  <div className="list-title">{title}</div>
   <ScrollView
     className="scrollable-list"
     direction="vertical"

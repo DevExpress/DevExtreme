@@ -21,7 +21,7 @@ class ColorIcon extends React.Component<ColorIconProps> {
     return (
       <i
         onClick={this.onClick}
-        className={this.props.color ? 'color dx-icon dx-icon-square' : 'color dx-icon dx-icon-square dx-theme-text-color'}
+        className="color dx-icon dx-icon-square"
         style={{ color: this.props.color }}
       />
     );

@@ -215,6 +215,30 @@ jobs:
           headless: 'true'
           useCsp: 'true'
 
+  qunit-tests-common:
+    needs: build
+    runs-on: devextreme-shr2
+    name: ${{ matrix.constel }}-chrome
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        constel: [ 'export', 'ui.htmlEditor' ]
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Run QUnit tests
+        uses: ./.github/actions/run-qunit-tests
+        with:
+          name: ${{ matrix.constel }}-chrome
+          constel: ${{ matrix.constel }}
+          browser: 'chrome'
+          useJQuery: 'true'
+          headless: 'true'
+          useCsp: 'true'
+
   qunit-tests-no-csp:
     needs: build
     runs-on: devextreme-shr2
@@ -223,7 +247,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        constel: [ 'export', 'misc(1/2)', 'misc(2/2)', 'ui.htmlEditor' ]
+        constel: [ 'misc(1/2)', 'misc(2/2)' ]
 
     steps:
       - name: Get sources

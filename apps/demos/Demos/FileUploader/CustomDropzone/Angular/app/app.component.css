@@ -1,10 +1,11 @@
 ::ng-deep #dropzone-external {
   width: 350px;
   height: 350px;
-  background-color: rgba(183, 183, 183, 0.1);
+  background-color: rgb(183 183 183 / 10%);
   border-width: 2px;
   border-style: dashed;
   padding: 10px;
+  border-color: var(--dx-color-border);
 }
 
 ::ng-deep #dropzone-external > * {
@@ -13,6 +14,7 @@
 
 ::ng-deep #dropzone-external.dropzone-active {
   border-style: solid;
+  border-color: var(--dx-color-primary);
 }
 
 ::ng-deep .widget-container > span {

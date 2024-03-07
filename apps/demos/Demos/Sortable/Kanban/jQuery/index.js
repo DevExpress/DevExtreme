@@ -34,7 +34,6 @@ $(() => {
   function renderListTitle($container, status) {
     $('<div>')
       .addClass('list-title')
-      .addClass('dx-theme-text-color')
       .text(status)
       .appendTo($container);
   }
@@ -62,8 +61,6 @@ $(() => {
     const $item = $('<div>')
       .addClass('card')
       .addClass('dx-card')
-      .addClass('dx-theme-text-color')
-      .addClass('dx-theme-background-color')
       .appendTo($container);
 
     const employee = employees.filter((e) => e.ID === task.Task_Assigned_Employee_ID)[0];
