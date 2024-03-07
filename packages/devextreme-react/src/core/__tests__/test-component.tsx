@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { Component, ComponentRef, IHtmlOptions } from '../component-func';
+import { Component, ComponentRef, IHtmlOptions } from '../component';
 import * as React from 'react';
 
 import {
@@ -73,7 +73,7 @@ const TestComponent = memo(forwardRef<ComponentRef, any>(function TestComponent<
         return props;
       }
     };
-  });
+  }, [componentRef.current, getElement, props]);
 
   return (
     <Component<P & IHtmlOptions>

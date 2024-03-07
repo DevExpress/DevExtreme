@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/multi_view";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxMultiView, {
     Properties
 } from "devextreme/ui/multi_view";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxMultiViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/multi_view";
@@ -30,7 +31,6 @@ type IMultiViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replac
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxMultiViewItem | string>;
   defaultSelectedIndex?: number;
   defaultSelectedItem?: any;
@@ -39,74 +39,59 @@ type IMultiViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replac
   onSelectedItemChange?: (value: any) => void;
 }>
 
-class MultiView<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IMultiViewOptions<TItem, TKey>>> {
-
-  public get instance(): dxMultiView<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxMultiView;
-
-  protected subscribableOptions = ["items","selectedIndex","selectedItem"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items",
-    defaultSelectedIndex: "selectedIndex",
-    defaultSelectedItem: "selectedItem"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface MultiViewRef<TItem = any, TKey = any> {
+  instance: () => dxMultiView<TItem, TKey>;
 }
-(MultiView as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  animationEnabled: PropTypes.bool,
-  deferRendering: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  loop: PropTypes.bool,
-  noDataText: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  selectedIndex: PropTypes.number,
-  swipeEnabled: PropTypes.bool,
-  tabIndex: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const MultiView = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IMultiViewOptions<TItem, TKey>>, ref: ForwardedRef<MultiViewRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+        defaultSelectedIndex: "selectedIndex",
+        defaultSelectedItem: "selectedItem",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IMultiViewOptions<TItem, TKey>>>, {
+          WidgetClass: dxMultiView,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IMultiViewOptions<TItem, TKey>> & { ref?: Ref<MultiViewRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -118,23 +103,28 @@ type IItemProps = React.PropsWithChildren<{
   text?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 export default MultiView;
 export {
   MultiView,
   IMultiViewOptions,
+  MultiViewRef,
   Item,
   IItemProps
 };

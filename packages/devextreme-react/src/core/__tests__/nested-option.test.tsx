@@ -2,9 +2,9 @@
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { memo } from 'react';
-import { Component, IHtmlOptions } from '../component-func';
-import ConfigurationComponent from '../nested-option-func';
-import { TestComponent, Widget, WidgetClass } from './test-component-func';
+import { Component, IHtmlOptions } from '../component';
+import ConfigurationComponent from '../nested-option';
+import { TestComponent, Widget, WidgetClass } from './test-component';
 
 jest.useFakeTimers();
 

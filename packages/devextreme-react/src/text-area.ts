@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxTextArea, {
     Properties
 } from "devextreme/ui/text_area";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_area";
 
@@ -34,123 +35,48 @@ type ITextAreaOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IT
   onValueChange?: (value: string) => void;
 }>
 
-class TextArea extends BaseComponent<React.PropsWithChildren<ITextAreaOptions>> {
-
-  public get instance(): dxTextArea {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxTextArea;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onChange","onContentReady","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onPaste","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
+interface TextAreaRef {
+  instance: () => dxTextArea;
 }
-(TextArea as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  autoResizeEnabled: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  label: PropTypes.string,
-  labelMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "static",
-      "floating",
-      "hidden",
-      "outside"])
-  ]),
-  maxHeight: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  maxLength: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  minHeight: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onCopy: PropTypes.func,
-  onCut: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onEnterKey: PropTypes.func,
-  onFocusIn: PropTypes.func,
-  onFocusOut: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onInput: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  onKeyUp: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onPaste: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  placeholder: PropTypes.string,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  spellcheck: PropTypes.bool,
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "outlined",
-      "underlined",
-      "filled"])
-  ]),
-  tabIndex: PropTypes.number,
-  text: PropTypes.string,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  value: PropTypes.string,
-  valueChangeEvent: PropTypes.string,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const TextArea = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ITextAreaOptions>, ref: ForwardedRef<TextAreaRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onChange","onContentReady","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onPaste","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ITextAreaOptions>>, {
+          WidgetClass: dxTextArea,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ITextAreaOptions> & { ref?: Ref<TextAreaRef> }) => ReactElement | null;
 export default TextArea;
 export {
   TextArea,
-  ITextAreaOptions
+  ITextAreaOptions,
+  TextAreaRef
 };
 import type * as TextAreaTypes from 'devextreme/ui/text_area_types';
 export { TextAreaTypes };

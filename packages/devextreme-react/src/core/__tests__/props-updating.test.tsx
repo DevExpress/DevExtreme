@@ -4,7 +4,7 @@ import * as React from 'react';
 import { memo } from 'react';
 import { act } from 'react-dom/test-utils';
 import * as CommonModule from 'devextreme/core/utils/common';
-import ConfigurationComponent from '../nested-option-func';
+import ConfigurationComponent from '../nested-option';
 import * as OptionsManagerModule from '../options-manager';
 import {
   eventHandlers,
@@ -12,7 +12,7 @@ import {
   TestComponent,
   Widget,
   WidgetClass,
-} from './test-component-func';
+} from './test-component';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({

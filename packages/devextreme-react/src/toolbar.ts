@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/toolbar";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxToolbar, {
     Properties
 } from "devextreme/ui/toolbar";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxToolbarItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/toolbar";
@@ -30,71 +31,68 @@ type IToolbarOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceF
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxToolbarItem | string>;
   onItemsChange?: (value: Array<any | dxToolbarItem | string>) => void;
 }>
 
-class Toolbar<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IToolbarOptions<TItem, TKey>>> {
-
-  public get instance(): dxToolbar<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxToolbar;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }, {
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
-  }];
+interface ToolbarRef<TItem = any, TKey = any> {
+  instance: () => dxToolbar<TItem, TKey>;
 }
-(Toolbar as any).propTypes = {
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  multiline: PropTypes.bool,
-  noDataText: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Toolbar = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IToolbarOptions<TItem, TKey>>, ref: ForwardedRef<ToolbarRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+        {
+          tmplOption: "menuItemTemplate",
+          render: "menuItemRender",
+          component: "menuItemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IToolbarOptions<TItem, TKey>>>, {
+          WidgetClass: dxToolbar,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IToolbarOptions<TItem, TKey>> & { ref?: Ref<ToolbarRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -114,31 +112,34 @@ type IItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "menuItemTemplate",
+          render: "menuItemRender",
+          component: "menuItemComponent"
+        }, {
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 export default Toolbar;
 export {
   Toolbar,
   IToolbarOptions,
+  ToolbarRef,
   Item,
   IItemProps
 };

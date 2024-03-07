@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxHtmlEditor, {
     Properties
 } from "devextreme/ui/html_editor";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, FocusInEvent, FocusOutEvent, InitializedEvent, ValueChangedEvent, dxHtmlEditorImageUploadTabItem, dxHtmlEditorTableContextMenuItem, dxHtmlEditorToolbarItem } from "devextreme/ui/html_editor";
@@ -35,110 +36,54 @@ type IHtmlEditorOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, 
   onValueChange?: (value: any) => void;
 }>
 
-class HtmlEditor extends BaseComponent<React.PropsWithChildren<IHtmlEditorOptions>> {
-
-  public get instance(): dxHtmlEditor {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxHtmlEditor;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onFocusIn","onFocusOut","onInitialized","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
-
-  protected _expectedChildren = {
-    imageUpload: { optionName: "imageUpload", isCollectionItem: false },
-    mediaResizing: { optionName: "mediaResizing", isCollectionItem: false },
-    mention: { optionName: "mentions", isCollectionItem: true },
-    tableContextMenu: { optionName: "tableContextMenu", isCollectionItem: false },
-    tableResizing: { optionName: "tableResizing", isCollectionItem: false },
-    toolbar: { optionName: "toolbar", isCollectionItem: false },
-    variables: { optionName: "variables", isCollectionItem: false }
-  };
+interface HtmlEditorRef {
+  instance: () => dxHtmlEditor;
 }
-(HtmlEditor as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  allowSoftLineBreak: PropTypes.bool,
-  customizeModules: PropTypes.func,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  imageUpload: PropTypes.object,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  mediaResizing: PropTypes.object,
-  mentions: PropTypes.array,
-  name: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onFocusIn: PropTypes.func,
-  onFocusOut: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  placeholder: PropTypes.string,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "outlined",
-      "underlined",
-      "filled"])
-  ]),
-  tabIndex: PropTypes.number,
-  tableContextMenu: PropTypes.object,
-  tableResizing: PropTypes.object,
-  toolbar: PropTypes.object,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  valueType: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "html",
-      "markdown"])
-  ]),
-  variables: PropTypes.object,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const HtmlEditor = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IHtmlEditorOptions>, ref: ForwardedRef<HtmlEditorRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onFocusIn","onFocusOut","onInitialized","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        imageUpload: { optionName: "imageUpload", isCollectionItem: false },
+        mediaResizing: { optionName: "mediaResizing", isCollectionItem: false },
+        mention: { optionName: "mentions", isCollectionItem: true },
+        tableContextMenu: { optionName: "tableContextMenu", isCollectionItem: false },
+        tableResizing: { optionName: "tableResizing", isCollectionItem: false },
+        toolbar: { optionName: "toolbar", isCollectionItem: false },
+        variables: { optionName: "variables", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IHtmlEditorOptions>>, {
+          WidgetClass: dxHtmlEditor,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IHtmlEditorOptions> & { ref?: Ref<HtmlEditorRef> }) => ReactElement | null;
 
 
 // owners:
@@ -212,12 +157,18 @@ type IFileUploaderOptionsProps = React.PropsWithChildren<{
   defaultValue?: Array<any>;
   onValueChange?: (value: Array<any>) => void;
 }>
-class FileUploaderOptions extends NestedOption<IFileUploaderOptionsProps> {
-  public static OptionName = "fileUploaderOptions";
-  public static DefaultsProps = {
-    defaultValue: "value"
-  };
-}
+const _componentFileUploaderOptions = memo(
+  (props: IFileUploaderOptionsProps) => {
+    return React.createElement(NestedOption<IFileUploaderOptionsProps>, { ...props });
+  }
+);
+
+const FileUploaderOptions: typeof _componentFileUploaderOptions & IElementDescriptor = Object.assign(_componentFileUploaderOptions, {
+  OptionName: "fileUploaderOptions",
+  DefaultsProps: {
+        defaultValue: "value"
+  },
+})
 
 // owners:
 // HtmlEditor
@@ -228,13 +179,19 @@ type IImageUploadProps = React.PropsWithChildren<{
   uploadDirectory?: string;
   uploadUrl?: string;
 }>
-class ImageUpload extends NestedOption<IImageUploadProps> {
-  public static OptionName = "imageUpload";
-  public static ExpectedChildren = {
+const _componentImageUpload = memo(
+  (props: IImageUploadProps) => {
+    return React.createElement(NestedOption<IImageUploadProps>, { ...props });
+  }
+);
+
+const ImageUpload: typeof _componentImageUpload & IElementDescriptor = Object.assign(_componentImageUpload, {
+  OptionName: "imageUpload",
+  ExpectedChildren: {
     fileUploaderOptions: { optionName: "fileUploaderOptions", isCollectionItem: false },
     tab: { optionName: "tabs", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // TableContextMenu
@@ -265,26 +222,28 @@ type IItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }, {
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
-  }];
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }, {
+          tmplOption: "menuItemTemplate",
+          render: "menuItemRender",
+          component: "menuItemComponent"
+        }],
+})
 
 // owners:
 // HtmlEditor
@@ -292,9 +251,15 @@ type IMediaResizingProps = React.PropsWithChildren<{
   allowedTargets?: Array<string>;
   enabled?: boolean;
 }>
-class MediaResizing extends NestedOption<IMediaResizingProps> {
-  public static OptionName = "mediaResizing";
-}
+const _componentMediaResizing = memo(
+  (props: IMediaResizingProps) => {
+    return React.createElement(NestedOption<IMediaResizingProps>, { ...props });
+  }
+);
+
+const MediaResizing: typeof _componentMediaResizing & IElementDescriptor = Object.assign(_componentMediaResizing, {
+  OptionName: "mediaResizing",
+})
 
 // owners:
 // HtmlEditor
@@ -310,36 +275,44 @@ type IMentionProps = React.PropsWithChildren<{
   valueExpr?: (() => void) | string;
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Mention extends NestedOption<IMentionProps> {
-  public static OptionName = "mentions";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentMention = memo(
+  (props: IMentionProps) => {
+    return React.createElement(NestedOption<IMentionProps>, { ...props });
+  }
+);
+
+const Mention: typeof _componentMention & IElementDescriptor = Object.assign(_componentMention, {
+  OptionName: "mentions",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        }, {
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 // owners:
 // ImageUpload
 type ITabProps = React.PropsWithChildren<{
   name?: "url" | "file";
 }>
-class Tab extends NestedOption<ITabProps> {
-  public static OptionName = "tabs";
-  public static IsCollectionItem = true;
-}
+const _componentTab = memo(
+  (props: ITabProps) => {
+    return React.createElement(NestedOption<ITabProps>, { ...props });
+  }
+);
+
+const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentTab, {
+  OptionName: "tabs",
+  IsCollectionItem: true,
+})
 
 // owners:
 // HtmlEditor
@@ -347,13 +320,19 @@ type ITableContextMenuProps = React.PropsWithChildren<{
   enabled?: boolean;
   items?: Array<dxHtmlEditorTableContextMenuItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "undo" | "redo" | "clear" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable" | "cellProperties" | "tableProperties">;
 }>
-class TableContextMenu extends NestedOption<ITableContextMenuProps> {
-  public static OptionName = "tableContextMenu";
-  public static ExpectedChildren = {
+const _componentTableContextMenu = memo(
+  (props: ITableContextMenuProps) => {
+    return React.createElement(NestedOption<ITableContextMenuProps>, { ...props });
+  }
+);
+
+const TableContextMenu: typeof _componentTableContextMenu & IElementDescriptor = Object.assign(_componentTableContextMenu, {
+  OptionName: "tableContextMenu",
+  ExpectedChildren: {
     item: { optionName: "items", isCollectionItem: true },
     tableContextMenuItem: { optionName: "items", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // TableContextMenu
@@ -372,18 +351,22 @@ type ITableContextMenuItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class TableContextMenuItem extends NestedOption<ITableContextMenuItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentTableContextMenuItem = memo(
+  (props: ITableContextMenuItemProps) => {
+    return React.createElement(NestedOption<ITableContextMenuItemProps>, { ...props });
+  }
+);
+
+const TableContextMenuItem: typeof _componentTableContextMenuItem & IElementDescriptor = Object.assign(_componentTableContextMenuItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 // owners:
 // HtmlEditor
@@ -392,9 +375,15 @@ type ITableResizingProps = React.PropsWithChildren<{
   minColumnWidth?: number;
   minRowHeight?: number;
 }>
-class TableResizing extends NestedOption<ITableResizingProps> {
-  public static OptionName = "tableResizing";
-}
+const _componentTableResizing = memo(
+  (props: ITableResizingProps) => {
+    return React.createElement(NestedOption<ITableResizingProps>, { ...props });
+  }
+);
+
+const TableResizing: typeof _componentTableResizing & IElementDescriptor = Object.assign(_componentTableResizing, {
+  OptionName: "tableResizing",
+})
 
 // owners:
 // HtmlEditor
@@ -403,13 +392,19 @@ type IToolbarProps = React.PropsWithChildren<{
   items?: Array<dxHtmlEditorToolbarItem | "background" | "bold" | "color" | "font" | "italic" | "link" | "image" | "size" | "strike" | "subscript" | "superscript" | "underline" | "blockquote" | "header" | "increaseIndent" | "decreaseIndent" | "orderedList" | "bulletList" | "alignLeft" | "alignCenter" | "alignRight" | "alignJustify" | "codeBlock" | "variable" | "separator" | "undo" | "redo" | "clear" | "cellProperties" | "tableProperties" | "insertTable" | "insertHeaderRow" | "insertRowAbove" | "insertRowBelow" | "insertColumnLeft" | "insertColumnRight" | "deleteColumn" | "deleteRow" | "deleteTable">;
   multiline?: boolean;
 }>
-class Toolbar extends NestedOption<IToolbarProps> {
-  public static OptionName = "toolbar";
-  public static ExpectedChildren = {
+const _componentToolbar = memo(
+  (props: IToolbarProps) => {
+    return React.createElement(NestedOption<IToolbarProps>, { ...props });
+  }
+);
+
+const Toolbar: typeof _componentToolbar & IElementDescriptor = Object.assign(_componentToolbar, {
+  OptionName: "toolbar",
+  ExpectedChildren: {
     item: { optionName: "items", isCollectionItem: true },
     toolbarItem: { optionName: "items", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Toolbar
@@ -432,26 +427,28 @@ type IToolbarItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class ToolbarItem extends NestedOption<IToolbarItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentToolbarItem = memo(
+  (props: IToolbarItemProps) => {
+    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
+  }
+);
+
+const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "menuItemTemplate",
+          render: "menuItemRender",
+          component: "menuItemComponent"
+        }, {
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 // owners:
 // HtmlEditor
@@ -459,14 +456,21 @@ type IVariablesProps = React.PropsWithChildren<{
   dataSource?: Array<string> | DataSource | DataSourceOptions | null | Store | string;
   escapeChar?: Array<string> | string;
 }>
-class Variables extends NestedOption<IVariablesProps> {
-  public static OptionName = "variables";
-}
+const _componentVariables = memo(
+  (props: IVariablesProps) => {
+    return React.createElement(NestedOption<IVariablesProps>, { ...props });
+  }
+);
+
+const Variables: typeof _componentVariables & IElementDescriptor = Object.assign(_componentVariables, {
+  OptionName: "variables",
+})
 
 export default HtmlEditor;
 export {
   HtmlEditor,
   IHtmlEditorOptions,
+  HtmlEditorRef,
   FileUploaderOptions,
   IFileUploaderOptionsProps,
   ImageUpload,

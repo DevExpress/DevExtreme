@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/box";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxBox, {
     Properties
 } from "devextreme/ui/box";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, dxBoxOptions } from "devextreme/ui/box";
@@ -30,88 +31,61 @@ type IBoxOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceField
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxBoxItem | string>;
   onItemsChange?: (value: Array<any | dxBoxItem | string>) => void;
 }>
 
-class Box<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IBoxOptions<TItem, TKey>>> {
-
-  public get instance(): dxBox<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxBox;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface BoxRef<TItem = any, TKey = any> {
+  instance: () => dxBox<TItem, TKey>;
 }
-(Box as any).propTypes = {
-  align: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "center",
-      "end",
-      "space-around",
-      "space-between",
-      "start"])
-  ]),
-  crossAlign: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "center",
-      "end",
-      "start",
-      "stretch"])
-  ]),
-  direction: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "col",
-      "row"])
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Box = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IBoxOptions<TItem, TKey>>, ref: ForwardedRef<BoxRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IBoxOptions<TItem, TKey>>>, {
+          WidgetClass: dxBox,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IBoxOptions<TItem, TKey>> & { ref?: Ref<BoxRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -128,23 +102,28 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 export default Box;
 export {
   Box,
   IBoxOptions,
+  BoxRef,
   Item,
   IItemProps
 };

@@ -23,7 +23,7 @@ import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
 import { buildConfigTree } from './configuration/react/tree';
 import { TemplateManager } from './template-manager';
-import { ComponentProps } from './component-func';
+import { ComponentProps } from './component';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -332,7 +332,7 @@ const ComponentBase = memo(
             createWidget(el);
           },
         }
-      ));
+      ), [instance.current, element.current, createWidget]);
 
       const _renderChildren = useCallback(() => {
         if (renderChildren) {
@@ -386,7 +386,7 @@ const ComponentBase = memo(
       );
     },
   ),
-) as <P extends IHtmlOptions>(props: P & ComponentBaseProps, ref: React.ForwardedRef<ComponentBaseRef>) => ReactElement | null;
+) as <P extends IHtmlOptions>(props: P & ComponentBaseProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;
 
 export {
   IHtmlOptions,

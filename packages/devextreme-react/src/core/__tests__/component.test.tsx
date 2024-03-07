@@ -8,7 +8,7 @@ import {
   TestPortalComponent,
   Widget,
   WidgetClass,
-} from './test-component-func';
+} from './test-component';
 
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({

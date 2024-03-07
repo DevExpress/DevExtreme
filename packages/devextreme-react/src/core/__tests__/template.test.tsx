@@ -3,14 +3,14 @@ import { cleanup, render, screen } from '@testing-library/react';
 import * as React from 'react';
 import { memo, forwardRef, ForwardedRef } from 'react';
 import { act } from 'react-dom/test-utils';
-import { Component } from '../component-func';
-import ConfigurationComponent from '../nested-option-func';
-import { Template } from '../template-func';
+import { Component } from '../component';
+import ConfigurationComponent from '../nested-option';
+import { Template } from '../template';
 import {
   TestComponent,
   Widget,
   WidgetClass,
-} from './test-component-func';
+} from './test-component';
 
 jest.useFakeTimers();
 
@@ -20,7 +20,6 @@ const templateProps = [{
   tmplOption: 'item',
   render: 'itemRender',
   component: 'itemComponent',
-  keyFn: 'itemKeyFn',
 }];
 
 
@@ -997,7 +996,6 @@ describe('component/render in nested options', () => {
               tmplOption: 'template',
               render: 'render',
               component: 'component',
-              keyFn: 'keyFn',
             }]
           }
           {...props}

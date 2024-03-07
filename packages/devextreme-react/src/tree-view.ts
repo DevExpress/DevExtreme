@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/tree_view";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxTreeView, {
     Properties
 } from "devextreme/ui/tree_view";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxTreeViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, SelectAllValueChangedEvent } from "devextreme/ui/tree_view";
@@ -36,166 +37,62 @@ type ITreeViewOptions<TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Pr
   dataSource?: Properties<TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<dxTreeViewItem>;
   onItemsChange?: (value: Array<dxTreeViewItem>) => void;
 }>
 
-class TreeView<TKey = any> extends BaseComponent<React.PropsWithChildren<ITreeViewOptions<TKey>>> {
-
-  public get instance(): dxTreeView<TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxTreeView;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemHold","onItemRendered","onSelectAllValueChanged"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true },
-    searchEditorOptions: { optionName: "searchEditorOptions", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface TreeViewRef<TKey = any> {
+  instance: () => dxTreeView<TKey>;
 }
-(TreeView as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  animationEnabled: PropTypes.bool,
-  createChildren: PropTypes.func,
-  dataStructure: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "plain",
-      "tree"])
-  ]),
-  disabled: PropTypes.bool,
-  disabledExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  displayExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  elementAttr: PropTypes.object,
-  expandAllEnabled: PropTypes.bool,
-  expandedExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  expandEvent: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "dblclick",
-      "click"])
-  ]),
-  expandNodesRecursive: PropTypes.bool,
-  focusStateEnabled: PropTypes.bool,
-  hasItemsExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  itemsExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  keyExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  noDataText: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemCollapsed: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemExpanded: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onItemSelectionChanged: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectAllValueChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  parentIdExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  rtlEnabled: PropTypes.bool,
-  scrollDirection: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "both",
-      "horizontal",
-      "vertical"])
-  ]),
-  searchEditorOptions: PropTypes.object,
-  searchEnabled: PropTypes.bool,
-  searchExpr: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  searchMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "contains",
-      "startswith",
-      "equals"])
-  ]),
-  searchTimeout: PropTypes.number,
-  searchValue: PropTypes.string,
-  selectAllText: PropTypes.string,
-  selectByClick: PropTypes.bool,
-  selectedExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  selectionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "single",
-      "multiple"])
-  ]),
-  selectNodesRecursive: PropTypes.bool,
-  showCheckBoxesMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "none",
-      "normal",
-      "selectAll"])
-  ]),
-  tabIndex: PropTypes.number,
-  useNativeScrolling: PropTypes.bool,
-  virtualModeEnabled: PropTypes.bool,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const TreeView = memo(
+  forwardRef(
+    <TKey = any>(props: React.PropsWithChildren<ITreeViewOptions<TKey>>, ref: ForwardedRef<TreeViewRef<TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemHold","onItemRendered","onSelectAllValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true },
+        searchEditorOptions: { optionName: "searchEditorOptions", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ITreeViewOptions<TKey>>>, {
+          WidgetClass: dxTreeView,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TKey = any>(props: React.PropsWithChildren<ITreeViewOptions<TKey>> & { ref?: Ref<TreeViewRef<TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -205,13 +102,19 @@ type IButtonProps = React.PropsWithChildren<{
   name?: string;
   options?: dxButtonOptions;
 }>
-class Button extends NestedOption<IButtonProps> {
-  public static OptionName = "buttons";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
+
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     options: { optionName: "options", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // TreeView
@@ -230,18 +133,22 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 // owners:
 // Button
@@ -273,17 +180,21 @@ type IOptionsProps = React.PropsWithChildren<{
   width?: (() => number | string) | number | string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Options extends NestedOption<IOptionsProps> {
-  public static OptionName = "options";
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentOptions = memo(
+  (props: IOptionsProps) => {
+    return React.createElement(NestedOption<IOptionsProps>, { ...props });
+  }
+);
+
+const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
+  OptionName: "options",
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 // owners:
 // TreeView
@@ -347,20 +258,27 @@ type ISearchEditorOptionsProps = React.PropsWithChildren<{
   defaultValue?: string;
   onValueChange?: (value: string) => void;
 }>
-class SearchEditorOptions extends NestedOption<ISearchEditorOptionsProps> {
-  public static OptionName = "searchEditorOptions";
-  public static DefaultsProps = {
-    defaultValue: "value"
-  };
-  public static ExpectedChildren = {
+const _componentSearchEditorOptions = memo(
+  (props: ISearchEditorOptionsProps) => {
+    return React.createElement(NestedOption<ISearchEditorOptionsProps>, { ...props });
+  }
+);
+
+const SearchEditorOptions: typeof _componentSearchEditorOptions & IElementDescriptor = Object.assign(_componentSearchEditorOptions, {
+  OptionName: "searchEditorOptions",
+  DefaultsProps: {
+        defaultValue: "value"
+  },
+  ExpectedChildren: {
     button: { optionName: "buttons", isCollectionItem: true }
-  };
-}
+  },
+})
 
 export default TreeView;
 export {
   TreeView,
   ITreeViewOptions,
+  TreeViewRef,
   Button,
   IButtonProps,
   Item,

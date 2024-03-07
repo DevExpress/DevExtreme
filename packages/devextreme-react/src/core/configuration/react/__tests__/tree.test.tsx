@@ -13,7 +13,6 @@ function createElementWithChildren(children: any[]): IOptionElement {
           tmplOption: 'template',
           component: 'component',
           render: 'render',
-          keyFn: 'keyFn',
         },
       ],
       initialValuesProps: {},

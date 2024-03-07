@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxFilterBuilder, {
     Properties
 } from "devextreme/ui/filter_builder";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField } from "devextreme/ui/filter_builder";
@@ -32,72 +33,52 @@ type IFilterBuilderOptions = React.PropsWithChildren<ReplaceFieldTypes<Propertie
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
 
-class FilterBuilder extends BaseComponent<React.PropsWithChildren<IFilterBuilderOptions>> {
-
-  public get instance(): dxFilterBuilder {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxFilterBuilder;
-
-  protected useRequestAnimationFrameFlag = true;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onEditorPrepared","onEditorPreparing","onInitialized","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
-
-  protected _expectedChildren = {
-    customOperation: { optionName: "customOperations", isCollectionItem: true },
-    field: { optionName: "fields", isCollectionItem: true },
-    filterOperationDescriptions: { optionName: "filterOperationDescriptions", isCollectionItem: false },
-    groupOperationDescriptions: { optionName: "groupOperationDescriptions", isCollectionItem: false }
-  };
+interface FilterBuilderRef {
+  instance: () => dxFilterBuilder;
 }
-(FilterBuilder as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  allowHierarchicalFields: PropTypes.bool,
-  customOperations: PropTypes.array,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  fields: PropTypes.array,
-  filterOperationDescriptions: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  groupOperationDescriptions: PropTypes.object,
-  groupOperations: PropTypes.array,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  maxGroupLevel: PropTypes.number,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onEditorPrepared: PropTypes.func,
-  onEditorPreparing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  tabIndex: PropTypes.number,
-  value: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const FilterBuilder = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IFilterBuilderOptions>, ref: ForwardedRef<FilterBuilderRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onEditorPrepared","onEditorPreparing","onInitialized","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        customOperation: { optionName: "customOperations", isCollectionItem: true },
+        field: { optionName: "fields", isCollectionItem: true },
+        filterOperationDescriptions: { optionName: "filterOperationDescriptions", isCollectionItem: false },
+        groupOperationDescriptions: { optionName: "groupOperationDescriptions", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IFilterBuilderOptions>>, {
+          WidgetClass: dxFilterBuilder,
+          ref: baseRef,
+          useRequestAnimationFrameFlag: true,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IFilterBuilderOptions> & { ref?: Ref<FilterBuilderRef> }) => ReactElement | null;
 
 
 // owners:
@@ -113,18 +94,22 @@ type ICustomOperationProps = React.PropsWithChildren<{
   name?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
-  editorKeyFn?: (data: any) => string;
 }>
-class CustomOperation extends NestedOption<ICustomOperationProps> {
-  public static OptionName = "customOperations";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "editorTemplate",
-    render: "editorRender",
-    component: "editorComponent",
-    keyFn: "editorKeyFn"
-  }];
-}
+const _componentCustomOperation = memo(
+  (props: ICustomOperationProps) => {
+    return React.createElement(NestedOption<ICustomOperationProps>, { ...props });
+  }
+);
+
+const CustomOperation: typeof _componentCustomOperation & IElementDescriptor = Object.assign(_componentCustomOperation, {
+  OptionName: "customOperations",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "editorTemplate",
+          render: "editorRender",
+          component: "editorComponent"
+        }],
+})
 
 // owners:
 // FilterBuilder
@@ -149,22 +134,26 @@ type IFieldProps = React.PropsWithChildren<{
   trueText?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
-  editorKeyFn?: (data: any) => string;
 }>
-class Field extends NestedOption<IFieldProps> {
-  public static OptionName = "fields";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentField = memo(
+  (props: IFieldProps) => {
+    return React.createElement(NestedOption<IFieldProps>, { ...props });
+  }
+);
+
+const Field: typeof _componentField & IElementDescriptor = Object.assign(_componentField, {
+  OptionName: "fields",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     format: { optionName: "format", isCollectionItem: false },
     lookup: { optionName: "lookup", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
-    tmplOption: "editorTemplate",
-    render: "editorRender",
-    component: "editorComponent",
-    keyFn: "editorKeyFn"
-  }];
-}
+  },
+  TemplateProps: [{
+          tmplOption: "editorTemplate",
+          render: "editorRender",
+          component: "editorComponent"
+        }],
+})
 
 // owners:
 // FilterBuilder
@@ -183,9 +172,15 @@ type IFilterOperationDescriptionsProps = React.PropsWithChildren<{
   notEqual?: string;
   startsWith?: string;
 }>
-class FilterOperationDescriptions extends NestedOption<IFilterOperationDescriptionsProps> {
-  public static OptionName = "filterOperationDescriptions";
-}
+const _componentFilterOperationDescriptions = memo(
+  (props: IFilterOperationDescriptionsProps) => {
+    return React.createElement(NestedOption<IFilterOperationDescriptionsProps>, { ...props });
+  }
+);
+
+const FilterOperationDescriptions: typeof _componentFilterOperationDescriptions & IElementDescriptor = Object.assign(_componentFilterOperationDescriptions, {
+  OptionName: "filterOperationDescriptions",
+})
 
 // owners:
 // Field
@@ -197,9 +192,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // FilterBuilder
@@ -209,9 +210,15 @@ type IGroupOperationDescriptionsProps = React.PropsWithChildren<{
   notOr?: string;
   or?: string;
 }>
-class GroupOperationDescriptions extends NestedOption<IGroupOperationDescriptionsProps> {
-  public static OptionName = "groupOperationDescriptions";
-}
+const _componentGroupOperationDescriptions = memo(
+  (props: IGroupOperationDescriptionsProps) => {
+    return React.createElement(NestedOption<IGroupOperationDescriptionsProps>, { ...props });
+  }
+);
+
+const GroupOperationDescriptions: typeof _componentGroupOperationDescriptions & IElementDescriptor = Object.assign(_componentGroupOperationDescriptions, {
+  OptionName: "groupOperationDescriptions",
+})
 
 // owners:
 // Field
@@ -221,14 +228,21 @@ type ILookupProps = React.PropsWithChildren<{
   displayExpr?: ((data: any) => string) | string;
   valueExpr?: ((data: any) => string | number | boolean) | string;
 }>
-class Lookup extends NestedOption<ILookupProps> {
-  public static OptionName = "lookup";
-}
+const _componentLookup = memo(
+  (props: ILookupProps) => {
+    return React.createElement(NestedOption<ILookupProps>, { ...props });
+  }
+);
+
+const Lookup: typeof _componentLookup & IElementDescriptor = Object.assign(_componentLookup, {
+  OptionName: "lookup",
+})
 
 export default FilterBuilder;
 export {
   FilterBuilder,
   IFilterBuilderOptions,
+  FilterBuilderRef,
   CustomOperation,
   ICustomOperationProps,
   Field,

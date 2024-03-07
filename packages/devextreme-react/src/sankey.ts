@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxSankey, {
     Properties
 } from "devextreme/viz/sankey";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, LinkClickEvent, NodeClickEvent, dxSankeyNode } from "devextreme/viz/sankey";
@@ -34,127 +35,57 @@ type ISankeyOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISan
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
 }>
 
-class Sankey extends BaseComponent<React.PropsWithChildren<ISankeyOptions>> {
-
-  public get instance(): dxSankey {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxSankey;
-
-  protected subscribableOptions = ["loadingIndicator","loadingIndicator.show"];
-
-  protected independentEvents = ["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLinkClick","onNodeClick"];
-
-  protected _defaults = {
-    defaultLoadingIndicator: "loadingIndicator"
-  };
-
-  protected _expectedChildren = {
-    adaptiveLayout: { optionName: "adaptiveLayout", isCollectionItem: false },
-    export: { optionName: "export", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    link: { optionName: "link", isCollectionItem: false },
-    loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
-    margin: { optionName: "margin", isCollectionItem: false },
-    node: { optionName: "node", isCollectionItem: false },
-    size: { optionName: "size", isCollectionItem: false },
-    title: { optionName: "title", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
+interface SankeyRef {
+  instance: () => dxSankey;
 }
-(Sankey as any).propTypes = {
-  adaptiveLayout: PropTypes.object,
-  alignment: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "center",
-      "top"])
-  ])
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  export: PropTypes.object,
-  hoverEnabled: PropTypes.bool,
-  label: PropTypes.object,
-  link: PropTypes.object,
-  loadingIndicator: PropTypes.object,
-  margin: PropTypes.object,
-  node: PropTypes.object,
-  onDisposing: PropTypes.func,
-  onDrawn: PropTypes.func,
-  onExported: PropTypes.func,
-  onExporting: PropTypes.func,
-  onFileSaving: PropTypes.func,
-  onIncidentOccurred: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onLinkClick: PropTypes.func,
-  onLinkHoverChanged: PropTypes.func,
-  onNodeClick: PropTypes.func,
-  onNodeHoverChanged: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  palette: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "Bright",
-      "Harmony Light",
-      "Ocean",
-      "Pastel",
-      "Soft",
-      "Soft Pastel",
-      "Vintage",
-      "Violet",
-      "Carmine",
-      "Dark Moon",
-      "Dark Violet",
-      "Green Mist",
-      "Soft Blue",
-      "Material",
-      "Office"])
-  ])
-  ]),
-  paletteExtensionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "alternate",
-      "blend",
-      "extrapolate"])
-  ]),
-  pathModified: PropTypes.bool,
-  redrawOnResize: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  size: PropTypes.object,
-  sourceField: PropTypes.string,
-  targetField: PropTypes.string,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "generic.dark",
-      "generic.light",
-      "generic.contrast",
-      "generic.carmine",
-      "generic.darkmoon",
-      "generic.darkviolet",
-      "generic.greenmist",
-      "generic.softblue",
-      "material.blue.light",
-      "material.lime.light",
-      "material.orange.light",
-      "material.purple.light",
-      "material.teal.light"])
-  ]),
-  title: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  tooltip: PropTypes.object,
-  weightField: PropTypes.string
-};
+
+const Sankey = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ISankeyOptions>, ref: ForwardedRef<SankeyRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onLinkClick","onNodeClick"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultLoadingIndicator: "loadingIndicator",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        adaptiveLayout: { optionName: "adaptiveLayout", isCollectionItem: false },
+        export: { optionName: "export", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        link: { optionName: "link", isCollectionItem: false },
+        loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        node: { optionName: "node", isCollectionItem: false },
+        size: { optionName: "size", isCollectionItem: false },
+        title: { optionName: "title", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ISankeyOptions>>, {
+          WidgetClass: dxSankey,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ISankeyOptions> & { ref?: Ref<SankeyRef> }) => ReactElement | null;
 
 
 // owners:
@@ -164,9 +95,15 @@ type IAdaptiveLayoutProps = React.PropsWithChildren<{
   keepLabels?: boolean;
   width?: number;
 }>
-class AdaptiveLayout extends NestedOption<IAdaptiveLayoutProps> {
-  public static OptionName = "adaptiveLayout";
-}
+const _componentAdaptiveLayout = memo(
+  (props: IAdaptiveLayoutProps) => {
+    return React.createElement(NestedOption<IAdaptiveLayoutProps>, { ...props });
+  }
+);
+
+const AdaptiveLayout: typeof _componentAdaptiveLayout & IElementDescriptor = Object.assign(_componentAdaptiveLayout, {
+  OptionName: "adaptiveLayout",
+})
 
 // owners:
 // Label
@@ -182,9 +119,15 @@ type IBorderProps = React.PropsWithChildren<{
   dashStyle?: "dash" | "dot" | "longDash" | "solid";
   opacity?: number;
 }>
-class Border extends NestedOption<IBorderProps> {
-  public static OptionName = "border";
-}
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
+
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Sankey
@@ -197,9 +140,15 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-}
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // Label
@@ -214,9 +163,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-class Font extends NestedOption<IFontProps> {
-  public static OptionName = "font";
-}
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
+
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Tooltip
@@ -228,9 +183,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // HoverStyle
@@ -241,9 +202,15 @@ type IHatchingProps = React.PropsWithChildren<{
   step?: number;
   width?: number;
 }>
-class Hatching extends NestedOption<IHatchingProps> {
-  public static OptionName = "hatching";
-}
+const _componentHatching = memo(
+  (props: IHatchingProps) => {
+    return React.createElement(NestedOption<IHatchingProps>, { ...props });
+  }
+);
+
+const Hatching: typeof _componentHatching & IElementDescriptor = Object.assign(_componentHatching, {
+  OptionName: "hatching",
+})
 
 // owners:
 // Link
@@ -263,9 +230,15 @@ type IHoverStyleProps = React.PropsWithChildren<{
   };
   opacity?: number;
 }>
-class HoverStyle extends NestedOption<IHoverStyleProps> {
-  public static OptionName = "hoverStyle";
-}
+const _componentHoverStyle = memo(
+  (props: IHoverStyleProps) => {
+    return React.createElement(NestedOption<IHoverStyleProps>, { ...props });
+  }
+);
+
+const HoverStyle: typeof _componentHoverStyle & IElementDescriptor = Object.assign(_componentHoverStyle, {
+  OptionName: "hoverStyle",
+})
 
 // owners:
 // Sankey
@@ -290,15 +263,21 @@ type ILabelProps = React.PropsWithChildren<{
   verticalOffset?: number;
   visible?: boolean;
 }>
-class Label extends NestedOption<ILabelProps> {
-  public static OptionName = "label";
-  public static ExpectedChildren = {
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
+
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     sankeyborder: { optionName: "border", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Sankey
@@ -327,14 +306,20 @@ type ILinkProps = React.PropsWithChildren<{
   };
   opacity?: number;
 }>
-class Link extends NestedOption<ILinkProps> {
-  public static OptionName = "link";
-  public static ExpectedChildren = {
+const _componentLink = memo(
+  (props: ILinkProps) => {
+    return React.createElement(NestedOption<ILinkProps>, { ...props });
+  }
+);
+
+const Link: typeof _componentLink & IElementDescriptor = Object.assign(_componentLink, {
+  OptionName: "link",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
     sankeyborder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Sankey
@@ -347,15 +332,21 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
-  public static OptionName = "loadingIndicator";
-  public static DefaultsProps = {
-    defaultShow: "show"
-  };
-  public static ExpectedChildren = {
+const _componentLoadingIndicator = memo(
+  (props: ILoadingIndicatorProps) => {
+    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
+  }
+);
+
+const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
+  OptionName: "loadingIndicator",
+  DefaultsProps: {
+        defaultShow: "show"
+  },
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Sankey
@@ -366,9 +357,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-class Margin extends NestedOption<IMarginProps> {
-  public static OptionName = "margin";
-}
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
+
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // Sankey
@@ -398,14 +395,20 @@ type INodeProps = React.PropsWithChildren<{
   padding?: number;
   width?: number;
 }>
-class Node extends NestedOption<INodeProps> {
-  public static OptionName = "node";
-  public static ExpectedChildren = {
+const _componentNode = memo(
+  (props: INodeProps) => {
+    return React.createElement(NestedOption<INodeProps>, { ...props });
+  }
+);
+
+const Node: typeof _componentNode & IElementDescriptor = Object.assign(_componentNode, {
+  OptionName: "node",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
     sankeyborder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Label
@@ -418,9 +421,15 @@ type ISankeyborderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class Sankeyborder extends NestedOption<ISankeyborderProps> {
-  public static OptionName = "border";
-}
+const _componentSankeyborder = memo(
+  (props: ISankeyborderProps) => {
+    return React.createElement(NestedOption<ISankeyborderProps>, { ...props });
+  }
+);
+
+const Sankeyborder: typeof _componentSankeyborder & IElementDescriptor = Object.assign(_componentSankeyborder, {
+  OptionName: "border",
+})
 
 // owners:
 // Label
@@ -432,9 +441,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-class Shadow extends NestedOption<IShadowProps> {
-  public static OptionName = "shadow";
-}
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
+
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // Sankey
@@ -442,9 +457,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-class Size extends NestedOption<ISizeProps> {
-  public static OptionName = "size";
-}
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
+
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // Title
@@ -455,12 +476,18 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Subtitle extends NestedOption<ISubtitleProps> {
-  public static OptionName = "subtitle";
-  public static ExpectedChildren = {
+const _componentSubtitle = memo(
+  (props: ISubtitleProps) => {
+    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
+  }
+);
+
+const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Sankey
@@ -486,14 +513,20 @@ type ITitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Title extends NestedOption<ITitleProps> {
-  public static OptionName = "title";
-  public static ExpectedChildren = {
+const _componentTitle = memo(
+  (props: ITitleProps) => {
+    return React.createElement(NestedOption<ITitleProps>, { ...props });
+  }
+);
+
+const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Sankey
@@ -529,32 +562,34 @@ type ITooltipProps = React.PropsWithChildren<{
   zIndex?: number;
   linkTooltipRender?: (...params: any) => React.ReactNode;
   linkTooltipComponent?: React.ComponentType<any>;
-  linkTooltipKeyFn?: (data: any) => string;
   nodeTooltipRender?: (...params: any) => React.ReactNode;
   nodeTooltipComponent?: React.ComponentType<any>;
-  nodeTooltipKeyFn?: (data: any) => string;
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-  public static ExpectedChildren = {
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
-    tmplOption: "linkTooltipTemplate",
-    render: "linkTooltipRender",
-    component: "linkTooltipComponent",
-    keyFn: "linkTooltipKeyFn"
-  }, {
-    tmplOption: "nodeTooltipTemplate",
-    render: "nodeTooltipRender",
-    component: "nodeTooltipComponent",
-    keyFn: "nodeTooltipKeyFn"
-  }];
-}
+  },
+  TemplateProps: [{
+          tmplOption: "linkTooltipTemplate",
+          render: "linkTooltipRender",
+          component: "linkTooltipComponent"
+        }, {
+          tmplOption: "nodeTooltipTemplate",
+          render: "nodeTooltipRender",
+          component: "nodeTooltipComponent"
+        }],
+})
 
 // owners:
 // Tooltip
@@ -565,14 +600,21 @@ type ITooltipBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class TooltipBorder extends NestedOption<ITooltipBorderProps> {
-  public static OptionName = "border";
-}
+const _componentTooltipBorder = memo(
+  (props: ITooltipBorderProps) => {
+    return React.createElement(NestedOption<ITooltipBorderProps>, { ...props });
+  }
+);
+
+const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Object.assign(_componentTooltipBorder, {
+  OptionName: "border",
+})
 
 export default Sankey;
 export {
   Sankey,
   ISankeyOptions,
+  SankeyRef,
   AdaptiveLayout,
   IAdaptiveLayoutProps,
   Border,

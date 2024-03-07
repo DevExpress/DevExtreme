@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxDropDownBox, {
     Properties
 } from "devextreme/ui/drop_down_box";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/drop_down_box";
@@ -46,161 +47,76 @@ type IDropDownBoxOptionsNarrowedEvents = {
 type IDropDownBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDropDownBoxOptionsNarrowedEvents> & IHtmlOptions & {
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
   dropDownButtonRender?: (...params: any) => React.ReactNode;
   dropDownButtonComponent?: React.ComponentType<any>;
-  dropDownButtonKeyFn?: (data: any) => string;
   fieldRender?: (...params: any) => React.ReactNode;
   fieldComponent?: React.ComponentType<any>;
-  fieldKeyFn?: (data: any) => string;
   defaultOpened?: boolean;
   onOpenedChange?: (value: boolean) => void;
 }>
 
-class DropDownBox extends BaseComponent<React.PropsWithChildren<IDropDownBoxOptions>> {
-
-  public get instance(): dxDropDownBox {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxDropDownBox;
-
-  protected subscribableOptions = ["opened"];
-
-  protected independentEvents = ["onChange","onClosed","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"];
-
-  protected _defaults = {
-    defaultOpened: "opened"
-  };
-
-  protected _expectedChildren = {
-    button: { optionName: "buttons", isCollectionItem: true },
-    dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }, {
-    tmplOption: "dropDownButtonTemplate",
-    render: "dropDownButtonRender",
-    component: "dropDownButtonComponent",
-    keyFn: "dropDownButtonKeyFn"
-  }, {
-    tmplOption: "fieldTemplate",
-    render: "fieldRender",
-    component: "fieldComponent",
-    keyFn: "fieldKeyFn"
-  }];
+interface DropDownBoxRef {
+  instance: () => dxDropDownBox;
 }
-(DropDownBox as any).propTypes = {
-  acceptCustomValue: PropTypes.bool,
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  buttons: PropTypes.array,
-  deferRendering: PropTypes.bool,
-  disabled: PropTypes.bool,
-  displayExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  displayValueFormatter: PropTypes.func,
-  dropDownOptions: PropTypes.object,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  items: PropTypes.array,
-  label: PropTypes.string,
-  labelMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "static",
-      "floating",
-      "hidden",
-      "outside"])
-  ]),
-  maxLength: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  onClosed: PropTypes.func,
-  onCopy: PropTypes.func,
-  onCut: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onEnterKey: PropTypes.func,
-  onFocusIn: PropTypes.func,
-  onFocusOut: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onInput: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  onKeyUp: PropTypes.func,
-  onOpened: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onPaste: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  opened: PropTypes.bool,
-  openOnFieldClick: PropTypes.bool,
-  placeholder: PropTypes.string,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  showClearButton: PropTypes.bool,
-  showDropDownButton: PropTypes.bool,
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "outlined",
-      "underlined",
-      "filled"])
-  ]),
-  tabIndex: PropTypes.number,
-  text: PropTypes.string,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top",
-      "auto"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  valueChangeEvent: PropTypes.string,
-  valueExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const DropDownBox = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IDropDownBoxOptions>, ref: ForwardedRef<DropDownBoxRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["opened"]), []);
+      const independentEvents = useMemo(() => (["onChange","onClosed","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onOpened","onPaste","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultOpened: "opened",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        button: { optionName: "buttons", isCollectionItem: true },
+        dropDownOptions: { optionName: "dropDownOptions", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "contentTemplate",
+          render: "contentRender",
+          component: "contentComponent"
+        },
+        {
+          tmplOption: "dropDownButtonTemplate",
+          render: "dropDownButtonRender",
+          component: "dropDownButtonComponent"
+        },
+        {
+          tmplOption: "fieldTemplate",
+          render: "fieldRender",
+          component: "fieldComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IDropDownBoxOptions>>, {
+          WidgetClass: dxDropDownBox,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IDropDownBoxOptions> & { ref?: Ref<DropDownBoxRef> }) => ReactElement | null;
 
 
 // owners:
@@ -209,13 +125,19 @@ type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
 }>
-class Animation extends NestedOption<IAnimationProps> {
-  public static OptionName = "animation";
-  public static ExpectedChildren = {
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
+
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
     hide: { optionName: "hide", isCollectionItem: false },
     show: { optionName: "show", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -223,9 +145,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class At extends NestedOption<IAtProps> {
-  public static OptionName = "at";
-}
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
+
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -233,9 +161,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class BoundaryOffset extends NestedOption<IBoundaryOffsetProps> {
-  public static OptionName = "boundaryOffset";
-}
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
+
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // DropDownBox
@@ -244,13 +178,19 @@ type IButtonProps = React.PropsWithChildren<{
   name?: string;
   options?: dxButtonOptions;
 }>
-class Button extends NestedOption<IButtonProps> {
-  public static OptionName = "buttons";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
+
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     options: { optionName: "options", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -258,9 +198,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-class Collision extends NestedOption<ICollisionProps> {
-  public static OptionName = "collision";
-}
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
+
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // DropDownBox
@@ -328,36 +274,38 @@ type IDropDownOptionsProps = React.PropsWithChildren<{
   onWidthChange?: (value: (() => number | string) | number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
-  titleKeyFn?: (data: any) => string;
 }>
-class DropDownOptions extends NestedOption<IDropDownOptionsProps> {
-  public static OptionName = "dropDownOptions";
-  public static DefaultsProps = {
-    defaultHeight: "height",
-    defaultPosition: "position",
-    defaultVisible: "visible",
-    defaultWidth: "width"
-  };
-  public static ExpectedChildren = {
+const _componentDropDownOptions = memo(
+  (props: IDropDownOptionsProps) => {
+    return React.createElement(NestedOption<IDropDownOptionsProps>, { ...props });
+  }
+);
+
+const DropDownOptions: typeof _componentDropDownOptions & IElementDescriptor = Object.assign(_componentDropDownOptions, {
+  OptionName: "dropDownOptions",
+  DefaultsProps: {
+        defaultHeight: "height",
+        defaultPosition: "position",
+        defaultVisible: "visible",
+        defaultWidth: "width"
+  },
+  ExpectedChildren: {
     animation: { optionName: "animation", isCollectionItem: false },
     position: { optionName: "position", isCollectionItem: false },
     toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
-  };
-  public static TemplateProps = [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }, {
-    tmplOption: "titleTemplate",
-    render: "titleRender",
-    component: "titleComponent",
-    keyFn: "titleKeyFn"
-  }];
-}
+  },
+  TemplateProps: [{
+          tmplOption: "contentTemplate",
+          render: "contentRender",
+          component: "contentComponent"
+        }, {
+          tmplOption: "titleTemplate",
+          render: "titleRender",
+          component: "titleComponent"
+        }],
+})
 
 // owners:
 // Hide
@@ -368,12 +316,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class From extends NestedOption<IFromProps> {
-  public static OptionName = "from";
-  public static ExpectedChildren = {
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
+
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
     position: { optionName: "position", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Animation
@@ -389,13 +343,19 @@ type IHideProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Hide extends NestedOption<IHideProps> {
-  public static OptionName = "hide";
-  public static ExpectedChildren = {
+const _componentHide = memo(
+  (props: IHideProps) => {
+    return React.createElement(NestedOption<IHideProps>, { ...props });
+  }
+);
+
+const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componentHide, {
+  OptionName: "hide",
+  ExpectedChildren: {
     from: { optionName: "from", isCollectionItem: false },
     to: { optionName: "to", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -403,9 +363,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class My extends NestedOption<IMyProps> {
-  public static OptionName = "my";
-}
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
+
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // Position
@@ -413,9 +379,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class Offset extends NestedOption<IOffsetProps> {
-  public static OptionName = "offset";
-}
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
+
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // Button
@@ -447,17 +419,21 @@ type IOptionsProps = React.PropsWithChildren<{
   width?: (() => number | string) | number | string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Options extends NestedOption<IOptionsProps> {
-  public static OptionName = "options";
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentOptions = memo(
+  (props: IOptionsProps) => {
+    return React.createElement(NestedOption<IOptionsProps>, { ...props });
+  }
+);
+
+const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
+  OptionName: "options",
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 // owners:
 // From
@@ -486,9 +462,15 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-class Position extends NestedOption<IPositionProps> {
-  public static OptionName = "position";
-}
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
+
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+})
 
 // owners:
 // Animation
@@ -504,9 +486,15 @@ type IShowProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Show extends NestedOption<IShowProps> {
-  public static OptionName = "show";
-}
+const _componentShow = memo(
+  (props: IShowProps) => {
+    return React.createElement(NestedOption<IShowProps>, { ...props });
+  }
+);
+
+const Show: typeof _componentShow & IElementDescriptor = Object.assign(_componentShow, {
+  OptionName: "show",
+})
 
 // owners:
 // Hide
@@ -517,9 +505,15 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class To extends NestedOption<IToProps> {
-  public static OptionName = "to";
-}
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
+
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 // owners:
 // DropDownOptions
@@ -539,31 +533,34 @@ type IToolbarItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class ToolbarItem extends NestedOption<IToolbarItemProps> {
-  public static OptionName = "toolbarItems";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "menuItemTemplate",
-    render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
-  }, {
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+const _componentToolbarItem = memo(
+  (props: IToolbarItemProps) => {
+    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
+  }
+);
+
+const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
+  OptionName: "toolbarItems",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "menuItemTemplate",
+          render: "menuItemRender",
+          component: "menuItemComponent"
+        }, {
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }],
+})
 
 export default DropDownBox;
 export {
   DropDownBox,
   IDropDownBoxOptions,
+  DropDownBoxRef,
   Animation,
   IAnimationProps,
   At,

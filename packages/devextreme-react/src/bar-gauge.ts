@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxBarGauge, {
     Properties
 } from "devextreme/viz/bar_gauge";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent, BarGaugeBarInfo, BarGaugeLegendItem } from "devextreme/viz/bar_gauge";
@@ -32,140 +33,74 @@ type IBarGaugeOptionsNarrowedEvents = {
 type IBarGaugeOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IBarGaugeOptionsNarrowedEvents> & IHtmlOptions & {
   centerRender?: (...params: any) => React.ReactNode;
   centerComponent?: React.ComponentType<any>;
-  centerKeyFn?: (data: any) => string;
   defaultLoadingIndicator?: Record<string, any>;
   defaultValues?: Array<number>;
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
   onValuesChange?: (value: Array<number>) => void;
 }>
 
-class BarGauge extends BaseComponent<React.PropsWithChildren<IBarGaugeOptions>> {
-
-  public get instance(): dxBarGauge {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxBarGauge;
-
-  protected subscribableOptions = ["loadingIndicator","loadingIndicator.show","values"];
-
-  protected independentEvents = ["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onTooltipHidden","onTooltipShown"];
-
-  protected _defaults = {
-    defaultLoadingIndicator: "loadingIndicator",
-    defaultValues: "values"
-  };
-
-  protected _expectedChildren = {
-    animation: { optionName: "animation", isCollectionItem: false },
-    barGaugeTitle: { optionName: "title", isCollectionItem: false },
-    export: { optionName: "export", isCollectionItem: false },
-    geometry: { optionName: "geometry", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    legend: { optionName: "legend", isCollectionItem: false },
-    loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
-    margin: { optionName: "margin", isCollectionItem: false },
-    size: { optionName: "size", isCollectionItem: false },
-    title: { optionName: "title", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "centerTemplate",
-    render: "centerRender",
-    component: "centerComponent",
-    keyFn: "centerKeyFn"
-  }];
+interface BarGaugeRef {
+  instance: () => dxBarGauge;
 }
-(BarGauge as any).propTypes = {
-  backgroundColor: PropTypes.string,
-  barSpacing: PropTypes.number,
-  baseValue: PropTypes.number,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  endValue: PropTypes.number,
-  export: PropTypes.object,
-  geometry: PropTypes.object,
-  label: PropTypes.object,
-  legend: PropTypes.object,
-  loadingIndicator: PropTypes.object,
-  margin: PropTypes.object,
-  onDisposing: PropTypes.func,
-  onDrawn: PropTypes.func,
-  onExported: PropTypes.func,
-  onExporting: PropTypes.func,
-  onFileSaving: PropTypes.func,
-  onIncidentOccurred: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onTooltipHidden: PropTypes.func,
-  onTooltipShown: PropTypes.func,
-  palette: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "Bright",
-      "Harmony Light",
-      "Ocean",
-      "Pastel",
-      "Soft",
-      "Soft Pastel",
-      "Vintage",
-      "Violet",
-      "Carmine",
-      "Dark Moon",
-      "Dark Violet",
-      "Green Mist",
-      "Soft Blue",
-      "Material",
-      "Office"])
-  ])
-  ]),
-  paletteExtensionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "alternate",
-      "blend",
-      "extrapolate"])
-  ]),
-  pathModified: PropTypes.bool,
-  redrawOnResize: PropTypes.bool,
-  relativeInnerRadius: PropTypes.number,
-  resolveLabelOverlapping: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "hide",
-      "none",
-      "shift"])
-  ]),
-  rtlEnabled: PropTypes.bool,
-  size: PropTypes.object,
-  startValue: PropTypes.number,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "generic.dark",
-      "generic.light",
-      "generic.contrast",
-      "generic.carmine",
-      "generic.darkmoon",
-      "generic.darkviolet",
-      "generic.greenmist",
-      "generic.softblue",
-      "material.blue.light",
-      "material.lime.light",
-      "material.orange.light",
-      "material.purple.light",
-      "material.teal.light"])
-  ]),
-  title: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  tooltip: PropTypes.object,
-  values: PropTypes.array
-};
+
+const BarGauge = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IBarGaugeOptions>, ref: ForwardedRef<BarGaugeRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show","values"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onTooltipHidden","onTooltipShown"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultLoadingIndicator: "loadingIndicator",
+        defaultValues: "values",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        animation: { optionName: "animation", isCollectionItem: false },
+        barGaugeTitle: { optionName: "title", isCollectionItem: false },
+        export: { optionName: "export", isCollectionItem: false },
+        geometry: { optionName: "geometry", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        legend: { optionName: "legend", isCollectionItem: false },
+        loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        size: { optionName: "size", isCollectionItem: false },
+        title: { optionName: "title", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "centerTemplate",
+          render: "centerRender",
+          component: "centerComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IBarGaugeOptions>>, {
+          WidgetClass: dxBarGauge,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IBarGaugeOptions> & { ref?: Ref<BarGaugeRef> }) => ReactElement | null;
 
 
 // owners:
@@ -175,9 +110,15 @@ type IAnimationProps = React.PropsWithChildren<{
   easing?: "easeOutCubic" | "linear";
   enabled?: boolean;
 }>
-class Animation extends NestedOption<IAnimationProps> {
-  public static OptionName = "animation";
-}
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
+
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+})
 
 // owners:
 // BarGauge
@@ -203,15 +144,21 @@ type IBarGaugeTitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class BarGaugeTitle extends NestedOption<IBarGaugeTitleProps> {
-  public static OptionName = "title";
-  public static ExpectedChildren = {
+const _componentBarGaugeTitle = memo(
+  (props: IBarGaugeTitleProps) => {
+    return React.createElement(NestedOption<IBarGaugeTitleProps>, { ...props });
+  }
+);
+
+const BarGaugeTitle: typeof _componentBarGaugeTitle & IElementDescriptor = Object.assign(_componentBarGaugeTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
     barGaugeTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // BarGaugeTitle
@@ -222,12 +169,18 @@ type IBarGaugeTitleSubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class BarGaugeTitleSubtitle extends NestedOption<IBarGaugeTitleSubtitleProps> {
-  public static OptionName = "subtitle";
-  public static ExpectedChildren = {
+const _componentBarGaugeTitleSubtitle = memo(
+  (props: IBarGaugeTitleSubtitleProps) => {
+    return React.createElement(NestedOption<IBarGaugeTitleSubtitleProps>, { ...props });
+  }
+);
+
+const BarGaugeTitleSubtitle: typeof _componentBarGaugeTitleSubtitle & IElementDescriptor = Object.assign(_componentBarGaugeTitleSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Legend
@@ -240,9 +193,15 @@ type IBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class Border extends NestedOption<IBorderProps> {
-  public static OptionName = "border";
-}
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
+
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // BarGauge
@@ -255,9 +214,15 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-}
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // Label
@@ -275,9 +240,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-class Font extends NestedOption<IFontProps> {
-  public static OptionName = "font";
-}
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
+
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Label
@@ -290,9 +261,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // BarGauge
@@ -300,9 +277,15 @@ type IGeometryProps = React.PropsWithChildren<{
   endAngle?: number;
   startAngle?: number;
 }>
-class Geometry extends NestedOption<IGeometryProps> {
-  public static OptionName = "geometry";
-}
+const _componentGeometry = memo(
+  (props: IGeometryProps) => {
+    return React.createElement(NestedOption<IGeometryProps>, { ...props });
+  }
+);
+
+const Geometry: typeof _componentGeometry & IElementDescriptor = Object.assign(_componentGeometry, {
+  OptionName: "geometry",
+})
 
 // owners:
 // Legend
@@ -314,9 +297,15 @@ type IItemTextFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class ItemTextFormat extends NestedOption<IItemTextFormatProps> {
-  public static OptionName = "itemTextFormat";
-}
+const _componentItemTextFormat = memo(
+  (props: IItemTextFormatProps) => {
+    return React.createElement(NestedOption<IItemTextFormatProps>, { ...props });
+  }
+);
+
+const ItemTextFormat: typeof _componentItemTextFormat & IElementDescriptor = Object.assign(_componentItemTextFormat, {
+  OptionName: "itemTextFormat",
+})
 
 // owners:
 // BarGauge
@@ -329,13 +318,19 @@ type ILabelProps = React.PropsWithChildren<{
   indent?: number;
   visible?: boolean;
 }>
-class Label extends NestedOption<ILabelProps> {
-  public static OptionName = "label";
-  public static ExpectedChildren = {
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
+
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // BarGauge
@@ -394,11 +389,16 @@ type ILegendProps = React.PropsWithChildren<{
   visible?: boolean;
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
-  markerKeyFn?: (data: any) => string;
 }>
-class Legend extends NestedOption<ILegendProps> {
-  public static OptionName = "legend";
-  public static ExpectedChildren = {
+const _componentLegend = memo(
+  (props: ILegendProps) => {
+    return React.createElement(NestedOption<ILegendProps>, { ...props });
+  }
+);
+
+const Legend: typeof _componentLegend & IElementDescriptor = Object.assign(_componentLegend, {
+  OptionName: "legend",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     itemTextFormat: { optionName: "itemTextFormat", isCollectionItem: false },
@@ -406,14 +406,13 @@ class Legend extends NestedOption<ILegendProps> {
     legendTitle: { optionName: "title", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     title: { optionName: "title", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
-    tmplOption: "markerTemplate",
-    render: "markerRender",
-    component: "markerComponent",
-    keyFn: "markerKeyFn"
-  }];
-}
+  },
+  TemplateProps: [{
+          tmplOption: "markerTemplate",
+          render: "markerRender",
+          component: "markerComponent"
+        }],
+})
 
 // owners:
 // Legend
@@ -425,9 +424,15 @@ type ILegendBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class LegendBorder extends NestedOption<ILegendBorderProps> {
-  public static OptionName = "border";
-}
+const _componentLegendBorder = memo(
+  (props: ILegendBorderProps) => {
+    return React.createElement(NestedOption<ILegendBorderProps>, { ...props });
+  }
+);
+
+const LegendBorder: typeof _componentLegendBorder & IElementDescriptor = Object.assign(_componentLegendBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Legend
@@ -449,15 +454,21 @@ type ILegendTitleProps = React.PropsWithChildren<{
   text?: string;
   verticalAlignment?: "bottom" | "top";
 }>
-class LegendTitle extends NestedOption<ILegendTitleProps> {
-  public static OptionName = "title";
-  public static ExpectedChildren = {
+const _componentLegendTitle = memo(
+  (props: ILegendTitleProps) => {
+    return React.createElement(NestedOption<ILegendTitleProps>, { ...props });
+  }
+);
+
+const LegendTitle: typeof _componentLegendTitle & IElementDescriptor = Object.assign(_componentLegendTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false },
     legendTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // LegendTitle
@@ -466,12 +477,18 @@ type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   offset?: number;
   text?: string;
 }>
-class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
-  public static OptionName = "subtitle";
-  public static ExpectedChildren = {
+const _componentLegendTitleSubtitle = memo(
+  (props: ILegendTitleSubtitleProps) => {
+    return React.createElement(NestedOption<ILegendTitleSubtitleProps>, { ...props });
+  }
+);
+
+const LegendTitleSubtitle: typeof _componentLegendTitleSubtitle & IElementDescriptor = Object.assign(_componentLegendTitleSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // BarGauge
@@ -483,15 +500,21 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
-  public static OptionName = "loadingIndicator";
-  public static DefaultsProps = {
-    defaultShow: "show"
-  };
-  public static ExpectedChildren = {
+const _componentLoadingIndicator = memo(
+  (props: ILoadingIndicatorProps) => {
+    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
+  }
+);
+
+const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
+  OptionName: "loadingIndicator",
+  DefaultsProps: {
+        defaultShow: "show"
+  },
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Legend
@@ -504,9 +527,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-class Margin extends NestedOption<IMarginProps> {
-  public static OptionName = "margin";
-}
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
+
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // Tooltip
@@ -517,9 +546,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-class Shadow extends NestedOption<IShadowProps> {
-  public static OptionName = "shadow";
-}
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
+
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // BarGauge
@@ -527,9 +562,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-class Size extends NestedOption<ISizeProps> {
-  public static OptionName = "size";
-}
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
+
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // LegendTitle
@@ -541,9 +582,15 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Subtitle extends NestedOption<ISubtitleProps> {
-  public static OptionName = "subtitle";
-}
+const _componentSubtitle = memo(
+  (props: ISubtitleProps) => {
+    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
+  }
+);
+
+const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
+  OptionName: "subtitle",
+})
 
 // owners:
 // Legend
@@ -570,9 +617,15 @@ type ITitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Title extends NestedOption<ITitleProps> {
-  public static OptionName = "title";
-}
+const _componentTitle = memo(
+  (props: ITitleProps) => {
+    return React.createElement(NestedOption<ITitleProps>, { ...props });
+  }
+);
+
+const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
+  OptionName: "title",
+})
 
 // owners:
 // BarGauge
@@ -607,24 +660,28 @@ type ITooltipProps = React.PropsWithChildren<{
   zIndex?: number;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-  public static ExpectedChildren = {
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }];
-}
+  },
+  TemplateProps: [{
+          tmplOption: "contentTemplate",
+          render: "contentRender",
+          component: "contentComponent"
+        }],
+})
 
 // owners:
 // Tooltip
@@ -635,14 +692,21 @@ type ITooltipBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class TooltipBorder extends NestedOption<ITooltipBorderProps> {
-  public static OptionName = "border";
-}
+const _componentTooltipBorder = memo(
+  (props: ITooltipBorderProps) => {
+    return React.createElement(NestedOption<ITooltipBorderProps>, { ...props });
+  }
+);
+
+const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Object.assign(_componentTooltipBorder, {
+  OptionName: "border",
+})
 
 export default BarGauge;
 export {
   BarGauge,
   IBarGaugeOptions,
+  BarGaugeRef,
   Animation,
   IAnimationProps,
   BarGaugeTitle,

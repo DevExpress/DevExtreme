@@ -1,5 +1,5 @@
 import { ITemplateMeta, Template as TemplateComp } from '../../template';
-import { Template as TemplateFuncComp } from '../../template-func';
+import { Template as TemplateFuncComp } from '../../template';
 
 enum ElementType {
   Option,
@@ -74,7 +74,7 @@ function getElementInfo(
       type: ElementType.Option,
       descriptor: {
         name,
-        isCollection: isCollectionItem,
+        isCollection: !!isCollectionItem,
         templates: elementDescriptor.TemplateProps || [],
         initialValuesProps: elementDescriptor.DefaultsProps || {},
         predefinedValuesProps: elementDescriptor.PredefinedProps || {},
@@ -91,11 +91,11 @@ function getElementInfo(
 
 interface IElementDescriptor {
   OptionName: string;
-  IsCollectionItem: boolean;
-  DefaultsProps: Record<string, string>;
-  TemplateProps: ITemplateMeta[];
-  PredefinedProps: Record<string, any>;
-  ExpectedChildren: Record<string, IExpectedChild>;
+  IsCollectionItem?: boolean;
+  DefaultsProps?: Record<string, string>;
+  TemplateProps?: ITemplateMeta[];
+  PredefinedProps?: Record<string, any>;
+  ExpectedChildren?: Record<string, IExpectedChild>;
 }
 
 export {
@@ -104,4 +104,5 @@ export {
   IElement,
   IOptionElement,
   IExpectedChild,
+  IElementDescriptor,
 };

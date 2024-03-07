@@ -6,7 +6,7 @@ import config, { getOption } from '../config';
 import {
   TestComponent,
   WidgetClass,
-} from './test-component-func';
+} from './test-component';
 
 const ComponentWithTemplates = memo(function ComponentWithTemplates(props: any) {
   return (
@@ -15,7 +15,6 @@ const ComponentWithTemplates = memo(function ComponentWithTemplates(props: any) 
         tmplOption: 'item',
         render: 'itemRender',
         component: 'itemComponent',
-        keyFn: 'itemKeyFn',
       }]}
       {...props}
     />

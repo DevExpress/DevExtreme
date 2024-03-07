@@ -2,14 +2,14 @@
 import { render, cleanup } from '@testing-library/react';
 import * as React from 'react';
 import { memo } from 'react';
-import { ExtensionComponent } from '../extension-component-func';
-import ConfigurationComponent from '../nested-option-func';
+import { ExtensionComponent } from '../extension-component';
+import ConfigurationComponent from '../nested-option';
 import {
   TestComponent,
   Widget,
   WidgetClass,
-} from './test-component-func';
-import { IHtmlOptions } from '../component-base-func';
+} from './test-component';
+import { IHtmlOptions } from '../component-base';
 
 const ExtensionWidgetClass = jest.fn<typeof Widget, any[]>(() => Widget);
 

@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { memo, ReactElement } from 'react';
 import { ElementType, getElementInfo } from './configuration/react/element';
 
 interface INestedOptionMeta {
@@ -8,10 +9,10 @@ interface INestedOptionMeta {
   makeDirty: () => void;
 }
 
-class NestedOption<P> extends React.PureComponent<P, any> {
-  public render(): React.ReactNode {
+const NestedOption = memo(
+  <P>(props: P) => {
     // @ts-expect-error TS2339
-    const { children: stateChildren } = this.props;
+    const { children: stateChildren } = props;
     const children = React.Children.map(
       stateChildren,
       (child) => {
@@ -25,8 +26,8 @@ class NestedOption<P> extends React.PureComponent<P, any> {
       {},
       children,
     );
-  }
-}
+  },
+) as <P>(props: P) => ReactElement | null;
 
 export default NestedOption;
 export {

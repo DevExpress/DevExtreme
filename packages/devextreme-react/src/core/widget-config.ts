@@ -1,5 +1,5 @@
 import { ITemplateMeta } from './template';
-import { ComponentBaseProps } from './component-base-func';
+import { ComponentBaseProps } from './component-base';
 
 const elementPropNames = ['style', 'id'];
 const classNamePropName = 'className';

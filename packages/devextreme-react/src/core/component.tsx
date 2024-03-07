@@ -10,10 +10,11 @@ import {
   memo,
 } from 'react';
 
-import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base-func';
+import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base';
+import { IElementDescriptor } from './configuration/react/element';
 import { IExpectedChild } from './configuration/react/element';
-import { ITemplateMeta } from './template-func';
-import { elementIsExtension } from './extension-component-func';
+import { ITemplateMeta } from './template';
+import { elementIsExtension } from './extension-component';
 
 interface ComponentProps {
   WidgetClass?: any;
@@ -101,7 +102,7 @@ const Component = memo(
             clearExtensions();
           },
         }
-      ));
+      ), [componentBaseRef.current, createWidget, clearExtensions]);
 
       return (
         <ComponentBase<P>
@@ -112,11 +113,12 @@ const Component = memo(
       );
     },
   ),
-) as <P extends IHtmlOptions>(props: P & ComponentProps, ref: React.ForwardedRef<ComponentRef>) => ReactElement | null;
+) as <P extends IHtmlOptions>(props: P & ComponentProps & { ref?: React.Ref<ComponentRef> }) => ReactElement | null;
 
 export {
   Component,
   ComponentProps,
-  ComponentRef,
   IHtmlOptions,
+  IElementDescriptor,
+  ComponentRef,
 };

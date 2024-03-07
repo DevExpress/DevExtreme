@@ -10,8 +10,8 @@ import {
   memo,
 } from 'react';
 
-import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base-func';
-import { ComponentProps } from './component-func';
+import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base';
+import { ComponentProps } from './component';
 
 type NestedOptionElement = ReactElement<any, React.JSXElementConstructor<any> & { isExtensionComponent: boolean }>;
 
@@ -49,7 +49,7 @@ const ExtensionComponent = memo(
             createWidget(el);
           },
         }
-      ));
+      ), [componentBaseRef.current, createWidget]);
 
       return (
         <ComponentBase<P>
@@ -59,7 +59,7 @@ const ExtensionComponent = memo(
       );
     },
   ),
-) as <P extends IHtmlOptions>(props: P & ComponentProps, ref: React.ForwardedRef<ComponentBaseRef>) => ReactElement | null;
+) as <P extends IHtmlOptions>(props: P & ComponentProps & { ref?: React.Ref<ComponentBaseRef> }) => ReactElement | null;
 
 export {
   ExtensionComponent,

@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/accordion";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxAccordion, {
     Properties
 } from "devextreme/ui/accordion";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxAccordionItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent } from "devextreme/ui/accordion";
@@ -31,10 +32,8 @@ type IAccordionOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replac
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   itemTitleRender?: (...params: any) => React.ReactNode;
   itemTitleComponent?: React.ComponentType<any>;
-  itemTitleKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxAccordionItem | string>;
   defaultSelectedIndex?: number;
   defaultSelectedItem?: any;
@@ -47,89 +46,66 @@ type IAccordionOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replac
   onSelectedItemsChange?: (value: Array<any>) => void;
 }>
 
-class Accordion<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IAccordionOptions<TItem, TKey>>> {
-
-  public get instance(): dxAccordion<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxAccordion;
-
-  protected subscribableOptions = ["items","selectedIndex","selectedItem","selectedItemKeys","selectedItems"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered","onItemTitleClick"];
-
-  protected _defaults = {
-    defaultItems: "items",
-    defaultSelectedIndex: "selectedIndex",
-    defaultSelectedItem: "selectedItem",
-    defaultSelectedItemKeys: "selectedItemKeys",
-    defaultSelectedItems: "selectedItems"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }, {
-    tmplOption: "itemTitleTemplate",
-    render: "itemTitleRender",
-    component: "itemTitleComponent",
-    keyFn: "itemTitleKeyFn"
-  }];
+interface AccordionRef<TItem = any, TKey = any> {
+  instance: () => dxAccordion<TItem, TKey>;
 }
-(Accordion as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  animationDuration: PropTypes.number,
-  collapsible: PropTypes.bool,
-  deferRendering: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  keyExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  multiple: PropTypes.bool,
-  noDataText: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onItemTitleClick: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  repaintChangesOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  selectedIndex: PropTypes.number,
-  selectedItemKeys: PropTypes.array,
-  selectedItems: PropTypes.array,
-  tabIndex: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Accordion = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IAccordionOptions<TItem, TKey>>, ref: ForwardedRef<AccordionRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem","selectedItemKeys","selectedItems"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered","onItemTitleClick"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+        defaultSelectedIndex: "selectedIndex",
+        defaultSelectedItem: "selectedItem",
+        defaultSelectedItemKeys: "selectedItemKeys",
+        defaultSelectedItems: "selectedItems",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+        {
+          tmplOption: "itemTitleTemplate",
+          render: "itemTitleRender",
+          component: "itemTitleComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IAccordionOptions<TItem, TKey>>>, {
+          WidgetClass: dxAccordion,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IAccordionOptions<TItem, TKey>> & { ref?: Ref<AccordionRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -145,31 +121,34 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
-  titleKeyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }, {
-    tmplOption: "titleTemplate",
-    render: "titleRender",
-    component: "titleComponent",
-    keyFn: "titleKeyFn"
-  }];
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        }, {
+          tmplOption: "titleTemplate",
+          render: "titleRender",
+          component: "titleComponent"
+        }],
+})
 
 export default Accordion;
 export {
   Accordion,
   IAccordionOptions,
+  AccordionRef,
   Item,
   IItemProps
 };

@@ -1,53 +1,62 @@
 /* eslint-disable max-classes-per-file */
 import { render } from '@testing-library/react';
 import * as React from 'react';
+import { memo } from 'react';
 import ConfigurationComponent from '../../../nested-option';
 import { Template } from '../../../template';
 
 import {
   ElementType,
+  IElementDescriptor,
   getElementInfo,
 } from '../element';
 
-class MinimalConfigurationComponent extends ConfigurationComponent<any> {
-  public static OptionName = 'option';
+const MinimalConfigurationComponent = memo(function MinimalConfigurationComponent(props: any) {
+  return (
+    <ConfigurationComponent<any>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & IElementDescriptor;
 
-  public static IsCollectionItem = false;
-}
+MinimalConfigurationComponent.OptionName = 'option';
+MinimalConfigurationComponent.IsCollectionItem = false;
 
-class RichConfigurationComponent extends ConfigurationComponent<any> {
-  public static OptionName = 'option';
+const RichConfigurationComponent = memo(function RichConfigurationComponent(props: any) {
+  return (
+    <ConfigurationComponent<any>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & IElementDescriptor;
 
-  public static IsCollectionItem = false;
+RichConfigurationComponent.OptionName = 'option';
+RichConfigurationComponent.IsCollectionItem = false;
+RichConfigurationComponent.DefaultsProps = { defaultValue: 'value' };
+RichConfigurationComponent.TemplateProps = [{
+  tmplOption: 'template',
+  render: 'render',
+  component: 'component',
+}];
+RichConfigurationComponent.PredefinedProps = { type: 'numeric' };
 
-  public static DefaultsProps = { defaultValue: 'value' };
+const CollectionConfigurationComponent = memo(function CollectionConfigurationComponent(props: any) {
+  return (
+    <ConfigurationComponent<any>
+      {...props}
+    />
+  );
+}) as React.MemoExoticComponent<any> & IElementDescriptor;
 
-  public static TemplateProps = [{
-    tmplOption: 'template',
-    render: 'render',
-    component: 'component',
-    keyFn: 'keyFn',
-  }];
-
-  public static PredefinedProps = { type: 'numeric' };
-}
-
-class CollectionConfigurationComponent extends ConfigurationComponent<any> {
-  public static OptionName = 'option';
-
-  public static IsCollectionItem = true;
-
-  public static DefaultsProps = { defaultValue: 'value' };
-
-  public static TemplateProps = [{
-    tmplOption: 'template',
-    render: 'render',
-    component: 'component',
-    keyFn: 'keyFn',
-  }];
-
-  public static PredefinedProps = { type: 'numeric' };
-}
+CollectionConfigurationComponent.OptionName = 'option';
+CollectionConfigurationComponent.IsCollectionItem = true;
+CollectionConfigurationComponent.DefaultsProps = { defaultValue: 'value' };
+CollectionConfigurationComponent.TemplateProps = [{
+  tmplOption: 'template',
+  render: 'render',
+  component: 'component',
+}];
+CollectionConfigurationComponent.PredefinedProps = { type: 'numeric' };
 
 const configurationComponents: any[] = [
   MinimalConfigurationComponent,
