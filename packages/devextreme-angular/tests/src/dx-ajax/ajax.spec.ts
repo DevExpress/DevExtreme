@@ -230,7 +230,7 @@ describe('Ajax request using DxAjaxModule', () => {
     });
   });
 
-  it('should request jsonp (same domain) create callback, interceptor is called and call it', (done) => {
+  it('should request jsonp (same domain) create callback and call it, interceptor is called ', (done) => {
     const url = '/same-domain';
     const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
 
@@ -250,5 +250,28 @@ describe('Ajax request using DxAjaxModule', () => {
     expect(req.request.urlWithParams).toContain(`${url}?callback1=callbackName&`);
 
     req.flush('callbackName({ok: 1})');
+  });
+
+  it('should request script (same domain) and evaluate it, interceptor is called', (done) => {
+    const url = '/same-domain/script';
+    const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
+    const document = domAdapter.getDocument();
+    (document.defaultView as any).callback = () => {};
+    const callbackSpy = spyOn(document.defaultView as any, 'callback');
+
+    ajax.sendRequest({
+      url,
+      dataType: 'script',
+    }).done(() => {
+      expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
+      expect(callbackSpy).toHaveBeenCalledTimes(1);
+      done();
+    });
+
+    const [req] = httpTestingControllerMock.match(() => true);
+
+    expect(req.request.urlWithParams).toContain(url);
+
+    req.flush('callback()');
   });
 });
