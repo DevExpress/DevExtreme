@@ -104,9 +104,10 @@ function patchOptions(options: Options) {
   return patchedOptions;
 }
 
-function rejectIfAborted(deferred, xhrSurrogate: XHRSurrogate) {
+function rejectIfAborted(deferred, xhrSurrogate: XHRSurrogate, callback?: () => void) {
   if (xhrSurrogate.aborted) {
     deferred.reject({ status: STATUS_ABORT, statusText: 'aborted', ok: false });
+    callback?.();
   }
 }
 
@@ -163,7 +164,9 @@ function getRequestCallbacks(options: Options, deferred, xhrSurrogate: XHRSurrog
       return deferred.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
     },
     complete() {
-      rejectIfAborted(deferred, xhrSurrogate);
+      rejectIfAborted(deferred, xhrSurrogate, () => {
+        options.upload?.onabort?.(xhrSurrogate);
+      });
     },
   };
 }
@@ -208,9 +211,12 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Opti
   const options = patchOptions(sendOptions);
   const headers = getRequestHeaders(options);
   const xhrSurrogate: XHRSurrogate = {
-    type: 'XMLHttpRequestSurrogate', // needs only for testing
+    type: 'XMLHttpRequestSurrogate',
     aborted: false,
-    abort() { result.abort(); },
+    abort() {
+      this.aborted = true;
+      abort$.next();
+    },
   };
 
   if (!options.crossDomain && isJSONP) {
@@ -222,13 +228,9 @@ export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Opti
   const { url, parameters: data } = getRequestOptions(options, headers);
   const { upload, beforeSend, xhrFields } = options;
 
-  result.abort = () => {
-    xhrSurrogate.aborted = true;
-    abort$.next();
-    upload?.onabort?.(xhrSurrogate);
-  };
+  result.abort = () => xhrSurrogate.abort();
 
-  if (options.crossDomain && isScript) {
+  if (options.crossDomain && isScript && !xhrSurrogate.aborted) {
     return sendRequestByScript(url, deferred, xhrSurrogate, result);
   }
 

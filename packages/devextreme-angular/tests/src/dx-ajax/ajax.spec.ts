@@ -175,6 +175,34 @@ describe('Ajax request using DxAjaxModule', () => {
     }, 500);
   });
 
+  it('fileUploader should be aborted', (done) => {
+    const callbacks = {
+      onUploadAborted() {},
+      onUploaded() {},
+    };
+
+    const onAbortSpy = spyOn(callbacks, 'onUploadAborted');
+    const onUploadedSpy = spyOn(callbacks, 'onUploaded');
+
+    const fixture = TestBed.createComponent(TestFileUploaderComponent);
+    fixture.detectChanges();
+
+    const { instance } = fixture.componentInstance.fileUploader;
+    instance.option('onUploadAborted', callbacks.onUploadAborted)
+
+    instance.upload();
+
+    httpTestingControllerMock.expectOne('https://js.devexpress.com/Demos/NetCore/FileUploader/Upload');
+
+    instance.abortUpload();
+
+    setTimeout(() => {
+      expect(onAbortSpy).toHaveBeenCalledTimes(1);
+      expect(onUploadedSpy).toHaveBeenCalledTimes(0);
+      done();
+    }, 0);
+  });
+
   it('JSONP cross domain request should be intercepted', (done) => {
     const interceptorFnSpy = spyOn(interceptors, 'interceptorFn');
     const url = 'http://somefakedomain1221.com/json-url';
