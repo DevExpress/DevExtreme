@@ -152,7 +152,7 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
-    generateInfernoComponents('./', transpileConfig.tsCjs),
+    generateInfernoComponents('./', transpileConfig.cjs),
     ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm)),
     ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs)),
     processRenovationMeta
