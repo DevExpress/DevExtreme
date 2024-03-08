@@ -72,7 +72,7 @@ QUnit.module('Behavior', moduleConfig, () => {
                 }
             });
 
-            const $collapseButton = this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+            const $collapseButton = $(this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
 
             $collapseButton.trigger('dxclick');
         });
@@ -83,7 +83,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             this.reinit({ [handler]: handlerStub });
 
-            const $collapseButton = this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+            const $collapseButton = $(this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
 
             $collapseButton.trigger('dxclick');
 

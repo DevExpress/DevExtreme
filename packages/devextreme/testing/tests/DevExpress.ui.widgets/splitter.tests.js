@@ -439,9 +439,9 @@ QUnit.module('Events', moduleConfig, () => {
             dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
         });
 
-        const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+        const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
 
-        $collapsePrevButton.trigger('dxclick');
+        $collapseNextButton.trigger('dxclick');
 
         assert.strictEqual(onItemExpanded.callCount, 1);
     });
@@ -459,7 +459,7 @@ QUnit.module('Events', moduleConfig, () => {
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).parent().is($resizeHandle), true, 'event field is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
-                    assert.strictEqual(itemData, { text: 'pane 1' }, 'itemData field is correct');
+                    assert.deepEqual(itemData, { text: 'pane 1' }, 'itemData field is correct');
                 },
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
             });
