@@ -143,23 +143,18 @@ describe('Ajax request using DxAjaxModule', () => {
       onUploaded() {},
     };
 
-    const beforeSendSpy = spyOn(callbacks, 'onBeforeSend');
-    const onProgressSpy = spyOn(callbacks, 'onProgress');
-    const onUploadStartedSpy = spyOn(callbacks, 'onUploadStarted');
-    const onUploadedSpy = spyOn(callbacks, 'onUploaded');
-
     const fixture = TestBed.createComponent(TestFileUploaderComponent);
     fixture.detectChanges();
 
     const { instance } = fixture.componentInstance.fileUploader;
 
-    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb]));
+    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb] = createSpy()));
 
     instance.upload();
 
     expect(interceptorFnSpy).toHaveBeenCalledTimes(1);
-    expect(beforeSendSpy).toHaveBeenCalledTimes(1);
-    expect(onUploadStartedSpy).toHaveBeenCalledTimes(1);
+    expect(callbacks.onBeforeSend).toHaveBeenCalledTimes(1);
+    expect(callbacks.onUploadStarted).toHaveBeenCalledTimes(1);
 
     const req = httpTestingControllerMock.expectOne('https://js.devexpress.com/Demos/NetCore/FileUploader/Upload');
 
@@ -168,37 +163,38 @@ describe('Ajax request using DxAjaxModule', () => {
     setTimeout(() => {
       const resultText = instance.element().querySelector('.dx-fileuploader-file-status-message')?.textContent;
 
-      expect(onProgressSpy).toHaveBeenCalledTimes(1);
-      expect(onUploadedSpy).toHaveBeenCalledTimes(1);
+      expect(callbacks.onProgress).toHaveBeenCalledTimes(1);
+      expect(callbacks.onUploaded).toHaveBeenCalledTimes(1);
       expect(resultText).toEqual('Uploaded');
       done();
     }, 500);
   });
 
-  it('fileUploader should be aborted', (done) => {
+  it('fileUploader should be aborted and callbacks are called correctly', (done) => {
     const callbacks = {
       onUploadAborted() {},
       onUploaded() {},
+      onUploadStarted() {},
     };
-
-    const onAbortSpy = spyOn(callbacks, 'onUploadAborted');
-    const onUploadedSpy = spyOn(callbacks, 'onUploaded');
 
     const fixture = TestBed.createComponent(TestFileUploaderComponent);
     fixture.detectChanges();
 
     const { instance } = fixture.componentInstance.fileUploader;
-    instance.option('onUploadAborted', callbacks.onUploadAborted)
+
+    Object.keys(callbacks).forEach((cb) => instance.option(cb, callbacks[cb] = createSpy()));
 
     instance.upload();
+
+    expect(callbacks.onUploadStarted).toHaveBeenCalledTimes(1);
 
     httpTestingControllerMock.expectOne('https://js.devexpress.com/Demos/NetCore/FileUploader/Upload');
 
     instance.abortUpload();
 
     setTimeout(() => {
-      expect(onAbortSpy).toHaveBeenCalledTimes(1);
-      expect(onUploadedSpy).toHaveBeenCalledTimes(0);
+      expect(callbacks.onUploadAborted).toHaveBeenCalledTimes(1);
+      expect(callbacks.onUploaded).toHaveBeenCalledTimes(0);
       done();
     }, 0);
   });
