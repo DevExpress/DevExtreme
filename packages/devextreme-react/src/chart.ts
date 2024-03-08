@@ -268,14 +268,14 @@ const Annotation: typeof _componentAnnotation & IElementDescriptor = Object.assi
     shadow: { optionName: "shadow", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }, {
-          tmplOption: "tooltipTemplate",
-          render: "tooltipRender",
-          component: "tooltipComponent"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "tooltipTemplate",
+    render: "tooltipRender",
+    component: "tooltipComponent"
+  }],
 })
 
 // owners:
@@ -527,8 +527,8 @@ const _componentArgumentAxis = memo(
 const ArgumentAxis: typeof _componentArgumentAxis & IElementDescriptor = Object.assign(_componentArgumentAxis, {
   OptionName: "argumentAxis",
   DefaultsProps: {
-        defaultCategories: "categories",
-        defaultVisualRange: "visualRange"
+    defaultCategories: "categories",
+    defaultVisualRange: "visualRange"
   },
   ExpectedChildren: {
     aggregationInterval: { optionName: "aggregationInterval", isCollectionItem: false },
@@ -654,10 +654,10 @@ const _componentAxisLabel = memo(
 const AxisLabel: typeof _componentAxisLabel & IElementDescriptor = Object.assign(_componentAxisLabel, {
   OptionName: "label",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -914,14 +914,14 @@ const _componentCommonAnnotationSettings = memo(
 const CommonAnnotationSettings: typeof _componentCommonAnnotationSettings & IElementDescriptor = Object.assign(_componentCommonAnnotationSettings, {
   OptionName: "commonAnnotationSettings",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }, {
-          tmplOption: "tooltipTemplate",
-          render: "tooltipRender",
-          component: "tooltipComponent"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "tooltipTemplate",
+    render: "tooltipRender",
+    component: "tooltipComponent"
+  }],
 })
 
 // owners:
@@ -1106,10 +1106,10 @@ const _componentCommonAxisSettingsLabel = memo(
 const CommonAxisSettingsLabel: typeof _componentCommonAxisSettingsLabel & IElementDescriptor = Object.assign(_componentCommonAxisSettingsLabel, {
   OptionName: "label",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -1994,10 +1994,10 @@ const _componentLabel = memo(
 const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
   OptionName: "label",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -2076,10 +2076,10 @@ const Legend: typeof _componentLegend & IElementDescriptor = Object.assign(_comp
     title: { optionName: "title", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "markerTemplate",
-          render: "markerRender",
-          component: "markerComponent"
-        }],
+    tmplOption: "markerTemplate",
+    render: "markerRender",
+    component: "markerComponent"
+  }],
 })
 
 // owners:
@@ -2181,7 +2181,7 @@ const _componentLoadingIndicator = memo(
 const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
   OptionName: "loadingIndicator",
   DefaultsProps: {
-        defaultShow: "show"
+    defaultShow: "show"
   },
   ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
@@ -3083,10 +3083,10 @@ const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_co
     tooltipBorder: { optionName: "border", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "contentTemplate",
-          render: "contentRender",
-          component: "contentComponent"
-        }],
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }],
 })
 
 // owners:
@@ -3324,8 +3324,8 @@ const ValueAxis: typeof _componentValueAxis & IElementDescriptor = Object.assign
   OptionName: "valueAxis",
   IsCollectionItem: true,
   DefaultsProps: {
-        defaultCategories: "categories",
-        defaultVisualRange: "visualRange"
+    defaultCategories: "categories",
+    defaultVisualRange: "visualRange"
   },
   ExpectedChildren: {
     axisConstantLineStyle: { optionName: "constantLineStyle", isCollectionItem: false },
@@ -3429,8 +3429,8 @@ const _componentVisualRange = memo(
 const VisualRange: typeof _componentVisualRange & IElementDescriptor = Object.assign(_componentVisualRange, {
   OptionName: "visualRange",
   DefaultsProps: {
-        defaultEndValue: "endValue",
-        defaultStartValue: "startValue"
+    defaultEndValue: "endValue",
+    defaultStartValue: "startValue"
   },
 })
 
@@ -3465,8 +3465,8 @@ const _componentWholeRange = memo(
 const WholeRange: typeof _componentWholeRange & IElementDescriptor = Object.assign(_componentWholeRange, {
   OptionName: "wholeRange",
   DefaultsProps: {
-        defaultEndValue: "endValue",
-        defaultStartValue: "startValue"
+    defaultEndValue: "endValue",
+    defaultStartValue: "startValue"
   },
 })
 

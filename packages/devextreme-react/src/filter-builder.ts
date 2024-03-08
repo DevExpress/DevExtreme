@@ -105,10 +105,10 @@ const CustomOperation: typeof _componentCustomOperation & IElementDescriptor = O
   OptionName: "customOperations",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "editorTemplate",
-          render: "editorRender",
-          component: "editorComponent"
-        }],
+    tmplOption: "editorTemplate",
+    render: "editorRender",
+    component: "editorComponent"
+  }],
 })
 
 // owners:
@@ -149,10 +149,10 @@ const Field: typeof _componentField & IElementDescriptor = Object.assign(_compon
     lookup: { optionName: "lookup", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "editorTemplate",
-          render: "editorRender",
-          component: "editorComponent"
-        }],
+    tmplOption: "editorTemplate",
+    render: "editorRender",
+    component: "editorComponent"
+  }],
 })
 
 // owners:

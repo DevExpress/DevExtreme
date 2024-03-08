@@ -291,7 +291,7 @@ const _componentLoadingIndicator = memo(
 const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
   OptionName: "loadingIndicator",
   DefaultsProps: {
-        defaultShow: "show"
+    defaultShow: "show"
   },
   ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
@@ -671,10 +671,10 @@ const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_co
     shadow: { optionName: "shadow", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "contentTemplate",
-          render: "contentRender",
-          component: "contentComponent"
-        }],
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }],
 })
 
 // owners:

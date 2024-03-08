@@ -125,14 +125,14 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 export default Toolbar;

@@ -298,14 +298,14 @@ const CustomShape: typeof _componentCustomShape & IElementDescriptor = Object.as
     connectionPoint: { optionName: "connectionPoints", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }, {
-          tmplOption: "toolboxTemplate",
-          render: "toolboxRender",
-          component: "toolboxComponent"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "toolboxTemplate",
+    render: "toolboxRender",
+    component: "toolboxComponent"
+  }],
 })
 
 // owners:
@@ -416,7 +416,7 @@ const _componentGridSize = memo(
 const GridSize: typeof _componentGridSize & IElementDescriptor = Object.assign(_componentGridSize, {
   OptionName: "gridSize",
   DefaultsProps: {
-        defaultValue: "value"
+    defaultValue: "value"
   },
 })
 
@@ -567,8 +567,8 @@ const _componentPageSize = memo(
 const PageSize: typeof _componentPageSize & IElementDescriptor = Object.assign(_componentPageSize, {
   OptionName: "pageSize",
   DefaultsProps: {
-        defaultHeight: "height",
-        defaultWidth: "width"
+    defaultHeight: "height",
+    defaultWidth: "width"
   },
   ExpectedChildren: {
     item: { optionName: "items", isCollectionItem: true },
@@ -751,7 +751,7 @@ const _componentZoomLevel = memo(
 const ZoomLevel: typeof _componentZoomLevel & IElementDescriptor = Object.assign(_componentZoomLevel, {
   OptionName: "zoomLevel",
   DefaultsProps: {
-        defaultValue: "value"
+    defaultValue: "value"
   },
 })
 

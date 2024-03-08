@@ -110,10 +110,10 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 export default ButtonGroup;

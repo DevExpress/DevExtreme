@@ -976,7 +976,7 @@ const _componentLoadingIndicator = memo(
 const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
   OptionName: "loadingIndicator",
   DefaultsProps: {
-        defaultShow: "show"
+    defaultShow: "show"
   },
   ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
@@ -1958,8 +1958,8 @@ const _componentValue = memo(
 const Value: typeof _componentValue & IElementDescriptor = Object.assign(_componentValue, {
   OptionName: "value",
   DefaultsProps: {
-        defaultEndValue: "endValue",
-        defaultStartValue: "startValue"
+    defaultEndValue: "endValue",
+    defaultStartValue: "startValue"
   },
   ExpectedChildren: {
     length: { optionName: "length", isCollectionItem: false }

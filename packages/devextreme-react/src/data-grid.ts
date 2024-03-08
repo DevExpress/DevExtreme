@@ -307,10 +307,10 @@ const Button: typeof _componentButton & IElementDescriptor = Object.assign(_comp
   OptionName: "buttons",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -483,14 +483,14 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
   OptionName: "columns",
   IsCollectionItem: true,
   DefaultsProps: {
-        defaultFilterValue: "filterValue",
-        defaultFilterValues: "filterValues",
-        defaultGroupIndex: "groupIndex",
-        defaultSelectedFilterOperation: "selectedFilterOperation",
-        defaultSortIndex: "sortIndex",
-        defaultSortOrder: "sortOrder",
-        defaultVisible: "visible",
-        defaultVisibleIndex: "visibleIndex"
+    defaultFilterValue: "filterValue",
+    defaultFilterValues: "filterValues",
+    defaultGroupIndex: "groupIndex",
+    defaultSelectedFilterOperation: "selectedFilterOperation",
+    defaultSortIndex: "sortIndex",
+    defaultSortOrder: "sortOrder",
+    defaultVisible: "visible",
+    defaultVisibleIndex: "visibleIndex"
   },
   ExpectedChildren: {
     AsyncRule: { optionName: "validationRules", isCollectionItem: true },
@@ -512,22 +512,22 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
     validationRule: { optionName: "validationRules", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "cellTemplate",
-          render: "cellRender",
-          component: "cellComponent"
-        }, {
-          tmplOption: "editCellTemplate",
-          render: "editCellRender",
-          component: "editCellComponent"
-        }, {
-          tmplOption: "groupCellTemplate",
-          render: "groupCellRender",
-          component: "groupCellComponent"
-        }, {
-          tmplOption: "headerCellTemplate",
-          render: "headerCellRender",
-          component: "headerCellComponent"
-        }],
+    tmplOption: "cellTemplate",
+    render: "cellRender",
+    component: "cellComponent"
+  }, {
+    tmplOption: "editCellTemplate",
+    render: "editCellRender",
+    component: "editCellComponent"
+  }, {
+    tmplOption: "groupCellTemplate",
+    render: "groupCellRender",
+    component: "groupCellComponent"
+  }, {
+    tmplOption: "headerCellTemplate",
+    render: "headerCellRender",
+    component: "headerCellComponent"
+  }],
 })
 
 // owners:
@@ -769,10 +769,10 @@ const CustomOperation: typeof _componentCustomOperation & IElementDescriptor = O
   OptionName: "customOperations",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "editorTemplate",
-          render: "editorRender",
-          component: "editorComponent"
-        }],
+    tmplOption: "editorTemplate",
+    render: "editorRender",
+    component: "editorComponent"
+  }],
 })
 
 // owners:
@@ -932,9 +932,9 @@ const _componentEditing = memo(
 const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
   OptionName: "editing",
   DefaultsProps: {
-        defaultChanges: "changes",
-        defaultEditColumnName: "editColumnName",
-        defaultEditRowKey: "editRowKey"
+    defaultChanges: "changes",
+    defaultEditColumnName: "editColumnName",
+    defaultEditRowKey: "editRowKey"
   },
   ExpectedChildren: {
     change: { optionName: "changes", isCollectionItem: true },
@@ -1074,10 +1074,10 @@ const Field: typeof _componentField & IElementDescriptor = Object.assign(_compon
     lookup: { optionName: "lookup", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "editorTemplate",
-          render: "editorRender",
-          component: "editorComponent"
-        }],
+    tmplOption: "editorTemplate",
+    render: "editorRender",
+    component: "editorComponent"
+  }],
 })
 
 // owners:
@@ -1160,7 +1160,7 @@ const _componentFilterBuilder = memo(
 const FilterBuilder: typeof _componentFilterBuilder & IElementDescriptor = Object.assign(_componentFilterBuilder, {
   OptionName: "filterBuilder",
   DefaultsProps: {
-        defaultValue: "value"
+    defaultValue: "value"
   },
   ExpectedChildren: {
     customOperation: { optionName: "customOperations", isCollectionItem: true },
@@ -1248,20 +1248,20 @@ const _componentFilterBuilderPopup = memo(
 const FilterBuilderPopup: typeof _componentFilterBuilderPopup & IElementDescriptor = Object.assign(_componentFilterBuilderPopup, {
   OptionName: "filterBuilderPopup",
   DefaultsProps: {
-        defaultHeight: "height",
-        defaultPosition: "position",
-        defaultVisible: "visible",
-        defaultWidth: "width"
+    defaultHeight: "height",
+    defaultPosition: "position",
+    defaultVisible: "visible",
+    defaultWidth: "width"
   },
   TemplateProps: [{
-          tmplOption: "contentTemplate",
-          render: "contentRender",
-          component: "contentComponent"
-        }, {
-          tmplOption: "titleTemplate",
-          render: "titleRender",
-          component: "titleComponent"
-        }],
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }, {
+    tmplOption: "titleTemplate",
+    render: "titleRender",
+    component: "titleComponent"
+  }],
 })
 
 // owners:
@@ -1314,7 +1314,7 @@ const _componentFilterPanel = memo(
 const FilterPanel: typeof _componentFilterPanel & IElementDescriptor = Object.assign(_componentFilterPanel, {
   OptionName: "filterPanel",
   DefaultsProps: {
-        defaultFilterEnabled: "filterEnabled"
+    defaultFilterEnabled: "filterEnabled"
   },
   ExpectedChildren: {
     filterPanelTexts: { optionName: "texts", isCollectionItem: false },
@@ -1438,7 +1438,7 @@ const _componentForm = memo(
 const Form: typeof _componentForm & IElementDescriptor = Object.assign(_componentForm, {
   OptionName: "form",
   DefaultsProps: {
-        defaultFormData: "formData"
+    defaultFormData: "formData"
   },
   ExpectedChildren: {
     colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
@@ -1515,10 +1515,10 @@ const FormItem: typeof _componentFormItem & IElementDescriptor = Object.assign(_
     validationRule: { optionName: "validationRules", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -1655,7 +1655,7 @@ const _componentGroupPanel = memo(
 const GroupPanel: typeof _componentGroupPanel & IElementDescriptor = Object.assign(_componentGroupPanel, {
   OptionName: "groupPanel",
   DefaultsProps: {
-        defaultVisible: "visible"
+    defaultVisible: "visible"
   },
 })
 
@@ -1748,14 +1748,14 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -1797,10 +1797,10 @@ const _componentLabel = memo(
 const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
   OptionName: "label",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -1864,10 +1864,10 @@ const _componentMasterDetail = memo(
 const MasterDetail: typeof _componentMasterDetail & IElementDescriptor = Object.assign(_componentMasterDetail, {
   OptionName: "masterDetail",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -1991,8 +1991,8 @@ const _componentPaging = memo(
 const Paging: typeof _componentPaging & IElementDescriptor = Object.assign(_componentPaging, {
   OptionName: "paging",
   DefaultsProps: {
-        defaultPageIndex: "pageIndex",
-        defaultPageSize: "pageSize"
+    defaultPageIndex: "pageIndex",
+    defaultPageSize: "pageSize"
   },
 })
 
@@ -2097,10 +2097,10 @@ const _componentPopup = memo(
 const Popup: typeof _componentPopup & IElementDescriptor = Object.assign(_componentPopup, {
   OptionName: "popup",
   DefaultsProps: {
-        defaultHeight: "height",
-        defaultPosition: "position",
-        defaultVisible: "visible",
-        defaultWidth: "width"
+    defaultHeight: "height",
+    defaultPosition: "position",
+    defaultVisible: "visible",
+    defaultWidth: "width"
   },
   ExpectedChildren: {
     animation: { optionName: "animation", isCollectionItem: false },
@@ -2108,14 +2108,14 @@ const Popup: typeof _componentPopup & IElementDescriptor = Object.assign(_compon
     toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "contentTemplate",
-          render: "contentRender",
-          component: "contentComponent"
-        }, {
-          tmplOption: "titleTemplate",
-          render: "titleRender",
-          component: "titleComponent"
-        }],
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }, {
+    tmplOption: "titleTemplate",
+    render: "titleRender",
+    component: "titleComponent"
+  }],
 })
 
 // owners:
@@ -2267,10 +2267,10 @@ const RowDragging: typeof _componentRowDragging & IElementDescriptor = Object.as
     cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "dragTemplate",
-          render: "dragRender",
-          component: "dragComponent"
-        }],
+    tmplOption: "dragTemplate",
+    render: "dragRender",
+    component: "dragComponent"
+  }],
 })
 
 // owners:
@@ -2339,7 +2339,7 @@ const _componentSearchPanel = memo(
 const SearchPanel: typeof _componentSearchPanel & IElementDescriptor = Object.assign(_componentSearchPanel, {
   OptionName: "searchPanel",
   DefaultsProps: {
-        defaultText: "text"
+    defaultText: "text"
   },
 })
 
@@ -2680,14 +2680,14 @@ const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.as
   OptionName: "toolbarItems",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:

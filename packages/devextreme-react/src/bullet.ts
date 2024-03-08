@@ -231,10 +231,10 @@ const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_co
     shadow: { optionName: "shadow", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "contentTemplate",
-          render: "contentRender",
-          component: "contentComponent"
-        }],
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }],
 })
 
 export default Bullet;

@@ -298,38 +298,38 @@ const View: typeof _componentView & IElementDescriptor = Object.assign(_componen
     scrolling: { optionName: "scrolling", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "appointmentCollectorTemplate",
-          render: "appointmentCollectorRender",
-          component: "appointmentCollectorComponent"
-        }, {
-          tmplOption: "appointmentTemplate",
-          render: "appointmentRender",
-          component: "appointmentComponent"
-        }, {
-          tmplOption: "appointmentTooltipTemplate",
-          render: "appointmentTooltipRender",
-          component: "appointmentTooltipComponent"
-        }, {
-          tmplOption: "dataCellTemplate",
-          render: "dataCellRender",
-          component: "dataCellComponent"
-        }, {
-          tmplOption: "dateCellTemplate",
-          render: "dateCellRender",
-          component: "dateCellComponent"
-        }, {
-          tmplOption: "dropDownAppointmentTemplate",
-          render: "dropDownAppointmentRender",
-          component: "dropDownAppointmentComponent"
-        }, {
-          tmplOption: "resourceCellTemplate",
-          render: "resourceCellRender",
-          component: "resourceCellComponent"
-        }, {
-          tmplOption: "timeCellTemplate",
-          render: "timeCellRender",
-          component: "timeCellComponent"
-        }],
+    tmplOption: "appointmentCollectorTemplate",
+    render: "appointmentCollectorRender",
+    component: "appointmentCollectorComponent"
+  }, {
+    tmplOption: "appointmentTemplate",
+    render: "appointmentRender",
+    component: "appointmentComponent"
+  }, {
+    tmplOption: "appointmentTooltipTemplate",
+    render: "appointmentTooltipRender",
+    component: "appointmentTooltipComponent"
+  }, {
+    tmplOption: "dataCellTemplate",
+    render: "dataCellRender",
+    component: "dataCellComponent"
+  }, {
+    tmplOption: "dateCellTemplate",
+    render: "dateCellRender",
+    component: "dateCellComponent"
+  }, {
+    tmplOption: "dropDownAppointmentTemplate",
+    render: "dropDownAppointmentRender",
+    component: "dropDownAppointmentComponent"
+  }, {
+    tmplOption: "resourceCellTemplate",
+    render: "resourceCellRender",
+    component: "resourceCellComponent"
+  }, {
+    tmplOption: "timeCellTemplate",
+    render: "timeCellRender",
+    component: "timeCellComponent"
+  }],
 })
 
 export default Scheduler;

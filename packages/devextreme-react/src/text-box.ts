@@ -143,10 +143,10 @@ const _componentOptions = memo(
 const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
   OptionName: "options",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 export default TextBox;

@@ -179,10 +179,10 @@ const _componentButtonOptions = memo(
 const ButtonOptions: typeof _componentButtonOptions & IElementDescriptor = Object.assign(_componentButtonOptions, {
   OptionName: "buttonOptions",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -335,14 +335,14 @@ const GroupItem: typeof _componentGroupItem & IElementDescriptor = Object.assign
     colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "captionTemplate",
-          render: "captionRender",
-          component: "captionComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "captionTemplate",
+    render: "captionRender",
+    component: "captionComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
   PredefinedProps: {
     itemType: "group"
   },
@@ -429,18 +429,18 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "tabTemplate",
-          render: "tabRender",
-          component: "tabComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }, {
-          tmplOption: "captionTemplate",
-          render: "captionRender",
-          component: "captionComponent"
-        }],
+    tmplOption: "tabTemplate",
+    render: "tabRender",
+    component: "tabComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "captionTemplate",
+    render: "captionRender",
+    component: "captionComponent"
+  }],
 })
 
 // owners:
@@ -464,10 +464,10 @@ const _componentLabel = memo(
 const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
   OptionName: "label",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -608,10 +608,10 @@ const SimpleItem: typeof _componentSimpleItem & IElementDescriptor = Object.assi
     validationRule: { optionName: "validationRules", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
   PredefinedProps: {
     itemType: "simple"
   },
@@ -677,14 +677,14 @@ const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentT
     colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "tabTemplate",
-          render: "tabRender",
-          component: "tabComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "tabTemplate",
+    render: "tabRender",
+    component: "tabComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -800,23 +800,23 @@ const _componentTabPanelOptions = memo(
 const TabPanelOptions: typeof _componentTabPanelOptions & IElementDescriptor = Object.assign(_componentTabPanelOptions, {
   OptionName: "tabPanelOptions",
   DefaultsProps: {
-        defaultItems: "items",
-        defaultSelectedIndex: "selectedIndex",
-        defaultSelectedItem: "selectedItem"
+    defaultItems: "items",
+    defaultSelectedIndex: "selectedIndex",
+    defaultSelectedItem: "selectedItem"
   },
   ExpectedChildren: {
     item: { optionName: "items", isCollectionItem: true },
     tabPanelOptionsItem: { optionName: "items", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "itemTemplate",
-          render: "itemRender",
-          component: "itemComponent"
-        }, {
-          tmplOption: "itemTitleTemplate",
-          render: "itemTitleRender",
-          component: "itemTitleComponent"
-        }],
+    tmplOption: "itemTemplate",
+    render: "itemRender",
+    component: "itemComponent"
+  }, {
+    tmplOption: "itemTitleTemplate",
+    render: "itemTitleRender",
+    component: "itemTitleComponent"
+  }],
 })
 
 // owners:
@@ -845,14 +845,14 @@ const TabPanelOptionsItem: typeof _componentTabPanelOptionsItem & IElementDescri
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "tabTemplate",
-          render: "tabRender",
-          component: "tabComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "tabTemplate",
+    render: "tabRender",
+    component: "tabComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:

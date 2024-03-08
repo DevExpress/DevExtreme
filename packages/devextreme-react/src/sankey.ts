@@ -341,7 +341,7 @@ const _componentLoadingIndicator = memo(
 const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
   OptionName: "loadingIndicator",
   DefaultsProps: {
-        defaultShow: "show"
+    defaultShow: "show"
   },
   ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
@@ -581,14 +581,14 @@ const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_co
     tooltipBorder: { optionName: "border", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "linkTooltipTemplate",
-          render: "linkTooltipRender",
-          component: "linkTooltipComponent"
-        }, {
-          tmplOption: "nodeTooltipTemplate",
-          render: "nodeTooltipRender",
-          component: "nodeTooltipComponent"
-        }],
+    tmplOption: "linkTooltipTemplate",
+    render: "linkTooltipRender",
+    component: "linkTooltipComponent"
+  }, {
+    tmplOption: "nodeTooltipTemplate",
+    render: "nodeTooltipRender",
+    component: "nodeTooltipComponent"
+  }],
 })
 
 // owners:

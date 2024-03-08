@@ -140,10 +140,10 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
     location: { optionName: "location", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:

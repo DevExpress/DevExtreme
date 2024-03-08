@@ -353,14 +353,14 @@ const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.as
   OptionName: "toolbarItems",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 export default Popup;

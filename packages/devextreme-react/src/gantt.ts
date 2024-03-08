@@ -217,13 +217,13 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
   OptionName: "columns",
   IsCollectionItem: true,
   DefaultsProps: {
-        defaultFilterValue: "filterValue",
-        defaultFilterValues: "filterValues",
-        defaultSelectedFilterOperation: "selectedFilterOperation",
-        defaultSortIndex: "sortIndex",
-        defaultSortOrder: "sortOrder",
-        defaultVisible: "visible",
-        defaultVisibleIndex: "visibleIndex"
+    defaultFilterValue: "filterValue",
+    defaultFilterValues: "filterValues",
+    defaultSelectedFilterOperation: "selectedFilterOperation",
+    defaultSortIndex: "sortIndex",
+    defaultSortOrder: "sortOrder",
+    defaultVisible: "visible",
+    defaultVisibleIndex: "visibleIndex"
   },
   ExpectedChildren: {
     columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
@@ -231,14 +231,14 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
     headerFilter: { optionName: "headerFilter", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "cellTemplate",
-          render: "cellRender",
-          component: "cellComponent"
-        }, {
-          tmplOption: "headerCellTemplate",
-          render: "headerCellRender",
-          component: "headerCellComponent"
-        }],
+    tmplOption: "cellTemplate",
+    render: "cellRender",
+    component: "cellComponent"
+  }, {
+    tmplOption: "headerCellTemplate",
+    render: "headerCellRender",
+    component: "headerCellComponent"
+  }],
 })
 
 // owners:
@@ -333,10 +333,10 @@ const ContextMenuItem: typeof _componentContextMenuItem & IElementDescriptor = O
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -535,14 +535,14 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }, {
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }],
 })
 
 // owners:
@@ -769,14 +769,14 @@ const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.as
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:

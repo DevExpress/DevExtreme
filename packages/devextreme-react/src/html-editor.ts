@@ -166,7 +166,7 @@ const _componentFileUploaderOptions = memo(
 const FileUploaderOptions: typeof _componentFileUploaderOptions & IElementDescriptor = Object.assign(_componentFileUploaderOptions, {
   OptionName: "fileUploaderOptions",
   DefaultsProps: {
-        defaultValue: "value"
+    defaultValue: "value"
   },
 })
 
@@ -235,14 +235,14 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }, {
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }, {
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }],
 })
 
 // owners:
@@ -288,14 +288,14 @@ const Mention: typeof _componentMention & IElementDescriptor = Object.assign(_co
   OptionName: "mentions",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "itemTemplate",
-          render: "itemRender",
-          component: "itemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "itemTemplate",
+    render: "itemRender",
+    component: "itemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -362,10 +362,10 @@ const TableContextMenuItem: typeof _componentTableContextMenuItem & IElementDesc
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -440,14 +440,14 @@ const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.as
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:

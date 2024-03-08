@@ -179,10 +179,10 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -238,10 +238,10 @@ const ItemDragging: typeof _componentItemDragging & IElementDescriptor = Object.
     cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
   },
   TemplateProps: [{
-          tmplOption: "dragTemplate",
-          render: "dragRender",
-          component: "dragComponent"
-        }],
+    tmplOption: "dragTemplate",
+    render: "dragRender",
+    component: "dragComponent"
+  }],
 })
 
 // owners:
@@ -301,10 +301,10 @@ const _componentOptions = memo(
 const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
   OptionName: "options",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -378,7 +378,7 @@ const _componentSearchEditorOptions = memo(
 const SearchEditorOptions: typeof _componentSearchEditorOptions & IElementDescriptor = Object.assign(_componentSearchEditorOptions, {
   OptionName: "searchEditorOptions",
   DefaultsProps: {
-        defaultValue: "value"
+    defaultValue: "value"
   },
   ExpectedChildren: {
     button: { optionName: "buttons", isCollectionItem: true }

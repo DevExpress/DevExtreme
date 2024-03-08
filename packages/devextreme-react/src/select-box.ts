@@ -300,10 +300,10 @@ const _componentDropDownOptions = memo(
 const DropDownOptions: typeof _componentDropDownOptions & IElementDescriptor = Object.assign(_componentDropDownOptions, {
   OptionName: "dropDownOptions",
   DefaultsProps: {
-        defaultHeight: "height",
-        defaultPosition: "position",
-        defaultVisible: "visible",
-        defaultWidth: "width"
+    defaultHeight: "height",
+    defaultPosition: "position",
+    defaultVisible: "visible",
+    defaultWidth: "width"
   },
   ExpectedChildren: {
     animation: { optionName: "animation", isCollectionItem: false },
@@ -311,14 +311,14 @@ const DropDownOptions: typeof _componentDropDownOptions & IElementDescriptor = O
     toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
   },
   TemplateProps: [{
-          tmplOption: "contentTemplate",
-          render: "contentRender",
-          component: "contentComponent"
-        }, {
-          tmplOption: "titleTemplate",
-          render: "titleRender",
-          component: "titleComponent"
-        }],
+    tmplOption: "contentTemplate",
+    render: "contentRender",
+    component: "contentComponent"
+  }, {
+    tmplOption: "titleTemplate",
+    render: "titleRender",
+    component: "titleComponent"
+  }],
 })
 
 // owners:
@@ -392,10 +392,10 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -470,10 +470,10 @@ const _componentOptions = memo(
 const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
   OptionName: "options",
   TemplateProps: [{
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 // owners:
@@ -587,14 +587,14 @@ const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.as
   OptionName: "toolbarItems",
   IsCollectionItem: true,
   TemplateProps: [{
-          tmplOption: "menuItemTemplate",
-          render: "menuItemRender",
-          component: "menuItemComponent"
-        }, {
-          tmplOption: "template",
-          render: "render",
-          component: "component"
-        }],
+    tmplOption: "menuItemTemplate",
+    render: "menuItemRender",
+    component: "menuItemComponent"
+  }, {
+    tmplOption: "template",
+    render: "render",
+    component: "component"
+  }],
 })
 
 export default SelectBox;
