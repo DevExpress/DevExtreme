@@ -28,7 +28,7 @@ const App = () => {
   const dataGridRef = useRef<DataGrid>(null);
 
   const onValueChanged = useCallback(({ value }) => {
-    const dataGrid = dataGridRef.current.instance;
+    const dataGrid = dataGridRef.current.instance();
 
     if (value === 'All') {
       dataGrid.clearFilter();

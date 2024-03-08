@@ -138,12 +138,12 @@ function App() {
     text: 'Reset',
     width: '120px',
     onClick: () => {
-      formRef.current.instance.reset();
+      formRef.current.instance().reset();
     },
   });
 
   const changePasswordMode = useCallback((name) => {
-    const editor = formRef.current.instance.getEditor(name);
+    const editor = formRef.current.instance().getEditor(name);
     editor.option('mode', editor.option('mode') === 'text' ? 'password' : 'text');
   }, []);
 
@@ -151,7 +151,7 @@ function App() {
     mode: 'password',
     valueChangeEvent: 'keyup',
     onValueChanged: () => {
-      const editor = formRef.current.instance.getEditor('ConfirmPassword');
+      const editor = formRef.current.instance().getEditor('ConfirmPassword');
       if (editor.option('value')) {
         const instance = Validator.getInstance(editor.element()) as Validator;
         instance.validate();

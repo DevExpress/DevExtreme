@@ -55,14 +55,14 @@ const App = () => {
 
     exportDataGrid({
       worksheet: priceSheet,
-      component: priceGridRef.current.instance,
+      component: priceGridRef.current.instance(),
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
         setAlternatingRowsBackground(gridCell, excelCell);
       },
     }).then(() => exportDataGrid({
       worksheet: ratingSheet,
-      component: ratingGridRef.current.instance,
+      component: ratingGridRef.current.instance(),
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
         setAlternatingRowsBackground(gridCell, excelCell);

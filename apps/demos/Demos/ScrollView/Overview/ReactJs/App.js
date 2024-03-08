@@ -48,7 +48,7 @@ const App = () => {
   );
   const reachBottomValueChanged = useCallback(
     (args) => {
-      scrollViewRef.current.instance.option(
+      scrollViewRef.current.instance().option(
         'onReachBottom',
         args.value ? updateBottomContent : null,
       );

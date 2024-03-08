@@ -27,7 +27,7 @@ function App() {
   const chartRef = useRef(null);
   const customizePoint = useCallback((arg) => {
     if (arg.seriesName === 'Volume') {
-      const point = chartRef.current.instance
+      const point = chartRef.current.instance()
         .getAllSeries()[0]
         .getPointsByArg(arg.argument)[0].data;
       if (point && point.close >= point.open) {

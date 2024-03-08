@@ -76,7 +76,7 @@ function App() {
   const syncTreeViewSelection = useCallback(
     (e: DropDownBoxTypes.ValueChangedEvent | any) => {
       const treeView = (e.component.selectItem && e.component)
-        || (treeViewRef.current && treeViewRef.current.instance);
+        || (treeViewRef.current && treeViewRef.current.instance());
 
       if (treeView) {
         if (e.value === null) {

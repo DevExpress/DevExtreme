@@ -21,7 +21,7 @@ const App = () => {
   const dataGridRef = useRef<DataGrid>(null);
 
   const onClearButtonClicked = useCallback(() => {
-    dataGridRef.current.instance.clearSelection();
+    dataGridRef.current.instance().clearSelection();
   }, []);
 
   const onSelectionChanged = useCallback(

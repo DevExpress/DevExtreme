@@ -9,7 +9,7 @@ export default function App() {
 
   const createFile = useCallback((
     fileExtension,
-    directory = fileManagerRef.current.instance.getCurrentDirectory(),
+    directory = fileManagerRef.current.instance().getCurrentDirectory(),
   ) => {
     const newItem = {
       __KEY__: Date.now(),
@@ -43,7 +43,7 @@ export default function App() {
     if (viewArea === 'navPane') {
       items = [directory];
     } else {
-      items = fileManagerRef.current.instance.getSelectedItems();
+      items = fileManagerRef.current.instance().getSelectedItems();
     }
 
     items.forEach((item: { dataItem: { category: any; }; }) => {
@@ -66,7 +66,7 @@ export default function App() {
     }
 
     if (updated) {
-      fileManagerRef.current.instance.refresh();
+      fileManagerRef.current.instance().refresh();
     }
   }, [createFile, updateCategory]);
 

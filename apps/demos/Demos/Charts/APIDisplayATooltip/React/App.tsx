@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import PieChart, {
-  Series, Tooltip, Size, Legend, PieChartTypes,
+  Series, Tooltip, Size, Legend, PieChartTypes, PieChartRef
 } from 'devextreme-react/pie-chart';
 import { SelectBox } from 'devextreme-react/select-box';
 import { populationData, regionLabel } from './data.ts';
@@ -11,7 +11,7 @@ const customizeTooltip = (pointInfo) => ({
 
 function App() {
   const [selectedRegion, setSelectedRegion] = useState(null);
-  const pieChartRef = useRef<PieChart>(null);
+  const pieChartRef = useRef<PieChartRef>(null);
 
   const showTooltip = useCallback((point) => {
     point.showTooltip();
@@ -23,7 +23,7 @@ function App() {
   }, [showTooltip]);
 
   const onRegionChanged = useCallback(({ value }) => {
-    const point = pieChartRef.current.instance.getAllSeries()[0].getPointsByArg(value)[0];
+    const point = pieChartRef.current.instance().getAllSeries()[0].getPointsByArg(value)[0];
     showTooltip(point);
   }, [showTooltip]);
 

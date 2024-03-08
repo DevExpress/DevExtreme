@@ -14,7 +14,7 @@ import { fileItems, getItemInfo } from './data.js';
 export default function App() {
   const fileManagerRef = useRef(null);
   const createFile = useCallback(
-    (fileExtension, directory = fileManagerRef.current.instance.getCurrentDirectory()) => {
+    (fileExtension, directory = fileManagerRef.current.instance().getCurrentDirectory()) => {
       const newItem = {
         __KEY__: Date.now(),
         name: `New file${fileExtension}`,
@@ -44,7 +44,7 @@ export default function App() {
     if (viewArea === 'navPane') {
       items = [directory];
     } else {
-      items = fileManagerRef.current.instance.getSelectedItems();
+      items = fileManagerRef.current.instance().getSelectedItems();
     }
     items.forEach((item) => {
       if (item.dataItem) {
@@ -63,7 +63,7 @@ export default function App() {
         updated = updateCategory(category, fileSystemItem, viewArea);
       }
       if (updated) {
-        fileManagerRef.current.instance.refresh();
+        fileManagerRef.current.instance().refresh();
       }
     },
     [createFile, updateCategory],

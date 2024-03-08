@@ -55,7 +55,7 @@ const App = () => {
 
     if (value === 'single') {
       setSelectNodesRecursive(false);
-      treeViewRef.current.instance.unselectAll();
+      treeViewRef.current.instance().unselectAll();
     }
     setIsRecursiveDisabled(value === 'single');
   }, [setSelectionMode, setSelectNodesRecursive, setIsRecursiveDisabled]);

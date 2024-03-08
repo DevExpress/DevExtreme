@@ -72,11 +72,11 @@ const App = () => {
             <Button
               text="Apply"
               type="default"
-              onClick={() => fieldChooserRef.current.instance.applyChanges()}
+              onClick={() => fieldChooserRef.current.instance().applyChanges()}
             ></Button>
             <Button
               text="Cancel"
-              onClick={() => fieldChooserRef.current.instance.cancelChanges()}
+              onClick={() => fieldChooserRef.current.instance().cancelChanges()}
             ></Button>
           </div>
         }

@@ -27,7 +27,7 @@ const App = () => {
 
   const onAppointmentContextMenu = useCallback((event: SchedulerTypes.AppointmentContextMenuEvent) => {
     const { appointmentData, targetedAppointmentData } = event;
-    const scheduler = schedulerRef.current?.instance;
+    const scheduler = schedulerRef.current?.instance();
 
     const resourceItems: ContextMenuItem[] = resourcesData.map((item) => ({
       ...item,
@@ -67,7 +67,7 @@ const App = () => {
   , []);
 
   const onCellContextMenu = useCallback((e: SchedulerTypes.CellContextMenuEvent) => {
-    const scheduler = schedulerRef.current?.instance;
+    const scheduler = schedulerRef.current?.instance();
 
     setTarget(cellClassName);
     setDisabled(false);

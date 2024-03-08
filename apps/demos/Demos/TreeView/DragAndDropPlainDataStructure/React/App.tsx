@@ -109,8 +109,8 @@ const App = () => {
   const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
 
   const getTreeView = useCallback((driveName: string) => (driveName === 'driveC'
-    ? treeViewDriveCRef.current.instance
-    : treeViewDriveDRef.current.instance), []);
+    ? treeViewDriveCRef.current.instance()
+    : treeViewDriveDRef.current.instance()), []);
 
   const onDragChange = useCallback((e: SortableTypes.DragChangeEvent) => {
     if (e.fromComponent === e.toComponent) {

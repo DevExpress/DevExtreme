@@ -14,12 +14,12 @@ const App = () => {
   const treeViewItemContextMenu = useCallback((e) => {
     setSelectedTreeItem(e.itemData);
     const isProduct = e.itemData.price !== undefined;
-    contextMenuRef.current.instance.option('items[0].visible', !isProduct);
-    contextMenuRef.current.instance.option('items[1].visible', !isProduct);
-    contextMenuRef.current.instance.option('items[2].visible', isProduct);
-    contextMenuRef.current.instance.option('items[3].visible', isProduct);
-    contextMenuRef.current.instance.option('items[0].disabled', e.node.expanded);
-    contextMenuRef.current.instance.option('items[1].disabled', !e.node.expanded);
+    contextMenuRef.current.instance().option('items[0].visible', !isProduct);
+    contextMenuRef.current.instance().option('items[1].visible', !isProduct);
+    contextMenuRef.current.instance().option('items[2].visible', isProduct);
+    contextMenuRef.current.instance().option('items[3].visible', isProduct);
+    contextMenuRef.current.instance().option('items[0].disabled', e.node.expanded);
+    contextMenuRef.current.instance().option('items[1].disabled', !e.node.expanded);
   }, []);
   const contextMenuItemClick = useCallback(
     (e) => {
@@ -27,12 +27,12 @@ const App = () => {
       switch (e.itemData.id) {
         case 'expand': {
           logEntry = `The '${selectedTreeItem.text}' group was expanded`;
-          treeViewRef.current.instance.expandItem(selectedTreeItem.id);
+          treeViewRef.current.instance().expandItem(selectedTreeItem.id);
           break;
         }
         case 'collapse': {
           logEntry = `The '${selectedTreeItem.text}' group was collapsed`;
-          treeViewRef.current.instance.collapseItem(selectedTreeItem.id);
+          treeViewRef.current.instance().collapseItem(selectedTreeItem.id);
           break;
         }
         case 'details': {

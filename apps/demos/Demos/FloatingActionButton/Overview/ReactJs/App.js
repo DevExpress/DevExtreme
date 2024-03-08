@@ -27,16 +27,16 @@ const App = () => {
     repaintFloatingActionButton();
   }, []);
   const editRow = useCallback(() => {
-    gridRef.current.instance.editRow(selectedRowIndex);
-    gridRef.current.instance.deselectAll();
+    gridRef.current.instance().editRow(selectedRowIndex);
+    gridRef.current.instance().deselectAll();
   }, [gridRef, selectedRowIndex]);
   const deleteRow = useCallback(() => {
-    gridRef.current.instance.deleteRow(selectedRowIndex);
-    gridRef.current.instance.deselectAll();
+    gridRef.current.instance().deleteRow(selectedRowIndex);
+    gridRef.current.instance().deselectAll();
   }, [gridRef, selectedRowIndex]);
   const addRow = useCallback(() => {
-    gridRef.current.instance.addRow();
-    gridRef.current.instance.deselectAll();
+    gridRef.current.instance().addRow();
+    gridRef.current.instance().deselectAll();
   }, [gridRef]);
   return (
     <div>
