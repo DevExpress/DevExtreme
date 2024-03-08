@@ -2,7 +2,7 @@
   "compilerOptions": {
     "outDir": "../../artifacts/dist_ts",
     "module": "es6",
-    "target": "ES2017",
+    "target": "es2020",
     "jsx": "preserve",
     "baseUrl": "../",
     "skipLibCheck": true,
@@ -25,11 +25,6 @@
     "noPropertyAccessFromIndexSignature": false,
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "lib": [
-      "ES2017",
-      "ES2020.BigInt",
-      "DOM"
-    ],
     "strict": true,
     // TODO: set to true
     "noImplicitAny": false,
