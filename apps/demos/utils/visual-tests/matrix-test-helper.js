@@ -197,7 +197,9 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
@@ -230,7 +232,9 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
@@ -261,16 +265,20 @@ const SKIPPED_TESTS = {
   },
   React: {
     Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },

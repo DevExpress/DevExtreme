@@ -75,7 +75,7 @@ tooltipModule.Tooltip = function(parameters) {
     return new StubTooltip(parameters);
 };
 
-sinon.stub(axisModule, 'Axis', function(parameters) {
+sinon.stub(axisModule, 'Axis').callsFake(function(parameters) {
     return new vizMocks.Axis(parameters);
 });
 
@@ -180,8 +180,8 @@ sinon.stub(rendererModule, 'Renderer').callsFake(function() {
 const environment = {
     beforeEach: function() {
         vizMocks.stubIncidentOccurredCreation();
-        rangeModule.Range.reset();
-        axisModule.Axis.reset();
+        rangeModule.Range.resetHistory();
+        axisModule.Axis.resetHistory();
         this.renderer = new vizMocks.Renderer();
         this.container = $(createTestContainer('#test-container', { width: '800px', height: '600px' }));
     },

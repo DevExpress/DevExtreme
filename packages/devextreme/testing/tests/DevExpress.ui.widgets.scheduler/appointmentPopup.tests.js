@@ -75,7 +75,7 @@ const defaultData = [
     }
 ];
 
-const createScheduler = (options = {}) => {
+const createScheduler = (options = {}, clock) => {
     const defaultOption = {
         dataSource: defaultData,
         views: ['month'],
@@ -87,7 +87,7 @@ const createScheduler = (options = {}) => {
         width: 600
     };
 
-    return createWrapper($.extend(defaultOption, options));
+    return createWrapper($.extend(defaultOption, options), clock);
 };
 
 const setWindowWidth = width => {
@@ -340,29 +340,35 @@ QUnit.module('Appointment popup form', moduleConfig, () => {
     });
 
     QUnit.test('Appointment popup should work properly', function(assert) {
-        const NEW_EXPECTED_SUBJECT = 'NEW SUBJECT';
-        const scheduler = createScheduler();
-        const appointmentPopup = scheduler.appointmentPopup;
+        const clock = sinon.useFakeTimers();
 
-        assert.notOk(appointmentPopup.isVisible(), 'Appointment popup should be invisible in on init');
+        try {
+            const NEW_EXPECTED_SUBJECT = 'NEW SUBJECT';
+            const scheduler = createScheduler({}, clock);
+            const appointmentPopup = scheduler.appointmentPopup;
 
-        scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
-        scheduler.tooltip.clickOnItem();
-        appointmentPopup.form.setSubject(NEW_EXPECTED_SUBJECT);
+            assert.notOk(appointmentPopup.isVisible(), 'Appointment popup should be invisible in on init');
 
-        assert.ok(appointmentPopup.isVisible(), 'Appointment popup should be visible after showAppointmentPopup method');
-        appointmentPopup.clickDoneButton();
+            scheduler.appointments.click(scheduler.appointments.getAppointmentCount() - 1);
+            scheduler.tooltip.clickOnItem();
+            appointmentPopup.form.setSubject(NEW_EXPECTED_SUBJECT);
 
-        const dataItem = scheduler.instance.option('dataSource')[1];
-        assert.equal(Object.keys(dataItem).length, 3, 'In appointment properties shouldn\'t added excess properties');
-        assert.equal(dataItem.text, NEW_EXPECTED_SUBJECT, `Text property of appointment should be changed on ${NEW_EXPECTED_SUBJECT}`);
+            assert.ok(appointmentPopup.isVisible(), 'Appointment popup should be visible after showAppointmentPopup method');
+            appointmentPopup.clickDoneButton();
 
-        scheduler.appointments.click(0);
-        scheduler.tooltip.clickOnItem();
-        appointmentPopup.dialog.clickEditSeries();
+            const dataItem = scheduler.instance.option('dataSource')[1];
+            assert.equal(Object.keys(dataItem).length, 3, 'In appointment properties shouldn\'t added excess properties');
+            assert.equal(dataItem.text, NEW_EXPECTED_SUBJECT, `Text property of appointment should be changed on ${NEW_EXPECTED_SUBJECT}`);
 
-        assert.ok(appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor should be visible after click on recurrence appointment');
-        assert.equal(appointmentPopup.form.getSubject(), defaultData[0].text, 'Subject in form should equal selected appointment');
+            scheduler.appointments.click(0);
+            scheduler.tooltip.clickOnItem();
+            appointmentPopup.dialog.clickEditSeries();
+
+            assert.ok(appointmentPopup.form.isRecurrenceEditorVisible(), 'Recurrence editor should be visible after click on recurrence appointment');
+            assert.equal(appointmentPopup.form.getSubject(), defaultData[0].text, 'Subject in form should equal selected appointment');
+        } finally {
+            clock.restore();
+        }
     });
 
     QUnit.test('Recurrence repeat-end editor should have default \'never\' value after reopening appointment popup', function(assert) {

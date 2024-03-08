@@ -51,6 +51,18 @@ const moduleConfig = {
     }
 };
 
+const moduleConfigWithClock = {
+    beforeEach() {
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+
+    afterEach() {
+        fx.off = false;
+        this.clock.restore();
+    }
+};
+
 const data = [{
     text: 'app_1_Los_Angeles',
     startDate: new Date('2017-05-22T05:00:00.000Z'),
@@ -69,14 +81,14 @@ const data = [{
     endDate: new Date('2017-05-22T16:30:00.000Z')
 }];
 
-const createScheduler = (options = {}) => {
+const createScheduler = (options = {}, clock) => {
     return createWrapper($.extend({
         dataSource: data,
         views: ['week', 'month'],
         currentView: 'week',
         currentDate: new Date(2017, 4, 22),
         height: 600
-    }, options));
+    }, options), clock);
 };
 
 module('Common', moduleConfig, () => {
@@ -413,7 +425,7 @@ module('API', moduleConfig, () => {
     });
 });
 
-module('Not native date DST', moduleConfig, () => {
+module('Not native date DST', moduleConfigWithClock, () => {
     module('summer time', () => {
         test('Exclude appointment from series in case DST start in prev visible view range', function(assert) {
             const scheduler = createScheduler({
@@ -426,7 +438,7 @@ module('Not native date DST', moduleConfig, () => {
                 recurrenceEditMode: 'occurrence',
                 timeZone: timeZones.LosAngeles,
                 currentDate: new Date(2020, 2, 16)
-            });
+            }, this.clock);
 
             scheduler.appointmentList[3].click();
             scheduler.tooltip.clickOnDeleteButton();
@@ -495,7 +507,7 @@ module('Not native date DST', moduleConfig, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 2, 8)
-                });
+                }, this.clock);
 
                 [1, 2, 3].forEach(index => {
                     scheduler.appointmentList[index].click();
@@ -591,7 +603,7 @@ module('Not native date DST', moduleConfig, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 2, 8)
-                });
+                }, this.clock);
 
                 const count = scheduler.appointments.getAppointmentCount();
                 for(let i = 0; i < count; i++) {
@@ -683,7 +695,7 @@ module('Not native date DST', moduleConfig, () => {
                     currentView: 'month',
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 2, 8)
-                });
+                }, this.clock);
 
                 for(let i = 0; i < testCase.expectedTexts.length; i++) {
                     const expectedText = testCase.expectedTexts[i];
@@ -756,7 +768,7 @@ module('Not native date DST', moduleConfig, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 10, 1)
-                });
+                }, this.clock);
 
                 [1, 2, 3].forEach(index => {
                     scheduler.appointmentList[index].click();
@@ -852,7 +864,7 @@ module('Not native date DST', moduleConfig, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 10, 1),
-                });
+                }, this.clock);
 
                 const count = scheduler.appointments.getAppointmentCount();
                 for(let i = 0; i < count; i++) {
@@ -945,7 +957,7 @@ module('Not native date DST', moduleConfig, () => {
                     firstDayOfWeek: 4,
                     timeZone: timeZones.LosAngeles,
                     currentDate: new Date(2020, 10, 1),
-                });
+                }, this.clock);
 
                 for(let i = 0; i < testCase.expectedTexts.length; i++) {
                     const expectedText = testCase.expectedTexts[i];
@@ -1008,7 +1020,7 @@ module('Scheduler grid and appointment time zone', moduleConfig, () => {
     }
 });
 
-module('Scheduler grid', moduleConfig, () => {
+module('Scheduler grid', moduleConfigWithClock, () => {
     const getDeltaTz = (schedulerTz, date) => {
         const defaultTz = date.getTimezoneOffset() * 60000;
         return schedulerTz * 3600000 + defaultTz;
@@ -1033,7 +1045,7 @@ module('Scheduler grid', moduleConfig, () => {
                 firstDayOfWeek: 5,
                 startDayHour: 11,
                 height: 600
-            });
+            }, this.clock);
 
             scheduler.appointmentList.forEach(appointment => {
                 assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);
@@ -1072,7 +1084,7 @@ module('Scheduler grid', moduleConfig, () => {
         }
     ].forEach(testCase => {
         test(`startDate and endDate of appointments should valid in ${testCase.timeZone}`, function(assert) {
-            const scheduler = createScheduler({ timeZone: testCase.timeZone });
+            const scheduler = createScheduler({ timeZone: testCase.timeZone }, this.clock);
 
             testCase.times.forEach((expected, index) => {
                 const gridDateText = scheduler.appointments.getDateText(index);
@@ -1109,7 +1121,7 @@ module('Scheduler grid', moduleConfig, () => {
                         startDate,
                         endDate
                     }]
-                });
+                }, this.clock);
 
                 const appointment = scheduler.appointmentList[0];
                 const initialPosition = appointment.rectangle;
@@ -1167,7 +1179,7 @@ module('Scheduler grid', moduleConfig, () => {
                             startDate,
                             endDate
                         }]
-                    });
+                    }, this.clock);
 
                     const appointment = scheduler.appointmentList[0];
                     const initialPosition = appointment.rectangle;

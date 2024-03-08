@@ -117,10 +117,10 @@ const environment = {
             BaseGauge.prototype[name].reset();
         });
 
-        rendererModule.Renderer.reset();
-        themeManagerModule.ThemeManager.reset();
-        factory.createTranslator.reset();
-        factory.createTracker.reset();
+        rendererModule.Renderer.resetHistory();
+        themeManagerModule.ThemeManager.resetHistory();
+        factory.createTranslator.resetHistory();
+        factory.createTracker.resetHistory();
     },
     createGauge: function(options) {
         return new BaseGauge(this.$container, options);

@@ -21,7 +21,16 @@ fixture.disablePageReloads`Scheduler render during DST`
 
 const SCHEDULER_SELECTOR = '#container';
 const APPOINTMENT_TEXT = 'Appointment';
-const REDUCE_CELLS_CSS = `
+// TODO remove first two selectors after fix of the currentTimeIndicator option
+const CUSTOM_CSS = `
+#container .dx-scheduler-header-panel-cell {
+  color: rgba(0,0,0,.54);
+}
+
+#container .dx-scheduler-header-panel-cell::before {
+  display: none;
+}
+
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
@@ -154,7 +163,7 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
       await t.expect(relativeTop).eql(expectedTopPosition[idx]);
     });
   }).before(async () => {
-    await insertStylesheetRulesToPage(REDUCE_CELLS_CSS);
+    await insertStylesheetRulesToPage(CUSTOM_CSS);
 
     const dataSource = [getAppointmentFromStartDate(startDate, offset)];
     await createWidget('dxScheduler', {
@@ -163,6 +172,7 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
       currentView: 'week',
       currentDate,
       offset,
+      showCurrentTimeIndicator: false,
       showAllDayPanel: false,
       firstDayOfWeek: 4,
       cellDuration: 60,
