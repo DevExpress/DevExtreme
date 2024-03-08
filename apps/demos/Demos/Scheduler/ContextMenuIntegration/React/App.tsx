@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Scheduler, { Resource, SchedulerTypes } from 'devextreme-react/scheduler';
+import Scheduler, { Resource, SchedulerTypes, SchedulerRef } from 'devextreme-react/scheduler';
 import ContextMenu, { ContextMenuTypes } from 'devextreme-react/context-menu';
 import { data, resourcesData, Resource as ResourceItem } from './data.ts';
 import AppointmentMenuTemplate from './AppointmentTemplate.tsx';
@@ -17,7 +17,7 @@ const onContextMenuItemClick = (e: ContextMenuTypes.ItemClickEvent) => {
 };
 
 const App = () => {
-  const schedulerRef = useRef<Scheduler>(null);
+  const schedulerRef = useRef<SchedulerRef>(null);
   const [currentDate, setCurrentDate] = useState(new Date(2020, 10, 25));
   const [contextMenuItems, setContextMenuItems] = useState<ContextMenuItem[]>([]);
   const [target, setTarget] = useState(appointmentClassName);

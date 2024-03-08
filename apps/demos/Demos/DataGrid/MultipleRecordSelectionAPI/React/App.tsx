@@ -4,6 +4,7 @@ import DataGrid, {
   Selection,
   Toolbar,
   Item,
+  DataGridRef,
 } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import Button from 'devextreme-react/button';
@@ -18,7 +19,7 @@ const App = () => {
   const [selectedRowKeys, setSelectedRowKeys] = useState([]);
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState('Nobody has been selected');
 
-  const dataGridRef = useRef<DataGrid>(null);
+  const dataGridRef = useRef<DataGridRef>(null);
 
   const onClearButtonClicked = useCallback(() => {
     dataGridRef.current.instance().clearSelection();

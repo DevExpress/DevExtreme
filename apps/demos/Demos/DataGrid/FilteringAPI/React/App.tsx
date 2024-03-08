@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
 import SelectBox from 'devextreme-react/select-box';
 import 'devextreme/data/odata/store';
 
@@ -25,7 +25,7 @@ const statusLabel = { 'aria-label': 'Status' };
 
 const App = () => {
   const [filterStatus, setFilterStatus] = useState(statuses[0]);
-  const dataGridRef = useRef<DataGrid>(null);
+  const dataGridRef = useRef<DataGridRef>(null);
 
   const onValueChanged = useCallback(({ value }) => {
     const dataGrid = dataGridRef.current.instance();

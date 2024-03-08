@@ -1,11 +1,11 @@
 import React, { useCallback, useRef } from 'react';
 import FileManager, {
-  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column,
+  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column, FileManagerRef
 } from 'devextreme-react/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 
 export default function App() {
-  const fileManagerRef = useRef<FileManager>(null);
+  const fileManagerRef = useRef<FileManagerRef>(null);
 
   const createFile = useCallback((
     fileExtension,

@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
 import { Workbook } from 'exceljs';
 import { saveAs } from 'file-saver-es';
 import { exportDataGrid } from 'devextreme/excel_exporter';
@@ -39,8 +39,8 @@ const setAlternatingRowsBackground = (gridCell, excelCell) => {
 };
 
 const App = () => {
-  const priceGridRef = useRef<DataGrid>(null);
-  const ratingGridRef = useRef<DataGrid>(null);
+  const priceGridRef = useRef<DataGridRef>(null);
+  const ratingGridRef = useRef<DataGridRef>(null);
 
   const exportGrids = useCallback(() => {
     const workbook = new Workbook();

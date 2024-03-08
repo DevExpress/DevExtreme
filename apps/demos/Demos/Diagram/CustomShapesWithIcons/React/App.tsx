@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from 'react';
 import Diagram, {
-  CustomShape, ConnectionPoint, Group, Toolbox,
+  CustomShape, ConnectionPoint, Group, Toolbox, DiagramRef,
 } from 'devextreme-react/diagram';
 import 'whatwg-fetch';
 
 export default function App() {
-  const diagramRef = useRef<Diagram>(null);
+  const diagramRef = useRef<DiagramRef>(null);
 
   useEffect(() => {
     const diagram = diagramRef.current?.instance();

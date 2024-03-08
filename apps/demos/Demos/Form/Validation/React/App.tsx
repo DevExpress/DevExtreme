@@ -13,6 +13,7 @@ import Form, {
   AsyncRule,
   CustomRule,
   FormTypes,
+  FormRef,
 } from 'devextreme-react/form';
 import { ButtonType } from 'devextreme-react/common';
 import notify from 'devextreme/ui/notify';
@@ -130,7 +131,7 @@ const registerButtonOptions = {
 };
 
 function App() {
-  const formRef = useRef<Form>(null);
+  const formRef = useRef<FormRef>(null);
 
   const [resetButtonOptions, setResetButtonOptions] = useState({
     disabled: true,

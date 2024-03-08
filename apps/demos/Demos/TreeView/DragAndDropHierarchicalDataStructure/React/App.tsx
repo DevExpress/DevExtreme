@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react';
-import TreeView, { TreeViewTypes } from 'devextreme-react/tree-view';
+import TreeView, { TreeViewTypes, TreeViewRef } from 'devextreme-react/tree-view';
 import Sortable, { SortableTypes } from 'devextreme-react/sortable';
 
 import service from './data.ts';
@@ -83,8 +83,8 @@ const getTopVisibleNode = (component) => {
 };
 
 const App = () => {
-  const treeViewDriveCRef = useRef<TreeView>(null);
-  const treeViewDriveDRef = useRef<TreeView>(null);
+  const treeViewDriveCRef = useRef<TreeViewRef>(null);
+  const treeViewDriveDRef = useRef<TreeViewRef>(null);
 
   const [itemsDriveC, setItemsDriveC] = useState(service.getItemsDriveC());
   const [itemsDriveD, setItemsDriveD] = useState(service.getItemsDriveD());
