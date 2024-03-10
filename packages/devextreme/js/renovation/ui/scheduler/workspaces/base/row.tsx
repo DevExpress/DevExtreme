@@ -2,6 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
 } from '@devextreme-generator/declarations';
 import { VirtualCell } from './virtual_cell';
+import { splitNumber } from './utils';
 
 const MAX_COL_SPAN = 1000;
 
@@ -25,37 +26,27 @@ export const viewFunction = ({
   >
     {hasLeftVirtualCell
       && leftVirtualCellCount != null
-      && Array.from({ length: Math.ceil(leftVirtualCellCount / MAX_COL_SPAN) }, (_, index) => {
-        const colSpan = Math.min(leftVirtualCellCount - (MAX_COL_SPAN * index), MAX_COL_SPAN);
-        const width = (leftVirtualCellWidth / leftVirtualCellCount) * colSpan;
-
-        return (
-          <VirtualCell
-            key={`left-virtual-cell-${index}`}
-            width={width}
-            colSpan={colSpan}
-            isHeaderCell={isHeaderRow}
-          />
-        );
-      })}
+      && splitNumber(leftVirtualCellCount, MAX_COL_SPAN).map((colSpan, index) => (
+        <VirtualCell
+          key={`left-virtual-cell-${index}`}
+          width={leftVirtualCellWidth * (colSpan / leftVirtualCellCount)}
+          colSpan={colSpan}
+          isHeaderCell={isHeaderRow}
+        />
+      ))}
 
     {children}
 
     {hasRightVirtualCell
       && rightVirtualCellCount != null
-      && Array.from({ length: Math.ceil(rightVirtualCellCount / MAX_COL_SPAN) }, (_, index) => {
-        const colSpan = Math.min(rightVirtualCellCount - (MAX_COL_SPAN * index), MAX_COL_SPAN);
-        const width = (rightVirtualCellWidth / rightVirtualCellCount) * colSpan;
-
-        return (
-          <VirtualCell
-            key={`right-virtual-cell-${index}`}
-            width={width}
-            colSpan={colSpan}
-            isHeaderCell={isHeaderRow}
-          />
-        );
-      })}
+      && splitNumber(rightVirtualCellCount, MAX_COL_SPAN).map((colSpan, index) => (
+        <VirtualCell
+          key={`right-virtual-cell-${index}`}
+          width={rightVirtualCellWidth * (colSpan / rightVirtualCellCount)}
+          colSpan={colSpan}
+          isHeaderCell={isHeaderRow}
+        />
+      ))}
   </tr>
 );
 
