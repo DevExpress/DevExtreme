@@ -38,7 +38,7 @@ testCases.forEach(({ views }) => {
   const viewType = views[0].type;
   const resourceCount = 400;
 
-  test(`it should correctly render virtual table if more than 1000 cells are virtualized for ${viewType} view (T1091980)`, async (t) => {
+  test(`it should correctly render virtual table if more than 1000 cells are virtualized for ${viewType} view (T1205597)`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     await takeScreenshot(t, scheduler.element, buildScreenshotName(viewType, 'start'));
