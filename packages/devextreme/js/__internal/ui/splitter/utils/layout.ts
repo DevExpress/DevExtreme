@@ -158,6 +158,8 @@ function getPercentSize(size: string | number, totalPanesSize: number): number {
   if (isPercentage) {
     return sizeNumber;
   }
+
+  // todo: refactor
   return 0;
 }
 
