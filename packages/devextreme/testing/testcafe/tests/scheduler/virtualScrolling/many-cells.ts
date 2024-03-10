@@ -1,4 +1,4 @@
-import { takeScreenshot } from 'devextreme-screenshot-comparer/build/src/take-screenshot';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
@@ -41,15 +41,27 @@ testCases.forEach(({ views }) => {
   test(`it should correctly render virtual table if more than 1000 cells are virtualized for ${viewType} view (T1205597)`, async (t) => {
     const scheduler = new Scheduler('#container');
 
-    await takeScreenshot(t, scheduler.element, buildScreenshotName(viewType, 'start'));
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t
+      .expect(takeScreenshot(buildScreenshotName(viewType, 'start'), scheduler.element))
+      .ok();
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 12), { groupId: resourceCount / 2 });
 
-    await takeScreenshot(t, scheduler.element, buildScreenshotName(viewType, 'middle'));
+    await t
+      .expect(takeScreenshot(buildScreenshotName(viewType, 'middle'), scheduler.element))
+      .ok();
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 12), { groupId: resourceCount - 1 });
 
-    await takeScreenshot(t, scheduler.element, buildScreenshotName(viewType, 'end'));
+    await t
+      .expect(takeScreenshot(buildScreenshotName(viewType, 'end'), scheduler.element))
+      .ok();
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async () => {
     const resources = Array.from({ length: resourceCount }, (_, i) => ({
       id: i,
