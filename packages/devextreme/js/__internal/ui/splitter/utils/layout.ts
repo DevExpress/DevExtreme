@@ -217,7 +217,7 @@ function getElementItemsSizeSum($element, orientation, handlesCount): number {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getElementSize(element, items, orientation, width, height): number {
+export function getElementSize($element, items, orientation, width, height): number {
   const handlesCount = Math.max(items.filter((p) => p.visible !== false).length - 1, 0);
 
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
@@ -225,5 +225,5 @@ export function getElementSize(element, items, orientation, width, height): numb
   if (sizeOption) {
     return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
   }
-  return getElementItemsSizeSum(element, orientation, handlesCount);
+  return getElementItemsSizeSum($element, orientation, handlesCount);
 }
