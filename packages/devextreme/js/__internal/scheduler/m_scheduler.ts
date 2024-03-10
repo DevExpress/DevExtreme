@@ -28,21 +28,19 @@ import DataHelperMixin from '@js/data_helper';
 import { triggerResizeEvent } from '@js/events/visibility_change';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
-import { renovationGetCurrentView } from '@js/renovation/ui/scheduler/model/untyped_getCurrentView';
-import { createTimeZoneCalculator } from '@js/renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
-import { getPreparedDataItems } from '@js/renovation/ui/scheduler/utils/data';
-import { excludeFromRecurrence } from '@js/renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
-import {
-  isDateAndTimeView,
-  isTimelineView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { createTimeZoneCalculator } from './__migration/timezone_calculator/index';
+import {
+  excludeFromRecurrence,
+  getAppointmentTakesAllDay,
+  getPreparedDataItems,
+  isDateAndTimeView, isTimelineView, viewsUtils,
+} from './__migration/utils/index';
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
@@ -414,7 +412,7 @@ class Scheduler extends Widget<any> {
   }
 
   get currentView() {
-    return renovationGetCurrentView(
+    return viewsUtils.getCurrentView(
       this.option('currentView'),
       this.option('views'),
     );
@@ -873,6 +871,7 @@ class Scheduler extends Widget<any> {
   }
 
   _supportAllDayResizing() {
+    // @ts-expect-error
     return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
   }
 

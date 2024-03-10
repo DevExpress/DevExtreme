@@ -1,9 +1,10 @@
 import dateUtils from '@js/core/utils/date';
-import { getDisplayedRowCount } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getTimePanelCellText } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/week';
-import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { shiftIntegerByModule } from '@ts/core/utils/math';
+
+import {
+  getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
+} from '../../__migration/utils/index';
 
 const toMs = dateUtils.dateToMilliseconds;
 
@@ -110,7 +111,7 @@ export class TimePanelDataGenerator {
         startDate,
         allDay,
         highlighted,
-        text: getTimePanelCellText(
+        text: weekUtils.getTimePanelCellText(
           timeIndex,
           startDate,
           startViewDate,

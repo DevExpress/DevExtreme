@@ -1,7 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { setOptionHour } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { calculateCellIndex } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
-import { calculateStartViewDate } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/timeline_month';
+import { monthUtils, setOptionHour, timelineMonthUtils } from '@ts/scheduler/__migration/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
 import { ViewDataGenerator } from './m_view_data_generator';
@@ -10,7 +8,7 @@ const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
   _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
-    return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+    return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 
   calculateEndDate(startDate, interval, endDayHour) {
@@ -22,7 +20,7 @@ export class ViewDataGeneratorTimelineMonth extends ViewDataGenerator {
   }
 
   _calculateStartViewDate(options: any) {
-    return calculateStartViewDate(
+    return timelineMonthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
       options.startDate,

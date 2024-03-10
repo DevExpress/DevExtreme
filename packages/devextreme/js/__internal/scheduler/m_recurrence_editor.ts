@@ -9,7 +9,6 @@ import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import { PathTimeZoneConversion } from '@js/renovation/ui/scheduler/timeZoneCalculator/types';
 import ButtonGroup from '@js/ui/button_group';
 import DateBox from '@js/ui/date_box';
 import Editor from '@js/ui/editor/editor';
@@ -17,6 +16,7 @@ import Form from '@js/ui/form';
 import NumberBox from '@js/ui/number_box';
 import { current, isFluent } from '@js/ui/themes';
 
+import { PathTimeZoneConversion } from './__migration/timezone_calculator/index';
 import { getRecurrenceProcessor } from './m_recurrence';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';

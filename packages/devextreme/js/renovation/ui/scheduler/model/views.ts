@@ -1,23 +1,19 @@
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
-import { renovationGetCurrentView } from './untyped_getCurrentView';
+
 import { isString } from '../../../../core/utils/type';
 import { CurrentViewConfigProps, ViewProps } from '../props';
-import { ViewType } from '../types';
 import { CurrentViewConfigType } from '../workspaces/props';
-
-export const getCurrentView = renovationGetCurrentView as (
-  currentView: string | ViewType,
-  // https://github.com/DevExpress/devextreme-renovation/issues/754
-  views: (ViewType | Partial<ViewProps>)[],
-) => ViewType | Partial<ViewProps>;
+import { ViewType } from '../../../../__internal/scheduler/__migration/types';
+import { viewsUtils } from '../../../../__internal/scheduler/__migration/utils/index';
 
 export const getCurrentViewProps = (
   currentView: string | ViewType,
   // https://github.com/DevExpress/devextreme-renovation/issues/754
   views: (ViewType | Partial<ViewProps>)[],
 ): Partial<ViewProps> => {
-  const currentViewProps = getCurrentView(currentView, views);
+  const currentViewProps = viewsUtils.getCurrentView(currentView, views);
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isString(currentViewProps)
     ? { type: currentViewProps }
     : currentViewProps;

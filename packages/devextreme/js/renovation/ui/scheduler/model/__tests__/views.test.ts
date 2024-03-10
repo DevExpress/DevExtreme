@@ -1,5 +1,5 @@
 import { ViewProps } from '../../props';
-import { ViewType } from '../../types';
+import { ViewType } from '../../../../../__internal/scheduler/__migration/types';
 import { getCurrentViewConfig, getCurrentViewProps } from '../views';
 
 describe('Model views', () => {

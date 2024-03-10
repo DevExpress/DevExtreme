@@ -36,13 +36,6 @@ export const getOverflowIndicatorStyles = (
   return result;
 };
 
-// TODO remove
-export const getOverflowIndicatorColor = (color: string, colors: string[]): string | undefined => (
-  !colors.length || colors.filter((item) => item !== color).length === 0
-    ? color
-    : undefined
-);
-
 export const getIndicatorColor = (
   appointmentContext: IAppointmentContext,
   viewModel: OverflowIndicatorViewModel,

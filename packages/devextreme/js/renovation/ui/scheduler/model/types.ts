@@ -1,7 +1,12 @@
-import { AllDayPanelModeType } from '../appointment/utils/getAppointmentTakesAllDay';
 import { ResourceProps } from '../props';
-import { DataAccessorType, GroupOrientation, ViewType } from '../types';
-import { CellsMetaData, Group } from '../workspaces/types';
+import { DataAccessorType } from '../types';
+import { CellsMetaData } from '../workspaces/types';
+import {
+  AllDayPanelModeType,
+  Group,
+  GroupOrientation,
+  ViewType,
+} from '../../../../__internal/scheduler/__migration/types';
 
 export interface AppointmentsConfigType {
   adaptivityEnabled: boolean;

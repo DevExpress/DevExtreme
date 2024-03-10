@@ -1,13 +1,8 @@
 import dateUtils from '@js/core/utils/date';
 import dateLocalization from '@js/localization/date';
-import { getToday, setOptionHour } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import {
-  calculateCellIndex,
-  calculateStartViewDate,
-  getCellText,
-  getViewStartByOptions,
-  isFirstCellInMonthWithIntervalCount,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
+  getToday, isFirstCellInMonthWithIntervalCount, monthUtils, setOptionHour,
+} from '@ts/scheduler/__migration/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
 // eslint-disable-next-line import/no-cycle
@@ -40,7 +35,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     data.today = this.isCurrentDate(startDate, indicatorTime, timeZoneCalculator);
     data.otherMonth = this.isOtherMonth(startDate, this._minVisibleDate, this._maxVisibleDate);
     data.firstDayOfMonth = isFirstCellInMonthWithIntervalCount(startDate, intervalCount);
-    data.text = getCellText(startDate, intervalCount);
+    data.text = monthUtils.getCellText(startDate, intervalCount);
 
     return data;
   }
@@ -54,7 +49,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
   }
 
   _calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount) {
-    return calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
+    return monthUtils.calculateCellIndex(rowIndex, columnIndex, rowCount, columnCount);
   }
 
   calculateEndDate(startDate, interval, endDayHour) {
@@ -66,7 +61,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
   }
 
   _calculateStartViewDate(options) {
-    return calculateStartViewDate(
+    return monthUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
       options.startDate,
@@ -83,7 +78,7 @@ export class ViewDataGeneratorMonth extends ViewDataGenerator {
     } = options;
 
     const firstMonthDate: any = dateUtils.getFirstMonthDate(startDate);
-    const viewStart = getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
+    const viewStart = monthUtils.getViewStartByOptions(startDate, currentDate, intervalCount, firstMonthDate);
 
     this._minVisibleDate = new Date(viewStart.setDate(1));
 
