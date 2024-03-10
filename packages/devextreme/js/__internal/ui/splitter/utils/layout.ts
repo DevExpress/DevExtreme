@@ -4,7 +4,6 @@ import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
 import { isNumeric, isString } from '@js/core/utils/type';
-import type { dxSplitterItem as Item } from 'devextreme/ui/splitter';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
@@ -162,7 +161,8 @@ function getPercentSize(size: string | number, totalPanesSize: number): number {
   return 0;
 }
 
-export function getInitialLayout(panes: Item[], totalPanesSize: number): number[] {
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getInitialLayout(panes, totalPanesSize: number): number[] {
   const layout: number[] = [];
   let totalSize = 0;
   let sizeOverflow = false;
@@ -204,7 +204,7 @@ export function getInitialLayout(panes: Item[], totalPanesSize: number): number[
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getElementItemsSizeSum($element, orientation, handlesCount): number {
+function getElementItemsSizeSum($element, orientation, handlesCount): number {
   const splitterSize = $element.get(0).getBoundingClientRect();
   const size: number = orientation === ORIENTATION.horizontal
     ? splitterSize.width : splitterSize.height;
@@ -212,4 +212,16 @@ export function getElementItemsSizeSum($element, orientation, handlesCount): num
   const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
 
   return size - handlesSizeSum;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getElementSize(element, items, orientation, width, height): number {
+  const handlesCount = Math.max(items.filter((p) => p.visible !== false).length - 1, 0);
+
+  const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
+
+  if (sizeOption) {
+    return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
+  }
+  return getElementItemsSizeSum(element, orientation, handlesCount);
 }

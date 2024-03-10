@@ -398,6 +398,18 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         assertLayout(items, ['0', '0', '0', '100'], assert);
     });
+
+    QUnit.test('runtime size option change should update lauout', function(assert) {
+        this.reinit({
+            width: 1016, dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
+        });
+
+        this.instance.option('items[0].size', 100);
+
+        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
+
+        assertLayout(items, ['10', '60', '30'], assert);
+    });
 });
 
 QUnit.module('Initialization', moduleConfig, () => {
