@@ -1,6 +1,6 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { addToStyles } from '../workspaces/utils';
-import { AppointmentGeometry, AppointmentViewModel } from './types';
+import { AppointmentViewModel } from './types';
 import messageLocalization from '../../../../localization/message';
 import dateLocalization from '../../../../localization/date';
 
@@ -32,17 +32,6 @@ export const getAppointmentStyles = (
     attr: 'left',
     value: `${left}px`,
   }]);
-};
-
-export const getAppointmentKey = (geometry: AppointmentGeometry): string => {
-  const {
-    left,
-    top,
-    width,
-    height,
-  } = geometry;
-
-  return `${left}-${top}-${width}-${height}`;
 };
 
 export const getReducedIconTooltipText = (endDate?: Date | string): string => {

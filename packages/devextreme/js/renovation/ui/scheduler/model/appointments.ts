@@ -6,17 +6,19 @@ import {
 } from '../../../../__internal/scheduler/workspaces/helpers/m_position_helper';
 import { SchedulerProps } from '../props';
 import { CurrentViewConfigType } from '../workspaces/props';
-import { getGroupCount } from '../../../../__internal/scheduler/resources/m_utils';
-import { isGroupingByDate } from '../workspaces/utils';
-import { CellsMetaData, Group, ViewDataProviderType } from '../workspaces/types';
+import { CellsMetaData } from '../workspaces/types';
 import dateUtils from '../../../../core/utils/date';
 
 import { AppointmentsConfigType, AppointmentsModelType } from './types';
 
 import { DataAccessorType } from '../types';
-import { calculateIsGroupedAllDayPanel, getCellDuration } from '../view_model/to_test/views/utils/base';
-import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
-import { getAppointmentRenderingStrategyName } from './utils';
+import { Group, ViewDataProviderType } from '../../../../__internal/scheduler/__migration/types';
+import {
+  calculateIsGroupedAllDayPanel, getAppointmentRenderingStrategyName, getCellDuration,
+  getGroupCount,
+  isGroupingByDate,
+} from '../../../../__internal/scheduler/__migration/utils/index';
+import { TimeZoneCalculator } from '../../../../__internal/scheduler/__migration/timezone_calculator/index';
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
 const toMs = (name: string): number => dateUtils.dateToMilliseconds(name);

@@ -4,9 +4,9 @@ import { FunctionTemplate } from '@js/core/templates/function_template';
 import { when } from '@js/core/utils/deferred';
 import { getBoundingRect } from '@js/core/utils/position';
 import messageLocalization from '@js/localization/message';
-import { getOverflowIndicatorColor } from '@js/renovation/ui/scheduler/appointment/overflow_indicator/utils';
 import Button from '@js/ui/button';
 
+import { getOverflowIndicatorColor } from './__migration/utils/index';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import { LIST_ITEM_CLASS, LIST_ITEM_DATA_KEY } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';

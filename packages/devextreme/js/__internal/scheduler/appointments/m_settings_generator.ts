@@ -2,17 +2,15 @@
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
-import {
-  isDateAndTimeView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { getGroupCount, isDateAndTimeView } from '../__migration/utils/index';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
 import {
-  createResourcesTree, getDataAccessors, getGroupCount, getResourceTreeLeaves,
+  createResourcesTree, getDataAccessors, getResourceTreeLeaves,
 } from '../resources/m_utils';
 import { CellPositionCalculator } from './m_cell_position_calculator';
 import { createFormattedDateText } from './m_text_utils';

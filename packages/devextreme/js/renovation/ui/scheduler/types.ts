@@ -2,8 +2,6 @@ import type { Appointment } from '../../../ui/scheduler';
 import type { DxPromise } from '../../../core/utils/deferred';
 
 export type Direction = 'vertical' | 'horizontal';
-export type GroupOrientation = 'vertical' | 'horizontal';
-export type ViewType = 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek';
 
 export interface IFieldExpr {
   startDateExpr: string;

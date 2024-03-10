@@ -4,7 +4,7 @@ import {
 } from '../../../../__internal/scheduler/resources/m_utils';
 import { ResourceProps } from '../props';
 import { DataAccessorType } from '../types';
-import { Group } from '../workspaces/types';
+import { Group } from '../../../../__internal/scheduler/__migration/types';
 
 // eslint-disable-next-line @typescript-eslint/no-type-alias
 export type ResourceMapType = Map<string, Promise<Group[]>>;

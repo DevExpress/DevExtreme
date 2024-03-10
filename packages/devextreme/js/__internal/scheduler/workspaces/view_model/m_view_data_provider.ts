@@ -1,14 +1,14 @@
 import dateUtils from '@js/core/utils/date';
-import type { ViewType } from '@js/renovation/ui/scheduler/types';
-import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
 import {
   calculateIsGroupedAllDayPanel,
-  isHorizontalView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import type { ViewCellData } from '@js/renovation/ui/scheduler/workspaces/types';
-import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
-import { dateUtilsTs } from '@ts/core/utils/date';
+  isGroupingByDate,
+  isHorizontalGroupingApplied, isHorizontalView,
+  isVerticalGroupingApplied,
+} from '@ts/scheduler/__migration/utils/index';
 
+import type { ViewCellData, ViewType } from '../../__migration/types';
+import { getGroupPanelData } from '../../__migration/utils/index';
 import timeZoneUtils from '../../m_utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
 import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
