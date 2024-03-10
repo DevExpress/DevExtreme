@@ -43,21 +43,27 @@ testCases.forEach(({ views }) => {
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await t
-      .expect(takeScreenshot(buildScreenshotName(viewType, 'start'), scheduler.element))
-      .ok();
+    // await t
+    //   .expect(takeScreenshot(buildScreenshotName(viewType, 'start'), scheduler.element))
+    //   .ok();
+
+    await takeScreenshot(buildScreenshotName(viewType, 'start'), scheduler.element);
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount / 2 });
 
-    await t
-      .expect(takeScreenshot(buildScreenshotName(viewType, 'middle'), scheduler.element))
-      .ok();
+    // await t
+    //   .expect(takeScreenshot(buildScreenshotName(viewType, 'middle'), scheduler.element))
+    //   .ok();
+
+    await takeScreenshot(buildScreenshotName(viewType, 'middle'), scheduler.element);
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount - 1 });
 
-    await t
-      .expect(takeScreenshot(buildScreenshotName(viewType, 'end'), scheduler.element))
-      .ok();
+    // await t
+    //   .expect(takeScreenshot(buildScreenshotName(viewType, 'end'), scheduler.element))
+    //   .ok();
+
+    await takeScreenshot(buildScreenshotName(viewType, 'end'), scheduler.element);
 
     await t
       .expect(compareResults.isValid())
