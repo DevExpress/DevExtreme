@@ -47,13 +47,13 @@ testCases.forEach(({ views }) => {
       .expect(takeScreenshot(buildScreenshotName(viewType, 'start'), scheduler.element))
       .ok();
 
-    await scheduler.scrollTo(new Date(2024, 1, 1, 12), { groupId: resourceCount / 2 });
+    await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount / 2 });
 
     await t
       .expect(takeScreenshot(buildScreenshotName(viewType, 'middle'), scheduler.element))
       .ok();
 
-    await scheduler.scrollTo(new Date(2024, 1, 1, 12), { groupId: resourceCount - 1 });
+    await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount - 1 });
 
     await t
       .expect(takeScreenshot(buildScreenshotName(viewType, 'end'), scheduler.element))
@@ -70,8 +70,8 @@ testCases.forEach(({ views }) => {
 
     const appointmentDateInfo = Array.from({ length: 29 })
       .map((_, i) => ({
-        startDate: new Date(2024, 1, i + 1, 12),
-        endDate: new Date(2024, 1, i + 1, 20),
+        startDate: new Date(2024, 1, i + 1, 1),
+        endDate: new Date(2024, 1, i + 1, 4),
       }));
 
     const appointments = Array.from({ length: resourceCount })
