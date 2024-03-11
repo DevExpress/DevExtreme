@@ -1,5 +1,4 @@
 export {
-  ResizeMode,
   Mode,
   ContentReadyEvent,
   DisposingEvent,

@@ -9,3 +9,6 @@ export const RESIZE_EVENT = {
   onResizeStart: 'onResizeStart',
   onResizeEnd: 'onResizeEnd',
 };
+
+export const ITEM_COLLAPSED_EVENT = 'onItemCollapsed';
+export const ITEM_EXPANDED_EVENT = 'onItemExpanded';

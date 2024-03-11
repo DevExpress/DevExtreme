@@ -58,6 +58,46 @@ QUnit.module('Initialization', moduleConfig, () => {
     });
 });
 
+QUnit.module('Behavior', moduleConfig, () => {
+    [
+        { handler: 'collapsePrevClick', button: 'prev', },
+        { handler: 'collapseNextClick', button: 'next', },
+    ].forEach(({ handler, button }) => {
+        QUnit.test(`${handler} handler should be fired on collapse ${button} button click`, function(assert) {
+            assert.expect(1);
+
+            this.reinit({
+                [handler]: () => {
+                    assert.ok(true, `${handler} handler fired`);
+                }
+            });
+
+            const $collapseButton = $(this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
+
+            $collapseButton.trigger('dxclick');
+        });
+
+        QUnit.test(`${handler} handler should be correctly updated on runtime`, function(assert) {
+            const handlerStub = sinon.stub();
+            const handlerStubAfterUpdate = sinon.stub();
+
+            this.reinit({ [handler]: handlerStub });
+
+            const $collapseButton = $(this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
+
+            $collapseButton.trigger('dxclick');
+
+            this.instance.option(handler, handlerStubAfterUpdate);
+
+            $collapseButton.trigger('dxclick');
+
+            assert.strictEqual(handlerStub.callCount, 1);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
+    });
+
+});
+
 QUnit.module('Cursor', moduleConfig, () => {
     [
         { direction: 'horizontal', expectedCursor: 'col-resize' },

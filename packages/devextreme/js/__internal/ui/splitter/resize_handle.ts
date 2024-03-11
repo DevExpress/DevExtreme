@@ -23,6 +23,8 @@ const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
+const CLICK_EVENT = 'dxclick';
+
 const RESIZE_DIRECTION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
@@ -41,6 +43,8 @@ class ResizeHandle extends (Widget as any) {
       showResizableIcon: true,
       showCollapsePrev: true,
       showCollapseNext: true,
+      collapsePrevClick: null,
+      collapseNextClick: null,
     });
   }
 
@@ -148,6 +152,7 @@ class ResizeHandle extends (Widget as any) {
 
   _attachEventHandlers(): void {
     const eventData = { direction: this.option('direction'), immediate: true };
+    const { collapsePrevClick, collapseNextClick } = this.option();
 
     eventsEngine.on(
       this.$element(),
@@ -169,6 +174,18 @@ class ResizeHandle extends (Widget as any) {
       eventData,
       this._resizeEndHandler.bind(this),
     );
+
+    eventsEngine.on(
+      this._$collapsePrevButton,
+      CLICK_EVENT,
+      collapsePrevClick,
+    );
+
+    eventsEngine.on(
+      this._$collapseNextButton,
+      CLICK_EVENT,
+      collapseNextClick,
+    );
   }
 
   _detachEventHandlers(): void {
@@ -178,6 +195,10 @@ class ResizeHandle extends (Widget as any) {
     eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this._$collapsePrevButton, CLICK_EVENT);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this._$collapseNextButton, CLICK_EVENT);
   }
 
   _isHorizontalDirection(): boolean {
@@ -197,6 +218,11 @@ class ResizeHandle extends (Widget as any) {
       case 'showResizableIcon':
       case 'showCollapsePrev':
       case 'showCollapseNext':
+        break;
+      case 'collapsePrevClick':
+      case 'collapseNextClick':
+        this._detachEventHandlers();
+        this._attachEventHandlers();
         break;
       case 'onResize':
       case 'onResizeStart':

@@ -8,6 +8,8 @@ import 'generic_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 
 QUnit.testStart(() => {
     const markup =
@@ -489,6 +491,106 @@ QUnit.module('Events', moduleConfig, () => {
             this.instance.option(eventHandler, handlerStubAfterUpdate);
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(handlerStub.callCount, 1);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
+
+        QUnit.test(`${eventHandler} should have correct argument fields`, function(assert) {
+            assert.expect(4);
+
+            this.reinit({
+                [eventHandler]: ({ component, element, event, handleElement }) => {
+                    const $resizeHandle = this.getResizeHandles();
+
+                    assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                    assert.strictEqual($(event.target).is($resizeHandle), true, 'event field is correct');
+                    assert.strictEqual($(handleElement).is($resizeHandle), true, 'handleElement field is correct');
+                },
+                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+            });
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+        });
+    });
+
+    QUnit.test('onItemCollapsed should be called on collapse prev button click', function(assert) {
+        const onItemCollapsed = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+        });
+
+        const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        assert.strictEqual(onItemCollapsed.callCount, 1);
+    });
+
+    QUnit.test('onItemExpanded should be called on collapse next button click', function(assert) {
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemExpanded,
+            dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+        });
+
+        const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+
+        $collapseNextButton.trigger('dxclick');
+
+        assert.strictEqual(onItemExpanded.callCount, 1);
+    });
+
+    ['onItemCollapsed', 'onItemExpanded'].forEach(eventHandler => {
+        QUnit.test(`${eventHandler} should have correct argument fields`, function(assert) {
+            assert.expect(5);
+
+            this.reinit({
+                [eventHandler]: ({ component, element, event, itemData, itemElement }) => {
+                    const $resizeHandle = this.getResizeHandles();
+                    const $item = this.$element.find(`.${SPLITTER_ITEM_CLASS}`).first();
+
+                    assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                    assert.strictEqual($(event.target).parent().is($resizeHandle), true, 'event field is correct');
+                    assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
+                    assert.deepEqual(itemData, { text: 'pane 1' }, 'itemData field is correct');
+                },
+                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+            });
+
+            const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+            const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+
+            $collapsePrevButton.trigger('dxclick');
+            $collapseNextButton.trigger('dxclick');
+        });
+
+        QUnit.test(`${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
+            const handlerStub = sinon.stub();
+            const handlerStubAfterUpdate = sinon.stub();
+
+            this.reinit({
+                [eventHandler]: handlerStub,
+                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+            });
+
+            const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+            const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+
+            $collapsePrevButton.trigger('dxclick');
+            $collapseNextButton.trigger('dxclick');
+
+            this.instance.option(eventHandler, handlerStubAfterUpdate);
+
+            $collapsePrevButton.trigger('dxclick');
+            $collapseNextButton.trigger('dxclick');
 
             assert.strictEqual(handlerStub.callCount, 1);
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
