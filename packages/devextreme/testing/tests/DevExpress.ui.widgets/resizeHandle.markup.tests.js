@@ -76,28 +76,32 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
         QUnit.test(`should have collapse prev button with correct classes (direction=${direction})`, function(assert) {
             this.reinit({ direction });
             const $collapsePrevButton = $(this.$element.children()[0]);
-            const expectedIconClass = `dx-icon-spin${direction === 'horizontal' ? 'left' : 'up'}`;
+            const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'left' : 'up'}`;
 
             assert.ok($collapsePrevButton.hasClass(RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS), 'has collapse-prev-button class');
             assert.ok($collapsePrevButton.hasClass(ICON_CLASS), 'has dx-icon class');
-            assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for cerresponding icon');
+            assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for corresponding icon');
         });
 
         QUnit.test(`should have collapse next button with correct classes (direction=${direction})`, function(assert) {
             this.reinit({ direction });
             const $collapseNextButton = $(this.$element.children()[2]);
-            const expectedIconClass = `dx-icon-spin${direction === 'horizontal' ? 'right' : 'down'}`;
+            const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'right' : 'down'}`;
 
             assert.ok($collapseNextButton.hasClass(RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS), 'has collapse-next-button class');
             assert.ok($collapseNextButton.hasClass(ICON_CLASS), 'has dx-icon class');
-            assert.ok($collapseNextButton.hasClass(expectedIconClass), 'has class for cerresponding icon');
+            assert.ok($collapseNextButton.hasClass(expectedIconClass), 'has class for corresponding icon');
         });
-    });
 
-    QUnit.test('should have resize handle icon with correct class', function(assert) {
-        const $resizeHandleIcon = $(this.$element.children()[1]);
-
-        assert.ok($resizeHandleIcon.hasClass(RESIZE_HANDLE_ICON_CLASS));
+        QUnit.test(`should have resize handle icon with correct class (direction=${direction})`, function(assert) {
+            this.reinit({ direction });
+            const $resizeHandleIcon = $(this.$element.children()[1]);
+            const expectedIconClass = `dx-icon-handle${direction === 'horizontal' ? 'vertical' : 'horizontal'}`;
+    
+            assert.ok($resizeHandleIcon.hasClass(RESIZE_HANDLE_ICON_CLASS));
+            assert.ok($resizeHandleIcon.hasClass(ICON_CLASS), 'has dx-icon class');
+            assert.ok($resizeHandleIcon.hasClass(expectedIconClass), 'has class for corresponding icon');
+        });
     });
 
     QUnit.test('collapse prev button should have state invisible class when showCollapsePrev=false', function(assert) {

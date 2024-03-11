@@ -78,19 +78,27 @@ class ResizeHandle extends (Widget as any) {
       case 'next':
         return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
       case 'icon':
+        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass()}`;
       default:
-        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} dx-icon-overflow`;
+        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} .dx-icon-overflow`;
     }
   }
+
+  _getResizeIconClass(): string {
+    const isHorizontal = this._isHorizontalDirection();
+    console.log(isHorizontal);
+    
+    return isHorizontal ? 'dx-icon-handlevertical' : 'dx-icon-handlehorizontal';
+}
 
   _getCollapseIconClass(isNextButton: boolean): string {
     const isHorizontal = this._isHorizontalDirection();
 
     if (isNextButton) {
-      return `dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
+      return `dx-icon-triangle${isHorizontal ? 'right' : 'down'}`;
     }
 
-    return `dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
+    return `dx-icon-triangle${isHorizontal ? 'left' : 'up'}`;
   }
 
   _setResizeHandleContentVisibility(): void {
