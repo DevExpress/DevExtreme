@@ -36,6 +36,29 @@ const SliderTooltip = Tooltip.inherit({
     _renderContent() {
         this.callBase();
         this._renderContentText();
+        this._toggleFlexibleStyling();
+    },
+
+    _toggleFlexibleStyling() {
+        const linkElements = document.querySelectorAll('link[rel="stylesheet"][type="text/css"]');
+
+        linkElements.forEach((linkElement) => {
+            const href = linkElement.getAttribute('href');
+
+            if(href && href.includes('dark')) {
+                const styleElement = document.createElement('style');
+
+                styleElement.textContent = `
+                .dx-slider-handle,
+                .dx-tooltip-wrapper,
+                .dx-overlay-content,
+                .dx-popup-content {
+                    color: #fff !important;
+                }
+            `;
+                document.head.appendChild(styleElement);
+            }
+        });
     },
 
     _toggleAriaAttributes() {},
