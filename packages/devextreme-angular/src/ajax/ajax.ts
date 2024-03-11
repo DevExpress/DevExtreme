@@ -62,6 +62,18 @@ function assignResponseProps(xhrSurrogate: XHRSurrogate, response: HttpResponse<
   return xhrSurrogate;
 }
 
+function isGetMethod(options: Options) {
+  return (options.method || 'get').toLowerCase() === 'get';
+}
+
+function isCacheNeed(options: Options) {
+  if (options.cache === undefined) {
+    return !(isUsedScript(options) || isUsedJSONP(options));
+  }
+
+  return options.cache;
+}
+
 function isUsedScript(options: Options) {
   return options.dataType === 'script';
 }
@@ -88,22 +100,6 @@ function getRequestHeaders(options: Options) {
     }
     return acc;
   }, {});
-}
-
-function isGetMethod(options: Options) {
-  return (options.method || 'get').toLowerCase() === 'get';
-}
-
-function patchOptions(options: Options) {
-  const patchedOptions = { ...options };
-
-  if (options.cache === undefined) {
-    patchedOptions.cache = !(isUsedScript(options) || isUsedJSONP(options));
-  }
-
-  patchedOptions.crossDomain = isCrossDomain(options.url);
-
-  return patchedOptions;
 }
 
 function rejectIfAborted(deferred: DeferredResult, xhrSurrogate: XHRSurrogate, callback?: () => void) {
@@ -195,15 +191,18 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
   };
 }
 
-export const sendRequestFactory = (httpClient: HttpClient) => (sendOptions: Options) => {
+export const sendRequestFactory = (httpClient: HttpClient) => (options: Options) => {
   const abort$ = new Subject<void>();
   const deferred: DeferredResult = Deferred();
   const result = deferred.promise() as Result;
-  const method = (sendOptions.method || 'get').toLowerCase();
-  const isGet = isGetMethod(sendOptions);
-  const isJSONP = isUsedJSONP(sendOptions);
-  const isScript = isUsedScript(sendOptions);
-  const options = patchOptions(sendOptions);
+  const method = (options.method || 'get').toLowerCase();
+  const isGet = isGetMethod(options);
+  const isJSONP = isUsedJSONP(options);
+  const isScript = isUsedScript(options);
+
+  options.crossDomain = isCrossDomain(options.url);
+  options.cache = isCacheNeed(options);
+
   const headers = getRequestHeaders(options);
   const xhrSurrogate: XHRSurrogate = {
     type: 'XMLHttpRequestSurrogate',
