@@ -97,7 +97,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             this.reinit({ direction });
             const $resizeHandleIcon = $(this.$element.children()[1]);
             const expectedIconClass = `dx-icon-handle${direction === 'horizontal' ? 'vertical' : 'horizontal'}`;
-    
+
             assert.ok($resizeHandleIcon.hasClass(RESIZE_HANDLE_ICON_CLASS));
             assert.ok($resizeHandleIcon.hasClass(ICON_CLASS), 'has dx-icon class');
             assert.ok($resizeHandleIcon.hasClass(expectedIconClass), 'has class for corresponding icon');

@@ -3,14 +3,14 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
-fixture.disablePageReloads`Splitter_keyboard`
+fixture.disablePageReloads`Splitter_Icon_Results`
   .page(url(__dirname, '../../container.html'));
 
 ['horizontal', 'vertical'].forEach((orientation) => {
-  test('Splitter icon test', async (t) => {
+  test(`Splitter appearance, orientation='${orientation}'`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Splitter appearance, orientation(${orientation}).png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Splitter appearance, orientation='${orientation}'.png`, { shouldTestInCompact: true });
 
     await t
       .expect(compareResults.isValid())
@@ -29,10 +29,10 @@ fixture.disablePageReloads`Splitter_keyboard`
     });
   });
 
-  test('Nested Splitter icon test', async (t) => {
+  test(`Nested Splitter appearance, orientation='${orientation}'`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Nested Splitter appearance, orientation(${orientation}).png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Nested Splitter appearance, orientation='${orientation}'.png`, { shouldTestInCompact: true });
 
     await t
       .expect(compareResults.isValid())
