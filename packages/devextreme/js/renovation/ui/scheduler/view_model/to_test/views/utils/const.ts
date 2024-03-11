@@ -1,6 +1,5 @@
-import { ViewType } from '../../../../types';
+import { ViewType } from '../../../../../../../__internal/scheduler/__migration/types';
 
-// TODO Vinogradov: Move these types to __internal
 export const VIEWS: Record<string, ViewType> = {
   DAY: 'day',
   WEEK: 'week',

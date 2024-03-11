@@ -11,11 +11,11 @@ import dateSerialization from '@js/core/utils/date_serialization';
 import { extend } from '@js/core/utils/extend';
 import DataSource from '@js/data/data_source';
 import messageLocalization from '@js/localization/message';
-import { Semaphore } from '@js/renovation/ui/scheduler/utils/semaphore/semaphore';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
+import { Semaphore } from '../__migration/semaphore/index';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import timeZoneDataUtils from '../timezones/m_utils_timezones_data';
 
@@ -64,6 +64,8 @@ export class AppointmentForm {
 
   form: any;
 
+  // TODO: Why we need the "semaphore" in the sync code?
+  //  We should research it and delete it if redundant
   semaphore: Semaphore;
 
   constructor(scheduler) {

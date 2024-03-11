@@ -2,10 +2,9 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
-import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
-import getSkippedHoursInRange from '@js/renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
+import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '../../__migration/utils/index';
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { ExpressionUtils } from '../../m_expression_utils';
 import BaseAppointmentsStrategy from './m_strategy_base';

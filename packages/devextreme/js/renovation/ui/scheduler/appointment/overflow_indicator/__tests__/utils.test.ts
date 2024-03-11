@@ -1,9 +1,9 @@
 import {
   getOverflowIndicatorStyles,
-  getOverflowIndicatorColor,
   getIndicatorColor,
 } from '../utils';
 import { getAppointmentColor } from '../../../resources/utils';
+import { getOverflowIndicatorColor } from '../../../../../../__internal/scheduler/__migration/utils';
 
 const colorPromise = Promise.resolve('#aabbcc');
 const undefinedColorPromise = Promise.resolve(undefined);
@@ -83,7 +83,7 @@ describe('Compact appointment utils', () => {
         )
           .then(() => {
             expect(getAppointmentColor)
-              .toBeCalledWith(
+              .toHaveBeenCalledWith(
                 {
                   resources: appointmentContext.resources,
                   resourceLoaderMap: appointmentContext.resourceLoaderMap,

@@ -8,7 +8,6 @@ import {
   JSXComponent,
   Method,
 } from '@devextreme-generator/declarations';
-import { TimeZoneCalculator } from './timeZoneCalculator/utils';
 // eslint-disable-next-line import/named
 import type { Appointment } from '../../../ui/scheduler';
 import { ViewProps, SchedulerProps } from './props';
@@ -20,7 +19,6 @@ import type { Options as DataSourceOptions } from '../../../data/data_source';
 import { getCurrentViewConfig, getCurrentViewProps, getValidGroups } from './model/views';
 import { CurrentViewConfigType } from './workspaces/props';
 import {
-  Group,
   ViewMetaData,
 } from './workspaces/types';
 import { WorkSpace } from './workspaces/base/work_space';
@@ -30,8 +28,7 @@ import type { AppointmentDataItem, DataAccessorType, DataSourcePromise } from '.
 import {
   createDataAccessors, isViewDataProviderConfigValid,
 } from './common';
-import { createTimeZoneCalculator } from './timeZoneCalculator/createTimeZoneCalculator';
-import { getGroupCount, loadResources } from '../../../__internal/scheduler/resources/m_utils';
+import { loadResources } from '../../../__internal/scheduler/resources/m_utils';
 import { getAppointmentsViewModel } from './view_model/appointments/appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from './model/appointments';
 import {
@@ -48,17 +45,23 @@ import { AppointmentTooltip } from './appointment/tooltip/appointment_tooltip';
 import { getViewRenderConfigByType } from './workspaces/base/work_space_config';
 import { getPreparedDataItems, resolveDataItems } from './utils/data';
 import { getFilterStrategy } from './utils/filtering/local';
-import combineRemoteFilter from './utils/filtering/remote';
 import { ReducedIconTooltip } from './appointment/reduced_icon_tooltip/layout';
 import { AppointmentsContextProvider } from './appointments_context_provider';
 import { IAppointmentContext } from './appointments_context';
 import { ResourceMapType } from './resources/utils';
 import { combineClasses } from '../../utils/combine_classes';
 import { AppointmentEditForm } from './appointment_edit_form/layout';
-import { getPopupSize, IAppointmentPopupSize } from './appointment_edit_form/popup_config';
 import { FormContextProvider } from './form_context_provider';
 import { IFormContext } from './form_context';
 import { createFormData } from './utils/editing/formData';
+import { Group } from '../../../__internal/scheduler/__migration/types';
+import { getPopupSize, IAppointmentPopupSize } from '../../../__internal/scheduler/__migration/appointment_popup/index';
+import {
+  createTimeZoneCalculator,
+  TimeZoneCalculator,
+} from '../../../__internal/scheduler/__migration/timezone_calculator/index';
+import { getGroupCount } from '../../../__internal/scheduler/__migration/utils/index';
+import { combineRemoteFilter } from '../../../__internal/scheduler/__migration/filterting/index';
 
 export const viewFunction = ({
   restAttributes,
@@ -620,6 +623,7 @@ export class Scheduler extends JSXComponent(SchedulerProps) {
 
   @Method()
   getEndViewDate(): Date {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.workSpaceViewModel!.viewDataProvider.getLastCellEndDate();
   }
 
