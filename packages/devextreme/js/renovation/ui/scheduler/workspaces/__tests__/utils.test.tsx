@@ -1,16 +1,10 @@
 import {
   getKeyByDateAndGroup,
-  getKeyByGroup,
   addHeightToStyle,
   addWidthToStyle,
-  getIsGroupedAllDayPanel,
   getGroupCellClasses,
-  isVerticalGroupingApplied,
-  isHorizontalGroupingApplied,
-  isGroupingByDate,
   addToStyles,
 } from '../utils';
-import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../consts';
 
 describe('Workspaces utils', () => {
   describe('getKeyByDateAndGroup', () => {
@@ -26,25 +20,6 @@ describe('Workspaces utils', () => {
       const testGroup = 3;
       expect(getKeyByDateAndGroup(testDate, testGroup))
         .toBe(`${time + testGroup}`);
-    });
-  });
-
-  describe('getKeyByGroup', () => {
-    it('should generate key from group', () => {
-      expect(getKeyByGroup(0, true))
-        .toBe('0');
-      expect(getKeyByGroup(1, true))
-        .toBe('1');
-    });
-
-    it('should return 0 when group orientation is horizontal', () => {
-      expect(getKeyByGroup(32, false))
-        .toBe('0');
-    });
-
-    it('should return "0" when groupIndex is undefined', () => {
-      expect(getKeyByGroup(undefined, false))
-        .toBe('0');
     });
   });
 
@@ -136,25 +111,6 @@ describe('Workspaces utils', () => {
     });
   });
 
-  describe('getIsGroupedAllDayPanel', () => {
-    it('should return false if all-day-panel is a part of the header', () => {
-      expect(getIsGroupedAllDayPanel(false, false))
-        .toBe(false);
-      expect(getIsGroupedAllDayPanel(false, true))
-        .toBe(false);
-    });
-
-    it('should return false in case of horizontal grouping', () => {
-      expect(getIsGroupedAllDayPanel(true, false))
-        .toBe(false);
-    });
-
-    it('should return true if all-day-panel is not a part of the header and vertical grouping is used', () => {
-      expect(getIsGroupedAllDayPanel(true, true))
-        .toBe(true);
-    });
-  });
-
   describe('getGroupCellClasses', () => {
     [true, false].forEach((isFirstGroupCell) => {
       [true, false].forEach((isLastGroupCell) => {
@@ -175,71 +131,6 @@ describe('Workspaces utils', () => {
           });
         });
       });
-    });
-  });
-
-  describe('isVerticalGroupingApplied', () => {
-    const groups = [{
-      name: 'groupId',
-      items: [{ id: 1 }],
-      data: [{ id: 1 }],
-    }];
-
-    it('should return true if group orientation is vertical', () => {
-      expect(isVerticalGroupingApplied(groups, VERTICAL_GROUP_ORIENTATION))
-        .toBe(true);
-    });
-
-    it('should return false if group orientation is not vertical', () => {
-      expect(isVerticalGroupingApplied(groups, HORIZONTAL_GROUP_ORIENTATION))
-        .toBe(false);
-      expect(isVerticalGroupingApplied(groups))
-        .toBe(false);
-    });
-
-    it('should return false if groups are empty', () => {
-      expect(isVerticalGroupingApplied([], VERTICAL_GROUP_ORIENTATION))
-        .toBe(false);
-    });
-  });
-
-  describe('isHorizontalGroupingApplied', () => {
-    const testGroups = [{}] as any;
-
-    it('should return true if group orientation is horizontal and groups length is more than 0', () => {
-      expect(isHorizontalGroupingApplied(testGroups, HORIZONTAL_GROUP_ORIENTATION))
-        .toBe(true);
-    });
-
-    it('should return false if group orientation is not horizontal', () => {
-      expect(isHorizontalGroupingApplied(testGroups, VERTICAL_GROUP_ORIENTATION))
-        .toBe(false);
-      expect(isHorizontalGroupingApplied(testGroups))
-        .toBe(false);
-    });
-
-    it('should return false if groups length is 0', () => {
-      expect(isHorizontalGroupingApplied([], HORIZONTAL_GROUP_ORIENTATION))
-        .toBe(false);
-    });
-  });
-
-  describe('isGroupingByDate', () => {
-    const testGroups = [{}] as any;
-
-    it('should return true if group orientation is horizontal and groupByDate is true', () => {
-      expect(isGroupingByDate(testGroups, HORIZONTAL_GROUP_ORIENTATION, true))
-        .toBe(true);
-    });
-
-    it('should return false if group orientation is horizontal and groupByDate is false', () => {
-      expect(isGroupingByDate(testGroups, HORIZONTAL_GROUP_ORIENTATION, false))
-        .toBe(false);
-    });
-
-    it('should return false if group orientation is vertical', () => {
-      expect(isGroupingByDate(testGroups, VERTICAL_GROUP_ORIENTATION, false))
-        .toBe(false);
     });
   });
 });

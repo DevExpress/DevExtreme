@@ -10,9 +10,9 @@ import { Row } from '../../row';
 import { AllDayPanelCell as Cell } from './cell';
 import {
   DataCellTemplateProps,
-  ViewCellData,
 } from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
+import { ViewCellData } from '../../../../../../../__internal/scheduler/__migration/types';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row

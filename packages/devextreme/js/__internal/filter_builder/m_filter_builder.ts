@@ -457,7 +457,7 @@ class FilterBuilder extends Widget<any> {
               // @ts-expect-error
               $valueButton.remove();
             }
-            $operationButton.html(currentOperation.text);
+            $operationButton.text(currentOperation.text);
             this._updateFilter();
           }
         },
@@ -508,7 +508,7 @@ class FilterBuilder extends Widget<any> {
             that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
             const caption = getFullCaption(item, e.component.option('items'));
-            $fieldButton.html(caption);
+            $fieldButton.text(caption);
             this._updateFilter();
           }
         },

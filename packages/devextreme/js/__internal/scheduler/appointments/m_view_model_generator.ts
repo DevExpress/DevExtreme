@@ -1,6 +1,6 @@
-import { getAppointmentKey } from '@js/renovation/ui/scheduler/appointment/utils';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { getAppointmentKey } from '../__migration/utils/index';
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month';

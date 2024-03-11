@@ -1,6 +1,5 @@
 import {
   getAppointmentStyles,
-  getAppointmentKey,
   getReducedIconTooltipText,
 } from '../utils';
 
@@ -93,13 +92,6 @@ describe('Appointment utils', () => {
           top: '2px',
           width: '50px',
         });
-    });
-  });
-
-  describe('getAppointmentKey', () => {
-    it('should generate correct key', () => {
-      expect(getAppointmentKey(testViewModel.geometry))
-        .toBe('1-2-10-20');
     });
   });
 

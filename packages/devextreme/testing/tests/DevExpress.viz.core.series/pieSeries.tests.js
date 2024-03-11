@@ -43,7 +43,7 @@ const createSeries = function(options, renderSettings) {
         seriesGroup: renderer.g()
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 

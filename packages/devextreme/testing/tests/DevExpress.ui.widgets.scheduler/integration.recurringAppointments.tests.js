@@ -36,6 +36,7 @@ supportedScrollingModes.forEach(scrollingMode => {
         beforeEach: function() {
             fx.off = true;
 
+            this.clock = sinon.useFakeTimers();
             this.createInstance = options => {
                 const scheduler = createWrapper({
                     height: 600,
@@ -45,14 +46,13 @@ supportedScrollingModes.forEach(scrollingMode => {
                     },
                     _draggingMode: 'default',
                     ...options
-                });
+                }, this.clock);
 
                 const workspace = scheduler.instance.getWorkSpace();
                 workspace.renderer.getRenderTimeout = () => -1;
 
                 return scheduler;
             };
-            this.clock = sinon.useFakeTimers();
         },
         afterEach: function() {
             fx.off = false;

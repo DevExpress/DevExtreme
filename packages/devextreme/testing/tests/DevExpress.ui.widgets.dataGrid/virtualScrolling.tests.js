@@ -244,7 +244,7 @@ QUnit.module('Virtual scrolling', {
         const contentSizes = getContentSizes(20, 20);
 
         this.scrollController.setContentItemSizes(contentSizes);
-        mockDataSource.load.reset();
+        mockDataSource.load.resetHistory();
         this.externalDataChangedHandler.reset();
     },
 
@@ -268,7 +268,7 @@ QUnit.module('Virtual scrolling', {
 
     QUnit.test('setViewport position. Scroll in the viewport area', function(assert) {
         this.scrollController.setViewportPosition(1);
-        mockDataSource.load.reset();
+        mockDataSource.load.resetHistory();
 
         this.scrollController.setViewportPosition(230);
         this.scrollController.setViewportPosition(1);
@@ -524,7 +524,7 @@ QUnit.module('Virtual scrolling', {
 
     QUnit.test('setViewport position. Scroll up', function(assert) {
         this.scrollController.setViewportPosition(this.contentSize * 8 + 220);
-        mockDataSource.load.reset();
+        mockDataSource.load.resetHistory();
         this.externalDataChangedHandler.reset();
 
         this.scrollController.setViewportPosition(this.contentSize * 7 + 220);
@@ -586,7 +586,7 @@ QUnit.module('Subscribe to external scrollable events', {
         this.contentSize = 400;
         const contentSizes = getContentSizes(20, 20);
         this.scrollController.setContentItemSizes(contentSizes);
-        mockDataSource.load.reset();
+        mockDataSource.load.resetHistory();
         this.externalDataChangedHandler.reset();
         this.clock = sinon.useFakeTimers();
 

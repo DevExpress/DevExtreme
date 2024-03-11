@@ -713,7 +713,7 @@ QUnit.test('adjust labels on updateSize', function(assert) {
     const axis = this.createDrawnAxis();
     const texts = this.renderer.text.getCalls().map(call => {
         const text = call.returnValue;
-        text.attr.reset();
+        text.attr.resetHistory();
         return text;
     });
 
@@ -766,8 +766,8 @@ QUnit.test('Update grid on second draw', function(assert) {
     const axis = this.createDrawnAxis({ grid: { visible: true, color: 'black', width: 1, opacity: 1 }, label: { overlappingBehavior: 'ignore' } });
 
     const grid = this.renderer.path.lastCall.returnValue;
-    grid.attr.reset();
-    grid.rotate.reset();
+    grid.attr.resetHistory();
+    grid.rotate.resetHistory();
 
     axis.draw({
         left: 10,
@@ -1238,7 +1238,7 @@ QUnit.test('Update grid on second draw', function(assert) {
     const axis = this.createDrawnAxis({ grid: { visible: true, color: 'black', width: 1, opacity: 1 }, label: { overlappingBehavior: 'ignore' } });
 
     const grid = this.renderer.circle.lastCall.returnValue;
-    grid.attr.reset();
+    grid.attr.resetHistory();
 
     axis.draw({
         left: 10,
@@ -1263,7 +1263,7 @@ QUnit.test('Update grid on second draw. Remove grid element if its value out of 
     const axis = this.createDrawnAxis({ grid: { visible: true, color: 'black', width: 1, opacity: 1 }, label: { overlappingBehavior: 'ignore' } });
 
     const grid = this.renderer.circle.lastCall.returnValue;
-    grid.stub('remove').reset();
+    grid.resetStub('remove');
 
     axis.getTranslator().translate.withArgs(500, 0).returns(500);
 
@@ -1294,7 +1294,7 @@ QUnit.test('Update grid on second draw. Remove grid element if its value out of 
         width: 100
     });
     const grid = this.renderer.path.lastCall.returnValue;
-    grid.stub('remove').reset();
+    grid.resetStub('remove');
     axis.getTranslator().translate.withArgs(500, 0).returns(500);
     axis.updateSize({
         left: 10,
@@ -1818,7 +1818,7 @@ QUnit.test('Check bounded ticks overlapping on updateSize - remove overlapped la
 
     const text = this.renderer.text;
 
-    text.getCalls().forEach(c => c.returnValue.stub('remove').reset());
+    text.getCalls().forEach(c => c.returnValue.resetStub('remove'));
     bBoxes = [
         { x: 0, y: 10, width: 10, height: 5 },
         { x: 5, y: 10, width: 10, height: 5 },
@@ -1847,7 +1847,7 @@ QUnit.test('Check bounded ticks overlapping on updateSize - do not remove overla
 
     const text = this.renderer.text;
 
-    text.getCalls().forEach(c => c.returnValue.stub('remove').reset());
+    text.getCalls().forEach(c => c.returnValue.resetStub('remove'));
     bBoxes = [
         { x: 0, y: 10, width: 10, height: 5 },
         { x: 5, y: 10, width: 10, height: 5 },
@@ -2387,7 +2387,7 @@ QUnit.test('Do not apply margins two times', function(assert) {
     });
 
     axis.draw(this.canvas);
-    this.tickGenerator.lastCall.returnValue.reset();
+    this.tickGenerator.lastCall.returnValue.resetHistory();
 
     // act
     axis.draw(this.canvas);

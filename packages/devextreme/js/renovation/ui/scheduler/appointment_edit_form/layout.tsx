@@ -16,7 +16,7 @@ import {
   isPopupFullScreenNeeded,
   IToolbarButtonConfig,
   getMaxWidth,
-} from './popup_config';
+} from '../../../../__internal/scheduler/__migration/appointment_popup/index';
 // eslint-disable-next-line import/named
 import type { dxSchedulerAppointment } from '../../../../ui/scheduler';
 import { EditForm } from './edit_form/layout';

@@ -9,8 +9,10 @@ import 'generic_light.css!';
 import {
     SCROLLABLE_CONTAINER_CLASS,
     SCROLLABLE_WRAPPER_CLASS,
-    SCROLLABLE_CONTENT_CLASS
+    SCROLLABLE_CONTENT_CLASS,
+    calculateInertiaDistance,
 } from './scrollable.constants.js';
+
 
 const moduleConfig = {
     beforeEach: function() {
@@ -365,4 +367,43 @@ QUnit.test('changing action option does not cause render', function(assert) {
     testAction('onScroll');
     testAction('onBounce');
     testAction('onUpdated');
+});
+
+QUnit.test('update', function(assert) {
+    this.clock.restore();
+    const done = assert.async();
+    const moveDistance = -10;
+    const moveDuration = 10;
+    const onUpdatedHandler = sinon.spy();
+    const inertiaDistance = calculateInertiaDistance(moveDistance, moveDuration);
+    const distance = moveDistance + inertiaDistance;
+    const $scrollable = $('#scrollable');
+    const $scrollableChild = $scrollable.find('div');
+
+    $scrollableChild.height(0);
+
+    $scrollable.dxScrollable({
+        useNative: false,
+        onUpdated: onUpdatedHandler,
+        onEnd: function() {
+            const location = getScrollOffset($scrollable);
+
+            assert.roughEqual(location.top, distance, 1, 'distance was calculated correctly');
+            done();
+        }
+    });
+
+    const mouse = pointerMock($scrollable.find('.' + SCROLLABLE_CONTENT_CLASS)).start();
+
+    $scrollableChild.height(-1 * distance + 1);
+    onUpdatedHandler.resetHistory();
+    $scrollable.dxScrollable('instance').update();
+
+    assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');
+
+    mouse
+        .down()
+        .wait(moveDuration)
+        .move(0, moveDistance)
+        .up();
 });
