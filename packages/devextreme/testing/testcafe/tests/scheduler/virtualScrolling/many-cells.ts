@@ -48,42 +48,21 @@ testCases.forEach(({ views }) => {
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    // await t
-    //   .expect(
-    //     await takeScreenshot(
-    //       buildScreenshotName(viewType, orientation, 'start'),
-    //       scheduler.element
-    //     )
-    //   )
-    //   .ok();
-
-    await takeScreenshot(buildScreenshotName(viewType, orientation, 'start'), scheduler.element);
+    await t
+      .expect(await takeScreenshot(buildScreenshotName(viewType, orientation, 'start'), scheduler.element))
+      .ok();
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount / 2 });
 
-    // await t
-    //   .expect(
-    //     await takeScreenshot(
-    //       buildScreenshotName(viewType, orientation, 'middle'),
-    //       scheduler.element
-    //     )
-    //   )
-    //   .ok();
-
-    await takeScreenshot(buildScreenshotName(viewType, orientation, 'middle'), scheduler.element);
+    await t
+      .expect(await takeScreenshot(buildScreenshotName(viewType, orientation, 'middle'), scheduler.element))
+      .ok();
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount - 1 });
 
-    // await t
-    //   .expect(
-    //     await takeScreenshot(
-    //       buildScreenshotName(viewType, orientation, 'end'),
-    //       scheduler.element
-    //     )
-    //   )
-    //   .ok();
-
-    await takeScreenshot(buildScreenshotName(viewType, orientation, 'end'), scheduler.element);
+    await t
+      .expect(await takeScreenshot(buildScreenshotName(viewType, orientation, 'end'), scheduler.element))
+      .ok();
 
     await t
       .expect(compareResults.isValid())
