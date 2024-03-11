@@ -10,7 +10,7 @@ fixture.disablePageReloads`Splitter_keyboard`
   test('Splitter icon test', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Splitter appearance, orientation:${orientation}.png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Splitter appearance, orientation(${orientation}).png`, { shouldTestInCompact: true });
 
     await t
       .expect(compareResults.isValid())
@@ -32,7 +32,7 @@ fixture.disablePageReloads`Splitter_keyboard`
   test('Nested Splitter icon test', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Nested Splitter appearance, orientation:${orientation}.png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Nested Splitter appearance, orientation(${orientation}).png`, { shouldTestInCompact: true });
 
     await t
       .expect(compareResults.isValid())
