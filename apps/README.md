@@ -46,7 +46,7 @@ cd apps/vue
 npm run start
 ```
 
-## Updating DevExtreme code
+## Update DevExtreme code
 
 To observe the changes made to the DevExtreme code within playgrounds, rebuild the `devextreme` package.
 ```
