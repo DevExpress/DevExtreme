@@ -45,7 +45,6 @@ import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
 import AppointmentCollection from './appointments/m_appointment_collection';
-import { renderAppointments } from './appointments/m_render';
 import { SchedulerHeader } from './header/m_header';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
@@ -1196,16 +1195,7 @@ class Scheduler extends Widget<any> {
       viewModel = this._getAppointmentsToRepaint();
     }
 
-    if (this.option('isRenovatedAppointments')) {
-      renderAppointments({
-        instance: this,
-        $dateTable: this.getWorkSpace()._getDateTable(),
-        viewModel,
-      });
-    } else {
-      this._appointments.option('items', viewModel);
-    }
-
+    this._appointments.option('items', viewModel);
     this.appointmentDataProvider.cleanState();
   }
 
@@ -1213,15 +1203,6 @@ class Scheduler extends Widget<any> {
     const layoutManager = this.getLayoutManager();
 
     const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);
-    if (this.option('isRenovatedAppointments')) {
-      const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
-        ? this.option('appointmentTemplate')
-        : undefined;
-      return {
-        appointments: appointmentsMap,
-        appointmentTemplate,
-      };
-    }
 
     return layoutManager.getRepaintedAppointments(
       appointmentsMap,
@@ -1593,7 +1574,6 @@ class Scheduler extends Widget<any> {
       rtlEnabled: this.option('rtlEnabled'),
       currentView: this.currentView,
       groups: this._getCurrentViewOption('groups'),
-      isRenovatedAppointments: this.option('isRenovatedAppointments'),
       timeZoneCalculator: this.timeZoneCalculator,
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
@@ -1737,7 +1717,6 @@ class Scheduler extends Widget<any> {
 
       // TODO: SSR does not work correctly with renovated render
       renovateRender: this._isRenovatedRender(isVirtualScrolling),
-      isRenovatedAppointments: this.option('isRenovatedAppointments'),
     }, currentViewOptions);
 
     result.observer = this;
