@@ -113,5 +113,7 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
         allowUpdating: true,
       },
     });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
   });
 });
