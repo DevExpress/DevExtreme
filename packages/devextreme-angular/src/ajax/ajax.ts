@@ -123,7 +123,7 @@ function addJsonpCallbackAndReturnData(options: Options, deferred: DeferredResul
   return patchedOptions.data;
 }
 
-function sendRequestByScript(url: string, deferred, xhrSurrogate: XHRSurrogate) {
+function sendRequestByScript(url: string, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
   evalCrossDomainScript(url).then(
     () => deferred.resolve(null, SUCCESS, xhrSurrogate),
     () => deferred.reject(xhrSurrogate, ERROR),
