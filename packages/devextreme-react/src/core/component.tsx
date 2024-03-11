@@ -7,7 +7,6 @@ import {
   useEffect,
   useCallback,
   ReactElement,
-  memo,
 } from 'react';
 
 import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base';
@@ -34,85 +33,83 @@ type ComponentRef = ComponentBaseRef & {
   clearExtensions: () => void;
 };
 
-const Component = memo(
-  forwardRef<ComponentRef, any>(
-    <P extends IHtmlOptions>(props: P & ComponentProps, ref: React.ForwardedRef<ComponentRef>) => {
-      const componentBaseRef = useRef<ComponentBaseRef>(null);
-      const extensionCreators = useRef<((element: Element) => void)[]>([]);
+const Component = forwardRef<ComponentRef, any>(
+  <P extends IHtmlOptions>(props: P & ComponentProps, ref: React.ForwardedRef<ComponentRef>) => {
+    const componentBaseRef = useRef<ComponentBaseRef>(null);
+    const extensionCreators = useRef<((element: Element) => void)[]>([]);
 
-      const registerExtension = useCallback((creator: any) => {
-        extensionCreators.current.push(creator);
-      }, [extensionCreators.current]);
+    const registerExtension = useCallback((creator: any) => {
+      extensionCreators.current.push(creator);
+    }, [extensionCreators.current]);
 
-      const createExtensions = useCallback(() => {
-        extensionCreators.current.forEach((creator) => creator(componentBaseRef.current?.getElement() as HTMLDivElement));
-      }, [extensionCreators.current, componentBaseRef.current]);
+    const createExtensions = useCallback(() => {
+      extensionCreators.current.forEach((creator) => creator(componentBaseRef.current?.getElement() as HTMLDivElement));
+    }, [extensionCreators.current, componentBaseRef.current]);
 
-      const renderChildren = useCallback(() => React.Children.map(
-        // @ts-expect-error TS2339
-        props.children,
-        (child) => {
-          if (child && elementIsExtension(child)) {
-            return React.cloneElement(
-              child,
-              { onMounted: registerExtension },
-            );
-          }
+    const renderChildren = useCallback(() => React.Children.map(
+      // @ts-expect-error TS2339
+      props.children,
+      (child) => {
+        if (child && elementIsExtension(child)) {
+          return React.cloneElement(
+            child,
+            { onMounted: registerExtension },
+          );
+        }
 
-          return child;
+        return child;
+      },
+    ), [props, registerExtension]);
+
+    const createWidget = useCallback((el?: Element) => {
+      componentBaseRef.current?.createWidget(el);
+    }, [componentBaseRef.current]);
+
+    const clearExtensions = useCallback(() => {
+      if (props.clearExtensions) {
+        props.clearExtensions();
+      }
+
+      extensionCreators.current = [];
+    }, [
+      extensionCreators.current,
+      props.clearExtensions,
+    ]);
+
+    useEffect(() => {
+      createWidget();
+      createExtensions();
+
+      return () => {
+        clearExtensions();
+      };
+    }, []);
+
+    useImperativeHandle(ref, () => (
+      {
+        getInstance() {
+          return componentBaseRef.current?.getInstance();
         },
-      ), [props, registerExtension]);
-
-      const createWidget = useCallback((el?: Element) => {
-        componentBaseRef.current?.createWidget(el);
-      }, [componentBaseRef.current]);
-
-      const clearExtensions = useCallback(() => {
-        if (props.clearExtensions) {
-          props.clearExtensions();
-        }
-
-        extensionCreators.current = [];
-      }, [
-        extensionCreators.current,
-        props.clearExtensions,
-      ]);
-
-      useEffect(() => {
-        createWidget();
-        createExtensions();
-
-        return () => {
+        getElement() {
+          return componentBaseRef.current?.getElement();
+        },
+        createWidget(el) {
+          createWidget(el);
+        },
+        clearExtensions() {
           clearExtensions();
-        };
-      }, []);
+        },
+      }
+    ), [componentBaseRef.current, createWidget, clearExtensions]);
 
-      useImperativeHandle(ref, () => (
-        {
-          getInstance() {
-            return componentBaseRef.current?.getInstance();
-          },
-          getElement() {
-            return componentBaseRef.current?.getElement();
-          },
-          createWidget(el) {
-            createWidget(el);
-          },
-          clearExtensions() {
-            clearExtensions();
-          },
-        }
-      ), [componentBaseRef.current, createWidget, clearExtensions]);
-
-      return (
-        <ComponentBase<P>
-          ref={componentBaseRef}
-          renderChildren={renderChildren}
-          {...props}
-        />
-      );
-    },
-  ),
+    return (
+      <ComponentBase<P>
+        ref={componentBaseRef}
+        renderChildren={renderChildren}
+        {...props}
+      />
+    );
+  },
 ) as <P extends IHtmlOptions>(props: P & ComponentProps & { ref?: React.Ref<ComponentRef> }) => ReactElement | null;
 
 export {
