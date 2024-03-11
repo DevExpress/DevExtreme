@@ -71,7 +71,7 @@ class ResizeHandle extends (Widget as any) {
     this._setResizeHandleContentVisibility();
   }
 
-  _getIconClass(iconType: string): string {
+  _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
     switch (iconType) {
       case 'prev':
         return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
@@ -80,16 +80,15 @@ class ResizeHandle extends (Widget as any) {
       case 'icon':
         return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass()}`;
       default:
-        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} .dx-icon-overflow`;
+        return '';
     }
   }
 
   _getResizeIconClass(): string {
     const isHorizontal = this._isHorizontalDirection();
-    console.log(isHorizontal);
-    
-    return isHorizontal ? 'dx-icon-handlevertical' : 'dx-icon-handlehorizontal';
-}
+
+    return `dx-icon-handle${isHorizontal ? 'vertical' : 'horizontal'}`;
+  }
 
   _getCollapseIconClass(isNextButton: boolean): string {
     const isHorizontal = this._isHorizontalDirection();
