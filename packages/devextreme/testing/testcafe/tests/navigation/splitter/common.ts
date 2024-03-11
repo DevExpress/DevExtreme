@@ -32,7 +32,7 @@ fixture.disablePageReloads`Splitter_Icon_Results`
   test(`Nested Splitter appearance, orientation='${orientation}'`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `Nested Splitter appearance, orientation='${orientation}'.png`, {element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `Nested Splitter appearance, orientation='${orientation}'.png`, { element: '#container', shouldTestInCompact: true });
 
     await t
       .expect(compareResults.isValid())
