@@ -4,10 +4,10 @@ import {
   JSXComponent,
 } from '@devextreme-generator/declarations';
 import { Row } from '../../../base/row';
-import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
 import { DateHeaderLayoutProps } from '../../../base/header_panel/date_header/layout';
 import getThemeType from '../../../../../../utils/getThemeType';
+import { isHorizontalGroupingApplied } from '../../../../../../../__internal/scheduler/__migration/utils/index';
 
 const { isMaterialBased } = getThemeType();
 
@@ -110,6 +110,7 @@ export class TimelineDateHeaderLayout extends JSXComponent<DateHeaderLayoutProps
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups, groupByDate } = this.props;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return isHorizontalGroupingApplied(groups, groupOrientation) && !groupByDate;
   }
 }

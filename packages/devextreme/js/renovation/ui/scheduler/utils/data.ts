@@ -2,7 +2,7 @@ import type { Appointment } from '../../../../ui/scheduler';
 import { AppointmentDataItem, DataAccessorType, LoadDataType } from '../types';
 import { replaceWrongEndDate } from '../../../../__internal/scheduler/appointments/data_provider/m_utils';
 import { createAppointmentAdapter } from '../../../../__internal/scheduler/m_appointment_adapter';
-import { TimeZoneCalculator } from '../timeZoneCalculator/utils';
+import { TimeZoneCalculator } from '../../../../__internal/scheduler/__migration/timezone_calculator/index';
 import { isDefined } from '../../../../core/utils/type';
 
 const RECURRENCE_FREQ = 'freq';

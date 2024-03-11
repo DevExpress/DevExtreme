@@ -1,15 +1,14 @@
 import ViewDataProvider from '../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import { SchedulerProps, ViewProps } from '../../props';
-import { ViewType } from '../../types';
+import { ViewType, Group, ViewDataProviderType } from '../../../../../__internal/scheduler/__migration/types';
 import { prepareGenerationOptions } from '../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../workspaces/base/work_space_config';
 import { WorkSpaceProps } from '../../workspaces/props';
-import { CellsMetaData, Group, ViewDataProviderType } from '../../workspaces/types';
+import { CellsMetaData } from '../../workspaces/types';
 import { getAppointmentsConfig, getAppointmentsModel } from '../appointments';
 import { AppointmentsConfigType } from '../types';
-import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
+import { createTimeZoneCalculator, TimeZoneCalculator } from '../../../../../__internal/scheduler/__migration/timezone_calculator';
 import { getCurrentViewConfig } from '../views';
-import { createTimeZoneCalculator } from '../../timeZoneCalculator/createTimeZoneCalculator';
 
 const prepareInstances = (
   viewType: ViewType,

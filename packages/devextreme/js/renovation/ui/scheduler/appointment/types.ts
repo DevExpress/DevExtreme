@@ -1,18 +1,9 @@
 import type { AppointmentCollectorTemplateData, AppointmentTemplateData } from '../../../../ui/scheduler';
 import { BaseTemplateProps, Direction } from '../types';
+import { AppointmentGeometry } from '../../../../__internal/scheduler/__migration/types';
 
 export type ReduceType = 'head' | 'body' | 'tail';
 export type AppointmentKindType = 'allDay' | 'allDayCompact' | 'regular' | 'regularCompact';
-
-export interface AppointmentGeometry {
-  empty: boolean; // TODO
-  left: number;
-  top: number;
-  width: number;
-  height: number;
-  leftVirtualWidth: number;
-  topVirtualHeight: number;
-}
 
 export interface AppointmentData {
   text: string;

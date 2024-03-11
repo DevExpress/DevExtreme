@@ -1,20 +1,21 @@
 import dateUtils from '@js/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/date';
+
 import {
   calculateCellIndex,
   calculateDayDuration,
   getDisplayedCellCount,
-  getDisplayedRowCount,
+  getDisplayedRowCount, getGroupCount,
+  getIsGroupedAllDayPanel,
+  getKeyByGroup,
   getStartViewDateWithoutDST,
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
   isHorizontalView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
-import { dateUtilsTs } from '@ts/core/utils/date';
-
+} from '../../__migration/utils/index';
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
 import timezoneUtils from '../../m_utils_time_zone';
-import { getAllGroups, getGroupCount } from '../../resources/m_utils';
+import { getAllGroups } from '../../resources/m_utils';
 
 const toMs = dateUtils.dateToMilliseconds;
 

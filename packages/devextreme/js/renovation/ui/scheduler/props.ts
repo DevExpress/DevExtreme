@@ -41,11 +41,10 @@ import type {
 
 import type { UserDefinedElement, DxElement } from '../../../core/element'; // eslint-disable-line import/named
 import messageLocalization from '../../../localization/message';
-import type { ViewType } from './types';
 import { BaseWidgetProps } from '../common/base_props';
 import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
 import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from './appointment/types';
-import type { AllDayPanelModeType } from './appointment/utils/getAppointmentTakesAllDay';
+import type { AllDayPanelModeType, ViewType } from '../../../__internal/scheduler/__migration/types';
 
 @ComponentBindings()
 export class ScrollingProps {

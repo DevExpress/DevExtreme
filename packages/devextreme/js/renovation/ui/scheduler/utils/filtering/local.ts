@@ -1,11 +1,11 @@
-import { AppointmentFilter, DataAccessorType, ViewType } from '../../types';
+import { AppointmentFilter, DataAccessorType } from '../../types';
 import {
   AppointmentFilterBaseStrategy,
   AppointmentFilterVirtualStrategy,
 } from '../../../../../__internal/scheduler/appointments/data_provider/m_appointment_filter';
-import { TimeZoneCalculator } from '../../timeZoneCalculator/utils';
-import { Group, ViewDataProviderType } from '../../workspaces/types';
 import { ResourceProps } from '../../props';
+import { Group, ViewDataProviderType, ViewType } from '../../../../../__internal/scheduler/__migration/types';
+import { TimeZoneCalculator } from '../../../../../__internal/scheduler/__migration/timezone_calculator/index';
 
 export const getFilterStrategy = (
   resources: ResourceProps[],

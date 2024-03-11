@@ -1,16 +1,16 @@
 import ViewDataProvider from '../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_provider';
 import { SchedulerProps, ViewProps } from '../../../props';
-import { DataAccessorType, ViewType } from '../../../types';
+import { DataAccessorType } from '../../../types';
+import { ViewType, ViewDataProviderType } from '../../../../../../__internal/scheduler/__migration/types';
 import { prepareGenerationOptions } from '../../../workspaces/base/work_space';
 import { getViewRenderConfigByType } from '../../../workspaces/base/work_space_config';
 import { WorkSpaceProps } from '../../../workspaces/props';
-import { CellsMetaData, ViewDataProviderType } from '../../../workspaces/types';
+import { CellsMetaData } from '../../../workspaces/types';
 import { getAppointmentsViewModel } from '../appointments';
 import { getAppointmentsConfig, getAppointmentsModel } from '../../../model/appointments';
 import { compileGetter, compileSetter } from '../../../../../../core/utils/data';
-import { createTimeZoneCalculator } from '../../../timeZoneCalculator/createTimeZoneCalculator';
 import { AppointmentsConfigType } from '../../../model/types';
-import { TimeZoneCalculator } from '../../../timeZoneCalculator/utils';
+import { createTimeZoneCalculator, TimeZoneCalculator } from '../../../../../../__internal/scheduler/__migration/timezone_calculator';
 import { getCurrentViewConfig } from '../../../model/views';
 
 jest.mock('../../../../../../__internal/scheduler/workspaces/helpers/m_position_helper', () => ({

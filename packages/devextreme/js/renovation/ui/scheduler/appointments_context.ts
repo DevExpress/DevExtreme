@@ -10,7 +10,7 @@ import {
 import { ResourceProps } from './props';
 import { ResourceMapType } from './resources/utils';
 import { DataAccessorType } from './types';
-import { Group } from './workspaces/types';
+import { Group } from '../../../__internal/scheduler/__migration/types';
 
 export interface IAppointmentContext {
   viewModel: AppointmentsViewModelType;
