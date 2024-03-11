@@ -691,8 +691,8 @@ export const ListBase = CollectionWidget.inherit({
         const { items, allowItemDeleting } = this.option();
 
         const label = allowItemDeleting
-            ? 'Deletable items'
-            : 'Items';
+            ? messageLocalization.format('dxList-listAriaLabel-deletable')
+            : messageLocalization.format('dxList-listAriaLabel');
 
         const listArea = items?.length ? {
             role: 'listbox',
