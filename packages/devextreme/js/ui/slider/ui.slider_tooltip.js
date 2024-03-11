@@ -1,4 +1,3 @@
-import $ from '../../core/renderer';
 import Tooltip from '../tooltip';
 import { extend } from '../../core/utils/extend';
 import { SliderTooltipPositionController } from './slider_tooltip_position_controller';
@@ -37,30 +36,6 @@ const SliderTooltip = Tooltip.inherit({
     _renderContent() {
         this.callBase();
         this._renderContentText();
-        this._toggleFlexibleStyling();
-    },
-
-    _toggleFlexibleStyling() {
-        const $linkElements = $('link[rel="stylesheet"][type="text/css"]');
-
-        $linkElements.each((index, linkElement) => {
-            const href = $(linkElement).attr('href');
-
-            if(href && href.includes('dark')) {
-                const styleElement = $('<style>');
-
-                styleElement.text(`
-                .dx-slider-handle,
-                .dx-tooltip-wrapper,
-                .dx-overlay-content,
-                .dx-popup-content {
-                    color: #fff !important;
-                }
-            `);
-
-                $('head').append(styleElement);
-            }
-        });
     },
 
     _toggleAriaAttributes() {},
