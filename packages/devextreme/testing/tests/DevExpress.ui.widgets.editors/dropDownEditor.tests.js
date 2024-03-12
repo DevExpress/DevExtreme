@@ -2099,11 +2099,6 @@ QUnit.module('aria accessibility', () => {
         assert.equal($input.attr('aria-haspopup'), 'true', 'haspopup attribute exists');
     });
 
-    QUnit.test('aria-autocomplete property on input', function(assert) {
-        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        assert.equal($input.attr('aria-autocomplete'), 'list', 'haspopup attribute exists');
-    });
-
     QUnit.test('aria-owns should be removed when popup is not visible', function(assert) {
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
         const instance = $dropDownEditor.dxDropDownEditor('instance');
@@ -2137,6 +2132,70 @@ QUnit.module('aria accessibility', () => {
                 dropDownEditor.close();
                 assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
                 assert.ok(hasAttr(), `${attrName} attribute has been set`);
+            });
+        });
+    });
+
+    QUnit.module('aria-autocomplete', () => {
+        const defaultConfigurationFalse = {
+            acceptCustomValue: false,
+            searchEnabled: false,
+        };
+
+        const defaultConfigurationTrue = {
+            acceptCustomValue: true,
+            searchEnabled: true,
+        };
+
+        const configurations = [
+            [{
+                acceptCustomValue: true,
+                searchEnabled: false,
+            }, 'list'],
+            [{
+                acceptCustomValue: false,
+                searchEnabled: true,
+            }, 'list'],
+            [{
+                ...defaultConfigurationFalse,
+                readOnly: true,
+            }, 'none'],
+            [{
+                ...defaultConfigurationFalse,
+                readOnly: false,
+            }, 'none'],
+            [{
+                ...defaultConfigurationFalse,
+                disabled: false,
+            }, 'none'],
+            [{
+                ...defaultConfigurationFalse,
+                disabled: true,
+            }, 'none'],
+            [{
+                ...defaultConfigurationTrue,
+                readOnly: true,
+            }, 'none'],
+            [{
+                ...defaultConfigurationTrue,
+                readOnly: false,
+            }, 'list'],
+            [{
+                ...defaultConfigurationTrue,
+                disabled: false,
+            }, 'list'],
+            [{
+                ...defaultConfigurationTrue,
+                disabled: true,
+            }, 'none'],
+        ];
+
+        configurations.forEach(([configuration, expectedValue]) => {
+            QUnit.test(`aria-autocomplete should be set correctly when ${JSON.stringify(configuration)}`, function(assert) {
+                const $element = $('#dropDownEditorLazy').dxDropDownEditor(configuration);
+                const $input = $element.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-autocomplete'), expectedValue, 'aria-autocomplete is correct');
             });
         });
     });

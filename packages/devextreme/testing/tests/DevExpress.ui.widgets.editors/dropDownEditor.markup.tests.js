@@ -19,7 +19,6 @@ const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 module('DropDownEditor markup', {
     beforeEach: function() {
@@ -113,23 +112,6 @@ module('DropDownEditor markup', {
         assert.ok(renderFieldSpy.calledOnce, 'field has been rendered');
     });
 });
-
-
-module('aria accessibility', () => {
-    test('aria role', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
-        const $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
-        assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
-    });
-
-    test('aria-autocomplete property on input', function(assert) {
-        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        assert.equal($input.attr('aria-autocomplete'), 'list', 'haspopup attribute exists');
-    });
-});
-
 
 module('option change', function() {
     const getStartDirection = (isRtlEnabled) => isRtlEnabled ? 'right' : 'left';
