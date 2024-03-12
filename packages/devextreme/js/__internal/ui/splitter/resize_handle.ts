@@ -75,26 +75,33 @@ class ResizeHandle extends (Widget as any) {
     this._setResizeHandleContentVisibility();
   }
 
-  _getIconClass(iconType: string): string {
+  _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
     switch (iconType) {
       case 'prev':
         return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
       case 'next':
         return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
       case 'icon':
+        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass()}`;
       default:
-        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} dx-icon-overflow`;
+        return '';
     }
+  }
+
+  _getResizeIconClass(): string {
+    const isHorizontal = this._isHorizontalDirection();
+
+    return `dx-icon-handle${isHorizontal ? 'vertical' : 'horizontal'}`;
   }
 
   _getCollapseIconClass(isNextButton: boolean): string {
     const isHorizontal = this._isHorizontalDirection();
 
     if (isNextButton) {
-      return `dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
+      return `dx-icon-triangle${isHorizontal ? 'right' : 'down'}`;
     }
 
-    return `dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
+    return `dx-icon-triangle${isHorizontal ? 'left' : 'up'}`;
   }
 
   _setResizeHandleContentVisibility(): void {
