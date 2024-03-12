@@ -18,8 +18,6 @@ import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 
-import type { DataController } from '../grid_core/data_controller/m_data_controller';
-import type { KeyboardNavigationController } from '../grid_core/keyboard_navigation/m_keyboard_navigation';
 import treeListCore from './m_core';
 
 const { callModuleItemsMethod } = treeListCore;
@@ -61,10 +59,6 @@ treeListCore.registerModulesOrder([
   'gridView']);
 
 class TreeList extends Widget<dxTreeListOptions> {
-  private _keyboardNavigationController!: KeyboardNavigationController;
-
-  private _dataController!: DataController;
-
   _deprecatedOptions: any;
 
   _activeStateUnit = DATAGRID_ROW_SELECTOR;
@@ -114,8 +108,7 @@ class TreeList extends Widget<dxTreeListOptions> {
   }
 
   protected _init() {
-    this._dataController = this.getController('data');
-    this._keyboardNavigationController = this.getController('keyboardNavigation');
+    const that = this;
 
     // @ts-expect-error
     super._init();
@@ -124,9 +117,9 @@ class TreeList extends Widget<dxTreeListOptions> {
       gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
     }
 
-    treeListCore.processModules(this, treeListCore);
+    treeListCore.processModules(that, treeListCore);
 
-    callModuleItemsMethod(this, 'init');
+    callModuleItemsMethod(that, 'init');
   }
 
   protected _clean() {}
@@ -181,7 +174,7 @@ class TreeList extends Widget<dxTreeListOptions> {
   }
 
   private isReady() {
-    return this._dataController.isReady();
+    return this.getController('data').isReady();
   }
 
   public beginUpdate() {
@@ -208,7 +201,7 @@ class TreeList extends Widget<dxTreeListOptions> {
     super.focus();
 
     if (isDefined(element)) {
-      this._keyboardNavigationController.focus(element);
+      this.getController('keyboardNavigation').focus(element);
     }
   }
 
