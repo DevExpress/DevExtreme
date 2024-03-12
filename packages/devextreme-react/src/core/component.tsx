@@ -10,8 +10,7 @@ import {
 } from 'react';
 
 import { IHtmlOptions, ComponentBaseRef, ComponentBase } from './component-base';
-import { IElementDescriptor } from './configuration/react/element';
-import { IExpectedChild } from './configuration/react/element';
+import { IElementDescriptor, IExpectedChild } from './configuration/react/element';
 import { ITemplateMeta } from './template';
 import { elementIsExtension } from './extension-component';
 

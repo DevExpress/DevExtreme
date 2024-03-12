@@ -8,7 +8,7 @@ interface INestedOptionMeta {
   makeDirty: () => void;
 }
 
-const NestedOption = <P>(props: P) => {
+const NestedOption = <P>(props: P): React.ReactElement | null => {
   // @ts-expect-error TS2339
   const { children: stateChildren } = props;
   const children = React.Children.map(
