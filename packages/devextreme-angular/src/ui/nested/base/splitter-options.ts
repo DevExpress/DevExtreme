@@ -9,7 +9,7 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeMode, ResizeStartEvent } from 'devextreme/ui/splitter';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 @Component({
     template: ''
@@ -57,10 +57,10 @@ export abstract class DxoSplitterOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
-    get items(): Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -169,18 +169,18 @@ export abstract class DxoSplitterOptions extends NestedOption {
         this._setOption('repaintChangesOnly', value);
     }
 
-    get resizeMode(): ResizeMode {
-        return this._getOption('resizeMode');
-    }
-    set resizeMode(value: ResizeMode) {
-        this._setOption('resizeMode', value);
-    }
-
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+    get separatorSize(): number | string {
+        return this._getOption('separatorSize');
+    }
+    set separatorSize(value: number | string) {
+        this._setOption('separatorSize', value);
     }
 
     get visible(): boolean {

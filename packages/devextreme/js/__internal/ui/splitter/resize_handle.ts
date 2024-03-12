@@ -23,6 +23,8 @@ const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
+const CLICK_EVENT = 'dxclick';
+
 const RESIZE_DIRECTION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
@@ -41,6 +43,8 @@ class ResizeHandle extends (Widget as any) {
       showResizableIcon: true,
       showCollapsePrev: true,
       showCollapseNext: true,
+      collapsePrevClick: null,
+      collapseNextClick: null,
     });
   }
 
@@ -71,26 +75,33 @@ class ResizeHandle extends (Widget as any) {
     this._setResizeHandleContentVisibility();
   }
 
-  _getIconClass(iconType: string): string {
+  _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
     switch (iconType) {
       case 'prev':
         return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
       case 'next':
         return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
       case 'icon':
+        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass()}`;
       default:
-        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} dx-icon-overflow`;
+        return '';
     }
+  }
+
+  _getResizeIconClass(): string {
+    const isHorizontal = this._isHorizontalDirection();
+
+    return `dx-icon-handle${isHorizontal ? 'vertical' : 'horizontal'}`;
   }
 
   _getCollapseIconClass(isNextButton: boolean): string {
     const isHorizontal = this._isHorizontalDirection();
 
     if (isNextButton) {
-      return `dx-icon-spin${isHorizontal ? 'right' : 'down'}`;
+      return `dx-icon-triangle${isHorizontal ? 'right' : 'down'}`;
     }
 
-    return `dx-icon-spin${isHorizontal ? 'left' : 'up'}`;
+    return `dx-icon-triangle${isHorizontal ? 'left' : 'up'}`;
   }
 
   _setResizeHandleContentVisibility(): void {
@@ -148,6 +159,7 @@ class ResizeHandle extends (Widget as any) {
 
   _attachEventHandlers(): void {
     const eventData = { direction: this.option('direction'), immediate: true };
+    const { collapsePrevClick, collapseNextClick } = this.option();
 
     eventsEngine.on(
       this.$element(),
@@ -169,6 +181,18 @@ class ResizeHandle extends (Widget as any) {
       eventData,
       this._resizeEndHandler.bind(this),
     );
+
+    eventsEngine.on(
+      this._$collapsePrevButton,
+      CLICK_EVENT,
+      collapsePrevClick,
+    );
+
+    eventsEngine.on(
+      this._$collapseNextButton,
+      CLICK_EVENT,
+      collapseNextClick,
+    );
   }
 
   _detachEventHandlers(): void {
@@ -178,6 +202,10 @@ class ResizeHandle extends (Widget as any) {
     eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this._$collapsePrevButton, CLICK_EVENT);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this._$collapseNextButton, CLICK_EVENT);
   }
 
   _isHorizontalDirection(): boolean {
@@ -197,6 +225,11 @@ class ResizeHandle extends (Widget as any) {
       case 'showResizableIcon':
       case 'showCollapsePrev':
       case 'showCollapseNext':
+        break;
+      case 'collapsePrevClick':
+      case 'collapseNextClick':
+        this._detachEventHandlers();
+        this._attachEventHandlers();
         break;
       case 'onResize':
       case 'onResizeStart':

@@ -5,9 +5,9 @@ import {
   Template,
 } from '@devextreme-generator/declarations';
 import {
-  GroupPanelData,
   ResourceCellTemplateProps,
 } from '../../types';
+import { GroupPanelData } from '../../../../../../__internal/scheduler/__migration/types';
 
 @ComponentBindings()
 export class GroupPanelBaseProps {

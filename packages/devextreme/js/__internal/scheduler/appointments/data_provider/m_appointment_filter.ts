@@ -4,15 +4,12 @@ import dateUtils from '@js/core/utils/date';
 import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import query from '@js/data/query';
-import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
-import { hasResourceValue } from '@js/renovation/ui/scheduler/resources/hasResourceValue';
-import getDatesWithoutTime from '@js/renovation/ui/scheduler/utils/filtering/getDatesWithoutTime';
-import {
-  isDateAndTimeView as calculateIsDateAndTimeView,
-  isTimelineView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { isTimelineView } from '@ts/scheduler/__migration/utils/index';
 
+import {
+  getAppointmentTakesAllDay, getDatesWithoutTime, hasResourceValue, isDateAndTimeView,
+} from '../../__migration/utils/index';
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
 import {
@@ -373,7 +370,7 @@ export class AppointmentFilterVirtualStrategy extends AppointmentFilterBaseStrat
   filter(preparedItems) {
     const { viewOffset } = this.options;
     const hourMs = toMs('hour');
-    const isCalculateStartAndEndDayHour = calculateIsDateAndTimeView(this.viewType);
+    const isCalculateStartAndEndDayHour = isDateAndTimeView(this.viewType);
     const checkIntersectViewport = isCalculateStartAndEndDayHour && this.viewDirection === 'horizontal';
 
     const isAllDayWorkspace = !this.supportAllDayRow;

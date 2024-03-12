@@ -10,6 +10,7 @@ const MIN_CELL_WIDTH = 1;
 const MIN_SCROLL_OFFSET = 10;
 const VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT = 15;
 const DOCUMENT_SCROLL_EVENT_NAMESPACE = addNamespace('scroll', 'dxSchedulerVirtualScrolling');
+const MAX_CELLS_PER_VIRTUAL_CELL_COUNT = 1000;
 
 const scrollingOrientations = {
   vertical: 'vertical',
@@ -102,9 +103,7 @@ export class VirtualScrollingDispatcher {
       ? this.cellCountInsideLeftVirtualCell
       : this.cellCountInsideRightVirtualCell;
 
-    return virtualItemsCount > 0
-      ? 1
-      : 0;
+    return Math.ceil(virtualItemsCount / MAX_CELLS_PER_VIRTUAL_CELL_COUNT);
   }
 
   get virtualRowOffset() {
@@ -674,9 +673,7 @@ export class VirtualScrollingRenderer {
   }
 
   getRenderTimeout() {
-    return this._workspace.option('isRenovatedAppointments')
-      ? -1
-      : VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
+    return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
   }
 
   get workspace() { return this._workspace; }

@@ -4,7 +4,7 @@ import {
   JSXComponent,
   OneWay,
   Event,
-  InternalState,
+  InternalState, TwoWay,
 } from '@devextreme-generator/declarations';
 
 import devices from '../../../../core/devices';
@@ -26,9 +26,9 @@ import type { DateNavigatorTextInfo } from '../../../../ui/scheduler';
 import {
   ItemOptions, Direction, ItemView,
 } from './types';
-import { ViewType } from '../types';
+import { ViewType } from '../../../../__internal/scheduler/__migration/types';
 
-import { SchedulerProps, ViewProps } from '../props';
+import { ViewProps } from '../props';
 import { SchedulerToolbarItem } from './props';
 import { ToolbarItem } from '../../toolbar/toolbar_props';
 import { SchedulerCalendar } from './calendar';
@@ -88,14 +88,22 @@ export class SchedulerToolbarBaseProps {
   @OneWay() customizationFunction?: (caption: DateNavigatorTextInfo) => string;
 
   @OneWay() viewType: ViewType = 'day';
+
+  @TwoWay()
+  currentView: string | 'agenda' | 'day' | 'month' | 'timelineDay' | 'timelineMonth' | 'timelineWeek' | 'timelineWorkWeek' | 'week' | 'workWeek' = 'day';
+
+  @OneWay()
+  max?: Date | number | string;
+
+  @OneWay()
+  min?: Date | number | string;
+
+  @OneWay()
+  useDropDownViewSwitcher = false;
 }
 
-export type SchedulerToolbarProps = SchedulerToolbarBaseProps
-// eslint-disable-next-line @typescript-eslint/no-type-alias
-& Pick<SchedulerProps, 'currentView' | 'min' | 'max' | 'useDropDownViewSwitcher'>;
-
 @Component({ view: viewFunction })
-export class SchedulerToolbar extends JSXComponent<SchedulerToolbarProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
+export class SchedulerToolbar extends JSXComponent<SchedulerToolbarBaseProps, 'items' | 'views' | 'onCurrentViewUpdate' | 'currentDate' | 'onCurrentDateUpdate' | 'startViewDate'>() {
   @InternalState() calendarVisible = false;
 
   get step(): string {

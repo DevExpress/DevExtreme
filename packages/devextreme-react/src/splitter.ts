@@ -96,13 +96,11 @@ class Splitter<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
       "vertical"])
   ]),
   repaintChangesOnly: PropTypes.bool,
-  resizeMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "live",
-      "postponed"])
-  ]),
   rtlEnabled: PropTypes.bool,
+  separatorSize: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
   visible: PropTypes.bool,
   width: PropTypes.oneOfType([
     PropTypes.func,
@@ -116,6 +114,7 @@ class Splitter<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChi
 // Splitter
 type IItemProps = React.PropsWithChildren<{
   collapsed?: boolean;
+  collapsedSize?: number | string;
   collapsible?: boolean;
   disabled?: boolean;
   maxSize?: number | string;
