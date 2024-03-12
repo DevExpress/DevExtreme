@@ -1,9 +1,14 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
+  getOuterHeight,
+  getOuterWidth,
+} from '@js/core/utils/size';
+import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
 import { isNumeric, isString } from '@js/core/utils/type';
+import type { Item } from '@js/ui/splitter';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
@@ -176,8 +181,10 @@ export function getInitialLayout(panes, totalPanesSize: number): number[] {
       // todo: refactor
     } else if (pane.size && (isPercentWidth(pane.size) || isPixelWidth(pane.size))) {
       let percentSize = getPercentSize(pane.size, totalPanesSize);
+
       percentSize = Math.min(100 - totalSize, percentSize);
       totalSize += percentSize;
+
       layout.push(percentSize);
 
       if (totalSize >= 100) {
@@ -207,18 +214,21 @@ export function getInitialLayout(panes, totalPanesSize: number): number[] {
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 function getElementItemsSizeSum($element, orientation, handlesCount): number {
-  const splitterSize = $element.get(0).getBoundingClientRect();
   const size: number = orientation === ORIENTATION.horizontal
-    ? splitterSize.width : splitterSize.height;
+    ? getOuterWidth($element) : getOuterHeight($element);
 
   const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
 
   return size - handlesSizeSum;
 }
 
+export function getVisibleItemsCount(items: Item[]): number {
+  return items.filter((p) => p.visible !== false).length;
+}
+
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getElementSize($element, items, orientation, width, height): number {
-  const handlesCount = Math.max(items.filter((p) => p.visible !== false).length - 1, 0);
+  const handlesCount = Math.max(getVisibleItemsCount(items) - 1, 0);
 
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
 
@@ -226,4 +236,12 @@ export function getElementSize($element, items, orientation, width, height): num
     return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
   }
   return getElementItemsSizeSum($element, orientation, handlesCount);
+}
+
+export function isElementVisible(element: HTMLElement | undefined | null): boolean {
+  if (element) {
+    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects?.().length);
+  }
+
+  return false;
 }
