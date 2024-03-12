@@ -77,14 +77,7 @@ $material-slider-handle-inner-disabled-size: 2px;
 
       .dx-popup-content {
         line-height: normal;
-
-        @if $mode == "light" {
-          color: $material-slider-tooltip-color;
-        }
-
-        @if $mode == "dark" {
-          color: $material-slider-inverted-tooltip-color;
-        }
+        color: $material-slider-tooltip-color;
 
         padding: $material-slider-tooltip-popup-content-padding;
 
