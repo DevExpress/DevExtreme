@@ -171,7 +171,7 @@ const DataController = Class.inherit((function () {
       depthSize,
       options,
     ) {
-      const cellDescriptionsCount = cellDescriptions.length;
+      const cellDescriptionsCount = cellDescriptions.filter(({ visible }) => visible !== false).length;
       const viewHeaderItems = createViewHeaderItems(headerItems, headerDescriptions);
       const { dataFields } = options;
       // @ts-expect-error
