@@ -4,8 +4,8 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 
 fixture('ContextMenu.Share')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t.resizeWindow(900, 600);
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 const IMAGE_ID = 'image';
