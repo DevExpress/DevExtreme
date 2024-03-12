@@ -74,14 +74,7 @@
     .dx-overlay-content {
       .dx-popup-content {
         line-height: normal;
-
-        @if $mode == "light" {
-          color: $fluent-slider-tooltip-color;
-        }
-
-        @if $mode == "dark" {
-          color: $fluent-slider-inverted-tooltip-color;
-        }
+        color: $fluent-slider-tooltip-color;
 
         .dx-slider-tooltip-position-top & {
           padding-top: 6px;
