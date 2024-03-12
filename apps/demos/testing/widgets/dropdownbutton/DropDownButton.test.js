@@ -7,8 +7,8 @@ const CUSTOM_BUTTON_SELECTOR = 'dx-dropdownbutton-toggle';
 
 fixture('DropDownButton.Overview')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t.resizeWindow(900, 800);
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('DropDownButton', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
