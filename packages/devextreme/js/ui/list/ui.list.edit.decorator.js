@@ -85,7 +85,6 @@ const EditDecorator = Class.inherit({
     _updateButtonAttributes($button) {
         $button.attr({
             role: null,
-            tabindex: null,
             'aria-label': null,
         });
     },
