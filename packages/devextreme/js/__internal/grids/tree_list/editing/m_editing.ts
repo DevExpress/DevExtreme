@@ -48,8 +48,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _getLoadedRowIndex(items, change) {
-    const dataController = this.getController('data');
-    const dataSourceAdapter = dataController.dataSource();
+    const dataSourceAdapter = this._dataController.dataSource();
     const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
 
     if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
@@ -96,12 +95,11 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _beforeSaveEditData(change) {
-    const dataController = this._dataController;
     // @ts-expect-error
     const result = super._beforeSaveEditData.apply(this, arguments);
 
     if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-      const store = dataController?.store();
+      const store = this._dataController?.store();
       const key = store?.key();
 
       if (!isDefined(key)) {
@@ -113,8 +111,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   private addRowByRowIndex(rowIndex) {
-    const dataController = this.getController('data');
-    const row = dataController.getVisibleRows()[rowIndex];
+    const row = this._dataController.getVisibleRows()[rowIndex];
 
     return this.addRow(row ? row.key : undefined);
   }
@@ -129,19 +126,18 @@ class EditingController extends editingModule.controllers.editing {
 
   protected _addRowCore(data, parentKey, oldEditRowIndex) {
     const rootValue = this.option('rootValue');
-    const dataController = this.getController('data');
-    const dataSourceAdapter = dataController.dataSource();
+    const dataSourceAdapter = this._dataController.dataSource();
     const parentKeyGetter = dataSourceAdapter.createParentIdGetter();
 
     parentKey = parentKeyGetter(data);
 
     // @ts-expect-error
-    if (parentKey !== undefined && parentKey !== rootValue && !dataController.isRowExpanded(parentKey)) {
+    if (parentKey !== undefined && parentKey !== rootValue && !this._dataController.isRowExpanded(parentKey)) {
       // @ts-expect-error
       const deferred = new Deferred();
 
       // @ts-expect-error
-      dataController.expandRow(parentKey).done(() => {
+      this._dataController.expandRow(parentKey).done(() => {
         setTimeout(() => {
           super._addRowCore.call(this, data, parentKey, oldEditRowIndex).done(deferred.resolve).fail(deferred.reject);
         });
@@ -154,8 +150,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _initNewRow(options, parentKey?) {
-    const dataController = this.getController('data');
-    const dataSourceAdapter = dataController.dataSource();
+    const dataSourceAdapter = this._dataController.dataSource();
     const parentIdSetter = dataSourceAdapter.createParentIdSetter();
 
     parentIdSetter(options.data, parentKey);

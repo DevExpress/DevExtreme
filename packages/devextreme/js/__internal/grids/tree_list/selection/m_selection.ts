@@ -26,13 +26,12 @@ const nodeExists = function (array, currentKey) {
 
 const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListExtender extends dataSelectionExtenderMixin(Base) {
   protected _handleDataChanged(e) {
-    const selectionController = this.getController('selection');
     // @ts-expect-error
-    const isRecursiveSelection = selectionController.isRecursiveSelection();
+    const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection && (!e || e.changeType !== 'updateSelectionState')) {
       // @ts-expect-error
-      selectionController.updateSelectionState({
+      this._selectionController.updateSelectionState({
         selectedItemKeys: this.option('selectedRowKeys'),
       });
     }
@@ -43,14 +42,13 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
     const that = this;
     // @ts-expect-error
     const d = super.loadDescendants.apply(that, arguments);
-    const selectionController = that.getController('selection');
     // @ts-expect-error
-    const isRecursiveSelection = selectionController.isRecursiveSelection();
+    const isRecursiveSelection = this._selectionController.isRecursiveSelection();
 
     if (isRecursiveSelection) {
       d.done(() => {
         // @ts-expect-error
-        selectionController.updateSelectionState({
+        this._selectionController.updateSelectionState({
           selectedItemKeys: that.option('selectedRowKeys'),
         });
       });
@@ -600,7 +598,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeList
 
     if (!options.row.isNewRow && this.option('selection.mode') === 'multiple') {
       // @ts-expect-error
-      this.getController('selection').renderSelectCheckBoxContainer($iconContainer, options);
+      this._selectionController.renderSelectCheckBoxContainer($iconContainer, options);
     }
 
     return $iconContainer;
