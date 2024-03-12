@@ -21,7 +21,10 @@ export const createWidget = async<TWidgetName extends WidgetName>(
   () => {
     (window as any).DevExpress.fx.off = disableFxAnimation;
     const options = typeof widgetOptions === 'function' ? widgetOptions() : widgetOptions;
-    (window as any).widget = ($(`${selector}`) as any)[widgetName](options)[widgetName]('instance');
+    (window as any).widget = new (window as any).DevExpress.ui[widgetName](
+      ($(selector) as any).get(0),
+      options,
+    );
   },
   {
     dependencies: {
@@ -37,7 +40,7 @@ export const disposeWidget = async <TWidgetName extends WidgetName>(
   widgetName: TWidgetName,
   selector = DEFAULT_SELECTOR,
 ): Promise<void> => ClientFunction(() => {
-  ($(`${selector}`) as any)[widgetName]('dispose');
+  (window as any).DevExpress.ui[widgetName].getInstance(($(`${selector}`) as any).get(0)).dispose();
   (window as any).widget = undefined;
 }, {
   dependencies: {

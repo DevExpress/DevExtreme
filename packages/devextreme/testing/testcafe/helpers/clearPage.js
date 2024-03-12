@@ -5,9 +5,9 @@ module.exports = {
     clearTestPage: async function() {
         await testCafe.ClientFunction(() => {
             const body = document.querySelector('body');
+            const parentContainer = document.getElementById('parentContainer');
 
-            $('#container').remove();
-            $('#otherContainer').remove();
+            parentContainer.remove();
 
             const containerElement = document.createElement('div');
             containerElement.setAttribute('id', 'container');
@@ -15,10 +15,14 @@ module.exports = {
             const otherContainerElement = document.createElement('div');
             otherContainerElement.setAttribute('id', 'otherContainer');
 
-            body.prepend(otherContainerElement);
-            body.prepend(containerElement);
+            const parentContainerElement = document.createElement('div');
+            parentContainerElement.setAttribute('id', 'parentContainer');
+
+            parentContainerElement.append(containerElement, otherContainerElement);
+            body.prepend(parentContainerElement);
 
             $('#stylesheetRules').remove();
+            $('.dx-overlay-wrapper').remove();
         })();
     }
 };
