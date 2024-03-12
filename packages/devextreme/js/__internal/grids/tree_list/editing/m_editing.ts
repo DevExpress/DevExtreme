@@ -64,7 +64,7 @@ class EditingController extends editingModule.controllers.editing {
     return super._getLoadedRowIndex.apply(this, arguments);
   }
 
-  _isEditColumnVisible() {
+  protected _isEditColumnVisible() {
     // @ts-expect-error
     const result = super._isEditColumnVisible.apply(this, arguments);
     const editingOptions: any = this.option('editing');
@@ -72,7 +72,7 @@ class EditingController extends editingModule.controllers.editing {
     return result || editingOptions.allowAdding;
   }
 
-  _isDefaultButtonVisible(button, options) {
+  protected _isDefaultButtonVisible(button, options) {
     // @ts-expect-error
     const result = super._isDefaultButtonVisible.apply(this, arguments);
     const { row } = options;
@@ -112,14 +112,14 @@ class EditingController extends editingModule.controllers.editing {
     return result;
   }
 
-  addRowByRowIndex(rowIndex) {
+  private addRowByRowIndex(rowIndex) {
     const dataController = this.getController('data');
     const row = dataController.getVisibleRows()[rowIndex];
 
     return this.addRow(row ? row.key : undefined);
   }
 
-  addRow(key) {
+  protected addRow(key) {
     if (key === undefined) {
       key = this.option('rootValue');
     }
@@ -164,11 +164,11 @@ class EditingController extends editingModule.controllers.editing {
     return super._initNewRow.apply(this, arguments);
   }
 
-  allowAdding(options) {
+  private allowAdding(options) {
     return this._allowEditAction('allowAdding', options);
   }
 
-  _needToCloseEditableCell($targetElement) {
+  protected _needToCloseEditableCell($targetElement) {
     // @ts-expect-error
     return super._needToCloseEditableCell.apply(this, arguments) || $targetElement.closest(`.${TREELIST_EXPAND_ICON_CONTAINER_CLASS}`).length && this.isEditing();
   }
@@ -183,7 +183,7 @@ class EditingController extends editingModule.controllers.editing {
 }
 
 const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewExtender extends editingModule.extenders.views.rowsView(Base) {
-  _renderCellCommandContent($container, options) {
+  private _renderCellCommandContent($container, options) {
     const editingController = this._editingController;
     const isEditRow = options.row && editingController.isEditRow(options.row.rowIndex);
     const isEditing = options.isEditing || isEditRow;
@@ -218,14 +218,14 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
     return false;
   }
 
-  _rowClick(e) {
+  protected _rowClick(e) {
     if (this.validateClick(e)) {
       // @ts-expect-error
       super._rowClickTreeListHack.apply(this, arguments);
     }
   }
 
-  _rowDblClick(e) {
+  protected _rowDblClick(e) {
     if (this.validateClick(e)) {
       // @ts-expect-error
       super._rowDblClickTreeListHack.apply(this, arguments);
@@ -234,7 +234,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerTreeListEditingExtender extends dataControllerEditingExtenderMixin(Base) {
-  changeRowExpand() {
+  private changeRowExpand() {
     this._editingController.refresh();
     // @ts-expect-error
     return super.changeRowExpand.apply(this, arguments);

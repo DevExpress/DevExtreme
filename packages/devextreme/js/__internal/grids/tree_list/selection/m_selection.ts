@@ -25,7 +25,7 @@ const nodeExists = function (array, currentKey) {
 };
 
 const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListExtender extends dataSelectionExtenderMixin(Base) {
-  _handleDataChanged(e) {
+  protected _handleDataChanged(e) {
     const selectionController = this.getController('selection');
     // @ts-expect-error
     const isRecursiveSelection = selectionController.isRecursiveSelection();
@@ -39,7 +39,7 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
     super._handleDataChanged.apply(this, arguments as any);
   }
 
-  loadDescendants() {
+  private loadDescendants() {
     const that = this;
     // @ts-expect-error
     const d = super.loadDescendants.apply(that, arguments);
@@ -97,7 +97,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return config;
   }
 
-  renderSelectCheckBoxContainer($container, model) {
+  private renderSelectCheckBoxContainer($container, model) {
     const that = this;
     const rowsView = that.component.getView('rowsView');
 
@@ -112,7 +112,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     rowsView._attachCheckBoxClickEvent($checkbox);
   }
 
-  _getSelectAllNodeKeys() {
+  private _getSelectAllNodeKeys() {
     const { component } = this;
     // @ts-expect-error
     const root = component.getRootNode();
@@ -136,7 +136,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return keys;
   }
 
-  isSelectAll() {
+  public isSelectAll() {
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const selectedRowKeys = this.option('selectedRowKeys') || [];
     if (selectedRowKeys.length === 0) return false;
@@ -180,7 +180,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return this.deselectRows(visibleKeys);
   }
 
-  selectedItemKeys(value, preserve, isDeselect, isSelectAll?) {
+  protected selectedItemKeys(value, preserve, isDeselect, isSelectAll?) {
     const that = this;
     const selectedRowKeys = that.option('selectedRowKeys');
     const isRecursiveSelection = this.isRecursiveSelection();
@@ -204,7 +204,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return super.selectedItemKeys(value, preserve, isDeselect, isSelectAll);
   }
 
-  changeItemSelection(itemIndex, keyboardKeys) {
+  public changeItemSelection(itemIndex, keyboardKeys) {
     const isRecursiveSelection = this.isRecursiveSelection();
     const callBase = super.changeItemSelection.bind(this);
 
@@ -218,7 +218,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return super.changeItemSelection.apply(this, arguments as any);
   }
 
-  _updateParentSelectionState(node, isSelected) {
+  private _updateParentSelectionState(node, isSelected) {
     const that = this;
     let state = isSelected;
     const parentNode = node.parent;
@@ -244,7 +244,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     }
   }
 
-  _updateChildrenSelectionState(node, isSelected) {
+  private _updateChildrenSelectionState(node, isSelected) {
     const that = this;
     const { children } = node;
 
@@ -257,7 +257,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     });
   }
 
-  _updateSelectionStateCore(keys, isSelected) {
+  private _updateSelectionStateCore(keys, isSelected) {
     const dataController = this._dataController;
 
     for (let i = 0; i < keys.length; i++) {
@@ -272,7 +272,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     }
   }
 
-  _getSelectedParentKeys(key, selectedItemKeys, useCash?) {
+  private _getSelectedParentKeys(key, selectedItemKeys, useCash?) {
     let selectedParentNode;
     // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
@@ -297,7 +297,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return selectedParentNode && result || [];
   }
 
-  _getSelectedChildKeys(key, keysToIgnore) {
+  private _getSelectedChildKeys(key, keysToIgnore) {
     const childKeys: any[] = [];
     // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
@@ -315,7 +315,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return childKeys;
   }
 
-  _normalizeParentKeys(key, args) {
+  private _normalizeParentKeys(key, args) {
     const that = this;
     let keysToIgnore = [key];
     const parentNodeKeys = that._getSelectedParentKeys(key, args.selectedRowKeys);
@@ -336,7 +336,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     }
   }
 
-  _normalizeChildrenKeys(key, args) {
+  private _normalizeChildrenKeys(key, args) {
     // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
 
@@ -350,7 +350,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     });
   }
 
-  _normalizeSelectedRowKeysCore(keys, args, preserve, isSelect) {
+  private _normalizeSelectedRowKeysCore(keys, args, preserve, isSelect) {
     const that = this;
 
     keys.forEach((key) => {
@@ -376,7 +376,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     });
   }
 
-  _normalizeSelectionArgs(args, preserve, isSelect) {
+  private _normalizeSelectionArgs(args, preserve, isSelect) {
     let result;
     const keys = Array.isArray(args.keys) ? args.keys : [args.keys];
     // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
@@ -406,11 +406,11 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     }
   }
 
-  _isModeLeavesOnly(mode) {
+  private _isModeLeavesOnly(mode) {
     return mode === 'leavesOnly';
   }
 
-  _removeDuplicatedKeys(keys) {
+  private _removeDuplicatedKeys(keys) {
     const result: any[] = [];
     const processedKeys = {};
 
@@ -424,7 +424,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  _getAllChildKeys(key) {
+  private _getAllChildKeys(key) {
     const childKeys: any[] = [];
     // @ts-expect-error
     const node = this._dataController.getNodeByKey(key);
@@ -436,7 +436,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return childKeys;
   }
 
-  _getAllSelectedRowKeys(keys) {
+  private _getAllSelectedRowKeys(keys) {
     let result: any = [];
 
     keys.forEach((key) => {
@@ -451,7 +451,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  _getParentSelectedRowKeys(keys) {
+  private _getParentSelectedRowKeys(keys) {
     const that = this;
     const result: any[] = [];
 
@@ -463,7 +463,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  _getLeafSelectedRowKeys(keys) {
+  private _getLeafSelectedRowKeys(keys) {
     const that = this;
     const result: any[] = [];
     const dataController = that._dataController;
@@ -477,14 +477,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  isRecursiveSelection() {
+  private isRecursiveSelection() {
     const selectionMode = this.option('selection.mode');
     const isRecursive = this.option('selection.recursive');
 
     return selectionMode === 'multiple' && isRecursive;
   }
 
-  updateSelectionState(options) {
+  private updateSelectionState(options) {
     const removedItemKeys = options.removedItemKeys || [];
     const selectedItemKeys = options.selectedItemKeys || [];
 
@@ -494,7 +494,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     }
   }
 
-  isRowSelected(key, isRecursiveSelection?) {
+  public isRowSelected(key, isRecursiveSelection?) {
     const result = super.isRowSelected.apply(this, arguments as any);
 
     isRecursiveSelection = isRecursiveSelection ?? this.isRecursiveSelection();
@@ -509,7 +509,7 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return result;
   }
 
-  getSelectedRowKeys(mode) {
+  protected getSelectedRowKeys(mode) {
     const that = this;
 
     if (!that._dataController) {
@@ -549,14 +549,14 @@ const selection = (Base: ModuleType<SelectionController>) => class SelectionCont
     return selectedRowsData;
   }
 
-  refresh() {
+  public refresh() {
     this._selectionStateByKey = {};
     return super.refresh.apply(this, arguments as any);
   }
 };
 
 const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeaderViewSelectionTreeListExtender extends columnHeadersSelectionExtenderMixin(Base) {
-  _processTemplate(template, options) {
+  protected _processTemplate(template, options) {
     const that = this;
     let resultTemplate;
     const renderingTemplate = super._processTemplate(template, options);
@@ -582,7 +582,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  renderSelectAll($cell, options) {
+  private renderSelectAll($cell, options) {
     $cell.addClass(TREELIST_SELECT_ALL_CLASS);
 
     this._renderSelectAllCheckBox($cell);
@@ -594,7 +594,7 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeListExtender extends rowsViewSelectionExtenderMixin(Base) {
-  _renderIcons($iconContainer, options) {
+  private _renderIcons($iconContainer, options) {
     // @ts-expect-error
     super._renderIcons.apply(this, arguments);
 
@@ -606,7 +606,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewSelectionTreeList
     return $iconContainer;
   }
 
-  _rowClick(e) {
+  protected _rowClick(e) {
     const $targetElement = $(e.event.target);
 
     // @ts-expect-error
