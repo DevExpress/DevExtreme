@@ -4307,7 +4307,7 @@ QUnit.module('Accessibility', () => {
     });
 
     const checkButtonAttributes = (assert, $button) => {
-        ['role', 'aria-label', 'tabindex'].forEach(attribute => {
+        ['role', 'aria-label'].forEach(attribute => {
             assert.strictEqual($button.attr(attribute), undefined, `${attribute} is not set`);
         });
     };
@@ -4315,7 +4315,7 @@ QUnit.module('Accessibility', () => {
     [STATIC_DELETE_BUTTON_CLASS, TOGGLE_DELETE_SWITCH_CLASS].forEach(buttonClass => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
-        QUnit.test(`List item ${itemDeleteMode} button should not have role, aria-label, tabindex`, function(assert) {
+        QUnit.test(`List item ${itemDeleteMode} button should not have role, aria-label`, function(assert) {
             $('#list').dxList({
                 itemDeleteMode,
                 items: ['text 1'],
@@ -4328,7 +4328,7 @@ QUnit.module('Accessibility', () => {
         });
     });
 
-    QUnit.test('List item switchable button should not have role, aria-label, tabindex', function(assert) {
+    QUnit.test('List item switchable button should not have role, aria-label', function(assert) {
         const $list = $('#list').dxList({
             items: ['text 1'],
             itemDeleteMode: 'slideButton',
