@@ -12,11 +12,12 @@ const IMAGE_ID = 'image';
 
 runManualTest('ContextMenu', 'Templates', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Template Share Appearance', async (t) => {
+    const MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.rightClick(`#${IMAGE_ID}`);
 
-    await t.click($('.dx-menu-item-text').withText('Share'));
+    await t.click($(`.${MENU_ITEM_TEXT_CLASS}`).withText('Share'));
 
     await takeScreenshot('context_menu_templates_share_visible.png');
 
