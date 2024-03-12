@@ -1466,7 +1466,7 @@ QUnit.begin(function() {
             { visible: true, border: { color: 'green' } },
         ]);
     });
-    
+
     QUnit.test('DataSource contains only equal values', function(assert) {
         this.createSparkline({
             dataSource: [1, 1, 1],
