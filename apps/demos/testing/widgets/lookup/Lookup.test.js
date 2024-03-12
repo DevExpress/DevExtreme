@@ -6,8 +6,8 @@ const LOOOKUP_BOX_CLASS = 'dx-lookup';
 
 fixture('Lookup.Basics')
   .page('http://localhost:8080/')
-  .beforeEach(async (t) => {
-    await t.resizeWindow(900, 800);
+  .before(async (ctx) => {
+    ctx.initialWindowSize = [900, 600];
   });
 
 runManualTest('Lookup', 'Basics', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
