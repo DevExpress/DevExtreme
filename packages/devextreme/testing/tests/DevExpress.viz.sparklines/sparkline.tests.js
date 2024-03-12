@@ -1433,6 +1433,23 @@ QUnit.begin(function() {
         ]);
     });
 
+    QUnit.test('winloss sparkline lossColor should be updated after runtime change (T1218338)', function(assert) {
+        const sparkline = this.createSparkline({
+            type: 'winloss',
+            lossColor: 'blue',
+            winlossThreshold: 4,
+            dataSource: [0, 3, 6]
+        });
+
+        sparkline.option({ lossColor: 'green' });
+
+        this.checkCustomizePoint(assert, [
+            { color: '#666666' },
+            { color: 'green' },
+            { color: '#666666' }
+        ]);
+    });
+
     QUnit.test('Several min/max in dataSource', function(assert) {
         this.createSparkline({
             dataSource: [1, 5, 5, -1, -1],
