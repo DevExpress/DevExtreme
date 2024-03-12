@@ -804,18 +804,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     border-bottom: $datagrid-border;
     padding: $fluent-grid-base-header-panel-padding;
 
-    .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-color, $button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
-    }
-
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
       border-radius: $fluent-base-border-radius;
-    }
-
-    .dx-#{$widget-name}-toolbar-button {
-      .dx-icon {
-        color: $base-text-color;
-      }
     }
   }
 

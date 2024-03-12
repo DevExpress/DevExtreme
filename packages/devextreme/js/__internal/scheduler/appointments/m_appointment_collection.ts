@@ -205,10 +205,6 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _optionChanged(args) {
-    if (this.option('isRenovatedAppointments')) {
-      return;
-    }
-
     switch (args.name) {
       case 'items':
         (this as any)._cleanFocusState();

@@ -18,7 +18,6 @@ import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
 import { ScrollableDirection } from '../../scroll_view/common/types';
-import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
 import {
   AllDayPanelModeType, GetDateForHeaderText,
   Group,
@@ -42,10 +41,6 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
-
-  @Template() appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 
   // -----------------
   // Public props
@@ -150,8 +145,6 @@ WorkSpaceProps,
 | 'dateCellTemplate'
 | 'timeCellTemplate'
 | 'resourceCellTemplate'
-| 'appointmentTemplate'
-| 'appointmentCollectorTemplate'
 | 'maxAppointmentsPerCell'
 | 'allDayPanelMode'
 >;
