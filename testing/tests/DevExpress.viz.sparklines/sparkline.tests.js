@@ -1450,6 +1450,23 @@ QUnit.begin(function() {
         ]);
     });
 
+    QUnit.test('Several min/max in dataSource', function(assert) {
+        this.createSparkline({
+            dataSource: [1, 5, 5, -1, -1],
+            maxColor: 'red',
+            minColor: 'green',
+            showMinMax: true
+        });
+
+        this.checkCustomizePoint(assert, [
+            { visible: true, border: { color: '#666666' } },
+            { visible: true, border: { color: 'red' } },
+            { visible: true, border: { color: 'red' } },
+            { visible: true, border: { color: 'green' } },
+            { visible: true, border: { color: 'green' } },
+        ]);
+    });
+    
     QUnit.test('DataSource contains only equal values', function(assert) {
         this.createSparkline({
             dataSource: [1, 1, 1],
