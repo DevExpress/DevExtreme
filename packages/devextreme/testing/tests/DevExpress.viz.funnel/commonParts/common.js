@@ -9,7 +9,11 @@ import 'viz/themes';
 export const stubAlgorithm = { normalizeValues: sinon.stub(), getFigures: sinon.stub() };
 tiling.addAlgorithm('stub', stubAlgorithm);
 
-$('#qunit-fixture').append('<div id="test-container"></div>');
+QUnit.testStart(function() {
+    const container = $('<div id="test-container"></div>');
+
+    $('#qunit-fixture').append(container);
+});
 
 export function createFunnel(options) {
     const defaultOptions = {
