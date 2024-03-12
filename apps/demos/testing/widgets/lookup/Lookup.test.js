@@ -2,6 +2,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 
+const LOOOKUP_BOX_CLASS = 'dx-lookup';
+
 fixture('Lookup.Basics')
   .page('http://localhost:8080/')
   .beforeEach(async (t) => {
@@ -10,7 +12,6 @@ fixture('Lookup.Basics')
 
 runManualTest('Lookup', 'Basics', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Lookup Appearance', async (t) => {
-    const LOOOKUP_BOX_CLASS = 'dx-lookup';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
