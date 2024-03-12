@@ -65,7 +65,6 @@ class AppointmentLayoutManager {
       loadedResources: this.instance.option('loadedResources'),
       getAppointmentColor: this.instance.createGetAppointmentColor(),
       dataAccessors: this.instance._dataAccessors,
-      isRenovatedAppointments: this.instance.option('isRenovatedAppointments'),
       appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
       adaptivityEnabled: this.instance.option('adaptivityEnabled'),
       rtlEnabled: this.instance.option('rtlEnabled'),

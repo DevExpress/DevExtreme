@@ -1,6 +1,5 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { AppointmentLayout } from '../../../../../appointment/layout';
 import { viewFunction as LayoutView } from '../layout';
 import { AllDayTable, AllDayTableProps } from '../table';
 
@@ -67,17 +66,6 @@ describe('AllDayPanelLayout', () => {
 
       expect(layout.hasClass('dx-scheduler-all-day-panel'))
         .toBe(true);
-    });
-
-    it('should render all-day appointments', () => {
-      const layout = render({});
-
-      expect(layout.find(AppointmentLayout).exists())
-        .toBe(true);
-      expect(layout.find(AppointmentLayout).props())
-        .toEqual({
-          isAllDay: true,
-        });
     });
   });
 });

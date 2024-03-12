@@ -674,9 +674,7 @@ export class VirtualScrollingRenderer {
   }
 
   getRenderTimeout() {
-    return this._workspace.option('isRenovatedAppointments')
-      ? -1
-      : VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
+    return VIRTUAL_APPOINTMENTS_RENDER_TIMEOUT;
   }
 
   get workspace() { return this._workspace; }
