@@ -2,6 +2,9 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 
+const STATIC_BUTTON_CLASS = 'dx-dropdownbutton';
+const CUSTOM_BUTTON_SELECTOR = 'dx-dropdownbutton-toggle';
+
 fixture('DropDownButton.Overview')
   .page('http://localhost:8080/')
   .beforeEach(async (t) => {
@@ -10,8 +13,6 @@ fixture('DropDownButton.Overview')
 
 runManualTest('DropDownButton', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Overview Appearance', async (t) => {
-    const STATIC_BUTTON_CLASS = 'dx-dropdownbutton';
-    const CUSTOM_BUTTON_SELECTOR = 'dx-dropdownbutton-toggle';
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
