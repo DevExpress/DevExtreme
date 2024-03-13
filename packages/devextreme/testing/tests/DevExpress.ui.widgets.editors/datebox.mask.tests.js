@@ -1034,26 +1034,31 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'PM', 'revert incorrect changes');
     });
 
-    test('when A is pressed it should toggle PM to AM (T1216937)', function(assert) {
-        this.instance.option({
-            value: new Date('10/10/2012 10:00 PM'),
-            useMaskBehavior: true,
-            displayFormat: 'a'
+    [
+        { type: 'time', input: 'a', initialValue: 'PM', expectedValue: 'AM' },
+        { type: 'time', input: 'p', initialValue: 'AM', expectedValue: 'PM' },
+        { type: 'datetime', input: 'a', initialValue: 'PM', expectedValue: 'AM' },
+        { type: 'datetime', input: 'p', initialValue: 'AM', expectedValue: 'PM' },
+        { type: 'time', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'time', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
+        { type: 'datetime', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'datetime', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
+    ].forEach(({ type, input, initialValue, expectedValue }) => {
+        QUnit.test(`when ${input} is pressed it should switch AM/PM to ${expectedValue}`, function(assert) {
+            const $dateBox = $('#dateBox').dxDateBox({
+                value: new Date(`10/10/2012, 10:00 ${initialValue}`),
+                displayFormat: 'a',
+                useMaskBehavior: true,
+                type: type,
+            });
+
+            keyboardMock($dateBox.find('.dx-texteditor-input'))
+                .focus()
+                .type(input)
+                .change();
+
+            assert.strictEqual(this.instance.option('text'), expectedValue);
         });
-
-        this.keyboard.type('a');
-        assert.strictEqual(this.$input.val(), 'AM');
-    });
-
-    test('when P is pressed it should toggle AM to PM', function(assert) {
-        this.instance.option({
-            value: new Date('10/10/2012 10:00 AM'),
-            useMaskBehavior: true,
-            displayFormat: 'a'
-        });
-
-        this.keyboard.type('p');
-        assert.strictEqual(this.$input.val(), 'PM');
     });
 
     test('Hour', function(assert) {
