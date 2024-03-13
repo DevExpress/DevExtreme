@@ -5929,6 +5929,10 @@ if(devices.real().deviceType === 'desktop') {
             helper.$widget.remove();
         }
     }, () => {
+        const getAriaAutocomplete = (searchEnabled) => {
+            return searchEnabled ? 'list' : 'none';
+        };
+
         [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({
@@ -5954,7 +5958,7 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                     type: 'text',
                     placeholder: 'Select...',
-                    'aria-autocomplete': 'list',
+                    'aria-autocomplete': getAriaAutocomplete(searchEnabled),
                     'aria-expanded': 'true',
                     'aria-haspopup': 'listbox',
                 };
@@ -5983,6 +5987,9 @@ if(devices.real().deviceType === 'desktop') {
                 if(searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled);
+
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
@@ -6002,7 +6009,7 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                     type: 'text',
                     placeholder: 'Select...',
-                    'aria-autocomplete': 'list',
+                    'aria-autocomplete': getAriaAutocomplete(searchEnabled),
                     'aria-expanded': 'false',
                     'aria-haspopup': 'listbox',
                 };
@@ -6019,6 +6026,8 @@ if(devices.real().deviceType === 'desktop') {
                 if(searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled);
 
                 helper.widget.option('searchEnabled', !searchEnabled);
                 helper.checkAttributes(helper.$widget, { }, 'widget');
