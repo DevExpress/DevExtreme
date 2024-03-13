@@ -3,16 +3,99 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
-  appendElementTo, setAttribute,
+  appendElementTo, getPropertyValue, insertStylesheetRulesToPage, setAttribute,
 } from '../../../helpers/domUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
+import TextArea from '../../../model/textArea';
 
 fixture.disablePageReloads`TextArea_Height`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
 const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
-const longText = 'Prepare 2013 Marketing Plan: We need to double revenues in 2013 and our marketing strategy is going to be key here. R&D is improving existing products and creating new products so we can deliver great AV equipment to our customers.Robert, please make certain to create a PowerPoint presentation for the members of the executive team.';
+
+[true, false].forEach((autoResizeEnabled) => {
+  test(`TextArea has correct height with "autoResizeEnabled" is ${autoResizeEnabled} and height is 7em & maxHeight is 5em`, async (t) => {
+    const textArea = new TextArea('#container');
+
+    await t
+      .expect(getPropertyValue(textArea.element, 'maxHeight'))
+      .eql('5em')
+      .expect(getPropertyValue(textArea.element, 'height'))
+      .eql('7em')
+      .expect(textArea.element.getStyleProperty('height'))
+      .eql('70px')
+      .expect(getPropertyValue(textArea.input, 'height'))
+      .eql('');
+  }).before(async () => createWidget('dxTextArea', {
+    maxHeight: '5em',
+    height: '7em',
+    autoResizeEnabled,
+    width: 200,
+    value: text,
+  }));
+
+  test(`TextArea has correct height with "autoResizeEnabled" is ${autoResizeEnabled} and height is 5em & maxHeight is 7em`, async (t) => {
+    const textArea = new TextArea('#container');
+
+    await t
+      .expect(getPropertyValue(textArea.element, 'maxHeight'))
+      .eql('7em')
+      .expect(getPropertyValue(textArea.element, 'height'))
+      .eql('5em')
+      .expect(textArea.element.getStyleProperty('height'))
+      .eql('70px')
+      .expect(getPropertyValue(textArea.input, 'height'))
+      .eql('');
+  }).before(async () => createWidget('dxTextArea', {
+    maxHeight: '7em',
+    height: '5em',
+    autoResizeEnabled,
+    width: 200,
+    value: text,
+  }));
+
+  test(`TextArea has correct height with "autoResizeEnabled" is ${autoResizeEnabled} and maxHeight option is 5em`, async (t) => {
+    const textArea = new TextArea('#container');
+
+    await t
+      .expect(getPropertyValue(textArea.element, 'maxHeight'))
+      .eql('5em')
+      .expect(getPropertyValue(textArea.element, 'height'))
+      .eql(autoResizeEnabled ? 'auto' : '')
+      .expect(textArea.element.getStyleProperty('height'))
+      .eql(autoResizeEnabled ? '70px' : '55px')
+      .expect(getPropertyValue(textArea.input, 'height'))
+      .eql(autoResizeEnabled ? '68px' : '');
+  }).before(async () => createWidget('dxTextArea', {
+    maxHeight: '5em',
+    autoResizeEnabled,
+    width: 200,
+  }));
+
+  test(`TextArea with font-size style has correct height with "autoResizeEnabled" is ${autoResizeEnabled} and maxHeight option is 5em`, async (t) => {
+    const textArea = new TextArea('#container');
+
+    await t
+      .expect(getPropertyValue(textArea.element, 'maxHeight'))
+      .eql('5em')
+      .expect(getPropertyValue(textArea.element, 'height'))
+      .eql(autoResizeEnabled ? 'auto' : '')
+      .expect(parseInt(await textArea.element.getStyleProperty('height'), 10))
+      .eql(autoResizeEnabled ? 60 : 49)
+      .expect(getPropertyValue(textArea.input, 'height'))
+      .eql(autoResizeEnabled ? '58px' : '');
+  }).before(async () => {
+    await insertStylesheetRulesToPage('#container { font-size: 12px; }');
+
+    return createWidget('dxTextArea', {
+      maxHeight: '5em',
+      autoResizeEnabled,
+      width: 200,
+      value: text,
+    });
+  });
+});
 
 test('TextArea correct height with autoResizeEnabled, height is 7em & maxHeight is 5em', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -46,10 +129,10 @@ test('TextArea correct height with autoResizeEnabled, height is 7em & maxHeight 
   }, '#textArea2');
 });
 
-test('TextArea has correct height autoResizeEnabled and different value length', async (t) => {
+test('TextArea has correct height with different value length', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TextArea has correct height autoResizeEnabled and different value length.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TextArea has correct height with different value length.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -76,10 +159,10 @@ test('TextArea has correct height autoResizeEnabled and different value length',
   }, '#textArea2');
 });
 
-test('Bug Fix (T1221869) when there is maxHeight and autoResizeEnabled', async (t) => {
+test('Height of TextArea input should have the correct height when the maxHeight option is set to 80px(T1221869)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Bug Fix (T1221869) when there is maxHeight and autoResizeEnabled.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Height of TextArea input should have the correct height when the maxHeight option is set to 80px(T1221869).png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -87,10 +170,9 @@ test('Bug Fix (T1221869) when there is maxHeight and autoResizeEnabled', async (
 }).before(async () => {
   await setAttribute('#container', 'style', 'width: 300px; height: 400px;');
   const config = {
-    value: longText,
+    value: text,
     width: 1000,
     maxHeight: 80,
-    inputAttr: { 'aria-label': 'Notes' },
     autoResizeEnabled: true,
   };
 
