@@ -334,10 +334,11 @@ const compileCriteria = (function() {
     };
 
     function compileEquals(getter, value, negate) {
-        const cache = {};
+        const cache = new WeakMap();
+
         return function(objc) {
-            if(cache[objc] !== undefined) {
-                return cache[objc];
+            if(cache.has(objc)) {
+                return cache.get(objc);
             }
 
             const obj = _toComparable(getter(objc));
@@ -347,7 +348,7 @@ const compileCriteria = (function() {
                 result = !result;
             }
 
-            cache[objc] = result;
+            cache.set(objc, result);
             return result;
         };
     }
