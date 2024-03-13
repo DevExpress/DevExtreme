@@ -32,11 +32,11 @@ const moduleConfig = {
         };
 
         this.getCollapsePrevButton = () => {
-            return this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+            return $(this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`));
         };
 
         this.getCollapseNextButton = () => {
-            return this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+            return $(this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
         };
     },
     afterEach: function() {
