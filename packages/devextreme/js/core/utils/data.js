@@ -62,9 +62,9 @@ export const compileGetter = function(expr) {
         const path = getPathParts(expr);
 
         return function(obj, options) {
-            if(obj[expr] !== undefined) {
+            /*            if(obj[expr] !== undefined) {
                 return obj[expr];
-            }
+            }*/
             options = prepareOptions(options);
             const functionAsIs = options.functionsAsIs;
             const hasDefaultValue = 'defaultValue' in options;
