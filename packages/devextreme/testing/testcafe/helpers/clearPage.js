@@ -1,6 +1,8 @@
 /* eslint-disable no-undef */
 const testCafe = require('testcafe');
 
+const shadowDom = process.env.shadowDom === 'true';
+
 module.exports = {
     clearTestPage: async function() {
         await testCafe.ClientFunction(() => {
@@ -8,7 +10,11 @@ module.exports = {
             const parentContainer = document.getElementById('parentContainer');
 
             if(parentContainer) {
-                parentContainer.remove();
+                if(shadowDom) {
+                    parentContainer.remove();
+                } else {
+                    $(parentContainer).remove();
+                }
 
                 const containerElement = document.createElement('div');
                 containerElement.setAttribute('id', 'container');
@@ -24,6 +30,10 @@ module.exports = {
             }
 
             $('#stylesheetRules').remove();
+        }, {
+            dependencies: {
+                shadowDom,
+            }
         })();
     }
 };

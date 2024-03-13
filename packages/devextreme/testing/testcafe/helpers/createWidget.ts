@@ -57,7 +57,7 @@ export const disposeWidget = async <TWidgetName extends WidgetName>(
   widgetName: TWidgetName,
   selector = DEFAULT_SELECTOR,
 ): Promise<void> => ClientFunction(() => {
-  if (process.env.shadowDom === 'true') {
+  if (shadowDom) {
     (window as any).DevExpress.ui[widgetName].getInstance(($(`${selector}`) as any).get(0)).dispose();
   } else {
     ($(`${selector}`) as any)[widgetName]('dispose');
@@ -67,5 +67,6 @@ export const disposeWidget = async <TWidgetName extends WidgetName>(
   dependencies: {
     widgetName,
     selector,
+    shadowDom,
   },
 })();
