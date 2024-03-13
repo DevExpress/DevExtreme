@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { ValueChangedEvent } from 'devextreme/ui/radio_group';
 import Drawer from 'devextreme-react/drawer';
 import RadioGroup from 'devextreme-react/radio-group';
 import Toolbar from 'devextreme-react/toolbar';
@@ -31,20 +32,21 @@ class App extends React.Component<any, {
     this.onMenuClick = this.onMenuClick.bind(this);
   }
 
-  onOpenedStateModeChanged({ value }) {
+  onOpenedStateModeChanged({ value }: ValueChangedEvent) {
     this.setState({ openedStateMode: value });
   }
 
-  onRevealModeChanged({ value }) {
+  onRevealModeChanged({ value }: ValueChangedEvent) {
     this.setState({ revealMode: value });
   }
 
-  onPositionChanged({ value }) {
+  onPositionChanged({ value }: ValueChangedEvent) {
     this.setState({ position: value });
   }
 
-  onOutsideClick() {
+  onOutsideClick() : boolean {
     this.setState({ opened: false });
+    return false;
   }
 
   onMenuClick() {

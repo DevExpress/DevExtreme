@@ -1,6 +1,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable max-len */
 import * as React from 'react';
+import { ValueChangedEvent } from 'devextreme/ui/text_box';
 import { Button } from 'devextreme-react/button';
 import { ScrollView } from 'devextreme-react/scroll-view';
 import { TextBox } from 'devextreme-react/text-box';
@@ -17,7 +18,7 @@ export default class extends React.Component<any, { text: string }> {
     this.handleTextChange = this.handleTextChange.bind(this);
   }
 
-  private handleTextChange(e: unknown) {
+  private handleTextChange(e: ValueChangedEvent) {
     this.setState({
       text: e.value,
     });
