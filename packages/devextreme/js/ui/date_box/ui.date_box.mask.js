@@ -116,13 +116,11 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _timeIndicatorHandler(char) {
-        const isAm = this._getActivePartProp('text') === 'AM';
-
         this._setNewDateIfEmpty();
 
         this._loadMaskValue(this._initialMaskValue);
 
-        this._changePartValue(0, true, char, isAm);
+        this._changePartValue(0, true, char);
     },
 
     _upDownArrowHandler(step) {
@@ -137,9 +135,11 @@ const DateBoxMask = DateBoxBase.inherit({
         this._changePartValue(delta + step, true);
     },
 
-    _changePartValue(step, lockOtherParts, char, isAm) {
+    _changePartValue(step, lockOtherParts, char) {
         const isAmPmPartActive = this._getActivePartProp('pattern') === 'a';
-        if(isAmPmPartActive && (char === undefined || (char === 'a' && isAm) || (char === 'p' && isAm))) {
+        const isAm = this._getActivePartProp('text') === 'AM';
+
+        if(isAmPmPartActive && (char === undefined || (char === 'a' && !isAm) || (char === 'p' && isAm))) {
             this._toggleAmPm();
         } else {
             this._partIncrease(step, lockOtherParts);
