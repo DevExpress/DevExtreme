@@ -10,6 +10,9 @@
 
 // adduse
 
+.dx-textarea {
+  font-size: $textarea-font-size;
+}
 @include dx-textarea(
   2px,
   $textarea-content-line-height,
