@@ -1942,7 +1942,7 @@ QUnit.module('Rows view', {
 
 
     // T355686
-    QUnit.skipInShadowDomMode('ContextMenu on hold when touch and when assign items in onContextMenuPreparing', function(assert) {
+    QUnit.test('ContextMenu on hold when touch and when assign items in onContextMenuPreparing', function(assert) {
         // arrange
         const rowInfos = this.items;
         const dataController = new MockDataController({ items: rowInfos });
