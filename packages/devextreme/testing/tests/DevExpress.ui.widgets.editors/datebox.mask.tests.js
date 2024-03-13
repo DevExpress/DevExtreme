@@ -1045,7 +1045,7 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'AM');
     });
 
-    test('when P is pressed it should toggle AM to PM (T1216937)', function(assert) {
+    test('when P is pressed it should toggle AM to PM', function(assert) {
         this.instance.option({
             value: new Date('10/10/2012 10:00 AM'),
             useMaskBehavior: true,
