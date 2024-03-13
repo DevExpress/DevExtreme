@@ -167,7 +167,7 @@ const TextArea = TextBox.inherit({
     _getHeightDifference($input) {
         return getVerticalOffsets(this._$element.get(0), false)
             + getVerticalOffsets(this._$textEditorContainer.get(0), false)
-            + getVerticalOffsets(this._$textEditorInputContainer.get(0), false)
+            + getVerticalOffsets(this._$textEditorInputContainer.get(0), true)
             + getElementBoxParams('height', getWindow().getComputedStyle($input.get(0))).margin;
     },
 
@@ -191,7 +191,6 @@ const TextArea = TextBox.inherit({
         $input.css('height', 0);
 
         const heightDifference = this._getHeightDifference($input);
-
         this._renderDimensions();
 
         const minHeight = this._getBoundaryHeight('minHeight');
@@ -205,7 +204,6 @@ const TextArea = TextBox.inherit({
         if(maxHeight !== undefined) {
             const adjustedMaxHeight = maxHeight - heightDifference;
             const needScroll = inputHeight > adjustedMaxHeight;
-
             inputHeight = Math.min(inputHeight, adjustedMaxHeight);
             this._updateInputAutoResizeAppearance($input, !needScroll);
         }
