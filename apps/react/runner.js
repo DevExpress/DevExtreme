@@ -2,7 +2,7 @@ const process = require('process');
 const createTestCafe = require('testcafe');
 
 let testCafe;
-createTestCafe('localhost')
+createTestCafe('127.0.0.1')
     .then(tsc => {
         testCafe = tsc;
 
