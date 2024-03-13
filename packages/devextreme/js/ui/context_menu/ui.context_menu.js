@@ -57,6 +57,12 @@ const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
 const window = getWindow();
 
 class ContextMenu extends MenuBase {
+    ctor(...args) {
+        this._scrollViews = [];
+
+        super.ctor(...args);
+    }
+
     getShowEvent(showEventOption) {
         let result = null;
 
@@ -256,6 +262,9 @@ class ContextMenu extends MenuBase {
     _setFocusedElement($element) {
         if($element && $element.length !== 0) {
             this.option('focusedElement', getPublicElement($element));
+            if(this._scrollViews.length) {
+                this._scrollViews[this._scrollViews.length - 1].scrollToElement($element);
+            }
         }
     }
 
@@ -523,6 +532,8 @@ class ContextMenu extends MenuBase {
         if(!arg.cancel) {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
+            this._scrollViews.pop();
+            console.log('_scrollViews', this._scrollViews);
         }
     }
 
@@ -609,21 +620,21 @@ class ContextMenu extends MenuBase {
         const maxHeight = this._getMaxHeight();
         const containerHeight = getOuterHeight(container);
 
-        if(!this._hasScrollView && containerHeight < maxHeight) {
+        if(!this._scrollViews.length && containerHeight < maxHeight) {
             return;
         }
 
-        this._hasScrollView = true;
         container.css('position', 'fixed');
         container.css('height', Math.min(containerHeight, maxHeight));
-        this._createComponent(container, ScrollView, {
+        this._scrollViews.push(this._createComponent(container, ScrollView, {
             onInitialized: (e) => {
                 this._createActionByOption('onScrollViewInitialized')({
                     element: container,
                     component: e.component
                 });
             },
-        });
+        }));
+        console.log('_scrollViews', this._scrollViews);
     }
 
     _getMaxHeight() {
@@ -814,6 +825,8 @@ class ContextMenu extends MenuBase {
         this._stopAnimate($submenu);
         animation && this._animate($submenu, animation);
         $submenu.css('visibility', 'hidden');
+        this._scrollViews.pop();
+        console.log('_scrollViews', this._scrollViews);
     }
 
     _stopAnimate($container) {
