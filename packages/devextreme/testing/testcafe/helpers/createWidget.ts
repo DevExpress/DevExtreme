@@ -10,6 +10,24 @@ const DEFAULT_OPTIONS: CreateWidgetOptions = {
   disableFxAnimation: true,
 };
 
+const shadowDom = process.env.shadowDom === 'true';
+
+const createWidgetCore = <TWidgetName extends WidgetName>(
+  widgetName: TWidgetName,
+  widgetOptions: TWidgetName extends keyof WidgetOptions
+    ? WidgetOptions[TWidgetName] : unknown,
+  selector: string,
+  isShadowDom: boolean,
+) => {
+  if (isShadowDom) {
+    return new (window as any).DevExpress.ui[widgetName](
+      ($(selector) as any).get(0),
+      widgetOptions,
+    );
+  }
+  return ($(`${selector}`) as any)[widgetName](widgetOptions)[widgetName]('instance');
+};
+
 export const createWidget = async<TWidgetName extends WidgetName>(
   widgetName: TWidgetName,
   widgetOptions: TWidgetName extends keyof WidgetOptions
@@ -21,10 +39,7 @@ export const createWidget = async<TWidgetName extends WidgetName>(
   () => {
     (window as any).DevExpress.fx.off = disableFxAnimation;
     const options = typeof widgetOptions === 'function' ? widgetOptions() : widgetOptions;
-    (window as any).widget = new (window as any).DevExpress.ui[widgetName](
-      ($(selector) as any).get(0),
-      options,
-    );
+    (window as any).widget = createWidgetCore(widgetName, options, selector, shadowDom);
   },
   {
     dependencies: {
@@ -32,6 +47,8 @@ export const createWidget = async<TWidgetName extends WidgetName>(
       widgetOptions,
       selector,
       disableFxAnimation,
+      shadowDom,
+      createWidgetCore,
     },
   },
 )();
@@ -40,7 +57,11 @@ export const disposeWidget = async <TWidgetName extends WidgetName>(
   widgetName: TWidgetName,
   selector = DEFAULT_SELECTOR,
 ): Promise<void> => ClientFunction(() => {
-  (window as any).DevExpress.ui[widgetName].getInstance(($(`${selector}`) as any).get(0)).dispose();
+  if (process.env.shadowDom === 'true') {
+    (window as any).DevExpress.ui[widgetName].getInstance(($(`${selector}`) as any).get(0)).dispose();
+  } else {
+    ($(`${selector}`) as any)[widgetName]('dispose');
+  }
   (window as any).widget = undefined;
 }, {
   dependencies: {
