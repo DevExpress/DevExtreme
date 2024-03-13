@@ -11,7 +11,7 @@ test('Slider appearance', async (t) => {
 
   await testScreenshot(t, takeScreenshot, 'slider-appearance.png', { element: '#container' });
 
-  await testScreenshot(t, takeScreenshot, 'slider-appearance.png', { element: '#container', theme: `${getFullThemeName().replace('light', 'dark')}` });
+  await testScreenshot(t, takeScreenshot, 'slider-appearance.png', { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
 
   await t
     .expect(compareResults.isValid())
