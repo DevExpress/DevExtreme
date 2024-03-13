@@ -610,10 +610,14 @@ export class ExportController extends dataGridCore.ViewController {
   }
 
   private _getSummaryCells(summaryTotalItems, totalAggregates) {
-    const dataController = this._dataController as any;
-    const columnsController = dataController._columnsController;
-
-    return dataController._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(null, true), (summaryItem, column) => (dataController._isDataColumn(column) ? column.index : -1));
+    // @ts-expect-error
+    return this._dataController._calculateSummaryCells(
+      summaryTotalItems,
+      totalAggregates,
+      this._columnsController.getVisibleColumns(null, true),
+      // @ts-expect-error
+      (summaryItem, column) => (this._dataController._isDataColumn(column) ? column.index : -1),
+    );
   }
 
   public _getSelectedItems() {
