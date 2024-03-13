@@ -1044,7 +1044,7 @@ module('Search', setupModule, () => {
         { type: 'datetime', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
         { type: 'datetime', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
     ].forEach(({ type, input, initialValue, expectedValue }) => {
-        QUnit.test(`when ${input} is pressed it should switch AM/PM to ${expectedValue}`, function(assert) {
+        QUnit.test(`when ${input} is pressed it should switch AM/PM to ${expectedValue} (T1216937)`, function(assert) {
             const $dateBox = $('#dateBox').dxDateBox({
                 value: new Date(`10/10/2012, 10:00 ${initialValue}`),
                 displayFormat: 'a',
