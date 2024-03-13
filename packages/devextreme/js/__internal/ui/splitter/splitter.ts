@@ -92,7 +92,6 @@ class Splitter extends (CollectionWidget as any) {
 
     if (isElementVisible(this.$element().get(0))) {
       this._layout = this._getInitialLayoutBasedOnSize();
-      this._updatePaneSizesWithOuterWidth();
     } else {
       this._shouldRecalculateLayout = true;
     }
