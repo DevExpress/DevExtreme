@@ -334,13 +334,20 @@ const compileCriteria = (function() {
     };
 
     function compileEquals(getter, value, negate) {
-        return function(obj) {
-            obj = _toComparable(getter(obj));
+        const cache = {};
+        return function(objc) {
+            if(cache[objc] !== undefined) {
+                return cache[objc];
+            }
+
+            const obj = _toComparable(getter(objc));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
                 result = !result;
             }
+
+            cache[objc] = result;
             return result;
         };
     }
