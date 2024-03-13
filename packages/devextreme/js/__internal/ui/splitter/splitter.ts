@@ -94,7 +94,7 @@ class Splitter extends (CollectionWidget as any) {
       this._layout = this._getInitialLayoutBasedOnSize();
       this._updatePaneSizesWithOuterWidth();
     } else {
-      this._shouldRecalculateLayout = true; // this._shouldUpdateLayout();
+      this._shouldRecalculateLayout = true;
     }
 
     super._initMarkup();
@@ -149,8 +149,12 @@ class Splitter extends (CollectionWidget as any) {
     return index === findLastIndexOfVisibleItem(this.option('items'));
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _renderItem(index, itemData, $container, $itemToReplace): unknown {
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container: dxElementWrapper,
+    $itemToReplace: dxElementWrapper,
+  ): unknown {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     const itemElement = $itemFrame.get(0);

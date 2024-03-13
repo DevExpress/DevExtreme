@@ -4,6 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { clearTestPage } from '../../../helpers/clearPage';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
+import TabPanel from '../../../model/tabPanel';
 
 fixture.disablePageReloads`Splitter_integration`
   .page(url(__dirname, '../../container.html'))
@@ -11,6 +12,11 @@ fixture.disablePageReloads`Splitter_integration`
 
 safeSizeTest('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const tabPanel = new TabPanel('#container');
+
+  await t
+    .click(tabPanel.tabs.getItem(1).element);
 
   await testScreenshot(t, takeScreenshot, 'Splitter panes inside tabPanel tab content, pane_1.size=`100px`.png', { element: '#container' });
 
