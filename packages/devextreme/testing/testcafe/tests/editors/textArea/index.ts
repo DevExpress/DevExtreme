@@ -17,7 +17,6 @@ const longText = 'Prepare 2013 Marketing Plan: We need to double revenues in 201
 test('TextArea has correct height with autoResizeEnabled and height is 7em & maxHeight is 5em', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.debug();
   await testScreenshot(t, takeScreenshot, 'TextArea has correct height with autoResizeEnabled and height is 7em & maxHeight is 5em.png', { element: '#container' });
 
   await t
@@ -50,7 +49,6 @@ test('TextArea has correct height with autoResizeEnabled and height is 7em & max
 test('TextArea has correct height with autoResizeEnabled and have different data string length inside', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.debug();
   await testScreenshot(t, takeScreenshot, 'TextArea with autoResizeEnabled and have different data string length inside.png', { element: '#container' });
 
   await t
@@ -81,7 +79,6 @@ test('TextArea has correct height with autoResizeEnabled and have different data
 test('Check for error in bug (T1221869) where when there is vale in maxHeight and autResizeEnabled is enabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.debug();
   await testScreenshot(t, takeScreenshot, 'Check for error in bug (T1221869) where when there is vale in maxHeight and autResizeEnabled is enabled.png', { element: '#container' });
 
   await t
