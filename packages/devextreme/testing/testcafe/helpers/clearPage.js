@@ -7,22 +7,23 @@ module.exports = {
             const body = document.querySelector('body');
             const parentContainer = document.getElementById('parentContainer');
 
-            parentContainer.remove();
+            if(parentContainer) {
+                parentContainer.remove();
 
-            const containerElement = document.createElement('div');
-            containerElement.setAttribute('id', 'container');
+                const containerElement = document.createElement('div');
+                containerElement.setAttribute('id', 'container');
 
-            const otherContainerElement = document.createElement('div');
-            otherContainerElement.setAttribute('id', 'otherContainer');
+                const otherContainerElement = document.createElement('div');
+                otherContainerElement.setAttribute('id', 'otherContainer');
 
-            const parentContainerElement = document.createElement('div');
-            parentContainerElement.setAttribute('id', 'parentContainer');
+                const parentContainerElement = document.createElement('div');
+                parentContainerElement.setAttribute('id', 'parentContainer');
 
-            parentContainerElement.append(containerElement, otherContainerElement);
-            body.prepend(parentContainerElement);
+                parentContainerElement.append(containerElement, otherContainerElement);
+                body.prepend(parentContainerElement);
+            }
 
             $('#stylesheetRules').remove();
-            $('.dx-overlay-wrapper').remove();
         })();
     }
 };
