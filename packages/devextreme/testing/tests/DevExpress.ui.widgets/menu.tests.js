@@ -53,6 +53,8 @@ const DX_TREEVIEW_CLASS = 'dx-treeview';
 const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
 const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
 const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -2008,6 +2010,35 @@ QUnit.module('keyboard navigation', {
             .press('up');
 
         assert.equal($(this.instance._visibleSubmenu.option('focusedElement')).text(), 'Item 113');
+    });
+
+    QUnit.test('selected item should be always visible during keyboard navigation', function(assert) {
+        this.instance.option({
+            items: [{
+                text: 'Item 1',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            }],
+        });
+
+        this.keyboard.press('down');
+        this.clock.tick(0);
+
+        const $scrollableContainer = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
+
+        this.keyboard
+            .press('up')
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 6, 'scrolled to bottop');
+
+        this.keyboard
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 6, 'scrolled back to 1st item');
     });
 });
 

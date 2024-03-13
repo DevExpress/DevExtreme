@@ -41,6 +41,8 @@ const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
 const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -2439,6 +2441,33 @@ QUnit.module('Keyboard navigation', moduleConfig, () => {
             .keyDown('up');
 
         assert.equal($(instance.option('focusedElement')).text(), 'item 22');
+    });
+
+    QUnit.test('Selected item should be always visible during keyboard navigation', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            focusStateEnabled: true
+        });
+
+        instance.show();
+        this.clock.tick(0);
+
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
+
+        keyboardMock(instance.itemsContainer())
+            .press('up')
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 6, 'scrolled to bottop');
+
+        keyboardMock(instance.itemsContainer())
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 6, 'scrolled back to 1st item');
     });
 });
 
