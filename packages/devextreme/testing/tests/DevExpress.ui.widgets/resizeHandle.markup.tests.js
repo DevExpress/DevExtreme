@@ -59,6 +59,8 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
 
     [true, false].forEach((resizable) => {
         QUnit.test(`should ${resizable ? '' : 'not'} have resizable class when resizable=${resizable}`, function(assert) {
+            this.reinit({ resizable });
+
             assert.strictEqual(this.$element.hasClass(RESIZE_HANDLE_RESIZABLE_CLASS), resizable);
         });
     });
