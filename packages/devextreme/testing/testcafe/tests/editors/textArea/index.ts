@@ -14,10 +14,10 @@ fixture.disablePageReloads`TextArea_Height`
 const text = 'Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.';
 const longText = 'Prepare 2013 Marketing Plan: We need to double revenues in 2013 and our marketing strategy is going to be key here. R&D is improving existing products and creating new products so we can deliver great AV equipment to our customers.Robert, please make certain to create a PowerPoint presentation for the members of the executive team.';
 
-test('TextArea has correct height with autoResizeEnabled and height is 7em & maxHeight is 5em', async (t) => {
+test('TextArea correct height with autoResizeEnabled, height is 7em & maxHeight is 5em', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TextArea has correct height with autoResizeEnabled and height is 7em & maxHeight is 5em.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TextArea correct height with autoResizeEnabled, height is 7em & maxHeight is 5em.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -46,10 +46,10 @@ test('TextArea has correct height with autoResizeEnabled and height is 7em & max
   }, '#textArea2');
 });
 
-test('TextArea has correct height with autoResizeEnabled and have different data string length inside', async (t) => {
+test('TextArea has correct height autoResizeEnabled and different value length', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'TextArea with autoResizeEnabled and have different data string length inside.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'TextArea has correct height autoResizeEnabled and different value length.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
@@ -76,10 +76,10 @@ test('TextArea has correct height with autoResizeEnabled and have different data
   }, '#textArea2');
 });
 
-test('Check for error in bug (T1221869) where when there is vale in maxHeight and autResizeEnabled is enabled', async (t) => {
+test('Bug Fix (T1221869) when there is maxHeight and autoResizeEnabled', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Check for error in bug (T1221869) where when there is vale in maxHeight and autResizeEnabled is enabled.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Bug Fix (T1221869) when there is maxHeight and autoResizeEnabled.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
