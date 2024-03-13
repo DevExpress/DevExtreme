@@ -1,11 +1,17 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
+  getOuterHeight,
+  getOuterWidth,
+} from '@js/core/utils/size';
+import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
-import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
+import { isNumeric, isString } from '@js/core/utils/type';
+import type { Item } from '@js/ui/splitter';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -133,14 +139,119 @@ export function updateItemsSize(items, sizeDistribution): void {
   });
 }
 
-export function getInitialLayout(items: Item[]): number[] {
+// eslint-disable-next-line class-methods-use-this
+function isPercentWidth(size: string | number): boolean {
+  return isString(size) && size.endsWith('%');
+}
+
+// eslint-disable-next-line class-methods-use-this
+function isPixelWidth(size: string | number): boolean {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return isNumeric(size) || (isString(size) && size.endsWith('px'));
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+function calculatePercentage(totalSize, size) {
+  if (totalSize === 0) {
+    return 0;
+  }
+
+  const percentage = (size / totalSize) * 100;
+  return percentage;
+}
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function getPercentSize(size: string | number, totalPanesSize: number): number {
+  const isPixel = isPixelWidth(size);
+  const sizeNumber = parseFloat(size as string);
+
+  if (isPixel) {
+    return calculatePercentage(totalPanesSize, sizeNumber);
+  }
+
+  const isPercentage = isPercentWidth(size);
+  if (isPercentage) {
+    return sizeNumber;
+  }
+
+  // todo: handle incorrect size input
+  return 0;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getInitialLayout(panes, totalPanesSize: number): number[] {
   const layout: number[] = [];
+  let totalSize = 0;
+  let sizeOverflow = false;
 
-  const visibleItemsCount = items.filter((item) => item.visible !== false).length;
+  // eslint-disable-next-line no-restricted-syntax
+  for (const pane of panes) {
+    if (pane.visible === false || sizeOverflow || pane.size === 0) {
+      layout.push(0);
+      // todo: refactor
+    } else if (pane.size && (isPercentWidth(pane.size) || isPixelWidth(pane.size))) {
+      let percentSize = getPercentSize(pane.size, totalPanesSize);
 
-  items.forEach((item) => {
-    layout.push(item.visible === false ? 0 : 100 / visibleItemsCount);
-  });
+      percentSize = Math.min(100 - totalSize, percentSize);
+      totalSize += percentSize;
+
+      layout.push(percentSize);
+
+      if (totalSize >= 100) {
+        sizeOverflow = true;
+      }
+    } else {
+      layout.push(-1);
+    }
+  }
+
+  const noSizePanes = panes.filter((p) => p.visible !== false && !p.size && p.size !== 0);
+
+  if (noSizePanes.length) {
+    const remainingSpace = Math.max(100 - totalSize, 0);
+
+    layout.forEach((pane, index) => {
+      if (layout[index] === -1) {
+        layout[index] = remainingSpace / noSizePanes.length;
+      }
+    });
+  } else if (totalSize < 100) {
+    layout[findLastIndexOfVisibleItem(panes)] += 100 - totalSize;
+  }
 
   return layout;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+function getElementItemsSizeSum($element, orientation, handlesCount): number {
+  const size: number = orientation === ORIENTATION.horizontal
+    ? getOuterWidth($element) : getOuterHeight($element);
+
+  const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
+
+  return size - handlesSizeSum;
+}
+
+export function getVisibleItemsCount(items: Item[]): number {
+  return items.filter((p) => p.visible !== false).length;
+}
+
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
+export function getElementSize($element, items, orientation, width, height): number {
+  const handlesCount = Math.max(getVisibleItemsCount(items) - 1, 0);
+
+  const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
+
+  if (sizeOption) {
+    return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
+  }
+  return getElementItemsSizeSum($element, orientation, handlesCount);
+}
+
+export function isElementVisible(element: HTMLElement | undefined | null): boolean {
+  if (element) {
+    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects?.().length);
+  }
+
+  return false;
 }

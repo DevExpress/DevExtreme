@@ -7,7 +7,27 @@ import { TextArea } from 'devextreme-react/text-area';
 
 import Example from './example-block';
 
-const employee: any = {
+type Employee = {
+  ID: number;
+
+  FirstName: string;
+
+  LastName: string;
+
+  Position: string;
+
+  BirthDate: string;
+
+  HireDate: string;
+
+  Notes: string;
+
+  Address: string;
+
+  Phone: string;
+}
+
+const employee: Employee = {
   ID: 1,
   FirstName: 'John',
   LastName: 'Heart',
@@ -29,8 +49,7 @@ const positions = [
   'Shipping Manager',
 ];
 
-const getTextBoxComponent = (disabled: boolean) => (props: any) => {
-  const { data } = props;
+const getTextBoxComponent = (disabled: boolean) => ({ data }) => {
   return <NumberBox disabled={disabled} value={data.editorOptions.value} />;
 };
 

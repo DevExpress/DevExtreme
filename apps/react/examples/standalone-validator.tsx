@@ -1,4 +1,7 @@
 import * as React from 'react';
+import { ClickEvent } from 'devextreme/ui/button';
+import { ValueChangedEvent } from 'devextreme/ui/text_box';
+import { ValidatedEvent } from 'devextreme/ui/validator';
 import {
   Button, TextBox, ValidationSummary, Validator,
 } from 'devextreme-react';
@@ -10,7 +13,7 @@ class ValidatorExample extends React.Component<any, any> {
 
   private _adapter: any;
 
-  private _callbacks: any[] = [];
+  private _callbacks: (() => void)[] = [];
 
   constructor(props: unknown) {
     super(props);
@@ -21,21 +24,21 @@ class ValidatorExample extends React.Component<any, any> {
     this._adapter = {
       getValue: () => this._currentValue,
       validationRequestsCallbacks: this._callbacks,
-      applyValidationResults: (e: any) => {
+      applyValidationResults: (e: ValidatedEvent) => {
         this.setState({ isValid: e.isValid });
       },
     };
   }
 
-  private _onValueChanged = (e: any) => {
+  private _onValueChanged = (e: ValueChangedEvent) => {
     this._currentValue = e.value;
 
-    this._callbacks.forEach((callback: any) => {
+    this._callbacks.forEach((callback: Function) => {
       callback();
     });
   };
 
-  private _onSubmit = (e: any) => {
+  private _onSubmit = (e: ClickEvent) => {
     e.validationGroup.validate();
   };
 

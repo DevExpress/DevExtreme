@@ -1,5 +1,6 @@
 import * as React from 'react';
 
+import { ValueChangedEvent } from 'devextreme/ui/text_box';
 import { Button } from 'devextreme-react/button';
 import { Popup } from 'devextreme-react/popup';
 import { ScrollView } from 'devextreme-react/scroll-view';
@@ -21,7 +22,7 @@ export default class extends React.Component<any, { visible: boolean; text: stri
     this.handleTextUpdate = this.handleTextUpdate.bind(this);
   }
 
-  private handleTextUpdate(e: unknown) {
+  private handleTextUpdate(e: ValueChangedEvent) {
     this.setState({
       text: e.value,
     });
