@@ -34,7 +34,8 @@
     "webpack-dev-server": "4.15.1"
   },
   "scripts": {
+    "test": "node runner.js",
     "start": "webpack-dev-server",
-    "build": "echo empty"
+    "build": "webpack"
   }
 }
