@@ -18,6 +18,7 @@ import {
 } from './utils/event';
 import {
   calculateDelta,
+  findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
   getCurrentLayout,
   getDimensionByOrientation,
@@ -31,6 +32,7 @@ const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const FLEX_PROPERTY = {
   flexGrow: 'flexGrow',
@@ -85,6 +87,8 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _renderItems(items: Item[]): void {
+    this._resizeHandles = [];
+
     super._renderItems(items);
   }
 
@@ -116,7 +120,10 @@ class Splitter extends (CollectionWidget as any) {
 
       groupAriaAttributes.id = itemId;
 
-      this._renderResizeHandle(itemId);
+      const nextItemData = this._getNextVisibleItemData(index);
+      const resizable = itemData.resizable !== false && nextItemData.resizable !== false;
+
+      this._renderResizeHandle(itemId, resizable);
     }
 
     this.setAria(groupAriaAttributes, $itemFrame);
@@ -124,11 +131,39 @@ class Splitter extends (CollectionWidget as any) {
     return $itemFrame;
   }
 
-  _renderResizeHandle(paneId: string): void {
+  _renderResizeHandle(paneId: string, resizable: boolean): void {
     const $resizeHandle = $('<div>')
       .appendTo(this.$element());
 
-    this._createComponent($resizeHandle, ResizeHandle, this._getResizeHandleConfig(paneId));
+    const config = this._getResizeHandleConfig(paneId, resizable);
+    const resizeHandle = this._createComponent($resizeHandle, ResizeHandle, config);
+
+    this._resizeHandles.push(resizeHandle);
+  }
+
+  _updateResizeHandlesResizableState(): void {
+    this._resizeHandles.forEach((resizeHandle) => {
+      const $resizeHandle = resizeHandle.$element();
+
+      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+      const leftItemData = this._getItemData($leftItem);
+      const rightItemData = this._getItemData($rightItem);
+      const resizable = leftItemData.resizable !== false && rightItemData.resizable !== false;
+
+      resizeHandle.option('resizable', resizable);
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getNextVisibleItemData(index: number): any {
+    const { items } = this.option();
+    return this._getItemDataByIndex(findIndexOfNextVisibleItem(items, index));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getItemDataByIndex(index: number): any {
+    return this._editStrategy.getItemDataByIndex(index);
   }
 
   _getAction(eventName: string): (e) => void {
@@ -136,7 +171,7 @@ class Splitter extends (CollectionWidget as any) {
     return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
   }
 
-  _getResizeHandleConfig(paneId: string): object {
+  _getResizeHandleConfig(paneId: string, resizable: boolean): object {
     const {
       orientation,
       rtlEnabled,
@@ -146,10 +181,11 @@ class Splitter extends (CollectionWidget as any) {
     return {
       direction: orientation,
       focusStateEnabled: allowKeyboardNavigation,
+      resizable,
       elementAttr: {
         'aria-controls': paneId,
       },
-      collapsePrevClick: (e): void => {
+      onCollapsePrevClick: (e): void => {
         const $resizeHandle = $(e.target).parent();
         const $item = this._getResizeHandleLeftItem($resizeHandle);
         const itemData = this._getItemData($item);
@@ -160,7 +196,7 @@ class Splitter extends (CollectionWidget as any) {
           itemElement: $item,
         });
       },
-      collapseNextClick: (e): void => {
+      onCollapseNextClick: (e): void => {
         const $resizeHandle = $(e.target).parent();
         const $item = this._getResizeHandleLeftItem($resizeHandle);
         const itemData = this._getItemData($item);
@@ -212,7 +248,26 @@ class Splitter extends (CollectionWidget as any) {
 
   // eslint-disable-next-line class-methods-use-this
   _getResizeHandleLeftItem($resizeHandle: dxElementWrapper): dxElementWrapper {
-    return $resizeHandle.prev();
+    let $leftItem = $resizeHandle.prev();
+
+    while ($leftItem.hasClass(INVISIBLE_STATE_CLASS)) {
+      $leftItem = $leftItem.prev();
+    }
+
+    return $leftItem;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeHandleRightItem($resizeHandle: dxElementWrapper): dxElementWrapper {
+    // @ts-expect-error renderer d.ts issue
+    let $rightItem = $resizeHandle.next();
+
+    while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
+      // @ts-expect-error renderer d.ts issue
+      $rightItem = $rightItem.next();
+    }
+
+    return $rightItem;
   }
 
   _renderItemContent(args: object): object {
@@ -265,6 +320,12 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
+    if (property === 'resizable') {
+      this._updateResizeHandlesResizableState();
+
+      return;
+    }
+
     super._itemOptionChanged(item, property, value);
   }
 

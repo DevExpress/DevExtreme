@@ -13,6 +13,7 @@ import {
 } from './utils/event';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
+const RESIZE_HANDLE_RESIZABLE_CLASS = 'dx-resize-handle-resizable';
 const HORIZONTAL_DIRECTION_CLASS = 'dx-resize-handle-horizontal';
 const VERTICAL_DIRECTION_CLASS = 'dx-resize-handle-vertical';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
@@ -40,11 +41,11 @@ class ResizeHandle extends (Widget as any) {
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
-      showResizableIcon: true,
+      resizable: true,
       showCollapsePrev: true,
       showCollapseNext: true,
-      collapsePrevClick: null,
-      collapseNextClick: null,
+      onCollapsePrevClick: null,
+      onCollapseNextClick: null,
     });
   }
 
@@ -65,14 +66,18 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _renderResizeHandleContent(): void {
+    const { resizable } = this.option();
+
     this.$element().addClass(RESIZE_HANDLE_CLASS);
+    this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
 
     this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
     this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
     this._$collapseNextButton = $('<div>').addClass(this._getIconClass('next')).appendTo(this.$element());
 
-    this._setResizeHandleContentVisibility();
+    this._setCollapseButtonsVisibility();
+    this._setResizeIconVisibility();
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -104,12 +109,17 @@ class ResizeHandle extends (Widget as any) {
     return `dx-icon-triangle${isHorizontal ? 'left' : 'up'}`;
   }
 
-  _setResizeHandleContentVisibility(): void {
-    const { showCollapsePrev, showCollapseNext, showResizableIcon } = this.option();
+  _setCollapseButtonsVisibility(): void {
+    const { showCollapsePrev, showCollapseNext } = this.option();
 
     this._$collapsePrevButton.toggleClass(STATE_INVISIBLE_CLASS, !showCollapsePrev);
-    this._$resizeHandle.toggleClass(STATE_INVISIBLE_CLASS, !showResizableIcon);
     this._$collapseNextButton.toggleClass(STATE_INVISIBLE_CLASS, !showCollapseNext);
+  }
+
+  _setResizeIconVisibility(): void {
+    const { resizable } = this.option();
+
+    this._$resizeHandle.toggleClass(STATE_INVISIBLE_CLASS, !resizable);
   }
 
   _setAriaAttributes(): void {
@@ -159,39 +169,41 @@ class ResizeHandle extends (Widget as any) {
 
   _attachEventHandlers(): void {
     const eventData = { direction: this.option('direction'), immediate: true };
-    const { collapsePrevClick, collapseNextClick } = this.option();
+    const { onCollapsePrevClick, onCollapseNextClick, resizable } = this.option();
 
-    eventsEngine.on(
-      this.$element(),
-      this.RESIZE_START_EVENT_NAME,
-      eventData,
-      this._resizeStartHandler.bind(this),
-    );
+    if (resizable) {
+      eventsEngine.on(
+        this.$element(),
+        this.RESIZE_START_EVENT_NAME,
+        eventData,
+        this._resizeStartHandler.bind(this),
+      );
 
-    eventsEngine.on(
-      this.$element(),
-      this.RESIZE_EVENT_NAME,
-      eventData,
-      this._resizeHandler.bind(this),
-    );
+      eventsEngine.on(
+        this.$element(),
+        this.RESIZE_EVENT_NAME,
+        eventData,
+        this._resizeHandler.bind(this),
+      );
 
-    eventsEngine.on(
-      this.$element(),
-      this.RESIZE_END_EVENT_NAME,
-      eventData,
-      this._resizeEndHandler.bind(this),
-    );
+      eventsEngine.on(
+        this.$element(),
+        this.RESIZE_END_EVENT_NAME,
+        eventData,
+        this._resizeEndHandler.bind(this),
+      );
+    }
 
     eventsEngine.on(
       this._$collapsePrevButton,
       CLICK_EVENT,
-      collapsePrevClick,
+      onCollapsePrevClick,
     );
 
     eventsEngine.on(
       this._$collapseNextButton,
       CLICK_EVENT,
-      collapseNextClick,
+      onCollapseNextClick,
     );
   }
 
@@ -214,7 +226,7 @@ class ResizeHandle extends (Widget as any) {
 
   // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   _optionChanged(args): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
       case 'direction':
@@ -222,12 +234,17 @@ class ResizeHandle extends (Widget as any) {
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;
-      case 'showResizableIcon':
+      case 'resizable':
+        this._setResizeIconVisibility();
+        this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
+        this._detachEventHandlers();
+        this._attachEventHandlers();
+        break;
       case 'showCollapsePrev':
       case 'showCollapseNext':
         break;
-      case 'collapsePrevClick':
-      case 'collapseNextClick':
+      case 'onCollapsePrevClick':
+      case 'onCollapseNextClick':
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;

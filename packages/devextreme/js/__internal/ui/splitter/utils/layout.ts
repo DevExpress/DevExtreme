@@ -34,6 +34,16 @@ export function findLastIndexOfVisibleItem(items: any[]): number {
   return -1;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function findIndexOfNextVisibleItem(items: any[], index: number): number {
+  for (let i = index + 1; i < items.length; i += 1) {
+    if (items[i].visible !== false) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 // eslint-disable-next-line max-len
 function findMaxAvailableDelta(currentLayout, firstItemIndex, secondItemIndex, isSizeDecreasing): number {
   const firstIndex = isSizeDecreasing ? 0 : secondItemIndex;

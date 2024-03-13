@@ -30,6 +30,14 @@ const moduleConfig = {
 
             init(options);
         };
+
+        this.getCollapsePrevButton = () => {
+            return this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+        };
+
+        this.getCollapseNextButton = () => {
+            return this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+        };
     },
     afterEach: function() {
         fx.off = false;
@@ -60,8 +68,8 @@ QUnit.module('Initialization', moduleConfig, () => {
 
 QUnit.module('Behavior', moduleConfig, () => {
     [
-        { handler: 'collapsePrevClick', button: 'prev', },
-        { handler: 'collapseNextClick', button: 'next', },
+        { handler: 'onCollapsePrevClick', button: 'prev', },
+        { handler: 'onCollapseNextClick', button: 'next', },
     ].forEach(({ handler, button }) => {
         QUnit.test(`${handler} handler should be fired on collapse ${button} button click`, function(assert) {
             assert.expect(1);
@@ -72,7 +80,7 @@ QUnit.module('Behavior', moduleConfig, () => {
                 }
             });
 
-            const $collapseButton = $(this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
+            const $collapseButton = button === 'prev' ? this.getCollapsePrevButton() : this.getCollapseNextButton();
 
             $collapseButton.trigger('dxclick');
         });
@@ -83,7 +91,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             this.reinit({ [handler]: handlerStub });
 
-            const $collapseButton = $(this.$element.find(`.${button === 'prev' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`));
+            const $collapseButton = button === 'prev' ? this.getCollapsePrevButton() : this.getCollapseNextButton();
 
             $collapseButton.trigger('dxclick');
 
@@ -110,9 +118,15 @@ QUnit.module('Cursor', moduleConfig, () => {
         });
     });
 
+    QUnit.test('resize handle should have "cursor: auto" when resizable is disabled', function(assert) {
+        this.reinit({ resizable: false });
+
+        assert.strictEqual(this.$element.css('cursor'), 'auto');
+    });
+
     QUnit.test('collapse buttons should have "cursor: pointer"', function(assert) {
-        const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
-        const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+        const $collapsePrevButton = this.getCollapsePrevButton();
+        const $collapseNextButton = this.getCollapseNextButton();
 
         assert.strictEqual($collapsePrevButton.css('cursor'), 'pointer');
         assert.strictEqual($collapseNextButton.css('cursor'), 'pointer');
@@ -143,6 +157,38 @@ QUnit.module('Events', moduleConfig, () => {
             const resizeHandlerStub = sinon.stub();
             this.reinit({ [eventHandler]: resizeHandlerStub });
             this.instance.option('direction', 'vertical');
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 1);
+        });
+
+        QUnit.test(`${eventHandler} should not be called when resizable=false on init`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+
+            this.reinit({ [eventHandler]: resizeHandlerStub, resizable: false });
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 0);
+        });
+
+        QUnit.test(`${eventHandler} should not be called when resizable=false on runtime`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+
+            this.reinit({ [eventHandler]: resizeHandlerStub, resizable: true });
+            this.instance.option('resizable', false);
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 0);
+        });
+
+        QUnit.test(`${eventHandler} should be called when resizable=true on init`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+
+            this.reinit({ [eventHandler]: resizeHandlerStub, resizable: false });
+            this.instance.option('resizable', true);
 
             pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
 

@@ -173,6 +173,53 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     [
+        { scenario: 'left', items: [ { resizable: false }, { } ] },
+        { scenario: 'right', items: [ { }, { resizable: false } ] },
+        { scenario: 'left and right', items: [ { resizable: false }, { resizable: false } ] }
+    ].forEach(({ scenario, items }) => {
+        QUnit.test(`resize should not work when ${scenario} pane has resizable=false`, function(assert) {
+            this.reinit({ items });
+
+            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            pointer.start().dragStart().drag(-25, -25).dragEnd();
+
+            assertLayout(items, ['50', '50'], assert);
+        });
+    });
+
+    QUnit.test('resize should work when pane resizable is enabled on runtime', function(assert) {
+        this.reinit({
+            items: [ { resizable: false }, { } ],
+        });
+
+        this.instance.option('items[0].resizable', true);
+
+        const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assertLayout(items, ['75', '25'], assert);
+    });
+
+    QUnit.test('resize should not work when pane resizable is disabled on runtime', function(assert) {
+        this.reinit({
+            items: [ { }, { } ],
+        });
+
+        this.instance.option('items[0].resizable', false);
+
+        const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        assertLayout(items, ['50', '50'], assert);
+    });
+
+    [
         { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
         { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
         { resizeDistance: -100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: true },
