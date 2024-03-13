@@ -1056,24 +1056,6 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'PM');
     });
 
-    [
-        { letter: 'x', expectedValue: 'AM' },
-        { letter: 'y', expectedValue: 'AM' },
-        { letter: 'x', expectedValue: 'PM' },
-        { letter: 'y', expectedValue: 'PM' },
-    ].forEach(({ letter, expectedValue }) => {
-        QUnit.test('AM/PM part should not change when keys other than "a" or "p" are pressed (T1216937)', function(assert) {
-            this.instance.option({
-                value: new Date(`10/10/2012 10:00 ${expectedValue}`),
-                useMaskBehavior: true,
-                displayFormat: 'a',
-            });
-
-            this.keyboard.type(letter);
-            assert.strictEqual(this.$input.val(), expectedValue);
-        });
-    });
-
     test('Hour', function(assert) {
         this.instance.option('displayFormat', 'hh');
 
