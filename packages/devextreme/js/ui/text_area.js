@@ -191,6 +191,7 @@ const TextArea = TextBox.inherit({
         $input.css('height', 0);
 
         const heightDifference = this._getHeightDifference($input);
+
         this._renderDimensions();
 
         const minHeight = this._getBoundaryHeight('minHeight');
@@ -204,6 +205,7 @@ const TextArea = TextBox.inherit({
         if(maxHeight !== undefined) {
             const adjustedMaxHeight = maxHeight - heightDifference;
             const needScroll = inputHeight > adjustedMaxHeight;
+
             inputHeight = Math.min(inputHeight, adjustedMaxHeight);
             this._updateInputAutoResizeAppearance($input, !needScroll);
         }
