@@ -92,6 +92,18 @@ const DateBoxMask = DateBoxBase.inherit({
                     this._upDownArrowHandler(BACKWARD);
                     event.preventDefault();
                 });
+            },
+            a: (e) => {
+                return applyHandler(e, (event) => {
+                    this._timeIndicatorHandler('a');
+                    event.preventDefault();
+                });
+            },
+            p: (e) => {
+                return applyHandler(e, (event) => {
+                    this._timeIndicatorHandler('a');
+                    event.preventDefault();
+                });
             }
         });
     },
@@ -101,6 +113,16 @@ const DateBoxMask = DateBoxBase.inherit({
         const isNotDeletingInCalendar = this.option('opened') && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
 
         return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
+    },
+
+    _timeIndicatorHandler(char) {
+        const isAm = this._getActivePartProp('text') === 'AM';
+
+        this._setNewDateIfEmpty();
+
+        this._loadMaskValue(this._initialMaskValue);
+
+        this._changePartValue(0, true, char, isAm);
     },
 
     _upDownArrowHandler(step) {
@@ -115,9 +137,9 @@ const DateBoxMask = DateBoxBase.inherit({
         this._changePartValue(delta + step, true);
     },
 
-    _changePartValue(step, lockOtherParts) {
+    _changePartValue(step, lockOtherParts, char, isAm) {
         const isAmPmPartActive = this._getActivePartProp('pattern') === 'a';
-        if(isAmPmPartActive) {
+        if(isAmPmPartActive && (char === undefined || (char === 'a' && isAm) || (char === 'p' && isAm))) {
             this._toggleAmPm();
         } else {
             this._partIncrease(step, lockOtherParts);
@@ -307,11 +329,6 @@ const DateBoxMask = DateBoxBase.inherit({
         const activePartText = this._getActivePartProp('text');
 
         if(!isNaN(parseInt(activePartText))) {
-            return;
-        }
-
-        if((char.toLowerCase() === 'p' && activePartText === 'AM') || (char.toLowerCase() === 'a' && activePartText === 'PM')) {
-            this._toggleAmPm();
             return;
         }
 
