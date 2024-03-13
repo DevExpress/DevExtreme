@@ -451,7 +451,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     const columnIndex = column && column.index;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      this.getController('headerFilter').showHeaderFilterMenu(columnIndex, true);
+      this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
     } else {
       // @ts-expect-error
       this._processGroupItemAction(columnIndex);
@@ -504,11 +504,10 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   }
 
   private _updateGroupPanelContent($groupPanel) {
-    const that = this;
-    const groupColumns = that.getController('columns').getGroupColumns();
-    const groupPanelOptions: any = that.option('groupPanel');
+    const groupColumns = this.getColumns();
+    const groupPanelOptions: any = this.option('groupPanel');
 
-    that._renderGroupPanelItems($groupPanel, groupColumns);
+    this._renderGroupPanelItems($groupPanel, groupColumns);
 
     if (groupPanelOptions.allowColumnDragging && !groupColumns.length) {
       $('<div>')
@@ -533,7 +532,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
   }
 
   public getColumns() {
-    return this.getController('columns').getGroupColumns();
+    return this._columnsController.getGroupColumns();
   }
 
   protected getBoundingRect() {
@@ -643,14 +642,13 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
   }
 
   private _changeGroupRowState(e) {
-    const dataController = this.getController('data');
-    const row = dataController.items()[e.rowIndex];
+    const row = this._dataController.items()[e.rowIndex];
     // @ts-expect-error
     const allowCollapsing = this._columnsController.columnOption(`groupIndex:${row.groupIndex}`, 'allowCollapsing');
 
     if (row.rowType === 'data' || row.rowType === 'group' && allowCollapsing !== false) {
       // @ts-expect-error
-      dataController.changeRowExpand(row.key, true);
+      this._dataController.changeRowExpand(row.key, true);
       e.event.preventDefault();
       e.handled = true;
     }

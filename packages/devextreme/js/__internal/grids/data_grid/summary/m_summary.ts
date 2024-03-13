@@ -165,7 +165,7 @@ const calculateAggregates = function (that, summary, data, groupLevel) {
   let calculator;
 
   if (recalculateWhileEditing(that)) {
-    const editingController = that.getController('editing');
+    const editingController = that._editingController;
     if (editingController) {
       const insertedData = editingController.getInsertedData();
       if (insertedData.length) {
@@ -582,10 +582,8 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
   }
 
   private _prepareUnsavedDataSelector(selector) {
-    const that = this;
-
-    if (recalculateWhileEditing(that)) {
-      const editingController = that.getController('editing');
+    if (recalculateWhileEditing(this)) {
+      const editingController = this._editingController;
       if (editingController) {
         return function (data) {
           data = editingController.getUpdatedData(data);
@@ -612,12 +610,11 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
 
   private _getAggregates(summaryItems, remoteOperations) {
     const that = this;
-    const columnsController = that.getController('columns');
     let calculateCustomSummary: any = that.option('summary.calculateCustomSummary');
     const commonSkipEmptyValues = that.option('summary.skipEmptyValues');
 
     return map(summaryItems || [], (summaryItem) => {
-      const column = columnsController.columnOption(summaryItem.column);
+      const column = this._columnsController.columnOption(summaryItem.column);
       const calculateCellValue = column && column.calculateCellValue ? column.calculateCellValue.bind(column) : compileGetter(column ? column.dataField : summaryItem.column);
       let aggregator = summaryItem.summaryType || 'count';
       const skipEmptyValues = isDefined(summaryItem.skipEmptyValues) ? summaryItem.skipEmptyValues : commonSkipEmptyValues;
@@ -799,7 +796,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     super.init();
   }
 
-  private footerItems() {
+  public footerItems() {
     return this._footerItems;
   }
 };

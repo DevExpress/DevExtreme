@@ -28,8 +28,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
   private changeRowExpand(path, isRowClick) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
-      const keyboardNavigation = this.getController('keyboardNavigation');
-      if ((!isRowClick || !keyboardNavigation.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
+      if ((!isRowClick || !this._keyboardNavigationController.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
         this.option('focusedRowKey', path);
       }
     }
@@ -39,11 +38,10 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
   }
 
   private _isFocusedRowInsideGroup(path) {
-    const columnsController = this.getController('columns');
     const focusedRowKey = this.option('focusedRowKey');
     const rowIndex = this.getRowIndexByKey(focusedRowKey);
     const focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex];
-    const groups = columnsController.getGroupDataSourceParameters(true);
+    const groups = this._columnsController.getGroupDataSourceParameters(true);
 
     if (focusedRow) {
       for (let i = 0; i < path.length; ++i) {
