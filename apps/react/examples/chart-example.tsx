@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 /* eslint-disable react/no-unused-state */
 import * as React from 'react';
+import { ValueChangedEvent } from 'devextreme/ui/text_box';
 import { Button } from 'devextreme-react/button';
 import { Chart } from 'devextreme-react/chart';
 import { TextBox } from 'devextreme-react/text-box';
@@ -30,7 +31,7 @@ class Updater extends React.Component<{ onChange: (value: string) => void }, { v
     onChange(value);
   }
 
-  private update(e: any) {
+  private update(e: ValueChangedEvent) {
     this.setState({
       value: e.value,
     });

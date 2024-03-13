@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import * as React from 'react';
+import { ValueChangedEvent } from 'devextreme/ui/text_box';
 import DataSource from 'devextreme/data/data_source';
 import { Button } from 'devextreme-react/button';
-import { List, Item as ListItem } from 'devextreme-react/list';
+import { List, Item as ListItem, IItemProps } from 'devextreme-react/list';
 import { TextBox } from 'devextreme-react/text-box';
 
 import Example from './example-block';
@@ -14,7 +15,7 @@ interface IListItemProps {
   index: number;
 }
 
-const items: IListItemProps[] = [
+const items: IItemProps[] = [
   { text: '123' },
   { text: '234' },
   { text: '567' },
@@ -55,17 +56,13 @@ class Item extends React.Component<IListItemProps, { counter: number }> {
   }
 }
 
-function ItemKeyGetter(data: any) {
-  return data.text;
-}
-
 function ItemsRender(item: string) {
   return <i>{item}</i>;
 }
 
 const listItems: string[] = ['orange', 'apple', 'potato'];
 
-export default class extends React.Component<any, { text: string; items: IListItemProps[]; }> {
+export default class extends React.Component<any, { text: string; items: IItemProps[]; }> {
   private dataSource: DataSource;
 
   constructor(props: unknown) {
@@ -82,7 +79,7 @@ export default class extends React.Component<any, { text: string; items: IListIt
           data: items,
         },
         sort: [
-          { getter: 'text', desc: true },
+          { selector: 'text', desc: true },
         ],
         pageSize: 1,
       },
@@ -96,7 +93,7 @@ export default class extends React.Component<any, { text: string; items: IListIt
     this.dataSource.dispose();
   }
 
-  private updateText(e: any) {
+  private updateText(e: ValueChangedEvent) {
     this.setState({
       text: e.value,
     });
@@ -133,7 +130,7 @@ export default class extends React.Component<any, { text: string; items: IListIt
           repaintChangesOnly
           items={stateItems}
           itemComponent={Item}
-          itemKeyFn={ItemKeyGetter}
+          keyExpr="text"
         />
 
         <hr />

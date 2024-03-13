@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { ClickEvent } from 'devextreme/ui/button';
 import { Button } from 'devextreme-react/button';
 import { TextBox } from 'devextreme-react/text-box';
 import { ValidationGroup } from 'devextreme-react/validation-group';
@@ -6,7 +7,7 @@ import { ValidationSummary } from 'devextreme-react/validation-summary';
 import { EmailRule, RequiredRule, Validator } from 'devextreme-react/validator';
 import Example from './example-block';
 
-const validate = (params: any): void => {
+const validate = (params: ClickEvent): void => {
   const result = params.validationGroup.validate();
   if (result.isValid) {
     // form data is valid

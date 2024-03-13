@@ -21,7 +21,6 @@ import {
   CustomerService
 } from './customer.service';
 import {
-  Appointment,
   AppointmentService
 } from './appointment.service';
 import {
@@ -30,6 +29,7 @@ import {
 import {
   DxPopoverComponent
 } from 'devextreme-angular';
+import ArrayStore from 'devextreme/data/array_store';
 
 @Component({
   selector: 'my-app',
@@ -100,7 +100,7 @@ import {
 export class AppComponent implements OnInit, AfterViewInit {
   @ViewChild(DxPopoverComponent) popover: DxPopoverComponent;
   
-  value: any = [
+  value: Array<Date|Number|String> = [
     new Date(),
     new Date(new Date().getTime() + 1000 * 60 * 60 * 24)
   ];
@@ -123,7 +123,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   chartSeriesTypes = ['bar', 'line', 'spline'];
   oranges: Orange[];
   customers: Customer[];
-  appointments: Appointment[];
+  appointments: ArrayStore;
   resources: any[];
   products = [
     {
@@ -217,7 +217,10 @@ export class AppComponent implements OnInit, AfterViewInit {
     this.passwordControl = this.form.controls['passwordControl'];
     this.oranges = this.orangeService.getOranges();
     this.customers = this.customerService.getCustomers();
-    this.appointments = this.appointmentService.getAppointments();
+    this.appointments = new ArrayStore({
+      data: this.appointmentService.getAppointments(),
+      key: 'ID'
+    });
     this.resources = [{
       field: 'OwnerId',
       allowMultiple: true,

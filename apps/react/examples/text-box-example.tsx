@@ -1,13 +1,13 @@
 /* eslint-disable react/no-unused-state */
 import * as React from 'react';
-import dxTextBox from 'devextreme/ui/text_box';
+import dxTextBox, { ValueChangedEvent } from 'devextreme/ui/text_box';
 import { Button } from 'devextreme-react/button';
 import { TextBox } from 'devextreme-react/text-box';
 import { RequiredRule, Validator } from 'devextreme-react/validator';
 import Example from './example-block';
 
 export default class extends React.Component<any, { text: string; uncontrolledText: string; }> {
-  private textBox: dxTextBox;
+  private textBox!: dxTextBox;
 
   constructor(props: unknown) {
     super(props);
@@ -21,7 +21,7 @@ export default class extends React.Component<any, { text: string; uncontrolledTe
     this.setFocusToTextBox = this.setFocusToTextBox.bind(this);
   }
 
-  private handleChange(e: unknown) {
+  private handleChange(e: ValueChangedEvent) {
     this.setState({
       text: `#${(e.value as string).toUpperCase().replace('A', '_')}`,
     });
