@@ -193,22 +193,22 @@ const calculateAggregates = function (that, summary, data, groupLevel) {
 };
 
 export class FooterView extends ColumnsView {
-  _getRows() {
+  protected _getRows() {
     // @ts-expect-error
     return this._dataController.footerItems();
   }
 
-  _getCellOptions(options) {
+  protected _getCellOptions(options) {
     return extend(super._getCellOptions(options), getSummaryCellOptions(this, options));
   }
 
-  _renderCellContent($cell, options) {
+  protected _renderCellContent($cell, options) {
     renderSummaryCell($cell, options);
     // @ts-expect-error
     super._renderCellContent.apply(this, arguments);
   }
 
-  _renderCore(change) {
+  protected _renderCore(change) {
     let needUpdateScrollLeft = false;
     // @ts-expect-error
     const totalItem = this._dataController.footerItems()[0];
@@ -228,7 +228,7 @@ export class FooterView extends ColumnsView {
     }
   }
 
-  _updateContent($newTable, change) {
+  protected _updateContent($newTable, change) {
     if (change && change.changeType === 'update' && change.columnIndices) {
       return this.waitAsyncTemplates().done(() => {
         const $row = this.getTableElement()!.find('.dx-row');
@@ -242,13 +242,13 @@ export class FooterView extends ColumnsView {
     return super._updateContent.apply(this, arguments);
   }
 
-  _rowClick(e?) {
+  protected _rowClick(e?) {
     // @ts-expect-error
     const item = this._dataController.footerItems()[e.rowIndex] || {};
     this.executeAction('onRowClick', extend({}, e, item));
   }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { optionNames } = e;
 
     if (e.changeTypes.grouping) return;
@@ -258,7 +258,7 @@ export class FooterView extends ColumnsView {
     }
   }
 
-  _handleDataChanged(e) {
+  protected _handleDataChanged(e) {
     const { changeType } = e;
 
     if (e.changeType === 'update' && e.repaintChangesOnly) {
@@ -272,7 +272,7 @@ export class FooterView extends ColumnsView {
     }
   }
 
-  _createRow(row) {
+  protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
 
@@ -285,11 +285,11 @@ export class FooterView extends ColumnsView {
     return $row;
   }
 
-  getHeight() {
+  private getHeight() {
     return this.getElementHeight();
   }
 
-  isVisible() {
+  public isVisible() {
     // @ts-expect-error
     return !!this._dataController.footerItems().length;
   }
@@ -300,13 +300,13 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
 
   _summaryGetter: any;
 
-  init() {
+  public init() {
     super.init.apply(this, arguments as any);
     this._totalAggregates = [];
     this._summaryGetter = noop;
   }
 
-  summaryGetter(summaryGetter?) {
+  private summaryGetter(summaryGetter?) {
     if (!arguments.length) {
       return this._summaryGetter;
     }
@@ -316,7 +316,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  summary(summary?) {
+  private summary(summary?) {
     if (!arguments.length) {
       return this._summaryGetter();
     }
@@ -324,18 +324,18 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     this._summaryGetter = function () { return summary; };
   }
 
-  totalAggregates() {
+  private totalAggregates() {
     return this._totalAggregates;
   }
 
-  isLastLevelGroupItemsPagingLocal() {
+  private isLastLevelGroupItemsPagingLocal() {
     const summary = this.summary();
     const sortByGroupsInfo = summary?.sortByGroups();
 
     return sortByGroupsInfo?.length;
   }
 
-  sortLastLevelGroupItems(items, groups, paths) {
+  private sortLastLevelGroupItems(items, groups, paths) {
     const groupedItems = storeHelper.multiLevelGroup(dataQuery(items), groups).toArray();
     let result = [];
 
@@ -350,7 +350,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return result;
   }
 
-  _customizeRemoteOperations(options) {
+  protected _customizeRemoteOperations(options) {
     const summary = this.summary();
 
     if (summary) {
@@ -378,7 +378,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  _handleDataLoadedCore(options) {
+  protected _handleDataLoadedCore(options) {
     const groups = normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group || []);
     const remoteOperations = options.remoteOperations || {};
     const summary = this.summaryGetter()(remoteOperations);
@@ -419,11 +419,11 @@ dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 const data = (Base: ModuleType<DataController>) => class SummaryDataControllerExtender extends Base {
   private _footerItems: any;
 
-  _isDataColumn(column) {
+  private _isDataColumn(column) {
     return column && (!isDefined(column.groupIndex) || column.showWhenGrouped);
   }
 
-  _isGroupFooterVisible() {
+  private _isGroupFooterVisible() {
     const groupItems: any = this.option('summary.groupItems') || [];
 
     for (let i = 0; i < groupItems.length; i++) {
@@ -437,7 +437,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return false;
   }
 
-  _processGroupItems(items, groupCount, options) {
+  private _processGroupItems(items, groupCount, options) {
     const data = options && options.data;
     // @ts-expect-error
     const result = super._processGroupItems.apply(this, arguments);
@@ -460,7 +460,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return result;
   }
 
-  _processGroupItem(groupItem, options) {
+  private _processGroupItem(groupItem, options) {
     const that = this;
 
     if (!options.summaryGroupItems) {
@@ -500,7 +500,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return groupItem;
   }
 
-  _calculateSummaryCells(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow?) {
+  private _calculateSummaryCells(summaryItems, aggregates, visibleColumns, calculateTargetColumnIndex, isGroupRow?) {
     const that = this;
     const summaryCells: any = [];
     const summaryCellsByColumns = {};
@@ -542,14 +542,14 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return summaryCells;
   }
 
-  _getSummaryCells(summaryTotalItems, totalAggregates) {
+  private _getSummaryCells(summaryTotalItems, totalAggregates) {
     const that = this;
     const columnsController = that._columnsController;
 
     return that._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(), (summaryItem, column) => (that._isDataColumn(column) ? column.index : -1));
   }
 
-  _updateItemsCore(change) {
+  protected _updateItemsCore(change) {
     const that = this;
     let summaryCells;
     const dataSource = that._dataSource;
@@ -581,7 +581,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     super._updateItemsCore(change);
   }
 
-  _prepareUnsavedDataSelector(selector) {
+  private _prepareUnsavedDataSelector(selector) {
     const that = this;
 
     if (recalculateWhileEditing(that)) {
@@ -597,7 +597,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return selector;
   }
 
-  _prepareAggregateSelector(selector, aggregator) {
+  private _prepareAggregateSelector(selector, aggregator) {
     selector = this._prepareUnsavedDataSelector(selector);
 
     if (aggregator === 'avg' || aggregator === 'sum') {
@@ -610,7 +610,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return selector;
   }
 
-  _getAggregates(summaryItems, remoteOperations) {
+  private _getAggregates(summaryItems, remoteOperations) {
     const that = this;
     const columnsController = that.getController('columns');
     let calculateCustomSummary: any = that.option('summary.calculateCustomSummary');
@@ -674,7 +674,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     });
   }
 
-  _addSortInfo(sortByGroups, groupColumn, selector, sortOrder) {
+  private _addSortInfo(sortByGroups, groupColumn, selector, sortOrder) {
     if (groupColumn) {
       const { groupIndex } = groupColumn;
       sortOrder = sortOrder || groupColumn.sortOrder;
@@ -688,7 +688,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     }
   }
 
-  _findSummaryItem(summaryItems, name) {
+  private _findSummaryItem(summaryItems, name) {
     let summaryItemIndex: any = -1;
 
     const getFullName = function (summaryItem) {
@@ -710,7 +710,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return summaryItemIndex;
   }
 
-  _getSummarySortByGroups(sortByGroupSummaryInfo, groupSummaryItems) {
+  private _getSummarySortByGroups(sortByGroupSummaryInfo, groupSummaryItems) {
     const that = this;
     const columnsController = that._columnsController;
     const groupColumns = columnsController.getGroupColumns();
@@ -750,7 +750,7 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return dataSourceAdapter;
   }
 
-  _getSummaryOptions(remoteOperations) {
+  private _getSummaryOptions(remoteOperations) {
     const that = this;
     const groupSummaryItems = that.option('summary.groupItems');
     const totalSummaryItems = that.option('summary.totalItems');
@@ -772,13 +772,13 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     return undefined;
   }
 
-  publicMethods() {
+  public publicMethods() {
     const methods = super.publicMethods();
     methods.push('getTotalSummaryValue');
     return methods;
   }
 
-  getTotalSummaryValue(summaryItemName) {
+  private getTotalSummaryValue(summaryItemName) {
     const summaryItemIndex = this._findSummaryItem(this.option('summary.totalItems'), summaryItemName);
     const aggregates = this._dataSource.totalAggregates();
 
@@ -787,25 +787,25 @@ const data = (Base: ModuleType<DataController>) => class SummaryDataControllerEx
     }
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'summary' || args.name === 'sortByGroupSummaryInfo') {
       args.name = 'dataSource';
     }
     super.optionChanged(args);
   }
 
-  init() {
+  public init() {
     this._footerItems = [];
     super.init();
   }
 
-  footerItems() {
+  private footerItems() {
     return this._footerItems;
   }
 };
 
 const editing = (Base: ModuleType<EditingController>) => class SummaryEditingController extends Base {
-  _refreshSummary() {
+  private _refreshSummary() {
     if (recalculateWhileEditing(this) && !this.isSaving()) {
       this._dataController.refresh({
         load: true,
@@ -814,7 +814,7 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
     }
   }
 
-  _addChange(params) {
+  protected _addChange(params) {
     // @ts-expect-error
     const result = super._addChange.apply(this, arguments);
 
@@ -845,7 +845,7 @@ const editing = (Base: ModuleType<EditingController>) => class SummaryEditingCon
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender extends Base {
-  _createRow(row) {
+  protected _createRow(row) {
     // @ts-expect-error
     const $row = super._createRow.apply(this, arguments);
 
@@ -853,7 +853,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     return $row;
   }
 
-  _renderCells($row, options) {
+  protected _renderCells($row, options) {
     // @ts-expect-error
     super._renderCells.apply(this, arguments);
 
@@ -862,11 +862,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     }
   }
 
-  _hasAlignByColumnSummaryItems(columnIndex, options) {
+  private _hasAlignByColumnSummaryItems(columnIndex, options) {
     return !isDefined(options.columns[columnIndex].groupIndex) && options.row.summaryCells[columnIndex].length;
   }
 
-  _getAlignByColumnCellCount(groupCellColSpan, options) {
+  private _getAlignByColumnCellCount(groupCellColSpan, options) {
     let alignByColumnCellCount = 0;
 
     for (let i = 1; i < groupCellColSpan; i++) {
@@ -877,7 +877,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     return alignByColumnCellCount;
   }
 
-  _renderGroupSummaryCells($row, options) {
+  private _renderGroupSummaryCells($row, options) {
     const $groupCell = $row.children().last();
     const groupCellColSpan = Number($groupCell.attr('colSpan')) || 1;
     const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellColSpan, options);
@@ -885,7 +885,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
     this._renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount);
   }
 
-  _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
+  private _renderGroupSummaryCellsCore($groupCell, options, groupCellColSpan, alignByColumnCellCount) {
     if (alignByColumnCellCount > 0) {
       $groupCell.attr('colSpan', groupCellColSpan - alignByColumnCellCount);
 
@@ -898,18 +898,18 @@ const rowsView = (Base: ModuleType<RowsView>) => class SummaryRowsViewExtender e
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _getSummaryCellIndex(columnIndex, columns) {
+  private _getSummaryCellIndex(columnIndex, columns) {
     return columnIndex;
   }
 
-  _getCellTemplate(options) {
+  protected _getCellTemplate(options) {
     if (!options.column.command && !isDefined(options.column.groupIndex) && options.summaryItems && options.summaryItems.length) {
       return renderSummaryCell;
     }
     return super._getCellTemplate(options);
   }
 
-  _getCellOptions(options) {
+  protected _getCellOptions(options) {
     const that = this;
     const parameters = super._getCellOptions(options);
 
