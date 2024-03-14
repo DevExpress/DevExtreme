@@ -92,7 +92,7 @@ const DateBoxMask = DateBoxBase.inherit({
                     this._upDownArrowHandler(BACKWARD);
                     event.preventDefault();
                 });
-            },
+            }
         });
     },
 
