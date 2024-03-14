@@ -13,7 +13,7 @@ import { clone } from '../../core/utils/object';
 const baseStackedSeries = {
     _calculateErrorBars: _noop,
     _updateOptions: function(options) {
-        this._stackName = 'axis_' + (options.axis || 'default');
+        this._stackName = 'axis_' + (options.stack || 'default');
     }
 };
 
