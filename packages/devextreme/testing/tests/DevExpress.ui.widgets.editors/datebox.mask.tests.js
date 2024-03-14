@@ -1782,3 +1782,68 @@ module('Using beforeInput event', {
         assert.strictEqual(this.$input.get(0).value, '01/01/2020 03:45');
     });
 });
+
+module('DateBox AM/PM Handling - Time datebox type', {
+    beforeEach: function() {
+        this.$element = $('#dateBox').dxDateBox({
+            value: new Date('10/10/2012 10:00 PM'),
+            displayFormat: 'aaa',
+            useMaskBehavior: true,
+            type: 'time',
+        });
+
+        this.instance = this.$element.dxDateBox('instance');
+        this.$input = this.$element.find('.dx-texteditor-input');
+        this.keyboard = keyboardMock(this.$input, true);
+    },
+}, () => {
+    test('when "a" is pressed it should toggle PM to AM', function(assert) {
+        this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+
+        this.keyboard
+            .focus()
+            .caret({ start: 6, end: 8 })
+            .type('a')
+            .press('enter');
+
+        assert.strictEqual(this.instance.option('text'), 'AM');
+    });
+
+    test('when "p" is pressed it should toggle AM to PM', function(assert) {
+        this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+
+        this.keyboard
+            .focus()
+            .caret({ start: 6, end: 8 })
+            .type('p')
+            .press('enter');
+
+        assert.strictEqual(this.instance.option('text'), 'PM');
+    });
+
+    test('when wrong key is pressed it should not toggle AM to PM', function(assert) {
+        ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
+            this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+            this.keyboard
+                .focus()
+                .caret({ start: 6, end: 8 })
+                .type(key)
+                .press('enter');
+        });
+
+        assert.strictEqual(this.instance.option('text'), 'AM');
+    });
+
+    test('when wrong key is pressed it should not toggle PM to AM', function(assert) {
+        ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
+            this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+            this.keyboard
+                .focus()
+                .caret({ start: 6, end: 8 })
+                .type(key)
+                .press('enter');
+        });
+
+        assert.strictEqual(this.instance.option('text'), 'PM');
+    });
+});
