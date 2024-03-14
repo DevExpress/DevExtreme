@@ -233,7 +233,7 @@ const isGroupOperator = function(value) {
 };
 
 export const isUniformSequenceEqualsByOr = function(crit) {
-    if(crit.length > 2 && Array.isArray(crit[0]) && crit[1] === 'or' && crit[0][1] === '=') {
+    if(crit.length > 2 && Array.isArray(crit[0]) && crit[1] === 'or' && typeof crit[0][0] === 'string' && crit[0][1] === '=') {
         const [prop] = crit[0];
         return !crit.find((el, i) => i % 2 !== 0 ? el !== 'or'
             : (!Array.isArray(el) || el.length !== 3 || el[0] !== prop || el[1] !== '='));
