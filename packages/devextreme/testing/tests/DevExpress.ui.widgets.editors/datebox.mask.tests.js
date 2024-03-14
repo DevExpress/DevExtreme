@@ -1024,6 +1024,24 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'AM');
     });
 
+    test('correct key should change AM to PM', function(assert) {
+        this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+        this.instance.option('displayFormat', 'aaa');
+
+        this.keyboard.type('p');
+
+        assert.strictEqual(this.$input.val(), 'PM');
+    });
+
+    test('correct key should change PM to AM', function(assert) {
+        this.instance.option('value', new Date('10/10/2012 10:00'));
+        this.instance.option('displayFormat', 'aaa');
+
+        this.keyboard.type('a');
+
+        assert.strictEqual(this.$input.val(), 'AM');
+    });
+
     test('Time indication', function(assert) {
         this.instance.option('displayFormat', 'a');
 
@@ -1781,32 +1799,4 @@ module('Using beforeInput event', {
 
         assert.strictEqual(this.$input.get(0).value, '01/01/2020 03:45');
     });
-});
-
-module('DateBox AM/PM Handling - Time datebox type', {
-    beforeEach: function() {
-        this.$element = $('#dateBox').dxDateBox({
-            value: new Date('10/10/2012 10:00 PM'),
-            useMaskBehavior: true,
-            type: 'time',
-        });
-
-        this.instance = this.$element.dxDateBox('instance');
-        this.$input = this.$element.find('.dx-texteditor-input');
-        this.keyboard = keyboardMock(this.$input, true);
-    },
-}, () => {
-    test('when "a" is pressed it should toggle PM to AM (T1216937)', function(assert) {
-        this.instance.option('value', new Date('10/10/2012 10:00 PM'));
-
-        this.instance.option('displayFormat', 'aaa');
-
-        this.keyboard
-            .focus()
-            .caret({ start: 6, end: 8 })
-            .type('a')
-            .press('enter');
-
-        assert.strictEqual(this.instance.option('text'), '10:00 AM');
-    })
 });
