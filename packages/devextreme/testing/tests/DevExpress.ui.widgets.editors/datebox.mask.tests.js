@@ -1787,7 +1787,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     beforeEach: function() {
         this.$element = $('#dateBox').dxDateBox({
             value: new Date('10/10/2012 10:00 PM'),
-            displayFormat: 'aaa',
+            displayFormat: 'HH:mm a',
             useMaskBehavior: true,
             type: 'time',
         });
@@ -1799,6 +1799,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
 }, () => {
     test('when "a" is pressed it should toggle PM to AM (T1216937)', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+        this.instance.option('displayFormat', 'aaa');
 
         this.keyboard.type('a');
 
@@ -1807,6 +1808,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
 
     test('when "p" is pressed it should toggle AM to PM', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+        this.instance.option('displayFormat', 'aaa');
 
         this.keyboard.type('p');
 
@@ -1816,6 +1818,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     test('when wrong key is pressed it should not toggle AM to PM', function(assert) {
         ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+            this.instance.option('displayFormat', 'aaa');
             this.keyboard.type(key);
         });
 
@@ -1825,6 +1828,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     test('when wrong key is pressed it should not toggle PM to AM', function(assert) {
         ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+            this.instance.option('displayFormat', 'aaa');
             this.keyboard.type(key);
         });
 
