@@ -903,6 +903,10 @@ const SelectBox = (DropDownList as any).inherit({
       case 'tooltipEnabled':
         this._renderTooltip();
         break;
+      case 'searchMode':
+        this.callBase(args);
+        this._setDefaultAria();
+        break;
       case 'displayCustomValue':
       case 'acceptCustomValue':
       case 'showSelectionControls':

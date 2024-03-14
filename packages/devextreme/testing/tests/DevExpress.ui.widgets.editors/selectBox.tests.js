@@ -5937,109 +5937,117 @@ if(devices.real().deviceType === 'desktop') {
             return searchMode === 'contains' ? 'list' : 'both';
         };
 
-        ['contains', 'startswith'].forEach(searchMode => {
-            [true, false].forEach((searchEnabled) => {
-                QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}, searchMode: ${searchMode}`, function() {
-                    helper.createWidget({
-                        opened: true,
-                        searchEnabled,
-                        searchMode,
-                    });
-
-                    const listAttributes = {
-                        id: helper.widget._listId,
-                        role: 'group',
-                        'aria-roledescription': 'list'
-                    };
-
-                    helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
-
-                    const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
-                    helper.checkAttributes($listItemContainer, { role: 'group' }, 'scrollview content');
-
-                    const inputAttributes = {
-                        autocomplete: 'off',
-                        role: 'combobox',
-                        spellcheck: 'false',
-                        tabindex: '0',
-                        type: 'text',
-                        placeholder: 'Select...',
-                        'aria-autocomplete': getAriaAutocomplete(searchEnabled, searchMode),
-                        'aria-expanded': 'true',
-                        'aria-haspopup': 'listbox',
-                    };
-
-                    inputAttributes['aria-controls'] = helper.widget._listId;
-                    inputAttributes['aria-owns'] = helper.widget._popupContentId;
-
-                    if(!searchEnabled) {
-                        inputAttributes.readonly = '';
-                    }
-                    helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
-                    helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                    helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
-
-                    helper.widget.option('searchEnabled', !searchEnabled);
-
-                    listAttributes.id = helper.widget._listId;
-                    helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
-                    helper.checkAttributes($listItemContainer, { role: 'group' }, 'scrollview content');
-
-                    inputAttributes['aria-controls'] = helper.widget._listId;
-                    inputAttributes['aria-owns'] = helper.widget._popupContentId;
-
-                    delete inputAttributes.readonly;
-
-                    if(searchEnabled) {
-                        inputAttributes.readonly = '';
-                    }
-
-                    inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled, searchMode);
-
-                    helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
-                    helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
-                    helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+        [true, false].forEach((searchEnabled) => {
+            QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
+                helper.createWidget({
+                    opened: true,
+                    searchEnabled,
+                    searchMode: 'contains',
                 });
 
-                QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}, searchMode: ${searchMode}`, function() {
-                    helper.createWidget({
-                        opened: false,
-                        deferRendering: true,
-                        searchEnabled,
-                        searchMode,
-                    });
+                const listAttributes = {
+                    id: helper.widget._listId,
+                    role: 'group',
+                    'aria-roledescription': 'list'
+                };
 
-                    const inputAttributes = {
-                        autocomplete: 'off',
-                        role: 'combobox',
-                        spellcheck: 'false',
-                        tabindex: '0',
-                        type: 'text',
-                        placeholder: 'Select...',
-                        'aria-autocomplete': getAriaAutocomplete(searchEnabled, searchMode),
-                        'aria-expanded': 'false',
-                        'aria-haspopup': 'listbox',
-                    };
+                helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
 
-                    if(!searchEnabled) {
-                        inputAttributes.readonly = '';
-                    }
+                const $listItemContainer = helper.widget._list.$element().find(`.${SCROLLVIEW_CONTENT_CLASS}`);
+                helper.checkAttributes($listItemContainer, { role: 'group' }, 'scrollview content');
 
-                    helper.checkAttributes(helper.$widget, { }, 'widget');
-                    helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+                const inputAttributes = {
+                    autocomplete: 'off',
+                    role: 'combobox',
+                    spellcheck: 'false',
+                    tabindex: '0',
+                    type: 'text',
+                    placeholder: 'Select...',
+                    'aria-autocomplete': getAriaAutocomplete(searchEnabled, 'contains'),
+                    'aria-expanded': 'true',
+                    'aria-haspopup': 'listbox',
+                };
 
-                    delete inputAttributes.readonly;
+                inputAttributes['aria-controls'] = helper.widget._listId;
+                inputAttributes['aria-owns'] = helper.widget._popupContentId;
 
-                    if(searchEnabled) {
-                        inputAttributes.readonly = '';
-                    }
+                if(!searchEnabled) {
+                    inputAttributes.readonly = '';
+                }
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
 
-                    inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled, searchMode);
+                helper.widget.option('searchMode', 'startswith');
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(searchEnabled, 'startswith');
 
-                    helper.widget.option('searchEnabled', !searchEnabled);
-                    helper.checkAttributes(helper.$widget, { }, 'widget');
-                    helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+
+                helper.widget.option('searchEnabled', !searchEnabled);
+
+                listAttributes.id = helper.widget._listId;
+                helper.checkAttributes(helper.widget._list.$element(), listAttributes, 'list');
+                helper.checkAttributes($listItemContainer, { role: 'group' }, 'scrollview content');
+
+                inputAttributes['aria-controls'] = helper.widget._listId;
+                inputAttributes['aria-owns'] = helper.widget._popupContentId;
+
+                delete inputAttributes.readonly;
+
+                if(searchEnabled) {
+                    inputAttributes.readonly = '';
+                }
+
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled, 'startswith');
+
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+                helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
+                helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+            });
+
+            QUnit.test(`opened: false, deferRendering: true -> searchEnabled: ${!searchEnabled}`, function() {
+                helper.createWidget({
+                    opened: false,
+                    deferRendering: true,
+                    searchEnabled,
+                    searchMode: 'contains',
                 });
+
+                const inputAttributes = {
+                    autocomplete: 'off',
+                    role: 'combobox',
+                    spellcheck: 'false',
+                    tabindex: '0',
+                    type: 'text',
+                    placeholder: 'Select...',
+                    'aria-autocomplete': getAriaAutocomplete(searchEnabled, 'contains'),
+                    'aria-expanded': 'false',
+                    'aria-haspopup': 'listbox',
+                };
+
+                if(!searchEnabled) {
+                    inputAttributes.readonly = '';
+                }
+
+                helper.checkAttributes(helper.$widget, { }, 'widget');
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+
+                helper.widget.option('searchMode', 'startswith');
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(searchEnabled, 'startswith');
+
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+
+                delete inputAttributes.readonly;
+
+                if(searchEnabled) {
+                    inputAttributes.readonly = '';
+                }
+
+                helper.widget.option('searchEnabled', !searchEnabled);
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled, 'startswith');
+
+                helper.checkAttributes(helper.$widget, { }, 'widget');
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
             });
         });
 
