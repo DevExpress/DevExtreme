@@ -101,7 +101,7 @@ const DateBoxMask = DateBoxBase.inherit({
             },
             p: (e) => {
                 return applyHandler(e, (event) => {
-                    this._timeIndicatorHandler('a');
+                    this._timeIndicatorHandler('p');
                     event.preventDefault();
                 });
             }
