@@ -6067,7 +6067,15 @@ if(devices.real().deviceType === 'desktop') {
         });
 
         ['disabled', 'readOnly'].forEach(disabledOption => {
-            QUnit.test(`Input aria-autocomplete is none if ${disabledOption} is true`, function(assert) {
+            QUnit.test(`aria-autocomplete set correctly if ${disabledOption} is true on init`, function(assert) {
+                helper.createWidget({ searchEnabled: true, [disabledOption]: true });
+
+                const $input = helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-autocomplete'), 'none');
+            });
+
+            QUnit.test(`aria-autocomplete set correctly if ${disabledOption} is true after runtime change`, function(assert) {
                 helper.createWidget({ searchEnabled: true });
 
                 const $input = helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`);
