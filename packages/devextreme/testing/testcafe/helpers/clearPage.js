@@ -1,10 +1,10 @@
 /* eslint-disable no-undef */
 const testCafe = require('testcafe');
 
-const shadowDom = process.env.shadowDom === 'true';
-
 module.exports = {
     clearTestPage: async function() {
+        const shadowDom = process.env.shadowDom === 'true';
+
         await testCafe.ClientFunction(() => {
             const body = document.querySelector('body');
             const parentContainer = document.getElementById('parentContainer');
