@@ -39,6 +39,15 @@ const moduleConfig = {
             return this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
         };
 
+        this.getPanes = () => {
+            return this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+        };
+
+        this.assertLayout = (expectedLayout) => {
+            this.getPanes().filter(':visible').toArray().forEach((item, index) => {
+                QUnit.assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
+            });
+        };
 
         this.checkItemSizes = (expectedItemSizes) => {
             this.instance.option('items').forEach((item, index) => {
@@ -52,12 +61,6 @@ const moduleConfig = {
 };
 
 QUnit.module('Resizing', moduleConfig, () => {
-    function assertLayout(items, expectedLayout, assert) {
-        items.filter(':visible').toArray().forEach((item, index) => {
-            assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
-        });
-    }
-
     QUnit.module('Pane sizing', moduleConfig, () => {
         ['horizontal', 'vertical'].forEach(orientation => {
             [
@@ -141,10 +144,8 @@ QUnit.module('Resizing', moduleConfig, () => {
                         orientation,
                     });
 
-                    const $items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
                     this.checkItemSizes(expectedItemSizes);
-                    assertLayout($items, expectedLayout, assert);
+                    this.assertLayout(expectedLayout);
                 });
             });
         });
@@ -171,10 +172,8 @@ QUnit.module('Resizing', moduleConfig, () => {
                         orientation,
                     });
 
-                    const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
                     this.checkItemSizes(expectedItemSizes);
-                    assertLayout(items, expectedLayout, assert);
+                    this.assertLayout(expectedLayout);
                 });
             });
         });
@@ -269,10 +268,8 @@ QUnit.module('Resizing', moduleConfig, () => {
                         orientation,
                     });
 
-                    const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
                     this.checkItemSizes(expectedItemSizes);
-                    assertLayout(items, expectedLayout, assert);
+                    this.assertLayout(expectedLayout);
                 });
             });
         });
@@ -285,9 +282,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ }, { }]
             });
 
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
-            assertLayout(items, ['50', '50'], assert);
+            this.assertLayout(['50', '50']);
         });
 
         QUnit.test(`items with nested splitter should be evenly distributed by default with ${orientation} orientation`, function(assert) {
@@ -300,9 +295,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 }]
             });
 
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
-            assertLayout(items, ['25', '25', '25', '25'], assert);
+            this.assertLayout(['25', '25', '25', '25']);
         });
 
         QUnit.test(`items should have no size if not visible, ${orientation} orientation`, function(assert) {
@@ -311,9 +304,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ }, { visible: false }, {}]
             });
 
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
-            assertLayout(items, ['50', '50'], assert);
+            this.assertLayout(['50', '50']);
         });
 
         QUnit.test(`first and second items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
@@ -323,12 +314,10 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{}, {}, { visible: false, }, { }, { }]
             });
 
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(-25, -25).dragEnd();
 
-            assertLayout(items, ['12.5', '37.5', '25', '25'], assert);
+            this.assertLayout(['12.5', '37.5', '25', '25']);
         });
 
         QUnit.test(`last items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
@@ -338,12 +327,10 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{}, {}, { visible: false, }, {}, {}]
             });
 
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(2));
             pointer.start().dragStart().drag(-25, -25).dragEnd();
 
-            assertLayout(items, ['25', '25', '12.5', '37.5'], assert);
+            this.assertLayout(['25', '25', '12.5', '37.5']);
         });
 
         QUnit.test(`items should be resized when their neighbour item is not visible, ${orientation} orientation`, function(assert) {
@@ -353,12 +340,10 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{}, { visible: false, }, { },]
             });
 
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
-            assertLayout(items, ['75', '25'], assert);
+            this.assertLayout(['75', '25']);
         });
 
         QUnit.test(`last two items should be able to resize when first item is not visible, ${orientation} orientation`, function(assert) {
@@ -368,12 +353,10 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ visible: false, }, {}, {},]
             });
 
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
-            assertLayout(items, ['75', '25'], assert);
+            this.assertLayout(['75', '25']);
         });
 
         QUnit.test(`splitter should have no resize handles if only 1 item is visible, ${orientation} orientation`, function(assert) {
@@ -405,45 +388,44 @@ QUnit.module('Resizing', moduleConfig, () => {
         { scenario: 'left and right', items: [ { resizable: false }, { resizable: false } ] }
     ].forEach(({ scenario, items }) => {
         QUnit.test(`resize should not work when ${scenario} pane has resizable=false`, function(assert) {
-            this.reinit({ items });
-
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
+            this.reinit({
+                width: 208, height: 208,
+                items
+            });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(-25, -25).dragEnd();
 
-            assertLayout(items, ['50', '50'], assert);
+            this.assertLayout(['50', '50']);
         });
     });
 
     QUnit.test('resize should work when pane resizable is enabled on runtime', function(assert) {
         this.reinit({
+            width: 208, height: 208,
             items: [ { resizable: false }, { } ],
         });
 
         this.instance.option('items[0].resizable', true);
 
-        const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
         const pointer = pointerMock(this.getResizeHandles().eq(0));
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
-        assertLayout(items, ['75', '25'], assert);
+        this.assertLayout(['75', '25']);
     });
 
     QUnit.test('resize should not work when pane resizable is disabled on runtime', function(assert) {
         this.reinit({
+            width: 208, height: 208,
             items: [ { }, { } ],
         });
 
         this.instance.option('items[0].resizable', false);
 
-        const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
         const pointer = pointerMock(this.getResizeHandles().eq(0));
         pointer.start().dragStart().drag(50, 50).dragEnd();
 
-        assertLayout(items, ['50', '50'], assert);
+        this.assertLayout(['50', '50']);
     });
 
     [{
@@ -548,13 +530,11 @@ QUnit.module('Resizing', moduleConfig, () => {
                 rtlEnabled: rtl,
             });
 
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
 
             this.checkItemSizes(expectedItemSizes);
-            assertLayout(items, expectedLayout, assert);
+            this.assertLayout(expectedLayout);
         });
     });
 
@@ -622,13 +602,11 @@ QUnit.module('Resizing', moduleConfig, () => {
                 orientation
             });
 
-            const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
 
             this.checkItemSizes(expectedItemSizes);
-            assertLayout(items, expectedLayout, assert);
+            this.assertLayout(expectedLayout);
         });
     });
 
@@ -647,12 +625,10 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{}, {}, {}, {}, {}],
             });
 
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(resizeDistance, resizeDistance).drag(resizeBackDistance, resizeBackDistance).dragEnd();
 
-            assertLayout(items, expectedSize, assert);
+            this.assertLayout(expectedSize);
         });
     });
 
@@ -663,12 +639,10 @@ QUnit.module('Resizing', moduleConfig, () => {
         QUnit.test(`resize item should not be resized beyound splitter borders with ${orientation} orientation`, function(assert) {
             this.reinit({ width: 208, height: 208, dataSource: [{ }, { }], orientation });
 
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
 
-            assertLayout(items, expectedSize, assert);
+            this.assertLayout(expectedSize);
         });
     });
 
@@ -685,24 +659,20 @@ QUnit.module('Resizing', moduleConfig, () => {
         QUnit.test(`should resize all panes on the way, ${orientation} orientation`, function(assert) {
             this.reinit({ width: 424, height: 424, dataSource: [{ }, { }, { }, { }], orientation, rtlEnabled: rtl });
 
-            const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
             const pointer = pointerMock(this.getResizeHandles().eq(handleIndex));
             pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
 
-            assertLayout(items, expectedSize, assert);
+            this.assertLayout(expectedSize);
         });
     });
 
     QUnit.test('resize item with nested splitter should resize all panes beyound neighbour', function(assert) {
         this.reinit({ width: 208, dataSource: [ { splitter: { dataSource: [{ }] } }, { }, { }, { splitter: { dataSource: [{ }] } }] });
 
-        const items = this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
-
         const pointer = pointerMock(this.getResizeHandles().eq(2));
         pointer.start().dragStart().drag(-400, 0).dragEnd();
 
-        assertLayout(items, ['0', '0', '0', '100'], assert);
+        this.assertLayout(['0', '0', '0', '100']);
     });
 
     QUnit.test('runtime size option change should update lauout', function(assert) {
@@ -712,9 +682,7 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         this.instance.option('items[0].size', 100);
 
-        const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
-
-        assertLayout(items, ['10', '60', '30'], assert);
+        this.assertLayout(['10', '60', '30']);
     });
 });
 
