@@ -13,7 +13,7 @@ import { clone } from '../../core/utils/object';
 const baseStackedSeries = {
     _calculateErrorBars: _noop,
     _updateOptions: function(options) {
-        this._stackName = 'axis_' + (options.stack || 'default');
+        this._stackName = 'axis_' + (options.axis || 'default');
     }
 };
 
@@ -161,7 +161,11 @@ chart['fullstackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseStack
     _appendInGroup: chart['stackedarea']._appendInGroup
 });
 
-polar['stackedbar'] = _extend({}, _polar.bar, baseStackedSeries, {});
+polar['stackedbar'] = _extend({}, _polar.bar, {...baseStackedSeries,
+    _updateOptions: function(options) {
+        this._stackName = 'axis_' + (options.stack || 'default');
+    }
+}, {});
 
 export {
     chart,
