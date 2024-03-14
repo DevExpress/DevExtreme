@@ -32,7 +32,7 @@ const createIcon = function (hasIcon, isExpanded) {
 };
 
 class TreeListRowsView extends RowsView {
-  _renderIconContainer($container, options) {
+  private _renderIconContainer($container, options) {
     const $iconContainer = $('<div>')
       .addClass(TREELIST_EXPAND_ICON_CONTAINER_CLASS)
       .appendTo($container);
@@ -55,7 +55,7 @@ class TreeListRowsView extends RowsView {
     return this._renderIcons($iconContainer, options);
   }
 
-  _renderIcons($iconContainer, options) {
+  private _renderIcons($iconContainer, options) {
     const { row } = options;
     const { level } = row;
 
@@ -66,12 +66,12 @@ class TreeListRowsView extends RowsView {
     return $iconContainer;
   }
 
-  _renderCellCommandContent(container, model) {
+  private _renderCellCommandContent(container, model) {
     this._renderIconContainer(container, model);
     return true;
   }
 
-  _processTemplate(template, options) {
+  protected _processTemplate(template, options) {
     const that = this;
     let resultTemplate;
     const renderingTemplate = super._processTemplate(template);
@@ -117,7 +117,7 @@ class TreeListRowsView extends RowsView {
     super._rowClick(e);
   }
 
-  _createRow(row) {
+  protected _createRow(row) {
     const node = row && row.node;
     const $rowElement = super._createRow.apply(this, arguments as any);
 
@@ -132,11 +132,11 @@ class TreeListRowsView extends RowsView {
     return $rowElement;
   }
 
-  isExpandIcon($targetElement) {
+  private isExpandIcon($targetElement) {
     return !!$targetElement.closest(`.${TREELIST_EXPANDED_CLASS}, .${TREELIST_COLLAPSED_CLASS}`).length;
   }
 
-  setTableRole($tableElement) {
+  public setTableRole($tableElement) {
     this.setAria('role', 'treegrid', $tableElement);
   }
 }
