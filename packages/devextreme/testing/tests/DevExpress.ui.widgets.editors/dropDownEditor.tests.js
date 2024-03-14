@@ -2137,56 +2137,20 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.module('aria-autocomplete', () => {
-        const defaultConfigurationFalse = {
-            acceptCustomValue: false,
-            searchEnabled: false,
-        };
-
-        const defaultConfigurationTrue = {
-            acceptCustomValue: true,
-            searchEnabled: true,
-        };
-
         const configurations = [
             [{
-                acceptCustomValue: true,
-                searchEnabled: false,
-            }, 'list'],
-            [{
-                acceptCustomValue: false,
                 searchEnabled: true,
             }, 'list'],
             [{
-                ...defaultConfigurationFalse,
-                readOnly: true,
+                searchEnabled: false,
             }, 'none'],
             [{
-                ...defaultConfigurationFalse,
-                readOnly: false,
-            }, 'none'],
-            [{
-                ...defaultConfigurationFalse,
-                disabled: false,
-            }, 'none'],
-            [{
-                ...defaultConfigurationFalse,
+                searchEnabled: true,
                 disabled: true,
             }, 'none'],
             [{
-                ...defaultConfigurationTrue,
+                searchEnabled: true,
                 readOnly: true,
-            }, 'none'],
-            [{
-                ...defaultConfigurationTrue,
-                readOnly: false,
-            }, 'list'],
-            [{
-                ...defaultConfigurationTrue,
-                disabled: false,
-            }, 'list'],
-            [{
-                ...defaultConfigurationTrue,
-                disabled: true,
             }, 'none'],
         ];
 

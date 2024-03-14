@@ -288,12 +288,12 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getAutocompleteAria() {
-        const { searchEnabled, acceptCustomValue, readOnly, disabled } = this.option();
+        const { searchEnabled, readOnly, disabled } = this.option();
 
-        const isEditable = acceptCustomValue || searchEnabled;
-        const isDisabled = readOnly || disabled;
+        const isAvailable = !(readOnly || disabled);
+        const hasAutocomplete = searchEnabled && isAvailable;
 
-        const autocompleteAria = isEditable && !isDisabled ? 'list' : 'none';
+        const autocompleteAria = hasAutocomplete ? 'list' : 'none';
 
         return autocompleteAria;
     },
