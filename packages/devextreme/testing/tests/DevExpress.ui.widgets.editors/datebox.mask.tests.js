@@ -1787,7 +1787,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     beforeEach: function() {
         this.$element = $('#dateBox').dxDateBox({
             value: new Date('10/10/2012 10:00 PM'),
-            displayFormat: 'HH:mm a',
+            displayFormat: 'aaa',
             useMaskBehavior: true,
             type: 'time',
         });
@@ -1795,49 +1795,39 @@ module('DateBox AM/PM Handling - Time datebox type', {
         this.instance = this.$element.dxDateBox('instance');
         this.$input = this.$element.find('.dx-texteditor-input');
         this.keyboard = keyboardMock(this.$input, true);
-        this.pointer = pointerMock(this.$input);
-        this.clock = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
     },
-
-    afterEach: function() {
-        this.clock.restore();
-    }
 }, () => {
     test('when "a" is pressed it should toggle PM to AM (T1216937)', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 PM'));
-        this.instance.option('displayFormat', 'aaa');
 
         this.keyboard.type('a');
 
-        assert.strictEqual(this.$input.val(), 'AM');
+        assert.strictEqual(this.instance.option('text'), 'AM');
     });
 
     test('when "p" is pressed it should toggle AM to PM', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 AM'));
-        this.instance.option('displayFormat', 'aaa');
 
         this.keyboard.type('p');
 
-        assert.strictEqual(this.$input.val(), 'PM');
+        assert.strictEqual(this.instance.option('text'), 'PM');
     });
 
     test('when wrong key is pressed it should not toggle AM to PM', function(assert) {
         ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
-            this.instance.option('displayFormat', 'aaa');
-            this.keyboard.type(key);
+            this.keyboard.press(key);
         });
 
-        assert.strictEqual(this.$input.val(), 'AM');
+        assert.strictEqual(this.instance.option('text'), 'AM');
     });
 
     test('when wrong key is pressed it should not toggle PM to AM', function(assert) {
         ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
-            this.instance.option('displayFormat', 'aaa');
-            this.keyboard.type(key);
+            this.keyboard.press(key);
         });
 
-        assert.strictEqual(this.$input.val(), 'PM');
+        assert.strictEqual(this.instance.option('text'), 'PM');
     });
 });
