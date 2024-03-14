@@ -1,0 +1,23 @@
+@use "sass:math";
+@use "sass:color";
+@use "colors" as *;
+@use "../colors" as *;
+@use "sizes" as *;
+@use "../sizes" as *;
+@use "../../base/textArea";
+@use "../../base/textArea/mixins" as *;
+@use "../textEditor/sizes" as *;
+
+// adduse
+
+@include dx-textarea(
+  2px,
+  $textarea-content-line-height,
+  $material-filled-texteditor-input-top-padding,
+  $material-filled-texteditor-input-with-label-top-padding,
+  $material-standard-texteditor-with-label-input-top-padding,
+);
+
+.dx-textarea {
+  font-size: $textarea-font-size;
+}
