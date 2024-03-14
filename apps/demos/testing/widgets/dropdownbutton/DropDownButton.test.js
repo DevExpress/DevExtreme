@@ -1,6 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
+import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_TOGGLE_CLASS = 'dx-dropdownbutton-toggle';
@@ -19,7 +20,7 @@ runManualTest('DropDownButton', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'
       .click($(`.${DROP_DOWN_BUTTON_CLASS}`).nth(0))
       .wait(200);
 
-    await takeScreenshot('dropdown_button_overview_custom_static_text.png');
+    await testScreenshot(t, takeScreenshot, 'dropdown_button_overview_custom_static_text.png');
 
     await t
       .click($(`.${DROP_DOWN_BUTTON_CLASS}`).nth(0))
@@ -29,7 +30,7 @@ runManualTest('DropDownButton', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'
       .click($(`.${DROP_DOWN_BUTTON_TOGGLE_CLASS}`))
       .wait(200);
 
-    await takeScreenshot('dropdown_button_overview_custom_button_action.png');
+    await testScreenshot(t, takeScreenshot, 'dropdown_button_overview_custom_button_action.png');
 
     await t
       .expect(compareResults.isValid())
