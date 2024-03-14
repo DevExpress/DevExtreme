@@ -304,13 +304,13 @@ class EditingControllerImpl extends modules.ViewController {
     return data;
   }
 
-  private getInsertedData() {
+  public getInsertedData() {
     return this.getChanges()
       .filter((change) => change.data && change.type === DATA_EDIT_DATA_INSERT_TYPE)
       .map((change) => change.data);
   }
 
-  private getRemovedData() {
+  public getRemovedData() {
     return this.getChanges()
       .filter((change) => this._getOldData(change.key) && change.type === DATA_EDIT_DATA_REMOVE_TYPE)
       .map((change) => this._getOldData(change.key));
