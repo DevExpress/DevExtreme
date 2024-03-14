@@ -487,7 +487,7 @@ const DropDownList = DropDownEditor.inherit({
         this.setAria('owns', this._popup && this._popupContentId);
     },
 
-    _getHaspopupAria() {
+    _getHasPopupAria() {
         return 'listbox';
     },
 

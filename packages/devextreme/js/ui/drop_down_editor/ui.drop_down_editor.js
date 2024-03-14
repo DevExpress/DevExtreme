@@ -283,7 +283,7 @@ const DropDownEditor = TextBox.inherit({
             .eq(0);
     },
 
-    _getHaspopupAria() {
+    _getHasPopupAria() {
         return 'true';
     },
 
@@ -293,7 +293,7 @@ const DropDownEditor = TextBox.inherit({
 
     _setDefaultAria: function() {
         this.setAria({
-            'haspopup': this._getHaspopupAria(),
+            'haspopup': this._getHasPopupAria(),
             'autocomplete': this._getAutocompleteAria(),
         });
     },
