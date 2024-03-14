@@ -93,18 +93,6 @@ const DateBoxMask = DateBoxBase.inherit({
                     event.preventDefault();
                 });
             },
-            a: (e) => {
-                return applyHandler(e, (event) => {
-                    this._timeIndicatorHandler('a');
-                    event.preventDefault();
-                });
-            },
-            p: (e) => {
-                return applyHandler(e, (event) => {
-                    this._timeIndicatorHandler('p');
-                    event.preventDefault();
-                });
-            }
         });
     },
 
@@ -113,14 +101,6 @@ const DateBoxMask = DateBoxBase.inherit({
         const isNotDeletingInCalendar = this.option('opened') && e && keysToHandleByMask.indexOf(normalizeKeyName(e)) === -1;
 
         return !this._useMaskBehavior() || isNotDeletingInCalendar || (e && e.altKey);
-    },
-
-    _timeIndicatorHandler(char) {
-        this._setNewDateIfEmpty();
-
-        this._loadMaskValue(this._initialMaskValue);
-
-        this._changePartValue(0, true, char);
     },
 
     _upDownArrowHandler(step) {
@@ -135,11 +115,10 @@ const DateBoxMask = DateBoxBase.inherit({
         this._changePartValue(delta + step, true);
     },
 
-    _changePartValue(step, lockOtherParts, char) {
+    _changePartValue(step, lockOtherParts) {
         const isAmPmPartActive = this._getActivePartProp('pattern') === 'a';
-        const isAm = this._getActivePartProp('text') === 'AM';
 
-        if(isAmPmPartActive && (char === undefined || (char === 'a' && !isAm) || (char === 'p' && isAm))) {
+        if(isAmPmPartActive) {
             this._toggleAmPm();
         } else {
             this._partIncrease(step, lockOtherParts);
@@ -326,7 +305,9 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _searchString(char) {
-        if(!isNaN(parseInt(this._getActivePartProp('text')))) {
+        const activePartText = this._getActivePartProp('text');
+
+        if(!isNaN(parseInt(activePartText))) {
             return;
         }
 
