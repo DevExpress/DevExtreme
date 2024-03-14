@@ -2136,31 +2136,10 @@ QUnit.module('aria accessibility', () => {
         });
     });
 
-    QUnit.module('aria-autocomplete', () => {
-        const configurations = [
-            [{
-                searchEnabled: true,
-            }, 'list'],
-            [{
-                searchEnabled: false,
-            }, 'none'],
-            [{
-                searchEnabled: true,
-                disabled: true,
-            }, 'none'],
-            [{
-                searchEnabled: true,
-                readOnly: true,
-            }, 'none'],
-        ];
+    QUnit.test('aria-autocomplete should be equal none', function(assert) {
+        const $element = $('#dropDownEditorLazy').dxDropDownEditor();
+        const $input = $element.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-        configurations.forEach(([configuration, expectedValue]) => {
-            QUnit.test(`aria-autocomplete should be set correctly when ${JSON.stringify(configuration)}`, function(assert) {
-                const $element = $('#dropDownEditorLazy').dxDropDownEditor(configuration);
-                const $input = $element.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-                assert.strictEqual($input.attr('aria-autocomplete'), expectedValue, 'aria-autocomplete is correct');
-            });
-        });
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete is correct');
     });
 });

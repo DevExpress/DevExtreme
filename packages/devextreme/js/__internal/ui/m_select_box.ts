@@ -427,6 +427,26 @@ const SelectBox = (DropDownList as any).inherit({
     return this._dataController.searchValue();
   },
 
+  _getAutocompleteAria() {
+    const {
+      disabled,
+      readOnly,
+      searchEnabled,
+      searchMode,
+    } = this.option();
+
+    const isAvailable = !(readOnly || disabled);
+    const hasAutocomplete = searchEnabled && isAvailable;
+
+    if (!hasAutocomplete) {
+      return 'none';
+    }
+
+    const autocompleteAria = searchMode === 'contains' ? 'list' : 'both';
+
+    return autocompleteAria;
+  },
+
   _toggleOpenState(isVisible) {
     if (this.option('disabled')) {
       return;
