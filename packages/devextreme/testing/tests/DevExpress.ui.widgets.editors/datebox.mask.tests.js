@@ -1065,8 +1065,14 @@ module('Search', setupModule, () => {
         { type: 'date', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
         { type: 'datetime', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
         { type: 'datetime', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
+        { type: 'time', input: 'aa', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'time', input: 'pp', initialValue: 'PM', expectedValue: 'PM' },
+        { type: 'date', input: 'aa', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'date', input: 'pp', initialValue: 'PM', expectedValue: 'PM' },
+        { type: 'datetime', input: 'aa', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'datetime', input: 'pp', initialValue: 'PM', expectedValue: 'PM' },
     ].forEach(({ type, input, initialValue, expectedValue }) => {
-        QUnit.test(`when ${initialValue} is active and ${input} is pressed it should stay to ${expectedValue}`, function(assert) {
+        QUnit.test(`when ${initialValue} is active and ${input} is single / double pressed it should stay to ${expectedValue}`, function(assert) {
             const $dateBox = $('#dateBox').dxDateBox({
                 value: new Date(`10/10/2012, 10:00 ${initialValue}`),
                 useMaskBehavior: true,
