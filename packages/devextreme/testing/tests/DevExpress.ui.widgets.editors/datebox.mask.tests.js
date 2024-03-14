@@ -1024,7 +1024,7 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'AM');
     });
 
-    test('correct key should change AM to PM', function(assert) {
+    test('when "p" is pressed it should change AM to PM (T1217203)', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 AM'));
         this.instance.option('displayFormat', 'aaa');
 
@@ -1033,8 +1033,8 @@ module('Search', setupModule, () => {
         assert.strictEqual(this.$input.val(), 'PM');
     });
 
-    test('correct key should change PM to AM', function(assert) {
-        this.instance.option('value', new Date('10/10/2012 10:00'));
+    test('when "a" is pressed it should change PM to AM', function(assert) {
+        this.instance.option('value', new Date('10/10/2012 10:00 PM'));
         this.instance.option('displayFormat', 'aaa');
 
         this.keyboard.type('a');
