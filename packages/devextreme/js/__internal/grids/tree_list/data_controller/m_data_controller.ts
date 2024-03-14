@@ -11,7 +11,7 @@ export class TreeListDataController extends DataController {
     return dataSourceAdapterProvider;
   }
 
-  _getNodeLevel(node) {
+  private _getNodeLevel(node) {
     let level = -1;
     while (node.parent) {
       if (node.visible) {
@@ -33,7 +33,7 @@ export class TreeListDataController extends DataController {
     };
   }
 
-  _loadOnOptionChange() {
+  private _loadOnOptionChange() {
     this._dataSource.load();
   }
 
@@ -65,7 +65,7 @@ export class TreeListDataController extends DataController {
     return super._isCellChanged.apply(this, arguments as any);
   }
 
-  init() {
+  public init() {
     this.createAction('onRowExpanding');
     this.createAction('onRowExpanded');
     this.createAction('onRowCollapsing');
@@ -94,7 +94,7 @@ export class TreeListDataController extends DataController {
     return super.publicMethods().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
   }
 
-  changeRowExpand(key) {
+  private changeRowExpand(key) {
     if (this._dataSource) {
       const args: any = {
         key,
@@ -114,11 +114,11 @@ export class TreeListDataController extends DataController {
     return new Deferred().resolve();
   }
 
-  isRowExpanded(key, cache?) {
+  private isRowExpanded(key, cache?) {
     return this._dataSource && this._dataSource.isRowExpanded(key, cache);
   }
 
-  expandRow(key) {
+  private expandRow(key) {
     if (!this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
@@ -126,7 +126,7 @@ export class TreeListDataController extends DataController {
     return new Deferred().resolve();
   }
 
-  collapseRow(key) {
+  private collapseRow(key) {
     if (this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
@@ -134,11 +134,11 @@ export class TreeListDataController extends DataController {
     return new Deferred().resolve();
   }
 
-  getRootNode() {
+  private getRootNode() {
     return this._dataSource && this._dataSource.getRootNode();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'rootValue':
       case 'parentIdExpr':
@@ -168,7 +168,7 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  getNodeByKey(key) {
+  private getNodeByKey(key) {
     if (!this._dataSource) {
       return;
     }
@@ -176,7 +176,7 @@ export class TreeListDataController extends DataController {
     return this._dataSource.getNodeByKey(key);
   }
 
-  getChildNodeKeys(parentKey) {
+  private getChildNodeKeys(parentKey) {
     if (!this._dataSource) {
       return;
     }
@@ -184,7 +184,7 @@ export class TreeListDataController extends DataController {
     return this._dataSource.getChildNodeKeys(parentKey);
   }
 
-  loadDescendants(keys, childrenOnly) {
+  private loadDescendants(keys, childrenOnly) {
     if (!this._dataSource) {
       return;
     }
@@ -192,7 +192,7 @@ export class TreeListDataController extends DataController {
     return this._dataSource.loadDescendants(keys, childrenOnly);
   }
 
-  forEachNode() {
+  private forEachNode() {
     this._dataSource.forEachNode.apply(this, arguments);
   }
 }
