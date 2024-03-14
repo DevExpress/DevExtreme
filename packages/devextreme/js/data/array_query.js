@@ -243,7 +243,6 @@ const compileCriteria = (function() {
     let langParams = {};
 
     const _toComparable = (value) => toComparable(value, false, langParams);
-
     const compileGroup = function(crit) {
         if(isUniformSequenceEqualsByOr(crit)) {
             const values = crit.flatMap((el, i) => i % 2 !== 0 ? [] : [_toComparable(el[2])]);
@@ -260,18 +259,18 @@ const compileCriteria = (function() {
         let isConjunctiveOperator = false;
         let isConjunctiveNextOperator = false;
 
-        crit.forEach(function(item) {
-            if(Array.isArray(item) || isFunction(item)) {
+        each(crit, function() {
+            if(Array.isArray(this) || isFunction(this)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
                     throw new errors.Error('E4019');
                 }
 
-                ops.push(compileCriteria(item, langParams));
+                ops.push(compileCriteria(this, langParams));
 
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = isConjunctiveOperatorChecker(item);
+                isConjunctiveNextOperator = isConjunctiveOperatorChecker(this);
             }
         });
 
