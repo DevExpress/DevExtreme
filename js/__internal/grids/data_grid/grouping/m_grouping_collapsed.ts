@@ -335,7 +335,7 @@ const loadGroupTotalCount = function (dataSource, options) {
 };
 
 export class GroupingHelper extends GroupingHelperCore {
-  updateTotalItemsCount(options) {
+  public updateTotalItemsCount(options) {
     let totalItemsCount = 0;
     const totalCount = options.extra && options.extra.totalCount || 0;
     const groupCount = options.extra && options.extra.groupCount || 0;
@@ -362,12 +362,12 @@ export class GroupingHelper extends GroupingHelperCore {
     super.updateTotalItemsCount(totalItemsCount - totalCount + groupCount);
   }
 
-  _isGroupExpanded(groupIndex) {
+  private _isGroupExpanded(groupIndex) {
     const groups = this._dataSource.group();
     return isGroupExpanded(groups, groupIndex);
   }
 
-  _updatePagingOptions(options, callback?) {
+  private _updatePagingOptions(options, callback?) {
     const that = this;
     const isVirtualPaging = that._isVirtualPaging();
     const pageSize = that._dataSource.pageSize();
@@ -444,7 +444,7 @@ export class GroupingHelper extends GroupingHelperCore {
     options.takes = takes;
   }
 
-  changeRowExpand(path) {
+  private changeRowExpand(path) {
     const that = this;
     const groupInfo = that.findGroupInfo(path);
     const dataSource = that._dataSource;
@@ -473,7 +473,7 @@ export class GroupingHelper extends GroupingHelperCore {
     return new Deferred().reject();
   }
 
-  handleDataLoading(options?) {
+  protected handleDataLoading(options?) {
     const that = this;
     const { storeLoadOptions } = options;
     const groups = dataGridCore.normalizeSortingInfo(storeLoadOptions.group || options.loadOptions.group);
@@ -510,7 +510,7 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  handleDataLoadedCore(options, callBase) {
+  protected handleDataLoadedCore(options, callBase) {
     const that = this;
     const loadedGroupCount = dataGridCore.normalizeSortingInfo(options.storeLoadOptions.group || options.loadOptions.group).length;
     const groupCount = options.group ? options.group.length : 0;
@@ -564,7 +564,7 @@ export class GroupingHelper extends GroupingHelperCore {
     loadGroupItems(that, options, loadedGroupCount, expandedInfo, 0, options.data);
   }
 
-  _processSkips(items, skips, groupCount) {
+  private _processSkips(items, skips, groupCount) {
     if (!groupCount) return;
 
     const firstItem = items[0];
@@ -581,7 +581,7 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  _processTakes(items, skips, takes, groupCount, parents?) {
+  private _processTakes(items, skips, takes, groupCount, parents?) {
     if (!groupCount || !items) return;
 
     parents = parents || [];
@@ -609,20 +609,20 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  _processPaging(options, groupCount) {
+  private _processPaging(options, groupCount) {
     this._processSkips(options.data, options.skips, groupCount);
     this._processTakes(options.data, options.skips, options.takes, groupCount);
   }
 
-  isLastLevelGroupItemsPagingLocal() {
+  private isLastLevelGroupItemsPagingLocal() {
     return false;
   }
 
-  sortLastLevelGroupItems(items) {
+  private sortLastLevelGroupItems(items) {
     return items;
   }
 
-  refresh(options, operationTypes?) {
+  protected refresh(options, operationTypes?) {
     const that = this;
     const dataSource = that._dataSource;
     const { storeLoadOptions } = options;
