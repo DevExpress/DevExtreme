@@ -427,7 +427,7 @@ const SelectBox = (DropDownList as any).inherit({
     return this._dataController.searchValue();
   },
 
-  _getAutocompleteAria() {
+  _getAriaAutocomplete() {
     const {
       disabled,
       readOnly,
@@ -903,6 +903,8 @@ const SelectBox = (DropDownList as any).inherit({
       case 'tooltipEnabled':
         this._renderTooltip();
         break;
+      case 'readOnly':
+      case 'disabled':
       case 'searchMode':
         this.callBase(args);
         this._setDefaultAria();

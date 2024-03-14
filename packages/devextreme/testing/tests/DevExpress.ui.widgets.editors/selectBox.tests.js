@@ -6065,6 +6065,20 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($listItemContainer, {});
             });
         });
+
+        ['disabled', 'readOnly'].forEach(disabledOption => {
+            QUnit.test(`Input aria-autocomplete is none if ${disabledOption} is true`, function(assert) {
+                helper.createWidget({ searchEnabled: true });
+
+                const $input = helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-autocomplete'), 'list');
+
+                helper.widget.option({ [disabledOption]: true });
+
+                assert.strictEqual($input.attr('aria-autocomplete'), 'none');
+            });
+        });
     });
 }
 

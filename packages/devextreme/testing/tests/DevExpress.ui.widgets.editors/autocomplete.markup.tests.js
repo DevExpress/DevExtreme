@@ -127,6 +127,22 @@ QUnit.module('aria accessibility', {}, () => {
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute is still list');
     });
 
+    QUnit.test('aria-autocomplete attribute is none', function(assert) {
+        const $element = $('#widget').dxAutocomplete();
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}:first`);
+        const instance = $element.dxAutocomplete('instance');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute is list');
+
+        instance.option({ readOnly: true });
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute is none');
+
+        instance.option({ readOnly: false, disabled: true });
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute is none');
+    });
+
     QUnit.test('aria role should not change to listbox after it\'s second rendering (T290859)', function(assert) {
         assert.expect(2);
 
