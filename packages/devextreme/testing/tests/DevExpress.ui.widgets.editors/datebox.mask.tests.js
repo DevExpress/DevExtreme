@@ -1803,8 +1803,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
         this.keyboard
             .focus()
             .caret({ start: 6, end: 8 })
-            .type('a')
-            .press('enter');
+            .type('a');
 
         assert.strictEqual(this.instance.option('text'), 'AM');
     });
@@ -1815,8 +1814,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
         this.keyboard
             .focus()
             .caret({ start: 6, end: 8 })
-            .type('p')
-            .press('enter');
+            .type('p');
 
         assert.strictEqual(this.instance.option('text'), 'PM');
     });
@@ -1827,8 +1825,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
             this.keyboard
                 .focus()
                 .caret({ start: 6, end: 8 })
-                .type(key)
-                .press('enter');
+                .type(key);
         });
 
         assert.strictEqual(this.instance.option('text'), 'AM');
@@ -1840,8 +1837,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
             this.keyboard
                 .focus()
                 .caret({ start: 6, end: 8 })
-                .type(key)
-                .press('enter');
+                .type(key);
         });
 
         assert.strictEqual(this.instance.option('text'), 'PM');
