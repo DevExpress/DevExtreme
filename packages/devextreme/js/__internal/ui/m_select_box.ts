@@ -435,8 +435,8 @@ const SelectBox = (DropDownList as any).inherit({
       searchMode,
     } = this.option();
 
-    const isAvailable = !(readOnly || disabled);
-    const hasAutocomplete = searchEnabled && isAvailable;
+    const isInputEditable = !(readOnly || disabled);
+    const hasAutocomplete = searchEnabled && isInputEditable;
 
     if (!hasAutocomplete) {
       return 'none';

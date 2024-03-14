@@ -115,7 +115,7 @@ QUnit.module('widget sizing render', () => {
 });
 
 QUnit.module('aria accessibility', {}, () => {
-    QUnit.test('aria-autocomplete attribute is list', function(assert) {
+    QUnit.test('aria-autocomplete attribute is list if input is editable', function(assert) {
         const $element = $('#widget').dxAutocomplete({ searchMode: 'contains' });
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}:first`);
         const instance = $element.dxAutocomplete('instance');
@@ -127,7 +127,7 @@ QUnit.module('aria accessibility', {}, () => {
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute is still list');
     });
 
-    QUnit.test('aria-autocomplete attribute is none', function(assert) {
+    QUnit.test('aria-autocomplete attribute is none if input is not editable', function(assert) {
         const $element = $('#widget').dxAutocomplete();
         const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}:first`);
         const instance = $element.dxAutocomplete('instance');

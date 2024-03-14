@@ -77,9 +77,9 @@ const Autocomplete = (DropDownList as any).inherit({
   _getAriaAutocomplete() {
     const { disabled, readOnly } = this.option();
 
-    const isAvailable = !(readOnly || disabled);
+    const isInputEditable = !(readOnly || disabled);
 
-    return isAvailable ? 'list' : 'none';
+    return isInputEditable ? 'list' : 'none';
   },
 
   _displayGetterExpr() {
