@@ -248,7 +248,11 @@ const compileCriteria = (function() {
         if(isUniformSequenceEqualsByOr(crit)) {
             const values = crit.flatMap((el, i) => i % 2 !== 0 ? [] : [_toComparable(el[2])]);
             const getter = compileGetter(crit[0][0]);
-            return (d) => values.includes(_toComparable(getter(d)));
+            return (d) => {
+                const filterValue = _toComparable(getter(d));
+                // eslint-disable-next-line eqeqeq
+                return !!values.find((value) => useStrictComparison(value) ? filterValue === value : (filterValue == value));
+            };
         }
 
         const ops = [];
