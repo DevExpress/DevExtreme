@@ -249,18 +249,18 @@ const compileCriteria = (function() {
         let isConjunctiveOperator = false;
         let isConjunctiveNextOperator = false;
 
-        each(crit, function() {
-            if(Array.isArray(this) || isFunction(this)) {
+        crit.forEach(function(item) {
+            if(Array.isArray(item) || isFunction(item)) {
                 if(ops.length > 1 && isConjunctiveOperator !== isConjunctiveNextOperator) {
                     throw new errors.Error('E4019');
                 }
 
-                ops.push(compileCriteria(this, langParams));
+                ops.push(compileCriteria(item, langParams));
 
                 isConjunctiveOperator = isConjunctiveNextOperator;
                 isConjunctiveNextOperator = true;
             } else {
-                isConjunctiveNextOperator = isConjunctiveOperatorChecker(this);
+                isConjunctiveNextOperator = isConjunctiveOperatorChecker(item);
             }
         });
 
@@ -334,21 +334,13 @@ const compileCriteria = (function() {
     };
 
     function compileEquals(getter, value, negate) {
-        const cache = new WeakMap();
-
-        return function(objc) {
-            if(cache.has(objc)) {
-                return cache.get(objc);
-            }
-
-            const obj = _toComparable(getter(objc));
+        return function(obj) {
+            obj = _toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
             if(negate) {
                 result = !result;
             }
-
-            cache.set(objc, result);
             return result;
         };
     }
