@@ -272,7 +272,7 @@ QUnit.module('live update', {
         const $moreButton = $('#templated-list .dx-list-next-button > .dx-button').eq(0);
         $moreButton.trigger('dxclick');
 
-        this.itemRenderedSpy.reset();
+        this.itemRenderedSpy.resetHistory();
         const pushData = [
             { type: 'update', data: { a: 'Item 0 Updated', id: 0 }, key: 0 },
             { type: 'update', data: { a: 'Item 2 Updated', id: 2 }, key: 2 },

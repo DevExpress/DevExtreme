@@ -7,9 +7,7 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import { setStyle } from '@js/core/utils/style';
 import { isDefined } from '@js/core/utils/type';
-
-// TODO: Move this function to the __internal scope
-import { getMemoizeScrollTo } from '../../../../renovation/ui/common/utils/scroll/getMemoizeScrollTo';
+import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 
 const PIVOTGRID_EXPAND_CLASS = 'dx-expand';
 

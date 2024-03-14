@@ -931,7 +931,7 @@ QUnit.test('Not Update clipRects and canvases. After zoomArgument', function(ass
         margin: { left: 80, right: 90, top: 10, bottom: 80 }
     });
 
-    chart._canvasClipRect.attr.reset();
+    chart._canvasClipRect.attr.resetHistory();
 
     chart.zoomArgument(1, 10);
 
@@ -944,7 +944,7 @@ QUnit.test('Update clipRect and canvases. After force render', function(assert) 
         margin: { left: 80, right: 90, top: 10, bottom: 80 }
     });
 
-    chart._canvasClipRect.attr.reset();
+    chart._canvasClipRect.attr.resetHistory();
 
     chart.render({ force: true });
 

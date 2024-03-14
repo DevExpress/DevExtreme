@@ -288,7 +288,7 @@ QUnit.test('Perform grouping', function(assert) {
     assert.deepEqual(stub.lastCall.args, ['test-arg'], 'attribute');
 
     valuesCallback.resetHistory();
-    set.reset();
+    set.resetHistory();
     callback = sinon.spy();
     performGrouping(context, [1, 2, 3], 'test-field-2', callback, valuesCallback);
 
@@ -306,7 +306,7 @@ QUnit.test('Perform grouping', function(assert) {
     }], 'data is set 2');
 
     valuesCallback.resetHistory();
-    set.reset();
+    set.resetHistory();
     performGrouping(context, { tag: 'test' }, 'test-field-3', 'data-field', valuesCallback);
 
     assert.strictEqual(context.grouping['test-field-3'], undefined, 'grouping 3');
@@ -315,7 +315,7 @@ QUnit.test('Perform grouping', function(assert) {
 });
 
 QUnit.test('Group by color', function(assert) {
-    stubPerformGrouping.reset();
+    stubPerformGrouping.resetHistory();
     const getColor = sinon.stub();
     const createDiscretePalette = sinon.stub().returns({ getColor: getColor });
     const context = {
@@ -342,7 +342,7 @@ QUnit.test('Group by color', function(assert) {
 });
 
 QUnit.test('Group by size', function(assert) {
-    stubPerformGrouping.reset();
+    stubPerformGrouping.resetHistory();
     const context = {
         settings: {
             sizeGroups: 'test-groups',
@@ -363,7 +363,7 @@ QUnit.test('Group by size', function(assert) {
 });
 
 QUnit.test('Group by size with callback', function(assert) {
-    stubPerformGrouping.reset();
+    stubPerformGrouping.resetHistory();
     const context = {
         settings: {
             sizeGroups: 'test-groups',
@@ -490,7 +490,7 @@ QUnit.test('Has labels group', function(assert) {
 });
 
 QUnit.test('Update grouping', function(assert) {
-    stubGroupByColor.reset();
+    stubGroupByColor.resetHistory();
 
     areaStrategyPolygon.updateGrouping(this.context);
 
@@ -587,7 +587,7 @@ QUnit.test('Has labels group', function(assert) {
 });
 
 QUnit.test('Update grouping', function(assert) {
-    stubGroupByColor.reset();
+    stubGroupByColor.resetHistory();
 
     lineStrategyLineString.updateGrouping(this.context);
 
@@ -616,8 +616,8 @@ QUnit.test('Has labels group', function(assert) {
 });
 
 QUnit.test('Update grouping', function(assert) {
-    stubPerformGrouping.reset();
-    stubGroupByColor.reset();
+    stubPerformGrouping.resetHistory();
+    stubGroupByColor.resetHistory();
 
     pointDotStrategy.updateGrouping(this.context);
 
@@ -935,8 +935,8 @@ QUnit.test('GetDefaultColor - use theme manager to get palette\'s accent color',
 });
 
 QUnit.test('Update grouping', function(assert) {
-    stubGroupByColor.reset();
-    stubGroupBySize.reset();
+    stubGroupByColor.resetHistory();
+    stubGroupBySize.resetHistory();
     this.context.settings = { dataField: 'data-field' };
 
     pointBubbleStrategy.updateGrouping(this.context);

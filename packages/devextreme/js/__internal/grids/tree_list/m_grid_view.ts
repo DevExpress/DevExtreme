@@ -3,11 +3,11 @@ import { gridViewModule, ResizingController } from '@ts/grids/grid_core/views/m_
 import treeListCore from './m_core';
 
 class TreeListResizingController extends ResizingController {
-  _getWidgetAriaLabel() {
+  protected _getWidgetAriaLabel() {
     return 'dxTreeList-ariaTreeList';
   }
 
-  _toggleBestFitMode(isBestFit) {
+  protected _toggleBestFitMode(isBestFit) {
     super._toggleBestFitMode(isBestFit);
 
     const $rowsTable = this._rowsView.getTableElement();

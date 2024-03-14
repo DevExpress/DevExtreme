@@ -27,16 +27,18 @@
   &.dx-resize-handle-horizontal {
     width: 8px;
     flex-direction: column;
-    cursor: col-resize;
+
+    &.dx-resize-handle-resizable {
+      cursor: col-resize;
+    }
   }
 
   &.dx-resize-handle-vertical {
     height: 8px;
     flex-direction: row;
-    cursor: row-resize;
-
-    .dx-resize-handle-icon {
-      transform: rotate(90deg);
+    
+    &.dx-resize-handle-resizable {
+      cursor: row-resize;
     }
   }
 }

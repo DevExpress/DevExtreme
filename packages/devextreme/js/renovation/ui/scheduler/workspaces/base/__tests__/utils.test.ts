@@ -1,5 +1,6 @@
-import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../consts';
-import { Group, TableWidthWorkSpaceConfig } from '../../types';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../__internal/scheduler/__migration/const';
+import { TableWidthWorkSpaceConfig } from '../../types';
+import { Group } from '../../../../../../__internal/scheduler/__migration/types';
 import {
   compareCellsByDateAndIndex,
   createCellElementMetaData,

@@ -1,4 +1,7 @@
-import { readFileSync, existsSync } from 'fs';
+import { readFileSync, existsSync, writeFileSync } from 'fs';
+import { join } from 'path';
+import { ClientFunction } from 'testcafe';
+import { THEME } from './helpers/theme-utils';
 
 const settings = {
   concurrency: undefined,
@@ -33,6 +36,18 @@ function patternGroupFromValues(product, demo, framework) {
   };
 }
 
+export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) => {
+  let demoAppCounter = 0;
+  const demoAppIntervalHandle = setInterval(() => {
+    const demoApp = document.querySelector('demo-app');
+    if ((demoApp && demoApp.innerText !== 'Loading...') || demoAppCounter === 120) {
+      setTimeout(resolve, 1000);
+      clearInterval(demoAppIntervalHandle);
+    }
+    demoAppCounter += 1;
+  }, 1000);
+}));
+
 function getInterestProcessArgs() {
   // eslint-disable-next-line spellcheck/spell-checker
   return process.argv.slice(2);
@@ -52,6 +67,33 @@ export function getChangedFiles() {
   return changedFilesPath
     && existsSync(changedFilesPath)
     && JSON.parse(readFileSync(changedFilesPath));
+}
+
+export function globalReadFrom(basePath, relativePath, mapCallback) {
+  const absolute = join(basePath, relativePath);
+  if (existsSync(absolute)) {
+    const result = readFileSync(absolute, 'utf8');
+    return (mapCallback && result && mapCallback(result)) || result;
+  }
+  return null;
+}
+
+export function changeTheme(dirName, demoPath, theme) {
+  if (!theme || theme === THEME.generic) {
+    return;
+  }
+
+  const updatedContent = globalReadFrom(dirName, demoPath, (data) => {
+    const result = data.replace(/data-theme="[^"]+"/g, `data-theme="${theme}"`);
+
+    return result.replace(/dx\.[^.]+(\.css")/g, `dx.${theme}$1`);
+  });
+
+  const indexFilePath = join(dirName, demoPath);
+
+  if (existsSync(indexFilePath)) {
+    writeFileSync(indexFilePath, updatedContent, 'utf8');
+  }
 }
 
 function getExplicitTestsInternal() {
@@ -127,74 +169,156 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
-  Angular: {
-    Charts: ['ZoomingAndScrollingAPI'],
-    Common: ['EditorAppearanceVariants'],
+  jQuery: {
+    Charts: [
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    ],
     DataGrid: [
-      'AdvancedMasterDetailView',
-      'AjaxRequest',
-      'Appearance',
-      'BatchEditing',
-      'CellEditingAndEditingAPI',
-      'ColumnCustomization',
-      'CustomNewRecordPosition',
-      'DataValidation',
-      'EditStateManagement',
-      'Filtering',
-      'FilteringAPI',
-      'GroupSummaries',
-      'InfiniteScrolling',
-      'MasterDetailAPI',
-      'MasterDetailView',
-      'MultipleRecordSelectionAPI',
-      'MultipleSorting',
-      'OdataService',
-      'RecordGrouping',
-      'RecordPaging',
-      'RemoteGrouping',
-      'RowEditingAndEditingEvents',
-      'RowSelection',
-      'SimpleArray',
-      'StatePersistence',
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
     ],
-    Drawer: ['TopOrBottomPosition'],
-    DropDownBox: ['MultipleSelection'],
-    Form: ['CustomizeItem'],
-    Gauges: ['VariableNumberOfBars'],
     List: [
-      'ItemDragging',
-      'ListSelection',
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
-    PivotGrid: ['IntegratedFieldChooser'],
-    Popup: ['Scrolling'],
+  },
+  Angular: {
+    Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ],
+    DataGrid: [
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'BatchEditing', themes: [THEME.fluent] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
+    ],
+    Form: [
+      'CustomizeItem',
+      { demo: 'Validation', themes: [THEME.material] },
+    ],
     Scheduler: [
       'CustomDragAndDrop',
-      'Resources',
     ],
-    Sortable: ['Kanban'],
-    TabPanel: ['Overview'],
-    Tabs: [
-      'Overview',
-      'Selection',
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
-    Toolbar: ['Adaptability'],
-    TreeView: ['ItemSelectionAndCustomization'],
-    VectorMap: ['TooltipHTMLSupport'],
   },
   Vue: {
+    Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
+      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+    ],
+    VectorMap: [
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    ],
     DataGrid: [
-      'EditStateManagement',
-      'FilteringAPI',
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'BatchEditing', themes: [THEME.fluent] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'FilteringAPI', themes: [THEME.material] },
       'StatePersistence',
+    ],
+    Drawer: [
+      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
+      { demo: 'ListSelection', themes: [THEME.material] },
+    ],
+    Tabs: [
+      { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
+    ],
+    TabPanel: [
+      { demo: 'Overview', themes: [THEME.material] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
+    ],
+    TreeView: [
+      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
+    ],
+  },
+  React: {
+    Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    ],
+    DataGrid: [
+      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
+      { demo: 'BatchEditing', themes: [THEME.fluent] },
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
+      { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
+      { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
+    ],
+    Scheduler: [
+      { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
+      { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: [THEME.fluent] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
   },
 };
 
-export function shouldRunTest(currentFramework, testIndex, product, demo) {
-  const frameworkSkippedDemos = SKIPPED_TESTS[currentFramework]
-      && SKIPPED_TESTS[currentFramework][product];
+export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
+  const shouldSkipDemo = (
+    framework,
+    component,
+    demoName,
+  ) => {
+    const frameworkTests = skippedTests[framework];
+    if (!frameworkTests) return false;
 
-  if (frameworkSkippedDemos && frameworkSkippedDemos.indexOf(demo) > -1) {
+    const componentTests = frameworkTests[component];
+    if (!componentTests) return false;
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const test of componentTests) {
+      if (typeof test === 'string' && test === demoName) {
+        return true;
+      } if (test.demo === demoName
+        && test.themes.includes(process.env.THEME || THEME.generic)) {
+        return true;
+      }
+    }
+
+    return false;
+  };
+
+  if (shouldSkipDemo(currentFramework, product, demo)) {
     return false;
   }
 
@@ -222,13 +346,16 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
+  changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
+
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
 
-  if (!shouldRunTest(framework, index, product, demo)) {
+  if (!shouldRunTest(framework, index, product, demo, SKIPPED_TESTS)) {
     return;
   }
+
+  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
 
   if (settings.explicitTests) {
     if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
@@ -237,10 +364,24 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
+  test.before(async (t) => {
+    const [width, height] = t.fixtureCtx.initialWindowSize;
+
+    await t.resizeWindow(width, height);
+
+    if (framework === 'Angular') {
+      await waitForAngularLoading();
+    }
+  });
+
   callback(test);
 }
 
 export function runManualTest(product, demo, framework, callback) {
+  if (process.env.STRATEGY === 'accessibility') {
+    return;
+  }
+
   if (Array.isArray(framework)) {
     framework.forEach((i) => {
       runManualTestCore(test, product, demo, i, callback);

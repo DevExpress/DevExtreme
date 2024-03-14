@@ -12,31 +12,6 @@ on:
   workflow_dispatch:
 
 jobs:
-  get-changes:
-    runs-on: ubuntu-latest
-    name: Get changed demos
-    timeout-minutes: 5
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Get changed files
-        uses: ./.github/actions/get-changed-files
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          path: apps/demos/Demos
-          result: apps/demos/changed-files.json
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: changed-demos
-          path: apps/demos/changed-files.json
-          retention-days: 1
-
   build:
     runs-on: ubuntu-latest
     name: Build devextreme
@@ -67,17 +42,17 @@ jobs:
   testcafe:
     needs:
       - build
-      - get-changes
     strategy:
       fail-fast: false
       matrix:
         STRATEGY: [screenshots, accessibility]
+        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
 
     runs-on: ubuntu-latest
-    name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}
+    name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
     timeout-minutes: 30
 
     steps:
@@ -114,13 +89,6 @@ jobs:
         python -m http.server 8082 &
         python -m http.server 8083 &
 
-    - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
-
     - name: Run TestCafe tests
       shell: bash
       working-directory: apps/demos
@@ -132,6 +100,7 @@ jobs:
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
         # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
@@ -150,7 +119,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: screenshots
-        path: apps/demos/testing/artifacts/compared-screenshots/*
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
     - name: Copy accessibility report

@@ -4,11 +4,11 @@ import { ColumnsController, columnsControllerModule } from '@ts/grids/grid_core/
 import treeListCore from './m_core';
 
 class TreeListColumnsController extends ColumnsController {
-  _getFirstItems(dataSourceAdapter) {
+  public _getFirstItems(dataSourceAdapter) {
     return super._getFirstItems(dataSourceAdapter).map((node) => node.data);
   }
 
-  getFirstDataColumnIndex() {
+  public getFirstDataColumnIndex() {
     const visibleColumns = this.getVisibleColumns();
     const visibleColumnsLength = visibleColumns.length;
     let firstDataColumnIndex = 0;

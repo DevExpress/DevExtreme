@@ -3,25 +3,39 @@ import registerComponent from '@js/core/component_registrator';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import {
+  getOuterHeight,
+  getOuterWidth,
+} from '@js/core/utils/size';
 import CollectionWidgetItem from '@js/ui/collection/item';
-import type { CollectionWidgetItem as Item } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
+import type { Item } from '@js/ui/splitter';
 
 import Guid from '../../../core/guid';
+import resizeObserverSingleton from '../../../core/resize_observer';
+import { hasWindow } from '../../../core/utils/window';
 import ResizeHandle, { RESIZE_HANDLE_CLASS } from './resize_handle';
 import { getComponentInstance } from './utils/component';
 import {
   getActionNameByEventName,
+  ITEM_COLLAPSED_EVENT,
+  ITEM_EXPANDED_EVENT,
   RESIZE_EVENT,
 } from './utils/event';
 import {
   calculateDelta,
+  findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
   getCurrentLayout,
   getDimensionByOrientation,
+  getElementSize,
   getInitialLayout,
   getNewLayout,
-  setFlexProp, updateItemsSize,
+  getVisibleItemsCount,
+  isElementVisible,
+  setFlexProp,
+  updateItemsSize,
 } from './utils/layout';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -29,6 +43,7 @@ const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
+const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const FLEX_PROPERTY = {
   flexGrow: 'flexGrow',
@@ -53,6 +68,8 @@ class Splitter extends (CollectionWidget as any) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       orientation: ORIENTATION.horizontal,
+      onItemCollapsed: null,
+      onItemExpanded: null,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
@@ -75,12 +92,53 @@ class Splitter extends (CollectionWidget as any) {
 
     this._toggleOrientationClass();
 
-    this._layout = getInitialLayout(this.option('items'));
+    if (isElementVisible(this.$element().get(0))) {
+      this._layout = this._getInitialLayoutBasedOnSize();
+    } else {
+      this._shouldRecalculateLayout = true;
+    }
 
     super._initMarkup();
+
+    this._attachResizeObserverSubscription();
+  }
+
+  _shouldUpdateLayout(): boolean {
+    const size: number = this.option('orientation') === ORIENTATION.horizontal
+      ? getOuterWidth(this.$element()) : getOuterHeight(this.$element());
+
+    return size === 0;
+  }
+
+  _render(): void {
+    super._render();
+  }
+
+  _attachResizeObserverSubscription(): void {
+    if (hasWindow()) {
+      const formRootElement = this.$element().get(0);
+
+      resizeObserverSingleton.unobserve(formRootElement);
+      resizeObserverSingleton.observe(formRootElement, () => { this._resizeHandler(); });
+    }
+  }
+
+  _resizeHandler(): void {
+    if (!this._shouldRecalculateLayout) {
+      return;
+    }
+
+    this._layout = this._getInitialLayoutBasedOnSize();
+
+    this._applyFlexGrowFromLayout(this._layout);
+    this._updatePaneSizesWithOuterWidth();
+
+    this._shouldRecalculateLayout = false;
   }
 
   _renderItems(items: Item[]): void {
+    this._resizeHandles = [];
+
     super._renderItems(items);
   }
 
@@ -94,12 +152,16 @@ class Splitter extends (CollectionWidget as any) {
     return index === findLastIndexOfVisibleItem(this.option('items'));
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _renderItem(index, itemData, $container, $itemToReplace): unknown {
+  _renderItem(
+    index: number,
+    itemData: Item,
+    $container: dxElementWrapper,
+    $itemToReplace: dxElementWrapper,
+  ): unknown {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     const itemElement = $itemFrame.get(0);
-    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, this._layout[index]);
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, this._layout ? this._layout[index] : 100 / getVisibleItemsCount(this.option('items')));
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
@@ -112,7 +174,10 @@ class Splitter extends (CollectionWidget as any) {
 
       groupAriaAttributes.id = itemId;
 
-      this._renderResizeHandle(itemId);
+      const nextItemData = this._getNextVisibleItemData(index);
+      const resizable = itemData.resizable !== false && nextItemData.resizable !== false;
+
+      this._renderResizeHandle(itemId, resizable);
     }
 
     this.setAria(groupAriaAttributes, $itemFrame);
@@ -120,11 +185,39 @@ class Splitter extends (CollectionWidget as any) {
     return $itemFrame;
   }
 
-  _renderResizeHandle(paneId: string): void {
+  _renderResizeHandle(paneId: string, resizable: boolean): void {
     const $resizeHandle = $('<div>')
       .appendTo(this.$element());
 
-    this._createComponent($resizeHandle, ResizeHandle, this._getResizeHandleConfig(paneId));
+    const config = this._getResizeHandleConfig(paneId, resizable);
+    const resizeHandle = this._createComponent($resizeHandle, ResizeHandle, config);
+
+    this._resizeHandles.push(resizeHandle);
+  }
+
+  _updateResizeHandlesResizableState(): void {
+    this._resizeHandles.forEach((resizeHandle) => {
+      const $resizeHandle = resizeHandle.$element();
+
+      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+      const leftItemData = this._getItemData($leftItem);
+      const rightItemData = this._getItemData($rightItem);
+      const resizable = leftItemData.resizable !== false && rightItemData.resizable !== false;
+
+      resizeHandle.option('resizable', resizable);
+    });
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getNextVisibleItemData(index: number): any {
+    const { items } = this.option();
+    return this._getItemDataByIndex(findIndexOfNextVisibleItem(items, index));
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  _getItemDataByIndex(index: number): any {
+    return this._editStrategy.getItemDataByIndex(index);
   }
 
   _getAction(eventName: string): (e) => void {
@@ -132,7 +225,7 @@ class Splitter extends (CollectionWidget as any) {
     return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
   }
 
-  _getResizeHandleConfig(paneId: string): object {
+  _getResizeHandleConfig(paneId: string, resizable: boolean): object {
     const {
       orientation,
       rtlEnabled,
@@ -142,13 +235,36 @@ class Splitter extends (CollectionWidget as any) {
     return {
       direction: orientation,
       focusStateEnabled: allowKeyboardNavigation,
+      resizable,
       elementAttr: {
         'aria-controls': paneId,
       },
-      onResizeStart: (e): void => {
+      onCollapsePrevClick: (e): void => {
+        const $resizeHandle = $(e.target).parent();
+        const $item = this._getResizeHandleLeftItem($resizeHandle);
+        const itemData = this._getItemData($item);
+
+        this._getAction(ITEM_COLLAPSED_EVENT)({
+          event: e,
+          itemData,
+          itemElement: $item,
+        });
+      },
+      onCollapseNextClick: (e): void => {
+        const $resizeHandle = $(e.target).parent();
+        const $item = this._getResizeHandleLeftItem($resizeHandle);
+        const itemData = this._getItemData($item);
+
+        this._getAction(ITEM_EXPANDED_EVENT)({
+          event: e,
+          itemData,
+          itemElement: $item,
+        });
+      },
+      onResizeStart: ({ element, event }): void => {
         this._$visibleItems = this._getVisibleItems();
         this._currentLayout = getCurrentLayout(this._$visibleItems);
-        this._activeResizeHandleIndex = this._getResizeHandleItems().index(e.element);
+        this._activeResizeHandleIndex = this._getResizeHandleItems().index(element);
 
         this._splitterItemsSize = this._getSummaryItemsSize(
           getDimensionByOrientation(orientation),
@@ -157,12 +273,11 @@ class Splitter extends (CollectionWidget as any) {
         );
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
-          event: e,
+          event,
+          handleElement: event.target,
         });
       },
-      onResize: (e): void => {
-        const { event } = e;
-
+      onResize: ({ event }): void => {
         const newLayout = getNewLayout(
           this._currentLayout,
           calculateDelta(event.offset, orientation, rtlEnabled, this._splitterItemsSize),
@@ -172,15 +287,45 @@ class Splitter extends (CollectionWidget as any) {
         updateItemsSize(this._$visibleItems, newLayout);
 
         this._getAction(RESIZE_EVENT.onResize)({
-          event: e,
+          event,
+          handleElement: event.target,
         });
       },
-      onResizeEnd: (e): void => {
+      onResizeEnd: ({ event }): void => {
+        each(this._itemElements(), (index: number, itemElement) => {
+          this._options.silent(`items[${index}].size`, getOuterWidth(itemElement));
+        });
+
         this._getAction(RESIZE_EVENT.onResizeEnd)({
-          event: e,
+          event,
+          handleElement: event.target,
         });
       },
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeHandleLeftItem($resizeHandle: dxElementWrapper): dxElementWrapper {
+    let $leftItem = $resizeHandle.prev();
+
+    while ($leftItem.hasClass(INVISIBLE_STATE_CLASS)) {
+      $leftItem = $leftItem.prev();
+    }
+
+    return $leftItem;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeHandleRightItem($resizeHandle: dxElementWrapper): dxElementWrapper {
+    // @ts-expect-error renderer d.ts issue
+    let $rightItem = $resizeHandle.next();
+
+    while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
+      // @ts-expect-error renderer d.ts issue
+      $rightItem = $rightItem.next();
+    }
+
+    return $rightItem;
   }
 
   _renderItemContent(args: object): object {
@@ -194,12 +339,15 @@ class Splitter extends (CollectionWidget as any) {
     // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
     args,
   ): unknown {
-    if (args.itemData.splitter) {
+    const { itemData } = args;
+
+    if (itemData.splitter) {
       return itemTemplate.source
         ? itemTemplate.source()
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         : ($ as any)();
     }
+
     return super._createItemByTemplate(itemTemplate, args);
   }
 
@@ -233,7 +381,47 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
-    super._itemOptionChanged(item, property, value);
+    switch (property) {
+      case 'size':
+        this._layout = this._getInitialLayoutBasedOnSize();
+
+        this._applyFlexGrowFromLayout(this._layout);
+        this._updatePaneSizesWithOuterWidth();
+        break;
+      case 'resizable':
+        this._updateResizeHandlesResizableState();
+        break;
+      default:
+        super._itemOptionChanged(item, property, value);
+    }
+  }
+
+  _getInitialLayoutBasedOnSize(): number[] {
+    const {
+      items, orientation, width, height,
+    } = this.option();
+
+    const elementSize = getElementSize(this.$element(), items, orientation, width, height);
+
+    return getInitialLayout(items, elementSize);
+  }
+
+  _applyFlexGrowFromLayout(layout: number[]): void {
+    this._iterateItems((index, itemElement) => {
+      setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, layout[index]);
+    });
+  }
+
+  _updatePaneSizesWithOuterWidth(): void {
+    this._iterateItems((index, itemElement) => {
+      this._options.silent(`items[${index}].size`, getOuterWidth(itemElement));
+    });
+  }
+
+  _iterateItems(callback: (index: number, itemElement: Element) => void): void {
+    each(this._itemElements(), (index: number, itemElement: Element) => {
+      callback(index, itemElement);
+    });
   }
 
   _getResizeHandleItems(): dxElementWrapper {
@@ -265,6 +453,8 @@ class Splitter extends (CollectionWidget as any) {
       case 'onResizeStart':
       case 'onResizeEnd':
       case 'onResize':
+      case 'onItemCollapsed':
+      case 'onItemExpanded':
         this[getActionNameByEventName(name)] = this._createActionByOption(name);
         break;
       default:

@@ -263,6 +263,12 @@ const iconSet = {
   dataarea: '\f176',
   datausage: '\f177',
   datapie: '\f178',
+  handlevertical: '\f161',
+  handlehorizontal: '\f16a',
+  triangleup: '\f16b',
+  triangledown: '\f16c',
+  triangleright: '\f16d',
+  triangleleft: '\f16e',
 };
 
 fixture.disablePageReloads`Icons`

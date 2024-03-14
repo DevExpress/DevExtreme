@@ -600,17 +600,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
     .dx-toolbar {
       margin-bottom: $generic-grid-base-header-panel-margin-bottom;
     }
-
-    .dx-apply-button {
-      @include dx-button-styling-variant(
-        $button-success-bg, $button-success-border-color, $button-success-color,
-        darken($button-success-bg, 10%),
-        darken($button-success-bg, 15%),
-        darken($button-success-bg, 20%),
-        $button-success-color,
-        $button-success-color
-      );
-    }
   }
 
   .dx-icon-column-chooser {

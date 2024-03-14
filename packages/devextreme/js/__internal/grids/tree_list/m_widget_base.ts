@@ -63,7 +63,7 @@ class TreeList extends Widget<dxTreeListOptions> {
 
   _activeStateUnit = DATAGRID_ROW_SELECTOR;
 
-  _getDefaultOptions() {
+  protected _getDefaultOptions() {
     // @ts-expect-error
     const result = super._getDefaultOptions();
 
@@ -75,7 +75,7 @@ class TreeList extends Widget<dxTreeListOptions> {
     return result;
   }
 
-  _setDeprecatedOptions() {
+  protected _setDeprecatedOptions() {
     // @ts-expect-error
     super._setDeprecatedOptions();
 
@@ -85,7 +85,7 @@ class TreeList extends Widget<dxTreeListOptions> {
     });
   }
 
-  _defaultOptionsRules() {
+  protected _defaultOptionsRules() {
     // @ts-expect-error
     return super._defaultOptionsRules().concat([
       {
@@ -107,7 +107,7 @@ class TreeList extends Widget<dxTreeListOptions> {
     ]);
   }
 
-  _init() {
+  protected _init() {
     const that = this;
 
     // @ts-expect-error
@@ -122,9 +122,9 @@ class TreeList extends Widget<dxTreeListOptions> {
     callModuleItemsMethod(that, 'init');
   }
 
-  _clean() {}
+  protected _clean() {}
 
-  _optionChanged(args) {
+  protected _optionChanged(args) {
     const that = this;
 
     callModuleItemsMethod(that, 'optionChanged', [args]);
@@ -134,30 +134,30 @@ class TreeList extends Widget<dxTreeListOptions> {
     }
   }
 
-  _dimensionChanged() {
+  private _dimensionChanged() {
     // @ts-expect-error
     this.updateDimensions(true);
   }
 
-  _visibilityChanged(visible) {
+  private _visibilityChanged(visible) {
     if (visible) {
       // @ts-expect-error
       this.updateDimensions();
     }
   }
 
-  _initMarkup() {
+  private _initMarkup() {
     // @ts-expect-error
     super._initMarkup.apply(this, arguments);
     (this.$element() as any).addClass(TREELIST_CLASS);
     this.getView('gridView').render(this.$element());
   }
 
-  _renderContentImpl() {
+  private _renderContentImpl() {
     this.getView('gridView').update();
   }
 
-  _renderContent() {
+  private _renderContent() {
     const that = this;
 
     deferRender(() => {
@@ -165,7 +165,7 @@ class TreeList extends Widget<dxTreeListOptions> {
     });
   }
 
-  _dispose() {
+  private _dispose() {
     const that = this;
     // @ts-expect-error
     super._dispose();
@@ -173,31 +173,31 @@ class TreeList extends Widget<dxTreeListOptions> {
     callModuleItemsMethod(that, 'dispose');
   }
 
-  isReady() {
+  private isReady() {
     return this.getController('data').isReady();
   }
 
-  beginUpdate() {
+  public beginUpdate() {
     super.beginUpdate();
     callModuleItemsMethod(this, 'beginUpdate');
   }
 
-  endUpdate() {
+  public endUpdate() {
     callModuleItemsMethod(this, 'endUpdate');
     super.endUpdate();
   }
 
-  getController(name) {
+  private getController(name) {
     // @ts-expect-error
     return this._controllers[name];
   }
 
-  getView(name) {
+  private getView(name) {
     // @ts-expect-error
     return this._views[name];
   }
 
-  focus(element?) {
+  public focus(element?) {
     super.focus();
 
     if (isDefined(element)) {

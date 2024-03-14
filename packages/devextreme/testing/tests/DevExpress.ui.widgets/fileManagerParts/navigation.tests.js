@@ -1415,7 +1415,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
         assert.strictEqual(this.fileManager.getCurrentDirectory().key, 'Folder 1', 'Current directory is the target one');
         assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 1', 'NavPane current folder text is correct');
 
-        optionChangedSpy.reset();
+        optionChangedSpy.resetHistory();
         this.fileManager.option('currentPath', 'Folder 2');
         this.clock.tick(400);
 
@@ -1492,7 +1492,7 @@ QUnit.module('Navigation operations', moduleConfig, () => {
 QUnit.module('initial navigation with error (T1085224)', moduleConfig_T1085224, () => {
     test('getItems must be invoked only once in case of exception after refresh thumbanilsView (T1085224)', function(assert) {
         const { getItemsSpy } = createFileManager_T1085224(this, true);
-        getItemsSpy.reset();
+        getItemsSpy.resetHistory();
         this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(800);
 
@@ -1501,7 +1501,7 @@ QUnit.module('initial navigation with error (T1085224)', moduleConfig_T1085224, 
 
     test('getItems must be invoked only once in case of exception after refresh detailsView (T1085224)', function(assert) {
         const { getItemsSpy } = createFileManager_T1085224(this);
-        getItemsSpy.reset();
+        getItemsSpy.resetHistory();
         this.wrapper.getToolbarRefreshButton().trigger('dxclick');
         this.clock.tick(800);
 

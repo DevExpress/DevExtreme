@@ -16,7 +16,6 @@ import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
 import { TimePanelTableLayout } from '../time_panel/layout';
-import { AppointmentLayout } from '../../../appointment/layout';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -481,13 +480,6 @@ describe('OrdinaryLayout', () => {
         });
     });
 
-    it('should render appointments', () => {
-      const layout = render({});
-
-      expect(layout.find(AppointmentLayout).exists())
-        .toBe(true);
-    });
-
     it('should render flex-container for scrollables', () => {
       const layout = render({});
 
@@ -531,11 +523,11 @@ describe('OrdinaryLayout', () => {
           layout.onDateTableScroll({ scrollOffset: { left: 50, top: 100 } });
 
           expect(sideBarScrollTo)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               top: 100,
             });
           expect(headerScrollTo)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               left: 50,
             });
           expect(onScroll)
@@ -560,7 +552,7 @@ describe('OrdinaryLayout', () => {
           layout.onHeaderScroll({ scrollOffset: { left: 50, top: 0 } });
 
           expect(dateTableScrollTo)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               left: 50,
             });
         });
@@ -583,7 +575,7 @@ describe('OrdinaryLayout', () => {
           layout.onSideBarScroll({ scrollOffset: { left: 50, top: 100 } });
 
           expect(dateTableScrollTo)
-            .toBeCalledWith({
+            .toHaveBeenCalledWith({
               top: 100,
             });
         });

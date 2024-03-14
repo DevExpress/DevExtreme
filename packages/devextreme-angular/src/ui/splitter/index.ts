@@ -28,7 +28,7 @@ import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeMode, ResizeStartEvent } from 'devextreme/ui/splitter';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
@@ -150,10 +150,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get items(): Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -198,19 +198,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
     /**
-     * [descr:dxSplitterOptions.resizeMode]
-    
-     */
-    @Input()
-    get resizeMode(): ResizeMode {
-        return this._getOption('resizeMode');
-    }
-    set resizeMode(value: ResizeMode) {
-        this._setOption('resizeMode', value);
-    }
-
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -220,6 +207,19 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxSplitterOptions.separatorSize]
+    
+     */
+    @Input()
+    get separatorSize(): number | string {
+        return this._getOption('separatorSize');
+    }
+    set separatorSize(value: number | string) {
+        this._setOption('separatorSize', value);
     }
 
 
@@ -391,7 +391,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { collapsed?: boolean, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, disabled?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
 
     /**
     
@@ -419,14 +419,14 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resizeModeChange: EventEmitter<ResizeMode>;
+    @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rtlEnabledChange: EventEmitter<boolean>;
+    @Output() separatorSizeChange: EventEmitter<number | string>;
 
     /**
     
@@ -488,8 +488,8 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
             { emit: 'itemTemplateChange' },
             { emit: 'orientationChange' },
             { emit: 'repaintChangesOnlyChange' },
-            { emit: 'resizeModeChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'separatorSizeChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
         ]);

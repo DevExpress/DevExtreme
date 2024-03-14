@@ -1,6 +1,6 @@
-import { getAppointmentKey } from '@js/renovation/ui/scheduler/appointment/utils';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { getAppointmentKey } from '../__migration/utils/index';
 import AgendaAppointmentsStrategy from './rendering_strategies/m_strategy_agenda';
 import HorizontalAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal';
 import HorizontalMonthAppointmentsStrategy from './rendering_strategies/m_strategy_horizontal_month';
@@ -26,10 +26,7 @@ export class AppointmentViewModelGenerator {
   }
 
   generate(filteredItems, options) {
-    const {
-      isRenovatedAppointments,
-      viewOffset,
-    } = options;
+    const { viewOffset } = options;
     const appointments = filteredItems
       ? filteredItems.slice()
       : [];
@@ -38,17 +35,8 @@ export class AppointmentViewModelGenerator {
 
     const renderingStrategy = this.getRenderingStrategy();
     const positionMap = renderingStrategy.createTaskPositionMap(appointments); // TODO - appointments are mutated inside!
-    const shiftedViewModel = this.postProcess(appointments, positionMap, isRenovatedAppointments);
+    const shiftedViewModel = this.postProcess(appointments, positionMap);
     const viewModel = this.unshiftViewModelAppointmentsByViewOffset(shiftedViewModel, viewOffset);
-
-    if (isRenovatedAppointments) {
-      // TODO this structure should be by default after remove old render
-      return this.makeRenovatedViewModels(
-        viewModel,
-        options.supportAllDayRow,
-        options.isVerticalGroupOrientation,
-      );
-    }
 
     return {
       positionMap,
@@ -56,7 +44,7 @@ export class AppointmentViewModelGenerator {
     };
   }
 
-  postProcess(filteredItems, positionMap, isRenovatedAppointments) {
+  postProcess(filteredItems, positionMap) {
     const renderingStrategy = this.getRenderingStrategy();
 
     return filteredItems.map((data, index) => {
@@ -78,10 +66,8 @@ export class AppointmentViewModelGenerator {
         settings: appointmentSettings,
       };
 
-      if (!isRenovatedAppointments) {
-        item.needRepaint = true;
-        item.needRemove = false;
-      }
+      item.needRepaint = true;
+      item.needRemove = false;
 
       return item;
     });

@@ -873,7 +873,7 @@ QUnit.test('Shift', function(assert) {
     // arrange
     const exportMenu = this.createExportMenu();
 
-    this.renderer.g.getCall(0).returnValue.attr.reset();
+    this.renderer.g.getCall(0).returnValue.attr.resetHistory();
 
     // act
     exportMenu.shift(10, 20);
@@ -886,7 +886,7 @@ QUnit.test('Move', function(assert) {
     // arrange
     const exportMenu = this.createExportMenu();
 
-    this.renderer.g.getCall(0).returnValue.attr.reset();
+    this.renderer.g.getCall(0).returnValue.attr.resetHistory();
 
     // act
     exportMenu.move([10, 20]);
@@ -930,9 +930,9 @@ QUnit.test('Set options', function(assert) {
     // arrange
     const exportMenu = this.createExportMenu();
 
-    this.renderer.rect.reset();
-    this.renderer.text.reset();
-    this.renderer.path.reset();
+    this.renderer.rect.resetHistory();
+    this.renderer.text.resetHistory();
+    this.renderer.path.resetHistory();
 
     // act
     exportMenu.setOptions({
@@ -1111,7 +1111,7 @@ QUnit.test('Button hover', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
 
     // act
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
@@ -1124,7 +1124,7 @@ QUnit.test('Button mousedown', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
     // act
     this.renderer.g.getCall(1).returnValue.on.getCall(2).args[1]({ target: { 'export-element-type': 'button' } });
     // assert
@@ -1135,7 +1135,7 @@ QUnit.test('Button unhover', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
 
     // act
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
@@ -1150,7 +1150,7 @@ QUnit.test('menuItem hover', function(assert) {
     this.createExportMenu();
     const menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
-    menuItemRect.attr.reset();
+    menuItemRect.attr.resetHistory();
 
     // act
     menuItemRect.on.getCall(0).args[1]();
@@ -1164,7 +1164,7 @@ QUnit.test('menuItem unhover', function(assert) {
     this.createExportMenu();
     const menuItemRect = this.renderer.rect.getCall(2).returnValue;
 
-    menuItemRect.attr.reset();
+    menuItemRect.attr.resetHistory();
 
     // act
     menuItemRect.on.getCall(0).args[1]();
@@ -1181,7 +1181,7 @@ QUnit.test('Button hover when button is selected', function(assert) {
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
@@ -1195,7 +1195,7 @@ QUnit.test('Button unhover when button is selected', function(assert) {
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
     this.renderer.g.getCall(1).returnValue.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
     this.renderer.g.getCall(1).returnValue.on.getCall(1).args[1]({ target: { 'export-element-type': 'button' } });
 
     // assert
@@ -1206,8 +1206,8 @@ QUnit.test('List opening', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.g.getCall(2).returnValue.attr.reset();
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.g.getCall(2).returnValue.attr.resetHistory();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
@@ -1246,8 +1246,8 @@ QUnit.test('List closing by menu button', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.g.getCall(2).returnValue.attr.reset();
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.g.getCall(2).returnValue.attr.resetHistory();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
@@ -1262,11 +1262,11 @@ QUnit.test('List closing by any place', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.g.getCall(2).returnValue.attr.reset();
+    this.renderer.g.getCall(2).returnValue.attr.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
     this.renderer.root.on.getCall(0).args[1]({ target: {} });
 
     // assert
@@ -1278,7 +1278,7 @@ QUnit.test('List isn\'t closing by click on list', function(assert) {
     // arrange
     this.createExportMenu();
 
-    this.renderer.g.getCall(2).returnValue.attr.reset();
+    this.renderer.g.getCall(2).returnValue.attr.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
@@ -1296,12 +1296,12 @@ QUnit.test('Exporting by click on format text', function(assert) {
     const exportMenu = this.createExportMenu();
     exportMenu.draw(50, 50, { width: 15, height: 25 });
 
-    this.renderer.g.getCall(2).returnValue.attr.reset();
-    this.renderer.g.getCall(0).returnValue.linkAppend.reset();
+    this.renderer.g.getCall(2).returnValue.attr.resetHistory();
+    this.renderer.g.getCall(0).returnValue.linkAppend.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
     this.renderer.root.on.getCall(0).args[1]({
         target: {
             'export-element-type': 'exporting',
@@ -1322,7 +1322,7 @@ QUnit.test('Open list after exporting - previously clicked item is unhovered. T5
     exportMenu.draw(50, 50, { width: 15, height: 25 });
 
     const menuItemRect = this.renderer.rect.getCall(2).returnValue;
-    menuItemRect.attr.reset();
+    menuItemRect.attr.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
@@ -1345,12 +1345,12 @@ QUnit.test('Printing by menu - close list', function(assert) {
 
     this.createExportMenu();
 
-    this.renderer.g.getCall(2).returnValue.attr.reset();
-    this.renderer.g.getCall(0).returnValue.linkAppend.reset();
+    this.renderer.g.getCall(2).returnValue.attr.resetHistory();
+    this.renderer.g.getCall(0).returnValue.linkAppend.resetHistory();
 
     // act
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'button' } });
-    this.renderer.rect.getCall(1).returnValue.attr.reset();
+    this.renderer.rect.getCall(1).returnValue.attr.resetHistory();
     this.renderer.root.on.getCall(0).args[1]({ target: { 'export-element-type': 'printing' } });
 
     // assert

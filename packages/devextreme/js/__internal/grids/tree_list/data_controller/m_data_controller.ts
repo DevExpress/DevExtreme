@@ -7,11 +7,11 @@ import dataSourceAdapterProvider from '../data_source_adapter/m_data_source_adap
 import treeListCore from '../m_core';
 
 export class TreeListDataController extends DataController {
-  _getDataSourceAdapter() {
+  protected _getDataSourceAdapter() {
     return dataSourceAdapterProvider;
   }
 
-  _getNodeLevel(node) {
+  private _getNodeLevel(node) {
     let level = -1;
     while (node.parent) {
       if (node.visible) {
@@ -22,7 +22,7 @@ export class TreeListDataController extends DataController {
     return level;
   }
 
-  _generateDataItem(node, options) {
+  protected _generateDataItem(node, options) {
     return {
       rowType: 'data',
       node,
@@ -33,11 +33,11 @@ export class TreeListDataController extends DataController {
     };
   }
 
-  _loadOnOptionChange() {
+  private _loadOnOptionChange() {
     this._dataSource.load();
   }
 
-  _isItemEquals(item1, item2) {
+  protected _isItemEquals(item1, item2) {
     if (item1.isSelected !== item2.isSelected) {
       return false;
     }
@@ -54,7 +54,7 @@ export class TreeListDataController extends DataController {
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
+  protected _isCellChanged(oldRow, newRow, visibleRowIndex, columnIndex, isLiveUpdate) {
     // @ts-expect-error
     const firstDataColumnIndex = this._columnsController.getFirstDataColumnIndex();
 
@@ -65,7 +65,7 @@ export class TreeListDataController extends DataController {
     return super._isCellChanged.apply(this, arguments as any);
   }
 
-  init() {
+  public init() {
     this.createAction('onRowExpanding');
     this.createAction('onRowExpanded');
     this.createAction('onRowCollapsing');
@@ -74,7 +74,7 @@ export class TreeListDataController extends DataController {
     super.init.apply(this, arguments as any);
   }
 
-  keyOf(data) {
+  public keyOf(data) {
     const dataSource = this._dataSource;
 
     if (dataSource) {
@@ -82,7 +82,7 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  key() {
+  public key() {
     const dataSource = this._dataSource;
 
     if (dataSource) {
@@ -90,11 +90,11 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  publicMethods() {
+  public publicMethods() {
     return super.publicMethods().concat(['expandRow', 'collapseRow', 'isRowExpanded', 'getRootNode', 'getNodeByKey', 'loadDescendants', 'forEachNode']);
   }
 
-  changeRowExpand(key) {
+  private changeRowExpand(key) {
     if (this._dataSource) {
       const args: any = {
         key,
@@ -114,11 +114,11 @@ export class TreeListDataController extends DataController {
     return new Deferred().resolve();
   }
 
-  isRowExpanded(key, cache?) {
+  private isRowExpanded(key, cache?) {
     return this._dataSource && this._dataSource.isRowExpanded(key, cache);
   }
 
-  expandRow(key) {
+  private expandRow(key) {
     if (!this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
@@ -126,7 +126,7 @@ export class TreeListDataController extends DataController {
     return new Deferred().resolve();
   }
 
-  collapseRow(key) {
+  private collapseRow(key) {
     if (this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
@@ -134,11 +134,11 @@ export class TreeListDataController extends DataController {
     return new Deferred().resolve();
   }
 
-  getRootNode() {
+  private getRootNode() {
     return this._dataSource && this._dataSource.getRootNode();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     switch (args.name) {
       case 'rootValue':
       case 'parentIdExpr':
@@ -168,7 +168,7 @@ export class TreeListDataController extends DataController {
     }
   }
 
-  getNodeByKey(key) {
+  private getNodeByKey(key) {
     if (!this._dataSource) {
       return;
     }
@@ -176,7 +176,7 @@ export class TreeListDataController extends DataController {
     return this._dataSource.getNodeByKey(key);
   }
 
-  getChildNodeKeys(parentKey) {
+  private getChildNodeKeys(parentKey) {
     if (!this._dataSource) {
       return;
     }
@@ -184,7 +184,7 @@ export class TreeListDataController extends DataController {
     return this._dataSource.getChildNodeKeys(parentKey);
   }
 
-  loadDescendants(keys, childrenOnly) {
+  private loadDescendants(keys, childrenOnly) {
     if (!this._dataSource) {
       return;
     }
@@ -192,7 +192,7 @@ export class TreeListDataController extends DataController {
     return this._dataSource.loadDescendants(keys, childrenOnly);
   }
 
-  forEachNode() {
+  private forEachNode() {
     this._dataSource.forEachNode.apply(this, arguments);
   }
 }

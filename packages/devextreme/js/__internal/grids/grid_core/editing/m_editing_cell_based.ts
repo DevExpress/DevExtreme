@@ -51,7 +51,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   _pointerDownEditorHandler: any;
 
-  init() {
+  public init() {
     const needCreateHandlers = !this._saveEditorHandler;
 
     super.init();
@@ -60,7 +60,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       // chrome 73+
       let $pointerDownTarget;
       let isResizing;
-      this._pointerUpEditorHandler = () => { isResizing = this.getController('columnsResizer')?.isResizing(); };
+      this._pointerUpEditorHandler = () => { isResizing = this._columnsResizerController?.isResizing(); };
       // eslint-disable-next-line no-return-assign
       this._pointerDownEditorHandler = (e: any) => $pointerDownTarget = $(e.target);
       this._saveEditorHandler = this.createAction(function (e) {
@@ -100,19 +100,22 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  isCellEditMode() {
+  private isCellEditMode() {
     return this.option('editing.mode') === EDIT_MODE_CELL;
   }
 
-  isBatchEditMode() {
+  private isBatchEditMode() {
     return this.option('editing.mode') === EDIT_MODE_BATCH;
   }
 
-  isCellOrBatchEditMode(): any {
+  /**
+   * interface override
+   */
+  public isCellOrBatchEditMode(): any {
     return this.isCellEditMode() || this.isBatchEditMode();
   }
 
-  _needToCloseEditableCell($targetElement) {
+  protected _needToCloseEditableCell($targetElement) {
     const $element = this.component.$element();
     let result = this.isEditing();
     const isCurrentComponentElement = !$element || !!$targetElement.closest($element).length;
@@ -121,10 +124,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       const isDataRow = $targetElement.closest(`.${DATA_ROW_CLASS}`).length;
 
       if (isDataRow) {
-        const rowsView = this.getView('rowsView');
         const $targetCell = $targetElement.closest(`.${ROW_CLASS}> td`);
-        const rowIndex = rowsView.getRowIndex($targetCell.parent());
-        const cellElements = rowsView.getCellElements(rowIndex);
+        const rowIndex = this._rowsView.getRowIndex($targetCell.parent());
+        const cellElements = this._rowsView.getCellElements(rowIndex);
 
         if (cellElements?.length) {
           const columnIndex = cellElements.index($targetCell);
@@ -141,13 +143,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return result || super._needToCloseEditableCell($targetElement);
   }
 
-  _closeEditItem($targetElement) {
+  protected _closeEditItem($targetElement) {
     if (this._needToCloseEditableCell($targetElement)) {
       this.closeEditCell();
     }
   }
 
-  _focusEditorIfNeed() {
+  public _focusEditorIfNeed() {
     if (this._needFocusEditor && this.isCellOrBatchEditMode()) {
       const editColumnIndex = this._getVisibleEditColumnIndex();
       const $cell = this._rowsView?._getCellElement(this._getVisibleEditRowIndex(), editColumnIndex); // T319885
@@ -166,7 +168,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  isEditing() {
+  public isEditing() {
     if (this.isCellOrBatchEditMode()) {
       const isEditRowKeyDefined = isDefined(this.option(EDITING_EDITROWKEY_OPTION_NAME));
       const isEditColumnNameDefined = isDefined(this.option(EDITING_EDITCOLUMNNAME_OPTION_NAME));
@@ -177,7 +179,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super.isEditing();
   }
 
-  _handleEditColumnNameChange(args) {
+  private _handleEditColumnNameChange(args) {
     const oldRowIndex = this._getVisibleEditRowIndex(args.previousValue);
 
     if (this.isCellOrBatchEditMode() && oldRowIndex !== -1 && isDefined(args.value) && args.value !== args.previousValue) {
@@ -188,7 +190,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _addRow(parentKey) {
+  protected _addRow(parentKey) {
     if (this.isCellEditMode() && this.hasChanges()) {
       // @ts-expect-error
       const deferred = new Deferred();
@@ -207,11 +209,14 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._addRow(parentKey);
   }
 
-  editCell(rowIndex, columnIndex) {
+  /**
+   * interface override
+   */
+  public editCell(rowIndex, columnIndex) {
     return this._editCell({ rowIndex, columnIndex });
   }
 
-  _editCell(options) {
+  private _editCell(options) {
     // @ts-expect-error
     const d = new Deferred();
     let coreResult;
@@ -226,7 +231,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return coreResult !== undefined ? coreResult : d.promise();
   }
 
-  _editCellCore(options) {
+  private _editCellCore(options) {
     const dataController = this._dataController;
     const isEditByOptionChanged = isDefined(options.oldColumnIndex) || isDefined(options.oldRowIndex);
     const {
@@ -279,7 +284,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return false;
   }
 
-  publicMethods() {
+  public publicMethods() {
     const publicMethods = super.publicMethods();
 
     return publicMethods.concat(['editCell', 'closeEditCell']);
@@ -317,7 +322,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _prepareEditCell(params, item, editColumnIndex, editRowIndex) {
+  private _prepareEditCell(params, item, editColumnIndex, editRowIndex) {
     if (!item.isNewRow) {
       params.key = item.key;
     }
@@ -341,7 +346,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return true;
   }
 
-  closeEditCell(isError?, withoutSaveEditData?) {
+  /**
+   * interface override
+   */
+  public closeEditCell(isError?, withoutSaveEditData?) {
     let result = when();
     const oldEditRowIndex = this._getVisibleEditRowIndex();
 
@@ -358,7 +366,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return result.promise();
   }
 
-  _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
+  private _closeEditCellCore(isError, oldEditRowIndex, withoutSaveEditData) {
     const dataController = this._dataController;
     // @ts-expect-error
     const deferred = new Deferred();
@@ -395,7 +403,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return promise;
   }
 
-  _resetModifiedClassCells(changes) {
+  private _resetModifiedClassCells(changes) {
     if (this.isBatchEditMode()) {
       const columnsCount = this._columnsController.getVisibleColumns().length;
       changes.forEach(({ key }) => {
@@ -409,7 +417,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _prepareChange(options, value, text) {
+  protected _prepareChange(options, value, text) {
     const $cellElement = $(options.cellElement);
 
     if (this.isBatchEditMode() && options.key !== undefined) {
@@ -419,7 +427,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._prepareChange(options, value, text);
   }
 
-  _cancelSaving(result) {
+  protected _cancelSaving(result) {
     const dataController = this._dataController;
 
     if (this.isCellOrBatchEditMode()) {
@@ -433,7 +441,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._cancelSaving(result);
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     const { fullName } = args;
 
     if (args.name === 'editing' && fullName === EDITING_EDITCOLUMNNAME_OPTION_NAME) {
@@ -444,7 +452,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _editCellFromOptionChanged(columnIndex, oldColumnIndex, oldRowIndex) {
+  private _editCellFromOptionChanged(columnIndex, oldColumnIndex, oldRowIndex) {
     const columns = this._columnsController.getVisibleColumns();
 
     if (columnIndex > -1) {
@@ -454,7 +462,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _handleEditRowKeyChange(args) {
+  protected _handleEditRowKeyChange(args) {
     if (this.isCellOrBatchEditMode()) {
       const columnIndex = this._getVisibleEditColumnIndex();
       const oldRowIndexCorrection = this._getEditRowIndexCorrection();
@@ -468,7 +476,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  deleteRow(rowIndex) {
+  protected deleteRow(rowIndex) {
     if (this.isCellEditMode() && this.isEditing()) {
       const { isNewRow } = this._dataController.items()[rowIndex] as any;
       const rowKey = this._dataController.getKeyByRowIndex(rowIndex);
@@ -483,7 +491,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _checkAndDeleteRow(rowIndex) {
+  protected _checkAndDeleteRow(rowIndex) {
     if (this.isBatchEditMode()) {
       this._deleteRowCore(rowIndex);
     } else {
@@ -491,7 +499,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _refreshCore(params) {
+  protected _refreshCore(params) {
     const { isPageChanged } = params ?? {};
     const needResetIndexes = this.isBatchEditMode() || isPageChanged && this.option('scrolling.mode') !== 'virtual';
 
@@ -506,7 +514,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _allowRowAdding(params) {
+  protected _allowRowAdding(params) {
     if (this.isBatchEditMode()) {
       return true;
     }
@@ -514,7 +522,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._allowRowAdding(params);
   }
 
-  _afterDeleteRow(rowIndex, oldEditRowIndex) {
+  protected _afterDeleteRow(rowIndex, oldEditRowIndex) {
     const dataController = this._dataController;
 
     if (this.isBatchEditMode()) {
@@ -530,7 +538,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._afterDeleteRow(rowIndex, oldEditRowIndex);
   }
 
-  _updateEditRow(row, forceUpdateRow, isCustomSetCellValue) {
+  protected _updateEditRow(row, forceUpdateRow, isCustomSetCellValue) {
     if (this.isCellOrBatchEditMode()) {
       this._updateRowImmediately(row, forceUpdateRow, isCustomSetCellValue);
     } else {
@@ -538,7 +546,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  _isDefaultButtonVisible(button, options) {
+  protected _isDefaultButtonVisible(button, options) {
     if (this.isCellOrBatchEditMode()) {
       const isBatchMode = this.isBatchEditMode();
 
@@ -559,13 +567,13 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._isDefaultButtonVisible(button, options);
   }
 
-  _isRowDeleteAllowed() {
+  protected _isRowDeleteAllowed() {
     const callBaseResult = super._isRowDeleteAllowed();
 
     return callBaseResult || this.isBatchEditMode();
   }
 
-  _beforeEndSaving(changes) {
+  protected _beforeEndSaving(changes) {
     if (this.isCellEditMode()) {
       if (changes[0]?.type !== 'update') {
         super._beforeEndSaving(changes);
@@ -578,7 +586,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     }
   }
 
-  prepareEditButtons(headerPanel) {
+  public prepareEditButtons(headerPanel) {
     const editingOptions: any = this.option('editing') ?? {};
     const buttonItems = super.prepareEditButtons(headerPanel);
     const needEditingButtons = editingOptions.allowUpdating || editingOptions.allowAdding || editingOptions.allowDeleting;
@@ -591,7 +599,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return buttonItems;
   }
 
-  _saveEditDataInner() {
+  protected _saveEditDataInner() {
     const editRow: any = this._dataController.getVisibleRows()[this.getEditRowIndex()];
     const editColumn = this._getEditColumn();
     const showEditorAlways = editColumn?.showEditorAlways;
@@ -607,7 +615,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._saveEditDataInner().always(deferred?.resolve);
   }
 
-  _applyChange(options, params, forceUpdateRow) {
+  protected _applyChange(options, params, forceUpdateRow) {
     const isUpdateInCellMode = this.isCellEditMode() && options.row && !options.row.isNewRow;
     const { showEditorAlways } = options.column;
     const isCustomSetCellValue = options.column.setCellValue !== options.column.defaultSetCellValue;
@@ -622,7 +630,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._applyChange(options, params, forceUpdateRow);
   }
 
-  _applyChangeCore(options, forceUpdateRow) {
+  protected _applyChangeCore(options, forceUpdateRow) {
     const { showEditorAlways } = options.column;
     const isUpdateInCellMode = this.isCellEditMode() && options.row && !options.row.isNewRow;
 
@@ -642,7 +650,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._applyChangeCore(options, forceUpdateRow);
   }
 
-  _processDataItemCore(item, change, key, columns, generateDataValues) {
+  protected _processDataItemCore(item, change, key, columns, generateDataValues) {
     const { data, type } = change;
 
     if (this.isBatchEditMode() && type === DATA_EDIT_DATA_REMOVE_TYPE) {
@@ -668,7 +676,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._processRemoveIfError(changes, editIndex);
   }
 
-  _beforeFocusElementInRow(rowIndex) {
+  protected _beforeFocusElementInRow(rowIndex) {
     super._beforeFocusElementInRow(rowIndex);
 
     const editRowIndex = rowIndex >= 0 ? rowIndex : 0;
@@ -678,7 +686,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedExtender extends Base {
-  _createTable() {
+  protected _createTable() {
     const $table = super._createTable.apply(this, arguments as any);
     const editingController = this._editingController;
 
@@ -693,7 +701,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
     return $table;
   }
 
-  _createRow(row) {
+  protected _createRow(row) {
     const $row = super._createRow.apply(this, arguments as any);
 
     if (row) {
@@ -710,8 +718,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingCellBasedE
 };
 
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelEditingCellBasedExtender extends Base {
-  isVisible() {
-    const editingOptions = this.getController('editing').option('editing');
+  public isVisible() {
+    const editingOptions = this._editingController.option('editing');
 
     // @ts-expect-error
     return super.isVisible() || editingOptions && (editingOptions.allowUpdating || editingOptions.allowDeleting) && editingOptions.mode === EDIT_MODE_BATCH;

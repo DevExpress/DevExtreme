@@ -169,13 +169,13 @@ const environment = {
             return new StubTooltip(parameters);
         });
 
-        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes, canvas) {
+        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes, canvas) {
             $.each(panes, function(_, item) {
                 item.canvas = $.extend({}, canvas);
             });
         });
 
-        validateData = sinon.stub(dataValidatorModule, 'validateData', function(data) {
+        validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data) {
             return { arg: data || [] };
         });
     },
@@ -200,13 +200,13 @@ const environment = {
         tooltipModule.Tooltip.reset();
         tooltipModule.Tooltip.restore();
 
-        this.layoutManager.layoutElements.reset();
+        this.layoutManager.layoutElements.resetHistory();
 
-        trackerModule.ChartTracker.reset();
-        legendModule.Legend.reset();
-        exportModule.ExportMenu.reset();
+        trackerModule.ChartTracker.resetHistory();
+        legendModule.Legend.resetHistory();
+        exportModule.ExportMenu.resetHistory();
 
-        titleModule.Title.reset();
+        titleModule.Title.resetHistory();
     }
 };
 
@@ -218,7 +218,7 @@ const environment = {
         const spyLayoutManager = layoutManagerModule.LayoutManager;
 
         vizUtils.updatePanesCanvases.restore();
-        sinon.stub(vizUtils, 'updatePanesCanvases', function(panes) {
+        sinon.stub(vizUtils, 'updatePanesCanvases').callsFake(function(panes) {
             panes[0].canvas = rect;
         });
 
@@ -1076,7 +1076,7 @@ const environment = {
             axis.getTemplatesGroups = function() { return valueGroups; };
         });
 
-        drawn.reset();
+        drawn.resetHistory();
         chart.render({ force: true });
         $.each(defs, function(_, d) { d.resolve(); });
 
@@ -1704,54 +1704,54 @@ const getPoints = function(count, options) {
 
 function resetMocksInChart(chart) {
     let i;
-    chart._renderer.stub('resize').reset();
-    chart._renderer.stub('clear').reset();
+    chart._renderer.resetStub('resize');
+    chart._renderer.resetStub('clear');
 
     chart.layoutManager.layoutElements.reset && chart.layoutManager.layoutElements.reset();
 
     chart._argumentAxes[0].resetMock();
     chart.getValueAxis().resetMock();
 
-    chart._legendGroup.stub('linkAppend').reset();
-    chart._legendGroup.stub('linkRemove').reset();
-    chart._legendGroup.stub('clear').reset();
-    chart._seriesGroup.stub('linkAppend').reset();
-    chart._seriesGroup.stub('linkRemove').reset();
-    chart._seriesGroup.stub('clear').reset();
-    chart._labelsGroup.stub('linkAppend').reset();
-    chart._labelsGroup.stub('linkRemove').reset();
-    chart._labelsGroup.stub('clear').reset();
-    chart._stripsGroup.stub('linkAppend').reset();
-    chart._stripsGroup.stub('linkRemove').reset();
-    chart._stripsGroup.stub('clear').reset();
-    chart._constantLinesGroup.above.stub('linkAppend').reset();
-    chart._constantLinesGroup.above.stub('linkRemove').reset();
-    chart._constantLinesGroup.above.stub('clear').reset();
+    chart._legendGroup.resetStub('linkAppend');
+    chart._legendGroup.resetStub('linkRemove');
+    chart._legendGroup.resetStub('clear');
+    chart._seriesGroup.resetStub('linkAppend');
+    chart._seriesGroup.resetStub('linkRemove');
+    chart._seriesGroup.resetStub('clear');
+    chart._labelsGroup.resetStub('linkAppend');
+    chart._labelsGroup.resetStub('linkRemove');
+    chart._labelsGroup.resetStub('clear');
+    chart._stripsGroup.resetStub('linkAppend');
+    chart._stripsGroup.resetStub('linkRemove');
+    chart._stripsGroup.resetStub('clear');
+    chart._constantLinesGroup.above.resetStub('linkAppend');
+    chart._constantLinesGroup.above.resetStub('linkRemove');
+    chart._constantLinesGroup.above.resetStub('clear');
 
-    chart._constantLinesGroup.under.stub('linkAppend').reset();
-    chart._constantLinesGroup.under.stub('linkRemove').reset();
-    chart._constantLinesGroup.under.stub('clear').reset();
+    chart._constantLinesGroup.under.resetStub('linkAppend');
+    chart._constantLinesGroup.under.resetStub('linkRemove');
+    chart._constantLinesGroup.under.resetStub('clear');
 
-    chart._axesGroup.stub('linkAppend').reset();
-    chart._axesGroup.stub('linkRemove').reset();
-    chart._axesGroup.stub('clear').reset();
-    chart._stripLabelAxesGroup.stub('linkAppend').reset();
-    chart._stripLabelAxesGroup.stub('linkRemove').reset();
-    chart._stripLabelAxesGroup.stub('clear').reset();
-    validateData.reset();
-    chart._crosshairCursorGroup.stub('linkAppend').reset();
-    chart._crosshairCursorGroup.stub('linkRemove').reset();
-    chart._crosshairCursorGroup.stub('clear').reset();
-    chart._scaleBreaksGroup.stub('linkAppend').reset();
-    chart._scaleBreaksGroup.stub('linkRemove').reset();
-    chart._scaleBreaksGroup.stub('clear').reset();
+    chart._axesGroup.resetStub('linkAppend');
+    chart._axesGroup.resetStub('linkRemove');
+    chart._axesGroup.resetStub('clear');
+    chart._stripLabelAxesGroup.resetStub('linkAppend');
+    chart._stripLabelAxesGroup.resetStub('linkRemove');
+    chart._stripLabelAxesGroup.resetStub('clear');
+    validateData.resetHistory();
+    chart._crosshairCursorGroup.resetStub('linkAppend');
+    chart._crosshairCursorGroup.resetStub('linkRemove');
+    chart._crosshairCursorGroup.resetStub('clear');
+    chart._scaleBreaksGroup.resetStub('linkAppend');
+    chart._scaleBreaksGroup.resetStub('linkRemove');
+    chart._scaleBreaksGroup.resetStub('clear');
 
-    chart.canvasClipRect && chart.canvasClipRect.stub('remove').reset();
-    chart.canvasClipRect && chart.canvasClipRect.stub('clear').reset();
-    chart.canvasClipRect && chart.canvasClipRect.stub('attr').reset();
-    chart._panesClipRects.base[0] && chart._panesClipRects.base[0].stub('remove').reset();
-    chart._panesClipRects.base[0] && chart._panesClipRects.base[0].stub('clear').reset();
-    chart._panesClipRects.base[0] && chart._panesClipRects.base[0].stub('attr').reset();
+    chart.canvasClipRect && chart.canvasClipRect.resetStub('remove');
+    chart.canvasClipRect && chart.canvasClipRect.resetStub('clear');
+    chart.canvasClipRect && chart.canvasClipRect.resetStub('attr');
+    chart._panesClipRects.base[0] && chart._panesClipRects.base[0].resetStub('remove');
+    chart._panesClipRects.base[0] && chart._panesClipRects.base[0].resetStub('clear');
+    chart._panesClipRects.base[0] && chart._panesClipRects.base[0].resetStub('attr');
 
     for(i = 0; i < chart.series.length; i++) {
         chart.series[i].wasDrawn = false;
@@ -1763,7 +1763,7 @@ function resetMocksInChart(chart) {
         }
     }
 
-    vizUtils.updatePanesCanvases.reset();
+    vizUtils.updatePanesCanvases.resetHistory();
 }
 
 function createChartInstance(options, container) {

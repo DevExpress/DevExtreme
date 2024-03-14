@@ -3,14 +3,14 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { triggerResizeEvent } from '@js/events/visibility_change';
+import Popup from '@js/ui/popup/ui.popup';
+import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
+
 import {
   getMaxWidth,
   getPopupToolbarItems,
   isPopupFullScreenNeeded,
-} from '@js/renovation/ui/scheduler/appointment_edit_form/popup_config';
-import Popup from '@js/ui/popup/ui.popup';
-import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
-
+} from '../__migration/appointment_popup/index';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
 import { getNormalizedResources } from '../resources/m_utils';
