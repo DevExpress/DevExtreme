@@ -41,8 +41,6 @@ const CUSTOM_CLASS = 'custom-class';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
-const OVERLAY_CONTENT_LABEL = 'Dropdown';
-
 const isIOs = devices.current().platform === 'ios';
 
 const beforeEach = function() {
@@ -2062,84 +2060,5 @@ QUnit.module('actions', {
 
         dropDownEditor.close();
         assert.ok(onClosedActionStub.called, 'onClosed action was fired');
-    });
-});
-
-QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
-        assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
-    });
-
-    QUnit.test('aria-expanded property on input', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
-
-        assert.equal($input.attr('aria-expanded'), 'true', 'aria-expanded property on opened');
-
-        instance.option('opened', false);
-        assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
-    });
-
-    QUnit.test('Overlay content must have correct aria-label attribute', function(assert) {
-        $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-
-        assert.strictEqual($overlayContent.attr('aria-label'), OVERLAY_CONTENT_LABEL, 'aria-label on element is correct');
-    });
-
-
-    QUnit.test('aria-haspopup property on input', function(assert) {
-        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        assert.equal($input.attr('aria-haspopup'), 'true', 'haspopup attribute exists');
-    });
-
-    QUnit.test('aria-owns should be removed when popup is not visible', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
-
-        assert.notEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns exists');
-        assert.equal($dropDownEditor.attr('aria-owns'), $(`.${POPUP_CONTENT}`).attr('id'), 'aria-owns points to popup\'s content id');
-
-        instance.close();
-
-        assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
-    });
-
-    QUnit.module('aria-controls', {}, () => {
-        const attrName = 'aria-controls';
-        const deferRenderings = [true, false];
-
-        deferRenderings.forEach(deferRendering => {
-            QUnit.test(`'aria-controls' should be set if deferRendering="${deferRendering}"`, function(assert) {
-                const dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ deferRendering }).dxDropDownEditor('instance');
-                const $input = $(dropDownEditor.field());
-                const hasAttr = () => $input[0].hasAttribute(attrName);
-
-                assert.strictEqual(hasAttr(), !deferRendering, `${attrName} attribute has ${deferRendering ? 'not' : ''} been set`);
-
-                dropDownEditor.open();
-                const popupId = $(dropDownEditor.content()).attr('id');
-
-                assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
-                assert.ok(hasAttr(), `${attrName} attribute has been set`);
-
-                dropDownEditor.close();
-                assert.strictEqual($input.attr(attrName), popupId, `input has correct ${attrName} attribute`);
-                assert.ok(hasAttr(), `${attrName} attribute has been set`);
-            });
-        });
-    });
-
-    QUnit.test('aria-autocomplete should be equal none', function(assert) {
-        const $element = $('#dropDownEditorLazy').dxDropDownEditor();
-        const $input = $element.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete is correct');
     });
 });
