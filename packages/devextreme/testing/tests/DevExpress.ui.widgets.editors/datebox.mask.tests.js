@@ -1800,10 +1800,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     test('when "a" is pressed it should toggle PM to AM (T1216937)', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 PM'));
 
-        this.keyboard
-            .focus()
-            .caret({ start: 6, end: 8 })
-            .type('a');
+        this.keyboard.type('a');
 
         assert.strictEqual(this.$input.val(), 'AM');
     });
@@ -1811,10 +1808,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     test('when "p" is pressed it should toggle AM to PM', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 AM'));
 
-        this.keyboard
-            .focus()
-            .caret({ start: 6, end: 8 })
-            .type('p');
+        this.keyboard.type('p');
 
         assert.strictEqual(this.$input.val(), 'PM');
     });
@@ -1822,10 +1816,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     test('when wrong key is pressed it should not toggle AM to PM', function(assert) {
         ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
-            this.keyboard
-                .focus()
-                .caret({ start: 6, end: 8 })
-                .type(key);
+            this.keyboard.type(key);
         });
 
         assert.strictEqual(this.$input.val(), 'AM');
@@ -1834,10 +1825,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
     test('when wrong key is pressed it should not toggle PM to AM', function(assert) {
         ['b', 'c', 'd', 'e', 'f'].forEach((key) => {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
-            this.keyboard
-                .focus()
-                .caret({ start: 6, end: 8 })
-                .type(key);
+            this.keyboard.type(key);
         });
 
         assert.strictEqual(this.$input.val(), 'PM');
