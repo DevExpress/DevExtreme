@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
+import { hasWindow } from 'core/utils/window';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
 
@@ -20,10 +21,6 @@ const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
-const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-const POPUP_CONTENT = 'dx-popup-content';
-
-const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
 module('DropDownEditor markup', {
     beforeEach: function() {
@@ -157,41 +154,9 @@ module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
     });
 
-    test('aria-expanded property on input', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
-
-        assert.equal($input.attr('aria-expanded'), 'true', 'aria-expanded property on opened');
-
-        instance.option('opened', false);
-        assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
-    });
-
-    test('Overlay content must have correct aria-label attribute', function(assert) {
-        $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-
-        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
-
-        assert.strictEqual($overlayContent.attr('aria-label'), OVERLAY_CONTENT_LABEL, 'aria-label on element is correct');
-    });
-
-
     test('aria-haspopup property on input', function(assert) {
         const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
         assert.equal($input.attr('aria-haspopup'), 'true', 'haspopup attribute exists');
-    });
-
-    test('aria-owns should be removed when popup is not visible', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
-
-        assert.notEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns exists');
-        assert.equal($dropDownEditor.attr('aria-owns'), $(`.${POPUP_CONTENT}`).attr('id'), 'aria-owns points to popup\'s content id');
-
-        instance.close();
-
-        assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 
     module('aria-controls', {}, () => {

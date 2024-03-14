@@ -41,6 +41,8 @@ const CUSTOM_CLASS = 'custom-class';
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
+const OVERLAY_CONTENT_LABEL = 'Dropdown';
+
 const isIOs = devices.current().platform === 'ios';
 
 const beforeEach = function() {
@@ -2060,5 +2062,38 @@ QUnit.module('actions', {
 
         dropDownEditor.close();
         assert.ok(onClosedActionStub.called, 'onClosed action was fired');
+    });
+});
+
+QUnit.module('aria accessibility', () => {
+    QUnit.test('Overlay content must have correct aria-label attribute', function(assert) {
+        $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+
+        const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
+
+        assert.strictEqual($overlayContent.attr('aria-label'), OVERLAY_CONTENT_LABEL, 'aria-label on element is correct');
+    });
+
+    QUnit.test('aria-owns should be removed when popup is not visible', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+        assert.notEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns exists');
+        assert.equal($dropDownEditor.attr('aria-owns'), $(`.${POPUP_CONTENT}`).attr('id'), 'aria-owns points to popup\'s content id');
+
+        instance.close();
+
+        assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
+    });
+
+    QUnit.test('aria-expanded property on input', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+        assert.equal($input.attr('aria-expanded'), 'true', 'aria-expanded property on opened');
+
+        instance.option('opened', false);
+        assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 });
