@@ -8,6 +8,7 @@ import type { Properties as DataGridOptions } from '@js/ui/data_grid';
 import type { Properties as TreeListdOptions } from '@js/ui/tree_list';
 import type Widget from '@js/ui/widget/ui.widget';
 
+import type { EditingController } from './editing/m_editing';
 import type { ModuleItem } from './m_modules';
 
 export type GridPropertyType<T, TProp extends string> = PropertyType<T, TProp> extends never ? never : PropertyType<T, TProp> | undefined;
@@ -210,6 +211,11 @@ export interface Views {
   filterBuilderView: import('./filter/m_filter_builder').FilterBuilderView;
   filterPanelView: import('./filter/m_filter_panel').FilterPanelView;
 }
+
+export interface EditingControllerRequired {
+  _editingController: EditingController;
+}
+
 type ViewTypes = {
   [ P in keyof Views ]: new(component: any) => Views[P];
 };
