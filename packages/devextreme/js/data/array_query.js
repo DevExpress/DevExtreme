@@ -248,8 +248,7 @@ const compileCriteria = (function() {
         if(isUniformSequenceEqualsByOr(crit)) {
             const values = crit.flatMap((el, i) => i % 2 !== 0 ? [] : [_toComparable(el[2])]);
             const getter = compileGetter(crit[0][0]);
-
-            return (d) => values.includes(getter(d));
+            return (d) => values.includes(_toComparable(getter(d)));
         }
 
         const ops = [];
