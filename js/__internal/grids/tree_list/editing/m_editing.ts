@@ -48,8 +48,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _getLoadedRowIndex(items, change) {
-    const dataController = this.getController('data');
-    const dataSourceAdapter = dataController.dataSource();
+    const dataSourceAdapter = this._dataController.dataSource();
     const parentKey = dataSourceAdapter?.parentKeyOf(change.data);
 
     if (parentKey !== undefined && parentKey !== this.option('rootValue')) {
@@ -64,7 +63,7 @@ class EditingController extends editingModule.controllers.editing {
     return super._getLoadedRowIndex.apply(this, arguments);
   }
 
-  _isEditColumnVisible() {
+  protected _isEditColumnVisible() {
     // @ts-expect-error
     const result = super._isEditColumnVisible.apply(this, arguments);
     const editingOptions: any = this.option('editing');
@@ -72,7 +71,7 @@ class EditingController extends editingModule.controllers.editing {
     return result || editingOptions.allowAdding;
   }
 
-  _isDefaultButtonVisible(button, options) {
+  protected _isDefaultButtonVisible(button, options) {
     // @ts-expect-error
     const result = super._isDefaultButtonVisible.apply(this, arguments);
     const { row } = options;
@@ -96,12 +95,11 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _beforeSaveEditData(change) {
-    const dataController = this._dataController;
     // @ts-expect-error
     const result = super._beforeSaveEditData.apply(this, arguments);
 
     if (change && change.type !== DATA_EDIT_DATA_INSERT_TYPE) {
-      const store = dataController?.store();
+      const store = this._dataController?.store();
       const key = store?.key();
 
       if (!isDefined(key)) {
@@ -112,14 +110,13 @@ class EditingController extends editingModule.controllers.editing {
     return result;
   }
 
-  addRowByRowIndex(rowIndex) {
-    const dataController = this.getController('data');
-    const row = dataController.getVisibleRows()[rowIndex];
+  private addRowByRowIndex(rowIndex) {
+    const row = this._dataController.getVisibleRows()[rowIndex];
 
     return this.addRow(row ? row.key : undefined);
   }
 
-  addRow(key) {
+  protected addRow(key) {
     if (key === undefined) {
       key = this.option('rootValue');
     }
@@ -129,19 +126,18 @@ class EditingController extends editingModule.controllers.editing {
 
   protected _addRowCore(data, parentKey, oldEditRowIndex) {
     const rootValue = this.option('rootValue');
-    const dataController = this.getController('data');
-    const dataSourceAdapter = dataController.dataSource();
+    const dataSourceAdapter = this._dataController.dataSource();
     const parentKeyGetter = dataSourceAdapter.createParentIdGetter();
 
     parentKey = parentKeyGetter(data);
 
     // @ts-expect-error
-    if (parentKey !== undefined && parentKey !== rootValue && !dataController.isRowExpanded(parentKey)) {
+    if (parentKey !== undefined && parentKey !== rootValue && !this._dataController.isRowExpanded(parentKey)) {
       // @ts-expect-error
       const deferred = new Deferred();
 
       // @ts-expect-error
-      dataController.expandRow(parentKey).done(() => {
+      this._dataController.expandRow(parentKey).done(() => {
         setTimeout(() => {
           super._addRowCore.call(this, data, parentKey, oldEditRowIndex).done(deferred.resolve).fail(deferred.reject);
         });
@@ -154,8 +150,7 @@ class EditingController extends editingModule.controllers.editing {
   }
 
   protected _initNewRow(options, parentKey?) {
-    const dataController = this.getController('data');
-    const dataSourceAdapter = dataController.dataSource();
+    const dataSourceAdapter = this._dataController.dataSource();
     const parentIdSetter = dataSourceAdapter.createParentIdSetter();
 
     parentIdSetter(options.data, parentKey);
@@ -164,11 +159,11 @@ class EditingController extends editingModule.controllers.editing {
     return super._initNewRow.apply(this, arguments);
   }
 
-  allowAdding(options) {
+  private allowAdding(options) {
     return this._allowEditAction('allowAdding', options);
   }
 
-  _needToCloseEditableCell($targetElement) {
+  protected _needToCloseEditableCell($targetElement) {
     // @ts-expect-error
     return super._needToCloseEditableCell.apply(this, arguments) || $targetElement.closest(`.${TREELIST_EXPAND_ICON_CONTAINER_CLASS}`).length && this.isEditing();
   }
@@ -183,7 +178,7 @@ class EditingController extends editingModule.controllers.editing {
 }
 
 const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewExtender extends editingModule.extenders.views.rowsView(Base) {
-  _renderCellCommandContent($container, options) {
+  private _renderCellCommandContent($container, options) {
     const editingController = this._editingController;
     const isEditRow = options.row && editingController.isEditRow(options.row.rowIndex);
     const isEditing = options.isEditing || isEditRow;
@@ -218,14 +213,14 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
     return false;
   }
 
-  _rowClick(e) {
+  protected _rowClick(e) {
     if (this.validateClick(e)) {
       // @ts-expect-error
       super._rowClickTreeListHack.apply(this, arguments);
     }
   }
 
-  _rowDblClick(e) {
+  protected _rowDblClick(e) {
     if (this.validateClick(e)) {
       // @ts-expect-error
       super._rowDblClickTreeListHack.apply(this, arguments);
@@ -234,7 +229,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class TreeListEditingRowsViewEx
 };
 
 const data = (Base: ModuleType<DataController>) => class DataControllerTreeListEditingExtender extends dataControllerEditingExtenderMixin(Base) {
-  changeRowExpand() {
+  private changeRowExpand() {
     this._editingController.refresh();
     // @ts-expect-error
     return super.changeRowExpand.apply(this, arguments);

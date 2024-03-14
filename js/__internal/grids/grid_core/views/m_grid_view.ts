@@ -180,7 +180,7 @@ export class ResizingController extends modules.ViewController {
     this.component._fireContentReadyAction();
   }
 
-  _getWidgetAriaLabel() {
+  protected _getWidgetAriaLabel() {
     return 'dxDataGrid-ariaDataGrid';
   }
 
