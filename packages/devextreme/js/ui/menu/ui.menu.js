@@ -622,8 +622,8 @@ class Menu extends MenuBase {
 
         this._actions.onSubmenuShowing({
             rootItem: getPublicElement($rootItem),
-            submenu: submenu,
-            dataNode: node,
+            submenuContainer: submenu.getOverlayContent().find(`.${DX_SUBMENU_CLASS}`),
+            itemData: node,
         });
 
         $border.show();

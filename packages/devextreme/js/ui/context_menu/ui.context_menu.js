@@ -533,7 +533,6 @@ class ContextMenu extends MenuBase {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
             this._scrollViews.pop();
-            console.log('_scrollViews', this._scrollViews);
         }
     }
 
@@ -620,10 +619,6 @@ class ContextMenu extends MenuBase {
         const maxHeight = this._getMaxHeight();
         const containerHeight = getOuterHeight(container);
 
-        if(!this._scrollViews.length && containerHeight < maxHeight) {
-            return;
-        }
-
         container.css('position', 'fixed');
         container.css('height', Math.min(containerHeight, maxHeight));
         this._scrollViews.push(this._createComponent(container, ScrollView, {
@@ -634,7 +629,6 @@ class ContextMenu extends MenuBase {
                 });
             },
         }));
-        console.log('_scrollViews', this._scrollViews);
     }
 
     _getMaxHeight() {
@@ -826,7 +820,6 @@ class ContextMenu extends MenuBase {
         animation && this._animate($submenu, animation);
         $submenu.css('visibility', 'hidden');
         this._scrollViews.pop();
-        console.log('_scrollViews', this._scrollViews);
     }
 
     _stopAnimate($container) {
