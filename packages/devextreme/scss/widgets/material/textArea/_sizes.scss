@@ -1,9 +1,11 @@
 @use "../sizes" as *;
+@use "../textEditor/sizes" as *;
 
 // adduse
 
 $textarea-content-line-height: null !default;
-
+$textarea-font-size: $material-texteditor-font-size !default;
+ 
 @if $size == "default" {
   $textarea-content-line-height: 24px !default;
 }
