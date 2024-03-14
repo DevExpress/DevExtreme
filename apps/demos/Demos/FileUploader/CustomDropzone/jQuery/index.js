@@ -8,7 +8,18 @@ $(() => {
     uploadUrl: 'https://js.devexpress.com/Demos/NetCore/FileUploader/Upload',
     visible: false,
     onDropZoneEnter(e) {
-      if (e.dropZoneElement.id === 'dropzone-external') { toggleDropZoneActive(e.dropZoneElement, true); }
+      const items = e.event.originalEvent.dataTransfer.items;
+
+      if (items.length === 1) {
+        const fileType = items[0].type;
+        const fileExtension = `.${fileType.replace(/^image\//, '')}`;
+
+        if (this.option('allowedFileExtensions').includes(fileExtension)) {
+          if (e.dropZoneElement.id === 'dropzone-external') {
+            toggleDropZoneActive(e.dropZoneElement, true);
+          }
+        }
+      }
     },
     onDropZoneLeave(e) {
       if (e.dropZoneElement.id === 'dropzone-external') { toggleDropZoneActive(e.dropZoneElement, false); }
