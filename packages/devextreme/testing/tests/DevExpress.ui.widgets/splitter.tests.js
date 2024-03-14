@@ -446,23 +446,6 @@ QUnit.module('Resizing', moduleConfig, () => {
         assertLayout(items, ['50', '50'], assert);
     });
 
-    [
-        { resizeDistance: 50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: -50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: -100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 75, expectedSize: ['12.5', '87.5'], orientation: 'horizontal', rtl: true },
-        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'horizontal', rtl: false },
-        { resizeDistance: 50, expectedSize: ['75', '25'], orientation: 'vertical', rtl: false },
-        { resizeDistance: -50, expectedSize: ['25', '75'], orientation: 'vertical', rtl: false },
-        { resizeDistance: -100, expectedSize: ['0', '100'], orientation: 'vertical', rtl: false },
-        { resizeDistance: 100, expectedSize: ['100', '0'], orientation: 'vertical', rtl: false },
-        { resizeDistance: 75, expectedSize: ['87.5', '12.5'], orientation: 'vertical', rtl: false },
-    ].forEach(({ resizeDistance, expectedSize, orientation, rtl }) => {
     [{
         resizeDistance: 50,
         expectedLayout: ['25', '75'],
@@ -524,38 +507,38 @@ QUnit.module('Resizing', moduleConfig, () => {
         orientation: 'horizontal',
         rtl: false
     },
-        // TODO: expectedItemSizes are not correct
-        // {
-        //     resizeDistance: 50,
-        //     expectedLayout: ['75', '25'],
-        //     expectedItemSizes: [208, 208],
-        //     orientation: 'vertical',
-        //     rtl: false },
-        // {
-        //     resizeDistance: -50,
-        //     expectedLayout: ['25', '75'],
-        //     expectedItemSizes: [208, 208],
-        //     orientation: 'vertical',
-        //     rtl: false },
-        // {
-        //     resizeDistance: -100,
-        //     expectedLayout: ['0', '100'],
-        //     expectedItemSizes: [208, 208],
-        //     orientation: 'vertical',
-        //     rtl: false },
-        // {
-        //     resizeDistance: 100,
-        //     expectedLayout: ['100', '0'],
-        //     expectedItemSizes: [208, 208],
-        //     orientation: 'vertical',
-        //     rtl: false },
-        // {
-        //     resizeDistance: 75,
-        //     expectedLayout: ['87.5', '12.5'],
-        //     expectedItemSizes: [208, 208],
-        //     orientation: 'vertical',
-        //     rtl: false
-        // },
+    // TODO: expectedItemSizes are not correct
+    // {
+    //     resizeDistance: 50,
+    //     expectedLayout: ['75', '25'],
+    //     expectedItemSizes: [208, 208],
+    //     orientation: 'vertical',
+    //     rtl: false },
+    // {
+    //     resizeDistance: -50,
+    //     expectedLayout: ['25', '75'],
+    //     expectedItemSizes: [208, 208],
+    //     orientation: 'vertical',
+    //     rtl: false },
+    // {
+    //     resizeDistance: -100,
+    //     expectedLayout: ['0', '100'],
+    //     expectedItemSizes: [208, 208],
+    //     orientation: 'vertical',
+    //     rtl: false },
+    // {
+    //     resizeDistance: 100,
+    //     expectedLayout: ['100', '0'],
+    //     expectedItemSizes: [208, 208],
+    //     orientation: 'vertical',
+    //     rtl: false },
+    // {
+    //     resizeDistance: 75,
+    //     expectedLayout: ['87.5', '12.5'],
+    //     expectedItemSizes: [208, 208],
+    //     orientation: 'vertical',
+    //     rtl: false
+    // },
     ].forEach(({ resizeDistance, expectedLayout, expectedItemSizes, orientation, rtl }) => {
         QUnit.test(`items should resize proportionally with ${orientation} orientation, rtl ${rtl}`, function(assert) {
             this.reinit({
