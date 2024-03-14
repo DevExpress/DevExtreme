@@ -1,6 +1,7 @@
 import sh from 'shelljs';
-import pkg from '../package.json';
-import { formatVersion, makeVersion, updateVersion } from './common/version-utils';
+import pkg from '../../package.json';
+import { formatVersion, makeVersion } from './common/monorepo-tools';
+import { updateVersion } from './common/version';
 
 const timestampVersion = makeVersion(formatVersion(pkg.version), true, new Date());
 if(timestampVersion === undefined) {
