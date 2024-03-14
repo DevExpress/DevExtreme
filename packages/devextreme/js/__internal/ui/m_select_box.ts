@@ -427,13 +427,14 @@ const SelectBox = (DropDownList as any).inherit({
     return this._dataController.searchValue();
   },
 
+  _isInlineAutocompleteEnabled() {
+    return this.option('searchEnabled')
+      && !this.option('acceptCustomValue')
+      && this.option('searchMode') === 'startswith';
+  },
+
   _getAriaAutocomplete() {
-    const {
-      disabled,
-      readOnly,
-      searchEnabled,
-      searchMode,
-    } = this.option();
+    const { disabled, readOnly, searchEnabled } = this.option();
 
     const isInputEditable = !(readOnly || disabled);
     const hasAutocomplete = searchEnabled && isInputEditable;
@@ -442,7 +443,9 @@ const SelectBox = (DropDownList as any).inherit({
       return 'none';
     }
 
-    const autocompleteAria = searchMode === 'contains' ? 'list' : 'both';
+    const isInlineAutocompleteEnabled = this._isInlineAutocompleteEnabled();
+
+    const autocompleteAria = isInlineAutocompleteEnabled ? 'both' : 'list';
 
     return autocompleteAria;
   },
@@ -852,10 +855,7 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _shouldSubstitutionBeRendered() {
-    return !this._preventSubstitution
-            && this.option('searchEnabled')
-            && !this.option('acceptCustomValue')
-            && this.option('searchMode') === 'startswith';
+    return !this._preventSubstitution && this._isInlineAutocompleteEnabled();
   },
 
   _renderInputSubstitution() {

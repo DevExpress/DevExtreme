@@ -6079,6 +6079,20 @@ if(devices.real().deviceType === 'desktop') {
                 assert.strictEqual($input.attr('aria-autocomplete'), 'none');
             });
         });
+
+        QUnit.test('aria-autocomplete set correctly with acceptCustomValue and searchMode: startswith', function(assert) {
+            helper.createWidget({
+                acceptCustomValue: false,
+                searchEnabled: true,
+                searchMode: 'startswith',
+            });
+
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'both');
+
+            helper.widget.option({ acceptCustomValue: true });
+
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'list');
+        });
     });
 }
 
