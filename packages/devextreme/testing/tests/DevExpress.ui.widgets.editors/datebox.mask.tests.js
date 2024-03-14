@@ -1795,7 +1795,13 @@ module('DateBox AM/PM Handling - Time datebox type', {
         this.instance = this.$element.dxDateBox('instance');
         this.$input = this.$element.find('.dx-texteditor-input');
         this.keyboard = keyboardMock(this.$input, true);
+        this.pointer = pointerMock(this.$input);
+        this.clock = sinon.useFakeTimers(new Date(2015, 3, 14).getTime());
     },
+
+    afterEach: function() {
+        this.clock.restore();
+    }
 }, () => {
     test('when "a" is pressed it should toggle PM to AM (T1216937)', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 PM'));
