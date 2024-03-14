@@ -72,7 +72,10 @@ const Autocomplete = (DropDownList as any).inherit({
   _initMarkup() {
     this.callBase();
     this.$element().addClass(AUTOCOMPLETE_CLASS);
-    this.setAria('autocomplete', 'inline');
+  },
+
+  _getAutocompleteAria() {
+    return 'list';
   },
 
   _displayGetterExpr() {
