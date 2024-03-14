@@ -1805,7 +1805,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
             .caret({ start: 6, end: 8 })
             .type('a');
 
-        assert.strictEqual(this.instance.option('text'), 'AM');
+        assert.strictEqual(this.$input.val(), 'AM');
     });
 
     test('when "p" is pressed it should toggle AM to PM', function(assert) {
@@ -1816,7 +1816,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
             .caret({ start: 6, end: 8 })
             .type('p');
 
-        assert.strictEqual(this.instance.option('text'), 'PM');
+        assert.strictEqual(this.$input.val(), 'PM');
     });
 
     test('when wrong key is pressed it should not toggle AM to PM', function(assert) {
@@ -1828,7 +1828,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
                 .type(key);
         });
 
-        assert.strictEqual(this.instance.option('text'), 'AM');
+        assert.strictEqual(this.$input.val(), 'AM');
     });
 
     test('when wrong key is pressed it should not toggle PM to AM', function(assert) {
@@ -1840,6 +1840,6 @@ module('DateBox AM/PM Handling - Time datebox type', {
                 .type(key);
         });
 
-        assert.strictEqual(this.instance.option('text'), 'PM');
+        assert.strictEqual(this.$input.val(), 'PM');
     });
 });
