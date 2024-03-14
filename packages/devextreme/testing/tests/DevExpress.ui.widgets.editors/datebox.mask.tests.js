@@ -1797,7 +1797,7 @@ module('DateBox AM/PM Handling - Time datebox type', {
         this.keyboard = keyboardMock(this.$input, true);
     },
 }, () => {
-    test('when "a" is pressed it should toggle PM to AM', function(assert) {
+    test('when "a" is pressed it should toggle PM to AM (T1216937)', function(assert) {
         this.instance.option('value', new Date('10/10/2012 10:00 PM'));
 
         this.keyboard
