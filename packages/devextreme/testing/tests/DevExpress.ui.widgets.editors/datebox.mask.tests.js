@@ -1037,18 +1037,36 @@ module('Search', setupModule, () => {
     [
         { type: 'time', input: 'a', initialValue: 'PM', expectedValue: 'AM' },
         { type: 'time', input: 'p', initialValue: 'AM', expectedValue: 'PM' },
-        { type: 'time', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
-        { type: 'time', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
         { type: 'date', input: 'a', initialValue: 'PM', expectedValue: 'AM' },
         { type: 'date', input: 'p', initialValue: 'AM', expectedValue: 'PM' },
-        { type: 'date', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
-        { type: 'date', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
         { type: 'datetime', input: 'a', initialValue: 'PM', expectedValue: 'AM' },
         { type: 'datetime', input: 'p', initialValue: 'AM', expectedValue: 'PM' },
+    ].forEach(({ type, input, initialValue, expectedValue }) => {
+        QUnit.test(`when ${input} is pressed it should toggle ${initialValue} to ${expectedValue} (T1216937)`, function(assert) {
+            const $dateBox = $('#dateBox').dxDateBox({
+                value: new Date(`10/10/2012, 10:00 ${initialValue}`),
+                useMaskBehavior: true,
+                displayFormat: 'a',
+                type: type,
+            });
+
+            keyboardMock($dateBox.find('.dx-texteditor-input'))
+                .focus()
+                .type(input);
+
+            assert.strictEqual($dateBox.dxDateBox('option', 'text'), expectedValue);
+        });
+    });
+
+    [
+        { type: 'time', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'time', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
+        { type: 'date', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
+        { type: 'date', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
         { type: 'datetime', input: 'a', initialValue: 'AM', expectedValue: 'AM' },
         { type: 'datetime', input: 'p', initialValue: 'PM', expectedValue: 'PM' },
     ].forEach(({ type, input, initialValue, expectedValue }) => {
-        QUnit.test(`when ${input} is pressed it should toggle ${initialValue} to ${expectedValue} (T1216937)`, function(assert) {
+        QUnit.test(`when ${initialValue} is active and ${input} is pressed it should stay to ${expectedValue}`, function(assert) {
             const $dateBox = $('#dateBox').dxDateBox({
                 value: new Date(`10/10/2012, 10:00 ${initialValue}`),
                 useMaskBehavior: true,
