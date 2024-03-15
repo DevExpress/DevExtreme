@@ -245,7 +245,12 @@ const compileCriteria = (function() {
     const _toComparable = (value) => toComparable(value, false, langParams);
 
     const compileOptimizedUniformEquals = (crit) => {
-        const values = crit.filter((_, i) => i % 2 === 0).map((el, i) => _toComparable(el[2]));
+        const values = crit.reduce((acc, item, i) => {
+            if(i % 2 === 0) {
+                acc.push(_toComparable(item[2]));
+            }
+            return acc;
+        }, []);
         const getter = compileGetter(crit[0][0]);
 
         return (obj) => {
