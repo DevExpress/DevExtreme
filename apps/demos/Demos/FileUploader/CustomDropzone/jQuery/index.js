@@ -11,10 +11,13 @@ $(() => {
       if (e.dropZoneElement.id === 'dropzone-external') {
         const items = e.event.originalEvent.dataTransfer.items;
 
-        const isSingleFileDragged = items.length === 1;
-        const isValidFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
+        const allowedFileExtensions = this.option('allowedFileExtensions');
+        const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
 
-        if (isSingleFileDragged && this.option('allowedFileExtensions').includes(isValidFileExtension)) {
+        const isSingleFileDragged = items.length === 1;
+        const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+
+        if (isSingleFileDragged && isValidFileExtension) {
           toggleDropZoneActive(e.dropZoneElement, true);
         }
       }
