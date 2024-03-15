@@ -79,6 +79,7 @@ jobs:
         with:
           sparse-checkout: |
             /tools
+            /packages/devextreme-monorepo-tools
             package.json
           sparse-checkout-cone-mode: false
 
