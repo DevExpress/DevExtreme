@@ -260,7 +260,57 @@ const environment = {
         return this.createPolarChart($.extend({}, { dataSource: [], series: {}, argumentAxis: { startAngle: 0 } }, options));
     }
 };
+QUnit.module('create Polar Chart with default configurations');
 
+QUnit.test('test if polarChart correctly labels axis and stack with defaultName', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ type: 'stackedbar' }]
+    });
+ 
+    const series = chart.getAllSeries();
+ 
+    assert.strictEqual(series.length, 1, 'count of series');
+ 
+    assert.strictEqual(series[0].getStackName(), 'axis_default_stack_default');
+});
+ 
+QUnit.test('test if polarChart correctly labels axisName', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ axis: 'axisName', type: 'stackedbar' }]
+    });
+ 
+    const series = chart.getAllSeries();
+ 
+    assert.strictEqual(series.length, 1, 'count of series');
+ 
+    assert.strictEqual(series[0].getStackName(), 'axis_axisName_stack_default');
+});
+ 
+QUnit.test('test if polarChart correctly labels axisName with stackName', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ axis: 'axisName', type: 'stackedbar', stack: 'stackName' }]
+    });
+ 
+    const series = chart.getAllSeries();
+ 
+    assert.strictEqual(series.length, 1, 'count of series');
+ 
+    assert.strictEqual(series[0].getStackName(), 'axis_axisName_stack_stackName');
+});
+
+QUnit.test('test if polarChart correctly labels stack names', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ type: 'stackedbar', stack: 'first' },
+            { type: 'stackedbar', stack: 'second' }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.strictEqual(series.length, 2, 'count of series');
+
+    assert.strictEqual(series[0].getStackName(), 'axis_default_stack_first');
+    assert.strictEqual(series[1].getStackName(), 'axis_default_stack_second');
+});
 QUnit.module('create Polar chart', environment);
 
 QUnit.test('create empty polar chart', function(assert) {

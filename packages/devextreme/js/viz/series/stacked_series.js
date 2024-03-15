@@ -161,11 +161,10 @@ chart['fullstackedsplinearea'] = _extend({}, areaSeries['splinearea'], baseStack
     _appendInGroup: chart['stackedarea']._appendInGroup
 });
 
-polar['stackedbar'] = _extend({}, _polar.bar, { ...baseStackedSeries,
-    _updateOptions: function(options) {
-        this._stackName = 'axis_' + (options.stack || 'default');
-    }
-}, {});
+polar['stackedbar'] = _extend({}, _polar.bar, baseStackedSeries, { _updateOptions: function(options) {
+    baseStackedSeries._updateOptions.call(this, options);
+    this._stackName = this._stackName + '_stack_' + (options.stack || 'default');
+} });
 
 export {
     chart,
