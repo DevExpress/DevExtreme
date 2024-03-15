@@ -303,6 +303,7 @@ class Menu extends MenuBase {
             }
         };
 
+        eventsEngine.off(this._focusTarget(), namespace);
         eventsEngine.on(this._focusTarget(), namespace, callback);
     }
 
