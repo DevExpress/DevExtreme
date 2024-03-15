@@ -1,20 +1,21 @@
 // eslint-disable-next-line max-classes-per-file
+import type { Orientation } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import {
   getOuterHeight,
   getOuterWidth,
 } from '@js/core/utils/size';
+import { hasWindow } from '@js/core/utils/window';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
-import type { Item } from '@js/ui/splitter';
+import type { Item, Properties } from '@js/ui/splitter';
 
-import Guid from '../../../core/guid';
-import resizeObserverSingleton from '../../../core/resize_observer';
-import { hasWindow } from '../../../core/utils/window';
 import ResizeHandle, { RESIZE_HANDLE_CLASS } from './resize_handle';
 import { getComponentInstance } from './utils/component';
 import {
@@ -25,18 +26,22 @@ import {
 } from './utils/event';
 import {
   calculateDelta,
+  convertSizeToRatio,
   findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
   getCurrentLayout,
+  getDefaultLayout,
   getDimensionByOrientation,
   getElementSize,
-  getInitialLayout,
   getNewLayout,
+  getVisibleItems,
   getVisibleItemsCount,
   isElementVisible,
   setFlexProp,
   updateItemsSize,
+  validateLayout,
 } from './utils/layout';
+import type { FlexProperty } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
@@ -45,7 +50,7 @@ const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-const FLEX_PROPERTY = {
+const FLEX_PROPERTY: Record<string, FlexProperty> = {
   flexGrow: 'flexGrow',
   flexShrink: 'flexShrink',
   flexBasis: 'flexBasis',
@@ -54,7 +59,7 @@ const FLEX_PROPERTY = {
 const DEFAULT_FLEX_SHRINK_PROP = 0;
 const DEFAULT_FLEX_BASIS_PROP = 0;
 
-const ORIENTATION = {
+const ORIENTATION: Record<string, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
@@ -64,7 +69,7 @@ class SplitterItem extends CollectionWidgetItem {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
-  _getDefaultOptions(): Record<string, unknown> {
+  _getDefaultOptions(): Properties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       orientation: ORIENTATION.horizontal,
@@ -94,7 +99,7 @@ class Splitter extends (CollectionWidget as any) {
     this._toggleOrientationClass();
 
     if (isElementVisible(this.$element().get(0))) {
-      this._layout = this._getInitialLayoutBasedOnSize();
+      this._layout = this._getDefaultLayoutBasedOnSize();
     } else {
       this._shouldRecalculateLayout = true;
     }
@@ -104,9 +109,14 @@ class Splitter extends (CollectionWidget as any) {
     this._attachResizeObserverSubscription();
   }
 
+  _getItemDimension(element: Element): number | string {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._isHorizontalOrientation()
+      ? getOuterWidth(element) : (getOuterHeight(element) as number);
+  }
+
   _shouldUpdateLayout(): boolean {
-    const size: number = this.option('orientation') === ORIENTATION.horizontal
-      ? getOuterWidth(this.$element()) : getOuterHeight(this.$element());
+    const size: number = this._getDimension(this.$element().get(0));
 
     return size === 0;
   }
@@ -129,7 +139,7 @@ class Splitter extends (CollectionWidget as any) {
       return;
     }
 
-    this._layout = this._getInitialLayoutBasedOnSize();
+    this._layout = this._getDefaultLayoutBasedOnSize();
 
     this._applyFlexGrowFromLayout(this._layout);
     this._updatePaneSizesWithOuterWidth();
@@ -162,6 +172,7 @@ class Splitter extends (CollectionWidget as any) {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     const itemElement = $itemFrame.get(0);
+
     setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, this._layout ? this._layout[index] : 100 / getVisibleItemsCount(this.option('items')));
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
@@ -216,14 +227,13 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getNextVisibleItemData(index: number): any {
+  _getNextVisibleItemData(index: number): Item {
     const { items } = this.option();
     return this._getItemDataByIndex(findIndexOfNextVisibleItem(items, index));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getItemDataByIndex(index: number): any {
+  _getItemDataByIndex(index: number): Item {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._editStrategy.getItemDataByIndex(index);
   }
 
@@ -243,6 +253,7 @@ class Splitter extends (CollectionWidget as any) {
     return {
       direction: orientation,
       focusStateEnabled: allowKeyboardNavigation,
+      hoverStateEnabled: true,
       resizable,
       separatorSize,
       elementAttr: {
@@ -281,6 +292,23 @@ class Splitter extends (CollectionWidget as any) {
           true,
         );
 
+        const {
+          items, width, height,
+        } = this.option();
+
+        const elementSize = getElementSize(this.$element(), items, orientation, width, height);
+
+        this._itemRestrictions = [];
+
+        getVisibleItems(items).forEach((item) => {
+          this._itemRestrictions.push({
+            visible: item.visible,
+            size: convertSizeToRatio(item.size, elementSize),
+            maxSize: convertSizeToRatio(item.maxSize, elementSize),
+            minSize: convertSizeToRatio(item.minSize, elementSize),
+          });
+        });
+
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
           handleElement: event.target,
@@ -291,6 +319,7 @@ class Splitter extends (CollectionWidget as any) {
           this._currentLayout,
           calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
           this._activeResizeHandleIndex,
+          this._itemRestrictions,
         );
 
         updateItemsSize(this._$visibleItems, newLayout);
@@ -301,8 +330,8 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
       onResizeEnd: ({ event }): void => {
-        each(this._itemElements(), (index: number, itemElement) => {
-          this._options.silent(`items[${index}].size`, getOuterWidth(itemElement));
+        each(this._itemElements(), (index: number, itemElement: Element) => {
+          this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
         });
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
@@ -392,7 +421,9 @@ class Splitter extends (CollectionWidget as any) {
   _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
     switch (property) {
       case 'size':
-        this._layout = this._getInitialLayoutBasedOnSize();
+      case 'maxSize':
+      case 'minSize':
+        this._layout = this._getDefaultLayoutBasedOnSize();
 
         this._applyFlexGrowFromLayout(this._layout);
         this._updatePaneSizesWithOuterWidth();
@@ -405,14 +436,27 @@ class Splitter extends (CollectionWidget as any) {
     }
   }
 
-  _getInitialLayoutBasedOnSize(): number[] {
+  _getDefaultLayoutBasedOnSize(): number[] {
     const {
       items, orientation, width, height,
     } = this.option();
 
     const elementSize = getElementSize(this.$element(), items, orientation, width, height);
 
-    return getInitialLayout(items, elementSize);
+    this._itemRestrictions = [];
+
+    items.forEach((item) => {
+      this._itemRestrictions.push({
+        visible: item.visible,
+        size: convertSizeToRatio(item.size, elementSize),
+        maxSize: convertSizeToRatio(item.maxSize, elementSize),
+        minSize: convertSizeToRatio(item.minSize, elementSize),
+      });
+    });
+
+    const defaultLayout = getDefaultLayout(this._itemRestrictions);
+
+    return validateLayout(defaultLayout, this._itemRestrictions);
   }
 
   _applyFlexGrowFromLayout(layout: number[]): void {
@@ -423,12 +467,12 @@ class Splitter extends (CollectionWidget as any) {
 
   _updatePaneSizesWithOuterWidth(): void {
     this._iterateItems((index, itemElement) => {
-      this._options.silent(`items[${index}].size`, getOuterWidth(itemElement));
+      this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
     });
   }
 
-  _iterateItems(callback: (index: number, itemElement: Element) => void): void {
-    each(this._itemElements(), (index: number, itemElement: Element) => {
+  _iterateItems(callback: (index: number, itemElement: HTMLElement) => void): void {
+    each(this._itemElements(), (index: number, itemElement: HTMLElement) => {
       callback(index, itemElement);
     });
   }
@@ -446,8 +490,7 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _optionChanged(args): void {
+  _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {
