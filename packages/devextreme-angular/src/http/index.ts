@@ -9,7 +9,7 @@ import { sendRequestFactory } from './ajax';
   imports: [],
   providers: [],
 })
-export class DxAjaxModule {
+export class DxHttpModule {
   constructor(httpClient: HttpClient) {
     devextremeAjax.inject({ sendRequest: sendRequestFactory(httpClient) });
   }

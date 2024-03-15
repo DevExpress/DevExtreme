@@ -7,7 +7,7 @@ import {
 import { Component, Injectable, ViewChild } from '@angular/core';
 
 import domAdapter from 'devextreme/core/dom_adapter';
-import { DxAjaxModule } from 'devextreme-angular/ajax';
+import { DxHttpModule } from 'devextreme-angular/http';
 import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
@@ -58,13 +58,13 @@ class TestFileUploaderComponent {
   value = [createBlobFile('image1.png', 50100)];
 }
 
-describe('Ajax request using DxAjaxModule', () => {
+describe('Ajax request using DxHttpModule', () => {
   let httpTestingControllerMock: HttpTestingController;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestFileUploaderComponent],
-      imports: [HttpClientTestingModule, DxAjaxModule, DxFileUploaderModule, BrowserTransferStateModule],
+      imports: [HttpClientTestingModule, DxHttpModule, DxFileUploaderModule, BrowserTransferStateModule],
       providers: [{ provide: HTTP_INTERCEPTORS, useClass: TestInterceptor, multi: true }],
     });
 
