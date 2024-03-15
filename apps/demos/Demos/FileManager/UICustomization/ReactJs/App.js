@@ -16,30 +16,28 @@ export default function App() {
   const createFile = useCallback((fileExtension, directory = fileManagerRef.current
     .instance()
     .getCurrentDirectory()) => {
-      const newItem = {
-        __KEY__: Date.now(),
-        name: `New file${fileExtension}`,
-        isDirectory: false,
-        size: 0,
-      };
-      if (!directory.isDirectory) {
-        return false;
+    const newItem = {
+      __KEY__: Date.now(),
+      name: `New file${fileExtension}`,
+      isDirectory: false,
+      size: 0,
+    };
+    if (!directory.isDirectory) {
+      return false;
+    }
+    let array = null;
+    if (!directory.dataItem) {
+      array = fileItems;
+    } else {
+      array = directory.dataItem.items;
+      if (!array) {
+        array = [];
+        directory.dataItem.items = array;
       }
-      let array = null;
-      if (!directory.dataItem) {
-        array = fileItems;
-      } else {
-        array = directory.dataItem.items;
-        if (!array) {
-          array = [];
-          directory.dataItem.items = array;
-        }
-      }
-      array.push(newItem);
-      return true;
-    },
-    [],
-  );
+    }
+    array.push(newItem);
+    return true;
+  }, []);
   const updateCategory = useCallback((newCategory, directory, viewArea) => {
     let items = null;
     if (viewArea === 'navPane') {
