@@ -245,12 +245,23 @@ const compileCriteria = (function() {
     const _toComparable = (value) => toComparable(value, false, langParams);
     const compileGroup = function(crit) {
         if(isUniformSequenceEqualsByOr(crit)) {
-            const values = crit.flatMap((el, i) => i % 2 !== 0 ? [] : [_toComparable(el[2])]);
+            const values = crit.filter((_, i) => i % 2 === 0).map((el, i) => _toComparable(el[2]));
             const getter = compileGetter(crit[0][0]);
+
             return (d) => {
                 const filterValue = _toComparable(getter(d));
-                // eslint-disable-next-line eqeqeq
-                return !!values.find((value) => useStrictComparison(value) ? filterValue === value : (filterValue == value));
+                let result = false;
+
+                values.find((value) => {
+                    result = useStrictComparison(value)
+                        ? filterValue === value
+                        // eslint-disable-next-line eqeqeq
+                        : filterValue == value;
+
+                    return result;
+                });
+
+                return result;
             };
         }
 
@@ -283,7 +294,6 @@ const compileCriteria = (function() {
                     break;
                 }
             }
-
             return result;
         };
     };
@@ -348,6 +358,7 @@ const compileCriteria = (function() {
             obj = _toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
+
             if(negate) {
                 result = !result;
             }
