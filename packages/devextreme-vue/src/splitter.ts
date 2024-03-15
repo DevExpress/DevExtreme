@@ -26,8 +26,8 @@ type AccessibleOptions = Pick<Properties,
   "onResizeStart" |
   "orientation" |
   "repaintChangesOnly" |
-  "resizeMode" |
   "rtlEnabled" |
+  "separatorSize" |
   "visible" |
   "width"
 >;
@@ -59,8 +59,8 @@ const DxSplitter = createComponent({
     onResizeStart: Function,
     orientation: String,
     repaintChangesOnly: Boolean,
-    resizeMode: String,
     rtlEnabled: Boolean,
+    separatorSize: [Number, String],
     visible: Boolean,
     width: [Function, Number, String]
   },
@@ -89,8 +89,8 @@ const DxSplitter = createComponent({
     "update:onResizeStart": null,
     "update:orientation": null,
     "update:repaintChangesOnly": null,
-    "update:resizeMode": null,
     "update:rtlEnabled": null,
+    "update:separatorSize": null,
     "update:visible": null,
     "update:width": null,
   },
@@ -113,6 +113,7 @@ const DxItem = createConfigurationComponent({
     "update:isActive": null,
     "update:hoveredElement": null,
     "update:collapsed": null,
+    "update:collapsedSize": null,
     "update:collapsible": null,
     "update:disabled": null,
     "update:maxSize": null,
@@ -126,6 +127,7 @@ const DxItem = createConfigurationComponent({
   },
   props: {
     collapsed: Boolean,
+    collapsedSize: [Number, String],
     collapsible: Boolean,
     disabled: Boolean,
     maxSize: [Number, String],

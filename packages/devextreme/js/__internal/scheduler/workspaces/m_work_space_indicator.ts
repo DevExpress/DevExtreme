@@ -5,9 +5,9 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { setWidth } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-import { getToday } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
+import { getToday } from '../__migration/utils/index';
 import { HEADER_CURRENT_TIME_CELL_CLASS } from '../m_classes';
 import timezoneUtils from '../m_utils_time_zone';
 import SchedulerWorkSpace from './m_work_space';

@@ -11,15 +11,13 @@ import {
 import {
   DateHeaderData,
   DateTimeCellTemplateProps,
-  Group,
-  GroupPanelData,
   ResourceCellTemplateProps,
-  TimePanelData,
 } from '../types';
 import { DateTableLayoutProps } from './date_table/layout';
 import { HeaderPanelLayoutProps } from './header_panel/layout';
 import { LayoutProps } from './layout_props';
 import { ScrollableDirection, ScrollEventArgs } from '../../../scroll_view/common/types';
+import { Group, GroupPanelData, TimePanelData } from '../../../../../__internal/scheduler/__migration/types';
 
 @ComponentBindings()
 export class MainLayoutProps extends LayoutProps {
@@ -59,8 +57,7 @@ export class MainLayoutProps extends LayoutProps {
   @OneWay() groupByDate = false;
 
   @OneWay() groupPanelClassName:
-  'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table'
-  = 'dx-scheduler-work-space-vertical-group-table';
+  'dx-scheduler-work-space-vertical-group-table' | 'dx-scheduler-group-table' = 'dx-scheduler-work-space-vertical-group-table';
 
   @OneWay() isWorkSpaceWithOddCells?: boolean;
 

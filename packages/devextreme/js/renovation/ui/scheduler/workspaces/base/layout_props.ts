@@ -5,7 +5,7 @@ import {
   JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { GroupedViewData, DataCellTemplateProps } from '../types';
-import { GroupOrientation } from '../../types';
+import { GroupOrientation } from '../../../../../__internal/scheduler/__migration/types';
 
 @ComponentBindings()
 export class LayoutProps {

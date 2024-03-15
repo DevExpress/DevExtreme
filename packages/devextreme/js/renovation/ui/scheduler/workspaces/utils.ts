@@ -1,11 +1,5 @@
 import { CSSAttributes } from '@devextreme-generator/declarations';
 import { combineClasses } from '../../../utils/combine_classes';
-import { Group } from './types';
-import { GroupOrientation } from '../types';
-import {
-  HORIZONTAL_GROUP_ORIENTATION,
-  VERTICAL_GROUP_ORIENTATION,
-} from '../consts';
 
 export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string => {
   const key = date.getTime();
@@ -14,16 +8,6 @@ export const getKeyByDateAndGroup = (date: Date, groupIndex?: number): string =>
   }
 
   return (key + groupIndex).toString();
-};
-
-export const getKeyByGroup = (
-  groupIndex: number | undefined, isVerticalGrouping: boolean,
-): string => {
-  if (isVerticalGrouping && !!groupIndex) {
-    return groupIndex.toString();
-  }
-
-  return '0';
 };
 
 export const addToStyles = (
@@ -68,27 +52,3 @@ export const getGroupCellClasses = (
   'dx-scheduler-last-group-cell': isLastGroupCell,
   [className]: true,
 });
-
-export const getIsGroupedAllDayPanel = (
-  hasAllDayRow: boolean, isVerticalGrouping: boolean,
-): boolean => hasAllDayRow && isVerticalGrouping;
-
-export const isVerticalGroupingApplied = (
-  groups: Group[],
-  groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === VERTICAL_GROUP_ORIENTATION
-  && !!groups.length;
-
-export const isHorizontalGroupingApplied = (
-  groups: Group[], groupOrientation?: GroupOrientation,
-): boolean => groupOrientation === HORIZONTAL_GROUP_ORIENTATION && !!groups.length;
-
-export const isGroupingByDate = (
-  groups: Group[],
-  groupOrientation: GroupOrientation | undefined,
-  groupByDate: boolean,
-): boolean => {
-  const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
-
-  return groupByDate && isHorizontalGrouping;
-};

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
 import { DateTableBody, DateTableBodyProps, viewFunction as TableBodyView } from '../table_body';
 import { Row } from '../../row';
 import { AllDayPanelTableBody } from '../all_day_panel/table_body';

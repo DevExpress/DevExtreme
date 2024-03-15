@@ -16,7 +16,6 @@ import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
 import { DateTableLayoutBase, DateTableLayoutProps } from '../date_table/layout';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
 import { TimePanelTableLayout } from '../time_panel/layout';
-import { AppointmentLayout } from '../../../appointment/layout';
 
 describe('OrdinaryLayout', () => {
   const viewData = {
@@ -422,13 +421,6 @@ describe('OrdinaryLayout', () => {
           dataCellTemplate,
           tableRef: 'allDayPanelRef',
         });
-    });
-
-    it('should render appointments', () => {
-      const layout = render({});
-
-      expect(layout.find(AppointmentLayout).exists())
-        .toBe(true);
     });
   });
 

@@ -777,18 +777,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     border-bottom: $datagrid-border;
     padding: $material-grid-base-header-panel-padding;
 
-    .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
-    }
-
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
       border-radius: 50%;
-    }
-
-    .dx-#{$widget-name}-toolbar-button {
-      .dx-icon {
-        color: $base-text-color;
-      }
     }
   }
 

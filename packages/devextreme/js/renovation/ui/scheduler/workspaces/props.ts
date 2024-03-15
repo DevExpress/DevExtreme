@@ -8,21 +8,22 @@ import {
 } from '@devextreme-generator/declarations';
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
 import dateUtils from '../../../../core/utils/date';
-import { GroupOrientation, ViewType } from '../types';
 import {
   DataCellTemplateProps,
   DateTimeCellTemplateProps,
-  Group,
   ResourceCellTemplateProps,
   ViewMetaData,
 } from './types';
 import { BaseWidgetProps } from '../../common/base_props';
 import { HeaderPanelLayoutProps } from './base/header_panel/layout';
 import { DateTableLayoutProps } from './base/date_table/layout';
-import { GetDateForHeaderText } from '../view_model/to_test/views/types';
 import { ScrollableDirection } from '../../scroll_view/common/types';
-import { AppointmentTemplateProps, OverflowIndicatorTemplateProps } from '../appointment/types';
-import { AllDayPanelModeType } from '../appointment/utils/getAppointmentTakesAllDay';
+import {
+  AllDayPanelModeType, GetDateForHeaderText,
+  Group,
+  GroupOrientation,
+  ViewType,
+} from '../../../../__internal/scheduler/__migration/types';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];
@@ -40,10 +41,6 @@ export class WorkSpaceProps extends BaseWidgetProps {
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 
   @Template() resourceCellTemplate?: JSXTemplate<ResourceCellTemplateProps>;
-
-  @Template() appointmentTemplate?: JSXTemplate<AppointmentTemplateProps>;
-
-  @Template() appointmentCollectorTemplate?: JSXTemplate<OverflowIndicatorTemplateProps>;
 
   // -----------------
   // Public props
@@ -148,8 +145,6 @@ WorkSpaceProps,
 | 'dateCellTemplate'
 | 'timeCellTemplate'
 | 'resourceCellTemplate'
-| 'appointmentTemplate'
-| 'appointmentCollectorTemplate'
 | 'maxAppointmentsPerCell'
 | 'allDayPanelMode'
 >;

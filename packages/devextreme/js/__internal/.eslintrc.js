@@ -129,6 +129,23 @@ module.exports = {
                 '@typescript-eslint/prefer-for-of': 'warn',
             }
         },
+        // Rules for Jest tests.
+        {
+            files: [
+                '**/*test.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/no-unsafe-return': 'warn',
+                '@typescript-eslint/no-explicit-any': 'warn',
+                '@typescript-eslint/explicit-function-return-type': 'warn'
+            }
+        },
     ],
     settings: {
         'import/resolver': {
