@@ -1,20 +1,21 @@
 // eslint-disable-next-line max-classes-per-file
+import type { Orientation } from '@js/common';
 import registerComponent from '@js/core/component_registrator';
+import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import resizeObserverSingleton from '@js/core/resize_observer';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import {
   getOuterHeight,
   getOuterWidth,
 } from '@js/core/utils/size';
+import { hasWindow } from '@js/core/utils/window';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import type { Item, Properties } from '@js/ui/splitter';
 
-import Guid from '../../../core/guid';
-import resizeObserverSingleton from '../../../core/resize_observer';
-import { hasWindow } from '../../../core/utils/window';
 import ResizeHandle, { RESIZE_HANDLE_CLASS } from './resize_handle';
 import { getComponentInstance } from './utils/component';
 import {
@@ -58,7 +59,7 @@ const FLEX_PROPERTY: Record<string, FlexProperty> = {
 const DEFAULT_FLEX_SHRINK_PROP = 0;
 const DEFAULT_FLEX_BASIS_PROP = 0;
 
-const ORIENTATION = {
+const ORIENTATION: Record<string, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
@@ -226,8 +227,7 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getNextVisibleItemData(index: number): any {
+  _getNextVisibleItemData(index: number): Item {
     const { items } = this.option();
     return this._getItemDataByIndex(findIndexOfNextVisibleItem(items, index));
   }
@@ -490,8 +490,7 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _optionChanged(args): void {
+  _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {

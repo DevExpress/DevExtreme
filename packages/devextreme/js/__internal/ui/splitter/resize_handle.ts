@@ -1,12 +1,14 @@
+import type { DragDirection } from '@js/common';
+import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import eventsEngine from '@js/events/core/events_engine';
+import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
+import { addNamespace } from '@js/events/utils/index';
 import type { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
+import type { ResizeEvent } from '@js/ui/splitter';
+import Widget from '@js/ui/widget/ui.widget';
 
-import Guid from '../../../core/guid';
-import { extend } from '../../../core/utils/extend';
-import eventsEngine from '../../../events/core/events_engine';
-import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '../../../events/drag';
-import { addNamespace } from '../../../events/utils/index';
-import Widget from '../../../ui/widget/ui.widget';
 import {
   getActionNameByEventName,
   RESIZE_EVENT,
@@ -26,7 +28,7 @@ const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
 const CLICK_EVENT = 'dxclick';
 
-const RESIZE_DIRECTION = {
+const RESIZE_DIRECTION: Record<string, DragDirection> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
@@ -179,8 +181,7 @@ class ResizeHandle extends (Widget as any) {
     });
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _resizeHandler(e): void {
+  _resizeHandler(e: ResizeEvent): void {
     this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
@@ -198,8 +199,11 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _attachEventHandlers(): void {
-    const eventData = { direction: this.option('direction'), immediate: true };
-    const { onCollapsePrevClick, onCollapseNextClick, resizable } = this.option();
+    const {
+      onCollapsePrevClick, onCollapseNextClick, resizable, direction,
+    } = this.option();
+
+    const eventData = { direction, immediate: true };
 
     if (resizable) {
       eventsEngine.on(
@@ -254,8 +258,7 @@ class ResizeHandle extends (Widget as any) {
     return this.option('direction') === RESIZE_DIRECTION.horizontal;
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _optionChanged(args): void {
+  _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {

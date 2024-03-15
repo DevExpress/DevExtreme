@@ -5,7 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { createEvent } from 'events/utils/index';
 
 import 'generic_light.css!';
-import { isNumeric } from '../../../js/core/utils/type.js';
+import { isNumeric } from 'core/utils/type.js';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
