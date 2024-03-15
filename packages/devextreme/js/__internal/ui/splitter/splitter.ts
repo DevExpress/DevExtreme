@@ -298,10 +298,10 @@ class Splitter extends (CollectionWidget as any) {
 
         const elementSize = getElementSize(this.$element(), items, orientation, width, height);
 
-        this._itemConstraints = [];
+        this._itemRestrictions = [];
 
         getVisibleItems(items).forEach((item) => {
-          this._itemConstraints.push({
+          this._itemRestrictions.push({
             visible: item.visible,
             size: convertSizeToRatio(item.size, elementSize),
             maxSize: convertSizeToRatio(item.maxSize, elementSize),
@@ -319,7 +319,7 @@ class Splitter extends (CollectionWidget as any) {
           this._currentLayout,
           calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
           this._activeResizeHandleIndex,
-          this._itemConstraints,
+          this._itemRestrictions,
         );
 
         updateItemsSize(this._$visibleItems, newLayout);
@@ -443,10 +443,10 @@ class Splitter extends (CollectionWidget as any) {
 
     const elementSize = getElementSize(this.$element(), items, orientation, width, height);
 
-    this._itemConstraints = [];
+    this._itemRestrictions = [];
 
     items.forEach((item) => {
-      this._itemConstraints.push({
+      this._itemRestrictions.push({
         visible: item.visible,
         size: convertSizeToRatio(item.size, elementSize),
         maxSize: convertSizeToRatio(item.maxSize, elementSize),
@@ -454,9 +454,9 @@ class Splitter extends (CollectionWidget as any) {
       });
     });
 
-    const defaultLayout = getDefaultLayout(this._itemConstraints);
+    const defaultLayout = getDefaultLayout(this._itemRestrictions);
 
-    return validateLayout(defaultLayout, this._itemConstraints);
+    return validateLayout(defaultLayout, this._itemRestrictions);
   }
 
   _applyFlexGrowFromLayout(layout: number[]): void {

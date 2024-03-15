@@ -53,11 +53,11 @@ export function findIndexOfNextVisibleItem(items: any[], index: number): number 
   return -1;
 }
 
-export function resizePanel(paneConstraints: PaneRestrictions, size: number): number {
+export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: number): number {
   const {
     minSize = 0,
     maxSize = 100,
-  } = paneConstraints;
+  } = paneRestrictions;
 
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
 
@@ -71,17 +71,17 @@ export function resizePanel(paneConstraints: PaneRestrictions, size: number): nu
 function findMaxAvailableDelta(
   increment: number,
   currentLayout: number[],
-  paneConstraints: PaneRestrictions[],
+  paneRestrictions: PaneRestrictions[],
   paneIndex: number,
   maxDelta = 0,
 ): number {
-  if (paneIndex < 0 || paneIndex >= paneConstraints.length) {
+  if (paneIndex < 0 || paneIndex >= paneRestrictions.length) {
     return maxDelta;
   }
 
   const prevSize = currentLayout[paneIndex];
 
-  const maxPaneSize = resizePanel(paneConstraints[paneIndex], 100);
+  const maxPaneSize = normalizePanelSize(paneRestrictions[paneIndex], 100);
 
   const delta = maxPaneSize - prevSize;
 
@@ -90,7 +90,7 @@ function findMaxAvailableDelta(
   return findMaxAvailableDelta(
     increment,
     currentLayout,
-    paneConstraints,
+    paneRestrictions,
     paneIndex + increment,
     nextMaxDelta,
   );
@@ -101,59 +101,57 @@ export function getNewLayout(
   currentLayout: number[],
   delta: number,
   prevPaneIndex: number,
-  paneConstraints: PaneRestrictions[],
+  paneRestrictions: PaneRestrictions[],
 ): number[] {
   const nextLayout = [...currentLayout];
   const nextPaneIndex = prevPaneIndex + 1;
 
-  // -----------------------------------
-  const increment = delta < 0 ? 1 : -1;
-  let currentItemIndex = delta < 0 ? nextPaneIndex : prevPaneIndex;
+  let currentDelta = delta;
+  const increment = currentDelta < 0 ? 1 : -1;
+  let currentItemIndex = currentDelta < 0 ? nextPaneIndex : prevPaneIndex;
 
   // eslint-disable-next-line max-len
-  const maxDelta = findMaxAvailableDelta(increment, currentLayout, paneConstraints, currentItemIndex);
-  const minAbsDelta = Math.min(Math.abs(delta), Math.abs(maxDelta));
+  const maxDelta = findMaxAvailableDelta(
+    increment,
+    currentLayout,
+    paneRestrictions,
+    currentItemIndex,
+  );
+  const minAbsDelta = Math.min(Math.abs(currentDelta), Math.abs(maxDelta));
 
   let deltaApplied = 0;
-  // eslint-disable-next-line no-param-reassign
-  delta = delta < 0 ? -minAbsDelta : minAbsDelta;
+  currentDelta = currentDelta < 0 ? -minAbsDelta : minAbsDelta;
+  currentItemIndex = currentDelta < 0 ? prevPaneIndex : nextPaneIndex;
 
-  currentItemIndex = delta < 0 ? prevPaneIndex : nextPaneIndex;
-  while (currentItemIndex >= 0 && currentItemIndex < paneConstraints.length) {
-    const deltaRemaining = Math.abs(delta) - Math.abs(deltaApplied);
+  while (currentItemIndex >= 0 && currentItemIndex < paneRestrictions.length) {
+    const deltaRemaining = Math.abs(currentDelta) - Math.abs(deltaApplied);
     const prevSize = currentLayout[currentItemIndex];
 
     const unsafeSize = prevSize - deltaRemaining;
-    const safeSize = resizePanel(paneConstraints[currentItemIndex], unsafeSize);
+    const safeSize = normalizePanelSize(paneRestrictions[currentItemIndex], unsafeSize);
     if (!(compareNumbersWithPrecision(prevSize, safeSize) === 0)) {
       deltaApplied += prevSize - safeSize;
       nextLayout[currentItemIndex] = safeSize;
 
-      if (deltaApplied
-        .toPrecision(3)
-        .localeCompare(Math.abs(delta).toPrecision(3), undefined, {
-          numeric: true,
-        }) >= 0) {
+      if (Math.abs(deltaApplied - Math.abs(currentDelta)) < PRECISION) {
         break;
       }
     }
-    if (delta < 0) {
-      // eslint-disable-next-line no-plusplus
-      currentItemIndex--;
+    if (currentDelta < 0) {
+      currentItemIndex -= 1;
     } else {
-      // eslint-disable-next-line no-plusplus
-      currentItemIndex++;
+      currentItemIndex += 1;
     }
   }
   if (compareNumbersWithPrecision(deltaApplied, 0) === 0) {
     return currentLayout;
   }
 
-  let pivotIndex = delta < 0 ? nextPaneIndex : prevPaneIndex;
+  let pivotIndex = currentDelta < 0 ? nextPaneIndex : prevPaneIndex;
   let prevSize = currentLayout[pivotIndex];
   let unsafeSize = prevSize + deltaApplied;
-  let safeSize = resizePanel(
-    paneConstraints[pivotIndex],
+  let safeSize = normalizePanelSize(
+    paneRestrictions[pivotIndex],
     unsafeSize,
   );
 
@@ -162,15 +160,15 @@ export function getNewLayout(
   if (!(compareNumbersWithPrecision(safeSize, unsafeSize) === 0)) {
     let deltaRemaining = unsafeSize - safeSize;
 
-    pivotIndex = delta < 0 ? nextPaneIndex : prevPaneIndex;
+    pivotIndex = currentDelta < 0 ? nextPaneIndex : prevPaneIndex;
 
     let index = pivotIndex;
-    while (index >= 0 && index < paneConstraints.length) {
+    while (index >= 0 && index < paneRestrictions.length) {
       prevSize = nextLayout[index];
 
       unsafeSize = prevSize + deltaRemaining;
-      safeSize = resizePanel(
-        paneConstraints[index],
+      safeSize = normalizePanelSize(
+        paneRestrictions[index],
         unsafeSize,
       );
       if (!(compareNumbersWithPrecision(prevSize, safeSize) === 0)) {
@@ -180,12 +178,10 @@ export function getNewLayout(
       if (compareNumbersWithPrecision(deltaRemaining, 0) === 0) {
         break;
       }
-      if (delta > 0) {
-        // eslint-disable-next-line no-plusplus
-        index--;
+      if (currentDelta > 0) {
+        index -= 1;
       } else {
-        // eslint-disable-next-line no-plusplus
-        index++;
+        index += 1;
       }
     }
   }
@@ -289,18 +285,15 @@ export function convertSizeToRatio(
 }
 
 export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
-  const layout = Array<number>(layoutRestrictions.length);
-
-  const panelConstraintsArray = layoutRestrictions;
+  const layout: number[] = new Array(layoutRestrictions.length).fill(0);
 
   let numPanelsWithSizes = 0;
   let remainingSize = 100;
 
-  for (let index = 0; index < panelConstraintsArray.length; index += 1) {
-    const panelConstraints = panelConstraintsArray[index];
+  layoutRestrictions.forEach((panelConstraints, index) => {
     const { size, visible } = panelConstraints;
 
-    if (size != null) {
+    if (isDefined(size)) {
       numPanelsWithSizes += 1;
 
       layout[index] = size;
@@ -313,28 +306,58 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
       layout[index] = 0;
       remainingSize -= 0;
     }
-  }
+  });
 
-  for (let index = 0; index < panelConstraintsArray.length; index += 1) {
-    const panelConstraints = panelConstraintsArray[index];
-
+  layoutRestrictions.forEach((panelConstraints, index) => {
     const { size, visible } = panelConstraints;
 
-    if (size != null || visible === false) {
-      // eslint-disable-next-line no-continue
-      continue;
+    if (size == null && visible !== false) {
+      const numRemainingPanels = layoutRestrictions.length - numPanelsWithSizes;
+      const newSize = remainingSize / numRemainingPanels;
+
+      numPanelsWithSizes += 1;
+
+      layout[index] = newSize;
+      remainingSize -= newSize;
     }
-
-    const numRemainingPanels = panelConstraintsArray.length - numPanelsWithSizes;
-    const newSize = remainingSize / numRemainingPanels;
-
-    numPanelsWithSizes += 1;
-
-    layout[index] = newSize;
-    remainingSize -= newSize;
-  }
+  });
 
   return layout;
+}
+
+function adjustAndDistributeLayoutSize(
+  layout: number[],
+  layoutRestrictions: PaneRestrictions[],
+): number[] {
+  let remainingSize = 0;
+
+  const nextLayout = layout.map((panelSize, index) => {
+    const restriction = layoutRestrictions[index];
+    const adjustedSize = normalizePanelSize(restriction, panelSize);
+
+    remainingSize += panelSize - adjustedSize;
+    return adjustedSize;
+  });
+
+  if (compareNumbersWithPrecision(remainingSize, 0) !== 0) {
+    for (
+      let index = 0;
+      index < nextLayout.length && compareNumbersWithPrecision(remainingSize, 0) !== 0;
+      index += 1
+    ) {
+      const currentSize = nextLayout[index];
+      const adjustedSize = normalizePanelSize(
+        layoutRestrictions[index],
+        currentSize + remainingSize,
+      );
+
+      remainingSize -= adjustedSize - currentSize;
+
+      nextLayout[index] = adjustedSize;
+    }
+  }
+
+  return nextLayout;
 }
 
 export function validateLayout(
@@ -356,40 +379,7 @@ export function validateLayout(
     }
   }
 
-  let remainingSize = 0;
-
-  for (let index = 0; index < layoutRestrictions.length; index += 1) {
-    const unsafeSize = nextLayout[index];
-
-    const safeSize = resizePanel(layoutRestrictions[index], unsafeSize);
-
-    if (unsafeSize !== safeSize) {
-      remainingSize += unsafeSize - safeSize;
-
-      nextLayout[index] = safeSize;
-    }
-  }
-
-  if (!(compareNumbersWithPrecision(remainingSize, 0) === 0)) {
-    for (let index = 0; index < layoutRestrictions.length; index += 1) {
-      const prevSize = nextLayout[index];
-
-      const unsafeSize = prevSize + remainingSize;
-      const safeSize = resizePanel(layoutRestrictions[index], unsafeSize);
-
-      if (prevSize !== safeSize) {
-        remainingSize -= safeSize - prevSize;
-        nextLayout[index] = safeSize;
-
-        // eslint-disable-next-line max-depth
-        if (compareNumbersWithPrecision(remainingSize, 0) === 0) {
-          break;
-        }
-      }
-    }
-  }
-
-  return nextLayout;
+  return adjustAndDistributeLayoutSize(nextLayout, layoutRestrictions);
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types

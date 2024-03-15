@@ -6,4 +6,6 @@ export interface PaneRestrictions {
   minSize?: number | undefined;
 }
 
+export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
+
 export type FlexProperty = 'flexGrow' | 'flexDirection' | 'flexBasis' | 'flexShrink';

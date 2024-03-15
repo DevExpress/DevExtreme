@@ -2,6 +2,7 @@ import type { DragDirection } from '@js/common';
 import Guid from '@js/core/guid';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
+import { name as CLICK_EVENT } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
 import { addNamespace } from '@js/events/utils/index';
@@ -25,8 +26,6 @@ const ICON_CLASS = 'dx-icon';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
-
-const CLICK_EVENT = 'dxclick';
 
 const RESIZE_DIRECTION: Record<string, DragDirection> = {
   horizontal: 'horizontal',
