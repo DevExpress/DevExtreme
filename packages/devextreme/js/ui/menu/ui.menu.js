@@ -273,10 +273,17 @@ class Menu extends MenuBase {
     }
 
     _isTargetOutOfComponent(relatedTarget) {
-        const $target = $(relatedTarget).parents(`.${DX_MENU_CLASS}`)[0];
-        const $element = this._focusTarget()[0];
+        const $menuTarget = $(relatedTarget).parents(`.${DX_MENU_CLASS}`)[0];
+        const $contextMenuTarget = $(relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
 
-        const isTargetOutOfComponent = $target !== $element;
+        if(!$menuTarget && !$contextMenuTarget) {
+            return true;
+        }
+
+        const $element = this._focusTarget()[0];
+        const $overlayContent = this._visibleSubmenu?.getOverlayContent()[0];
+
+        const isTargetOutOfComponent = !($menuTarget === $element || $contextMenuTarget === $overlayContent);
 
         return isTargetOutOfComponent;
     }
