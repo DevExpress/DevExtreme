@@ -211,7 +211,7 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         instance.option('items', [{ text: 3 }, { text: 4 }]);
         instance.show();
-        assert.equal($('.dx-overlay').length, 1, 'only one overlay should exists');
+        assert.equal($('.dx-overlay').length, 2, 'only two overlay should exists (from Menu and LoadPanel in ScrollView)');
     });
 
     QUnit.test('submenus in the same level should have same horizontal offset', function(assert) {
@@ -287,7 +287,7 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.option('items', [{ text: 1 }]);
-        assert.equal($('.dx-overlay').length, 1, 'overlays cleaned correctly');
+        assert.equal($('.dx-overlay').length, 2, 'overlays cleaned correctly');
     });
 
     QUnit.test('show method should toggle menu\'s visibility', function(assert) {
