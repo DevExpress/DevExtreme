@@ -21,6 +21,24 @@ const testCases = generateOptionMatrix<{ views: View[] }>({
     [
       {
         type: 'month',
+        groupOrientation: 'horizontal',
+      },
+    ],
+    [
+      {
+        type: 'week',
+        groupOrientation: 'horizontal',
+      },
+    ],
+    [
+      {
+        type: 'workWeek',
+        groupOrientation: 'horizontal',
+      },
+    ],
+    [
+      {
+        type: 'month',
         groupOrientation: 'vertical',
       },
     ],
