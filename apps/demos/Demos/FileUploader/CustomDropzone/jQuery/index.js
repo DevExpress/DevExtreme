@@ -8,16 +8,14 @@ $(() => {
     uploadUrl: 'https://js.devexpress.com/Demos/NetCore/FileUploader/Upload',
     visible: false,
     onDropZoneEnter(e) {
-      const items = e.event.originalEvent.dataTransfer.items;
+      if (e.dropZoneElement.id === 'dropzone-external') {
+        const items = e.event.originalEvent.dataTransfer.items;
 
-      if (items.length === 1) {
-        const fileType = items[0].type;
-        const fileExtension = `.${fileType.replace(/^image\//, '')}`;
+        const isSingleFileDragged = items.length === 1;
+        const isValidFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
 
-        if (this.option('allowedFileExtensions').includes(fileExtension)) {
-          if (e.dropZoneElement.id === 'dropzone-external') {
-            toggleDropZoneActive(e.dropZoneElement, true);
-          }
+        if (isSingleFileDragged && this.option('allowedFileExtensions').includes(isValidFileExtension)) {
+          toggleDropZoneActive(e.dropZoneElement, true);
         }
       }
     },
