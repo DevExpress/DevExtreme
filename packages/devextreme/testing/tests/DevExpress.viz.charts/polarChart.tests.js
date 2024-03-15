@@ -266,35 +266,35 @@ QUnit.test('test if polarChart correctly labels axis and stack with defaultName'
     const chart = new dxPolarChart('#chartContainer', {
         series: [{ type: 'stackedbar' }]
     });
- 
+
     const series = chart.getAllSeries();
- 
+
     assert.strictEqual(series.length, 1, 'count of series');
- 
+
     assert.strictEqual(series[0].getStackName(), 'axis_default_stack_default');
 });
- 
+
 QUnit.test('test if polarChart correctly labels axisName', function(assert) {
     const chart = new dxPolarChart('#chartContainer', {
         series: [{ axis: 'axisName', type: 'stackedbar' }]
     });
- 
+
     const series = chart.getAllSeries();
- 
+
     assert.strictEqual(series.length, 1, 'count of series');
- 
+
     assert.strictEqual(series[0].getStackName(), 'axis_axisName_stack_default');
 });
- 
+
 QUnit.test('test if polarChart correctly labels axisName with stackName', function(assert) {
     const chart = new dxPolarChart('#chartContainer', {
         series: [{ axis: 'axisName', type: 'stackedbar', stack: 'stackName' }]
     });
- 
+
     const series = chart.getAllSeries();
- 
+
     assert.strictEqual(series.length, 1, 'count of series');
- 
+
     assert.strictEqual(series[0].getStackName(), 'axis_axisName_stack_stackName');
 });
 
