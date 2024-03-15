@@ -46,6 +46,10 @@ const moduleConfig = {
         this.getCollapseNextButton = () => {
             return this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
         };
+
+        this.getResizeHandleIcon = () => {
+            return this.$element.find(`.${RESIZE_HANDLE_ICON_CLASS}`);
+        };
     },
     afterEach: function() {
         fx.off = false;
@@ -89,8 +93,54 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
         assert.strictEqual(this.$element.hasClass(VERTICAL_DIRECTION_CLASS), false);
     });
 
+    QUnit.module('SeparatorSize', () => {
+        [
+            { direction: 'horizontal', dimension: 'width', newDirection: 'vertical', newDimension: 'height' },
+            { direction: 'vertical', dimension: 'height', newDirection: 'horizontal', newDimension: 'width' },
+        ].forEach(({ direction, dimension, newDirection, newDimension }) => {
+            QUnit.test(`Resize handle should have ${dimension}=8 by default (direction=${direction})`, function(assert) {
+                this.reinit({ direction });
+
+                assert.strictEqual(this.$element.css(dimension), '8px');
+            });
+
+            QUnit.test(`Resize handle should correctly set separator ${dimension} on init (direction=${direction})`, function(assert) {
+                this.reinit({
+                    direction,
+                    separatorSize: 5,
+                });
+
+                assert.strictEqual(this.$element.css(dimension), '5px');
+            });
+
+            QUnit.test(`Resize handle should correctly set separator ${dimension} on init (direction=${direction})`, function(assert) {
+                this.reinit({
+                    direction,
+                    separatorSize: 5,
+                });
+
+                assert.strictEqual(this.$element.css(dimension), '5px');
+            });
+
+            QUnit.test(`Resize handle should correctly update styles on runtime direction change (from ${direction} to ${newDirection}`, function(assert) {
+                this.reinit({
+                    direction,
+                    separatorSize: 5,
+                });
+
+                assert.strictEqual(this.$element.css(dimension), '5px');
+                assert.notStrictEqual(this.$element.css(newDimension), '5px');
+
+                this.instance.option('direction', newDirection);
+
+                assert.strictEqual(this.$element.css(newDimension), '5px');
+                assert.notStrictEqual(this.$element.css(dimension), '5px');
+            });
+        });
+    });
+
     ['vertical', 'horizontal'].forEach((direction) => {
-        QUnit.test(`should have collapse prev button with correct classes (direction=${direction})`, function(assert) {
+        QUnit.test(`should have collapse prev button with correct classes (direction=${direction}) on init`, function(assert) {
             this.reinit({ direction });
             const $collapsePrevButton = $(this.$element.children()[0]);
             const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'left' : 'up'}`;
@@ -100,7 +150,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for corresponding icon');
         });
 
-        QUnit.test(`should have collapse next button with correct classes (direction=${direction})`, function(assert) {
+        QUnit.test(`should have collapse next button with correct classes (direction=${direction}) on init`, function(assert) {
             this.reinit({ direction });
             const $collapseNextButton = $(this.$element.children()[2]);
             const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'right' : 'down'}`;
@@ -110,7 +160,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             assert.ok($collapseNextButton.hasClass(expectedIconClass), 'has class for corresponding icon');
         });
 
-        QUnit.test(`should have resize handle icon with correct class (direction=${direction})`, function(assert) {
+        QUnit.test(`should have resize handle icon with correct class (direction=${direction}) on init`, function(assert) {
             this.reinit({ direction });
             const $resizeHandleIcon = $(this.$element.children()[1]);
             const expectedIconClass = `dx-icon-handle${direction === 'horizontal' ? 'vertical' : 'horizontal'}`;
@@ -118,6 +168,51 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             assert.ok($resizeHandleIcon.hasClass(RESIZE_HANDLE_ICON_CLASS));
             assert.ok($resizeHandleIcon.hasClass(ICON_CLASS), 'has dx-icon class');
             assert.ok($resizeHandleIcon.hasClass(expectedIconClass), 'has class for corresponding icon');
+        });
+
+        QUnit.test(`collapse prev button should have correct icon class on runtime direction change (initial direction=${direction})`, function(assert) {
+            this.reinit({ direction });
+            const $collapsePrevButton = this.getCollapsePrevButton();
+            const newDirection = direction === 'horizontal' ? 'vertical' : 'horizontal';
+            const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'left' : 'up'}`;
+            const newExpectedIconClass = `dx-icon-triangle${newDirection === 'horizontal' ? 'left' : 'up'}`;
+
+            assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for corresponding icon');
+
+            this.instance.option('direction', newDirection);
+
+            assert.notOk($collapsePrevButton.hasClass(expectedIconClass), 'has no class for old icon');
+            assert.ok($collapsePrevButton.hasClass(newExpectedIconClass), 'has class for new icon');
+        });
+
+        QUnit.test(`collapse next button should have correct icon class on runtime direction change (initial direction=${direction})`, function(assert) {
+            this.reinit({ direction });
+            const $collapseNextButton = this.getCollapseNextButton();
+            const newDirection = direction === 'horizontal' ? 'vertical' : 'horizontal';
+            const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'right' : 'down'}`;
+            const newExpectedIconClass = `dx-icon-triangle${newDirection === 'horizontal' ? 'right' : 'down'}`;
+
+            assert.ok($collapseNextButton.hasClass(expectedIconClass), 'has class for corresponding icon');
+
+            this.instance.option('direction', newDirection);
+
+            assert.notOk($collapseNextButton.hasClass(expectedIconClass), 'has no class for old icon');
+            assert.ok($collapseNextButton.hasClass(newExpectedIconClass), 'has class for new icon');
+        });
+
+        QUnit.test(`resize handle icon should have correct class on runtime direction change (initial direction=${direction})`, function(assert) {
+            this.reinit({ direction });
+            const $resizeHandleIcon = this.getResizeHandleIcon();
+            const newDirection = direction === 'horizontal' ? 'vertical' : 'horizontal';
+            const expectedIconClass = `dx-icon-handle${direction === 'horizontal' ? 'vertical' : 'horizontal'}`;
+            const newExpectedIconClass = `dx-icon-handle${newDirection === 'horizontal' ? 'vertical' : 'horizontal'}`;
+
+            assert.ok($resizeHandleIcon.hasClass(expectedIconClass), 'has class for corresponding icon');
+
+            this.instance.option('direction', newDirection);
+
+            assert.notOk($resizeHandleIcon.hasClass(expectedIconClass), 'has no class for old icon');
+            assert.ok($resizeHandleIcon.hasClass(newExpectedIconClass), 'has class for new icon');
         });
     });
 

@@ -46,6 +46,7 @@ class ResizeHandle extends (Widget as any) {
       showCollapseNext: true,
       onCollapsePrevClick: null,
       onCollapseNextClick: null,
+      separatorSize: 8,
     });
   }
 
@@ -71,6 +72,7 @@ class ResizeHandle extends (Widget as any) {
     this.$element().addClass(RESIZE_HANDLE_CLASS);
     this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
+    this._setResizeHandleSize();
 
     this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
     this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
@@ -80,28 +82,56 @@ class ResizeHandle extends (Widget as any) {
     this._setResizeIconVisibility();
   }
 
+  _updateIconsClasses(): void {
+    const isHorizontal = this._isHorizontalDirection();
+
+    this._$collapsePrevButton
+      .removeClass(this._getCollapseIconClass(false, !isHorizontal))
+      .addClass(this._getCollapseIconClass(false, isHorizontal));
+
+    this._$resizeHandle
+      .removeClass(this._getResizeIconClass(!isHorizontal))
+      .addClass(this._getResizeIconClass(isHorizontal));
+
+    this._$collapseNextButton
+      .removeClass(this._getCollapseIconClass(true, !isHorizontal))
+      .addClass(this._getCollapseIconClass(true, isHorizontal));
+  }
+
+  _setResizeHandleSize(): void {
+    const { separatorSize } = this.option();
+    const styleToSet = this._isHorizontalDirection() ? 'width' : 'height';
+
+    this.$element().css({
+      width: '',
+      height: '',
+    });
+
+    this.$element().css(styleToSet, separatorSize);
+  }
+
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
+    const isHorizontal = this._isHorizontalDirection();
+
     switch (iconType) {
       case 'prev':
-        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false, isHorizontal)}`;
       case 'next':
-        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true, isHorizontal)}`;
       case 'icon':
-        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass()}`;
+        return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass(isHorizontal)}`;
       default:
         return '';
     }
   }
 
-  _getResizeIconClass(): string {
-    const isHorizontal = this._isHorizontalDirection();
-
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeIconClass(isHorizontal: boolean): string {
     return `dx-icon-handle${isHorizontal ? 'vertical' : 'horizontal'}`;
   }
 
-  _getCollapseIconClass(isNextButton: boolean): string {
-    const isHorizontal = this._isHorizontalDirection();
-
+  // eslint-disable-next-line class-methods-use-this
+  _getCollapseIconClass(isNextButton: boolean, isHorizontal: boolean): string {
     if (isNextButton) {
       return `dx-icon-triangle${isHorizontal ? 'right' : 'down'}`;
     }
@@ -233,12 +263,17 @@ class ResizeHandle extends (Widget as any) {
         this._toggleDirectionClass();
         this._detachEventHandlers();
         this._attachEventHandlers();
+        this._setResizeHandleSize();
+        this._updateIconsClasses();
         break;
       case 'resizable':
         this._setResizeIconVisibility();
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachEventHandlers();
         this._attachEventHandlers();
+        break;
+      case 'separatorSize':
+        this._setResizeHandleSize();
         break;
       case 'showCollapsePrev':
       case 'showCollapseNext':

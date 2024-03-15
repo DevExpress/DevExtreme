@@ -74,6 +74,7 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: null,
       onResizeStart: null,
       allowKeyboardNavigation: true,
+      separatorSize: 8,
     });
   }
 
@@ -209,6 +210,12 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _updateResizeHandlesOption(optionName: string, optionValue: unknown): void {
+    this._resizeHandles.forEach((resizeHandle) => {
+      resizeHandle.option(optionName, optionValue);
+    });
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _getNextVisibleItemData(index: number): any {
     const { items } = this.option();
@@ -230,12 +237,14 @@ class Splitter extends (CollectionWidget as any) {
       orientation,
       rtlEnabled,
       allowKeyboardNavigation,
+      separatorSize,
     } = this.option();
 
     return {
       direction: orientation,
       focusStateEnabled: allowKeyboardNavigation,
       resizable,
+      separatorSize,
       elementAttr: {
         'aria-controls': paneId,
       },
@@ -267,7 +276,7 @@ class Splitter extends (CollectionWidget as any) {
         this._activeResizeHandleIndex = this._getResizeHandleItems().index(element);
 
         this._splitterItemsSize = this._getSummaryItemsSize(
-          getDimensionByOrientation(orientation),
+          getDimensionByOrientation(this.option('orientation')),
           this._$visibleItems,
           true,
         );
@@ -280,7 +289,7 @@ class Splitter extends (CollectionWidget as any) {
       onResize: ({ event }): void => {
         const newLayout = getNewLayout(
           this._currentLayout,
-          calculateDelta(event.offset, orientation, rtlEnabled, this._splitterItemsSize),
+          calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
           this._activeResizeHandleIndex,
         );
 
@@ -449,6 +458,7 @@ class Splitter extends (CollectionWidget as any) {
         break;
       case 'orientation':
         this._toggleOrientationClass();
+        this._updateResizeHandlesOption('direction', value);
         break;
       case 'onResizeStart':
       case 'onResizeEnd':
@@ -456,6 +466,9 @@ class Splitter extends (CollectionWidget as any) {
       case 'onItemCollapsed':
       case 'onItemExpanded':
         this[getActionNameByEventName(name)] = this._createActionByOption(name);
+        break;
+      case 'separatorSize':
+        this._updateResizeHandlesOption(name, value);
         break;
       default:
         super._optionChanged(args);
