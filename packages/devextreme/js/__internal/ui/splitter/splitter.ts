@@ -10,7 +10,7 @@ import {
 } from '@js/core/utils/size';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
-import type { Item } from '@js/ui/splitter';
+import type { Item, Properties } from '@js/ui/splitter';
 
 import Guid from '../../../core/guid';
 import resizeObserverSingleton from '../../../core/resize_observer';
@@ -68,7 +68,7 @@ class SplitterItem extends CollectionWidgetItem {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
-  _getDefaultOptions(): Record<string, unknown> {
+  _getDefaultOptions(): Properties {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       orientation: ORIENTATION.horizontal,
@@ -232,8 +232,8 @@ class Splitter extends (CollectionWidget as any) {
     return this._getItemDataByIndex(findIndexOfNextVisibleItem(items, index));
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  _getItemDataByIndex(index: number): any {
+  _getItemDataByIndex(index: number): Item {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._editStrategy.getItemDataByIndex(index);
   }
 

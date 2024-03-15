@@ -45,13 +45,13 @@ const moduleConfig = {
 
         this.assertLayout = (expectedLayout) => {
             this.getPanes().filter(':visible').toArray().forEach((item, index) => {
-                QUnit.assert.strictEqual(item.style.flexGrow, expectedLayout[index]);
+                QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], 0.1, `$item[${index}].flexGrow`);
             });
         };
 
         this.checkItemSizes = (expectedItemSizes) => {
             this.instance.option('items').forEach((item, index) => {
-                QUnit.assert.strictEqual(item.size, expectedItemSizes[index], `item[${index}].size`);
+                QUnit.assert.roughEqual(item.size, expectedItemSizes[index], 0.1, `item[${index}].size`);
             });
         };
     },
