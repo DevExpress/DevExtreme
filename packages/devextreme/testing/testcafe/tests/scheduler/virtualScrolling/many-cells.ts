@@ -9,77 +9,35 @@ import type { ViewType, Orientation } from '../../../../../js/ui/scheduler';
 fixture.disablePageReloads`Scheduler: Virtual scrolling (many cells)`
   .page(url(__dirname, '../../container.html'));
 
-interface View {
-  type: ViewType;
-  groupOrientation: Orientation;
-}
-
 const buildScreenshotName = (viewType: ViewType, orientation: Orientation, step: string) => `virtual-scrolling-many-cells-${viewType}-${orientation}-${step}.png`;
 
-const testCases = generateOptionMatrix<{ views: View[] }>({
-  views: [
-    [
-      {
-        type: 'month',
-        groupOrientation: 'horizontal',
-      },
-    ],
-    [
-      {
-        type: 'week',
-        groupOrientation: 'horizontal',
-      },
-    ],
-    [
-      {
-        type: 'workWeek',
-        groupOrientation: 'horizontal',
-      },
-    ],
-    [
-      {
-        type: 'month',
-        groupOrientation: 'vertical',
-      },
-    ],
-    [
-      {
-        type: 'week',
-        groupOrientation: 'vertical',
-      },
-    ],
-    [
-      {
-        type: 'workWeek',
-        groupOrientation: 'vertical',
-      },
-    ],
-  ],
+const testCases = generateOptionMatrix<{ viewType: ViewType; groupOrientation: Orientation }>({
+  viewType: ['month', 'week', 'workWeek'],
+  groupOrientation: ['horizontal', 'vertical'],
 });
 
-testCases.forEach(({ views }) => {
-  const { type: viewType, groupOrientation: orientation } = views[0];
+testCases.forEach(({ viewType, groupOrientation }) => {
   const resourceCount = 400;
 
-  test(`it should correctly render virtual table if more than 1000 cells are virtualized for ${viewType} view and ${orientation} orientation`, async (t) => {
+  test(`it should correctly render virtual table if more than 1000 cells are virtualized for ${viewType} view and ${groupOrientation} orientation`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t
-      .expect(await takeScreenshot(buildScreenshotName(viewType, orientation, 'start'), scheduler.element))
+      .expect(await takeScreenshot(buildScreenshotName(viewType, groupOrientation, 'start'), scheduler.element))
       .ok();
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount / 2 });
 
     await t
-      .expect(await takeScreenshot(buildScreenshotName(viewType, orientation, 'middle'), scheduler.element))
+      .expect(await takeScreenshot(buildScreenshotName(viewType, groupOrientation, 'middle'), scheduler.element))
       .ok();
 
     await scheduler.scrollTo(new Date(2024, 1, 1, 1), { groupId: resourceCount - 1 });
 
     await t
-      .expect(await takeScreenshot(buildScreenshotName(viewType, orientation, 'end'), scheduler.element))
+      .expect(await takeScreenshot(buildScreenshotName(viewType, groupOrientation, 'end'), scheduler.element))
       .ok();
 
     await t
@@ -112,7 +70,10 @@ testCases.forEach(({ views }) => {
         height: 600,
         currentDate: new Date(2024, 1, 1),
         dataSource: appointments,
-        views,
+        views: [{
+          type: viewType,
+          groupOrientation,
+        }],
         currentView: viewType,
         scrolling: {
           mode: 'virtual',
