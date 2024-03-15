@@ -311,7 +311,7 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-group-header {
       @include flex-container(row, nowrap);
 
-      flex: 1 1 100%;
+      flex: 1 1 0;
       padding: 0 5px;
       height: auto;
       width: $scheduler-left-column-width;
