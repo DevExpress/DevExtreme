@@ -9,7 +9,7 @@ import {
     isGroupCriterion,
     isUnaryOperation,
     normalizeBinaryCriterion,
-    isUniformEqualsSequenceByOr,
+    isUniformEqualsByOr,
     isConjunctiveOperator as isConjunctiveOperatorChecker
 } from './utils';
 
@@ -244,7 +244,7 @@ const compileCriteria = (function() {
 
     const _toComparable = (value) => toComparable(value, false, langParams);
 
-    const getOptimizedUniformEqualsSequence = (crit) => {
+    const compileOptimizedUniformEquals = (crit) => {
         const values = crit.filter((_, i) => i % 2 === 0).map((el, i) => _toComparable(el[2]));
         const getter = compileGetter(crit[0][0]);
 
@@ -265,8 +265,8 @@ const compileCriteria = (function() {
         };
     };
     const compileGroup = function(crit) {
-        if(isUniformEqualsSequenceByOr(crit)) {
-            return getOptimizedUniformEqualsSequence(crit);
+        if(isUniformEqualsByOr(crit)) {
+            return compileOptimizedUniformEquals(crit);
         }
 
         const ops = [];
