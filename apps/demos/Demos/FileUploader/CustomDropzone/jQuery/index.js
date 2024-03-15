@@ -7,11 +7,9 @@ $(() => {
     uploadMode: 'instantly',
     uploadUrl: 'https://js.devexpress.com/Demos/NetCore/FileUploader/Upload',
     visible: false,
-    onDropZoneEnter(e) {
-      const component = e.component;
-
-      if (e.dropZoneElement.id === 'dropzone-external') {
-        const items = e.event.originalEvent.dataTransfer.items;
+    onDropZoneEnter({ component, dropZoneElement, event }) {
+      if (dropZoneElement.id === 'dropzone-external') {
+        const items = event.originalEvent.dataTransfer.items;
 
         const allowedFileExtensions = component.option('allowedFileExtensions');
         const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
@@ -20,7 +18,7 @@ $(() => {
         const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
 
         if (isSingleFileDragged && isValidFileExtension) {
-          toggleDropZoneActive(e.dropZoneElement, true);
+          toggleDropZoneActive(dropZoneElement, true);
         }
       }
     },
