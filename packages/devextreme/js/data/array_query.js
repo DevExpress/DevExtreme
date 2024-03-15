@@ -244,20 +244,20 @@ const compileCriteria = (function() {
 
     const _toComparable = (value) => toComparable(value, false, langParams);
 
-    const compileOptimizedUniformEquals = (crit) => {
-        const values = crit.reduce((acc, item, i) => {
+    const compileUniformEqualsCriteria = (crit) => {
+        const getter = compileGetter(crit[0][0]);
+        const filterValues = crit.reduce((acc, item, i) => {
             if(i % 2 === 0) {
                 acc.push(_toComparable(item[2]));
             }
             return acc;
         }, []);
-        const getter = compileGetter(crit[0][0]);
 
         return (obj) => {
             const value = _toComparable(getter(obj));
             let result = false;
 
-            values.find((filterValue) => {
+            filterValues.find((filterValue) => {
                 result = useStrictComparison(filterValue)
                     ? value === filterValue
                     // eslint-disable-next-line eqeqeq
@@ -271,7 +271,7 @@ const compileCriteria = (function() {
     };
     const compileGroup = function(crit) {
         if(isUniformEqualsByOr(crit)) {
-            return compileOptimizedUniformEquals(crit);
+            return compileUniformEqualsCriteria(crit);
         }
 
         const ops = [];
