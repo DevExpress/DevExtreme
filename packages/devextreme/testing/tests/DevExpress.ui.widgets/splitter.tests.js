@@ -687,6 +687,7 @@ QUnit.module('Resizing', moduleConfig, () => {
 
     QUnit.test('resize should work correctly after orientation runtime change', function(assert) {
         this.reinit({
+            width: 208, height: 208,
             items: [ { }, { } ],
         });
 
@@ -765,7 +766,10 @@ QUnit.module('Behavoir', moduleConfig, () => {
     });
 
     QUnit.test('Resize handle should correctly update size when orientation is changed on runtime', function(assert) {
-        this.reinit({ dataSource: [{ }, { }] });
+        this.reinit({
+            dataSource: [{ }, { }],
+            separatorSize: 4,
+        });
         const $resizeHandle = this.getResizeHandles();
 
         this.instance.option('orientation', 'vertical');
