@@ -713,14 +713,20 @@ QUnit.test('execute quickly if criteria is huge sequence of ["prop", "=", value]
         .flatMap((_, index) => [['id', '=', index], 'or']);
 
     filters.pop();
-    const startTime = Date.now();
-    QUERY(input).filter(filters).enumerate().done((r) => {
-        const executionTime = Date.now() - startTime;
-        assert.ok(executionTime < 500, `Execution time is ${executionTime}. It must be less than 500ms`);
-        assert.equal(r.length, 5000);
 
-        done();
+    let bestTime = 1000;
+    const arrayQuery = QUERY(input);
+
+    [1, 2, 3].forEach(() => {
+        const startTime = Date.now();
+        const r = arrayQuery.filter(filters).toArray();
+        bestTime = Math.min(Date.now() - startTime, bestTime);
+        assert.equal(r.length, 5000);
     });
+
+    assert.ok(bestTime < 300, `Execution time is ${bestTime}. It must be less than 300ms`);
+
+    done();
 });
 
 QUnit.module('Grouping');
