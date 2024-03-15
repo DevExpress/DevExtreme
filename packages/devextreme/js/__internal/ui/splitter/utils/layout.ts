@@ -128,6 +128,7 @@ export function getNewLayout(
     if (!(compareNumbersWithPrecision(prevSize, safeSize) === 0)) {
       deltaApplied += prevSize - safeSize;
       nextLayout[currentItemIndex] = safeSize;
+
       if (deltaApplied
         .toPrecision(3)
         .localeCompare(Math.abs(delta).toPrecision(3), undefined, {
@@ -290,7 +291,7 @@ export function convertSizeToRatio(
 export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
   const layout = Array<number>(layoutRestrictions.length);
 
-  const panelConstraintsArray = layoutRestrictions; // panes.filter((p) => p.visible !== false);
+  const panelConstraintsArray = layoutRestrictions;
 
   let numPanelsWithSizes = 0;
   let remainingSize = 100;
@@ -336,7 +337,6 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
   return layout;
 }
 
-// eslint-disable-next-line class-methods-use-this
 export function validateLayout(
   prevLayout: number[],
   layoutRestrictions: PaneRestrictions[],
@@ -358,27 +358,20 @@ export function validateLayout(
 
   let remainingSize = 0;
 
-  // First pass: Validate the proposed layout given each panel's constraints
-  // eslint-disable-next-line no-plusplus
-  for (let index = 0; index < layoutRestrictions.length; index++) {
+  for (let index = 0; index < layoutRestrictions.length; index += 1) {
     const unsafeSize = nextLayout[index];
-    // assert(unsafeSize != null);
 
     const safeSize = resizePanel(layoutRestrictions[index], unsafeSize);
 
-    // eslint-disable-next-line eqeqeq
-    if (unsafeSize != safeSize) {
+    if (unsafeSize !== safeSize) {
       remainingSize += unsafeSize - safeSize;
 
       nextLayout[index] = safeSize;
     }
   }
 
-  // If there is additional, left over space, assign it to any panel(s) that permits it
-  // (It's not worth taking multiple additional passes to evenly distribute)
   if (!(compareNumbersWithPrecision(remainingSize, 0) === 0)) {
-    // eslint-disable-next-line no-plusplus
-    for (let index = 0; index < layoutRestrictions.length; index++) {
+    for (let index = 0; index < layoutRestrictions.length; index += 1) {
       const prevSize = nextLayout[index];
 
       const unsafeSize = prevSize + remainingSize;
@@ -388,7 +381,6 @@ export function validateLayout(
         remainingSize -= safeSize - prevSize;
         nextLayout[index] = safeSize;
 
-        // Once we've used up the remainder, bail
         // eslint-disable-next-line max-depth
         if (compareNumbersWithPrecision(remainingSize, 0) === 0) {
           break;
