@@ -243,26 +243,30 @@ const compileCriteria = (function() {
     let langParams = {};
 
     const _toComparable = (value) => toComparable(value, false, langParams);
-    const compileGroup = function(crit) {
-        if(isUniformSequenceEqualsByOr(crit)) {
-            const values = crit.filter((_, i) => i % 2 === 0).map((el, i) => _toComparable(el[2]));
-            const getter = compileGetter(crit[0][0]);
 
-            return (d) => {
-                const filterValue = _toComparable(getter(d));
-                let result = false;
+    const convertToOptimizedCriteria = (crit) => {
+        const values = crit.filter((_, i) => i % 2 === 0).map((el, i) => _toComparable(el[2]));
+        const getter = compileGetter(crit[0][0]);
 
-                values.find((value) => {
-                    result = useStrictComparison(value)
-                        ? filterValue === value
-                        // eslint-disable-next-line eqeqeq
-                        : filterValue == value;
+        return (d) => {
+            const value = _toComparable(getter(d));
+            let result = false;
 
-                    return result;
-                });
+            values.find((filterValue) => {
+                result = useStrictComparison(filterValue)
+                    ? value === filterValue
+                    // eslint-disable-next-line eqeqeq
+                    : value == filterValue;
 
                 return result;
-            };
+            });
+
+            return result;
+        };
+    };
+    const compileGroup = function(crit) {
+        if(isUniformSequenceEqualsByOr(crit)) {
+            return convertToOptimizedCriteria(crit);
         }
 
         const ops = [];
