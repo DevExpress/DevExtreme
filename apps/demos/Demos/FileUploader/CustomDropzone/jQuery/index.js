@@ -8,10 +8,12 @@ $(() => {
     uploadUrl: 'https://js.devexpress.com/Demos/NetCore/FileUploader/Upload',
     visible: false,
     onDropZoneEnter(e) {
+      const component = e.component;
+
       if (e.dropZoneElement.id === 'dropzone-external') {
         const items = e.event.originalEvent.dataTransfer.items;
 
-        const allowedFileExtensions = this.option('allowedFileExtensions');
+        const allowedFileExtensions = component.option('allowedFileExtensions');
         const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
 
         const isSingleFileDragged = items.length === 1;
