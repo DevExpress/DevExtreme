@@ -16,6 +16,22 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 }),
 { dependencies: { themeName } })();
 
+const addShadowRootTree = async function() {
+    await createTestCafe.ClientFunction(() => {
+        const root = document.querySelector('#parentContainer');
+        const childNodes = root.childNodes;
+
+        if(!root.shadowRoot) {
+            root.attachShadow({ mode: 'open' });
+        }
+
+        const shadowContainer = document.createElement('div');
+        shadowContainer.append.apply(shadowContainer, Array.from(childNodes));
+
+        root.shadowRoot.appendChild(shadowContainer);
+    })();
+};
+
 let testCafe;
 createTestCafe({
     hostname: 'localhost',
@@ -36,6 +52,7 @@ createTestCafe({
 
         setTestingPlatform(args);
         setTestingTheme(args);
+        setShadowDom(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
         if(fs.existsSync('./testing/testcafe/screenshots')) {
@@ -94,17 +111,20 @@ createTestCafe({
         if(args.componentFolder.trim() !== 'renovation') {
             runOptions.hooks = {
                 test: {
+                    before: async() => {
+                        if(args.shadowDom) {
+                            await addShadowRootTree();
+                        }
+
+                        if(args.theme) {
+                            await changeTheme(args.theme);
+                        }
+                    },
                     after: async() => {
                         await testPageUtils.clearTestPage();
                     }
                 },
             };
-
-            if(args.theme) {
-                runOptions.hooks.test.before = async() => {
-                    await changeTheme(args.theme);
-                };
-            }
         }
 
         if(args.browsers === 'chrome:docker') {
@@ -124,6 +144,10 @@ function setTestingPlatform(args) {
 
 function setTestingTheme(args) {
     process.env.theme = args.theme || 'generic.light';
+}
+
+function setShadowDom(args) {
+    process.env.shadowDom = args.shadowDom;
 }
 
 function expandBrowserAlias(browser) {
@@ -151,6 +175,7 @@ function getArgs() {
             indices: '',
             platform: '',
             theme: '',
+            shadowDom: false,
         }
     });
 }
