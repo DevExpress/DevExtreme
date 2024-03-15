@@ -760,33 +760,6 @@ QUnit.module('Menu tests', {
         assert.notOk(submenu.option('visible'), 'submenu was closed');
     });
 
-    [true, false].forEach(hideSubmenuOnFocusOut => {
-        QUnit.test(`Submenu should be ${hideSubmenuOnFocusOut ? 'closed' : 'opened'} when element lose focus and _hideSubmenuOnFocusOut=${hideSubmenuOnFocusOut}`, function(assert) {
-            const options = {
-                _hideSubmenuOnFocusOut: hideSubmenuOnFocusOut,
-                focusStateEnabled: true,
-                showFirstSubmenuMode: 'onClick',
-                items: [
-                    { text: 'item 1', items: [{ text: 'item 11' }] },
-                    { text: 'item 2', items: [{ text: 'item 21' }] },
-                ],
-            };
-            const menu = createMenu(options);
-            const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
-            const $subMenu = $menuItem.eq(1);
-
-            $($subMenu).trigger('dxclick');
-
-            const submenu = getSubMenuInstance($subMenu);
-
-            assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
-
-            $(menu.element).trigger('focusout');
-
-            assert.strictEqual(submenu.option('visible'), !hideSubmenuOnFocusOut, `submenu ${hideSubmenuOnFocusOut ? 'closed' : 'opened'}`);
-        });
-    });
-
     QUnit.test('Don\'t hide submenu when cancel is true', function(assert) {
         let i = 0;
 

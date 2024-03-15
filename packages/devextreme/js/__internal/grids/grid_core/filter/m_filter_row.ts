@@ -659,7 +659,6 @@ const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnH
         });
       },
       rtlEnabled: that.option('rtlEnabled'),
-      _hideSubmenuOnFocusOut: false,
     });
   }
 

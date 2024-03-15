@@ -81,9 +81,7 @@ class Menu extends MenuBase {
 
             onSubmenuHidden: null,
 
-            adaptivityEnabled: false,
-
-            _hideSubmenuOnFocusOut: true,
+            adaptivityEnabled: false
 
             /**
             * @name dxMenuOptions.selectedItems
@@ -271,6 +269,34 @@ class Menu extends MenuBase {
     _render() {
         super._render();
         this._initAdaptivity();
+        this._attachFocusOutHandler();
+    }
+
+    _isTargetOutOfComponent(relatedTarget) {
+        const $target = $(relatedTarget).parents(`.${DX_MENU_CLASS}`)[0];
+        const $element = this._focusTarget()[0];
+
+        const isTargetOutOfComponent = $target !== $element;
+
+        return isTargetOutOfComponent;
+    }
+
+    _attachFocusOutHandler() {
+        const namespace = addNamespace('focusout', this.NAME);
+
+        const callback = ({ relatedTarget }) => {
+            if(!relatedTarget) {
+                return;
+            }
+
+            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+
+            if(isTargetOutside) {
+                this._hideVisibleSubmenu();
+            }
+        };
+
+        eventsEngine.on(this._focusTarget(), namespace, callback);
     }
 
     _renderHamburgerButton() {
@@ -524,16 +550,6 @@ class Menu extends MenuBase {
         const optionValue = this.option('showFirstSubmenuMode');
 
         return isObject(optionValue) ? optionValue.name : optionValue;
-    }
-
-    _focusOutHandler(e) {
-        const hideSubmenuOnFocusOut = this.option('_hideSubmenuOnFocusOut');
-
-        if(hideSubmenuOnFocusOut) {
-            this._hideVisibleSubmenu();
-        }
-
-        super._focusOutHandler(e);
     }
 
     _moveMainMenuFocus(direction) {
@@ -951,8 +967,6 @@ class Menu extends MenuBase {
                     this._treeView.option('animationEnabled', !!args.value);
                 }
                 super._optionChanged(args);
-                break;
-            case '_hideSubmenuOnFocusOut':
                 break;
             default:
                 if(this._isAdaptivityEnabled() && ((args.name === args.fullName) || (args.name === 'items'))) {
