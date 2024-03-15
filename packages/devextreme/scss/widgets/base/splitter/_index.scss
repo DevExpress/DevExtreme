@@ -25,7 +25,6 @@
   }
 
   &.dx-resize-handle-horizontal {
-    width: 8px;
     flex-direction: column;
 
     &.dx-resize-handle-resizable {
@@ -34,7 +33,6 @@
   }
 
   &.dx-resize-handle-vertical {
-    height: 8px;
     flex-direction: row;
     
     &.dx-resize-handle-resizable {

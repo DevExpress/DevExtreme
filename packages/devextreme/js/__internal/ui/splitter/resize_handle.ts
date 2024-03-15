@@ -46,6 +46,7 @@ class ResizeHandle extends (Widget as any) {
       showCollapseNext: true,
       onCollapsePrevClick: null,
       onCollapseNextClick: null,
+      separatorSize: 8,
     });
   }
 
@@ -71,13 +72,34 @@ class ResizeHandle extends (Widget as any) {
     this.$element().addClass(RESIZE_HANDLE_CLASS);
     this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
+    this._setResizeHandleSize();
 
-    this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
-    this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
-    this._$collapseNextButton = $('<div>').addClass(this._getIconClass('next')).appendTo(this.$element());
+    this._$collapsePrevButton = $('<div>').appendTo(this.$element());
+    this._$resizeHandle = $('<div>').appendTo(this.$element());
+    this._$collapseNextButton = $('<div>').appendTo(this.$element());
+
+    this._updateResizeHandleContentClasses();
+  }
+
+  _updateResizeHandleContentClasses(): void {
+    this._$collapsePrevButton.removeClass().addClass(this._getIconClass('prev'));
+    this._$resizeHandle.removeClass().addClass(this._getIconClass('icon'));
+    this._$collapseNextButton.removeClass().addClass(this._getIconClass('next'));
 
     this._setCollapseButtonsVisibility();
     this._setResizeIconVisibility();
+  }
+
+  _setResizeHandleSize(): void {
+    const { separatorSize } = this.option();
+    const styleToSet = this._isHorizontalDirection() ? 'width' : 'height';
+
+    this.$element().css({
+      width: '',
+      height: '',
+    });
+
+    this.$element().css(styleToSet, separatorSize);
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -233,12 +255,17 @@ class ResizeHandle extends (Widget as any) {
         this._toggleDirectionClass();
         this._detachEventHandlers();
         this._attachEventHandlers();
+        this._setResizeHandleSize();
+        this._updateResizeHandleContentClasses();
         break;
       case 'resizable':
         this._setResizeIconVisibility();
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachEventHandlers();
         this._attachEventHandlers();
+        break;
+      case 'separatorSize':
+        this._setResizeHandleSize();
         break;
       case 'showCollapsePrev':
       case 'showCollapseNext':

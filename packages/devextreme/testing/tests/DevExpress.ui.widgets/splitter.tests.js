@@ -684,6 +684,19 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         this.assertLayout(['10', '60', '30']);
     });
+
+    QUnit.test('resize should work correctly after orientation runtime change', function(assert) {
+        this.reinit({
+            items: [ { }, { } ],
+        });
+
+        this.instance.option('orientation', 'vertical');
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+        this.assertLayout(['75', '25']);
+    });
 });
 
 QUnit.module('Initialization', moduleConfig, () => {
@@ -730,6 +743,36 @@ QUnit.module('Initialization', moduleConfig, () => {
     });
 });
 
+QUnit.module('Behavoir', moduleConfig, () => {
+    QUnit.test('Resize handle should have correct size when separatorSize is defined on init', function(assert) {
+        this.reinit({
+            dataSource: [{ }, { }],
+            separatorSize: 5,
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+
+        assert.strictEqual($resizeHandle.css('width'), '5px');
+    });
+
+    QUnit.test('Resize handle should have correct size when separatorSize is defined on runtime', function(assert) {
+        this.reinit({ dataSource: [{ }, { }] });
+        this.instance.option('separatorSize', 4);
+
+        const $resizeHandle = this.getResizeHandles();
+
+        assert.strictEqual($resizeHandle.css('width'), '4px');
+    });
+
+    QUnit.test('Resize handle should correctly update size when orientation is changed on runtime', function(assert) {
+        this.reinit({ dataSource: [{ }, { }] });
+        const $resizeHandle = this.getResizeHandles();
+
+        this.instance.option('orientation', 'vertical');
+
+        assert.strictEqual($resizeHandle.css('height'), '4px');
+    });
+});
 
 QUnit.module('Events', moduleConfig, () => {
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
