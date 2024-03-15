@@ -51,7 +51,7 @@ const moduleConfig = {
 
         this.checkItemSizes = (expectedItemSizes) => {
             this.instance.option('items').forEach((item, index) => {
-                QUnit.assert.roughEqual(item.size, expectedItemSizes[index], 0.1, `item[${index}].size`);
+                QUnit.assert.strictEqual(item.size, expectedItemSizes[index], 0.1, `item[${index}].size`);
             });
         };
     },
