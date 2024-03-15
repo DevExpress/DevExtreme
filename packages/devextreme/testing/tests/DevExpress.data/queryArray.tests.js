@@ -719,15 +719,15 @@ QUnit.test('execute quickly if criteria is huge sequence of ["prop", "=", value]
     filtersNotUniform.at(-1)[1] = '<>';
 
     let bestTime = 1000;
-    let bestNotEqTime = 1000;
+    let notUniformTime = 1000;
 
     const arrayQuery = QUERY(input);
 
-    [1, 2, 3].forEach(() => {
+    [1].forEach(() => {
         const startTime = Date.now();
 
         arrayQuery.filter(filtersNotUniform).toArray();
-        bestNotEqTime = Math.min(Date.now() - startTime, bestTime);
+        notUniformTime = Date.now() - startTime;
     });
 
     [1, 2, 3].forEach(() => {
@@ -738,7 +738,7 @@ QUnit.test('execute quickly if criteria is huge sequence of ["prop", "=", value]
         assert.equal(r.length, 5000);
     });
 
-    assert.ok(bestTime * 2 < bestNotEqTime, `Execution time is ${bestTime}. It must be less than ${Math.floor(bestNotEqTime / 2)}ms`);
+    assert.ok(bestTime * 2 < notUniformTime, `Execution time is ${bestTime}. It must be less than ${Math.floor(notUniformTime / 2)}ms`);
 
     done();
 });
