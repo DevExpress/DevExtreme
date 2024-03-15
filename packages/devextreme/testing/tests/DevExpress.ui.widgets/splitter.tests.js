@@ -5,6 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import { createEvent } from 'events/utils/index';
 
 import 'generic_light.css!';
+import { isNumeric } from '../../../js/core/utils/type.js';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -51,7 +52,11 @@ const moduleConfig = {
 
         this.checkItemSizes = (expectedItemSizes) => {
             this.instance.option('items').forEach((item, index) => {
-                QUnit.assert.strictEqual(item.size, expectedItemSizes[index], 0.1, `item[${index}].size`);
+                if(isNumeric(item.size)) {
+                    QUnit.assert.roughEqual(item.size, expectedItemSizes[index], 0.1, `item[${index}].size`);
+                } else {
+                    QUnit.assert.strictEqual(item.size, expectedItemSizes[index], `item[${index}].size`);
+                }
             });
         };
     },
