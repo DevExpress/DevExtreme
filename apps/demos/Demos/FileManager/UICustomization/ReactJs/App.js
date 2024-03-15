@@ -13,8 +13,9 @@ import { fileItems, getItemInfo } from './data.js';
 
 export default function App() {
   const fileManagerRef = useRef(null);
-  const createFile = useCallback(
-    (fileExtension, directory = fileManagerRef.current.instance().getCurrentDirectory()) => {
+  const createFile = useCallback((fileExtension, directory = fileManagerRef.current
+    .instance()
+    .getCurrentDirectory()) => {
       const newItem = {
         __KEY__: Date.now(),
         name: `New file${fileExtension}`,

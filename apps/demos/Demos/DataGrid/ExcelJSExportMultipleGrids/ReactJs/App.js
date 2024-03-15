@@ -52,7 +52,7 @@ const App = () => {
     ratingSheet.getRow(2).getCell(2).font = { bold: true, size: 16, underline: 'double' };
     exportDataGrid({
       worksheet: priceSheet,
-      component: priceGridRef.(current.instance()),
+      component: priceGridRef.current.instance(),
       topLeftCell: { row: 4, column: 2 },
       customizeCell: ({ gridCell, excelCell }) => {
         setAlternatingRowsBackground(gridCell, excelCell);
