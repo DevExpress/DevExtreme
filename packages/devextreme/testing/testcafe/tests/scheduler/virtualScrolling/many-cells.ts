@@ -19,7 +19,7 @@ const testCases = generateOptionMatrix<{ viewType: ViewType; groupOrientation: O
 testCases.forEach(({ viewType, groupOrientation }) => {
   const resourceCount = 400;
 
-  test(`it should correctly render virtual table if more than 1000 cells are virtualized for ${viewType} view and ${groupOrientation} orientation`, async (t) => {
+  test(`it should correctly render virtual table if a lot of resources are presented for ${viewType} view and ${groupOrientation} orientation (T1205597, T1137490)`, async (t) => {
     const scheduler = new Scheduler('#container');
 
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
