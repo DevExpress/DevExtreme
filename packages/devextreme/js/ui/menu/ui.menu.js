@@ -292,10 +292,6 @@ class Menu extends MenuBase {
         const namespace = addNamespace('focusout', this.NAME);
 
         const callback = ({ relatedTarget }) => {
-            if(!relatedTarget) {
-                return;
-            }
-
             const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
 
             if(isTargetOutside) {
