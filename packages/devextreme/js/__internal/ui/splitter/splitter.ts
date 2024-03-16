@@ -178,7 +178,14 @@ class Splitter extends (CollectionWidget as any) {
       const nextItemData = this._getNextVisibleItemData(index);
       const resizable = itemData.resizable !== false && nextItemData.resizable !== false;
 
-      this._renderResizeHandle(itemId, resizable);
+      const itemProps = {
+        paneId: itemId,
+        resizable,
+        showCollapsePrev: itemData.collapsible === true,
+        showCollapseNext: nextItemData.collapsible === true,
+      };
+
+      this._renderResizeHandle(itemProps);
     }
 
     this.setAria(groupAriaAttributes, $itemFrame);
@@ -186,11 +193,11 @@ class Splitter extends (CollectionWidget as any) {
     return $itemFrame;
   }
 
-  _renderResizeHandle(paneId: string, resizable: boolean): void {
+  _renderResizeHandle(itemProps: Record<string, unknown>): void {
     const $resizeHandle = $('<div>')
       .appendTo(this.$element());
 
-    const config = this._getResizeHandleConfig(paneId, resizable);
+    const config = this._getResizeHandleConfig(itemProps);
     const resizeHandle = this._createComponent($resizeHandle, ResizeHandle, config);
 
     this._resizeHandles.push(resizeHandle);
@@ -207,6 +214,20 @@ class Splitter extends (CollectionWidget as any) {
       const resizable = leftItemData.resizable !== false && rightItemData.resizable !== false;
 
       resizeHandle.option('resizable', resizable);
+    });
+  }
+
+  _updateResizeHandlesCollapsibleState(): void {
+    this._resizeHandles.forEach((resizeHandle) => {
+      const $resizeHandle = resizeHandle.$element();
+      const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+      const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+      const leftItemData = this._getItemData($leftItem);
+      const rightItemData = this._getItemData($rightItem);
+      const showCollapsePrev = leftItemData.collapsible === true;
+      const showCollapseNext = rightItemData.collapsible === true;
+
+      resizeHandle.option({ showCollapsePrev, showCollapseNext });
     });
   }
 
@@ -232,7 +253,7 @@ class Splitter extends (CollectionWidget as any) {
     return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
   }
 
-  _getResizeHandleConfig(paneId: string, resizable: boolean): object {
+  _getResizeHandleConfig(itemProps: Record<string, unknown>): object {
     const {
       orientation,
       rtlEnabled,
@@ -240,10 +261,19 @@ class Splitter extends (CollectionWidget as any) {
       separatorSize,
     } = this.option();
 
+    const {
+      paneId,
+      resizable,
+      showCollapsePrev,
+      showCollapseNext,
+    } = itemProps;
+
     return {
       direction: orientation,
       focusStateEnabled: allowKeyboardNavigation,
       resizable,
+      showCollapsePrev,
+      showCollapseNext,
       separatorSize,
       elementAttr: {
         'aria-controls': paneId,
@@ -399,6 +429,9 @@ class Splitter extends (CollectionWidget as any) {
         break;
       case 'resizable':
         this._updateResizeHandlesResizableState();
+        break;
+      case 'collapsible':
+        this._updateResizeHandlesCollapsibleState();
         break;
       default:
         super._itemOptionChanged(item, property, value);
