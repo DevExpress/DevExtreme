@@ -54,6 +54,7 @@ fixture.disablePageReloads`Splitter_Icon_Results`
               text: 'Pane_2_3', collapsible: true,
             }],
           },
+          collapsible: true,
         },
         { text: 'Pane_3', collapsible: true },
       ],
