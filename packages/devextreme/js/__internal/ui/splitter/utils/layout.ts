@@ -450,9 +450,10 @@ export function getElementSize($element, items, orientation, width, height): num
 
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
 
-  if (sizeOption) {
+  if (isPixelWidth(sizeOption)) {
     return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
   }
+
   return getElementItemsSizeSum($element, orientation, handlesCount);
 }
 

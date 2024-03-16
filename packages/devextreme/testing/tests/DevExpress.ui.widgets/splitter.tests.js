@@ -14,7 +14,12 @@ const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-p
 
 QUnit.testStart(() => {
     const markup =
-        '<div id="splitter"></div>';
+        ' \
+            <div id="splitter"></div> \
+            <div id="container" style="width: 1024px; height: 1024px"> \
+                <div id="splitterInContainer"></div> \
+            </div> \
+        ';
 
     $('#qunit-fixture').html(markup);
 });
@@ -23,21 +28,21 @@ const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
 
-        const init = (options = {}) => {
-            this.$element = $('#splitter').dxSplitter(options);
+        const init = (options = {}, selector = '#splitter') => {
+            this.$element = $(selector).dxSplitter(options);
             this.instance = this.$element.dxSplitter('instance');
         };
 
         init();
 
-        this.reinit = (options) => {
+        this.reinit = (options, selector) => {
             this.instance.dispose();
 
-            init(options);
+            init(options, selector);
         };
 
-        this.getResizeHandles = () => {
-            return this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
+        this.getResizeHandles = (childrenOnly = true) => {
+            return this.$element[childrenOnly ? 'children' : 'find'](`.${RESIZE_HANDLE_CLASS}`);
         };
 
         this.getPanes = () => {
@@ -548,6 +553,29 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.assertLayout(['50', '50']);
         });
 
+        QUnit.test(`splitter size in percentages, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ }, { }, { }]
+            });
+
+            this.assertLayout(['33.3333', '33.3333', '33.3333']);
+        });
+
+        QUnit.test(`splitter size in percentages, pane size in pixels, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ size: '400px' }, { }, { }, { }]
+            }, '#splitterInContainer');
+
+
+            this.assertLayout(['40', '20', '20', '20']);
+        });
+
         QUnit.test(`items with nested splitter should be evenly distributed by default with ${orientation} orientation`, function(assert) {
             this.reinit({
                 width: 208,
@@ -610,6 +638,22 @@ QUnit.module('Resizing', moduleConfig, () => {
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
             this.assertLayout(['75', '25']);
+        });
+
+        QUnit.test(`items should be resized when their neighbour item contains splitter, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{}, { splitter: { dataSource: [{}, {}, {}] } }, { }, { }]
+            }, '#splitterInContainer');
+
+            this.assertLayout(['25', '25', '25', '25']);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(50, 50).dragEnd();
+
+            this.assertLayout(['25', '30', '20', '25']);
         });
 
         QUnit.test(`last two items should be able to resize when first item is not visible, ${orientation} orientation`, function(assert) {
@@ -1109,7 +1153,7 @@ QUnit.module('Events', moduleConfig, () => {
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
             });
 
-            const pointer = pointerMock(this.getResizeHandles().eq(0));
+            const pointer = pointerMock(this.getResizeHandles(false).eq(0));
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1125,7 +1169,8 @@ QUnit.module('Events', moduleConfig, () => {
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
             });
 
-            const pointer = pointerMock(this.getResizeHandles().eq(0));
+
+            const pointer = pointerMock(this.getResizeHandles(false).eq(0));
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1252,7 +1297,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
                 }]
             });
 
-            const pointer = pointerMock(this.getResizeHandles()[0]);
+            const pointer = pointerMock(this.getResizeHandles(false)[0]);
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1272,7 +1317,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
                 }]
             });
 
-            const pointer = pointerMock(this.getResizeHandles()[0]);
+            const pointer = pointerMock(this.getResizeHandles(false)[0]);
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1293,7 +1338,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
                 }]
             });
 
-            let pointer = pointerMock(this.getResizeHandles().get(0));
+            let pointer = pointerMock(this.getResizeHandles(false).get(0));
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
@@ -1303,7 +1348,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
 
             this.instance.option(`items[0].splitter.${eventHandler}`, handlerStubAfterUpdate);
 
-            pointer = pointerMock(this.getResizeHandles()[0]);
+            pointer = pointerMock(this.getResizeHandles(false)[0]);
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
             assert.strictEqual(handlerStub.callCount, 0);
