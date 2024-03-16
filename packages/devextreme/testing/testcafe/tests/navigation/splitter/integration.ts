@@ -45,8 +45,10 @@ safeSizeTest('The splitter pane should be rendered with the correct ratio inside
       dataSource: [{
         size: '100px',
         text: 'Pane_1',
+        collapsible: true,
         template: () => $('<div>').text('Pane_1'),
       }, {
+        collapsible: true,
         splitter: {
           orientation: 'vertical',
           dataSource: [{
