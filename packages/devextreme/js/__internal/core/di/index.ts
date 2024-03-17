@@ -10,6 +10,8 @@ interface DIItem<T, TDeps extends readonly any[]> {
 export class DIContext {
   private readonly instances: Map<unknown, unknown> = new Map();
 
+  private readonly fabrics: Map<unknown, unknown> = new Map();
+
   private readonly antiRecursionSet = new Set();
 
   public register<T, TDeps extends readonly any[]>(
@@ -18,17 +20,24 @@ export class DIContext {
   ): void {
     // eslint-disable-next-line no-param-reassign
     fabric ??= id;
-    this.instances.set(id, this.create(fabric));
+    this.fabrics.set(id, fabric);
   }
 
   public get<T, TDeps extends readonly any[]>(
     id: DIItem<T, TDeps>,
   ): T {
-    const res = this.instances.get(id);
-    if (!res) {
-      throw new Error('DI item is not registered');
+    if (this.instances.get(id)) {
+      return this.instances.get(id) as T;
     }
-    return res as T;
+
+    const fabric = this.fabrics.get(id);
+    if (fabric) {
+      const res: T = this.create(fabric as any);
+      this.instances.set(id, res);
+      return res;
+    }
+
+    throw new Error('DI item is not registered');
   }
 
   public tryGet<T, TDeps extends readonly any[]>(
@@ -45,7 +54,7 @@ export class DIContext {
 
     this.antiRecursionSet.add(fabric);
 
-    const args = (fabric.dependencies ?? []).map((dependency) => this.create(dependency));
+    const args = (fabric.dependencies ?? []).map((dependency) => this.get(dependency));
 
     this.antiRecursionSet.delete(fabric);
 

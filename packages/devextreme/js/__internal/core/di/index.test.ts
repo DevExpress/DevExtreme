@@ -77,3 +77,26 @@ describe('mocks', () => {
     expect(ctx.get(MyClass).getNumber()).toBe(2);
   });
 });
+
+it('should work regardless of registration order', () => {
+  class MyClass {
+    getNumber(): number {
+      return 1;
+    }
+  }
+
+  class MyDependentClass {
+    static dependencies = [MyClass] as const;
+
+    constructor(private readonly myClass: MyClass) {}
+
+    getSuperNumber(): number {
+      return this.myClass.getNumber() * 2;
+    }
+  }
+
+  const ctx = new DIContext();
+  ctx.register(MyDependentClass);
+  ctx.register(MyClass);
+  expect(ctx.get(MyDependentClass).getSuperNumber()).toBe(2);
+});
