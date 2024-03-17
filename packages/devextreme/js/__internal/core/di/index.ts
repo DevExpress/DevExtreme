@@ -24,7 +24,18 @@ export class DIContext {
   public get<T, TDeps extends readonly any[]>(
     id: DIItem<T, TDeps>,
   ): T {
-    return this.instances.get(id) as T;
+    const res = this.instances.get(id);
+    if (!res) {
+      throw new Error('DI item is not registered');
+    }
+    return res as T;
+  }
+
+  public tryGet<T, TDeps extends readonly any[]>(
+    id: DIItem<T, TDeps>,
+  ): T | null {
+    const res = this.instances.get(id);
+    return res as T;
   }
 
   public create<T, TDeps extends readonly any[]>(fabric: DIItem<T, TDeps>): T {
