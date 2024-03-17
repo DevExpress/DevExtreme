@@ -23,6 +23,13 @@ export class DIContext {
     this.fabrics.set(id, fabric);
   }
 
+  public registerInstance<T, TDeps extends readonly any[]>(
+    id: DIItem<T, TDeps>,
+    instance: T,
+  ): void {
+    this.instances.set(id, instance);
+  }
+
   public get<T, TDeps extends readonly any[]>(
     id: DIItem<T, TDeps>,
   ): T {
