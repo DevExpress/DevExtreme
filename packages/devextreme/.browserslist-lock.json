@@ -1,0 +1,14 @@
+{
+  "sha1": "39d924727e335efc4afe1739a0dcbae160b99f33",
+  "targets": {
+    "android": "52",
+    "chrome": "109",
+    "edge": "114",
+    "firefox": "115",
+    "ios": "11",
+    "opera": "99",
+    "opera_mobile": "73",
+    "safari": "16.4",
+    "samsung": "6.2"
+  }
+}

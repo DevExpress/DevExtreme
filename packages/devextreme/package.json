@@ -220,17 +220,12 @@
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
     "qunit-in-docker": "gulp qunit-in-docker --constel",
     "test-typescript": "gulp test-ts",
-    "tcd-update": "tcd-update"
+    "tcd-update": "tcd-update",
+    "update-browsers-lock": "ts-node ./tools/update-browsers-lock"
   },
   "jest": {
     "modulePathIgnorePatterns": [
       "node_modules"
     ]
-  },
-  "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%",
-    "not dead"
-  ]
+  }
 }
