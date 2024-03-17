@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 /* eslint-disable @typescript-eslint/prefer-nullish-coalescing */
 /* eslint-disable max-classes-per-file */
 /* eslint-disable @typescript-eslint/method-signature-style */
@@ -12,6 +13,7 @@ import { isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
+import { DIContext } from '@ts/core/di/index';
 
 import type {
   Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module,
@@ -24,6 +26,8 @@ import { updateViewsBorders } from './views/utils/update_views_borders';
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 export class ModuleItem {
+  static dependencies = ['component'];
+
   public _updateLockCount: any;
 
   public component!: InternalGrid;
@@ -411,6 +415,9 @@ export function processModules(
   componentInstance: ComponentInstanceType,
   componentClass: { modules: [Module & { name: string }]; modulesOrder: any },
 ): void {
+  const diContext = new DIContext();
+  diContext.registerInstance('component' as any, componentInstance);
+
   const { modules } = componentClass;
   const { modulesOrder } = componentClass;
 
@@ -421,7 +428,7 @@ export function processModules(
 
     each(moduleTypes, (name, moduleType) => {
       // eslint-disable-next-line new-cap
-      const moduleItem = new moduleType(componentInstance);
+      const moduleItem = diContext.get(moduleType);
       moduleItem.name = name;
       registerPublicMethods(componentInstance, name, moduleItem);
 
@@ -486,10 +493,20 @@ export function processModules(
     rootViewTypes,
   );
 
-  // eslint-disable-next-line no-param-reassign
-  componentInstance._controllers = createModuleItems(controllerTypes);
-  // eslint-disable-next-line no-param-reassign
-  componentInstance._views = createModuleItems(viewTypes);
+  Object.keys(controllerTypes).forEach((name) => {
+    const id = rootControllerTypes[name];
+    const fabric = controllerTypes[name];
+    diContext.register(id, fabric);
+  });
+  Object.keys(viewTypes).forEach((name) => {
+    const id = rootViewTypes[name];
+    const fabric = viewTypes[name];
+    diContext.register(id, fabric);
+  });
+
+  componentInstance._controllers = createModuleItems(rootControllerTypes);
+  componentInstance._views = createModuleItems(rootViewTypes);
+  componentInstance.diContext = diContext;
 }
 
 const callModuleItemsMethod = function (that, methodName, args?) {
