@@ -80,7 +80,14 @@ export class ContextMenuController extends modules.ViewController {
 }
 
 export class ContextMenuView extends modules.View {
-  private _contextMenuController!: ContextMenuController;
+  static dependencies = ['component', ContextMenuController];
+
+  constructor(
+    component,
+    private _contextMenuController: ContextMenuController,
+  ) {
+    super(component);
+  }
 
   public init() {
     super.init();
