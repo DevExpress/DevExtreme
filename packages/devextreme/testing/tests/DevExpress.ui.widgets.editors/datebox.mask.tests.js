@@ -1229,7 +1229,6 @@ module('Search', setupModule, () => {
 module('Date AM/PM Handling', {
     beforeEach: function() {
         setupModule.beforeEach.call(this);
-        this.instance.option('value', null);
         ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
             this.instance.option('displayFormat', format);
         });
