@@ -27,6 +27,7 @@ interface Options {
 interface XHRSurrogate {
   type?: string;
   aborted: boolean;
+  status?: number;
   abort: () => void;
 }
 
@@ -148,11 +149,13 @@ function getRequestCallbacks(options: Options, deferred: DeferredResult, xhrSurr
     error(error: HttpErrorResponse) {
       let errorStatus = error?.statusText === TIMEOUT ? TIMEOUT : 'error';
 
-      errorStatus = options.dataType === 'json' && error.message.includes('parsing')
+      errorStatus = options.dataType === 'json' && error.message?.includes?.('parsing')
         ? PARSER_ERROR
         : errorStatus;
 
-      return deferred.reject(assignResponseProps(xhrSurrogate, error), errorStatus, error);
+      xhrSurrogate = assignResponseProps(xhrSurrogate, error);
+      xhrSurrogate.status = error.status || 400;
+      return deferred.reject(xhrSurrogate, errorStatus, error);
     },
     complete() {
       rejectIfAborted(deferred, xhrSurrogate);
@@ -181,7 +184,9 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
       return null;
     },
     error(error: HttpErrorResponse) {
-      return deferred.reject(assignResponseProps(xhrSurrogate, error), error.status, error);
+      xhrSurrogate = assignResponseProps(xhrSurrogate, error);
+      xhrSurrogate.status = error.status || 400;
+      return deferred.reject(xhrSurrogate, error.status, error);
     },
     complete() {
       rejectIfAborted(deferred, xhrSurrogate, () => {
