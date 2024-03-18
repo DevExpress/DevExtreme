@@ -39,7 +39,9 @@ runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
+});
 
+runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
   test('dropzone-active class is not added to the dropzone element when an invalid file format is dragged', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -67,7 +69,9 @@ runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   });
+});
 
+runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
   test('dropzone-active class is not added to the dropzone element when an multiple items are dragged', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
