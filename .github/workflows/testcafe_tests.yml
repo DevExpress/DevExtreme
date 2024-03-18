@@ -166,7 +166,7 @@ jobs:
       run: 7z x artifacts.zip -aoa
 
     - name: Run TestCafe tests
-      working-directory: ./packages/devextreme
+      working-directory: ./e2e/testcafe
       run: |
         [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
@@ -174,7 +174,7 @@ jobs:
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
-        npm run test-testcafe -- $all_args
+        npm run test -- $all_args
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
