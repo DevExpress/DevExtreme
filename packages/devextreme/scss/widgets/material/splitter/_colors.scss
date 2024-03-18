@@ -3,15 +3,28 @@
 @use "../colors" as *;
 // adduse
 
-$splitter-resize-handle-bg: #D1D1D1 !default;
-$splitter-resize-handle-color: black !default;
+$splitter-resize-handle-color: null !default;
+$splitter-resize-handle-color-hover: null !default;
+$splitter-resize-handle-color-focused: null !default;
 
-@if $mode == 'dark' {
-    $splitter-resize-handle-bg: #FFFFFF0A;
-    $splitter-resize-handle-color: #FFFFFF;
-}
+$splitter-resize-handle-bg: null !default;
+$splitter-resize-handle-bg-hover: null !default;
+$splitter-resize-handle-bg-focused: $base-accent !default;
 
 @if $mode == 'light' {
-    $splitter-resize-handle-bg:#0000000A;
-    $splitter-resize-handle-color: #00000099;
+  $splitter-resize-handle-color: #FFFFFF !default;
+  $splitter-resize-handle-color-hover: #00000099 !default;
+  $splitter-resize-handle-color-focused: #FFFFFF !default;
+
+  $splitter-resize-handle-bg: #0000000A !default;
+  $splitter-resize-handle-bg-hover: #0000001F !default;
+}
+
+@if $mode == 'dark' {
+  $splitter-resize-handle-color: #FFFFFF !default;
+  $splitter-resize-handle-color-hover: #FFFFFF99 !default;
+  $splitter-resize-handle-color-focused: #363640 !default;
+
+  $splitter-resize-handle-bg: #FFFFFF0A !default;
+  $splitter-resize-handle-bg-hover: #FFFFFF1F;
 }

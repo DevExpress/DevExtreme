@@ -1,36 +1,31 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-$splitter-resize-handle-bg: #D1D1D1 !default;
-$splitter-resize-handle-color: black !default;
-// @mixin state($property){
-//     @if $property == 'hover' and  $color == 'dark'{
-//         background-color: #FFFFFF29;
-//         color:#DEDEDE;
-//     }
-//     @if $property == 'hover' and  $color == 'light'{
-//         background-color: #33333329;
-//         color: #333333;
-//     }
+$splitter-resize-handle-color: null !default;
+$splitter-resize-handle-color-hover: null !default;
+$splitter-resize-handle-color-focused: null !default;
 
-//     @if $property == 'focus' and  $color == 'dark'{
-//         background-color: #1CA8DD;
-//         color:#2A2A2A;
-//     }
-//     @if $property == 'focus' and  $color == 'light'{
-//         background-color: #337AB7;
-//         color:#FFFFFF;
-//     }
-// }
-
-@if $color == 'dark' {
-    $splitter-resize-handle-bg: #3E3E3E;
-    $splitter-resize-handle-color: #DEDEDE;
-}
+$splitter-resize-handle-bg: null !default;
+$splitter-resize-handle-bg-hover: null !default;
+$splitter-resize-handle-bg-focused: $base-accent !default;
 
 @if $color == 'light' {
-    $splitter-resize-handle-bg:#EFEFEF;
-    $splitter-resize-handle-color: #333333;
+  $splitter-resize-handle-color: #424242 !default;
+  $splitter-resize-handle-color-hover: #333333 !default;
+  $splitter-resize-handle-color-focused: #FFFFFF !default;
+
+  $splitter-resize-handle-bg: #F0F0F0 !default;
+  $splitter-resize-handle-bg-hover: #33333329 !default;
+}
+
+@if $color == 'dark' {
+  $splitter-resize-handle-color: #DEDEDE !default;
+  $splitter-resize-handle-color-hover: #DEDEDE !default;
+  $splitter-resize-handle-color-focused: #2A2A2A !default;
+
+  $splitter-resize-handle-bg: #3E3E3E !default;
+  $splitter-resize-handle-bg-hover: #FFFFFF29;
 }
