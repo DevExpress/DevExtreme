@@ -26,7 +26,10 @@ import { updateViewsBorders } from './views/utils/update_views_borders';
 const WIDGET_WITH_LEGACY_CONTAINER_NAME = 'dxDataGrid';
 
 export class ModuleItem {
-  static dependencies = ['component'];
+  // We don't have type for GridBase widget
+  // There's no such class, DataGrid and TreeList don't have common ancestor
+  // so I just added 'component' id as string
+  static dependencies: unknown[] = ['component'];
 
   public _updateLockCount: any;
 
