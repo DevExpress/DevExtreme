@@ -1243,6 +1243,46 @@ module('Search', setupModule, () => {
     });
 });
 
+module('Date AM/PM Handling', setupModule, () => {
+    ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
+        test(`wrong key should not change PM to AM if displayFormat=${format}`, function(assert) {
+            this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+            this.instance.option('displayFormat', format);
+
+            this.keyboard.type('t');
+
+            assert.strictEqual(this.$input.val(), 'PM');
+        });
+
+        test(`wrong key should not change AM to PM if displayFormat=${format}`, function(assert) {
+            this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+            this.instance.option('displayFormat', format);
+
+            this.keyboard.type('q');
+
+            assert.strictEqual(this.$input.val(), 'AM');
+        });
+
+        test(`when "a" is pressed it should change PM to AM if displayFormat=${format} (T1217203)`, function(assert) {
+            this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+            this.instance.option('displayFormat', format);
+
+            this.keyboard.type('a');
+
+            assert.strictEqual(this.$input.val(), 'AM');
+        });
+
+        test(`when "p" is pressed it should change AM to PM if displayFormat=${format}`, function(assert) {
+            this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+            this.instance.option('displayFormat', format);
+
+            this.keyboard.type('p');
+
+            assert.strictEqual(this.$input.val(), 'PM');
+        });
+    });
+});
+
 module('Empty dateBox', {
     beforeEach: function() {
         setupModule.beforeEach.call(this);
