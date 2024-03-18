@@ -159,12 +159,6 @@ class ContextMenu extends MenuBase {
 
     _focusInHandler() {}
 
-    _focusOutHandler(e) {
-        this.hide();
-
-        super._focusOutHandler(e);
-    }
-
     _itemContainer() {
         return this._overlay ? this._overlay.$content() : $();
     }
@@ -346,6 +340,29 @@ class ContextMenu extends MenuBase {
         this._addWidgetClass();
     }
 
+    _isTargetOutOfComponent(relatedTarget) {
+        const $parents = $(relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`);
+        const $contextMenuTarget = $parents[0];
+
+        return !$contextMenuTarget;
+    }
+
+    _attachFocusOutHandler() {
+        const target = this._overlay.$content();
+        const namespace = addNamespace('focusout', this.NAME);
+
+        const callback = ({ relatedTarget }) => {
+            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+
+            if(isTargetOutside) {
+                this.hide();
+            }
+        };
+
+        eventsEngine.off(target, namespace);
+        eventsEngine.on(target, namespace, callback);
+    }
+
     _renderContentImpl() {
         this._detachShowContextMenuEvents(this._getTarget());
         this._attachShowContextMenuEvents();
@@ -510,7 +527,10 @@ class ContextMenu extends MenuBase {
             showTitle: false,
             height: 'auto',
             width: 'auto',
-            onShown: this._overlayShownActionHandler.bind(this),
+            onShown: () => {
+                this._attachFocusOutHandler();
+                this._overlayShownActionHandler();
+            },
             onHiding: this._overlayHidingActionHandler.bind(this),
             onHidden: this._overlayHiddenActionHandler.bind(this),
             visualContainer: window
