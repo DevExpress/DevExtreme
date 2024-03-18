@@ -16,12 +16,12 @@ const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 QUnit.testStart(() => {
     const markup =
-        ' \
-            <div id="splitter"></div> \
-            <div id="container" style="width: 1024px; height: 1024px"> \
-                <div id="splitterInContainer"></div> \
-            </div> \
-        ';
+        `
+            <div id="splitter"></div>
+            <div id="container" style="width: 1024px; height: 1024px">
+                <div id="splitterInContainer"></div>
+            </div>
+        `;
 
     $('#qunit-fixture').html(markup);
 });
