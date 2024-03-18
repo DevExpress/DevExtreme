@@ -427,6 +427,29 @@ const SelectBox = (DropDownList as any).inherit({
     return this._dataController.searchValue();
   },
 
+  _isInlineAutocompleteEnabled() {
+    return this.option('searchEnabled')
+      && !this.option('acceptCustomValue')
+      && this.option('searchMode') === 'startswith';
+  },
+
+  _getAriaAutocomplete() {
+    const { disabled, readOnly, searchEnabled } = this.option();
+
+    const isInputEditable = !(readOnly || disabled);
+    const hasAutocomplete = searchEnabled && isInputEditable;
+
+    if (!hasAutocomplete) {
+      return 'none';
+    }
+
+    const isInlineAutocompleteEnabled = this._isInlineAutocompleteEnabled();
+
+    const autocompleteAria = isInlineAutocompleteEnabled ? 'both' : 'list';
+
+    return autocompleteAria;
+  },
+
   _toggleOpenState(isVisible) {
     if (this.option('disabled')) {
       return;
@@ -832,10 +855,7 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _shouldSubstitutionBeRendered() {
-    return !this._preventSubstitution
-            && this.option('searchEnabled')
-            && !this.option('acceptCustomValue')
-            && this.option('searchMode') === 'startswith';
+    return !this._preventSubstitution && this._isInlineAutocompleteEnabled();
   },
 
   _renderInputSubstitution() {
@@ -882,6 +902,12 @@ const SelectBox = (DropDownList as any).inherit({
         break;
       case 'tooltipEnabled':
         this._renderTooltip();
+        break;
+      case 'readOnly':
+      case 'disabled':
+      case 'searchMode':
+        this.callBase(args);
+        this._setDefaultAria();
         break;
       case 'displayCustomValue':
       case 'acceptCustomValue':

@@ -1646,6 +1646,13 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         assert.equal($input.attr('aria-controls'), $list.attr('id'), 'aria-controls points to list\'s id');
     });
 
+    QUnit.test('aria-haspopup should be equal listbox', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList();
+        const $input = $dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-haspopup'), 'listbox');
+    });
+
     QUnit.test('input\'s aria-activedescendant attribute should point to the focused item', function(assert) {
         const $dropDownList = $('#dropDownList').dxDropDownList({
             dataSource: [1, 2, 3],
@@ -1700,7 +1707,6 @@ QUnit.module('aria accessibility', moduleConfig, () => {
         list.option('focusedElement', null);
         assert.strictEqual($input.attr('aria-activedescendant'), undefined, 'aria-activedescendant is not defined');
     });
-
 
     ['items', 'dataSource'].forEach(dataSource => {
         const getItemsContainer = () => $(`.${LIST_CLASS} .${LIST_ITEMS_CLASS}`);
