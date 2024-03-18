@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { Deferred, DeferredObj } from 'devextreme/core/utils/deferred';
 import {
   HttpClient, HttpEventType, HttpParams, HttpEvent, HttpErrorResponse, HttpResponse,
 } from '@angular/common/http';
 import { throwError, Subject } from 'rxjs';
+import { Deferred, DeferredObj } from 'devextreme/core/utils/deferred';
 import { takeUntil, timeoutWith } from 'rxjs/operators';
 import { isDefined } from 'devextreme/core/utils/type';
 import { getWindow } from 'devextreme/core/utils/window';
