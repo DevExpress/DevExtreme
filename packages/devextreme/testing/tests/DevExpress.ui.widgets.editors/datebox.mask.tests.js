@@ -1229,15 +1229,13 @@ module('Search', setupModule, () => {
 module('Date AM/PM Handling', {
     beforeEach: function() {
         setupModule.beforeEach.call(this);
-        ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
-            this.instance.option('displayFormat', format);
-        });
     },
     afterEach: setupModule.afterEach
 }, () => {
     ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
         test(`wrong key should not change PM to AM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+            this.instance.option('displayFormat', format);
 
             this.keyboard.type('t');
 
@@ -1246,6 +1244,7 @@ module('Date AM/PM Handling', {
 
         test(`wrong key should not change AM to PM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+            this.instance.option('displayFormat', format);
 
             this.keyboard.type('q');
 
@@ -1254,6 +1253,7 @@ module('Date AM/PM Handling', {
 
         test(`when "a" is pressed it should change PM to AM if displayFormat=${format} (T1217203)`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
+            this.instance.option('displayFormat', format);
 
             this.keyboard.type('a');
 
@@ -1262,6 +1262,7 @@ module('Date AM/PM Handling', {
 
         test(`when "p" is pressed it should change AM to PM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
+            this.instance.option('displayFormat', format);
 
             this.keyboard.type('p');
 
