@@ -14,8 +14,8 @@ $splitter-resize-handle-bg-focused: $base-accent !default;
 
 @if $color == 'light' {
   $splitter-resize-handle-color: #424242 !default;
-  $splitter-resize-handle-color-hover: #333333 !default;
-  $splitter-resize-handle-color-focused: #FFFFFF !default;
+  $splitter-resize-handle-color-hover: #333 !default;
+  $splitter-resize-handle-color-focused: #FFF !default;
 
   $splitter-resize-handle-bg: #F0F0F0 !default;
   $splitter-resize-handle-bg-hover: #33333329 !default;
