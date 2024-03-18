@@ -49,9 +49,9 @@ const moduleConfig = {
             return this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
         };
 
-        this.assertLayout = (expectedLayout) => {
+        this.assertLayout = (expectedLayout, epsilon) => {
             this.getPanes().filter(':visible').toArray().forEach((item, index) => {
-                QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], 0.1, `$item[${index}].flexGrow`);
+                QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], epsilon || 0.1, `$item[${index}].flexGrow`);
             });
         };
 
@@ -572,16 +572,16 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ size: '400px' }, { }, { }, { }]
             }, '#splitterInContainer');
 
-
-            this.assertLayout(['40', '20', '20', '20']);
+            this.checkItemSizes(['400px', undefined, undefined, undefined]);
+            this.assertLayout(['40', '20', '20', '20'], 1);
         });
 
         QUnit.test(`items with nested splitter should be evenly distributed by default with ${orientation} orientation`, function(assert) {
             this.reinit({
                 width: 208,
                 height: 208,
-                orientation: 'horizontal',
-                dataSource: [{}, {}, {}, {
+                orientation,
+                dataSource: [{ }, { }, { }, {
                     splitter: {
                         orientation,
                         dataSource: [{ }]
@@ -605,7 +605,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 224, height: 224,
                 orientation,
-                dataSource: [{}, {}, { visible: false, }, { }, { }]
+                dataSource: [{ }, { }, { visible: false, }, { }, { }]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -618,7 +618,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 224, height: 224,
                 orientation,
-                dataSource: [{}, {}, { visible: false, }, {}, {}]
+                dataSource: [{ }, { }, { visible: false, }, { }, { }]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(2));
@@ -631,7 +631,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 208, height: 208,
                 orientation,
-                dataSource: [{}, { visible: false, }, { },]
+                dataSource: [{ }, { visible: false, }, { },]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -645,14 +645,15 @@ QUnit.module('Resizing', moduleConfig, () => {
                 width: '100%',
                 height: '100%',
                 orientation,
-                dataSource: [{}, { splitter: { dataSource: [{}, {}, {}] } }, { }, { }]
+                dataSource: [{ }, { splitter: { dataSource: [{}, {}, {}] } }, { }, { }]
             }, '#splitterInContainer');
 
-            this.assertLayout(['25', '25', '25', '25']);
+            this.assertLayout(['25', '25', '25', '25'], 1);
 
             const pointer = pointerMock(this.getResizeHandles().eq(1));
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
+            this.checkItemSizes([250, 300, 200, 250]);
             this.assertLayout(['25', '30', '20', '25']);
         });
 
