@@ -10,5 +10,12 @@
 .dx-splitter {
   .dx-resize-handle {
     background-color: $splitter-resize-handle-bg;
+    color: $splitter-resize-handle-color;
+  }
+  .dx-state-hover {
+    @include state('hover');
+  }
+  .dx-state-focused {
+    @include state('focus')
   }
 }

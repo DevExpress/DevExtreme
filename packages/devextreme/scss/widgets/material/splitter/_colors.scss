@@ -1,7 +1,36 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
-
 // adduse
 
-$splitter-resize-handle-bg: #D1D1D1;
+$splitter-resize-handle-bg: #D1D1D1 !default;
+$splitter-resize-handle-color: black !default;
+@mixin state($property){
+    @if $property == 'hover' and  $mode == 'dark'{
+        background-color: #FFFFFF1F;
+        color:#FFFFFF99;
+    }
+    @if $property == 'hover' and  $mode == 'light'{
+        background-color: #0000001F;
+        color: #00000099;
+    }
+
+    @if $property == 'focus' and  $mode == 'dark'{
+        background-color: #5CCBFD;
+        color:#363640;
+    }
+    @if $property == 'focus' and  $mode == 'light'{
+        background-color: #03A9F4;
+        color:#FFFFFF;
+    }
+}
+
+@if $mode == 'dark' {
+    $splitter-resize-handle-bg: #FFFFFF0A;
+    $splitter-resize-handle-color: #FFFFFF;
+}
+
+@if $mode == 'light' {
+    $splitter-resize-handle-bg:#0000000A;
+    $splitter-resize-handle-color: #00000099;
+}
