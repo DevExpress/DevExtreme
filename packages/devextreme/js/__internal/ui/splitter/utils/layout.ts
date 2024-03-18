@@ -132,7 +132,7 @@ export function getNewLayout(
     if (!(compareNumbersWithPrecision(prevSize, safeSize) === 0)) {
       deltaApplied += prevSize - safeSize;
       nextLayout[currentItemIndex] = safeSize;
-      if (deltaApplied.toFixed(PRECISION) >= Math.abs(delta).toFixed(PRECISION)) {
+      if (deltaApplied.toFixed(PRECISION) >= Math.abs(currentDelta).toFixed(PRECISION)) {
         break;
       }
     }

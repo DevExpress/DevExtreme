@@ -683,7 +683,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(this.getResizeHandles().eq(1));
             pointer.start().dragStart().drag(260, 260).dragEnd();
 
-            this.checkItemSizes([250, 510, 200, 240]);
+            this.checkItemSizes([250, 510, 0, 240]);
             this.assertLayout(['25', '51', '0', '24']);
         });
 
