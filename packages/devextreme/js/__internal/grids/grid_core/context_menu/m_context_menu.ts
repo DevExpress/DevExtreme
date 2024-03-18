@@ -84,15 +84,9 @@ export class ContextMenuView extends modules.View {
 
   constructor(
     component,
-    private _contextMenuController: ContextMenuController,
+    private readonly _contextMenuController: ContextMenuController,
   ) {
     super(component);
-  }
-
-  public init() {
-    super.init();
-
-    this._contextMenuController = this.getController('contextMenu');
   }
 
   protected _renderCore() {
