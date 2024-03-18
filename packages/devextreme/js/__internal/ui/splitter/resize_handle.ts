@@ -279,6 +279,7 @@ class ResizeHandle extends (Widget as any) {
         break;
       case 'showCollapsePrev':
       case 'showCollapseNext':
+        this._setCollapseButtonsVisibility();
         break;
       case 'onCollapsePrevClick':
       case 'onCollapseNextClick':

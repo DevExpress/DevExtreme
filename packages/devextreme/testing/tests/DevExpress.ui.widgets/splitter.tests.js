@@ -11,6 +11,7 @@ const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
+const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 QUnit.testStart(() => {
     const markup =
@@ -38,6 +39,14 @@ const moduleConfig = {
 
         this.getResizeHandles = () => {
             return this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
+        };
+
+        this.getCollapsePrevButton = ($resizeHandle) => {
+            return $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+        };
+
+        this.getCollapseNextButton = ($resizeHandle) => {
+            return $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
         };
 
         this.getPanes = () => {
@@ -1083,6 +1092,7 @@ QUnit.module('Behavoir', moduleConfig, () => {
         this.instance.option('separatorSize', 4);
 
         const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
 
         assert.strictEqual($resizeHandle.css('width'), '4px');
     });
@@ -1097,6 +1107,69 @@ QUnit.module('Behavoir', moduleConfig, () => {
         this.instance.option('orientation', 'vertical');
 
         assert.strictEqual($resizeHandle.css('height'), '4px');
+    });
+
+    QUnit.test('Collapse buttons should be invisible when pane collapsible is not defined', function(assert) {
+        this.reinit({
+            dataSource: [{ }, { }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        assert.ok($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is invisible');
+        assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is invisible');
+    });
+
+    QUnit.test('Both resize handle collapse buttons should be visible when two panes are collapsible', function(assert) {
+        this.reinit({
+            dataSource: [{ collapsible: true }, { collapsible: true }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        assert.notOk($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is visible');
+        assert.notOk($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is visible');
+    });
+
+    QUnit.test('Only collapse prev button should be visible when only left pane is collapsible', function(assert) {
+        this.reinit({
+            dataSource: [{ collapsible: true }, {}],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        assert.notOk($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is visible');
+        assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is invisible');
+    });
+
+    QUnit.test('Only collapse next button should be visible when only right pane is collapsible', function(assert) {
+        this.reinit({
+            dataSource: [{}, { collapsible: true }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        assert.ok($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is invisible');
+        assert.notOk($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is visible');
+    });
+
+    QUnit.test('Collapsible buttons should become visible on panes runtime collapsable enable', function(assert) {
+        this.reinit({
+            dataSource: [{}, {}],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        this.instance.option('items[0].collapsible', true);
+        this.instance.option('items[1].collapsible', true);
+
+        assert.notOk($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is visible');
+        assert.notOk($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is visible');
     });
 });
 
