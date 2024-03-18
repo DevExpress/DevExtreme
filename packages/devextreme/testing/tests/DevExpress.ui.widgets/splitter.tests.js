@@ -670,6 +670,23 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.assertLayout(['75', '25']);
         });
 
+        QUnit.test(`next item should be resized immediately when the current item is 0 during resizing, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ }, { }, { }, { }]
+            }, '#splitterInContainer');
+
+            this.assertLayout(['25', '25', '25', '25'], 1);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(260, 260).dragEnd();
+
+            this.checkItemSizes([250, 510, 200, 240]);
+            this.assertLayout(['25', '51', '0', '24']);
+        });
+
         QUnit.test(`splitter should have no resize handles if only 1 item is visible, ${orientation} orientation`, function(assert) {
             this.reinit({
                 orientation,
