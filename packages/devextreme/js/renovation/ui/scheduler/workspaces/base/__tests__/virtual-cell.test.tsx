@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as CellView, VirtualCell } from '../virtual_cell';
-import { addWidthToStyle } from '../../utils';
+import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
 import { HeaderCell } from '../header_cell';
 import { OrdinaryCell } from '../ordinary_cell';
 
@@ -61,7 +61,7 @@ describe('VirtualCell', () => {
           expect(cell.style)
             .toBe('style');
 
-          expect(addWidthToStyle)
+          expect(renderUtils.addWidthToStyle)
             .toHaveBeenCalledWith(500, style);
         });
       });

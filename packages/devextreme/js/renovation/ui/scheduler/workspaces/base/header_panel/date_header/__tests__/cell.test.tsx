@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { combineClasses } from '../../../../../../../utils/combine_classes';
-import { getGroupCellClasses } from '../../../../utils';
+import { renderUtils } from '../../../../../../../../__internal/scheduler/__migration/utils/index';
 import {
   DateHeaderCell,
   viewFunction as CellView,
@@ -184,7 +184,7 @@ describe('DateHeaderCell', () => {
               class: true,
             });
 
-          expect(getGroupCellClasses)
+          expect(renderUtils.getGroupCellClasses)
             .toHaveBeenCalledWith('isFirstGroupCell', 'isLastGroupCell', 'combineClasses');
         });
       });

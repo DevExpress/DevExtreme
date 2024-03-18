@@ -211,8 +211,3 @@ export const compareCellsByDateAndIndex = (daysAndIndexes: {
 
 export const isCellAllDay = (cell: HTMLElement): boolean => cell.className
   .includes(ALL_DAY_PANEL_CELL_CLASS);
-
-export const splitNumber = (value: number, splitValue: number): number[] => Array.from(
-  { length: Math.ceil(value / splitValue) },
-  (_, index) => Math.min(value - (splitValue * index), splitValue),
-);

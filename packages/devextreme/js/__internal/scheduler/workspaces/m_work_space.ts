@@ -42,9 +42,8 @@ import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base
 // @ts-expect-error
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 // @ts-expect-error
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-// @ts-expect-error
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
+import { HeaderPanelComponent } from '../__migration/components/index';
 import type { ViewType } from '../__migration/types';
 import {
   calculateIsGroupedAllDayPanel,
@@ -363,7 +362,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
 
-  get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+  get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
   get timeZoneCalculator(): any {
     return this.option('timeZoneCalculator');
