@@ -1,0 +1,35 @@
+@use "../../generic/colors" as generic;
+@use "../../material/colors" as material;
+@use "../../fluent/colors" as fluent;
+@mixin hover(
+    $bgHoverLight,
+    $colorHoverLight,
+    $bgHoverDark, 
+    $colorHoverDark,
+){
+    @if (generic.$color == 'dark' or material.$mode == 'dark' or fluent.$mode == 'dark'){
+        background-color: $bgHoverDark;
+        color: $colorHoverDark;
+    }
+    @if (generic.$color == 'light' or material.$mode == 'light' or fluent.$mode == 'light'){
+        background-color: $bgHoverLight;
+        color: $colorHoverLight;
+    }
+}
+
+@mixin focus(
+    $bgFocusLight, 
+    $colorFocusLight,
+    $bgFocusDark,
+    $colorFocusDark
+){
+
+    @if (generic.$color == 'dark' or material.$mode == 'dark' or fluent.$mode == 'dark'){
+        background-color: $bgFocusDark;
+        color:$colorFocusDark;
+    }
+    @if (generic.$color == 'light' or material.$mode == 'light' or fluent.$mode == 'light'){
+        background-color: $bgFocusLight;
+        color:$colorFocusLight;
+    }
+}

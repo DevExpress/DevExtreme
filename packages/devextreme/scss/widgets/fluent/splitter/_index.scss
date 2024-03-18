@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/splitter";
+@use "../../base/splitter/mixins" as *;
 
 // adduse
 
@@ -13,9 +14,19 @@
     color: $splitter-resize-handle-color;
   }
   .dx-state-hover {
-    @include state('hover');
+    @include hover(
+      #E0E0E0,
+      #424242,
+      #525252,
+      #FFFFFF
+    );
   }
   .dx-state-focused {
-    @include state('focus')
+    @include focus(
+      #0F6CBD,
+      #FFFFFF,
+      #479EF5,
+      #242424
+    )
   }
 }

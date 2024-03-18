@@ -5,25 +5,25 @@
 
 $splitter-resize-handle-bg: #D1D1D1 !default;
 $splitter-resize-handle-color: black !default;
-@mixin state($property){
-    @if $property == 'hover' and  $color == 'dark'{
-        background-color: #FFFFFF29;
-        color:#DEDEDE;
-    }
-    @if $property == 'hover' and  $color == 'light'{
-        background-color: #33333329;
-        color: #333333;
-    }
+// @mixin state($property){
+//     @if $property == 'hover' and  $color == 'dark'{
+//         background-color: #FFFFFF29;
+//         color:#DEDEDE;
+//     }
+//     @if $property == 'hover' and  $color == 'light'{
+//         background-color: #33333329;
+//         color: #333333;
+//     }
 
-    @if $property == 'focus' and  $color == 'dark'{
-        background-color: #1CA8DD;
-        color:#2A2A2A;
-    }
-    @if $property == 'focus' and  $color == 'light'{
-        background-color: #337AB7;
-        color:#FFFFFF;
-    }
-}
+//     @if $property == 'focus' and  $color == 'dark'{
+//         background-color: #1CA8DD;
+//         color:#2A2A2A;
+//     }
+//     @if $property == 'focus' and  $color == 'light'{
+//         background-color: #337AB7;
+//         color:#FFFFFF;
+//     }
+// }
 
 @if $color == 'dark' {
     $splitter-resize-handle-bg: #3E3E3E;

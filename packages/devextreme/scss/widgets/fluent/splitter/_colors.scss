@@ -5,25 +5,6 @@
 
 $splitter-resize-handle-bg: #D1D1D1 !default;
 $splitter-resize-handle-color: black !default;
-@mixin state($property){
-    @if $property == 'hover' and  $mode == 'dark'{
-        background-color:#525252;
-        color:#FFFFFF;
-    }
-    @if $property == 'hover' and  $mode == 'light'{
-        background-color:#E0E0E0;
-        color:#424242;
-    }
-
-    @if $property == 'focus' and  $mode == 'dark'{
-        background-color:#479EF5;
-        color:#242424;
-    }
-    @if $property == 'focus' and  $mode == 'light'{
-        background-color:#0F6CBD;
-        color:#FFFFFF;
-    }
-}
 
 @if $mode == 'dark' {
     $splitter-resize-handle-bg: #333333;
