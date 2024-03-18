@@ -52,9 +52,11 @@
         <div id="button"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                $("#button").dxList({
+                    items: ['item1', 'item2', 'item3'],
+                    showSelectionControls: true,
+                    selectionMode: 'none',
+                    allowItemDeleting: true,
                 });
             });
         </script>
