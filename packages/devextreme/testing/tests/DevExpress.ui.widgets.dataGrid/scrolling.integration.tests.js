@@ -2,7 +2,6 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
@@ -68,7 +67,6 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
