@@ -1230,46 +1230,39 @@ module('Date AM/PM Handling', {
     beforeEach: function() {
         setupModule.beforeEach.call(this);
         this.instance.option('value', null);
+        ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
+            this.instance.option('displayFormat', format);
+        });
     },
     afterEach: setupModule.afterEach
 }, () => {
     ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
-        test('wrong key should not change PM to AM', function(assert) {
+        test(`wrong key should not change PM to AM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
-            this.instance.option('displayFormat', format);
 
             this.keyboard.type('t');
 
             assert.strictEqual(this.$input.val(), 'PM');
         });
-    });
 
-    ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
-        test('wrong key should not change AM to PM', function(assert) {
+        test(`wrong key should not change AM to PM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
-            this.instance.option('displayFormat', format);
 
             this.keyboard.type('q');
 
             assert.strictEqual(this.$input.val(), 'AM');
         });
-    });
 
-    ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
-        test('when "a" is pressed it should change PM to AM (T1217203)', function(assert) {
+        test(`when "a" is pressed it should change PM to AM if displayFormat=${format} (T1217203)`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
-            this.instance.option('displayFormat', format);
 
             this.keyboard.type('a');
 
             assert.strictEqual(this.$input.val(), 'AM');
         });
-    });
 
-    ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
-        test('when "p" is pressed it should change AM to PM', function(assert) {
+        test(`when "p" is pressed it should change AM to PM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 AM'));
-            this.instance.option('displayFormat', format);
 
             this.keyboard.type('p');
 
