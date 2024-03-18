@@ -18,11 +18,11 @@ safeSizeTest('The splitter pane should be rendered with the correct ratio inside
   await t
     .click(tabPanel.tabs.getItem(1).element);
 
-  await testScreenshot(t, takeScreenshot, 'Splitter inside tab content, pane_1.size=`100px`.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Splitter in tab content, pane_1.size=`100px`.png', { element: '#container' });
 
   await t.resizeWindow(600, 400);
 
-  await testScreenshot(t, takeScreenshot, 'Splitter inside tab content after window resize, pane_1.size=`100px`.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'Splitter in tab content after window resize, pane_1.size=`100px`.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
