@@ -1,17 +1,31 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+
 // adduse
 
-$splitter-resize-handle-bg: #D1D1D1 !default;
-$splitter-resize-handle-color: black !default;
+$splitter-resize-handle-color: null !default;
+$splitter-resize-handle-color-hover: null !default;
+$splitter-resize-handle-color-focused: null !default;
 
-@if $mode == 'dark' {
-    $splitter-resize-handle-bg: #333333;
-    $splitter-resize-handle-color: #FFFFFF;
-}
+$splitter-resize-handle-bg: null !default;
+$splitter-resize-handle-bg-hover: null !default;
+$splitter-resize-handle-bg-focused: $base-accent !default;
 
 @if $mode == 'light' {
-    $splitter-resize-handle-bg: #F0F0F0;
-    $splitter-resize-handle-color: #424242;
+  $splitter-resize-handle-color: #424242 !default;
+  $splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;
+  $splitter-resize-handle-color-focused: $base-inverted-text-color !default;
+
+  $splitter-resize-handle-bg: #F0F0F0 !default;
+  $splitter-resize-handle-bg-hover: $base-border-color !default;
+}
+
+@if $mode == 'dark' {
+  $splitter-resize-handle-color: $base-text-color !default;
+  $splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;
+  $splitter-resize-handle-color-focused: $base-inverted-text-color !default;
+
+  $splitter-resize-handle-bg: $base-active-bg !default;
+  $splitter-resize-handle-bg-hover: #525252;
 }

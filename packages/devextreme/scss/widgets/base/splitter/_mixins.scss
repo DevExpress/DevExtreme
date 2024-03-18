@@ -1,35 +1,61 @@
 @use "../../generic/colors" as generic;
 @use "../../material/colors" as material;
 @use "../../fluent/colors" as fluent;
+
+@mixin resize-handle-states(
+  $color,
+  $background-color,
+  $color-hover,
+  $background-color-hover,
+  $color-focused,
+  $background-color-focused,
+) {
+  .dx-resize-handle {
+    color: $color;
+    background-color: $background-color;
+    
+    &.dx-state-hover {
+      color: $color-hover;
+      background-color: $background-color-hover;
+    }
+    
+    &.dx-state-focused {
+      color: $color-focused;
+      background-color: $background-color-focused;
+    }
+  }
+}
+
 @mixin hover(
-    $bgHoverLight,
-    $colorHoverLight,
-    $bgHoverDark, 
-    $colorHoverDark,
+  $bgHoverLight,
+  $colorHoverLight,
+  $bgHoverDark, 
+  $colorHoverDark,
 ){
-    @if (generic.$color == 'dark' or material.$mode == 'dark' or fluent.$mode == 'dark'){
-        background-color: $bgHoverDark;
-        color: $colorHoverDark;
-    }
-    @if (generic.$color == 'light' or material.$mode == 'light' or fluent.$mode == 'light'){
-        background-color: $bgHoverLight;
-        color: $colorHoverLight;
-    }
+  @if generic.$color == 'dark' or material.$mode == 'dark' or fluent.$mode == 'dark' {
+    background-color: $bgHoverDark;
+    color: $colorHoverDark;
+  }
+
+  @if generic.$color == 'light' or material.$mode == 'light' or fluent.$mode == 'light' {
+    background-color: $bgHoverLight;
+    color: $colorHoverLight;
+  }
 }
 
 @mixin focus(
-    $bgFocusLight, 
-    $colorFocusLight,
-    $bgFocusDark,
-    $colorFocusDark
+  $bgFocusLight, 
+  $colorFocusLight,
+  $bgFocusDark,
+  $colorFocusDark
 ){
+  @if generic.$color == 'dark' or material.$mode == 'dark' or fluent.$mode == 'dark' {
+    background-color: $bgFocusDark;
+    color: $colorFocusDark;
+  }
 
-    @if (generic.$color == 'dark' or material.$mode == 'dark' or fluent.$mode == 'dark'){
-        background-color: $bgFocusDark;
-        color:$colorFocusDark;
-    }
-    @if (generic.$color == 'light' or material.$mode == 'light' or fluent.$mode == 'light'){
-        background-color: $bgFocusLight;
-        color:$colorFocusLight;
-    }
+  @if generic.$color == 'light' or material.$mode == 'light' or fluent.$mode == 'light' {
+    background-color: $bgFocusLight;
+    color: $colorFocusLight;
+  }
 }

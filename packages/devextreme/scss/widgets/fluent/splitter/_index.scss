@@ -9,24 +9,12 @@
 // adduse
 
 .dx-splitter {
-  .dx-resize-handle {
-    background-color: $splitter-resize-handle-bg;
-    color: $splitter-resize-handle-color;
-  }
-  .dx-state-hover {
-    @include hover(
-      #E0E0E0,
-      #424242,
-      #525252,
-      #FFFFFF
-    );
-  }
-  .dx-state-focused {
-    @include focus(
-      #0F6CBD,
-      #FFFFFF,
-      #479EF5,
-      #242424
-    )
-  }
+  @include resize-handle-states(
+    $splitter-resize-handle-color,
+    $splitter-resize-handle-bg,
+    $splitter-resize-handle-color-hover,
+    $splitter-resize-handle-bg-hover,
+    $splitter-resize-handle-color-focused,
+    $splitter-resize-handle-bg-focused,
+  );
 }
