@@ -4295,27 +4295,36 @@ QUnit.module('Accessibility', () => {
 
     [true, false].forEach(allowItemDeleting => {
         QUnit.test(`List items element should have a correct aria-label when allowItemDeleting=${allowItemDeleting}`, function(assert) {
-            $('#list').dxList({
+            const instance = $('#list').dxList({
                 allowItemDeleting,
                 items: ['text 1'],
-            });
+            }).dxList('instance');
 
             const $listItems = $(`.${LIST_ITEMS_CLASS}`);
 
             assert.strictEqual($listItems.attr('aria-label'), allowItemDeleting ? 'Deletable items' : 'Items');
+
+            instance.option({ allowItemDeleting: !allowItemDeleting });
+
+            assert.strictEqual($listItems.attr('aria-label'), allowItemDeleting ? 'Items' : 'Deletable items', 'aria-label set correctly after runtime change');
         });
     });
 
     const checkButtonAttributes = (assert, $button) => {
-        ['role', 'aria-label'].forEach(attribute => {
-            assert.strictEqual($button.attr(attribute), undefined, `${attribute} is not set`);
+        ['role', 'aria-label', 'tabindex'].forEach(attribute => {
+            const expectedValue = attribute === 'tabindex' ? '-1' : undefined;
+            const testMessage = attribute === 'tabindex'
+                ? 'tabindex is set correctly'
+                : `${attribute} is not set`;
+
+            assert.strictEqual($button.attr(attribute), expectedValue, testMessage);
         });
     };
 
     [STATIC_DELETE_BUTTON_CLASS, TOGGLE_DELETE_SWITCH_CLASS].forEach(buttonClass => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
-        QUnit.test(`List item ${itemDeleteMode} button should not have role, aria-label`, function(assert) {
+        QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
             $('#list').dxList({
                 itemDeleteMode,
                 items: ['text 1'],
@@ -4328,7 +4337,7 @@ QUnit.module('Accessibility', () => {
         });
     });
 
-    QUnit.test('List item switchable button should not have role, aria-label', function(assert) {
+    QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
         const $list = $('#list').dxList({
             items: ['text 1'],
             itemDeleteMode: 'slideButton',
