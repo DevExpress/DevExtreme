@@ -133,7 +133,8 @@ export function getNewLayout(
       deltaApplied += prevSize - safeSize;
       nextLayout[currentItemIndex] = safeSize;
 
-      if (Math.abs(deltaApplied - Math.abs(currentDelta)) < PRECISION) {
+      if (parseFloat(deltaApplied.toFixed(PRECISION))
+        >= parseFloat(Math.abs(currentDelta).toFixed(PRECISION))) {
         break;
       }
     }
@@ -450,9 +451,10 @@ export function getElementSize($element, items, orientation, width, height): num
 
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
 
-  if (sizeOption) {
+  if (isPixelWidth(sizeOption)) {
     return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
   }
+
   return getElementItemsSizeSum($element, orientation, handlesCount);
 }
 

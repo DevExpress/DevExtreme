@@ -512,7 +512,7 @@ class Splitter extends (CollectionWidget as any) {
 
   _getResizeHandleItems(): dxElementWrapper {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.$element().find(`.${RESIZE_HANDLE_CLASS}`);
+    return this.$element().children(`.${RESIZE_HANDLE_CLASS}`);
   }
 
   _iterateResizeHandles(callback: (instance: ResizeHandle) => void): void {
