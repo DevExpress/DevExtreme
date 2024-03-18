@@ -181,7 +181,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/compared-screenshots/**/*
+        path: ${{ github.workspace }}/e2e/testcafe/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
     - name: Copy failed test artifacts
@@ -189,7 +189,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: failed-tests
-        path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/failedtests/**/*
+        path: ${{ github.workspace }}/e2e/testcafe/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
   notify:

@@ -5,7 +5,7 @@ import { join, resolve, basename } from 'path';
 import { argv } from 'process';
 
 const PATH_TO_CURRENT_ETALONS = argv[2];
-const PATH_TO_TESTCAFE_TESTS = './testing/testcafe/tests';
+const PATH_TO_TESTCAFE_TESTS = './';
 const NEW_ETALON_FILE_NAME_PATTERN = /^(?!.*(?:_mask|_diff|_etalon)\.png$).*\.png$/i;
 const ETALONS_FOLDER_NAME = 'etalons';
 

@@ -2,9 +2,9 @@
   "screenshots": {
     "path": "./",
     "takeOnFails": true,
-    "pathPattern": "/testing/testcafe/artifacts/failedtests/${TEST}"
+    "pathPattern": "/artifacts/failedtests/${TEST}"
   },
   "screenshots-comparer": {
-    "path": "./testing/testcafe"
+    "path": "./"
   }
 }
