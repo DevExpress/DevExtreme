@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Loading...",
         "dxList-nextButtonText": "More",
         "dxList-selectAll": "Select All",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Delete",
         "dxListEditDecorator-more": "More",
 

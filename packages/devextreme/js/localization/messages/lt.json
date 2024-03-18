@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Įkeliama...",
         "dxList-nextButtonText": "Daugiau",
         "dxList-selectAll": "Pasirinkti viską",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Ištrinti",
         "dxListEditDecorator-more": "Daugiau",
 

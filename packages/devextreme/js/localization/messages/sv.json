@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Laddar...",
         "dxList-nextButtonText": "Mer",
         "dxList-selectAll": "Välj alla",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Radera",
         "dxListEditDecorator-more": "Mer",
 
