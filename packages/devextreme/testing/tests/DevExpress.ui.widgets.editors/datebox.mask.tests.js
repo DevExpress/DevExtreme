@@ -1226,12 +1226,7 @@ module('Search', setupModule, () => {
     });
 });
 
-module('Date AM/PM Handling', {
-    beforeEach: function() {
-        setupModule.beforeEach.call(this);
-    },
-    afterEach: setupModule.afterEach
-}, () => {
+module('Date AM/PM Handling', setupModule, () => {
     ['a', 'aa', 'aaa', 'aaaa', 'aaaaa'].forEach((format) => {
         test(`wrong key should not change PM to AM if displayFormat=${format}`, function(assert) {
             this.instance.option('value', new Date('10/10/2012 10:00 PM'));
