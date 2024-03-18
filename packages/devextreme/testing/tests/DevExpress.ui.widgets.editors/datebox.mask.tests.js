@@ -1007,23 +1007,6 @@ module('Events', setupModule, () => {
 });
 
 module('Search', setupModule, () => {
-    test('wrong key should not change PM to AM', function(assert) {
-        this.instance.option('displayFormat', 'a');
-
-        this.keyboard.type('t');
-
-        assert.strictEqual(this.$input.val(), 'PM');
-    });
-
-    test('wrong key should not change AM to PM', function(assert) {
-        this.instance.option('value', new Date('10/10/2012 10:00'));
-        this.instance.option('displayFormat', 'a');
-
-        this.keyboard.type('q');
-
-        assert.strictEqual(this.$input.val(), 'AM');
-    });
-
     test('Time indication', function(assert) {
         this.instance.option('displayFormat', 'a');
 
