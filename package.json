@@ -82,6 +82,7 @@
   "workspaces": [
     "apps/*",
     "packages/*",
+    "e2e/*",
     "packages/devextreme/artifacts/npm/*"
   ],
   "dependencies": {
