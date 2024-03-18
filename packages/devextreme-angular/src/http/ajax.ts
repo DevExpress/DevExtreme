@@ -14,6 +14,7 @@ import {
   getJsonpCallbackName as getCallbackNameAndPatchOptions,
   getRequestHeaders as getAjaxRequestHeaders,
   getAcceptHeader,
+  getMethod,
   evalScript,
 } from 'devextreme/core/utils/ajax_utils';
 
@@ -64,7 +65,7 @@ function assignResponseProps(xhrSurrogate: XHRSurrogate, response: HttpResponse<
 }
 
 function isGetMethod(options: Options) {
-  return (options.method || 'get').toLowerCase() === 'get';
+  return getMethod(options) === 'get';
 }
 
 function isCacheNeed(options: Options) {
