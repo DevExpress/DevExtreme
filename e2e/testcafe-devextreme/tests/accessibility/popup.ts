@@ -2,7 +2,7 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { ToolbarItem, Properties } from '../../../../js/ui/popup.d';
+import { ToolbarItem, Properties } from 'devextreme/ui/popup.d';
 import { isMaterial, isMaterialBased } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Accessibility`

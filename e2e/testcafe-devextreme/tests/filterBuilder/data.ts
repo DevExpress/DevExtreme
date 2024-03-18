@@ -1,5 +1,5 @@
 // eslint-disable-next-line import/named
-import { Field } from '../../../../js/ui/filter_builder';
+import { Field } from 'devextreme/ui/filter_builder';
 
 export const filter = [
   ['Category', '=', 'Video Players'],

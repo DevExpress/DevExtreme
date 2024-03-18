@@ -55,8 +55,8 @@ createTestCafe({
         setShadowDom(args);
 
         componentFolder = componentFolder ? `${componentFolder}/**` : '**';
-        if(fs.existsSync('./testing/testcafe/screenshots')) {
-            fs.rmSync('./testing/testcafe/screenshots', { recursive: true });
+        if(fs.existsSync('./screenshots')) {
+            fs.rmSync('./screenshots', { recursive: true });
         }
 
         const browsers = args.browsers.split(' ').map(expandBrowserAlias);
@@ -66,8 +66,8 @@ createTestCafe({
         const runner = testCafe.createRunner()
             .browsers(browsers)
             .reporter(reporter)
-            .src([`./testing/testcafe/tests/${componentFolder}/${file}.ts`]);
-
+            .src([`./tests/${componentFolder}/${file}.ts`]);
+    
         runner.compilerOptions({
             'typescript': {
                 customCompilerModulePath: '../../node_modules/typescript',

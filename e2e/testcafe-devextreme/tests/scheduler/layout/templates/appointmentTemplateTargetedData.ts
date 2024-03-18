@@ -6,7 +6,7 @@ import type {
   Orientation,
   ScrollMode,
   ViewType,
-} from '../../../../../../js/ui/scheduler';
+} from 'devextreme/ui/scheduler';
 
 import { generateOptionMatrix } from '../../../../helpers/generateOptionMatrix';
 import { scrollTo } from '../../virtualScrolling/utils';

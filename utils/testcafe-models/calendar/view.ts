@@ -1,7 +1,7 @@
 import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
-import dateSerialization from '../../../../js/core/utils/date_serialization';
-import dateUtils from '../../../../js/core/utils/date';
+import dateSerialization from 'devextreme/core/utils/date_serialization';
+import dateUtils from 'devextreme/core/utils/date';
 
 const CLASS = {
   cell: 'dx-calendar-cell',

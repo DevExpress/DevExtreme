@@ -1,4 +1,4 @@
-import { extend } from '../../../../../../js/core/utils/extend';
+import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../../../helpers/createWidget';
 
 export default async (options = {}): Promise<void> => createWidget('dxScheduler', extend({

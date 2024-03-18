@@ -3,7 +3,7 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/date_box.d';
+import { Properties } from 'devextreme/ui/date_box.d';
 import DateBox from '../../model/dateBox';
 
 fixture.disablePageReloads`Accessibility`

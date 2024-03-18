@@ -1,5 +1,5 @@
-import type { Properties as DataGridProperties } from '../../../js/ui/data_grid';
-import type { Properties as FilterBuilderProperties } from '../../../js/ui/filter_builder';
+import type { Properties as DataGridProperties } from 'devextreme/ui/data_grid';
+import type { Properties as FilterBuilderProperties } from 'devextreme/ui/filter_builder';
 
 export type WidgetName =
   'dxAccordion'

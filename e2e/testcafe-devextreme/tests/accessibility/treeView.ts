@@ -2,7 +2,7 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/tree_view.d';
+import { Properties } from 'devextreme/ui/tree_view.d';
 import { employees } from '../navigation/treeView/data';
 
 fixture.disablePageReloads`Accessibility`

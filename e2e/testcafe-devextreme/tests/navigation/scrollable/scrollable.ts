@@ -5,8 +5,8 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import Scrollable from '../../../model/scrollView/internal/scrollable';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { ScrollableDirection } from '../../../../../js/renovation/ui/scroll_view/common/types';
-import Guid from '../../../../../js/core/guid';
+import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
+import Guid from 'devextreme/core/guid';
 
 fixture.disablePageReloads`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));
