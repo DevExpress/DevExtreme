@@ -10,8 +10,10 @@ import { DateHeaderText } from '../dateHeaderText';
 jest.mock('../../../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(() => 'combineClasses'),
 }));
-jest.mock('../../../../utils', () => ({
-  getGroupCellClasses: jest.fn(() => 'getGroupCellClasses'),
+jest.mock('../../../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  renderUtils: {
+    getGroupCellClasses: jest.fn(() => 'getGroupCellClasses'),
+  },
 }));
 
 describe('DateHeaderCell', () => {

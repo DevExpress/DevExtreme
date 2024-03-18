@@ -10,8 +10,10 @@ jest.mock('../../utils', () => ({
   getGroupCellClasses: jest.fn(),
 }));
 
-jest.mock('../../utils', () => ({
-  addWidthToStyle: jest.fn(() => 'style'),
+jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  renderUtils: {
+    addWidthToStyle: jest.fn(() => 'style'),
+  },
 }));
 
 describe('VirtualCell', () => {

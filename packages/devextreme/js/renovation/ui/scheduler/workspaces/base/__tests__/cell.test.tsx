@@ -5,9 +5,11 @@ import {
 } from '../cell';
 import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
 
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
-  getGroupCellClasses: jest.fn(),
+jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  ...jest.requireActual('../../../../../../__internal/scheduler/__migration/utils/index'),
+  renderUtils: {
+    getGroupCellClasses: jest.fn(),
+  },
 }));
 
 describe('DateTableCellBase', () => {

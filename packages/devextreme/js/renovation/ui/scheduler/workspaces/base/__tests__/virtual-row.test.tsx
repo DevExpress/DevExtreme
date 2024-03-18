@@ -4,8 +4,10 @@ import { VirtualRow, viewFunction as RowView } from '../virtual_row';
 import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
 import { VirtualCell } from '../virtual_cell';
 
-jest.mock('../../utils', () => ({
-  addHeightToStyle: jest.fn(() => 'style'),
+jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  renderUtils: {
+    addHeightToStyle: jest.fn(() => 'style'),
+  },
 }));
 jest.mock('../row', () => ({
   ...jest.requireActual('../row'),

@@ -10,8 +10,10 @@ import { renderUtils } from '../../../../../../../../__internal/scheduler/__migr
 jest.mock('../row', () => ({
   Row: () => null,
 }));
-jest.mock('../../../../utils', () => ({
-  addHeightToStyle: jest.fn(() => 'style'),
+jest.mock('.../../../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  renderUtils: {
+    addHeightToStyle: jest.fn(() => 'style'),
+  },
 }));
 
 describe('GroupPanel Vertical Layout', () => {
