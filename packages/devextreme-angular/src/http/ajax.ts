@@ -122,8 +122,8 @@ function addJsonpCallbackAndReturnData(options: Options, deferred: DeferredResul
 
 function sendRequestByScript(url: string, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
   evalCrossDomainScript(url).then(
-      () => deferred.resolve(null, SUCCESS, xhrSurrogate),
-      () => deferred.reject(xhrSurrogate, ERROR),
+    () => deferred.resolve(null, SUCCESS, xhrSurrogate),
+    () => deferred.reject(xhrSurrogate, ERROR),
   );
 }
 
@@ -132,8 +132,8 @@ function getRequestCallbacks(options: Options, deferred: DeferredResult, xhrSurr
     next(response: HttpResponse<any>) {
       if (isUsedJSONP(options)) {
         return options.crossDomain
-            ? deferred.resolve(response, 'success', assignResponseProps(xhrSurrogate, response))
-            : evalScript(response.body);
+          ? deferred.resolve(response, 'success', assignResponseProps(xhrSurrogate, response))
+          : evalScript(response.body);
       }
 
       if (isUsedScript(options)) {
@@ -141,19 +141,19 @@ function getRequestCallbacks(options: Options, deferred: DeferredResult, xhrSurr
       }
 
       return deferred.resolve(
-          response.body,
-          response.body ? 'success' : NO_CONTENT,
-          assignResponseProps(xhrSurrogate, response),
+        response.body,
+        response.body ? 'success' : NO_CONTENT,
+        assignResponseProps(xhrSurrogate, response),
       );
     },
     error(error: HttpErrorResponse) {
       let errorStatus = error?.statusText === TIMEOUT ? TIMEOUT : 'error';
 
       errorStatus = options.dataType === 'json' && error.message?.includes?.('parsing')
-          ? PARSER_ERROR
-          : errorStatus;
+        ? PARSER_ERROR
+        : errorStatus;
 
-      return deferred.reject(assignResponseProps(xhrSurrogate, {status: 400, ...(error || {})} as HttpErrorResponse), errorStatus, error);
+      return deferred.reject(assignResponseProps(xhrSurrogate, { status: 400, ...error || {} } as HttpErrorResponse), errorStatus, error);
     },
     complete() {
       rejectIfAborted(deferred, xhrSurrogate);
@@ -182,7 +182,7 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
       return null;
     },
     error(error: HttpErrorResponse) {
-      return deferred.reject(assignResponseProps(xhrSurrogate, {status: 400, ...(error || {})} as HttpErrorResponse), error.status, error);
+      return deferred.reject(assignResponseProps(xhrSurrogate, { status: 400, ...error || {} } as HttpErrorResponse), error.status, error);
     },
     complete() {
       rejectIfAborted(deferred, xhrSurrogate, () => {
@@ -237,42 +237,42 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   }
 
   const makeBody = () => (!upload && typeof data === 'object' && headers[CONTENT_TYPE].indexOf(URLENCODED) === 0
-      ? Object.keys(data).reduce(
-          (httpParams, key) => httpParams.set(key, data[key]),
-          new HttpParams(),
-      ).toString()
-      : data);
+    ? Object.keys(data).reduce(
+      (httpParams, key) => httpParams.set(key, data[key]),
+      new HttpParams(),
+    ).toString()
+    : data);
 
   const body = isGet ? undefined : makeBody();
   const params = isGet ? data : undefined;
 
   const request = options.crossDomain && isJSONP
-      ? httpClient.jsonp(url, options.jsonp || 'callback')
-      : httpClient.request(
-          method,
-          url,
-          {
-            params,
-            body,
-            headers,
-            reportProgress: true,
-            withCredentials: xhrFields?.withCredentials,
-            observe: upload ? 'events' : 'response',
-            responseType: options.responseType || (isScript || isJSONP ? 'text' : options.dataType),
-          },
-      );
+    ? httpClient.jsonp(url, options.jsonp || 'callback')
+    : httpClient.request(
+      method,
+      url,
+      {
+        params,
+        body,
+        headers,
+        reportProgress: true,
+        withCredentials: xhrFields?.withCredentials,
+        observe: upload ? 'events' : 'response',
+        responseType: options.responseType || (isScript || isJSONP ? 'text' : options.dataType),
+      },
+    );
 
   const subscriptionCallbacks = upload
-      ? getUploadCallbacks
-      : getRequestCallbacks;
+    ? getUploadCallbacks
+    : getRequestCallbacks;
 
   request.pipe.apply(request, [
     takeUntil(abort$) as any,
     ...options.timeout
-        ? [timeoutWith(options.timeout, throwError({ statusText: TIMEOUT, status: 0, ok: false })) as any]
-        : [],
+      ? [timeoutWith(options.timeout, throwError({ statusText: TIMEOUT, status: 0, ok: false })) as any]
+      : [],
   ]).subscribe(
-      subscriptionCallbacks(options, deferred, xhrSurrogate),
+    subscriptionCallbacks(options, deferred, xhrSurrogate),
   );
 
   return result;
