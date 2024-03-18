@@ -39,6 +39,8 @@ const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
+const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -206,13 +208,13 @@ QUnit.module('Rendering', moduleConfig, () => {
         assert.equal(onSubmenuCreated.callCount, 1, 'handler should not be called after the second showing');
     });
 
-    // TODO fix me in jQuery mode
-    QUnit.test.skip('contextMenu should not create a new overlay after refresh', function(assert) {
+    QUnit.test('contextMenu should not create a new overlay after refresh', function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }, { text: 2 }] });
 
         instance.option('items', [{ text: 3 }, { text: 4 }]);
         instance.show();
-        assert.equal($('.dx-overlay').length, 2, 'only two overlay should exists (from Menu and LoadPanel in ScrollView)');
+        this.clock.tick(0);
+        assert.equal(this.$element.find('.dx-overlay').length, 1, 'only one overlay should exists');
     });
 
     QUnit.test('submenus in the same level should have same horizontal offset', function(assert) {
@@ -268,6 +270,29 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
     });
+
+    QUnit.test('context menu should init ScrollView', function(assert) {
+        new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
+        assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
+    });
+
+    QUnit.test('height of the context menu should be limited', function(assert) {
+        new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            visible: true,
+        });
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu is exceeds the window');
+        assert.ok($submenu.height() < $(window).height(), 'height of submenu wrapper is not exceeds the window');
+    });
 });
 
 QUnit.module('Showing and hiding context menu', moduleConfig, () => {
@@ -284,12 +309,12 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         assert.ok($itemsContainer.is(':visible'), 'menu is visible');
     });
 
-    // TODO fix me in jQuery mode
-    QUnit.test.skip('context menu should not leak overlays', function(assert) {
+    QUnit.test('context menu should not leak overlays', function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.option('items', [{ text: 1 }]);
-        assert.equal($('.dx-overlay').length, 2, 'overlays cleaned correctly');
+        this.clock.tick(0);
+        assert.equal(this.$element.find('.dx-overlay').length, 1, 'overlays cleaned correctly');
     });
 
     QUnit.test('show method should toggle menu\'s visibility', function(assert) {

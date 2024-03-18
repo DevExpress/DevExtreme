@@ -51,6 +51,8 @@ const DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + '-adaptive-mode';
 const DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + '-overlay-wrapper';
 const DX_TREEVIEW_CLASS = 'dx-treeview';
 const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
+const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
+const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -201,9 +203,11 @@ QUnit.module('Render content delimiters', {
 QUnit.module('Menu rendering', {
     beforeEach: function() {
         fx.off = true;
+        this.clock = sinon.useFakeTimers();
     },
     afterEach: function() {
         fx.off = false;
+        this.clock.restore();
     }
 }, () => {
     QUnit.test('Render items with custom model', function(assert) {
@@ -379,6 +383,47 @@ QUnit.module('Menu rendering', {
         assert.equal(Math.round($(submenu._$content[0]).offset().top), Math.round($(rootMenuItem[0]).offset().top));
         assert.ok($(submenu._$content[0]).offset().left < $(rootMenuItem[0]).offset().left);
         fixtures.simple.drop();
+    });
+
+    QUnit.test('submenu should init ScrollView', function(assert) {
+        const menu = createMenu({
+            items: [{
+                text: 'item 1',
+                items: [{
+                    text: 'item 11',
+                }]
+            }],
+            showFirstSubmenuMode: 'onClick'
+        });
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($item1).trigger('dxclick');
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
+        assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
+    });
+
+    QUnit.test('height of the context menu should be limited', function(assert) {
+        const menu = createMenu({
+            items: [{
+                text: 'item 1',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            }],
+            showFirstSubmenuMode: 'onClick'
+        });
+
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($item1).trigger('dxclick');
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu is exceeds the window');
+        assert.ok($submenu.height() < $(window).height(), 'height of submenu wrapper is not exceeds the window');
     });
 });
 
