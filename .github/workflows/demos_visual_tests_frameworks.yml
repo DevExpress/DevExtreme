@@ -298,7 +298,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '121.0.6167.160'
+        chrome-version: '122.0.6261.128'
 
     - name: Restore npm cache
       uses: actions/cache@v4
