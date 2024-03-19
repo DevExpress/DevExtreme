@@ -4,28 +4,53 @@
 
 // adduse
 
+/**
+* $name 10. Icon color
+* $type color
+*/
 $splitter-resize-handle-color: null !default;
-$splitter-resize-handle-color-hover: null !default;
-$splitter-resize-handle-color-focused: null !default;
 
+/**
+* $name 40. Handle background color
+* $type color
+*/
 $splitter-resize-handle-bg: null !default;
+
+/**
+* $name 50. Handle hover state background color
+* $type color
+*/
 $splitter-resize-handle-bg-hover: null !default;
+
+/**
+* $name 60. Handle focused state background color
+* $type color
+*/
 $splitter-resize-handle-bg-focused: $base-accent !default;
 
 @if $mode == 'light' {
-  $splitter-resize-handle-color: #FFF !default;
-  $splitter-resize-handle-color-hover: #0009 !default;
-  $splitter-resize-handle-color-focused: #FFF !default;
+  $splitter-resize-handle-color: $base-text-color !default;
 
-  $splitter-resize-handle-bg: #0000000A !default;
-  $splitter-resize-handle-bg-hover: #0000001F !default;
+  $splitter-resize-handle-bg: $base-hover-bg !default;
+  $splitter-resize-handle-bg-hover: color.change($base-inverted-bg, $alpha: 0.12) !default;
 }
 
 @if $mode == 'dark' {
-  $splitter-resize-handle-color: #FFF !default;
-  $splitter-resize-handle-color-hover: #FFF9 !default;
-  $splitter-resize-handle-color-focused: #363640 !default;
+  $splitter-resize-handle-color: color.change($base-text-color, $alpha: 0.87) !default;
 
-  $splitter-resize-handle-bg: #FFFFFF0A !default;
-  $splitter-resize-handle-bg-hover: #FFFFFF1F;
+  $splitter-resize-handle-bg: color.change($base-text-color, $alpha: 0.04) !default;
+  $splitter-resize-handle-bg-hover: color.change($base-text-color, $alpha: 0.12) !default;
 }
+
+
+/**
+* $name 20. Hover state icon color
+* $type color
+*/
+$splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;
+
+/**
+* $name 30. Focused state icon color
+* $type color
+*/
+$splitter-resize-handle-color-focused: $base-inverted-text-color !default;
