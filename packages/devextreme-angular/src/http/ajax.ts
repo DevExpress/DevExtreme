@@ -147,7 +147,7 @@ function getRequestCallbacks(options: Options, deferred: DeferredResult, xhrSurr
       );
     },
     error(error: HttpErrorResponse) {
-      error = error && typeof error === 'object' ? error : { message: error } as unknown as HttpErrorResponse;
+      error = error && typeof error === 'object' ? error : { error } as unknown as HttpErrorResponse;
       let errorStatus = error?.statusText === TIMEOUT ? TIMEOUT : 'error';
 
       errorStatus = options.dataType === 'json' && error?.message?.includes?.('parsing')
@@ -183,7 +183,7 @@ function getUploadCallbacks(options: Options, deferred: DeferredResult, xhrSurro
       return null;
     },
     error(error: HttpErrorResponse) {
-      error = error && typeof error === 'object' ? error : { message: error } as unknown as HttpErrorResponse;
+      error = error && typeof error === 'object' ? error : { error } as unknown as HttpErrorResponse;
       return deferred.reject(assignResponseProps(xhrSurrogate, { status: 400, ...error } as HttpErrorResponse), error.status, error);
     },
     complete() {
