@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import TagBox from '../../../model/tagBox';
+import TagBox from 'devextreme-testcafe-models/tagBox';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`TagBox`

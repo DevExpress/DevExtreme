@@ -4,7 +4,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute, setStyleAttribute } from '../../../helpers/domUtils';
-import Toolbar from '../../../model/toolbar/toolbar';
+import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 
 fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'));

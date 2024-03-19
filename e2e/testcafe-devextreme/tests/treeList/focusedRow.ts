@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import TreeList from '../../model/treeList';
+import TreeList from 'devextreme-testcafe-models/treeList';
 
 const clearLocalStorage = ClientFunction(() => {
   (window as any).localStorage.removeItem('mystate');

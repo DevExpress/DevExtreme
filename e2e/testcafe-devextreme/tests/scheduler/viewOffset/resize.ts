@@ -2,8 +2,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
-import Appointment from '../../../model/scheduler/appointment';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
+import Appointment from 'devextreme-testcafe-models/scheduler/appointment';
 
 fixture.disablePageReloads`Offset: Resize appointments`
   .page(url(__dirname, '../../container.html'));

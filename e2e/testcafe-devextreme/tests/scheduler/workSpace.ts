@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../helpers/createWidget';
-import Scheduler, { CLASS } from '../../model/scheduler';
+import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
 import { extend } from 'devextreme/core/utils/extend';
 import url from '../../helpers/getPageUrl';
 import { changeTheme } from '../../helpers/changeTheme';

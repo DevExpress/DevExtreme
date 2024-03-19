@@ -3,8 +3,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
-import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
 

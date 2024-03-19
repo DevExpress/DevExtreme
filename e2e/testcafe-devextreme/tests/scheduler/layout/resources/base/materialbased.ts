@@ -1,6 +1,6 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../../helpers/createWidget';
-import Scheduler from '../../../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';

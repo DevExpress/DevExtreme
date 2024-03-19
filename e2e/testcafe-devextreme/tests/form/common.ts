@@ -2,8 +2,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot, isMaterialBased } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import Form from '../../model/form/form';
-import DateRangeBox from '../../model/dateRangeBox';
+import Form from 'devextreme-testcafe-models/form/form';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 import { clearTestPage } from '../../helpers/clearPage';
 

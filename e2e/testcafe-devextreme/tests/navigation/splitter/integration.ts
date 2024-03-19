@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import { clearTestPage } from '../../../helpers/clearPage';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import TabPanel from '../../../model/tabPanel';
+import TabPanel from 'devextreme-testcafe-models/tabPanel';
 
 fixture.disablePageReloads`Splitter_integration`
   .page(url(__dirname, '../../container.html'))

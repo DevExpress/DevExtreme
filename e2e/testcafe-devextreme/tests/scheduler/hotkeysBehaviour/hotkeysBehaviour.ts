@@ -1,8 +1,8 @@
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
-import FocusableElement from '../../../model/internal/focusable';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
+import FocusableElement from 'devextreme-testcafe-models/internal/focusable';
 
 fixture.disablePageReloads`Hotkeys for appointments update and navigation`
   .page(url(__dirname, '../../container.html'));

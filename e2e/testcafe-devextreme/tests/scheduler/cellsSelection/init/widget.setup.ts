@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../../helpers/createWidget';
-import Scheduler, { CLASS } from '../../../../model/scheduler';
+import Scheduler, { CLASS } from 'devextreme-testcafe-models/scheduler';
 
 export const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', {

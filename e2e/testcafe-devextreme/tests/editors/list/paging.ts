@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot, isMaterial } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import List from '../../../model/list';
+import List from 'devextreme-testcafe-models/list';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`List`

@@ -1,7 +1,7 @@
 import { ClientFunction, Selector, t } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Drag-n-drop to fake cell`

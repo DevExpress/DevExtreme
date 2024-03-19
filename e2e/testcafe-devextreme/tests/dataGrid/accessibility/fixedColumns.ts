@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import DataGrid from '../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import type { Properties } from 'devextreme/ui/data_grid';
 

@@ -10,7 +10,7 @@ import {
   insertStylesheetRulesToPage,
   removeAttribute,
 } from '../../../helpers/domUtils';
-import Popup from '../../../model/popup';
+import Popup from 'devextreme-testcafe-models/popup';
 
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 

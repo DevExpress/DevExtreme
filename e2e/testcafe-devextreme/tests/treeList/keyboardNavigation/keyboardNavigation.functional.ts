@@ -1,7 +1,7 @@
-import Button from '../../../model/button';
+import Button from 'devextreme-testcafe-models/button';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TreeList from '../../../model/treeList';
+import TreeList from 'devextreme-testcafe-models/treeList';
 
 fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));

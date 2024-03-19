@@ -1,5 +1,5 @@
 import url from '../../../helpers/getPageUrl';
-import TextBox from '../../../model/textBox';
+import TextBox from 'devextreme-testcafe-models/textBox';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 

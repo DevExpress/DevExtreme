@@ -7,7 +7,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
-import DateRangeBox from '../../../model/dateRangeBox';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
 

@@ -1,7 +1,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Resize appointments in All Day Panel`
   .page(url(__dirname, '../../container.html'));

@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import DataGrid from '../../../model/dataGrid';
-import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 
 fixture`Header Filter T1163100 change filter icon`
   .page(url(__dirname, '../../container.html'));

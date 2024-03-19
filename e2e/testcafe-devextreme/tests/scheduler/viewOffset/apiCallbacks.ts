@@ -2,7 +2,7 @@ import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/cal
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 // NOTE: Disable page reloads will break the tests!
 fixture`Offset: Api callbacks`

@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DateRangeBox from '../../../model/dateRangeBox';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import { clearTestPage } from '../../../helpers/clearPage';
 import { appendElementTo } from '../../../helpers/domUtils';
 

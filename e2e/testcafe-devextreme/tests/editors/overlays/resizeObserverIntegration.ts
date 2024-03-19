@@ -1,7 +1,7 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import url from '../../../helpers/getPageUrl';
-import Popup from '../../../model/popup';
+import Popup from 'devextreme-testcafe-models/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
 import { setStyleAttribute } from '../../../helpers/domUtils';

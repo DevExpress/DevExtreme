@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import DateBox from '../../../model/dateBox';
+import DateBox from 'devextreme-testcafe-models/dateBox';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
 import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';

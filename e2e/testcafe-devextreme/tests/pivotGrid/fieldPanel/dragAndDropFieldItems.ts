@@ -3,7 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import PivotGrid from '../../../model/pivotGrid';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { DRAG_MOUSE_OPTIONS } from '../const';
 
 fixture.disablePageReloads`pivotGrid_fieldPanel_drag-n-drop`

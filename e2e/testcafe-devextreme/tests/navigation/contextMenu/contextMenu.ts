@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import ContextMenu from '../../../model/contextMenu';
+import ContextMenu from 'devextreme-testcafe-models/contextMenu';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`ContextMenu`

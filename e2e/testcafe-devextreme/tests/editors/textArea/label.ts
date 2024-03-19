@@ -3,7 +3,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TextArea from '../../../model/textArea';
+import TextArea from 'devextreme-testcafe-models/textArea';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Label`

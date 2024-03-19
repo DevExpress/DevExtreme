@@ -1,6 +1,6 @@
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import DataGrid from '../../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../../helpers/callbackTestHelper';
 
 // TODO: Something wrong with test cleanup with 'disablePageReloads'

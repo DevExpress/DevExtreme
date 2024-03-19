@@ -4,7 +4,7 @@ import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from 'devextreme/ui/date_box.d';
-import DateBox from '../../model/dateBox';
+import DateBox from 'devextreme-testcafe-models/dateBox';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))

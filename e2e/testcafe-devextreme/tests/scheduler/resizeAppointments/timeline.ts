@@ -1,7 +1,7 @@
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Resize appointments in the Scheduler basic views`

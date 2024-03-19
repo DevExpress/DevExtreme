@@ -3,8 +3,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
-import TreeList from '../../model/treeList';
-import CheckBox from '../../model/checkBox';
+import TreeList from 'devextreme-testcafe-models/treeList';
+import CheckBox from 'devextreme-testcafe-models/checkBox';
 
 const scrollWindowTo = async (position: object) => {
   await ClientFunction(

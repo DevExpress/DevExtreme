@@ -1,6 +1,6 @@
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Appointment tooltip with recurrence appointment and custom time zone`
   .page(url(__dirname, '../../container.html'));

@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Calendar from '../../../model/calendar';
+import Calendar from 'devextreme-testcafe-models/calendar';
 
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';

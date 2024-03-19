@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Menu from '../../../model/menu';
+import Menu from 'devextreme-testcafe-models/menu';
 
 fixture.disablePageReloads`Menu_keyboard`
   .page(url(__dirname, '../../container.html'));

@@ -5,7 +5,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../container.html'));

@@ -1,5 +1,5 @@
 import url from '../../../helpers/getPageUrl';
-import SelectBox from '../../../model/selectBox';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
 import { createWidget } from '../../../helpers/createWidget';
 import { isMaterial } from '../../../helpers/themeUtils';
 

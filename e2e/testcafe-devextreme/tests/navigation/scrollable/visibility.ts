@@ -3,7 +3,7 @@ import { Selector } from 'testcafe';
 import { isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Scrollable from '../../../model/scrollView/internal/scrollable';
+import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
 

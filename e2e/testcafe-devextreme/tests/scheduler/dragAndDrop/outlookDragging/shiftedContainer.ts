@@ -3,7 +3,7 @@ import { Selector } from 'testcafe';
 import { setStyleAttribute } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import Scheduler from '../../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Outlook dragging base tests in shifted container`
   .page(url(__dirname, '../../../container.html'));

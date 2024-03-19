@@ -6,7 +6,7 @@ import { createWidget } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
-import TreeView from '../../../model/treeView';
+import TreeView from 'devextreme-testcafe-models/treeView';
 
 fixture.disablePageReloads`TreeView`
   .page(url(__dirname, '../../container.html'));

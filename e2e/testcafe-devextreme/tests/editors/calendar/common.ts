@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import Calendar from '../../../model/calendar';
+import Calendar from 'devextreme-testcafe-models/calendar';
 import {
   appendElementTo, setClassAttribute, setStyleAttribute,
 } from '../../../helpers/domUtils';

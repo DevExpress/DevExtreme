@@ -1,4 +1,4 @@
-import SelectBox from '../../model/selectBox';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
