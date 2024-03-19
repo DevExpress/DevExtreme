@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import DataGrid from '../../model/dataGrid';
-import CheckBox from '../../model/checkBox';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 

@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Menu from '../../../model/menu';
+import Menu from 'devextreme-testcafe-models/menu';
 import {
   setAttribute, appendElementTo,
 } from '../../../helpers/domUtils';

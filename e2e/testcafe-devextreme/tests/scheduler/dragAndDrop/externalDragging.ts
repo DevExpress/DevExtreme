@@ -2,7 +2,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Drag-n-drop from another draggable area`

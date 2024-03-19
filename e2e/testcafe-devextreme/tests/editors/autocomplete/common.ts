@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import Autocomplete from '../../../model/autocomplete';
+import Autocomplete from 'devextreme-testcafe-models/autocomplete';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';

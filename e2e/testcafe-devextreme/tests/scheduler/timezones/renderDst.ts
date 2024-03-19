@@ -7,7 +7,7 @@ import {
 import url from '../../../helpers/getPageUrl';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
 import { createWidget, disposeWidget } from '../../../helpers/createWidget';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scheduler render during DST`

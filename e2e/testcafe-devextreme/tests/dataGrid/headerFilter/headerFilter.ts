@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from '../../../model/dataGrid';
-import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import { getData } from '../helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Header Filter`

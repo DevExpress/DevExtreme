@@ -1,7 +1,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import Scheduler from '../../../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createDataSetForScreenShotTests } from '../../utils';
 
 fixture.disablePageReloads`Scheduler: Generic theme layout`

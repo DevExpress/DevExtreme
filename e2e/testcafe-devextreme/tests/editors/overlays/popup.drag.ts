@@ -1,5 +1,5 @@
 import url from '../../../helpers/getPageUrl';
-import Popup from '../../../model/popup';
+import Popup from 'devextreme-testcafe-models/popup';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';

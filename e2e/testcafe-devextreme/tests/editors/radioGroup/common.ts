@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import RadioGroup from '../../../model/radioGroup';
+import RadioGroup from 'devextreme-testcafe-models/radioGroup';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 

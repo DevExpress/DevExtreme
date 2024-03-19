@@ -2,12 +2,12 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from '../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
 import { Themes } from '../../../helpers/themes';
 import { changeTheme } from '../../../helpers/changeTheme';
-import FilterTextBox from '../../../model/dataGrid/editors/filterTextBox';
-import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
+import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 
 fixture`Common tests with axe`
   .page(url(__dirname, '../../container.html'));

@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TreeList from '../../../model/treeList';
+import TreeList from 'devextreme-testcafe-models/treeList';
 
 // T1147695
 fixture

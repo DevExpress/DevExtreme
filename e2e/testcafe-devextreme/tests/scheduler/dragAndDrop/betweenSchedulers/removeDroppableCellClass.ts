@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
-import Scheduler from '../../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../helpers/createWidget';
 import { setStyleAttribute, appendElementTo } from '../../../../helpers/domUtils';
 

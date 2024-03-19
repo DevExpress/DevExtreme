@@ -7,7 +7,7 @@ import {
   appendElementTo,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import SelectBox from '../../../model/selectBox';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
 
 const labelMods = ['floating', 'static', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];

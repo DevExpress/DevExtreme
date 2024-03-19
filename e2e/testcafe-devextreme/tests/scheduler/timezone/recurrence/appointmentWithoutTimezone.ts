@@ -3,8 +3,8 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { getScreenshotName } from '../timezoneTestingUtils';
 import { createWidget } from '../../../../helpers/createWidget';
-import SelectBox from '../../../../model/selectBox';
-import Scheduler from '../../../../model/scheduler';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Recurrent appointments without timezone in scheduler with timezone`
   .page(url(__dirname, '../../../container.html'));

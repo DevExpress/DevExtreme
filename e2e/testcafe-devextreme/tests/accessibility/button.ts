@@ -5,7 +5,7 @@ import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 import { Properties } from 'devextreme/ui/button.d';
-import Button from '../../model/button';
+import Button from 'devextreme-testcafe-models/button';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))

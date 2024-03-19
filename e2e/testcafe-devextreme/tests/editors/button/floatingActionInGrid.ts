@@ -5,7 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import DataGrid from '../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const scrollWindowTo = async (position: object) => {

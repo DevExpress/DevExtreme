@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import PivotGrid from '../../../model/pivotGrid';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 
 fixture.disablePageReloads`PivotGrid_fieldChooser`
   .page(url(__dirname, '../../container.html'));

@@ -1,7 +1,7 @@
 import { simpleData, allDayData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Appointment overlapping in Scheduler`
   .page(url(__dirname, '../../container.html'));

@@ -4,7 +4,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { sales } from '../data.js';
-import PivotGrid from '../../../model/pivotGrid';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 
 fixture.disablePageReloads`PivotGrid_fieldChooser`
   .page(url(__dirname, '../container.html'));

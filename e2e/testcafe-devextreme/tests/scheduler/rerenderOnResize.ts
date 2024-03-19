@@ -1,7 +1,7 @@
 import { getStyleAttribute, setStyleAttribute } from '../../helpers/domUtils';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import Scheduler from '../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Re-render on resize`

@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import ColorBox from '../../../model/colorbox';
+import ColorBox from 'devextreme-testcafe-models/colorbox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';

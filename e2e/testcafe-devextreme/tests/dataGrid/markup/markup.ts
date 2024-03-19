@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from '../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture.disablePageReloads`Icon Sizes`
   .page(url(__dirname, '../../container.html'));

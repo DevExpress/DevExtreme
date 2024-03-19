@@ -7,7 +7,7 @@ import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { Item } from 'devextreme/ui/menu.d';
-import Menu from '../../../model/menu';
+import Menu from 'devextreme-testcafe-models/menu';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Menu_common`

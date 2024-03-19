@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 const CLICK_OPTIONS = { speed: 0.5 };
 const SCHEDULER_SELECTOR = '#container';

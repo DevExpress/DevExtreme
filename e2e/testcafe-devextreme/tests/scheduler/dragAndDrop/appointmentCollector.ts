@@ -3,7 +3,7 @@ import { appointmentCollectorData } from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Drag-and-drop behaviour for the appointment tooltip`
   .page(url(__dirname, '../../container.html'));

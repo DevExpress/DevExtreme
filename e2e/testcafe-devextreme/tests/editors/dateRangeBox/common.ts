@@ -13,7 +13,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
-import DateRangeBox from '../../../model/dateRangeBox';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';

@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
-import Form from '../../model/form/form';
+import Form from 'devextreme-testcafe-models/form/form';
 
 fixture.disablePageReloads`Form`
   .page(url(__dirname, '../containerQuill.html'));

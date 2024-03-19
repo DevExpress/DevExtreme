@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import CheckBox from '../../../model/checkBox';
+import CheckBox from 'devextreme-testcafe-models/checkBox';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';

@@ -1,7 +1,7 @@
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from '../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture`Templates tests with axe`
   .page(url(__dirname, '../../container.html'));

@@ -2,7 +2,7 @@ import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import dataSource from './init/widget.data';
 import createScheduler from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Rendering of the recurrence appointments in  Scheduler `
   .page(url(__dirname, '../../container.html'));

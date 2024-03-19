@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import ContextMenu from '../../../model/contextMenu';
+import ContextMenu from 'devextreme-testcafe-models/contextMenu';
 import { Item } from 'devextreme/ui/context_menu.d';
 import {
   appendElementTo, setAttribute,

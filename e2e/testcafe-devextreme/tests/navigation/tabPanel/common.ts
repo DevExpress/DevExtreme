@@ -6,7 +6,7 @@ import {
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TabPanel from '../../../model/tabPanel';
+import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import { Item } from 'devextreme/ui/tab_panel.d';
 import { setAttribute, appendElementTo } from '../../../helpers/domUtils';
 

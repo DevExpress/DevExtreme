@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import PivotGrid from '../../../model/pivotGrid';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 
 fixture.disablePageReloads`pivotGrid_sort`
   .page(url(__dirname, '../../container.html'));

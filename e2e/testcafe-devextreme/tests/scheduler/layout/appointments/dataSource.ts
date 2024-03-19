@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import Scheduler from '../../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`DataSource`

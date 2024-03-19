@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from '../../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture
   .disablePageReloads`Keyboard Navigation - screenshots`

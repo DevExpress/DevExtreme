@@ -3,7 +3,7 @@ import url from '../../../helpers/getPageUrl';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
-import Popup from '../../../model/popup';
+import Popup from 'devextreme-testcafe-models/popup';
 
 fixture.disablePageReloads`Popup`
   .page(url(__dirname, '../../container.html'));

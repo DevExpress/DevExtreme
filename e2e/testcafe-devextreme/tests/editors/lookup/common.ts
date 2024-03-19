@@ -3,7 +3,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import Lookup from '../../../model/lookup';
+import Lookup from 'devextreme-testcafe-models/lookup';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {

@@ -1,6 +1,6 @@
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from '../../../model/scheduler';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 const SCHEDULER_SELECTOR = '#container';
 const CELL_WIDTH = 200;

@@ -3,7 +3,7 @@ import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import DataGrid, { CLASS } from '../../model/dataGrid';
+import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');

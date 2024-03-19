@@ -8,7 +8,7 @@ import {
   appendElementTo,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import TagBox from '../../../model/tagBox';
+import TagBox from 'devextreme-testcafe-models/tagBox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];

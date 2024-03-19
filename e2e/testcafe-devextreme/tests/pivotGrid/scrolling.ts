@@ -9,7 +9,7 @@ import { virtualData } from './virtualData.js';
 import { dataOptions } from './virtualDataOptions.js';
 // eslint-disable-next-line import/extensions
 import { sales } from './data.js';
-import PivotGrid from '../../model/pivotGrid';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { generateOptionMatrix } from '../../helpers/generateOptionMatrix';
 
 const testFixture = () => {

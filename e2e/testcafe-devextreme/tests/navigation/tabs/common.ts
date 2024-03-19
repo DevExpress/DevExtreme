@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { Item } from 'devextreme/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
-import Tabs from '../../../model/tabs';
+import Tabs from 'devextreme-testcafe-models/tabs';
 
 const TAB_CLASS = 'dx-tab';
 

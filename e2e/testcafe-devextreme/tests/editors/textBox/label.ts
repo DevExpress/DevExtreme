@@ -10,7 +10,7 @@ import {
 import { testScreenshot, getThemeName } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TextBox from '../../../model/textBox';
+import TextBox from 'devextreme-testcafe-models/textBox';
 import Guid from 'devextreme/core/guid';
 import { clearTestPage } from '../../../helpers/clearPage';
 

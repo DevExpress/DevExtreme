@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Toolbar from '../../../model/toolbar/toolbar';
+import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { setAttribute } from '../../../helpers/domUtils';
 

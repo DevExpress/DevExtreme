@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import DataGrid from '../../model/dataGrid';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
 
 const DATA_GRID_SELECTOR = '#container';
