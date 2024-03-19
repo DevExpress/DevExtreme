@@ -64,13 +64,6 @@ jobs:
     - name: Run npm install
       run: npm install --no-audit --no-fund
 
-    - name: Run npm install TS testing
-      working-directory: ./packages/devextreme
-      run: |
-        pushd testing/typescript
-        npm install --no-audit --no-fund
-        popd
-
     - name: Build
       working-directory: ./packages/devextreme
       run: npm run build
