@@ -12,39 +12,40 @@ fixture('FileUploader.CustomDropzone')
   });
 
 runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
-  const triggerDragEnter = async (dropZoneSelector, fileType) => {
+  const triggerDragEnter = async (dropZoneSelector, fileTypes) => {
     await ClientFunction(() => {
       const $dropZone = $(dropZoneSelector);
       const { left, top } = $dropZone.offset();
+      const items = fileTypes.map((fileType) => ({ kind: 'file', type: fileType }));
       $dropZone.trigger($.Event('dragenter', {
         originalEvent: $.Event('dragenter', {
           dataTransfer: {
-            items: [{ kind: 'file', type: fileType }],
+            items,
             types: ['Files'],
           },
           clientX: left,
           clientY: top,
         }),
       }));
-    }, { dependencies: { dropZoneSelector, fileType } })();
+    }, { dependencies: { dropZoneSelector, fileTypes } })();
   };
 
   test('dropzone-active class is added to the dropzone element when single valid file is dragged over it', async (t) => {
-    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, 'image/png');
+    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, ['image/png']);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).ok();
   });
 
   test('dropzone-active class is not added to the dropzone element when an invalid file format is dragged', async (t) => {
-    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, 'image/xlsx');
+    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, ['image/xlsx']);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
   });
 
   test('dropzone-active class is not added to the dropzone element when multiple items are dragged', async (t) => {
     await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [
-      { type: 'image/png' },
-      { type: 'image/png' },
+      'image/png',
+      'image/png',
     ]);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
@@ -53,7 +54,7 @@ runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
   test('custom dropzone user interface appearance when dropzone-active is applied', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, 'image/png');
+    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, ['image/png']);
 
     await testScreenshot(t, takeScreenshot, 'custom_dropzone_valid_file.png');
 
