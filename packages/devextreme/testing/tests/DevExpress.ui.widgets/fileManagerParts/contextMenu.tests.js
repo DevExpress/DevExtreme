@@ -1,5 +1,5 @@
 import $ from 'jquery';
-const { test, testInActiveWindow } = QUnit;
+const { test } = QUnit;
 import 'ui/file_manager';
 import fx from 'animation/fx';
 import pointerEvents from 'events/pointer';
