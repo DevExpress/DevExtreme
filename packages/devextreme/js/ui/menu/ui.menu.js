@@ -269,38 +269,23 @@ class Menu extends MenuBase {
     _render() {
         super._render();
         this._initAdaptivity();
-        this._attachFocusOutHandler();
     }
 
     _isTargetOutOfComponent(relatedTarget) {
-        const $menuTarget = $(relatedTarget).parents(`.${DX_MENU_CLASS}`)[0];
-        const $contextMenuTarget = $(relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
+        const isInsideRootMenu = $(relatedTarget).parents(`.${DX_MENU_CLASS}`).length !== 0;
+        const isInsideContextMenu = $(relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
-        if(!$menuTarget && !$contextMenuTarget) {
-            return true;
-        }
-
-        const $element = this._focusTarget()[0];
-        const $overlayContent = this._visibleSubmenu?.getOverlayContent()[0];
-
-        const isTargetOutOfComponent = !($menuTarget === $element || $contextMenuTarget === $overlayContent);
+        const isTargetOutOfComponent = !(isInsideRootMenu || isInsideContextMenu);
 
         return isTargetOutOfComponent;
     }
 
-    _attachFocusOutHandler() {
-        const namespace = addNamespace('focusout', this.NAME);
+    _focusOutHandler({ relatedTarget }) {
+        const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
 
-        const callback = ({ relatedTarget }) => {
-            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
-
-            if(isTargetOutside) {
-                this._hideVisibleSubmenu();
-            }
-        };
-
-        eventsEngine.off(this._focusTarget(), namespace);
-        eventsEngine.on(this._focusTarget(), namespace, callback);
+        if(isTargetOutside) {
+            this._hideVisibleSubmenu();
+        }
     }
 
     _renderHamburgerButton() {

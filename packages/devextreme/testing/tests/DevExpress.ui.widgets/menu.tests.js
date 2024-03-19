@@ -760,7 +760,7 @@ QUnit.module('Menu tests', {
         assert.notOk(submenu.option('visible'), 'submenu was closed');
     });
 
-    QUnit.test('Submenu should be closed when element lose focus', function(assert) {
+    QUnit.test('Submenu should be closed when element loses focus', function(assert) {
         const options = {
             focusStateEnabled: true,
             showFirstSubmenuMode: 'onClick',
