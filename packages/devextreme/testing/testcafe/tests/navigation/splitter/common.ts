@@ -17,11 +17,15 @@ test('Splitter appearance on different appearance and themes', async (t) => {
   await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
   await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
 
-  t.hover(splitter.resizeHandles.nth(0));
+  await t
+    .hover(splitter.resizeHandles.nth(0));
+
   await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
   await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
 
-  t.click(splitter.resizeHandles.nth(0));
+  await t
+    .click(splitter.resizeHandles.nth(0));
+
   await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
   await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
 
