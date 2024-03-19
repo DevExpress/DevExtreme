@@ -83,6 +83,7 @@
     "apps/*",
     "packages/*",
     "e2e/*",
+    "utils/*",
     "packages/devextreme/artifacts/npm/*"
   ],
   "dependencies": {
