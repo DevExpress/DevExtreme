@@ -292,7 +292,25 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
   let remainingSize = 100;
 
   layoutRestrictions.forEach((panelConstraints, index) => {
-    const { size, visible } = panelConstraints;
+    const { size, visible, collapsed } = panelConstraints;
+
+    if (visible === false) {
+      numPanelsWithSizes += 1;
+
+      layout[index] = 0;
+      remainingSize -= 0;
+
+      return;
+    }
+
+    if (collapsed === true) {
+      numPanelsWithSizes += 1;
+
+      layout[index] = 0;
+      remainingSize -= 0;
+
+      return;
+    }
 
     if (isDefined(size)) {
       numPanelsWithSizes += 1;
@@ -300,19 +318,12 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
       layout[index] = size;
       remainingSize -= size;
     }
-
-    if (visible === false) {
-      numPanelsWithSizes += 1;
-
-      layout[index] = 0;
-      remainingSize -= 0;
-    }
   });
 
   layoutRestrictions.forEach((panelConstraints, index) => {
-    const { size, visible } = panelConstraints;
+    const { size, visible, collapsed } = panelConstraints;
 
-    if (size == null && visible !== false) {
+    if (size == null && visible !== false && collapsed !== true) {
       const numRemainingPanels = layoutRestrictions.length - numPanelsWithSizes;
       const newSize = remainingSize / numRemainingPanels;
 
