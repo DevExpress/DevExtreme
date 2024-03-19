@@ -11,6 +11,7 @@ fixture.disablePageReloads`Splitter_Icon_Results`
 
 test('Splitter appearance on different appearance and themes', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  t.debug();
   await testScreenshot(t, takeScreenshot, 'splitter-appearance state=normal.png', { element: '#normal' });
   await testScreenshot(t, takeScreenshot, 'splitter-appearance state=normal.png', { element: '#normal', theme: getFullThemeName().replace('light', 'dark') });
 
@@ -26,11 +27,6 @@ test('Splitter appearance on different appearance and themes', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setAttribute('#container', 'style', 'display:flex; height: 400px;');
-
-  await appendElementTo('#container', 'div', 'normal', { });
-  await appendElementTo('#container', 'div', 'hover', { });
-  await appendElementTo('#container', 'div', 'focused', { });
   await createWidget('dxSplitter', {
     orientation: 'horizontal',
     width: 600,
@@ -41,29 +37,7 @@ test('Splitter appearance on different appearance and themes', async (t) => {
       text: 'pane_2',
     },
     ],
-  }, '#normal');
-  await createWidget('dxSplitter', {
-    orientation: 'horizontal',
-    width: 600,
-    height: 300,
-    dataSource: [{
-      text: 'pane_1',
-    }, {
-      text: 'pane_2',
-    },
-    ],
-  }, '#hover');
-  await createWidget('dxSplitter', {
-    orientation: 'horizontal',
-    width: 600,
-    height: 300,
-    dataSource: [{
-      text: 'pane_1',
-    }, {
-      text: 'pane_2',
-    },
-    ],
-  }, '#focused');
+  });
 });
 
 ['horizontal', 'vertical'].forEach((orientation) => {
