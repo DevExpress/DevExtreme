@@ -10,6 +10,16 @@ themeModule.registerTheme({
     backgroundColor: 'some_theme_color'
 });
 
+function createMockWidget(size, option) {
+    const root = $('<div>').append($('<svg>'));
+
+    return {
+        element: sinon.stub().returns(root),
+        getSize: sinon.stub().returns(size),
+        option
+    };
+}
+
 QUnit.module('Creation', {
     beforeEach: function() {
         this.renderer = new vizMocks.Renderer();
@@ -348,15 +358,6 @@ QUnit.test('Enabled options is false', function(assert) {
 });
 
 QUnit.module('API. Markup manipulations', {
-    createWidget(size, option) {
-        const root = $('<div>').append($('<svg>'));
-
-        return {
-            element: sinon.stub().returns(root),
-            getSize: sinon.stub().returns(size),
-            option
-        };
-    },
     checkAttrsValues(expectedSvgAttrs, root, assert) {
         Object.keys(expectedSvgAttrs).forEach((attrKey) => {
             const expectedAttrValue = expectedSvgAttrs[attrKey];
@@ -377,8 +378,8 @@ QUnit.test('getMarkup method', function(assert) {
         if(param === 'backgroundColor') return 'backgroundColor';
     };
     const widgets = [
-        this.createWidget({ height: 25, width: 10 }, optionMock),
-        this.createWidget({ height: 15, width: 15 }, optionMock),
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock),
     ];
 
     const markup = exportModule.getMarkup(widgets);
@@ -391,8 +392,8 @@ QUnit.test('getMarkup. BackgroundColor in theme', function(assert) {
         if(param === 'theme') return 'someTheme.light';
     };
     const widgets = [
-        this.createWidget({ height: 25, width: 10 }, optionMock),
-        this.createWidget({ height: 15, width: 15 }, optionMock)
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock)
     ];
 
     const markup = exportModule.getMarkup(widgets);
@@ -407,8 +408,8 @@ QUnit.test('getMarkup. Different colors in charts. No backgroundColor in result'
         if(param === 'backgroundColor') return colors[i++];
     };
     const widgets = [
-        this.createWidget({ height: 25, width: 10 }, optionMock),
-        this.createWidget({ height: 15, width: 15 }, optionMock)
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock)
     ];
 
     const markup = exportModule.getMarkup(widgets);
@@ -420,7 +421,7 @@ QUnit.test('Combine widgets markups (combineMarkups), just widget', function(ass
     const optionMock = (param) => {
         if(param === 'backgroundColor') return 'backgroundColor';
     };
-    const widgets = [this.createWidget({ width: 10, height: 25 }, optionMock)];
+    const widgets = [createMockWidget({ width: 10, height: 25 }, optionMock)];
 
     const markupData = exportModule.combineMarkups(widgets);
 
@@ -449,8 +450,8 @@ QUnit.test('Combine widgets markups (combineMarkups), array of widgets - column'
         if(param === 'backgroundColor') return 'backgroundColor';
     };
     const widgets = [
-        this.createWidget({ width: 10, height: 25 }, optionMock),
-        this.createWidget({ width: 15, height: 15 }, optionMock),
+        createMockWidget({ width: 10, height: 25 }, optionMock),
+        createMockWidget({ width: 15, height: 15 }, optionMock),
     ];
 
     const markupData = exportModule.combineMarkups(widgets);
@@ -481,8 +482,8 @@ QUnit.test('Combine widgets markups (combineMarkups), array of arrays of widgets
         if(param === 'backgroundColor') return 'backgroundColor';
     };
     const markupData = exportModule.combineMarkups([
-        [this.createWidget({ width: 10, height: 25 }, optionMock), this.createWidget({ width: 15, height: 15 }, optionMock)],
-        [this.createWidget({ width: 20, height: 15 }, optionMock), this.createWidget({ width: 10, height: 35 }, optionMock)]
+        [createMockWidget({ width: 10, height: 25 }, optionMock), createMockWidget({ width: 15, height: 15 }, optionMock)],
+        [createMockWidget({ width: 20, height: 15 }, optionMock), createMockWidget({ width: 10, height: 35 }, optionMock)]
     ]);
 
     const expectedSvgAttrs = {
@@ -512,8 +513,8 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with center-
     };
 
     const markupData = exportModule.combineMarkups([
-        [this.createWidget({ width: 10, height: 25 }, optionMock), this.createWidget({ width: 16, height: 15 }, optionMock)],
-        [this.createWidget({ width: 20, height: 15 }, optionMock), this.createWidget({ width: 10, height: 35 }, optionMock)]
+        [createMockWidget({ width: 10, height: 25 }, optionMock), createMockWidget({ width: 16, height: 15 }, optionMock)],
+        [createMockWidget({ width: 20, height: 15 }, optionMock), createMockWidget({ width: 10, height: 35 }, optionMock)]
     ], {
         gridLayout: true,
         verticalAlignment: 'center',
@@ -546,8 +547,8 @@ QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-
     };
 
     const markupData = exportModule.combineMarkups([
-        [this.createWidget({ width: 10, height: 25 }, optionMock), this.createWidget({ width: 16, height: 15 }, optionMock)],
-        [this.createWidget({ width: 20, height: 15 }, optionMock), this.createWidget({ width: 10, height: 35 }, optionMock)]
+        [createMockWidget({ width: 10, height: 25 }, optionMock), createMockWidget({ width: 16, height: 15 }, optionMock)],
+        [createMockWidget({ width: 20, height: 15 }, optionMock), createMockWidget({ width: 10, height: 35 }, optionMock)]
     ], {
         gridLayout: true,
         verticalAlignment: 'bottom',
@@ -734,6 +735,19 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     } finally {
         themeModule.currentTheme(currentTheme);
     }
+});
+
+QUnit.test('exportWidgets method should pass to export markup as string', function(assert) {
+    const optionMock = (param) => {
+        if(param === 'theme') return 'someTheme.light';
+    };
+    const widgets = [
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock),
+    ];
+    exportModule.exportWidgets(widgets);
+
+    assert.deepEqual(clientExporter.export.getCall(0).args[0].nodeName, 'svg', 'combineMarkups should pass to export DOM node');
 });
 
 QUnit.test('exportWidgets method. Defaults', function(assert) {

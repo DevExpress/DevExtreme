@@ -1,6 +1,6 @@
 import $ from '../core/renderer';
 import Color from '../color';
-import { isFunction, isPromise, isDefined } from '../core/utils/type';
+import { isFunction, isPromise, isDefined, isRenderer } from '../core/utils/type';
 import { getSvgElement, HIDDEN_FOR_EXPORT } from '../core/utils/svg';
 import { each as _each, map as _map } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';
@@ -754,7 +754,7 @@ function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, svgT
     context.setTransform(scaledScreenInfo.pixelRatio, 0, 0, scaledScreenInfo.pixelRatio, 0, 0);
     const svgElem = getSvgElement(markup);
     let invisibleDiv;
-    const markupIsDomElement = domAdapter.isElementNode(markup);
+    const markupIsDomElement = domAdapter.isElementNode(markup) || isRenderer(markup);
     context.translate(margin, margin);
 
     domAdapter.getBody().appendChild(canvas);
@@ -769,7 +769,7 @@ function getCanvasFromSvg(markup, { width, height, backgroundColor, margin, svgT
     }
     drawBackground(context, width, height, backgroundColor, margin);
 
-    return fromPromise(svgToCanvas(svgElem, canvas, markupIsDomElement && contains(domAdapter.getBody(), markup)))
+    return fromPromise(svgToCanvas(svgElem, canvas, markupIsDomElement && contains(domAdapter.getBody(), $(markup).get(0))))
         .then(() => canvas)
         .always(() => {
             invisibleDiv && domAdapter.getBody().removeChild(invisibleDiv);

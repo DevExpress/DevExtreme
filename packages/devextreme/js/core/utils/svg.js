@@ -1,6 +1,7 @@
 import domAdapter from '../../core/dom_adapter';
 import { getWindow } from './window';
 import $ from '../../core/renderer';
+import { isRenderer, isString } from './type';
 
 const window = getWindow();
 
@@ -50,9 +51,15 @@ export function getSvgMarkup(element, backgroundColor) {
 }
 
 export function getSvgElement(markup) {
-    return domAdapter.isNode(markup)
-        ? markup
-        : (new window.DOMParser()
+    if(isString(markup)) {
+        const parsedMarkup = new window.DOMParser()
             .parseFromString(markup, 'image/svg+xml')
-            .childNodes[0]);
+            .childNodes[0];
+
+        return parsedMarkup;
+    } else if(domAdapter.isNode(markup)) {
+        return markup;
+    } else if(isRenderer(markup)) {
+        return markup.get(0);
+    }
 }
