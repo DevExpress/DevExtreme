@@ -3,7 +3,7 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from 'devextreme/renovation/
 
 import Widget from '../internal/widget';
 import Scrollbar from './internal/scrollbar';
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 
 const CLASS = {
   scrollable: 'dx-scrollable',

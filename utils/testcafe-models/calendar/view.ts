@@ -1,4 +1,4 @@
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import dateSerialization from 'devextreme/core/utils/date_serialization';
 import dateUtils from 'devextreme/core/utils/date';

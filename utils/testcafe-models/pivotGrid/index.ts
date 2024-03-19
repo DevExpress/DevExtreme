@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import ColumnHeaderArea from './columnHeaderArea';
 import DataHeaderArea from './dataHeaderArea';

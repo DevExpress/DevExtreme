@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import type { WidgetName, WidgetOptions } from './widgetTypings';
+import type { WidgetName, WidgetOptions } from 'devextreme-testcafe-models/types';
 
 export interface CreateWidgetOptions {
   disableFxAnimation: boolean;
