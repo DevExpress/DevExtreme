@@ -12,92 +12,48 @@ fixture('FileUploader.CustomDropzone')
   });
 
 runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
-  test('dropzone-active class is added to the dropzone element when single valid file is dragged over it', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
+  const triggerDragEnter = async (t, dropZoneSelector, fileType) => {
     await ClientFunction(() => {
-      const $dropZone = $(`#${DROPZONE_EXTERNAL_CLASS}`);
+      const $dropZone = $(dropZoneSelector);
+      const { left, top } = $dropZone.offset();
       $dropZone.trigger($.Event('dragenter', {
         originalEvent: $.Event('dragenter', {
           dataTransfer: {
-            items: [
-              { kind: 'file', type: 'image/png' },
-            ],
+            items: [{ kind: 'file', type: fileType }],
             types: ['Files'],
           },
-          clientX: $dropZone.offset().left,
-          clientY: $dropZone.offset().top,
+          clientX: left,
+          clientY: top,
         }),
       }));
-    }, { dependencies: { DROPZONE_EXTERNAL_CLASS } })();
+    }, { dependencies: { dropZoneSelector, fileType } })();
+  };
+
+  test.only('dropzone-active class is added to the dropzone element when single valid file is dragged over it', async (t) => {
+    await triggerDragEnter(t, `#${DROPZONE_EXTERNAL_CLASS}`, 'image/png');
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).ok();
+  });
+
+  test.only('dropzone-active class is not added to the dropzone element when an invalid file format is dragged', async (t) => {
+    await triggerDragEnter(t, `#${DROPZONE_EXTERNAL_CLASS}`, 'image/xlsx');
+
+    await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
+  });
+
+  test.only('dropzone-active class is not added to the dropzone element when multiple items are dragged', async (t) => {
+    await triggerDragEnter(t, `#${DROPZONE_EXTERNAL_CLASS}`, 'image/png');
+
+    await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
+  });
+
+  test.only('custom dropzone user interface appearance when dropzone-active is applied', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await triggerDragEnter(t, `#${DROPZONE_EXTERNAL_CLASS}`, 'image/png');
 
     await testScreenshot(t, takeScreenshot, 'custom_dropzone_valid_file.png');
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  });
-});
-
-runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
-  test('dropzone-active class is not added to the dropzone element when an invalid file format is dragged', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await ClientFunction(() => {
-      const $dropZone = $(`#${DROPZONE_EXTERNAL_CLASS}`);
-      $dropZone.trigger($.Event('dragenter', {
-        originalEvent: $.Event('dragenter', {
-          dataTransfer: {
-            items: [
-              { kind: 'file', type: 'image/xlsx' },
-            ],
-            types: ['Files'],
-          },
-          clientX: $dropZone.offset().left,
-          clientY: $dropZone.offset().top,
-        }),
-      }));
-    }, { dependencies: { DROPZONE_EXTERNAL_CLASS } })();
-
-    await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
-
-    await testScreenshot(t, takeScreenshot, 'custom_dropzone_invalid_format.png');
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  });
-});
-
-runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
-  test('dropzone-active class is not added to the dropzone element when an multiple items are dragged', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-    await ClientFunction(() => {
-      const $dropZone = $(`#${DROPZONE_EXTERNAL_CLASS}`);
-      $dropZone.trigger($.Event('dragenter', {
-        originalEvent: $.Event('dragenter', {
-          dataTransfer: {
-            items: [
-              { kind: 'file', type: 'image/png' },
-              { kind: 'file', type: 'image/png' },
-            ],
-            types: ['Files'],
-          },
-          clientX: $dropZone.offset().left,
-          clientY: $dropZone.offset().top,
-        }),
-      }));
-    }, { dependencies: { DROPZONE_EXTERNAL_CLASS } })();
-
-    await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
-
-    await testScreenshot(t, takeScreenshot, 'custom_dropzone_multiple_files.png');
-
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
+    await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
   });
 });
