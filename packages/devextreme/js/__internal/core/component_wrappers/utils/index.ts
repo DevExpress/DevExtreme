@@ -1,4 +1,7 @@
 export {
+  getTemplate,
+} from './get_template';
+export {
   shallowEquals,
 } from './shallow_equals';
 export {

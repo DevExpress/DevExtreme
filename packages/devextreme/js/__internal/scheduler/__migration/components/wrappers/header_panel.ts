@@ -3,8 +3,8 @@ import registerComponent from '@js/core/component_registrator';
 import { ComponentWrapper } from '@ts/core/component_wrappers/index';
 
 import {
-  HeaderPanelLayout,
-} from '../base/m_header_panel';
+  HeaderPanel,
+} from '../base/header_panel';
 
 export class HeaderPanelComponent extends ComponentWrapper {
   _setOptionsByReference(): void {
@@ -37,8 +37,8 @@ export class HeaderPanelComponent extends ComponentWrapper {
   /* eslint-enable @typescript-eslint/explicit-function-return-type */
 
   // @ts-expect-error types error in R1
-  get _viewComponent(): typeof HeaderPanelLayout {
-    return HeaderPanelLayout;
+  get _viewComponent(): typeof HeaderPanel {
+    return HeaderPanel;
   }
 }
 
