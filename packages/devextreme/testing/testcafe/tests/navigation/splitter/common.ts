@@ -11,17 +11,17 @@ fixture.disablePageReloads`Splitter_Icon_Results`
 
 test('Splitter appearance on different appearance and themes', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  t.debug();
-  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=normal.png', { element: '#normal' });
-  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=normal.png', { element: '#normal', theme: getFullThemeName().replace('light', 'dark') });
 
-  t.hover('#hover');
-  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=hover.png', { element: '#hover' });
-  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=hover.png', { element: '#hover', theme: getFullThemeName().replace('light', 'dark') });
+  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=normal.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=normal.png', { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
 
-  t.click('#focused');
-  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=focus.png', { element: '#focused' });
-  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=focus.png', { element: '#focused', theme: getFullThemeName().replace('light', 'dark') });
+  t.hover('.dx-resize-handle');
+  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=hover.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=hover.png', { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
+
+  t.click('.dx-resize-handle');
+  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=focus.png', { element: '#container' });
+  await testScreenshot(t, takeScreenshot, 'splitter-appearance state=focus.png', { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
 
   await t
     .expect(compareResults.isValid())
