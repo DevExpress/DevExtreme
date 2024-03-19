@@ -1438,6 +1438,28 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(instance.option('visible'), false, 'menu was hidden');
     });
 
+    QUnit.testInActiveWindow('Context menu should not be hidden if inside item was clicked', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            focusStateEnabled: true,
+            items: [
+                {
+                    text: 'item 1',
+                    items: [{ text: 'item 11' }],
+                },
+            ],
+        });
+
+        instance.show();
+
+        assert.strictEqual(instance.option('visible'), true, 'menu is opened');
+
+        const overlayContent = instance.itemsContainer();
+
+        $(overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+
+        assert.strictEqual(instance.option('visible'), true, 'menu is still opened');
+    });
+
     QUnit.test('context menu should not hide after outsideclick when event is canceled', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 'item 1', items: [{ text: 'item 11', items: [{ text: 'item 111' }] }] }],
