@@ -784,6 +784,41 @@ QUnit.module('Menu tests', {
         assert.strictEqual(submenu.option('visible'), false, 'submenu closed');
     });
 
+    QUnit.test('Submenu should not be closed when submenu item clicked', function(assert) {
+        const options = {
+            focusStateEnabled: true,
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                {
+                    text: 'item 1',
+                    items: [
+                        {
+                            text: 'item 11',
+                            items: [
+                                { text: 'item 111' },
+                            ],
+                        },
+                    ],
+                },
+            ],
+        };
+        const menu = createMenu(options);
+        const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
+        const $subMenu = $menuItem.eq(0);
+
+        $($subMenu).trigger('dxclick');
+
+        const submenu = getSubMenuInstance($subMenu);
+
+        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+        const $submenuItems = submenu.itemElements();
+
+        $($submenuItems.eq(0)).trigger('dxclick');
+
+        assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
+    });
+
     QUnit.test('Don\'t hide submenu when cancel is true', function(assert) {
         let i = 0;
 
