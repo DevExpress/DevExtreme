@@ -11,7 +11,7 @@ import {
   isCrossDomain,
   evalCrossDomainScript,
   getRequestOptions,
-  getJsonpCallbackName as getCallbackNameAndPatchOptions,
+  getJsonpCallbackName,
   getRequestHeaders as getAjaxRequestHeaders,
   getAcceptHeader,
   getMethod,
@@ -110,14 +110,15 @@ function rejectIfAborted(deferred: DeferredResult, xhrSurrogate: XHRSurrogate, c
   }
 }
 
-function addJsonpCallbackAndReturnData(options: Options, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
+function getJsonpParameters(options: Options) {
   const patchedOptions = { ...options };
-  const callbackName = getCallbackNameAndPatchOptions(patchedOptions);
+  const callbackName = getJsonpCallbackName(patchedOptions);
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-expect-error
+  return { callbackName, data: patchedOptions.data };
+}
+
+function addJsonpCallback(callbackName: string, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
   getWindow()[callbackName] = (data) => deferred.resolve(data, SUCCESS, xhrSurrogate);
-  return patchedOptions.data;
 }
 
 function sendRequestByScript(url: string, deferred: DeferredResult, xhrSurrogate: XHRSurrogate) {
@@ -219,9 +220,11 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   result.abort = () => xhrSurrogate.abort();
 
   if (!options.crossDomain && isJSONP) {
-    const data = addJsonpCallbackAndReturnData(options, deferred, xhrSurrogate);
+    const { callbackName, data } = getJsonpParameters(options);
 
     options.data = { ...options.data, ...data };
+
+    addJsonpCallback(callbackName, deferred, xhrSurrogate);
   }
 
   const { url, parameters: data } = getRequestOptions(options, headers);
