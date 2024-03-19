@@ -481,6 +481,7 @@ class Splitter extends (CollectionWidget as any) {
     items.forEach((item) => {
       this._itemRestrictions.push({
         visible: item.visible,
+        collapsed: item.collapsed === true,
         size: convertSizeToRatio(item.size, elementSize),
         maxSize: convertSizeToRatio(item.maxSize, elementSize),
         minSize: convertSizeToRatio(item.minSize, elementSize),

@@ -535,6 +535,21 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 expectedLayout: ['99', '1'],
                 expectedItemSizes: [undefined, '1%']
             },
+            {
+                dataSource: [{ visible: false }, { }, { }],
+                expectedLayout: ['50', '50'],
+                expectedItemSizes: [undefined, undefined, undefined]
+            },
+            {
+                dataSource: [{ }, { visible: false }, { }],
+                expectedLayout: ['50', '50'],
+                expectedItemSizes: [undefined, undefined, undefined]
+            },
+            {
+                dataSource: [{ }, { }, { visible: false }],
+                expectedLayout: ['50', '50'],
+                expectedItemSizes: [undefined, undefined, undefined]
+            },
         ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
             QUnit.test(`pane should respect size option in percentages, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
                 this.reinit({
@@ -546,6 +561,41 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 this.checkItemSizes(expectedItemSizes);
                 this.assertLayout(expectedLayout);
             });
+        });
+    });
+
+    [{
+        items: [{ collapsed: true }, {}],
+        expectedLayout: ['0', '100'],
+    },
+    {
+        items: [{}, { collapsed: true }],
+        expectedLayout: ['100', '0'],
+    },
+    {
+        items: [{ collapsed: true }, { collapsed: true }, { collapsed: true }],
+        expectedLayout: ['0', '0', '0'],
+    },
+    {
+        items: [{ size: 200 }, { collapsed: true }, { size: 200 }],
+        expectedLayout: ['50', '0', '50'],
+    },
+    {
+        items: [{ visible: false }, { collapsed: true }],
+        expectedLayout: ['0', '0'],
+    },
+    {
+        items: [{}, { visible: false }, { collapsed: true }],
+        expectedLayout: ['100', '0', '0'],
+    },
+    {
+        items: [{}, { collapsed: true }, {}],
+        expectedLayout: ['50', '0', '50'],
+    },].forEach(({ items, expectedLayout }) => {
+        QUnit.test(`Panes with collapsed, items: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            this.assertLayout(expectedLayout);
         });
     });
 });
