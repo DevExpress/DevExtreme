@@ -174,6 +174,7 @@ class OptionsManager {
     Object.keys(this.guards).forEach((optionName) => {
       delete this.guards[optionName];
     });
+    this.instance = null;
   }
 
   private isOptionSubscribable(optionName: string): boolean {
