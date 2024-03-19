@@ -352,9 +352,10 @@ class ContextMenu extends MenuBase {
         const namespace = addNamespace('focusout', this.NAME);
 
         const callback = ({ relatedTarget }) => {
+            const isCurrentOverlayVisible = this._overlay._currentVisible;
             const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
 
-            if(isTargetOutside) {
+            if(isCurrentOverlayVisible && isTargetOutside) {
                 this.hide();
             }
         };
