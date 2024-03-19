@@ -20,7 +20,7 @@ npm run pack -w=devextreme-angular
 ```
 2. Run the launch script:
 ```
-cd apps/angular
+cd playgrounds/angular
 npm run start
 ```
 
@@ -31,7 +31,7 @@ npm run pack -w=devextreme-react
 ```
 2. Run the launch script:
 ```
-cd apps/react
+cd playgrounds/react
 npm run start
 ```
 
@@ -42,7 +42,7 @@ npm run pack -w=devextreme-vue
 ```
 2. Run the launch script:
 ```
-cd apps/vue
+cd playgrounds/vue
 npm run start
 ```
 
