@@ -30,21 +30,21 @@ runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
   };
 
   test('dropzone-active class is added to the dropzone element when single valid file is dragged over it', async (t) => {
-    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [{ kind: 'file', type: 'image/png' }]);
+    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [{ type: 'image/png' }]);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).ok();
   });
 
   test('dropzone-active class is not added to the dropzone element when an invalid file format is dragged', async (t) => {
-    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [{ kind: 'file', type: 'image/xlsx' }]);
+    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [{ type: 'image/xlsx' }]);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
   });
 
   test('dropzone-active class is not added to the dropzone element when multiple items are dragged', async (t) => {
     await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [
-      { kind: 'file', type: 'image/png' },
-      { kind: 'file', type: 'image/png' },
+      { type: 'image/png' },
+      { type: 'image/png' },
     ]);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
@@ -53,7 +53,7 @@ runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
   test('custom dropzone user interface appearance when dropzone-active is applied', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [{ kind: 'file', type: 'image/png' }]);
+    await triggerDragEnter(`#${DROPZONE_EXTERNAL_CLASS}`, [{ type: 'image/png' }]);
 
     await testScreenshot(t, takeScreenshot, 'custom_dropzone_valid_file.png');
 
