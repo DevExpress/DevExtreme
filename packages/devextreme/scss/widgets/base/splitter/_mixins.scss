@@ -1,7 +1,3 @@
-@use "../../generic/colors" as generic;
-@use "../../material/colors" as material;
-@use "../../fluent/colors" as fluent;
-
 @mixin resize-handle-states(
   $color,
   $background-color,
