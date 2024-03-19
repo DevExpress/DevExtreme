@@ -1,6 +1,17 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "noUnusedLocals": false
-  }
+    "skipLibCheck": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "target": "ES6",
+    // paths are only for ./license_validation.ts test
+    "paths": {
+      "@js/*": ["devextreme/js/*"],
+      "@ts/*": ["devextreme/js/__internal/*"],
+    }
+  },
+  "include": [
+    "**/*.ts"
+  ]
 }
