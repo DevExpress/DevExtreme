@@ -44,7 +44,7 @@ runManualTest('FileUploader', 'CustomDropzone', ['jQuery'], (test) => {
   test('dropzone-active class is not added to the dropzone element when multiple items are dragged', async (t) => {
     await triggerDragEnter(t, `#${DROPZONE_EXTERNAL_CLASS}`, [
       { type: 'image/png' },
-      { type: 'image/png' }
+      { type: 'image/png' },
     ]);
 
     await t.expect(Selector(`#${DROPZONE_EXTERNAL_CLASS}`).hasClass('dropzone-active')).notOk();
