@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "جار التحميل...",
         "dxList-nextButtonText": "المزيد",
         "dxList-selectAll": "تحديد الكل",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "حذف",
         "dxListEditDecorator-more": "المزيد",
 

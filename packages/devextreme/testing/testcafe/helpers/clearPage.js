@@ -3,11 +3,17 @@ const testCafe = require('testcafe');
 
 module.exports = {
     clearTestPage: async function() {
+        const shadowDom = process.env.shadowDom === 'true';
+
         await testCafe.ClientFunction(() => {
             const body = document.querySelector('body');
+            const parentContainer = document.getElementById('parentContainer');
 
-            $('#container').remove();
-            $('#otherContainer').remove();
+            if(shadowDom) {
+                parentContainer?.remove();
+            } else {
+                $(parentContainer).remove();
+            }
 
             const containerElement = document.createElement('div');
             containerElement.setAttribute('id', 'container');
@@ -15,10 +21,17 @@ module.exports = {
             const otherContainerElement = document.createElement('div');
             otherContainerElement.setAttribute('id', 'otherContainer');
 
-            body.prepend(otherContainerElement);
-            body.prepend(containerElement);
+            const parentContainerElement = document.createElement('div');
+            parentContainerElement.setAttribute('id', 'parentContainer');
+
+            parentContainerElement.append(containerElement, otherContainerElement);
+            body.prepend(parentContainerElement);
 
             $('#stylesheetRules').remove();
+        }, {
+            dependencies: {
+                shadowDom,
+            }
         })();
     }
 };

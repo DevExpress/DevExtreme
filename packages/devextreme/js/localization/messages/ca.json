@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Carregant ...",
         "dxList-nextButtonText": "Més",
         "dxList-selectAll": "Seleccionar tot",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Esborrar",
         "dxListEditDecorator-more": "Més",
 

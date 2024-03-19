@@ -34,24 +34,30 @@ safeSizeTest('The splitter pane should be rendered with the correct ratio inside
   templatesRenderAsynchronously: true,
   dataSource: [{
     title: 'Tab_1',
+    collapsible: true,
     text: 'Tab_1 content',
   }, {
     title: 'Tab_2',
+    collapsible: true,
     template: () => ($('<div>') as any).dxSplitter({
       orientation: 'horizontal',
       allowKeyboardNavigation: true,
       dataSource: [{
         size: '100px',
         text: 'Pane_1',
+        collapsible: true,
         template: () => $('<div>').text('Pane_1'),
       }, {
+        collapsible: true,
         splitter: {
           orientation: 'vertical',
           dataSource: [{
             text: 'Pane_2_1',
+            collapsible: true,
             template: () => $('<div>').text('Pane_2_1'),
           }, {
             text: 'Pane_2_2',
+            collapsible: true,
             template: () => $('<div>').text('Pane_2_2'),
           }],
         },

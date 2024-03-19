@@ -55,9 +55,9 @@ test('Splitter appearance on different appearance and themes', async (t) => {
       width: 600,
       height: 300,
       dataSource: [{
-        text: 'pane_1',
+        text: 'pane_1', collapsible: true,
       }, {
-        text: 'pane_2',
+        text: 'pane_2', collapsible: true,
       },
       ],
     });
@@ -76,20 +76,21 @@ test('Splitter appearance on different appearance and themes', async (t) => {
       orientation,
       width: 600,
       height: 300,
-      dataSource: [{ text: 'Pane_1' },
+      dataSource: [{ text: 'Pane_1', collapsible: true },
         {
           splitter: {
             orientation: orientation === 'horizontal' ? 'vertical' : 'horizontal',
             dataSource: [{
-              text: 'Pane_2_1',
+              text: 'Pane_2_1', collapsible: true,
             }, {
-              text: 'Pane_2_2',
+              text: 'Pane_2_2', collapsible: true,
             }, {
-              text: 'Pane_2_3',
+              text: 'Pane_2_3', collapsible: true,
             }],
           },
+          collapsible: true,
         },
-        { text: 'Pane_3' },
+        { text: 'Pane_3', collapsible: true },
       ],
     });
   });

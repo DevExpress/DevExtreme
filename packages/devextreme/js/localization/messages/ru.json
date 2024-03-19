@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Загрузка...",
         "dxList-nextButtonText": "Далее",
         "dxList-selectAll": "Выбрать все",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Удалить",
         "dxListEditDecorator-more": "Еще",
 

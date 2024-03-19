@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Φόρτωση...",
         "dxList-nextButtonText": "Περισσότερα",
         "dxList-selectAll": "Επιλογή όλων",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Διαγραφή",
         "dxListEditDecorator-more": "Περισσότερα",
 

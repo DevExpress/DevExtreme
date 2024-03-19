@@ -72,7 +72,14 @@ const Autocomplete = (DropDownList as any).inherit({
   _initMarkup() {
     this.callBase();
     this.$element().addClass(AUTOCOMPLETE_CLASS);
-    this.setAria('autocomplete', 'inline');
+  },
+
+  _getAriaAutocomplete() {
+    const { disabled, readOnly } = this.option();
+
+    const isInputEditable = !(readOnly || disabled);
+
+    return isInputEditable ? 'list' : 'none';
   },
 
   _displayGetterExpr() {
@@ -164,6 +171,11 @@ const Autocomplete = (DropDownList as any).inherit({
 
   _optionChanged(args) {
     switch (args.name) {
+      case 'readOnly':
+      case 'disabled':
+        this.callBase(args);
+        this._setDefaultAria();
+        break;
       case 'maxItemCount':
         this._searchDataSource();
         break;

@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Încărcare...",
         "dxList-nextButtonText": "Mai mult",
         "dxList-selectAll": "Selectează Tot",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Șterge",
         "dxListEditDecorator-more": "Mai mult",
 
