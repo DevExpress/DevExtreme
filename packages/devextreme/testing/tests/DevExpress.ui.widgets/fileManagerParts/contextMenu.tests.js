@@ -1036,7 +1036,6 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         this.fileManager.option('contextMenu.items', [ { text: 'Item 1' }, { text: 'Item 2' }, { text: 'Item 3' } ]);
 
         this.wrapper.getRowInDetailsView(1).trigger('dxhoverstart');
-
         this.wrapper.getRowActionButtonInDetailsView(1).trigger('dxclick');
         this.clock.tick(400);
 
