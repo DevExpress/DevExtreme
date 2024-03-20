@@ -160,12 +160,12 @@ class ResizeHandle extends (Widget as any) {
     if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
       this.option('disabled', true);
       this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
+      this.option(inverseDimension, null);
     } else {
+      this.option(dimension, separatorSize);
+      this.option(inverseDimension, null);
       this.option('disabled', false);
-      this.$element().css(dimension, separatorSize);
     }
-
-    this.option(inverseDimension, undefined);
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
