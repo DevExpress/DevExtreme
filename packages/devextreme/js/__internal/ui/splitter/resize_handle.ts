@@ -33,6 +33,7 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
 };
 
 const KEYBOARD_DELTA = 5;
+const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ResizeHandle extends (Widget as any) {
@@ -151,19 +152,20 @@ class ResizeHandle extends (Widget as any) {
     const {
       separatorSize, resizable, showCollapseNext, showCollapsePrev,
     } = this.option();
-    const dimension = this._isHorizontalDirection() ? 'width' : 'height';
+    const isHorizontal = this._isHorizontalDirection();
 
-    this.$element().css({
-      width: '',
-      height: '',
-    });
+    const dimension = isHorizontal ? 'width' : 'height';
+    const inverseDimension = isHorizontal ? 'height' : 'width';
 
     if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
       this.option('disabled', true);
-      this.$element().css(dimension, 2);
+      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
     } else {
+      this.option('disabled', false);
       this.$element().css(dimension, separatorSize);
     }
+
+    this.option(inverseDimension, undefined);
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {

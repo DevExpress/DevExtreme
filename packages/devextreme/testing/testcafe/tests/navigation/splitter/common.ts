@@ -14,6 +14,11 @@ test('Splitter appearance on different appearance and themes', async (t) => {
   const getScreenshotName = (state) => `Splitter apearance - handle in ${state} state.png`;
   const darkTheme = getFullThemeName().replace('light', 'dark');
 
+  await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container' });
+  await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container', theme: darkTheme });
+
+  await splitter.option('items[1].resizable', true);
+
   await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
   await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
 
@@ -40,6 +45,7 @@ test('Splitter appearance on different appearance and themes', async (t) => {
     text: 'pane_1',
   }, {
     text: 'pane_2',
+    resizable: false,
   },
   ],
 }));
