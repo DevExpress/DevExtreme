@@ -1,7 +1,5 @@
 <template>
-  <div>
-    <i :class="`dx-icon dx-icon-${icon}`"/><span>{{ data.caption }}</span>
-  </div>
+  <i :class="`dx-icon dx-icon-${icon}`"/><span>{{ data.caption }}</span>
 </template>
 <script setup lang="ts">
 

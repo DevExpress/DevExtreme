@@ -60,7 +60,7 @@
 
     <ng-container *ngFor="let label of groupCaptionTemplates">
       <div *dxTemplate="let data of label.name">
-        <div><i class="dx-icon {{ label.icon }}"></i>{{ data.caption }}</div>
+        <i class="dx-icon {{ label.icon }}"></i><span>{{ data.caption }}</span>
       </div>
     </ng-container>
   </dx-form>
