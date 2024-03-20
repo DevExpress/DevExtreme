@@ -20,11 +20,38 @@ $(() => {
     onItemClick(e) {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
-    text: 'Sandra Johnson',
-    icon: '../../../../images/gym/coach-woman.png',
+    text: 'Olyvia Peyton',
+    icon: '../../../../images/employees/51.png',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
+    template(data, element) {
+      const $imageWrapper = $(document.createElement('div'))
+        .addClass('button-img-wrapper').appendTo(element);
+
+      $(document.createElement('div'))
+        .addClass('button-img-indicator').appendTo($imageWrapper);
+
+      $(document.createElement('img'))
+        .addClass('dx-button-img')
+        .attr({
+          src: data.icon,
+          alt: 'imageAlt',
+        }).appendTo($imageWrapper);
+
+      const $wrapper = $(document.createElement('div'))
+        .addClass('dx-button-wrapper').appendTo(element);
+
+      $(document.createElement('div'))
+        .addClass('dx-button-title').text(data.text)
+        .appendTo($wrapper);
+
+      $(document.createElement('div'))
+        .addClass('dx-button-row').text('IT Manager').appendTo($wrapper);
+
+      return $(element);
+    },
+
   });
 
   $('#template').dxToolbar({
