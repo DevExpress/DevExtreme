@@ -139,6 +139,8 @@
 }
 
 .dx-form-group-custom-caption {
+  font-size: $material-form-group-caption-font-size;
+
   .dx-icon {
     @include dx-icon-sizing($material-base-icon-size);
     @include dx-icon-margin(math.div($material-base-icon-size, 3));

@@ -121,6 +121,8 @@
 }
 
 .dx-form-group-custom-caption {
+  font-size: $fluent-form-group-caption-font-size;
+
   .dx-icon {
     @include dx-icon-sizing($fluent-base-icon-size);
     @include dx-icon-margin($fluent-form-group-custom-caption-icon-margin);
