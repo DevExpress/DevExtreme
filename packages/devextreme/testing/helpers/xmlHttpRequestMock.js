@@ -54,6 +54,7 @@ window.XMLHttpRequestMock = function() {
         this.uploaded = false;
         this.uploadAborted = false;
         this.uploadFailed = false;
+        this.getAllResponseHeaders = () => null;
         if('withCredentials' in (new RealXMLHttpRequest())) {
             this.withCredentials = false;
         }
@@ -105,6 +106,7 @@ window.XMLHttpRequestMock = function() {
                 this.upload.onload(progressEvent);
                 this.status = STATUS;
                 this._fireReadyStateEvent();
+                this.onload?.({status: this.status, ...progressEvent});
             } else {
                 this._timeout = setTimeout($.proxy(this._progressHandler, this), PROGRESS_INTERVAL);
             }
@@ -120,6 +122,7 @@ window.XMLHttpRequestMock = function() {
             this.upload.onerror(errorEvent);
             this.status = STATUS;
             this._fireReadyStateEvent();
+            this.onerror?.({status: this.status});
         };
 
         this.setRequestHeader = function(name, value) {
@@ -169,6 +172,24 @@ window.XMLHttpRequestMock = function() {
             'onload': function() {},
             'onerror': function() {},
             'onloadstart': function() {}
+        };
+
+        this.removeEventListener = (event, fn) => {
+            delete this['on' + event];
+        };
+
+        this.upload.removeEventListener = (event, fn) => {
+            delete this.upload['on' + event];
+        };
+
+        this.addEventListener = (event, fn) => {
+            this['on' + event] = (arg1, arg2, arg3) => {
+                return fn(arg1, arg2, arg3);
+            };
+        };
+
+        this.upload.addEventListener = (event, fn) => {
+            this.upload['on' + event] = fn;
         };
 
         xhrList.push(this);
