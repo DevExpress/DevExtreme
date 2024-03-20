@@ -166,7 +166,7 @@ jobs:
       run: 7z x artifacts.zip -aoa
 
     - name: Run TestCafe tests
-      working-directory: ./e2e/testcafe
+      working-directory: ./e2e/testcafe-devextreme
       run: |
         [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
