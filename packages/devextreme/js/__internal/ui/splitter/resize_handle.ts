@@ -38,7 +38,8 @@ class ResizeHandle extends (Widget as any) {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       direction: RESIZE_DIRECTION.horizontal,
-      focusStateEnabled: false,
+      hoverStateEnabled: true,
+      focusStateEnabled: true,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
