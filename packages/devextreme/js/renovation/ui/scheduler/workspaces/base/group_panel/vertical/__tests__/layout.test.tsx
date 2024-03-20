@@ -5,13 +5,15 @@ import {
   viewFunction as LayoutView,
 } from '../layout';
 import { Row } from '../row';
-import { addHeightToStyle } from '../../../../utils';
+import { renderUtils } from '../../../../../../../../__internal/scheduler/__migration/utils/index';
 
 jest.mock('../row', () => ({
   Row: () => null,
 }));
-jest.mock('../../../../utils', () => ({
-  addHeightToStyle: jest.fn(() => 'style'),
+jest.mock('.../../../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  renderUtils: {
+    addHeightToStyle: jest.fn(() => 'style'),
+  },
 }));
 
 describe('GroupPanel Vertical Layout', () => {
@@ -108,7 +110,7 @@ describe('GroupPanel Vertical Layout', () => {
           expect(layout.style)
             .toBe('style');
 
-          expect(addHeightToStyle)
+          expect(renderUtils.addHeightToStyle)
             .toHaveBeenCalledWith(500, styles);
         });
       });
