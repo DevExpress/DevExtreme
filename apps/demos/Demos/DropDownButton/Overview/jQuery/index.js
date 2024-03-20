@@ -26,11 +26,13 @@ $(() => {
     keyExpr: 'id',
     useSelectMode: false,
     template(data, element) {
+      const borderColor = $('.dx-button-mode-outlined').css('border-top-color');
+
       const $imgWrapper = $(document.createElement('div'))
         .addClass('dx-button-img-wrapper')
         .appendTo(element);
       $(document.createElement('div'))
-        .addClass('dx-button-img-indicator dx-widget dx-button dx-button-mode-contained dx-button-danger dx-state-disable')
+        .addClass('dx-button-img-indicator')
         .appendTo($imgWrapper);
       $(document.createElement('img'))
         .addClass('dx-button-img')
@@ -38,6 +40,7 @@ $(() => {
           src: data ? data.icon : 'unknown.png',
           alt: 'imageAlt',
         })
+        .attr('style', `border:1px solid ${borderColor}`)
         .appendTo($imgWrapper);
 
       const $wrapper = $(document.createElement('div'))
