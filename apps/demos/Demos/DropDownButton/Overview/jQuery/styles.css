@@ -20,3 +20,42 @@
 #text {
   line-height: 1.35;
 }
+
+.dx-button {
+  height: auto;
+}
+
+.dx-button-wrapper {
+  padding: 0px 8px 0px 8px;
+  flex-direction: row;
+}
+
+.dx-button-img-wrapper {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: #fff;
+  overflow: hidden;
+}
+
+.dx-button-img {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d1d1d1;
+}
+
+.dx-button-title {
+  width: 87px;
+  height: 18px;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 18px;
+}
+
+.dx-button-row {
+  width: 62px;
+  height: 16px;
+  font-weight: 400;
+  font-size: 12px;
+  line-height: 16px;
+}

@@ -25,6 +25,34 @@ $(() => {
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
+    template(data, element) {
+      const $imgWrapper = $(document.createElement('div'))
+        .addClass('dx-button-img-wrapper')
+        .appendTo(element);
+      $(document.createElement('img'))
+        .addClass('dx-button-img')
+        .attr({
+          src: data ? data.icon : 'unknown.png',
+          alt: 'imageAlt',
+        })
+        .appendTo($imgWrapper);
+
+      const $wrapper = $(document.createElement('div'))
+        .addClass('dx-button-wrapper')
+        .appendTo(element);
+
+      $(document.createElement('div'))
+        .addClass('dx-button-title')
+        .text(data.text)
+        .appendTo($wrapper);
+
+      $(document.createElement('div'))
+        .addClass('dx-button-row')
+        .text('IT Manager')
+        .appendTo($wrapper);
+
+      return $(element);
+    },
   });
 
   $('#template').dxToolbar({
