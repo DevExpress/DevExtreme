@@ -7,8 +7,20 @@ $(() => {
     uploadMode: 'instantly',
     uploadUrl: 'https://js.devexpress.com/Demos/NetCore/FileUploader/Upload',
     visible: false,
-    onDropZoneEnter(e) {
-      if (e.dropZoneElement.id === 'dropzone-external') { toggleDropZoneActive(e.dropZoneElement, true); }
+    onDropZoneEnter({ component, dropZoneElement, event }) {
+      if (dropZoneElement.id === 'dropzone-external') {
+        const items = event.originalEvent.dataTransfer.items;
+
+        const allowedFileExtensions = component.option('allowedFileExtensions');
+        const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
+
+        const isSingleFileDragged = items.length === 1;
+        const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+
+        if (isSingleFileDragged && isValidFileExtension) {
+          toggleDropZoneActive(dropZoneElement, true);
+        }
+      }
     },
     onDropZoneLeave(e) {
       if (e.dropZoneElement.id === 'dropzone-external') { toggleDropZoneActive(e.dropZoneElement, false); }
