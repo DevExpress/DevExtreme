@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
@@ -37,7 +38,7 @@ export class FilterPanelView extends modules.View {
 
   private readonly _filterValueBuffer: any;
 
-  public init() {
+  public init(): void {
     this._dataController = this.getController('data');
     this._columnsController = this.getController('columns');
     this._filterSyncController = this.getController('filterSync');
@@ -45,11 +46,11 @@ export class FilterPanelView extends modules.View {
     this._dataController.dataSourceChanged.add(() => this.render());
   }
 
-  public isVisible() {
-    return this.option('filterPanel.visible') && this._dataController.dataSource();
+  public isVisible(): boolean {
+    return !!this.option('filterPanel.visible') && !!this._dataController.dataSource();
   }
 
-  protected _renderCore() {
+  protected _renderCore(): void {
     const $element = this.element();
 
     $element.empty();
@@ -93,7 +94,7 @@ export class FilterPanelView extends modules.View {
       .append($textElement);
   }
 
-  private _getCheckElement() {
+  private _getCheckElement(): dxElementWrapper {
     const that = this;
     const $element = $('<div>')
       .addClass(this.addWidgetPrefix(FILTER_PANEL_CHECKBOX_CLASS));
@@ -108,7 +109,7 @@ export class FilterPanelView extends modules.View {
     return $element;
   }
 
-  private _getFilterElement() {
+  private _getFilterElement(): dxElementWrapper {
     const that = this;
     const $element = $('<div>').addClass('dx-icon-filter');
 
@@ -121,7 +122,7 @@ export class FilterPanelView extends modules.View {
     return $element;
   }
 
-  private _getTextElement() {
+  private _getTextElement(): dxElementWrapper {
     const that = this;
     const $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS));
     let filterText;
@@ -155,11 +156,11 @@ export class FilterPanelView extends modules.View {
     return $textElement;
   }
 
-  private _showFilterBuilder() {
+  private _showFilterBuilder(): void {
     this.option('filterBuilderPopup.visible', true);
   }
 
-  private _getRemoveButtonElement() {
+  private _getRemoveButtonElement(): dxElementWrapper {
     const that = this;
     // @ts-expect-error
     const clearFilterValue = () => that.option('filterValue', null);
@@ -176,14 +177,14 @@ export class FilterPanelView extends modules.View {
     return $element;
   }
 
-  private _addTabIndexToElement($element) {
+  private _addTabIndexToElement($element): void {
     if (!this.option('useLegacyKeyboardNavigation')) {
       const tabindex = this.option('tabindex') || 0;
       $element.attr('tabindex', tabindex);
     }
   }
 
-  public optionChanged(args) {
+  public optionChanged(args): void {
     switch (args.name) {
       case 'filterValue':
         this._invalidate();
@@ -199,7 +200,7 @@ export class FilterPanelView extends modules.View {
     }
   }
 
-  private _getConditionText(fieldText, operationText, valueText) {
+  private _getConditionText(fieldText, operationText, valueText): string {
     let result = `[${fieldText}] ${operationText}`;
     if (isDefined(valueText)) {
       result += valueText;
@@ -207,13 +208,12 @@ export class FilterPanelView extends modules.View {
     return result;
   }
 
-  private _getValueMaskedText(value) {
+  private _getValueMaskedText(value): string {
     return Array.isArray(value) ? `('${value.join('\', \'')}')` : ` '${value}'`;
   }
 
-  private _getValueText(field, customOperation, value) {
-    // @ts-expect-error
-    const deferred = new Deferred();
+  private _getValueText(field, customOperation, value): DeferredObj<string> {
+    const deferred = Deferred<string>();
     const hasCustomOperation = customOperation && customOperation.customizeText;
     if (isDefined(value) || hasCustomOperation) {
       if (!hasCustomOperation && field.lookup) {
@@ -229,14 +229,13 @@ export class FilterPanelView extends modules.View {
     } else {
       deferred.resolve('');
     }
-    return deferred.promise();
+    return deferred.promise() as any;
   }
 
   private getConditionText(filterValue, options) {
     const that = this;
     const operation = filterValue[1];
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred();
     const customOperation = getCustomOperation(options.customOperations, operation);
     let operationText;
     const field = getField(filterValue[0], options.columns);
