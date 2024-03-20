@@ -17,7 +17,13 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
   employee: Employee;
-
+  
+  groupCaptionTemplate(icon){
+    return (data) => {
+      return `<i class='dx-icon dx-icon-${icon}'></i><span>${data.caption}</span>`;
+    }
+  }
+  
   constructor(service: Service) {
     this.employee = service.getEmployee();
   }
