@@ -74,6 +74,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     const isAppointmentTakesSeveralDays = !timeZoneUtils.isSameAppointmentDates(appointmentStartDate, appointmentEndDate);
 
     const settings = this.generateAppointmentSettings(appointment);
+    console.log('settings: ', settings);
     let result = [];
 
     for (let j = 0; j < settings.length; j++) {
@@ -214,7 +215,7 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     while (tailHeight > 0 && left < hMax) {
       tailHeight = Math.max(minHeight, tailHeight);
       const columnIndex = appointmentSettings.columnIndex + cellsDiff;
-      const height = Math.min(tailHeight, vMax);
+      const height = Math.min(tailHeight, vMax - currentPartTop);
 
       result.push({
         ...appointmentSettings,
@@ -228,7 +229,8 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       });
 
       left += offset;
-      tailHeight -= vMax;
+      const maxAllowedHeight = vMax - currentPartTop;
+      tailHeight -= maxAllowedHeight;
     }
 
     if (hasTailPart && result.length > 0) {
