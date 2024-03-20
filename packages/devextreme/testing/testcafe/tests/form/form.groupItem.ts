@@ -40,7 +40,7 @@ test(testName, async (t) => {
     {
       itemType: 'group',
       items: ['item1'],
-      captionTemplate: () => $('<div><i class="dx-icon dx-icon-user"></i>Custom caption template</div>'),
+      captionTemplate: () => $('<i class="dx-icon dx-icon-user"></i><span>Custom caption template</span>'),
     },
   ],
 }));

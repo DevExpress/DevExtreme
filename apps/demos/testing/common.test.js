@@ -221,6 +221,7 @@ const SKIPPED_TESTS = {
           const testTheme = process.env.THEME;
 
           if (!shouldRunTest(approach, index, widgetName, demoName, SKIPPED_TESTS)) {
+            console.log(approach, index, widgetName, demoName);
             return;
           }
 
