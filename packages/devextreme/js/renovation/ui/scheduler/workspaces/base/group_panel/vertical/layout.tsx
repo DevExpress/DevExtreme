@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, CSSAttributes, ForwardRef, JSXComponent, RefObject,
 } from '@devextreme-generator/declarations';
 import { Row } from './row';
-import { addHeightToStyle } from '../../../utils';
+import { renderUtils } from '../../../../../../../__internal/scheduler/__migration/utils/index';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';
 import { GroupRenderItem } from '../../../../../../../__internal/scheduler/__migration/types';
 
@@ -45,6 +45,6 @@ export class GroupPanelVerticalLayout extends JSXComponent(VerticalGroupPanelLay
   get style(): CSSAttributes {
     const { height, styles } = this.props;
 
-    return addHeightToStyle(height, styles);
+    return renderUtils.addHeightToStyle(height, styles);
   }
 }

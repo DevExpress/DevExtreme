@@ -1,3 +1,4 @@
+import type { Orientation } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
@@ -11,7 +12,7 @@ import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import type { Item } from '@js/ui/splitter';
 
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
-import type { FlexProperty, PaneRestrictions } from './types';
+import type { FlexProperty, PaneRestrictions, ResizeOffset } from './types';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
@@ -196,11 +197,16 @@ export function getNewLayout(
   return nextLayout;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function normalizeOffset(offset, orientation, rtlEnabled): number {
-  const xOffset: number = rtlEnabled ? -offset.x : offset.x;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return orientation === ORIENTATION.horizontal ? xOffset : offset.y;
+function normalizeOffset(
+  offset: ResizeOffset,
+  orientation: Orientation,
+  rtlEnabled: boolean,
+): number {
+  if (orientation === ORIENTATION.vertical) {
+    return offset.y ?? 0;
+  }
+
+  return (rtlEnabled ? -1 : 1) * (offset.x ?? 0);
 }
 
 export function getDimensionByOrientation(orientation: string): string {
@@ -208,8 +214,8 @@ export function getDimensionByOrientation(orientation: string): string {
 }
 
 export function calculateDelta(
-  offset: number,
-  orientation: string,
+  offset: ResizeOffset,
+  orientation: Orientation,
   rtlEnabled: boolean,
   totalWidth: number,
 ): number {

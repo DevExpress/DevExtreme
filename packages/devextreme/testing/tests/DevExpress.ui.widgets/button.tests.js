@@ -9,7 +9,6 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 import localization from 'localization';
 import ja from 'localization/messages/ja.json!';
 import { Deferred } from 'core/utils/deferred';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import dxButton from 'ui/button';
 
 import 'generic_light.css!';
@@ -27,7 +26,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     $('#widthRootStyle').css('width', '300px');
-    addShadowDomStyles($('#qunit-fixture'));
 
     $('#form').on('submit', function(e) {
         e.preventDefault();

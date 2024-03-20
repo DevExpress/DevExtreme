@@ -1,11 +1,13 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { VirtualRow, viewFunction as RowView } from '../virtual_row';
-import { addHeightToStyle } from '../../utils';
+import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
 import { VirtualCell } from '../virtual_cell';
 
-jest.mock('../../utils', () => ({
-  addHeightToStyle: jest.fn(() => 'style'),
+jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  renderUtils: {
+    addHeightToStyle: jest.fn(() => 'style'),
+  },
 }));
 jest.mock('../row', () => ({
   ...jest.requireActual('../row'),
@@ -76,7 +78,7 @@ describe('VirtualRow', () => {
           expect(row.style)
             .toBe('style');
 
-          expect(addHeightToStyle)
+          expect(renderUtils.addHeightToStyle)
             .toHaveBeenCalledWith(500, style);
         });
       });

@@ -10,7 +10,7 @@ import {
 import { CellBaseProps } from '../../cell';
 import { DateTimeCellTemplateProps } from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
-import { getGroupCellClasses } from '../../../utils';
+import { renderUtils } from '../../../../../../../__internal/scheduler/__migration/utils/index';
 import { DateHeaderText } from './dateHeaderText';
 
 export const viewFunction = ({
@@ -110,7 +110,7 @@ export class DateHeaderCell extends JSXComponent(DateHeaderCellProps) {
       [className]: !!className,
     });
 
-    return getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
+    return renderUtils.getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
   }
 
   // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
