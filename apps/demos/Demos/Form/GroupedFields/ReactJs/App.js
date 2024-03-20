@@ -7,13 +7,11 @@ import Form, {
   TabPanelOptions,
   Tab,
 } from 'devextreme-react/form';
+import GroupCaption from './GroupCaptionTemplate.js';
 import service from './data.js';
 
 const employee = service.getEmployee();
 export default function App() {
-  function groupCaptionTemplate(icon) {
-    return (data) => `<i class='dx-icon dx-icon-${icon}'></i><span>${data.caption}</span>`;
-  }
   return (
     <React.Fragment>
       <div className="long-title">
@@ -26,12 +24,12 @@ export default function App() {
           formData={employee}
         >
           <GroupItem
-            captionTemplate={groupCaptionTemplate('info')}
+            captionTemplate={GroupCaption('info')}
             caption="System Information"
           >
             <SimpleItem dataField="ID" />
             <GroupItem
-              captionTemplate={groupCaptionTemplate('user')}
+              captionTemplate={GroupCaption('user')}
               caption="Main Information"
             >
               <SimpleItem dataField="FirstName" />
@@ -42,12 +40,12 @@ export default function App() {
             </GroupItem>
           </GroupItem>
           <GroupItem
-            captionTemplate={groupCaptionTemplate('accountbox')}
+            captionTemplate={GroupCaption('accountbox')}
             caption="Personal Data"
           >
             <SimpleItem dataField="BirthDate" />
             <GroupItem
-              captionTemplate={groupCaptionTemplate('home')}
+              captionTemplate={GroupCaption('home')}
               caption="Home Address"
             >
               <SimpleItem dataField="Address" />
@@ -57,7 +55,7 @@ export default function App() {
             </GroupItem>
           </GroupItem>
           <GroupItem
-            captionTemplate={groupCaptionTemplate('tel')}
+            captionTemplate={GroupCaption('tel')}
             caption="Contact Information"
           >
             <TabbedItem>

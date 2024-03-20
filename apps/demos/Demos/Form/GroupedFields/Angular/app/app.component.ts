@@ -17,15 +17,19 @@ if (!/localhost/.test(document.location.host)) {
 })
 export class AppComponent {
   employee: Employee;
-  
-  groupCaptionTemplate(icon){
-    return (data) => {
-      return `<i class='dx-icon dx-icon-${icon}'></i><span>${data.caption}</span>`;
-    }
-  }
+
+  groupCaptionTemplates: Object;
   
   constructor(service: Service) {
     this.employee = service.getEmployee();
+
+    this.groupCaptionTemplates = [
+      { name: 'user', icon: 'dx-icon-user' },
+      { name: 'info', icon: 'dx-icon-info' },
+      { name: 'personal', icon: 'dx-icon-accountbox' },
+      { name: 'address', icon: 'dx-icon-home' },
+      { name: 'contact', icon: 'dx-icon-tel' },
+    ];
   }
 }
 

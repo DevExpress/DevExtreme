@@ -8,12 +8,6 @@
   line-height: 2em;
 }
 
-::ng-deep .dx-form-group-custom-caption {
-  display: flex;
-  align-items: center;
-  font-size: var(--dx-font-size-md);
-}
-
 ::ng-deep .dx-form-group-custom-caption .dx-icon {
   color: var(--dx-color-spin-icon);
 }
