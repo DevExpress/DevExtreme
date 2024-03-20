@@ -21,7 +21,7 @@ $(() => {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
     text: 'Sandra Johnson',
-    icon: '../../../../images/gym/coach-woman.png',
+    icon: '../../../apps/demos/images/gym/coach-woman.png',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
@@ -30,10 +30,10 @@ $(() => {
         .addClass('dx-button-img-wrapper')
         .appendTo(element);
       $(document.createElement('div'))
-        .addClass('dx-button-img-indicator dx-buttongroup-mode-outlined dx-widget dx-button dx-button-mode-contained dx-button-danger dx-state-disable')
+        .addClass('dx-button-img-indicator dx-widget dx-button dx-button-mode-contained dx-button-danger dx-state-disable')
         .appendTo($imgWrapper);
       $(document.createElement('img'))
-        .addClass('dx-button-img dx-buttongroup-mode-outlined')
+        .addClass('dx-button-img')
         .attr({
           src: data ? data.icon : 'unknown.png',
           alt: 'imageAlt',
