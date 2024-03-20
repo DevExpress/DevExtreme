@@ -335,6 +335,7 @@ class Splitter extends (CollectionWidget as any) {
 
         getVisibleItems(items).forEach((item) => {
           this._itemRestrictions.push({
+            resizable: item.resizable !== false,
             visible: item.visible,
             size: convertSizeToRatio(item.size, elementSize),
             maxSize: convertSizeToRatio(item.maxSize, elementSize),
@@ -348,8 +349,6 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
       onResize: ({ element, event }): void => {
-        console.log(calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize));
-
         const newLayout = getNewLayout(
           this._currentLayout,
           calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),

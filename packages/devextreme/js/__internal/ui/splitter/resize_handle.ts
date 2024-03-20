@@ -148,15 +148,22 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _setResizeHandleSize(): void {
-    const { separatorSize } = this.option();
-    const styleToSet = this._isHorizontalDirection() ? 'width' : 'height';
+    const {
+      separatorSize, resizable, showCollapseNext, showCollapsePrev,
+    } = this.option();
+    const dimension = this._isHorizontalDirection() ? 'width' : 'height';
 
     this.$element().css({
       width: '',
       height: '',
     });
 
-    this.$element().css(styleToSet, separatorSize);
+    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
+      this.option('disabled', true);
+      this.$element().css(dimension, 2);
+    } else {
+      this.$element().css(dimension, separatorSize);
+    }
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -346,6 +353,7 @@ class ResizeHandle extends (Widget as any) {
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachEventHandlers();
         this._attachEventHandlers();
+        this._setResizeHandleSize();
         break;
       case 'separatorSize':
         this._setResizeHandleSize();
@@ -353,6 +361,7 @@ class ResizeHandle extends (Widget as any) {
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
+        this._setResizeHandleSize();
         break;
       case 'onCollapsePrev':
       case 'onCollapseNext':

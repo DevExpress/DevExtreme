@@ -58,7 +58,12 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   const {
     minSize = 0,
     maxSize = 100,
+    resizable,
   } = paneRestrictions;
+
+  if (resizable === false) {
+    return paneRestrictions.size as number;
+  }
 
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
 
