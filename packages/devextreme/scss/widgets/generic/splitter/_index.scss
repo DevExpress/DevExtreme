@@ -22,6 +22,6 @@
 
 .dx-resize-handle {
   .dx-icon {
-    @include dx-icon-sizing(18px);
+    @include dx-icon-sizing($splitter-resize-handle-icon-size);
   }
 }
