@@ -255,18 +255,10 @@ const compileCriteria = (function() {
 
         return (obj) => {
             const value = _toComparable(getter(obj));
-            let result = false;
-
-            filterValues.find((filterValue) => {
-                result = useStrictComparison(filterValue)
-                    ? value === filterValue
-                    // eslint-disable-next-line eqeqeq
-                    : value == filterValue;
-
-                return result;
-            });
-
-            return result;
+            return filterValues.some((filterValue) => useStrictComparison(filterValue)
+                ? value === filterValue
+                // eslint-disable-next-line eqeqeq
+                : value == filterValue);
         };
     };
     const compileGroup = function(crit) {
