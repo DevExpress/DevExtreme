@@ -12,7 +12,7 @@ import {
   globalReadFrom,
   changeTheme,
   waitForAngularLoading,
-  shouldRunTest,
+  shouldSkipDemo,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
   getThemePostfix,
@@ -220,8 +220,7 @@ const SKIPPED_TESTS = {
         } else {
           const testTheme = process.env.THEME;
 
-          if (!shouldRunTest(approach, index, widgetName, demoName, SKIPPED_TESTS)) {
-            console.log(approach, index, widgetName, demoName);
+          if (shouldSkipDemo(approach, widgetName, demoName, SKIPPED_TESTS)) {
             return;
           }
 

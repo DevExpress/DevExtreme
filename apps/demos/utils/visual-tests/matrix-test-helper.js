@@ -293,46 +293,35 @@ const SKIPPED_TESTS = {
   },
 };
 
-export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
-  const shouldSkipDemo = (
-    framework,
-    component,
-    demoName,
-  ) => {
-    const frameworkTests = skippedTests[framework];
-    if (!frameworkTests) {
-      console.log('1 - frameworkTests', frameworkTests);
-      return false;
-    }
-
-    const componentTests = frameworkTests[component];
-    if (!componentTests) {
-      console.log('2 - componentTests', componentTests);
-      return false;
-    }
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const test of componentTests) {
-      if (typeof test === 'string' && test === demoName) {
-        console.log('3 - demoName', demoName, typeof test === 'string');
-        return true;
-      } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
-        console.log('4 - demoName', test.demo, test.themes.includes(process.env.THEME || THEME.generic));
-        return true;
-      }
-    }
-
-    console.log('5 - demo');
-    return false;
-  };
-
-  if (shouldSkipDemo(currentFramework, product, demo)) {
-    console.log('6 - demo', currentFramework, product, demo);
+export function shouldSkipDemo(framework, component, demoName, skippedTests) {
+  const frameworkTests = skippedTests[framework];
+  if (!frameworkTests) {
     return false;
   }
 
-  console.log('7 - demo', shouldRunFramework(currentFramework), shouldRunTestAtIndex(testIndex));
+  const componentTests = frameworkTests[component];
+  if (!componentTests) {
+    return false;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const test of componentTests) {
+    if (typeof test === 'string' && test === demoName) {
+      return true;
+    } if (test.demo === demoName
+        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
+  if (shouldSkipDemo(currentFramework, product, demo, skippedTests)) {
+    return false;
+  }
+
   return shouldRunFramework(currentFramework) && shouldRunTestAtIndex(testIndex);
 }
 
