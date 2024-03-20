@@ -7,3 +7,18 @@
   text-align: center;
   line-height: 2em;
 }
+
+.dx-form-group-custom-caption {
+  display: flex;
+  align-items: center;
+  font-size: var(--dx-font-size-md);
+}
+
+.dx-form-group-custom-caption .dx-icon {
+  color: var(--dx-color-spin-icon);
+}
+
+.dx-form-group-custom-caption span {
+  line-height: 1;
+}
+
