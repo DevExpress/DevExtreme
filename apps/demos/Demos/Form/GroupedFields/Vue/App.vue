@@ -8,12 +8,14 @@
         :form-data="employee"
       >
         <DxGroupItem
+          :caption-template="groupCaptionTemplate('info')"
           caption="System Information"
         >
           <DxSimpleItem
             data-field="ID"
           />
           <DxGroupItem
+            :caption-template="groupCaptionTemplate('user')"
             caption="Main Information"
           >
             <DxSimpleItem
@@ -34,12 +36,14 @@
           </DxGroupItem>
         </DxGroupItem>
         <DxGroupItem
+          :caption-template="groupCaptionTemplate('accountbox')"
           caption="Personal Data"
         >
           <DxSimpleItem
             data-field="BirthDate"
           />
           <DxGroupItem
+            :caption-template="groupCaptionTemplate('home')"
             caption="Home Address"
           >
             <DxSimpleItem
@@ -57,6 +61,7 @@
           </DxGroupItem>
         </DxGroupItem>
         <DxGroupItem
+          :caption-template="groupCaptionTemplate('tel')"
           caption="Contact Information"
         >
           <DxTabbedItem>
@@ -98,6 +103,13 @@ import service from './data.ts';
 import 'devextreme-vue/text-area';
 
 const employee = service.getEmployee();
+
+function groupCaptionTemplate(icon){
+    return (data) => { 
+      return `<i class='dx-icon dx-icon-${icon}'></i><span>${data.caption}</span>`;
+  }
+};
+
 </script>
 <style scoped>
 #form-container {
@@ -108,5 +120,19 @@ const employee = service.getEmployee();
   font-size: 24px;
   text-align: center;
   line-height: 2em;
+}
+
+.dx-form-group-custom-caption {
+  display: flex;
+  align-items: center;
+  font-size: var(--dx-font-size-md);
+}
+
+.dx-form-group-custom-caption .dx-icon {
+  color: var(--dx-color-spin-icon);
+}
+
+.dx-form-group-custom-caption span {
+  line-height: 1;
 }
 </style>
