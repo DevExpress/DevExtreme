@@ -3,11 +3,13 @@ import { shallow, ShallowWrapper } from 'enzyme';
 import {
   viewFunction as CellView, CellBase,
 } from '../cell';
-import { getGroupCellClasses } from '../../utils';
+import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
 
-jest.mock('../../utils', () => ({
-  ...jest.requireActual('../../utils'),
-  getGroupCellClasses: jest.fn(),
+jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+  ...jest.requireActual('../../../../../../__internal/scheduler/__migration/utils/index'),
+  renderUtils: {
+    getGroupCellClasses: jest.fn(),
+  },
 }));
 
 describe('DateTableCellBase', () => {
@@ -61,10 +63,10 @@ describe('DateTableCellBase', () => {
               expect(cellBase.classes)
                 .toEqual(undefined);
 
-              expect(getGroupCellClasses)
+              expect(renderUtils.getGroupCellClasses)
                 .toHaveBeenCalledTimes(1);
 
-              expect(getGroupCellClasses)
+              expect(renderUtils.getGroupCellClasses)
                 .toHaveBeenCalledWith(
                   isFirstGroupCell,
                   isLastGroupCell,

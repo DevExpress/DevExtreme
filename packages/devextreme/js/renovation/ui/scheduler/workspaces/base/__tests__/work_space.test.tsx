@@ -6,7 +6,7 @@ import {
 import { ViewDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_view_data_generator';
 import { DateHeaderDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../../__internal/scheduler/workspaces/view_model/m_time_panel_data_generator';
-import { formatWeekdayAndDay } from '../../../../../../__internal/scheduler/__migration/utils';
+import { formatWeekdayAndDay } from '../../../../../../__internal/scheduler/__migration/utils/index';
 import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../__internal/scheduler/__migration/const';
 import { OrdinaryLayout } from '../ordinary_layout';
 import {
@@ -19,7 +19,7 @@ import { HeaderPanelLayout } from '../header_panel/layout';
 import { DateTableLayoutBase } from '../date_table/layout';
 
 import { combineClasses } from '../../../../../utils/combine_classes';
-import * as MigratedUtils from '../../../../../../__internal/scheduler/__migration/utils';
+import * as MigratedUtils from '../../../../../../__internal/scheduler/__migration/utils/index';
 import { CrossScrollingLayout } from '../cross_scrolling_layout';
 import { getDateTableWidth } from '../utils';
 
