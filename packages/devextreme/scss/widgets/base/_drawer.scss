@@ -5,6 +5,12 @@
 .dx-drawer {
   height: 100%;
   width: 100%;
+
+  &:not(.dx-drawer-opened) {
+    .dx-drawer-panel-content:not(.dx-drawer-panel-content-has-min-size) {
+      visibility: hidden;
+    }
+  }
 }
 
 .dx-drawer-wrapper {
