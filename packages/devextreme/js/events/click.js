@@ -80,8 +80,20 @@ const ClickEmitter = Emitter.inherit({
             blurPrevented = e.isDefaultPrevented();
         };
 
+        const getTarget = function(e) {
+            const originalEvent = e.originalEvent;
+
+            if(originalEvent?.target?.shadowRoot) {
+                const path = originalEvent.path ?? originalEvent.composedPath?.();
+                return $(path[0]);
+            }
+
+            return $(e.target);
+        };
+
         const clickHandler = function(e) {
-            const $target = $(e.target);
+            const $target = getTarget(e);
+
             if(!blurPrevented && startTarget && !$target.is(startTarget) && !$(startTarget).is('label') && isInput($target)) {
                 resetActiveElement();
             }
