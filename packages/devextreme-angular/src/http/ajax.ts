@@ -199,7 +199,6 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   const abort$ = new Subject<void>();
   const deferred: DeferredResult = Deferred();
   const result = deferred.promise() as Result;
-  const method = (options.method || 'get').toLowerCase();
   const isGet = isGetMethod(options);
   const isJSONP = isUsedJSONP(options);
   const isScript = isUsedScript(options);
@@ -254,7 +253,7 @@ export const sendRequestFactory = (httpClient: HttpClient) => (options: Options)
   const request = options.crossDomain && isJSONP
     ? httpClient.jsonp(url, options.jsonp || 'callback')
     : httpClient.request(
-      method,
+      getMethod(options),
       url,
       {
         params,
