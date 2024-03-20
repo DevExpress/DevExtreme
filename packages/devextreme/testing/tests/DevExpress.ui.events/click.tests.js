@@ -12,6 +12,7 @@ QUnit.testStart(function() {
         '<div id="inputWrapper">\
             <input id="input" />\
         </div>\
+        <div id="shadowhost" tabIndex="5"></div>\
         <div id="container">\
             <div id="element">\
                 <div id="wrapper">\
@@ -149,6 +150,69 @@ QUnit.test('click should not be prevented (T131440, T131837)', function(assert) 
 
 
 QUnit.module('reset active element', moduleConfig);
+
+QUnit.test('native click should focus on input if the input is inside shadow DOM', function(assert) {
+    if(devices.real().generic) {
+        assert.ok(true);
+        return;
+    }
+
+    const originalResetActiveElement = domUtils.resetActiveElement;
+
+    try {
+        const $element = this.element;
+
+        const shadowInput = document.createElement('input');
+        const $shadowHost = $('#shadowhost'); // div with tabIndex (it must me focusable)
+
+        $shadowHost[0]
+            .attachShadow({ mode: 'open' })
+            .appendChild(shadowInput);
+
+        const $shadowInput = $(shadowInput);
+        const pointer = nativePointerMock($shadowInput);
+        let isMouseDownPrevented = false;
+        let resetCount = 0;
+
+        $element.on('dxclick', noop)
+            .on('mousedown', function(e) {
+                isMouseDownPrevented = e.isDefaultPrevented();
+            });
+
+        pointer
+            .start()
+            .touchStart()
+            .touchEnd()
+            .mouseDown()
+            .mouseUp()
+            .pointerDown()
+            .pointerUp();
+
+        domUtils.resetActiveElement = $.proxy(function() {
+            resetCount++;
+        }, this);
+
+        // NOTE: after animation/scroll on real device input can be placed under pointer
+        if(!isMouseDownPrevented) {
+            $shadowHost.focus();
+            $shadowHost.trigger({
+                type: 'click',
+                originalEvent: {
+                    target: $shadowHost.get(0),
+                    composedPath: () => [
+                        shadowInput,
+                        $shadowHost[0].shadowRoot,
+                        $shadowHost[0]
+                    ]
+                }
+            });
+        }
+
+        assert.equal(resetCount, 0, 'input should get focus if it is inside shadow DOM');
+    } finally {
+        domUtils.resetActiveElement = originalResetActiveElement;
+    }
+});
 
 QUnit.test('native click should not focus on input after animation or scroll', function(assert) {
     if(devices.real().generic) {
