@@ -33,15 +33,25 @@
 .dx-button-img-wrapper {
   width: 32px;
   height: 32px;
-  border-radius: 50%;
-  background-color: #fff;
   overflow: hidden;
+  position: relative;
 }
 
 .dx-button-img {
   width: 32px;
   height: 32px;
-  border: 1px solid #d1d1d1;
+  border-radius: 50%;
+}
+
+.dx-button-img-indicator {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  border-width: 1px;
+  z-index: 1;
 }
 
 .dx-button-title {

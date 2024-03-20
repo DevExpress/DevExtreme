@@ -29,8 +29,11 @@ $(() => {
       const $imgWrapper = $(document.createElement('div'))
         .addClass('dx-button-img-wrapper')
         .appendTo(element);
+      $(document.createElement('div'))
+        .addClass('dx-button-img-indicator dx-buttongroup-mode-outlined dx-widget dx-button dx-button-mode-contained dx-button-danger dx-state-disable')
+        .appendTo($imgWrapper);
       $(document.createElement('img'))
-        .addClass('dx-button-img')
+        .addClass('dx-button-img dx-buttongroup-mode-outlined')
         .attr({
           src: data ? data.icon : 'unknown.png',
           alt: 'imageAlt',
