@@ -3,7 +3,6 @@ import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../../js/reno
 
 import Widget from '../../internal/widget';
 import Scrollbar from './scrollbar';
-import type { PlatformType } from '../../../helpers/multi-platform-test/platform-type';
 import type { WidgetName } from '../../../helpers/widgetTypings';
 
 const CLASS = {
@@ -12,13 +11,14 @@ const CLASS = {
   scrollableContent: 'dx-scrollable-content',
 };
 
-const getScrollable = (platform: PlatformType) => class Scrollable extends Widget {
+export default class Scrollable extends Widget {
   scrollbar: Scrollbar;
 
   vScrollbar?: Scrollbar;
 
   hScrollbar?: Scrollbar;
 
+  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
   constructor(id: string | Selector, options?: any) {
     super(id);
 
@@ -34,11 +34,6 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
         this.hScrollbar = new Scrollbar(DIRECTION_HORIZONTAL);
       }
     }
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getTestingPlatform() {
-    return platform;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -176,12 +171,4 @@ const getScrollable = (platform: PlatformType) => class Scrollable extends Widge
       { dependencies: { getInstance } },
     )();
   }
-};
-
-export const ScrollableFactory = {
-  jquery: getScrollable('jquery'),
-  angular: getScrollable('angular'),
-  react: getScrollable('react'),
-};
-
-export default ScrollableFactory.jquery;
+}
