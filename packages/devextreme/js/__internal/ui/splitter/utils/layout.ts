@@ -59,7 +59,6 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
     minSize = 0,
     maxSize = 100,
   } = paneRestrictions;
-
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
 
   adjustedSize = Math.min(maxSize, adjustedSize);
