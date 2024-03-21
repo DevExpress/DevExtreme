@@ -31,3 +31,4 @@ node_modules
 Thumbs.db
 
 .nx/cache
+nx-cloud.env
