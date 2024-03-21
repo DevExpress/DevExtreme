@@ -1423,10 +1423,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
     QUnit.testInActiveWindow('Context menu should hide on focusout', function(assert) {
         const instance = new ContextMenu(this.$element, {
-            items: [
-                { text: 'item 1' },
-            ],
-            focusStateEnabled: true,
+            items: [{ text: 'item 1' }],
         });
 
         instance.show();
@@ -1438,9 +1435,24 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(instance.option('visible'), false, 'menu was hidden');
     });
 
-    QUnit.testInActiveWindow('Context menu should not be hidden if inside item was clicked', function(assert) {
+    QUnit.testInActiveWindow('Context menu should not be hidden if its item gets focus', function(assert) {
         const instance = new ContextMenu(this.$element, {
-            focusStateEnabled: true,
+            items: [{ text: 'item 1' }],
+        });
+
+        instance.show();
+
+        assert.strictEqual(instance.option('visible'), true, 'menu is opened');
+
+        const overlayContent = instance.itemsContainer();
+
+        $(overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).eq(0)).trigger('focusin');
+
+        assert.strictEqual(instance.option('visible'), true, 'menu is still opened');
+    });
+
+    QUnit.testInActiveWindow('Context menu should not be hidden if submenu item gets focus', function(assert) {
+        const instance = new ContextMenu(this.$element, {
             items: [
                 {
                     text: 'item 1',
@@ -1454,8 +1466,11 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual(instance.option('visible'), true, 'menu is opened');
 
         const overlayContent = instance.itemsContainer();
+        const $firstSubmenuItem = overlayContent.find(`.${DX_MENU_ITEM_CLASS}`);
+        $($firstSubmenuItem).trigger('dxclick');
 
-        $(overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).eq(0)).trigger('dxclick');
+        const $secondSubmenuItem = $firstSubmenuItem.find(`.${DX_MENU_ITEM_CLASS}`);
+        $($secondSubmenuItem).trigger('focusin');
 
         assert.strictEqual(instance.option('visible'), true, 'menu is still opened');
     });

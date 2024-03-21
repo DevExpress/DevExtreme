@@ -341,7 +341,7 @@ class ContextMenu extends MenuBase {
     }
 
     _isTargetOutOfComponent(relatedTarget) {
-        const isInsideContextMenu = $(relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
+        const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
         return !isInsideContextMenu;
     }
