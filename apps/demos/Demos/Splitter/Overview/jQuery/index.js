@@ -1,14 +1,14 @@
 $(() => {
-  const myfunction = (data, index, element) => {
+  const myfunction = (data, name, element) => {
     const $fullText = $("<div>").text("");
     $fullText.addClass("contentParent");
-    const $item = $("<div>").text("Pane " + index);
+    const $item = $("<div>").text(name);
     $item.addClass("paneClass");
     $fullText.append($item);
     const $state = $("<div>").text(
-      `${data.resizable ? "Resizable " : ""}${
-        data.resizable && data.collapsible ? "and" : ""
-      }${data.collapsible ? " Collapsible" : ""}`
+      `${data.resizable ? "Resizable " : "Non-Resizable"}${
+        data.resizable && data.collapsible ? " and " : " and "
+      }${data.collapsible ? " Collapsible" : "Non-Collapsible"}`
     );
 
     $state.addClass("stateClass");
@@ -30,10 +30,11 @@ $(() => {
       items: [
         {
           resizable: true,
+          collapsible: false,
           minSize: "60px",
           size:"140px",
           template: function (data, index, element) {
-            myfunction(data, 1, element);
+            myfunction(data, "Left Panel", element);
           }
         },
         {
@@ -43,9 +44,9 @@ $(() => {
               {
                 resizable: true,
                 collapsible: true,
-                minSize: "60px",
+                maxSize: "75px",
                 template: function (data, index, element) {
-                  myfunction(data, 2, element);
+                  myfunction(data, "Central Panel", element);
                 }
               },
               {
@@ -55,27 +56,26 @@ $(() => {
                   items: [
                     {
                       resizable: true,
-                      size: "33.3%",
-                      minSize: "10px",
+                      size: "30%",
+                      minSize: "5%",
                       template: function (data, index, element) {
-                        myfunction(data, 3, element);
+                        myfunction(data, "Nested Left Panel", element);
+                      }
+                    },
+                    {
+                      resizable: false,
+                      collapsible: true,
+                      template: function (data, index, element) {
+                        myfunction(data, "Nested Central Panel", element);
                       }
                     },
                     {
                       resizable: true,
                       collapsible: true,
-                      size: "33.3%",
-                      minSize: "10px",
+                      size: "30%",
+                      minSize: "5%",
                       template: function (data, index, element) {
-                        myfunction(data, 4, element);
-                      }
-                    },
-                    {
-                      resizable: true,
-                      collapsible: true,
-                      minSize: "10px",
-                      template: function (data, index, element) {
-                        myfunction(data, 5, element);
+                        myfunction(data, "Nested Right Panel", element);
                       }
                     }
                   ]
@@ -85,12 +85,11 @@ $(() => {
           }
         },
         {
-          minSize: "60px",
-          size:"170px",
+          size:"140px",
           resizable: false,
           collapsible: false,
           template: function (data, index, element) {
-            myfunction(data, 6, element);
+            myfunction(data, "Right Panel", element);
           }
         }
       ]
