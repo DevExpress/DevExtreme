@@ -1474,7 +1474,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onItemCollapsed,
             onItemExpanded,
-            dataSource: [{ }, { collapsed: true }]
+            dataSource: [{ collapsible: true }, { collapsed: true, collapsible: true }]
         });
 
         const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
@@ -1492,7 +1492,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onItemCollapsed,
             onItemExpanded,
-            dataSource: [{ }, { }]
+            dataSource: [{ collapsible: true }, { collapsible: true }]
         });
 
         const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
@@ -1510,7 +1510,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onItemCollapsed,
             onItemExpanded,
-            dataSource: [{ collapsed: true }, { }]
+            dataSource: [{ collapsed: true, collapsible: true }, { collapsible: true }]
         });
 
         const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
@@ -1535,9 +1535,9 @@ QUnit.module('Events', moduleConfig, () => {
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).parent().get(0), $resizeHandle.get(0), 'target event field is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
-                    assert.deepEqual(itemData, { collapsed: true, size: 0 }, 'itemData field is correct');
+                    assert.deepEqual(itemData, { collapsed: true, size: 0, collapsible: true }, 'itemData field is correct');
                 },
-                dataSource: [{ }, { }]
+                dataSource: [{ collapsible: true, }, { collapsible: true, }]
             });
 
             const $collapseButton = this.$element.find(`.${item === 'left' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
@@ -1560,7 +1560,7 @@ QUnit.module('Events', moduleConfig, () => {
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
                     assert.strictEqual(itemData.collapsed, false, 'itemData is correct');
                 },
-                dataSource: [{ collapsed: item === 'left' }, { collapsed: item === 'right' }]
+                dataSource: [{ collapsed: item === 'left', collapsible: true }, { collapsed: item === 'right', collapsible: true }]
             });
 
             const $collapseButton = this.$element.find(`.${item === 'right' ? RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS : RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
@@ -1576,7 +1576,7 @@ QUnit.module('Events', moduleConfig, () => {
 
             this.reinit({
                 [eventHandler]: handlerStub,
-                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                dataSource: [{ collapsible: true }, { collapsible: true }]
             });
 
             const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
