@@ -8,11 +8,11 @@
         </div>
         <div class="dx-field-value">
           <DxDropDownButton
-              :items="data.downloads"
-              :drop-down-options="{ width: 230 }"
-              text="Download Trial"
-              icon="save"
-              @item-click="onItemClick"
+            :items="data.downloads"
+            :drop-down-options="{ width: 230 }"
+            text="Download Trial"
+            icon="save"
+            @item-click="onItemClick"
           />
         </div>
       </div>
