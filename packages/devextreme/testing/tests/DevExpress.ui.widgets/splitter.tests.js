@@ -772,6 +772,51 @@ QUnit.module('Resizing', moduleConfig, () => {
 
             assert.strictEqual(resizeHandles.length, 3);
         });
+
+        [
+            {
+                resizeHandleIndex: 1,
+                resizeDistance: 500,
+                dataSource: [{ }, { }, { }, { resizable: false, size: '100px' }],
+                expectedLayout: ['30', '60', '0', '10'],
+                expectedItemSizes: [300, 600, 0, 100]
+            },
+            {
+                resizeHandleIndex: 1,
+                resizeDistance: -500,
+                dataSource: [{ resizable: false, size: '100px' }, { }, { }, { }],
+                expectedLayout: ['10', '0', '60', '30'],
+                expectedItemSizes: [100, 0, 600, 300]
+            },
+            {
+                resizeHandleIndex: 0,
+                resizeDistance: 800,
+                dataSource: [{ }, { }, { resizable: false, size: '100px' }, { }],
+                expectedLayout: ['90', '0', '10', '0'],
+                expectedItemSizes: [900, 0, 100, 0]
+            },
+            {
+                resizeHandleIndex: 2,
+                resizeDistance: -800,
+                dataSource: [{ }, { resizable: false, size: '100px' }, { }, { }],
+                expectedLayout: ['0', '10', '0', '90'],
+                expectedItemSizes: [0, 100, 0, 900]
+            },
+        ].forEach(({ resizeHandleIndex, resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {
+            QUnit.test(`non resizable panes shouldn't change their sizes, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
+                this.reinit({
+                    width: 1024, height: 1024,
+                    dataSource,
+                    orientation,
+                });
+
+                const pointer = pointerMock(this.getResizeHandles().eq(resizeHandleIndex));
+                pointer.start().dragStart().drag(resizeDistance, resizeDistance).dragEnd();
+
+                this.checkItemSizes(expectedItemSizes);
+                this.assertLayout(expectedLayout);
+            });
+        });
     });
 
     [
