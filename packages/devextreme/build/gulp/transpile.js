@@ -20,7 +20,7 @@ const removeDebug = require('./compression-pipes.js').removeDebug;
 const ctx = require('./context.js');
 const { replaceWidgets, reloadConfig, renovatedComponentsPath } = require('./renovation-pipes');
 const { ifEsmPackage } = require('./utils');
-const testsConfig = require('../../testing/tests.babelrc.json');
+// const testsConfig = require('../../testing/tests.babelrc.json');
 const transpileConfig = require('./transpile-config');
 
 const createTsCompiler = require('./typescript/compiler');
@@ -306,9 +306,9 @@ watchTsTask.displayName = 'transpile TS watch';
 
 gulp.task('transpile-watch', gulp.parallel(watchJsTask, watchTsTask));
 
-gulp.task('transpile-tests', gulp.series('bundler-config', () =>
-    gulp
-        .src(['testing/**/*.js'])
-        .pipe(babel(testsConfig))
-        .pipe(gulp.dest('testing'))
-));
+// gulp.task('transpile-tests', gulp.series('bundler-config', () =>
+//     gulp
+//         .src(['testing/**/*.js'])
+//         .pipe(babel(testsConfig))
+//         .pipe(gulp.dest('testing'))
+// ));

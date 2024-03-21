@@ -82,7 +82,7 @@ namespace Runner.Tools
         }
     }
     public static class ConsoleHelper {
-        public static readonly Logger Logger = new Logger("testing/RawLog.txt");
+        public static readonly Logger Logger = new Logger("RawLog.txt");
         public static readonly ConsoleWriter Out = new ConsoleWriter(Console.Out);
         public static readonly ConsoleWriter Error = new ConsoleWriter(Console.Error, "ERROR: ");
 

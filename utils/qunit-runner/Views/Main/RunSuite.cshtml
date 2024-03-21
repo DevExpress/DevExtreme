@@ -10,7 +10,7 @@
     var renovationPart = Model.NoRenovation ? "" : "-renovation";
     var cspPart = Model.NoCsp ? "" : "-systemjs";
     var npmModule = "transpiled" + renovationPart + cspPart;
-    var testingBasePath = Model.NoCsp ? "~/packages/devextreme/testing/" : "~/packages/devextreme/artifacts/transpiled-testing/";
+    var testingBasePath = Model.NoCsp ? "~/e2e/qunit/" : "~/packages/devextreme/artifacts/transpiled-testing/";
 
     string GetJQueryUrl() {
         if(isNoJQueryTest)
@@ -68,7 +68,7 @@
         QUnit.config.autostart = false;
         QUnit.config.failOnZeroTests = false;
     </script>
-    <script src="@Url.ContentWithCacheBuster("~/packages/devextreme/testing/helpers/qunitExtensions.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/e2e/qunit/helpers/qunitExtensions.js")"></script>
 
     <style nonce="tYGMxb">
         #qunit-fixture.qunit-fixture-visible {
