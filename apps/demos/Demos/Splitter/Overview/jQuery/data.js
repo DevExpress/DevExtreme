@@ -1,46 +1,53 @@
-
 const paneData = [
     {
-      name: "Left Pane",
-      data: {
-        resizable: true,
-        collapsible: false,
-        minSize: "60px",
-        size: "140px"
+      resizable: true,
+      minSize: "60px",
+      size:"140px",
+      template: function (data) {
+        return $.fn.paneContentTemplate(data, 'Left Panel');
       }
     },
     {
-      nestedSplitter: {
+      minSize: "20%",
+      splitter: {
         orientation: "vertical",
         items: [
           {
-            name: "Central Pane",
             resizable: true,
             collapsible: true,
             maxSize: "75%",
+            template: function (data) {
+                return $.fn.paneContentTemplate(data, 'Central Panel');
+            }
           },
           {
-            nestedSplitter: {
+            collapsible: true,
+            splitter: {
               orientation: "horizontal",
               items: [
                 {
-                  name: "Nested Left Panel",
                   resizable: true,
                   collapsible: true,
                   size: "30%",
                   minSize: "5%",
+                  template: function (data) {
+                    return $.fn.paneContentTemplate(data, 'Nested Left Panel');
+                  }
                 },
                 {
-                  name: "Nested Central Panel",
-                  resizable: false,
                   collapsible: true,
+                  template: function (data) {
+                    return $.fn.paneContentTemplate(data, 'Nested Central Panel');
+                  }
                 },
                 {
-                  name: "Nested Right Panel",
                   resizable: true,
                   collapsible: true,
                   size: "30%",
                   minSize: "5%",
+                  template: function (data) {
+                    return $.fn.paneContentTemplate(data, 'Nested Right Panel');
+                  }
                 }
               ]
             }
@@ -49,11 +56,11 @@ const paneData = [
       }
     },
     {
-      name: "Right Pane",
-      data: {
-        size: "140px",
-        resizable: false,
-        collapsible: false
+      size:"140px",
+      resizable: false,
+      collapsible: false,
+      template: function (data) {
+        return $.fn.paneContentTemplate(data, 'Right Panel');
       }
     }
   ];
