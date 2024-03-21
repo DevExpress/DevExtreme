@@ -43,7 +43,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapseNext } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || showCollapseNext === false) {
+            return;
+          }
           this._collapseNextHandler(e);
         } else {
           this._resizeBy(e, { x: KEYBOARD_DELTA });
@@ -53,7 +58,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapsePrev } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || showCollapsePrev === false) {
+            return;
+          }
           this._collapsePrevHandler(e);
         } else {
           this._resizeBy(e, { x: -KEYBOARD_DELTA });
@@ -63,7 +73,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapsePrev } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
+            return;
+          }
           this._collapsePrevHandler(e);
         } else {
           this._resizeBy(e, { y: -KEYBOARD_DELTA });
@@ -73,7 +88,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapseNext } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
+            return;
+          }
           this._collapseNextHandler(e);
         } else {
           this._resizeBy(e, { y: KEYBOARD_DELTA });
@@ -265,6 +285,10 @@ class ResizeHandle extends (Widget as any) {
     e: KeyboardEvent,
     offset: ResizeOffset = { x: 0, y: 0 },
   ): void {
+    const { resizable } = this.option();
+
+    if (resizable === false) return;
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e as any).offset = offset;
 
