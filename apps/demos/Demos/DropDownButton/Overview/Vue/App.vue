@@ -203,10 +203,6 @@ function onColorClick(clickedColor) {
   font-size: 18px;
 }
 
-#text {
-  line-height: 1.35;
-}
-
 .dx-button-wrapper {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
