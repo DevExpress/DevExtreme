@@ -5,7 +5,7 @@
     "test": "node ./runner.js"
   },
   "devDependencies": {
-    "devextreme": "24.1.0",
+    "devextreme": "*",
     "testcafe": "2.5.0"
   }
 }
