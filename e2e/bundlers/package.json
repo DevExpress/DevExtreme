@@ -16,20 +16,8 @@
     "rollup": "2.79.1",
     "vite": "2.9.17",
     "webpack": "5.76.0",
-    "webpack-cli": "4.10.0"
-  },
-  "scripts": {
-    "test:bundlers": "npm run install:devextreme && npm run generate-entry-files && npm run build:all && npm run clean",
-    "install:devextreme": "bash -c \"npm install --save-dev $(npm pack ../../artifacts/npm/devextreme/)\"",
-    "generate-entry-files": "rimraf entry && mkdir entry && node ./generate_entry_files.js",
-    "build:all": "npm run build:webpack-cjs && npm run build:browserify-cjs && npm run build:webpack && npm run build:rollup && npm run build:parcel && npm run build:vite",
-    "build:webpack-cjs": "webpack --config ./webpack.config.cjs.js",
-    "build:webpack": "webpack --config ./webpack.config.js",
-    "build:rollup": "rollup -c",
-    "build:parcel": "parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel",
-    "build:browserify-cjs": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js",
-    "build:vite": "vite build",
-    "clean": "rimraf dist entry devextreme-** && npm uninstall devextreme"
+    "webpack-cli": "4.10.0",
+    "devextreme-main": "*"
   },
   "alias": {
     "globalize$": "~/node_modules/globalize/dist/globalize.js",

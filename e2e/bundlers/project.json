@@ -1,0 +1,72 @@
+{
+  "name": "devextreme-modules-test",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "rimraf entry && mkdir entry && node ./generate_entry_files.js"
+      }
+    },
+    "test": {
+      "executor": "nx:noop",
+      "dependsOn": [
+        "build",
+        "test--webpack-cjs",
+        "test--webpack",
+        "test--rollup",
+        "test--parcel",
+        "test--browserify-cjs",
+        "test--vite"
+      ]
+    },
+    "test--webpack-cjs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "webpack --config ./webpack.config.cjs.js"
+      },
+      "dependsOn": ["build"]
+    },
+    "test--webpack": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "webpack --config ./webpack.config.js"
+      },
+      "dependsOn": ["build"]
+    },
+    "test--rollup": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "rollup -c"
+      },
+      "dependsOn": ["build"]
+    },
+    "test--parcel": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
+      },
+      "dependsOn": ["build"]
+    },
+    "test--browserify-cjs": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
+      },
+      "dependsOn": ["build"]
+    },
+    "test--vite": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{projectRoot}",
+        "command": "vite build"
+      },
+      "dependsOn": ["build"]
+    }
+  }
+}
