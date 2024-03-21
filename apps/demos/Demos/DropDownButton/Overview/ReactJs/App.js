@@ -139,6 +139,7 @@ const App = () => {
           <div className="dx-field-label">Custom main button action</div>
           <div className="dx-field-value">
             <DropDownButton
+              id="two-sections"
               splitButton={true}
               useSelectMode={false}
               text="Olyvia Peyton"

@@ -21,6 +21,7 @@
         <div class="dx-field-label">Custom main button action</div>
         <div class="dx-field-value">
           <DxDropDownButton
+              id="two-sections"
               :split-button="true"
               :use-select-mode="false"
               :items="data.profileSettings"
