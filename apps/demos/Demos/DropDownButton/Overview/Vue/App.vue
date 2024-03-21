@@ -8,31 +8,44 @@
         </div>
         <div class="dx-field-value">
           <DxDropDownButton
-            :items="data.downloads"
-            :drop-down-options="{ width: 230 }"
-            text="Download Trial"
-            icon="save"
-            @item-click="onItemClick"
+              :items="data.downloads"
+              :drop-down-options="{ width: 230 }"
+              text="Download Trial"
+              icon="save"
+              @item-click="onItemClick"
           />
         </div>
       </div>
 
       <div class="dx-field">
-        <div class="dx-field-label">
-          Custom main button action
-        </div>
+        <div class="dx-field-label">Custom main button action</div>
         <div class="dx-field-value">
           <DxDropDownButton
-            :split-button="true"
-            :use-select-mode="false"
-            :items="data.profileSettings"
-            text="Sandra Johnson"
-            icon="../../../../images/gym/coach-woman.png"
-            display-expr="name"
-            key-expr="id"
-            @button-click="onButtonClick"
-            @item-click="onItemClick"
-          />
+              :split-button="true"
+              :use-select-mode="false"
+              :items="data.profileSettings"
+              text="Olyvia Peyton"
+              icon="../../../../images/employees/51.png"
+              display-expr="name"
+              key-expr="id"
+              @button-click="onButtonClick"
+              @item-click="onItemClick"
+          >
+            <template #template="{ data }">
+              <div class="button-img-wrapper">
+                <div class="button-img-indicator"/>
+                <img
+                    class="dx-button-img"
+                    :src="data.icon"
+                    alt="imageAlt"
+                >
+              </div>
+              <div class="dx-button-wrapper">
+                <div class="dx-button-title">{{ data.text }}</div>
+                <div class="dx-button-row">IT Manager</div>
+              </div>
+            </template>
+          </DxDropDownButton>
         </div>
       </div>
     </div>
@@ -49,11 +62,11 @@
           <template #colorpicker="{ data }">
             <div class="custom-color-picker">
               <i
-                v-for="(itemColor, i) in data"
-                :key="i"
-                class="dx-icon dx-icon-square"
-                :style="{ color: itemColor }"
-                @click="onColorClick(itemColor)"
+                  v-for="(itemColor, i) in data"
+                  :key="i"
+                  class="dx-icon dx-icon-square"
+                  :style="{ color: itemColor }"
+                  @click="onColorClick(itemColor)"
               />
             </div>
           </template>
@@ -61,8 +74,8 @@
       </div>
       <div class="dx-field">
         <p
-          id="text"
-          :style="{
+            id="text"
+            :style="{
             textAlign: alignment,
             fontSize: fontSize,
             color: color,
@@ -171,22 +184,76 @@ function onColorClick(clickedColor) {
 }
 </script>
 <style scoped>
-  .demo-container .dx-fieldset:first-child {
-    width: 500px;
-  }
+.demo-container .dx-fieldset:first-child {
+  width: 500px;
+}
 
-  .dx-popup-content > .dx-template-wrapper.custom-color-picker {
-    width: 82px;
-    padding: 5px;
-  }
+.custom-color-picker {
+  width: 82px;
+  padding: 5px;
+}
 
-  .dx-button-content img.dx-icon {
-    width: 24px;
-    height: 24px;
-  }
+.dx-button-content img.dx-icon {
+  width: 24px;
+  height: 24px;
+}
 
-  .color {
-    cursor: pointer;
-    font-size: 18px;
-  }
+.color {
+  cursor: pointer;
+  font-size: 18px;
+}
+
+#text {
+  line-height: 1.35;
+}
+
+.dx-button-wrapper {
+  padding-inline-start: 12px;
+  padding-inline-end: 4px;
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.button-img-wrapper {
+  position: relative;
+  height: 32px;
+}
+
+.dx-button-img {
+  width: 32px;
+  height: 32px;
+  position: relative;
+  border-width: 1px;
+  border-style: solid;
+  border-color: var(--dx-color-border);
+  border-radius: 50%;
+}
+
+.button-img-indicator {
+  position: absolute;
+  background-color: var(--dx-color-danger);
+  top: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border-width: 2px;
+  border-style: solid;
+  border-color: var(--dx-color-main-bg);
+  z-index: 1;
+}
+
+.dx-button-title {
+  line-height: 20px;
+}
+
+.dx-button-row {
+  line-height: 14px;
+  opacity: 0.6;
+}
+
+#two-sections .dx-button {
+  height: 46px;
+}
 </style>
