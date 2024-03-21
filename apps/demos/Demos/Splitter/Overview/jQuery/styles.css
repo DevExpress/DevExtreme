@@ -1,0 +1,32 @@
+.dx-viewport{
+display: flex;
+justify-content: center;
+}
+
+.demo-container {
+  width: 860px;
+  height: 460px;
+  padding: 32px;
+  position: relative;
+}
+
+#splitter{
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  border-radius: 8px;
+  position: relative;
+  overflow: hidden;
+}
+.contentParent {
+  padding: 12px;
+}
+.paneClass {
+  font-family: "Arial";
+}
+.stateClass {
+  font-family: "Arial";
+  font-size: var(--dx-font-size-xs);
+}
+.optionClass {
+  color: var(--dx-texteditor-color-label);
+  font-size: 10px;
+}

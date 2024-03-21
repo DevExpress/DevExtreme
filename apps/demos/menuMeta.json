@@ -4503,6 +4503,18 @@
         ]
       },
       {
+        "Name": "Splitter",
+        "Equivalents": "Layout Control",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Splitter",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
         "Name": "Button Group",
         "Breadcrumb": true,
         "Equivalents": "dxButtonGroup, dx-buttongroup",
