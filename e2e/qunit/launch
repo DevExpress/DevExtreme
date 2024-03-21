@@ -5,7 +5,7 @@ const { join } = require('path');
 const { spawn } = require('child_process');
 const { platform } = require('os');
 const { env, versions } = require('process');
-const PORT = require('./../ports.json').qunit;
+const PORT = require('./ports.json').qunit;
 
 if(parseInt(versions.node.split('.')[0]) < 6) {
     throw 'Node version is too low';
@@ -16,7 +16,7 @@ execRunner();
 function execRunner () {
     spawn(
         'dotnet',
-        [ join(__dirname, 'runner/bin/runner.dll') ],
+        [ require.resolve('devextreme-qunit-runner/bin/runner.dll') ],
         { stdio: 'inherit', shell: true }
     );
 

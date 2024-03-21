@@ -1,0 +1,12 @@
+{
+  "name": "devextreme-qunit-tests",
+  "dependencies": {
+    "qunit": "2.20.0",
+    "devextreme-main": "*",
+    "devextreme-qunit-runner": "*"
+  },
+  "scripts": {
+    "start": "node ./launch",
+    "build": "echo empty"
+  }
+}
