@@ -84,7 +84,7 @@ QUnit.test('chart in container with height from style', function(assert) {
         }
     </style>`);
 
-    style.appendTo('head');
+    style.appendTo('#qunit-fixture');
     try {
         container.dxChart({
             dataSource: [{

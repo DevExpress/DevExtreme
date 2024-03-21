@@ -84,7 +84,8 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
             if(componentClass.IS_RENOVATED_WIDGET) {
                 componentClass.defaultOptions({});
             }
-            const component = new componentClass('#cmp');
+            const $container = $('#cmp');
+            const component = new componentClass($container);
             options = $.isFunction(options) ? options.call(component) : options;
 
             const defaults = component.option();

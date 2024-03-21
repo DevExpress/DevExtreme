@@ -237,7 +237,7 @@ QUnit.test('maxBottomOffset', function(assert) {
     pointer.start().down().move(0, 200).up();
 });
 
-QUnit.test('Should be possible to drag into created in runtime element', function(assert) {
+QUnit.skipInShadowDomMode('Should be possible to drag into created in runtime element', function(assert) {
     const $element = $('#element');
     const pointer = pointerMock($element);
     const clock = sinon.useFakeTimers();
@@ -382,7 +382,7 @@ QUnit.test('There are no exceptions when dragging an element when it has several
 
 QUnit.module('dropping');
 
-QUnit.test('dxdragenter should be fired when draggable enter drop target', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter should be fired when draggable enter drop target', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const pointer = pointerMock($element);
@@ -401,7 +401,7 @@ QUnit.test('dxdragenter should be fired when draggable enter drop target', funct
     assert.equal(dragEnterFired, 1);
 });
 
-QUnit.test('dxdragenter should be fired only if pointer above drop target', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter should be fired only if pointer above drop target', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const pointer = pointerMock($element);
@@ -456,7 +456,7 @@ QUnit.test('dxdragleave should not be fired if drag started on the element', fun
     }
 });
 
-QUnit.test('dxdragleave should be fired when draggable leave drop target', function(assert) {
+QUnit.skipInShadowDomMode('dxdragleave should be fired when draggable leave drop target', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const pointer = pointerMock($element);
@@ -475,7 +475,7 @@ QUnit.test('dxdragleave should be fired when draggable leave drop target', funct
     assert.equal(dragLeaveFired, 1);
 });
 
-QUnit.test('dxdragleave and dxdragenter should be fired when draggable moves from one drop target to another', function(assert) {
+QUnit.skipInShadowDomMode('dxdragleave and dxdragenter should be fired when draggable moves from one drop target to another', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const $anotherDropTarget = $('#anotherDropTarget');
@@ -512,7 +512,7 @@ QUnit.test('dxdragenter should not be fired on drag element', function(assert) {
     assert.equal(dragEnterFired, 0);
 });
 
-QUnit.test('drop targets should be overridden by e.targetElements (array of jQuery)', function(assert) {
+QUnit.skipInShadowDomMode('drop targets should be overridden by e.targetElements (array of jQuery)', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const $anotherDropTarget = $('#anotherDropTarget');
@@ -534,7 +534,7 @@ QUnit.test('drop targets should be overridden by e.targetElements (array of jQue
     assert.equal(dragEnterFired, 1);
 });
 
-QUnit.test('drop targets should be overridden by e.targetElements (DOMNode)', function(assert) {
+QUnit.skipInShadowDomMode('drop targets should be overridden by e.targetElements (DOMNode)', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const $anotherDropTarget = $('#anotherDropTarget');
@@ -578,7 +578,7 @@ QUnit.test('drop targets should be overridden by e.targetElements (null)', funct
     assert.equal(dragEnterFired, 0);
 });
 
-QUnit.test('drop targets should be overridden by e.targetElements (container)', function(assert) {
+QUnit.skipInShadowDomMode('drop targets should be overridden by e.targetElements (container)', function(assert) {
     const $element = $('#element');
     const $dropTargetContainer = $('#dropTarget');
     const $innerDropTarget = $('#innerDropTarget');
@@ -601,7 +601,7 @@ QUnit.test('drop targets should be overridden by e.targetElements (container)', 
     assert.equal(dragEnterFired, 1);
 });
 
-QUnit.test('dxdrop should be fired when draggable drop to the target', function(assert) {
+QUnit.skipInShadowDomMode('dxdrop should be fired when draggable drop to the target', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const pointer = pointerMock($element);
@@ -617,7 +617,7 @@ QUnit.test('dxdrop should be fired when draggable drop to the target', function(
     assert.equal(dropFired, 1);
 });
 
-QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired with current dragging element', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter, dxdragleave, dxdrop should be fired with current dragging element', function(assert) {
     assert.expect(4);
 
     const $element = $('#element');
@@ -639,7 +639,7 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired with current draggi
     pointer.start().down().move(250, 250).move(200, 200).move(-200, -200).up();
 });
 
-QUnit.test('dxdragenter, dxdragleave, dxdrop should have correct target', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter, dxdragleave, dxdrop should have correct target', function(assert) {
     assert.expect(4);
 
     const $element = $('#element');
@@ -661,7 +661,7 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should have correct target', functi
     pointer.start().down().move(250, 250).move(200, 200).move(-200, -200).up();
 });
 
-QUnit.test('dxdragenter, dxdragleave, dxdrop should support delegated subscriptions', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter, dxdragleave, dxdrop should support delegated subscriptions', function(assert) {
     assert.expect(4);
 
     const $element = $('#element');
@@ -683,7 +683,7 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should support delegated subscripti
     pointer.start().down().move(250, 250).move(200, 200).move(-200, -200).up();
 });
 
-QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired on closest delegated target', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter, dxdragleave, dxdrop should be fired on closest delegated target', function(assert) {
     assert.expect(8);
 
     const $element = $('#element');
@@ -705,7 +705,7 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should be fired on closest delegate
     pointer.start().down().move(250, 250).move(200, 200).move(-200, -200).up();
 });
 
-QUnit.test('dxdragenter, dxdragleave, dxdrop should not be fired on unsubscribed delegated target', function(assert) {
+QUnit.skipInShadowDomMode('dxdragenter, dxdragleave, dxdrop should not be fired on unsubscribed delegated target', function(assert) {
     assert.expect(4);
 
     const $element = $('#element');
@@ -730,7 +730,7 @@ QUnit.test('dxdragenter, dxdragleave, dxdrop should not be fired on unsubscribed
 
 
 ['successive', 'reverse'].forEach((orderOfSubscriptions) => {
-    QUnit.test(`dxdragenter of the nested target should be fired with ${orderOfSubscriptions} subscriptions`, function(assert) {
+    QUnit.skipInShadowDomMode(`dxdragenter of the nested target should be fired with ${orderOfSubscriptions} subscriptions`, function(assert) {
         assert.expect(2);
 
         const $element = $('#element');
@@ -870,7 +870,7 @@ QUnit.test('override dropTarget position function', function(assert) {
     assert.equal(dragEnterFired, 1);
 });
 
-QUnit.test('override dropTarget size function', function(assert) {
+QUnit.skipInShadowDomMode('override dropTarget size function', function(assert) {
     const $element = $('#element');
     const $dropTarget = $('#dropTarget');
     const pointer = pointerMock($element);

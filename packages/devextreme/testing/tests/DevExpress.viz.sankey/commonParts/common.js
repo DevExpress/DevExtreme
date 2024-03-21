@@ -14,7 +14,11 @@ const spiesLayoutBuilder = {
     _computeNodes: sinon.spy(layoutBuilder, '_computeNodes')
 };
 
-$('#qunit-fixture').append('<div id="test-container"></div>');
+QUnit.testStart(function() {
+    const container = $('<div id="test-container"></div>');
+
+    $('#qunit-fixture').append(container);
+});
 
 function createSankey(options) {
     const defaultOptions = {

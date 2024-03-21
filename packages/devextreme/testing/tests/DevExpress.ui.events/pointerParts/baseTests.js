@@ -196,7 +196,7 @@ QUnit.test('one pointer event should not unsubscribe another events', function(a
     $element.trigger('dxpointerup');
 });
 
-QUnit.test('empty original event should not unsubscribe the whole namespace', function(assert) {
+QUnit.skipInShadowDomMode('empty original event should not unsubscribe the whole namespace', function(assert) {
     assert.expect(1);
 
     const element = document.getElementById('element');

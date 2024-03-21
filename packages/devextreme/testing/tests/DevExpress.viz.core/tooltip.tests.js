@@ -184,7 +184,7 @@ QUnit.test('Set options. Container is incorrect', function(assert) {
     assert.equal(tooltip._getContainer(), $('body').get(0));
 });
 
-QUnit.test('Set options. Container is correct', function(assert) {
+QUnit.skipInShadowDomMode('Set options. Container is correct', function(assert) {
     const et = { event: 'trigger' };
     const tooltip = new Tooltip({ eventTrigger: et });
     this.options.container = '.some-correct-class-name';
@@ -196,7 +196,7 @@ QUnit.test('Set options. Container is correct', function(assert) {
     assert.equal(tooltip._getContainer(), $('.some-correct-class-name').get(0));
 });
 
-QUnit.test('Append tooltip to container on shown', function(assert) {
+QUnit.skipInShadowDomMode('Append tooltip to container on shown', function(assert) {
     $('#qunit-fixture')
         .append('<div class=\'tooltip-container\'></div>')
         .append('<div class=\'tooltip-container\'></div>');
@@ -215,7 +215,7 @@ QUnit.test('Append tooltip to container on shown', function(assert) {
     assert.strictEqual($('.test-tooltip').parent().get(0), $('.tooltip-container').get(0));
 });
 
-QUnit.test('Tooltip should be appended in the closest element to root', function(assert) {
+QUnit.skipInShadowDomMode('Tooltip should be appended in the closest element to root', function(assert) {
     $('#qunit-fixture')
         .append('<div class=\'tooltip-container far\'></div>')
         .append('<div class=\'tooltip-container\'><div id=\'root\'></div></div>');
@@ -235,7 +235,7 @@ QUnit.test('Tooltip should be appended in the closest element to root', function
 });
 
 // T803622
-QUnit.test('Container has offset', function(assert) {
+QUnit.skipInShadowDomMode('Container has offset', function(assert) {
     const $container = $('<div class="tooltipContainer"></div>');
 
     $container.css({
@@ -1035,7 +1035,7 @@ QUnit.test('Show preparations. W/ customize w/ html/text', function(assert) {
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('body').get(0)]);
 });
 
-QUnit.test('Show preparations. Certain container', function(assert) {
+QUnit.skipInShadowDomMode('Show preparations. Certain container', function(assert) {
     this.options.customizeTooltip = null;
     this.options.container = '.some-correct-class-name';
     this.tooltip._getCanvas = function() { return CANVAS; };
@@ -1064,7 +1064,7 @@ QUnit.test('Show preparations. Certain container', function(assert) {
     assert.deepEqual(this.tooltip._wrapper.appendTo.firstCall.args, [$('.some-correct-class-name').get(0)]);
 });
 
-QUnit.test('Show preparations. Certain container, tooltip out of canvas', function(assert) {
+QUnit.skipInShadowDomMode('Show preparations. Certain container, tooltip out of canvas', function(assert) {
     this.options.customizeTooltip = null;
     this.options.container = '.some-correct-class-name';
     this.tooltip.update(this.options);
