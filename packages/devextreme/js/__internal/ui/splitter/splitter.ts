@@ -287,7 +287,7 @@ class Splitter extends (CollectionWidget as any) {
       elementAttr: {
         'aria-controls': paneId,
       },
-      onCollapsePrevClick: (e): void => {
+      onCollapsePrev: (e): void => {
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -322,7 +322,7 @@ class Splitter extends (CollectionWidget as any) {
           itemElement: $leftItem,
         });
       },
-      onCollapseNextClick: (e): void => {
+      onCollapseNext: (e): void => {
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -393,8 +393,6 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
       onResize: ({ element, event }): void => {
-        console.log(calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize));
-
         const newLayout = getNewLayout(
           this._currentLayout,
           calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
