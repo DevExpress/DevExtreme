@@ -249,6 +249,7 @@ function onColorClick(clickedColor) {
 }
 
 .dx-button-row {
+  font-size: 12px;
   line-height: 14px;
   opacity: 0.6;
 }
