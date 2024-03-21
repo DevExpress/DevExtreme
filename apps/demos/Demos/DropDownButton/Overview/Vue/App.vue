@@ -62,11 +62,11 @@
           <template #colorpicker="{ data }">
             <div class="custom-color-picker">
               <i
-                  v-for="(itemColor, i) in data"
-                  :key="i"
-                  class="dx-icon dx-icon-square"
-                  :style="{ color: itemColor }"
-                  @click="onColorClick(itemColor)"
+                v-for="(itemColor, i) in data"
+                :key="i"
+                class="dx-icon dx-icon-square"
+                :style="{ color: itemColor }"
+                @click="onColorClick(itemColor)"
               />
             </div>
           </template>
@@ -74,8 +74,8 @@
       </div>
       <div class="dx-field">
         <p
-            id="text"
-            :style="{
+          id="text"
+          :style="{
             textAlign: alignment,
             fontSize: fontSize,
             color: color,
