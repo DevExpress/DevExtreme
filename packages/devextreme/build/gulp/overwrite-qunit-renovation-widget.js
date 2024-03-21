@@ -5,7 +5,7 @@ module.exports = ({ name, pathToComponentRegistrator, pathToWrapper, pathInRenov
         `import Widget from '${pathInRenovationFolder}';`;
     return `${wrappedComponentImport}
 import registerComponent from '${pathToComponentRegistrator}';
-import { wrapRenovatedWidget } from '/packages/devextreme/testing/helpers/wrapRenovatedWidget.js';
+import { wrapRenovatedWidget } from '/e2e/qunit/helpers/wrapRenovatedWidget.js';
 const wrappedComponent = wrapRenovatedWidget(Widget);
 registerComponent('dx${name}', wrappedComponent);
 export default wrappedComponent;`;

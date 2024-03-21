@@ -21,7 +21,7 @@ namespace Runner
         {
             try
             {
-                var rootPath = Path.Combine(AppContext.BaseDirectory, "../../..");
+                var rootPath = Directory.GetCurrentDirectory();
                 ConsoleHelper.Logger.SetWorkingFolder(rootPath);
                 ConsoleHelper.Logger.Write();
                 Ports.Load(Path.Combine(rootPath, "ports.json"));

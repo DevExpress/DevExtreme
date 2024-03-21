@@ -9,6 +9,6 @@ module.exports = [
     // { name: 'Scrollable', pathInRenovationFolder: 'ui/scroll_view/scrollable.j', pathInJSFolder: 'ui/scroll_view/ui.scrollable.js', pathToWrapper: '/testing/helpers/renovationScrollableHelper.js', inProgress: true },
     // { name: 'DataGrid', pathInRenovationFolder: 'ui/grids/data_grid/data_grid.j', pathInJSFolder: 'ui/data_grid.js' },
     // { name: 'Scheduler', pathInRenovationFolder: 'ui/scheduler/scheduler.j', pathInJSFolder: 'ui/scheduler.js', inProgress: true },
-    { name: 'Pager', pathInRenovationFolder: 'ui/pager/pager.j', pathInJSFolder: 'ui/pager.js', pathToWrapper: '/packages/devextreme/testing/helpers/renovationPagerHelper.js' },
+    { name: 'Pager', pathInRenovationFolder: 'ui/pager/pager.j', pathInJSFolder: 'ui/pager.js', pathToWrapper: '/e2e/qunit/helpers/renovationPagerHelper.js' },
     // { name: 'Bullet', pathInRenovationFolder: 'viz/sparklines/bullet.j', pathInJSFolder: 'viz/sparklines/bullet.js' },
 ];

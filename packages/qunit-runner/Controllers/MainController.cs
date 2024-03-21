@@ -29,7 +29,7 @@ namespace Runner.Controllers
             _env = env;
             _runFlags = runFlags;
 
-            _completedSuitesFileName = Path.Combine(_env.ContentRootPath, "testing/CompletedSuites.txt");
+            _completedSuitesFileName = Path.Combine(_env.ContentRootPath, "./CompletedSuites.txt");
         }
 
         protected UIModelHelper UIModelHelper
@@ -156,7 +156,7 @@ namespace Runner.Controllers
         public void NotifyIsAlive() {
             if (_runFlags.IsContinuousIntegration)
                 lock (IOLock) {
-                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "testing/LastSuiteTime.txt"), DateTime.Now.ToString("s"));
+                    IOFile.WriteAllText(Path.Combine(_env.ContentRootPath, "./LastSuiteTime.txt"), DateTime.Now.ToString("s"));
                 }
         }
 
@@ -199,7 +199,7 @@ namespace Runner.Controllers
 
         public ContentResult DisplayResults()
         {
-            var xslUrl = Url.Content("~/packages/devextreme/testing/content/unittests.xsl");
+            var xslUrl = Url.Content("~/e2e/qunit/content/unittests.xsl");
             var xml = new StringBuilder();
             xml.AppendLine("<?xml version=\"1.0\"?>");
             xml.AppendLine("<?xml-stylesheet type=\"text/xsl\" href=\"" + xslUrl + "\"?>");
@@ -223,7 +223,7 @@ namespace Runner.Controllers
             {
                 lock (IO_SYNC)
                 {
-                    IOFile.AppendAllText(Path.Combine(_env.ContentRootPath, "testing/MiscErrors.log"), data + Environment.NewLine);
+                    IOFile.AppendAllText(Path.Combine(_env.ContentRootPath, "./MiscErrors.log"), data + Environment.NewLine);
                 }
             }
         }
@@ -251,7 +251,7 @@ namespace Runner.Controllers
 
         string ResultXmlPath()
         {
-            return Path.Combine(_env.ContentRootPath, "testing/Results.xml");
+            return Path.Combine(_env.ContentRootPath, "./Results.xml");
         }
 
         static void ValidateResultsJson(string json)

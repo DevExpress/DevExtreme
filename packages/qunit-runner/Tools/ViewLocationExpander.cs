@@ -7,7 +7,7 @@ namespace Runner.Tools
     {
         public IEnumerable<string> ExpandViewLocations(ViewLocationExpanderContext context, IEnumerable<string> viewLocations)
         {
-            return new[] { "/testing/runner/Views/{1}/{0}.cshtml" };
+            return new[] { "/Views/{1}/{0}.cshtml" };
         }
 
         public void PopulateValues(ViewLocationExpanderContext context)

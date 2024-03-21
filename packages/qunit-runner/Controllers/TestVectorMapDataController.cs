@@ -23,7 +23,7 @@ namespace Runner.Controllers
         private const int NodeScriptTimeout = 15000;
         private const int DirectoryKillTimeout = 5000;
 
-        private const string PathToDataDirectory = "testing/content/VectorMapData/";
+        private const string PathToDataDirectory = "./content/VectorMapData/";
 
         private static readonly string PathToNode;
 
@@ -102,7 +102,7 @@ namespace Runner.Controllers
                 if (NodeServerContextInstance == null)
                 {
                     var args = new[] {
-                        Path.Combine(_env.ContentRootPath, "testing/helpers/vectormaputils-tester.js"),
+                        Path.Combine(_env.ContentRootPath, "./helpers/vectormaputils-tester.js"),
                         Path.Combine(_env.ContentRootPath, PathToDataDirectory)
                     };
 
