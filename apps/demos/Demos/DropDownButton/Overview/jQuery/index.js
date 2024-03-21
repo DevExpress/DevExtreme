@@ -20,42 +20,34 @@ $(() => {
     onItemClick(e) {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
-    text: 'Sandra Johnson',
-    icon: '../../../apps/demos/images/gym/coach-woman.png',
+    text: 'Olyvia Peyton',
+    icon: '../../../../images/employees/51.png',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
     template(data, element) {
-      const borderColor = $('.dx-button-mode-outlined').css('border-top-color');
+      const $imageWrapper = $(document.createElement('div'))
+        .addClass('button-img-wrapper').appendTo(element);
 
-      const $imgWrapper = $(document.createElement('div'))
-        .addClass('dx-button-img-wrapper')
-        .appendTo(element);
       $(document.createElement('div'))
-        .addClass('dx-button-img-indicator')
-        .appendTo($imgWrapper);
+        .addClass('button-img-indicator').appendTo($imageWrapper);
+
       $(document.createElement('img'))
         .addClass('dx-button-img')
         .attr({
-          src: data ? data.icon : 'unknown.png',
+          src: data.icon,
           alt: 'imageAlt',
-        })
-        .attr('style', `border:1px solid ${borderColor}`)
-        .appendTo($imgWrapper);
+        }).appendTo($imageWrapper);
 
       const $wrapper = $(document.createElement('div'))
-        .addClass('dx-button-wrapper')
-        .appendTo(element);
+        .addClass('dx-button-wrapper').appendTo(element);
 
       $(document.createElement('div'))
-        .addClass('dx-button-title')
-        .text(data.text)
+        .addClass('dx-button-title').text(data.text)
         .appendTo($wrapper);
 
       $(document.createElement('div'))
-        .addClass('dx-button-row')
-        .text('IT Manager')
-        .appendTo($wrapper);
+        .addClass('dx-button-row').text('IT Manager').appendTo($wrapper);
 
       return $(element);
     },
