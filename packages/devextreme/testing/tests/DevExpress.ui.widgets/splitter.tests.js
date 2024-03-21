@@ -2,6 +2,7 @@ import $ from 'jquery';
 import Splitter from 'ui/splitter';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
+import keyboardMock from '../../helpers/keyboardMock.js';
 import { createEvent } from 'events/utils/index';
 import devices from 'core/devices';
 
@@ -1878,5 +1879,133 @@ QUnit.module('Keyboard support', moduleConfig, () => {
         this.getResizeHandles().eq(0).trigger(createEvent('keydown', { key: 'Enter' }));
 
         assert.strictEqual(registerKeyHandlerSpy.callCount, 0);
+    });
+
+    [
+        { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowUp' },
+        { key: 'ArrowUp', orientation: 'vertical', wrongKey: 'ArrowLeft' }
+    ].forEach(({ key, orientation, wrongKey }) => {
+        QUnit.test(`Prev item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ collapsible: true }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'item is collapsed');
+        });
+
+        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ collapsible: true }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
+        });
+
+        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} if pane is not collapsible`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
+        });
+
+        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
+            const onItemCollapsed = sinon.stub();
+            this.reinit({
+                orientation,
+                onItemCollapsed,
+                items: [{ collapsible: true }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
+        });
+
+        QUnit.test(`onItemCollapsed should not be fired on command+${key} when item is already collapsed`, function(assert) {
+            const onItemCollapsed = sinon.stub();
+            this.reinit({
+                orientation,
+                onItemCollapsed,
+                items: [{ collapsible: true, collapsed: true }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed fired');
+        });
+    });
+
+    [
+        { key: 'ArrowRight', orientation: 'horizontal', wrongKey: 'ArrowDown' },
+        { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowRight' }
+    ].forEach(({ key, orientation, wrongKey }) => {
+        QUnit.test(`Next item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ }, { collapsible: true }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[1].collapsed'), true, 'item is collapsed');
+        });
+
+        QUnit.test(`Next item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ }, { collapsible: true }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[1].collapsed'), undefined, 'item is not collapsed');
+        });
+
+        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
+            const onItemCollapsed = sinon.stub();
+            this.reinit({
+                orientation,
+                onItemCollapsed,
+                items: [{ }, { collapsible: true }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
+        });
     });
 });

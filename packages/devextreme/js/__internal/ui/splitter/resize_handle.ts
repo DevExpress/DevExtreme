@@ -43,6 +43,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapseNext } = this.option();
+
+        if (direction === RESIZE_DIRECTION.vertical || showCollapseNext === false) {
+          return;
+        }
+
         if (isCommandKeyPressed(e)) {
           this._collapseNextHandler(e);
         } else {
@@ -52,6 +58,12 @@ class ResizeHandle extends (Widget as any) {
       leftArrow(e: KeyboardEvent) {
         e.preventDefault();
         e.stopPropagation();
+
+        const { direction, showCollapsePrev } = this.option();
+
+        if (direction === RESIZE_DIRECTION.vertical || showCollapsePrev === false) {
+          return;
+        }
 
         if (isCommandKeyPressed(e)) {
           this._collapsePrevHandler(e);
@@ -63,6 +75,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapsePrev } = this.option();
+
+        if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
+          return;
+        }
+
         if (isCommandKeyPressed(e)) {
           this._collapsePrevHandler(e);
         } else {
@@ -72,6 +90,12 @@ class ResizeHandle extends (Widget as any) {
       downArrow(e: KeyboardEvent) {
         e.preventDefault();
         e.stopPropagation();
+
+        const { direction, showCollapseNext } = this.option();
+
+        if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
+          return;
+        }
 
         if (isCommandKeyPressed(e)) {
           this._collapseNextHandler(e);
