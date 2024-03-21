@@ -20,6 +20,19 @@ const itemTemplateRender = (item) => (
   </div>
 );
 
+const dropDownButtonRender = (data) => (
+  <React.Fragment>
+    <div className="button-img-wrapper">
+      <div className="button-img-indicator"></div>
+      <img className="dx-button-img" src={data.icon} alt="imageAlt" />
+    </div>
+    <div className="dx-button-wrapper">
+      <div className="dx-button-title">{data.text}</div>
+      <div className="dx-button-row">IT Manager</div>
+    </div>
+  </React.Fragment>
+);
+
 const App = () => {
   const [alignment, setAlignment] = useState<TextAlign>('left');
   const [color, setColor] = useState(null);
@@ -136,14 +149,16 @@ const App = () => {
             <DropDownButton
               splitButton={true}
               useSelectMode={false}
-              text="Sandra Johnson"
-              icon="../../../../images/gym/coach-woman.png"
+              text="Olyvia Peyton"
+              icon="../../../../images/employees/51.png"
               items={data.profileSettings}
               displayExpr="name"
               keyExpr="id"
               onButtonClick={onButtonClick}
               onItemClick={onItemClick}
-            />
+              render={dropDownButtonRender}
+            >
+            </DropDownButton>
           </div>
         </div>
       </div>
