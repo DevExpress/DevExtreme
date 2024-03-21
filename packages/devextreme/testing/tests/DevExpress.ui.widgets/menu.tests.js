@@ -762,6 +762,37 @@ QUnit.module('Menu tests', {
     });
 
     QUnit.test('Submenu should be closed when element loses focus', function(assert) {
+        const simpleMenu = $('#simpleMenu');
+
+        simpleMenu.attr('tabindex', 1);
+
+        try {
+            const options = {
+                focusStateEnabled: true,
+                showFirstSubmenuMode: 'onClick',
+                items: [
+                    {
+                        text: 'item 1',
+                        items: [{ text: 'item 1_1' }],
+                    },
+                ],
+            };
+            const menu = createMenu(options);
+            const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $menuItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($menuItem);
+            assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+            simpleMenu.trigger('focusin');
+            assert.strictEqual(submenu.option('visible'), false, 'submenu closed');
+        } finally {
+            simpleMenu.attr('tabindex', null);
+        }
+    });
+
+    QUnit.test('Submenu should not be closed when element loses focus by focusout event', function(assert) {
         const options = {
             focusStateEnabled: true,
             showFirstSubmenuMode: 'onClick',
@@ -783,7 +814,7 @@ QUnit.module('Menu tests', {
 
         $(menu.element).trigger('focusout');
 
-        assert.strictEqual(submenu.option('visible'), false, 'submenu closed');
+        assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
     });
 
     QUnit.test('Submenu should not be closed when submenu item gets focus', function(assert) {

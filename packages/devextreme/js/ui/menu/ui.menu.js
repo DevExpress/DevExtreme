@@ -280,12 +280,18 @@ class Menu extends MenuBase {
         return isTargetOutOfComponent;
     }
 
-    _focusOutHandler({ relatedTarget }) {
-        const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+    _focusOutHandler(e) {
+        const { relatedTarget } = e;
 
-        if(isTargetOutside) {
-            this._hideVisibleSubmenu();
+        if(relatedTarget) {
+            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+
+            if(isTargetOutside) {
+                this._hideVisibleSubmenu();
+            }
         }
+
+        super._focusOutHandler(e);
     }
 
     _renderHamburgerButton() {
