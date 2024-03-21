@@ -495,7 +495,6 @@ QUnit.test('conditions are not checked if it\'s not necessary', function(assert)
     ).done(done);
 });
 
-
 QUnit.test('string functions', function(assert) {
     assert.expect(4);
 
@@ -703,6 +702,45 @@ QUnit.test('mixin and/or conditions inside a single group throws', function(asse
         'and',
         ['foobar']
     ]));
+});
+
+QUnit.module('Filtering performance');
+
+QUnit.test('execute quickly if criteria is huge sequence of ["prop", "=", value] filters are grouped by OR (T1217184)', function(assert) {
+    const done = assert.async();
+    const input = [...new Array(20000)].map((_, index) => ({ id: index }));
+    const filters = [...new Array(5000)]
+        .flatMap((_, index) => [['id', '=', index], 'or']);
+
+    filters.pop();
+
+    const filtersNotUniform = filters.map((f, i) => (i % 2 ? 'or' : [...f]));
+
+    filtersNotUniform.at(-1)[1] = '<>';
+
+    let bestTime = 1000;
+    let notUniformTime = 1000;
+
+    const arrayQuery = QUERY(input);
+
+    [1].forEach(() => {
+        const startTime = Date.now();
+
+        arrayQuery.filter(filtersNotUniform).toArray();
+        notUniformTime = Date.now() - startTime;
+    });
+
+    [1, 2, 3].forEach(() => {
+        const startTime = Date.now();
+        const r = arrayQuery.filter(filters).toArray();
+
+        bestTime = Math.min(Date.now() - startTime, bestTime);
+        assert.equal(r.length, 5000);
+    });
+
+    assert.ok(bestTime * 2 < notUniformTime, `Execution time is ${bestTime}. It must be less than ${Math.floor(notUniformTime / 2)}ms`);
+
+    done();
 });
 
 QUnit.module('Grouping');

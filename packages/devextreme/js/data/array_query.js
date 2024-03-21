@@ -9,6 +9,7 @@ import {
     isGroupCriterion,
     isUnaryOperation,
     normalizeBinaryCriterion,
+    isUniformEqualsByOr,
     isConjunctiveOperator as isConjunctiveOperatorChecker
 } from './utils';
 
@@ -243,7 +244,28 @@ const compileCriteria = (function() {
 
     const _toComparable = (value) => toComparable(value, false, langParams);
 
+    const compileUniformEqualsCriteria = (crit) => {
+        const getter = compileGetter(crit[0][0]);
+        const filterValues = crit.reduce((acc, item, i) => {
+            if(i % 2 === 0) {
+                acc.push(_toComparable(item[2]));
+            }
+            return acc;
+        }, []);
+
+        return (obj) => {
+            const value = _toComparable(getter(obj));
+            return filterValues.some((filterValue) => useStrictComparison(filterValue)
+                ? value === filterValue
+                // eslint-disable-next-line eqeqeq
+                : value == filterValue);
+        };
+    };
     const compileGroup = function(crit) {
+        if(isUniformEqualsByOr(crit)) {
+            return compileUniformEqualsCriteria(crit);
+        }
+
         const ops = [];
 
         let isConjunctiveOperator = false;
@@ -273,7 +295,6 @@ const compileCriteria = (function() {
                     break;
                 }
             }
-
             return result;
         };
     };
@@ -338,6 +359,7 @@ const compileCriteria = (function() {
             obj = _toComparable(getter(obj));
             // eslint-disable-next-line eqeqeq
             let result = useStrictComparison(value) ? obj === value : obj == value;
+
             if(negate) {
                 result = !result;
             }
