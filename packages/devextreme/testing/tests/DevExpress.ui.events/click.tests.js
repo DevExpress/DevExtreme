@@ -151,7 +151,7 @@ QUnit.test('click should not be prevented (T131440, T131837)', function(assert) 
 
 QUnit.module('reset active element', moduleConfig);
 
-QUnit.test('native click should focus on input if the input is inside shadow DOM', function(assert) {
+QUnit.test('native click should focus on input if the input is inside shadow DOM (T1218285)', function(assert) {
     if(devices.real().generic) {
         assert.ok(true);
         return;
@@ -162,14 +162,13 @@ QUnit.test('native click should focus on input if the input is inside shadow DOM
     try {
         const $element = this.element;
 
-        const shadowInput = document.createElement('input');
+        const $shadowInput = $('<input>');
         const $shadowHost = $('#shadowhost'); // div with tabIndex (it must me focusable)
 
         $shadowHost[0]
             .attachShadow({ mode: 'open' })
-            .appendChild(shadowInput);
+            .appendChild($shadowInput[0]);
 
-        const $shadowInput = $(shadowInput);
         const pointer = nativePointerMock($shadowInput);
         let isMouseDownPrevented = false;
         let resetCount = 0;
@@ -198,9 +197,9 @@ QUnit.test('native click should focus on input if the input is inside shadow DOM
             $shadowHost.trigger({
                 type: 'click',
                 originalEvent: {
-                    target: $shadowHost.get(0),
+                    target: $shadowHost[0],
                     composedPath: () => [
-                        shadowInput,
+                        $shadowInput[0],
                         $shadowHost[0].shadowRoot,
                         $shadowHost[0]
                     ]
