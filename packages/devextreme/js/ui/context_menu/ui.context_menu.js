@@ -346,13 +346,18 @@ class ContextMenu extends MenuBase {
         return !isInsideContextMenu;
     }
 
-    _focusOutHandler({ relatedTarget }) {
-        const isCurrentOverlayVisible = this._overlay._currentVisible;
-        const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+    _focusOutHandler(e) {
+        const { relatedTarget } = e;
 
-        if(isCurrentOverlayVisible && isTargetOutside) {
-            this.hide();
+        if(relatedTarget) {
+            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+
+            if(isTargetOutside) {
+                this.hide();
+            }
         }
+
+        super._focusOutHandler(e);
     }
 
     _renderContentImpl() {
