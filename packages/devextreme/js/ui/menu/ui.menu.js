@@ -271,7 +271,7 @@ class Menu extends MenuBase {
         this._initAdaptivity();
     }
 
-    _shouldSubmenuBeClosed(relatedTarget, e) {
+    _shouldSubmenuBeClosed(relatedTarget) {
         const isInsideRootMenu = $(relatedTarget).closest(`.${DX_MENU_CLASS}`).length !== 0;
         const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
@@ -280,8 +280,8 @@ class Menu extends MenuBase {
         return shouldBeClosed;
     }
 
-    _focusOutHandler({ relatedTarget, target }) {
-        const shouldSubmenuBeClosed = this._shouldSubmenuBeClosed(relatedTarget, target);
+    _focusOutHandler({ relatedTarget }) {
+        const shouldSubmenuBeClosed = this._shouldSubmenuBeClosed(relatedTarget);
 
         if(shouldSubmenuBeClosed) {
             this._hideVisibleSubmenu();
