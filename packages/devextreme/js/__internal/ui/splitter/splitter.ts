@@ -100,7 +100,6 @@ class Splitter extends (CollectionWidget as any) {
     this._toggleOrientationClass();
 
     if (isElementVisible(this.$element().get(0))) {
-      this._panesCacheSize = {};
       this._layout = this._getDefaultLayoutBasedOnSize();
     } else {
       this._shouldRecalculateLayout = true;
@@ -108,6 +107,7 @@ class Splitter extends (CollectionWidget as any) {
 
     super._initMarkup();
 
+    this._panesCacheSize = {};
     this._attachResizeObserverSubscription();
   }
 
