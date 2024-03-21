@@ -1,7 +1,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const modulesMetadataFilePath = path.join(__dirname, '../../build/gulp/modules_metadata.json');
+const modulesMetadataFilePath = path.join(__dirname, '../../packages/devextreme/build/gulp/modules_metadata.json');
 
 const filePaths = {
     cjs: path.join(__dirname, './entry/modules_cjs.js'),
