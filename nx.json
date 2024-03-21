@@ -48,5 +48,8 @@
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
-  }
+  },
+  "plugins": [
+    "devextreme-nx-testcafe"
+  ]
 }
