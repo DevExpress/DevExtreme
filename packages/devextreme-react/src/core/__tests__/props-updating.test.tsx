@@ -10,6 +10,7 @@ import {
   eventHandlers,
   fireOptionChange,
   TestComponent,
+  TestComponentRef,
   Widget,
   WidgetClass,
 } from './test-component';
@@ -166,7 +167,7 @@ describe('option update', () => {
   });
 
   it('component use component ref as target element', () => {
-    const ref = React.createRef<TestComponent>();
+    const ref = React.createRef<TestComponentRef>();
     const { rerender } = render(
       <div>
         <TestComponent ref={ref} />
@@ -183,8 +184,8 @@ describe('option update', () => {
 
     expect(Widget.option.mock.calls.length).toBe(2);
 
-    expect(Widget.option.mock.calls[0][1]).toEqual(ref.current?.instance.element());
-    expect(Widget.option.mock.calls[1][1]).toEqual(ref.current?.instance.element());
+    expect(Widget.option.mock.calls[0][1]).toEqual(ref.current?.instance().element());
+    expect(Widget.option.mock.calls[1][1]).toEqual(ref.current?.instance().element());
   });
 
   it('updates nested collection item', () => {

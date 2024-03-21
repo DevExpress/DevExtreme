@@ -33,8 +33,8 @@ function isIgnoredProp(name: string) {
 
 function getRefElement(value: any): HTMLElement {
   if (value?.current) {
-    if (value.current.instance?.element()) {
-      return value.current.instance.element();
+    if (value.current.instance?.().element()) {
+      return value.current.instance().element();
     }
     return value.current;
   }

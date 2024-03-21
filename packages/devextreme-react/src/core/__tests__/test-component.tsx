@@ -35,7 +35,12 @@ const Widget = {
 
 const WidgetClass = jest.fn<typeof Widget, any>(() => Widget);
 
-const TestComponent = memo(forwardRef<ComponentRef, any>(function TestComponent<P = any>(props: P, ref: React.ForwardedRef<ComponentRef>) {
+interface TestComponentRef {
+  instance: () => { element: () => HTMLDivElement | undefined };
+  getProps: () => any;
+}
+
+const TestComponent = memo(forwardRef<TestComponentRef, any>(function TestComponent<P = any>(props: P, ref: React.ForwardedRef<TestComponentRef>) {
   const componentRef = useRef<ComponentRef>(null);
 
   const getElement = useCallback(() => {
@@ -57,21 +62,16 @@ const TestComponent = memo(forwardRef<ComponentRef, any>(function TestComponent<
 
   useImperativeHandle(ref, () => {
     return {
-      getInstance() {
-        return componentRef.current!.getInstance();
-      },
-      getElement() {
-        return getElement();
-      },
-      createWidget(el) {
-        componentRef.current!.createWidget(el);
-      },
-      clearExtensions() {
-        componentRef.current!.clearExtensions();
+      instance() {
+        return {
+          element() {
+            return getElement();
+          }
+        }
       },
       getProps() {
         return props;
-      }
+      },
     };
   }, [componentRef.current, getElement, props]);
 
@@ -87,7 +87,7 @@ const TestComponent = memo(forwardRef<ComponentRef, any>(function TestComponent<
   );
 })) as <P = any>(props: P, ref: React.ForwardedRef<ComponentRef>) => ReactElement<any> | null;
 
-const TestPortalComponent = memo(forwardRef<ComponentRef, any>(function TestPortalComponent<P = any>(props: P, ref: React.ForwardedRef<ComponentRef>) {
+const TestPortalComponent = memo(forwardRef<TestComponentRef, any>(function TestPortalComponent<P = any>(props: P, ref: React.ForwardedRef<TestComponentRef>) {
   return (
     <TestComponent<P>
       ref={ref}
@@ -108,6 +108,7 @@ function fireOptionChange(fullName: string, value: unknown): void {
 export {
   TestComponent,
   TestPortalComponent,
+  TestComponentRef,
   Widget,
   WidgetClass,
   eventHandlers,
