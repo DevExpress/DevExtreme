@@ -12,5 +12,4 @@ node_modules
 /js/renovation/**/*.j.tsx
 /js/renovation/code_coverage
 /scss/bundles/*.scss
-RawLog.txt
 testing/CompletedSuites.txt
