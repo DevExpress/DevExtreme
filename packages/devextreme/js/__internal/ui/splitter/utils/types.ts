@@ -1,5 +1,6 @@
 export interface PaneRestrictions {
   collapsed?: boolean | undefined;
+  resizable?: boolean | undefined;
   visible?: boolean | undefined;
   size?: number | undefined;
   maxSize?: number | undefined;
