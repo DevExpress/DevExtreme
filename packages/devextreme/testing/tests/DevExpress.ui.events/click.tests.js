@@ -243,7 +243,7 @@ QUnit.test('native click should not focus on input after animation or scroll', f
         $input.trigger('click');
     }
 
-    assert.equal(resetActiveElementSpy.calledCount, 1, 'input should not get focus after animation or scroll');
+    assert.equal(resetActiveElementSpy.callCount, 1, 'input should not get focus after animation or scroll');
 });
 
 QUnit.test('native click should focus on input after animation or scroll if default action prevented', function(assert) {
