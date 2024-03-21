@@ -205,6 +205,11 @@ function onColorClick(clickedColor) {
   font-size: 18px;
 }
 
+.dx-popup-content > .dx-template-wrapper.custom-color-picker {
+  width: 82px;
+  padding: 5px;
+}
+
 .dx-button-wrapper {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
