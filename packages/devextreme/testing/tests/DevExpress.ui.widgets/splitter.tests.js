@@ -1436,7 +1436,7 @@ QUnit.module('Events', moduleConfig, () => {
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
-                    assert.strictEqual($(event.target).is($resizeHandle), true, 'event field is correct');
+                    assert.strictEqual($(event.target).get(0), $resizeHandle.get(0), 'event field is correct');
                     assert.strictEqual($(handleElement).is($resizeHandle), true, 'handleElement field is correct');
                 },
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
@@ -1532,7 +1532,7 @@ QUnit.module('Events', moduleConfig, () => {
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
-                    assert.strictEqual($(event.target).parent().is($resizeHandle), true, 'event field is correct');
+                    assert.strictEqual($(event.target).parent().get(0), $resizeHandle.get(0), 'target event field is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
                     assert.deepEqual(itemData, { collapsed: true, size: 0 }, 'itemData field is correct');
                 },

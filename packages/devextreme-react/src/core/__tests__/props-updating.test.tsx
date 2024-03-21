@@ -117,11 +117,34 @@ describe('option update', () => {
     <div>
       <div ref={ref}></div>
       <TestComponent dropZone={ref} dialogTrigger={ref} />
-    </div>,);
+    </div>,
+    );
 
     expect(Widget.option.mock.calls.length).toBe(2);
     expect(Widget.option.mock.calls[0][1]).toEqual(ref.current);
     expect(Widget.option.mock.calls[1][1]).toEqual(ref.current);
+  });
+
+  it('component use component ref as target element', () => {
+    const ref = React.createRef<TestComponent>();
+    const { rerender } = render(
+      <div>
+        <TestComponent ref={ref} />
+        <TestComponent/>
+      </div>,
+    );
+
+    rerender(
+    <div>
+      <TestComponent ref={ref}/>
+      <TestComponent dropZone={ref} dialogTrigger={ref} />
+    </div>,
+    );
+
+    expect(Widget.option.mock.calls.length).toBe(2);
+
+    expect(Widget.option.mock.calls[0][1]).toEqual(ref.current?.instance.element());
+    expect(Widget.option.mock.calls[1][1]).toEqual(ref.current?.instance.element());
   });
 
   it('updates nested collection item', () => {

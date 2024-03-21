@@ -2,8 +2,7 @@ import registerComponent from '@js/core/component_registrator';
 import dateUtils from '@js/core/utils/date';
 
 // NOTE: Renovation component import.
-// @ts-expect-error
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
+import { HeaderPanelComponent } from '../__migration/components/index';
 import { formatWeekdayAndDay, monthUtils } from '../__migration/utils/index';
 import { VIEWS } from '../m_constants';
 import SchedulerTimeline from './m_timeline';
@@ -15,7 +14,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
   readonly viewDirection = 'horizontal';
 
-  get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+  get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
   _renderView() {
     super._renderView();

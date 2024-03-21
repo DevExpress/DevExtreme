@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
-import { addWidthToStyle } from '../utils';
+import { renderUtils } from '../../../../../__internal/scheduler/__migration/utils/index';
 import { HeaderCell } from './header_cell';
 import { OrdinaryCell } from './ordinary_cell';
 
@@ -41,6 +41,6 @@ export class VirtualCell extends JSXComponent(VirtualCellProps) {
     const { width } = this.props;
     const { style } = this.restAttributes;
 
-    return addWidthToStyle(width, style);
+    return renderUtils.addWidthToStyle(width, style);
   }
 }
