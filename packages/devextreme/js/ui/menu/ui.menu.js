@@ -271,19 +271,19 @@ class Menu extends MenuBase {
         this._initAdaptivity();
     }
 
-    _shouldSubmenuBeClosed(relatedTarget) {
+    _isTargetOutOfComponent(relatedTarget) {
         const isInsideRootMenu = $(relatedTarget).closest(`.${DX_MENU_CLASS}`).length !== 0;
         const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
 
-        const shouldBeClosed = !(isInsideRootMenu || isInsideContextMenu);
+        const isTargetOutOfComponent = !(isInsideRootMenu || isInsideContextMenu);
 
-        return shouldBeClosed;
+        return isTargetOutOfComponent;
     }
 
     _focusOutHandler({ relatedTarget }) {
-        const shouldSubmenuBeClosed = this._shouldSubmenuBeClosed(relatedTarget);
+        const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
 
-        if(shouldSubmenuBeClosed) {
+        if(isTargetOutside) {
             this._hideVisibleSubmenu();
         }
     }

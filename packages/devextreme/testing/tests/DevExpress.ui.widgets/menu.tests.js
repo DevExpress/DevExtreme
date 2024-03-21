@@ -811,7 +811,7 @@ QUnit.module('Menu tests', {
         assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
     });
 
-    QUnit.test('Submenu should not be closed when this root menu item gets focus', function(assert) {
+    QUnit.test('Submenu should not be closed when current root menu item gets focus', function(assert) {
         const options = {
             showFirstSubmenuMode: 'onClick',
             items: [
