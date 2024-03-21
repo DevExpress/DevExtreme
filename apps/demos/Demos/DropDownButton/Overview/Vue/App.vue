@@ -251,6 +251,6 @@ function onColorClick(clickedColor) {
 }
 
 #two-sections .dx-button {
-  height: 46px;
+  min-height: 46px;
 }
 </style>
