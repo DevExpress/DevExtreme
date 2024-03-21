@@ -816,19 +816,19 @@ QUnit.module('Resizing', moduleConfig, () => {
                 resizeDistance: 800,
                 dataSource: [{ }, { }, { resizable: false, size: '100px' }, { }],
                 expectedLayout: ['90', '0', '10', '0'],
-                expectedItemSizes: [900, 0, 100, 0]
+                expectedItemSizes: [906, 0, 100, 0]
             },
             {
                 resizeHandleIndex: 2,
                 resizeDistance: -800,
                 dataSource: [{ }, { resizable: false, size: '100px' }, { }, { }],
                 expectedLayout: ['0', '10', '0', '90'],
-                expectedItemSizes: [0, 100, 0, 900]
+                expectedItemSizes: [0, 100, 0, 906]
             },
         ].forEach(({ resizeHandleIndex, resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {
             QUnit.test(`non resizable panes shouldn't change their sizes, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
                 this.reinit({
-                    width: 1024, height: 1024,
+                    width: 1018, height: 1018,
                     dataSource,
                     orientation,
                 });

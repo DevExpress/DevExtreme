@@ -15,7 +15,6 @@ import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
 import type { FlexProperty, PaneRestrictions, ResizeOffset } from './types';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
-const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -450,11 +449,9 @@ export function validateLayout(
 // }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function getElementItemsSizeSum($element, orientation, handlesCount): number {
+function getElementItemsSizeSum($element, orientation, handlesSizeSum): number {
   const size: number = orientation === ORIENTATION.horizontal
     ? getOuterWidth($element) : getOuterHeight($element);
-
-  const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
 
   return size - handlesSizeSum;
 }
@@ -468,16 +465,14 @@ export function getVisibleItemsCount(items: Item[]): number {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getElementSize($element, items, orientation, width, height): number {
-  const handlesCount = Math.max(getVisibleItemsCount(items) - 1, 0);
-
+export function getElementSize($element, orientation, width, height, handlesSizeSum): number {
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
 
   if (isPixelWidth(sizeOption)) {
-    return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
+    return sizeOption - handlesSizeSum;
   }
 
-  return getElementItemsSizeSum($element, orientation, handlesCount);
+  return getElementItemsSizeSum($element, orientation, handlesSizeSum);
 }
 
 export function isElementVisible(element: HTMLElement | undefined | null): boolean {
