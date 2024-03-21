@@ -64,7 +64,7 @@
   opacity: 0.6;
 }
 
-#two-sections .dx-button {
+::ng-deep #two-sections .dx-button {
   min-height: 46px;
   height: 46px;
 }
