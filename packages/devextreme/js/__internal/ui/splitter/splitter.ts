@@ -240,10 +240,13 @@ class Splitter extends (CollectionWidget as any) {
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
-      const showCollapsePrev = leftItemData.collapsible === true
-        && leftItemData.collapsed !== true;
-      const showCollapseNext = rightItemData.collapsible === true
-        && rightItemData.collapsed !== true;
+      const showCollapsePrev = rightItemData.collapsed === true
+        ? rightItemData.collapsible === true && leftItemData.collapsed !== true
+        : leftItemData.collapsible === true && leftItemData.collapsed !== true;
+
+      const showCollapseNext = leftItemData.collapsed === true
+        ? leftItemData.collapsible === true && rightItemData.collapsed !== true
+        : rightItemData.collapsible === true && rightItemData.collapsed !== true;
 
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
     });

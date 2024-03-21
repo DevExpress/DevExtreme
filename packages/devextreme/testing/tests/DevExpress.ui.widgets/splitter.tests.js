@@ -1405,6 +1405,46 @@ QUnit.module('Behavoir', moduleConfig, () => {
         assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is invisible');
     });
 
+    QUnit.test('Collapse next button should be visible (left item is collapsed, right item is not collapsible)', function(assert) {
+        this.reinit({
+            dataSource: [{ collapsible: true, collapsed: true }, { }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        assert.notOk($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is visible');
+    });
+
+    QUnit.test('Collapse prev button should be visible (right item is collapsed, left item is not collapsible)', function(assert) {
+        this.reinit({
+            dataSource: [{ }, { collapsible: true, collapsed: true }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        assert.notOk($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is visible');
+    });
+
+    QUnit.test('Collapse prev button should not be visible (left item is collapsed, right item is collapsed)', function(assert) {
+        this.reinit({
+            dataSource: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        assert.ok($collapsePrevButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse prev button is invisible');
+    });
+
+    QUnit.test('Collapse next button should not be visible (left item is collapsed, right item is collapsed)', function(assert) {
+        this.reinit({
+            dataSource: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }],
+        });
+        const $resizeHandle = this.getResizeHandles();
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is invisible');
+    });
+
     ['left', 'right'].forEach((item) => {
         QUnit.test(`Resize handle icon should be invisible (${item} item is collapsed on init)`, function(assert) {
             this.reinit({
