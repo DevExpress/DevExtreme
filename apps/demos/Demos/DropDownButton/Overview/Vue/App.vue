@@ -30,8 +30,9 @@
               key-expr="id"
               @button-click="onButtonClick"
               @item-click="onItemClick"
+              template="dropDownButtonTemplate"
           >
-            <template #template="{ data }">
+            <template #dropDownButtonTemplate="{ data }">
               <div class="button-img-wrapper">
                 <div class="button-img-indicator"/>
                 <img
