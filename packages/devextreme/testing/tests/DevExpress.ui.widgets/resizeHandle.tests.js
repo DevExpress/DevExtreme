@@ -235,15 +235,16 @@ QUnit.module('Events', moduleConfig, () => {
 QUnit.module('keyboard navigation', moduleConfig, () => {
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
         [
-            { keyDownEventData: { key: 'ArrowLeft', ctrlKey: false }, expectedOffset: { x: -5 }, },
-            { keyDownEventData: { key: 'ArrowRight', ctrlKey: false }, expectedOffset: { x: 5 }, },
-            { keyDownEventData: { key: 'ArrowDown', ctrlKey: false }, expectedOffset: { y: 5 }, },
-            { keyDownEventData: { key: 'ArrowUp', ctrlKey: false }, expectedOffset: { y: -5 } },
-        ].forEach(({ keyDownEventData, expectedOffset }) => {
+            { keyDownEventData: { key: 'ArrowLeft', ctrlKey: false }, direction: 'horizontal', expectedOffset: { x: -5 }, },
+            { keyDownEventData: { key: 'ArrowRight', ctrlKey: false }, direction: 'horizontal', expectedOffset: { x: 5 }, },
+            { keyDownEventData: { key: 'ArrowDown', ctrlKey: false }, direction: 'vertical', expectedOffset: { y: 5 }, },
+            { keyDownEventData: { key: 'ArrowUp', ctrlKey: false }, direction: 'vertical', expectedOffset: { y: -5 } },
+        ].forEach(({ direction, keyDownEventData, expectedOffset }) => {
             QUnit.test(`default behavior of ${keyDownEventData.key} arrow key should be prevented`, function(assert) {
                 const eventHandlerStub = sinon.stub();
 
                 this.reinit({
+                    direction,
                     focusStateEnabled: true,
                     [eventHandler]: eventHandlerStub,
                 });
@@ -261,6 +262,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
                 const eventHandlerStub = sinon.stub();
 
                 this.reinit({
+                    direction,
                     focusStateEnabled: true,
                     [eventHandler]: eventHandlerStub,
                 });
@@ -276,19 +278,20 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
     });
 
     [
-        { eventHandler: 'onCollapsePrev', keyDownEventData: { key: 'ArrowLeft', ctrlKey: true } },
-        { eventHandler: 'onCollapseNext', keyDownEventData: { key: 'ArrowRight', ctrlKey: true } },
-        { eventHandler: 'onCollapseNext', keyDownEventData: { key: 'ArrowDown', ctrlKey: true } },
-        { eventHandler: 'onCollapsePrev', keyDownEventData: { key: 'ArrowUp', ctrlKey: true } },
-        { eventHandler: 'onCollapsePrev', keyDownEventData: { key: 'ArrowLeft', metaKey: true }, },
-        { eventHandler: 'onCollapseNext', keyDownEventData: { key: 'ArrowRight', metaKey: true }, },
-        { eventHandler: 'onCollapseNext', keyDownEventData: { key: 'ArrowDown', metaKey: true }, },
-        { eventHandler: 'onCollapsePrev', keyDownEventData: { key: 'ArrowUp', metaKey: true }, },
-    ].forEach(({ eventHandler, keyDownEventData }) => {
+        { eventHandler: 'onCollapsePrev', direction: 'horizontal', keyDownEventData: { key: 'ArrowLeft', ctrlKey: true } },
+        { eventHandler: 'onCollapseNext', direction: 'horizontal', keyDownEventData: { key: 'ArrowRight', ctrlKey: true } },
+        { eventHandler: 'onCollapseNext', direction: 'vertical', keyDownEventData: { key: 'ArrowDown', ctrlKey: true } },
+        { eventHandler: 'onCollapsePrev', direction: 'vertical', keyDownEventData: { key: 'ArrowUp', ctrlKey: true } },
+        { eventHandler: 'onCollapsePrev', direction: 'horizontal', keyDownEventData: { key: 'ArrowLeft', metaKey: true }, },
+        { eventHandler: 'onCollapseNext', direction: 'horizontal', keyDownEventData: { key: 'ArrowRight', metaKey: true }, },
+        { eventHandler: 'onCollapseNext', direction: 'vertical', keyDownEventData: { key: 'ArrowDown', metaKey: true }, },
+        { eventHandler: 'onCollapsePrev', direction: 'vertical', keyDownEventData: { key: 'ArrowUp', metaKey: true }, },
+    ].forEach(({ direction, eventHandler, keyDownEventData }) => {
         QUnit.test(`default behavior of ${keyDownEventData.key} arrow key should be prevented`, function(assert) {
             const eventHandlerStub = sinon.stub();
 
             this.reinit({
+                direction,
                 focusStateEnabled: true,
                 [eventHandler]: eventHandlerStub,
             });
@@ -306,6 +309,7 @@ QUnit.module('keyboard navigation', moduleConfig, () => {
             const eventHandlerStub = sinon.stub();
 
             this.reinit({
+                direction,
                 focusStateEnabled: true,
                 [eventHandler]: eventHandlerStub,
             });

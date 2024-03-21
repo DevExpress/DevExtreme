@@ -51,6 +51,8 @@ const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
+const INACTIVE_RESIZE_HANDLE_SIZE = 2;
+
 const FLEX_PROPERTY: Record<string, FlexProperty> = {
   flexGrow: 'flexGrow',
   flexShrink: 'flexShrink',
@@ -99,14 +101,9 @@ class Splitter extends (CollectionWidget as any) {
 
     this._toggleOrientationClass();
 
-    if (isElementVisible(this.$element().get(0))) {
-      this._layout = this._getDefaultLayoutBasedOnSize();
-    } else {
-      this._shouldRecalculateLayout = true;
-    }
-
     super._initMarkup();
 
+    this._panesCacheSize = {};
     this._attachResizeObserverSubscription();
   }
 
@@ -152,6 +149,16 @@ class Splitter extends (CollectionWidget as any) {
     this._resizeHandles = [];
 
     super._renderItems(items);
+
+    this._updateResizeHandlesResizableState();
+    this._updateResizeHandlesCollapsibleState();
+
+    if (isElementVisible(this.$element().get(0))) {
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      this._applyFlexGrowFromLayout(this._layout);
+    } else {
+      this._shouldRecalculateLayout = true;
+    }
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -174,7 +181,7 @@ class Splitter extends (CollectionWidget as any) {
 
     const itemElement = $itemFrame.get(0);
 
-    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, this._layout ? this._layout[index] : 100 / getVisibleItemsCount(this.option('items')));
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / getVisibleItemsCount(this.option('items')));
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
@@ -187,14 +194,8 @@ class Splitter extends (CollectionWidget as any) {
 
       groupAriaAttributes.id = itemId;
 
-      const nextItemData = this._getNextVisibleItemData(index);
-      const resizable = itemData.resizable !== false && nextItemData.resizable !== false;
-
       const itemProps = {
         paneId: itemId,
-        resizable,
-        showCollapsePrev: itemData.collapsible === true,
-        showCollapseNext: nextItemData.collapsible === true,
       };
 
       this._renderResizeHandle(itemProps);
@@ -223,7 +224,10 @@ class Splitter extends (CollectionWidget as any) {
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
-      const resizable = leftItemData.resizable !== false && rightItemData.resizable !== false;
+      const resizable = leftItemData.resizable !== false
+        && rightItemData.resizable !== false
+        && leftItemData.collapsed !== true
+        && rightItemData.collapsed !== true;
 
       resizeHandle.option('resizable', resizable);
     });
@@ -236,8 +240,13 @@ class Splitter extends (CollectionWidget as any) {
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
-      const showCollapsePrev = leftItemData.collapsible === true;
-      const showCollapseNext = rightItemData.collapsible === true;
+      const showCollapsePrev = rightItemData.collapsed === true
+        ? rightItemData.collapsible === true && leftItemData.collapsed !== true
+        : leftItemData.collapsible === true && leftItemData.collapsed !== true;
+
+      const showCollapseNext = leftItemData.collapsed === true
+        ? leftItemData.collapsible === true && rightItemData.collapsed !== true
+        : rightItemData.collapsible === true && rightItemData.collapsed !== true;
 
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
     });
@@ -274,42 +283,84 @@ class Splitter extends (CollectionWidget as any) {
 
     const {
       paneId,
-      resizable,
-      showCollapsePrev,
-      showCollapseNext,
     } = itemProps;
 
     return {
       direction: orientation,
       focusStateEnabled: allowKeyboardNavigation,
       hoverStateEnabled: true,
-      resizable,
-      showCollapsePrev,
-      showCollapseNext,
       separatorSize,
       elementAttr: {
         'aria-controls': paneId,
       },
       onCollapsePrev: (e): void => {
         const $resizeHandle = $(e.element);
-        const $item = this._getResizeHandleLeftItem($resizeHandle);
-        const itemData = this._getItemData($item);
+
+        const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        const leftItemData = this._getItemData($leftItem);
+        const leftItemIndex = this._getIndexByItem(leftItemData);
+        const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+        const rightItemData = this._getItemData($rightItem);
+        const rightItemIndex = this._getIndexByItem(rightItemData);
+
+        const isRightItemCollapsed = rightItemData.collapsed === true;
+
+        if (isRightItemCollapsed) {
+          this._options.silent(`items[${rightItemIndex}].size`, this._panesCacheSize[rightItemIndex]);
+          this.option(`items[${rightItemIndex}].collapsed`, false);
+
+          this._getAction(ITEM_EXPANDED_EVENT)({
+            event: e.event,
+            itemData: rightItemData,
+            itemElement: $rightItem,
+          });
+
+          return;
+        }
+
+        this._panesCacheSize[leftItemIndex] = this._getItemDimension($leftItem.get(0));
+
+        this.option(`items[${leftItemIndex}].collapsed`, true);
 
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
-          itemData,
-          itemElement: $item,
+          itemData: leftItemData,
+          itemElement: $leftItem,
         });
       },
       onCollapseNext: (e): void => {
         const $resizeHandle = $(e.element);
-        const $item = this._getResizeHandleLeftItem($resizeHandle);
-        const itemData = this._getItemData($item);
 
-        this._getAction(ITEM_EXPANDED_EVENT)({
+        const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        const leftItemData = this._getItemData($leftItem);
+        const leftItemIndex = this._getIndexByItem(leftItemData);
+        const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+        const rightItemData = this._getItemData($rightItem);
+        const rightItemIndex = this._getIndexByItem(rightItemData);
+
+        const isLeftItemCollapsed = leftItemData.collapsed === true;
+
+        if (isLeftItemCollapsed) {
+          this._options.silent(`items[${leftItemIndex}].size`, this._panesCacheSize[leftItemIndex]);
+          this.option(`items[${leftItemIndex}].collapsed`, false);
+
+          this._getAction(ITEM_EXPANDED_EVENT)({
+            event: e.event,
+            itemData: leftItemData,
+            itemElement: $leftItem,
+          });
+
+          return;
+        }
+
+        this._panesCacheSize[rightItemIndex] = this._getItemDimension($rightItem.get(0));
+
+        this.option(`items[${rightItemIndex}].collapsed`, true);
+
+        this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
-          itemData,
-          itemElement: $item,
+          itemData: rightItemData,
+          itemElement: $rightItem,
         });
       },
       onResizeStart: (e: ResizeStartEvent): void => {
@@ -329,12 +380,20 @@ class Splitter extends (CollectionWidget as any) {
           items, width, height,
         } = this.option();
 
-        const elementSize = getElementSize(this.$element(), items, orientation, width, height);
+        const handlesSizeSum = this._getResizeHandlesSize();
+        const elementSize = getElementSize(
+          this.$element(),
+          orientation,
+          width,
+          height,
+          handlesSizeSum,
+        );
 
         this._itemRestrictions = [];
 
         getVisibleItems(items).forEach((item) => {
           this._itemRestrictions.push({
+            resizable: item.resizable !== false,
             visible: item.visible,
             size: convertSizeToRatio(item.size, elementSize),
             maxSize: convertSizeToRatio(item.maxSize, elementSize),
@@ -348,8 +407,6 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
       onResize: ({ element, event }): void => {
-        console.log(calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize));
-
         const newLayout = getNewLayout(
           this._currentLayout,
           calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
@@ -399,6 +456,18 @@ class Splitter extends (CollectionWidget as any) {
     }
 
     return $rightItem;
+  }
+
+  _getResizeHandlesSize(): number {
+    let size = 0;
+
+    this._resizeHandles?.forEach((resizeHandle) => {
+      const { disabled, separatorSize } = resizeHandle.option();
+
+      size += disabled ? INACTIVE_RESIZE_HANDLE_SIZE : separatorSize as number;
+    });
+
+    return size;
   }
 
   _renderItemContent(args: object): object {
@@ -463,6 +532,15 @@ class Splitter extends (CollectionWidget as any) {
         this._applyFlexGrowFromLayout(this._layout);
         this._updatePaneSizesWithOuterWidth();
         break;
+      case 'collapsed':
+        this._updateResizeHandlesResizableState();
+        this._updateResizeHandlesCollapsibleState();
+
+        this._layout = this._getDefaultLayoutBasedOnSize();
+
+        this._applyFlexGrowFromLayout(this._layout);
+        this._updatePaneSizesWithOuterWidth();
+        break;
       case 'resizable':
         this._updateResizeHandlesResizableState();
         break;
@@ -479,7 +557,8 @@ class Splitter extends (CollectionWidget as any) {
       items, orientation, width, height,
     } = this.option();
 
-    const elementSize = getElementSize(this.$element(), items, orientation, width, height);
+    const handlesSizeSum = this._getResizeHandlesSize();
+    const elementSize = getElementSize(this.$element(), orientation, width, height, handlesSizeSum);
 
     this._itemRestrictions = [];
 

@@ -297,16 +297,17 @@ $base-invalid-color-selected: $base-danger-selected !default;
 
 
 :root {
-  --dx-component-color-bg: #{$base-bg}; 
+  --dx-component-color-bg: #{$base-bg};
   --dx-color-main-bg: #{$base-typography-bg};
-  --dx-color-primary: #{$base-accent}; 
+  --dx-color-primary: #{$base-accent};
   --dx-color-danger: #{$base-danger};
-  --dx-color-success: #{$base-success}; 
-  --dx-color-warning: #{$base-warning}; 
-  --dx-color-border: #{$base-border-color}; 
-  --dx-color-text: #{$base-text-color}; 
-  --dx-color-icon: #{$base-icon-color}; 
-  --dx-color-link: #{$base-link-color}; 
-  --dx-color-shadow: #{$base-shadow-color}; 
-  --dx-color-separator: #{$base-separator-color}; 
+  --dx-color-success: #{$base-success};
+  --dx-color-warning: #{$base-warning};
+  --dx-color-border: #{$base-border-color};
+  --dx-color-text: #{$base-text-color};
+  --dx-color-icon: #{$base-icon-color};
+  --dx-color-spin-icon: #{$base-spin-icon-color};
+  --dx-color-link: #{$base-link-color};
+  --dx-color-shadow: #{$base-shadow-color};
+  --dx-color-separator: #{$base-separator-color};
 }

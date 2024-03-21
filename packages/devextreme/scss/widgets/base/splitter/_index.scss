@@ -3,9 +3,17 @@
 .dx-splitter {
   display: flex;
   height: 100%;
+  width: 100%;
   
   .dx-splitter-item {
+    display: flex;
     overflow: hidden;
+  }
+
+  .dx-splitter-item-content {
+    position: relative;
+    flex: 1 1 auto;
+    overflow: auto;
   }
 
   &.dx-splitter-vertical {
@@ -39,5 +47,9 @@
     &.dx-resize-handle-resizable {
       cursor: row-resize;
     }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
   }
 }

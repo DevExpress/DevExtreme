@@ -3,6 +3,7 @@
 @use "../colors" as *;
 @use "sizes" as *;
 @use "../sizes" as *;
+@use "../../base/icons" as *;
 @use "../../base/splitter";
 @use "../../base/splitter/mixins" as *;
 
@@ -17,4 +18,10 @@
     $splitter-resize-handle-color-focused,
     $splitter-resize-handle-bg-focused,
   );
+}
+
+.dx-resize-handle {
+  .dx-icon {
+    @include dx-icon-sizing($splitter-resize-handle-icon-size);
+  }
 }

@@ -33,6 +33,7 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
 };
 
 const KEYBOARD_DELTA = 5;
+const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ResizeHandle extends (Widget as any) {
@@ -42,7 +43,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapseNext } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || showCollapseNext === false) {
+            return;
+          }
           this._collapseNextHandler(e);
         } else {
           this._resizeBy(e, { x: KEYBOARD_DELTA });
@@ -52,7 +58,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapsePrev } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || showCollapsePrev === false) {
+            return;
+          }
           this._collapsePrevHandler(e);
         } else {
           this._resizeBy(e, { x: -KEYBOARD_DELTA });
@@ -62,7 +73,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapsePrev } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
+            return;
+          }
           this._collapsePrevHandler(e);
         } else {
           this._resizeBy(e, { y: -KEYBOARD_DELTA });
@@ -72,7 +88,12 @@ class ResizeHandle extends (Widget as any) {
         e.preventDefault();
         e.stopPropagation();
 
+        const { direction, showCollapseNext } = this.option();
+
         if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
+            return;
+          }
           this._collapseNextHandler(e);
         } else {
           this._resizeBy(e, { y: KEYBOARD_DELTA });
@@ -148,15 +169,23 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _setResizeHandleSize(): void {
-    const { separatorSize } = this.option();
-    const styleToSet = this._isHorizontalDirection() ? 'width' : 'height';
+    const {
+      separatorSize, resizable, showCollapseNext, showCollapsePrev,
+    } = this.option();
+    const isHorizontal = this._isHorizontalDirection();
 
-    this.$element().css({
-      width: '',
-      height: '',
-    });
+    const dimension = isHorizontal ? 'width' : 'height';
+    const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    this.$element().css(styleToSet, separatorSize);
+    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
+      this.option('disabled', true);
+      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
+      this.option(inverseDimension, null);
+    } else {
+      this.option(dimension, separatorSize);
+      this.option(inverseDimension, null);
+      this.option('disabled', false);
+    }
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -256,6 +285,10 @@ class ResizeHandle extends (Widget as any) {
     e: KeyboardEvent,
     offset: ResizeOffset = { x: 0, y: 0 },
   ): void {
+    const { resizable } = this.option();
+
+    if (resizable === false) return;
+
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (e as any).offset = offset;
 
@@ -346,6 +379,7 @@ class ResizeHandle extends (Widget as any) {
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachEventHandlers();
         this._attachEventHandlers();
+        this._setResizeHandleSize();
         break;
       case 'separatorSize':
         this._setResizeHandleSize();
@@ -353,6 +387,7 @@ class ResizeHandle extends (Widget as any) {
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
+        this._setResizeHandleSize();
         break;
       case 'onCollapsePrev':
       case 'onCollapseNext':

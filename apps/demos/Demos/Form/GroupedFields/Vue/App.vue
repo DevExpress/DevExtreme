@@ -8,12 +8,14 @@
         :form-data="employee"
       >
         <DxGroupItem
+          caption-template="infoGroupCaption"
           caption="System Information"
         >
           <DxSimpleItem
             data-field="ID"
           />
           <DxGroupItem
+            caption-template="userDataGroupCaption"
             caption="Main Information"
           >
             <DxSimpleItem
@@ -34,12 +36,14 @@
           </DxGroupItem>
         </DxGroupItem>
         <DxGroupItem
+          caption-template="personalDataGroupCaption"
           caption="Personal Data"
         >
           <DxSimpleItem
             data-field="BirthDate"
           />
           <DxGroupItem
+            caption-template="addressGroupCaption"
             caption="Home Address"
           >
             <DxSimpleItem
@@ -57,6 +61,7 @@
           </DxGroupItem>
         </DxGroupItem>
         <DxGroupItem
+          caption-template="contactInfoGroupCaption"
           caption="Contact Information"
         >
           <DxTabbedItem>
@@ -86,6 +91,36 @@
             </DxTab>
           </DxTabbedItem>
         </DxGroupItem>
+
+        <template #userDataGroupCaption="{ data }">
+          <GroupCaption
+            :data="data"
+            icon="user"
+          />
+        </template>
+        <template #personalDataGroupCaption="{ data }">
+          <GroupCaption
+            :data="data"
+            icon="accountbox"
+          />
+        </template>
+        <template #contactInfoGroupCaption="{ data }">
+          <GroupCaption
+            :data="data"
+            icon="tel"
+          />
+        </template>
+        <template #addressGroupCaption="{ data }">
+          <GroupCaption
+            :data="data"
+            icon="home"
+          />
+        </template>
+        <template #infoGroupCaption="{ data }">
+          <GroupCaption
+            :data="data"
+          />
+        </template>
       </DxForm>
     </div>
   </div>
@@ -95,9 +130,15 @@ import {
   DxForm, DxSimpleItem, DxGroupItem, DxTabbedItem, DxTabPanelOptions, DxTab,
 } from 'devextreme-vue/form';
 import service from './data.ts';
+import GroupCaption from './GroupCaption.vue';
 import 'devextreme-vue/text-area';
 
 const employee = service.getEmployee();
+
+function groupCaptionTemplate(icon) {
+  return (data) => `<i class='dx-icon dx-icon-${icon}'></i><span>${data.caption}</span>`;
+}
+
 </script>
 <style scoped>
 #form-container {
@@ -108,5 +149,13 @@ const employee = service.getEmployee();
   font-size: 24px;
   text-align: center;
   line-height: 2em;
+}
+
+.dx-form-group-custom-caption .dx-icon {
+  color: var(--dx-color-spin-icon);
+}
+
+.dx-form-group-custom-caption span {
+  line-height: 1;
 }
 </style>

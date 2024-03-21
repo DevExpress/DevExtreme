@@ -119,14 +119,9 @@
   margin: 0;
 }
 
-.dx-form-group-caption {
-  font-size: 20px;
-}
-
 .dx-form-group-custom-caption {
-  .dx-icon {
-    vertical-align: top;
-  }
+  display: flex;
+  align-items: center;
 }
 
 .dx-form-group-with-caption {
