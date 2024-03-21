@@ -60,6 +60,9 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
     resizable,
   } = paneRestrictions;
 
+  if (paneRestrictions.collapsed === true) {
+    return 0;
+  }
   if (resizable === false) {
     return paneRestrictions.size as number;
   }

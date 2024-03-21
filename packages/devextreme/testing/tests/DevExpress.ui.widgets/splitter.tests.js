@@ -621,6 +621,16 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             this.assertLayout(expectedLayout);
         });
     });
+
+    QUnit.test('Pane with collapsed=true should have more priority than pane with maxSize', function(assert) {
+        this.reinit({
+            items: [ { collapsed: true }, { maxSize: '50%' } ],
+        });
+
+        const $leftPane = this.getPanes().first();
+
+        assert.strictEqual($leftPane.css('width'), '0px');
+    });
 });
 
 QUnit.module('Resizing', moduleConfig, () => {
