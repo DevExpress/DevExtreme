@@ -737,7 +737,7 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     }
 });
 
-QUnit.test('exportWidgets method should pass to export markup as string', function(assert) {
+QUnit.test('exportWidgets method should pass to export markup as DOM node', function(assert) {
     const optionMock = (param) => {
         if(param === 'theme') return 'someTheme.light';
     };
@@ -745,9 +745,10 @@ QUnit.test('exportWidgets method should pass to export markup as string', functi
         createMockWidget({ height: 25, width: 10 }, optionMock),
         createMockWidget({ height: 15, width: 15 }, optionMock),
     ];
+
     exportModule.exportWidgets(widgets);
 
-    assert.deepEqual(clientExporter.export.getCall(0).args[0].nodeName, 'svg', 'combineMarkups should pass to export DOM node');
+    assert.strictEqual(clientExporter.export.getCall(0).args[0].nodeName, 'svg', 'combineMarkups should pass to export DOM node');
 });
 
 QUnit.test('exportWidgets method. Defaults', function(assert) {

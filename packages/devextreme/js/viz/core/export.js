@@ -352,7 +352,8 @@ export let combineMarkups = function(widgets, options = { }) {
             options,
             exportItems,
             compactView
-        });
+        }
+    );
 
     return {
         root: rootElement,
