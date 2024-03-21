@@ -293,32 +293,32 @@ const SKIPPED_TESTS = {
   },
 };
 
-export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
-  const shouldSkipDemo = (
-    framework,
-    component,
-    demoName,
-  ) => {
-    const frameworkTests = skippedTests[framework];
-    if (!frameworkTests) return false;
-
-    const componentTests = frameworkTests[component];
-    if (!componentTests) return false;
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const test of componentTests) {
-      if (typeof test === 'string' && test === demoName) {
-        return true;
-      } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
-        return true;
-      }
-    }
-
+export function shouldSkipDemo(framework, component, demoName, skippedTests) {
+  const frameworkTests = skippedTests[framework];
+  if (!frameworkTests) {
     return false;
-  };
+  }
 
-  if (shouldSkipDemo(currentFramework, product, demo)) {
+  const componentTests = frameworkTests[component];
+  if (!componentTests) {
+    return false;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const test of componentTests) {
+    if (typeof test === 'string' && test === demoName) {
+      return true;
+    } if (test.demo === demoName
+        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
+  if (shouldSkipDemo(currentFramework, product, demo, skippedTests)) {
     return false;
   }
 
