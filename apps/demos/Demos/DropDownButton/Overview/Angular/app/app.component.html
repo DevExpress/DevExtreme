@@ -19,14 +19,26 @@
       <dx-drop-down-button
         [splitButton]="true"
         [useSelectMode]="false"
-        text="Sandra Johnson"
-        icon="../../../../images/gym/coach-woman.png"
+        text="Olyvie Peyton"
+        icon="../../../../images/employees/51.png"
         [items]="profileSettings"
         displayExpr="name"
         keyExpr="id"
         (onButtonClick)="onButtonClick($event)"
         (onItemClick)="onItemClick($event)"
-      ></dx-drop-down-button>
+        template="template"
+      >
+        <div *dxTemplate="let data of 'template'">
+          <div class="button-img-wrapper">
+            <div class="button-img-indicator"></div>
+            <img class="dx-button-img" [src]="data.icon" alt="imageAlt" />
+          </div>
+          <div class="dx-button-wrapper">
+            <div class="dx-button-title">{{ data.text }}</div>
+            <div class="dx-button-row">IT Manager</div>
+          </div>
+        </div>
+      </dx-drop-down-button>
     </div>
   </div>
 </div>
