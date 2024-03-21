@@ -48,4 +48,8 @@
       cursor: row-resize;
     }
   }
+
+  &.dx-state-disabled {
+    opacity: 1;
+  }
 }

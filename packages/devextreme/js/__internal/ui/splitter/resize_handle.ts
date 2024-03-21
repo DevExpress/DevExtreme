@@ -33,6 +33,7 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
 };
 
 const KEYBOARD_DELTA = 5;
+const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ResizeHandle extends (Widget as any) {
@@ -148,15 +149,23 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _setResizeHandleSize(): void {
-    const { separatorSize } = this.option();
-    const styleToSet = this._isHorizontalDirection() ? 'width' : 'height';
+    const {
+      separatorSize, resizable, showCollapseNext, showCollapsePrev,
+    } = this.option();
+    const isHorizontal = this._isHorizontalDirection();
 
-    this.$element().css({
-      width: '',
-      height: '',
-    });
+    const dimension = isHorizontal ? 'width' : 'height';
+    const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    this.$element().css(styleToSet, separatorSize);
+    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
+      this.option('disabled', true);
+      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
+      this.option(inverseDimension, null);
+    } else {
+      this.option(dimension, separatorSize);
+      this.option(inverseDimension, null);
+      this.option('disabled', false);
+    }
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -346,6 +355,7 @@ class ResizeHandle extends (Widget as any) {
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachEventHandlers();
         this._attachEventHandlers();
+        this._setResizeHandleSize();
         break;
       case 'separatorSize':
         this._setResizeHandleSize();
@@ -353,6 +363,7 @@ class ResizeHandle extends (Widget as any) {
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
+        this._setResizeHandleSize();
         break;
       case 'onCollapsePrev':
       case 'onCollapseNext':
