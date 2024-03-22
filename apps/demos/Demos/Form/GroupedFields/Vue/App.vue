@@ -101,7 +101,7 @@
         <template #personalDataGroupCaption="{ data }">
           <GroupCaption
             :data="data"
-            icon="accountbox"
+            icon="card"
           />
         </template>
         <template #contactInfoGroupCaption="{ data }">
@@ -134,10 +134,6 @@ import GroupCaption from './GroupCaption.vue';
 import 'devextreme-vue/text-area';
 
 const employee = service.getEmployee();
-
-function groupCaptionTemplate(icon) {
-  return (data) => `<i class='dx-icon dx-icon-${icon}'></i><span>${data.caption}</span>`;
-}
 
 </script>
 <style scoped>
