@@ -28,7 +28,7 @@ export class AppComponent {
       { name: 'Central Pane' },
       { name: 'Right Pane' },
       { name: 'Nested Left Pane' },
-      { name: 'Nested Center Pane' },
+      { name: 'Nested Central Pane' },
       { name: 'Nested Right Pane' },
     ];
   }

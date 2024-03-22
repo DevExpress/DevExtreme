@@ -68,7 +68,7 @@ $(() => {
                   {
                     collapsible: false,
                     template(data) {
-                      return paneContentTemplate(data, 'Nested Center Pane');
+                      return paneContentTemplate(data, 'Nested Central Pane');
                     },
                   },
                   {

@@ -30,7 +30,7 @@
             <DxItem
               :resizable="true"
               :collapsible="true"
-              text="Nested Center Pane"
+              text="Nested Central Pane"
               template="paneContent"
             />
             <DxItem
