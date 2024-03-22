@@ -1,30 +1,40 @@
 <template>
-    <div class="pane-content">
-      <div class="pane-title">
-        {{ data.text }}
-      </div>
-      <div class="pane-state">
-        {{ `${data.resizable ? 'Resizable ' : ''}${data.resizable && data.collapsible ? 'and' : ''}${data.collapsible ? ' Collapsible' : ''}` }}
-      </div>
-  
-      <div class="pane-option" v-html="renderOptions()"></div>
+  <div class="pane-content">
+    <div class="pane-title">
+      {{ data.text }}
     </div>
-  </template>
-  
-  <script setup lang="ts">
-  const props = defineProps<{
-    data: Record<string, any>
-  }>();
-  const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
-  
-  const { data } = props;
+    <div class="pane-state">
+      {{ getStateText() }}
+    </div>
 
-  const renderOptions = () => {
-    return Object.entries(data)
-      .filter(([key]) => dimensionOptions.has(key))
-      .map(([key, value]) => `<div class='pane-option'>${key}: ${value}</div>`).join('');
-  }
-  </script>
+    <div
+      class="pane-option"
+      v-for="(value, key) in filteredData"
+      :key="key"
+    >
+      {{ `${key}: ${value}` }}
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { defineProps, computed } from 'vue';
+
+const props = defineProps<{
+  data: Record<string, any>
+}>();
+
+const { data } = props;
+
+const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+
+const getStateText = () => `${data.resizable ? 'Resizable ' : ''}${data.resizable && data.collapsible ? 'and' : ''}${data.collapsible ? ' Collapsible' : ''}`
+
+const filteredData = computed(() => Object.fromEntries(
+  Object.entries(data)
+    .filter(([key]) => dimensionOptions.has(key))
+));
+</script>
 
 <style scoped>
   .pane-content {
