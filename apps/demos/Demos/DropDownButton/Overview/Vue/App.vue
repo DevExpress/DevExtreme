@@ -43,7 +43,7 @@
                 >
               </div>
               <div class="text-container">
-                <div class="dx-button-title">{{ data.text }}</div>
+                <div class="button-title">{{ data.text }}</div>
                 <div class="button-row">IT Manager</div>
               </div>
             </template>
