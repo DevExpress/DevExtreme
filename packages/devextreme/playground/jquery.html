@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,51 +41,7 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        .demo-container {
-            overflow: visible;
-        }
-
-        .flex-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .dx-drawer-content {
-            display: flex;
-        }
-
-        #toolbar {
-            box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
-            padding: 5px 10px;
-            z-index: 10000;
-        }
-
-        .panel-list {
-            height: 400px;
-            padding-top: 12px;
-        }
-
-        .caption {
-            font-size: 18px;
-            font-weight: 500;
-        }
-
-        label {
-            font-weight: bold;
-        }
-
-        #content {
-            padding: 0 24px;
-        }
-
-        #content h2 {
-            font-size: 26px;
-        }
-    </style>
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -94,181 +49,15 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-
-        <!-- <div id="container"></div> -->
-
-        <div class="dx-viewport demo-container">
-            <div class="flex-container">
-                <div id="toolbar"></div>
-                <div id="drawer">
-                    <div id="content" class="dx-theme-background-color"></div>
-                </div>
-            </div>
-        </div>
-
+        <div id="button"></div>
         <script>
-            $(() => {
-                $('#content').html(text);
-
-                const drawer = $('#drawer').dxDrawer({
-                    opened: true,
-                    height: 400,
-                    focusStateEnabled: true,
-                    // openedStateMode: 'push',
-                    // minSize: 50,
-                    // revealMode: 'expand',
-                    template() {
-                        const $list = $('<div>').width(200).addClass('panel-list dx-theme-typography-background-color');
-
-                        return $list.dxList({
-                            dataSource: navigation,
-                            // hoverStateEnabled: false,
-                            focusStateEnabled: true,
-                            // activeStateEnabled: false,
-                        });
-                    },
-                }).dxDrawer('instance');
-
-                $('#toolbar').dxToolbar({
-                    elementAttr: {
-                        class: 'dx-theme-background-color',
-                    },
-                    items: [{
-                        widget: 'dxButton',
-                        location: 'before',
-                        options: {
-                            icon: 'menu',
-                            stylingMode: 'text',
-                            onClick() {
-                                drawer.toggle();
-                            },
-                        },
-                    }],
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
-
-                /** RUNTIME CHANGE */
-                // drawer.option({ minSize: null });
             });
-
-            const navigation = [
-                { id: 1, text: 'Products', icon: 'product' },
-                { id: 2, text: 'Sales', icon: 'money' },
-                { id: 3, text: 'Customers', icon: 'group' },
-                { id: 4, text: 'Employees', icon: 'card' },
-                { id: 5, text: 'Reports', icon: 'chart' },
-            ];
-
-            const text = `
-<h2>
-    <b>Drawer Demo</b>
-</h2>
-<p>
-    Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Penatibus et magnis dis parturient. Eget dolor morbi non arcu risus. Tristique magna sit amet purus gravida quis blandit. Auctor urna nunc id cursus metus aliquam eleifend mi in. Tellus orci ac auctor augue mauris augue neque gravida. Nullam vehicula ipsum a arcu. Nullam ac tortor vitae purus faucibus ornare suspendisse sed nisi. Cursus in hac habitasse platea dictumst. Egestas dui id ornare arcu. Dictumst vestibulum rhoncus est pellentesque elit ullamcorper dignissim.</p><p>Mauris rhoncus aenean vel elit scelerisque mauris pellentesque pulvinar. Neque volutpat ac tincidunt vitae semper quis lectus. Sed sed risus pretium quam vulputate dignissim suspendisse in. Urna nec tincidunt praesent semper feugiat nibh sed pulvinar. Ultricies lacus sed turpis tincidunt id aliquet risus feugiat. Amet cursus sit amet dictum sit amet justo donec enim. Vestibulum rhoncus est pellentesque elit ullamcorper. Id aliquet risus feugiat in ante metus dictum at.
-</p>`;
-
-        // function createDrawer({
-        //     openedStateMode,
-        //     shading,
-        //     createOuterContent,
-        //     createDrawerContent,
-        //     createInnerContent,
-        // }) {
-        //     function createDrawerInt($container) {
-        //         if (createOuterContent) {
-        //             createOuterContent($container);
-        //         }
-
-        //         const $drawer = $('<div id=\'drawer1\'>');
-        //         const $templateView = $('<div style=\'background-color: aquamarine; height: 100%;\'>').appendTo($drawer);
-                
-        //             if (openedStateMode === 'overlap') {
-        //             $templateView.css('padding-left', '200px');
-        //         }
-
-        //         if (openedStateMode === 'push') {
-        //             $templateView.css('padding-right', '200px');
-        //         }
-
-        //         if (createInnerContent) {
-        //             createInnerContent($templateView);
-        //         }
-
-        //         ($drawer.appendTo($container)).dxDrawer({
-        //             openedStateMode,
-        //             shading,
-        //             opened: true,
-        //             height: 400,
-        //             template: () => {
-        //                 const $result = $('<div>').width(200).css('background-color', 'aqua').css('height', '100%');
-
-        //                 if (createDrawerContent) {
-        //                     createDrawerContent($result);
-        //                 }
-
-        //                 return $result;
-        //             },
-        //         });
-        //     }
-
-        //     ($('<div id="showPopupBtn">').appendTo($('#container')))
-        //         .dxButton({
-        //         text: 'Show Popup',
-        //         onClick: () => ($('#popup1')).dxPopup('instance').show(),
-        //     });
-
-        //     ($('<div id=\'popup1\'>').appendTo($('#container'))).dxPopup({
-        //         position: 'top',
-        //         height: 600,
-        //         showTitle: false,
-        //         contentTemplate: () => {
-        //             const $popupTemplate = $('<div id="popup1_template">').css('background-color', 'blanchedalmond').css('height', '100%');
-        //             createDrawerInt($popupTemplate);
-
-        //             return $popupTemplate;
-        //         },
-        //     });
-
-        //     createDrawerInt($('#container'));
-        // }
-
-        // const createInnerContent = ($container) => {
-        //     ($('<div id="menu">').appendTo($container)).dxFileManager({
-        //     currentPath: 'Documents/Projects',
-        //     fileSystemProvider: [
-        //         {
-        //         name: 'Documents',
-        //         isDirectory: true,
-        //         items: [
-        //             {
-        //             name: 'Projects',
-        //             isDirectory: true,
-        //             items: [{ name: 'About.rtf' }, { name: 'Passwords.rtf' }],
-        //             },
-        //         ],
-        //         },
-        //     ],
-        //     height: 300,
-        //     permissions: {
-        //         create: true,
-        //         copy: true,
-        //         move: true,
-        //         delete: true,
-        //         rename: true,
-        //         upload: true,
-        //         download: true,
-        //     },
-        //     });
-        // };
-
-        // const config = {
-        //     openedStateMode: 'shrink',
-        //     shading: true,
-        //     createInnerContent,
-        // }
-
-        // createDrawer(config);
         </script>
     </div>
 </body>
-
 </html>
