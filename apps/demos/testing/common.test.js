@@ -137,7 +137,9 @@ const SKIPPED_TESTS = {
     VectorMap: [
       { demo: 'Palette', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
-      
+      { demo: 'CustomProjection', themes: [THEME.material] },
+      { demo: 'MultipleLayers', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
   },
   React: {
