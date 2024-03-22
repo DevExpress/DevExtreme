@@ -25,4 +25,22 @@
       .map(([key, value]) => `<div class='pane-option'>${key}: ${value}</div>`).join('');
   }
   </script>
+
+<style scoped>
+  .pane-content {
+    padding: 12px;
+  }
+  .pane-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .pane-state {
+    font-size: var(--dx-font-size-xs);
+    margin-bottom: 4px;
+  }
+  .pane-option {
+    color: var(--dx-texteditor-color-label);
+    font-size: 10px;
+  }
+</style>
   

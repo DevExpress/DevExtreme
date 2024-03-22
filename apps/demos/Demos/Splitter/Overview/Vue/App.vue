@@ -77,33 +77,29 @@ import { DxSplitter, DxItem } from 'devextreme-vue/splitter';
 import PaneContent from './PaneContent.vue'
 </script>
 <style scoped>
-.demo-container #app{
-  width: 860px;
-  height: 460px;
-  padding: 32px;
-  position: relative;
-}
-
-.splitter {
-  border: 1px solid var(--dx-color-border);
-  border-radius: 8px;
-  position: relative;
-  overflow: hidden;
-}
-.pane-content {
-  padding: 12px;
-}
-.pane-title {
-  font-weight: 600;
-  margin-bottom: 2px;
-}
-.pane-state {
-  font-size: var(--dx-font-size-xs);
-  margin-bottom: 4px;
-}
-.pane-option {
-  color: var(--dx-texteditor-color-label);
-  font-size: 10px;
-}
-
+  .demo-container #app{
+    height: 500px;
+    position: relative;
+  }
+  .splitter {
+    border: 1px solid var(--dx-color-border);
+    border-radius: 8px;
+    position: relative;
+    overflow: hidden;
+  }
+  .pane-content {
+    padding: 12px;
+  }
+  .pane-title {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+  .pane-state {
+    font-size: var(--dx-font-size-xs);
+    margin-bottom: 4px;
+  }
+  .pane-option {
+    color: var(--dx-texteditor-color-label);
+    font-size: 10px;
+  }
 </style>

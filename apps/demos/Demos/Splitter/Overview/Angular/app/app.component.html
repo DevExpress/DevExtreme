@@ -1,0 +1,71 @@
+<dx-splitter id="splitter">
+  <dxi-item
+    [resizable]="true"
+    minSize="70px"
+    size="140px"
+    template="Left Pane"
+  ></dxi-item>
+  <dxi-item [resizable]="true">
+    <dx-splitter orientation="vertical">
+      <dxi-item
+        [resizable]="true"
+        [collapsible]="true"
+        maxSize="75%"
+        template="Center Pane"
+      ></dxi-item>
+      <dxi-item [resizable]="true" [collapsible]="true">
+        <dx-splitter>
+          <dxi-item
+            [collapsible]="true"
+            minSize="5%"
+            size="30%"
+            template="Nested Left Pane"
+          ></dxi-item>
+          <dxi-item template="Nested Center Pane"></dxi-item>
+          <dxi-item
+            [collapsible]="true"
+            minSize="5%"
+            size="30%"
+            template="Nested Right Pane"
+          ></dxi-item>
+
+          <ng-container *ngFor="let pane of renderedContentTemplates">
+            <div *dxTemplate="let data of pane.name" class="pane-content">
+              <div class="pane-title">{{ pane.name }}</div>
+              <div class="pane-state">{{ getPaneState(data) }}</div>
+              <ng-container *ngFor="let item of filterDimensionOptions(data)">
+                <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+              </ng-container>
+            </div>
+          </ng-container>
+        </dx-splitter>
+      </dxi-item>
+
+      <ng-container *ngFor="let pane of renderedContentTemplates">
+        <div *dxTemplate="let data of pane.name" class="pane-content">
+          <div class="pane-title">{{ pane.name }}</div>
+          <div class="pane-state">{{ getPaneState(data) }}</div>
+          <ng-container *ngFor="let item of filterDimensionOptions(data)">
+            <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+          </ng-container>
+        </div>
+      </ng-container>
+    </dx-splitter>
+  </dxi-item>
+  <dxi-item
+    [resizable]="false"
+    [collapsible]="false"
+    size="140px"
+    template="Right Pane"
+  ></dxi-item>
+
+  <ng-container *ngFor="let pane of renderedContentTemplates">
+    <div *dxTemplate="let data of pane.name" class="pane-content">
+      <div class="pane-title">{{ pane.name }}</div>
+      <div class="pane-state">{{ getPaneState(data) }}</div>
+      <ng-container *ngFor="let item of filterDimensionOptions(data)">
+        <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+      </ng-container>
+    </div>
+  </ng-container>
+</dx-splitter>

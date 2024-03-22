@@ -1,29 +1,29 @@
-.demo-container {
+::ng-deep .demo-container {
   height: 500px;
 }
 
-#splitter {
+::ng-deep #splitter {
   border: 1px solid var(--dx-color-border);
   border-radius: 8px;
   position: relative;
   overflow: hidden;
 }
 
-.pane-content {
+::ng-deep .pane-content {
   padding: 12px;
 }
 
-.pane-title {
+::ng-deep .pane-title {
   font-weight: 600;
   margin-bottom: 2px;
 }
 
-.pane-state {
+::ng-deep .pane-state {
   font-size: var(--dx-font-size-xs);
   margin-bottom: 4px;
 }
 
-.pane-option {
+::ng-deep .pane-option {
   color: var(--dx-texteditor-color-label);
   font-size: 10px;
 }
