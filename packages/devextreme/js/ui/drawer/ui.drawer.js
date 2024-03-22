@@ -195,19 +195,15 @@ const Drawer = Widget.inherit({
         }
     },
 
-    _updateHasMinSizePanelContentClass(shouldBeSet) {
-        if(shouldBeSet) {
-            this._$panelContentWrapper.addClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS);
-        } else {
-            this._$panelContentWrapper.removeClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS);
-        }
+    _togglePanelContentHasMinSizeClass(shouldBeSet) {
+        this._$panelContentWrapper.toggle(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS, shouldBeSet);
     },
 
     _renderPanelContentWrapper() {
         const { openedStateMode, opened, minSize } = this.option();
 
         this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
-        this._updateHasMinSizePanelContentClass(!!minSize);
+        this._togglePanelContentHasMinSizeClass(!!minSize);
 
         const position = this.calcTargetPosition();
 
@@ -549,7 +545,7 @@ const Drawer = Widget.inherit({
             case 'minSize':
                 this._initMinMaxSize();
                 this._renderPosition(this.option('opened'), true);
-                this._updateHasMinSizePanelContentClass(!!args.value);
+                this._togglePanelContentHasMinSizeClass(!!args.value);
                 break;
             case 'maxSize':
                 this._initMinMaxSize();
