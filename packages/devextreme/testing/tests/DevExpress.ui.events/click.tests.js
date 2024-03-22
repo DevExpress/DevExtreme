@@ -39,7 +39,6 @@ const moduleConfig = {
     },
     afterEach: function() {
         this.clock.restore();
-
         clickEvent.misc.requestAnimationFrame = this._originalAnimFrame;
     }
 };
