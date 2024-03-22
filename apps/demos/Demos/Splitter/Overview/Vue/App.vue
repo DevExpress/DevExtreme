@@ -1,11 +1,12 @@
 <!-- eslint-disable no-restricted-syntax -->
 <template>
-  <DxSplitter orientation="horizontal">
+  <DxSplitter class="splitter" orientation="horizontal">
     <DxItem
       :resizable="true"
       min-size="60px"
       size="140px"
-      :template="(data, index, element)=>myfunction(data, 1, element)"
+      title="Left Pane"
+      template="paneContent"
     />
     <DxItem>
       <DxSplitter orientation="vertical">
@@ -13,7 +14,8 @@
           :resizable="true"
           :collapsible="true"
           min-size="60px"
-          :template="(data, index, element)=>myfunction(data, 2, element)"
+          title="Central Pane"
+          template="paneContent"
         />
         <DxItem :collapsible="true">
           <DxSplitter orientation="horizontal">
@@ -21,96 +23,87 @@
               :resizable="true"
               size="33.3%"
               min-size="10px"
-              :template="(data, index, element)=>myfunction(data, 3, element)"
+              title="Nested Left Pane"
+              template="paneContent"
             />
             <DxItem
               :resizable="true"
               :collapsible="true"
               size="33.3%"
               min-size="10px"
-              :template="(data, index, element)=>myfunction(data, 4, element)"
+              title="Nested Center Pane"
+              template="paneContent"
             />
             <DxItem
               :resizable="true"
               :collapsible="true"
               min-size="10px"
-              :template="(data, index, element)=>myfunction(data, 5, element)"
+              title="Nested Right Pane"
+              template="paneContent"
             />
+            <template #paneContent="{ data }">
+              <PaneContent
+                :data="data"
+              />
+            </template>
           </DxSplitter>
         </DxItem>
+        <template #paneContent="{ data }">
+          <PaneContent
+            :data="data"
+          />
+        </template>
       </DxSplitter>
     </DxItem>
     <DxItem
       size="170px"
       min-size="60px"
-      :template="(data, index, element)=>myfunction(data, 6, element)"
+      title="Right Pane"
+      template="paneContent"
     />
+
+
+    <template #paneContent="{ data }">
+      <PaneContent
+        :data="data"
+      />
+    </template>
   </DxSplitter>
 
 
 </template>
 <script setup lang="ts">
 import { DxSplitter, DxItem } from 'devextreme-vue/splitter';
-
-// eslint-disable-next-line spellcheck/spell-checker
-const myfunction = (data, index, element) => {
-  const fullText = document.createElement('div');
-  fullText.textContent = '';
-  fullText.classList.add('contentParent');
-
-  const item = document.createElement('div');
-  item.textContent = `Pane ${index}`;
-  item.classList.add('paneClass');
-  fullText.appendChild(item);
-
-  const state = document.createElement('div');
-  state.textContent = `${data.resizable ? 'Resizable ' : ''}${data.resizable && data.collapsible ? 'and' : ''}${data.collapsible ? ' Collapsible' : ''}`;
-  state.classList.add('stateClass');
-  fullText.appendChild(state);
-
-  Object.keys(data).forEach((key) => {
-    if (key !== 'template' && key !== 'resizable' && key !== 'collapsible') {
-      const value = data[key];
-      const config = document.createElement('div');
-      config.textContent = `${key}: ${value}`;
-      config.classList.add('optionClass');
-      fullText.appendChild(config);
-    }
-  });
-
-  element.appendChild(fullText);
-};
+import PaneContent from './PaneContent.vue'
 </script>
 <style scoped>
-.demo-container #app {
+.demo-container #app{
   width: 860px;
   height: 460px;
   padding: 32px;
   position: relative;
 }
 
-#splitter{
-  border: 1px solid rgba(0, 0, 0, 0.16);
+.splitter {
+  border: 1px solid var(--dx-color-border);
   border-radius: 8px;
-  position:relative;
+  position: relative;
   overflow: hidden;
 }
-
-.contentParent {
+.pane-content {
   padding: 12px;
 }
-
-.paneClass {
-  font-family: "Arial";
+.pane-title {
+  font-weight: 600;
+  margin-bottom: 2px;
 }
-
-.stateClass {
-  font-family: "Arial";
+.pane-state {
   font-size: var(--dx-font-size-xs);
+  margin-bottom: 4px;
 }
-
-.optionClass {
+.pane-option {
   color: var(--dx-texteditor-color-label);
   font-size: 10px;
 }
+
 </style>
