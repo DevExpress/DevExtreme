@@ -69,12 +69,9 @@ const options: Options<Properties> = {
 };
 
 const a11yCheckConfig = {
-  // NOTE: color-contrast issues
   rules: {
     'scrollable-region-focusable': { enabled: false },
-    // aria-orientation
     'aria-allowed-attr': { enabled: false },
-    // 'color-contrast': { enabled: false }
   },
 };
 
