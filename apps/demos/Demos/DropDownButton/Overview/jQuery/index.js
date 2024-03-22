@@ -33,7 +33,7 @@ $(() => {
         .addClass('button-img-indicator').appendTo($imageWrapper);
 
       $(document.createElement('img'))
-        .addClass('dx-button-img')
+        .addClass('button-img')
         .attr({
           src: data.icon,
           alt: 'employee',
@@ -43,11 +43,11 @@ $(() => {
         .addClass('text-container').appendTo(element);
 
       $(document.createElement('div'))
-        .addClass('dx-button-title').text(data.text)
+        .addClass('button-title').text(data.text)
         .appendTo($wrapper);
 
       $(document.createElement('div'))
-        .addClass('dx-button-row').text('IT Manager').appendTo($wrapper);
+        .addClass('button-row').text('IT Manager').appendTo($wrapper);
 
       return $(element);
     },

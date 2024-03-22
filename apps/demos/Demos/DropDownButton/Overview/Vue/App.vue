@@ -37,14 +37,14 @@
               <div class="button-img-container">
                 <div class="button-img-indicator"/>
                 <img
-                    class="dx-button-img"
+                    class="button-img"
                     :src="data.icon"
                     alt="employee"
                 >
               </div>
               <div class="text-container">
                 <div class="dx-button-title">{{ data.text }}</div>
-                <div class="dx-button-row">IT Manager</div>
+                <div class="button-row">IT Manager</div>
               </div>
             </template>
           </DxDropDownButton>
@@ -223,7 +223,7 @@ function onColorClick(clickedColor) {
   height: 32px;
 }
 
-.dx-button-img {
+.button-img {
   width: 32px;
   height: 32px;
   position: relative;
@@ -247,11 +247,11 @@ function onColorClick(clickedColor) {
   z-index: 1;
 }
 
-.dx-button-title {
+.button-title {
   line-height: 20px;
 }
 
-.dx-button-row {
+.button-row {
   font-size: 12px;
   line-height: 14px;
   opacity: 0.6;

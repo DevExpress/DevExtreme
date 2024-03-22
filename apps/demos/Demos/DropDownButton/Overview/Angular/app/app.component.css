@@ -30,7 +30,7 @@
   height: 32px;
 }
 
-::ng-deep .dx-button-img {
+::ng-deep .button-img {
   width: 32px;
   height: 32px;
   position: relative;
@@ -54,11 +54,11 @@
   z-index: 1;
 }
 
-::ng-deep .dx-button-title {
+::ng-deep .button-title {
   line-height: 20px;
 }
 
-::ng-deep .dx-button-row {
+::ng-deep .button-row {
   font-size: 12px;
   line-height: 14px;
   opacity: 0.6;

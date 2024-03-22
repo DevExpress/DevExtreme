@@ -15,14 +15,14 @@ const dropDownButtonRender = (data) => (
     <div className="button-img-container">
       <div className="button-img-indicator"></div>
       <img
-        className="dx-button-img"
+        className="button-img"
         src={data.icon}
         alt="employee"
       />
     </div>
     <div className="text-container">
-      <div className="dx-button-title">{data.text}</div>
-      <div className="dx-button-row">IT Manager</div>
+      <div className="button-title">{data.text}</div>
+      <div className="button-row">IT Manager</div>
     </div>
   </React.Fragment>
 );

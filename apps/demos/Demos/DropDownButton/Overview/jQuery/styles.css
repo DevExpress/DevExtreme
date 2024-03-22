@@ -30,7 +30,7 @@
   height: 32px;
 }
 
-.dx-button-img {
+.button-img {
   width: 32px;
   height: 32px;
   position: relative;
@@ -54,11 +54,11 @@
   z-index: 1;
 }
 
-.dx-button-title {
+.button-title {
   line-height: 20px;
 }
 
-.dx-button-row {
+.button-row {
   font-size: 12px;
   line-height: 14px;
   opacity: 0.6;
