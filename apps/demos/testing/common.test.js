@@ -207,12 +207,19 @@ const SKIPPED_TESTS = {
       { demo: 'PointsAggregation', themes: [THEME.material] },
       { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+    ],
+    Drawer: [
+      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'DeferredSelection', themes: [THEME.material] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
     TreeView: [
       { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
@@ -237,7 +244,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
-      
+      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
     ],
     RangeSelector: [
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
@@ -251,6 +258,9 @@ const SKIPPED_TESTS = {
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
+    ],
+    Gantt: [
+      { demo: 'Validation', themes: [THEME.material] },
     ],
   },
 };

@@ -172,6 +172,7 @@ const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
