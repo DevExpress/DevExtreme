@@ -359,13 +359,6 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 
   const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
 
-  if (settings.explicitTests) {
-    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
-      callback(test.only);
-    }
-    return;
-  }
-
   test.before(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
@@ -375,6 +368,13 @@ export function runManualTestCore(testObject, product, demo, framework, callback
       await waitForAngularLoading();
     }
   });
+
+  if (settings.explicitTests) {
+    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
+      callback(test.only);
+    }
+    return;
+  }
 
   callback(test);
 }
