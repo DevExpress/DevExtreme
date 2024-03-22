@@ -150,11 +150,11 @@ QUnit.test('click should not be prevented (T131440, T131837)', function(assert) 
 
 QUnit.module('focus reset on mobile - resetActiveElement method', {
     beforeEach: function() {
-        moduleConfig.beforeEach();
+        moduleConfig.beforeEach.call(this);
         this.resetActiveElementSpy = sinon.spy(domUtils, 'resetActiveElement');
     },
     afterEach: function() {
-        moduleConfig.afterEach();
+        moduleConfig.afterEach.call(this);
         domUtils.resetActiveElement.restore();
     }
 });
