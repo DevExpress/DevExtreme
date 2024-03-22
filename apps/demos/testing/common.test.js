@@ -230,6 +230,9 @@ const SKIPPED_TESTS = {
       { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
+    
+    ],
+    TileView: [
       { demo: 'Directions', themes: [THEME.material] },
     ],
     Toolbar: [
