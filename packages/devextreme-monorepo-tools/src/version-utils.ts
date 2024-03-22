@@ -39,7 +39,7 @@ export function makeVersion(baseVersion: string | undefined, daily: boolean, dat
       patch <= 1 ? 'alpha' : 'build' :
       patch <= 2 ? 'beta' : '';
 
-  if (daily) {
+  if (daily && stage != 'alpha') {
     patch += 1;
   }
 

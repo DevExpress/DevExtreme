@@ -24,9 +24,9 @@ describe('version utils', () => {
     // daily, possible hotfix
     { baseVersion: '23.2.4', daily: true, date: new Date(1234, 5, 16, 7, 18), expected: '23.2.5-build-34167-0718' },
     // before EAP
-    { baseVersion: '24.1.0', daily: true, date: new Date(2234, 5, 16, 7, 18), expected: '24.1.1-alpha-34167-0718' },
+    { baseVersion: '24.1.0', daily: true, date: new Date(2234, 5, 16, 7, 18), expected: '24.1.0-alpha-34167-0718' },
     // EAP and after it
-    { baseVersion: '24.1.1', daily: true, date: new Date(2000, 0, 1, 22, 33), expected: '24.1.2-alpha-00001-2233' },
+    { baseVersion: '24.1.1', daily: true, date: new Date(2000, 0, 1, 22, 33), expected: '24.1.1-alpha-00001-2233' },
     // beta
     { baseVersion: '24.1.2', daily: false, date: new Date(2000, 2, 30, 4, 15), expected: '24.1.2-beta' },
     // daily after beta
