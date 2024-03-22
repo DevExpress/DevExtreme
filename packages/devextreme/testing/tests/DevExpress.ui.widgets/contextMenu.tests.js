@@ -1423,6 +1423,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
     QUnit.testInActiveWindow('Context menu should not be hidden when the component loses focus', function(assert) {
         const instance = new ContextMenu(this.$element, {
+            focusStateEnabled: true,
             items: [{ text: 'item 1' }],
         });
 
