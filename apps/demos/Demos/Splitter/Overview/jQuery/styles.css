@@ -5,7 +5,6 @@
 #splitter {
   border: 1px solid var(--dx-color-border);
   border-radius: 8px;
-  position: relative;
   overflow: hidden;
 }
 

@@ -77,14 +77,15 @@ import { DxSplitter, DxItem } from 'devextreme-vue/splitter';
 import PaneContent from './PaneContent.vue'
 </script>
 <style scoped>
-  .demo-container #app {
+  .demo-container {
     height: 500px;
-    position: relative;
+  }
+  #app {
+    height: 100%;
   }
   .splitter {
     border: 1px solid var(--dx-color-border);
     border-radius: 8px;
-    position: relative;
     overflow: hidden;
   }
 </style>
