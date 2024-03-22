@@ -1,6 +1,6 @@
 <!-- eslint-disable no-restricted-syntax -->
 <template>
-  <DxSplitter class="splitter" orientation="horizontal">
+  <DxSplitter class="splitter">
     <DxItem
       :resizable="true"
       min-size="70px"
@@ -18,7 +18,7 @@
           template="paneContent"
         />
         <DxItem :collapsible="true">
-          <DxSplitter orientation="horizontal">
+          <DxSplitter>
             <DxItem
               :resizable="true"
               :collapsible="true"
@@ -80,9 +80,11 @@ import PaneContent from './PaneContent.vue'
   .demo-container {
     height: 500px;
   }
+
   #app {
     height: 100%;
   }
+
   .splitter {
     border: 1px solid var(--dx-color-border);
     border-radius: 8px;
