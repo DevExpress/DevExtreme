@@ -4503,18 +4503,6 @@
         ]
       },
       {
-        "Name": "Splitter",
-        "Equivalents": "Layout Control",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "Splitter",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Button Group",
         "Breadcrumb": true,
         "Equivalents": "dxButtonGroup, dx-buttongroup",
@@ -4837,6 +4825,19 @@
             "Title": "Customization",
             "Name": "Customization",
             "Widget": "Sortable"
+          }
+        ]
+      },
+      {
+        "Name": "Splitter",
+        "Equivalents": "Layout Control",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Splitter",
+            "Badge": "New",
+            "DemoType": "Web"
           }
         ]
       }
