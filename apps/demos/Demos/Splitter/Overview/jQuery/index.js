@@ -36,11 +36,10 @@ $(() => {
         minSize: '70px',
         size: '140px',
         template(data) {
-          return paneContentTemplate(data, 'Left Panel');
+          return paneContentTemplate(data, 'Left Pane');
         },
       },
       {
-        minSize: '20%',
         splitter: {
           orientation: 'vertical',
           items: [
@@ -49,7 +48,7 @@ $(() => {
               collapsible: true,
               maxSize: '75%',
               template(data) {
-                return paneContentTemplate(data, 'Central Panel');
+                return paneContentTemplate(data, 'Center Pane');
               },
             },
             {
@@ -63,13 +62,13 @@ $(() => {
                     size: '30%',
                     minSize: '5%',
                     template(data) {
-                      return paneContentTemplate(data, 'Nested Left Panel');
+                      return paneContentTemplate(data, 'Nested Left Pane');
                     },
                   },
                   {
-                    collapsible: true,
+                    collapsible: false,
                     template(data) {
-                      return paneContentTemplate(data, 'Nested Central Panel');
+                      return paneContentTemplate(data, 'Nested Center Pane');
                     },
                   },
                   {
@@ -78,7 +77,7 @@ $(() => {
                     size: '30%',
                     minSize: '5%',
                     template(data) {
-                      return paneContentTemplate(data, 'Nested Right Panel');
+                      return paneContentTemplate(data, 'Nested Right Pane');
                     },
                   },
                 ],
@@ -92,7 +91,7 @@ $(() => {
         resizable: false,
         collapsible: false,
         template(data) {
-          return paneContentTemplate(data, 'Right Panel');
+          return paneContentTemplate(data, 'Right Pane');
         },
       },
     ],

@@ -16,10 +16,7 @@ if (!/localhost/.test(document.location.host)) {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class AppComponent {
-  private _data;
-
   dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
-
 
   @Input() paneContentTemplates: any[];
 
