@@ -47,6 +47,7 @@ export class AppComponent {
 
   filterDimensionOptions(data: any): {key: string, value: any}[] {
     return Object.entries(data)
+      .reverse()
       .filter(([key]) => this.dimensionOptions.has(key))
       .map(([key, value]) => {
         return ({key, value})
