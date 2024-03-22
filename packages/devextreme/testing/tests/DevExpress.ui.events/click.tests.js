@@ -43,6 +43,7 @@ const moduleConfig = {
     }
 };
 
+
 QUnit.module('click handler', moduleConfig);
 
 QUnit.test('event triggers', function(assert) {
