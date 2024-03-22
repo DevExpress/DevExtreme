@@ -227,6 +227,7 @@ const SKIPPED_TESTS = {
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
     ],
   },
