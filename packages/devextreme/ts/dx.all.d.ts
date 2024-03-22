@@ -42025,7 +42025,7 @@ declare module DevExpress.viz {
    * [descr:viz.exportFromMarkup(markup, options)]
    */
   export function exportFromMarkup(
-    markup: string,
+    markup: string | DevExpress.core.UserDefinedElement,
     options: {
       fileName?: string;
       format?: string;

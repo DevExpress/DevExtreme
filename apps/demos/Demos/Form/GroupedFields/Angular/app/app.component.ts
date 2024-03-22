@@ -26,7 +26,7 @@ export class AppComponent {
     this.groupCaptionTemplates = [
       { name: 'user', icon: 'dx-icon-user' },
       { name: 'info', icon: 'dx-icon-info' },
-      { name: 'personal', icon: 'dx-icon-accountbox' },
+      { name: 'personal', icon: 'dx-icon-card' },
       { name: 'address', icon: 'dx-icon-home' },
       { name: 'contact', icon: 'dx-icon-tel' },
     ];

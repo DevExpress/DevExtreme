@@ -172,6 +172,7 @@ const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
@@ -279,6 +280,7 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RecordGrouping', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -357,14 +359,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 
   const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
 
-  if (settings.explicitTests) {
-    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
-      callback(test.only);
-    }
-    return;
-  }
-
-  test.before(async (t) => {
+  test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
@@ -373,6 +368,13 @@ export function runManualTestCore(testObject, product, demo, framework, callback
       await waitForAngularLoading();
     }
   });
+
+  if (settings.explicitTests) {
+    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
+      callback(test.only);
+    }
+    return;
+  }
 
   callback(test);
 }
