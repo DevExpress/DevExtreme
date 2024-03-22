@@ -5,6 +5,7 @@ import { Template } from 'devextreme-react/core/template';
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
 import ColorIcon from './ColorIcon.js';
+import DropDownButtonTemplate from './Templates.js';
 import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
@@ -158,7 +159,7 @@ const App = () => {
               keyExpr="id"
               onButtonClick={onButtonClick}
               onItemClick={onItemClick}
-              render={dropDownButtonRender}
+              render={({ data }) => <DropDownButtonTemplate data={data} />}
             ></DropDownButton>
           </div>
         </div>
