@@ -48,7 +48,7 @@ $(() => {
               collapsible: true,
               maxSize: '75%',
               template(data) {
-                return paneContentTemplate(data, 'Center Pane');
+                return paneContentTemplate(data, 'Central Pane');
               },
             },
             {

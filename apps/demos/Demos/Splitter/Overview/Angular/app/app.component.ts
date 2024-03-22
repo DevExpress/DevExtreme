@@ -25,7 +25,7 @@ export class AppComponent {
   constructor() {
     this.paneContentTemplates = [
       { name: 'Left Pane' },
-      { name: 'Center Pane' },
+      { name: 'Central Pane' },
       { name: 'Right Pane' },
       { name: 'Nested Left Pane' },
       { name: 'Nested Center Pane' },

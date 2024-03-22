@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-export default function GroupCaption(paneName: string) {
+export default function PaneContent(paneName: string) {
   const dimensionOptions = new Set(['size', 'minSize', 'maxSize'])
 
   return function template(data) {
