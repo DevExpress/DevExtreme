@@ -6,16 +6,19 @@
 $treelist-expanded-icon-margin-left: null !default;
 $treelist-collapsed-icon-margin-left: null !default;
 $treelist-icon-margin-top: null !default;
+$treelist-expanded-collapsed-margin-right: null !default;
 
 @if $size == "default" {
   $treelist-expanded-icon-margin-left: 5px !default;
   $treelist-collapsed-icon-margin-left: 6px !default;
   $treelist-icon-margin-top: math.div($generic-base-icon-size, 2) - 1 !default;
+  $treelist-expanded-collapsed-margin-right: 4px !default;
 }
 
 @else if $size == "compact" {
   $treelist-expanded-icon-margin-left: 3px !default;
   $treelist-collapsed-icon-margin-left: 4px !default;
   $treelist-icon-margin-top: math.div($generic-base-icon-size, 2) !default;
+  $treelist-expanded-collapsed-margin-right: 1px !default;
 }
 
