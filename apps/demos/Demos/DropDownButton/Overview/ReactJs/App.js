@@ -134,7 +134,7 @@ const App = () => {
               keyExpr="id"
               onButtonClick={onButtonClick}
               onItemClick={onItemClick}
-              render={({ data }) => <DropDownButtonTemplate data={data} />}
+              render={DropDownButtonTemplate}
             ></DropDownButton>
           </div>
         </div>

@@ -14,10 +14,10 @@ const ButtonDescription = ({ text, description }) => (
   </div>
 );
 
-const DropDownButtonTemplate = ({ data }) => (
+const DropDownButtonTemplate = ({ icon, text, description }) => (
   <React.Fragment>
-    <Avatar icon={data.icon} />
-    <ButtonDescription text={data.text} description="IT Manager" />
+    <Avatar icon={icon} />
+    <ButtonDescription text={text} description={description} />
   </React.Fragment>
 );
 
