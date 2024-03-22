@@ -1,8 +1,31 @@
 import { Selector, ClientFunction } from 'testcafe';
 import type { WidgetName } from '../../helpers/widgetTypings';
-import type { PlatformType } from '../../helpers/multi-platform-test/platform-type';
-import { getComponentInstance } from '../../helpers/multi-platform-test';
 import { isObject } from '../../../../js/core/utils/type';
+
+function getComponentInstance(
+  selector: Selector,
+  name?: string,
+): () => Promise<unknown> {
+  return ClientFunction(
+    () => {
+      const $widgetElement = $(selector());
+      const elementData = $widgetElement.data();
+      const widgetNames = elementData.dxComponents;
+
+      if (name) {
+        return elementData[name] ?? elementData[widgetNames[0]];
+      }
+      if (widgetNames.length > 1) {
+        throw new Error(`Cannot update options for multiple widgets: ${widgetNames}`);
+      }
+      if (widgetNames.length < 1) {
+        throw new Error(`jQuery widget not found for selector $(${selector})`);
+      }
+      return elementData[widgetNames[0]];
+    },
+    { dependencies: { selector, name } },
+  );
+}
 
 const CLASS = {
   focused: 'dx-state-focused',
@@ -38,7 +61,6 @@ export default abstract class Widget {
     this.element = typeof id === 'string' ? Selector(id) : id;
 
     this.getInstance = getComponentInstance(
-      this.getTestingPlatform(),
       this.element,
       this.getName(),
     );
@@ -61,11 +83,6 @@ export default abstract class Widget {
         option, value, getInstance,
       },
     })();
-  }
-
-  // eslint-disable-next-line class-methods-use-this
-  getTestingPlatform(): PlatformType {
-    return 'jquery';
   }
 
   focus(): Promise<void> {

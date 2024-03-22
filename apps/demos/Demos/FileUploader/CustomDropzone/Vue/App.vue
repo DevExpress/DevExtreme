@@ -61,9 +61,19 @@ const progressVisible = ref(false);
 const progressValue = ref(0);
 const allowedFileExtensions = ['.jpg', '.jpeg', '.gif', '.png'];
 
-function onDropZoneEnter(e) {
-  if (e.dropZoneElement.id === 'dropzone-external') {
-    isDropZoneActive.value = true;
+function onDropZoneEnter({ component, dropZoneElement, event }) {
+  if (dropZoneElement.id === 'dropzone-external') {
+    const items = event.originalEvent.dataTransfer.items;
+
+    const allowedFileExtensions = component.option('allowedFileExtensions');
+    const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
+
+    const isSingleFileDragged = items.length === 1;
+    const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+
+    if (isSingleFileDragged && isValidFileExtension) {
+      isDropZoneActive.value = true;
+    }
   }
 }
 function onDropZoneLeave(e) {

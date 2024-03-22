@@ -3,7 +3,6 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import browser from 'core/utils/browser';
 import { getWindow } from 'core/utils/window';
 import { getWidth, getHeight } from 'core/utils/size';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 
 QUnit.testStart(function() {
@@ -31,7 +30,6 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 QUnit.module('Initialization', baseModuleConfig, () => {

@@ -1,0 +1,23 @@
+@mixin resize-handle-states(
+  $color,
+  $background-color,
+  $color-hover,
+  $background-color-hover,
+  $color-focused,
+  $background-color-focused,
+) {
+  .dx-resize-handle {
+    color: $color;
+    background-color: $background-color;
+    
+    &.dx-state-hover {
+      color: $color-hover;
+      background-color: $background-color-hover;
+    }
+    
+    &.dx-state-focused {
+      color: $color-focused;
+      background-color: $background-color-focused;
+    }
+  }
+}

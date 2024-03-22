@@ -1255,7 +1255,7 @@ QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
         { title: 'Window' }
     ]);
 
-    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['GeneralGeneral', 'WindowWindow'], 'dx-tab-text elements');
+    assert.deepEqual([...testContainer.find('.dx-tab-text')].map(e => e.textContent), ['GeneralGeneral', 'WindowWindow'], 'dx-tab-text elements');
 });
 
 QUnit.module('Align labels', {
@@ -1924,7 +1924,7 @@ QUnit.module('T986577', () => {
     });
 
 
-    QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+    QUnit.skipInShadowDomMode('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
         const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
         const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
 

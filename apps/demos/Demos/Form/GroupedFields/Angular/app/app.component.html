@@ -3,9 +3,17 @@
 </div>
 <div id="form-container">
   <dx-form id="form" [formData]="employee" [colCount]="2">
-    <dxi-item itemType="group" caption="System Information">
+    <dxi-item
+      itemType="group"
+      captionTemplate="info"
+      caption="System Information"
+    >
       <dxi-item dataField="ID"></dxi-item>
-      <dxi-item itemType="group" caption="Main Information">
+      <dxi-item
+        itemType="group"
+        captionTemplate="user"
+        caption="Main Information"
+      >
         <dxi-item dataField="FirstName"></dxi-item>
         <dxi-item dataField="LastName"></dxi-item>
         <dxi-item dataField="HireDate"></dxi-item>
@@ -13,16 +21,28 @@
         <dxi-item dataField="OfficeNo"></dxi-item>
       </dxi-item>
     </dxi-item>
-    <dxi-item itemType="group" caption="Personal Data">
+    <dxi-item
+      itemType="group"
+      captionTemplate="personal"
+      caption="Personal Data"
+    >
       <dxi-item dataField="BirthDate"></dxi-item>
-      <dxi-item itemType="group" caption="Home Address">
+      <dxi-item
+        itemType="group"
+        captionTemplate="address"
+        caption="Home Address"
+      >
         <dxi-item dataField="Address"></dxi-item>
         <dxi-item dataField="City"></dxi-item>
         <dxi-item dataField="State"></dxi-item>
         <dxi-item dataField="Zipcode"></dxi-item>
       </dxi-item>
     </dxi-item>
-    <dxi-item itemType="group" caption="Contact Information">
+    <dxi-item
+      itemType="group"
+      captionTemplate="contact"
+      caption="Contact Information"
+    >
       <dxi-item itemType="tabbed">
         <dxo-tab-panel-options [deferRendering]="false">
         </dxo-tab-panel-options>
@@ -37,5 +57,11 @@
         </dxi-tab>
       </dxi-item>
     </dxi-item>
+
+    <ng-container *ngFor="let label of groupCaptionTemplates">
+      <div *dxTemplate="let data of label.name">
+        <i class="dx-icon {{ label.icon }}"></i><span>{{ data.caption }}</span>
+      </div>
+    </ng-container>
   </dx-form>
 </div>

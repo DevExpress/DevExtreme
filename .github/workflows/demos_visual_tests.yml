@@ -11,6 +11,10 @@ on:
       - "[0-9][0-9]_[0-9]"
   workflow_dispatch:
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   build:
     runs-on: ubuntu-latest

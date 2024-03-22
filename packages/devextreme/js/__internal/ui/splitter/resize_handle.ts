@@ -5,15 +5,15 @@ import { extend } from '@js/core/utils/extend';
 import { name as CLICK_EVENT } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
-import { addNamespace } from '@js/events/utils/index';
-import type { ResizeEndEvent, ResizeStartEvent } from '@js/ui/resizable';
-import type { ResizeEvent } from '@js/ui/splitter';
+import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import Widget from '@js/ui/widget/ui.widget';
 
 import {
+  COLLAPSE_EVENT,
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
+import type { ResizeOffset } from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_RESIZABLE_CLASS = 'dx-resize-handle-resizable';
@@ -32,21 +32,90 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
   vertical: 'vertical',
 };
 
+const KEYBOARD_DELTA = 5;
+const INACTIVE_RESIZE_HANDLE_SIZE = 2;
+
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ResizeHandle extends (Widget as any) {
+  _supportedKeys(): Record<string, unknown> {
+    return extend(super._supportedKeys(), {
+      rightArrow(e: KeyboardEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { direction, showCollapseNext } = this.option();
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || showCollapseNext === false) {
+            return;
+          }
+          this._collapseNextHandler(e);
+        } else {
+          this._resizeBy(e, { x: KEYBOARD_DELTA });
+        }
+      },
+      leftArrow(e: KeyboardEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { direction, showCollapsePrev } = this.option();
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.vertical || showCollapsePrev === false) {
+            return;
+          }
+          this._collapsePrevHandler(e);
+        } else {
+          this._resizeBy(e, { x: -KEYBOARD_DELTA });
+        }
+      },
+      upArrow(e: KeyboardEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { direction, showCollapsePrev } = this.option();
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
+            return;
+          }
+          this._collapsePrevHandler(e);
+        } else {
+          this._resizeBy(e, { y: -KEYBOARD_DELTA });
+        }
+      },
+      downArrow(e: KeyboardEvent) {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const { direction, showCollapseNext } = this.option();
+
+        if (isCommandKeyPressed(e)) {
+          if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
+            return;
+          }
+          this._collapseNextHandler(e);
+        } else {
+          this._resizeBy(e, { y: KEYBOARD_DELTA });
+        }
+      },
+    }) as Record<string, unknown>;
+  }
+
   _getDefaultOptions(): Record<string, unknown> {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       direction: RESIZE_DIRECTION.horizontal,
-      focusStateEnabled: false,
+      hoverStateEnabled: true,
+      focusStateEnabled: true,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
       resizable: true,
       showCollapsePrev: true,
       showCollapseNext: true,
-      onCollapsePrevClick: null,
-      onCollapseNextClick: null,
+      onCollapsePrev: null,
+      onCollapseNext: null,
       separatorSize: 8,
     });
   }
@@ -100,15 +169,23 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _setResizeHandleSize(): void {
-    const { separatorSize } = this.option();
-    const styleToSet = this._isHorizontalDirection() ? 'width' : 'height';
+    const {
+      separatorSize, resizable, showCollapseNext, showCollapsePrev,
+    } = this.option();
+    const isHorizontal = this._isHorizontalDirection();
 
-    this.$element().css({
-      width: '',
-      height: '',
-    });
+    const dimension = isHorizontal ? 'width' : 'height';
+    const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    this.$element().css(styleToSet, separatorSize);
+    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
+      this.option('disabled', true);
+      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
+      this.option(inverseDimension, null);
+    } else {
+      this.option(dimension, separatorSize);
+      this.option(inverseDimension, null);
+      this.option('disabled', false);
+    }
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -174,22 +251,50 @@ class ResizeHandle extends (Widget as any) {
     this._attachEventHandlers();
   }
 
-  _resizeStartHandler(e: ResizeStartEvent): void {
+  _resizeStartHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
     this._getAction(RESIZE_EVENT.onResizeStart)({
       event: e,
     });
   }
 
-  _resizeHandler(e: ResizeEvent): void {
+  _resizeHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
     this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
   }
 
-  _resizeEndHandler(e: ResizeEndEvent): void {
+  _resizeEndHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
     this._getAction(RESIZE_EVENT.onResizeEnd)({
       event: e,
     });
+  }
+
+  _collapsePrevHandler(e: KeyboardEvent): void {
+    this._getAction(COLLAPSE_EVENT.onCollapsePrev)({
+      event: e,
+    });
+  }
+
+  _collapseNextHandler(e: KeyboardEvent): void {
+    this._getAction(COLLAPSE_EVENT.onCollapseNext)({
+      event: e,
+    });
+  }
+
+  _resizeBy(
+    e: KeyboardEvent,
+    offset: ResizeOffset = { x: 0, y: 0 },
+  ): void {
+    const { resizable } = this.option();
+
+    if (resizable === false) return;
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (e as any).offset = offset;
+
+    this._resizeStartHandler(e);
+    this._resizeHandler(e);
+    this._resizeEndHandler(e);
   }
 
   _getAction(eventName: string): (e) => void {
@@ -199,7 +304,8 @@ class ResizeHandle extends (Widget as any) {
 
   _attachEventHandlers(): void {
     const {
-      onCollapsePrevClick, onCollapseNextClick, resizable, direction,
+      resizable,
+      direction,
     } = this.option();
 
     const eventData = { direction, immediate: true };
@@ -230,13 +336,13 @@ class ResizeHandle extends (Widget as any) {
     eventsEngine.on(
       this._$collapsePrevButton,
       CLICK_EVENT,
-      onCollapsePrevClick,
+      this._collapsePrevHandler.bind(this),
     );
 
     eventsEngine.on(
       this._$collapseNextButton,
       CLICK_EVENT,
-      onCollapseNextClick,
+      this._collapseNextHandler.bind(this),
     );
   }
 
@@ -273,6 +379,7 @@ class ResizeHandle extends (Widget as any) {
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachEventHandlers();
         this._attachEventHandlers();
+        this._setResizeHandleSize();
         break;
       case 'separatorSize':
         this._setResizeHandleSize();
@@ -280,9 +387,10 @@ class ResizeHandle extends (Widget as any) {
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
+        this._setResizeHandleSize();
         break;
-      case 'onCollapsePrevClick':
-      case 'onCollapseNextClick':
+      case 'onCollapsePrev':
+      case 'onCollapseNext':
         this._detachEventHandlers();
         this._attachEventHandlers();
         break;

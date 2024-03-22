@@ -9,7 +9,7 @@ import {
   RefObject,
   Slot,
 } from '@devextreme-generator/declarations';
-import { addHeightToStyle, addWidthToStyle } from '../utils';
+import { renderUtils } from '../../../../../__internal/scheduler/__migration/utils/index';
 import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
@@ -99,9 +99,9 @@ export class Table extends JSXComponent(TableProps) {
     const { height, width } = this.props;
     const { style } = this.restAttributes;
 
-    const heightAdded = addHeightToStyle(height, style);
+    const heightAdded = renderUtils.addHeightToStyle(height, style);
 
-    return addWidthToStyle(width, heightAdded);
+    return renderUtils.addWidthToStyle(width, heightAdded);
   }
 
   get hasTopVirtualRow(): boolean {

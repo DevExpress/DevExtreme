@@ -2,12 +2,12 @@ import $ from 'jquery';
 import commonUtils from 'core/utils/common';
 import devices from 'core/devices';
 import browser from 'core/utils/browser';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import pointerEvents from 'events/pointer';
 import DataGridWrapper from '../../helpers/wrappers/dataGridWrappers.js';
 import { createDataGrid, baseModuleConfig } from '../../helpers/dataGridHelper.js';
 import { getHeight, getWidth } from 'core/utils/size';
 import { getEmulatorStyles } from '../../helpers/stylesHelper.js';
+import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
 const dataGridWrapper = new DataGridWrapper('#dataGrid');
 
@@ -68,7 +68,6 @@ QUnit.testStart(function() {
     `;
 
     $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 QUnit.module('Scrolling', baseModuleConfig, () => {
@@ -184,6 +183,8 @@ QUnit.module('Scrolling', baseModuleConfig, () => {
     // T388508
     QUnit.test('Correct start scroll position when RTL and detached container of the datagrid', function(assert) {
         // arrange, act
+        addShadowDomStyles($('#qunit-fixture'));
+
         const $dataGrid = $('<div/>').dxDataGrid({
             width: 100,
             rtlEnabled: true,

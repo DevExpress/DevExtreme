@@ -1,6 +1,5 @@
 import $ from 'jquery';
 import devices from 'core/devices';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { validateGroup } from 'ui/validation_engine';
 import dxCheckBox from 'ui/check_box';
@@ -16,7 +15,6 @@ QUnit.testStart(function() {
         </div>`;
 
     $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 const CHECKBOX_CLASS = 'dx-checkbox';

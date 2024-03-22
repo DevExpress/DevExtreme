@@ -1,3 +1,4 @@
+import type { Orientation } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
@@ -11,10 +12,9 @@ import { isDefined, isNumeric, isString } from '@js/core/utils/type';
 import type { Item } from '@js/ui/splitter';
 
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
-import type { FlexProperty, PaneRestrictions } from './types';
+import type { FlexProperty, PaneRestrictions, ResizeOffset } from './types';
 
 const FLEX_PROPERTY_NAME = 'flexGrow';
-const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 const ORIENTATION = {
   horizontal: 'horizontal',
@@ -57,7 +57,15 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   const {
     minSize = 0,
     maxSize = 100,
+    resizable,
   } = paneRestrictions;
+
+  if (paneRestrictions.collapsed === true) {
+    return 0;
+  }
+  if (resizable === false) {
+    return paneRestrictions.size as number;
+  }
 
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
 
@@ -196,11 +204,16 @@ export function getNewLayout(
   return nextLayout;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function normalizeOffset(offset, orientation, rtlEnabled): number {
-  const xOffset: number = rtlEnabled ? -offset.x : offset.x;
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-  return orientation === ORIENTATION.horizontal ? xOffset : offset.y;
+function normalizeOffset(
+  offset: ResizeOffset,
+  orientation: Orientation,
+  rtlEnabled: boolean,
+): number {
+  if (orientation === ORIENTATION.vertical) {
+    return offset.y ?? 0;
+  }
+
+  return (rtlEnabled ? -1 : 1) * (offset.x ?? 0);
 }
 
 export function getDimensionByOrientation(orientation: string): string {
@@ -208,8 +221,8 @@ export function getDimensionByOrientation(orientation: string): string {
 }
 
 export function calculateDelta(
-  offset: number,
-  orientation: string,
+  offset: ResizeOffset,
+  orientation: Orientation,
   rtlEnabled: boolean,
   totalWidth: number,
 ): number {
@@ -439,11 +452,9 @@ export function validateLayout(
 // }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function getElementItemsSizeSum($element, orientation, handlesCount): number {
+function getElementItemsSizeSum($element, orientation, handlesSizeSum): number {
   const size: number = orientation === ORIENTATION.horizontal
     ? getOuterWidth($element) : getOuterHeight($element);
-
-  const handlesSizeSum = handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
 
   return size - handlesSizeSum;
 }
@@ -457,16 +468,14 @@ export function getVisibleItemsCount(items: Item[]): number {
 }
 
 // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getElementSize($element, items, orientation, width, height): number {
-  const handlesCount = Math.max(getVisibleItemsCount(items) - 1, 0);
-
+export function getElementSize($element, orientation, width, height, handlesSizeSum): number {
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
 
   if (isPixelWidth(sizeOption)) {
-    return sizeOption - handlesCount * DEFAULT_RESIZE_HANDLE_SIZE;
+    return sizeOption - handlesSizeSum;
   }
 
-  return getElementItemsSizeSum($element, orientation, handlesCount);
+  return getElementItemsSizeSum($element, orientation, handlesSizeSum);
 }
 
 export function isElementVisible(element: HTMLElement | undefined | null): boolean {

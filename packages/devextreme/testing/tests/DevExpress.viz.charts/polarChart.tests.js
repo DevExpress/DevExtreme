@@ -22,7 +22,11 @@ const stubThemeManager = createStubThemeManager();
 const exportModule = require('viz/core/export');
 const stubLayoutManager = sinon.createStubInstance(layoutManagerModule.LayoutManager);
 
-$('<div id="chartContainer">').appendTo('#qunit-fixture');
+QUnit.testStart(function() {
+    const chartContainer = $('<div id="chartContainer">');
+
+    chartContainer.appendTo('#qunit-fixture');
+});
 
 legendModule.Legend = sinon.spy(function(parameters) {
     const legend = new vizMocks.Legend(parameters);
@@ -260,10 +264,16 @@ const environment = {
         return this.createPolarChart($.extend({}, { dataSource: [], series: {}, argumentAxis: { startAngle: 0 } }, options));
     }
 };
-QUnit.module('create Polar Chart with default configurations');
+QUnit.module('create Polar Chart with default configurations', {
+    createPolarChart(options) {
+        const $container = $('#chartContainer');
+
+        return new dxPolarChart($container, options);
+    }
+});
 
 QUnit.test('test if polarChart correctly labels axis and stack with default if not setted', function(assert) {
-    const chart = new dxPolarChart('#chartContainer', {
+    const chart = this.createPolarChart({
         series: [{ type: 'stackedbar' }]
     });
 
@@ -275,7 +285,7 @@ QUnit.test('test if polarChart correctly labels axis and stack with default if n
 });
 
 QUnit.test('test if polarChart correctly labels axisName without stackName', function(assert) {
-    const chart = new dxPolarChart('#chartContainer', {
+    const chart = this.createPolarChart({
         series: [{ axis: 'axisName', type: 'stackedbar' }]
     });
 
@@ -287,7 +297,7 @@ QUnit.test('test if polarChart correctly labels axisName without stackName', fun
 });
 
 QUnit.test('test if polarChart correctly labels axisName with stackName', function(assert) {
-    const chart = new dxPolarChart('#chartContainer', {
+    const chart = this.createPolarChart({
         series: [{ axis: 'axisName', type: 'stackedbar', stack: 'stackName' }]
     });
 
@@ -299,7 +309,7 @@ QUnit.test('test if polarChart correctly labels axisName with stackName', functi
 });
 
 QUnit.test('Series of PolarChart should have correct stackName when stackName is set(T1215023)', function(assert) {
-    const chart = new dxPolarChart('#chartContainer', {
+    const chart = this.createPolarChart({
         series: [{ type: 'stackedbar', stack: 'first' },
             { type: 'stackedbar', stack: 'second' }]
     });
@@ -311,6 +321,7 @@ QUnit.test('Series of PolarChart should have correct stackName when stackName is
     assert.strictEqual(series[0].getStackName(), 'axis_default_stack_first');
     assert.strictEqual(series[1].getStackName(), 'axis_default_stack_second');
 });
+
 QUnit.module('create Polar chart', environment);
 
 QUnit.test('create empty polar chart', function(assert) {

@@ -6,7 +6,7 @@ import {
   DateHeaderLayoutProps,
 } from '../layout';
 import { Row } from '../../../row';
-import * as MigratedUtils from '../../../../../../../../__internal/scheduler/__migration/utils';
+import * as MigratedUtils from '../../../../../../../../__internal/scheduler/__migration/utils/index';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../../__internal/scheduler/__migration/const';
 import { DateHeaderCell } from '../cell';
 import getThemeType from '../../../../../../../utils/getThemeType';

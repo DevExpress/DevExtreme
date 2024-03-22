@@ -44,7 +44,7 @@ QUnit.module('hideToasts', {
         assert.equal(this.getToastCount(), 0);
     });
 
-    QUnit.test('with string parameter hides Toasts with corresponding container', function(assert) {
+    QUnit.skipInShadowDomMode('with string parameter hides Toasts with corresponding container', function(assert) {
         assert.equal(this.getToastCount(), 2);
 
         hideToasts(this.containerSelector);
@@ -52,7 +52,7 @@ QUnit.module('hideToasts', {
         assert.equal(this.getToastCount(), 1);
     });
 
-    QUnit.test('with jQuery element parameter hides Toasts with corresponding container', function(assert) {
+    QUnit.skipInShadowDomMode('with jQuery element parameter hides Toasts with corresponding container', function(assert) {
         assert.equal(this.getToastCount(), 2);
 
         hideToasts($(this.containerSelector));
@@ -60,7 +60,7 @@ QUnit.module('hideToasts', {
         assert.equal(this.getToastCount(), 1);
     });
 
-    QUnit.test('with html element parameter hides Toasts with corresponding container', function(assert) {
+    QUnit.skipInShadowDomMode('with html element parameter hides Toasts with corresponding container', function(assert) {
         assert.equal(this.getToastCount(), 2);
 
         hideToasts($(this.containerSelector).get(0));

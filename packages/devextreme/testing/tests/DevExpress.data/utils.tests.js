@@ -1,5 +1,5 @@
 import Guid from 'core/guid';
-import { processRequestResultLock, keysEqual, isGroupCriterion, throttleChanges, base64_encode as b64 } from 'data/utils';
+import { processRequestResultLock, keysEqual, isGroupCriterion, throttleChanges, base64_encode as b64, isUniformEqualsByOr } from 'data/utils';
 import { EdmLiteral } from 'data/odata/utils';
 import { createObjectWithChanges } from 'data/array_utils';
 
@@ -24,6 +24,28 @@ QUnit.test('toComparable is used for compound keys', function(assert) {
         { a: 1, b: guid1 },
         { a: 1, b: guid2 }
     ));
+});
+
+QUnit.test('isUniformEqualsByOr(filter) returns true only for uniform equals filter with OR', function(assert) {
+    [
+        [['prop', '=', 1], 'or', ['other', '=', 1]],
+        [1],
+        [['prop', '=', 1], 'or', 1],
+        [['prop', '=', 1], 'or', ['prop', '!=', 1]],
+        [[() => 'prop', '=', 1], 'or', ['prop', '!=', 1]],
+        [['prop', '=', 1], 'and', ['prop', '=', 1]],
+        [['prop', '=', 1], 'or', [['prop', '=', 1], 'or', 1]],
+    ].forEach(
+        (filter) => assert.ok(!isUniformEqualsByOr(filter))
+    );
+
+    [
+        [['prop', '=', 1], 'or', ['prop', '=', 2]],
+        [['prop', '=', 1], 'or', ['prop', '=', 2], 'or', ['prop', '=', 3]],
+        [['prop', '=', 1], 'or', ['prop', '=', '2']],
+    ].forEach(
+        (filter) => assert.ok(isUniformEqualsByOr(filter))
+    );
 });
 
 // T364210

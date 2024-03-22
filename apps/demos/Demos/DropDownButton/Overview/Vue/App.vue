@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="dx-fieldset">
-      <div class="dx-fieldset-header">Single usage</div>
+      <div class="dx-fieldset-header">Standalone button</div>
       <div class="dx-field">
         <div class="dx-field-label">
-          Custom static text
+          Text and icon
         </div>
         <div class="dx-field-value">
           <DxDropDownButton
@@ -18,9 +18,10 @@
       </div>
 
       <div class="dx-field">
-        <div class="dx-field-label">Custom main button action</div>
+        <div class="dx-field-label">Custom template and actions</div>
         <div class="dx-field-value">
           <DxDropDownButton
+              id="two-sections"
               :split-button="true"
               :use-select-mode="false"
               :items="data.profileSettings"
@@ -30,8 +31,9 @@
               key-expr="id"
               @button-click="onButtonClick"
               @item-click="onItemClick"
+              template="dropDownButtonTemplate"
           >
-            <template #template="{ data }">
+            <template #dropDownButtonTemplate="{ data }">
               <div class="button-img-wrapper">
                 <div class="button-img-indicator"/>
                 <img
@@ -50,7 +52,7 @@
       </div>
     </div>
     <div class="dx-fieldset">
-      <div class="dx-fieldset-header">Usage in a toolbar</div>
+      <div class="dx-fieldset-header">Embedded in a Toolbar</div>
       <div class="dx-field">
         <DxToolbar :items="toolbarItems">
           <template #fontItem="{ data }">
@@ -203,6 +205,11 @@ function onColorClick(clickedColor) {
   font-size: 18px;
 }
 
+.dx-popup-content > .dx-template-wrapper.custom-color-picker {
+  width: 82px;
+  padding: 5px;
+}
+
 .dx-button-wrapper {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
@@ -230,7 +237,7 @@ function onColorClick(clickedColor) {
   position: absolute;
   background-color: var(--dx-color-danger);
   top: -1px;
-  right: -1px;
+  inset-inline-end: -1px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -251,6 +258,6 @@ function onColorClick(clickedColor) {
 }
 
 #two-sections .dx-button {
-  min-height: 46px;
+  height: 46px;
 }
 </style>

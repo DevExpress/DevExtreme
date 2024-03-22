@@ -17,7 +17,7 @@
   font-size: 18px;
 }
 
-.dx-button-wrapper {
+::ng-deep .dx-button-wrapper {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
   display: flex;
@@ -25,12 +25,12 @@
   flex-direction: column;
 }
 
-.button-img-wrapper {
+::ng-deep .button-img-wrapper {
   position: relative;
   height: 32px;
 }
 
-.dx-button-img {
+::ng-deep .dx-button-img {
   width: 32px;
   height: 32px;
   position: relative;
@@ -40,11 +40,11 @@
   border-radius: 50%;
 }
 
-.button-img-indicator {
+::ng-deep .button-img-indicator {
   position: absolute;
   background-color: var(--dx-color-danger);
   top: -1px;
-  right: -1px;
+  inset-inline-end: -1px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
@@ -54,16 +54,16 @@
   z-index: 1;
 }
 
-.dx-button-title {
+::ng-deep .dx-button-title {
   line-height: 20px;
 }
 
-.dx-button-row {
+::ng-deep .dx-button-row {
   font-size: 12px;
   line-height: 14px;
   opacity: 0.6;
 }
 
-#two-sections .dx-button {
-  min-height: 46px;
+::ng-deep #two-sections .dx-button {
+  height: 46px;
 }

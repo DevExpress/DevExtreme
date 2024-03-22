@@ -16,12 +16,14 @@ $fluent-form-layout-manager-tabpanel-content-padding: null !default;
 
 $fluent-form-label-font-size: $fluent-base-font-size !default;
 $fluent-form-label-icon-size: $fluent-base-icon-size !default;
+$fluent-form-group-custom-caption-icon-margin: null !default;
 
 @if $size == "default" {
   $fluent-form-group-caption-bottom-margin: 4px !default;
   $fluent-form-group-caption-top-padding: 16px !default;
   $fluent-form-group-content-bottom-padding: 16px !default;
   $fluent-form-group-caption-font-size: 20px !default;
+  $fluent-form-group-custom-caption-icon-margin: 6px !default;
   $fluent-form-default-top-padding: 16px !default;
   $fluent-form-top-label-bottom-margin: 4px !default;
   $fluent-form-layout-manager-horizontal-padding: 12px !default;
@@ -34,6 +36,7 @@ $fluent-form-label-icon-size: $fluent-base-icon-size !default;
   $fluent-form-group-caption-top-padding: 12px !default;
   $fluent-form-group-content-bottom-padding: 12px !default;
   $fluent-form-group-caption-font-size: 16px !default;
+  $fluent-form-group-custom-caption-icon-margin: 4px !default;
   $fluent-form-default-top-padding: 8px !default;
   $fluent-form-top-label-bottom-margin: 2px !default;
   $fluent-form-layout-manager-horizontal-padding: 8px !default;

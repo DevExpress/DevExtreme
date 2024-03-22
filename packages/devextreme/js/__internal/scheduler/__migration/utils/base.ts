@@ -530,3 +530,8 @@ export const getGroupPanelData = (
     baseColSpan,
   };
 };
+
+export const splitNumber = (value: number, splitValue: number): number[] => Array.from(
+  { length: Math.ceil(value / splitValue) },
+  (_, index) => Math.min(value - (splitValue * index), splitValue),
+);

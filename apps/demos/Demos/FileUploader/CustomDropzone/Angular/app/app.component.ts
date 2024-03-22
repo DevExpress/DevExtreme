@@ -24,6 +24,8 @@ export class AppComponent {
 
   progressValue = 0;
 
+  allowedFileExtensions: string[] = ['.jpg', '.jpeg', '.gif', '.png'];
+
   constructor() {
     this.onDropZoneEnter = this.onDropZoneEnter.bind(this);
     this.onDropZoneLeave = this.onDropZoneLeave.bind(this);
@@ -32,8 +34,20 @@ export class AppComponent {
     this.onUploadStarted = this.onUploadStarted.bind(this);
   }
 
-  onDropZoneEnter(e) {
-    if (e.dropZoneElement.id === 'dropzone-external') { this.isDropZoneActive = true; }
+  onDropZoneEnter({ component, dropZoneElement, event }) {
+    if (dropZoneElement.id === 'dropzone-external') {
+      const items = event.originalEvent.dataTransfer.items;
+
+      const allowedFileExtensions = component.option('allowedFileExtensions');
+      const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
+
+      const isSingleFileDragged = items.length === 1;
+      const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+
+      if (isSingleFileDragged && isValidFileExtension) {
+        this.isDropZoneActive = true;
+      }
+    }
   }
 
   onDropZoneLeave(e) {

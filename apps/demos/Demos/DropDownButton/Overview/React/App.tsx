@@ -125,10 +125,10 @@ const App = () => {
   return (
     <div>
       <div className="dx-fieldset">
-        <div className="dx-fieldset-header">Single usage</div>
+        <div className="dx-fieldset-header">Standalone button</div>
         <div className="dx-field">
           <div className="dx-field-label">
-            Custom static text
+            Text and icon
           </div>
           <div className="dx-field-value">
             <DropDownButton
@@ -143,10 +143,11 @@ const App = () => {
 
         <div className="dx-field">
           <div className="dx-field-label">
-            Custom main button action
+            Custom template and actions
           </div>
           <div className="dx-field-value">
             <DropDownButton
+              id="two-sections"
               splitButton={true}
               useSelectMode={false}
               text="Olyvia Peyton"
@@ -164,7 +165,7 @@ const App = () => {
       </div>
 
       <div className="dx-fieldset">
-        <div className="dx-fieldset-header">Usage in a toolbar</div>
+        <div className="dx-fieldset-header">Embedded in a Toolbar</div>
         <div className="dx-field">
           <Toolbar items={toolbarItems}>
             <Template name="colorpicker">

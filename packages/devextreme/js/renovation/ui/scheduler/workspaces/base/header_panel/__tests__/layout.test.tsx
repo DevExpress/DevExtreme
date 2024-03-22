@@ -4,7 +4,7 @@ import {
   HeaderPanelLayout,
   HeaderPanelLayoutProps,
 } from '../layout';
-import * as MigratedUtils from '../../../../../../../__internal/scheduler/__migration/utils';
+import * as MigratedUtils from '../../../../../../../__internal/scheduler/__migration/utils/index';
 import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
 import { GroupPanel } from '../../group_panel/group_panel';
 import { DateHeaderLayout } from '../date_header/layout';

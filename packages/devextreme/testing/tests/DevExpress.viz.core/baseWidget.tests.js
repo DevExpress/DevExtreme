@@ -366,7 +366,7 @@ QUnit.test('Unknown option', function(assert) {
 QUnit.module('ElementAttr support', $.extend({}, environment, {
     beforeEach: function() {
         environment.beforeEach.apply(this, arguments);
-        $('head').append($('<style nonce="qunit-test" type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
+        this.$container.parent().append($('<style nonce="qunit-test" type=\'text/css\' id=\'size-style\'>' + '.size-class{width:300px;height:300px;}' + '</style>'));
     },
     afterEach: function() {
         $('#size-style').remove();

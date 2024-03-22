@@ -1,4 +1,4 @@
-/* global currentTest, createTestContainer */
+/* global currentTest */
 
 const $ = require('jquery');
 const vizMocks = require('../../helpers/vizMocks.js');
@@ -9,10 +9,6 @@ const BaseWidget = require('__internal/viz/core/m_base_widget').default;
 
 require('viz/bullet');
 
-$('<div>')
-    .attr('id', 'container')
-    .css({ width: 250, height: 30 })
-    .appendTo('#qunit-fixture');
 
 let StubTranslator;
 const StubTooltip = vizMocks.Tooltip;
@@ -28,6 +24,11 @@ QUnit.begin(function() {
 });
 
 QUnit.testStart(function() {
+    $('<div>')
+        .attr('id', 'container')
+        .css({ width: 250, height: 30 })
+        .appendTo('#qunit-fixture');
+
     translator2DModule.Translator2D.resetHistory();
 });
 
@@ -42,7 +43,7 @@ tooltipModule.DEBUG_set_tooltip(sinon.spy(function() {
 
 const environment = {
     beforeEach: function() {
-        this.$container = $(createTestContainer('#container'));
+        this.$container = $('<div>').appendTo('#container');
         this.resetTranslators();
         this.tooltip = new StubTooltip();
     },

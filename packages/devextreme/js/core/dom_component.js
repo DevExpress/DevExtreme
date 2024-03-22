@@ -113,6 +113,8 @@ const DOMComponent = Component.inherit({
     },
 
     _renderComponent() {
+        addShadowDomStyles(this.$element());
+
         this._initMarkup();
 
         hasWindow() && this._render();
@@ -129,8 +131,6 @@ const DOMComponent = Component.inherit({
 
     _render() {
         this._attachVisibilityChangeHandlers();
-
-        addShadowDomStyles(this.$element());
     },
 
     _renderElementAttributes() {

@@ -1,3 +1,5 @@
+import { getThemeType } from '@ts/scheduler/__migration/utils/themes';
+
 import {
   calculateStartViewDate,
 } from './agenda';
@@ -10,6 +12,9 @@ import {
   getCellText,
   getViewStartByOptions,
 } from './month';
+import {
+  addHeightToStyle, addToStyles, addWidthToStyle, combineClasses, getGroupCellClasses,
+} from './render';
 import {
   calculateStartViewDate as timelineMonthCalculateStartViewDate,
 } from './timeline_month';
@@ -71,6 +76,7 @@ export {
   isTimelineView,
   isVerticalGroupingApplied,
   setOptionHour,
+  splitNumber,
 } from './base';
 export {
   getPreparedDataItems,
@@ -119,4 +125,16 @@ export const timelineMonthUtils = {
 
 export const viewsUtils = {
   getCurrentView,
+};
+
+export const renderUtils = {
+  addToStyles,
+  addWidthToStyle,
+  addHeightToStyle,
+  getGroupCellClasses,
+  combineClasses,
+};
+
+export const themeUtils = {
+  getThemeType,
 };

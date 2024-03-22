@@ -95,7 +95,6 @@ QUnit.testStart(() => {
     </div>`;
 
     $('#qunit-fixture').html(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 QUnit.module('Drawer behavior', () => {
@@ -656,6 +655,8 @@ QUnit.module('Drawer behavior', () => {
     });
 
     QUnit.test('content container should have correct position if it is rendered in invisible container', function(assert) {
+        addShadowDomStyles($('#qunit-fixture'));
+
         const $container = $('#drawerContainer');
         const $element = $('#drawer2');
 
