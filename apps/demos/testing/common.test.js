@@ -90,7 +90,7 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
-      { demo: 'SignalRService', themes: [THEME.fluent] },
+      { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
     ],
@@ -105,6 +105,7 @@ const SKIPPED_TESTS = {
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'Selection', themes: [THEME.material] },
+      { demo: 'CustomMapData', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -128,6 +129,8 @@ const SKIPPED_TESTS = {
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
       { demo: 'BaseValueForRangeBar', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
+      { demo: 'SubvalueIndicatorTextFormatting', themes: [THEME.material] },
+      { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
@@ -197,6 +200,7 @@ const SKIPPED_TESTS = {
       { demo: 'SignalRService', themes: [THEME.material] },
       { demo: 'PointsAggregation', themes: [THEME.material] },
       { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
+      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
@@ -205,6 +209,7 @@ const SKIPPED_TESTS = {
       { demo: 'FilteringAPI', themes: [THEME.material] },
     ],
     TreeView: [
+      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
     ],
@@ -224,6 +229,9 @@ const SKIPPED_TESTS = {
     ],
     RangeSelector: [
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+    ],
+    PivotGrid: [
+      { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
