@@ -11,7 +11,7 @@ $(() => {
     items: downloads,
   });
 
-  $('#two-sections').dxDropDownButton({
+  $('#custom-template').dxDropDownButton({
     items: profileSettings,
     splitButton: true,
     onButtonClick(e) {
@@ -20,14 +20,14 @@ $(() => {
     onItemClick(e) {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
-    text: 'Olyvia Peyton',
+    text: 'Olivia Peyton',
     icon: '../../../../images/employees/51.png',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
     template(data, element) {
       const $imageWrapper = $(document.createElement('div'))
-        .addClass('button-img-wrapper').appendTo(element);
+        .addClass('button-img-container').appendTo(element);
 
       $(document.createElement('div'))
         .addClass('button-img-indicator').appendTo($imageWrapper);
@@ -36,11 +36,11 @@ $(() => {
         .addClass('dx-button-img')
         .attr({
           src: data.icon,
-          alt: 'imageAlt',
+          alt: 'employee',
         }).appendTo($imageWrapper);
 
       const $wrapper = $(document.createElement('div'))
-        .addClass('dx-button-wrapper').appendTo(element);
+        .addClass('text-container').appendTo(element);
 
       $(document.createElement('div'))
         .addClass('dx-button-title').text(data.text)

@@ -17,7 +17,7 @@
   font-size: 18px;
 }
 
-::ng-deep .dx-button-wrapper {
+::ng-deep .text-container {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
   display: flex;
@@ -25,7 +25,7 @@
   flex-direction: column;
 }
 
-::ng-deep .button-img-wrapper {
+::ng-deep .button-img-container {
   position: relative;
   height: 32px;
 }
@@ -64,6 +64,6 @@
   opacity: 0.6;
 }
 
-::ng-deep #two-sections .dx-button {
+::ng-deep #custom-template .dx-button {
   height: 46px;
 }

@@ -17,7 +17,7 @@
   font-size: 18px;
 }
 
-.dx-button-wrapper {
+.text-container {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
   display: flex;
@@ -25,7 +25,7 @@
   flex-direction: column;
 }
 
-.button-img-wrapper {
+.button-img-container {
   position: relative;
   height: 32px;
 }
@@ -64,6 +64,6 @@
   opacity: 0.6;
 }
 
-#two-sections .dx-button {
+#custom-template .dx-button {
   height: 46px;
 }

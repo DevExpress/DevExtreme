@@ -12,15 +12,15 @@ const data = service.getData();
 const itemTemplateRender = (item) => <div style={{ fontSize: `${item.size}px` }}>{item.text}</div>;
 const dropDownButtonRender = (data) => (
   <React.Fragment>
-    <div className="button-img-wrapper">
+    <div className="button-img-container">
       <div className="button-img-indicator"></div>
       <img
         className="dx-button-img"
         src={data.icon}
-        alt="imageAlt"
+        alt="employee"
       />
     </div>
-    <div className="dx-button-wrapper">
+    <div className="text-container">
       <div className="dx-button-title">{data.text}</div>
       <div className="dx-button-row">IT Manager</div>
     </div>
@@ -139,10 +139,10 @@ const App = () => {
           <div className="dx-field-label">Custom template and actions</div>
           <div className="dx-field-value">
             <DropDownButton
-              id="two-sections"
+              id="custom-template"
               splitButton={true}
               useSelectMode={false}
-              text="Olyvia Peyton"
+              text="Olivia Peyton"
               icon="../../../../images/employees/51.png"
               items={data.profileSettings}
               displayExpr="name"

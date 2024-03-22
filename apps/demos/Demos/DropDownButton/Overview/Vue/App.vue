@@ -21,11 +21,11 @@
         <div class="dx-field-label">Custom template and actions</div>
         <div class="dx-field-value">
           <DxDropDownButton
-              id="two-sections"
+              id="custom-template"
               :split-button="true"
               :use-select-mode="false"
               :items="data.profileSettings"
-              text="Olyvia Peyton"
+              text="Olivia Peyton"
               icon="../../../../images/employees/51.png"
               display-expr="name"
               key-expr="id"
@@ -34,15 +34,15 @@
               template="dropDownButtonTemplate"
           >
             <template #dropDownButtonTemplate="{ data }">
-              <div class="button-img-wrapper">
+              <div class="button-img-container">
                 <div class="button-img-indicator"/>
                 <img
                     class="dx-button-img"
                     :src="data.icon"
-                    alt="imageAlt"
+                    alt="employee"
                 >
               </div>
-              <div class="dx-button-wrapper">
+              <div class="text-container">
                 <div class="dx-button-title">{{ data.text }}</div>
                 <div class="dx-button-row">IT Manager</div>
               </div>
@@ -210,7 +210,7 @@ function onColorClick(clickedColor) {
   padding: 5px;
 }
 
-.dx-button-wrapper {
+.text-container {
   padding-inline-start: 12px;
   padding-inline-end: 4px;
   display: flex;
@@ -218,7 +218,7 @@ function onColorClick(clickedColor) {
   flex-direction: column;
 }
 
-.button-img-wrapper {
+.button-img-container {
   position: relative;
   height: 32px;
 }
@@ -257,7 +257,7 @@ function onColorClick(clickedColor) {
   opacity: 0.6;
 }
 
-#two-sections .dx-button {
+#custom-template .dx-button {
   height: 46px;
 }
 </style>

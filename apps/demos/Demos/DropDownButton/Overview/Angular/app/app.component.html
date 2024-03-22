@@ -17,10 +17,10 @@
     <div class="dx-field-label">Custom template and actions</div>
     <div class="dx-field-value">
       <dx-drop-down-button
-        id="two-sections"
+        id="custom-template"
         [splitButton]="true"
         [useSelectMode]="false"
-        text="Olyvia Peyton"
+        text="Olivia Peyton"
         icon="../../../../images/employees/51.png"
         [items]="profileSettings"
         displayExpr="name"
@@ -30,11 +30,11 @@
         template="template"
       >
         <div *dxTemplate="let data of 'template'">
-          <div class="button-img-wrapper">
+          <div class="button-img-container">
             <div class="button-img-indicator"></div>
-            <img class="dx-button-img" [src]="data.icon" alt="imageAlt" />
+            <img class="dx-button-img" [src]="data.icon" alt="employee" />
           </div>
-          <div class="dx-button-wrapper">
+          <div class="text-container">
             <div class="dx-button-title">{{ data.text }}</div>
             <div class="dx-button-row">IT Manager</div>
           </div>
