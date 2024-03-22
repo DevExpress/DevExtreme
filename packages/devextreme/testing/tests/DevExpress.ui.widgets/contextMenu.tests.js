@@ -1422,25 +1422,19 @@ QUnit.module('Behavior', moduleConfig, () => {
     });
 
     QUnit.testInActiveWindow('Context menu should not be hidden when the component loses focus', function(assert) {
-        const simpleMenu = $('#simpleMenu');
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 'item 1' }],
+        });
 
-        simpleMenu.attr('tabindex', 1);
+        instance.show();
 
-        try {
-            const instance = new ContextMenu(this.$element, {
-                items: [{ text: 'item 1' }],
-            });
+        assert.strictEqual(instance.option('visible'), true, 'menu opened');
 
-            instance.show();
+        const overlayContent = instance.itemsContainer();
 
-            assert.strictEqual(instance.option('visible'), true, 'menu opened');
+        $(overlayContent).trigger($.Event('focusout', { relatedTarget: $('body') }));
 
-            simpleMenu.trigger('focusin');
-
-            assert.strictEqual(instance.option('visible'), false, 'menu is hidden');
-        } finally {
-            simpleMenu.attr('tabindex', null);
-        }
+        assert.strictEqual(instance.option('visible'), false, 'menu is hidden');
     });
 
     QUnit.testInActiveWindow('Context menu should not be hidden when the component loses focus via focusout', function(assert) {
