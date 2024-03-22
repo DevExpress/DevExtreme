@@ -178,6 +178,7 @@ const SKIPPED_TESTS = {
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
+      { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
@@ -198,9 +199,6 @@ const SKIPPED_TESTS = {
     Gauges: [
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-    ],
-    List: [
-      { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
   },
   Vue: {
