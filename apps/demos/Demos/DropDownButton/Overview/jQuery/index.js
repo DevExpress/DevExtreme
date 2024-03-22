@@ -26,27 +26,27 @@ $(() => {
     keyExpr: 'id',
     useSelectMode: false,
     template(data, element) {
-      const $imageWrapper = $(document.createElement('div'))
+      const $imageWrapper = $("<div>")
         .addClass('button-img-container').appendTo(element);
 
-      $(document.createElement('div'))
+      $("<div>")
         .addClass('button-img-indicator').appendTo($imageWrapper);
 
-      $(document.createElement('img'))
+      $("<img>")
         .addClass('button-img')
         .attr({
           src: data.icon,
           alt: 'employee',
         }).appendTo($imageWrapper);
 
-      const $wrapper = $(document.createElement('div'))
+      const $wrapper = $("<div>")
         .addClass('text-container').appendTo(element);
 
-      $(document.createElement('div'))
+      $("<div>")
         .addClass('button-title').text(data.text)
         .appendTo($wrapper);
 
-      $(document.createElement('div'))
+      $("<div>")
         .addClass('button-row').text('IT Manager').appendTo($wrapper);
 
       return $(element);
