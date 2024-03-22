@@ -16,13 +16,15 @@
       <dxi-item [resizable]="true" [collapsible]="true">
         <dx-splitter>
           <dxi-item
+            [resizable]="true"
             [collapsible]="true"
-            minSize="5%"
             size="30%"
+            minSize="5%"
             template="Nested Left Pane"
           ></dxi-item>
-          <dxi-item template="Nested Central Pane"></dxi-item>
+          <dxi-item [resizable]="true" template="Nested Central Pane"></dxi-item>
           <dxi-item
+            [resizable]="true"
             [collapsible]="true"
             minSize="5%"
             size="30%"

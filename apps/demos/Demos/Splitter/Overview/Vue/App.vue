@@ -29,7 +29,6 @@
             />
             <DxItem
               :resizable="true"
-              :collapsible="true"
               text="Nested Central Pane"
               template="paneContent"
             />

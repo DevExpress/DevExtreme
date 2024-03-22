@@ -9,7 +9,7 @@ const App = () => (
         resizable={true}
         minSize="70px"
         size="140px"
-        render={PaneContent('Pane Left')}
+        render={PaneContent('Left Pane')}
       />
       <Item resizable={true}>
         <Splitter orientation="vertical">
@@ -25,13 +25,18 @@ const App = () => (
           >
             <Splitter>
               <Item
+                resizable={true}
                 collapsible={true}
                 minSize="5%"
                 size="30%"
                 render={PaneContent('Nested Left Pane')}
               />
-              <Item render={PaneContent('Nested Central Pane')} />
               <Item
+                resizable={true}
+                render={PaneContent('Nested Central Pane')}
+              />
+              <Item
+                resizable={true}
                 collapsible={true}
                 minSize="5%"
                 size="30%"
