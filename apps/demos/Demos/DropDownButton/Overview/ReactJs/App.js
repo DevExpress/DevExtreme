@@ -11,31 +11,6 @@ import 'whatwg-fetch';
 const buttonDropDownOptions = { width: 230 };
 const data = service.getData();
 const itemTemplateRender = (item) => <div style={{ fontSize: `${item.size}px` }}>{item.text}</div>;
-const Avatar = (icon) => (
-  <div className="button-img-container">
-    <div className="button-img-indicator"></div>
-    <img
-      className="button-img"
-      src={icon}
-      alt="employee"
-    />
-  </div>
-);
-const ButtonDescription = ({ text, description }) => (
-  <div className="text-container">
-    <div className="button-title">{text}</div>
-    <div className="button-row">{description}</div>
-  </div>
-);
-const dropDownButtonRender = (data) => (
-  <React.Fragment>
-    <Avatar icon={data.icon} />
-    <ButtonDescription
-      text={data.text}
-      description="IT Manager"
-    />
-  </React.Fragment>
-);
 const App = () => {
   const [alignment, setAlignment] = useState('left');
   const [color, setColor] = useState(null);
