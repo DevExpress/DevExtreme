@@ -21,7 +21,7 @@ $(() => {
       }],
     }, {
       itemType: 'group',
-      captionTemplate: groupCaptionTemplate('accountbox'),
+      captionTemplate: groupCaptionTemplate('card'),
       caption: 'Personal Data',
       items: ['BirthDate', {
         itemType: 'group',

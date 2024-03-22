@@ -7,7 +7,7 @@ import Form, {
   TabPanelOptions,
   Tab,
 } from 'devextreme-react/form';
-import GroupCaption from './GroupCaptionTemplate.js';
+import GroupCaption from './GroupCaption.js';
 import service from './data.js';
 
 const employee = service.getEmployee();
@@ -40,7 +40,7 @@ export default function App() {
             </GroupItem>
           </GroupItem>
           <GroupItem
-            captionTemplate={GroupCaption('accountbox')}
+            captionTemplate={GroupCaption('card')}
             caption="Personal Data"
           >
             <SimpleItem dataField="BirthDate" />

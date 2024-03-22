@@ -4580,7 +4580,8 @@
           {
             "Title": "Grouped Fields",
             "Name": "GroupedFields",
-            "Widget": "Form"
+            "Widget": "Form",
+            "Badge": "Updated"
           },
           {
             "Title": "Columns Adaptability",

@@ -3,7 +3,7 @@ import 'devextreme-react/text-area';
 import Form, {
   SimpleItem, GroupItem, TabbedItem, TabPanelOptions, Tab,
 } from 'devextreme-react/form';
-import GroupCaption from './GroupCaptionTemplate.tsx';
+import GroupCaption from './GroupCaption.tsx';
 import service from './data.ts';
 
 const employee = service.getEmployee();
@@ -27,7 +27,7 @@ export default function App() {
               <SimpleItem dataField="OfficeNo" />
             </GroupItem>
           </GroupItem>
-          <GroupItem captionTemplate={GroupCaption('accountbox')} caption="Personal Data">
+          <GroupItem captionTemplate={GroupCaption('card')} caption="Personal Data">
             <SimpleItem dataField="BirthDate" />
             <GroupItem captionTemplate={GroupCaption('home')} caption='Home Address'>
               <SimpleItem dataField="Address" />
