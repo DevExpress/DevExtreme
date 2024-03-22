@@ -196,7 +196,7 @@ const Drawer = Widget.inherit({
     },
 
     _togglePanelContentHasMinSizeClass(shouldBeSet) {
-        this._$panelContentWrapper.toggle(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS, shouldBeSet);
+        this._$panelContentWrapper.toggleClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS, shouldBeSet);
     },
 
     _renderPanelContentWrapper() {

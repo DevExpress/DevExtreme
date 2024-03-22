@@ -7,6 +7,7 @@ import 'ui/drawer';
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
+const DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS = 'dx-drawer-panel-content-has-min-size';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const OPENED_STATE_CLASS = 'dx-drawer-opened';
@@ -55,6 +56,40 @@ QUnit.module('rendering', () => {
         const $element = $('#drawer').dxDrawer();
 
         assert.ok($element.hasClass(DRAWER_CLASS + '-slide'), 'drawer class is correct');
+    });
+
+    QUnit.test('drawer panel should have dx-drawer-panel-content-has-min-size class if minSize set', function(assert) {
+        const $element = $('#drawer').dxDrawer({ minSize: 1 });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), true, 'dx-drawer-panel-content-has-min-size is set');
+
+        instance.option({ minSize: null });
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), false, 'dx-drawer-panel-content-has-min-size is not set');
+    });
+
+    QUnit.test('drawer panel should not have dx-drawer-panel-content-has-min-size class if minSize is not set on init', function(assert) {
+        const $element = $('#drawer').dxDrawer({ minSize: null });
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), false, 'dx-drawer-panel-content-has-min-size is not set');
+    });
+
+    QUnit.test('drawer panel should have visibility: hidden if minSize is not set and drawer is closed', function(assert) {
+        const $element = $('#drawer').dxDrawer({
+            minSize: null,
+            opened: false,
+        });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        assert.strictEqual($panel.css('visibility') === 'hidden', true, 'visibility: hidden is set');
+
+        instance.option({ opened: true });
+
+        assert.strictEqual($panel.css('visibility') === 'hidden', false, 'visibility: hidden is not set');
     });
 
     QUnit.test('render drawer content', function(assert) {
