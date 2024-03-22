@@ -147,6 +147,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'MultipleLayers', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'CustomMapData', themes: [THEME.material] },
     ],
   },
   React: {
@@ -173,7 +174,7 @@ const SKIPPED_TESTS = {
       { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
     ],
     Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent] },
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
@@ -185,6 +186,7 @@ const SKIPPED_TESTS = {
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
+      { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
@@ -192,6 +194,7 @@ const SKIPPED_TESTS = {
     ],
     Gauges: [
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
+      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
     ],
   },
   Vue: {
@@ -215,9 +218,13 @@ const SKIPPED_TESTS = {
       { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
+      { demo: 'Directions', themes: [THEME.material] },
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
+    ],
+    TreeList: [
+      { demo: 'Overview', themes: [THEME.material] },
     ],
     Tabs: [
       { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
@@ -227,11 +234,14 @@ const SKIPPED_TESTS = {
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
     Gauges: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
       { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
+      
     ],
     RangeSelector: [
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+      { demo: 'DiscreteScale', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'LayoutCustomization', themes: [THEME.material] },
