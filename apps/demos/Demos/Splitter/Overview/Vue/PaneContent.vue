@@ -1,7 +1,7 @@
 <template>
     <div class="pane-content">
       <div class="pane-title">
-        {{ data.title }}
+        {{ data.text }}
       </div>
       <div class="pane-state">
         {{ `${data.resizable ? 'Resizable ' : ''}${data.resizable && data.collapsible ? 'and' : ''}${data.collapsible ? ' Collapsible' : ''}` }}
@@ -18,7 +18,7 @@
   const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
   
   const { data } = props;
-  
+
   const renderOptions = () => {
     return Object.entries(data)
       .filter(([key]) => dimensionOptions.has(key))
@@ -43,4 +43,3 @@
     font-size: 10px;
   }
 </style>
-  

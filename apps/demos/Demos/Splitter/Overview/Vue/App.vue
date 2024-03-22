@@ -5,7 +5,7 @@
       :resizable="true"
       min-size="60px"
       size="140px"
-      title="Left Pane"
+      text="Left Pane"
       template="paneContent"
     />
     <DxItem>
@@ -14,7 +14,7 @@
           :resizable="true"
           :collapsible="true"
           min-size="60px"
-          title="Center Pane"
+          text="Center Pane"
           template="paneContent"
         />
         <DxItem :collapsible="true">
@@ -23,7 +23,7 @@
               :resizable="true"
               size="33.3%"
               min-size="10px"
-              title="Nested Left Pane"
+              text="Nested Left Pane"
               template="paneContent"
             />
             <DxItem
@@ -31,14 +31,14 @@
               :collapsible="true"
               size="33.3%"
               min-size="10px"
-              title="Nested Center Pane"
+              text="Nested Center Pane"
               template="paneContent"
             />
             <DxItem
               :resizable="true"
               :collapsible="true"
               min-size="10px"
-              title="Nested Right Pane"
+              text="Nested Right Pane"
               template="paneContent"
             />
             <template #paneContent="{ data }">
@@ -58,10 +58,9 @@
     <DxItem
       size="170px"
       min-size="60px"
-      title="Right Pane"
+      text="Right Pane"
       template="paneContent"
     />
-
 
     <template #paneContent="{ data }">
       <PaneContent
@@ -69,13 +68,13 @@
       />
     </template>
   </DxSplitter>
-
-
 </template>
+
 <script setup lang="ts">
 import { DxSplitter, DxItem } from 'devextreme-vue/splitter';
 import PaneContent from './PaneContent.vue'
 </script>
+
 <style scoped>
   .demo-container {
     height: 500px;
