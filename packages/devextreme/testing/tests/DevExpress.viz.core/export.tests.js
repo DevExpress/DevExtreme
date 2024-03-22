@@ -2,12 +2,23 @@ const vizMocks = require('../../helpers/vizMocks.js');
 const exportModule = require('viz/core/export');
 const themeModule = require('viz/themes');
 const clientExporter = require('exporter');
+const $ = require('jquery');
 const combineMarkupsOrig = exportModule.combineMarkups;
 
 themeModule.registerTheme({
     name: 'someTheme.light',
     backgroundColor: 'some_theme_color'
 });
+
+function createMockWidget(size, option) {
+    const root = $('<div>').append($('<svg>'));
+
+    return {
+        element: sinon.stub().returns(root),
+        getSize: sinon.stub().returns(size),
+        option
+    };
+}
 
 QUnit.module('Creation', {
     beforeEach: function() {
@@ -346,179 +357,222 @@ QUnit.test('Enabled options is false', function(assert) {
     assert.equal(this.renderer.stub('text').callCount, 0, 'No texts');
 });
 
-QUnit.module('API. Markup manipulations');
+QUnit.module('API. Markup manipulations', {
+    checkAttrsValues(expectedSvgAttrs, root, assert) {
+        Object.keys(expectedSvgAttrs).forEach((attrKey) => {
+            const expectedAttrValue = expectedSvgAttrs[attrKey];
+            const attrValue = root.getAttribute(attrKey);
+
+            assert.strictEqual(attrValue, expectedAttrValue, `value of ${attrKey}`);
+        });
+    },
+    checkBackgroundColor(backgroundValue, markup, assert) {
+        const background = `data-backgroundcolor="${backgroundValue}"`;
+
+        assert.strictEqual(markup.includes(background), true);
+    }
+});
 
 QUnit.test('getMarkup method', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg </svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return 'backgroundColor';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return 'backgroundColor';
     };
-    const markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+    const widgets = [
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock),
+    ];
 
-    assert.equal(markup, '<svg data-backgroundcolor="backgroundColor" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
+    const markup = exportModule.getMarkup(widgets);
+
+    this.checkBackgroundColor('backgroundColor', markup, assert);
 });
 
 QUnit.test('getMarkup. BackgroundColor in theme', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg </svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'theme') return 'someTheme.light';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'theme') return 'someTheme.light';
     };
-    const markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+    const widgets = [
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock)
+    ];
 
-    assert.equal(markup, '<svg data-backgroundcolor="some_theme_color" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
+    const markup = exportModule.getMarkup(widgets);
+
+    this.checkBackgroundColor('some_theme_color', markup, assert);
 });
 
 QUnit.test('getMarkup. Different colors in charts. No backgroundColor in result', function(assert) {
     const colors = ['color_1', 'color_2'];
     let i = 0;
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg </svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return colors[i++];
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return colors[i++];
     };
-    const markup = exportModule.getMarkup([createWidget({ height: 25, width: 10 }), createWidget({ height: 15, width: 15 })]);
+    const widgets = [
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock)
+    ];
 
-    assert.equal(markup, '<svg data-backgroundcolor="" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0,0)"><svg </svg></g><g transform="translate(0,25)"><svg </svg></g></svg>');
+    const markup = exportModule.getMarkup(widgets);
+
+    this.checkBackgroundColor('', markup, assert);
 });
 
 QUnit.test('Combine widgets markups (combineMarkups), just widget', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg></svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return 'backgroundColor';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return 'backgroundColor';
     };
-    const markupData = exportModule.combineMarkups(createWidget({ width: 10, height: 25 }));
+    const widgets = [createMockWidget({ width: 10, height: 25 }, optionMock)];
 
-    assert.deepEqual(markupData, {
-        markup: '<svg data-backgroundcolor="backgroundColor" height="25" width="10" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-            + '<g transform="translate(0,0)"><svg></svg></g>'
-            + '</svg>',
-        width: 10,
-        height: 25
-    });
+    const markupData = exportModule.combineMarkups(widgets);
+
+    const expectedSvgAttrs = {
+        'xmlns': 'http://www.w3.org/2000/svg',
+        'version': '1.1',
+        'fill': 'none',
+        'stroke': 'none',
+        'stroke-width': '0',
+        'width': '10',
+        'height': '25',
+        'data-backgroundcolor': 'backgroundColor',
+    };
+
+    const expectedMarkup = '<defs></defs><g transform="translate(0,0)"><svg></svg></g>';
+
+    assert.strictEqual(markupData.width, 10);
+    assert.strictEqual(markupData.height, 25);
+
+    assert.strictEqual(markupData.root.innerHTML, expectedMarkup);
+    this.checkAttrsValues(expectedSvgAttrs, markupData.root, assert);
 });
 
 QUnit.test('Combine widgets markups (combineMarkups), array of widgets - column', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg></svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return 'backgroundColor';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return 'backgroundColor';
     };
-    const markupData = exportModule.combineMarkups([createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })]);
+    const widgets = [
+        createMockWidget({ width: 10, height: 25 }, optionMock),
+        createMockWidget({ width: 15, height: 15 }, optionMock),
+    ];
 
-    assert.deepEqual(markupData, {
-        markup: '<svg data-backgroundcolor="backgroundColor" height="40" width="15" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-            + '<g transform="translate(0,0)"><svg></svg></g>'
-            + '<g transform="translate(0,25)"><svg></svg></g>'
-            + '</svg>',
-        width: 15,
-        height: 40
-    });
+    const markupData = exportModule.combineMarkups(widgets);
+
+    const expectedSvgAttrs = {
+        'xmlns': 'http://www.w3.org/2000/svg',
+        'version': '1.1',
+        'fill': 'none',
+        'stroke': 'none',
+        'stroke-width': '0',
+        'width': '15',
+        'height': '40',
+        'data-backgroundcolor': 'backgroundColor',
+    };
+
+    const expectedMarkup = '<defs></defs>'
+        + '<g transform="translate(0,0)"><svg></svg></g>'
+        + '<g transform="translate(0,25)"><svg></svg></g>';
+
+    assert.strictEqual(markupData.width, 15);
+    assert.strictEqual(markupData.height, 40);
+    assert.strictEqual(markupData.root.innerHTML, expectedMarkup);
+    this.checkAttrsValues(expectedSvgAttrs, markupData.root, assert);
 });
 
 QUnit.test('Combine widgets markups (combineMarkups), array of arrays of widgets - nested arrays are rows', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg></svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return 'backgroundColor';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return 'backgroundColor';
     };
     const markupData = exportModule.combineMarkups([
-        [createWidget({ width: 10, height: 25 }), createWidget({ width: 15, height: 15 })],
-        [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+        [createMockWidget({ width: 10, height: 25 }, optionMock), createMockWidget({ width: 15, height: 15 }, optionMock)],
+        [createMockWidget({ width: 20, height: 15 }, optionMock), createMockWidget({ width: 10, height: 35 }, optionMock)]
     ]);
 
-    assert.deepEqual(markupData, {
-        markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="30" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-            + '<g transform="translate(0,0)"><svg></svg></g><g transform="translate(10,0)"><svg></svg></g>'
-            + '<g transform="translate(0,25)"><svg></svg></g><g transform="translate(20,25)"><svg></svg></g>'
-            + '</svg>',
-        width: 30,
-        height: 60
-    });
+    const expectedSvgAttrs = {
+        'xmlns': 'http://www.w3.org/2000/svg',
+        'version': '1.1',
+        'fill': 'none',
+        'stroke': 'none',
+        'stroke-width': '0',
+        'width': '30',
+        'height': '60',
+        'data-backgroundcolor': 'backgroundColor',
+    };
+    const expectedMarkup = '<defs></defs>'
+        + '<g transform="translate(0,0)"><svg></svg></g><g transform="translate(10,0)"><svg></svg></g>'
+        + '<g transform="translate(0,25)"><svg></svg></g><g transform="translate(20,25)"><svg></svg></g>';
+
+    assert.strictEqual(markupData.width, 30);
+    assert.strictEqual(markupData.height, 60);
+
+    assert.strictEqual(markupData.root.innerHTML, expectedMarkup);
+    this.checkAttrsValues(expectedSvgAttrs, markupData.root, assert);
 });
 
 QUnit.test('Combine widgets markups (combineMarkups) in grid layout with center-center alignments', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg></svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return 'backgroundColor';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return 'backgroundColor';
     };
+
     const markupData = exportModule.combineMarkups([
-        [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
-        [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+        [createMockWidget({ width: 10, height: 25 }, optionMock), createMockWidget({ width: 16, height: 15 }, optionMock)],
+        [createMockWidget({ width: 20, height: 15 }, optionMock), createMockWidget({ width: 10, height: 35 }, optionMock)]
     ], {
         gridLayout: true,
         verticalAlignment: 'center',
         horizontalAlignment: 'center'
     });
 
-    assert.deepEqual(markupData, {
-        markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-            + '<g transform="translate(5,0)"><svg></svg></g><g transform="translate(22,5)"><svg></svg></g>'
-            + '<g transform="translate(0,35)"><svg></svg></g><g transform="translate(25,25)"><svg></svg></g>'
-            + '</svg>',
-        width: 40,
-        height: 60
-    });
+    const expectedSvgAttrs = {
+        'xmlns': 'http://www.w3.org/2000/svg',
+        'version': '1.1',
+        'fill': 'none',
+        'stroke': 'none',
+        'stroke-width': '0',
+        'width': '40',
+        'height': '60',
+        'data-backgroundcolor': 'backgroundColor',
+    };
+    const expectedMarkup = '<defs></defs>'
+        + '<g transform="translate(5,0)"><svg></svg></g><g transform="translate(22,5)"><svg></svg></g>'
+        + '<g transform="translate(0,35)"><svg></svg></g><g transform="translate(25,25)"><svg></svg></g>';
+
+    assert.strictEqual(markupData.width, 40);
+    assert.strictEqual(markupData.height, 60);
+    assert.strictEqual(markupData.root.innerHTML, expectedMarkup);
+    this.checkAttrsValues(expectedSvgAttrs, markupData.root, assert);
 });
 
 QUnit.test('Combine widgets markups (combineMarkups) in grid layout with bottom-right alignments', function(assert) {
-    const createWidget = function(size) {
-        return {
-            svg: sinon.stub().returns('<svg></svg>'),
-            getSize: sinon.stub().returns(size),
-            option: function(param) {
-                if(param === 'backgroundColor') return 'backgroundColor';
-            }
-        };
+    const optionMock = (param) => {
+        if(param === 'backgroundColor') return 'backgroundColor';
     };
+
     const markupData = exportModule.combineMarkups([
-        [createWidget({ width: 10, height: 25 }), createWidget({ width: 16, height: 15 })],
-        [createWidget({ width: 20, height: 15 }), createWidget({ width: 10, height: 35 })]
+        [createMockWidget({ width: 10, height: 25 }, optionMock), createMockWidget({ width: 16, height: 15 }, optionMock)],
+        [createMockWidget({ width: 20, height: 15 }, optionMock), createMockWidget({ width: 10, height: 35 }, optionMock)]
     ], {
         gridLayout: true,
         verticalAlignment: 'bottom',
         horizontalAlignment: 'right'
     });
 
-    assert.deepEqual(markupData, {
-        markup: '<svg data-backgroundcolor="backgroundColor" height="60" width="40" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-            + '<g transform="translate(10,0)"><svg></svg></g><g transform="translate(24,10)"><svg></svg></g>'
-            + '<g transform="translate(0,45)"><svg></svg></g><g transform="translate(30,25)"><svg></svg></g>'
-            + '</svg>',
-        width: 40,
-        height: 60
-    });
+    const expectedSvgAttrs = {
+        'xmlns': 'http://www.w3.org/2000/svg',
+        'version': '1.1',
+        'fill': 'none',
+        'stroke': 'none',
+        'stroke-width': '0',
+        'width': '40',
+        'height': '60',
+        'data-backgroundcolor': 'backgroundColor',
+    };
+    const expectedMarkup = '<defs></defs>'
+        + '<g transform="translate(10,0)"><svg></svg></g><g transform="translate(24,10)"><svg></svg></g>'
+        + '<g transform="translate(0,45)"><svg></svg></g><g transform="translate(30,25)"><svg></svg></g>';
+
+    assert.strictEqual(markupData.width, 40);
+    assert.strictEqual(markupData.height, 60);
+    assert.strictEqual(markupData.root.innerHTML, expectedMarkup);
+    this.checkAttrsValues(expectedSvgAttrs, markupData.root, assert);
 });
 
 QUnit.module('API. Export methods', {
@@ -683,10 +737,24 @@ QUnit.test('exportFromMarkup. backgroundColor from current theme', function(asse
     }
 });
 
+QUnit.test('exportWidgets method should pass to export markup as DOM node', function(assert) {
+    const optionMock = (param) => {
+        if(param === 'theme') return 'someTheme.light';
+    };
+    const widgets = [
+        createMockWidget({ height: 25, width: 10 }, optionMock),
+        createMockWidget({ height: 15, width: 15 }, optionMock),
+    ];
+
+    exportModule.exportWidgets(widgets);
+
+    assert.strictEqual(clientExporter.export.getCall(0).args[0].nodeName, 'svg', 'combineMarkups should pass to export DOM node');
+});
+
 QUnit.test('exportWidgets method. Defaults', function(assert) {
     // arrange
     exportModule.DEBUG_set_combineMarkups(sinon.spy(function() {
-        return { markup: 'testMarkup', width: 600, height: 400 };
+        return { root: 'testMarkup', width: 600, height: 400 };
     }));
 
     // act
@@ -733,7 +801,7 @@ QUnit.test('exportWidgets method. Set options. Size options are ignored', functi
         horizontalAlignment: 'right'
     };
     exportModule.DEBUG_set_combineMarkups(sinon.spy(function() {
-        return { markup: 'testMarkup', width: 600, height: 400 };
+        return { root: 'testMarkup', width: 600, height: 400 };
     }));
 
     // act

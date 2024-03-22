@@ -2557,7 +2557,46 @@ QUnit.test('Read computed style of elements if export target is attached element
     $('#qunit-fixture').append(element);
     this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'font-size': '25px', 'font-style': '' });
 
-    const imageBlob = getData(element);
+    const imageBlob = getData($(element));
+
+    assert.expect(9);
+    $.when(imageBlob).done(function() {
+        try {
+            const textElem = that.drawnElements[1];
+
+            assert.equal(textElem.style.weight, 'bold', 'Style weight');
+
+            assert.equal(textElem.type, 'text', 'The second element on canvas is text');
+            assert.equal(textElem.style.font, '"Segoe UI Light","Helvetica Neue Light","Segoe UI","Helvetica Neue","Trebuchet MS",Verdana', 'Style font');
+            assert.equal(textElem.style.size, '25px', 'Size from computed');
+            assert.equal(textElem.style.style, 'italic', 'Style');
+            assert.equal(textElem.style.fillStyle, '#ff0000', 'Style fill');
+            assert.roughEqual(textElem.style.globalAlpha, 0.3, 0.1, 'Style opacity');
+            assert.strictEqual($('#qunit-fixture').children().length, 1);
+            assert.strictEqual($('#qunit-fixture').children()[0].nodeName, 'svg');
+        } finally {
+            done();
+        }
+    });
+});
+
+QUnit.test('Read computed style of elements if export target is attached element. Element passed as renderer', function(assert) {
+    const that = this;
+    const done = assert.async();
+    const element = createSvgElement(testingMarkupStart + '<text x="20" y="30">Test</text>' + testingMarkupEnd);
+    element.querySelector('text').style = `
+        font-style: italic;
+        font-size: 16px;
+        font-family: 'Segoe UI Light', 'Helvetica Neue Light', 'Segoe UI', 'Helvetica Neue', 'Trebuchet MS', Verdana;
+        font-weight: bold;
+        fill: #232323;
+        opacity: 0.3;
+    `;
+
+    $('#qunit-fixture').append(element);
+    this.stubGetComputedStyle(element.childNodes[0], { fill: '#ff0000', 'font-size': '25px', 'font-style': '' });
+
+    const imageBlob = getData($(element));
 
     assert.expect(9);
     $.when(imageBlob).done(function() {

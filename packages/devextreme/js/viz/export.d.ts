@@ -13,6 +13,7 @@ import type dxVectorMap from './vector_map';
 import type dxSparkline from './sparkline';
 import type dxBullet from './bullet';
 import type dxBarGauge from './bar_gauge';
+import { UserDefinedElement } from '../core/element';
 
 /**
  * @public
@@ -26,7 +27,7 @@ export type VizWidget = dxChart | dxPieChart | dxFunnel | dxSankey | dxTreeMap |
  * @static
  * @public
  */
-export function exportFromMarkup(markup: string, options: { fileName?: string; format?: string; backgroundColor?: string; width?: number; height?: number; onExporting?: Function; onExported?: Function; onFileSaving?: Function; margin?: number; svgToCanvas?: Function }): void;
+export function exportFromMarkup(markup: string | UserDefinedElement, options: { fileName?: string; format?: string; backgroundColor?: string; width?: number; height?: number; onExporting?: Function; onExported?: Function; onFileSaving?: Function; margin?: number; svgToCanvas?: Function }): void;
 
 /**
  * @docid viz.exportWidgets
