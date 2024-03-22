@@ -20,16 +20,24 @@ const itemTemplateRender = (item) => (
   </div>
 );
 
+const Avatar = (icon) => (
+  <div className="button-img-container">
+    <div className="button-img-indicator"></div>
+    <img className="button-img" src={icon} alt="employee" />
+  </div>
+);
+
+const ButtonDescription = ({ text, description }) => (
+  <div className="text-container">
+    <div className="button-title">{text}</div>
+    <div className="button-row">{description}</div>
+  </div>
+);
+
 const dropDownButtonRender = (data) => (
   <React.Fragment>
-    <div className="button-img-container">
-      <div className="button-img-indicator"></div>
-      <img className="button-img" src={data.icon} alt="employee" />
-    </div>
-    <div className="text-container">
-      <div className="button-title">{data.text}</div>
-      <div className="button-row">IT Manager</div>
-    </div>
+    <Avatar icon={data.icon} />
+    <ButtonDescription text={data.text} description="IT Manager" />
   </React.Fragment>
 );
 
