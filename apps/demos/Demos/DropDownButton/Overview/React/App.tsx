@@ -6,6 +6,7 @@ import { ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
 import ColorIcon from './ColorIcon.tsx';
+import DropDownButtonTemplate from './Template';
 import 'whatwg-fetch';
 
 type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start';
@@ -34,7 +35,7 @@ const ButtonDescription = ({ text, description }) => (
   </div>
 );
 
-const dropDownButtonRender = (data) => (
+const DropDownButtonTemplate = (data) => (
   <React.Fragment>
     <Avatar icon={data.icon} />
     <ButtonDescription text={data.text} description="IT Manager" />
@@ -165,7 +166,7 @@ const App = () => {
               keyExpr="id"
               onButtonClick={onButtonClick}
               onItemClick={onItemClick}
-              render={dropDownButtonRender}
+              render={({ data }) => <DropDownButtonTemplate data={data} />}
             >
             </DropDownButton>
           </div>
