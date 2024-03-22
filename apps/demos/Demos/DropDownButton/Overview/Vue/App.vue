@@ -237,7 +237,7 @@ function onColorClick(clickedColor) {
   position: absolute;
   background-color: var(--dx-color-danger);
   top: -1px;
-  right: -1px;
+  inset-inline-end: -1px;
   width: 10px;
   height: 10px;
   border-radius: 50%;
