@@ -91,6 +91,8 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'SignalRService', themes: [THEME.fluent] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -101,6 +103,8 @@ const SKIPPED_TESTS = {
       { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'MultiplePointSelection', themes: [THEME.material] },
+      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'Selection', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -117,10 +121,15 @@ const SKIPPED_TESTS = {
       { demo: 'PopupEditing', themes: [THEME.material] },
       { demo: 'FormEditing', themes: [THEME.material] },
       { demo: 'CellEditing', themes: [THEME.material] },
+      { demo: 'Resizing', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
       { demo: 'BaseValueForRangeBar', themes: [THEME.material] },
+      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
+    ],
+    RangeSelector: [
+      { demo: 'DiscreteScale', themes: [THEME.material] },
     ],
     Gantt: [
       { demo: 'ContextMenu', themes: [THEME.material] },
@@ -128,58 +137,82 @@ const SKIPPED_TESTS = {
     VectorMap: [
       { demo: 'Palette', themes: [THEME.material] },
       { demo: 'CustomAnnotations', themes: [THEME.material] },
+      
     ],
   },
   React: {
+    Charts: [
+      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+    ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
+      { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
+      { demo: 'GroupByDate', themes: [THEME.fluent] },
     ],
     TreeView: [
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
     ],
     TabPanel: [
-      { demo: 'SortableClosableTabs', themes: [THEME.material] },
-    ],
-    Scheduler: [
-      { demo: 'GroupByDate', themes: [THEME.fluent] },
+      { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
+      { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
+    ],
+    RangeSelector: [
+      { demo: 'DiscreteScale', themes: [THEME.material] },
+    ],
+    PivotGrid: [
+      { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
+    ],
+    Gauges: [
+      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
     ],
   },
   Vue: {
+    Charts: [
+      { demo: 'TilingAlgorithms', themes: [THEME.material] },
+      { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
+      { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
+      { demo: 'Colorization', themes: [THEME.material] },
+    ],
     DataGrid: [
-      { demo: 'SignalRService', themes: [THEME.fluent] },
+      { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
+      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
     ],
     TreeView: [
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
     ],
     Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.material] },
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     Tabs: [
-      { demo: 'Selection', themes: [THEME.material] },
+      { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
     ],
     List: [
       { demo: 'ListSelection', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+      { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
     ],
     RangeSelector: [
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
     ],
   },
 };
