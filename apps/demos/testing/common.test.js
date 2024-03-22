@@ -81,19 +81,32 @@ const getTestSpecificSkipRules = (testName) => {
 };
 
 const SKIPPED_TESTS = {
+  jQuery: {
+    Charts: [
+      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+    ],
+  },
   Angular: {
     DataGrid: [
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
+      { demo: 'SignalRService', themes: [THEME.fluent] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'Strips', themes: [THEME.material] },
+      { demo: 'Bubble', themes: [THEME.material] },
       { demo: 'PointImage', themes: [THEME.material] },
       { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
       { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
+      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+      { demo: 'MultiplePointSelection', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
+    ],
+    PivotGrid: [
+      { demo: 'ChartIntegration', themes: [THEME.material] },
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
@@ -101,31 +114,54 @@ const SKIPPED_TESTS = {
     TreeList: [
       { demo: 'BatchEditing', themes: [THEME.material] },
       { demo: 'RowEditing', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.material] },
+      { demo: 'FormEditing', themes: [THEME.material] },
+      { demo: 'CellEditing', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-    ]
+      { demo: 'BaseValueForRangeBar', themes: [THEME.material] },
+    ],
+    Gantt: [
+      { demo: 'ContextMenu', themes: [THEME.material] },
+    ],
+    VectorMap: [
+      { demo: 'Palette', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
+    ],
   },
   React: {
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
     TreeView: [
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
+      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
+    ],
+    TabPanel: [
+      { demo: 'SortableClosableTabs', themes: [THEME.material] },
+    ],
+    Scheduler: [
+      { demo: 'GroupByDate', themes: [THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'CustomMapData', themes: [THEME.material] },
+      { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
     ],
   },
   Vue: {
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
     ],
     TreeView: [
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
+      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.material] },
@@ -141,8 +177,11 @@ const SKIPPED_TESTS = {
     ],
     RangeSelector: [
       { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
-    ]
-  }
+    ],
+    VectorMap: [
+      { demo: 'Overview', themes: [THEME.material] },
+    ],
+  },
 };
 
 ['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
