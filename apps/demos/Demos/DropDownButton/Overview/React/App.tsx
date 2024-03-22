@@ -6,7 +6,7 @@ import { ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
 import ColorIcon from './ColorIcon.tsx';
-import DropDownButtonTemplate from './Templates.tsx';
+import DropDownButtonTemplate from './DropDownButtonTemplate.tsx';
 import 'whatwg-fetch';
 
 type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start';

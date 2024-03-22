@@ -5,7 +5,7 @@ import { Template } from 'devextreme-react/core/template';
 import notify from 'devextreme/ui/notify';
 import service from './data.js';
 import ColorIcon from './ColorIcon.js';
-import DropDownButtonTemplate from './Templates.js';
+import DropDownButtonTemplate from './DropDownButtonTemplate.js';
 import 'whatwg-fetch';
 
 const buttonDropDownOptions = { width: 230 };
