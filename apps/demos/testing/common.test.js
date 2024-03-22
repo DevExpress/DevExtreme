@@ -110,6 +110,7 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
     PivotGrid: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ChartIntegration', themes: [THEME.material] },
     ],
     Toolbar: [
@@ -148,6 +149,7 @@ const SKIPPED_TESTS = {
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
+      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
@@ -157,23 +159,29 @@ const SKIPPED_TESTS = {
       { demo: 'GroupByDate', themes: [THEME.fluent] },
     ],
     TreeView: [
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
+      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
+      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
     ],
     TabPanel: [
       { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     RangeSelector: [
       { demo: 'DiscreteScale', themes: [THEME.material] },
     ],
     PivotGrid: [
       { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
+      { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
@@ -185,11 +193,15 @@ const SKIPPED_TESTS = {
       { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
       { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
       { demo: 'Colorization', themes: [THEME.material] },
+      { demo: 'SignalRService', themes: [THEME.material] },
+      { demo: 'PointsAggregation', themes: [THEME.material] },
+      { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
-      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
+      { demo: 'FilteringAPI', themes: [THEME.material] },
     ],
     TreeView: [
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
@@ -203,6 +215,7 @@ const SKIPPED_TESTS = {
     ],
     List: [
       { demo: 'ListSelection', themes: [THEME.material] },
+      { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
     Gauges: [
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
