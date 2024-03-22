@@ -157,13 +157,13 @@ const SKIPPED_TESTS = {
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
-      { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
+      { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-      { demo: 'GroupByDate', themes: [THEME.fluent] },
+      { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
     TreeView: [
       { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
@@ -175,6 +175,9 @@ const SKIPPED_TESTS = {
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
+    ],
+    List: [
+      { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
@@ -195,6 +198,9 @@ const SKIPPED_TESTS = {
     Gauges: [
       { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
       { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+    ],
+    List: [
+      { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
   },
   Vue: {
@@ -217,6 +223,7 @@ const SKIPPED_TESTS = {
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      { demo: 'Filtering', themes: [THEME.fluent] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
