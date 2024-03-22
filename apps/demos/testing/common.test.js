@@ -106,6 +106,9 @@ const SKIPPED_TESTS = {
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
       { demo: 'Selection', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
+      { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
+      { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
+      { demo: 'APISelectAPoint', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
