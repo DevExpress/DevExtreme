@@ -77,11 +77,8 @@ QUnit.module('rendering', () => {
         assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), false, 'dx-drawer-panel-content-has-min-size is not set');
     });
 
-    QUnit.test('drawer panel should have visibility: hidden if minSize is not set and drawer is closed', function(assert) {
-        const $element = $('#drawer').dxDrawer({
-            minSize: null,
-            opened: false,
-        });
+    QUnit.test('drawer panel should have visibility: hidden if drawer is closed', function(assert) {
+        const $element = $('#drawer').dxDrawer({ opened: false });
         const instance = $element.dxDrawer('instance');
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
