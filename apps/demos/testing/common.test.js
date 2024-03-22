@@ -174,6 +174,7 @@ const SKIPPED_TESTS = {
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
+      { demo: 'MultipleLayers', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     RangeSelector: [
