@@ -83,20 +83,66 @@ const getTestSpecificSkipRules = (testName) => {
 const SKIPPED_TESTS = {
   Angular: {
     DataGrid: [
+      { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent] },
+    ],
+    Charts: [
+      { demo: 'Overview', themes: [THEME.material] },
+      { demo: 'PointImage', themes: [THEME.material] },
+      { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
+      { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
+    ],
+    TreeList: [
+      { demo: 'BatchEditing', themes: [THEME.material] },
+      { demo: 'RowEditing', themes: [THEME.material] },
+    ],
+    Gauges: [
+      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+    ]
   },
   React: {
     DataGrid: [
-      { demo: 'SignalRService', themes: [THEME.material] },
+      { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
+    TreeView: [
+      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
+    ],
+    VectorMap: [
+      { demo: 'PieMarkers', themes: [THEME.material] },
+    ],
   },
+  Vue: {
+    DataGrid: [
+      { demo: 'SignalRService', themes: [THEME.fluent] },
+    ],
+    TreeView: [
+      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
+    ],
+    Toolbar: [
+      { demo: 'Adaptability', themes: [THEME.material] },
+    ],
+    Tabs: [
+      { demo: 'Selection', themes: [THEME.material] },
+    ],
+    List: [
+      { demo: 'ListSelection', themes: [THEME.material] },
+    ],
+    Gauges: [
+      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+    ],
+    RangeSelector: [
+      { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+    ]
+  }
 };
 
 ['jQuery', 'React', 'Vue', 'Angular'].forEach((approach) => {
