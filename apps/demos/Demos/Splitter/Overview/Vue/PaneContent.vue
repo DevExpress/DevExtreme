@@ -28,8 +28,13 @@ const { data } = props;
 
 const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
 
-const getStateText = () => `${data.resizable ? 'Resizable ' : ''}${data.resizable && data.collapsible ? 'and' : ''}${data.collapsible ? ' Collapsible' : ''}`
+const getStateText = function () {
+  if (data.resizable !== false && !data.collapsible) {
+    return 'Resizable only';
+  }
 
+  return `${data.resizable ? 'Resizable' : 'Non-resizable'} and ${data.collapsible ? 'collapsible' : 'non-collapsible'}`;
+};
 const filteredData = computed(() => Object.fromEntries(
   Object.entries(data)
     .filter(([key]) => dimensionOptions.has(key))

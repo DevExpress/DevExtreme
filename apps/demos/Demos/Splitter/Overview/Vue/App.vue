@@ -3,7 +3,7 @@
   <DxSplitter class="splitter" orientation="horizontal">
     <DxItem
       :resizable="true"
-      min-size="60px"
+      min-size="70px"
       size="140px"
       text="Left Pane"
       template="paneContent"
@@ -13,31 +13,31 @@
         <DxItem
           :resizable="true"
           :collapsible="true"
-          min-size="60px"
-          text="Center Pane"
+          max-size="75%"
+          text="Central Pane"
           template="paneContent"
         />
         <DxItem :collapsible="true">
           <DxSplitter orientation="horizontal">
             <DxItem
               :resizable="true"
-              size="33.3%"
-              min-size="10px"
+              :collapsible="true"
+              size="30%"
+              min-size="5%"
               text="Nested Left Pane"
               template="paneContent"
             />
             <DxItem
               :resizable="true"
               :collapsible="true"
-              size="33.3%"
-              min-size="10px"
               text="Nested Center Pane"
               template="paneContent"
             />
             <DxItem
               :resizable="true"
               :collapsible="true"
-              min-size="10px"
+              size="30%"
+              min-size="5%"
               text="Nested Right Pane"
               template="paneContent"
             />
@@ -56,8 +56,9 @@
       </DxSplitter>
     </DxItem>
     <DxItem
-      size="170px"
-      min-size="60px"
+      :resizable="false"
+      :collapsible="false"
+      size="140px"
       text="Right Pane"
       template="paneContent"
     />
