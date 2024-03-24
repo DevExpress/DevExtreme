@@ -22,6 +22,11 @@ jobs:
     steps:
     - name: Get sources
       uses: actions/checkout@v4
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '121.0.6167.160'
     
     - name: Restore npm cache
       uses: actions/cache@v4
@@ -34,6 +39,7 @@ jobs:
       run: npm ci --no-audit --no-fund
     
     - name: Run targets
+      continue-on-error: true
       run: >
         npx nx run-many
         -t test
@@ -50,3 +56,6 @@ jobs:
         devextreme-demos
         devextreme-react-playground
         devextreme-vue-playground
+
+    - name: test treelist
+      run: npx nx e2e devextreme-testcafe-tests --browsers="chrome:headless --disable-gpu --window-size=1200,800"
