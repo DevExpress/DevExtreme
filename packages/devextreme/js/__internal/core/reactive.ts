@@ -70,10 +70,10 @@ export function toSubscribable<T>(v: MaybeSubscribable<T>): Subscribable<T> {
   return new Observable(v);
 }
 
-export function computed<TArgs extends readonly any[], TValue>(
+export function interruptableComputed<TArgs extends readonly any[], TValue>(
   compute: (...args: TArgs) => TValue,
   deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
-): Subscribable<TValue> {
+): Observable<TValue> {
   const depValues: [...TArgs] = deps.map(() => undefined) as any;
   const depInitialized = deps.map(() => false);
   let isInitialized = false;
@@ -96,4 +96,11 @@ export function computed<TArgs extends readonly any[], TValue>(
   });
 
   return value;
+}
+
+export function computed<TArgs extends readonly any[], TValue>(
+  compute: (...args: TArgs) => TValue,
+  deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
+): Subscribable<TValue> {
+  return interruptableComputed(compute, deps);
 }
