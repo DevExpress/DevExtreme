@@ -26,7 +26,6 @@
               :use-select-mode="false"
               :items="data.profileSettings"
               text="Olivia Peyton"
-              icon="../../../../images/employees/51.png"
               display-expr="name"
               key-expr="id"
               @button-click="onButtonClick"
@@ -38,7 +37,7 @@
                 <div class="button-img-indicator"/>
                 <img
                     class="button-img"
-                    :src="data.icon"
+                    src="/apps/demos/images/employees/51.png"
                     alt="employee"
                 >
               </div>

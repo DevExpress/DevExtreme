@@ -14,9 +14,9 @@ const ButtonDescription = ({ text, description }) => (
   </div>
 );
 
-const DropDownButtonTemplate = ({ icon, text }) => (
+const DropDownButtonTemplate = ({ text }) => (
   <React.Fragment>
-    <Avatar icon={icon} />
+    <Avatar icon="../../../../images/employees/51.png" />
     <ButtonDescription text={text} description="IT Manager" />
   </React.Fragment>
 );

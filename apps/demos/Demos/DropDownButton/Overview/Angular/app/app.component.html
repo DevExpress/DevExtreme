@@ -21,7 +21,6 @@
         [splitButton]="true"
         [useSelectMode]="false"
         text="Olivia Peyton"
-        icon="../../../../images/employees/51.png"
         [items]="profileSettings"
         displayExpr="name"
         keyExpr="id"
@@ -32,7 +31,7 @@
         <div *dxTemplate="let data of 'template'">
           <div class="button-img-container">
             <div class="button-img-indicator"></div>
-            <img class="button-img" [src]="data.icon" alt="employee" />
+            <img class="button-img" src="../../../../images/employees/51.png" alt="employee" />
           </div>
           <div class="text-container">
             <div class="button-title">{{ data.text }}</div>

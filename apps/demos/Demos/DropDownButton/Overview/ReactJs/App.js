@@ -128,7 +128,6 @@ const App = () => {
               splitButton={true}
               useSelectMode={false}
               text="Olivia Peyton"
-              icon="../../../../images/employees/51.png"
               items={data.profileSettings}
               displayExpr="name"
               keyExpr="id"
