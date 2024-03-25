@@ -104,20 +104,6 @@ const abstract = function() {
     throw errors.Error('E0001');
 };
 
-const copyStatic = (function() {
-    const hasOwn = Object.prototype.hasOwnProperty;
-
-    return function(source, destination) {
-        for(const key in source) {
-            if(!hasOwn.call(source, key)) {
-                return;
-            }
-
-            destination[key] = source[key];
-        }
-    };
-})();
-
 const classImpl = function() { };
 
 classImpl.inherit = function(members) {
@@ -148,7 +134,7 @@ classImpl.inherit = function(members) {
 
     inheritor.prototype = clonePrototype(parent);
 
-    copyStatic(parent, inheritor);
+    Object.setPrototypeOf(inheritor, parent);
 
     inheritor.inherit = parent.inherit;
     inheritor.abstract = abstract;
