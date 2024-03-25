@@ -4,7 +4,7 @@ import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
 const ITEM_TITLE_CLASS = 'dx-accordion-item-title';
-const CHECKBOX_ICON_CLASS = 'dx-checkbox';
+const CHECKBOX_CLASS = 'dx-checkbox';
 
 fixture('Accordion.Overview')
   .page('http://localhost:8080/')
