@@ -3,8 +3,8 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-const ITEM_CONTENT_CLASS = 'dx-item-content';
-const CHECKBOX_ICON_CLASS = 'dx-checkbox-icon';
+const ITEM_TITLE_CLASS = 'dx-accordion-item-title';
+const CHECKBOX_ICON_CLASS = 'dx-checkbox';
 
 fixture('Accordion.Overview')
   .page('http://localhost:8080/')
@@ -12,18 +12,20 @@ fixture('Accordion.Overview')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
-  test('Custom Overview Appearance', async (t) => {
+runManualTest('Accordion', 'Overview', ['jQuery'], (test) => {
+  test.only('Custom Overview Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
+    await t.debug();
+
     await t
-      .click($(`.${ITEM_CONTENT_CLASS}`).nth(2))
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
       .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_expanded_electronics.png');
 
     await t
-      .click($(`.${ITEM_CONTENT_CLASS}`).nth(2))
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
       .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_disabled_collapsible.png');
@@ -37,17 +39,17 @@ runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (t
       .wait(200);
 
     await t
-      .click($(`.${ITEM_CONTENT_CLASS}`).nth(1))
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(1))
       .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_enabled_multiple_and_collapsible.png');
 
     await t
-      .click($(`.${ITEM_CONTENT_CLASS}`).nth(3))
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(2))
       .wait(200);
 
     await t
-      .click($(`.${ITEM_CONTENT_CLASS}`).nth(5))
+      .click($(`.${ITEM_TITLE_CLASS}`).nth(3))
       .wait(200);
 
     await testScreenshot(t, takeScreenshot, 'accordion_overview_expanded_ksmusic_and_tomsclub.png');
