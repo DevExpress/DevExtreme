@@ -13,12 +13,6 @@ const wrapOverridden = function(baseProto, methodName, method) {
     };
 };
 
-const clonePrototype = function(obj) {
-    const func = function() { };
-    func.prototype = obj.prototype;
-    return new func();
-};
-
 const redefine = function(members) {
     const that = this;
     let overridden;
@@ -132,8 +126,7 @@ classImpl.inherit = function(members) {
         }
     };
 
-    inheritor.prototype = clonePrototype(parent);
-
+    Object.setPrototypeOf(inheritor.prototype, parent.prototype);
     Object.setPrototypeOf(inheritor, parent);
 
     inheritor.inherit = parent.inherit;
