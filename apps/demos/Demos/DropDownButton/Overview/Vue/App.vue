@@ -194,11 +194,6 @@ function onColorClick(clickedColor) {
   padding: 5px;
 }
 
-.dx-button-content img.dx-icon {
-  width: 24px;
-  height: 24px;
-}
-
 .color {
   cursor: pointer;
   font-size: 18px;

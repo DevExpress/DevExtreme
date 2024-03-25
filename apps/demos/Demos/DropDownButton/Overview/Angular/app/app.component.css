@@ -7,11 +7,6 @@
   padding: 5px;
 }
 
-::ng-deep .dx-button-content img.dx-icon {
-  width: 24px;
-  height: 24px;
-}
-
 ::ng-deep .color {
   cursor: pointer;
   font-size: 18px;
