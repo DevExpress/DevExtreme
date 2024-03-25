@@ -29,6 +29,20 @@ const redefine = function(members) {
         that.prototype[memberName] = overridden ? wrapOverridden(that.parent.prototype, memberName, member) : member;
     }
 
+    const isParentES6 = !Object.hasOwn(that.parent, 'parent');
+
+    if(isParentES6 && members['ctor']) {
+        that.prototype.ctor = function() {
+            const prevCallBase = this.callBase;
+            this.callBase = that.parent;
+            try {
+                return members['ctor'].apply(this, arguments);
+            } finally {
+                this.callBase = prevCallBase;
+            }
+        };
+    }
+
     return that;
 };
 
@@ -103,6 +117,7 @@ classImpl.inherit = function(members) {
     const parent = this;
     const inheritor = function() {
         const instance = this;
+
         if(!instance || isWindow(instance) || typeof instance.constructor !== 'function') {
             throw errors.Error('E0003');
         }
