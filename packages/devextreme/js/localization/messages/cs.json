@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Bez časové zóny",
         "dxScheduler-moreAppointments": "{0} navíc",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Dnes",
         "dxCalendar-ariaWidgetName": "Kalendář",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Không có múi giờ",
         "dxScheduler-moreAppointments": "{0} thêm",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Hôm nay",
         "dxCalendar-ariaWidgetName": "Lịch",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "沒有時區",
         "dxScheduler-moreAppointments": "{0} 更多",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "今天",
         "dxCalendar-ariaWidgetName": "日曆",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Fără fus orar",
         "dxScheduler-moreAppointments": "{0} mai mult",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Astăzi",
         "dxCalendar-ariaWidgetName": "Calendar",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

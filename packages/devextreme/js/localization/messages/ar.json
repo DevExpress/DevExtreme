@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "بلا منطقة زمنية",
         "dxScheduler-moreAppointments": "{0} المزيد",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "اليوم",
         "dxCalendar-ariaWidgetName": "التقويم",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

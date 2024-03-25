@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Ei aikavyöhyke",
         "dxScheduler-moreAppointments": "{0} lisää",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Tänään",
         "dxCalendar-ariaWidgetName": "Kalenteri",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

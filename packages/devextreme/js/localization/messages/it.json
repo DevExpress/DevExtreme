@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Nessun fuso orario",
         "dxScheduler-moreAppointments": "{0} ancora",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Oggi",
         "dxCalendar-ariaWidgetName": "Calendario",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Ingen tidssone",
         "dxScheduler-moreAppointments": "{0} mer",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "I dag",
         "dxCalendar-ariaWidgetName": "Kalender",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

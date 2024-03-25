@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Χωρίς ζώνη ώρας",
         "dxScheduler-moreAppointments": "{0} περισσότερα",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Σήμερα",
         "dxCalendar-ariaWidgetName": "Ημερολόγιο",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

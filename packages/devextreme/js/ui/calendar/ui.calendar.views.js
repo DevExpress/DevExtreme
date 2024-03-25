@@ -6,6 +6,7 @@ import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import dateSerialization from '../../core/utils/date_serialization';
+import messageLocalization from '../../localization/message';
 
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
@@ -42,7 +43,14 @@ const Views = {
         _renderFocusTarget: noop,
 
         getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'longdate');
+            const formattedDate = dateLocalization.format(date, 'longdate');
+            const isToday = this._isTodayCell(date);
+
+            const ariaLabel = isToday
+                ? `${formattedDate}. ${messageLocalization.format('dxCalendar-today')}`
+                : formattedDate;
+
+            return ariaLabel;
         },
 
         _renderHeader: function() {

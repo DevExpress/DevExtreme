@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Brak strefy czasowej",
         "dxScheduler-moreAppointments": "{0} kolejne",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Dzisiaj",
         "dxCalendar-ariaWidgetName": "Kalendarz",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

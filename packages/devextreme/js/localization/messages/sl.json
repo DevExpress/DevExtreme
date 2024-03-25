@@ -288,6 +288,7 @@
         "dxScheduler-noTimezoneTitle": "Brez časovnega pasa",
         "dxScheduler-moreAppointments": "še {0}",
 
+        "dxCalendar-today": "Today",
         "dxCalendar-todayButtonText": "Danes",
         "dxCalendar-ariaWidgetName": "Koledar",
         "dxCalendar-previousMonthButtonLabel": "Previous month",
