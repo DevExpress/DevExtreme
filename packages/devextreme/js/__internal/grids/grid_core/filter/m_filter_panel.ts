@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
@@ -124,10 +123,14 @@ export class FilterPanelView extends modules.View {
   private _getTextElement(): dxElementWrapper {
     const that = this;
     const $textElement = $('<div>').addClass(that.addWidgetPrefix(FILTER_PANEL_TEXT_CLASS));
-    let filterText;
     const filterValue = that.option('filterValue');
     if (filterValue) {
-      when(that.getFilterText(filterValue, this._filterSyncController.getCustomFilterOperations())).done((filterText) => {
+      // eslint-disable-next-line @typescript-eslint/no-floating-promises
+      (async (): Promise<void> => {
+        let filterText = await that.getFilterText(
+          filterValue,
+          this._filterSyncController.getCustomFilterOperations(),
+        );
         const customizeText = that.option('filterPanel.customizeText');
         if (customizeText) {
           const customText = customizeText({
@@ -140,10 +143,10 @@ export class FilterPanelView extends modules.View {
           }
         }
         $textElement.text(filterText);
-      });
+      })();
     } else {
-      filterText = that.option('filterPanel.texts.createFilter');
-      $textElement.text(filterText);
+      const filterText = that.option('filterPanel.texts.createFilter');
+      $textElement.text(filterText ?? '');
     }
 
     eventsEngine.on($textElement, 'click', () => that._showFilterBuilder());
@@ -229,10 +232,9 @@ export class FilterPanelView extends modules.View {
     return '';
   }
 
-  private getConditionText(filterValue, options) {
+  private async getConditionText(filterValue, options) {
     const that = this;
     const operation = filterValue[1];
-    const deferred = Deferred();
     const customOperation = getCustomOperation(options.customOperations, operation);
     let operationText;
     const field = getField(filterValue[0], options.columns);
@@ -246,17 +248,13 @@ export class FilterPanelView extends modules.View {
     } else {
       operationText = getCaptionByOperation(operation, options.filterOperationDescriptions);
     }
-    when(this._getValueText(field, customOperation, value)).done((valueText) => {
-      deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
-    });
-    return deferred;
+    const valueText = await this._getValueText(field, customOperation, value);
+    return that._getConditionText(fieldText, operationText, valueText);
   }
 
-  private getGroupText(filterValue, options, isInnerGroup?) {
+  private async getGroupText(filterValue, options, isInnerGroup?) {
     const that = this;
-    // @ts-expect-error
-    const result = new Deferred();
-    const textParts: any[] = [];
+    const textParts: (string | Promise<string>)[] = [];
     const groupValue = getGroupValue(filterValue);
 
     filterValue.forEach((item) => {
@@ -267,20 +265,19 @@ export class FilterPanelView extends modules.View {
       }
     });
 
-    when.apply(this, textParts).done((...args) => {
-      let text;
-      if (groupValue.startsWith('!')) {
-        const groupText = options.groupOperationDescriptions[`not${groupValue.substring(1, 2).toUpperCase()}${groupValue.substring(2)}`].split(' ');
-        text = `${groupText[0]} ${args[0]}`;
-      } else {
-        text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
-      }
-      if (isInnerGroup) {
-        text = `(${text})`;
-      }
-      result.resolve(text);
-    });
-    return result;
+    const args = await Promise.all(textParts);
+    let text: string;
+    if (groupValue.startsWith('!')) {
+      const groupText = options.groupOperationDescriptions[`not${groupValue.substring(1, 2).toUpperCase()}${groupValue.substring(2)}`].split(' ');
+      text = `${groupText[0]} ${args[0]}`;
+    } else {
+      text = args.join(` ${options.groupOperationDescriptions[groupValue]} `);
+    }
+    if (isInnerGroup) {
+      text = `(${text})`;
+    }
+
+    return text;
   }
 
   private getFilterText(filterValue, customOperations) {
