@@ -40,7 +40,7 @@ runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (t
       .click($(`.${ITEM_CONTENT_CLASS}`).nth(1))
       .wait(200);
 
-    await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_enabled_collapsible.png');
+    await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_enabled_multiple_and_collapsible.png');
 
     await t
       .click($(`.${ITEM_CONTENT_CLASS}`).nth(3))
