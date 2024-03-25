@@ -40,4 +40,4 @@ export type DxExtendedPromise<T> = DxPromise<T> & {
     ): PromiseLike<TResult1 | TResult2>;
 };
 
-export function when<T>(...args: (DeferredObj<T> | T)[]): DeferredObj<T>;
+export function when<T>(...args: (DeferredObj<T> | Promise<T> | T)[]): DeferredObj<T>;
