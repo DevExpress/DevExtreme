@@ -31,11 +31,11 @@ runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (t
     await testScreenshot(t, takeScreenshot, 'accordion_overview_collapsed_electronics_disabled_collapsible.png');
 
     await t
-      .click($(`.${CHECKBOX_ICON_CLASS}`).nth(0))
+      .click($(`.${CHECKBOX_CLASS}`).nth(0))
       .wait(200);
 
     await t
-      .click($(`.${CHECKBOX_ICON_CLASS}`).nth(1))
+      .click($(`.${CHECKBOX_CLASS}`).nth(1))
       .wait(200);
 
     await t
