@@ -40,8 +40,7 @@ const include = function() {
 
     // NOTE: For ES6 classes. They don't have _includedCtors/_includedPostCtors
     // properties and get them from the ancestor class.
-    const hasClassObjOwnProperty = Object.prototype.hasOwnProperty.bind(classObj);
-    const isES6Class = !hasClassObjOwnProperty('_includedCtors') && !hasClassObjOwnProperty('_includedPostCtors');
+    const isES6Class = !Object.hasOwn(classObj, '_includedCtors') && !Object.hasOwn(classObj, '_includedPostCtors');
 
     if(isES6Class) {
         classObj._includedCtors = classObj._includedCtors.slice(0);
@@ -74,7 +73,7 @@ const include = function() {
 };
 
 const subclassOf = function(parentClass) {
-    const hasParentProperty = Object.prototype.hasOwnProperty.bind(this)('parent');
+    const hasParentProperty = Object.hasOwn(this, 'parent');
     const isES6Class = !hasParentProperty && this.parent;
 
     if(isES6Class) {
