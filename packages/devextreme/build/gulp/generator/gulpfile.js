@@ -85,7 +85,7 @@ const processErrors = (knownErrors, errors = []) => (e) => {
     }
 };
 
-function generateInfernoComponents(distPath = './', babelConfig = transpileConfig.cjs, dev) {
+function generateInfernoComponents(distPath, babelConfig, dev) {
     return function generateInfernoComponents(done) {
         const tsProject = ts.createProject('build/gulp/generator/ts-configs/inferno.tsconfig.json');
 
@@ -104,6 +104,11 @@ function generateInfernoComponents(distPath = './', babelConfig = transpileConfi
                 finish() {}
             }))
             .pipe(gulpIf(isNotDTS, babel(babelConfig)))
+            .on('error', function(e) {
+                console.log('babel error occured:')
+                console.log(e)
+                done(1);
+            })
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PATH)))
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_RENOVATION_PATH)))
             .pipe(gulpIf(isDefault, gulp.dest(context.TRANSPILED_PROD_RENOVATION_PATH)))
@@ -147,7 +152,7 @@ gulp.task('generate-jquery-components-watch', function watchJQueryComponents() {
 
 gulp.task('generate-components', gulp.series(
     'generate-jquery-components',
-    generateInfernoComponents(),
+    generateInfernoComponents('./', transpileConfig.cjs),
     ifEsmPackage(generateInfernoComponents('./esm', transpileConfig.esm)),
     ifEsmPackage(generateInfernoComponents('./cjs', transpileConfig.cjs)),
     processRenovationMeta
