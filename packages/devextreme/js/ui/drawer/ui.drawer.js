@@ -22,6 +22,7 @@ import { triggerResizeEvent } from '../../events/visibility_change';
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
+const DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS = 'dx-drawer-panel-content-has-min-size';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
@@ -194,16 +195,33 @@ const Drawer = Widget.inherit({
         }
     },
 
+    _togglePanelContentHasMinSizeClass(shouldBeSet) {
+        this._$panelContentWrapper.toggleClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS, shouldBeSet);
+    },
+
     _renderPanelContentWrapper() {
+        const { openedStateMode, opened, minSize } = this.option();
+
         this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
+        this._togglePanelContentHasMinSizeClass(!!minSize);
+
         const position = this.calcTargetPosition();
-        if(this.option('openedStateMode') === 'push' && ['top', 'bottom'].indexOf(position) > -1) {
+
+        if(openedStateMode === 'push' && ['top', 'bottom'].indexOf(position) > -1) {
             this._$panelContentWrapper.addClass(DRAWER_PANEL_CONTENT_CLASS + '-push-top-or-bottom');
         }
-        if(this.option('openedStateMode') !== 'overlap' && !this.option('opened') && !this.option('minSize')) {
+
+        if(openedStateMode !== 'overlap' && !opened && !minSize) {
             this._$panelContentWrapper.attr('manualposition', true);
-            this._$panelContentWrapper.css({ position: 'absolute', top: '-10000px', left: '-10000px', right: 'auto', bottom: 'auto' });
+            this._$panelContentWrapper.css({
+                position: 'absolute',
+                top: '-10000px',
+                left: '-10000px',
+                right: 'auto',
+                bottom: 'auto',
+            });
         }
+
         this._$wrapper.append(this._$panelContentWrapper);
     },
 
@@ -525,6 +543,10 @@ const Drawer = Widget.inherit({
                 this._refreshPanel();
                 break;
             case 'minSize':
+                this._initMinMaxSize();
+                this._renderPosition(this.option('opened'), true);
+                this._togglePanelContentHasMinSizeClass(!!args.value);
+                break;
             case 'maxSize':
                 this._initMinMaxSize();
                 this._renderPosition(this.option('opened'), true);
