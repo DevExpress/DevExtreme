@@ -183,6 +183,7 @@ class ContextMenu extends MenuBase {
 
             this.selectItem($item[0]);
         };
+
         return extend(super._supportedKeys(), {
             space: selectItem,
             escape: this.hide
@@ -337,6 +338,26 @@ class ContextMenu extends MenuBase {
         super._render();
         this._renderVisibility(this.option('visible'));
         this._addWidgetClass();
+    }
+
+    _isTargetOutOfComponent(relatedTarget) {
+        const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
+
+        return !isInsideContextMenu;
+    }
+
+    _focusOutHandler(e) {
+        const { relatedTarget } = e;
+
+        if(relatedTarget) {
+            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+
+            if(isTargetOutside) {
+                this.hide();
+            }
+        }
+
+        super._focusOutHandler(e);
     }
 
     _renderContentImpl() {
