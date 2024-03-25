@@ -121,12 +121,13 @@ const copyStatic = (function() {
 const classImpl = function() { };
 
 classImpl.inherit = function(members) {
+    const parent = this;
     const inheritor = function() {
-        if(!this || isWindow(this) || typeof this.constructor !== 'function') {
+        const instance = this;
+        if(!instance || isWindow(instance) || typeof instance.constructor !== 'function') {
             throw errors.Error('E0003');
         }
 
-        const instance = this;
         const ctor = instance.ctor;
         const includedCtors = instance.constructor._includedCtors;
         const includedPostCtors = instance.constructor._includedPostCtors;
@@ -145,19 +146,19 @@ classImpl.inherit = function(members) {
         }
     };
 
-    inheritor.prototype = clonePrototype(this);
+    inheritor.prototype = clonePrototype(parent);
 
-    copyStatic(this, inheritor);
+    copyStatic(parent, inheritor);
 
-    inheritor.inherit = this.inherit;
+    inheritor.inherit = parent.inherit;
     inheritor.abstract = abstract;
     inheritor.redefine = redefine;
     inheritor.include = include;
     inheritor.subclassOf = subclassOf;
 
-    inheritor.parent = this;
-    inheritor._includedCtors = this._includedCtors ? this._includedCtors.slice(0) : [];
-    inheritor._includedPostCtors = this._includedPostCtors ? this._includedPostCtors.slice(0) : [];
+    inheritor.parent = parent;
+    inheritor._includedCtors = parent._includedCtors ? parent._includedCtors.slice(0) : [];
+    inheritor._includedPostCtors = parent._includedPostCtors ? parent._includedPostCtors.slice(0) : [];
     inheritor.prototype.constructor = inheritor;
 
     inheritor.redefine(members);
