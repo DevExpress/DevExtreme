@@ -21,7 +21,6 @@ $(() => {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
     text: 'Olivia Peyton',
-    icon: '../../../../images/employees/51.png',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
@@ -35,7 +34,7 @@ $(() => {
       $("<img>")
         .addClass('button-img')
         .attr({
-          src: data.icon,
+          src: '../../../../images/employees/51.png',
           alt: 'employee',
         }).appendTo($imageWrapper);
 
