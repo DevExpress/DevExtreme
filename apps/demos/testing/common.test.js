@@ -73,6 +73,8 @@ const getTestSpecificSkipRules = (testName) => {
     case 'DataGrid-RowSelection':
     case 'FilterBuilder-WithList':
       return ['image-alt'];
+    case 'Splitter-Overview':
+      return ['aria-allowed-attr'];
     case 'TagBox-Overview':
       return ['image-alt', 'image-redundant-alt'];
     default:
@@ -212,6 +214,7 @@ const SKIPPED_TESTS = {
       { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'Palette', themes: [THEME.material] },
     ],
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
