@@ -33,8 +33,8 @@ $(() => {
     items: [
       {
         resizable: true,
-        minSize: '70px',
         size: '140px',
+        minSize: '70px',
         template(data) {
           return paneContentTemplate(data, 'Left Pane');
         },

@@ -3,8 +3,8 @@
   <DxSplitter class="splitter">
     <DxItem
       :resizable="true"
-      min-size="70px"
       size="140px"
+      min-size="70px"
       text="Left Pane"
       template="paneContent"
     />
