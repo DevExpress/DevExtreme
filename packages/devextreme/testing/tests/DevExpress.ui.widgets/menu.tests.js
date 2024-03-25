@@ -760,6 +760,130 @@ QUnit.module('Menu tests', {
         assert.notOk(submenu.option('visible'), 'submenu was closed');
     });
 
+    QUnit.testInActiveWindow('Submenu should be closed when element loses focus', function(assert) {
+        const options = {
+            focusStateEnabled: true,
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                {
+                    text: 'item 1',
+                    items: [{ text: 'item 1_1' }],
+                },
+            ],
+        };
+        const menu = createMenu(options);
+        const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $menuItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($menuItem);
+        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+        $(menu.element).trigger($.Event('focusout', { relatedTarget: $('body') }));
+        assert.strictEqual(submenu.option('visible'), false, 'submenu closed');
+    });
+
+    QUnit.testInActiveWindow('Submenu should not be closed when element loses focus by focusout event', function(assert) {
+        const options = {
+            focusStateEnabled: true,
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                {
+                    text: 'item 1',
+                    items: [{ text: 'item 1_1' }],
+                },
+            ],
+        };
+        const menu = createMenu(options);
+        const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $menuItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($menuItem);
+
+        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+        $(menu.element).trigger('focusout');
+
+        assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
+    });
+
+    QUnit.testInActiveWindow('Submenu should not be closed when submenu item gets focus', function(assert) {
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                {
+                    text: 'item 1',
+                    items: [{ text: 'item 1_1' }],
+                },
+            ],
+        };
+        const menu = createMenu(options);
+        const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $menuItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($menuItem);
+
+        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+        const $submenuItems = submenu.itemElements();
+        $($submenuItems.eq(0)).trigger('focusin');
+
+        assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
+    });
+
+    QUnit.testInActiveWindow('Submenu should not be closed when current root menu item gets focus', function(assert) {
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                {
+                    text: 'item 1',
+                    items: [{ text: 'item 1_1' }],
+                },
+            ],
+        };
+        const menu = createMenu(options);
+
+        const $menuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $menuItem.trigger('dxclick');
+        const submenu = getSubMenuInstance($menuItem);
+        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+        $menuItem.trigger('focusin');
+        assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
+    });
+
+    QUnit.testInActiveWindow('Submenu should not be closed when another root menu item gets focus', function(assert) {
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            items: [
+                {
+                    text: 'item 1',
+                    items: [{ text: 'item 1_1' }],
+                },
+                {
+                    text: 'item 2',
+                    items: [{ text: 'item 2_1' }],
+                },
+            ],
+        };
+        const menu = createMenu(options);
+
+        const $menuItems = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`);
+
+        const $firstMenuItem = $menuItems.eq(0);
+        const $secondMenuItem = $menuItems.eq(1);
+
+        $firstMenuItem.trigger('dxclick');
+        const submenu = getSubMenuInstance($firstMenuItem);
+        assert.strictEqual(submenu.option('visible'), true, 'submenu opened');
+
+        $secondMenuItem.trigger('focusin');
+        assert.strictEqual(submenu.option('visible'), true, 'submenu still opened');
+    });
+
     QUnit.test('Don\'t hide submenu when cancel is true', function(assert) {
         let i = 0;
 
