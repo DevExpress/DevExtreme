@@ -376,8 +376,13 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
         $detailCell
           .addClass(CELL_FOCUS_DISABLED_CLASS)
           .addClass(MASTER_DETAIL_CELL_CLASS)
-          .attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'))
           .attr('colSpan', visibleColumns.length);
+
+        const isEditForm = row.isEditing;
+
+        if (!isEditForm) {
+          $detailCell.attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'));
+        }
       }
     } else {
       super._renderCells.apply(this, arguments as any);
