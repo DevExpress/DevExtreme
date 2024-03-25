@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { captionize } from '@js/core/utils/inflector';
 import { isDefined } from '@js/core/utils/type';
@@ -212,24 +211,22 @@ export class FilterPanelView extends modules.View {
     return Array.isArray(value) ? `('${value.join('\', \'')}')` : ` '${value}'`;
   }
 
-  private _getValueText(field, customOperation, value): DeferredObj<string> {
-    const deferred = Deferred<string>();
+  private async _getValueText(field, customOperation, value): Promise<string> {
     const hasCustomOperation = customOperation && customOperation.customizeText;
     if (isDefined(value) || hasCustomOperation) {
       if (!hasCustomOperation && field.lookup) {
-        getCurrentLookupValueText(field, value, (data) => {
-          deferred.resolve(this._getValueMaskedText(data));
+        const data = await new Promise((resolve) => {
+          getCurrentLookupValueText(field, value, resolve);
         });
-      } else {
-        const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value, null);
-        when(getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET)).done((data) => {
-          deferred.resolve(this._getValueMaskedText(data));
-        });
+
+        return this._getValueMaskedText(data);
       }
-    } else {
-      deferred.resolve('');
+      const displayValue = Array.isArray(value) ? value : gridUtils.getDisplayValue(field, value, null);
+      const data = await getCurrentValueText(field, displayValue, customOperation, FILTER_PANEL_TARGET);
+
+      return this._getValueMaskedText(data);
     }
-    return deferred.promise() as any;
+    return '';
   }
 
   private getConditionText(filterValue, options) {
@@ -249,7 +246,7 @@ export class FilterPanelView extends modules.View {
     } else {
       operationText = getCaptionByOperation(operation, options.filterOperationDescriptions);
     }
-    this._getValueText(field, customOperation, value).done((valueText) => {
+    when(this._getValueText(field, customOperation, value)).done((valueText) => {
       deferred.resolve(that._getConditionText(fieldText, operationText, valueText));
     });
     return deferred;
@@ -259,7 +256,7 @@ export class FilterPanelView extends modules.View {
     const that = this;
     // @ts-expect-error
     const result = new Deferred();
-    const textParts: string[] = [];
+    const textParts: any[] = [];
     const groupValue = getGroupValue(filterValue);
 
     filterValue.forEach((item) => {
