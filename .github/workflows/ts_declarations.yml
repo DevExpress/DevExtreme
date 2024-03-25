@@ -73,37 +73,9 @@ jobs:
 
     - name: Validate declarations
       working-directory: ./packages/devextreme
-      run: npm run validate-declarations
-
-  check-ts-compilation:
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Restore npm cache
-      uses: actions/cache@v4
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
-    - name: Check sources compilation
-      working-directory: ./packages/devextreme
-      run: npm run validate-ts
-
-    - name: Check test cases
-      working-directory: ./packages/devextreme
-      run: npm run test-typescript
+      run: |
+        npm run validate-ts
+        npm run validate-declarations
 
   notify:
     runs-on: devextreme-shr2

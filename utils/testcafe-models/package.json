@@ -1,0 +1,6 @@
+{
+  "name": "devextreme-testcafe-models",
+  "peerDependencies": {
+    "testcafe": "*"
+  }
+}
