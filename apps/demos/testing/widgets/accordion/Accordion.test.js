@@ -13,7 +13,7 @@ fixture('Accordion.Overview')
   });
 
 runManualTest('Accordion', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
-  test.only('Custom Overview Appearance', async (t) => {
+  test('Custom Overview Appearance', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await t.debug();
