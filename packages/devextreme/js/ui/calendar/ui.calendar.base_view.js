@@ -138,9 +138,9 @@ const BaseView = Widget.inherit({
         elementData(cell, CALENDAR_DATE_VALUE_KEY, cellDate);
 
         this.setAria({
-            'role': 'gridcell',
-            'label': this.getCellAriaLabel(cellDate),
-            'selected': false,
+            role: 'gridcell',
+            selected: false,
+            label: this.getCellAriaLabel(cellDate),
         }, $cell);
 
         return { cell, $cell };
