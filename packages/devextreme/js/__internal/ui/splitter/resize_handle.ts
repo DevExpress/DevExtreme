@@ -4,6 +4,7 @@ import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { name as CLICK_EVENT } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
+import { name as DOUBLE_CLICK_EVENT } from '@js/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import Widget from '@js/ui/widget/ui.widget';
@@ -334,6 +335,24 @@ class ResizeHandle extends (Widget as any) {
     }
 
     eventsEngine.on(
+      this.$element(),
+      DOUBLE_CLICK_EVENT,
+      (e) => {
+        const { showCollapsePrev, showCollapseNext } = this.option();
+
+        if (showCollapsePrev === true) {
+          this._collapsePrevHandler(e);
+
+          return;
+        }
+
+        if (showCollapseNext === true) {
+          this._collapseNextHandler(e);
+        }
+      },
+    );
+
+    eventsEngine.on(
       this._$collapsePrevButton,
       CLICK_EVENT,
       this._collapsePrevHandler.bind(this),
@@ -353,6 +372,8 @@ class ResizeHandle extends (Widget as any) {
     eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
+    // @ts-expect-error todo: make optional parameters for eventsEngine
+    eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT);
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this._$collapsePrevButton, CLICK_EVENT);
     // @ts-expect-error todo: make optional parameters for eventsEngine

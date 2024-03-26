@@ -623,6 +623,37 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
+    [{
+        items: [{ collapsible: true }, { collapsible: true }],
+        expectedLayout: ['0', '100'],
+    },
+    {
+        items: [{ }, { collapsible: true }],
+        expectedLayout: ['100', '0'],
+    },
+    {
+        items: [{ }, { }],
+        expectedLayout: ['50', '50'],
+    },
+    {
+        items: [{ collapsible: true, collapsed: true }, { }],
+        expectedLayout: ['50', '50'],
+    },
+    {
+        items: [{ visible: false }, { collapsible: true }, { collapsible: true }],
+        expectedLayout: ['0', '100'],
+    }].forEach(({ items, expectedLayout }) => {
+        QUnit.test(`Panes collapse by double click: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            const $resizeHandle = this.getResizeHandles();
+
+            $resizeHandle.trigger('dxdblclick');
+
+            this.assertLayout(expectedLayout);
+        });
+    });
+
     QUnit.test('Pane with collapsed=true should have more priority than pane with maxSize', function(assert) {
         this.reinit({
             items: [ { collapsed: true }, { maxSize: '50%' } ],
@@ -1612,6 +1643,42 @@ QUnit.module('Events', moduleConfig, () => {
         const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
 
         $collapseNextButton.trigger('dxclick');
+
+        assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
+        assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');
+    });
+
+    QUnit.test('onItemCollapsed should be called on pane collapsing by double click', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsible: true }, { collapsible: true }]
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+
+        $resizeHandle.trigger('dxdblclick');
+
+        assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed not called');
+        assert.strictEqual(onItemExpanded.callCount, 0, 'onItemExpanded called');
+    });
+
+    QUnit.test('onItemExpanded should be called on pane expanding by double click', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsed: true, collapsible: true }, { collapsible: true }]
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+
+        $resizeHandle.trigger('dxdblclick');
 
         assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
         assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');

@@ -20,7 +20,7 @@ const moduleConfig = {
 
         const init = (options = {}) => {
             this.instance = new ResizeHandle($('#resizeHandle'), options);
-            this.$element = this.instance.$element();
+            this.$element = $(this.instance.$element());
         };
 
         init();
@@ -104,6 +104,26 @@ QUnit.module('Behavior', moduleConfig, () => {
         });
     });
 
+    ['prev', 'next', 'both', 'none'].forEach((scenario) => {
+        QUnit.test(`double click handler (${scenario} button visible)`, function(assert) {
+            const onCollapsePrevStub = sinon.stub();
+            const onCollapseNextStub = sinon.stub();
+            const onCollapsePrevCallCount = scenario === 'prev' || scenario === 'both' ? 1 : 0;
+            const onCollapseNextCallCount = scenario === 'next' ? 1 : 0;
+
+            this.reinit({
+                onCollapsePrev: onCollapsePrevStub,
+                onCollapseNext: onCollapseNextStub,
+                showCollapsePrev: scenario === 'prev' || scenario === 'both',
+                showCollapseNext: scenario === 'next' || scenario === 'both',
+            });
+
+            this.$element.trigger('dxdblclick');
+
+            assert.strictEqual(onCollapsePrevStub.callCount, onCollapsePrevCallCount, `onCollapsePrev called ${onCollapsePrevCallCount} times`);
+            assert.strictEqual(onCollapseNextStub.callCount, onCollapseNextCallCount, `onCollapseNext called ${onCollapseNextCallCount} times`);
+        });
+    });
 });
 
 QUnit.module('Cursor', moduleConfig, () => {
