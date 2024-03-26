@@ -53,7 +53,7 @@ export class AppComponent {
   }
 
   onItemDragStart(e: DxDraggableTypes.DragStartEvent) {
-    Object.assign(e.itemData, e.fromData);
+    e.itemData = e.fromData;
   }
 
   onItemDragEnd(e: DxDraggableTypes.DragEndEvent) {
