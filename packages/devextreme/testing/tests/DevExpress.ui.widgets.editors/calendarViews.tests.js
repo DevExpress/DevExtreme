@@ -25,7 +25,7 @@ const CURRENT_DATE_TEXT = {
     month: messageLocalization.format('dxCalendar-currentDay'),
     year: messageLocalization.format('dxCalendar-currentMonth'),
     decade: messageLocalization.format('dxCalendar-currentYear'),
-    century: messageLocalization.format('dxCalendar-currentYearsRange'),
+    century: messageLocalization.format('dxCalendar-currentYearRange'),
 };
 
 const getShortDate = function(date) {
