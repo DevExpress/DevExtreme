@@ -1427,7 +1427,6 @@ const Calendar = Editor.inherit({
     },
 
     _updateAriaSelected(value, previousValue) {
-        // debugger
         previousValue.forEach((item) => {
             this.setAria('selected', false, this._view._getCellByDate(item));
         });

@@ -139,7 +139,8 @@ const BaseView = Widget.inherit({
 
         this.setAria({
             'role': 'gridcell',
-            'label': this.getCellAriaLabel(cellDate)
+            'label': this.getCellAriaLabel(cellDate),
+            'selected': false,
         }, $cell);
 
         return { cell, $cell };
