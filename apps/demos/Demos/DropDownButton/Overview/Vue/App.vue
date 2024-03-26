@@ -25,7 +25,6 @@
               :split-button="true"
               :use-select-mode="false"
               :items="data.profileSettings"
-              text="Olivia Peyton"
               display-expr="name"
               key-expr="id"
               @button-click="onButtonClick"
@@ -42,7 +41,7 @@
                 >
               </div>
               <div class="text-container">
-                <div class="button-title">{{ data.text }}</div>
+                <div class="button-title">Olivia Peyton</div>
                 <div class="button-row">IT Manager</div>
               </div>
             </template>

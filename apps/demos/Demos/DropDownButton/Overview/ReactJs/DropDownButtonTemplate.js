@@ -16,11 +16,11 @@ const ButtonDescription = ({ text, description }) => (
     <div className="button-row">{description}</div>
   </div>
 );
-const DropDownButtonTemplate = ({ text }) => (
+const DropDownButtonTemplate = () => (
   <React.Fragment>
     <Avatar icon="../../../../images/employees/51.png" />
     <ButtonDescription
-      text={text}
+      text="Olivia Peyton"
       description="IT Manager"
     />
   </React.Fragment>

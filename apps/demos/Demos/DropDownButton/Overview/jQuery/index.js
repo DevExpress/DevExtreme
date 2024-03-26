@@ -20,7 +20,6 @@ $(() => {
     onItemClick(e) {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
-    text: 'Olivia Peyton',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
@@ -42,7 +41,7 @@ $(() => {
         .addClass('text-container').appendTo(element);
 
       $('<div>')
-        .addClass('button-title').text(data.text)
+        .addClass('button-title').text('Olivia Peyton')
         .appendTo($textContainer);
 
       $('<div>')

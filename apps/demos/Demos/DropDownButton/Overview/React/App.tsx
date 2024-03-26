@@ -137,7 +137,6 @@ const App = () => {
               id="custom-template"
               splitButton={true}
               useSelectMode={false}
-              text="Olivia Peyton"
               items={data.profileSettings}
               displayExpr="name"
               keyExpr="id"
