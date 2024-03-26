@@ -6,7 +6,6 @@ import dateUtils from '../../core/utils/date';
 import { extend } from '../../core/utils/extend';
 import dateLocalization from '../../localization/date';
 import dateSerialization from '../../core/utils/date_serialization';
-import messageLocalization from '../../localization/message';
 
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
@@ -19,6 +18,10 @@ const Views = {
 
         _getViewName: function() {
             return 'month';
+        },
+
+        _getCurrentDateFormat: function() {
+            return 'longdate';
         },
 
         _getDefaultOptions: function() {
@@ -41,17 +44,6 @@ const Views = {
         },
 
         _renderFocusTarget: noop,
-
-        getCellAriaLabel: function(date) {
-            const formattedDate = dateLocalization.format(date, 'longdate');
-            const isToday = this._isTodayCell(date);
-
-            const ariaLabel = isToday
-                ? `${formattedDate}. ${messageLocalization.format('dxCalendar-today')}`
-                : formattedDate;
-
-            return ariaLabel;
-        },
 
         _renderHeader: function() {
             const $headerRow = $('<tr>');
@@ -229,6 +221,10 @@ const Views = {
             return 'year';
         },
 
+        _getCurrentDateFormat: function() {
+            return 'monthandyear';
+        },
+
         _isTodayCell: function(cellDate) {
             const today = this.option('_todayDate')();
 
@@ -276,10 +272,6 @@ const Views = {
             foundDate.setDate(1);
 
             return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
-        },
-
-        getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'monthandyear');
         },
 
         getNavigatorCaption: function() {

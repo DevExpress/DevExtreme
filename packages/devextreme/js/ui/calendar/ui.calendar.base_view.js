@@ -12,6 +12,7 @@ import messageLocalization from '../../localization/message';
 import { addNamespace } from '../../events/utils/index';
 import { name as clickEventName } from '../../events/click';
 import { start as hoverStartEventName } from '../../events/hover';
+import dateLocalization from '../../localization/date';
 
 const { abstract } = Widget;
 
@@ -40,6 +41,13 @@ const CALENDAR_DXHOVERSTART_EVENT_NAME = addNamespace(hoverStartEventName, 'dxCa
 const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 
 const DAY_INTERVAL = 86400000;
+
+const CURRENT_DATE_TEXT = {
+    month: messageLocalization.format('dxCalendar-today'),
+    year: 'Current month',
+    decade: 'Current year',
+    century: 'Current years range',
+};
 
 const BaseView = Widget.inherit({
 
@@ -409,8 +417,24 @@ const BaseView = Widget.inherit({
         return this.option('selectionMode') === 'range';
     },
 
-    getCellAriaLabel: function(date) {
-        return this._getCellText(date);
+    _getCurrentDateFormat() {
+        return null;
+    },
+
+    getCellAriaLabel(date) {
+        const viewName = this._getViewName();
+        const isToday = this._isTodayCell(date);
+        const format = this._getCurrentDateFormat();
+
+        const dateRangeText = format
+            ? dateLocalization.format(date, format)
+            : this._getCellText(date);
+
+        const ariaLabel = isToday
+            ? `${dateRangeText}. ${CURRENT_DATE_TEXT[viewName]}`
+            : dateRangeText;
+
+        return ariaLabel;
     },
 
     _getFirstAvailableDate: function() {
