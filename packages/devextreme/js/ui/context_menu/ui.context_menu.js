@@ -605,20 +605,20 @@ class ContextMenu extends MenuBase {
         }
     }
 
-    _initScrollView(container) {
-        const maxHeight = this._getMaxHeight();
-        const containerHeight = getOuterHeight(container);
+    _initScrollView($container) {
+        const maxHeight = this._getMaxHeight($container);
+        const containerHeight = getOuterHeight($container);
+        const menuHeight = Math.min(containerHeight, maxHeight);
 
-        container.css('position', 'fixed');
-        container.css('height', Math.min(containerHeight, maxHeight));
-        this._createComponent(container, ScrollView, {});
+        $container.css('position', 'fixed');
+        $container.css('height', menuHeight);
+        this._createComponent($container, ScrollView, {});
     }
 
-    _getMaxHeight() {
-        const $element = this.$element();
+    _getMaxHeight($element) {
         const offsetTop = $element.offset().top;
         const windowHeight = getOuterHeight(window);
-        const maxHeight = Math.max(offsetTop, windowHeight - offsetTop - getOuterHeight($element));
+        const maxHeight = Math.max(offsetTop, windowHeight - offsetTop);
 
         return Math.min(windowHeight, maxHeight);
     }
@@ -630,20 +630,21 @@ class ContextMenu extends MenuBase {
 
         if(!this._hasSubmenu(node)) return;
 
-        const $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
+        let $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
         const isSubmenuRendered = $submenu.length;
 
         super._showSubmenu($item);
 
         if(!isSubmenuRendered) {
             this._renderSubmenuItems(node, $item);
+            $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
         }
 
         if(!this._isSubmenuVisible($submenu)) {
             this._drawSubmenu($item);
         }
 
-        this._initScrollView(isSubmenuRendered ? $submenu : $item.children(`.${DX_SUBMENU_CLASS}`));
+        this._initScrollView($submenu);
     }
 
     _hideSubmenusOnSameLevel($item) {
@@ -884,7 +885,7 @@ class ContextMenu extends MenuBase {
             this._overlay.option('position', position);
             promise = this._overlay.show()
                 .then(() => {
-                    const $subMenu = $(this._overlay.content()).children('.dx-submenu');
+                    const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
                     if($subMenu.length) {
                         this._initScrollView($subMenu);
                     }

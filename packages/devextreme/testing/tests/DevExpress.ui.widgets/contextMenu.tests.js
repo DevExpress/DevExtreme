@@ -281,6 +281,29 @@ QUnit.module('Rendering', moduleConfig, () => {
         assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
     });
 
+    QUnit.test('ScrollView should be initialised on 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenu.length, 2, '2 submenu exists');
+        assert.ok($submenu.eq(1).hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested menu');
+    });
+
     QUnit.test('height of the context menu should be limited', function(assert) {
         new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
@@ -290,8 +313,9 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
-        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu is exceeds the window');
-        assert.ok($submenu.height() < $(window).height(), 'height of submenu wrapper is not exceeds the window');
+        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
+        assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
+        assert.strictEqual($submenu.offset().top, 0, 'menu does not cross the window border');
     });
 });
 

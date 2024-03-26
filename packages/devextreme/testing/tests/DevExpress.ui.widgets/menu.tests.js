@@ -391,7 +391,7 @@ QUnit.module('Menu rendering', {
                 text: 'item 1',
                 items: [{
                     text: 'item 11',
-                }]
+                }],
             }],
             showFirstSubmenuMode: 'onClick'
         });
@@ -406,13 +406,48 @@ QUnit.module('Menu rendering', {
         assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
     });
 
-    QUnit.test('height of the context menu should be limited', function(assert) {
+    QUnit.test('ScrollView should be initialised on 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenu({
+            items: [{
+                text: 'item 1',
+                items: [{
+                    text: 'item 11',
+                    items: [{
+                        text: 'item 111',
+                    }],
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($item1).trigger('dxclick');
+        this.clock.tick(0);
+
+        const submenu = getSubMenuInstance($item1);
+        this.clock.tick(MOUSETIMEOUT);
+        assert.ok(submenu._overlay.option('visible'));
+
+        const $menuItem = $($(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).first());
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
+        $($menuItem).trigger('dxpointermove');
+        this.clock.tick(0);
+        const $submenu = $($(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1));
+        assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested submenu');
+    });
+
+    QUnit.test('height of the submenu should be limited', function(assert) {
         const menu = createMenu({
             items: [{
                 text: 'item 1',
                 items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
             }],
-            showFirstSubmenuMode: 'onClick'
+            showFirstSubmenuMode: 'onClick',
         });
 
         const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
@@ -422,8 +457,8 @@ QUnit.module('Menu rendering', {
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
-        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu is exceeds the window');
-        assert.ok($submenu.height() < $(window).height(), 'height of submenu wrapper is not exceeds the window');
+        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
+        assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
     });
 });
 
