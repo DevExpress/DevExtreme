@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import Popup from '../popup';
 
 const CLASS = {

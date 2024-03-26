@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 // eslint-disable-next-line max-classes-per-file
 import FocusableElement from '../internal/focusable';
 

@@ -1,4 +1,5 @@
-import { Selector, t } from 'testcafe';
+import { t } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import TabPanel from '../../../model/tabPanel';

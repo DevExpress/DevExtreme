@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import DataGridInstance from '../../../../js/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';

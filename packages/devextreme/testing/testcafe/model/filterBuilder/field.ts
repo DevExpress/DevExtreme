@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 
 const CLASS = {
   valueText: 'dx-filterbuilder-item-value-text',

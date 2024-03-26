@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
 import TextBox from '../textBox';

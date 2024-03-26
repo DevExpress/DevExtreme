@@ -1,7 +1,7 @@
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-restricted-syntax */
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from '../../../helpers/selector';
 import {
   removeStylesheetRulesFromPage, insertStylesheetRulesToPage, setStyleAttribute,
   appendElementTo, setClassAttribute,

@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import type { WidgetName } from '../../helpers/widgetTypings';
 
 import Widget from '../internal/widget';

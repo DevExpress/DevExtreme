@@ -1,5 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector, ClientFunction } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
