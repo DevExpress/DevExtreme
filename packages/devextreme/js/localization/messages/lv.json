@@ -288,7 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Nav laika josla",
         "dxScheduler-moreAppointments": "{0} vairāk",
 
-        "dxCalendar-today": "Today",
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearsRange": "Current years range",
         "dxCalendar-todayButtonText": "Šodien",
         "dxCalendar-ariaWidgetName": "Kalendārs",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

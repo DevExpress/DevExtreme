@@ -288,7 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Nepasirinkta laiko zona",
         "dxScheduler-moreAppointments": "dar {0}",
 
-        "dxCalendar-today": "Today",
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearsRange": "Current years range",
         "dxCalendar-todayButtonText": "Šiandien",
         "dxCalendar-ariaWidgetName": "Kalendorius",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

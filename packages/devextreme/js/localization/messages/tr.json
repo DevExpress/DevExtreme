@@ -288,7 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Saat dilimi yok",
         "dxScheduler-moreAppointments": "{0} daha",
 
-        "dxCalendar-today": "Today",
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearsRange": "Current years range",
         "dxCalendar-todayButtonText": "Bugün",
         "dxCalendar-ariaWidgetName": "Takvim",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

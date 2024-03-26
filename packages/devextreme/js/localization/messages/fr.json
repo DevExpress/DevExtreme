@@ -288,7 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Pas de fuseau horaire",
         "dxScheduler-moreAppointments": "{0} en plus",
 
-        "dxCalendar-today": "Today",
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearsRange": "Current years range",
         "dxCalendar-todayButtonText": "Aujourd'hui",
         "dxCalendar-ariaWidgetName": "Calendrier",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

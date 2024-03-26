@@ -43,10 +43,10 @@ const CALENDAR_DATE_VALUE_KEY = 'dxDateValueKey';
 const DAY_INTERVAL = 86400000;
 
 const CURRENT_DATE_TEXT = {
-    month: messageLocalization.format('dxCalendar-today'),
-    year: 'Current month',
-    decade: 'Current year',
-    century: 'Current years range',
+    month: messageLocalization.format('dxCalendar-currentDay'),
+    year: messageLocalization.format('dxCalendar-currentMonth'),
+    decade: messageLocalization.format('dxCalendar-currentYear'),
+    century: messageLocalization.format('dxCalendar-currentYearsRange'),
 };
 
 const BaseView = Widget.inherit({

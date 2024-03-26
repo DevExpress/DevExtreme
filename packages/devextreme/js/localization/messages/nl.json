@@ -288,7 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Geen tijdszone",
         "dxScheduler-moreAppointments": "Nog {0}",
 
-        "dxCalendar-today": "Today",
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearsRange": "Current years range",
         "dxCalendar-todayButtonText": "Vandaag",
         "dxCalendar-ariaWidgetName": "Kalender",
         "dxCalendar-previousMonthButtonLabel": "Previous month",
