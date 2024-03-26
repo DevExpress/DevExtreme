@@ -37,7 +37,7 @@
                 <div class="button-img-indicator"/>
                 <img
                     class="button-img"
-                    src="/apps/demos/images/employees/51.png"
+                    :src=employeeImageUrl
                     alt="employee"
                 >
               </div>
@@ -107,6 +107,9 @@ const fontSize = ref('14px');
 const lineHeight = ref(1.35);
 let colorPicker;
 const data = service.getData();
+
+const employeeImageUrl = data.getEmployeeImageUrl();
+
 const toolbarItems = [
   {
     location: 'before',
