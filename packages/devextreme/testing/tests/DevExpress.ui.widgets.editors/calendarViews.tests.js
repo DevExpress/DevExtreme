@@ -7,6 +7,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
 import dateLocalization from 'localization/date';
+import messageLocalization from 'localization/message';
 
 import 'ui/calendar';
 
@@ -19,6 +20,13 @@ const CALENDAR_CELL_TODAY_CLASS = 'dx-calendar-today';
 
 const UP_ARROW_KEY_CODE = 'ArrowUp';
 const DOWN_ARROW_KEY_CODE = 'ArrowDown';
+
+const CURRENT_DATE_TEXT = {
+    month: messageLocalization.format('dxCalendar-currentDay'),
+    year: messageLocalization.format('dxCalendar-currentMonth'),
+    decade: messageLocalization.format('dxCalendar-currentYear'),
+    century: messageLocalization.format('dxCalendar-currentYearsRange'),
+};
 
 const getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -934,7 +942,9 @@ QUnit.module('Aria accessibility', {
             century: '2010 - 2019',
         };
 
-        ['month', 'year', 'decade', 'century'].forEach(view => {
+        const views = ['month', 'year', 'decade', 'century'];
+
+        views.forEach(view => {
             QUnit.test(`Calendar cell should have a correct aria-label attribute when view is ${view}`, function(assert) {
                 new Views[view](this.$element, {
                     date: new Date(2015, 5, 1),
@@ -950,20 +960,20 @@ QUnit.module('Aria accessibility', {
             });
         });
 
-        QUnit.test('Today calendar cell\'s aria-label should include \'Today\' text', function(assert) {
-            const today = new Date();
+        views.forEach(view => {
+            QUnit.test(`Current date cell should have a correct aria-label attribute when view is ${view}`, function(assert) {
+                new Views[view](this.$element, {
+                    date: new Date(2015, 5, 1),
+                    _todayDate: () => new Date(2015, 5, 1),
+                });
 
-            new Views.month(this.$element, {
-                date: today,
+                const $cell = this.$element.find(`.${CALENDAR_CELL_TODAY_CLASS}`);
+
+                const cellAriaLabel = $cell.attr('aria-label');
+                const expectedValue = `${expectedAriaLabel[view]}. ${CURRENT_DATE_TEXT[view]}`;
+
+                assert.strictEqual(cellAriaLabel, expectedValue, 'aria label is correct');
             });
-
-            const $cell = this.$element.find(`.${CALENDAR_CELL_TODAY_CLASS}`);
-            const cellAriaLabel = $cell.attr('aria-label');
-
-            const formattedDate = dateLocalization.format(today, 'longdate');
-            const expectedAriaLabel = `${formattedDate}. Today`;
-
-            assert.strictEqual(cellAriaLabel, expectedAriaLabel, 'aria label is correct');
         });
     });
 
