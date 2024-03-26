@@ -4,8 +4,7 @@ export default function PaneContent(paneName: string) {
   const dimensionOptions = new Set(['size', 'minSize', 'maxSize'])
 
   return function template(data) {
-    const getPaneState = useMemo(() => {
-      // Your existing logic
+    const getPaneState = useMemo(() => {  
       if (data.resizable !== false && !data.collapsible) {
         return 'Resizable only';
       }

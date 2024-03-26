@@ -261,11 +261,14 @@ const SKIPPED_TESTS = {
       { demo: 'DiscreteScale', themes: [THEME.material] },
     ],
     PivotGrid: [
+      { demo: 'Overview', themes: [THEME.material] },
       { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     VectorMap: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+      { demo: 'MultipleLayers', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
     ],

@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineProps, computed } from 'vue';
+import { computed } from 'vue';
 
 const props = defineProps<{
   data: Record<string, any>
@@ -28,7 +28,7 @@ const { data } = props;
 
 const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
 
-const getStateText = function () {
+const getStateText = function() {
   if (data.resizable !== false && !data.collapsible) {
     return 'Resizable only';
   }

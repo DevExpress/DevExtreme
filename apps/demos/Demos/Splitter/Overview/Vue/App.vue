@@ -1,4 +1,3 @@
-<!-- eslint-disable no-restricted-syntax -->
 <template>
   <DxSplitter class="splitter">
     <DxItem
