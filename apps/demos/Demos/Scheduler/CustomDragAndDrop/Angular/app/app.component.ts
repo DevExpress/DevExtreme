@@ -3,6 +3,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
+import { DxDraggableTypes } from 'devextreme-angular/ui/draggable';
 import { Appointment, Task, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -47,15 +48,15 @@ export class AppComponent {
     }
   };
 
-  onListDragStart(e: DxSchedulerTypes.AppointmentDraggingStartEvent) {
+  onListDragStart(e: DxDraggableTypes.DragStartEvent) {
     e.cancel = true;
   }
 
-  onItemDragStart(e: DxSchedulerTypes.AppointmentDraggingStartEvent) {
+  onItemDragStart(e: DxDraggableTypes.DragStartEvent) {
     Object.assign(e.itemData, e.fromData);
   }
 
-  onItemDragEnd(e: DxSchedulerTypes.AppointmentDraggingEndEvent) {
+  onItemDragEnd(e: DxDraggableTypes.DragEndEvent) {
     if (e.toData) {
       e.cancel = true;
     }
