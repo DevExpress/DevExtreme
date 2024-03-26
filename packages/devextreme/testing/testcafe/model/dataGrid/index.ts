@@ -161,7 +161,14 @@ export default class DataGrid extends Widget {
   }
 
   getFocusedRow(): Selector {
-    return this.dataRows.filter(`.${CLASS.focusedRow}`);
+    const { focusedRow } = CLASS;
+
+    return this.dataRows.filter(
+      (node) => node.classList.contains(focusedRow),
+      {
+        focusedRow,
+      },
+    );
   }
 
   getErrorRow(): Selector {

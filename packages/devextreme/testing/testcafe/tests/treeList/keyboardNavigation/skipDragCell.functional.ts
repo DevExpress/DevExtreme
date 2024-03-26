@@ -1,3 +1,4 @@
+import { skipInShadowDomMode } from '../../../helpers/shadowDom/skipInShadowDomMode';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
@@ -56,7 +57,7 @@ const createTreeListRenderAsyncWithButtons = async () => createWidget('dxTreeLis
   renderAsync: true,
 });
 
-test('The drag cell should be skipped when navigating from the header cell by tab keypress', async (t) => {
+skipInShadowDomMode('The drag cell should be skipped when navigating from the header cell by tab keypress', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const expectedFocusedCell = treeList.getDataCell(0, 1);
   const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
@@ -67,7 +68,7 @@ test('The drag cell should be skipped when navigating from the header cell by ta
     .ok();
 }).before(async () => createTreeList());
 
-test('The drag cell should be skipped when navigating from the header cell by tab keypress'
+skipInShadowDomMode('The drag cell should be skipped when navigating from the header cell by tab keypress'
   + ' with buttons column and renderAsync: true', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const expectedFocusedCell = treeList.getDataCell(0, 1);
