@@ -34,7 +34,6 @@ $treelist-checkbox-offset-left: $treelist-empty-space-width + $generic-grid-base
 $treelist-checkbox-offset-left-rtl: $treelist-checkbox-offset-left + $generic-grid-base-checkbox-icon-size;
 $treelist-editor-cell-padding-left: $treelist-checkbox-offset-left-rtl + $generic-grid-base-cell-padding;
 $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + $generic-grid-base-cell-padding;
-$treelist-select-all-interaction-area-size: 24px;
 
 .dx-treelist-rowsview {
   .dx-treelist-empty-space {
@@ -144,8 +143,8 @@ $treelist-select-all-interaction-area-size: 24px;
     width: $treelist-select-all-interaction-area-size;
     height: $treelist-select-all-interaction-area-size;
     position: absolute;
-    left: math.div($generic-grid-base-checkbox-icon-size - $treelist-select-all-interaction-area-size, 2);
-    top: math.div($generic-grid-base-checkbox-icon-size - $generic-grid-base-checkbox-padding-bottom - $treelist-select-all-interaction-area-size, 2);
+    left: $treelist-select-all-interaction-area-left;
+    top: $treelist-select-all-interaction-area-top;
   }
 }
 
