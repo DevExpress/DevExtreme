@@ -1,5 +1,5 @@
-import { Selector } from '../../../../helpers/selector';
 import Widget from '../../../internal/widget';
+import { getRootContainer } from '../../../../helpers/domUtils';
 
 const CLASS = {
   exportButton: 'export-button',
@@ -12,13 +12,13 @@ export default class ExportButton {
 
   widgetName: string;
 
-  body = Selector('body');
+  root = getRootContainer();
 
   isOpened: Promise<boolean>;
 
   constructor(headerPanel: Selector, widgetName: string) {
     this.widgetName = widgetName;
     this.element = headerPanel.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.exportButton)}`);
-    this.isOpened = this.body.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.exportMenu)}.${CLASS.dropDownButtonPopupWrapper}`).exists;
+    this.isOpened = this.root.find(`.${Widget.addClassPrefix(this.widgetName, CLASS.exportMenu)}.${CLASS.dropDownButtonPopupWrapper}`).exists;
   }
 }

@@ -1,6 +1,6 @@
-import { Selector } from '../../../helpers/selector';
 import ContextMenu from '../../contextMenu';
 import TextBox from '../../textBox';
+import { getRootContainer } from '../../../helpers/domUtils';
 
 const CLASS = {
   menuButton: 'dx-menu-item',
@@ -9,7 +9,7 @@ const CLASS = {
 };
 
 export default class FilterTextBox extends TextBox {
-  body: Selector;
+  root: Selector;
 
   menuButton: Selector;
 
@@ -18,8 +18,8 @@ export default class FilterTextBox extends TextBox {
   constructor(selector: Selector) {
     super(selector);
 
-    this.body = Selector('body');
+    this.root = getRootContainer();
     this.menuButton = this.element.find(`.${CLASS.menuButton}`).nth(0);
-    this.menu = new ContextMenu(this.body.find(`.${CLASS.gridMarker}.${CLASS.filterMenu}`));
+    this.menu = new ContextMenu(this.root.find(`.${CLASS.gridMarker}.${CLASS.filterMenu}`));
   }
 }

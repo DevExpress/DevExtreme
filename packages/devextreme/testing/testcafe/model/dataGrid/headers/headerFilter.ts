@@ -1,5 +1,5 @@
-import { Selector } from '../../../helpers/selector';
 import List from '../../list';
+import { getRootContainer } from '../../../helpers/domUtils';
 
 const CLASS = {
   filterMenu: 'dx-header-filter-menu',
@@ -9,9 +9,9 @@ const CLASS = {
 };
 
 export default class HeaderFilter {
-  body = Selector('body');
+  root = getRootContainer();
 
-  element = this.body.find(`.${CLASS.filterMenu}`);
+  element = this.root.find(`.${CLASS.filterMenu}`);
 
   getList(): List {
     return new List(this.element.find(`.${CLASS.list}`));

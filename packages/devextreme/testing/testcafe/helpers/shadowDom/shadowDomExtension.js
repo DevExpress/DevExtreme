@@ -18,6 +18,8 @@ window.addShadowRootTree = () => {
     root.attachShadow({ mode: 'open' });
 
     const shadowContainer = document.createElement('div');
+    shadowContainer.setAttribute('id', 'shadowContainer');
+    window.DevExpress.viewPort(shadowContainer);
     shadowContainer.append.apply(shadowContainer, Array.from(childNodes));
 
     root.shadowRoot.appendChild(shadowContainer);

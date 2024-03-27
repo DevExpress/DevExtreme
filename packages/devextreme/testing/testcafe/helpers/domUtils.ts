@@ -1,4 +1,5 @@
 import { ClientFunction } from 'testcafe';
+import { Selector } from './selector';
 
 const STYLESHEET_RULES_ID = 'stylesheetRules';
 
@@ -14,6 +15,8 @@ function createElement(
 
   return element;
 }
+
+export const getRootContainer = (): Selector => Selector(process.env.shadowDom === 'true' ? '#shadowContainer' : 'body');
 
 export const setAttribute = ClientFunction((selector, attribute, value) => {
   const element = document.querySelector(selector);

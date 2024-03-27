@@ -1,7 +1,7 @@
-import { Selector } from '../../../helpers/selector';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import { FilterBuilderPopup } from './builder';
+import { getRootContainer } from '../../../helpers/domUtils';
 
 const CLASS = {
   filterPanelIcon: 'dx-icon-filter',
@@ -11,7 +11,7 @@ const CLASS = {
 };
 
 export default class FilterPanel extends FocusableElement {
-  body: Selector;
+  root: Selector;
 
   widgetName: string;
 
@@ -20,9 +20,9 @@ export default class FilterPanel extends FocusableElement {
   constructor(element: Selector, widgetName: string) {
     super(element);
 
-    this.body = Selector('body');
+    this.root = getRootContainer();
     this.widgetName = widgetName;
-    this.isOpened = this.body.find(`.${CLASS.popupWrapper} .${CLASS.filterBuilder}`).exists;
+    this.isOpened = this.root.find(`.${CLASS.popupWrapper} .${CLASS.filterBuilder}`).exists;
   }
 
   getIconFilter(): FocusableElement {
