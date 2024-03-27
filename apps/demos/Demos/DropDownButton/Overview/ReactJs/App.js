@@ -18,7 +18,11 @@ const App = () => {
   const [lineHeight, setLineHeight] = useState(1.35);
   const [colorPicker, setColorPicker] = useState(null);
   const onButtonClick = useCallback((e) => {
-    notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+    notify(
+      `Go to ${e.element.querySelector('.button-title').textContent}'s profile`,
+      'success',
+      600,
+    );
   }, []);
   const onItemClick = useCallback((e) => {
     notify(e.itemData.name || e.itemData, 'success', 600);

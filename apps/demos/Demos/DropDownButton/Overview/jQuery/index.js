@@ -15,7 +15,7 @@ $(() => {
     items: profileSettings,
     splitButton: true,
     onButtonClick(e) {
-      DevExpress.ui.notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+      DevExpress.ui.notify(`Go to ${e.element.find(".button-title").text()}'s profile`, 'success', 600);
     },
     onItemClick(e) {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);

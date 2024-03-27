@@ -175,7 +175,7 @@ const toolbarItems = [
 ];
 
 function onButtonClick(e) {
-  notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+  notify(`Go to ${e.element.querySelector(".button-title").textContent}'s profile`, 'success', 600);
 }
 function onItemClick(e) {
   notify(e.itemData.name || e.itemData, 'success', 600);
