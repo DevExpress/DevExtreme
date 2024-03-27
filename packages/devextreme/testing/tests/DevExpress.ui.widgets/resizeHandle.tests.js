@@ -153,6 +153,23 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(eventHandlerStub.callCount, 1);
         });
 
+        QUnit.test(`${eventHandler} event handler should be able to be updated at runtime if the handler was declared during initialization`, function(assert) {
+            const eventHandlerStub = sinon.stub();
+            const newEventHandlerStub = sinon.stub();
+
+            this.reinit({ [eventHandler]: eventHandlerStub });
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            eventHandlerStub.reset();
+            this.instance.option(eventHandler, newEventHandlerStub);
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(eventHandlerStub.callCount, 0);
+            assert.strictEqual(newEventHandlerStub.callCount, 1);
+        });
+
         QUnit.test(`${eventHandler} should be called once after direction option changed`, function(assert) {
             const eventHandlerStub = sinon.stub();
             this.reinit({ [eventHandler]: eventHandlerStub });
