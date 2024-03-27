@@ -288,6 +288,10 @@
         "dxScheduler-noTimezoneTitle": "時間帯なし",
         "dxScheduler-moreAppointments": "その他 {0} つ選択",
 
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearRange": "Current year range",
         "dxCalendar-todayButtonText": "今日",
         "dxCalendar-ariaWidgetName": "カレンダー",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

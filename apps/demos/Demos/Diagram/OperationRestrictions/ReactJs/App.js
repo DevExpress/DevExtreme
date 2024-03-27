@@ -51,7 +51,7 @@ function itemStyleExpr(obj) {
 export default function App() {
   const diagramRef = useRef(null);
   const onRequestEditOperation = useCallback((e) => {
-    const diagram = diagramRef.current.instance;
+    const diagram = diagramRef.current.instance();
     if (e.operation === 'addShape') {
       if (e.args.shape.type !== 'employee' && e.args.shape.type !== 'team') {
         if (e.reason !== 'checkUIElementAvailability') {

@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxDeferRendering, {
     Properties
 } from "devextreme/ui/defer_rendering";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, RenderedEvent, ShownEvent } from "devextreme/ui/defer_rendering";
@@ -25,55 +26,41 @@ type IDeferRenderingOptionsNarrowedEvents = {
 
 type IDeferRenderingOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDeferRenderingOptionsNarrowedEvents> & IHtmlOptions>
 
-class DeferRendering extends BaseComponent<React.PropsWithChildren<IDeferRenderingOptions>> {
-
-  public get instance(): dxDeferRendering {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxDeferRendering;
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onRendered","onShown"];
-
-  protected _expectedChildren = {
-    animation: { optionName: "animation", isCollectionItem: false }
-  };
+interface DeferRenderingRef {
+  instance: () => dxDeferRendering;
 }
-(DeferRendering as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  animation: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onRendered: PropTypes.func,
-  onShown: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  showLoadIndicator: PropTypes.bool,
-  staggerItemSelector: PropTypes.string,
-  tabIndex: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const DeferRendering = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IDeferRenderingOptions>, ref: ForwardedRef<DeferRenderingRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onRendered","onShown"]), []);
+
+      const expectedChildren = useMemo(() => ({
+        animation: { optionName: "animation", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IDeferRenderingOptions>>, {
+          WidgetClass: dxDeferRendering,
+          ref: baseRef,
+          independentEvents,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IDeferRenderingOptions> & { ref?: Ref<DeferRenderingRef> }) => ReactElement | null;
 
 
 // owners:
@@ -90,13 +77,19 @@ type IAnimationProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Animation extends NestedOption<IAnimationProps> {
-  public static OptionName = "animation";
-  public static ExpectedChildren = {
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
+
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
     from: { optionName: "from", isCollectionItem: false },
     to: { optionName: "to", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -104,9 +97,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class At extends NestedOption<IAtProps> {
-  public static OptionName = "at";
-}
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
+
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -114,9 +113,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class BoundaryOffset extends NestedOption<IBoundaryOffsetProps> {
-  public static OptionName = "boundaryOffset";
-}
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
+
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // Position
@@ -124,9 +129,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-class Collision extends NestedOption<ICollisionProps> {
-  public static OptionName = "collision";
-}
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
+
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // Animation
@@ -137,12 +148,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class From extends NestedOption<IFromProps> {
-  public static OptionName = "from";
-  public static ExpectedChildren = {
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
+
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
     position: { optionName: "position", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -150,9 +167,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class My extends NestedOption<IMyProps> {
-  public static OptionName = "my";
-}
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
+
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // Position
@@ -160,9 +183,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class Offset extends NestedOption<IOffsetProps> {
-  public static OptionName = "offset";
-}
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
+
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // From
@@ -190,16 +219,22 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-class Position extends NestedOption<IPositionProps> {
-  public static OptionName = "position";
-  public static ExpectedChildren = {
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
+
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+  ExpectedChildren: {
     at: { optionName: "at", isCollectionItem: false },
     boundaryOffset: { optionName: "boundaryOffset", isCollectionItem: false },
     collision: { optionName: "collision", isCollectionItem: false },
     my: { optionName: "my", isCollectionItem: false },
     offset: { optionName: "offset", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Animation
@@ -210,14 +245,21 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class To extends NestedOption<IToProps> {
-  public static OptionName = "to";
-}
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
+
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 export default DeferRendering;
 export {
   DeferRendering,
   IDeferRenderingOptions,
+  DeferRenderingRef,
   Animation,
   IAnimationProps,
   At,

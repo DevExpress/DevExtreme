@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxScrollView, {
     Properties
 } from "devextreme/ui/scroll_view";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { DisposingEvent, InitializedEvent, PullDownEvent, ReachBottomEvent, ScrollEvent, UpdatedEvent } from "devextreme/ui/scroll_view";
 
@@ -23,65 +24,41 @@ type IScrollViewOptionsNarrowedEvents = {
 
 type IScrollViewOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IScrollViewOptionsNarrowedEvents> & IHtmlOptions>
 
-class ScrollView extends BaseComponent<React.PropsWithChildren<IScrollViewOptions>> {
-
-  public get instance(): dxScrollView {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxScrollView;
-
-  protected independentEvents = ["onDisposing","onInitialized","onPullDown","onReachBottom","onScroll","onUpdated"];
+interface ScrollViewRef {
+  instance: () => dxScrollView;
 }
-(ScrollView as any).propTypes = {
-  bounceEnabled: PropTypes.bool,
-  direction: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "both",
-      "horizontal",
-      "vertical"])
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onPullDown: PropTypes.func,
-  onReachBottom: PropTypes.func,
-  onScroll: PropTypes.func,
-  onUpdated: PropTypes.func,
-  pulledDownText: PropTypes.string,
-  pullingDownText: PropTypes.string,
-  reachBottomText: PropTypes.string,
-  refreshingText: PropTypes.string,
-  rtlEnabled: PropTypes.bool,
-  scrollByContent: PropTypes.bool,
-  scrollByThumb: PropTypes.bool,
-  showScrollbar: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "onScroll",
-      "onHover",
-      "always",
-      "never"])
-  ]),
-  useNative: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const ScrollView = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IScrollViewOptions>, ref: ForwardedRef<ScrollViewRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onPullDown","onReachBottom","onScroll","onUpdated"]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IScrollViewOptions>>, {
+          WidgetClass: dxScrollView,
+          ref: baseRef,
+          independentEvents,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IScrollViewOptions> & { ref?: Ref<ScrollViewRef> }) => ReactElement | null;
 export default ScrollView;
 export {
   ScrollView,
-  IScrollViewOptions
+  IScrollViewOptions,
+  ScrollViewRef
 };
 import type * as ScrollViewTypes from 'devextreme/ui/scroll_view_types';
 export { ScrollViewTypes };

@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxResponsiveBox, {
     Properties
 } from "devextreme/ui/responsive_box";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxResponsiveBoxItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/responsive_box";
@@ -30,71 +31,63 @@ type IResponsiveBoxOptions<TItem = any, TKey = any> = React.PropsWithChildren<Re
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxResponsiveBoxItem | string>;
   onItemsChange?: (value: Array<any | dxResponsiveBoxItem | string>) => void;
 }>
 
-class ResponsiveBox<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IResponsiveBoxOptions<TItem, TKey>>> {
-
-  public get instance(): dxResponsiveBox<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxResponsiveBox;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    col: { optionName: "cols", isCollectionItem: true },
-    item: { optionName: "items", isCollectionItem: true },
-    row: { optionName: "rows", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface ResponsiveBoxRef<TItem = any, TKey = any> {
+  instance: () => dxResponsiveBox<TItem, TKey>;
 }
-(ResponsiveBox as any).propTypes = {
-  cols: PropTypes.array,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rows: PropTypes.array,
-  rtlEnabled: PropTypes.bool,
-  screenByWidth: PropTypes.func,
-  singleColumnScreen: PropTypes.string,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const ResponsiveBox = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IResponsiveBoxOptions<TItem, TKey>>, ref: ForwardedRef<ResponsiveBoxRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        col: { optionName: "cols", isCollectionItem: true },
+        item: { optionName: "items", isCollectionItem: true },
+        row: { optionName: "rows", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IResponsiveBoxOptions<TItem, TKey>>>, {
+          WidgetClass: dxResponsiveBox,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IResponsiveBoxOptions<TItem, TKey>> & { ref?: Ref<ResponsiveBoxRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -105,10 +98,16 @@ type IColProps = React.PropsWithChildren<{
   screen?: string;
   shrink?: number;
 }>
-class Col extends NestedOption<IColProps> {
-  public static OptionName = "cols";
-  public static IsCollectionItem = true;
-}
+const _componentCol = memo(
+  (props: IColProps) => {
+    return React.createElement(NestedOption<IColProps>, { ...props });
+  }
+);
+
+const Col: typeof _componentCol & IElementDescriptor = Object.assign(_componentCol, {
+  OptionName: "cols",
+  IsCollectionItem: true,
+})
 
 // owners:
 // ResponsiveBox
@@ -127,21 +126,25 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     location: { optionName: "location", isCollectionItem: true }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // Item
@@ -152,10 +155,16 @@ type ILocationProps = React.PropsWithChildren<{
   rowspan?: number;
   screen?: string;
 }>
-class Location extends NestedOption<ILocationProps> {
-  public static OptionName = "location";
-  public static IsCollectionItem = true;
-}
+const _componentLocation = memo(
+  (props: ILocationProps) => {
+    return React.createElement(NestedOption<ILocationProps>, { ...props });
+  }
+);
+
+const Location: typeof _componentLocation & IElementDescriptor = Object.assign(_componentLocation, {
+  OptionName: "location",
+  IsCollectionItem: true,
+})
 
 // owners:
 // ResponsiveBox
@@ -165,15 +174,22 @@ type IRowProps = React.PropsWithChildren<{
   screen?: string;
   shrink?: number;
 }>
-class Row extends NestedOption<IRowProps> {
-  public static OptionName = "rows";
-  public static IsCollectionItem = true;
-}
+const _componentRow = memo(
+  (props: IRowProps) => {
+    return React.createElement(NestedOption<IRowProps>, { ...props });
+  }
+);
+
+const Row: typeof _componentRow & IElementDescriptor = Object.assign(_componentRow, {
+  OptionName: "rows",
+  IsCollectionItem: true,
+})
 
 export default ResponsiveBox;
 export {
   ResponsiveBox,
   IResponsiveBoxOptions,
+  ResponsiveBoxRef,
   Col,
   IColProps,
   Item,

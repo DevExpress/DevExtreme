@@ -11,7 +11,7 @@ const reloadPage = () => {
 const App = () => {
   const treeList = useRef(null);
   const onStateResetClick = useCallback(() => {
-    treeList.current.instance.state(null);
+    treeList.current.instance().state(null);
   }, []);
   return (
     <div>

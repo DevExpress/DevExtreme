@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import {
-  TreeList, Selection, FilterRow, StateStoring, Column,
+  TreeList, Selection, FilterRow, StateStoring, Column, TreeListRef,
 } from 'devextreme-react/tree-list';
 import { employees } from './data.ts';
 
@@ -11,10 +11,10 @@ const reloadPage = () => {
 };
 
 const App = () => {
-  const treeList = useRef<TreeList>(null);
+  const treeList = useRef<TreeListRef>(null);
 
   const onStateResetClick = useCallback(() => {
-    treeList.current.instance.state(null);
+    treeList.current.instance().state(null);
   }, []);
 
   return (

@@ -227,7 +227,7 @@ class App extends React.Component {
   }
 
   exportButtonClick() {
-    const gantt = this.ganttRef.current.instance;
+    const gantt = this.ganttRef.current.instance();
     const format = this.state.formatBoxValue.toLowerCase();
     const isLandscape = this.state.landscapeCheckBoxValue;
     const exportMode = this.state.exportModeBoxValue === 'Tree List'

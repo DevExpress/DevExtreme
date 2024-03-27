@@ -300,9 +300,23 @@ class ResizeHandle extends (Widget as any) {
     this._resizeEndHandler(e);
   }
 
+  _createEventAction(eventName: string): void {
+    const actionName = getActionNameByEventName(eventName);
+
+    this[actionName] = this._createActionByOption(eventName, {
+      excludeValidators: ['disabled', 'readOnly'],
+    });
+  }
+
   _getAction(eventName: string): (e) => void {
+    const actionName = getActionNameByEventName(eventName);
+
+    if (!this[actionName]) {
+      this._createEventAction(eventName);
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
+    return this[actionName];
   }
 
   _attachEventHandlers(): void {
@@ -441,13 +455,10 @@ class ResizeHandle extends (Widget as any) {
         break;
       case 'onCollapsePrev':
       case 'onCollapseNext':
-        this._detachPointerEventHandlers();
-        this._attachPointerEventHandlers();
-        break;
       case 'onResize':
       case 'onResizeStart':
       case 'onResizeEnd':
-        this[getActionNameByEventName(name)] = this._createActionByOption(name);
+        this._createEventAction(name);
         break;
       default:
         super._optionChanged(args);

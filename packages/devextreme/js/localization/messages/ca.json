@@ -288,6 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Sense zona horària",
         "dxScheduler-moreAppointments": "{0} Més",
 
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearRange": "Current year range",
         "dxCalendar-todayButtonText": "Avui",
         "dxCalendar-ariaWidgetName": "Calendari",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

@@ -24,7 +24,7 @@ function customizeTooltip(pointInfo) {
 function App() {
   const chartRef = useRef(null);
   const resetZoom = useCallback(() => {
-    chartRef.current.instance.resetVisualRange();
+    chartRef.current.instance().resetVisualRange();
   }, []);
   return (
     <div>

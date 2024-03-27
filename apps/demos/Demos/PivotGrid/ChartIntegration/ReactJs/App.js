@@ -20,7 +20,7 @@ const App = () => {
   const chartRef = useRef(null);
   const pivotGridRef = useRef(null);
   useEffect(() => {
-    pivotGridRef.current.instance.bindChart(chartRef.current.instance, {
+    pivotGridRef.current.instance().bindChart(chartRef.current.instance(), {
       dataFieldsDisplayMode: 'splitPanes',
       alternateDataFields: false,
     });

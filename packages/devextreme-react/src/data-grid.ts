@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/data_grid";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxDataGrid, {
     Properties
 } from "devextreme/ui/data_grid";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxDataGridColumn, AdaptiveDetailRowPreparingEvent, CellClickEvent, CellDblClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DataErrorOccurredEvent, DisposingEvent, EditCanceledEvent, EditCancelingEvent, EditingStartEvent, EditorPreparedEvent, EditorPreparingEvent, ExportingEvent, FocusedCellChangingEvent, FocusedRowChangingEvent, InitializedEvent, InitNewRowEvent, KeyDownEvent, RowClickEvent, RowCollapsedEvent, RowCollapsingEvent, RowDblClickEvent, RowExpandedEvent, RowExpandingEvent, RowInsertedEvent, RowInsertingEvent, RowPreparedEvent, RowRemovedEvent, RowRemovingEvent, RowUpdatedEvent, RowUpdatingEvent, RowValidatingEvent, SavedEvent, SavingEvent, ToolbarPreparingEvent, dxDataGridRowObject, ColumnButtonClickEvent, dxDataGridColumnButton, dxDataGridToolbarItem } from "devextreme/ui/data_grid";
@@ -79,10 +80,8 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   dataSource?: Properties<TRowData, TKey>["dataSource"];
   dataRowRender?: (...params: any) => React.ReactNode;
   dataRowComponent?: React.ComponentType<any>;
-  dataRowKeyFn?: (data: any) => string;
   rowRender?: (...params: any) => React.ReactNode;
   rowComponent?: React.ComponentType<any>;
-  rowKeyFn?: (data: any) => string;
   defaultColumns?: Array<dxDataGridColumn | string>;
   defaultEditing?: Record<string, any>;
   defaultFilterPanel?: Record<string, any>;
@@ -109,239 +108,102 @@ type IDataGridOptions<TRowData = any, TKey = any> = React.PropsWithChildren<Repl
   onSelectionFilterChange?: (value: Array<any> | (() => any) | string) => void;
 }>
 
-class DataGrid<TRowData = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IDataGridOptions<TRowData, TKey>>> {
-
-  public get instance(): dxDataGrid<TRowData, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxDataGrid;
-
-  protected useRequestAnimationFrameFlag = true;
-
-  protected subscribableOptions = ["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","searchPanel","searchPanel.text","selectedRowKeys","selectionFilter"];
-
-  protected independentEvents = ["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"];
-
-  protected _defaults = {
-    defaultColumns: "columns",
-    defaultEditing: "editing",
-    defaultFilterPanel: "filterPanel",
-    defaultFilterValue: "filterValue",
-    defaultFocusedColumnIndex: "focusedColumnIndex",
-    defaultFocusedRowIndex: "focusedRowIndex",
-    defaultFocusedRowKey: "focusedRowKey",
-    defaultGroupPanel: "groupPanel",
-    defaultPaging: "paging",
-    defaultSearchPanel: "searchPanel",
-    defaultSelectedRowKeys: "selectedRowKeys",
-    defaultSelectionFilter: "selectionFilter"
-  };
-
-  protected _expectedChildren = {
-    column: { optionName: "columns", isCollectionItem: true },
-    columnChooser: { optionName: "columnChooser", isCollectionItem: false },
-    columnFixing: { optionName: "columnFixing", isCollectionItem: false },
-    dataGridHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
-    dataGridSelection: { optionName: "selection", isCollectionItem: false },
-    editing: { optionName: "editing", isCollectionItem: false },
-    export: { optionName: "export", isCollectionItem: false },
-    filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
-    filterBuilderPopup: { optionName: "filterBuilderPopup", isCollectionItem: false },
-    filterPanel: { optionName: "filterPanel", isCollectionItem: false },
-    filterRow: { optionName: "filterRow", isCollectionItem: false },
-    grouping: { optionName: "grouping", isCollectionItem: false },
-    groupPanel: { optionName: "groupPanel", isCollectionItem: false },
-    headerFilter: { optionName: "headerFilter", isCollectionItem: false },
-    keyboardNavigation: { optionName: "keyboardNavigation", isCollectionItem: false },
-    loadPanel: { optionName: "loadPanel", isCollectionItem: false },
-    masterDetail: { optionName: "masterDetail", isCollectionItem: false },
-    pager: { optionName: "pager", isCollectionItem: false },
-    paging: { optionName: "paging", isCollectionItem: false },
-    remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
-    rowDragging: { optionName: "rowDragging", isCollectionItem: false },
-    scrolling: { optionName: "scrolling", isCollectionItem: false },
-    searchPanel: { optionName: "searchPanel", isCollectionItem: false },
-    selection: { optionName: "selection", isCollectionItem: false },
-    sortByGroupSummaryInfo: { optionName: "sortByGroupSummaryInfo", isCollectionItem: true },
-    sorting: { optionName: "sorting", isCollectionItem: false },
-    stateStoring: { optionName: "stateStoring", isCollectionItem: false },
-    summary: { optionName: "summary", isCollectionItem: false },
-    toolbar: { optionName: "toolbar", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "dataRowTemplate",
-    render: "dataRowRender",
-    component: "dataRowComponent",
-    keyFn: "dataRowKeyFn"
-  }, {
-    tmplOption: "rowTemplate",
-    render: "rowRender",
-    component: "rowComponent",
-    keyFn: "rowKeyFn"
-  }];
+interface DataGridRef<TRowData = any, TKey = any> {
+  instance: () => dxDataGrid<TRowData, TKey>;
 }
-(DataGrid as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  allowColumnReordering: PropTypes.bool,
-  allowColumnResizing: PropTypes.bool,
-  autoNavigateToFocusedRow: PropTypes.bool,
-  cacheEnabled: PropTypes.bool,
-  cellHintEnabled: PropTypes.bool,
-  columnAutoWidth: PropTypes.bool,
-  columnChooser: PropTypes.object,
-  columnFixing: PropTypes.object,
-  columnHidingEnabled: PropTypes.bool,
-  columnMinWidth: PropTypes.number,
-  columnResizingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "nextColumn",
-      "widget"])
-  ]),
-  columns: PropTypes.array,
-  columnWidth: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "auto"])
-  ])
-  ]),
-  customizeColumns: PropTypes.func,
-  dateSerializationFormat: PropTypes.string,
-  disabled: PropTypes.bool,
-  editing: PropTypes.object,
-  elementAttr: PropTypes.object,
-  errorRowEnabled: PropTypes.bool,
-  export: PropTypes.object,
-  filterBuilder: PropTypes.object,
-  filterBuilderPopup: PropTypes.object,
-  filterPanel: PropTypes.object,
-  filterRow: PropTypes.object,
-  filterSyncEnabled: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "auto"])
-  ])
-  ]),
-  filterValue: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  focusedColumnIndex: PropTypes.number,
-  focusedRowEnabled: PropTypes.bool,
-  focusedRowIndex: PropTypes.number,
-  grouping: PropTypes.object,
-  groupPanel: PropTypes.object,
-  headerFilter: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  highlightChanges: PropTypes.bool,
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  keyboardNavigation: PropTypes.object,
-  keyExpr: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.string
-  ]),
-  loadPanel: PropTypes.object,
-  masterDetail: PropTypes.object,
-  noDataText: PropTypes.string,
-  onAdaptiveDetailRowPreparing: PropTypes.func,
-  onCellClick: PropTypes.func,
-  onCellDblClick: PropTypes.func,
-  onCellHoverChanged: PropTypes.func,
-  onCellPrepared: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onContextMenuPreparing: PropTypes.func,
-  onDataErrorOccurred: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onEditCanceled: PropTypes.func,
-  onEditCanceling: PropTypes.func,
-  onEditingStart: PropTypes.func,
-  onEditorPrepared: PropTypes.func,
-  onEditorPreparing: PropTypes.func,
-  onExporting: PropTypes.func,
-  onFocusedCellChanged: PropTypes.func,
-  onFocusedCellChanging: PropTypes.func,
-  onFocusedRowChanged: PropTypes.func,
-  onFocusedRowChanging: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onInitNewRow: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onRowClick: PropTypes.func,
-  onRowCollapsed: PropTypes.func,
-  onRowCollapsing: PropTypes.func,
-  onRowDblClick: PropTypes.func,
-  onRowExpanded: PropTypes.func,
-  onRowExpanding: PropTypes.func,
-  onRowInserted: PropTypes.func,
-  onRowInserting: PropTypes.func,
-  onRowPrepared: PropTypes.func,
-  onRowRemoved: PropTypes.func,
-  onRowRemoving: PropTypes.func,
-  onRowUpdated: PropTypes.func,
-  onRowUpdating: PropTypes.func,
-  onRowValidating: PropTypes.func,
-  onSaved: PropTypes.func,
-  onSaving: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  onToolbarPreparing: PropTypes.func,
-  pager: PropTypes.object,
-  paging: PropTypes.object,
-  remoteOperations: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "auto"])
-  ])
-  ]),
-  renderAsync: PropTypes.bool,
-  repaintChangesOnly: PropTypes.bool,
-  rowAlternationEnabled: PropTypes.bool,
-  rowDragging: PropTypes.object,
-  rtlEnabled: PropTypes.bool,
-  scrolling: PropTypes.object,
-  searchPanel: PropTypes.object,
-  selectedRowKeys: PropTypes.array,
-  selection: PropTypes.object,
-  selectionFilter: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  showBorders: PropTypes.bool,
-  showColumnHeaders: PropTypes.bool,
-  showColumnLines: PropTypes.bool,
-  showRowLines: PropTypes.bool,
-  sortByGroupSummaryInfo: PropTypes.array,
-  sorting: PropTypes.object,
-  stateStoring: PropTypes.object,
-  summary: PropTypes.object,
-  syncLookupFilterValues: PropTypes.bool,
-  tabIndex: PropTypes.number,
-  toolbar: PropTypes.object,
-  twoWayBindingEnabled: PropTypes.bool,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  wordWrapEnabled: PropTypes.bool
-};
+
+const DataGrid = memo(
+  forwardRef(
+    <TRowData = any, TKey = any>(props: React.PropsWithChildren<IDataGridOptions<TRowData, TKey>>, ref: ForwardedRef<DataGridRef<TRowData, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["columns","editing","editing.changes","editing.editColumnName","editing.editRowKey","filterPanel","filterPanel.filterEnabled","filterValue","focusedColumnIndex","focusedRowIndex","focusedRowKey","groupPanel","groupPanel.visible","paging","paging.pageIndex","paging.pageSize","searchPanel","searchPanel.text","selectedRowKeys","selectionFilter"]), []);
+      const independentEvents = useMemo(() => (["onAdaptiveDetailRowPreparing","onCellClick","onCellDblClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDataErrorOccurred","onDisposing","onEditCanceled","onEditCanceling","onEditingStart","onEditorPrepared","onEditorPreparing","onExporting","onFocusedCellChanging","onFocusedRowChanging","onInitialized","onInitNewRow","onKeyDown","onRowClick","onRowCollapsed","onRowCollapsing","onRowDblClick","onRowExpanded","onRowExpanding","onRowInserted","onRowInserting","onRowPrepared","onRowRemoved","onRowRemoving","onRowUpdated","onRowUpdating","onRowValidating","onSaved","onSaving","onToolbarPreparing"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultColumns: "columns",
+        defaultEditing: "editing",
+        defaultFilterPanel: "filterPanel",
+        defaultFilterValue: "filterValue",
+        defaultFocusedColumnIndex: "focusedColumnIndex",
+        defaultFocusedRowIndex: "focusedRowIndex",
+        defaultFocusedRowKey: "focusedRowKey",
+        defaultGroupPanel: "groupPanel",
+        defaultPaging: "paging",
+        defaultSearchPanel: "searchPanel",
+        defaultSelectedRowKeys: "selectedRowKeys",
+        defaultSelectionFilter: "selectionFilter",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        column: { optionName: "columns", isCollectionItem: true },
+        columnChooser: { optionName: "columnChooser", isCollectionItem: false },
+        columnFixing: { optionName: "columnFixing", isCollectionItem: false },
+        dataGridHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
+        dataGridSelection: { optionName: "selection", isCollectionItem: false },
+        editing: { optionName: "editing", isCollectionItem: false },
+        export: { optionName: "export", isCollectionItem: false },
+        filterBuilder: { optionName: "filterBuilder", isCollectionItem: false },
+        filterBuilderPopup: { optionName: "filterBuilderPopup", isCollectionItem: false },
+        filterPanel: { optionName: "filterPanel", isCollectionItem: false },
+        filterRow: { optionName: "filterRow", isCollectionItem: false },
+        grouping: { optionName: "grouping", isCollectionItem: false },
+        groupPanel: { optionName: "groupPanel", isCollectionItem: false },
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false },
+        keyboardNavigation: { optionName: "keyboardNavigation", isCollectionItem: false },
+        loadPanel: { optionName: "loadPanel", isCollectionItem: false },
+        masterDetail: { optionName: "masterDetail", isCollectionItem: false },
+        pager: { optionName: "pager", isCollectionItem: false },
+        paging: { optionName: "paging", isCollectionItem: false },
+        remoteOperations: { optionName: "remoteOperations", isCollectionItem: false },
+        rowDragging: { optionName: "rowDragging", isCollectionItem: false },
+        scrolling: { optionName: "scrolling", isCollectionItem: false },
+        searchPanel: { optionName: "searchPanel", isCollectionItem: false },
+        selection: { optionName: "selection", isCollectionItem: false },
+        sortByGroupSummaryInfo: { optionName: "sortByGroupSummaryInfo", isCollectionItem: true },
+        sorting: { optionName: "sorting", isCollectionItem: false },
+        stateStoring: { optionName: "stateStoring", isCollectionItem: false },
+        summary: { optionName: "summary", isCollectionItem: false },
+        toolbar: { optionName: "toolbar", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "dataRowTemplate",
+          render: "dataRowRender",
+          component: "dataRowComponent"
+        },
+        {
+          tmplOption: "rowTemplate",
+          render: "rowRender",
+          component: "rowComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IDataGridOptions<TRowData, TKey>>>, {
+          WidgetClass: dxDataGrid,
+          ref: baseRef,
+          useRequestAnimationFrameFlag: true,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TRowData = any, TKey = any>(props: React.PropsWithChildren<IDataGridOptions<TRowData, TKey>> & { ref?: Ref<DataGridRef<TRowData, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -350,13 +212,19 @@ type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
 }>
-class Animation extends NestedOption<IAnimationProps> {
-  public static OptionName = "animation";
-  public static ExpectedChildren = {
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
+
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
     hide: { optionName: "hide", isCollectionItem: false },
     show: { optionName: "show", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FormItem
@@ -368,13 +236,19 @@ type IAsyncRuleProps = React.PropsWithChildren<{
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => any);
 }>
-class AsyncRule extends NestedOption<IAsyncRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentAsyncRule = memo(
+  (props: IAsyncRuleProps) => {
+    return React.createElement(NestedOption<IAsyncRuleProps>, { ...props });
+  }
+);
+
+const AsyncRule: typeof _componentAsyncRule & IElementDescriptor = Object.assign(_componentAsyncRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "async"
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -382,9 +256,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class At extends NestedOption<IAtProps> {
-  public static OptionName = "at";
-}
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
+
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -392,9 +272,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class BoundaryOffset extends NestedOption<IBoundaryOffsetProps> {
-  public static OptionName = "boundaryOffset";
-}
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
+
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // Column
@@ -410,18 +296,22 @@ type IButtonProps = React.PropsWithChildren<{
   visible?: boolean | ((options: { column: dxDataGridColumn, component: dxDataGrid, row: dxDataGridRowObject }) => boolean);
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Button extends NestedOption<IButtonProps> {
-  public static OptionName = "buttons";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
+
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // Editing
@@ -432,10 +322,16 @@ type IChangeProps = React.PropsWithChildren<{
   key?: any;
   type?: "insert" | "update" | "remove";
 }>
-class Change extends NestedOption<IChangeProps> {
-  public static OptionName = "changes";
-  public static IsCollectionItem = true;
-}
+const _componentChange = memo(
+  (props: IChangeProps) => {
+    return React.createElement(NestedOption<IChangeProps>, { ...props });
+  }
+);
+
+const Change: typeof _componentChange & IElementDescriptor = Object.assign(_componentChange, {
+  OptionName: "changes",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Form
@@ -445,9 +341,15 @@ type IColCountByScreenProps = React.PropsWithChildren<{
   sm?: number;
   xs?: number;
 }>
-class ColCountByScreen extends NestedOption<IColCountByScreenProps> {
-  public static OptionName = "colCountByScreen";
-}
+const _componentColCountByScreen = memo(
+  (props: IColCountByScreenProps) => {
+    return React.createElement(NestedOption<IColCountByScreenProps>, { ...props });
+  }
+);
+
+const ColCountByScreen: typeof _componentColCountByScreen & IElementDescriptor = Object.assign(_componentColCountByScreen, {
+  OptionName: "colCountByScreen",
+})
 
 // owners:
 // Position
@@ -455,9 +357,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-class Collision extends NestedOption<ICollisionProps> {
-  public static OptionName = "collision";
-}
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
+
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // DataGrid
@@ -558,21 +466,23 @@ type IColumnProps = React.PropsWithChildren<{
   onVisibleIndexChange?: (value: number) => void;
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
-  cellKeyFn?: (data: any) => string;
   editCellRender?: (...params: any) => React.ReactNode;
   editCellComponent?: React.ComponentType<any>;
-  editCellKeyFn?: (data: any) => string;
   groupCellRender?: (...params: any) => React.ReactNode;
   groupCellComponent?: React.ComponentType<any>;
-  groupCellKeyFn?: (data: any) => string;
   headerCellRender?: (...params: any) => React.ReactNode;
   headerCellComponent?: React.ComponentType<any>;
-  headerCellKeyFn?: (data: any) => string;
 }>
-class Column extends NestedOption<IColumnProps> {
-  public static OptionName = "columns";
-  public static IsCollectionItem = true;
-  public static DefaultsProps = {
+const _componentColumn = memo(
+  (props: IColumnProps) => {
+    return React.createElement(NestedOption<IColumnProps>, { ...props });
+  }
+);
+
+const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_componentColumn, {
+  OptionName: "columns",
+  IsCollectionItem: true,
+  DefaultsProps: {
     defaultFilterValue: "filterValue",
     defaultFilterValues: "filterValues",
     defaultGroupIndex: "groupIndex",
@@ -581,8 +491,8 @@ class Column extends NestedOption<IColumnProps> {
     defaultSortOrder: "sortOrder",
     defaultVisible: "visible",
     defaultVisibleIndex: "visibleIndex"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     AsyncRule: { optionName: "validationRules", isCollectionItem: true },
     button: { optionName: "buttons", isCollectionItem: true },
     columnHeaderFilter: { optionName: "headerFilter", isCollectionItem: false },
@@ -600,29 +510,25 @@ class Column extends NestedOption<IColumnProps> {
     RequiredRule: { optionName: "validationRules", isCollectionItem: true },
     StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
     validationRule: { optionName: "validationRules", isCollectionItem: true }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "cellTemplate",
     render: "cellRender",
-    component: "cellComponent",
-    keyFn: "cellKeyFn"
+    component: "cellComponent"
   }, {
     tmplOption: "editCellTemplate",
     render: "editCellRender",
-    component: "editCellComponent",
-    keyFn: "editCellKeyFn"
+    component: "editCellComponent"
   }, {
     tmplOption: "groupCellTemplate",
     render: "groupCellRender",
-    component: "groupCellComponent",
-    keyFn: "groupCellKeyFn"
+    component: "groupCellComponent"
   }, {
     tmplOption: "headerCellTemplate",
     render: "headerCellRender",
-    component: "headerCellComponent",
-    keyFn: "headerCellKeyFn"
-  }];
-}
+    component: "headerCellComponent"
+  }],
+})
 
 // owners:
 // DataGrid
@@ -641,16 +547,22 @@ type IColumnChooserProps = React.PropsWithChildren<{
   title?: string;
   width?: number | string;
 }>
-class ColumnChooser extends NestedOption<IColumnChooserProps> {
-  public static OptionName = "columnChooser";
-  public static ExpectedChildren = {
+const _componentColumnChooser = memo(
+  (props: IColumnChooserProps) => {
+    return React.createElement(NestedOption<IColumnChooserProps>, { ...props });
+  }
+);
+
+const ColumnChooser: typeof _componentColumnChooser & IElementDescriptor = Object.assign(_componentColumnChooser, {
+  OptionName: "columnChooser",
+  ExpectedChildren: {
     columnChooserSearch: { optionName: "search", isCollectionItem: false },
     columnChooserSelection: { optionName: "selection", isCollectionItem: false },
     position: { optionName: "position", isCollectionItem: false },
     search: { optionName: "search", isCollectionItem: false },
     selection: { optionName: "selection", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // ColumnChooser
@@ -659,9 +571,15 @@ type IColumnChooserSearchProps = React.PropsWithChildren<{
   enabled?: boolean;
   timeout?: number;
 }>
-class ColumnChooserSearch extends NestedOption<IColumnChooserSearchProps> {
-  public static OptionName = "search";
-}
+const _componentColumnChooserSearch = memo(
+  (props: IColumnChooserSearchProps) => {
+    return React.createElement(NestedOption<IColumnChooserSearchProps>, { ...props });
+  }
+);
+
+const ColumnChooserSearch: typeof _componentColumnChooserSearch & IElementDescriptor = Object.assign(_componentColumnChooserSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // ColumnChooser
@@ -670,9 +588,15 @@ type IColumnChooserSelectionProps = React.PropsWithChildren<{
   recursive?: boolean;
   selectByClick?: boolean;
 }>
-class ColumnChooserSelection extends NestedOption<IColumnChooserSelectionProps> {
-  public static OptionName = "selection";
-}
+const _componentColumnChooserSelection = memo(
+  (props: IColumnChooserSelectionProps) => {
+    return React.createElement(NestedOption<IColumnChooserSelectionProps>, { ...props });
+  }
+);
+
+const ColumnChooserSelection: typeof _componentColumnChooserSelection & IElementDescriptor = Object.assign(_componentColumnChooserSelection, {
+  OptionName: "selection",
+})
 
 // owners:
 // DataGrid
@@ -685,13 +609,19 @@ type IColumnFixingProps = React.PropsWithChildren<{
     unfix?: string;
   };
 }>
-class ColumnFixing extends NestedOption<IColumnFixingProps> {
-  public static OptionName = "columnFixing";
-  public static ExpectedChildren = {
+const _componentColumnFixing = memo(
+  (props: IColumnFixingProps) => {
+    return React.createElement(NestedOption<IColumnFixingProps>, { ...props });
+  }
+);
+
+const ColumnFixing: typeof _componentColumnFixing & IElementDescriptor = Object.assign(_componentColumnFixing, {
+  OptionName: "columnFixing",
+  ExpectedChildren: {
     columnFixingTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // ColumnFixing
@@ -701,9 +631,15 @@ type IColumnFixingTextsProps = React.PropsWithChildren<{
   rightPosition?: string;
   unfix?: string;
 }>
-class ColumnFixingTexts extends NestedOption<IColumnFixingTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentColumnFixingTexts = memo(
+  (props: IColumnFixingTextsProps) => {
+    return React.createElement(NestedOption<IColumnFixingTextsProps>, { ...props });
+  }
+);
+
+const ColumnFixingTexts: typeof _componentColumnFixingTexts & IElementDescriptor = Object.assign(_componentColumnFixingTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // Column
@@ -717,13 +653,19 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
 }>
-class ColumnHeaderFilter extends NestedOption<IColumnHeaderFilterProps> {
-  public static OptionName = "headerFilter";
-  public static ExpectedChildren = {
+const _componentColumnHeaderFilter = memo(
+  (props: IColumnHeaderFilterProps) => {
+    return React.createElement(NestedOption<IColumnHeaderFilterProps>, { ...props });
+  }
+);
+
+const ColumnHeaderFilter: typeof _componentColumnHeaderFilter & IElementDescriptor = Object.assign(_componentColumnHeaderFilter, {
+  OptionName: "headerFilter",
+  ExpectedChildren: {
     columnHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
     search: { optionName: "search", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // ColumnHeaderFilter
@@ -734,9 +676,15 @@ type IColumnHeaderFilterSearchProps = React.PropsWithChildren<{
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
-class ColumnHeaderFilterSearch extends NestedOption<IColumnHeaderFilterSearchProps> {
-  public static OptionName = "search";
-}
+const _componentColumnHeaderFilterSearch = memo(
+  (props: IColumnHeaderFilterSearchProps) => {
+    return React.createElement(NestedOption<IColumnHeaderFilterSearchProps>, { ...props });
+  }
+);
+
+const ColumnHeaderFilterSearch: typeof _componentColumnHeaderFilterSearch & IElementDescriptor = Object.assign(_componentColumnHeaderFilterSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // Column
@@ -747,9 +695,15 @@ type IColumnLookupProps = React.PropsWithChildren<{
   displayExpr?: ((data: any) => string) | string;
   valueExpr?: string;
 }>
-class ColumnLookup extends NestedOption<IColumnLookupProps> {
-  public static OptionName = "lookup";
-}
+const _componentColumnLookup = memo(
+  (props: IColumnLookupProps) => {
+    return React.createElement(NestedOption<IColumnLookupProps>, { ...props });
+  }
+);
+
+const ColumnLookup: typeof _componentColumnLookup & IElementDescriptor = Object.assign(_componentColumnLookup, {
+  OptionName: "lookup",
+})
 
 // owners:
 // FormItem
@@ -761,13 +715,19 @@ type ICompareRuleProps = React.PropsWithChildren<{
   message?: string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class CompareRule extends NestedOption<ICompareRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentCompareRule = memo(
+  (props: ICompareRuleProps) => {
+    return React.createElement(NestedOption<ICompareRuleProps>, { ...props });
+  }
+);
+
+const CompareRule: typeof _componentCompareRule & IElementDescriptor = Object.assign(_componentCompareRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "compare"
-  };
-}
+  },
+})
 
 // owners:
 // RowDragging
@@ -775,9 +735,15 @@ type ICursorOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class CursorOffset extends NestedOption<ICursorOffsetProps> {
-  public static OptionName = "cursorOffset";
-}
+const _componentCursorOffset = memo(
+  (props: ICursorOffsetProps) => {
+    return React.createElement(NestedOption<ICursorOffsetProps>, { ...props });
+  }
+);
+
+const CursorOffset: typeof _componentCursorOffset & IElementDescriptor = Object.assign(_componentCursorOffset, {
+  OptionName: "cursorOffset",
+})
 
 // owners:
 // FilterBuilder
@@ -792,18 +758,22 @@ type ICustomOperationProps = React.PropsWithChildren<{
   name?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
-  editorKeyFn?: (data: any) => string;
 }>
-class CustomOperation extends NestedOption<ICustomOperationProps> {
-  public static OptionName = "customOperations";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentCustomOperation = memo(
+  (props: ICustomOperationProps) => {
+    return React.createElement(NestedOption<ICustomOperationProps>, { ...props });
+  }
+);
+
+const CustomOperation: typeof _componentCustomOperation & IElementDescriptor = Object.assign(_componentCustomOperation, {
+  OptionName: "customOperations",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "editorTemplate",
     render: "editorRender",
-    component: "editorComponent",
-    keyFn: "editorKeyFn"
-  }];
-}
+    component: "editorComponent"
+  }],
+})
 
 // owners:
 // FormItem
@@ -815,13 +785,19 @@ type ICustomRuleProps = React.PropsWithChildren<{
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
 }>
-class CustomRule extends NestedOption<ICustomRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentCustomRule = memo(
+  (props: ICustomRuleProps) => {
+    return React.createElement(NestedOption<ICustomRuleProps>, { ...props });
+  }
+);
+
+const CustomRule: typeof _componentCustomRule & IElementDescriptor = Object.assign(_componentCustomRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "custom"
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -839,15 +815,21 @@ type IDataGridHeaderFilterProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number | string;
 }>
-class DataGridHeaderFilter extends NestedOption<IDataGridHeaderFilterProps> {
-  public static OptionName = "headerFilter";
-  public static ExpectedChildren = {
+const _componentDataGridHeaderFilter = memo(
+  (props: IDataGridHeaderFilterProps) => {
+    return React.createElement(NestedOption<IDataGridHeaderFilterProps>, { ...props });
+  }
+);
+
+const DataGridHeaderFilter: typeof _componentDataGridHeaderFilter & IElementDescriptor = Object.assign(_componentDataGridHeaderFilter, {
+  OptionName: "headerFilter",
+  ExpectedChildren: {
     dataGridHeaderFilterSearch: { optionName: "search", isCollectionItem: false },
     dataGridHeaderFilterTexts: { optionName: "texts", isCollectionItem: false },
     search: { optionName: "search", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // DataGridHeaderFilter
@@ -857,9 +839,15 @@ type IDataGridHeaderFilterSearchProps = React.PropsWithChildren<{
   mode?: "contains" | "startswith" | "equals";
   timeout?: number;
 }>
-class DataGridHeaderFilterSearch extends NestedOption<IDataGridHeaderFilterSearchProps> {
-  public static OptionName = "search";
-}
+const _componentDataGridHeaderFilterSearch = memo(
+  (props: IDataGridHeaderFilterSearchProps) => {
+    return React.createElement(NestedOption<IDataGridHeaderFilterSearchProps>, { ...props });
+  }
+);
+
+const DataGridHeaderFilterSearch: typeof _componentDataGridHeaderFilterSearch & IElementDescriptor = Object.assign(_componentDataGridHeaderFilterSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // DataGridHeaderFilter
@@ -868,9 +856,15 @@ type IDataGridHeaderFilterTextsProps = React.PropsWithChildren<{
   emptyValue?: string;
   ok?: string;
 }>
-class DataGridHeaderFilterTexts extends NestedOption<IDataGridHeaderFilterTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentDataGridHeaderFilterTexts = memo(
+  (props: IDataGridHeaderFilterTextsProps) => {
+    return React.createElement(NestedOption<IDataGridHeaderFilterTextsProps>, { ...props });
+  }
+);
+
+const DataGridHeaderFilterTexts: typeof _componentDataGridHeaderFilterTexts & IElementDescriptor = Object.assign(_componentDataGridHeaderFilterTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // DataGrid
@@ -881,9 +875,15 @@ type IDataGridSelectionProps = React.PropsWithChildren<{
   selectAllMode?: "allPages" | "page";
   showCheckBoxesMode?: "always" | "none" | "onClick" | "onLongTap";
 }>
-class DataGridSelection extends NestedOption<IDataGridSelectionProps> {
-  public static OptionName = "selection";
-}
+const _componentDataGridSelection = memo(
+  (props: IDataGridSelectionProps) => {
+    return React.createElement(NestedOption<IDataGridSelectionProps>, { ...props });
+  }
+);
+
+const DataGridSelection: typeof _componentDataGridSelection & IElementDescriptor = Object.assign(_componentDataGridSelection, {
+  OptionName: "selection",
+})
 
 // owners:
 // DataGrid
@@ -923,21 +923,27 @@ type IEditingProps = React.PropsWithChildren<{
   defaultEditRowKey?: any;
   onEditRowKeyChange?: (value: any) => void;
 }>
-class Editing extends NestedOption<IEditingProps> {
-  public static OptionName = "editing";
-  public static DefaultsProps = {
+const _componentEditing = memo(
+  (props: IEditingProps) => {
+    return React.createElement(NestedOption<IEditingProps>, { ...props });
+  }
+);
+
+const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
+  OptionName: "editing",
+  DefaultsProps: {
     defaultChanges: "changes",
     defaultEditColumnName: "editColumnName",
     defaultEditRowKey: "editRowKey"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     change: { optionName: "changes", isCollectionItem: true },
     editingTexts: { optionName: "texts", isCollectionItem: false },
     form: { optionName: "form", isCollectionItem: false },
     popup: { optionName: "popup", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Editing
@@ -954,9 +960,15 @@ type IEditingTextsProps = React.PropsWithChildren<{
   undeleteRow?: string;
   validationCancelChanges?: string;
 }>
-class EditingTexts extends NestedOption<IEditingTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentEditingTexts = memo(
+  (props: IEditingTextsProps) => {
+    return React.createElement(NestedOption<IEditingTextsProps>, { ...props });
+  }
+);
+
+const EditingTexts: typeof _componentEditingTexts & IElementDescriptor = Object.assign(_componentEditingTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // FormItem
@@ -966,13 +978,19 @@ type IEmailRuleProps = React.PropsWithChildren<{
   message?: string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class EmailRule extends NestedOption<IEmailRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentEmailRule = memo(
+  (props: IEmailRuleProps) => {
+    return React.createElement(NestedOption<IEmailRuleProps>, { ...props });
+  }
+);
+
+const EmailRule: typeof _componentEmailRule & IElementDescriptor = Object.assign(_componentEmailRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "email"
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -986,13 +1004,19 @@ type IExportProps = React.PropsWithChildren<{
     exportTo?: string;
   };
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-  public static ExpectedChildren = {
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+  ExpectedChildren: {
     exportTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Export
@@ -1001,9 +1025,15 @@ type IExportTextsProps = React.PropsWithChildren<{
   exportSelectedRows?: string;
   exportTo?: string;
 }>
-class ExportTexts extends NestedOption<IExportTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentExportTexts = memo(
+  (props: IExportTextsProps) => {
+    return React.createElement(NestedOption<IExportTextsProps>, { ...props });
+  }
+);
+
+const ExportTexts: typeof _componentExportTexts & IElementDescriptor = Object.assign(_componentExportTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // FilterBuilder
@@ -1028,23 +1058,27 @@ type IFieldProps = React.PropsWithChildren<{
   trueText?: string;
   editorRender?: (...params: any) => React.ReactNode;
   editorComponent?: React.ComponentType<any>;
-  editorKeyFn?: (data: any) => string;
 }>
-class Field extends NestedOption<IFieldProps> {
-  public static OptionName = "fields";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentField = memo(
+  (props: IFieldProps) => {
+    return React.createElement(NestedOption<IFieldProps>, { ...props });
+  }
+);
+
+const Field: typeof _componentField & IElementDescriptor = Object.assign(_componentField, {
+  OptionName: "fields",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     fieldLookup: { optionName: "lookup", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     lookup: { optionName: "lookup", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "editorTemplate",
     render: "editorRender",
-    component: "editorComponent",
-    keyFn: "editorKeyFn"
-  }];
-}
+    component: "editorComponent"
+  }],
+})
 
 // owners:
 // Field
@@ -1054,9 +1088,15 @@ type IFieldLookupProps = React.PropsWithChildren<{
   displayExpr?: ((data: any) => string) | string;
   valueExpr?: ((data: any) => string | number | boolean) | string;
 }>
-class FieldLookup extends NestedOption<IFieldLookupProps> {
-  public static OptionName = "lookup";
-}
+const _componentFieldLookup = memo(
+  (props: IFieldLookupProps) => {
+    return React.createElement(NestedOption<IFieldLookupProps>, { ...props });
+  }
+);
+
+const FieldLookup: typeof _componentFieldLookup & IElementDescriptor = Object.assign(_componentFieldLookup, {
+  OptionName: "lookup",
+})
 
 // owners:
 // DataGrid
@@ -1111,18 +1151,24 @@ type IFilterBuilderProps = React.PropsWithChildren<{
   defaultValue?: Array<any> | (() => any) | string;
   onValueChange?: (value: Array<any> | (() => any) | string) => void;
 }>
-class FilterBuilder extends NestedOption<IFilterBuilderProps> {
-  public static OptionName = "filterBuilder";
-  public static DefaultsProps = {
+const _componentFilterBuilder = memo(
+  (props: IFilterBuilderProps) => {
+    return React.createElement(NestedOption<IFilterBuilderProps>, { ...props });
+  }
+);
+
+const FilterBuilder: typeof _componentFilterBuilder & IElementDescriptor = Object.assign(_componentFilterBuilder, {
+  OptionName: "filterBuilder",
+  DefaultsProps: {
     defaultValue: "value"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     customOperation: { optionName: "customOperations", isCollectionItem: true },
     field: { optionName: "fields", isCollectionItem: true },
     filterOperationDescriptions: { optionName: "filterOperationDescriptions", isCollectionItem: false },
     groupOperationDescriptions: { optionName: "groupOperationDescriptions", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -1190,31 +1236,33 @@ type IFilterBuilderPopupProps = React.PropsWithChildren<{
   onWidthChange?: (value: (() => number | string) | number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
-  titleKeyFn?: (data: any) => string;
 }>
-class FilterBuilderPopup extends NestedOption<IFilterBuilderPopupProps> {
-  public static OptionName = "filterBuilderPopup";
-  public static DefaultsProps = {
+const _componentFilterBuilderPopup = memo(
+  (props: IFilterBuilderPopupProps) => {
+    return React.createElement(NestedOption<IFilterBuilderPopupProps>, { ...props });
+  }
+);
+
+const FilterBuilderPopup: typeof _componentFilterBuilderPopup & IElementDescriptor = Object.assign(_componentFilterBuilderPopup, {
+  OptionName: "filterBuilderPopup",
+  DefaultsProps: {
     defaultHeight: "height",
     defaultPosition: "position",
     defaultVisible: "visible",
     defaultWidth: "width"
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "contentTemplate",
     render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
+    component: "contentComponent"
   }, {
     tmplOption: "titleTemplate",
     render: "titleRender",
-    component: "titleComponent",
-    keyFn: "titleKeyFn"
-  }];
-}
+    component: "titleComponent"
+  }],
+})
 
 // owners:
 // FilterBuilder
@@ -1233,9 +1281,15 @@ type IFilterOperationDescriptionsProps = React.PropsWithChildren<{
   notEqual?: string;
   startsWith?: string;
 }>
-class FilterOperationDescriptions extends NestedOption<IFilterOperationDescriptionsProps> {
-  public static OptionName = "filterOperationDescriptions";
-}
+const _componentFilterOperationDescriptions = memo(
+  (props: IFilterOperationDescriptionsProps) => {
+    return React.createElement(NestedOption<IFilterOperationDescriptionsProps>, { ...props });
+  }
+);
+
+const FilterOperationDescriptions: typeof _componentFilterOperationDescriptions & IElementDescriptor = Object.assign(_componentFilterOperationDescriptions, {
+  OptionName: "filterOperationDescriptions",
+})
 
 // owners:
 // DataGrid
@@ -1251,16 +1305,22 @@ type IFilterPanelProps = React.PropsWithChildren<{
   defaultFilterEnabled?: boolean;
   onFilterEnabledChange?: (value: boolean) => void;
 }>
-class FilterPanel extends NestedOption<IFilterPanelProps> {
-  public static OptionName = "filterPanel";
-  public static DefaultsProps = {
+const _componentFilterPanel = memo(
+  (props: IFilterPanelProps) => {
+    return React.createElement(NestedOption<IFilterPanelProps>, { ...props });
+  }
+);
+
+const FilterPanel: typeof _componentFilterPanel & IElementDescriptor = Object.assign(_componentFilterPanel, {
+  OptionName: "filterPanel",
+  DefaultsProps: {
     defaultFilterEnabled: "filterEnabled"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     filterPanelTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FilterPanel
@@ -1269,9 +1329,15 @@ type IFilterPanelTextsProps = React.PropsWithChildren<{
   createFilter?: string;
   filterEnabledHint?: string;
 }>
-class FilterPanelTexts extends NestedOption<IFilterPanelTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentFilterPanelTexts = memo(
+  (props: IFilterPanelTextsProps) => {
+    return React.createElement(NestedOption<IFilterPanelTextsProps>, { ...props });
+  }
+);
+
+const FilterPanelTexts: typeof _componentFilterPanelTexts & IElementDescriptor = Object.assign(_componentFilterPanelTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // DataGrid
@@ -1298,12 +1364,18 @@ type IFilterRowProps = React.PropsWithChildren<{
   showOperationChooser?: boolean;
   visible?: boolean;
 }>
-class FilterRow extends NestedOption<IFilterRowProps> {
-  public static OptionName = "filterRow";
-  public static ExpectedChildren = {
+const _componentFilterRow = memo(
+  (props: IFilterRowProps) => {
+    return React.createElement(NestedOption<IFilterRowProps>, { ...props });
+  }
+);
+
+const FilterRow: typeof _componentFilterRow & IElementDescriptor = Object.assign(_componentFilterRow, {
+  OptionName: "filterRow",
+  ExpectedChildren: {
     operationDescriptions: { optionName: "operationDescriptions", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Editing
@@ -1357,15 +1429,21 @@ type IFormProps = React.PropsWithChildren<{
   defaultFormData?: any;
   onFormDataChange?: (value: any) => void;
 }>
-class Form extends NestedOption<IFormProps> {
-  public static OptionName = "form";
-  public static DefaultsProps = {
+const _componentForm = memo(
+  (props: IFormProps) => {
+    return React.createElement(NestedOption<IFormProps>, { ...props });
+  }
+);
+
+const Form: typeof _componentForm & IElementDescriptor = Object.assign(_componentForm, {
+  OptionName: "form",
+  DefaultsProps: {
     defaultFormData: "formData"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     colCountByScreen: { optionName: "colCountByScreen", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Column
@@ -1378,9 +1456,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // Column
@@ -1408,11 +1492,16 @@ type IFormItemProps = React.PropsWithChildren<{
   visibleIndex?: number;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class FormItem extends NestedOption<IFormItemProps> {
-  public static OptionName = "formItem";
-  public static ExpectedChildren = {
+const _componentFormItem = memo(
+  (props: IFormItemProps) => {
+    return React.createElement(NestedOption<IFormItemProps>, { ...props });
+  }
+);
+
+const FormItem: typeof _componentFormItem & IElementDescriptor = Object.assign(_componentFormItem, {
+  OptionName: "formItem",
+  ExpectedChildren: {
     AsyncRule: { optionName: "validationRules", isCollectionItem: true },
     CompareRule: { optionName: "validationRules", isCollectionItem: true },
     CustomRule: { optionName: "validationRules", isCollectionItem: true },
@@ -1424,14 +1513,13 @@ class FormItem extends NestedOption<IFormItemProps> {
     RequiredRule: { optionName: "validationRules", isCollectionItem: true },
     StringLengthRule: { optionName: "validationRules", isCollectionItem: true },
     validationRule: { optionName: "validationRules", isCollectionItem: true }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // Hide
@@ -1442,12 +1530,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class From extends NestedOption<IFromProps> {
-  public static OptionName = "from";
-  public static ExpectedChildren = {
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
+
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
     position: { optionName: "position", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -1464,13 +1558,19 @@ type IGroupingProps = React.PropsWithChildren<{
     ungroupAll?: string;
   };
 }>
-class Grouping extends NestedOption<IGroupingProps> {
-  public static OptionName = "grouping";
-  public static ExpectedChildren = {
+const _componentGrouping = memo(
+  (props: IGroupingProps) => {
+    return React.createElement(NestedOption<IGroupingProps>, { ...props });
+  }
+);
+
+const Grouping: typeof _componentGrouping & IElementDescriptor = Object.assign(_componentGrouping, {
+  OptionName: "grouping",
+  ExpectedChildren: {
     groupingTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Grouping
@@ -1481,9 +1581,15 @@ type IGroupingTextsProps = React.PropsWithChildren<{
   ungroup?: string;
   ungroupAll?: string;
 }>
-class GroupingTexts extends NestedOption<IGroupingTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentGroupingTexts = memo(
+  (props: IGroupingTextsProps) => {
+    return React.createElement(NestedOption<IGroupingTextsProps>, { ...props });
+  }
+);
+
+const GroupingTexts: typeof _componentGroupingTexts & IElementDescriptor = Object.assign(_componentGroupingTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // Summary
@@ -1499,13 +1605,19 @@ type IGroupItemProps = React.PropsWithChildren<{
   summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum";
   valueFormat?: LocalizationTypes.Format;
 }>
-class GroupItem extends NestedOption<IGroupItemProps> {
-  public static OptionName = "groupItems";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentGroupItem = memo(
+  (props: IGroupItemProps) => {
+    return React.createElement(NestedOption<IGroupItemProps>, { ...props });
+  }
+);
+
+const GroupItem: typeof _componentGroupItem & IElementDescriptor = Object.assign(_componentGroupItem, {
+  OptionName: "groupItems",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     valueFormat: { optionName: "valueFormat", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FilterBuilder
@@ -1515,9 +1627,15 @@ type IGroupOperationDescriptionsProps = React.PropsWithChildren<{
   notOr?: string;
   or?: string;
 }>
-class GroupOperationDescriptions extends NestedOption<IGroupOperationDescriptionsProps> {
-  public static OptionName = "groupOperationDescriptions";
-}
+const _componentGroupOperationDescriptions = memo(
+  (props: IGroupOperationDescriptionsProps) => {
+    return React.createElement(NestedOption<IGroupOperationDescriptionsProps>, { ...props });
+  }
+);
+
+const GroupOperationDescriptions: typeof _componentGroupOperationDescriptions & IElementDescriptor = Object.assign(_componentGroupOperationDescriptions, {
+  OptionName: "groupOperationDescriptions",
+})
 
 // owners:
 // DataGrid
@@ -1528,12 +1646,18 @@ type IGroupPanelProps = React.PropsWithChildren<{
   defaultVisible?: boolean | "auto";
   onVisibleChange?: (value: boolean | "auto") => void;
 }>
-class GroupPanel extends NestedOption<IGroupPanelProps> {
-  public static OptionName = "groupPanel";
-  public static DefaultsProps = {
+const _componentGroupPanel = memo(
+  (props: IGroupPanelProps) => {
+    return React.createElement(NestedOption<IGroupPanelProps>, { ...props });
+  }
+);
+
+const GroupPanel: typeof _componentGroupPanel & IElementDescriptor = Object.assign(_componentGroupPanel, {
+  OptionName: "groupPanel",
+  DefaultsProps: {
     defaultVisible: "visible"
-  };
-}
+  },
+})
 
 // owners:
 // Column
@@ -1555,9 +1679,15 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   };
   visible?: boolean;
 }>
-class HeaderFilter extends NestedOption<IHeaderFilterProps> {
-  public static OptionName = "headerFilter";
-}
+const _componentHeaderFilter = memo(
+  (props: IHeaderFilterProps) => {
+    return React.createElement(NestedOption<IHeaderFilterProps>, { ...props });
+  }
+);
+
+const HeaderFilter: typeof _componentHeaderFilter & IElementDescriptor = Object.assign(_componentHeaderFilter, {
+  OptionName: "headerFilter",
+})
 
 // owners:
 // Animation
@@ -1573,13 +1703,19 @@ type IHideProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Hide extends NestedOption<IHideProps> {
-  public static OptionName = "hide";
-  public static ExpectedChildren = {
+const _componentHide = memo(
+  (props: IHideProps) => {
+    return React.createElement(NestedOption<IHideProps>, { ...props });
+  }
+);
+
+const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componentHide, {
+  OptionName: "hide",
+  ExpectedChildren: {
     from: { optionName: "from", isCollectionItem: false },
     to: { optionName: "to", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Toolbar
@@ -1599,26 +1735,28 @@ type IItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "menuItemTemplate",
     render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
+    component: "menuItemComponent"
   }, {
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // DataGrid
@@ -1628,9 +1766,15 @@ type IKeyboardNavigationProps = React.PropsWithChildren<{
   enterKeyAction?: "startEdit" | "moveFocus";
   enterKeyDirection?: "none" | "column" | "row";
 }>
-class KeyboardNavigation extends NestedOption<IKeyboardNavigationProps> {
-  public static OptionName = "keyboardNavigation";
-}
+const _componentKeyboardNavigation = memo(
+  (props: IKeyboardNavigationProps) => {
+    return React.createElement(NestedOption<IKeyboardNavigationProps>, { ...props });
+  }
+);
+
+const KeyboardNavigation: typeof _componentKeyboardNavigation & IElementDescriptor = Object.assign(_componentKeyboardNavigation, {
+  OptionName: "keyboardNavigation",
+})
 
 // owners:
 // FormItem
@@ -1643,17 +1787,21 @@ type ILabelProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Label extends NestedOption<ILabelProps> {
-  public static OptionName = "label";
-  public static TemplateProps = [{
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
+
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // DataGrid
@@ -1668,9 +1816,15 @@ type ILoadPanelProps = React.PropsWithChildren<{
   text?: string;
   width?: number | string;
 }>
-class LoadPanel extends NestedOption<ILoadPanelProps> {
-  public static OptionName = "loadPanel";
-}
+const _componentLoadPanel = memo(
+  (props: ILoadPanelProps) => {
+    return React.createElement(NestedOption<ILoadPanelProps>, { ...props });
+  }
+);
+
+const LoadPanel: typeof _componentLoadPanel & IElementDescriptor = Object.assign(_componentLoadPanel, {
+  OptionName: "loadPanel",
+})
 
 // owners:
 // Column
@@ -1682,9 +1836,15 @@ type ILookupProps = React.PropsWithChildren<{
   displayExpr?: ((data: any) => string) | string;
   valueExpr?: string | ((data: any) => string | number | boolean);
 }>
-class Lookup extends NestedOption<ILookupProps> {
-  public static OptionName = "lookup";
-}
+const _componentLookup = memo(
+  (props: ILookupProps) => {
+    return React.createElement(NestedOption<ILookupProps>, { ...props });
+  }
+);
+
+const Lookup: typeof _componentLookup & IElementDescriptor = Object.assign(_componentLookup, {
+  OptionName: "lookup",
+})
 
 // owners:
 // DataGrid
@@ -1694,17 +1854,21 @@ type IMasterDetailProps = React.PropsWithChildren<{
   template?: ((detailElement: any, detailInfo: { data: Record<string, any>, key: any, watch: (() => void) }) => any) | template;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class MasterDetail extends NestedOption<IMasterDetailProps> {
-  public static OptionName = "masterDetail";
-  public static TemplateProps = [{
+const _componentMasterDetail = memo(
+  (props: IMasterDetailProps) => {
+    return React.createElement(NestedOption<IMasterDetailProps>, { ...props });
+  }
+);
+
+const MasterDetail: typeof _componentMasterDetail & IElementDescriptor = Object.assign(_componentMasterDetail, {
+  OptionName: "masterDetail",
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // Position
@@ -1712,9 +1876,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class My extends NestedOption<IMyProps> {
-  public static OptionName = "my";
-}
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
+
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // FormItem
@@ -1724,13 +1894,19 @@ type INumericRuleProps = React.PropsWithChildren<{
   message?: string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class NumericRule extends NestedOption<INumericRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentNumericRule = memo(
+  (props: INumericRuleProps) => {
+    return React.createElement(NestedOption<INumericRuleProps>, { ...props });
+  }
+);
+
+const NumericRule: typeof _componentNumericRule & IElementDescriptor = Object.assign(_componentNumericRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "numeric"
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -1738,9 +1914,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class Offset extends NestedOption<IOffsetProps> {
-  public static OptionName = "offset";
-}
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
+
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // FilterRow
@@ -1757,9 +1939,15 @@ type IOperationDescriptionsProps = React.PropsWithChildren<{
   notEqual?: string;
   startsWith?: string;
 }>
-class OperationDescriptions extends NestedOption<IOperationDescriptionsProps> {
-  public static OptionName = "operationDescriptions";
-}
+const _componentOperationDescriptions = memo(
+  (props: IOperationDescriptionsProps) => {
+    return React.createElement(NestedOption<IOperationDescriptionsProps>, { ...props });
+  }
+);
+
+const OperationDescriptions: typeof _componentOperationDescriptions & IElementDescriptor = Object.assign(_componentOperationDescriptions, {
+  OptionName: "operationDescriptions",
+})
 
 // owners:
 // DataGrid
@@ -1773,9 +1961,15 @@ type IPagerProps = React.PropsWithChildren<{
   showPageSizeSelector?: boolean;
   visible?: boolean | "auto";
 }>
-class Pager extends NestedOption<IPagerProps> {
-  public static OptionName = "pager";
-}
+const _componentPager = memo(
+  (props: IPagerProps) => {
+    return React.createElement(NestedOption<IPagerProps>, { ...props });
+  }
+);
+
+const Pager: typeof _componentPager & IElementDescriptor = Object.assign(_componentPager, {
+  OptionName: "pager",
+})
 
 // owners:
 // DataGrid
@@ -1788,13 +1982,19 @@ type IPagingProps = React.PropsWithChildren<{
   defaultPageSize?: number;
   onPageSizeChange?: (value: number) => void;
 }>
-class Paging extends NestedOption<IPagingProps> {
-  public static OptionName = "paging";
-  public static DefaultsProps = {
+const _componentPaging = memo(
+  (props: IPagingProps) => {
+    return React.createElement(NestedOption<IPagingProps>, { ...props });
+  }
+);
+
+const Paging: typeof _componentPaging & IElementDescriptor = Object.assign(_componentPaging, {
+  OptionName: "paging",
+  DefaultsProps: {
     defaultPageIndex: "pageIndex",
     defaultPageSize: "pageSize"
-  };
-}
+  },
+})
 
 // owners:
 // FormItem
@@ -1805,13 +2005,19 @@ type IPatternRuleProps = React.PropsWithChildren<{
   pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class PatternRule extends NestedOption<IPatternRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentPatternRule = memo(
+  (props: IPatternRuleProps) => {
+    return React.createElement(NestedOption<IPatternRuleProps>, { ...props });
+  }
+);
+
+const PatternRule: typeof _componentPatternRule & IElementDescriptor = Object.assign(_componentPatternRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "pattern"
-  };
-}
+  },
+})
 
 // owners:
 // Editing
@@ -1879,36 +2085,38 @@ type IPopupProps = React.PropsWithChildren<{
   onWidthChange?: (value: (() => number | string) | number | string) => void;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
-  titleKeyFn?: (data: any) => string;
 }>
-class Popup extends NestedOption<IPopupProps> {
-  public static OptionName = "popup";
-  public static DefaultsProps = {
+const _componentPopup = memo(
+  (props: IPopupProps) => {
+    return React.createElement(NestedOption<IPopupProps>, { ...props });
+  }
+);
+
+const Popup: typeof _componentPopup & IElementDescriptor = Object.assign(_componentPopup, {
+  OptionName: "popup",
+  DefaultsProps: {
     defaultHeight: "height",
     defaultPosition: "position",
     defaultVisible: "visible",
     defaultWidth: "width"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     animation: { optionName: "animation", isCollectionItem: false },
     position: { optionName: "position", isCollectionItem: false },
     toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "contentTemplate",
     render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
+    component: "contentComponent"
   }, {
     tmplOption: "titleTemplate",
     render: "titleRender",
-    component: "titleComponent",
-    keyFn: "titleKeyFn"
-  }];
-}
+    component: "titleComponent"
+  }],
+})
 
 // owners:
 // From
@@ -1938,9 +2146,15 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-class Position extends NestedOption<IPositionProps> {
-  public static OptionName = "position";
-}
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
+
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+})
 
 // owners:
 // FormItem
@@ -1953,13 +2167,19 @@ type IRangeRuleProps = React.PropsWithChildren<{
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class RangeRule extends NestedOption<IRangeRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentRangeRule = memo(
+  (props: IRangeRuleProps) => {
+    return React.createElement(NestedOption<IRangeRuleProps>, { ...props });
+  }
+);
+
+const RangeRule: typeof _componentRangeRule & IElementDescriptor = Object.assign(_componentRangeRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "range"
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -1971,9 +2191,15 @@ type IRemoteOperationsProps = React.PropsWithChildren<{
   sorting?: boolean;
   summary?: boolean;
 }>
-class RemoteOperations extends NestedOption<IRemoteOperationsProps> {
-  public static OptionName = "remoteOperations";
-}
+const _componentRemoteOperations = memo(
+  (props: IRemoteOperationsProps) => {
+    return React.createElement(NestedOption<IRemoteOperationsProps>, { ...props });
+  }
+);
+
+const RemoteOperations: typeof _componentRemoteOperations & IElementDescriptor = Object.assign(_componentRemoteOperations, {
+  OptionName: "remoteOperations",
+})
 
 // owners:
 // FormItem
@@ -1983,13 +2209,19 @@ type IRequiredRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class RequiredRule extends NestedOption<IRequiredRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentRequiredRule = memo(
+  (props: IRequiredRuleProps) => {
+    return React.createElement(NestedOption<IRequiredRuleProps>, { ...props });
+  }
+);
+
+const RequiredRule: typeof _componentRequiredRule & IElementDescriptor = Object.assign(_componentRequiredRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "required"
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -2022,20 +2254,24 @@ type IRowDraggingProps = React.PropsWithChildren<{
   showDragIcons?: boolean;
   dragRender?: (...params: any) => React.ReactNode;
   dragComponent?: React.ComponentType<any>;
-  dragKeyFn?: (data: any) => string;
 }>
-class RowDragging extends NestedOption<IRowDraggingProps> {
-  public static OptionName = "rowDragging";
-  public static ExpectedChildren = {
+const _componentRowDragging = memo(
+  (props: IRowDraggingProps) => {
+    return React.createElement(NestedOption<IRowDraggingProps>, { ...props });
+  }
+);
+
+const RowDragging: typeof _componentRowDragging & IElementDescriptor = Object.assign(_componentRowDragging, {
+  OptionName: "rowDragging",
+  ExpectedChildren: {
     cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "dragTemplate",
     render: "dragRender",
-    component: "dragComponent",
-    keyFn: "dragKeyFn"
-  }];
-}
+    component: "dragComponent"
+  }],
+})
 
 // owners:
 // DataGrid
@@ -2050,9 +2286,15 @@ type IScrollingProps = React.PropsWithChildren<{
   showScrollbar?: "always" | "never" | "onHover" | "onScroll";
   useNative?: boolean | "auto";
 }>
-class Scrolling extends NestedOption<IScrollingProps> {
-  public static OptionName = "scrolling";
-}
+const _componentScrolling = memo(
+  (props: IScrollingProps) => {
+    return React.createElement(NestedOption<IScrollingProps>, { ...props });
+  }
+);
+
+const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign(_componentScrolling, {
+  OptionName: "scrolling",
+})
 
 // owners:
 // ColumnHeaderFilter
@@ -2065,9 +2307,15 @@ type ISearchProps = React.PropsWithChildren<{
   searchExpr?: Array<(() => any) | string> | (() => any) | string;
   timeout?: number;
 }>
-class Search extends NestedOption<ISearchProps> {
-  public static OptionName = "search";
-}
+const _componentSearch = memo(
+  (props: ISearchProps) => {
+    return React.createElement(NestedOption<ISearchProps>, { ...props });
+  }
+);
+
+const Search: typeof _componentSearch & IElementDescriptor = Object.assign(_componentSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // DataGrid
@@ -2082,12 +2330,18 @@ type ISearchPanelProps = React.PropsWithChildren<{
   defaultText?: string;
   onTextChange?: (value: string) => void;
 }>
-class SearchPanel extends NestedOption<ISearchPanelProps> {
-  public static OptionName = "searchPanel";
-  public static DefaultsProps = {
+const _componentSearchPanel = memo(
+  (props: ISearchPanelProps) => {
+    return React.createElement(NestedOption<ISearchPanelProps>, { ...props });
+  }
+);
+
+const SearchPanel: typeof _componentSearchPanel & IElementDescriptor = Object.assign(_componentSearchPanel, {
+  OptionName: "searchPanel",
+  DefaultsProps: {
     defaultText: "text"
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -2101,9 +2355,15 @@ type ISelectionProps = React.PropsWithChildren<{
   recursive?: boolean;
   selectByClick?: boolean;
 }>
-class Selection extends NestedOption<ISelectionProps> {
-  public static OptionName = "selection";
-}
+const _componentSelection = memo(
+  (props: ISelectionProps) => {
+    return React.createElement(NestedOption<ISelectionProps>, { ...props });
+  }
+);
+
+const Selection: typeof _componentSelection & IElementDescriptor = Object.assign(_componentSelection, {
+  OptionName: "selection",
+})
 
 // owners:
 // Animation
@@ -2119,9 +2379,15 @@ type IShowProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Show extends NestedOption<IShowProps> {
-  public static OptionName = "show";
-}
+const _componentShow = memo(
+  (props: IShowProps) => {
+    return React.createElement(NestedOption<IShowProps>, { ...props });
+  }
+);
+
+const Show: typeof _componentShow & IElementDescriptor = Object.assign(_componentShow, {
+  OptionName: "show",
+})
 
 // owners:
 // DataGrid
@@ -2130,10 +2396,16 @@ type ISortByGroupSummaryInfoProps = React.PropsWithChildren<{
   sortOrder?: "asc" | "desc";
   summaryItem?: number | string;
 }>
-class SortByGroupSummaryInfo extends NestedOption<ISortByGroupSummaryInfoProps> {
-  public static OptionName = "sortByGroupSummaryInfo";
-  public static IsCollectionItem = true;
-}
+const _componentSortByGroupSummaryInfo = memo(
+  (props: ISortByGroupSummaryInfoProps) => {
+    return React.createElement(NestedOption<ISortByGroupSummaryInfoProps>, { ...props });
+  }
+);
+
+const SortByGroupSummaryInfo: typeof _componentSortByGroupSummaryInfo & IElementDescriptor = Object.assign(_componentSortByGroupSummaryInfo, {
+  OptionName: "sortByGroupSummaryInfo",
+  IsCollectionItem: true,
+})
 
 // owners:
 // DataGrid
@@ -2144,9 +2416,15 @@ type ISortingProps = React.PropsWithChildren<{
   mode?: "single" | "multiple" | "none";
   showSortIndexes?: boolean;
 }>
-class Sorting extends NestedOption<ISortingProps> {
-  public static OptionName = "sorting";
-}
+const _componentSorting = memo(
+  (props: ISortingProps) => {
+    return React.createElement(NestedOption<ISortingProps>, { ...props });
+  }
+);
+
+const Sorting: typeof _componentSorting & IElementDescriptor = Object.assign(_componentSorting, {
+  OptionName: "sorting",
+})
 
 // owners:
 // DataGrid
@@ -2158,9 +2436,15 @@ type IStateStoringProps = React.PropsWithChildren<{
   storageKey?: string;
   type?: "custom" | "localStorage" | "sessionStorage";
 }>
-class StateStoring extends NestedOption<IStateStoringProps> {
-  public static OptionName = "stateStoring";
-}
+const _componentStateStoring = memo(
+  (props: IStateStoringProps) => {
+    return React.createElement(NestedOption<IStateStoringProps>, { ...props });
+  }
+);
+
+const StateStoring: typeof _componentStateStoring & IElementDescriptor = Object.assign(_componentStateStoring, {
+  OptionName: "stateStoring",
+})
 
 // owners:
 // FormItem
@@ -2173,13 +2457,19 @@ type IStringLengthRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
-class StringLengthRule extends NestedOption<IStringLengthRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentStringLengthRule = memo(
+  (props: IStringLengthRuleProps) => {
+    return React.createElement(NestedOption<IStringLengthRuleProps>, { ...props });
+  }
+);
+
+const StringLengthRule: typeof _componentStringLengthRule & IElementDescriptor = Object.assign(_componentStringLengthRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "stringLength"
-  };
-}
+  },
+})
 
 // owners:
 // DataGrid
@@ -2223,15 +2513,21 @@ type ISummaryProps = React.PropsWithChildren<{
     valueFormat?: LocalizationTypes.Format;
   }[];
 }>
-class Summary extends NestedOption<ISummaryProps> {
-  public static OptionName = "summary";
-  public static ExpectedChildren = {
+const _componentSummary = memo(
+  (props: ISummaryProps) => {
+    return React.createElement(NestedOption<ISummaryProps>, { ...props });
+  }
+);
+
+const Summary: typeof _componentSummary & IElementDescriptor = Object.assign(_componentSummary, {
+  OptionName: "summary",
+  ExpectedChildren: {
     groupItem: { optionName: "groupItems", isCollectionItem: true },
     summaryTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false },
     totalItem: { optionName: "totalItems", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Summary
@@ -2246,9 +2542,15 @@ type ISummaryTextsProps = React.PropsWithChildren<{
   sum?: string;
   sumOtherColumn?: string;
 }>
-class SummaryTexts extends NestedOption<ISummaryTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentSummaryTexts = memo(
+  (props: ISummaryTextsProps) => {
+    return React.createElement(NestedOption<ISummaryTextsProps>, { ...props });
+  }
+);
+
+const SummaryTexts: typeof _componentSummaryTexts & IElementDescriptor = Object.assign(_componentSummaryTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // Editing
@@ -2298,9 +2600,15 @@ type ITextsProps = React.PropsWithChildren<{
   emptyValue?: string;
   ok?: string;
 }>
-class Texts extends NestedOption<ITextsProps> {
-  public static OptionName = "texts";
-}
+const _componentTexts = memo(
+  (props: ITextsProps) => {
+    return React.createElement(NestedOption<ITextsProps>, { ...props });
+  }
+);
+
+const Texts: typeof _componentTexts & IElementDescriptor = Object.assign(_componentTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // Hide
@@ -2311,9 +2619,15 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class To extends NestedOption<IToProps> {
-  public static OptionName = "to";
-}
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
+
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 // owners:
 // DataGrid
@@ -2322,12 +2636,18 @@ type IToolbarProps = React.PropsWithChildren<{
   items?: Array<dxDataGridToolbarItem | "addRowButton" | "applyFilterButton" | "columnChooserButton" | "exportButton" | "groupPanel" | "revertButton" | "saveButton" | "searchPanel">;
   visible?: boolean;
 }>
-class Toolbar extends NestedOption<IToolbarProps> {
-  public static OptionName = "toolbar";
-  public static ExpectedChildren = {
+const _componentToolbar = memo(
+  (props: IToolbarProps) => {
+    return React.createElement(NestedOption<IToolbarProps>, { ...props });
+  }
+);
+
+const Toolbar: typeof _componentToolbar & IElementDescriptor = Object.assign(_componentToolbar, {
+  OptionName: "toolbar",
+  ExpectedChildren: {
     item: { optionName: "items", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Popup
@@ -2347,26 +2667,28 @@ type IToolbarItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class ToolbarItem extends NestedOption<IToolbarItemProps> {
-  public static OptionName = "toolbarItems";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentToolbarItem = memo(
+  (props: IToolbarItemProps) => {
+    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
+  }
+);
+
+const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
+  OptionName: "toolbarItems",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "menuItemTemplate",
     render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
+    component: "menuItemComponent"
   }, {
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 // owners:
 // Summary
@@ -2382,13 +2704,19 @@ type ITotalItemProps = React.PropsWithChildren<{
   summaryType?: "avg" | "count" | "custom" | "max" | "min" | "sum";
   valueFormat?: LocalizationTypes.Format;
 }>
-class TotalItem extends NestedOption<ITotalItemProps> {
-  public static OptionName = "totalItems";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentTotalItem = memo(
+  (props: ITotalItemProps) => {
+    return React.createElement(NestedOption<ITotalItemProps>, { ...props });
+  }
+);
+
+const TotalItem: typeof _componentTotalItem & IElementDescriptor = Object.assign(_componentTotalItem, {
+  OptionName: "totalItems",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     valueFormat: { optionName: "valueFormat", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FormItem
@@ -2406,13 +2734,19 @@ type IValidationRuleProps = React.PropsWithChildren<{
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
   pattern?: RegExp | string;
 }>
-class ValidationRule extends NestedOption<IValidationRuleProps> {
-  public static OptionName = "validationRules";
-  public static IsCollectionItem = true;
-  public static PredefinedProps = {
+const _componentValidationRule = memo(
+  (props: IValidationRuleProps) => {
+    return React.createElement(NestedOption<IValidationRuleProps>, { ...props });
+  }
+);
+
+const ValidationRule: typeof _componentValidationRule & IElementDescriptor = Object.assign(_componentValidationRule, {
+  OptionName: "validationRules",
+  IsCollectionItem: true,
+  PredefinedProps: {
     type: "required"
-  };
-}
+  },
+})
 
 // owners:
 // GroupItem
@@ -2425,14 +2759,21 @@ type IValueFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class ValueFormat extends NestedOption<IValueFormatProps> {
-  public static OptionName = "valueFormat";
-}
+const _componentValueFormat = memo(
+  (props: IValueFormatProps) => {
+    return React.createElement(NestedOption<IValueFormatProps>, { ...props });
+  }
+);
+
+const ValueFormat: typeof _componentValueFormat & IElementDescriptor = Object.assign(_componentValueFormat, {
+  OptionName: "valueFormat",
+})
 
 export default DataGrid;
 export {
   DataGrid,
   IDataGridOptions,
+  DataGridRef,
   Animation,
   IAnimationProps,
   AsyncRule,

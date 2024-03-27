@@ -21,7 +21,7 @@ function App() {
 
   const onClick = useCallback(() => {
     exportFromMarkup(
-      prepareMarkup(chartRef.current.instance.svg(),
+      prepareMarkup(chartRef.current.instance().svg(),
         childRef.current.innerHTML), {
         width: 820,
         height: 420,

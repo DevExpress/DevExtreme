@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxResizable, {
     Properties
 } from "devextreme/ui/resizable";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { DisposingEvent, InitializedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent } from "devextreme/ui/resizable";
 
@@ -27,61 +28,49 @@ type IResizableOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, I
   onWidthChange?: (value: (() => number | string) | number | string) => void;
 }>
 
-class Resizable extends BaseComponent<React.PropsWithChildren<IResizableOptions>> {
-
-  public get instance(): dxResizable {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxResizable;
-
-  protected subscribableOptions = ["height","width"];
-
-  protected independentEvents = ["onDisposing","onInitialized","onResize","onResizeEnd","onResizeStart"];
-
-  protected _defaults = {
-    defaultHeight: "height",
-    defaultWidth: "width"
-  };
+interface ResizableRef {
+  instance: () => dxResizable;
 }
-(Resizable as any).propTypes = {
-  elementAttr: PropTypes.object,
-  handles: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top",
-      "all"])
-  ]),
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  keepAspectRatio: PropTypes.bool,
-  maxHeight: PropTypes.number,
-  maxWidth: PropTypes.number,
-  minHeight: PropTypes.number,
-  minWidth: PropTypes.number,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onResize: PropTypes.func,
-  onResizeEnd: PropTypes.func,
-  onResizeStart: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Resizable = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IResizableOptions>, ref: ForwardedRef<ResizableRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["height","width"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onResize","onResizeEnd","onResizeStart"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultHeight: "height",
+        defaultWidth: "width",
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IResizableOptions>>, {
+          WidgetClass: dxResizable,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IResizableOptions> & { ref?: Ref<ResizableRef> }) => ReactElement | null;
 export default Resizable;
 export {
   Resizable,
-  IResizableOptions
+  IResizableOptions,
+  ResizableRef
 };
 import type * as ResizableTypes from 'devextreme/ui/resizable_types';
 export { ResizableTypes };

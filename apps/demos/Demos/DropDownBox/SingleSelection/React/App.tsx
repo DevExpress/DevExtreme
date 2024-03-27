@@ -102,9 +102,9 @@ function App() {
     if (!treeViewRef.current) return;
 
     if (!e.value) {
-      treeViewRef.current.instance.unselectAll();
+      treeViewRef.current.instance().unselectAll();
     } else {
-      treeViewRef.current.instance.selectItem(e.value);
+      treeViewRef.current.instance().selectItem(e.value);
     }
   }, []);
 

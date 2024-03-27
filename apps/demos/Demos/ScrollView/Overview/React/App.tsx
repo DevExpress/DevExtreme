@@ -41,7 +41,7 @@ const App = () => {
   }, [setPullDown]);
 
   const reachBottomValueChanged = useCallback((args: CheckBoxTypes.ValueChangedEvent) => {
-    scrollViewRef.current.instance.option('onReachBottom', args.value ? updateBottomContent : null);
+    scrollViewRef.current.instance().option('onReachBottom', args.value ? updateBottomContent : null);
   }, [updateBottomContent]);
 
   return (

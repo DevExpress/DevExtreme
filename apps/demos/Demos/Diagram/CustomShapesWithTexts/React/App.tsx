@@ -1,15 +1,15 @@
 import React, { useEffect, useRef } from 'react';
-import Diagram, { CustomShape, Group, Toolbox } from 'devextreme-react/diagram';
+import Diagram, { CustomShape, Group, Toolbox, DiagramRef } from 'devextreme-react/diagram';
 import service from './data.ts';
 import 'whatwg-fetch';
 
 const employees = service.getEmployees();
 
 export default function App() {
-  const diagramRef = useRef<Diagram>();
+  const diagramRef = useRef<DiagramRef>();
 
   useEffect(() => {
-    const diagram = diagramRef.current.instance;
+    const diagram = diagramRef.current.instance();
     fetch('../../../../data/diagram-employees.json')
       .then((response) => response.json())
       .then((json) => {
