@@ -123,6 +123,13 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "treeList", name: "treeList in shadow DOM", concurrency: 1, shadowDom: true },
+          { componentFolder: "scheduler", name: "scheduler in shadow DOM (1/5)", indices: "1/5", shadowDom: true },
+          { componentFolder: "scheduler", name: "scheduler in shadow DOM (2/5)", indices: "2/5", shadowDom: true },
+          { componentFolder: "scheduler", name: "scheduler in shadow DOM (3/5)", indices: "3/5", shadowDom: true },
+          { componentFolder: "scheduler", name: "scheduler in shadow DOM (4/5)", indices: "4/5", shadowDom: true },
+          { componentFolder: "scheduler", name: "scheduler in shadow DOM (5/5)", indices: "5/5", shadowDom: true },
+          { componentFolder: "scheduler/timezones", name: "scheduler in shadow DOM (Europe/Berlin)", timezone: "Europe/Berlin", shadowDom: true },
+          { componentFolder: "scheduler/timezones", name: "scheduler in shadow DOM (America/Los_Angeles)", timezone: "America/Los_Angeles", shadowDom: true },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
