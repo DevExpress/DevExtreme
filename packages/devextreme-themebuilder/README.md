@@ -1,8 +1,3 @@
-# DevExtreme ThemeBuilder
+# DevExtreme Theme Builder
 
-This package is utilized by the ThemeBuilder ([web version](https://js.devexpress.com/ThemeBuilder/) and [CLI tool](https://www.npmjs.com/package/devextreme-cli)) to create a custom theme based on predefined DevExtreme and Bootstrap themes.
-
-- Official website: [js.devexpress.com](https://js.devexpress.com)
-- Pricing: [js.devexpress.com/buy](https://js.devexpress.com/Buy)
-- Licensing: [js.devexpress.com/licensing](https://js.devexpress.com/Licensing)
-- Support: [www.devexpress.com/support](https://www.devexpress.com/support)
+This package powers the DevExtreme [Theme Builder](https://js.devexpress.com/Angular/Documentation/Guide/Common/DevExtreme_CLI/#ThemeBuilder). Use the Theme Builder on the ([web](https://js.devexpress.com/ThemeBuilder/) or in the [command line](https://github.com/DevExpress/devextreme-cli)) to create custom DevExtreme themes.

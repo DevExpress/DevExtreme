@@ -1,8 +1,8 @@
 <!--
-HEADS UP! We don't provide support for customer issues here.
-Use the Support Center instead: https://devexpress.com/sc
+HEADS UP! DevExtreme doesn't offer customer support on GitHub.
+Use the DevExpress Support Center instead: https://devexpress.com/sc
 
-Before submitting an issue, please check CONTRIBUTING.md
+Read CONTRIBUTING.md before you submit an issue.
 -->
 
 ### Steps to Reproduce:
@@ -22,5 +22,5 @@ Before submitting an issue, please check CONTRIBUTING.md
 ### Environment Details:
 
 <!-- 
-Specify a DevExtreme version, a browser or device, an operating system and their versions, other environment details or notes you consider important.
+Help us reproduce the issue. Specify the following details: version of the DevExtreme package, name and version of your browser, device, and operating system, as well as any other information that may be important.
 -->
