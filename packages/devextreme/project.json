@@ -16,9 +16,6 @@
         "{projectRoot}/images/**/*",
         "{projectRoot}/js/**/*",
         "{projectRoot}/scss/widgets/**/*",
-        "{projectRoot}/testing/**/*",
-        "!{projectRoot}/testing/*.txt",
-        "!{projectRoot}/testing/*.xml",
         "{projectRoot}/ts/**/*",
         "{projectRoot}/*.js"
       ],
