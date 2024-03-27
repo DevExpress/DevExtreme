@@ -4,6 +4,7 @@ import { TemplateInstantiationModel, UpdateLocker } from './types';
 
 export const RemovalLockerContext = createContext<UpdateLocker | undefined>(undefined);
 
+// eslint-disable-next-line @typescript-eslint/no-extra-parens
 export const RestoreTreeContext = createContext<(() => void) | undefined>(undefined);
 
 export function generateID(): string {

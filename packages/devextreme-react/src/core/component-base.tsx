@@ -393,7 +393,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     return React.createElement(
       RestoreTreeContext.Provider,
       {
-        value: restoreTree
+        value: restoreTree,
       },
       React.createElement(
         'div',
