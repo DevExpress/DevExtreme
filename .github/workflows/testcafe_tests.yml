@@ -123,6 +123,8 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "treeList", name: "treeList in shadow DOM", concurrency: 1, shadowDom: true },
+          { componentFolder: "dataGrid", name: "dataGrid in shadow DOM (1/2)", indices: "1/2", shadowDom: true },
+          { componentFolder: "dataGrid", name: "dataGrid in shadow DOM (2/2)", indices: "2/2", shadowDom: true },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
