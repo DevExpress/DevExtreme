@@ -35,9 +35,9 @@
               <div class="button-img-container">
                 <div class="button-img-indicator"/>
                 <img
-                    class="button-img"
-                    :src=employeeImageUrl
-                    alt="employee"
+                  class="button-img"
+                  :src=employeeImageUrl
+                  alt="employee"
                 >
               </div>
               <div class="text-container">
