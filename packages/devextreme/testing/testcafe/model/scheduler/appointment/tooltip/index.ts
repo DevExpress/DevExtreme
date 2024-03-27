@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../../../helpers/selector';
 import TooltipBase from './base';
 import ListItem from './listItem';
 

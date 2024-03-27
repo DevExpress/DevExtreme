@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';

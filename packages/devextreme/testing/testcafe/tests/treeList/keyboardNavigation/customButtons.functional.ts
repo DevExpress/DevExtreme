@@ -1,6 +1,7 @@
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
+import { skipInShadowDomMode } from '../../../helpers/shadowDom/skipInShadowDomMode';
 
 fixture
   .disablePageReloads`Keyboard Navigation - custom buttons`
@@ -54,7 +55,7 @@ const createTreeList = async () => createWidget('dxTreeList', {
   },
 });
 
-test('Custom buttons cell should be focused before custom buttons on tab navigation', async (t) => {
+skipInShadowDomMode('Custom buttons cell should be focused before custom buttons on tab navigation', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const expectedFocusedCell = treeList.getDataCell(0, 0);
   const cellToStartNavigation = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);
@@ -66,7 +67,7 @@ test('Custom buttons cell should be focused before custom buttons on tab navigat
     .ok();
 }).before(async () => createTreeList());
 
-test('Custom buttons cell should be focused after custom buttons on shift+tab reverse navigation', async (t) => {
+skipInShadowDomMode('Custom buttons cell should be focused after custom buttons on shift+tab reverse navigation', async (t) => {
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const expectedFocusedCell = treeList.getDataCell(0, 0);
   const cellToStartNavigation = treeList.getDataCell(0, 1);

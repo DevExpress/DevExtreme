@@ -18,17 +18,8 @@ const changeTheme = async(themeName) => createTestCafe.ClientFunction(() => new 
 
 const addShadowRootTree = async function() {
     await createTestCafe.ClientFunction(() => {
-        const root = document.querySelector('#parentContainer');
-        const childNodes = root.childNodes;
-
-        if(!root.shadowRoot) {
-            root.attachShadow({ mode: 'open' });
-        }
-
-        const shadowContainer = document.createElement('div');
-        shadowContainer.append.apply(shadowContainer, Array.from(childNodes));
-
-        root.shadowRoot.appendChild(shadowContainer);
+        // eslint-disable-next-line no-undef
+        window.addShadowRootTree();
     })();
 };
 

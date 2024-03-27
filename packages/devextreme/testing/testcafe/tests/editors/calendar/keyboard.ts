@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import Calendar from '../../../model/calendar';

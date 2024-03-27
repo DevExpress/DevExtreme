@@ -7,6 +7,22 @@ function get(selector) {
     return typeof selector === 'string' && selector ? getRoot()?.querySelectorAll(selector) : selector;
 }
 
+window.addShadowRootTree = () => {
+    const root = document.querySelector('#parentContainer');
+    const childNodes = root.childNodes;
+
+    if(root.shadowRoot) {
+        return;
+    }
+
+    root.attachShadow({ mode: 'open' });
+
+    const shadowContainer = document.createElement('div');
+    shadowContainer.append.apply(shadowContainer, Array.from(childNodes));
+
+    root.shadowRoot.appendChild(shadowContainer);
+};
+
 $(function() {
     const jQueryInit = jQuery.fn.init;
 
@@ -24,4 +40,6 @@ $(function() {
 
         return result;
     };
+
+    window.addShadowRootTree();
 });
