@@ -6,6 +6,7 @@ import { ButtonTypes } from 'devextreme-react/button';
 import notify from 'devextreme/ui/notify';
 import service from './data.ts';
 import ColorIcon from './ColorIcon.tsx';
+import DropDownButtonTemplate from './DropDownButtonTemplate.tsx';
 import 'whatwg-fetch';
 
 type TextAlign = 'center' | 'end' | 'justify' | 'left' | 'match-parent' | 'right' | 'start';
@@ -19,7 +20,6 @@ const itemTemplateRender = (item) => (
     {item.text}
   </div>
 );
-
 const App = () => {
   const [alignment, setAlignment] = useState<TextAlign>('left');
   const [color, setColor] = useState(null);
@@ -28,7 +28,7 @@ const App = () => {
   const [colorPicker, setColorPicker] = useState(null);
 
   const onButtonClick = useCallback((e: ButtonTypes.ClickEvent) => {
-    notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+    notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
   }, []);
 
   const onItemClick = useCallback((e: DropDownButtonTypes.ItemClickEvent) => {
@@ -112,10 +112,10 @@ const App = () => {
   return (
     <div>
       <div className="dx-fieldset">
-        <div className="dx-fieldset-header">Single usage</div>
+        <div className="dx-fieldset-header">Standalone button</div>
         <div className="dx-field">
           <div className="dx-field-label">
-            Custom static text
+            Text and icon
           </div>
           <div className="dx-field-value">
             <DropDownButton
@@ -130,26 +130,27 @@ const App = () => {
 
         <div className="dx-field">
           <div className="dx-field-label">
-            Custom main button action
+            Custom template and actions
           </div>
           <div className="dx-field-value">
             <DropDownButton
+              id="custom-template"
               splitButton={true}
               useSelectMode={false}
-              text="Sandra Johnson"
-              icon="../../../../images/gym/coach-woman.png"
               items={data.profileSettings}
               displayExpr="name"
               keyExpr="id"
               onButtonClick={onButtonClick}
               onItemClick={onItemClick}
-            />
+              render={DropDownButtonTemplate}
+            >
+            </DropDownButton>
           </div>
         </div>
       </div>
 
       <div className="dx-fieldset">
-        <div className="dx-fieldset-header">Usage in a toolbar</div>
+        <div className="dx-fieldset-header">Embedded in a Toolbar</div>
         <div className="dx-field">
           <Toolbar items={toolbarItems}>
             <Template name="colorpicker">

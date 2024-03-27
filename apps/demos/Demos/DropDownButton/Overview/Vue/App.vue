@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="dx-fieldset">
-      <div class="dx-fieldset-header">Single usage</div>
+      <div class="dx-fieldset-header">Standalone button</div>
       <div class="dx-field">
         <div class="dx-field-label">
-          Custom static text
+          Text and icon
         </div>
         <div class="dx-field-value">
           <DxDropDownButton
@@ -18,26 +18,39 @@
       </div>
 
       <div class="dx-field">
-        <div class="dx-field-label">
-          Custom main button action
-        </div>
+        <div class="dx-field-label">Custom template and actions</div>
         <div class="dx-field-value">
           <DxDropDownButton
+            id="custom-template"
             :split-button="true"
             :use-select-mode="false"
             :items="data.profileSettings"
-            text="Sandra Johnson"
-            icon="../../../../images/gym/coach-woman.png"
             display-expr="name"
             key-expr="id"
             @button-click="onButtonClick"
             @item-click="onItemClick"
-          />
+            template="dropDownButtonTemplate"
+          >
+            <template #dropDownButtonTemplate="{ data }">
+              <div class="button-img-container">
+                <div class="button-img-indicator"/>
+                <img
+                  class="button-img"
+                  :src=employeeImageUrl
+                  alt="employee"
+                >
+              </div>
+              <div class="text-container">
+                <div class="button-title">Olivia Peyton</div>
+                <div class="button-row">IT Manager</div>
+              </div>
+            </template>
+          </DxDropDownButton>
         </div>
       </div>
     </div>
     <div class="dx-fieldset">
-      <div class="dx-fieldset-header">Usage in a toolbar</div>
+      <div class="dx-fieldset-header">Embedded in a Toolbar</div>
       <div class="dx-field">
         <DxToolbar :items="toolbarItems">
           <template #fontItem="{ data }">
@@ -93,6 +106,9 @@ const fontSize = ref('14px');
 const lineHeight = ref(1.35);
 let colorPicker;
 const data = service.getData();
+
+const employeeImageUrl = data.getEmployeeImageUrl();
+
 const toolbarItems = [
   {
     location: 'before',
@@ -159,7 +175,7 @@ const toolbarItems = [
 ];
 
 function onButtonClick(e) {
-  notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+  notify(`Go to ${e.element.querySelector(".button-title").textContent}'s profile`, 'success', 600);
 }
 function onItemClick(e) {
   notify(e.itemData.name || e.itemData, 'success', 600);
@@ -180,13 +196,64 @@ function onColorClick(clickedColor) {
     padding: 5px;
   }
 
-  .dx-button-content img.dx-icon {
-    width: 24px;
-    height: 24px;
-  }
-
   .color {
     cursor: pointer;
     font-size: 18px;
+  }
+
+  .text-container {
+    padding-inline-start: 12px;
+    padding-inline-end: 4px;
+    display: flex;
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .button-img-container {
+    position: relative;
+    height: 32px;
+  }
+
+  .button-img {
+    width: 32px;
+    height: 32px;
+    position: relative;
+    border-width: 1px;
+    border-style: solid;
+    border-color: var(--dx-color-border);
+    border-radius: 50%;
+  }
+
+  .button-img-indicator {
+    position: absolute;
+    background-color: var(--dx-color-danger);
+    top: -1px;
+    inset-inline-end: -1px;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border-width: 2px;
+    border-style: solid;
+    border-color: var(--dx-color-main-bg);
+    z-index: 1;
+  }
+
+  .button-title {
+    line-height: 20px;
+  }
+
+  .button-row {
+    font-size: 12px;
+    line-height: 14px;
+    opacity: 0.6;
+  }
+
+  #custom-template .dx-button {
+    height: 46px;
+  }
+
+  #custom-template .dx-button.dx-dropdownbutton-action .dx-button-content {
+    padding-inline-start: 12px;
+    padding-inline-end: 12px;
   }
 </style>
