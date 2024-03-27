@@ -5,6 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createEvent } from 'events/utils/index';
 import devices from 'core/devices';
+import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
 import { isNumeric } from 'core/utils/type';
@@ -618,6 +619,37 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 : this.getCollapseNextButton($resizeHandle);
 
             $collapseButton.trigger('dxclick');
+
+            this.assertLayout(expectedLayout);
+        });
+    });
+
+    [{
+        items: [{ collapsible: true }, { collapsible: true }],
+        expectedLayout: ['0', '100'],
+    },
+    {
+        items: [{ }, { collapsible: true }],
+        expectedLayout: ['100', '0'],
+    },
+    {
+        items: [{ }, { }],
+        expectedLayout: ['50', '50'],
+    },
+    {
+        items: [{ collapsible: true, collapsed: true }, { }],
+        expectedLayout: ['50', '50'],
+    },
+    {
+        items: [{ visible: false }, { collapsible: true }, { collapsible: true }],
+        expectedLayout: ['0', '100'],
+    }].forEach(({ items, expectedLayout }) => {
+        QUnit.test(`Panes collapse by double click: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            const $resizeHandle = this.getResizeHandles();
+
+            $resizeHandle.trigger(DOUBLE_CLICK_EVENT);
 
             this.assertLayout(expectedLayout);
         });
@@ -1469,7 +1501,7 @@ QUnit.module('Behavoir', moduleConfig, () => {
 
         QUnit.test(`Resize handle icon should be invisible (${item} item is collapsed on runtime)`, function(assert) {
             this.reinit({
-                dataSource: [{ }, { }],
+                dataSource: [{ collapsible: true }, { collapsible: true }],
             });
             const $resizeHandle = this.getResizeHandles();
             const $resizeHandleIcon = this.getResizeHandleIcon($resizeHandle);
@@ -1552,7 +1584,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onItemCollapsed,
             onItemExpanded,
-            dataSource: [{ }, { }]
+            dataSource: [{ collapsible: true }, { collapsible: true }]
         });
 
         const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
@@ -1612,6 +1644,42 @@ QUnit.module('Events', moduleConfig, () => {
         const $collapseNextButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
 
         $collapseNextButton.trigger('dxclick');
+
+        assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
+        assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');
+    });
+
+    QUnit.test('onItemCollapsed should be called on pane collapsing by double click', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsible: true }, { collapsible: true }]
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+
+        $resizeHandle.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed not called');
+        assert.strictEqual(onItemExpanded.callCount, 0, 'onItemExpanded called');
+    });
+
+    QUnit.test('onItemExpanded should be called on pane expanding by double click', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsed: true, collapsible: true }, { collapsible: true }]
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+
+        $resizeHandle.trigger(DOUBLE_CLICK_EVENT);
 
         assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
         assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');
