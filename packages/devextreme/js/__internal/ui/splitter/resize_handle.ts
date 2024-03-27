@@ -127,6 +127,8 @@ class ResizeHandle extends (Widget as any) {
     this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
     this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
     this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
+    this.CLICK_EVENT_NAME = addNamespace(CLICK_EVENT, namespace);
+    this.DOUBLE_CLICK_EVENT_NAME = addNamespace(DOUBLE_CLICK_EVENT, namespace);
   }
 
   _initMarkup(): void {
@@ -270,13 +272,13 @@ class ResizeHandle extends (Widget as any) {
     });
   }
 
-  _collapsePrevHandler(e: KeyboardEvent): void {
+  _collapsePrevHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapsePrev)({
       event: e,
     });
   }
 
-  _collapseNextHandler(e: KeyboardEvent): void {
+  _collapseNextHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapseNext)({
       event: e,
     });
@@ -304,14 +306,19 @@ class ResizeHandle extends (Widget as any) {
   }
 
   _attachEventHandlers(): void {
+    this._attachResizeEventHandlers();
+    this._attachPointerEventHandlers();
+  }
+
+  _attachResizeEventHandlers(): void {
     const {
       resizable,
       direction,
     } = this.option();
 
-    const eventData = { direction, immediate: true };
-
     if (resizable) {
+      const eventData = { direction, immediate: true };
+
       eventsEngine.on(
         this.$element(),
         this.RESIZE_START_EVENT_NAME,
@@ -333,51 +340,70 @@ class ResizeHandle extends (Widget as any) {
         this._resizeEndHandler.bind(this),
       );
     }
+  }
 
-    eventsEngine.on(
-      this.$element(),
-      DOUBLE_CLICK_EVENT,
-      (e) => {
-        const { showCollapsePrev, showCollapseNext } = this.option();
+  _attachPointerEventHandlers(): void {
+    const {
+      showCollapsePrev,
+      showCollapseNext,
+    } = this.option();
 
-        if (showCollapsePrev === true) {
-          this._collapsePrevHandler(e);
+    if (showCollapsePrev === true || showCollapseNext === true) {
+      eventsEngine.on(
+        this.$element(),
+        this.DOUBLE_CLICK_EVENT_NAME,
+        this._doubleClickHandler.bind(this),
+      );
+    }
 
-          return;
-        }
+    if (showCollapsePrev === true) {
+      eventsEngine.on(
+        this._$collapsePrevButton,
+        this.CLICK_EVENT_NAME,
+        this._collapsePrevHandler.bind(this),
+      );
+    }
 
-        if (showCollapseNext === true) {
-          this._collapseNextHandler(e);
-        }
-      },
-    );
-
-    eventsEngine.on(
-      this._$collapsePrevButton,
-      CLICK_EVENT,
-      this._collapsePrevHandler.bind(this),
-    );
-
-    eventsEngine.on(
-      this._$collapseNextButton,
-      CLICK_EVENT,
-      this._collapseNextHandler.bind(this),
-    );
+    if (showCollapseNext === true) {
+      eventsEngine.on(
+        this._$collapseNextButton,
+        this.CLICK_EVENT_NAME,
+        this._collapseNextHandler.bind(this),
+      );
+    }
   }
 
   _detachEventHandlers(): void {
+    this._detachResizeEventHandlers();
+    this._detachPointerEventHandlers();
+  }
+
+  _detachResizeEventHandlers(): void {
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this.$element(), this.RESIZE_START_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
     eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
+  }
+
+  _detachPointerEventHandlers(): void {
     // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this.$element(), DOUBLE_CLICK_EVENT);
+    eventsEngine.off(this.$element(), this.DOUBLE_CLICK_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this._$collapsePrevButton, CLICK_EVENT);
+    eventsEngine.off(this._$collapsePrevButton, this.CLICK_EVENT_NAME);
     // @ts-expect-error todo: make optional parameters for eventsEngine
-    eventsEngine.off(this._$collapseNextButton, CLICK_EVENT);
+    eventsEngine.off(this._$collapseNextButton, this.CLICK_EVENT_NAME);
+  }
+
+  _doubleClickHandler(e: PointerEvent | MouseEvent | TouchEvent): void {
+    const { showCollapsePrev, showCollapseNext } = this.option();
+
+    if (showCollapsePrev === true) {
+      this._collapsePrevHandler(e);
+    } else if (showCollapseNext === true) {
+      this._collapseNextHandler(e);
+    }
   }
 
   _isHorizontalDirection(): boolean {
@@ -390,16 +416,16 @@ class ResizeHandle extends (Widget as any) {
     switch (name) {
       case 'direction':
         this._toggleDirectionClass();
-        this._detachEventHandlers();
-        this._attachEventHandlers();
+        this._detachResizeEventHandlers();
+        this._attachResizeEventHandlers();
         this._setResizeHandleSize();
         this._updateIconsClasses();
         break;
       case 'resizable':
         this._setResizeIconVisibility();
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
-        this._detachEventHandlers();
-        this._attachEventHandlers();
+        this._detachResizeEventHandlers();
+        this._attachResizeEventHandlers();
         this._setResizeHandleSize();
         break;
       case 'separatorSize':
@@ -408,12 +434,15 @@ class ResizeHandle extends (Widget as any) {
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
+        this._setResizeIconVisibility();
         this._setResizeHandleSize();
+        this._detachPointerEventHandlers();
+        this._attachPointerEventHandlers();
         break;
       case 'onCollapsePrev':
       case 'onCollapseNext':
-        this._detachEventHandlers();
-        this._attachEventHandlers();
+        this._detachPointerEventHandlers();
+        this._attachPointerEventHandlers();
         break;
       case 'onResize':
       case 'onResizeStart':

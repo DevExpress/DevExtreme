@@ -5,6 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createEvent } from 'events/utils/index';
 import devices from 'core/devices';
+import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
 import { isNumeric } from 'core/utils/type';
@@ -648,7 +649,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             const $resizeHandle = this.getResizeHandles();
 
-            $resizeHandle.trigger('dxdblclick');
+            $resizeHandle.trigger(DOUBLE_CLICK_EVENT);
 
             this.assertLayout(expectedLayout);
         });
@@ -1500,7 +1501,7 @@ QUnit.module('Behavoir', moduleConfig, () => {
 
         QUnit.test(`Resize handle icon should be invisible (${item} item is collapsed on runtime)`, function(assert) {
             this.reinit({
-                dataSource: [{ }, { }],
+                dataSource: [{ collapsible: true }, { collapsible: true }],
             });
             const $resizeHandle = this.getResizeHandles();
             const $resizeHandleIcon = this.getResizeHandleIcon($resizeHandle);
@@ -1583,7 +1584,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             onItemCollapsed,
             onItemExpanded,
-            dataSource: [{ }, { }]
+            dataSource: [{ collapsible: true }, { collapsible: true }]
         });
 
         const $collapsePrevButton = this.$element.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
@@ -1660,7 +1661,7 @@ QUnit.module('Events', moduleConfig, () => {
 
         const $resizeHandle = this.getResizeHandles();
 
-        $resizeHandle.trigger('dxdblclick');
+        $resizeHandle.trigger(DOUBLE_CLICK_EVENT);
 
         assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed not called');
         assert.strictEqual(onItemExpanded.callCount, 0, 'onItemExpanded called');
@@ -1678,7 +1679,7 @@ QUnit.module('Events', moduleConfig, () => {
 
         const $resizeHandle = this.getResizeHandles();
 
-        $resizeHandle.trigger('dxdblclick');
+        $resizeHandle.trigger(DOUBLE_CLICK_EVENT);
 
         assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
         assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');

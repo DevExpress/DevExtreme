@@ -2,6 +2,7 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
+import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
 
@@ -118,11 +119,62 @@ QUnit.module('Behavior', moduleConfig, () => {
                 showCollapseNext: scenario === 'next' || scenario === 'both',
             });
 
-            this.$element.trigger('dxdblclick');
+            this.$element.trigger(DOUBLE_CLICK_EVENT);
 
             assert.strictEqual(onCollapsePrevStub.callCount, onCollapsePrevCallCount, `onCollapsePrev called ${onCollapsePrevCallCount} times`);
             assert.strictEqual(onCollapseNextStub.callCount, onCollapseNextCallCount, `onCollapseNext called ${onCollapseNextCallCount} times`);
         });
+    });
+
+    QUnit.test('Double click should not trigger onCollapsePrev/onCollapseNext (runtime collapse buttons disabling)', function(assert) {
+        const onCollapsePrevStub = sinon.stub();
+        const onCollapseNextStub = sinon.stub();
+
+        this.reinit({
+            onCollapsePrev: onCollapsePrevStub,
+            onCollapseNext: onCollapseNextStub,
+            showCollapsePrev: true,
+            showCollapseNext: true,
+        });
+
+        this.instance.option({ showCollapsePrev: false, showCollapseNext: false });
+
+        this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onCollapsePrevStub.callCount, 0, 'onCollapsePrev not called');
+        assert.strictEqual(onCollapseNextStub.callCount, 0, 'onCollapseNext not called');
+    });
+
+    QUnit.test('Double click should trigger onCollapsePrev (runtime collapse prev button enabling)', function(assert) {
+        const onCollapsePrevStub = sinon.stub();
+
+        this.reinit({
+            onCollapsePrev: onCollapsePrevStub,
+            showCollapsePrev: false,
+            showCollapseNext: false,
+        });
+
+        this.instance.option('showCollapsePrev', true);
+
+        this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onCollapsePrevStub.callCount, 1);
+    });
+
+    QUnit.test('Double click should trigger onCollapseNext (runtime collapse next button enabling)', function(assert) {
+        const onCollapseNextStub = sinon.stub();
+
+        this.reinit({
+            onCollapseNext: onCollapseNextStub,
+            showCollapsePrev: false,
+            showCollapseNext: false,
+        });
+
+        this.instance.option('showCollapseNext', true);
+
+        this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onCollapseNextStub.callCount, 1);
     });
 });
 
