@@ -473,7 +473,7 @@ class Splitter extends (CollectionWidget as any) {
   _getResizeHandlesSize(): number {
     let size = 0;
 
-    this._resizeHandles?.forEach((resizeHandle) => {
+    this._resizeHandles.forEach((resizeHandle) => {
       const { disabled, separatorSize } = resizeHandle.option();
 
       size += disabled ? INACTIVE_RESIZE_HANDLE_SIZE : separatorSize as number;
