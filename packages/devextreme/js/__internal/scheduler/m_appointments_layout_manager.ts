@@ -1,10 +1,8 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
-import { getAppointmentRenderingStrategyName } from '@js/renovation/ui/scheduler/model/utils';
-import { getCellDuration } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
+import { getAppointmentRenderingStrategyName, getCellDuration, getGroupCount } from './__migration/utils/index';
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
-import { getGroupCount } from './resources/m_utils';
 import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
 
 const toMs = dateUtils.dateToMilliseconds;
@@ -67,7 +65,6 @@ class AppointmentLayoutManager {
       loadedResources: this.instance.option('loadedResources'),
       getAppointmentColor: this.instance.createGetAppointmentColor(),
       dataAccessors: this.instance._dataAccessors,
-      isRenovatedAppointments: this.instance.option('isRenovatedAppointments'),
       appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
       adaptivityEnabled: this.instance.option('adaptivityEnabled'),
       rtlEnabled: this.instance.option('rtlEnabled'),

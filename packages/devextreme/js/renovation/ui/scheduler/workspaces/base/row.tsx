@@ -2,6 +2,9 @@ import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
 } from '@devextreme-generator/declarations';
 import { VirtualCell } from './virtual_cell';
+import { splitNumber } from '../../../../../__internal/scheduler/__migration/utils/index';
+
+const MAX_COL_SPAN = 1000;
 
 export const viewFunction = ({
   props: {
@@ -21,23 +24,29 @@ export const viewFunction = ({
     className={className}
     style={styles}
   >
-    {hasLeftVirtualCell && (
-      <VirtualCell
-        width={leftVirtualCellWidth}
-        colSpan={leftVirtualCellCount}
-        isHeaderCell={isHeaderRow}
-      />
-    )}
+    {hasLeftVirtualCell
+      && leftVirtualCellCount != null
+      && splitNumber(leftVirtualCellCount, MAX_COL_SPAN).map((colSpan, index) => (
+        <VirtualCell
+          key={`left-virtual-cell-${index}`}
+          width={leftVirtualCellWidth * (colSpan / leftVirtualCellCount)}
+          colSpan={colSpan}
+          isHeaderCell={isHeaderRow}
+        />
+      ))}
 
     {children}
 
-    {hasRightVirtualCell && (
-      <VirtualCell
-        width={rightVirtualCellWidth}
-        colSpan={rightVirtualCellCount}
-        isHeaderCell={isHeaderRow}
-      />
-    )}
+    {hasRightVirtualCell
+      && rightVirtualCellCount != null
+      && splitNumber(rightVirtualCellCount, MAX_COL_SPAN).map((colSpan, index) => (
+        <VirtualCell
+          key={`right-virtual-cell-${index}`}
+          width={rightVirtualCellWidth * (colSpan / rightVirtualCellCount)}
+          colSpan={colSpan}
+          isHeaderCell={isHeaderRow}
+        />
+      ))}
   </tr>
 );
 

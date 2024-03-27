@@ -15,9 +15,11 @@ import { prepareItems } from '@ts/grids/grid_core/m_export';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '../../grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '../../grid_core/data_controller/m_data_controller';
 import type { EditingController } from '../../grid_core/editing/m_editing';
 import type { HeaderPanel } from '../../grid_core/header_panel/m_header_panel';
 import type { ModuleType } from '../../grid_core/m_types';
+import type { SelectionController } from '../../grid_core/selection/m_selection';
 import type { RowsView } from '../../grid_core/views/m_rows_view';
 import dataGridCore from '../m_core';
 
@@ -52,7 +54,7 @@ export class DataProvider {
     this._selectedRowsOnly = selectedRowsOnly;
   }
 
-  _getGroupValue(item) {
+  private _getGroupValue(item) {
     const {
       key, data, rowType, groupIndex, summaryCells,
     } = item;
@@ -69,11 +71,11 @@ export class DataProvider {
     return result;
   }
 
-  _correctCellIndex(cellIndex) {
+  private _correctCellIndex(cellIndex) {
     return cellIndex;
   }
 
-  _initOptions() {
+  private _initOptions() {
     const exportController = this._exportController;
     const groupColumns = exportController._columnsController.getGroupColumns();
 
@@ -87,7 +89,7 @@ export class DataProvider {
     };
   }
 
-  getHeaderStyles() {
+  private getHeaderStyles() {
     return [
       { bold: true, alignment: 'center' },
       { bold: true, alignment: 'left' },
@@ -95,14 +97,14 @@ export class DataProvider {
     ];
   }
 
-  getGroupRowStyle() {
+  private getGroupRowStyle() {
     return {
       bold: true,
       alignment: getDefaultAlignment(this._options.rtlEnabled),
     };
   }
 
-  getColumnStyles() {
+  private getColumnStyles() {
     const columnStyles: any[] = [];
 
     this.getColumns().forEach((column) => {
@@ -116,16 +118,16 @@ export class DataProvider {
     return columnStyles;
   }
 
-  getStyles() {
+  private getStyles() {
     return [...this.getHeaderStyles(), ...this.getColumnStyles(), this.getGroupRowStyle()];
   }
 
-  _getTotalCellStyleId(cellIndex) {
+  private _getTotalCellStyleId(cellIndex) {
     const alignment = this.getColumns()[cellIndex]?.alignment || 'right';
     return this.getHeaderStyles().map((style) => style.alignment).indexOf(alignment);
   }
 
-  getStyleId(rowIndex, cellIndex) {
+  private getStyleId(rowIndex, cellIndex) {
     if (rowIndex < this.getHeaderRowCount()) {
       return 0;
     }
@@ -138,35 +140,35 @@ export class DataProvider {
     return cellIndex + this.getHeaderStyles().length;
   }
 
-  getColumns(getColumnsByAllRows?) {
+  private getColumns(getColumnsByAllRows?) {
     const { columns } = this._options;
 
     return getColumnsByAllRows ? columns : columns[columns.length - 1];
   }
 
-  getColumnsWidths() {
+  private getColumnsWidths() {
     const columns = this.getColumns();
     return isDefined(columns)
       ? columns.map((c) => c.width)
       : undefined;
   }
 
-  getRowsCount() {
+  private getRowsCount() {
     return this._options.items.length + this.getHeaderRowCount();
   }
 
-  getHeaderRowCount() {
+  private getHeaderRowCount() {
     if (this.isHeadersVisible()) {
       return this._options.columns.length - 1;
     }
     return 0;
   }
 
-  isGroupRow(rowIndex) {
+  private isGroupRow(rowIndex) {
     return rowIndex < this._options.items.length && this._options.items[rowIndex].rowType === 'group';
   }
 
-  getGroupLevel(rowIndex) {
+  private getGroupLevel(rowIndex) {
     const item = this._options.items[rowIndex - this.getHeaderRowCount()];
     const groupIndex = item && item.groupIndex;
 
@@ -176,7 +178,7 @@ export class DataProvider {
     return isDefined(groupIndex) ? groupIndex : this._options.groupColumns.length;
   }
 
-  getCellType(rowIndex, cellIndex) {
+  private getCellType(rowIndex, cellIndex) {
     const columns = this.getColumns();
 
     if (rowIndex < this.getHeaderRowCount()) {
@@ -197,7 +199,7 @@ export class DataProvider {
     }
   }
 
-  ready() {
+  private ready() {
     const that = this;
 
     that._initOptions();
@@ -210,13 +212,13 @@ export class DataProvider {
     });
   }
 
-  _convertFromGridGroupSummaryItems(gridGroupSummaryItems) {
+  private _convertFromGridGroupSummaryItems(gridGroupSummaryItems) {
     if (isDefined(gridGroupSummaryItems) && gridGroupSummaryItems.length > 0) {
       return gridGroupSummaryItems.map((item) => ({ value: item.value, name: item.name }));
     }
   }
 
-  getCellData(rowIndex, cellIndex, isExcelJS) {
+  private getCellData(rowIndex, cellIndex, isExcelJS) {
     let value;
     let column;
 
@@ -299,11 +301,11 @@ export class DataProvider {
     return result;
   }
 
-  isHeadersVisible() {
+  private isHeadersVisible() {
     return this._options.isHeadersVisible;
   }
 
-  isTotalCell(rowIndex, cellIndex) {
+  private isTotalCell(rowIndex, cellIndex) {
     const { items } = this._options;
     const item = items[rowIndex];
     const correctCellIndex = this._correctCellIndex(cellIndex);
@@ -312,7 +314,7 @@ export class DataProvider {
     return item && item.rowType === 'groupFooter' || item.rowType === 'totalFooter' || isSummaryAlignByColumn;
   }
 
-  getCellMerging(rowIndex, cellIndex) {
+  private getCellMerging(rowIndex, cellIndex) {
     const { columns } = this._options;
     const column = columns[rowIndex] && columns[rowIndex][cellIndex];
 
@@ -322,7 +324,7 @@ export class DataProvider {
     } : { colspan: 0, rowspan: 0 };
   }
 
-  getFrozenArea() {
+  private getFrozenArea() {
     const that = this;
 
     return { x: 0, y: that.getHeaderRowCount() };
@@ -331,6 +333,10 @@ export class DataProvider {
 
 export class ExportController extends dataGridCore.ViewController {
   public _columnsController!: ColumnsController;
+
+  private _dataController!: DataController;
+
+  private _selectionController!: SelectionController;
 
   private _headersView!: ColumnHeadersView;
 
@@ -342,7 +348,18 @@ export class ExportController extends dataGridCore.ViewController {
 
   private readonly selectionOnlyChanged: any;
 
-  _getEmptyCell() {
+  public init() {
+    this.throwWarningIfNoOnExportingEvent();
+    this._columnsController = this.getController('columns');
+    this._dataController = this.getController('data');
+    this._selectionController = this.getController('selection');
+    this._rowsView = this.getView('rowsView');
+    this._headersView = this.getView('columnHeadersView');
+
+    this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
+  }
+
+  private _getEmptyCell() {
     return {
       caption: '',
       colspan: 1,
@@ -357,7 +374,7 @@ export class ExportController extends dataGridCore.ViewController {
     column.width = width;
   }
 
-  _getColumns(initialColumnWidthsByColumnIndex) {
+  public _getColumns(initialColumnWidthsByColumnIndex) {
     let result: any[] = [];
     let i;
     let columns;
@@ -408,7 +425,7 @@ export class ExportController extends dataGridCore.ViewController {
     return result;
   }
 
-  _calculateExportColspan(column) {
+  private _calculateExportColspan(column) {
     if (!column.isBand) {
       return;
     }
@@ -424,11 +441,11 @@ export class ExportController extends dataGridCore.ViewController {
     }, 0);
   }
 
-  _needColumnExporting(column) {
+  private _needColumnExporting(column) {
     return !column.command && (column.allowExporting || column.allowExporting === undefined);
   }
 
-  _getFooterSummaryItems(summaryCells, isTotal?) {
+  private _getFooterSummaryItems(summaryCells, isTotal?) {
     const result: any[] = [];
     let estimatedItemsCount = 1;
     let i = 0;
@@ -449,7 +466,7 @@ export class ExportController extends dataGridCore.ViewController {
     return result;
   }
 
-  _hasSummaryGroupFooters() {
+  private _hasSummaryGroupFooters() {
     const groupItems: any = this.option('summary.groupItems');
 
     if (isDefined(groupItems)) {
@@ -463,7 +480,7 @@ export class ExportController extends dataGridCore.ViewController {
     return false;
   }
 
-  _getItemsWithSummaryGroupFooters(sourceItems) {
+  private _getItemsWithSummaryGroupFooters(sourceItems) {
     let result: any[] = [];
     let beforeGroupFooterItems: any[] = [];
     let groupFooterItems: any[] = [];
@@ -482,7 +499,7 @@ export class ExportController extends dataGridCore.ViewController {
     return result.length ? result : beforeGroupFooterItems;
   }
 
-  _updateGroupValuesWithSummaryByColumn(sourceItems) {
+  private _updateGroupValuesWithSummaryByColumn(sourceItems) {
     let summaryValues: any[] = [];
 
     for (let i = 0; i < sourceItems.length; i++) {
@@ -510,7 +527,7 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  _processUnExportedItems(items) {
+  private _processUnExportedItems(items) {
     const columns = this._columnsController.getVisibleColumns(null, true);
     const groupColumns = this._columnsController.getGroupColumns();
     let values;
@@ -555,18 +572,18 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  _getAllItems(data?, skipFilter = false) {
+  public _getAllItems(data?, skipFilter = false) {
     const that = this;
     // @ts-expect-error
     const d = new Deferred();
-    const dataController = this.getController('data');
-    const footerItems = (dataController as any).footerItems();
+    // @ts-expect-error
+    const footerItems = this._dataController.footerItems();
     const totalItem = footerItems.length && footerItems[0];
     const summaryTotalItems = that.option('summary.totalItems');
     let summaryCells;
 
     when(data).done((data) => {
-      dataController.loadAll(data, skipFilter).done((sourceItems, totalAggregates) => {
+      this._dataController.loadAll(data, skipFilter).done((sourceItems, totalAggregates) => {
         that._updateGroupValuesWithSummaryByColumn(sourceItems);
 
         if (that._hasSummaryGroupFooters()) {
@@ -592,28 +609,30 @@ export class ExportController extends dataGridCore.ViewController {
     return d;
   }
 
-  _getSummaryCells(summaryTotalItems, totalAggregates) {
-    const dataController = this.getController('data');
-    const columnsController = dataController._columnsController;
-
-    return (dataController as any)._calculateSummaryCells(summaryTotalItems, totalAggregates, columnsController.getVisibleColumns(null, true), (summaryItem, column) => ((dataController as any)._isDataColumn(column) ? column.index : -1));
+  private _getSummaryCells(summaryTotalItems, totalAggregates) {
+    // @ts-expect-error
+    return this._dataController._calculateSummaryCells(
+      summaryTotalItems,
+      totalAggregates,
+      this._columnsController.getVisibleColumns(null, true),
+      // @ts-expect-error
+      (summaryItem, column) => (this._dataController._isDataColumn(column) ? column.index : -1),
+    );
   }
 
-  _getSelectedItems() {
-    const selectionController = this.getController('selection');
-
+  public _getSelectedItems() {
     if (this.needLoadItemsOnExportingSelectedItems()) {
       return this._getAllItems(
-        selectionController.loadSelectedItemsWithFilter(),
+        this._selectionController.loadSelectedItemsWithFilter(),
         true,
       );
     }
     return this._getAllItems(
-      selectionController.getSelectedRowsData(),
+      this._selectionController.getSelectedRowsData(),
     );
   }
 
-  _getColumnWidths(headersView, rowsView) {
+  private _getColumnWidths(headersView, rowsView) {
     return headersView && headersView.isVisible() ? headersView.getColumnWidths() : rowsView.getColumnWidths();
   }
 
@@ -625,20 +644,11 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  init() {
-    this.throwWarningIfNoOnExportingEvent();
-    this._columnsController = this.getController('columns');
-    this._rowsView = this.getView('rowsView');
-    this._headersView = this.getView('columnHeadersView');
-
-    this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
-  }
-
   protected callbackNames() {
     return ['selectionOnlyChanged'];
   }
 
-  getDataProvider(selectedRowsOnly) {
+  private getDataProvider(selectedRowsOnly) {
     const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
     let initialColumnWidthsByColumnIndex;
     if (columnWidths && columnWidths.length) {
@@ -652,7 +662,7 @@ export class ExportController extends dataGridCore.ViewController {
     return new DataProvider(this, initialColumnWidthsByColumnIndex, selectedRowsOnly);
   }
 
-  exportTo(selectedRowsOnly, format) {
+  public exportTo(selectedRowsOnly, format) {
     this._selectionOnly = selectedRowsOnly;
 
     const onExporting = this.getAction('onExporting');
@@ -667,11 +677,11 @@ export class ExportController extends dataGridCore.ViewController {
     isFunction(onExporting) && onExporting(eventArgs);
   }
 
-  publicMethods() {
+  public publicMethods() {
     return ['getDataProvider'];
   }
 
-  selectionOnly(value) {
+  public selectionOnly(value) {
     if (isDefined(value)) {
       this._isSelectedRows = value;
       this.selectionOnlyChanged.fire();
@@ -680,7 +690,7 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     super.optionChanged(args);
     if (args.name === 'export') {
       this.throwWarningIfNoOnExportingEvent();
@@ -689,13 +699,13 @@ export class ExportController extends dataGridCore.ViewController {
 
   needLoadItemsOnExportingSelectedItems(): boolean {
     return this.option('loadItemsOnExportingSelectedItems')
-      ?? this.getController('data')._dataSource.remoteOperations().filtering;
+      ?? this._dataController._dataSource.remoteOperations().filtering;
   }
 }
 
 const editing = (Base: ModuleType<EditingController>) => class ExportEditingControllerExtender extends Base {
   // @ts-expect-error
-  callbackNames() {
+  private callbackNames() {
     const callbackList = super.callbackNames();
 
     return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
@@ -712,7 +722,7 @@ const editing = (Base: ModuleType<EditingController>) => class ExportEditingCont
 const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelExtender extends Base {
   private _exportController!: ExportController;
 
-  _getToolbarItems() {
+  protected _getToolbarItems() {
     const items = super._getToolbarItems();
 
     const exportButton = this._getExportToolbarButton();
@@ -725,7 +735,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     return items;
   }
 
-  _getExportToolbarButton() {
+  private _getExportToolbarButton() {
     const items = this._getExportToolbarItems();
 
     if (items.length === 0) {
@@ -781,7 +791,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     return toolbarButtonOptions;
   }
 
-  _getExportToolbarItems() {
+  private _getExportToolbarItems() {
     const exportOptions: any = this.option('export');
     const texts: any = this.option('export.texts');
     const formats: any[] = this.option('export.formats') ?? [];
@@ -828,15 +838,15 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     return items;
   }
 
-  _correctItemsPosition(items) {
+  private _correctItemsPosition(items) {
     items.sort((itemA, itemB) => itemA.sortIndex - itemB.sortIndex);
   }
 
-  _isExportButtonVisible() {
+  private _isExportButtonVisible() {
     return this.option('export.enabled');
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     super.optionChanged(args);
     if (args.name === 'export') {
       args.handled = true;
@@ -851,7 +861,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     return isDataColumnsInvisible || hasUnsavedChanges;
   }
 
-  _columnOptionChanged(e?) {
+  protected _columnOptionChanged(e?) {
     // @ts-expect-error
     super._columnOptionChanged(e);
 
@@ -864,11 +874,10 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     }
   }
 
-  init() {
+  public init() {
     super.init();
 
     this._exportController = this.getController('export');
-    this._editingController = this.getController('editing');
 
     // @ts-expect-error
     this._editingController.editingButtonsUpdated.add(() => {
@@ -878,7 +887,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     });
   }
 
-  isVisible() {
+  public isVisible() {
     return super.isVisible() || this._isExportButtonVisible();
   }
 };

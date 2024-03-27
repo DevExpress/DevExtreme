@@ -116,7 +116,9 @@ const DateBoxMask = DateBoxBase.inherit({
     },
 
     _changePartValue(step, lockOtherParts) {
-        const isAmPmPartActive = this._getActivePartProp('pattern') === 'a';
+        const activePartPattern = this._getActivePartProp('pattern');
+        const isAmPmPartActive = /^a{1,5}$/.test(activePartPattern);
+
         if(isAmPmPartActive) {
             this._toggleAmPm();
         } else {

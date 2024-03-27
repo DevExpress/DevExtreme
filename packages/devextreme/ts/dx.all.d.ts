@@ -25784,7 +25784,6 @@ declare module DevExpress.ui {
        */
       readonly handleElement?: DevExpress.core.DxElement;
     }
-    export type ResizeMode = 'live' | 'postponed';
     /**
      * [descr:_ui_splitter_ResizeStartEvent]
      */
@@ -25819,6 +25818,10 @@ declare module DevExpress.ui {
      * [descr:dxSplitterItem.minSize]
      */
     minSize?: number | string;
+    /**
+     * [descr:dxSplitterItem.collapsedSize]
+     */
+    collapsedSize?: number | string;
     /**
      * [descr:dxSplitterItem.collapsed]
      */
@@ -25857,13 +25860,13 @@ declare module DevExpress.ui {
      */
     repaintChangesOnly?: boolean;
     /**
-     * [descr:dxSplitterOptions.resizeMode]
-     */
-    resizeMode?: DevExpress.ui.dxSplitter.ResizeMode;
-    /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
      */
     allowKeyboardNavigation?: boolean;
+    /**
+     * [descr:dxSplitterOptions.separatorSize]
+     */
+    separatorSize?: number | string;
     /**
      * [descr:dxSplitterOptions.onResize]
      */
@@ -42022,7 +42025,7 @@ declare module DevExpress.viz {
    * [descr:viz.exportFromMarkup(markup, options)]
    */
   export function exportFromMarkup(
-    markup: string,
+    markup: string | DevExpress.core.UserDefinedElement,
     options: {
       fileName?: string;
       format?: string;

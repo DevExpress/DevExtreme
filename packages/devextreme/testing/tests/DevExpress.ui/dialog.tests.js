@@ -21,9 +21,15 @@ const DIALOG_MESSAGE_CLASS = 'dx-dialog-message';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const TOOLBAR_LABEL_CLASS = 'dx-toolbar-label';
 
+QUnit.testStart(function() {
+    const container = $('<div id="container">');
+
+    container.appendTo('#qunit-fixture');
+});
+
 module('dialog', {
     beforeEach: function() {
-        viewPort('#qunit-fixture');
+        viewPort($('#container'));
 
         fx.off = true;
 
@@ -448,7 +454,7 @@ module('dialog', {
 
 QUnit.module('width on phone', {
     beforeEach: function() {
-        viewPort('#qunit-fixture');
+        viewPort($('#container'));
         fx.off = true;
         this.realDevice = devices.real();
 

@@ -7,3 +7,16 @@
   text-align: center;
   line-height: 2em;
 }
+
+::ng-deep .dx-form-group-custom-caption .dx-template-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .dx-form-group-custom-caption .dx-icon {
+  color: var(--dx-color-spin-icon);
+}
+
+::ng-deep .dx-form-group-custom-caption span {
+  line-height: 1;
+}

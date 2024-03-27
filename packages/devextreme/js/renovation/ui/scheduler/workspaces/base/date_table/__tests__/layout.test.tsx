@@ -5,7 +5,7 @@ import {
 } from '../layout';
 import { Table } from '../../table';
 import { DateTableBody } from '../table_body';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
 
 jest.mock('../table_body', () => ({
   DateTableBody: () => null,

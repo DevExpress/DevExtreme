@@ -6,11 +6,11 @@ import type { ModuleType } from '../grid_core/m_types';
 import treeListCore from './m_core';
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class TreeListEditingControllerExtender extends validatingModule.extenders.controllers.editing(Base) {
-  processDataItem(item) {
+  public processDataItem(item) {
     super.processDataItemTreeListHack.apply(this, arguments as any);
   }
 
-  processItems(items, e) {
+  public processItems(items, e) {
     return super.processItemsTreeListHack.apply(this, arguments as any);
   }
 };

@@ -5,8 +5,8 @@ import {
   TimelineDateHeaderLayout,
 } from '../layout';
 import { Row } from '../../../../base/row';
-import * as utilsModule from '../../../../utils';
-import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
+import * as MigratedUtils from '../../../../../../../../__internal/scheduler/__migration/utils/index';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../../__internal/scheduler/__migration/const';
 import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 
 jest.mock('../../../../../../../utils/getThemeType', () => ({
@@ -15,7 +15,7 @@ jest.mock('../../../../../../../utils/getThemeType', () => ({
   default: jest.fn(() => ({ isMaterialBased: true })),
 }));
 
-const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
+const isHorizontalGroupingApplied = jest.spyOn(MigratedUtils, 'isHorizontalGroupingApplied');
 
 describe('TimelineDateHeaderLayout', () => {
   const dateHeaderData: any = {

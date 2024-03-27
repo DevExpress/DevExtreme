@@ -8,7 +8,7 @@ class TreeListColumnsController extends ColumnsController {
     return super._getFirstItems(dataSourceAdapter).map((node) => node.data);
   }
 
-  getFirstDataColumnIndex() {
+  public getFirstDataColumnIndex() {
     const visibleColumns = this.getVisibleColumns();
     const visibleColumnsLength = visibleColumns.length;
     let firstDataColumnIndex = 0;

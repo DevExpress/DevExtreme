@@ -4,13 +4,7 @@
   "affected": {
     "defaultBase": "master"
   },
-  "tasksRunnerOptions": {
-    "default": {
-      "options": {
-        "accessToken": "NmRmZjQ5YzAtMjc3ZC00ODA5LWJjZTgtNDMyMWM4MjI5Zjc2fHJlYWQtd3JpdGU="
-      }
-    }
-  },
+  "nxCloudAccessToken": "ZDFmMzkyZTYtZmU5MC00MDMyLWI3NDktYjhhYWUxZWM4YTg3fHJlYWQ=",
   "targetDefaults": {
     "build": {
       "dependsOn": [

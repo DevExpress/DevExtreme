@@ -5929,11 +5929,20 @@ if(devices.real().deviceType === 'desktop') {
             helper.$widget.remove();
         }
     }, () => {
+        const getAriaAutocomplete = (searchEnabled, searchMode) => {
+            if(!searchEnabled) {
+                return 'none';
+            }
+
+            return searchMode === 'contains' ? 'list' : 'both';
+        };
+
         [true, false].forEach((searchEnabled) => {
             QUnit.test(`opened: true -> searchEnabled: ${!searchEnabled}`, function() {
                 helper.createWidget({
                     opened: true,
-                    searchEnabled
+                    searchEnabled,
+                    searchMode: 'contains',
                 });
 
                 const listAttributes = {
@@ -5954,7 +5963,7 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                     type: 'text',
                     placeholder: 'Select...',
-                    'aria-autocomplete': 'list',
+                    'aria-autocomplete': getAriaAutocomplete(searchEnabled, 'contains'),
                     'aria-expanded': 'true',
                     'aria-haspopup': 'listbox',
                 };
@@ -5968,6 +5977,11 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
+
+                helper.widget.option('searchMode', 'startswith');
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(searchEnabled, 'startswith');
+
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
 
                 helper.widget.option('searchEnabled', !searchEnabled);
 
@@ -5983,6 +5997,9 @@ if(devices.real().deviceType === 'desktop') {
                 if(searchEnabled) {
                     inputAttributes.readonly = '';
                 }
+
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled, 'startswith');
+
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
                 helper.checkAttributes(helper.$widget, { 'aria-owns': helper.widget._popupContentId }, 'widget');
                 helper.checkAttributes(helper.widget._popup.$content(), { id: helper.widget._popupContentId }, 'popupContent');
@@ -5992,7 +6009,8 @@ if(devices.real().deviceType === 'desktop') {
                 helper.createWidget({
                     opened: false,
                     deferRendering: true,
-                    searchEnabled
+                    searchEnabled,
+                    searchMode: 'contains',
                 });
 
                 const inputAttributes = {
@@ -6002,7 +6020,7 @@ if(devices.real().deviceType === 'desktop') {
                     tabindex: '0',
                     type: 'text',
                     placeholder: 'Select...',
-                    'aria-autocomplete': 'list',
+                    'aria-autocomplete': getAriaAutocomplete(searchEnabled, 'contains'),
                     'aria-expanded': 'false',
                     'aria-haspopup': 'listbox',
                 };
@@ -6014,6 +6032,11 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
 
+                helper.widget.option('searchMode', 'startswith');
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(searchEnabled, 'startswith');
+
+                helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
+
                 delete inputAttributes.readonly;
 
                 if(searchEnabled) {
@@ -6021,6 +6044,8 @@ if(devices.real().deviceType === 'desktop') {
                 }
 
                 helper.widget.option('searchEnabled', !searchEnabled);
+                inputAttributes['aria-autocomplete'] = getAriaAutocomplete(!searchEnabled, 'startswith');
+
                 helper.checkAttributes(helper.$widget, { }, 'widget');
                 helper.checkAttributes(helper.widget._input(), inputAttributes, 'input');
             });
@@ -6039,6 +6064,42 @@ if(devices.real().deviceType === 'desktop') {
                 helper.widget.option(dataSourcePropertyName, []);
                 helper.checkAttributes($listItemContainer, {});
             });
+        });
+
+        ['disabled', 'readOnly'].forEach(disabledOption => {
+            QUnit.test(`aria-autocomplete set correctly if ${disabledOption} is true on init`, function(assert) {
+                helper.createWidget({ searchEnabled: true, [disabledOption]: true });
+
+                const $input = helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-autocomplete'), 'none');
+            });
+
+            QUnit.test(`aria-autocomplete set correctly if ${disabledOption} is true after runtime change`, function(assert) {
+                helper.createWidget({ searchEnabled: true });
+
+                const $input = helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-autocomplete'), 'list');
+
+                helper.widget.option({ [disabledOption]: true });
+
+                assert.strictEqual($input.attr('aria-autocomplete'), 'none');
+            });
+        });
+
+        QUnit.test('aria-autocomplete set correctly with acceptCustomValue and searchMode: startswith', function(assert) {
+            helper.createWidget({
+                acceptCustomValue: false,
+                searchEnabled: true,
+                searchMode: 'startswith',
+            });
+
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'both');
+
+            helper.widget.option({ acceptCustomValue: true });
+
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'list');
         });
     });
 }

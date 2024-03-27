@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "بارگذاری...",
         "dxList-nextButtonText": "بیشتر",
         "dxList-selectAll": "انتخاب همه",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "حذف",
         "dxListEditDecorator-more": "بیشتر",
 

@@ -1,16 +1,13 @@
 import dateUtils from '@js/core/utils/date';
-import {
-  formatWeekdayAndDay,
-  getDisplayedCellCount,
-  getHeaderCellText,
-  getHorizontalGroupCount,
-  getTotalCellCountByCompleteData,
-  isTimelineView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { VIEWS } from '@ts/scheduler/m_constants';
 
+import {
+  formatWeekdayAndDay, getDisplayedCellCount, getGroupCount,
+  getHeaderCellText,
+  getHorizontalGroupCount, getTotalCellCountByCompleteData,
+  isTimelineView,
+} from '../../__migration/utils/index';
 import timeZoneUtils from '../../m_utils_time_zone';
-import { getGroupCount } from '../../resources/m_utils';
 
 export class DateHeaderDataGenerator {
   constructor(public _viewDataGenerator) {

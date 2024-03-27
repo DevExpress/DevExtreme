@@ -124,7 +124,7 @@ test('Should select previous item after delete last item', async (t) => {
 }).before(async () => createList('none', true));
 
 [[2, 0], [1, 2]].forEach(([selectItemIdx, deleteItemIdx]) => {
-  test(`Should not change selection after delete another (not selected) item (${selectItemIdx}, ${selectItemIdx})`, async (t) => {
+  test(`Should not change selection after delete another (not selected) item (${selectItemIdx}, ${deleteItemIdx})`, async (t) => {
     const list = new List('#container');
     const itemToSelect = list.getItem(selectItemIdx);
     const itemToDelete = list.getItem(deleteItemIdx);

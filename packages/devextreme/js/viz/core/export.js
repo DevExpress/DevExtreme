@@ -10,6 +10,8 @@ import { start as hoverEventStart, end as hoverEventEnd } from '../../events/hov
 import pointerEvents from '../../events/pointer';
 import { logger } from '../../core/utils/console';
 import { getWidth } from '../../core/utils/size';
+import { Renderer } from './renderers/renderer';
+import $ from '../../core/renderer';
 
 const pointerActions = [pointerEvents.down, pointerEvents.move].join(' ');
 
@@ -37,6 +39,30 @@ const EXPORT_DATA_KEY = 'export-element-type';
 const FORMAT_DATA_KEY = 'export-element-format';
 
 const GET_COLOR_REGEX = /data-backgroundcolor="([^"]*)"/;
+
+function getRendererWrapper(width, height, backgroundColor) {
+    const rendererContainer = $('<div>').get(0);
+
+    const renderer = new Renderer({
+        container: rendererContainer
+    });
+
+    renderer.resize(width, height);
+    renderer.root.element.setAttribute('data-backgroundcolor', backgroundColor);
+
+    return {
+        createGroup() {
+            return renderer.g();
+        },
+        getRootContent() {
+            return renderer.root.element.cloneNode(true);
+        },
+        dispose() {
+            renderer.dispose();
+            rendererContainer.remove();
+        }
+    };
+}
 
 function getValidFormats() {
     const imageFormats = imageExporter.testFormats(ALLOWED_IMAGE_FORMATS);
@@ -256,7 +282,7 @@ export const exportFromMarkup = function(markup, options) {
     _export(markup, options, getCreatorFunc(options.format));
 };
 
-export const getMarkup = widgets => combineMarkups(widgets).markup;
+export const getMarkup = widgets => combineMarkups(widgets).root.outerHTML;
 
 export const exportWidgets = function(widgets, options) {
     options = options || {};
@@ -267,7 +293,7 @@ export const exportWidgets = function(widgets, options) {
     });
     options.width = markupInfo.width;
     options.height = markupInfo.height;
-    exportFromMarkup(markupInfo.markup, options);
+    exportFromMarkup(markupInfo.root, options);
 };
 
 export let combineMarkups = function(widgets, options = { }) {
@@ -282,6 +308,11 @@ export let combineMarkups = function(widgets, options = { }) {
         const rowInfo = row.reduce((r, item, colIndex) => {
             const size = item.getSize();
             const backgroundColor = item.option('backgroundColor') || getTheme(item.option('theme')).backgroundColor;
+            const node = item.element()
+                .find('svg')
+                .get(0)
+                .cloneNode(true);
+
             backgroundColor && r.backgroundColors.indexOf(backgroundColor) === -1 && r.backgroundColors.push(backgroundColor);
 
             r.hOffset = r.width;
@@ -289,7 +320,7 @@ export let combineMarkups = function(widgets, options = { }) {
             r.height = Math.max(r.height, size.height);
             r.itemWidth = Math.max(r.itemWidth, size.width);
             r.items.push({
-                markup: item.svg(),
+                node,
                 width: size.width,
                 height: size.height,
                 c: colIndex,
@@ -311,7 +342,28 @@ export let combineMarkups = function(widgets, options = { }) {
         return r;
     }, { items: [], rowOffsets: [], rowHeights: [], itemWidth: 0, totalHeight: 0, maxItemLen: 0, totalWidth: 0, backgroundColors: [] });
 
-    const backgroundColor = `data-backgroundcolor="${exportItems.backgroundColors.length === 1 ? exportItems.backgroundColors[0] : '' }" `;
+    const backgroundColor = `${exportItems.backgroundColors.length === 1 ? exportItems.backgroundColors[0] : '' }`;
+    const { totalWidth, totalHeight } = exportItems;
+
+    const rootElement = wrapItemsToElement(totalWidth,
+        totalHeight,
+        backgroundColor,
+        {
+            options,
+            exportItems,
+            compactView
+        }
+    );
+
+    return {
+        root: rootElement,
+        width: totalWidth,
+        height: totalHeight
+    };
+};
+
+function wrapItemsToElement(width, height, backgroundColor, { exportItems, options, compactView }) {
+    const rendererWrapper = getRendererWrapper(width, height, backgroundColor);
     const getVOffset = item => {
         const align = options.verticalAlignment;
         const dy = exportItems.rowHeights[item.r] - item.height;
@@ -330,18 +382,23 @@ export let combineMarkups = function(widgets, options = { }) {
         return item.c * colWidth + (align === 'right' ? dx : align === 'center' ? dx / 2 : 0);
     };
 
-    const totalHeight = exportItems.totalHeight;
-    const totalWidth = exportItems.totalWidth;
-    return {
-        markup: '<svg ' + backgroundColor + 'height="' + totalHeight + '" width="' + totalWidth + '" version="1.1" xmlns="http://www.w3.org/2000/svg">'
-            + exportItems.items.map(item =>
-                `<g transform="translate(${getHOffset(item)},${getVOffset(item)})">${item.markup}</g>`
-            ).join('')
-            + '</svg>',
-        width: totalWidth,
-        height: totalHeight
-    };
-};
+    exportItems.items.forEach((item) => {
+        const container = rendererWrapper.createGroup();
+
+        container.attr({
+            translateX: getHOffset(item),
+            translateY: getVOffset(item),
+        });
+        container.element.appendChild(item.node);
+        container.append();
+    });
+
+    const result = rendererWrapper.getRootContent();
+
+    rendererWrapper.dispose();
+
+    return result;
+}
 
 export let ExportMenu = function(params) {
     const renderer = this._renderer = params.renderer;

@@ -10,6 +10,7 @@ on:
     branches: [24_1]
 
 env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
 
 jobs:
@@ -39,8 +40,8 @@ jobs:
       working-directory: ./packages/devextreme
       run: npx gulp localization
 
-    - name: Jest tests for build scripts
-      run: npx nx test-scripts
+    - name: Jest tests for monorepo tools
+      run: npx nx test devextreme-monorepo-tools
 
     - name: Jest tests
       run: npx nx test-jest devextreme-main

@@ -1,6 +1,7 @@
 /* eslint-disable spaced-comment */
 /* eslint-disable rulesdir/no-non-null-assertion */
 /* eslint-disable class-methods-use-this */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 import {
   Component,
   Consumer,
@@ -21,19 +22,11 @@ import {
   CellsSelectionControllerType,
   CellsSelectionState,
   CorrectedVirtualScrollingState,
-  DateHeaderCellData,
   DateHeaderData,
   DateHeaderDataGeneratorType,
-  Group,
   GroupedViewData,
-  GroupPanelData,
-  TimePanelData,
   TimePanelDataGeneratorType,
-  ViewCellData,
   ViewDataGeneratorType,
-  ViewDataMap,
-  ViewDataProviderOptions,
-  ViewDataProviderType,
   VirtualScrollingDispatcherType,
   VirtualScrollingState,
   WorkSpaceGenerationOptions,
@@ -51,15 +44,11 @@ import {
 } from './utils';
 import { ViewRenderConfig, WorkSpaceProps } from '../props';
 import { getViewRenderConfigByType } from './work_space_config';
-import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import { CrossScrollingLayout } from './cross_scrolling_layout';
-import { GroupOrientation } from '../../types';
 import { getViewDataGeneratorByViewType } from '../../../../../__internal/scheduler/workspaces/view_model/m_utils';
-import { calculateIsGroupedAllDayPanel } from '../../view_model/to_test/views/utils/base';
 import { DateHeaderDataGenerator } from '../../../../../__internal/scheduler/workspaces/view_model/m_date_header_data_generator';
 import { TimePanelDataGenerator } from '../../../../../__internal/scheduler/workspaces/view_model/m_time_panel_data_generator';
 import { CellsSelectionController } from '../../../../../__internal/scheduler/workspaces/m_cells_selection_controller';
-import { getGroupPanelData } from '../../view_model/group_panel/utils';
 import { ScrollEventArgs, ScrollOffset } from '../../../scroll_view/common/types';
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import { getWindow } from '../../../../../core/utils/window';
@@ -72,6 +61,19 @@ import { isMouseEvent } from '../../../../../events/utils/index';
 import { ALL_DAY_PANEL_CELL_CLASS, DATE_TABLE_CELL_CLASS } from '../const';
 ///#DEBUG
 import { DiagnosticUtils } from '../../../../utils/diagnostic';
+import {
+  DateHeaderCellData,
+  Group,
+  GroupOrientation, GroupPanelData, TimePanelData,
+  ViewCellData, ViewDataMap,
+  ViewDataProviderOptions, ViewDataProviderType,
+} from '../../../../../__internal/scheduler/__migration/types';
+import {
+  calculateIsGroupedAllDayPanel, getGroupPanelData,
+  isGroupingByDate,
+  isHorizontalGroupingApplied,
+  isVerticalGroupingApplied,
+} from '../../../../../__internal/scheduler/__migration/utils/index';
 ///#ENDDEBUG
 const DATA_CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_PANEL_CELL_CLASS}`;
 

@@ -40,12 +40,12 @@ export interface GroupingDataControllerExtension {
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class GroupingDataSourceAdapterExtender extends Base {
   _grouping: any;
 
-  init() {
+  public init() {
     super.init.apply(this, arguments as any);
     this._initGroupingHelper();
   }
 
-  _initGroupingHelper(options?) {
+  private _initGroupingHelper(options?) {
     const grouping = this._grouping;
     const isAutoExpandAll = this.option('grouping.autoExpandAll');
     const isFocusedRowEnabled = this.option('focusedRowEnabled');
@@ -61,38 +61,38 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  totalItemsCount() {
+  protected totalItemsCount() {
     const totalCount = super.totalItemsCount();
 
     return totalCount > 0 && this._dataSource.group() && this._dataSource.requireTotalCount() ? totalCount + this._grouping.totalCountCorrection() : totalCount;
   }
 
-  itemsCount() {
+  protected itemsCount() {
     return this._dataSource.group() ? this._grouping.itemsCount() || 0 : super.itemsCount.apply(this, arguments as any);
   }
 
-  allowCollapseAll() {
+  protected allowCollapseAll() {
     return this._grouping.allowCollapseAll();
   }
 
-  isGroupItemCountable(item) {
+  protected isGroupItemCountable(item) {
     return this._grouping.isGroupItemCountable(item);
   }
 
-  isRowExpanded(key) {
+  private isRowExpanded(key) {
     const groupInfo = this._grouping.findGroupInfo(key);
     return groupInfo ? groupInfo.isExpanded : !this._grouping.allowCollapseAll();
   }
 
-  collapseAll(groupIndex) {
+  private collapseAll(groupIndex) {
     return this._collapseExpandAll(groupIndex, false);
   }
 
-  expandAll(groupIndex) {
+  private expandAll(groupIndex) {
     return this._collapseExpandAll(groupIndex, true);
   }
 
-  _collapseExpandAll(groupIndex, isExpand) {
+  private _collapseExpandAll(groupIndex, isExpand) {
     const that = this;
     const dataSource = that._dataSource;
     const group = dataSource.group();
@@ -118,13 +118,13 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     return true;
   }
 
-  refresh() {
+  public refresh() {
     super.refresh.apply(this, arguments as any);
 
     return this._grouping.refresh.apply(this._grouping, arguments);
   }
 
-  changeRowExpand(path) {
+  protected changeRowExpand(path) {
     const that = this;
     const dataSource = that._dataSource;
 
@@ -139,18 +139,18 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     }
   }
 
-  _changeRowExpandCore(path) {
+  protected _changeRowExpandCore(path) {
     return this._grouping.changeRowExpand(path);
   }
 
   /// #DEBUG
-  getGroupsInfo() {
+  private getGroupsInfo() {
     return this._grouping._groupsInfo;
   }
 
   /// #ENDDEBUG
   // @ts-expect-error
-  _hasGroupLevelsExpandState(group, isExpanded) {
+  private _hasGroupLevelsExpandState(group, isExpanded) {
     if (group && Array.isArray(group)) {
       for (let i = 0; i < group.length; i++) {
         if (group[i].isExpanded === isExpanded) {
@@ -180,17 +180,17 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
     super._customizeRemoteOperations.apply(this, arguments as any);
   }
 
-  _handleDataLoading(options) {
+  protected _handleDataLoading(options) {
     super._handleDataLoading(options);
     this._initGroupingHelper(options);
     return this._grouping.handleDataLoading(options);
   }
 
-  _handleDataLoaded(options) {
+  protected _handleDataLoaded(options) {
     return this._grouping.handleDataLoaded(options, super._handleDataLoaded.bind(this));
   }
 
-  _handleDataLoadedCore(options) {
+  protected _handleDataLoadedCore(options) {
     return this._grouping.handleDataLoadedCore(options, super._handleDataLoadedCore.bind(this));
   }
 };
@@ -198,7 +198,7 @@ const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class
 dataSourceAdapterProvider.extend(dataSourceAdapterExtender);
 
 const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => class GroupingDataControllerExtender extends Base {
-  init() {
+  public init() {
     const that = this;
     super.init();
 
@@ -230,11 +230,11 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  _processGroupItem(item, options?) {
+  private _processGroupItem(item, options?) {
     return item;
   }
 
-  _processGroupItems(items, groupsCount, options?) {
+  private _processGroupItems(items, groupsCount, options?) {
     const that = this;
     const groupedColumns = that._columnsController.getGroupColumns();
     const column = groupedColumns[groupedColumns.length - groupsCount];
@@ -287,11 +287,11 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return resultItems;
   }
 
-  publicMethods() {
+  public publicMethods() {
     return super.publicMethods().concat(['collapseAll', 'expandAll', 'isRowExpanded', 'expandRow', 'collapseRow']);
   }
 
-  collapseAll(groupIndex) {
+  private collapseAll(groupIndex) {
     const dataSource = this._dataSource;
     if (dataSource && dataSource.collapseAll(groupIndex)) {
       dataSource.pageIndex(0);
@@ -299,7 +299,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     }
   }
 
-  expandAll(groupIndex) {
+  private expandAll(groupIndex) {
     const dataSource = this._dataSource;
     if (dataSource && dataSource.expandAll(groupIndex)) {
       dataSource.pageIndex(0);
@@ -307,7 +307,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     }
   }
 
-  changeRowExpand(key) {
+  private changeRowExpand(key) {
     const that = this;
     const expanded = that.isRowExpanded(key);
     const args: any = {
@@ -328,7 +328,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return new Deferred().resolve();
   }
 
-  _changeRowExpandCore(key) {
+  protected _changeRowExpandCore(key) {
     const that = this;
     const dataSource = this._dataSource;
 
@@ -344,13 +344,13 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return d;
   }
 
-  isRowExpanded(key) {
+  private isRowExpanded(key) {
     const dataSource = this._dataSource;
 
     return dataSource && dataSource.isRowExpanded(key);
   }
 
-  expandRow(key) {
+  private expandRow(key) {
     if (!this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
@@ -358,7 +358,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return new Deferred().resolve();
   }
 
-  collapseRow(key) {
+  private collapseRow(key) {
     if (this.isRowExpanded(key)) {
       return this.changeRowExpand(key);
     }
@@ -366,7 +366,7 @@ const GroupingDataControllerExtender = (Base: ModuleType<DataController>) => cla
     return new Deferred().resolve();
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'grouping'/* autoExpandAll */) {
       args.name = 'dataSource';
     }
@@ -410,13 +410,13 @@ const allowDragging = (groupPanelOptions, column): boolean => {
 };
 
 export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => class GroupingHeaderPanelExtender extends Base {
-  _getToolbarItems() {
+  protected _getToolbarItems() {
     const items = super._getToolbarItems();
 
     return this._appendGroupingItem(items);
   }
 
-  _appendGroupingItem(items) {
+  private _appendGroupingItem(items) {
     if (this._isGroupPanelVisible()) {
       let isRendered = false;
       const toolbarItem = {
@@ -443,7 +443,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return items;
   }
 
-  _handleActionKeyDown(args) {
+  private _handleActionKeyDown(args) {
     const { event } = args;
     const $target = $(event.target);
     const groupColumnIndex = $target.closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`).index();
@@ -451,7 +451,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     const columnIndex = column && column.index;
 
     if ($target.is(HEADER_FILTER_CLASS_SELECTOR)) {
-      this.getController('headerFilter').showHeaderFilterMenu(columnIndex, true);
+      this._headerFilterController.showHeaderFilterMenu(columnIndex, true);
     } else {
       // @ts-expect-error
       this._processGroupItemAction(columnIndex);
@@ -464,7 +464,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return isGroupPanelVisible(this.option('groupPanel'));
   }
 
-  _renderGroupPanelItems($groupPanel, groupColumns) {
+  private _renderGroupPanelItems($groupPanel, groupColumns) {
     const that = this;
 
     $groupPanel.empty();
@@ -476,7 +476,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     restoreFocus(this);
   }
 
-  _createGroupPanelItem($rootElement, groupColumn) {
+  private _createGroupPanelItem($rootElement, groupColumn) {
     const $groupPanelItem = $('<div>')
       .addClass(groupColumn.cssClass)
       .addClass(DATAGRID_GROUP_PANEL_ITEM_CLASS)
@@ -489,7 +489,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return $groupPanelItem;
   }
 
-  _columnOptionChanged(e?) {
+  protected _columnOptionChanged(e?) {
     if (!this._requireReady && !gridCore.checkChanges(e.optionNames, ['width', 'visibleWidth'])) {
       const $toolbarElement = this.element();
       const $groupPanel = $toolbarElement && $toolbarElement.find(`.${DATAGRID_GROUP_PANEL_CLASS}`);
@@ -503,12 +503,11 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     super._columnOptionChanged();
   }
 
-  _updateGroupPanelContent($groupPanel) {
-    const that = this;
-    const groupColumns = that.getController('columns').getGroupColumns();
-    const groupPanelOptions: any = that.option('groupPanel');
+  private _updateGroupPanelContent($groupPanel) {
+    const groupColumns = this.getColumns();
+    const groupPanelOptions: any = this.option('groupPanel');
 
-    that._renderGroupPanelItems($groupPanel, groupColumns);
+    this._renderGroupPanelItems($groupPanel, groupColumns);
 
     if (groupPanelOptions.allowColumnDragging && !groupColumns.length) {
       $('<div>')
@@ -532,11 +531,11 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return $element && $element.find(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
   }
 
-  getColumns() {
-    return this.getController('columns').getGroupColumns();
+  public getColumns() {
+    return this._columnsController.getGroupColumns();
   }
 
-  getBoundingRect() {
+  protected getBoundingRect() {
     const that = this;
     const $element = that.element();
 
@@ -551,11 +550,11 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return null;
   }
 
-  getName() {
+  public getName() {
     return 'group';
   }
 
-  getContextMenuItems(options) {
+  private getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
     const $groupedColumnElement = $(options.targetElement).closest(`.${DATAGRID_GROUP_PANEL_ITEM_CLASS}`);
@@ -585,15 +584,15 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     return items;
   }
 
-  isVisible() {
+  public isVisible() {
     return super.isVisible() || this._isGroupPanelVisible();
   }
 
-  hasGroupedColumns(): boolean {
+  public hasGroupedColumns(): boolean {
     return this._isGroupPanelVisible() && !!this.getColumns().length;
   }
 
-  optionChanged(args) {
+  public optionChanged(args) {
     if (args.name === 'groupPanel') {
       this._invalidate();
       args.handled = true;
@@ -604,7 +603,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
 };
 
 const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingRowsViewExtender extends Base {
-  getContextMenuItems(options) {
+  private getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
     let items;
@@ -628,7 +627,7 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
     return items;
   }
 
-  _rowClick(e) {
+  protected _rowClick(e) {
     const that = this;
     const expandMode = that.option('grouping.expandMode');
     const scrollingMode = that.option('scrolling.mode');
@@ -642,15 +641,14 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
     super._rowClick(e);
   }
 
-  _changeGroupRowState(e) {
-    const dataController = this.getController('data');
-    const row = dataController.items()[e.rowIndex];
+  private _changeGroupRowState(e) {
+    const row = this._dataController.items()[e.rowIndex];
     // @ts-expect-error
     const allowCollapsing = this._columnsController.columnOption(`groupIndex:${row.groupIndex}`, 'allowCollapsing');
 
     if (row.rowType === 'data' || row.rowType === 'group' && allowCollapsing !== false) {
       // @ts-expect-error
-      dataController.changeRowExpand(row.key, true);
+      this._dataController.changeRowExpand(row.key, true);
       e.event.preventDefault();
       e.handled = true;
     }
@@ -658,7 +656,7 @@ const GroupingRowsViewExtender = (Base: ModuleType<RowsView>) => class GroupingR
 };
 
 const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class GroupingHeadersViewExtender extends Base {
-  getContextMenuItems(options) {
+  public getContextMenuItems(options) {
     const that = this;
     const contextMenuEnabled = that.option('grouping.contextMenuEnabled');
     let items: any[] | undefined = super.getContextMenuItems(options);
@@ -723,7 +721,7 @@ gridCore.registerModule('grouping', {
     controllers: {
       data: GroupingDataControllerExtender,
       columns: (Base: ModuleType<ColumnsController>) => class GroupingColumnsExtender extends Base {
-        _getExpandColumnOptions() {
+        public _getExpandColumnOptions() {
           // @ts-expect-error
           const options = super._getExpandColumnOptions.apply(this, arguments);
 
@@ -734,7 +732,7 @@ gridCore.registerModule('grouping', {
         }
       },
       editing: (Base: ModuleType<EditingController>) => class GroupingEditingExtender extends Base {
-        _isProcessedItem(item) {
+        protected _isProcessedItem(item) {
           return isDefined(item.groupIndex) && isString(item.rowType) && item.rowType.indexOf('group') === 0;
         }
       },

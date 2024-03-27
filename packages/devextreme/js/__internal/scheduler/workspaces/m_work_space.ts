@@ -28,18 +28,9 @@ import {
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { getMemoizeScrollTo } from '@js/renovation/ui/common/utils/scroll/getMemoizeScrollTo';
-import type { ViewType } from '@js/renovation/ui/scheduler/types';
-import {
-  calculateIsGroupedAllDayPanel,
-  calculateViewStartDate,
-  getCellDuration,
-  getStartViewDateTimeOffset,
-  getViewStartByOptions,
-  isDateAndTimeView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
+import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 
 // NOTE: Renovation component section
 // @ts-expect-error
@@ -51,9 +42,15 @@ import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base
 // @ts-expect-error
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 // @ts-expect-error
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-// @ts-expect-error
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
+import { HeaderPanelComponent } from '../__migration/components/index';
+import type { ViewType } from '../__migration/types';
+import {
+  calculateIsGroupedAllDayPanel,
+  calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
+  getViewStartByOptions,
+  isDateAndTimeView,
+} from '../__migration/utils/index';
 import WidgetObserver from '../base/m_widget_observer';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
@@ -70,7 +67,7 @@ import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import {
-  createResourcesTree, getCellGroups, getGroupCount, getGroupsObjectFromGroupsArray,
+  createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray,
 } from '../resources/m_utils';
 import VerticalShader from '../shaders/m_current_time_shader_vertical';
 import {
@@ -365,7 +362,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
 
-  get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+  get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
   get timeZoneCalculator(): any {
     return this.option('timeZoneCalculator');
@@ -1072,7 +1069,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _getGroupCount() {
-    return getGroupCount(this.option('groups'));
+    return getGroupCount(this.option('groups') as any);
   }
 
   _attachTablesEvents() {

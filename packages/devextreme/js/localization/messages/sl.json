@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Nalagam...",
         "dxList-nextButtonText": "Več",
         "dxList-selectAll": "Izberi vse",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Izbriši",
         "dxListEditDecorator-more": "Več",
 

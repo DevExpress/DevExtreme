@@ -20,7 +20,7 @@ function findIndex(items, callback) {
 const data = (
   Base: ModuleType<DataController>,
 ) => class TreeListDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
-  changeRowExpand(key) {
+  private changeRowExpand(key) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && this.isRowExpanded(key)) {
       if (this._isFocusedRowInside(key)) {
@@ -32,7 +32,7 @@ const data = (
     return super.changeRowExpand.apply(this, arguments);
   }
 
-  _isFocusedRowInside(parentKey) {
+  private _isFocusedRowInside(parentKey) {
     const focusedRowKey = this.option('focusedRowKey');
     const rowIndex = this.getRowIndexByKey(focusedRowKey);
     const focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex];
@@ -49,7 +49,7 @@ const data = (
     return false;
   }
 
-  getParentKey(key) {
+  private getParentKey(key) {
     const that = this;
     const dataSource = that._dataSource;
     // @ts-expect-error
@@ -76,7 +76,7 @@ const data = (
     return d.promise();
   }
 
-  expandAscendants(key) {
+  private expandAscendants(key) {
     const that = this;
     const dataSource = that._dataSource;
     // @ts-expect-error

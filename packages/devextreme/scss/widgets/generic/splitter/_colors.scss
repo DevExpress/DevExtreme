@@ -1,7 +1,42 @@
 @use "sass:color";
 @use "../sizes" as *;
 @use "../colors" as *;
+@use "../button/colors" as *;
 
 // adduse
 
-$splitter-resize-handle-bg: #D1D1D1;
+/**
+* $name 10. Icon color
+* $type color
+*/
+$splitter-resize-handle-color: $base-icon-color !default;
+
+/**
+* $name 20. Hover state icon color
+* $type color
+*/
+$splitter-resize-handle-color-hover: $splitter-resize-handle-color !default;
+
+/**
+* $name 30. Focused state icon color
+* $type color
+*/
+$splitter-resize-handle-color-focused: $base-inverted-icon-color !default;
+
+/**
+* $name 40. Handle background color
+* $type color
+*/
+$splitter-resize-handle-bg: $button-normal-text-bg-focused !default;
+
+/**
+* $name 50. Handle hover state background color
+* $type color
+*/
+$splitter-resize-handle-bg-hover: $button-normal-text-bg-active !default;
+
+/**
+* $name 60. Handle focused state background color
+* $type color
+*/
+$splitter-resize-handle-bg-focused: $base-accent !default;

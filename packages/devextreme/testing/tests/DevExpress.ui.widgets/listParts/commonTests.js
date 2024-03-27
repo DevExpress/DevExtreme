@@ -39,6 +39,9 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
+const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
+const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
+const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 
 const toSelector = cssClass => {
     return '.' + cssClass;
@@ -4118,41 +4121,6 @@ QUnit.module('Search', () => {
     });
 });
 
-QUnit.test('SelectAll checkbox should have aria-label="Select All" attribute', function(assert) {
-    $('#list').dxList({
-        selectionMode: 'all',
-        showSelectionControls: true
-    });
-
-    const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
-
-    assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'Select All');
-});
-
-QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
-    $('#list').dxList({
-        items: ['text 1', 'text 2'],
-        selectionMode: 'multiple',
-        showSelectionControls: true
-    });
-
-    const $checkboxes = $(`.${LIST_SELECT_CHECKBOX_CLASS}`);
-
-    assert.strictEqual($checkboxes.attr('aria-label'), 'Check State');
-});
-
-QUnit.test('radio buttons should have aria-label="Check State" attribute', function(assert) {
-    $('#list').dxList({
-        items: ['text 1', 'text 2'],
-        selectionMode: 'single',
-        showSelectionControls: true
-    });
-
-    const $radioButtons = $(`.${LIST_SELECT_RADIOBUTTON_CLASS}`);
-
-    assert.strictEqual($radioButtons.attr('aria-label'), 'Check State');
-});
-
 let helper;
 if(devices.real().deviceType === 'desktop') {
     [true, false].forEach((searchEnabled) => {
@@ -4289,3 +4257,100 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
     });
 }
 
+QUnit.module('Accessibility', () => {
+    QUnit.test('SelectAll checkbox should have aria-label="Select All" attribute', function(assert) {
+        $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true
+        });
+
+        const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'Select All');
+    });
+
+    QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
+        $('#list').dxList({
+            items: ['text 1', 'text 2'],
+            selectionMode: 'multiple',
+            showSelectionControls: true
+        });
+
+        const $checkboxes = $(`.${LIST_SELECT_CHECKBOX_CLASS}`);
+
+        assert.strictEqual($checkboxes.attr('aria-label'), 'Check State');
+    });
+
+    QUnit.test('radio buttons should have aria-label="Check State" attribute', function(assert) {
+        $('#list').dxList({
+            items: ['text 1', 'text 2'],
+            selectionMode: 'single',
+            showSelectionControls: true
+        });
+
+        const $radioButtons = $(`.${LIST_SELECT_RADIOBUTTON_CLASS}`);
+
+        assert.strictEqual($radioButtons.attr('aria-label'), 'Check State');
+    });
+
+    [true, false].forEach(allowItemDeleting => {
+        QUnit.test(`List items element should have a correct aria-label when allowItemDeleting=${allowItemDeleting}`, function(assert) {
+            const instance = $('#list').dxList({
+                allowItemDeleting,
+                items: ['text 1'],
+            }).dxList('instance');
+
+            const $listItems = $(`.${LIST_ITEMS_CLASS}`);
+
+            assert.strictEqual($listItems.attr('aria-label'), allowItemDeleting ? 'Deletable items' : 'Items');
+
+            instance.option({ allowItemDeleting: !allowItemDeleting });
+
+            assert.strictEqual($listItems.attr('aria-label'), allowItemDeleting ? 'Items' : 'Deletable items', 'aria-label set correctly after runtime change');
+        });
+    });
+
+    const checkButtonAttributes = (assert, $button) => {
+        ['role', 'aria-label', 'tabindex'].forEach(attribute => {
+            const expectedValue = attribute === 'tabindex' ? '-1' : undefined;
+            const testMessage = attribute === 'tabindex'
+                ? 'tabindex is set correctly'
+                : `${attribute} is not set`;
+
+            assert.strictEqual($button.attr(attribute), expectedValue, testMessage);
+        });
+    };
+
+    [STATIC_DELETE_BUTTON_CLASS, TOGGLE_DELETE_SWITCH_CLASS].forEach(buttonClass => {
+        const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
+
+        QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
+            $('#list').dxList({
+                itemDeleteMode,
+                items: ['text 1'],
+                allowItemDeleting: true,
+            });
+
+            const $button = $(`.${buttonClass}`);
+
+            checkButtonAttributes(assert, $button);
+        });
+    });
+
+    QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
+        const $list = $('#list').dxList({
+            items: ['text 1'],
+            itemDeleteMode: 'slideButton',
+            allowItemDeleting: true,
+        });
+
+        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $item = $items.eq(0);
+
+        pointerMock($item).start().swipeEnd(1);
+
+        const $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
+
+        checkButtonAttributes(assert, $switchableButton);
+    });
+});

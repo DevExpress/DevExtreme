@@ -24,9 +24,6 @@ import {
     Orientation,
 } from '../common';
 
-/** @public */
-export type ResizeMode = 'live' | 'postponed';
-
 /**
  * @docid _ui_splitter_ResizeInfo
  * @hidden
@@ -176,16 +173,16 @@ export interface dxSplitterOptions<
     repaintChangesOnly?: boolean;
     /**
      * @docid
-     * @default 'live'
-     * @public
-     */
-    resizeMode?: ResizeMode;
-    /**
-     * @docid
      * @default true
      * @public
      */
     allowKeyboardNavigation?: boolean;
+    /**
+     * @docid
+     * @default 8
+     * @public
+     */
+    separatorSize?: number | string;
     /**
      * @docid
      * @default null
@@ -274,6 +271,12 @@ export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
      * @public
      */
     minSize?: number | string;
+    /**
+     * @docid
+     * @default undefined
+     * @public
+     */
+    collapsedSize?: number | string;
     /**
      * @docid
      * @default false

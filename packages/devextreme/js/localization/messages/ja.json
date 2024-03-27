@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "読み込み中…",
         "dxList-nextButtonText": "もっと表示する",
         "dxList-selectAll": "すべてを選択",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "削除",
         "dxListEditDecorator-more": "もっと",
 

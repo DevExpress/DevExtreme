@@ -113,30 +113,30 @@ export class GroupingHelper {
     this.reset();
   }
 
-  reset() {
+  private reset() {
     this._groupsInfo = [];
     this._totalCountCorrection = 0;
   }
 
-  totalCountCorrection() {
+  private totalCountCorrection() {
     return this._totalCountCorrection;
   }
 
-  updateTotalItemsCount(totalCountCorrection) {
+  protected updateTotalItemsCount(totalCountCorrection) {
     this._totalCountCorrection = totalCountCorrection || 0;
   }
 
-  isGroupItemCountable(item) {
+  protected isGroupItemCountable(item) {
     return !this._isVirtualPaging() || !item.isContinuation;
   }
 
-  _isVirtualPaging() {
+  public _isVirtualPaging() {
     const scrollingMode = this._dataSource.option('scrolling.mode');
 
     return scrollingMode === 'virtual' || scrollingMode === 'infinite';
   }
 
-  itemsCount() {
+  private itemsCount() {
     const dataSourceAdapter = this._dataSource;
     const dataSource = dataSourceAdapter._dataSource;
     const groupCount = gridCore.normalizeSortingInfo(dataSource.group() || []).length;
@@ -145,7 +145,7 @@ export class GroupingHelper {
     return itemsCount;
   }
 
-  foreachGroups(callback, childrenAtFirst?, foreachCollapsedGroups?, updateOffsets?, updateParentOffsets?) {
+  public foreachGroups(callback, childrenAtFirst?, foreachCollapsedGroups?, updateOffsets?, updateParentOffsets?) {
     const that = this;
 
     function foreachGroupsCore(groupsInfo, callback, childrenAtFirst, parents) {
@@ -188,7 +188,7 @@ export class GroupingHelper {
     return foreachGroupsCore(that._groupsInfo, callback, childrenAtFirst, []);
   }
 
-  _updateGroupInfoOffsets(groupsInfo, parents?) {
+  private _updateGroupInfoOffsets(groupsInfo, parents?) {
     parents = parents || [];
 
     for (let index = 0; index < groupsInfo.length; index++) {
@@ -206,7 +206,7 @@ export class GroupingHelper {
     groupsInfo.sort((a, b) => a.offset - b.offset);
   }
 
-  findGroupInfo(path) {
+  public findGroupInfo(path) {
     const that = this;
     let groupInfo;
     let groupsInfo = that._groupsInfo;
@@ -219,7 +219,7 @@ export class GroupingHelper {
     return groupInfo && groupInfo.data;
   }
 
-  addGroupInfo(groupInfoData) {
+  public addGroupInfo(groupInfoData) {
     const that = this;
     let groupInfo;
     const { path } = groupInfoData;
@@ -249,11 +249,11 @@ export class GroupingHelper {
     }
   }
 
-  allowCollapseAll() {
+  protected allowCollapseAll() {
     return true;
   }
 
-  refresh(options) {
+  protected refresh(options) {
     const that = this;
     const { storeLoadOptions } = options;
     const groups = normalizeSortingInfo(storeLoadOptions.group || []);
@@ -276,14 +276,14 @@ export class GroupingHelper {
     }
   }
 
-  handleDataLoading() {
+  protected handleDataLoading() {
   }
 
-  handleDataLoaded(options, callBase) {
+  protected handleDataLoaded(options, callBase) {
     callBase(options);
   }
 
-  handleDataLoadedCore(options, callBase) {
+  protected handleDataLoadedCore(options, callBase) {
     callBase(options);
   }
 }

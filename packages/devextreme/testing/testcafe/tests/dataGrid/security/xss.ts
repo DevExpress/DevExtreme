@@ -11,6 +11,9 @@ fixture`XSS`
         }
       })
       .navigateTo(url(__dirname, '../security/pages/XSS.html'));
+  })
+  .afterEach(async (t) => {
+    await t.navigateTo(url(__dirname, '../../container.html'));
   });
 
 test('The XSS script does not run when the markup has been replaced with text', async (t) => {

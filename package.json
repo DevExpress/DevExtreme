@@ -1,6 +1,6 @@
 {
   "name": "devextreme-monorepo",
-  "version": "24.1.0",
+  "version": "24.1.1",
   "license": "MIT",
   "author": "Developer Express Inc.",
   "scripts": {
@@ -23,15 +23,17 @@
     "regenerate-all": "nx run-many -t regenerate",
     "lint-staged": "lint-staged",
     "prepare": "husky install",
-    "test-scripts": "jest --config build/jest.config.js",
-    "all:update-version": "ts-node build/update-version.ts",
-    "all:build": "ts-node build/build-all.ts",
-    "overwrite-wrappers-packages": "ts-node build/install-wrappers.ts",
+    "all:update-version": "ts-node tools/scripts/update-version.ts",
+    "all:build": "ts-node tools/scripts/build-all.ts",
+    "all:pack-and-copy": "nx run-many -t pack-and-copy",
+    "overwrite-wrappers-packages": "ts-node tools/scripts/overwrite-wrappers-packages.ts",
     "webserver": "http-server --port 8080 -c-1"
   },
   "nx": {},
   "private": true,
   "devDependencies": {
+    "@nx/jest": "^16.10.0",
+    "@nx/js": "^16.10.0",
     "@types/node": "^20.11.5",
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "^2.0.4",

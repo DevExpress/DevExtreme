@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { Deferred } from 'core/utils/deferred';
+import { hasWindow } from 'core/utils/window';
 
 import 'ui/drop_down_editor/ui.drop_down_editor';
 
@@ -19,7 +20,7 @@ const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_BUTTON_VISIBLE = 'dx-dropdowneditor-button-visible';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
-const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 
 module('DropDownEditor markup', {
     beforeEach: function() {
@@ -114,23 +115,6 @@ module('DropDownEditor markup', {
     });
 });
 
-
-module('aria accessibility', () => {
-    test('aria role', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
-        const $input = $dropDownEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
-        assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
-    });
-
-    test('aria-autocomplete property on input', function(assert) {
-        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXTEDITOR_INPUT_CLASS}`);
-        assert.equal($input.attr('aria-autocomplete'), 'list', 'haspopup attribute exists');
-    });
-});
-
-
 module('option change', function() {
     const getStartDirection = (isRtlEnabled) => isRtlEnabled ? 'right' : 'left';
 
@@ -160,3 +144,26 @@ module('option change', function() {
         });
     });
 });
+
+module('aria accessibility', () => {
+    test('aria role', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
+        assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
+    });
+
+    test('aria-haspopup property on input', function(assert) {
+        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        assert.equal($input.attr('aria-haspopup'), 'true', 'haspopup attribute exists');
+    });
+
+    test('aria-autocomplete should be equal none', function(assert) {
+        const $element = $('#dropDownEditorLazy').dxDropDownEditor();
+        const $input = $element.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete is correct');
+    });
+});
+

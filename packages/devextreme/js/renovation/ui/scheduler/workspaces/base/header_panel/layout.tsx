@@ -10,10 +10,10 @@ import {
   DateHeaderData,
   DateTimeCellTemplateProps,
 } from '../../types';
-import { isHorizontalGroupingApplied } from '../../utils';
 import { GroupPanel, GroupPanelProps } from '../group_panel/group_panel';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
 import { HeaderPanel } from '../../../../../component_wrapper/scheduler/header_panel';
+import { isHorizontalGroupingApplied } from '../../../../../../__internal/scheduler/__migration/utils/index';
 
 export const viewFunction = ({
   isHorizontalGrouping,
@@ -87,6 +87,7 @@ export class HeaderPanelLayout extends JSXComponent<HeaderPanelLayoutProps, 'dat
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups } = this.props;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return isHorizontalGroupingApplied(groups, groupOrientation);
   }
 }

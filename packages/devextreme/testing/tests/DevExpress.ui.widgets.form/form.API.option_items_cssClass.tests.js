@@ -12,6 +12,12 @@ QUnit.testStart(function() {
     $('#qunit-fixture').html(markup);
 });
 
+function isFocusedElement(element) {
+    const doc = document.getElementById('qunit-fixture').shadowRoot || document;
+
+    return doc.activeElement === element;
+}
+
 [false, true].forEach(useItemOption => {
     QUnit.module(`Public API: ${useItemOption ? 'itemOption(option, cssClass)' : 'option(items.cssClass)'}`, () => {
         const createForm = items => {
@@ -204,8 +210,10 @@ QUnit.testStart(function() {
             form.validate();
             assert.strictEqual($('#form').find(`.${INVALID_CLASS}`).length, 1, `initial [${INVALID_CLASS}].length`);
 
-            $('#form').find('.dx-texteditor-input').focus();
-            assert.ok($('#form').find('.dx-texteditor-input').is(':focus'), 'initial focus');
+            const editorInput = $('#form').find('.dx-texteditor-input')[1];
+
+            editorInput.focus();
+            assert.ok(isFocusedElement(editorInput), 'initial focus');
             assert.strictEqual($('#form').find('.class1').length, 1, '$(#form).find(class1).length');
 
             if(useItemOption) {
@@ -217,7 +225,7 @@ QUnit.testStart(function() {
             assert.strictEqual(form.itemOption('item1').cssClass, 'class2', 'form.itemOption(item1).cssClass');
             assert.strictEqual(form.option('items[0].cssClass'), 'class2', 'form.option(items[0].cssClass)');
             assert.strictEqual($('#form').find(`.${INVALID_CLASS}`).length, 1, `final [${INVALID_CLASS}].length`);
-            assert.ok($('#form').find('.dx-texteditor-input').is(':focus'), 'initial focus');
+            assert.ok(isFocusedElement(editorInput), 'initial focus');
             assert.strictEqual($('#form').find('.class2').length, 1, '$(#form).find(class2).length');
         });
 

@@ -1,9 +1,10 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-return */
 import {
   Component, ComponentBindings, ForwardRef, Fragment, JSXComponent, RefObject,
 } from '@devextreme-generator/declarations';
-import { GroupRenderItem } from '../../../types';
 import { Row } from './row';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';
+import { GroupRenderItem } from '../../../../../../../__internal/scheduler/__migration/types';
 
 export const viewFunction = ({
   props: {

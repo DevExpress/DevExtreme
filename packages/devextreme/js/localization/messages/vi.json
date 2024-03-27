@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Đang tải...",
         "dxList-nextButtonText": "Thêm",
         "dxList-selectAll": "Chọn Tất cả",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Xóa",
         "dxListEditDecorator-more": "Thêm",
 

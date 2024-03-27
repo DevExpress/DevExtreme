@@ -19,7 +19,6 @@ import { MonthDateTableLayout } from '../month/date_table/layout';
 import { DateTableLayoutBase } from './date_table/layout';
 import { TimelineHeaderPanelLayout } from '../timeline/header_panel/layout';
 import { HeaderPanelLayout } from './header_panel/layout';
-import { AppointmentLayout } from '../../appointment/layout';
 
 export const viewFunction = ({
   dateTableScrollableRef,
@@ -178,7 +177,6 @@ export const viewFunction = ({
                 dataCellTemplate={dataCellTemplate}
                 width={tablesWidth}
               />
-              <AppointmentLayout />
             </div>
           </div>
         </Scrollable>

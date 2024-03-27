@@ -3,15 +3,11 @@ import { noop } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
 import { getBoundingRect } from '@js/core/utils/position';
 import { hasWindow } from '@js/core/utils/window';
-import { formatWeekday } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import {
-  getCellText,
-  getViewStartByOptions,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
 
 // NOTE: Renovation component import.
 // @ts-expect-error
 import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
+import { formatWeekday, monthUtils } from '../__migration/utils/index';
 import { VIEWS } from '../m_constants';
 import { utils } from '../m_utils';
 import SchedulerWorkSpace from './m_work_space_indicator';
@@ -86,7 +82,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
   }
 
   _getViewStartByOptions() {
-    return getViewStartByOptions(
+    return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
       this.option('intervalCount') as any,
@@ -183,7 +179,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     options.getCellText = (rowIndex, columnIndex) => {
       const date = this.viewDataProvider.completeViewDataMap[rowIndex][columnIndex].startDate;
 
-      return getCellText(date, this.option('intervalCount') as any);
+      return monthUtils.getCellText(date, this.option('intervalCount') as any);
     };
     options.getCellTextClass = DATE_TABLE_CELL_TEXT_CLASS;
     options.setAdditionalClasses = this._setMonthClassesToCell.bind(this);

@@ -11,12 +11,11 @@ import { Row } from '../../row';
 import {
   DateHeaderData,
   DateTimeCellTemplateProps,
-  Group,
 } from '../../../types';
-import { GroupOrientation } from '../../../../types';
-import { isHorizontalGroupingApplied } from '../../../utils';
 import { DateHeaderCell } from './cell';
 import getThemeType from '../../../../../../utils/getThemeType';
+import { Group, GroupOrientation } from '../../../../../../../__internal/scheduler/__migration/types';
+import { isHorizontalGroupingApplied } from '../../../../../../../__internal/scheduler/__migration/utils/index';
 
 const { isMaterialBased } = getThemeType();
 
@@ -106,6 +105,7 @@ export class DateHeaderLayout extends JSXComponent<DateHeaderLayoutProps, 'dateH
   get isHorizontalGrouping(): boolean {
     const { groupOrientation, groups, groupByDate } = this.props;
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return isHorizontalGroupingApplied(groups, groupOrientation) && !groupByDate;
   }
 }

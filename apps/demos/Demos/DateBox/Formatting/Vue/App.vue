@@ -35,6 +35,7 @@
             :use-mask-behavior="true"
             :input-attr="{ 'aria-label': 'Date' }"
             :value="date"
+            type="datetime"
             placeholder="Tuesday, 16 of Oct, 2018 14:52"
             display-format="EEEE, d of MMM, yyyy HH:mm"
           />

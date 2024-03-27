@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Yükleniyor...",
         "dxList-nextButtonText": "Daha",
         "dxList-selectAll": "Tümünü Seç",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Sil",
         "dxListEditDecorator-more": "Daha",
 

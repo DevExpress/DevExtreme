@@ -115,11 +115,32 @@ QUnit.module('widget sizing render', () => {
 });
 
 QUnit.module('aria accessibility', {}, () => {
-    QUnit.test('aria-autocomplete property', function(assert) {
-        const $element = $('#widget').dxAutocomplete();
-        const $input = $element.find('.' + TEXTEDITOR_INPUT_CLASS + ':first');
+    QUnit.test('aria-autocomplete attribute is list if input is editable', function(assert) {
+        const $element = $('#widget').dxAutocomplete({ searchMode: 'contains' });
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}:first`);
+        const instance = $element.dxAutocomplete('instance');
 
-        assert.equal($input.attr('aria-autocomplete'), 'inline');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute is list');
+
+        instance.option({ searchMode: 'startswith' });
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute is still list');
+    });
+
+    QUnit.test('aria-autocomplete attribute is none if input is not editable', function(assert) {
+        const $element = $('#widget').dxAutocomplete();
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}:first`);
+        const instance = $element.dxAutocomplete('instance');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute is list');
+
+        instance.option({ readOnly: true });
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute is none');
+
+        instance.option({ readOnly: false, disabled: true });
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute is none');
     });
 
     QUnit.test('aria role should not change to listbox after it\'s second rendering (T290859)', function(assert) {

@@ -11,32 +11,11 @@ on:
       - "[0-9][0-9]_[0-9]"
   workflow_dispatch:
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
-  get-changes:
-    runs-on: ubuntu-latest
-    name: Get changed demos
-    timeout-minutes: 5
-
-    steps:
-      - name: Get sources
-        uses: actions/checkout@v4
-
-      - name: Get changed files
-        uses: ./.github/actions/get-changed-files
-        if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          path: apps/demos/Demos
-          result: apps/demos/changed-files.json
-
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v4
-        with:
-          name: changed-demos
-          path: apps/demos/changed-files.json
-          retention-days: 1
-
   build:
     runs-on: ubuntu-latest
     name: Build devextreme
@@ -67,7 +46,6 @@ jobs:
   testcafe:
     needs:
       - build
-      - get-changes
     strategy:
       fail-fast: false
       matrix:
@@ -114,13 +92,6 @@ jobs:
         python -m http.server 8081 &
         python -m http.server 8082 &
         python -m http.server 8083 &
-
-    - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
 
     - name: Run TestCafe tests
       shell: bash

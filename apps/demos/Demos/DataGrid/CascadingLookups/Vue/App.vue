@@ -53,11 +53,11 @@ import {
 } from './data.ts';
 
 function setStateValue(
-  column: DxDataGridTypes.Column, newData: Employee, value: number, currentRowData: Employee,
+  this: DxDataGridTypes.Column, newData: Employee, value: number, currentRowData: Employee,
 ) {
   newData.CityID = null;
 
-  column.defaultSetCellValue!(newData, value, currentRowData);
+  this.defaultSetCellValue!(newData, value, currentRowData);
 }
 
 const getFilteredCities = (options: { data: City }) => ({

@@ -1,19 +1,26 @@
+const path = require('path');
 const TsconfigPathsPlugin = require('tsconfig-paths-webpack-plugin');
 
 module.exports = {
   mode: "development",
-  entry: "./app.tsx",
+  entry: "./index.tsx",
   output: {
-    filename: "./public/js/app/bundle.js",
+    filename: "bundle.js",
+    publicPath: "/js/app/",
+    path: path.resolve(__dirname, 'public/js/app')
   },
   devtool: "source-map",
   devServer: {
     port: 9000,
-    open: true,
-    openPage: "public/index.html"
+    open: true
   },
   resolve: {
     extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"],
+    alias: {
+      'react': path.resolve(__dirname, './node_modules/react'),
+      'react-dom': path.resolve(__dirname, './node_modules/react-dom'),
+      '@types/react': path.resolve(__dirname, './node_modules/@types/react'),
+    },
     plugins: [new TsconfigPathsPlugin({
       configFile: "./tsconfig.json"
     })]
@@ -43,7 +50,7 @@ module.exports = {
       },
       { 
         test: /\.(eot|svg|ttf|woff|woff2)$/, 
-        use: "url-loader?name=[name].[ext]"
+        type: 'asset/inline'
       }
     ]
   }

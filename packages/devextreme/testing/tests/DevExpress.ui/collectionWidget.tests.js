@@ -119,7 +119,8 @@ module('render', {
 
     test('custom render func, returns jquery. Items: [{ prop: 0 }, { prop: 1 }, { prop: 2 }]', function(assert) {
         const element = this.element;
-        new TestComponent('#cmp', {
+        const $container = $('#cmp');
+        new TestComponent($container, {
             items: [{
                 testProp: 0
             }, {
@@ -139,7 +140,9 @@ module('render', {
 
     test('custom render func, returns jquery. Items: [{ prop: 3 }, { prop: 4 }, { prop: 5 }]', function(assert) {
         const element = this.element;
-        new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        new TestComponent($container, {
             items: [{
                 testProp: 3
             }, {
@@ -159,7 +162,9 @@ module('render', {
 
     test('custom render func, returns dom node', function(assert) {
         const element = this.element;
-        new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        new TestComponent($container, {
             integrationOptions: {
                 templates: {
                     'item': {
@@ -188,8 +193,9 @@ module('render', {
 
     test('custom render func, returns string', function(assert) {
         const element = this.element;
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             items: [{
                 testProp: '0'
             }, {
@@ -208,8 +214,9 @@ module('render', {
 
     test('custom render func, returns numbers', function(assert) {
         const element = this.element;
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             items: [0, 1],
             itemRender(item, index, itemElement) {
                 return item;
@@ -262,8 +269,10 @@ module('render', {
     });
 
     test('item takes new template', function(assert) {
-        const componentWithTemplate = new TestComponent('#cmp-with-template', { itemTemplate: 'testTemplate' });
-        const component = new TestComponent('#cmp', { itemTemplate: componentWithTemplate._getTemplateByOption('itemTemplate') });
+        const $container1 = $('#cmp-with-template');
+        const componentWithTemplate = new TestComponent($container1, { itemTemplate: 'testTemplate' });
+        const $container2 = $('#cmp');
+        const component = new TestComponent($container2, { itemTemplate: componentWithTemplate._getTemplateByOption('itemTemplate') });
         assert.equal(component._getTemplateByOption('itemTemplate'), componentWithTemplate._getTemplateByOption('itemTemplate'));
     });
 
@@ -485,7 +494,9 @@ module('render', {
     });
 
     test('No data text message - no items and source', function(assert) {
-        const component = new TestComponent('#cmp', {});
+        const $container = $('#cmp');
+
+        const component = new TestComponent($container, {});
         assert.equal(component.$element().find('.' + EMPTY_MESSAGE_CLASS).length, 1);
     });
 
@@ -504,8 +515,9 @@ module('render', {
 
     test('No data text message - empty dataSource', function(assert) {
         executeAsyncMock.setup();
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             dataSource: {
                 store: new ArrayStore([])
             }
@@ -523,14 +535,17 @@ module('render', {
     });
 
     test('No data text message - value', function(assert) {
-        new TestComponent('#cmp');
+        const $container = $('#cmp');
+
+        new TestComponent($container);
         assert.equal(this.element.find('.' + EMPTY_MESSAGE_CLASS).text(), DEFAULT_EMPTY_TEXT);
     });
 
     test('No data text message - custom value', function(assert) {
         let noDataText = 'noDataText';
+        const $container = $('#cmp');
 
-        const component = new TestComponent('#cmp', {
+        const component = new TestComponent($container, {
             noDataText
         });
 
@@ -543,8 +558,9 @@ module('render', {
 
     test('No data text message - custom value with link, encodeNoDataText: false', function(assert) {
         let noDataText = '<a href="javascript:alert(1)">link</a>';
+        const $container = $('#cmp');
 
-        const component = new TestComponent('#cmp', {
+        const component = new TestComponent($container, {
             noDataText,
             encodeNoDataText: false,
         });
@@ -559,8 +575,9 @@ module('render', {
     test('No data text message - custom value with link, encodeNoDataText: true', function(assert) {
         let noDataText = '<a href="javascript:alert(1)">link</a>';
         const encodedNoDataText = '&lt;a href="javascript:alert(1)"&gt;link&lt;/a&gt;';
+        const $container = $('#cmp');
 
-        const component = new TestComponent('#cmp', {
+        const component = new TestComponent($container, {
             noDataText,
             encodeNoDataText: true,
         });
@@ -573,7 +590,9 @@ module('render', {
     });
 
     test('message element is not rendered if no data text is null, \'\', false', function(assert) {
-        const component = new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        const component = new TestComponent($container, {
             noDataText: null
         });
 
@@ -587,7 +606,9 @@ module('render', {
     });
 
     test('No data message may contain HTML markup', function(assert) {
-        const component = new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        const component = new TestComponent($container, {
             noDataText: '<div class="custom">No data custom</div>'
         });
 
@@ -671,8 +692,9 @@ module('render', {
 
     test('onContentReady should be fired after if dataSource isn\'t empty', function(assert) {
         let count = 0;
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             onContentReady() {
                 count++;
             },
@@ -684,8 +706,9 @@ module('render', {
 
     test('onContentReady should be fired after if dataSource is empty', function(assert) {
         let count = 0;
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             onContentReady() {
                 count++;
             },
@@ -697,8 +720,9 @@ module('render', {
 
     test('onContentReady should be fired after if items isn\'t empty', function(assert) {
         let count = 0;
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             onContentReady() {
                 count++;
             },
@@ -710,8 +734,9 @@ module('render', {
 
     test('onContentReady should be fired after if items is empty', function(assert) {
         let count = 0;
+        const $container = $('#cmp');
 
-        new TestComponent('#cmp', {
+        new TestComponent($container, {
             onContentReady() {
                 count++;
             },
@@ -722,7 +747,9 @@ module('render', {
     });
 
     test('item.visible property changing should not re-render whole item (T259051)', function(assert) {
-        const instance = new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        const instance = new TestComponent($container, {
             items: [{ text: '1' }]
         });
 
@@ -733,7 +760,9 @@ module('render', {
     });
 
     test('item.disabled property changing should not re-render whole item', function(assert) {
-        const instance = new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        const instance = new TestComponent($container, {
             items: [{ text: '1' }]
         });
 
@@ -744,7 +773,9 @@ module('render', {
     });
 
     test('_getSummaryItemsSize function returns right width', function(assert) {
-        const instance = new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        const instance = new TestComponent($container, {
             items: [
                 { template: $('<div class="test-width">').css('width', '20px').css('padding-left', '7px') },
                 { template: $('<div class="test-width">').css('width', '10px').css('margin-left', '5px') },
@@ -756,7 +787,9 @@ module('render', {
     });
 
     test('_getSummaryItemsSize function returns right height', function(assert) {
-        const instance = new TestComponent('#cmp', {
+        const $container = $('#cmp');
+
+        const instance = new TestComponent($container, {
             items: [
                 { template: $('<div class="test-height">').css('height', '20px').css('padding-top', '7px') },
                 { template: $('<div class="test-height">').css('height', '10px').css('margin-top', '5px') },
@@ -1156,8 +1189,9 @@ module('items via markup', {
 }, () => {
     test('item property changing should not re-render whole widget', function(assert) {
         const contentReadySpy = sinon.spy();
+        const $container = $('#cmp');
 
-        const component = new TestComponent('#cmp', {
+        const component = new TestComponent($container, {
             items: [{ visible: false }],
             onContentReady: contentReadySpy
         });
@@ -1172,7 +1206,7 @@ module('items via markup', {
 
         const $innerItem = $('<div>').attr('data-options', dxItemString).text('test');
         $innerItem.appendTo($element);
-        const component = new TestComponent('#cmp', {});
+        const component = new TestComponent($element, {});
 
         assert.equal(component.option('items').length, 1, 'item was added');
         assert.equal($innerItem.attr('data-options'), dxItemString, 'item was not changed');
@@ -1188,7 +1222,7 @@ module('items via markup', {
         $innerItem.appendTo($element);
         let component;
         try {
-            component = new TestComponent('#cmp', {});
+            component = new TestComponent($element, {});
         } finally {
             config({ optionsParser: originalParser });
         }
@@ -1958,10 +1992,11 @@ module('Data layer integration', {
         const store = new TestStore();
         const source = new DataSource(store);
         let itemCount = 0;
+        const $container = $('#cmp');
 
         source.load().done(() => {
             assert.equal(loadCount, 1);
-            new TestWidget('#cmp', {
+            new TestWidget($container, {
                 dataSource: source,
                 onItemRendered() {
                     itemCount++;
@@ -1978,8 +2013,9 @@ module('Data layer integration', {
     test('data widget should handle dataSource loading error', function(assert) {
         const deferred = $.Deferred();
         let contentReadyFired = 0;
+        const $container = $('#cmp');
 
-        new TestWidget('#cmp', {
+        new TestWidget($container, {
             dataSource: {
                 load() {
                     return deferred.promise();
@@ -1997,7 +2033,8 @@ module('Data layer integration', {
 
     test('collection correctly handle loadResult object', function(assert) {
         const mapStub = sinon.stub();
-        const instance = new TestWidget('#cmp', {
+        const $container = $('#cmp');
+        const instance = new TestWidget($container, {
             dataSource: {
                 load({ filter }) {
                     const items = filter ? [{ id: 3, text: 'test3' }] : [{ id: 1, text: 'test1' }, { id: 2, text: 'test2' }];

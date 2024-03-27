@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Ladataan...",
         "dxList-nextButtonText": "Lisää",
         "dxList-selectAll": "Valitse kaikki",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Poista",
         "dxListEditDecorator-more": "Lisää",
 

@@ -473,6 +473,13 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('collapsed', value);
     }
 
+    get collapsedSize(): number | string | undefined {
+        return this._getOption('collapsedSize');
+    }
+    set collapsedSize(value: number | string | undefined) {
+        this._setOption('collapsedSize', value);
+    }
+
     get collapsible(): boolean {
         return this._getOption('collapsible');
     }

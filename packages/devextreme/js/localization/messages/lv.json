@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Lādē...",
         "dxList-nextButtonText": "Vairāk",
         "dxList-selectAll": "Izvēlēties visu",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Dzēst",
         "dxListEditDecorator-more": "Vairāk",
 

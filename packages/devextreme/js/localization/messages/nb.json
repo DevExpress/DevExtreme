@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Laster...",
         "dxList-nextButtonText": "Mer",
         "dxList-selectAll": "Velg alle",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Slett",
         "dxListEditDecorator-more": "Mer",
 

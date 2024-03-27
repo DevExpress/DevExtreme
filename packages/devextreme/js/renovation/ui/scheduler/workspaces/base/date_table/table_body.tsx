@@ -7,12 +7,13 @@ import {
   JSXTemplate,
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
-import { DataCellTemplateProps, ViewCellData } from '../../types';
+import { DataCellTemplateProps } from '../../types';
 import { AllDayPanelTableBody } from './all_day_panel/table_body';
 import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { DATE_TABLE_ROW_CLASS } from '../../const';
+import { ViewCellData } from '../../../../../../__internal/scheduler/__migration/types';
 
 export interface CellTemplateProps extends ViewCellData {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;

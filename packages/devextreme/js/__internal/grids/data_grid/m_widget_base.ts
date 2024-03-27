@@ -66,7 +66,7 @@ class DataGrid extends Widget<Properties> {
 
   private readonly _views: any;
 
-  _getDefaultOptions() {
+  private _getDefaultOptions() {
     // @ts-expect-error
     const result = super._getDefaultOptions();
 
@@ -78,7 +78,7 @@ class DataGrid extends Widget<Properties> {
     return result;
   }
 
-  _setDeprecatedOptions() {
+  private _setDeprecatedOptions() {
     // @ts-expect-error
     super._setDeprecatedOptions();
 
@@ -91,7 +91,7 @@ class DataGrid extends Widget<Properties> {
     });
   }
 
-  _defaultOptionsRules() {
+  private _defaultOptionsRules() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat([
@@ -151,7 +151,7 @@ class DataGrid extends Widget<Properties> {
     ]);
   }
 
-  _init() {
+  private _init() {
     const that = this;
 
     // @ts-expect-error
@@ -166,11 +166,11 @@ class DataGrid extends Widget<Properties> {
     gridCore.callModuleItemsMethod(that, 'init');
   }
 
-  _clean() {
+  private _clean() {
 
   }
 
-  _optionChanged(args) {
+  private _optionChanged(args) {
     const that = this;
 
     gridCore.callModuleItemsMethod(that, 'optionChanged', [args]);
@@ -180,29 +180,29 @@ class DataGrid extends Widget<Properties> {
     }
   }
 
-  _dimensionChanged() {
+  private _dimensionChanged() {
     // @ts-expect-error
     this.updateDimensions(true);
   }
 
-  _visibilityChanged(visible) {
+  private _visibilityChanged(visible) {
     if (visible) {
       // @ts-expect-error
       this.updateDimensions();
     }
   }
 
-  _initMarkup() {
+  private _initMarkup() {
     // @ts-expect-error
     super._initMarkup.apply(this, arguments);
     this.getView('gridView').render(this.$element());
   }
 
-  _renderContentImpl() {
+  private _renderContentImpl() {
     this.getView('gridView').update();
   }
 
-  _renderContent() {
+  private _renderContent() {
     const that = this;
 
     deferRender(() => {
@@ -210,7 +210,7 @@ class DataGrid extends Widget<Properties> {
     });
   }
 
-  _getTemplate(templateName) {
+  public _getTemplate(templateName) {
     let template = templateName;
 
     if (isString(template) && template.startsWith('#')) {
@@ -221,7 +221,7 @@ class DataGrid extends Widget<Properties> {
     return super._getTemplate(template);
   }
 
-  _dispose() {
+  private _dispose() {
     const that = this;
     // @ts-expect-error
     super._dispose();
@@ -229,33 +229,33 @@ class DataGrid extends Widget<Properties> {
     gridCore.callModuleItemsMethod(that, 'dispose');
   }
 
-  isReady() {
+  private isReady() {
     return this.getController('data').isReady();
   }
 
-  beginUpdate() {
+  public beginUpdate() {
     const that = this;
 
     super.beginUpdate();
     gridCore.callModuleItemsMethod(that, 'beginUpdate');
   }
 
-  endUpdate() {
+  public endUpdate() {
     const that = this;
 
     gridCore.callModuleItemsMethod(that, 'endUpdate');
     super.endUpdate();
   }
 
-  getController(name) {
+  private getController(name) {
     return this._controllers[name];
   }
 
-  getView(name) {
+  private getView(name) {
     return this._views[name];
   }
 
-  focus(element?) {
+  public focus(element?) {
     this.getController('keyboardNavigation').focus(element);
   }
 

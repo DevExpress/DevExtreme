@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "Betöltés...",
         "dxList-nextButtonText": "Tovább",
         "dxList-selectAll": "Összes kiválasztása",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "Törlés",
         "dxListEditDecorator-more": "Több",
 

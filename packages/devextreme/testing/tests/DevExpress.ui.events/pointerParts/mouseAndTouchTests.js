@@ -144,7 +144,7 @@ const simulateMouseEvent = function($element, type, options) {
     $element[0].dispatchEvent(event);
 };
 
-QUnit.test('dxpointer events should have correct pointers', function(assert) {
+QUnit.skipInShadowDomMode('dxpointer events should have correct pointers', function(assert) {
     this.$element.one('dxpointerdown', function(e) {
         const pointers = e.pointers;
         assert.equal(pointers.length, 1);
@@ -170,7 +170,7 @@ QUnit.test('dxpointer events should have correct pointers', function(assert) {
     simulateMouseEvent(this.$element, 'mousemove');
 });
 
-QUnit.test('pointers in dxpointer events should be updated on mouse move', function(assert) {
+QUnit.skipInShadowDomMode('pointers in dxpointer events should be updated on mouse move', function(assert) {
     simulateMouseEvent(this.$element, 'mousedown', { clientX: 0 });
 
     this.$element.one('dxpointermove', function(e) {

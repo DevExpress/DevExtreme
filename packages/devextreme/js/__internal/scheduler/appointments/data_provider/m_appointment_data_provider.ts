@@ -1,6 +1,6 @@
 import config from '@js/core/config';
-import combineRemoteFilter from '@js/renovation/ui/scheduler/utils/filtering/remote';
 
+import { combineRemoteFilter } from '../../__migration/filterting/index';
 import { AppointmentDataSource } from './m_appointment_data_source';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './m_appointment_filter';
 

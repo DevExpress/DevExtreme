@@ -1,21 +1,27 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands, @typescript-eslint/no-unsafe-return */
 import type { dxSchedulerScrolling } from '../../../../../ui/scheduler';
 import dateUtils from '../../../../../core/utils/date';
-import { getGroupCount } from '../../../../../__internal/scheduler/resources/m_utils';
-import { GroupOrientation } from '../../types';
-import { GetDateForHeaderText } from '../../view_model/to_test/views/types';
 import {
-  Group,
   TableWidthWorkSpaceConfig,
-  ViewDataProviderType,
   VirtualScrollingOptions,
 } from '../types';
-import { isHorizontalGroupingApplied, isVerticalGroupingApplied } from '../utils';
 import {
   ALL_DAY_PANEL_CELL_CLASS,
   ALL_DAY_ROW_CLASS,
   DATE_TABLE_CELL_CLASS,
   DATE_TABLE_ROW_CLASS,
 } from '../const';
+import {
+  GetDateForHeaderText,
+  Group,
+  GroupOrientation,
+  ViewDataProviderType,
+} from '../../../../../__internal/scheduler/__migration/types';
+import {
+  getGroupCount,
+  isHorizontalGroupingApplied,
+  isVerticalGroupingApplied,
+} from '../../../../../__internal/scheduler/__migration/utils/index';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');

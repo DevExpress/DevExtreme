@@ -25,11 +25,10 @@ DataController
 & GroupingDataControllerExtension>;
 
 const data = (Base: DataControllerBase) => class FocusDataControllerExtender extends focusModule.extenders.controllers.data(Base) {
-  changeRowExpand(path, isRowClick) {
+  private changeRowExpand(path, isRowClick) {
     // @ts-expect-error
     if (this.option('focusedRowEnabled') && Array.isArray(path) && this.isRowExpanded(path)) {
-      const keyboardNavigation = this.getController('keyboardNavigation');
-      if ((!isRowClick || !keyboardNavigation.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
+      if ((!isRowClick || !this._keyboardNavigationController.isKeyboardEnabled()) && this._isFocusedRowInsideGroup(path)) {
         this.option('focusedRowKey', path);
       }
     }
@@ -38,12 +37,11 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     return super.changeRowExpand(path, isRowClick);
   }
 
-  _isFocusedRowInsideGroup(path) {
-    const columnsController = this.getController('columns');
+  private _isFocusedRowInsideGroup(path) {
     const focusedRowKey = this.option('focusedRowKey');
     const rowIndex = this.getRowIndexByKey(focusedRowKey);
     const focusedRow = rowIndex >= 0 && this.getVisibleRows()[rowIndex];
-    const groups = columnsController.getGroupDataSourceParameters(true);
+    const groups = this._columnsController.getGroupDataSourceParameters(true);
 
     if (focusedRow) {
       for (let i = 0; i < path.length; ++i) {
@@ -58,7 +56,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     return true;
   }
 
-  _getGroupPath(groupItem, groupCount) {
+  private _getGroupPath(groupItem, groupCount) {
     const groupPath: any[] = [];
     let items = [groupItem];
 
@@ -73,7 +71,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     return groupPath;
   }
 
-  _expandGroupByPath(that, groupPath, level) {
+  private _expandGroupByPath(that, groupPath, level) {
   // @ts-expect-error
     const d = new Deferred();
 
@@ -92,7 +90,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     return d.promise();
   }
 
-  _calculateGlobalRowIndexByGroupedData(key) {
+  private _calculateGlobalRowIndexByGroupedData(key) {
     const that = this;
     const dataSource = that._dataSource;
     const filter = that._generateFilterByKey(key);
@@ -130,7 +128,7 @@ const data = (Base: DataControllerBase) => class FocusDataControllerExtender ext
     return deferred.promise();
   }
 
-  _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group) {
+  private _calculateExpandedRowGlobalIndex(deferred, key, groupPath, group) {
     const groupFilter = createGroupFilter(groupPath, { group });
     const dataSource = this._dataSource;
     const scrollingMode = this.option('scrolling.mode');

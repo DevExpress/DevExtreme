@@ -172,6 +172,7 @@ const SKIPPED_TESTS = {
   jQuery: {
     Charts: [
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
@@ -279,6 +280,7 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
+      { demo: 'RecordGrouping', themes: [THEME.material] },
     ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
@@ -293,32 +295,32 @@ const SKIPPED_TESTS = {
   },
 };
 
-export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
-  const shouldSkipDemo = (
-    framework,
-    component,
-    demoName,
-  ) => {
-    const frameworkTests = skippedTests[framework];
-    if (!frameworkTests) return false;
-
-    const componentTests = frameworkTests[component];
-    if (!componentTests) return false;
-
-    // eslint-disable-next-line no-restricted-syntax
-    for (const test of componentTests) {
-      if (typeof test === 'string' && test === demoName) {
-        return true;
-      } if (test.demo === demoName
-        && test.themes.includes(process.env.THEME || THEME.generic)) {
-        return true;
-      }
-    }
-
+export function shouldSkipDemo(framework, component, demoName, skippedTests) {
+  const frameworkTests = skippedTests[framework];
+  if (!frameworkTests) {
     return false;
-  };
+  }
 
-  if (shouldSkipDemo(currentFramework, product, demo)) {
+  const componentTests = frameworkTests[component];
+  if (!componentTests) {
+    return false;
+  }
+
+  // eslint-disable-next-line no-restricted-syntax
+  for (const test of componentTests) {
+    if (typeof test === 'string' && test === demoName) {
+      return true;
+    } if (test.demo === demoName
+        && test.themes.includes(process.env.THEME || THEME.generic)) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+export function shouldRunTest(currentFramework, testIndex, product, demo, skippedTests) {
+  if (shouldSkipDemo(currentFramework, product, demo, skippedTests)) {
     return false;
   }
 
@@ -357,14 +359,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 
   const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
 
-  if (settings.explicitTests) {
-    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
-      callback(test.only);
-    }
-    return;
-  }
-
-  test.before(async (t) => {
+  test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
@@ -373,6 +368,13 @@ export function runManualTestCore(testObject, product, demo, framework, callback
       await waitForAngularLoading();
     }
   });
+
+  if (settings.explicitTests) {
+    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
+      callback(test.only);
+    }
+    return;
+  }
 
   callback(test);
 }

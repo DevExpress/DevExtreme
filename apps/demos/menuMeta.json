@@ -25,7 +25,8 @@
             "Name": "SimpleArray",
             "Widget": "DataGrid",
             "MvcAdditionalFiles": [
-              "/Scripts/data/customers.js"
+              "/Models/Customer.cs",
+              "/Models/SampleData/SimpleArrayCustomers.cs"
             ],
             "DemoType": "Web"
           },
@@ -393,6 +394,9 @@
             "Title": "Remote Grouping",
             "Name": "RemoteGrouping",
             "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/DataService/Sale.cs"
+            ],
             "DemoType": "Web",
             "Modules": "devextreme-aspnet-data-nojquery"
           }
@@ -1633,7 +1637,11 @@
             "Title": "Simple Array",
             "Name": "SimpleArray",
             "Widget": "Scheduler",
-            "DemoType": "Web"
+            "DemoType": "Web",
+            "MvcAdditionalFiles": [
+              "/Models/Appointment.cs",
+              "/Models/SampleData/SimpleArrayAppointments.cs"
+            ]
           },
           {
             "MvcDocUrl": "https://docs.devexpress.com/DevExtremeAspNetMvc/400704/concepts/data-binding",
@@ -1711,7 +1719,10 @@
             "Name": "Agenda",
             "Widget": "Scheduler",
             "MvcAdditionalFiles": [
-              "/Models/SampleData/AgendaTasks.cs"
+              "/Models/SampleData/AgendaTasks.cs",
+              "/Models/SampleData/AssigneeResources.cs",
+              "/Models/SampleData/PriorityResources.cs",
+              "/ViewModels/SchedulerResourcesViewModel.cs"
             ],
             "DemoType": "Web"
           }
@@ -2041,6 +2052,9 @@
             "Name": "Overview",
             "DocUrl": "",
             "Widget": "Diagram",
+            "MvcAdditionalFiles": [
+              "/Content/SampleData/diagram-flow.json"
+            ],
             "DemoType": "Web",
             "WideDemo": true,
             "Modules": "whatwg-fetch"
@@ -2056,6 +2070,9 @@
             "Name": "NodesAndEdgesArrays",
             "DocUrl": "Guide/UI_Components/Diagram/Data_Binding/#Node_and_Edge_Arrays",
             "Widget": "Diagram",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/FlowData.cs"
+            ],
             "DemoType": "Web",
             "WideDemo": true
           },
@@ -2076,7 +2093,7 @@
             "DocUrl": "Guide/UI_Components/Diagram/Data_Binding/#Hierarchical_Array",
             "Widget": "Diagram",
             "MvcAdditionalFiles": [
-              "/Scripts/data/employees.js"
+              "/Models/SampleData/OrgItems.cs"
             ],
             "DemoType": "Web",
             "WideDemo": true
@@ -4157,8 +4174,7 @@
             "Name": "Overview",
             "Widget": "CheckBox",
             "MvcAdditionalFiles": [
-              "/Controllers/CheckBoxController.cs",
-              "/Views/CheckBox/Overview.cshtml"
+              "/Controllers/CheckBoxController.cs"
             ]
           }
         ]
@@ -4564,7 +4580,8 @@
           {
             "Title": "Grouped Fields",
             "Name": "GroupedFields",
-            "Widget": "Form"
+            "Widget": "Form",
+            "Badge": "Updated"
           },
           {
             "Title": "Columns Adaptability",

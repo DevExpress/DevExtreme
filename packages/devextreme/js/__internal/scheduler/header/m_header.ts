@@ -7,11 +7,11 @@ import errors from '@js/core/errors';
 import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
-import { renovationGetCurrentView } from '@js/renovation/ui/scheduler/model/untyped_getCurrentView';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
 import Widget from '@js/ui/widget/ui.widget';
 
+import { viewsUtils } from '../__migration/utils/index';
 import SchedulerCalendar from './m_calendar';
 import {
   getDateNavigator,
@@ -75,7 +75,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     this.eventMap = new Map(
       [
         ['currentView', [(view) => {
-          this.currentView = renovationGetCurrentView(
+          this.currentView = viewsUtils.getCurrentView(
             getViewName(view),
             // @ts-expect-error
             this.option('views'),
@@ -120,7 +120,7 @@ export class SchedulerHeader extends Widget<dxSchedulerOptions> {
     // @ts-expect-error
     this.$element().addClass(COMPONENT_CLASS);
 
-    this.currentView = renovationGetCurrentView(
+    this.currentView = viewsUtils.getCurrentView(
       getViewName(this.option('currentView')),
       // @ts-expect-error
       this.option('views'),

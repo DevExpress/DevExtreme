@@ -1,36 +1,16 @@
 import type { dxSchedulerScrolling } from '../../../../ui/scheduler';
 import { ScrollOffset } from '../../scroll_view/common/types';
-import { BaseTemplateProps, GroupOrientation, ViewType } from '../types';
-import { GetDateForHeaderText } from '../view_model/to_test/views/types';
-
-export interface ViewCellData {
-  startDate: Date;
-  endDate: Date;
-  text?: string;
-  otherMonth?: boolean;
-  today?: boolean;
-  allDay?: boolean;
-  groups?: Record<string, unknown>;
-  groupIndex?: number;
-  index: number;
-  isFirstGroupCell: boolean;
-  isLastGroupCell: boolean;
-  key: number;
-  firstDayOfMonth?: boolean;
-  isSelected?: boolean;
-  isFocused?: boolean;
-  highlighted?: boolean;
-}
-
-export interface DateHeaderCellData extends ViewCellData {
-  colSpan: number;
-}
-
-interface ViewDataBase {
-  groupIndex: number;
-  isGroupedAllDayPanel?: boolean;
-  key: string;
-}
+import { BaseTemplateProps } from '../types';
+import {
+  CountGenerationConfig, DateHeaderCellData,
+  GetDateForHeaderText,
+  Group,
+  GroupItem,
+  GroupOrientation, TimePanelData,
+  ViewCellData, ViewDataBase, ViewDataMap,
+  ViewDataProviderType,
+  ViewType,
+} from '../../../../__internal/scheduler/__migration/types';
 
 interface RowData {
   cells: ViewCellData[];
@@ -40,11 +20,6 @@ interface RowData {
 interface ViewData extends ViewDataBase {
   dateTable: RowData[];
   allDayPanel?: ViewCellData[];
-}
-
-interface TimePanelCellsData extends ViewDataBase {
-  dateTable: ViewCellData[];
-  allDayPanel?: ViewCellData;
 }
 
 interface GroupedViewDataBase {
@@ -60,50 +35,6 @@ interface GroupedViewDataBase {
 
 export interface GroupedViewData extends GroupedViewDataBase {
   groupedData: ViewData[];
-}
-
-interface CellPositionData {
-  rowIndex: number;
-  columnIndex: number;
-}
-
-interface CellInfo {
-  cellData: ViewCellData;
-  position: CellPositionData;
-}
-
-export interface ViewDataMap {
-  dateTableMap: CellInfo[][];
-  allDayPanelMap: CellInfo[];
-}
-
-export interface TimePanelData extends GroupedViewDataBase {
-  groupedData: TimePanelCellsData[];
-}
-
-export interface GroupItem {
-  id: number | string;
-  text?: string;
-  color?: string;
-}
-export interface GroupRenderItem extends GroupItem {
-  key: string;
-  resourceName: string;
-  data: GroupItem;
-  colSpan?: number;
-  isFirstGroupCell?: boolean;
-  isLastGroupCell?: boolean;
-}
-
-export interface GroupPanelData {
-  groupPanelItems: GroupRenderItem[][];
-  baseColSpan: number;
-}
-
-export interface Group {
-  name: string;
-  items: GroupItem[];
-  data: GroupItem[];
 }
 
 interface BaseTemplateData {
@@ -172,82 +103,6 @@ export interface DateHeaderData {
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
   isMonthDateHeader?: boolean;
-}
-
-interface CountGenerationConfig {
-  intervalCount: number;
-  currentDate: Date;
-  viewType: string;
-  hoursInterval: number;
-  startDayHour: number;
-  endDayHour: number;
-}
-
-interface ViewOptions {
-  isVerticalGrouping: boolean;
-  groupOrientation: GroupOrientation;
-  isGroupedByDate: boolean;
-  startCellIndex: number;
-  startRowIndex: number;
-  startDayHour: number;
-  endDayHour: number;
-}
-
-export interface ViewDataProviderOptions {
-  startRowIndex: number;
-  startCellIndex: number;
-  groupOrientation: GroupOrientation;
-  groupByDate: boolean;
-  groups: Group[];
-  isProvideVirtualCellsWidth: boolean;
-  isAllDayPanelVisible: boolean;
-  selectedCells?: unknown;
-  focusedCell?: unknown;
-  headerCellTextFormat: string | ((date: Date) => string);
-  getDateForHeaderText: GetDateForHeaderText;
-  startDayHour: number;
-  endDayHour: number;
-  viewOffset: number;
-  cellDuration: number;
-  viewType: ViewType;
-  intervalCount: number;
-  hoursInterval: number;
-  currentDate: Date;
-  startDate?: Date;
-  firstDayOfWeek: number;
-  today: Date;
-
-  isGenerateTimePanelData: boolean;
-  isGenerateWeekDaysHeaderData: boolean;
-}
-
-// TODO: tempporary
-export interface ViewDataProviderType {
-  completeViewDataMap: ViewCellData[][];
-  viewDataMap: ViewDataMap;
-  timePanelData: TimePanelData;
-  dateHeaderData: DateHeaderData;
-  getCellData: (rowIndex: number, columnIndex: number, isAllDay) => ViewCellData;
-  getCellCount: (config: CountGenerationConfig) => number;
-  getRowCount: (config: CountGenerationConfig) => number;
-  update: (options: unknown, isGenerateNewData: boolean) => void;
-  getGroupPanelData: (options: unknown) => GroupPanelData;
-  getLastCellEndDate: () => Date;
-  getVisibleDayDuration: (
-    startDayHour: number,
-    endDayHour: number,
-    hoursInterval: number
-  ) => number;
-  getLastViewDateByEndDayHour: (endDayHour: number) => Date;
-  getIntervalDuration: (intervalCount: number) => number;
-  getStartViewDate: () => Date;
-  getViewOptions: () => ViewOptions;
-  setViewOptions: (options: ViewDataProviderOptions) => void;
-  createGroupedDataMapProvider: () => void;
-  isSkippedDate: (date: Date) => boolean;
-  getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
-  getCellsBetween: (first: ViewCellData, last: ViewCellData) => ViewCellData[];
-  viewType: ViewType;
 }
 
 interface CompleteViewDataGenerationOptions {

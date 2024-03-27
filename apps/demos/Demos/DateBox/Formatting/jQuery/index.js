@@ -25,6 +25,7 @@ $(() => {
     useMaskBehavior: true,
     displayFormat: 'EEEE, d of MMM, yyyy HH:mm',
     value: date,
+    type: 'datetime',
     inputAttr: { 'aria-label': 'Date' },
   });
 

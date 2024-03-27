@@ -6,12 +6,11 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-import { formatWeekdayAndDay } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getDateForHeaderText } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/timeline_week';
 
 // NOTE: Renovation component import.
 // @ts-expect-error
 import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
+import { formatWeekdayAndDay, timelineWeekUtils } from '../__migration/utils/index';
 import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,
@@ -299,7 +298,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
     return {
       ...options,
       isGenerateWeekDaysHeaderData: this._needRenderWeekHeader(),
-      getDateForHeaderText,
+      getDateForHeaderText: timelineWeekUtils.getDateForHeaderText,
     };
   }
 

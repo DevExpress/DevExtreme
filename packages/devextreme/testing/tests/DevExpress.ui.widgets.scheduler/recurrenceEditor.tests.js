@@ -7,7 +7,7 @@ import RadioGroup from 'ui/radio_group';
 import ButtonGroup from 'ui/button_group';
 import DateBox from 'ui/date_box';
 import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
-import { createTimeZoneCalculator } from 'renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
+import { createTimeZoneCalculator } from '__internal/scheduler/__migration/timezone_calculator/index.js';
 import dateLocalization from 'localization/date';
 
 const FREQUENCY_EDITOR = 'dx-recurrence-selectbox-freq';

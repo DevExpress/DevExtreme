@@ -11,9 +11,19 @@ export default function App() {
   const [progressVisible, setProgressVisible] = useState(false);
   const [progressValue, setProgressValue] = useState(0);
 
-  const onDropZoneEnter = useCallback((e: FileUploaderTypes.DropZoneEnterEvent) => {
-    if (e.dropZoneElement.id === 'dropzone-external') {
-      setIsDropZoneActive(true);
+  const onDropZoneEnter = useCallback(({ component, dropZoneElement, event }) => {
+    if (dropZoneElement.id === 'dropzone-external') {
+      const items = event.originalEvent.dataTransfer.items;
+
+      const allowedFileExtensions = component.option('allowedFileExtensions');
+      const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
+
+      const isSingleFileDragged = items.length === 1;
+      const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+
+      if (isSingleFileDragged && isValidFileExtension) {
+        setIsDropZoneActive(true);
+      }
     }
   }, [setIsDropZoneActive]);
 

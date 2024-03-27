@@ -194,7 +194,7 @@ const getGroupCount = function (item, groupCount) {
 };
 
 export class GroupingHelper extends GroupingHelperCore {
-  handleDataLoading(options?) {
+  protected handleDataLoading(options?) {
     const that = this;
     const { storeLoadOptions } = options;
     const collapsedGroups: any[] = [];
@@ -250,7 +250,7 @@ export class GroupingHelper extends GroupingHelperCore {
     options.take = take;
   }
 
-  handleDataLoaded(options, callBase) {
+  protected handleDataLoaded(options, callBase) {
     const that = this;
     const { collapsedGroups } = options;
     const groups = dataGridCore.normalizeSortingInfo(options.group);
@@ -305,11 +305,11 @@ export class GroupingHelper extends GroupingHelperCore {
     }
   }
 
-  isGroupItemCountable(item) {
+  protected isGroupItemCountable(item) {
     return item.items === null;
   }
 
-  updateTotalItemsCount() {
+  protected updateTotalItemsCount() {
     let itemsCountCorrection = 0;
 
     foreachCollapsedGroups(this, (groupInfo) => {
@@ -320,7 +320,7 @@ export class GroupingHelper extends GroupingHelperCore {
     super.updateTotalItemsCount(itemsCountCorrection);
   }
 
-  changeRowExpand(path) {
+  private changeRowExpand(path) {
     const that = this;
     const dataSource = that._dataSource;
     const beginPageIndex = dataSource.beginPageIndex ? dataSource.beginPageIndex() : dataSource.pageIndex();
@@ -366,11 +366,11 @@ export class GroupingHelper extends GroupingHelperCore {
     });
   }
 
-  allowCollapseAll() {
+  protected allowCollapseAll() {
     return false;
   }
 
-  refresh(options, operationTypes?) {
+  protected refresh(options, operationTypes?) {
     const that = this;
     const { storeLoadOptions } = options;
     const dataSource = that._dataSource;

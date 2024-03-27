@@ -122,7 +122,13 @@
 .dx-icon-accountbox,
 .dx-icon-ordersbox,
 .dx-icon-arrowback,
-.dx-icon-pinmap {
+.dx-icon-pinmap,
+.dx-icon-handlevertical,
+.dx-icon-handlehorizontal,
+.dx-icon-triangleup,
+.dx-icon-triangledown,
+.dx-icon-triangleright,
+.dx-icon-triangleleft {
   background-position: 0 0;
   background-repeat: no-repeat;
 }
@@ -441,6 +447,7 @@ $icons: (
     "taskstop": '\f15e',
     "clearcircle": '\f15f',
     "send": '\f160',
+    "handlevertical":'\f161',
     "photooutline": '\f162',
     "panelright": '\f163',
     "panelleft": '\f164',
@@ -449,6 +456,11 @@ $icons: (
     "login": '\f167',
     "eyeopen": '\f168',
     "eyeclose": '\f169',
+    "handlehorizontal":'\f16a',
+    "triangleup":'\f16b',
+    "triangledown":'\f16c',
+    "triangleright":'\f16d',
+    "triangleleft":'\f16e',
     "expandform": '\f170',
     "description": '\f171',
     "belloutline": '\f172',

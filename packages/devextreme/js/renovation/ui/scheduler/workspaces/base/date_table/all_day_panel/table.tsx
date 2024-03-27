@@ -3,10 +3,10 @@ import {
 } from '@devextreme-generator/declarations';
 import { Table } from '../../table';
 import { AllDayPanelTableBody } from './table_body';
-import { ViewCellData } from '../../../types';
 import { LayoutProps } from '../../layout_props';
 import { DefaultSizes } from '../../../const';
 import { DateTable } from '../../../../../../component_wrapper/scheduler/date_table';
+import { ViewCellData } from '../../../../../../../__internal/scheduler/__migration/types';
 
 export const viewFunction = ({
   emptyTableHeight,

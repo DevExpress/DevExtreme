@@ -14,9 +14,9 @@ import { TimePanelCell } from './cell';
 import { CellBase } from '../cell';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
-import { DateTimeCellTemplateProps, TimePanelData } from '../../types';
-import { GroupOrientation } from '../../../types';
+import { DateTimeCellTemplateProps } from '../../types';
 import { TimePanel } from '../../../../../component_wrapper/scheduler/time_panel';
+import { GroupOrientation, TimePanelData } from '../../../../../../__internal/scheduler/__migration/types';
 
 export const viewFunction = ({
   props: {
@@ -115,10 +115,12 @@ export class TimePanelLayoutProps {
 })
 export class TimePanelTableLayout extends JSXComponent(TimePanelLayoutProps) {
   get topVirtualRowHeight(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.props.timePanelData.topVirtualRowHeight ?? 0;
   }
 
   get bottomVirtualRowHeight(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.props.timePanelData.bottomVirtualRowHeight ?? 0;
   }
 }

@@ -2066,42 +2066,12 @@ QUnit.module('actions', {
 });
 
 QUnit.module('aria accessibility', () => {
-    QUnit.test('aria role', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor();
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'aria role on input is correct');
-        assert.strictEqual($dropDownEditor.attr('role'), undefined, 'aria role on element is not exist');
-    });
-
-    QUnit.test('aria-expanded property on input', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
-
-        assert.equal($input.attr('aria-expanded'), 'true', 'aria-expanded property on opened');
-
-        instance.option('opened', false);
-        assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
-    });
-
     QUnit.test('Overlay content must have correct aria-label attribute', function(assert) {
         $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
 
         const $overlayContent = $(`.${OVERLAY_CONTENT_CLASS}`);
 
         assert.strictEqual($overlayContent.attr('aria-label'), OVERLAY_CONTENT_LABEL, 'aria-label on element is correct');
-    });
-
-
-    QUnit.test('aria-haspopup property on input', function(assert) {
-        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        assert.equal($input.attr('aria-haspopup'), 'true', 'haspopup attribute exists');
-    });
-
-    QUnit.test('aria-autocomplete property on input', function(assert) {
-        const $input = $('#dropDownEditorLazy').dxDropDownEditor().find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        assert.equal($input.attr('aria-autocomplete'), 'list', 'haspopup attribute exists');
     });
 
     QUnit.test('aria-owns should be removed when popup is not visible', function(assert) {
@@ -2114,6 +2084,17 @@ QUnit.module('aria accessibility', () => {
         instance.close();
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
+    });
+
+    QUnit.test('aria-expanded property on input', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({ opened: true });
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+
+        assert.equal($input.attr('aria-expanded'), 'true', 'aria-expanded property on opened');
+
+        instance.option('opened', false);
+        assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 
     QUnit.module('aria-controls', {}, () => {

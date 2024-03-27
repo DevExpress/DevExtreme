@@ -271,6 +271,29 @@ class Menu extends MenuBase {
         this._initAdaptivity();
     }
 
+    _isTargetOutOfComponent(relatedTarget) {
+        const isInsideRootMenu = $(relatedTarget).closest(`.${DX_MENU_CLASS}`).length !== 0;
+        const isInsideContextMenu = $(relatedTarget).closest(`.${DX_CONTEXT_MENU_CLASS}`).length !== 0;
+
+        const isTargetOutOfComponent = !(isInsideRootMenu || isInsideContextMenu);
+
+        return isTargetOutOfComponent;
+    }
+
+    _focusOutHandler(e) {
+        const { relatedTarget } = e;
+
+        if(relatedTarget) {
+            const isTargetOutside = this._isTargetOutOfComponent(relatedTarget);
+
+            if(isTargetOutside) {
+                this._hideVisibleSubmenu();
+            }
+        }
+
+        super._focusOutHandler(e);
+    }
+
     _renderHamburgerButton() {
         this._hamburger = new Button($('<div>').addClass(DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS), {
             icon: 'menu',
@@ -823,7 +846,9 @@ class Menu extends MenuBase {
     }
 
     _hideSubmenu(submenu) {
-        submenu && submenu.hide();
+        if(submenu) {
+            submenu.hide();
+        }
 
         if(this._visibleSubmenu === submenu) {
             this._visibleSubmenu = null;

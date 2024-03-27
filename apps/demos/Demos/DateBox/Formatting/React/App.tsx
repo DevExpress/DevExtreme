@@ -44,6 +44,7 @@ function App() {
               showClearButton={true}
               inputAttr={dateLabel}
               useMaskBehavior={true}
+              type="datetime"
               displayFormat="EEEE, d of MMM, yyyy HH:mm"
             />
           </div>

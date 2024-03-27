@@ -36,6 +36,16 @@ class TestComponent<P = any> extends Component<P & IHtmlOptions> {
 
   protected useDeferUpdateFlag = true;
 
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  get instance(): any {
+    return {
+      element: () => this.element,
+    };
+  }
+
   _createWidget(element?: Element): void {
     eventHandlers.optionChanged = [];
     Widget.option.mockImplementation((name: string) => name === 'integrationOptions.useDeferUpdateForTemplates');

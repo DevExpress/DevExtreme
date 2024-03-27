@@ -5,7 +5,7 @@ import {
   OneWay,
   Slot,
 } from '@devextreme-generator/declarations';
-import { getGroupCellClasses } from '../utils';
+import { renderUtils } from '../../../../../__internal/scheduler/__migration/utils/index';
 import { ContentTemplateProps } from '../types';
 
 export const viewFunction = (viewModel: CellBase): JSX.Element => (
@@ -57,6 +57,6 @@ export class CellBase extends JSXComponent(CellBaseProps) {
   get classes(): string {
     const { isFirstGroupCell, isLastGroupCell, className } = this.props;
 
-    return getGroupCellClasses(isFirstGroupCell, isLastGroupCell, className);
+    return renderUtils.getGroupCellClasses(isFirstGroupCell, isLastGroupCell, className);
   }
 }

@@ -3,9 +3,17 @@
 .dx-splitter {
   display: flex;
   height: 100%;
+  width: 100%;
   
   .dx-splitter-item {
+    display: flex;
     overflow: hidden;
+  }
+
+  .dx-splitter-item-content {
+    position: relative;
+    flex: 1 1 auto;
+    overflow: auto;
   }
 
   &.dx-splitter-vertical {
@@ -18,6 +26,7 @@
   justify-content: center;
   align-items: center;
   gap: 8px;
+  overflow: hidden;
 
   .dx-resize-handle-collapse-prev-pane,
   .dx-resize-handle-collapse-next-pane {
@@ -25,18 +34,22 @@
   }
 
   &.dx-resize-handle-horizontal {
-    width: 8px;
     flex-direction: column;
-    cursor: col-resize;
+
+    &.dx-resize-handle-resizable {
+      cursor: col-resize;
+    }
   }
 
   &.dx-resize-handle-vertical {
-    height: 8px;
     flex-direction: row;
-    cursor: row-resize;
-
-    .dx-resize-handle-icon {
-      transform: rotate(90deg);
+    
+    &.dx-resize-handle-resizable {
+      cursor: row-resize;
     }
+  }
+
+  &.dx-state-disabled {
+    opacity: 1;
   }
 }

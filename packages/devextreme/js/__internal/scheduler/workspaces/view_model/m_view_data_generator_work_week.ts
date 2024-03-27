@@ -1,8 +1,4 @@
-import {
-  calculateStartViewDate,
-  isDataOnWeekend,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/work_week';
-
+import { isDataOnWeekend, workWeekUtils } from '../../__migration/utils/index';
 import { ViewDataGeneratorWeek } from './m_view_data_generator_week';
 
 export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
@@ -15,7 +11,7 @@ export class ViewDataGeneratorWorkWeek extends ViewDataGeneratorWeek {
   }
 
   _calculateStartViewDate(options) {
-    return calculateStartViewDate(
+    return workWeekUtils.calculateStartViewDate(
       options.currentDate,
       options.startDayHour,
       options.startDate,

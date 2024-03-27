@@ -523,7 +523,7 @@ const dxSparkline = BaseSparkline.inherit({
     }
 });
 
-_map(['lineColor', 'lineWidth', 'areaOpacity', 'minColor', 'maxColor', 'barPositiveColor', 'barNegativeColor',
+_map(['lossColor', 'lineColor', 'lineWidth', 'areaOpacity', 'minColor', 'maxColor', 'barPositiveColor', 'barNegativeColor',
     'winColor', 'lessColor', 'firstLastColor', 'pointSymbol', 'pointColor', 'pointSize',
     'type', 'argumentField', 'valueField', 'winlossThreshold', 'showFirstLast', 'showMinMax',
     'ignoreEmptyPoints', 'minValue', 'maxValue'

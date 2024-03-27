@@ -6,8 +6,8 @@ import {
   DateHeaderLayoutProps,
 } from '../layout';
 import { Row } from '../../../row';
-import * as utilsModule from '../../../../utils';
-import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../consts';
+import * as MigratedUtils from '../../../../../../../../__internal/scheduler/__migration/utils/index';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../../__internal/scheduler/__migration/const';
 import { DateHeaderCell } from '../cell';
 import getThemeType from '../../../../../../../utils/getThemeType';
 
@@ -17,7 +17,7 @@ jest.mock('../../../../../../../utils/getThemeType', () => ({
   default: jest.fn(() => 'test_isMaterial'),
 }));
 
-const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
+const isHorizontalGroupingApplied = jest.spyOn(MigratedUtils, 'isHorizontalGroupingApplied');
 
 describe('DateHeaderLayout', () => {
   const dateHeaderData: any = {
@@ -117,7 +117,7 @@ describe('DateHeaderLayout', () => {
         .toBe(firstCellData.key);
 
       expect(getThemeType)
-        .toBeCalledTimes(1);
+        .toHaveBeenCalledTimes(1);
 
       const secondCell = cells.at(1);
       const secondCellData = dateHeaderData.dataMap[0][1];

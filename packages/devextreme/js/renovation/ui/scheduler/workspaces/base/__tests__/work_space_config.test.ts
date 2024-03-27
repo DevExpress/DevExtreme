@@ -1,13 +1,16 @@
-import { formatWeekdayAndDay, formatWeekday } from '../../../view_model/to_test/views/utils/base';
 import {
-  getDateForHeaderText as timelineGetDateFrHeaderText,
-} from '../../../view_model/to_test/views/utils/timeline_week';
+  formatWeekdayAndDay,
+  formatWeekday,
+  timelineWeekUtils,
+} from '../../../../../../__internal/scheduler/__migration/utils/index';
 import { DateTableLayoutBase } from '../date_table/layout';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { getViewRenderConfigByType } from '../work_space_config';
 import { getDateForHeaderText } from '../utils';
 import { MonthDateTableLayout } from '../../month/date_table/layout';
 import { TimelineHeaderPanelLayout } from '../../timeline/header_panel/layout';
+
+const timelineGetDateFrHeaderText = timelineWeekUtils.getDateForHeaderText;
 
 describe('Workspace config utils', () => {
   describe('getViewRenderConfigByType', () => {

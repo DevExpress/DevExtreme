@@ -1,16 +1,15 @@
-import { formatWeekday, formatWeekdayAndDay } from '../../view_model/to_test/views/utils/base';
-import {
-  getDateForHeaderText as timelineGetDateForHeaderText,
-} from '../../view_model/to_test/views/utils/timeline_week';
-import { GroupOrientation, ViewType } from '../../types';
 import { MonthDateTableLayout } from '../month/date_table/layout';
 import { ViewRenderConfig } from '../props';
 import { TimelineHeaderPanelLayout } from '../timeline/header_panel/layout';
 import { DateTableLayoutBase } from './date_table/layout';
 import { HeaderPanelLayout } from './header_panel/layout';
 import { getDateForHeaderText } from './utils';
-import { Group } from '../types';
-import { isVerticalGroupingApplied } from '../utils';
+import {
+  formatWeekday,
+  formatWeekdayAndDay, isVerticalGroupingApplied,
+  timelineWeekUtils,
+} from '../../../../../__internal/scheduler/__migration/utils/index';
+import { Group, GroupOrientation, ViewType } from '../../../../../__internal/scheduler/__migration/types';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 
@@ -48,7 +47,7 @@ const timelineViewConfig: ViewRenderConfig = {
   isRenderTimePanel: false,
   groupPanelClassName: 'dx-scheduler-group-table',
   headerCellTextFormat: 'shorttime',
-  getDateForHeaderText: timelineGetDateForHeaderText,
+  getDateForHeaderText: timelineWeekUtils.getDateForHeaderText,
   isRenderDateHeader: true,
   isGenerateWeekDaysHeaderData: true,
   scrollingDirection: 'horizontal',

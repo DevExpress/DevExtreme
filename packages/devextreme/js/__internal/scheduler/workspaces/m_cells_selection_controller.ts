@@ -1,4 +1,4 @@
-import { isDateAndTimeView } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { isDateAndTimeView } from '../__migration/utils/index';
 
 export class CellsSelectionController {
   handleArrowClick(options) {

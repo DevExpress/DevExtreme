@@ -44,6 +44,8 @@
         "dxList-pageLoadingText": "正在載入...",
         "dxList-nextButtonText": "更多",
         "dxList-selectAll": "全選",
+        "dxList-listAriaLabel": "Items",
+        "dxList-listAriaLabel-deletable": "Deletable items",
         "dxListEditDecorator-delete": "刪除",
         "dxListEditDecorator-more": "更多",
 

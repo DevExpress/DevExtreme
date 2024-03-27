@@ -103,6 +103,7 @@ import { DxiLocationComponent } from './location-dxi';
         'linkAttr',
         'url',
         'collapsed',
+        'collapsedSize',
         'collapsible',
         'maxSize',
         'minSize',

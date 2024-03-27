@@ -2,7 +2,6 @@ import { getHeight, getWidth } from 'core/utils/size';
 import devices from 'core/devices';
 import commonUtils from 'core/utils/common';
 import browser from 'core/utils/browser';
-import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import pointerEvents from 'events/pointer';
@@ -52,7 +51,6 @@ QUnit.testStart(function() {
 
     $('#qunit-fixture').html(markup);
     // $('body').append(markup);
-    addShadowDomStyles($('#qunit-fixture'));
 });
 
 QUnit.module('Virtual Scrolling', baseModuleConfig, () => {

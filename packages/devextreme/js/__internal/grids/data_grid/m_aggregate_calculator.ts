@@ -83,7 +83,7 @@ export default class AggregateCalculator {
     this._totals = [];
   }
 
-  calculate() {
+  private calculate() {
     if (this._totalAggregates.length) {
       this._calculateTotals(0, { items: this._data });
     }
@@ -93,11 +93,11 @@ export default class AggregateCalculator {
     }
   }
 
-  totalAggregates() {
+  private totalAggregates() {
     return this._totals;
   }
 
-  _aggregate(aggregates, data, container) {
+  private _aggregate(aggregates, data, container) {
     const length = data.items ? data.items.length : 0;
 
     for (let i = 0; i < aggregates.length; i++) {
@@ -112,7 +112,7 @@ export default class AggregateCalculator {
     }
   }
 
-  _calculateTotals(level, data) {
+  private _calculateTotals(level, data) {
     if (level === 0) {
       this._totals = this._seed(this._totalAggregates);
     }
@@ -130,7 +130,7 @@ export default class AggregateCalculator {
     }
   }
 
-  _calculateGroups(root) {
+  private _calculateGroups(root) {
     const maxLevel = this._groupLevel;
     let currentLevel = maxLevel + 1;
 
@@ -157,7 +157,7 @@ export default class AggregateCalculator {
     }
   }
 
-  _seed(aggregates, groupIndex?) {
+  private _seed(aggregates, groupIndex?) {
     return map(aggregates, (aggregate) => {
       const { aggregator } = aggregate;
       const seed = 'seed' in aggregator
@@ -168,7 +168,7 @@ export default class AggregateCalculator {
     });
   }
 
-  _accumulate(aggregateIndex, aggregate, results, item) {
+  private _accumulate(aggregateIndex, aggregate, results, item) {
     const value = aggregate.selector(item);
     const { aggregator } = aggregate;
     const { skipEmptyValues } = aggregate;
@@ -184,7 +184,7 @@ export default class AggregateCalculator {
     }
   }
 
-  _finalize(aggregates, results) {
+  private _finalize(aggregates, results) {
     return map(aggregates, (aggregate, index) => {
       const fin = aggregate.aggregator.finalize;
       return fin

@@ -1,0 +1,32 @@
+{
+  "name": "devextreme-monorepo-tools",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "{projectRoot}/src",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "@nx/js:tsc",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "{projectRoot}/npm",
+        "tsConfig": "{projectRoot}/tsconfig.build.json",
+        "packageJson": "{projectRoot}/package.json",
+        "main": "{projectRoot}/src/index.ts",
+        "assets": ["{projectRoot}/*.md"],
+        "srcRootForCompilationRoot": "src"
+      }
+    },
+    "pack-and-copy": {
+      "dependsOn": ["build"],
+      "command": "ts-node tools/scripts/pack devextreme-monorepo-tools"
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "{projectRoot}/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}

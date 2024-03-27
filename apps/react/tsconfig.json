@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "strict": true,
-    "jsx": "react"
+    "jsx": "react",
+    "allowJs": true,
+    "target": "ESNext"
   },
   "include": ["**/*"],
 }

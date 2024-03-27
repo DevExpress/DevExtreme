@@ -46,7 +46,6 @@
                 "eslint-config-devextreme",
                 "rrule",
                 "sass-embedded",
-                "sinon",
                 "systemjs"
             ],
             "enabled": false

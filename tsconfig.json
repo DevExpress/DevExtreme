@@ -9,17 +9,20 @@
         "devextreme-angular/npm/dist/*"
       ],
       "devextreme-react": [
-        "devextreme-react/src"
+        "devextreme-react/npm"
       ],
       "devextreme-react/*": [
-        "devextreme-react/src/*"
+        "devextreme-react/npm/*"
       ],
       "devextreme-vue": [
         "devextreme-vue/src"
       ],
       "devextreme-vue/*": [
         "devextreme-vue/src/*"
-      ]
+      ],
+      "devextreme-monorepo-tools": [
+        "devextreme-monorepo-tools/src"
+      ],
     },
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

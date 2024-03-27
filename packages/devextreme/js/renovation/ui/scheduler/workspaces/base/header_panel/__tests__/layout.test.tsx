@@ -4,14 +4,14 @@ import {
   HeaderPanelLayout,
   HeaderPanelLayoutProps,
 } from '../layout';
-import * as utilsModule from '../../../utils';
-import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../consts';
+import * as MigratedUtils from '../../../../../../../__internal/scheduler/__migration/utils/index';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
 import { GroupPanel } from '../../group_panel/group_panel';
 import { DateHeaderLayout } from '../date_header/layout';
 import { TimelineDateHeaderLayout } from '../../../timeline/header_panel/date_header/layout';
 import { DateHeaderData } from '../../../types';
 
-const isHorizontalGroupingApplied = jest.spyOn(utilsModule, 'isHorizontalGroupingApplied');
+const isHorizontalGroupingApplied = jest.spyOn(MigratedUtils, 'isHorizontalGroupingApplied');
 
 describe('HeaderPanelLayoutLayout', () => {
   const dateHeaderData: DateHeaderData = {

@@ -1,11 +1,9 @@
 import registerComponent from '@js/core/component_registrator';
 import dateUtils from '@js/core/utils/date';
-import { formatWeekdayAndDay } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getViewStartByOptions } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/month';
 
 // NOTE: Renovation component import.
-// @ts-expect-error
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
+import { HeaderPanelComponent } from '../__migration/components/index';
+import { formatWeekdayAndDay, monthUtils } from '../__migration/utils/index';
 import { VIEWS } from '../m_constants';
 import SchedulerTimeline from './m_timeline';
 
@@ -16,7 +14,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
 
   readonly viewDirection = 'horizontal';
 
-  get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+  get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
   _renderView() {
     super._renderView();
@@ -52,7 +50,7 @@ class SchedulerTimelineMonth extends SchedulerTimeline {
   }
 
   _getViewStartByOptions() {
-    return getViewStartByOptions(
+    return monthUtils.getViewStartByOptions(
       this.option('startDate') as any,
       this.option('currentDate') as any,
       this.option('intervalCount') as any,

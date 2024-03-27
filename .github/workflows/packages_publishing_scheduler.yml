@@ -1,8 +1,8 @@
-name: Schedule daily publishing to GitHub Packages
+name: Publishing to GitHub Packages (scheduler)
 
 on:
   schedule:
-    - cron: '0 0 * * 1-5'
+    - cron: '30 19 * * 1-5'
   workflow_dispatch:
 
 jobs:

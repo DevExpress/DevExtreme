@@ -8,9 +8,8 @@ import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { setHeight, setOuterHeight } from '@js/core/utils/size';
 import dateLocalization from '@js/localization/date';
-import { calculateStartViewDate } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/agenda';
-import { formatWeekday, getVerticalGroupCountClass } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 
+import { agendaUtils, formatWeekday, getVerticalGroupCountClass } from '../__migration/utils/index';
 import {
   DATE_TABLE_CLASS,
   DATE_TABLE_ROW_CLASS,
@@ -119,7 +118,7 @@ class SchedulerAgenda extends WorkSpace {
   }
 
   _calculateStartViewDate() {
-    return calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
+    return agendaUtils.calculateStartViewDate(this.option('currentDate') as any, this.option('startDayHour') as any);
   }
 
   _getRowCount() {
