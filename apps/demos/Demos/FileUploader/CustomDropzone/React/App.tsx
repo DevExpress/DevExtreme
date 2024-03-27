@@ -15,11 +15,11 @@ export default function App() {
     if (dropZoneElement.id === 'dropzone-external') {
       const items = event.originalEvent.dataTransfer.items;
 
-      const allowedFileExtensions = component.option('allowedFileExtensions');
+      const currentAllowedFileExtensions = component.option('allowedFileExtensions');
       const draggedFileExtension = `.${items[0].type.replace(/^image\//, '')}`;
 
       const isSingleFileDragged = items.length === 1;
-      const isValidFileExtension = allowedFileExtensions.includes(draggedFileExtension);
+      const isValidFileExtension = currentAllowedFileExtensions.includes(draggedFileExtension);
 
       if (isSingleFileDragged && isValidFileExtension) {
         setIsDropZoneActive(true);
