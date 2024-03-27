@@ -25866,7 +25866,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxSplitterOptions.separatorSize]
      */
-    separatorSize?: number | string;
+    separatorSize?: number;
     /**
      * [descr:dxSplitterOptions.onResize]
      */

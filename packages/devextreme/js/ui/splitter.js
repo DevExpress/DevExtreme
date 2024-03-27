@@ -26,11 +26,13 @@ export default Splitter;
 
 /**
  * @name dxSplitterOptions.onSelectionChanged
+ * @action
  * @hidden
  */
 
 /**
  * @name dxSplitterOptions.onItemHold
+ * @action
  * @hidden
  */
 
@@ -88,5 +90,10 @@ export default Splitter;
 
 /**
  * @name dxSplitterItem.html
+ * @hidden
+ */
+
+/**
+ * @name dxSplitterItem.disabled
  * @hidden
  */
