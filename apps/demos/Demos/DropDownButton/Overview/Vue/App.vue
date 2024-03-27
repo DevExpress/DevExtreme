@@ -21,15 +21,15 @@
         <div class="dx-field-label">Custom template and actions</div>
         <div class="dx-field-value">
           <DxDropDownButton
-              id="custom-template"
-              :split-button="true"
-              :use-select-mode="false"
-              :items="data.profileSettings"
-              display-expr="name"
-              key-expr="id"
-              @button-click="onButtonClick"
-              @item-click="onItemClick"
-              template="dropDownButtonTemplate"
+            id="custom-template"
+            :split-button="true"
+            :use-select-mode="false"
+            :items="data.profileSettings"
+            display-expr="name"
+            key-expr="id"
+            @button-click="onButtonClick"
+            @item-click="onItemClick"
+            template="dropDownButtonTemplate"
           >
             <template #dropDownButtonTemplate="{ data }">
               <div class="button-img-container">
