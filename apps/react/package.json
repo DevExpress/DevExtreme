@@ -15,8 +15,8 @@
     "react-dom": "~18.0.0"
   },
   "devDependencies": {
-    "@types/react": "~18.0.0",
-    "@types/react-dom": "~18.0.0",
+    "@types/react": "16.14.34",
+    "@types/react-dom": "18.2.18",
     "css-loader": "6.10.0",
     "source-map-loader": "4.0.2",
     "style-loader": "3.3.4",
