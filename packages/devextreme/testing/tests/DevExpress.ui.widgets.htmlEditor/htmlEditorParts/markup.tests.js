@@ -107,7 +107,7 @@ export default function() {
             assert.ok($element.hasClass(HTML_EDITOR_FILLED_CLASS), 'has new styling mode class');
         });
 
-        test('ordered list should have counter-reset property set to default (T1220554)', function(assert) {
+        test('ordered list should have counter-reset property set to none (T1220554)', function(assert) {
             const instance = $('#htmlEditor').dxHtmlEditor({
                 value: '<ol><li></li></ol>'
             }).dxHtmlEditor('instance');
@@ -115,7 +115,7 @@ export default function() {
 
             const $contentOrderedList = $element.find(`.${HTML_EDITOR_CONTENT_CLASS} ol`);
 
-            assert.equal($contentOrderedList.css('counterReset'), 'list-item 0', 'dx-htmleditor-content ol has counter-reset: item-list 0;');
+            assert.equal($contentOrderedList.css('counterReset'), 'none', 'dx-htmleditor-content ol has counter-reset: none;');
         });
     });
 
