@@ -33,3 +33,8 @@
 .option > .label {
   margin-right: 10px;
 }
+
+.dx-htmleditor-content ol {
+  counter-reset: none;
+  counter-set: list-3 0 list-4 0 list-5 0 list-6 0 list-7 0 list-8 0 list-9 0;
+}
