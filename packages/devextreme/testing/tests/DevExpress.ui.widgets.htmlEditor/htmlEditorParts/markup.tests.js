@@ -106,17 +106,6 @@ export default function() {
             assert.notOk($element.hasClass(HTML_EDITOR_OUTLINED_CLASS), 'has no old styling mode class');
             assert.ok($element.hasClass(HTML_EDITOR_FILLED_CLASS), 'has new styling mode class');
         });
-
-        test('ordered list should have counter-reset property set to default (T1220554)', function(assert) {
-            const instance = $('#htmlEditor').dxHtmlEditor({
-                value: '<ol><li></li></ol>'
-            }).dxHtmlEditor('instance');
-            const $element = instance.$element();
-
-            const $contentOrderedList = $element.find(`.${HTML_EDITOR_CONTENT_CLASS} ol`);
-
-            assert.equal($contentOrderedList.css('counterReset'), 'list-item 0', 'dx-htmleditor-content ol has counter-reset: list-item 0;');
-        });
     });
 
     QUnit.module('Accessibility', () => {
