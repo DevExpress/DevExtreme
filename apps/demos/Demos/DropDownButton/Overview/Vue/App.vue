@@ -196,11 +196,6 @@ function onColorClick(clickedColor) {
     padding: 5px;
   }
 
-  .custom-color-picker {
-    width: 82px;
-    padding: 5px;
-  }
-
   .color {
     cursor: pointer;
     font-size: 18px;
