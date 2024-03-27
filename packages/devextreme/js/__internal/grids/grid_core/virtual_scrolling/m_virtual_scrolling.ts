@@ -1625,7 +1625,7 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       const bottom = this._dataController
         // @ts-expect-error
         .getContentOffset('end');
-      const $tables = this.getTableElements();
+      const $tables: any = this.getTableElements();
       const $virtualRows = $tables.children('tbody').children(`.${VIRTUAL_ROW_CLASS}`);
 
       removeEmptyRows($virtualRows, VIRTUAL_ROW_CLASS);

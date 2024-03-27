@@ -27,6 +27,8 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
+import type { BondRenderer } from '@ts/core/reactive_dom';
+import { $$ } from '@ts/core/reactive_dom';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
@@ -37,6 +39,7 @@ import type { ColumnsController } from '../columns_controller/m_columns_controll
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
 import gridCoreUtils from '../m_utils';
+import { Table } from './components';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
 const SCROLLABLE_SIMULATED_CLASS = 'scrollable-simulated';
@@ -159,7 +162,7 @@ export const normalizeWidth = (width: string | number | undefined): string | und
 };
 
 export class ColumnsView extends ColumnStateMixin(modules.View) {
-  protected _tableElement: any;
+  protected _tableElement?: BondRenderer<Table> | null;
 
   protected _scrollLeft: any;
 
@@ -349,9 +352,9 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: selection
    */
   protected _createTable(columns, isAppend?) {
-    const $table = $('<table>')
-      .addClass(this.addWidgetPrefix(TABLE_CLASS))
-      .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
+    const $table = $$.component(Table, {
+      className: `${this.addWidgetPrefix(TABLE_CLASS)} ${this.addWidgetPrefix(TABLE_FIXED_CLASS)}`,
+    }).toRenderer();
 
     if (columns && !isAppend) {
       $table
@@ -673,6 +676,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   protected _wrapRowIfNeed($table, $row, isRefreshing?) {
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
@@ -979,15 +983,16 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
-  public getTableElements() {
+  public getTableElements(): any {
     // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
     return this._tableElement || $();
   }
 
   /**
    * @extended: column_fixing
    */
-  public getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
+  public getTableElement(isFixedTableRendering?): BondRenderer<Table> | undefined | null {
     return this._tableElement;
   }
 
@@ -1040,6 +1045,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     const $scrollContainer = this._getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
+      // @ts-expect-error
       $scrollContainer.remove();
     }
   }
@@ -1143,7 +1149,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   /**
    * @extended: column_fixing
    */
-  public getColumnWidths($tableElement?: dxElementWrapper): number[] {
+  public getColumnWidths($tableElement?: dxElementWrapper | null): number[] {
     (this.option('forceApplyBindings') || noop)();
 
     $tableElement = $tableElement ?? this.getTableElement();

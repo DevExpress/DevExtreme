@@ -21,6 +21,8 @@ module.exports = {
                 tsconfigRootDir: __dirname,
             },
             rules: {
+                'spellcheck/spell-checker': 'off',
+                '@typescript-eslint/no-shadow': 'off',
                 '@typescript-eslint/consistent-type-imports': [
                     'error',
                     {
