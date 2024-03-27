@@ -94,7 +94,7 @@ const createRunningTotalExpr = function (field) {
     const prevCell = field.allowCrossGroupCalculation
       ? getPrevCellCrossGroup(e, direction)
       : e.prev(direction, false);
-    let value = e.value(true);
+    let value = e.value(false);
     const prevValue = prevCell && prevCell.value(true);
 
     if (isDefined(prevValue) && isDefined(value)) {
