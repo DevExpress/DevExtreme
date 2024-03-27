@@ -65,6 +65,11 @@ export const CLASS = {
   dialogWrapper: 'dx-dialog-wrapper',
 };
 
+const E2E_ATTRIBUTES = {
+  a11yStatusContainer: 'e2e-a11y-general-status-container',
+  summaryCellStatusContainer: 'e2e-a11y-summary-cell-status-container',
+};
+
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
   if ($element?.length) {
     const offset = $element.offset();
@@ -717,5 +722,13 @@ export default class DataGrid extends Widget {
 
   getScrollBarThumbTrack(scrollbarPosition: string): Selector {
     return this.getRowsView().find(`.dx-scrollbar-${scrollbarPosition.toLowerCase()} .dx-scrollable-scroll`);
+  }
+
+  getGeneralStatusContainer(): Selector {
+    return this.element().find(`[${E2E_ATTRIBUTES.a11yStatusContainer}="true"]`);
+  }
+
+  getSummaryCellStatusContainer(nth = 0): Selector {
+    return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
   }
 }
