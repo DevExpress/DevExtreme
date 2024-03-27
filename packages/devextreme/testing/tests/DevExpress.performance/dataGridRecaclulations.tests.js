@@ -41,7 +41,7 @@ QUnit.performanceTest('render with columnAutoWidth', function(assert) {
         columnAutoWidth: true
     });
 
-    assert.measureStyleRecalculation(measureFunction, DataGrid.IS_RENOVATED_WIDGET ? 14 : 13);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest('render with columnFixing', function(assert) {

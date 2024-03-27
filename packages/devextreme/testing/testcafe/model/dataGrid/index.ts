@@ -63,6 +63,7 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
+  summaryTotal: 'dx-datagrid-summary-item',
 };
 
 const E2E_ATTRIBUTES = {
@@ -730,5 +731,9 @@ export default class DataGrid extends Widget {
 
   getSummaryCellStatusContainer(nth = 0): Selector {
     return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
+  }
+
+  getSummaryTotalElement(nth = 0): Selector {
+    return this.element().find(`.${CLASS.summaryTotal}`).nth(nth);
   }
 }
