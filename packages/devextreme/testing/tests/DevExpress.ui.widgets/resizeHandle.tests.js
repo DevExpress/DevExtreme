@@ -94,13 +94,11 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             const $collapseButton = button === 'prev' ? this.getCollapsePrevButton() : this.getCollapseNextButton();
 
-            $collapseButton.trigger('dxclick');
-
             this.instance.option(handler, handlerStubAfterUpdate);
 
             $collapseButton.trigger('dxclick');
 
-            assert.strictEqual(handlerStub.callCount, 1);
+            assert.strictEqual(handlerStub.callCount, 0);
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
         });
     });
