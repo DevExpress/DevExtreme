@@ -31,8 +31,8 @@ const App = () => {
   const dataGridRef = useRef(null);
   const toggleGroupColumn = useCallback((e) => {
     const newGrouping = e.value;
-    dataGridRef.current.instance.clearGrouping();
-    dataGridRef.current.instance.columnOption(newGrouping, 'groupIndex', 0);
+    dataGridRef.current.instance().clearGrouping();
+    dataGridRef.current.instance().columnOption(newGrouping, 'groupIndex', 0);
     setTotalCount(getGroupCount(newGrouping));
     setGroupColumn(newGrouping);
   }, []);
@@ -40,7 +40,7 @@ const App = () => {
     setExpandAll(!expandAll);
   }, [expandAll]);
   const refreshDataGrid = useCallback(() => {
-    dataGridRef.current.instance.refresh();
+    dataGridRef.current.instance().refresh();
   }, []);
   return (
     <DataGrid

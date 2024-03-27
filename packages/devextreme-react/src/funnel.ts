@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxFunnel, {
     Properties
 } from "devextreme/viz/funnel";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, ItemClickEvent, LegendClickEvent, dxFunnelItem, FunnelLegendItem } from "devextreme/viz/funnel";
@@ -34,142 +35,58 @@ type IFunnelOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IFun
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
 }>
 
-class Funnel extends BaseComponent<React.PropsWithChildren<IFunnelOptions>> {
-
-  public get instance(): dxFunnel {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxFunnel;
-
-  protected subscribableOptions = ["loadingIndicator","loadingIndicator.show"];
-
-  protected independentEvents = ["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onItemClick","onLegendClick"];
-
-  protected _defaults = {
-    defaultLoadingIndicator: "loadingIndicator"
-  };
-
-  protected _expectedChildren = {
-    adaptiveLayout: { optionName: "adaptiveLayout", isCollectionItem: false },
-    export: { optionName: "export", isCollectionItem: false },
-    funnelTitle: { optionName: "title", isCollectionItem: false },
-    item: { optionName: "item", isCollectionItem: false },
-    label: { optionName: "label", isCollectionItem: false },
-    legend: { optionName: "legend", isCollectionItem: false },
-    loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
-    margin: { optionName: "margin", isCollectionItem: false },
-    size: { optionName: "size", isCollectionItem: false },
-    title: { optionName: "title", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
+interface FunnelRef {
+  instance: () => dxFunnel;
 }
-(Funnel as any).propTypes = {
-  adaptiveLayout: PropTypes.object,
-  algorithm: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "dynamicHeight",
-      "dynamicSlope"])
-  ]),
-  argumentField: PropTypes.string,
-  colorField: PropTypes.string,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  export: PropTypes.object,
-  hoverEnabled: PropTypes.bool,
-  inverted: PropTypes.bool,
-  item: PropTypes.object,
-  label: PropTypes.object,
-  legend: PropTypes.object,
-  loadingIndicator: PropTypes.object,
-  margin: PropTypes.object,
-  neckHeight: PropTypes.number,
-  neckWidth: PropTypes.number,
-  onDisposing: PropTypes.func,
-  onDrawn: PropTypes.func,
-  onExported: PropTypes.func,
-  onExporting: PropTypes.func,
-  onFileSaving: PropTypes.func,
-  onHoverChanged: PropTypes.func,
-  onIncidentOccurred: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onLegendClick: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  palette: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "Bright",
-      "Harmony Light",
-      "Ocean",
-      "Pastel",
-      "Soft",
-      "Soft Pastel",
-      "Vintage",
-      "Violet",
-      "Carmine",
-      "Dark Moon",
-      "Dark Violet",
-      "Green Mist",
-      "Soft Blue",
-      "Material",
-      "Office"])
-  ])
-  ]),
-  paletteExtensionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "alternate",
-      "blend",
-      "extrapolate"])
-  ]),
-  pathModified: PropTypes.bool,
-  redrawOnResize: PropTypes.bool,
-  resolveLabelOverlapping: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "hide",
-      "none",
-      "shift"])
-  ]),
-  rtlEnabled: PropTypes.bool,
-  selectionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "single",
-      "multiple",
-      "none"])
-  ]),
-  size: PropTypes.object,
-  sortData: PropTypes.bool,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "generic.dark",
-      "generic.light",
-      "generic.contrast",
-      "generic.carmine",
-      "generic.darkmoon",
-      "generic.darkviolet",
-      "generic.greenmist",
-      "generic.softblue",
-      "material.blue.light",
-      "material.lime.light",
-      "material.orange.light",
-      "material.purple.light",
-      "material.teal.light"])
-  ]),
-  title: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  tooltip: PropTypes.object,
-  valueField: PropTypes.string
-};
+
+const Funnel = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IFunnelOptions>, ref: ForwardedRef<FunnelRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onItemClick","onLegendClick"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultLoadingIndicator: "loadingIndicator",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        adaptiveLayout: { optionName: "adaptiveLayout", isCollectionItem: false },
+        export: { optionName: "export", isCollectionItem: false },
+        funnelTitle: { optionName: "title", isCollectionItem: false },
+        item: { optionName: "item", isCollectionItem: false },
+        label: { optionName: "label", isCollectionItem: false },
+        legend: { optionName: "legend", isCollectionItem: false },
+        loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
+        margin: { optionName: "margin", isCollectionItem: false },
+        size: { optionName: "size", isCollectionItem: false },
+        title: { optionName: "title", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IFunnelOptions>>, {
+          WidgetClass: dxFunnel,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IFunnelOptions> & { ref?: Ref<FunnelRef> }) => ReactElement | null;
 
 
 // owners:
@@ -179,9 +96,15 @@ type IAdaptiveLayoutProps = React.PropsWithChildren<{
   keepLabels?: boolean;
   width?: number;
 }>
-class AdaptiveLayout extends NestedOption<IAdaptiveLayoutProps> {
-  public static OptionName = "adaptiveLayout";
-}
+const _componentAdaptiveLayout = memo(
+  (props: IAdaptiveLayoutProps) => {
+    return React.createElement(NestedOption<IAdaptiveLayoutProps>, { ...props });
+  }
+);
+
+const AdaptiveLayout: typeof _componentAdaptiveLayout & IElementDescriptor = Object.assign(_componentAdaptiveLayout, {
+  OptionName: "adaptiveLayout",
+})
 
 // owners:
 // Item
@@ -198,9 +121,15 @@ type IBorderProps = React.PropsWithChildren<{
   cornerRadius?: number;
   opacity?: number;
 }>
-class Border extends NestedOption<IBorderProps> {
-  public static OptionName = "border";
-}
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
+
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Label
@@ -210,9 +139,15 @@ type IConnectorProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class Connector extends NestedOption<IConnectorProps> {
-  public static OptionName = "connector";
-}
+const _componentConnector = memo(
+  (props: IConnectorProps) => {
+    return React.createElement(NestedOption<IConnectorProps>, { ...props });
+  }
+);
+
+const Connector: typeof _componentConnector & IElementDescriptor = Object.assign(_componentConnector, {
+  OptionName: "connector",
+})
 
 // owners:
 // Funnel
@@ -225,9 +160,15 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-}
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // Label
@@ -245,9 +186,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-class Font extends NestedOption<IFontProps> {
-  public static OptionName = "font";
-}
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
+
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Label
@@ -260,9 +207,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // Funnel
@@ -288,15 +241,21 @@ type IFunnelTitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class FunnelTitle extends NestedOption<IFunnelTitleProps> {
-  public static OptionName = "title";
-  public static ExpectedChildren = {
+const _componentFunnelTitle = memo(
+  (props: IFunnelTitleProps) => {
+    return React.createElement(NestedOption<IFunnelTitleProps>, { ...props });
+  }
+);
+
+const FunnelTitle: typeof _componentFunnelTitle & IElementDescriptor = Object.assign(_componentFunnelTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false },
     funnelTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FunnelTitle
@@ -307,12 +266,18 @@ type IFunnelTitleSubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class FunnelTitleSubtitle extends NestedOption<IFunnelTitleSubtitleProps> {
-  public static OptionName = "subtitle";
-  public static ExpectedChildren = {
+const _componentFunnelTitleSubtitle = memo(
+  (props: IFunnelTitleSubtitleProps) => {
+    return React.createElement(NestedOption<IFunnelTitleSubtitleProps>, { ...props });
+  }
+);
+
+const FunnelTitleSubtitle: typeof _componentFunnelTitleSubtitle & IElementDescriptor = Object.assign(_componentFunnelTitleSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // HoverStyle
@@ -323,9 +288,15 @@ type IHatchingProps = React.PropsWithChildren<{
   step?: number;
   width?: number;
 }>
-class Hatching extends NestedOption<IHatchingProps> {
-  public static OptionName = "hatching";
-}
+const _componentHatching = memo(
+  (props: IHatchingProps) => {
+    return React.createElement(NestedOption<IHatchingProps>, { ...props });
+  }
+);
+
+const Hatching: typeof _componentHatching & IElementDescriptor = Object.assign(_componentHatching, {
+  OptionName: "hatching",
+})
 
 // owners:
 // Item
@@ -342,14 +313,20 @@ type IHoverStyleProps = React.PropsWithChildren<{
     width?: number;
   };
 }>
-class HoverStyle extends NestedOption<IHoverStyleProps> {
-  public static OptionName = "hoverStyle";
-  public static ExpectedChildren = {
+const _componentHoverStyle = memo(
+  (props: IHoverStyleProps) => {
+    return React.createElement(NestedOption<IHoverStyleProps>, { ...props });
+  }
+);
+
+const HoverStyle: typeof _componentHoverStyle & IElementDescriptor = Object.assign(_componentHoverStyle, {
+  OptionName: "hoverStyle",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     hatching: { optionName: "hatching", isCollectionItem: false },
     itemBorder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Funnel
@@ -386,15 +363,21 @@ type IItemProps = React.PropsWithChildren<{
     };
   };
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "item";
-  public static ExpectedChildren = {
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "item",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
     itemBorder: { optionName: "border", isCollectionItem: false },
     selectionStyle: { optionName: "selectionStyle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Item
@@ -405,9 +388,15 @@ type IItemBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class ItemBorder extends NestedOption<IItemBorderProps> {
-  public static OptionName = "border";
-}
+const _componentItemBorder = memo(
+  (props: IItemBorderProps) => {
+    return React.createElement(NestedOption<IItemBorderProps>, { ...props });
+  }
+);
+
+const ItemBorder: typeof _componentItemBorder & IElementDescriptor = Object.assign(_componentItemBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Funnel
@@ -436,16 +425,22 @@ type ILabelProps = React.PropsWithChildren<{
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Label extends NestedOption<ILabelProps> {
-  public static OptionName = "label";
-  public static ExpectedChildren = {
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
+
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     connector: { optionName: "connector", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     labelBorder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Label
@@ -455,9 +450,15 @@ type ILabelBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class LabelBorder extends NestedOption<ILabelBorderProps> {
-  public static OptionName = "border";
-}
+const _componentLabelBorder = memo(
+  (props: ILabelBorderProps) => {
+    return React.createElement(NestedOption<ILabelBorderProps>, { ...props });
+  }
+);
+
+const LabelBorder: typeof _componentLabelBorder & IElementDescriptor = Object.assign(_componentLabelBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Funnel
@@ -515,25 +516,29 @@ type ILegendProps = React.PropsWithChildren<{
   visible?: boolean;
   markerRender?: (...params: any) => React.ReactNode;
   markerComponent?: React.ComponentType<any>;
-  markerKeyFn?: (data: any) => string;
 }>
-class Legend extends NestedOption<ILegendProps> {
-  public static OptionName = "legend";
-  public static ExpectedChildren = {
+const _componentLegend = memo(
+  (props: ILegendProps) => {
+    return React.createElement(NestedOption<ILegendProps>, { ...props });
+  }
+);
+
+const Legend: typeof _componentLegend & IElementDescriptor = Object.assign(_componentLegend, {
+  OptionName: "legend",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     legendBorder: { optionName: "border", isCollectionItem: false },
     legendTitle: { optionName: "title", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     title: { optionName: "title", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "markerTemplate",
     render: "markerRender",
-    component: "markerComponent",
-    keyFn: "markerKeyFn"
-  }];
-}
+    component: "markerComponent"
+  }],
+})
 
 // owners:
 // Legend
@@ -545,9 +550,15 @@ type ILegendBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class LegendBorder extends NestedOption<ILegendBorderProps> {
-  public static OptionName = "border";
-}
+const _componentLegendBorder = memo(
+  (props: ILegendBorderProps) => {
+    return React.createElement(NestedOption<ILegendBorderProps>, { ...props });
+  }
+);
+
+const LegendBorder: typeof _componentLegendBorder & IElementDescriptor = Object.assign(_componentLegendBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Legend
@@ -569,15 +580,21 @@ type ILegendTitleProps = React.PropsWithChildren<{
   text?: string;
   verticalAlignment?: "bottom" | "top";
 }>
-class LegendTitle extends NestedOption<ILegendTitleProps> {
-  public static OptionName = "title";
-  public static ExpectedChildren = {
+const _componentLegendTitle = memo(
+  (props: ILegendTitleProps) => {
+    return React.createElement(NestedOption<ILegendTitleProps>, { ...props });
+  }
+);
+
+const LegendTitle: typeof _componentLegendTitle & IElementDescriptor = Object.assign(_componentLegendTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false },
     legendTitleSubtitle: { optionName: "subtitle", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // LegendTitle
@@ -586,12 +603,18 @@ type ILegendTitleSubtitleProps = React.PropsWithChildren<{
   offset?: number;
   text?: string;
 }>
-class LegendTitleSubtitle extends NestedOption<ILegendTitleSubtitleProps> {
-  public static OptionName = "subtitle";
-  public static ExpectedChildren = {
+const _componentLegendTitleSubtitle = memo(
+  (props: ILegendTitleSubtitleProps) => {
+    return React.createElement(NestedOption<ILegendTitleSubtitleProps>, { ...props });
+  }
+);
+
+const LegendTitleSubtitle: typeof _componentLegendTitleSubtitle & IElementDescriptor = Object.assign(_componentLegendTitleSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Funnel
@@ -604,15 +627,21 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
-  public static OptionName = "loadingIndicator";
-  public static DefaultsProps = {
+const _componentLoadingIndicator = memo(
+  (props: ILoadingIndicatorProps) => {
+    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
+  }
+);
+
+const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
+  OptionName: "loadingIndicator",
+  DefaultsProps: {
     defaultShow: "show"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Legend
@@ -625,9 +654,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-class Margin extends NestedOption<IMarginProps> {
-  public static OptionName = "margin";
-}
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
+
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // Item
@@ -644,14 +679,20 @@ type ISelectionStyleProps = React.PropsWithChildren<{
     width?: number;
   };
 }>
-class SelectionStyle extends NestedOption<ISelectionStyleProps> {
-  public static OptionName = "selectionStyle";
-  public static ExpectedChildren = {
+const _componentSelectionStyle = memo(
+  (props: ISelectionStyleProps) => {
+    return React.createElement(NestedOption<ISelectionStyleProps>, { ...props });
+  }
+);
+
+const SelectionStyle: typeof _componentSelectionStyle & IElementDescriptor = Object.assign(_componentSelectionStyle, {
+  OptionName: "selectionStyle",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     hatching: { optionName: "hatching", isCollectionItem: false },
     itemBorder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Tooltip
@@ -662,9 +703,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-class Shadow extends NestedOption<IShadowProps> {
-  public static OptionName = "shadow";
-}
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
+
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // Funnel
@@ -672,9 +719,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-class Size extends NestedOption<ISizeProps> {
-  public static OptionName = "size";
-}
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
+
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // LegendTitle
@@ -686,9 +739,15 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Subtitle extends NestedOption<ISubtitleProps> {
-  public static OptionName = "subtitle";
-}
+const _componentSubtitle = memo(
+  (props: ISubtitleProps) => {
+    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
+  }
+);
+
+const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
+  OptionName: "subtitle",
+})
 
 // owners:
 // Legend
@@ -715,9 +774,15 @@ type ITitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Title extends NestedOption<ITitleProps> {
-  public static OptionName = "title";
-}
+const _componentTitle = memo(
+  (props: ITitleProps) => {
+    return React.createElement(NestedOption<ITitleProps>, { ...props });
+  }
+);
+
+const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
+  OptionName: "title",
+})
 
 // owners:
 // Funnel
@@ -751,24 +816,28 @@ type ITooltipProps = React.PropsWithChildren<{
   zIndex?: number;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-  public static ExpectedChildren = {
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "contentTemplate",
     render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }];
-}
+    component: "contentComponent"
+  }],
+})
 
 // owners:
 // Tooltip
@@ -779,14 +848,21 @@ type ITooltipBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class TooltipBorder extends NestedOption<ITooltipBorderProps> {
-  public static OptionName = "border";
-}
+const _componentTooltipBorder = memo(
+  (props: ITooltipBorderProps) => {
+    return React.createElement(NestedOption<ITooltipBorderProps>, { ...props });
+  }
+);
+
+const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Object.assign(_componentTooltipBorder, {
+  OptionName: "border",
+})
 
 export default Funnel;
 export {
   Funnel,
   IFunnelOptions,
+  FunnelRef,
   AdaptiveLayout,
   IAdaptiveLayoutProps,
   Border,

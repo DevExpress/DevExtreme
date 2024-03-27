@@ -46,7 +46,7 @@ export default class extends React.Component<any, { text: string; uncontrolledTe
           defaultValue="initial text"
           ref={(ref) => {
             if (ref) {
-              this.textBox = ref.instance;
+              this.textBox = ref.instance();
             }
           }}
         />

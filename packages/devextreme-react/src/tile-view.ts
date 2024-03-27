@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/tile_view";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxTileView, {
     Properties
 } from "devextreme/ui/tile_view";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxTileViewItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/tile_view";
@@ -30,88 +31,61 @@ type ITileViewOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replace
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxTileViewItem | string>;
   onItemsChange?: (value: Array<any | dxTileViewItem | string>) => void;
 }>
 
-class TileView<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<ITileViewOptions<TItem, TKey>>> {
-
-  public get instance(): dxTileView<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxTileView;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface TileViewRef<TItem = any, TKey = any> {
+  instance: () => dxTileView<TItem, TKey>;
 }
-(TileView as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  baseItemHeight: PropTypes.number,
-  baseItemWidth: PropTypes.number,
-  direction: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "horizontal",
-      "vertical"])
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  itemMargin: PropTypes.number,
-  items: PropTypes.array,
-  noDataText: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  showScrollbar: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "never",
-      "onHover",
-      "onScroll"])
-  ]),
-  tabIndex: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const TileView = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<ITileViewOptions<TItem, TKey>>, ref: ForwardedRef<TileViewRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ITileViewOptions<TItem, TKey>>>, {
+          WidgetClass: dxTileView,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<ITileViewOptions<TItem, TKey>> & { ref?: Ref<TileViewRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -126,23 +100,28 @@ type IItemProps = React.PropsWithChildren<{
   widthRatio?: number;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default TileView;
 export {
   TileView,
   ITileViewOptions,
+  TileViewRef,
   Item,
   IItemProps
 };

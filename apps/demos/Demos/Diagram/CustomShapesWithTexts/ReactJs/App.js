@@ -7,7 +7,7 @@ const employees = service.getEmployees();
 export default function App() {
   const diagramRef = useRef();
   useEffect(() => {
-    const diagram = diagramRef.current.instance;
+    const diagram = diagramRef.current.instance();
     fetch('../../../../data/diagram-employees.json')
       .then((response) => response.json())
       .then((json) => {

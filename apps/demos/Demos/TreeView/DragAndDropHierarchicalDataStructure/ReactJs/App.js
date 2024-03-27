@@ -76,8 +76,8 @@ const App = () => {
   const getTreeView = useCallback(
     (driveName) =>
       (driveName === 'driveC'
-        ? treeViewDriveCRef.current.instance
-        : treeViewDriveDRef.current.instance),
+        ? treeViewDriveCRef.current.instance()
+        : treeViewDriveDRef.current.instance()),
     [],
   );
   const onDragChange = useCallback(

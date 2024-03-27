@@ -42,21 +42,21 @@ const App = () => {
     const doc = new jsPDF();
     exportDataGrid({
       jsPDFDocument: doc,
-      component: priceGridRef.current.instance,
+      component: priceGridRef.current.instance(),
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(priceGridRef.current.instance, gridCell, pdfCell);
+        setAlternatingRowsBackground(priceGridRef.current.instance(), gridCell, pdfCell);
       },
     }).then(() => {
       doc.addPage();
       exportDataGrid({
         jsPDFDocument: doc,
-        component: ratingGridRef.current.instance,
+        component: ratingGridRef.current.instance(),
         topLeft: { x: 7, y: 5 },
         columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(ratingGridRef.current.instance, gridCell, pdfCell);
+          setAlternatingRowsBackground(ratingGridRef.current.instance(), gridCell, pdfCell);
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');

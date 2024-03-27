@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxPivotGrid, {
     Properties
 } from "devextreme/ui/pivot_grid";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { CellClickEvent, CellPreparedEvent, ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, ExportingEvent, InitializedEvent } from "devextreme/ui/pivot_grid";
@@ -26,94 +27,49 @@ type IPivotGridOptionsNarrowedEvents = {
 
 type IPivotGridOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPivotGridOptionsNarrowedEvents> & IHtmlOptions>
 
-class PivotGrid extends BaseComponent<React.PropsWithChildren<IPivotGridOptions>> {
-
-  public get instance(): dxPivotGrid {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxPivotGrid;
-
-  protected independentEvents = ["onCellClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDisposing","onExporting","onInitialized"];
-
-  protected _expectedChildren = {
-    export: { optionName: "export", isCollectionItem: false },
-    fieldChooser: { optionName: "fieldChooser", isCollectionItem: false },
-    fieldPanel: { optionName: "fieldPanel", isCollectionItem: false },
-    headerFilter: { optionName: "headerFilter", isCollectionItem: false },
-    loadPanel: { optionName: "loadPanel", isCollectionItem: false },
-    pivotGridTexts: { optionName: "texts", isCollectionItem: false },
-    scrolling: { optionName: "scrolling", isCollectionItem: false },
-    stateStoring: { optionName: "stateStoring", isCollectionItem: false },
-    texts: { optionName: "texts", isCollectionItem: false }
-  };
+interface PivotGridRef {
+  instance: () => dxPivotGrid;
 }
-(PivotGrid as any).propTypes = {
-  allowExpandAll: PropTypes.bool,
-  allowFiltering: PropTypes.bool,
-  allowSorting: PropTypes.bool,
-  allowSortingBySummary: PropTypes.bool,
-  dataFieldArea: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "column",
-      "row"])
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  encodeHtml: PropTypes.bool,
-  export: PropTypes.object,
-  fieldChooser: PropTypes.object,
-  fieldPanel: PropTypes.object,
-  headerFilter: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hideEmptySummaryCells: PropTypes.bool,
-  hint: PropTypes.string,
-  loadPanel: PropTypes.object,
-  onCellClick: PropTypes.func,
-  onCellPrepared: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onContextMenuPreparing: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onExporting: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rowHeaderLayout: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "standard",
-      "tree"])
-  ]),
-  rtlEnabled: PropTypes.bool,
-  scrolling: PropTypes.object,
-  showBorders: PropTypes.bool,
-  showColumnGrandTotals: PropTypes.bool,
-  showColumnTotals: PropTypes.bool,
-  showRowGrandTotals: PropTypes.bool,
-  showRowTotals: PropTypes.bool,
-  showTotalsPrior: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "both",
-      "columns",
-      "none",
-      "rows"])
-  ]),
-  stateStoring: PropTypes.object,
-  tabIndex: PropTypes.number,
-  texts: PropTypes.object,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  wordWrapEnabled: PropTypes.bool
-};
+
+const PivotGrid = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IPivotGridOptions>, ref: ForwardedRef<PivotGridRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onCellClick","onCellPrepared","onContentReady","onContextMenuPreparing","onDisposing","onExporting","onInitialized"]), []);
+
+      const expectedChildren = useMemo(() => ({
+        export: { optionName: "export", isCollectionItem: false },
+        fieldChooser: { optionName: "fieldChooser", isCollectionItem: false },
+        fieldPanel: { optionName: "fieldPanel", isCollectionItem: false },
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false },
+        loadPanel: { optionName: "loadPanel", isCollectionItem: false },
+        pivotGridTexts: { optionName: "texts", isCollectionItem: false },
+        scrolling: { optionName: "scrolling", isCollectionItem: false },
+        stateStoring: { optionName: "stateStoring", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IPivotGridOptions>>, {
+          WidgetClass: dxPivotGrid,
+          ref: baseRef,
+          independentEvents,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IPivotGridOptions> & { ref?: Ref<PivotGridRef> }) => ReactElement | null;
 
 
 // owners:
@@ -121,9 +77,15 @@ class PivotGrid extends BaseComponent<React.PropsWithChildren<IPivotGridOptions>
 type IExportProps = React.PropsWithChildren<{
   enabled?: boolean;
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-}
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // PivotGrid
@@ -144,13 +106,19 @@ type IFieldChooserProps = React.PropsWithChildren<{
   title?: string;
   width?: number;
 }>
-class FieldChooser extends NestedOption<IFieldChooserProps> {
-  public static OptionName = "fieldChooser";
-  public static ExpectedChildren = {
+const _componentFieldChooser = memo(
+  (props: IFieldChooserProps) => {
+    return React.createElement(NestedOption<IFieldChooserProps>, { ...props });
+  }
+);
+
+const FieldChooser: typeof _componentFieldChooser & IElementDescriptor = Object.assign(_componentFieldChooser, {
+  OptionName: "fieldChooser",
+  ExpectedChildren: {
     fieldChooserTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FieldChooser
@@ -161,9 +129,15 @@ type IFieldChooserTextsProps = React.PropsWithChildren<{
   filterFields?: string;
   rowFields?: string;
 }>
-class FieldChooserTexts extends NestedOption<IFieldChooserTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentFieldChooserTexts = memo(
+  (props: IFieldChooserTextsProps) => {
+    return React.createElement(NestedOption<IFieldChooserTextsProps>, { ...props });
+  }
+);
+
+const FieldChooserTexts: typeof _componentFieldChooserTexts & IElementDescriptor = Object.assign(_componentFieldChooserTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -181,13 +155,19 @@ type IFieldPanelProps = React.PropsWithChildren<{
   };
   visible?: boolean;
 }>
-class FieldPanel extends NestedOption<IFieldPanelProps> {
-  public static OptionName = "fieldPanel";
-  public static ExpectedChildren = {
+const _componentFieldPanel = memo(
+  (props: IFieldPanelProps) => {
+    return React.createElement(NestedOption<IFieldPanelProps>, { ...props });
+  }
+);
+
+const FieldPanel: typeof _componentFieldPanel & IElementDescriptor = Object.assign(_componentFieldPanel, {
+  OptionName: "fieldPanel",
+  ExpectedChildren: {
     fieldPanelTexts: { optionName: "texts", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // FieldPanel
@@ -197,9 +177,15 @@ type IFieldPanelTextsProps = React.PropsWithChildren<{
   filterFieldArea?: string;
   rowFieldArea?: string;
 }>
-class FieldPanelTexts extends NestedOption<IFieldPanelTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentFieldPanelTexts = memo(
+  (props: IFieldPanelTextsProps) => {
+    return React.createElement(NestedOption<IFieldPanelTextsProps>, { ...props });
+  }
+);
+
+const FieldPanelTexts: typeof _componentFieldPanelTexts & IElementDescriptor = Object.assign(_componentFieldPanelTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -217,14 +203,20 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   };
   width?: number;
 }>
-class HeaderFilter extends NestedOption<IHeaderFilterProps> {
-  public static OptionName = "headerFilter";
-  public static ExpectedChildren = {
+const _componentHeaderFilter = memo(
+  (props: IHeaderFilterProps) => {
+    return React.createElement(NestedOption<IHeaderFilterProps>, { ...props });
+  }
+);
+
+const HeaderFilter: typeof _componentHeaderFilter & IElementDescriptor = Object.assign(_componentHeaderFilter, {
+  OptionName: "headerFilter",
+  ExpectedChildren: {
     headerFilterTexts: { optionName: "texts", isCollectionItem: false },
     search: { optionName: "search", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // HeaderFilter
@@ -233,9 +225,15 @@ type IHeaderFilterTextsProps = React.PropsWithChildren<{
   emptyValue?: string;
   ok?: string;
 }>
-class HeaderFilterTexts extends NestedOption<IHeaderFilterTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentHeaderFilterTexts = memo(
+  (props: IHeaderFilterTextsProps) => {
+    return React.createElement(NestedOption<IHeaderFilterTextsProps>, { ...props });
+  }
+);
+
+const HeaderFilterTexts: typeof _componentHeaderFilterTexts & IElementDescriptor = Object.assign(_componentHeaderFilterTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -250,9 +248,15 @@ type ILoadPanelProps = React.PropsWithChildren<{
   text?: string;
   width?: number;
 }>
-class LoadPanel extends NestedOption<ILoadPanelProps> {
-  public static OptionName = "loadPanel";
-}
+const _componentLoadPanel = memo(
+  (props: ILoadPanelProps) => {
+    return React.createElement(NestedOption<ILoadPanelProps>, { ...props });
+  }
+);
+
+const LoadPanel: typeof _componentLoadPanel & IElementDescriptor = Object.assign(_componentLoadPanel, {
+  OptionName: "loadPanel",
+})
 
 // owners:
 // PivotGrid
@@ -269,9 +273,15 @@ type IPivotGridTextsProps = React.PropsWithChildren<{
   sortRowBySummary?: string;
   total?: string;
 }>
-class PivotGridTexts extends NestedOption<IPivotGridTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentPivotGridTexts = memo(
+  (props: IPivotGridTextsProps) => {
+    return React.createElement(NestedOption<IPivotGridTextsProps>, { ...props });
+  }
+);
+
+const PivotGridTexts: typeof _componentPivotGridTexts & IElementDescriptor = Object.assign(_componentPivotGridTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGrid
@@ -279,9 +289,15 @@ type IScrollingProps = React.PropsWithChildren<{
   mode?: "standard" | "virtual";
   useNative?: boolean | "auto";
 }>
-class Scrolling extends NestedOption<IScrollingProps> {
-  public static OptionName = "scrolling";
-}
+const _componentScrolling = memo(
+  (props: IScrollingProps) => {
+    return React.createElement(NestedOption<IScrollingProps>, { ...props });
+  }
+);
+
+const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign(_componentScrolling, {
+  OptionName: "scrolling",
+})
 
 // owners:
 // HeaderFilter
@@ -291,9 +307,15 @@ type ISearchProps = React.PropsWithChildren<{
   mode?: "contains" | "startswith" | "equals";
   timeout?: number;
 }>
-class Search extends NestedOption<ISearchProps> {
-  public static OptionName = "search";
-}
+const _componentSearch = memo(
+  (props: ISearchProps) => {
+    return React.createElement(NestedOption<ISearchProps>, { ...props });
+  }
+);
+
+const Search: typeof _componentSearch & IElementDescriptor = Object.assign(_componentSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // PivotGrid
@@ -305,9 +327,15 @@ type IStateStoringProps = React.PropsWithChildren<{
   storageKey?: string;
   type?: "custom" | "localStorage" | "sessionStorage";
 }>
-class StateStoring extends NestedOption<IStateStoringProps> {
-  public static OptionName = "stateStoring";
-}
+const _componentStateStoring = memo(
+  (props: IStateStoringProps) => {
+    return React.createElement(NestedOption<IStateStoringProps>, { ...props });
+  }
+);
+
+const StateStoring: typeof _componentStateStoring & IElementDescriptor = Object.assign(_componentStateStoring, {
+  OptionName: "stateStoring",
+})
 
 // owners:
 // FieldChooser
@@ -339,14 +367,21 @@ type ITextsProps = React.PropsWithChildren<{
   sortRowBySummary?: string;
   total?: string;
 }>
-class Texts extends NestedOption<ITextsProps> {
-  public static OptionName = "texts";
-}
+const _componentTexts = memo(
+  (props: ITextsProps) => {
+    return React.createElement(NestedOption<ITextsProps>, { ...props });
+  }
+);
+
+const Texts: typeof _componentTexts & IElementDescriptor = Object.assign(_componentTexts, {
+  OptionName: "texts",
+})
 
 export default PivotGrid;
 export {
   PivotGrid,
   IPivotGridOptions,
+  PivotGridRef,
   Export,
   IExportProps,
   FieldChooser,

@@ -13,7 +13,6 @@ interface ITemplate {
   isAnonymous: boolean;
   type: 'component' | 'render' | 'children';
   content: any;
-  keyFn?: (data: any) => string;
 }
 
 export {

@@ -1,5 +1,6 @@
 import { render as testingRender, cleanup } from '@testing-library/react';
 import * as React from 'react';
+import { memo } from 'react';
 import { act } from 'react-dom/test-utils';
 import config, { getOption } from '../config';
 import {
@@ -7,14 +8,18 @@ import {
   WidgetClass,
 } from './test-component';
 
-class ComponentWithTemplates extends TestComponent {
-  protected _templateProps = [{
-    tmplOption: 'item',
-    render: 'itemRender',
-    component: 'itemComponent',
-    keyFn: 'itemKeyFn',
-  }];
-}
+const ComponentWithTemplates = memo(function ComponentWithTemplates(props: any) {
+  return (
+    <TestComponent
+      templateProps={[{
+        tmplOption: 'item',
+        render: 'itemRender',
+        component: 'itemComponent',
+      }]}
+      {...props}
+    />
+  );
+});
 
 describe('useLegacyTemplateEngine', () => {
   const originalValue = getOption('useLegacyTemplateEngine');

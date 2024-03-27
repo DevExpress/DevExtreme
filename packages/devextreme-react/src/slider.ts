@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxSlider, {
     Properties
 } from "devextreme/ui/slider";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/slider";
@@ -27,94 +28,49 @@ type ISliderOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISli
   onValueChange?: (value: number) => void;
 }>
 
-class Slider extends BaseComponent<React.PropsWithChildren<ISliderOptions>> {
-
-  public get instance(): dxSlider {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxSlider;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
-
-  protected _expectedChildren = {
-    label: { optionName: "label", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
+interface SliderRef {
+  instance: () => dxSlider;
 }
-(Slider as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  keyStep: PropTypes.number,
-  label: PropTypes.object,
-  max: PropTypes.number,
-  min: PropTypes.number,
-  name: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  showRange: PropTypes.bool,
-  step: PropTypes.number,
-  tabIndex: PropTypes.number,
-  tooltip: PropTypes.object,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  value: PropTypes.number,
-  valueChangeMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "onHandleMove",
-      "onHandleRelease"])
-  ]),
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Slider = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ISliderOptions>, ref: ForwardedRef<SliderRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        label: { optionName: "label", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ISliderOptions>>, {
+          WidgetClass: dxSlider,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ISliderOptions> & { ref?: Ref<SliderRef> }) => ReactElement | null;
 
 
 // owners:
@@ -128,9 +84,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // Slider
@@ -139,12 +101,18 @@ type ILabelProps = React.PropsWithChildren<{
   position?: "bottom" | "top";
   visible?: boolean;
 }>
-class Label extends NestedOption<ILabelProps> {
-  public static OptionName = "label";
-  public static ExpectedChildren = {
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
+
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
     format: { optionName: "format", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Slider
@@ -154,17 +122,24 @@ type ITooltipProps = React.PropsWithChildren<{
   position?: "bottom" | "top";
   showMode?: "always" | "onHover";
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-  public static ExpectedChildren = {
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
     format: { optionName: "format", isCollectionItem: false }
-  };
-}
+  },
+})
 
 export default Slider;
 export {
   Slider,
   ISliderOptions,
+  SliderRef,
   Format,
   IFormatProps,
   Label,

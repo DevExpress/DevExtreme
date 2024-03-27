@@ -49,7 +49,7 @@ export default function App() {
   }, [setWeekendDisabled]);
 
   const onClearButtonClick = useCallback(() => {
-    calendar.current.instance.clear();
+    calendar.current.instance().clear();
   }, []);
 
   return (

@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxPivotGridFieldChooser, {
     Properties
 } from "devextreme/ui/pivot_grid_field_chooser";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, ContextMenuPreparingEvent, DisposingEvent, InitializedEvent } from "devextreme/ui/pivot_grid_field_chooser";
@@ -23,67 +24,43 @@ type IPivotGridFieldChooserOptionsNarrowedEvents = {
 
 type IPivotGridFieldChooserOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPivotGridFieldChooserOptionsNarrowedEvents> & IHtmlOptions>
 
-class PivotGridFieldChooser extends BaseComponent<React.PropsWithChildren<IPivotGridFieldChooserOptions>> {
-
-  public get instance(): dxPivotGridFieldChooser {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxPivotGridFieldChooser;
-
-  protected independentEvents = ["onContentReady","onContextMenuPreparing","onDisposing","onInitialized"];
-
-  protected _expectedChildren = {
-    headerFilter: { optionName: "headerFilter", isCollectionItem: false },
-    pivotGridFieldChooserTexts: { optionName: "texts", isCollectionItem: false },
-    texts: { optionName: "texts", isCollectionItem: false }
-  };
+interface PivotGridFieldChooserRef {
+  instance: () => dxPivotGridFieldChooser;
 }
-(PivotGridFieldChooser as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  allowSearch: PropTypes.bool,
-  applyChangesMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "instantly",
-      "onDemand"])
-  ]),
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  encodeHtml: PropTypes.bool,
-  focusStateEnabled: PropTypes.bool,
-  headerFilter: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  layout: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([
-      0,
-      1,
-      2])
-  ]),
-  onContentReady: PropTypes.func,
-  onContextMenuPreparing: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  searchTimeout: PropTypes.number,
-  tabIndex: PropTypes.number,
-  texts: PropTypes.object,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const PivotGridFieldChooser = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IPivotGridFieldChooserOptions>, ref: ForwardedRef<PivotGridFieldChooserRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onContentReady","onContextMenuPreparing","onDisposing","onInitialized"]), []);
+
+      const expectedChildren = useMemo(() => ({
+        headerFilter: { optionName: "headerFilter", isCollectionItem: false },
+        pivotGridFieldChooserTexts: { optionName: "texts", isCollectionItem: false },
+        texts: { optionName: "texts", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IPivotGridFieldChooserOptions>>, {
+          WidgetClass: dxPivotGridFieldChooser,
+          ref: baseRef,
+          independentEvents,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IPivotGridFieldChooserOptions> & { ref?: Ref<PivotGridFieldChooserRef> }) => ReactElement | null;
 
 
 // owners:
@@ -102,14 +79,20 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   };
   width?: number;
 }>
-class HeaderFilter extends NestedOption<IHeaderFilterProps> {
-  public static OptionName = "headerFilter";
-  public static ExpectedChildren = {
+const _componentHeaderFilter = memo(
+  (props: IHeaderFilterProps) => {
+    return React.createElement(NestedOption<IHeaderFilterProps>, { ...props });
+  }
+);
+
+const HeaderFilter: typeof _componentHeaderFilter & IElementDescriptor = Object.assign(_componentHeaderFilter, {
+  OptionName: "headerFilter",
+  ExpectedChildren: {
     headerFilterTexts: { optionName: "texts", isCollectionItem: false },
     search: { optionName: "search", isCollectionItem: false },
     texts: { optionName: "texts", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // HeaderFilter
@@ -118,9 +101,15 @@ type IHeaderFilterTextsProps = React.PropsWithChildren<{
   emptyValue?: string;
   ok?: string;
 }>
-class HeaderFilterTexts extends NestedOption<IHeaderFilterTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentHeaderFilterTexts = memo(
+  (props: IHeaderFilterTextsProps) => {
+    return React.createElement(NestedOption<IHeaderFilterTextsProps>, { ...props });
+  }
+);
+
+const HeaderFilterTexts: typeof _componentHeaderFilterTexts & IElementDescriptor = Object.assign(_componentHeaderFilterTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // PivotGridFieldChooser
@@ -131,9 +120,15 @@ type IPivotGridFieldChooserTextsProps = React.PropsWithChildren<{
   filterFields?: string;
   rowFields?: string;
 }>
-class PivotGridFieldChooserTexts extends NestedOption<IPivotGridFieldChooserTextsProps> {
-  public static OptionName = "texts";
-}
+const _componentPivotGridFieldChooserTexts = memo(
+  (props: IPivotGridFieldChooserTextsProps) => {
+    return React.createElement(NestedOption<IPivotGridFieldChooserTextsProps>, { ...props });
+  }
+);
+
+const PivotGridFieldChooserTexts: typeof _componentPivotGridFieldChooserTexts & IElementDescriptor = Object.assign(_componentPivotGridFieldChooserTexts, {
+  OptionName: "texts",
+})
 
 // owners:
 // HeaderFilter
@@ -143,9 +138,15 @@ type ISearchProps = React.PropsWithChildren<{
   mode?: "contains" | "startswith" | "equals";
   timeout?: number;
 }>
-class Search extends NestedOption<ISearchProps> {
-  public static OptionName = "search";
-}
+const _componentSearch = memo(
+  (props: ISearchProps) => {
+    return React.createElement(NestedOption<ISearchProps>, { ...props });
+  }
+);
+
+const Search: typeof _componentSearch & IElementDescriptor = Object.assign(_componentSearch, {
+  OptionName: "search",
+})
 
 // owners:
 // HeaderFilter
@@ -160,14 +161,21 @@ type ITextsProps = React.PropsWithChildren<{
   filterFields?: string;
   rowFields?: string;
 }>
-class Texts extends NestedOption<ITextsProps> {
-  public static OptionName = "texts";
-}
+const _componentTexts = memo(
+  (props: ITextsProps) => {
+    return React.createElement(NestedOption<ITextsProps>, { ...props });
+  }
+);
+
+const Texts: typeof _componentTexts & IElementDescriptor = Object.assign(_componentTexts, {
+  OptionName: "texts",
+})
 
 export default PivotGridFieldChooser;
 export {
   PivotGridFieldChooser,
   IPivotGridFieldChooserOptions,
+  PivotGridFieldChooserRef,
   HeaderFilter,
   IHeaderFilterProps,
   HeaderFilterTexts,

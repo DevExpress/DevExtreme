@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/splitter";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxSplitter, {
     Properties
 } from "devextreme/ui/splitter";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxSplitterItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, ResizeEvent, ResizeEndEvent, ResizeStartEvent, dxSplitterOptions } from "devextreme/ui/splitter";
@@ -34,77 +35,61 @@ type ISplitterOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replace
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxSplitterItem | string>;
   onItemsChange?: (value: Array<any | dxSplitterItem | string>) => void;
 }>
 
-class Splitter<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<ISplitterOptions<TItem, TKey>>> {
-
-  public get instance(): dxSplitter<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxSplitter;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemRendered","onResize","onResizeEnd","onResizeStart"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface SplitterRef<TItem = any, TKey = any> {
+  instance: () => dxSplitter<TItem, TKey>;
 }
-(Splitter as any).propTypes = {
-  allowKeyboardNavigation: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hoverStateEnabled: PropTypes.bool,
-  items: PropTypes.array,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemCollapsed: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemExpanded: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onResize: PropTypes.func,
-  onResizeEnd: PropTypes.func,
-  onResizeStart: PropTypes.func,
-  orientation: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "horizontal",
-      "vertical"])
-  ]),
-  repaintChangesOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  separatorSize: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Splitter = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<ISplitterOptions<TItem, TKey>>, ref: ForwardedRef<SplitterRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemCollapsed","onItemContextMenu","onItemExpanded","onItemRendered","onResize","onResizeEnd","onResizeStart"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ISplitterOptions<TItem, TKey>>>, {
+          WidgetClass: dxSplitter,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<ISplitterOptions<TItem, TKey>> & { ref?: Ref<SplitterRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -123,23 +108,28 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default Splitter;
 export {
   Splitter,
   ISplitterOptions,
+  SplitterRef,
   Item,
   IItemProps
 };

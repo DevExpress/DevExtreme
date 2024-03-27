@@ -29,8 +29,8 @@ const App = () => {
   const vectorMapRef = useRef(null);
 
   const reset = useCallback(() => {
-    vectorMapRef.current.instance.center(null);
-    vectorMapRef.current.instance.zoomFactor(null);
+    vectorMapRef.current.instance().center(null);
+    vectorMapRef.current.instance().zoomFactor(null);
   }, [vectorMapRef]);
 
   return (

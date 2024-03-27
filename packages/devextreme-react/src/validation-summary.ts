@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/validation_summary";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxValidationSummary, {
     Properties
 } from "devextreme/ui/validation_summary";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -27,49 +28,61 @@ type IValidationSummaryOptions<TItem = any, TKey = any> = React.PropsWithChildre
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | CollectionWidgetItem | string>;
   onItemsChange?: (value: Array<any | CollectionWidgetItem | string>) => void;
 }>
 
-class ValidationSummary<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IValidationSummaryOptions<TItem, TKey>>> {
-
-  public get instance(): dxValidationSummary<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxValidationSummary;
-
-  protected subscribableOptions = ["items"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick"];
-
-  protected _defaults = {
-    defaultItems: "items"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface ValidationSummaryRef<TItem = any, TKey = any> {
+  instance: () => dxValidationSummary<TItem, TKey>;
 }
-(ValidationSummary as any).propTypes = {
-  elementAttr: PropTypes.object,
-  hoverStateEnabled: PropTypes.bool,
-  items: PropTypes.array,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  validationGroup: PropTypes.string
-};
+
+const ValidationSummary = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IValidationSummaryOptions<TItem, TKey>>, ref: ForwardedRef<ValidationSummaryRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IValidationSummaryOptions<TItem, TKey>>>, {
+          WidgetClass: dxValidationSummary,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IValidationSummaryOptions<TItem, TKey>> & { ref?: Ref<ValidationSummaryRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -82,23 +95,28 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default ValidationSummary;
 export {
   ValidationSummary,
   IValidationSummaryOptions,
+  ValidationSummaryRef,
   Item,
   IItemProps
 };

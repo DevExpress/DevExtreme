@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxTextBox, {
     Properties
 } from "devextreme/ui/text_box";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, PasteEvent, ValueChangedEvent } from "devextreme/ui/text_box";
@@ -37,136 +38,48 @@ type ITextBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITe
   onValueChange?: (value: string) => void;
 }>
 
-class TextBox extends BaseComponent<React.PropsWithChildren<ITextBoxOptions>> {
-
-  public get instance(): dxTextBox {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxTextBox;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onChange","onContentReady","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onPaste","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
-
-  protected _expectedChildren = {
-    button: { optionName: "buttons", isCollectionItem: true }
-  };
+interface TextBoxRef {
+  instance: () => dxTextBox;
 }
-(TextBox as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  buttons: PropTypes.array,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  label: PropTypes.string,
-  labelMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "static",
-      "floating",
-      "hidden",
-      "outside"])
-  ]),
-  mask: PropTypes.string,
-  maskChar: PropTypes.string,
-  maskInvalidMessage: PropTypes.string,
-  maxLength: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  mode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "email",
-      "password",
-      "search",
-      "tel",
-      "text",
-      "url"])
-  ]),
-  name: PropTypes.string,
-  onChange: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onCopy: PropTypes.func,
-  onCut: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onEnterKey: PropTypes.func,
-  onFocusIn: PropTypes.func,
-  onFocusOut: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onInput: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  onKeyUp: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onPaste: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  placeholder: PropTypes.string,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  showClearButton: PropTypes.bool,
-  showMaskMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "onFocus"])
-  ]),
-  spellcheck: PropTypes.bool,
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "outlined",
-      "underlined",
-      "filled"])
-  ]),
-  tabIndex: PropTypes.number,
-  text: PropTypes.string,
-  useMaskedValue: PropTypes.bool,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  value: PropTypes.string,
-  valueChangeEvent: PropTypes.string,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const TextBox = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ITextBoxOptions>, ref: ForwardedRef<TextBoxRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onChange","onContentReady","onCopy","onCut","onDisposing","onEnterKey","onFocusIn","onFocusOut","onInitialized","onInput","onKeyDown","onKeyUp","onPaste","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        button: { optionName: "buttons", isCollectionItem: true }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ITextBoxOptions>>, {
+          WidgetClass: dxTextBox,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ITextBoxOptions> & { ref?: Ref<TextBoxRef> }) => ReactElement | null;
 
 
 // owners:
@@ -176,13 +89,19 @@ type IButtonProps = React.PropsWithChildren<{
   name?: string;
   options?: dxButtonOptions;
 }>
-class Button extends NestedOption<IButtonProps> {
-  public static OptionName = "buttons";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentButton = memo(
+  (props: IButtonProps) => {
+    return React.createElement(NestedOption<IButtonProps>, { ...props });
+  }
+);
+
+const Button: typeof _componentButton & IElementDescriptor = Object.assign(_componentButton, {
+  OptionName: "buttons",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     options: { optionName: "options", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Button
@@ -214,22 +133,27 @@ type IOptionsProps = React.PropsWithChildren<{
   width?: (() => number | string) | number | string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Options extends NestedOption<IOptionsProps> {
-  public static OptionName = "options";
-  public static TemplateProps = [{
+const _componentOptions = memo(
+  (props: IOptionsProps) => {
+    return React.createElement(NestedOption<IOptionsProps>, { ...props });
+  }
+);
+
+const Options: typeof _componentOptions & IElementDescriptor = Object.assign(_componentOptions, {
+  OptionName: "options",
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default TextBox;
 export {
   TextBox,
   ITextBoxOptions,
+  TextBoxRef,
   Button,
   IButtonProps,
   Options,

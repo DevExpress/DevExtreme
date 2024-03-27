@@ -32,7 +32,7 @@ function onCustomCommand(e) {
 export default function App() {
   const diagramRef = useRef(null);
   useEffect(() => {
-    const diagram = diagramRef.current.instance;
+    const diagram = diagramRef.current.instance();
     fetch('../../../../data/diagram-flow.json')
       .then((response) => response.json())
       .then((json) => {

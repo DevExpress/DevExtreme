@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxRecurrenceEditor, {
     Properties
 } from "devextreme/ui/recurrence_editor";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/recurrence_editor";
 
@@ -24,79 +25,48 @@ type IRecurrenceEditorOptions = React.PropsWithChildren<ReplaceFieldTypes<Proper
   onValueChange?: (value: string) => void;
 }>
 
-class RecurrenceEditor extends BaseComponent<React.PropsWithChildren<IRecurrenceEditorOptions>> {
-
-  public get instance(): dxRecurrenceEditor {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxRecurrenceEditor;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
+interface RecurrenceEditorRef {
+  instance: () => dxRecurrenceEditor;
 }
-(RecurrenceEditor as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  tabIndex: PropTypes.number,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  value: PropTypes.string,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const RecurrenceEditor = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IRecurrenceEditorOptions>, ref: ForwardedRef<RecurrenceEditorRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IRecurrenceEditorOptions>>, {
+          WidgetClass: dxRecurrenceEditor,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IRecurrenceEditorOptions> & { ref?: Ref<RecurrenceEditorRef> }) => ReactElement | null;
 export default RecurrenceEditor;
 export {
   RecurrenceEditor,
-  IRecurrenceEditorOptions
+  IRecurrenceEditorOptions,
+  RecurrenceEditorRef
 };
 import type * as RecurrenceEditorTypes from 'devextreme/ui/recurrence_editor_types';
 export { RecurrenceEditorTypes };
