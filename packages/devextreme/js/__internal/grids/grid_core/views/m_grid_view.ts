@@ -194,7 +194,7 @@ export class ResizingController extends modules.ViewController {
   }
 
   private _setAriaLabel(): void {
-    const columnCount = this._columnsController._columns.filter(({ visible }) => !!visible).length;
+    const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
     const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
     const widgetAriaLabel = this._getWidgetAriaLabel();
     const widgetStatusText = messageLocalization
@@ -939,7 +939,7 @@ export class GridView extends modules.View {
         { a11yLiveType: 'polite' },
       );
       this._a11yGeneralStatusElement.attr(E2E_ATTRIBUTES.a11yStatusContainer, 'true');
-      this._rootElement.prepend(this._a11yGeneralStatusElement);
+      this._rootElement.append(this._a11yGeneralStatusElement);
     }
 
     this._renderViews($groupElement);
@@ -959,7 +959,7 @@ export class GridView extends modules.View {
   }
 
   public setWidgetA11yStatusText(statusText: string): void {
-    this._a11yGeneralStatusElement.text(statusText);
+    this._a11yGeneralStatusElement?.text(statusText);
   }
 }
 

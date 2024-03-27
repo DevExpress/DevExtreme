@@ -47,7 +47,7 @@ export const renderSummaryCell = function (cell, options) {
   const $cell = $(cell);
   const { column, summaryItems } = options;
 
-  if (column.command || !summaryItems) {
+  if (column.command || !Array.isArray(summaryItems)) {
     return;
   }
 
@@ -74,6 +74,7 @@ export const renderSummaryCell = function (cell, options) {
     return $resultElements;
   }, []);
 
+  // @ts-expect-error Badly typed renderer
   $cell.append($summaryItems);
 };
 
