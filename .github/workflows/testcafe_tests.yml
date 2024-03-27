@@ -123,6 +123,7 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "treeList", name: "treeList in shadow DOM", concurrency: 1, shadowDom: true },
+          { componentFolder: "pivotGrid", name: "pivotGrid in shadow DOM", concurrency: 1, shadowDom: true },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
