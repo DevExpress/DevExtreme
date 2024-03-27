@@ -8,25 +8,23 @@ interface INestedOptionMeta {
   makeDirty: () => void;
 }
 
-class NestedOption<P> extends React.PureComponent<P, any> {
-  public render(): React.ReactNode {
-    // @ts-expect-error TS2339
-    const { children: stateChildren } = this.props;
-    const children = React.Children.map(
-      stateChildren,
-      (child) => {
-        const childElementInfo = getElementInfo(child);
+const NestedOption = <P>(props: P): React.ReactElement | null => {
+  // @ts-expect-error TS2339
+  const { children: stateChildren } = props;
+  const children = React.Children.map(
+    stateChildren,
+    (child) => {
+      const childElementInfo = getElementInfo(child);
 
-        return childElementInfo.type === ElementType.Option ? child : null;
-      },
-    );
-    return React.createElement(
-      React.Fragment,
-      {},
-      children,
-    );
-  }
-}
+      return childElementInfo.type === ElementType.Option ? child : null;
+    },
+  );
+  return React.createElement(
+    React.Fragment,
+    {},
+    children,
+  );
+};
 
 export default NestedOption;
 export {

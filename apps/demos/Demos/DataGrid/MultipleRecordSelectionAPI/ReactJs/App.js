@@ -18,7 +18,7 @@ const App = () => {
   const [selectedEmployeeNames, setSelectedEmployeeNames] = useState('Nobody has been selected');
   const dataGridRef = useRef(null);
   const onClearButtonClicked = useCallback(() => {
-    dataGridRef.current.instance.clearSelection();
+    dataGridRef.current.instance().clearSelection();
   }, []);
   const onSelectionChanged = useCallback(
     ({ selectedRowKeys: changedRowKeys, selectedRowsData }) => {

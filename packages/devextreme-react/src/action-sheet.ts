@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/action_sheet";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxActionSheet, {
     Properties
 } from "devextreme/ui/action_sheet";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxActionSheetItem, CancelClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/action_sheet";
@@ -32,75 +33,64 @@ type IActionSheetOptions<TItem = any, TKey = any> = React.PropsWithChildren<Repl
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxActionSheetItem | string>;
   defaultVisible?: boolean;
   onItemsChange?: (value: Array<any | dxActionSheetItem | string>) => void;
   onVisibleChange?: (value: boolean) => void;
 }>
 
-class ActionSheet<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<IActionSheetOptions<TItem, TKey>>> {
-
-  public get instance(): dxActionSheet<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxActionSheet;
-
-  protected subscribableOptions = ["items","visible"];
-
-  protected independentEvents = ["onCancelClick","onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items",
-    defaultVisible: "visible"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface ActionSheetRef<TItem = any, TKey = any> {
+  instance: () => dxActionSheet<TItem, TKey>;
 }
-(ActionSheet as any).propTypes = {
-  cancelText: PropTypes.string,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  onCancelClick: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  showCancelButton: PropTypes.bool,
-  showTitle: PropTypes.bool,
-  title: PropTypes.string,
-  usePopover: PropTypes.bool,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const ActionSheet = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<IActionSheetOptions<TItem, TKey>>, ref: ForwardedRef<ActionSheetRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items","visible"]), []);
+      const independentEvents = useMemo(() => (["onCancelClick","onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+        defaultVisible: "visible",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IActionSheetOptions<TItem, TKey>>>, {
+          WidgetClass: dxActionSheet,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<IActionSheetOptions<TItem, TKey>> & { ref?: Ref<ActionSheetRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -115,23 +105,28 @@ type IItemProps = React.PropsWithChildren<{
   type?: "danger" | "default" | "normal" | "success";
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default ActionSheet;
 export {
   ActionSheet,
   IActionSheetOptions,
+  ActionSheetRef,
   Item,
   IItemProps
 };

@@ -86,7 +86,7 @@ function App() {
     (e) => {
       setPassword(e.value);
       if (confirmPassword) {
-        validatorRef.current.instance.validate();
+        validatorRef.current.instance().validate();
       }
     },
     [confirmPassword, setPassword],

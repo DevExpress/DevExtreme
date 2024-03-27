@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxToast, {
     Properties
 } from "devextreme/ui/toast";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { PositionConfig } from "devextreme/animation/position";
@@ -28,121 +29,66 @@ type IToastOptionsNarrowedEvents = {
 type IToastOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IToastOptionsNarrowedEvents> & IHtmlOptions & {
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
   defaultPosition?: PositionConfig | string;
   defaultVisible?: boolean;
   onPositionChange?: (value: PositionConfig | string) => void;
   onVisibleChange?: (value: boolean) => void;
 }>
 
-class Toast extends BaseComponent<React.PropsWithChildren<IToastOptions>> {
-
-  public get instance(): dxToast {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxToast;
-
-  protected isPortalComponent = true;
-
-  protected subscribableOptions = ["position","visible"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown"];
-
-  protected _defaults = {
-    defaultPosition: "position",
-    defaultVisible: "visible"
-  };
-
-  protected _expectedChildren = {
-    animation: { optionName: "animation", isCollectionItem: false },
-    position: { optionName: "position", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }];
+interface ToastRef {
+  instance: () => dxToast;
 }
-(Toast as any).propTypes = {
-  accessKey: PropTypes.string,
-  animation: PropTypes.object,
-  closeOnClick: PropTypes.bool,
-  closeOnOutsideClick: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.func
-  ]),
-  closeOnSwipe: PropTypes.bool,
-  deferRendering: PropTypes.bool,
-  displayTime: PropTypes.number,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hideOnOutsideClick: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.func
-  ]),
-  hideOnParentScroll: PropTypes.bool,
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  maxHeight: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  maxWidth: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  message: PropTypes.string,
-  minHeight: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  minWidth: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onHidden: PropTypes.func,
-  onHiding: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onShowing: PropTypes.func,
-  onShown: PropTypes.func,
-  position: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  rtlEnabled: PropTypes.bool,
-  shading: PropTypes.bool,
-  shadingColor: PropTypes.string,
-  tabIndex: PropTypes.number,
-  type: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "custom",
-      "error",
-      "info",
-      "success",
-      "warning"])
-  ]),
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Toast = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IToastOptions>, ref: ForwardedRef<ToastRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["position","visible"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultPosition: "position",
+        defaultVisible: "visible",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        animation: { optionName: "animation", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "contentTemplate",
+          render: "contentRender",
+          component: "contentComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IToastOptions>>, {
+          WidgetClass: dxToast,
+          ref: baseRef,
+          isPortalComponent: true,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IToastOptions> & { ref?: Ref<ToastRef> }) => ReactElement | null;
 
 
 // owners:
@@ -151,13 +97,19 @@ type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
 }>
-class Animation extends NestedOption<IAnimationProps> {
-  public static OptionName = "animation";
-  public static ExpectedChildren = {
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
+
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
     hide: { optionName: "hide", isCollectionItem: false },
     show: { optionName: "show", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -165,9 +117,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class At extends NestedOption<IAtProps> {
-  public static OptionName = "at";
-}
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
+
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -175,9 +133,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class BoundaryOffset extends NestedOption<IBoundaryOffsetProps> {
-  public static OptionName = "boundaryOffset";
-}
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
+
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // Position
@@ -185,9 +149,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-class Collision extends NestedOption<ICollisionProps> {
-  public static OptionName = "collision";
-}
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
+
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // Hide
@@ -198,12 +168,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class From extends NestedOption<IFromProps> {
-  public static OptionName = "from";
-  public static ExpectedChildren = {
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
+
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
     position: { optionName: "position", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Animation
@@ -219,13 +195,19 @@ type IHideProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Hide extends NestedOption<IHideProps> {
-  public static OptionName = "hide";
-  public static ExpectedChildren = {
+const _componentHide = memo(
+  (props: IHideProps) => {
+    return React.createElement(NestedOption<IHideProps>, { ...props });
+  }
+);
+
+const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componentHide, {
+  OptionName: "hide",
+  ExpectedChildren: {
     from: { optionName: "from", isCollectionItem: false },
     to: { optionName: "to", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -233,9 +215,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class My extends NestedOption<IMyProps> {
-  public static OptionName = "my";
-}
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
+
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // Position
@@ -243,9 +231,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class Offset extends NestedOption<IOffsetProps> {
-  public static OptionName = "offset";
-}
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
+
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // From
@@ -274,9 +268,15 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-class Position extends NestedOption<IPositionProps> {
-  public static OptionName = "position";
-}
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
+
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+})
 
 // owners:
 // Animation
@@ -292,9 +292,15 @@ type IShowProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Show extends NestedOption<IShowProps> {
-  public static OptionName = "show";
-}
+const _componentShow = memo(
+  (props: IShowProps) => {
+    return React.createElement(NestedOption<IShowProps>, { ...props });
+  }
+);
+
+const Show: typeof _componentShow & IElementDescriptor = Object.assign(_componentShow, {
+  OptionName: "show",
+})
 
 // owners:
 // Hide
@@ -305,14 +311,21 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class To extends NestedOption<IToProps> {
-  public static OptionName = "to";
-}
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
+
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 export default Toast;
 export {
   Toast,
   IToastOptions,
+  ToastRef,
   Animation,
   IAnimationProps,
   At,

@@ -22,10 +22,10 @@ function customizeLabelText({ value }) {
 function App() {
   const chartRef = useRef(null);
   const printChart = useCallback(() => {
-    chartRef.current.instance.print();
+    chartRef.current.instance().print();
   }, []);
   const exportChart = useCallback(() => {
-    chartRef.current.instance.exportTo('Example', 'png');
+    chartRef.current.instance().exportTo('Example', 'png');
   }, []);
   return (
     <React.Fragment>

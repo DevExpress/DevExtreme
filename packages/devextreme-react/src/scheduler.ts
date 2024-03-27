@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxScheduler, {
     Properties
 } from "devextreme/ui/scheduler";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, AppointmentTemplateData, AppointmentTooltipTemplateData, dxSchedulerScrolling } from "devextreme/ui/scheduler";
@@ -44,237 +45,117 @@ type ISchedulerOptionsNarrowedEvents = {
 type ISchedulerOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISchedulerOptionsNarrowedEvents> & IHtmlOptions & {
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
-  appointmentCollectorKeyFn?: (data: any) => string;
   appointmentRender?: (...params: any) => React.ReactNode;
   appointmentComponent?: React.ComponentType<any>;
-  appointmentKeyFn?: (data: any) => string;
   appointmentTooltipRender?: (...params: any) => React.ReactNode;
   appointmentTooltipComponent?: React.ComponentType<any>;
-  appointmentTooltipKeyFn?: (data: any) => string;
   dataCellRender?: (...params: any) => React.ReactNode;
   dataCellComponent?: React.ComponentType<any>;
-  dataCellKeyFn?: (data: any) => string;
   dateCellRender?: (...params: any) => React.ReactNode;
   dateCellComponent?: React.ComponentType<any>;
-  dateCellKeyFn?: (data: any) => string;
   dropDownAppointmentRender?: (...params: any) => React.ReactNode;
   dropDownAppointmentComponent?: React.ComponentType<any>;
-  dropDownAppointmentKeyFn?: (data: any) => string;
   resourceCellRender?: (...params: any) => React.ReactNode;
   resourceCellComponent?: React.ComponentType<any>;
-  resourceCellKeyFn?: (data: any) => string;
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
-  timeCellKeyFn?: (data: any) => string;
   defaultCurrentDate?: Date | number | string;
   defaultCurrentView?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
   onCurrentDateChange?: (value: Date | number | string) => void;
   onCurrentViewChange?: (value: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek") => void;
 }>
 
-class Scheduler extends BaseComponent<React.PropsWithChildren<ISchedulerOptions>> {
-
-  public get instance(): dxScheduler {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxScheduler;
-
-  protected subscribableOptions = ["currentDate","currentView"];
-
-  protected independentEvents = ["onAppointmentAdded","onAppointmentAdding","onAppointmentClick","onAppointmentContextMenu","onAppointmentDblClick","onAppointmentDeleted","onAppointmentDeleting","onAppointmentFormOpening","onAppointmentRendered","onAppointmentTooltipShowing","onAppointmentUpdated","onAppointmentUpdating","onCellClick","onCellContextMenu","onContentReady","onDisposing","onInitialized"];
-
-  protected _defaults = {
-    defaultCurrentDate: "currentDate",
-    defaultCurrentView: "currentView"
-  };
-
-  protected _expectedChildren = {
-    appointmentDragging: { optionName: "appointmentDragging", isCollectionItem: false },
-    editing: { optionName: "editing", isCollectionItem: false },
-    resource: { optionName: "resources", isCollectionItem: true },
-    scrolling: { optionName: "scrolling", isCollectionItem: false },
-    view: { optionName: "views", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "appointmentCollectorTemplate",
-    render: "appointmentCollectorRender",
-    component: "appointmentCollectorComponent",
-    keyFn: "appointmentCollectorKeyFn"
-  }, {
-    tmplOption: "appointmentTemplate",
-    render: "appointmentRender",
-    component: "appointmentComponent",
-    keyFn: "appointmentKeyFn"
-  }, {
-    tmplOption: "appointmentTooltipTemplate",
-    render: "appointmentTooltipRender",
-    component: "appointmentTooltipComponent",
-    keyFn: "appointmentTooltipKeyFn"
-  }, {
-    tmplOption: "dataCellTemplate",
-    render: "dataCellRender",
-    component: "dataCellComponent",
-    keyFn: "dataCellKeyFn"
-  }, {
-    tmplOption: "dateCellTemplate",
-    render: "dateCellRender",
-    component: "dateCellComponent",
-    keyFn: "dateCellKeyFn"
-  }, {
-    tmplOption: "dropDownAppointmentTemplate",
-    render: "dropDownAppointmentRender",
-    component: "dropDownAppointmentComponent",
-    keyFn: "dropDownAppointmentKeyFn"
-  }, {
-    tmplOption: "resourceCellTemplate",
-    render: "resourceCellRender",
-    component: "resourceCellComponent",
-    keyFn: "resourceCellKeyFn"
-  }, {
-    tmplOption: "timeCellTemplate",
-    render: "timeCellRender",
-    component: "timeCellComponent",
-    keyFn: "timeCellKeyFn"
-  }];
+interface SchedulerRef {
+  instance: () => dxScheduler;
 }
-(Scheduler as any).propTypes = {
-  accessKey: PropTypes.string,
-  adaptivityEnabled: PropTypes.bool,
-  allDayExpr: PropTypes.string,
-  allDayPanelMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "all",
-      "allDay",
-      "hidden"])
-  ]),
-  appointmentDragging: PropTypes.object,
-  cellDuration: PropTypes.number,
-  crossScrollingEnabled: PropTypes.bool,
-  currentDate: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  currentView: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "agenda",
-      "day",
-      "month",
-      "timelineDay",
-      "timelineMonth",
-      "timelineWeek",
-      "timelineWorkWeek",
-      "week",
-      "workWeek"])
-  ]),
-  customizeDateNavigatorText: PropTypes.func,
-  dateSerializationFormat: PropTypes.string,
-  descriptionExpr: PropTypes.string,
-  disabled: PropTypes.bool,
-  editing: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.object
-  ]),
-  elementAttr: PropTypes.object,
-  endDateExpr: PropTypes.string,
-  endDateTimeZoneExpr: PropTypes.string,
-  endDayHour: PropTypes.number,
-  firstDayOfWeek: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOf([
-      0,
-      1,
-      2,
-      3,
-      4,
-      5,
-      6])
-  ]),
-  focusStateEnabled: PropTypes.bool,
-  groupByDate: PropTypes.bool,
-  groups: PropTypes.array,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  indicatorUpdateInterval: PropTypes.number,
-  max: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  maxAppointmentsPerCell: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "auto",
-      "unlimited"])
-  ])
-  ]),
-  min: PropTypes.oneOfType([
-    PropTypes.instanceOf(Date),
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  noDataText: PropTypes.string,
-  offset: PropTypes.number,
-  onAppointmentAdded: PropTypes.func,
-  onAppointmentAdding: PropTypes.func,
-  onAppointmentClick: PropTypes.func,
-  onAppointmentContextMenu: PropTypes.func,
-  onAppointmentDblClick: PropTypes.func,
-  onAppointmentDeleted: PropTypes.func,
-  onAppointmentDeleting: PropTypes.func,
-  onAppointmentFormOpening: PropTypes.func,
-  onAppointmentRendered: PropTypes.func,
-  onAppointmentTooltipShowing: PropTypes.func,
-  onAppointmentUpdated: PropTypes.func,
-  onAppointmentUpdating: PropTypes.func,
-  onCellClick: PropTypes.func,
-  onCellContextMenu: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  recurrenceEditMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "dialog",
-      "occurrence",
-      "series"])
-  ]),
-  recurrenceExceptionExpr: PropTypes.string,
-  recurrenceRuleExpr: PropTypes.string,
-  remoteFiltering: PropTypes.bool,
-  resources: PropTypes.array,
-  rtlEnabled: PropTypes.bool,
-  scrolling: PropTypes.object,
-  selectedCellData: PropTypes.array,
-  shadeUntilCurrentTime: PropTypes.bool,
-  showAllDayPanel: PropTypes.bool,
-  showCurrentTimeIndicator: PropTypes.bool,
-  startDateExpr: PropTypes.string,
-  startDateTimeZoneExpr: PropTypes.string,
-  startDayHour: PropTypes.number,
-  tabIndex: PropTypes.number,
-  textExpr: PropTypes.string,
-  timeZone: PropTypes.string,
-  useDropDownViewSwitcher: PropTypes.bool,
-  views: PropTypes.array,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Scheduler = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ISchedulerOptions>, ref: ForwardedRef<SchedulerRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["currentDate","currentView"]), []);
+      const independentEvents = useMemo(() => (["onAppointmentAdded","onAppointmentAdding","onAppointmentClick","onAppointmentContextMenu","onAppointmentDblClick","onAppointmentDeleted","onAppointmentDeleting","onAppointmentFormOpening","onAppointmentRendered","onAppointmentTooltipShowing","onAppointmentUpdated","onAppointmentUpdating","onCellClick","onCellContextMenu","onContentReady","onDisposing","onInitialized"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultCurrentDate: "currentDate",
+        defaultCurrentView: "currentView",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        appointmentDragging: { optionName: "appointmentDragging", isCollectionItem: false },
+        editing: { optionName: "editing", isCollectionItem: false },
+        resource: { optionName: "resources", isCollectionItem: true },
+        scrolling: { optionName: "scrolling", isCollectionItem: false },
+        view: { optionName: "views", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "appointmentCollectorTemplate",
+          render: "appointmentCollectorRender",
+          component: "appointmentCollectorComponent"
+        },
+        {
+          tmplOption: "appointmentTemplate",
+          render: "appointmentRender",
+          component: "appointmentComponent"
+        },
+        {
+          tmplOption: "appointmentTooltipTemplate",
+          render: "appointmentTooltipRender",
+          component: "appointmentTooltipComponent"
+        },
+        {
+          tmplOption: "dataCellTemplate",
+          render: "dataCellRender",
+          component: "dataCellComponent"
+        },
+        {
+          tmplOption: "dateCellTemplate",
+          render: "dateCellRender",
+          component: "dateCellComponent"
+        },
+        {
+          tmplOption: "dropDownAppointmentTemplate",
+          render: "dropDownAppointmentRender",
+          component: "dropDownAppointmentComponent"
+        },
+        {
+          tmplOption: "resourceCellTemplate",
+          render: "resourceCellRender",
+          component: "resourceCellComponent"
+        },
+        {
+          tmplOption: "timeCellTemplate",
+          render: "timeCellRender",
+          component: "timeCellComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ISchedulerOptions>>, {
+          WidgetClass: dxScheduler,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ISchedulerOptions> & { ref?: Ref<SchedulerRef> }) => ReactElement | null;
 
 
 // owners:
@@ -291,9 +172,15 @@ type IAppointmentDraggingProps = React.PropsWithChildren<{
   scrollSensitivity?: number;
   scrollSpeed?: number;
 }>
-class AppointmentDragging extends NestedOption<IAppointmentDraggingProps> {
-  public static OptionName = "appointmentDragging";
-}
+const _componentAppointmentDragging = memo(
+  (props: IAppointmentDraggingProps) => {
+    return React.createElement(NestedOption<IAppointmentDraggingProps>, { ...props });
+  }
+);
+
+const AppointmentDragging: typeof _componentAppointmentDragging & IElementDescriptor = Object.assign(_componentAppointmentDragging, {
+  OptionName: "appointmentDragging",
+})
 
 // owners:
 // Scheduler
@@ -305,9 +192,15 @@ type IEditingProps = React.PropsWithChildren<{
   allowTimeZoneEditing?: boolean;
   allowUpdating?: boolean;
 }>
-class Editing extends NestedOption<IEditingProps> {
-  public static OptionName = "editing";
-}
+const _componentEditing = memo(
+  (props: IEditingProps) => {
+    return React.createElement(NestedOption<IEditingProps>, { ...props });
+  }
+);
+
+const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
+  OptionName: "editing",
+})
 
 // owners:
 // Scheduler
@@ -321,10 +214,16 @@ type IResourceProps = React.PropsWithChildren<{
   useColorAsDefault?: boolean;
   valueExpr?: (() => void) | string;
 }>
-class Resource extends NestedOption<IResourceProps> {
-  public static OptionName = "resources";
-  public static IsCollectionItem = true;
-}
+const _componentResource = memo(
+  (props: IResourceProps) => {
+    return React.createElement(NestedOption<IResourceProps>, { ...props });
+  }
+);
+
+const Resource: typeof _componentResource & IElementDescriptor = Object.assign(_componentResource, {
+  OptionName: "resources",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Scheduler
@@ -332,9 +231,15 @@ class Resource extends NestedOption<IResourceProps> {
 type IScrollingProps = React.PropsWithChildren<{
   mode?: "standard" | "virtual";
 }>
-class Scrolling extends NestedOption<IScrollingProps> {
-  public static OptionName = "scrolling";
-}
+const _componentScrolling = memo(
+  (props: IScrollingProps) => {
+    return React.createElement(NestedOption<IScrollingProps>, { ...props });
+  }
+);
+
+const Scrolling: typeof _componentScrolling & IElementDescriptor = Object.assign(_componentScrolling, {
+  OptionName: "scrolling",
+})
 
 // owners:
 // Scheduler
@@ -365,82 +270,73 @@ type IViewProps = React.PropsWithChildren<{
   type?: "agenda" | "day" | "month" | "timelineDay" | "timelineMonth" | "timelineWeek" | "timelineWorkWeek" | "week" | "workWeek";
   appointmentCollectorRender?: (...params: any) => React.ReactNode;
   appointmentCollectorComponent?: React.ComponentType<any>;
-  appointmentCollectorKeyFn?: (data: any) => string;
   appointmentRender?: (...params: any) => React.ReactNode;
   appointmentComponent?: React.ComponentType<any>;
-  appointmentKeyFn?: (data: any) => string;
   appointmentTooltipRender?: (...params: any) => React.ReactNode;
   appointmentTooltipComponent?: React.ComponentType<any>;
-  appointmentTooltipKeyFn?: (data: any) => string;
   dataCellRender?: (...params: any) => React.ReactNode;
   dataCellComponent?: React.ComponentType<any>;
-  dataCellKeyFn?: (data: any) => string;
   dateCellRender?: (...params: any) => React.ReactNode;
   dateCellComponent?: React.ComponentType<any>;
-  dateCellKeyFn?: (data: any) => string;
   dropDownAppointmentRender?: (...params: any) => React.ReactNode;
   dropDownAppointmentComponent?: React.ComponentType<any>;
-  dropDownAppointmentKeyFn?: (data: any) => string;
   resourceCellRender?: (...params: any) => React.ReactNode;
   resourceCellComponent?: React.ComponentType<any>;
-  resourceCellKeyFn?: (data: any) => string;
   timeCellRender?: (...params: any) => React.ReactNode;
   timeCellComponent?: React.ComponentType<any>;
-  timeCellKeyFn?: (data: any) => string;
 }>
-class View extends NestedOption<IViewProps> {
-  public static OptionName = "views";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentView = memo(
+  (props: IViewProps) => {
+    return React.createElement(NestedOption<IViewProps>, { ...props });
+  }
+);
+
+const View: typeof _componentView & IElementDescriptor = Object.assign(_componentView, {
+  OptionName: "views",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     scrolling: { optionName: "scrolling", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "appointmentCollectorTemplate",
     render: "appointmentCollectorRender",
-    component: "appointmentCollectorComponent",
-    keyFn: "appointmentCollectorKeyFn"
+    component: "appointmentCollectorComponent"
   }, {
     tmplOption: "appointmentTemplate",
     render: "appointmentRender",
-    component: "appointmentComponent",
-    keyFn: "appointmentKeyFn"
+    component: "appointmentComponent"
   }, {
     tmplOption: "appointmentTooltipTemplate",
     render: "appointmentTooltipRender",
-    component: "appointmentTooltipComponent",
-    keyFn: "appointmentTooltipKeyFn"
+    component: "appointmentTooltipComponent"
   }, {
     tmplOption: "dataCellTemplate",
     render: "dataCellRender",
-    component: "dataCellComponent",
-    keyFn: "dataCellKeyFn"
+    component: "dataCellComponent"
   }, {
     tmplOption: "dateCellTemplate",
     render: "dateCellRender",
-    component: "dateCellComponent",
-    keyFn: "dateCellKeyFn"
+    component: "dateCellComponent"
   }, {
     tmplOption: "dropDownAppointmentTemplate",
     render: "dropDownAppointmentRender",
-    component: "dropDownAppointmentComponent",
-    keyFn: "dropDownAppointmentKeyFn"
+    component: "dropDownAppointmentComponent"
   }, {
     tmplOption: "resourceCellTemplate",
     render: "resourceCellRender",
-    component: "resourceCellComponent",
-    keyFn: "resourceCellKeyFn"
+    component: "resourceCellComponent"
   }, {
     tmplOption: "timeCellTemplate",
     render: "timeCellRender",
-    component: "timeCellComponent",
-    keyFn: "timeCellKeyFn"
-  }];
-}
+    component: "timeCellComponent"
+  }],
+})
 
 export default Scheduler;
 export {
   Scheduler,
   ISchedulerOptions,
+  SchedulerRef,
   AppointmentDragging,
   IAppointmentDraggingProps,
   Editing,

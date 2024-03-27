@@ -22,7 +22,7 @@ function App() {
   const gaugeRef = useRef(null);
 
   const updateValues = useCallback(() => {
-    const gauge = gaugeRef.current.instance;
+    const gauge = gaugeRef.current.instance();
     gauge.value(mainGeneratorValue);
     gauge.subvalues([additionalGenerator1Value, additionalGenerator2Value]);
   }, [

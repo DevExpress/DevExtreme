@@ -13,7 +13,7 @@ function App() {
   const chartRef = useRef(null);
   const pieChartRef = useRef(null);
   const onClick = useCallback(() => {
-    exportWidgets([[chartRef.current.instance, pieChartRef.current.instance]], {
+    exportWidgets([[chartRef.current.instance(), pieChartRef.current.instance()]], {
       fileName: 'chart',
       format: 'PNG',
     });

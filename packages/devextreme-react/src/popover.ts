@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxPopover, {
     Properties
 } from "devextreme/ui/popover";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { PositionConfig } from "devextreme/animation/position";
@@ -31,10 +32,8 @@ type IPopoverOptionsNarrowedEvents = {
 type IPopoverOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPopoverOptionsNarrowedEvents> & IHtmlOptions & {
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
   titleRender?: (...params: any) => React.ReactNode;
   titleComponent?: React.ComponentType<any>;
-  titleKeyFn?: (data: any) => string;
   defaultHeight?: (() => number | string) | number | string;
   defaultPosition?: PositionConfig | "bottom" | "left" | "right" | "top";
   defaultVisible?: boolean;
@@ -45,130 +44,70 @@ type IPopoverOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IPo
   onWidthChange?: (value: (() => number | string) | number | string) => void;
 }>
 
-class Popover extends BaseComponent<React.PropsWithChildren<IPopoverOptions>> {
-
-  public get instance(): dxPopover {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxPopover;
-
-  protected isPortalComponent = true;
-
-  protected subscribableOptions = ["height","position","visible","width"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown","onTitleRendered"];
-
-  protected _defaults = {
-    defaultHeight: "height",
-    defaultPosition: "position",
-    defaultVisible: "visible",
-    defaultWidth: "width"
-  };
-
-  protected _expectedChildren = {
-    animation: { optionName: "animation", isCollectionItem: false },
-    hideEvent: { optionName: "hideEvent", isCollectionItem: false },
-    position: { optionName: "position", isCollectionItem: false },
-    showEvent: { optionName: "showEvent", isCollectionItem: false },
-    toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "contentTemplate",
-    render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }, {
-    tmplOption: "titleTemplate",
-    render: "titleRender",
-    component: "titleComponent",
-    keyFn: "titleKeyFn"
-  }];
+interface PopoverRef {
+  instance: () => dxPopover;
 }
-(Popover as any).propTypes = {
-  animation: PropTypes.object,
-  closeOnOutsideClick: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.func
-  ]),
-  deferRendering: PropTypes.bool,
-  disabled: PropTypes.bool,
-  enableBodyScroll: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hideEvent: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  hideOnOutsideClick: PropTypes.oneOfType([
-    PropTypes.bool,
-    PropTypes.func
-  ]),
-  hideOnParentScroll: PropTypes.bool,
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  maxHeight: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  maxWidth: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  minHeight: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  minWidth: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onHidden: PropTypes.func,
-  onHiding: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onShowing: PropTypes.func,
-  onShown: PropTypes.func,
-  onTitleRendered: PropTypes.func,
-  position: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ])
-  ]),
-  rtlEnabled: PropTypes.bool,
-  shading: PropTypes.bool,
-  shadingColor: PropTypes.string,
-  showCloseButton: PropTypes.bool,
-  showEvent: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  showTitle: PropTypes.bool,
-  title: PropTypes.string,
-  toolbarItems: PropTypes.array,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Popover = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IPopoverOptions>, ref: ForwardedRef<PopoverRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["height","position","visible","width"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onHidden","onHiding","onInitialized","onShowing","onShown","onTitleRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultHeight: "height",
+        defaultPosition: "position",
+        defaultVisible: "visible",
+        defaultWidth: "width",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        animation: { optionName: "animation", isCollectionItem: false },
+        hideEvent: { optionName: "hideEvent", isCollectionItem: false },
+        position: { optionName: "position", isCollectionItem: false },
+        showEvent: { optionName: "showEvent", isCollectionItem: false },
+        toolbarItem: { optionName: "toolbarItems", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "contentTemplate",
+          render: "contentRender",
+          component: "contentComponent"
+        },
+        {
+          tmplOption: "titleTemplate",
+          render: "titleRender",
+          component: "titleComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IPopoverOptions>>, {
+          WidgetClass: dxPopover,
+          ref: baseRef,
+          isPortalComponent: true,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IPopoverOptions> & { ref?: Ref<PopoverRef> }) => ReactElement | null;
 
 
 // owners:
@@ -177,13 +116,19 @@ type IAnimationProps = React.PropsWithChildren<{
   hide?: AnimationConfig;
   show?: AnimationConfig;
 }>
-class Animation extends NestedOption<IAnimationProps> {
-  public static OptionName = "animation";
-  public static ExpectedChildren = {
+const _componentAnimation = memo(
+  (props: IAnimationProps) => {
+    return React.createElement(NestedOption<IAnimationProps>, { ...props });
+  }
+);
+
+const Animation: typeof _componentAnimation & IElementDescriptor = Object.assign(_componentAnimation, {
+  OptionName: "animation",
+  ExpectedChildren: {
     hide: { optionName: "hide", isCollectionItem: false },
     show: { optionName: "show", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Position
@@ -191,9 +136,15 @@ type IAtProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class At extends NestedOption<IAtProps> {
-  public static OptionName = "at";
-}
+const _componentAt = memo(
+  (props: IAtProps) => {
+    return React.createElement(NestedOption<IAtProps>, { ...props });
+  }
+);
+
+const At: typeof _componentAt & IElementDescriptor = Object.assign(_componentAt, {
+  OptionName: "at",
+})
 
 // owners:
 // Position
@@ -201,9 +152,15 @@ type IBoundaryOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class BoundaryOffset extends NestedOption<IBoundaryOffsetProps> {
-  public static OptionName = "boundaryOffset";
-}
+const _componentBoundaryOffset = memo(
+  (props: IBoundaryOffsetProps) => {
+    return React.createElement(NestedOption<IBoundaryOffsetProps>, { ...props });
+  }
+);
+
+const BoundaryOffset: typeof _componentBoundaryOffset & IElementDescriptor = Object.assign(_componentBoundaryOffset, {
+  OptionName: "boundaryOffset",
+})
 
 // owners:
 // Position
@@ -211,9 +168,15 @@ type ICollisionProps = React.PropsWithChildren<{
   x?: "fit" | "flip" | "flipfit" | "none";
   y?: "fit" | "flip" | "flipfit" | "none";
 }>
-class Collision extends NestedOption<ICollisionProps> {
-  public static OptionName = "collision";
-}
+const _componentCollision = memo(
+  (props: ICollisionProps) => {
+    return React.createElement(NestedOption<ICollisionProps>, { ...props });
+  }
+);
+
+const Collision: typeof _componentCollision & IElementDescriptor = Object.assign(_componentCollision, {
+  OptionName: "collision",
+})
 
 // owners:
 // Hide
@@ -224,12 +187,18 @@ type IFromProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class From extends NestedOption<IFromProps> {
-  public static OptionName = "from";
-  public static ExpectedChildren = {
+const _componentFrom = memo(
+  (props: IFromProps) => {
+    return React.createElement(NestedOption<IFromProps>, { ...props });
+  }
+);
+
+const From: typeof _componentFrom & IElementDescriptor = Object.assign(_componentFrom, {
+  OptionName: "from",
+  ExpectedChildren: {
     position: { optionName: "position", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Animation
@@ -245,13 +214,19 @@ type IHideProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Hide extends NestedOption<IHideProps> {
-  public static OptionName = "hide";
-  public static ExpectedChildren = {
+const _componentHide = memo(
+  (props: IHideProps) => {
+    return React.createElement(NestedOption<IHideProps>, { ...props });
+  }
+);
+
+const Hide: typeof _componentHide & IElementDescriptor = Object.assign(_componentHide, {
+  OptionName: "hide",
+  ExpectedChildren: {
     from: { optionName: "from", isCollectionItem: false },
     to: { optionName: "to", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Popover
@@ -259,9 +234,15 @@ type IHideEventProps = React.PropsWithChildren<{
   delay?: number;
   name?: string;
 }>
-class HideEvent extends NestedOption<IHideEventProps> {
-  public static OptionName = "hideEvent";
-}
+const _componentHideEvent = memo(
+  (props: IHideEventProps) => {
+    return React.createElement(NestedOption<IHideEventProps>, { ...props });
+  }
+);
+
+const HideEvent: typeof _componentHideEvent & IElementDescriptor = Object.assign(_componentHideEvent, {
+  OptionName: "hideEvent",
+})
 
 // owners:
 // Position
@@ -269,9 +250,15 @@ type IMyProps = React.PropsWithChildren<{
   x?: "center" | "left" | "right";
   y?: "bottom" | "center" | "top";
 }>
-class My extends NestedOption<IMyProps> {
-  public static OptionName = "my";
-}
+const _componentMy = memo(
+  (props: IMyProps) => {
+    return React.createElement(NestedOption<IMyProps>, { ...props });
+  }
+);
+
+const My: typeof _componentMy & IElementDescriptor = Object.assign(_componentMy, {
+  OptionName: "my",
+})
 
 // owners:
 // Position
@@ -279,9 +266,15 @@ type IOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class Offset extends NestedOption<IOffsetProps> {
-  public static OptionName = "offset";
-}
+const _componentOffset = memo(
+  (props: IOffsetProps) => {
+    return React.createElement(NestedOption<IOffsetProps>, { ...props });
+  }
+);
+
+const Offset: typeof _componentOffset & IElementDescriptor = Object.assign(_componentOffset, {
+  OptionName: "offset",
+})
 
 // owners:
 // From
@@ -310,9 +303,15 @@ type IPositionProps = React.PropsWithChildren<{
     y?: number;
   };
 }>
-class Position extends NestedOption<IPositionProps> {
-  public static OptionName = "position";
-}
+const _componentPosition = memo(
+  (props: IPositionProps) => {
+    return React.createElement(NestedOption<IPositionProps>, { ...props });
+  }
+);
+
+const Position: typeof _componentPosition & IElementDescriptor = Object.assign(_componentPosition, {
+  OptionName: "position",
+})
 
 // owners:
 // Animation
@@ -328,9 +327,15 @@ type IShowProps = React.PropsWithChildren<{
   to?: AnimationState;
   type?: "css" | "fade" | "fadeIn" | "fadeOut" | "pop" | "slide" | "slideIn" | "slideOut";
 }>
-class Show extends NestedOption<IShowProps> {
-  public static OptionName = "show";
-}
+const _componentShow = memo(
+  (props: IShowProps) => {
+    return React.createElement(NestedOption<IShowProps>, { ...props });
+  }
+);
+
+const Show: typeof _componentShow & IElementDescriptor = Object.assign(_componentShow, {
+  OptionName: "show",
+})
 
 // owners:
 // Popover
@@ -338,9 +343,15 @@ type IShowEventProps = React.PropsWithChildren<{
   delay?: number;
   name?: string;
 }>
-class ShowEvent extends NestedOption<IShowEventProps> {
-  public static OptionName = "showEvent";
-}
+const _componentShowEvent = memo(
+  (props: IShowEventProps) => {
+    return React.createElement(NestedOption<IShowEventProps>, { ...props });
+  }
+);
+
+const ShowEvent: typeof _componentShowEvent & IElementDescriptor = Object.assign(_componentShowEvent, {
+  OptionName: "showEvent",
+})
 
 // owners:
 // Hide
@@ -351,9 +362,15 @@ type IToProps = React.PropsWithChildren<{
   scale?: number;
   top?: number;
 }>
-class To extends NestedOption<IToProps> {
-  public static OptionName = "to";
-}
+const _componentTo = memo(
+  (props: IToProps) => {
+    return React.createElement(NestedOption<IToProps>, { ...props });
+  }
+);
+
+const To: typeof _componentTo & IElementDescriptor = Object.assign(_componentTo, {
+  OptionName: "to",
+})
 
 // owners:
 // Popover
@@ -373,31 +390,34 @@ type IToolbarItemProps = React.PropsWithChildren<{
   widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
-  menuItemKeyFn?: (data: any) => string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class ToolbarItem extends NestedOption<IToolbarItemProps> {
-  public static OptionName = "toolbarItems";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentToolbarItem = memo(
+  (props: IToolbarItemProps) => {
+    return React.createElement(NestedOption<IToolbarItemProps>, { ...props });
+  }
+);
+
+const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.assign(_componentToolbarItem, {
+  OptionName: "toolbarItems",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "menuItemTemplate",
     render: "menuItemRender",
-    component: "menuItemComponent",
-    keyFn: "menuItemKeyFn"
+    component: "menuItemComponent"
   }, {
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default Popover;
 export {
   Popover,
   IPopoverOptions,
+  PopoverRef,
   Animation,
   IAnimationProps,
   At,

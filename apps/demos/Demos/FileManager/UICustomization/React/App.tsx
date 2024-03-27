@@ -1,15 +1,15 @@
 import React, { useCallback, useRef } from 'react';
 import FileManager, {
-  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column,
+  Permissions, Toolbar, ContextMenu, Item, FileSelectionItem, ItemView, Details, Column, FileManagerRef
 } from 'devextreme-react/file-manager';
 import { fileItems, getItemInfo } from './data.ts';
 
 export default function App() {
-  const fileManagerRef = useRef<FileManager>(null);
+  const fileManagerRef = useRef<FileManagerRef>(null);
 
   const createFile = useCallback((
     fileExtension,
-    directory = fileManagerRef.current.instance.getCurrentDirectory(),
+    directory = fileManagerRef.current.instance().getCurrentDirectory(),
   ) => {
     const newItem = {
       __KEY__: Date.now(),
@@ -43,7 +43,7 @@ export default function App() {
     if (viewArea === 'navPane') {
       items = [directory];
     } else {
-      items = fileManagerRef.current.instance.getSelectedItems();
+      items = fileManagerRef.current.instance().getSelectedItems();
     }
 
     items.forEach((item: { dataItem: { category: any; }; }) => {
@@ -66,7 +66,7 @@ export default function App() {
     }
 
     if (updated) {
-      fileManagerRef.current.instance.refresh();
+      fileManagerRef.current.instance().refresh();
     }
   }, [createFile, updateCategory]);
 

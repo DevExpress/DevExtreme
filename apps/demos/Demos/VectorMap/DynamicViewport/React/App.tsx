@@ -20,7 +20,7 @@ const App = () => {
 
   const continentChanged = useCallback(({ value }) => {
     setCoordinates(value);
-    mapRef.current.instance.viewport(value);
+    mapRef.current.instance().viewport(value);
   }, [setCoordinates]);
 
   const zoomFactorChanged = useCallback((e: VectorMapTypes.ZoomFactorChangedEvent) => {

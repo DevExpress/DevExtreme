@@ -76,7 +76,7 @@ const App = () => {
   const [currentFilter, setCurrentFilter] = useState(applyFilterTypes[0].key);
   const dataGridRef = useRef(null);
   const clearFilter = useCallback(() => {
-    dataGridRef.current.instance.clearFilter();
+    dataGridRef.current.instance().clearFilter();
   }, []);
   const onShowFilterRowChanged = useCallback(
     (e) => {

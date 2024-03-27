@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react';
 import Button from 'devextreme-react/button';
 import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
 import DataGrid, {
-  Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item,
+  Grouping, Column, ColumnChooser, LoadPanel, Toolbar, Item, DataGridRef,
 } from 'devextreme-react/data-grid';
 
 import query from 'devextreme/data/query';
@@ -23,13 +23,13 @@ const App = () => {
   const [expandAll, setExpandAll] = useState(true);
   const [totalCount, setTotalCount] = useState(getGroupCount('CustomerStoreState'));
   const [groupColumn, setGroupColumn] = useState('CustomerStoreState');
-  const dataGridRef = useRef<DataGrid>(null);
+  const dataGridRef = useRef<DataGridRef>(null);
 
   const toggleGroupColumn = useCallback((e: SelectBoxTypes.ValueChangedEvent) => {
     const newGrouping = e.value;
 
-    dataGridRef.current.instance.clearGrouping();
-    dataGridRef.current.instance.columnOption(newGrouping, 'groupIndex', 0);
+    dataGridRef.current.instance().clearGrouping();
+    dataGridRef.current.instance().columnOption(newGrouping, 'groupIndex', 0);
 
     setTotalCount(getGroupCount(newGrouping));
     setGroupColumn(newGrouping);
@@ -40,7 +40,7 @@ const App = () => {
   }, [expandAll]);
 
   const refreshDataGrid = useCallback(() => {
-    dataGridRef.current.instance.refresh();
+    dataGridRef.current.instance().refresh();
   }, []);
 
   return (

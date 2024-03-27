@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxButtonGroup, {
     Properties
 } from "devextreme/ui/button_group";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent } from "devextreme/ui/button_group";
@@ -25,90 +26,64 @@ type IButtonGroupOptionsNarrowedEvents = {
 type IButtonGroupOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IButtonGroupOptionsNarrowedEvents> & IHtmlOptions & {
   buttonRender?: (...params: any) => React.ReactNode;
   buttonComponent?: React.ComponentType<any>;
-  buttonKeyFn?: (data: any) => string;
   defaultSelectedItemKeys?: Array<any>;
   defaultSelectedItems?: Array<any>;
   onSelectedItemKeysChange?: (value: Array<any>) => void;
   onSelectedItemsChange?: (value: Array<any>) => void;
 }>
 
-class ButtonGroup extends BaseComponent<React.PropsWithChildren<IButtonGroupOptions>> {
-
-  public get instance(): dxButtonGroup {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxButtonGroup;
-
-  protected subscribableOptions = ["selectedItemKeys","selectedItems"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick"];
-
-  protected _defaults = {
-    defaultSelectedItemKeys: "selectedItemKeys",
-    defaultSelectedItems: "selectedItems"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "buttonTemplate",
-    render: "buttonRender",
-    component: "buttonComponent",
-    keyFn: "buttonKeyFn"
-  }];
+interface ButtonGroupRef {
+  instance: () => dxButtonGroup;
 }
-(ButtonGroup as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  items: PropTypes.array,
-  keyExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  selectedItemKeys: PropTypes.array,
-  selectedItems: PropTypes.array,
-  selectionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "single",
-      "multiple",
-      "none"])
-  ]),
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "text",
-      "outlined",
-      "contained"])
-  ]),
-  tabIndex: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const ButtonGroup = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IButtonGroupOptions>, ref: ForwardedRef<ButtonGroupRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["selectedItemKeys","selectedItems"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultSelectedItemKeys: "selectedItemKeys",
+        defaultSelectedItems: "selectedItems",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "buttonTemplate",
+          render: "buttonRender",
+          component: "buttonComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IButtonGroupOptions>>, {
+          WidgetClass: dxButtonGroup,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IButtonGroupOptions> & { ref?: Ref<ButtonGroupRef> }) => ReactElement | null;
 
 
 // owners:
@@ -124,23 +99,28 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default ButtonGroup;
 export {
   ButtonGroup,
   IButtonGroupOptions,
+  ButtonGroupRef,
   Item,
   IItemProps
 };

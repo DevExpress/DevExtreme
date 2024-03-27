@@ -4,7 +4,7 @@ import {
   FieldChooser,
   PivotGridTypes,
 } from 'devextreme-react/pivot-grid';
-import { DataGrid, Column } from 'devextreme-react/data-grid';
+import { DataGrid, Column, DataGridRef } from 'devextreme-react/data-grid';
 import { Popup } from 'devextreme-react/popup';
 import DataSource from 'devextreme/data/data_source';
 import PivotGridDataSource from 'devextreme/ui/pivot_grid/data_source';
@@ -15,7 +15,7 @@ const App = () => {
   const [popupTitle, setPopupTitle] = useState('');
   const [drillDownDataSource, setDrillDownDataSource] = useState<DataSource>(null);
   const [popupVisible, setPopupVisible] = useState(false);
-  const dataGridRef = useRef<DataGrid>(null);
+  const dataGridRef = useRef<DataGridRef>(null);
 
   const onCellClick = useCallback((e: PivotGridTypes.CellClickEvent) => {
     if (e.area === 'data') {
@@ -49,7 +49,7 @@ const App = () => {
         height={400}
         title={popupTitle}
         onHiding={() => setPopupVisible(false)}
-        onShown={() => dataGridRef.current.instance.updateDimensions()}
+        onShown={() => dataGridRef.current.instance().updateDimensions()}
         showCloseButton={true}
       >
         <DataGrid
