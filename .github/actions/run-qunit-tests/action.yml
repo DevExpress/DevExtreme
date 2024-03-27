@@ -104,13 +104,12 @@ runs:
         rm -rf artifacts/npm
         7z x artifacts.zip
 
-    - name: Build dotnet
-      working-directory: ./packages/devextreme
+    - name: Build runner
       shell: bash
-      run: dotnet build build/build-dotnet.sln
+      run: npx nx build devextreme-qunit-runner
 
     - name: Run QUnit tests
-      working-directory: ./packages/devextreme
+      working-directory: ./e2e/qunit
       shell: bash
       env:
         CONSTEL: ${{ inputs.constel }}
@@ -135,5 +134,5 @@ runs:
       uses: actions/upload-artifact@v3
       with:
         name: RawLog-${{ env.MATRIX_ENVS_NAME_SAFE }}
-        path: ${{ github.workspace }}/packages/devextreme/testing/RawLog.txt
+        path: ${{ github.workspace }}/e2e/qunit/RawLog.txt
         if-no-files-found: ignore
