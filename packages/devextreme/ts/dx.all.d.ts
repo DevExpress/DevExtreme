@@ -23716,7 +23716,9 @@ declare module DevExpress.ui {
       readonly toComponent?: dxSortable | dxDraggable;
     };
     export type AppointmentDraggingStartEvent = DevExpress.events.Cancelable &
-      AppointmentDraggingEvent;
+      Omit<AppointmentDraggingEvent, 'itemData'> & {
+        itemData?: any;
+      };
     /**
      * [descr:_ui_scheduler_AppointmentFormOpeningEvent]
      */
