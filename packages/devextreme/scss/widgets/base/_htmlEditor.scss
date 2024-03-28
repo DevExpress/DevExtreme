@@ -180,9 +180,12 @@ $transparent-border: 1px solid transparent;
   h4,
   h5,
   h6,
-  ol,
   ul {
     counter-reset: add-counter-reset($max-indent);
+  }
+
+  ol {
+    counter-reset: list-item 0;
   }
 
   table {
