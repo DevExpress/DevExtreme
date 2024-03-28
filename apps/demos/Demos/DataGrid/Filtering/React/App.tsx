@@ -7,7 +7,13 @@ import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
 
 import { orders } from './data.ts';
 
-const saleAmountEditorOptions = { format: 'currency', showClearButton: true };
+const saleAmountEditorOptions = { 
+  format: 'currency', 
+  showClearButton: true, 
+  inputAttr: {
+    'aria-label': 'Filter Cell',
+  }, 
+};
 const filterLabel = { 'aria-label': 'Filter' };
 
 const applyFilterTypes = [{

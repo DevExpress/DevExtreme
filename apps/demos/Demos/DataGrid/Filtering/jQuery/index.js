@@ -58,6 +58,9 @@ $(() => {
       editorOptions: {
         format: 'currency',
         showClearButton: true,
+        inputAttr: {
+          'aria-label': 'Filter Cell',
+        },
       },
       headerFilter: {
         dataSource: [{
