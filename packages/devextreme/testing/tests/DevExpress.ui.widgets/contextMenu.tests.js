@@ -26,6 +26,7 @@ QUnit.testStart(() => {
 });
 
 const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
+const DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS = 'dx-menu-items-container';
 const DX_MENU_ITEM_CLASS = 'dx-menu-item';
 const DX_ICON_CLASS = 'dx-icon';
 const DX_MENU_ITEM_CONTENT_CLASS = 'dx-menu-item-content';
@@ -281,7 +282,7 @@ QUnit.module('Rendering', moduleConfig, () => {
         assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
     });
 
-    QUnit.test('ScrollView should be initialised on 2nd level submenu', function(assert) {
+    QUnit.test('ScrollView should be initialized on a 2nd level submenu', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -293,15 +294,40 @@ QUnit.module('Rendering', moduleConfig, () => {
         });
 
         const $itemsContainer = instance.itemsContainer();
-        const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
         $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
         this.clock.tick(0);
 
-        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
 
-        assert.strictEqual($submenu.length, 2, '2 submenu exists');
-        assert.ok($submenu.eq(1).hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested menu');
+        assert.strictEqual($submenus.length, 2, '2 submenu exists');
+
+        const $nestedSubmenu = $submenus.eq(1);
+        assert.ok($nestedSubmenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested menu');
+    });
+
+    QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })) }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+        const $nestedSubmenu = $submenus.eq(1);
+        const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
+        assert.strictEqual($rootItem.offset().top, $nestedItemsContainer.offset().top, 'Nested submenu aligned to a clicked item');
+        assert.strictEqual($nestedSubmenu.outerHeight(), $(window).height() - $nestedItemsContainer.offset().top, 'Nested submenu uses all available space');
     });
 
     QUnit.test('height of the context menu should be limited', function(assert) {
