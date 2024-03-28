@@ -605,20 +605,41 @@ class ContextMenu extends MenuBase {
         }
     }
 
-    _initScrollView($container) {
-        const maxHeight = this._getMaxHeight($container);
+    _initScrollView($container, anchor, considerAnchorHeight = true) {
         const containerHeight = getOuterHeight($container);
+        const maxHeight = this._getMaxHeight(containerHeight, anchor, considerAnchorHeight);
         const menuHeight = Math.min(containerHeight, maxHeight);
+        const cssProps = {
+            height: menuHeight,
+            overflow: 'visible',
+        };
+        const containerOffset = $container.offset().top;
 
-        $container.css('position', 'fixed');
-        $container.css('height', menuHeight);
+        if(containerOffset < 0) {
+            cssProps.top = -containerOffset;
+        }
+        $container.css(cssProps);
         this._createComponent($container, ScrollView, {});
     }
 
-    _getMaxHeight($element) {
-        const offsetTop = $element.offset().top;
+    _getMaxHeight(containerHeight, anchor, considerAnchorHeight) {
         const windowHeight = getOuterHeight(window);
-        const maxHeight = Math.max(offsetTop, windowHeight - offsetTop);
+        const isContextMenuRootEvent = anchor.type === DEFAULT_SHOW_EVENT || !anchor.offset;
+        const document = domAdapter.getDocument();
+        const isAnchorDocument = anchor.length && anchor[0] === document;
+
+        if(isContextMenuRootEvent || isAnchorDocument) {
+            return windowHeight;
+        }
+
+        const offsetTop = anchor.offset().top;
+        let maxHeight = Math.max(offsetTop, windowHeight - offsetTop);
+
+        if(considerAnchorHeight) {
+            maxHeight -= getOuterHeight(anchor);
+        } else if(offsetTop > windowHeight / 2) {
+            maxHeight += getOuterHeight(anchor);
+        }
 
         return Math.min(windowHeight, maxHeight);
     }
@@ -644,7 +665,7 @@ class ContextMenu extends MenuBase {
             this._drawSubmenu($item);
         }
 
-        this._initScrollView($submenu);
+        this._initScrollView($submenu, $item, false);
     }
 
     _hideSubmenusOnSameLevel($item) {
@@ -887,7 +908,7 @@ class ContextMenu extends MenuBase {
                 .then(() => {
                     const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
                     if($subMenu.length) {
-                        this._initScrollView($subMenu);
+                        this._initScrollView($subMenu, position.of);
                     }
                 });
             event && event.stopPropagation();
