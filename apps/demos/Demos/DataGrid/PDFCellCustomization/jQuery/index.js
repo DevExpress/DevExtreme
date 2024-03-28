@@ -74,7 +74,6 @@ $(() => {
       },
     }, {
       dataField: 'Website',
-      caption: '',
       alignment: 'center',
       width: 100,
       cellTemplate(container, options) {
