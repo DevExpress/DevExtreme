@@ -66,6 +66,7 @@ import {
 
 import { TOOLBAR_CLASS } from '../toolbar/constants';
 
+const UNREFRESHABLE_COMPONENT_CLASS = '.dx-dropdowneditor';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const ITEM_OPTIONS_FOR_VALIDATION_UPDATING = ['items', 'isRequired', 'validationRules', 'visible'];
@@ -1182,10 +1183,13 @@ const Form = Widget.inherit({
     },
 
     _refresh: function() {
-        const editorSelector = `.${FOCUSED_STATE_CLASS} > :not(.dx-dropdowneditor-input-wrapper) input,`
-            + ` .${FOCUSED_STATE_CLASS} textarea`;
+        const editorSelector = `.${FOCUSED_STATE_CLASS} input, .${FOCUSED_STATE_CLASS} textarea`;
 
-        eventsEngine.trigger(this.$element().find(editorSelector), 'change');
+        this.$element().find(editorSelector).each((idx, el) => {
+            if(!$(el).parents(UNREFRESHABLE_COMPONENT_CLASS).length) {
+                eventsEngine.trigger(el, 'change');
+            }
+        });
 
         this.callBase();
     },
