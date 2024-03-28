@@ -27,6 +27,9 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
+const isIos = devices.current().platform === 'ios';
+const isAndroid = devices.real().platform === 'android';
+
 const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
@@ -569,6 +572,25 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 this.assertLayout(expectedLayout);
             });
         });
+
+        // TODO: These tests are failing on CI for iOS, Android, shadowDom. It's necessary to investigate and remove the skips for these tests.
+        if(!isIos && !isAndroid && !QUnit.isInShadowDomMode()) {
+            QUnit.test(`pane should have an exact size if the size is specified in pixels and the root element has a border, ${orientation} orientation`, function(assert) {
+                this.reinit({
+                    elementAttr: {
+                        style: 'border: 10px solid black',
+                    },
+                    dataSource: [{ size: 400 }, { }, { }, { }],
+                    orientation,
+                }, '#splitterInContainer');
+
+                const dimension = orientation === 'horizontal' ? 'width' : 'height';
+                assert.strictEqual(this.getPanes().eq(0).css(dimension), '400px', 'pane[0].size has exact size');
+
+                this.checkItemSizes([400, undefined, undefined, undefined]);
+                this.assertLayout(['40.8163', '19.7279', '19.7279', '19.7279']);
+            });
+        }
     });
 
     [{
@@ -751,9 +773,6 @@ QUnit.module('Resizing', moduleConfig, () => {
 
             this.assertLayout(['75', '25']);
         });
-
-        const isIos = devices.current().platform === 'ios';
-        const isAndroid = devices.real().platform === 'android';
 
         // TODO: These tests are failing on CI for iOS, Android, shadowDom. It's necessary to investigate and remove the skips for these tests.
         if(!isIos && !isAndroid && !QUnit.isInShadowDomMode()) {
