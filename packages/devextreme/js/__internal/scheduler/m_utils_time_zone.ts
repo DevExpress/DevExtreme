@@ -55,14 +55,27 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
-const calculateTimezoneByValue = (timezone, date = new Date()) => {
-  // NOTE: This check could be removed. We don't support numerical timezones
-  if (typeof timezone === 'string') {
-    const dateUtc = createUTCDate(date);
-    return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
-  }
-  return timezone;
+// const calculateTimezoneByValue = (timezone, date = new Date()) => {
+//   // NOTE: This check could be removed. We don't support numerical timezones
+//   if (typeof timezone === 'string') {
+//     const dateUtc = createUTCDate(date);
+//     return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+//   }
+//   return timezone;
+// };
+
+const calculateTimezoneByValue = (timeZone, date = new Date()) => {
+  const correctedTime = date.getTime() - date.getTimezoneOffset() * 60 * 1000;
+  const correctedDate = new Date(correctedTime);
+
+  const utcDate = new Date(correctedDate.toLocaleString('en-US', { timeZone: 'UTC' }));
+  const tzDate = new Date(correctedDate.toLocaleString('en-US', { timeZone }));
+  const result = (tzDate.getTime() - utcDate.getTime()) / 60 / 1000 / 60;
+  return result;
 };
+
+// (window as any).calculateTimezoneByValue = calculateTimezoneByValue;
+// (window as any).calculateTimezoneByValueNew = calculateTimezoneByValueNew;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => calculateTimezoneByValue(timeZone, startDate) - calculateTimezoneByValue(timeZone, endDate);
