@@ -1,7 +1,10 @@
-import React from 'react';
+import React from "react";
 
-export default function GroupCaption(iconName: string) {
-  return function template(data) {
-    return (`<i class='dx-icon dx-icon-${iconName}'></i><span>${data.caption}</span>`);
-  };
-}
+const GroupCaption = ({ iconName, caption }) => (
+  <React.Fragment>
+    <i className={`dx-icon dx-icon-${iconName}`}></i>
+    <span>{caption}</span>
+  </React.Fragment>
+);
+
+export default GroupCaption;

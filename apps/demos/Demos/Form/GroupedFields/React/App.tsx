@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import 'devextreme-react/text-area';
 import Form, {
   SimpleItem, GroupItem, TabbedItem, TabPanelOptions, Tab,
@@ -9,6 +9,11 @@ import service from './data.ts';
 const employee = service.getEmployee();
 
 export default function App() {
+  const groupCaptionRender = useCallback(
+    (iconName) => (data) => <GroupCaption iconName={iconName} {...data} />,
+    []
+  );
+
   return (
     <React.Fragment>
       <div className="long-title"><h3>Personal details</h3></div>
@@ -17,9 +22,9 @@ export default function App() {
           colCount={2}
           id="form"
           formData={employee}>
-          <GroupItem captionTemplate={GroupCaption('info')} caption="System Information">
+          <GroupItem captionRender={groupCaptionRender('info')} caption="System Information">
             <SimpleItem dataField="ID" />
-            <GroupItem captionTemplate={GroupCaption('user')} caption="Main Information">
+            <GroupItem captionRender={groupCaptionRender('user')} caption="Main Information">
               <SimpleItem dataField="FirstName" />
               <SimpleItem dataField="LastName" />
               <SimpleItem dataField="HireDate" />
@@ -27,16 +32,16 @@ export default function App() {
               <SimpleItem dataField="OfficeNo" />
             </GroupItem>
           </GroupItem>
-          <GroupItem captionTemplate={GroupCaption('card')} caption="Personal Data">
+          <GroupItem captionRender={groupCaptionRender('card')} caption="Personal Data">
             <SimpleItem dataField="BirthDate" />
-            <GroupItem captionTemplate={GroupCaption('home')} caption='Home Address'>
+            <GroupItem captionRender={groupCaptionRender('home')} caption='Home Address'>
               <SimpleItem dataField="Address" />
               <SimpleItem dataField="City" />
               <SimpleItem dataField="State" />
               <SimpleItem dataField="Zipcode" />
             </GroupItem>
           </GroupItem>
-          <GroupItem captionTemplate={GroupCaption('tel')} caption="Contact Information">
+          <GroupItem captionRender={groupCaptionRender('tel')} caption="Contact Information">
             <TabbedItem>
               <TabPanelOptions deferRendering={false} />
               <Tab title="Phone">
