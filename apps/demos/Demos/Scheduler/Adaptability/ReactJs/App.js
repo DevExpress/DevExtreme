@@ -9,7 +9,7 @@ const currentDate = new Date(2021, 2, 25);
 const App = () => {
   const schedulerRef = useRef(null);
   const showAppointmentPopup = useCallback(() => {
-    schedulerRef.current?.instance.showAppointmentPopup();
+    schedulerRef.current?.instance().showAppointmentPopup();
   }, []);
   return (
     <React.Fragment>

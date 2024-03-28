@@ -2,6 +2,7 @@ import $ from 'jquery';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
+import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
 
@@ -20,7 +21,7 @@ const moduleConfig = {
 
         const init = (options = {}) => {
             this.instance = new ResizeHandle($('#resizeHandle'), options);
-            this.$element = this.instance.$element();
+            this.$element = $(this.instance.$element());
         };
 
         init();
@@ -93,17 +94,86 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             const $collapseButton = button === 'prev' ? this.getCollapsePrevButton() : this.getCollapseNextButton();
 
-            $collapseButton.trigger('dxclick');
-
             this.instance.option(handler, handlerStubAfterUpdate);
 
             $collapseButton.trigger('dxclick');
 
-            assert.strictEqual(handlerStub.callCount, 1);
+            assert.strictEqual(handlerStub.callCount, 0);
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
         });
     });
 
+    ['prev', 'next', 'both', 'none'].forEach((scenario) => {
+        QUnit.test(`double click handler (${scenario} button visible)`, function(assert) {
+            const onCollapsePrevStub = sinon.stub();
+            const onCollapseNextStub = sinon.stub();
+            const onCollapsePrevCallCount = scenario === 'prev' || scenario === 'both' ? 1 : 0;
+            const onCollapseNextCallCount = scenario === 'next' ? 1 : 0;
+
+            this.reinit({
+                onCollapsePrev: onCollapsePrevStub,
+                onCollapseNext: onCollapseNextStub,
+                showCollapsePrev: scenario === 'prev' || scenario === 'both',
+                showCollapseNext: scenario === 'next' || scenario === 'both',
+            });
+
+            this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+            assert.strictEqual(onCollapsePrevStub.callCount, onCollapsePrevCallCount, `onCollapsePrev called ${onCollapsePrevCallCount} times`);
+            assert.strictEqual(onCollapseNextStub.callCount, onCollapseNextCallCount, `onCollapseNext called ${onCollapseNextCallCount} times`);
+        });
+    });
+
+    QUnit.test('Double click should not trigger onCollapsePrev/onCollapseNext (runtime collapse buttons disabling)', function(assert) {
+        const onCollapsePrevStub = sinon.stub();
+        const onCollapseNextStub = sinon.stub();
+
+        this.reinit({
+            onCollapsePrev: onCollapsePrevStub,
+            onCollapseNext: onCollapseNextStub,
+            showCollapsePrev: true,
+            showCollapseNext: true,
+        });
+
+        this.instance.option({ showCollapsePrev: false, showCollapseNext: false });
+
+        this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onCollapsePrevStub.callCount, 0, 'onCollapsePrev not called');
+        assert.strictEqual(onCollapseNextStub.callCount, 0, 'onCollapseNext not called');
+    });
+
+    QUnit.test('Double click should trigger onCollapsePrev (runtime collapse prev button enabling)', function(assert) {
+        const onCollapsePrevStub = sinon.stub();
+
+        this.reinit({
+            onCollapsePrev: onCollapsePrevStub,
+            showCollapsePrev: false,
+            showCollapseNext: false,
+        });
+
+        this.instance.option('showCollapsePrev', true);
+
+        this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onCollapsePrevStub.callCount, 1);
+    });
+
+    QUnit.test('Double click should trigger onCollapseNext (runtime collapse next button enabling)', function(assert) {
+        const onCollapseNextStub = sinon.stub();
+
+        this.reinit({
+            onCollapseNext: onCollapseNextStub,
+            showCollapsePrev: false,
+            showCollapseNext: false,
+        });
+
+        this.instance.option('showCollapseNext', true);
+
+        this.$element.trigger(DOUBLE_CLICK_EVENT);
+
+        assert.strictEqual(onCollapseNextStub.callCount, 1);
+    });
 });
 
 QUnit.module('Cursor', moduleConfig, () => {
@@ -151,6 +221,23 @@ QUnit.module('Events', moduleConfig, () => {
             pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
 
             assert.strictEqual(eventHandlerStub.callCount, 1);
+        });
+
+        QUnit.test(`${eventHandler} event handler should be able to be updated at runtime if the handler was declared during initialization`, function(assert) {
+            const eventHandlerStub = sinon.stub();
+            const newEventHandlerStub = sinon.stub();
+
+            this.reinit({ [eventHandler]: eventHandlerStub });
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            eventHandlerStub.reset();
+            this.instance.option(eventHandler, newEventHandlerStub);
+
+            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(eventHandlerStub.callCount, 0);
+            assert.strictEqual(newEventHandlerStub.callCount, 1);
         });
 
         QUnit.test(`${eventHandler} should be called once after direction option changed`, function(assert) {

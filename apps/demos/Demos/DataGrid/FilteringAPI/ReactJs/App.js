@@ -25,7 +25,7 @@ const App = () => {
   const [filterStatus, setFilterStatus] = useState(statuses[0]);
   const dataGridRef = useRef(null);
   const onValueChanged = useCallback(({ value }) => {
-    const dataGrid = dataGridRef.current.instance;
+    const dataGrid = dataGridRef.current.instance();
     if (value === 'All') {
       dataGrid.clearFilter();
     } else {

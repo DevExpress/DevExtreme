@@ -20,7 +20,7 @@ const App = () => {
   const [crossScrollingEnabled, setCrossScrollingEnabled] = useState(false);
   const onAppointmentContextMenu = useCallback((event) => {
     const { appointmentData, targetedAppointmentData } = event;
-    const scheduler = schedulerRef.current?.instance;
+    const scheduler = schedulerRef.current?.instance();
     const resourceItems = resourcesData.map((item) => ({
       ...item,
       onItemClick: (e) =>
@@ -59,7 +59,7 @@ const App = () => {
   }, []);
   const onCellContextMenu = useCallback(
     (e) => {
-      const scheduler = schedulerRef.current?.instance;
+      const scheduler = schedulerRef.current?.instance();
       setTarget(cellClassName);
       setDisabled(false);
       setContextMenuItems([

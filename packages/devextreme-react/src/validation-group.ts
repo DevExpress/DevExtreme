@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxValidationGroup, {
     Properties
 } from "devextreme/ui/validation_group";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { DisposingEvent, InitializedEvent } from "devextreme/ui/validation_group";
 
@@ -19,36 +20,41 @@ type IValidationGroupOptionsNarrowedEvents = {
 
 type IValidationGroupOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IValidationGroupOptionsNarrowedEvents> & IHtmlOptions>
 
-class ValidationGroup extends BaseComponent<React.PropsWithChildren<IValidationGroupOptions>> {
-
-  public get instance(): dxValidationGroup {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxValidationGroup;
-
-  protected independentEvents = ["onDisposing","onInitialized"];
+interface ValidationGroupRef {
+  instance: () => dxValidationGroup;
 }
-(ValidationGroup as any).propTypes = {
-  elementAttr: PropTypes.object,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const ValidationGroup = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IValidationGroupOptions>, ref: ForwardedRef<ValidationGroupRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized"]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IValidationGroupOptions>>, {
+          WidgetClass: dxValidationGroup,
+          ref: baseRef,
+          independentEvents,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IValidationGroupOptions> & { ref?: Ref<ValidationGroupRef> }) => ReactElement | null;
 export default ValidationGroup;
 export {
   ValidationGroup,
-  IValidationGroupOptions
+  IValidationGroupOptions,
+  ValidationGroupRef
 };
 import type * as ValidationGroupTypes from 'devextreme/ui/validation_group_types';
 export { ValidationGroupTypes };

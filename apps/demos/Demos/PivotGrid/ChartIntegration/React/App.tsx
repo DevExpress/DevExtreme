@@ -7,10 +7,12 @@ import Chart, {
   CommonSeriesSettings,
   Size,
   Tooltip,
+  ChartRef,
 } from 'devextreme-react/chart';
 
 import PivotGrid, {
   FieldChooser,
+  PivotGridRef,
 } from 'devextreme-react/pivot-grid';
 
 import sales from './data.ts';
@@ -27,11 +29,11 @@ const customizeTooltip = (args) => {
 };
 
 const App = () => {
-  const chartRef = useRef<Chart>(null);
-  const pivotGridRef = useRef<PivotGrid>(null);
+  const chartRef = useRef<ChartRef>(null);
+  const pivotGridRef = useRef<PivotGridRef>(null);
 
   useEffect(() => {
-    pivotGridRef.current.instance.bindChart(chartRef.current.instance, {
+    pivotGridRef.current.instance().bindChart(chartRef.current.instance(), {
       dataFieldsDisplayMode: 'splitPanes',
       alternateDataFields: false,
     });

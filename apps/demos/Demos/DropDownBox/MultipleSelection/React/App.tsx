@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import DropDownBox, { DropDownBoxTypes } from 'devextreme-react/drop-down-box';
-import TreeView from 'devextreme-react/tree-view';
+import TreeView, { TreeViewRef } from 'devextreme-react/tree-view';
 import DataGrid, {
   Selection,
   Paging,
@@ -29,7 +29,7 @@ const gridDataSource = makeAsyncDataSource('customers.json');
 function App() {
   const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
   const [gridBoxValue, setGridBoxValue] = useState([3]);
-  const treeViewRef = useRef<TreeView<any>>();
+  const treeViewRef = useRef<TreeViewRef>();
 
   const treeViewRender = useCallback(
     () => (
@@ -76,7 +76,7 @@ function App() {
   const syncTreeViewSelection = useCallback(
     (e: DropDownBoxTypes.ValueChangedEvent | any) => {
       const treeView = (e.component.selectItem && e.component)
-        || (treeViewRef.current && treeViewRef.current.instance);
+        || (treeViewRef.current && treeViewRef.current.instance());
 
       if (treeView) {
         if (e.value === null) {

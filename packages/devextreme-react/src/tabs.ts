@@ -1,11 +1,12 @@
 "use client"
 export { ExplicitTypes } from "devextreme/ui/tabs";
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxTabs, {
     Properties
 } from "devextreme/ui/tabs";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { dxTabsItem, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent } from "devextreme/ui/tabs";
@@ -30,7 +31,6 @@ type ITabsOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFiel
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  itemKeyFn?: (data: any) => string;
   defaultItems?: Array<any | dxTabsItem | string>;
   defaultSelectedIndex?: number;
   defaultSelectedItem?: any;
@@ -43,107 +43,61 @@ type ITabsOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFiel
   onSelectedItemsChange?: (value: Array<any>) => void;
 }>
 
-class Tabs<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren<ITabsOptions<TItem, TKey>>> {
-
-  public get instance(): dxTabs<TItem, TKey> {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxTabs;
-
-  protected subscribableOptions = ["items","selectedIndex","selectedItem","selectedItemKeys","selectedItems"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"];
-
-  protected _defaults = {
-    defaultItems: "items",
-    defaultSelectedIndex: "selectedIndex",
-    defaultSelectedItem: "selectedItem",
-    defaultSelectedItemKeys: "selectedItemKeys",
-    defaultSelectedItems: "selectedItems"
-  };
-
-  protected _expectedChildren = {
-    item: { optionName: "items", isCollectionItem: true }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "itemTemplate",
-    render: "itemRender",
-    component: "itemComponent",
-    keyFn: "itemKeyFn"
-  }];
+interface TabsRef<TItem = any, TKey = any> {
+  instance: () => dxTabs<TItem, TKey>;
 }
-(Tabs as any).propTypes = {
-  accessKey: PropTypes.string,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  iconPosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "top",
-      "end",
-      "bottom",
-      "start"])
-  ]),
-  itemHoldTimeout: PropTypes.number,
-  items: PropTypes.array,
-  keyExpr: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.string
-  ]),
-  noDataText: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemContextMenu: PropTypes.func,
-  onItemHold: PropTypes.func,
-  onItemRendered: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  orientation: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "horizontal",
-      "vertical"])
-  ]),
-  repaintChangesOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  scrollByContent: PropTypes.bool,
-  scrollingEnabled: PropTypes.bool,
-  selectedIndex: PropTypes.number,
-  selectedItemKeys: PropTypes.array,
-  selectedItems: PropTypes.array,
-  selectionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "single",
-      "multiple"])
-  ]),
-  showNavButtons: PropTypes.bool,
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "primary",
-      "secondary"])
-  ]),
-  tabIndex: PropTypes.number,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Tabs = memo(
+  forwardRef(
+    <TItem = any, TKey = any>(props: React.PropsWithChildren<ITabsOptions<TItem, TKey>>, ref: ForwardedRef<TabsRef<TItem, TKey>>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["items","selectedIndex","selectedItem","selectedItemKeys","selectedItems"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onItemClick","onItemContextMenu","onItemHold","onItemRendered"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultItems: "items",
+        defaultSelectedIndex: "selectedIndex",
+        defaultSelectedItem: "selectedItem",
+        defaultSelectedItemKeys: "selectedItemKeys",
+        defaultSelectedItems: "selectedItems",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        item: { optionName: "items", isCollectionItem: true }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "itemTemplate",
+          render: "itemRender",
+          component: "itemComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ITabsOptions<TItem, TKey>>>, {
+          WidgetClass: dxTabs,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as <TItem = any, TKey = any>(props: React.PropsWithChildren<ITabsOptions<TItem, TKey>> & { ref?: Ref<TabsRef<TItem, TKey>> }) => ReactElement | null;
 
 
 // owners:
@@ -158,23 +112,28 @@ type IItemProps = React.PropsWithChildren<{
   visible?: boolean;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-  public static TemplateProps = [{
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
-}
+    component: "component"
+  }],
+})
 
 export default Tabs;
 export {
   Tabs,
   ITabsOptions,
+  TabsRef,
   Item,
   IItemProps
 };

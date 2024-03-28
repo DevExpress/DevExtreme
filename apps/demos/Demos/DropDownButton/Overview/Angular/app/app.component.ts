@@ -63,7 +63,7 @@ export class AppComponent {
   };
 
   onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent) {
-    notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+    notify(`Go to ${e.element.querySelector(".button-title").textContent}'s profile`, 'success', 600);
   }
 
   onItemClick(e: DxDropDownButtonTypes.ItemClickEvent) {

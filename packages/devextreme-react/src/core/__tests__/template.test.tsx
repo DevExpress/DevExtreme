@@ -1,8 +1,9 @@
 /* eslint-disable max-classes-per-file */
 import { cleanup, render, screen } from '@testing-library/react';
 import * as React from 'react';
+import { memo, forwardRef, ForwardedRef } from 'react';
 import { act } from 'react-dom/test-utils';
-import { Component, IHtmlOptions } from '../component';
+import { Component } from '../component';
 import ConfigurationComponent from '../nested-option';
 import { Template } from '../template';
 import {
@@ -19,18 +20,28 @@ const templateProps = [{
   tmplOption: 'item',
   render: 'itemRender',
   component: 'itemComponent',
-  keyFn: 'itemKeyFn',
 }];
 
-class ComponentWithTemplates extends TestComponent {
-  protected _templateProps = templateProps;
-}
 
-class ComponentWithAsyncTemplates<P = {}> extends Component<P & IHtmlOptions> {
-  protected _WidgetClass = WidgetClass;
+const ComponentWithTemplates = memo(forwardRef(function ComponentWithTemplates(props: any, ref: ForwardedRef<any>) {
+  return (
+    <TestComponent
+      templateProps={templateProps}
+      ref={ref}
+      {...props}
+    />
+  );
+}));
 
-  protected _templateProps = templateProps;
-}
+const ComponentWithAsyncTemplates = memo(function ComponentWithAsyncTemplates(props: any) {
+  return (
+    <Component
+      WidgetClass={WidgetClass}
+      templateProps={templateProps}
+      {...props}
+    />
+  );
+});
 
 function renderTemplate(
   name: string,
@@ -61,12 +72,10 @@ function testTemplateOption(testedOption: string) {
 
   if (testedOption === 'itemComponent') {
     prepareTemplate = (render) => {
-      class ItemComponent extends React.PureComponent<{ data: any; index?: number }> {
-        public render() {
-          const { data, index } = this.props;
-          return render(data, index);
-        }
-      }
+      const ItemComponent = memo(function ItemComponent(props: { data: any; index?: number }) {
+        const { data, index } = props;
+        return render(data, index);
+      });
       return ItemComponent;
     };
   }
@@ -135,6 +144,7 @@ function testTemplateOption(testedOption: string) {
 
   it('renders new template after component change', () => {
     const ref = React.createRef<HTMLDivElement>();
+    const containerRef = React.createRef<HTMLDivElement>();
     const elementOptions: Record<string, any> = { ref };
     elementOptions[testedOption] = () => <div className="template">First Template</div>;
     const { rerender, container } = render(
@@ -145,11 +155,11 @@ function testTemplateOption(testedOption: string) {
     changedElementOptions[testedOption] = () => <div className="template">Second Template</div>;
     rerender(
       <ComponentWithTemplates {...changedElementOptions}>
-        <div ref={ref} />
+        <div ref={containerRef} />
       </ComponentWithTemplates>,
     );
 
-    act(() => { renderItemTemplate(undefined, ref.current); });
+    act(() => { renderItemTemplate(undefined, containerRef.current); });
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Second Template</div>');
   });
@@ -309,7 +319,7 @@ function testTemplateOption(testedOption: string) {
   });
 
   it('has templates with unique ids', () => {
-    const ref = React.createRef<ComponentWithTemplates>();
+    const ref = React.createRef<any>();
     const refContainer = React.createRef<HTMLDivElement>();
 
     const elementOptions: Record<string, any> = {};
@@ -332,32 +342,6 @@ function testTemplateOption(testedOption: string) {
     expect(screen.getByText('First item')).toBeTruthy();
     expect(screen.getByText('Second item')).toBeTruthy();
   });
-
-  // it('has templates with ids genetated with keyExpr', () => {
-  //   const ref = React.createRef<ComponentWithTemplates>();
-
-  //   const elementOptions: Record<string, unknown> = {};
-  //   elementOptions[testedOption] = prepareTemplate((data: Record<string, unknown>) => (
-  //     <div className="template">
-  //       Template
-  //       {data.text as string}
-  //     </div>
-  //   ));
-  //   elementOptions.itemKeyFn = (data) => data.text;
-  //   render(
-  //     <ComponentWithTemplates {...elementOptions} ref={ref} />,
-  //   );
-
-  //   act(() => { renderItemTemplate({ text: 1 }); });
-  //   act(() => { renderItemTemplate({ text: 2 }); });
-
-  //   const componentInstance = ref.current as unknown as { _templatesStore: { _templates: Record<string, TemplateWrapperRenderer> } };
-
-  //   const templatesKeys = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
-  //   expect(templatesKeys.length).toBe(2);
-  //   expect(templatesKeys[0]).toBe('1');
-  //   expect(templatesKeys[1]).toBe('2');
-  // });
 }
 
 describe('function template', () => {
@@ -562,23 +546,6 @@ describe('nested template', () => {
 
     expect(container.querySelector('.template')?.outerHTML).toBe('<div class="template">Second Template</div>');
   });
-
-  // it('has templates with ids genetated by keyFn', () => {
-  //   const ref = React.createRef<ComponentWithTemplates>();
-  //   const FirstTemplate = () => <div className="template">Template</div>;
-  //   const keyExpr = (data) => data.text;
-  //   render(
-  //     <ComponentWithTemplates ref={ref}>
-  //       <Template name="item1" render={FirstTemplate} keyFn={keyExpr} />
-  //     </ComponentWithTemplates>,
-  //   );
-
-  //   act(() => { renderTemplate('item1', { text: 1 }); });
-  //   const componentInstance = ref.current as any;
-  //   const templates = Object.getOwnPropertyNames(componentInstance._templatesStore._templates);
-  //   expect(templates.length).toBe(1);
-  //   expect(templates[0]).toBe('1');
-  // });
 });
 
 describe('component/render in nested options', () => {
@@ -588,35 +555,51 @@ describe('component/render in nested options', () => {
     cleanup();
   });
 
-  class NestedComponent extends ConfigurationComponent<{
-    item?: any;
-    itemRender?: any;
-    itemComponent?: any;
-  } & React.PropsWithChildren> {
-    public static OptionName = 'option';
+  const NestedComponent = memo(function NestedComponent(props: any) {
+    return (
+      <ConfigurationComponent<{
+        item?: any;
+        itemRender?: any;
+        itemComponent?: any;
+      } & React.PropsWithChildren>
+        {...props}
+      />
+    );
+  }) as React.MemoExoticComponent<any> & {
+    OptionName: string
+    TemplateProps: Record<string, string>[]
+  };
 
-    public static TemplateProps = [{
-      tmplOption: 'item',
-      render: 'itemRender',
-      component: 'itemComponent',
-    }];
-  }
+  NestedComponent.OptionName = 'option';
+  NestedComponent.TemplateProps = [{
+    tmplOption: 'item',
+    render: 'itemRender',
+    component: 'itemComponent',
+  }];
 
-  class CollectionNestedComponent extends ConfigurationComponent<{
-    template?: any;
-    render?: any;
-    component?: any;
-  } & React.PropsWithChildren> {
-    public static IsCollectionItem = true;
+  const CollectionNestedComponent = memo(function CollectionNestedComponent(props: any) {
+    return (
+      <ConfigurationComponent<{
+        template?: any;
+        render?: any;
+        component?: any;
+      } & React.PropsWithChildren>
+        {...props}
+      />
+    );
+  }) as React.MemoExoticComponent<any> & {
+    OptionName: string
+    IsCollectionItem: boolean;
+    TemplateProps: Record<string, string>[]
+  };
 
-    public static OptionName = 'collection';
-
-    public static TemplateProps = [{
-      tmplOption: 'template',
-      render: 'render',
-      component: 'component',
-    }];
-  }
+  CollectionNestedComponent.OptionName = 'collection';
+  CollectionNestedComponent.IsCollectionItem = true;
+  CollectionNestedComponent.TemplateProps = [{
+    tmplOption: 'template',
+    render: 'render',
+    component: 'component',
+  }];
 
   it('pass integrationOptions options to widget', () => {
     const ItemTemplate = () => <div>Template</div>;
@@ -1005,14 +988,20 @@ describe('component/render in nested options', () => {
   });
 
   it('does not create template for widget transcluded content', () => {
-    class ComponentWithTranscludedContent extends TestComponent {
-      protected _templateProps = [{
-        tmplOption: 'template',
-        render: 'render',
-        component: 'component',
-        keyFn: 'keyFn',
-      }];
-    }
+    const ComponentWithTranscludedContent = memo(function ComponentWithTranscludedContent(props: any) {
+      return (
+        <TestComponent
+          templateProps={
+            [{
+              tmplOption: 'template',
+              render: 'render',
+              component: 'component',
+            }]
+          }
+          {...props}
+        />
+      );
+    });
 
     render(
       <ComponentWithTranscludedContent>

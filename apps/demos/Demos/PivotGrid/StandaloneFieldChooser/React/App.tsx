@@ -8,6 +8,7 @@ import {
 import {
   PivotGridFieldChooser,
   Texts,
+  PivotGridFieldChooserRef,
 } from 'devextreme-react/pivot-grid-field-chooser';
 
 import {
@@ -36,7 +37,7 @@ const layouts = service.getLayouts();
 const App = () => {
   const [applyChangesMode, setApplyChangesMode] = useState<ApplyChangesMode>('instantly');
   const [layout, setLayout] = useState<FieldChooserLayout>(0);
-  const fieldChooserRef = useRef<PivotGridFieldChooser>(null);
+  const fieldChooserRef = useRef<PivotGridFieldChooserRef>(null);
 
   return (
     <React.Fragment>
@@ -72,11 +73,11 @@ const App = () => {
             <Button
               text="Apply"
               type="default"
-              onClick={() => fieldChooserRef.current.instance.applyChanges()}
+              onClick={() => fieldChooserRef.current.instance().applyChanges()}
             ></Button>
             <Button
               text="Cancel"
-              onClick={() => fieldChooserRef.current.instance.cancelChanges()}
+              onClick={() => fieldChooserRef.current.instance().cancelChanges()}
             ></Button>
           </div>
         }

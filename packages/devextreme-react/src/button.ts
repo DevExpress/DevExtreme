@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxButton, {
     Properties
 } from "devextreme/ui/button";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { ClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent } from "devextreme/ui/button";
 
@@ -22,76 +23,52 @@ type IButtonOptionsNarrowedEvents = {
 type IButtonOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IButtonOptionsNarrowedEvents> & IHtmlOptions & {
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
 }>
 
-class Button extends BaseComponent<React.PropsWithChildren<IButtonOptions>> {
-
-  public get instance(): dxButton {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxButton;
-
-  protected independentEvents = ["onClick","onContentReady","onDisposing","onInitialized"];
-
-  protected _templateProps = [{
-    tmplOption: "template",
-    render: "render",
-    component: "component",
-    keyFn: "keyFn"
-  }];
+interface ButtonRef {
+  instance: () => dxButton;
 }
-(Button as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  icon: PropTypes.string,
-  onClick: PropTypes.func,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  stylingMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "text",
-      "outlined",
-      "contained"])
-  ]),
-  tabIndex: PropTypes.number,
-  text: PropTypes.string,
-  type: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "danger",
-      "default",
-      "normal",
-      "success"])
-  ]),
-  useSubmitBehavior: PropTypes.bool,
-  validationGroup: PropTypes.string,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Button = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IButtonOptions>, ref: ForwardedRef<ButtonRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onClick","onContentReady","onDisposing","onInitialized"]), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "template",
+          render: "render",
+          component: "component"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IButtonOptions>>, {
+          WidgetClass: dxButton,
+          ref: baseRef,
+          independentEvents,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IButtonOptions> & { ref?: Ref<ButtonRef> }) => ReactElement | null;
 export default Button;
 export {
   Button,
-  IButtonOptions
+  IButtonOptions,
+  ButtonRef
 };
 import type * as ButtonTypes from 'devextreme/ui/button_types';
 export { ButtonTypes };

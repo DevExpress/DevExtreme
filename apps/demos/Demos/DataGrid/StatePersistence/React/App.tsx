@@ -1,6 +1,6 @@
 import React, { useCallback, useRef } from 'react';
 import DataGrid, {
-  Selection, FilterRow, GroupPanel, StateStoring, Pager, Column,
+  Selection, FilterRow, GroupPanel, StateStoring, Pager, Column, DataGridRef,
 } from 'devextreme-react/data-grid';
 import { orders } from './data.ts';
 
@@ -11,10 +11,10 @@ const onRefreshClick = () => {
 };
 
 const App = () => {
-  const dataGridRef = useRef<DataGrid>(null);
+  const dataGridRef = useRef<DataGridRef>(null);
 
   const onStateResetClick = useCallback(() => {
-    dataGridRef.current.instance.state(null);
+    dataGridRef.current.instance().state(null);
   }, []);
 
   return (

@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxBullet, {
     Properties
 } from "devextreme/viz/bullet";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, TooltipHiddenEvent, TooltipShownEvent } from "devextreme/viz/bullet";
@@ -31,67 +32,43 @@ type IBulletOptionsNarrowedEvents = {
 
 type IBulletOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IBulletOptionsNarrowedEvents> & IHtmlOptions>
 
-class Bullet extends BaseComponent<React.PropsWithChildren<IBulletOptions>> {
-
-  public get instance(): dxBullet {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxBullet;
-
-  protected independentEvents = ["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onTooltipHidden","onTooltipShown"];
-
-  protected _expectedChildren = {
-    margin: { optionName: "margin", isCollectionItem: false },
-    size: { optionName: "size", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
+interface BulletRef {
+  instance: () => dxBullet;
 }
-(Bullet as any).propTypes = {
-  color: PropTypes.string,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  endScaleValue: PropTypes.number,
-  margin: PropTypes.object,
-  onDisposing: PropTypes.func,
-  onDrawn: PropTypes.func,
-  onExported: PropTypes.func,
-  onExporting: PropTypes.func,
-  onFileSaving: PropTypes.func,
-  onIncidentOccurred: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onTooltipHidden: PropTypes.func,
-  onTooltipShown: PropTypes.func,
-  pathModified: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  showTarget: PropTypes.bool,
-  showZeroLevel: PropTypes.bool,
-  size: PropTypes.object,
-  startScaleValue: PropTypes.number,
-  target: PropTypes.number,
-  targetColor: PropTypes.string,
-  targetWidth: PropTypes.number,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "generic.dark",
-      "generic.light",
-      "generic.contrast",
-      "generic.carmine",
-      "generic.darkmoon",
-      "generic.darkviolet",
-      "generic.greenmist",
-      "generic.softblue",
-      "material.blue.light",
-      "material.lime.light",
-      "material.orange.light",
-      "material.purple.light",
-      "material.teal.light"])
-  ]),
-  tooltip: PropTypes.object,
-  value: PropTypes.number
-};
+
+const Bullet = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IBulletOptions>, ref: ForwardedRef<BulletRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onDisposing","onDrawn","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onTooltipHidden","onTooltipShown"]), []);
+
+      const expectedChildren = useMemo(() => ({
+        margin: { optionName: "margin", isCollectionItem: false },
+        size: { optionName: "size", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IBulletOptions>>, {
+          WidgetClass: dxBullet,
+          ref: baseRef,
+          independentEvents,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IBulletOptions> & { ref?: Ref<BulletRef> }) => ReactElement | null;
 
 
 // owners:
@@ -103,9 +80,15 @@ type IBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class Border extends NestedOption<IBorderProps> {
-  public static OptionName = "border";
-}
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
+
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Tooltip
@@ -116,9 +99,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-class Font extends NestedOption<IFontProps> {
-  public static OptionName = "font";
-}
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
+
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Tooltip
@@ -130,9 +119,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // Bullet
@@ -142,9 +137,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-class Margin extends NestedOption<IMarginProps> {
-  public static OptionName = "margin";
-}
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
+
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // Tooltip
@@ -155,9 +156,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-class Shadow extends NestedOption<IShadowProps> {
-  public static OptionName = "shadow";
-}
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
+
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // Bullet
@@ -165,9 +172,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-class Size extends NestedOption<ISizeProps> {
-  public static OptionName = "size";
-}
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
+
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // Bullet
@@ -202,28 +215,33 @@ type ITooltipProps = React.PropsWithChildren<{
   zIndex?: number;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-  public static ExpectedChildren = {
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "contentTemplate",
     render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }];
-}
+    component: "contentComponent"
+  }],
+})
 
 export default Bullet;
 export {
   Bullet,
   IBulletOptions,
+  BulletRef,
   Border,
   IBorderProps,
   Font,

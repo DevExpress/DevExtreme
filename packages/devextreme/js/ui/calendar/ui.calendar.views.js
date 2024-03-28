@@ -20,6 +20,10 @@ const Views = {
             return 'month';
         },
 
+        _getCurrentDateFormat: function() {
+            return 'longdate';
+        },
+
         _getDefaultOptions: function() {
             return extend(this.callBase(), {
                 firstDayOfWeek: 0,
@@ -40,10 +44,6 @@ const Views = {
         },
 
         _renderFocusTarget: noop,
-
-        getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'longdate');
-        },
 
         _renderHeader: function() {
             const $headerRow = $('<tr>');
@@ -221,6 +221,10 @@ const Views = {
             return 'year';
         },
 
+        _getCurrentDateFormat: function() {
+            return 'monthandyear';
+        },
+
         _isTodayCell: function(cellDate) {
             const today = this.option('_todayDate')();
 
@@ -268,10 +272,6 @@ const Views = {
             foundDate.setDate(1);
 
             return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
-        },
-
-        getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'monthandyear');
         },
 
         getNavigatorCaption: function() {

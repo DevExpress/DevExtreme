@@ -268,9 +268,23 @@ class Splitter extends (CollectionWidget as any) {
     return this._editStrategy.getItemDataByIndex(index);
   }
 
+  _createEventAction(eventName: string): void {
+    const actionName = getActionNameByEventName(eventName);
+
+    this[actionName] = this._createActionByOption(eventName, {
+      excludeValidators: ['disabled', 'readOnly'],
+    });
+  }
+
   _getAction(eventName: string): (e) => void {
+    const actionName = getActionNameByEventName(eventName);
+
+    if (!this[actionName]) {
+      this._createEventAction(eventName);
+    }
+
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this[getActionNameByEventName(eventName)] ?? this._createActionByOption(eventName);
+    return this[actionName];
   }
 
   _getResizeHandleConfig(itemProps: Record<string, unknown>): object {
@@ -461,7 +475,7 @@ class Splitter extends (CollectionWidget as any) {
   _getResizeHandlesSize(): number {
     let size = 0;
 
-    this._resizeHandles?.forEach((resizeHandle) => {
+    this._resizeHandles.forEach((resizeHandle) => {
       const { disabled, separatorSize } = resizeHandle.option();
 
       size += disabled ? INACTIVE_RESIZE_HANDLE_SIZE : separatorSize as number;
@@ -626,7 +640,7 @@ class Splitter extends (CollectionWidget as any) {
       case 'onResize':
       case 'onItemCollapsed':
       case 'onItemExpanded':
-        this[getActionNameByEventName(name)] = this._createActionByOption(name);
+        this._createEventAction(name);
         break;
       case 'separatorSize':
         this._updateResizeHandlesOption(name, value);
