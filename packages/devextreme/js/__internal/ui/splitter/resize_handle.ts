@@ -182,17 +182,16 @@ class ResizeHandle extends (Widget as any) {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
-      this.option('disabled', true);
-      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
-      this.option(inverseDimension, null);
-    } else {
-      const size = getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
+    const disabled = resizable === false
+      && showCollapseNext === false
+      && showCollapsePrev === false;
 
-      this.option(dimension, size);
-      this.option(inverseDimension, null);
-      this.option('disabled', false);
-    }
+    this.option('disabled', disabled);
+    this.option(inverseDimension, null);
+
+    const handleSize = disabled ? INACTIVE_RESIZE_HANDLE_SIZE
+      : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
+    this.option(dimension, handleSize);
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
