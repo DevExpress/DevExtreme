@@ -51,9 +51,9 @@ class App extends React.Component {
 
   endTaskIndexValueChanged: INumberBoxOptions['onValueChanged'];
 
-  startDateValueChanged: IDateBoxOptions['onValueChange'];
+  startDateValueChanged: IDateBoxOptions['onValueChanged'];
 
-  endDateValueChanged: IDateBoxOptions['onValueChange'];
+  endDateValueChanged: IDateBoxOptions['onValueChanged'];
 
   constructor(props) {
     super(props);

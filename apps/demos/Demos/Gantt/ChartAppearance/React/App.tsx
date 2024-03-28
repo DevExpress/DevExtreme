@@ -40,8 +40,8 @@ function App() {
   const onShowResourcesChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ showResources: value });
   const onShowDependenciesChanged: ICheckBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ showDependencies: value });
   const onShowCustomTaskTooltip: ICheckBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ showCustomTaskTooltip: value });
-  const onStartDateValueChanged: IDateBoxOptions['onValueChange'] = ({ value }) => updateGanttConfig({ startDateRange: value });
-  const onEndDateValueChanged: IDateBoxOptions['onValueChange'] = ({ value }) => updateGanttConfig({ endDateRange: value });
+  const onStartDateValueChanged: IDateBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ startDateRange: value });
+  const onEndDateValueChanged: IDateBoxOptions['onValueChanged'] = ({ value }) => updateGanttConfig({ endDateRange: value });
 
   return (
     <div id="form-demo">
