@@ -47,6 +47,7 @@ const App = () => {
           <img
             src={selectedRowPicture}
             className="employee-photo"
+            alt="Employee Photo"
           />
           <p className="employee-notes">{selectedRowNotes}</p>
         </div>
