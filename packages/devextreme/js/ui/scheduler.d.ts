@@ -364,7 +364,9 @@ export type AppointmentDraggingMoveEvent = Cancelable & AppointmentDraggingEvent
 };
 
 /** @public */
-export type AppointmentDraggingStartEvent = Cancelable & AppointmentDraggingEvent;
+export type AppointmentDraggingStartEvent = Cancelable & Omit<AppointmentDraggingEvent, 'itemData'> & {
+  itemData?: any;
+};
 
 /** @public */
 export type AppointmentDraggingRemoveEvent = AppointmentDraggingEvent & {
