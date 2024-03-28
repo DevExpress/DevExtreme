@@ -48,6 +48,7 @@ const CURRENT_DATE_TEXT = {
     decade: messageLocalization.format('dxCalendar-currentYear'),
     century: messageLocalization.format('dxCalendar-currentYearRange'),
 };
+const ARIA_LABEL_DATE_FORMAT = 'longdate';
 
 const BaseView = Widget.inherit({
 
@@ -86,17 +87,48 @@ const BaseView = Widget.inherit({
         this._renderValue();
         this._renderRange();
         this._renderEvents();
+        this._updateTableAriaLabel();
+    },
+
+    _getTableAriaLabel() {
+        const { value, selectionMode } = this.option();
+
+        if(selectionMode === 'multiple') {
+            return null;
+        }
+
+        const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
+
+        if(Array.isArray(value) && !value.length) {
+            return localizedWidgetName;
+        }
+
+        const [startDate, endDate] = value.length ? value : [value];
+
+        const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
+        const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
+
+        const selectedDatesText = startDate && endDate
+            // NOTE: need to localize
+            ? `Selected dates range from ${formattedStartDate} to ${formattedEndDate}`
+            // NOTE: need to localize
+            : `Selected date is ${formattedStartDate}`;
+
+        const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
+
+        return ariaLabel;
+    },
+
+    _updateTableAriaLabel() {
+        const label = this._getTableAriaLabel();
+
+        this.setAria({ label }, this._$table);
     },
 
     _createTable: function() {
         this._$table = $('<table>');
 
-        const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
-
-        this.setAria({
-            label: localizedWidgetName,
-            role: 'grid'
-        }, this._$table);
+        this.setAria({ role: 'grid' }, this._$table);
 
         return this._$table;
     },
