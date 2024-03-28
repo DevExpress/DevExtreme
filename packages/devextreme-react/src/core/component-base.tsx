@@ -16,7 +16,7 @@ import { requestAnimationFrame } from 'devextreme/animation/frame';
 import { deferUpdate } from 'devextreme/core/utils/common';
 import { createPortal } from 'react-dom';
 
-import { RemovalLockerContext } from './helpers';
+import { RemovalLockerContext, RestoreTreeContext } from './helpers';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { DXRemoveCustomArgs, DXTemplateCreator, InitArgument } from './types';
 import { elementPropNames, getClassName } from './widget-config';
@@ -63,11 +63,13 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
     const [, setForceUpdateToken] = useState(0);
     const removalLocker = useContext(RemovalLockerContext);
+    const restoreParentLink = useContext(RestoreTreeContext);
     const instance = useRef<any>();
     const element = useRef<HTMLDivElement>();
     const portalContainer = useRef<HTMLElement | null>();
     const useDeferUpdateForTemplates = useRef(false);
     const guardsUpdateScheduled = useRef(false);
+    const childElementsDetached = useRef(false);
     const optionsManager = useRef<OptionsManager>(new OptionsManager());
     const childNodes = useRef<Node[]>();
 
@@ -76,6 +78,22 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const updateTemplates = useRef<(callback: () => void) => void>();
 
     const prevPropsRef = useRef<P & ComponentBaseProps>();
+
+    const restoreTree = useCallback(() => {
+      if (childNodes.current?.length && element.current) {
+        element.current.append(...childNodes.current);
+        childElementsDetached.current = false;
+      }
+
+      if (restoreParentLink && element.current && !element.current.isConnected) {
+        restoreParentLink();
+      }
+    }, [
+      childNodes.current,
+      element.current,
+      childElementsDetached.current,
+      restoreParentLink,
+    ]);
 
     const updateCssClasses = useCallback((prevProps: (P & ComponentBaseProps) | undefined, newProps: P & ComponentBaseProps) => {
       const prevClassName = prevProps ? getClassName(prevProps) : undefined;
@@ -261,8 +279,8 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const onComponentMounted = useCallback(() => {
       const { style } = props;
 
-      if (childNodes.current?.length) {
-        element.current?.append(...childNodes.current);
+      if (childElementsDetached.current) {
+        restoreTree();
       } else if (element.current?.childNodes.length) {
         childNodes.current = Array.from(element.current?.childNodes);
       }
@@ -276,6 +294,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     }, [
       childNodes.current,
       element.current,
+      childElementsDetached.current,
       updateCssClasses,
       setInlineStyles,
       props,
@@ -288,6 +307,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
 
         childNodes.current?.forEach((child) => child.parentNode?.removeChild(child));
+        childElementsDetached.current = true;
 
         if (element.current) {
           events.triggerHandler(element.current, DX_REMOVE_EVENT, dxRemoveArgs);
@@ -304,6 +324,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       childNodes.current,
       element.current,
       optionsManager.current,
+      childElementsDetached.current,
     ]);
 
     useEffect(() => {
@@ -370,8 +391,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     ]);
 
     return React.createElement(
-      React.Fragment,
-      {},
+      RestoreTreeContext.Provider,
+      {
+        value: restoreTree,
+      },
       React.createElement(
         'div',
         getElementProps(),
