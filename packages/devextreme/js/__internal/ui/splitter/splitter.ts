@@ -35,6 +35,7 @@ import {
   getDimensionByOrientation,
   getElementSize,
   getNewLayout,
+  getSafeSize,
   getVisibleItems,
   getVisibleItemsCount,
   isElementVisible,
@@ -52,6 +53,7 @@ const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
 const INACTIVE_RESIZE_HANDLE_SIZE = 2;
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 const FLEX_PROPERTY: Record<string, FlexProperty> = {
   flexGrow: 'flexGrow',
@@ -82,7 +84,7 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: null,
       onResizeStart: null,
       allowKeyboardNavigation: true,
-      separatorSize: 8,
+      separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
     });
   }
 
@@ -478,7 +480,8 @@ class Splitter extends (CollectionWidget as any) {
     this._resizeHandles.forEach((resizeHandle) => {
       const { disabled, separatorSize } = resizeHandle.option();
 
-      size += disabled ? INACTIVE_RESIZE_HANDLE_SIZE : separatorSize as number;
+      size += disabled ? INACTIVE_RESIZE_HANDLE_SIZE
+        : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
     });
 
     return size;
