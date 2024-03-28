@@ -76,7 +76,13 @@ const locales: { name: string, value: Locale } = service.getLocales();
 const payments: Record<string, string | number>[] = service.getPayments();
 const locale: Locale = getLocale();
 const editPopupOptions = { width: 700, height: 345 };
-const amountEditorOptions = { format: 'currency', showClearButton: true };
+const amountEditorOptions = { 
+  format: 'currency', 
+  showClearButton: true, 
+  inputAttr: {
+    'aria-label': 'Filter Cell',
+  },
+};
 const selectBoxInputAttr = { id: 'selectInput' };
 const formatMessage = ref((msg) => msg);
 
