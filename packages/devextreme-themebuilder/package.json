@@ -37,7 +37,7 @@
     "@types/jest": "26.0.24",
     "@types/less": "3.0.6",
     "@types/node": "20.11.17",
-    "express": "4.18.2",
+    "express": "4.19.2",
     "filing-cabinet": "4.1.6",
     "fs-extra": "11.2.0",
     "immutable": "4.3.5",
