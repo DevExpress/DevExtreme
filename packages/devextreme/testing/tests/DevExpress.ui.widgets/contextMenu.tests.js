@@ -39,6 +39,8 @@ const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
+const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
+const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -211,7 +213,8 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         instance.option('items', [{ text: 3 }, { text: 4 }]);
         instance.show();
-        assert.equal($('.dx-overlay').length, 1, 'only one overlay should exists');
+        this.clock.tick(0);
+        assert.equal(this.$element.find('.dx-overlay').length, 1, 'only one overlay should exists');
     });
 
     QUnit.test('submenus in the same level should have same horizontal offset', function(assert) {
@@ -267,6 +270,53 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
     });
+
+    QUnit.test('context menu should init ScrollView', function(assert) {
+        new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
+        assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
+    });
+
+    QUnit.test('ScrollView should be initialised on 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find('.' + DX_MENU_ITEM_CLASS).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenu.length, 2, '2 submenu exists');
+        assert.ok($submenu.eq(1).hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested menu');
+    });
+
+    QUnit.test('height of the context menu should be limited', function(assert) {
+        new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            visible: true,
+        });
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
+        assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
+        assert.strictEqual($submenu.offset().top, 0, 'menu does not cross the window border');
+    });
 });
 
 QUnit.module('Showing and hiding context menu', moduleConfig, () => {
@@ -287,7 +337,8 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.option('items', [{ text: 1 }]);
-        assert.equal($('.dx-overlay').length, 1, 'overlays cleaned correctly');
+        this.clock.tick(0);
+        assert.equal(this.$element.find('.dx-overlay').length, 1, 'overlays cleaned correctly');
     });
 
     QUnit.test('show method should toggle menu\'s visibility', function(assert) {

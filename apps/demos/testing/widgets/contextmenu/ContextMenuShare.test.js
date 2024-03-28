@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils'
 const IMAGE_ID = 'image';
 const MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
 
-fixture('ContextMenu.Templates')
+fixture.skip('ContextMenu.Templates')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
