@@ -212,8 +212,6 @@
     "validate-ts": "gulp validate-ts",
     "validate-declarations": "dx-tools validate-declarations --sources ./js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\"",
     "testcafe-in-docker": "docker build -f ./testing/testcafe/docker/Dockerfile -t testcafe-testing . && docker run -it testcafe-testing",
-    "test-testcafe": "node ./testing/testcafe/runner",
-    "test-testcafe-inprogress": "node ./testing/testcafe/runner --meta=renovation",
     "test-jest": "jest --coverage --runInBand",
     "test-jest:watch": "jest --watch",
     "test-styles": "npm run test-jest -- --config=./testing/styles/jest.config.json --coverage=false",
