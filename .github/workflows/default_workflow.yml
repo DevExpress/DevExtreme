@@ -1,0 +1,52 @@
+name: Default Workflow
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "[0-9][0-9]_[0-9]"
+
+env:
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
+jobs:
+  main:
+    name: main
+    runs-on: devextreme-shr2
+    timeout-minutes: 15
+    
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+    
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Run npm install
+      run: npm ci --no-audit --no-fund
+    
+    - name: Run targets
+      run: >
+        npx nx run-many
+        -t test
+        --exclude
+        devextreme
+        devextreme-themebuilder
+        devextreme-angular
+        devextreme-react
+        devextreme-vue
+        devextreme-react-storybook
+        devextreme-main
+        devextreme-angular-playground
+        devextreme-testcafe-tests
+        devextreme-demos
+        devextreme-react-playground
+        devextreme-vue-playground
