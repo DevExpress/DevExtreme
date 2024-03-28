@@ -14,5 +14,5 @@ export const createTimeZoneCalculator = (
   ): number => timeZoneUtils.calculateTimezoneByValue(
     appointmentTimezone,
     date,
-  ) as number,
+  ),
 });
