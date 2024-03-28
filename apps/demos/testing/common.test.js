@@ -52,27 +52,11 @@ const getTestSpecificSkipRules = (testName) => {
     case 'Calendar-MultipleSelection':
     case 'DataGrid-ExcelJSCellCustomization':
     case 'DataGrid-HorizontalVirtualScrolling':
-    case 'DataGrid-PDFCellCustomization':
-      return ['empty-table-header'];
-    case 'DataGrid-Filtering':
     case 'DataGrid-FilterPanel':
     case 'Localization-UsingGlobalize':
-    case 'Localization-UsingIntl':
-      return ['label'];
-    case 'DataGrid-RowTemplate':
-    case 'DataGrid-Row3RdPartyEngineTemplate':
-      return ['aria-required-children', 'image-alt'];
-    case 'DataGrid-CustomNewRecordPosition':
-      return ['link-name'];
-    case 'DataGrid-Column3RdPartyEngineTemplate':
-    case 'DataGrid-ColumnTemplate':
     case 'DataGrid-ExcelJSExportImages':
     case 'DataGrid-FilteringAPI':
-    case 'DataGrid-MasterDetailAPI':
     case 'DataGrid-PDFExportImages':
-    case 'DataGrid-RowSelection':
-    case 'FilterBuilder-WithList':
-      return ['image-alt'];
     case 'TagBox-Overview':
       return ['image-alt', 'image-redundant-alt'];
     default:
