@@ -5,7 +5,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import Toolbar from '../../../model/toolbar/toolbar';
-import Guid from '../../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 import { appendElementTo, setAttribute, setClassAttribute } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';

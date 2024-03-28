@@ -7,7 +7,7 @@ import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
 } from '../../helpers/domUtils';
-import Guid from '../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 
 const ICON_CLASS = 'dx-icon';
 const iconSet = {

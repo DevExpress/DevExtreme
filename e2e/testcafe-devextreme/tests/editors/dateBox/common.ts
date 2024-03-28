@@ -8,7 +8,7 @@ import {
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Guid from '../../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';

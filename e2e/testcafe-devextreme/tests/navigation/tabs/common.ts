@@ -3,7 +3,7 @@ import { Selector, ClientFunction } from 'testcafe';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Item } from '../../../../../js/ui/tabs.d';
+import { Item } from 'devextreme/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import Tabs from '../../../model/tabs';
 

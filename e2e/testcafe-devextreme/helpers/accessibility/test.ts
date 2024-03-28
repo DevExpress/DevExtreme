@@ -1,6 +1,6 @@
 import { ElementContext } from 'axe-core';
 import { createWidget } from '../createWidget';
-import type { WidgetName } from '../widgetTypings';
+import type { WidgetName } from 'devextreme-testcafe-models/types';
 import { isMaterialBased } from '../themeUtils';
 import { a11yCheck, A11yCheckOptions } from './utils';
 import { generateOptionMatrix, Options } from '../generateOptionMatrix';

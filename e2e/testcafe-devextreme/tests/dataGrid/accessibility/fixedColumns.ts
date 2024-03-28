@@ -3,7 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from '../../../model/dataGrid';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
-import type { Properties } from '../../../../../js/ui/data_grid';
+import type { Properties } from 'devextreme/ui/data_grid';
 
 fixture`Fixed columns tests with axe`
   .page(url(__dirname, '../../container.html'));

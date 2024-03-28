@@ -9,7 +9,7 @@ import {
   appendElementTo,
   insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
-import Guid from '../../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';

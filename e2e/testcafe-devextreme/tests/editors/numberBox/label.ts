@@ -6,7 +6,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
-import Guid from '../../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 import { clearTestPage } from '../../../helpers/clearPage';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';

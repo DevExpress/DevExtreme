@@ -1,5 +1,5 @@
 import ResizeHandle from './handle';
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import Widget from '../internal/widget';
 import SplitterItem from './item';
 

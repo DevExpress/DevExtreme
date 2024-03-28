@@ -2,7 +2,7 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/date_range_box.d';
+import { Properties } from 'devextreme/ui/date_range_box.d';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))

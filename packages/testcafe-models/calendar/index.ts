@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import Button from '../button';
 import Widget from '../internal/widget';
 import CalendarView from './view';

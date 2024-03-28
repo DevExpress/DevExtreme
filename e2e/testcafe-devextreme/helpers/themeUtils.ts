@@ -1,4 +1,4 @@
-import { isString } from '../../../js/core/utils/type';
+import { isString } from 'devextreme/core/utils/type';
 import { changeTheme } from './changeTheme';
 
 const defaultThemeName = 'generic.light';

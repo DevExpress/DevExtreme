@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import Widget from '../internal/widget';
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import ContextMenu from '../contextMenu';
 
 const CLASS = {

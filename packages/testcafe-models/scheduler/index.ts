@@ -7,7 +7,7 @@ import Appointment from './appointment';
 import Toolbar from './toolbar';
 import Collectors from './collectors';
 import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import { GroupRow } from './groupRow';
 import { HeaderPanel } from './headerPanel';
 

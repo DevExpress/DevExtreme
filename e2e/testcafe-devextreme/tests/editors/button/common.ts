@@ -11,7 +11,7 @@ import {
   setAttribute,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import Guid from '../../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';

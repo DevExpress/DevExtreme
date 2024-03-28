@@ -5,7 +5,7 @@ import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../.
 import Scheduler from '../../../model/scheduler';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
-import type { Appointment } from '../../../../../js/ui/scheduler';
+import type { Appointment } from 'devextreme/ui/scheduler';
 
 interface TestCase {
   timezone: MachineTimezonesType;

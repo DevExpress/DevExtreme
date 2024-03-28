@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
-import Splitter from '../../../model/splitter';
+import Splitter from 'devextreme-testcafe-models/splitter';
 
 fixture.disablePageReloads`Splitter_Icon_Results`
   .page(url(__dirname, '../../container.html'));

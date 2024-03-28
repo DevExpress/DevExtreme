@@ -1,5 +1,5 @@
 import { ClientFunction, Selector } from 'testcafe';
-import DataGridInstance from '../../../../js/ui/data_grid';
+import DataGridInstance from 'devextreme/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
 import DataRow from './data/row';
@@ -12,7 +12,7 @@ import DataCell from './data/cell';
 import Headers from './headers';
 import ContextMenu from '../contextMenu';
 
-import type { WidgetName } from '../../helpers/widgetTypings';
+import type { WidgetName } from '../types';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';

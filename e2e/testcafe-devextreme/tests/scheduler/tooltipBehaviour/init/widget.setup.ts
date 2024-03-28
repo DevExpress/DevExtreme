@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import { extend } from '../../../../../../js/core/utils/extend';
+import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../../../helpers/createWidget';
 
 export const createScheduler = async (options = {}): Promise<void> => createWidget('dxScheduler', extend({

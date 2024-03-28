@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { extend } from '../../../../../js/core/utils/extend';
+import { extend } from 'devextreme/core/utils/extend';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';

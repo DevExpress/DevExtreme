@@ -1,4 +1,4 @@
-import type { WidgetName } from '../helpers/widgetTypings';
+import type { WidgetName } from './types';
 import SelectBox from './selectBox';
 
 const CLASS = {

@@ -4,7 +4,7 @@ import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from '../../../../js/ui/button.d';
+import { Properties } from 'devextreme/ui/button.d';
 import Button from '../../model/button';
 
 fixture.disablePageReloads`Accessibility`

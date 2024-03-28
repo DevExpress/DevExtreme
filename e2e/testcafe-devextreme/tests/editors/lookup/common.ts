@@ -9,7 +9,7 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {
   appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
-import Guid from '../../../../../js/core/guid';
+import Guid from 'devextreme/core/guid';
 import { clearTestPage } from '../../../helpers/clearPage';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';

@@ -1,4 +1,4 @@
-import type { WidgetName } from '../helpers/widgetTypings';
+import type { WidgetName } from './types';
 import DataGrid from './dataGrid';
 
 export default class TreeList extends DataGrid {
