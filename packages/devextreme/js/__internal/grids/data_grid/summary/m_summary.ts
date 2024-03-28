@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
@@ -17,6 +18,7 @@ import errors from '@js/ui/widget/ui.errors';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type DataSourceAdapter from '@ts/grids/grid_core/data_source_adapter/m_data_source_adapter';
 import type { EditingControllerRequired, ModuleType } from '@ts/grids/grid_core/m_types';
+import { A11yStatusContainerComponent } from '@ts/grids/grid_core/views/a11y_status_container_component';
 import { ColumnsView } from '@ts/grids/grid_core/views/m_columns_view';
 
 import type { EditingController } from '../../grid_core/editing/m_editing';
@@ -37,28 +39,43 @@ const DATAGRID_CELL_DISABLED = 'dx-cell-focus-disabled';
 const DATAGRID_GROUP_FOOTER_ROW_TYPE = 'groupFooter';
 const DATAGRID_TOTAL_FOOTER_ROW_TYPE = 'totalFooter';
 
+const E2E_ATTRIBUTES = {
+  summaryCellStatusContainer: 'e2e-a11y-summary-cell-status-container',
+};
+
 export const renderSummaryCell = function (cell, options) {
   const $cell = $(cell);
-  const { column } = options;
-  const { summaryItems } = options;
-  const $summaryItems: any = [];
+  const { column, summaryItems } = options;
 
-  if (!column.command && summaryItems) {
-    for (let i = 0; i < summaryItems.length; i++) {
-      const summaryItem = summaryItems[i];
-      const text = gridCore.getSummaryText(summaryItem, options.summaryTexts);
-
-      $summaryItems.push($('<div>')
-        .css('textAlign', summaryItem.alignment || column.alignment)
-        .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
-        .addClass(DATAGRID_TEXT_CONTENT_CLASS)
-        .addClass(summaryItem.cssClass)
-        .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
-        .text(text)
-        .attr('aria-label', `${column.caption} ${text}`));
-    }
-    $cell.append($summaryItems);
+  if (column.command || !Array.isArray(summaryItems)) {
+    return;
   }
+
+  const $summaryItems = summaryItems.reduce(($resultElements: dxElementWrapper[], item: any) => {
+    const text = gridCore.getSummaryText(item, options.summaryTexts);
+    const a11yText = `${column.caption} ${text}`;
+
+    const $item = $('<div>')
+      .css('textAlign', item.alignment || column.alignment)
+      .addClass(DATAGRID_SUMMARY_ITEM_CLASS)
+      .addClass(DATAGRID_TEXT_CONTENT_CLASS)
+      .addClass(item.cssClass)
+      .toggleClass(DATAGRID_GROUP_TEXT_CONTENT_CLASS, options.rowType === 'group')
+      .text(text)
+      .attr('aria-label', a11yText);
+    const $a11yItem = A11yStatusContainerComponent(
+      { statusText: a11yText, a11yLiveType: 'polite' },
+    );
+    $a11yItem.attr(E2E_ATTRIBUTES.summaryCellStatusContainer, 'true');
+
+    $resultElements.push($item);
+    $resultElements.push($a11yItem);
+
+    return $resultElements;
+  }, []);
+
+  // @ts-expect-error Badly typed renderer
+  $cell.append($summaryItems);
 };
 
 const getSummaryCellOptions = function (that, options) {

@@ -3739,7 +3739,7 @@ QUnit.module('Rows view', {
         assert.equal($groupRowCells.length, 3);
         assert.equal($groupRowCells.eq(1).text(), 'Column 1: 1 (Column1 Sum: 1)', 'group cell text');
         assert.equal($groupRowCells.eq(1).attr('colspan'), '2', 'group cell colspan');
-        assert.equal($groupRowCells.eq(2).text(), 'Sum: 100', 'alignByColumn summary cell text');
+        assert.equal($groupRowCells.eq(2).find('.dx-datagrid-summary-item').text(), 'Sum: 100', 'alignByColumn summary cell text');
     });
 
     QUnit.test('Show summary in a group row when two alignByColumn summary items', function(assert) {
@@ -3776,8 +3776,8 @@ QUnit.module('Rows view', {
         assert.equal($groupRowCells.length, 4);
         assert.equal($groupRowCells.eq(1).text(), 'Column 1: 1 (Column1 Sum: 1)', 'group cell text');
         assert.equal($groupRowCells.eq(1).attr('colspan'), '1', 'group cell colspan');
-        assert.equal($groupRowCells.eq(2).text(), 'Sum: 50', 'alignByColumn summary cell 1 text');
-        assert.equal($groupRowCells.eq(3).text(), 'Sum: 100', 'alignByColumn summary cell 2 text');
+        assert.equal($groupRowCells.eq(2).find('.dx-datagrid-summary-item').text(), 'Sum: 50', 'alignByColumn summary cell 1 text');
+        assert.equal($groupRowCells.eq(3).find('.dx-datagrid-summary-item').text(), 'Sum: 100', 'alignByColumn summary cell 2 text');
     });
 
     // T355321
@@ -3815,9 +3815,9 @@ QUnit.module('Rows view', {
         assert.equal($groupRowCells.length, 5);
         assert.equal($groupRowCells.eq(1).text(), 'Column 1: 1 (Column1 Sum: 1)', 'group cell text');
         assert.equal($groupRowCells.eq(1).attr('colspan'), '1', 'group cell colspan');
-        assert.equal($groupRowCells.eq(2).text(), 'Sum: 50', 'alignByColumn summary cell 1 text');
+        assert.equal($groupRowCells.eq(2).find('.dx-datagrid-summary-item').text(), 'Sum: 50', 'alignByColumn summary cell 1 text');
         assert.equal($groupRowCells.eq(3).text(), '', 'summary cell 2 must be empty');
-        assert.equal($groupRowCells.eq(4).text(), 'Sum: 100', 'alignByColumn summary cell 3 text');
+        assert.equal($groupRowCells.eq(4).find('.dx-datagrid-summary-item').text(), 'Sum: 100', 'alignByColumn summary cell 3 text');
     });
 
     QUnit.test('Summary items are not displayed in a group row', function(assert) {
@@ -5188,7 +5188,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
         assert.equal($cellElements.length, 4, 'count column');
         assert.equal($cellElements.eq(1).text(), 'Age: 15 (Max: 15)', 'group text');
-        assert.equal($cellElements.eq(2).text(), 'Count: 1', 'summary text third column');
+        assert.equal($cellElements.eq(2).find('.dx-datagrid-summary-item').text(), 'Count: 1', 'summary text third column');
         assert.equal($cellElements.eq(3).text(), '', 'summary text fourth column');
     });
 
@@ -5222,7 +5222,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
         assert.equal($cellElements.length, 3, 'count column');
         assert.equal($cellElements.eq(1).text(), 'Name: Alex', 'group text');
-        assert.equal($cellElements.last().text(), 'Count: 1', 'summary text');
+        assert.equal($cellElements.last().find('.dx-datagrid-summary-item').text(), 'Count: 1', 'summary text');
     });
 
     // T281779
@@ -5263,7 +5263,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok($rowElement.hasClass('dx-group-row'), 'group row');
         assert.equal($cellElements.length, 3, 'count column');
         assert.equal($cellElements.eq(1).text(), 'Name: Alex (Count: 1)', 'group text');
-        assert.equal($cellElements.last().text(), 'Count: 1', 'summary text');
+        assert.equal($cellElements.last().find('.dx-datagrid-summary-item').text(), 'Count: 1', 'summary text');
     });
 
 

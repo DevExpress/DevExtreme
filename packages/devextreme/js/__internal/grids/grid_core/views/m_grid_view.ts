@@ -1,5 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
@@ -15,6 +16,7 @@ import { getWindow, hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import * as accessibility from '@js/ui/shared/accessibility';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import { A11yStatusContainerComponent } from '@ts/grids/grid_core/views/a11y_status_container_component';
 
 import type { FooterView } from '../../data_grid/summary/m_summary';
 import type { AdaptiveColumnsController } from '../adaptivity/m_adaptivity';
@@ -34,6 +36,10 @@ const GROUP_ROW_SELECTOR = 'tr.dx-group-row';
 const HIDDEN_COLUMNS_WIDTH = 'adaptiveHidden';
 
 const VIEW_NAMES = ['columnsSeparatorView', 'blockSeparatorView', 'trackerView', 'headerPanel', 'columnHeadersView', 'rowsView', 'footerView', 'columnChooserView', 'filterPanelView', 'pagerView', 'draggingHeaderView', 'contextMenuView', 'errorView', 'headerFilterView', 'filterBuilderView'];
+
+const E2E_ATTRIBUTES = {
+  a11yStatusContainer: 'e2e-a11y-general-status-container',
+};
 
 const isPercentWidth = function (width) {
   return isString(width) && width.endsWith('%');
@@ -72,6 +78,8 @@ export class ResizingController extends modules.ViewController {
 
   _footerView!: FooterView;
 
+  private _gridView!: GridView;
+
   private _prevContentMinHeight: any;
 
   private _maxWidth: any;
@@ -103,6 +111,7 @@ export class ResizingController extends modules.ViewController {
     this._editorFactoryController = this.getController('editorFactory');
     this._footerView = this.getView('footerView');
     this._rowsView = this.getView('rowsView');
+    this._gridView = this.getView('gridView');
   }
 
   _initPostRenderHandlers() {
@@ -184,15 +193,18 @@ export class ResizingController extends modules.ViewController {
     return 'dxDataGrid-ariaDataGrid';
   }
 
-  _setAriaLabel() {
+  private _setAriaLabel(): void {
+    const columnCount = this._columnsController?._columns?.filter(({ visible }) => !!visible).length ?? 0;
     const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
-    this.component.setAria('label', messageLocalization.format(
-      this._getWidgetAriaLabel(),
-      // @ts-expect-error
-      totalItemsCount,
-      this.component.columnCount(),
-      // @ts-expect-error
-    ), this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
+    const widgetAriaLabel = this._getWidgetAriaLabel();
+    const widgetStatusText = messageLocalization
+      // @ts-expect-error Badly typed format method
+      .format(widgetAriaLabel, totalItemsCount, columnCount);
+    // @ts-expect-error Badly typed dxElementWrapper
+    const $ariaLabelElement = this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`);
+
+    this.component.setAria('label', widgetStatusText, $ariaLabelElement);
+    this._gridView.setWidgetA11yStatusText(widgetStatusText);
   }
 
   _getBestFitWidths() {
@@ -854,17 +866,18 @@ export class GridView extends modules.View {
 
   private _rootElement: any;
 
+  private _a11yGeneralStatusElement!: dxElementWrapper;
+
+  public init(): void {
+    this._resizingController = this.getController('resizing');
+    this._dataController = this.getController('data');
+  }
+
   protected _endUpdateCore() {
     if (this.component._requireResize) {
       this.component._requireResize = false;
       this._resizingController.resize();
     }
-  }
-
-  public init() {
-    const that = this;
-    that._resizingController = that.getController('resizing');
-    that._dataController = that.getController('data');
   }
 
   public getView(name) {
@@ -921,6 +934,14 @@ export class GridView extends modules.View {
       $groupElement.appendTo($rootElement);
     }
 
+    if (!this._a11yGeneralStatusElement) {
+      this._a11yGeneralStatusElement = A11yStatusContainerComponent(
+        { a11yLiveType: 'polite' },
+      );
+      this._a11yGeneralStatusElement.attr(E2E_ATTRIBUTES.a11yStatusContainer, 'true');
+      this._rootElement.append(this._a11yGeneralStatusElement);
+    }
+
     this._renderViews($groupElement);
   }
 
@@ -935,6 +956,10 @@ export class GridView extends modules.View {
         that._resizingController.fireContentReadyAction();
       }
     }
+  }
+
+  public setWidgetA11yStatusText(statusText: string): void {
+    this._a11yGeneralStatusElement?.text(statusText);
   }
 }
 

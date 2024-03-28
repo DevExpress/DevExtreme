@@ -719,7 +719,7 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(1).text(), 'Column 4: test4', 'text second cell in group row');
         assert.notEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(1).css('visibility'), 'hidden', 'group cell is visible');
         assert.equal($fixTable.find('tbody > .dx-group-row').find('td').eq(1).attr('colspan'), 3, 'colspan a second cell in group row');
-        assert.strictEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(2).text(), 'Column2 Count: 2', 'summary value');
+        assert.strictEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(2).find('.dx-datagrid-summary-item').text(), 'Column2 Count: 2', 'summary value');
     });
 
     // T394151
@@ -768,7 +768,7 @@ QUnit.module('Fixed columns', {
         assert.ok($cellElements.eq(0).hasClass('dx-datagrid-expand'), 'first cell in group row');
         assert.strictEqual($cellElements.eq(1).text(), 'Column 4: test4', 'text second cell in group row');
         assert.equal($cellElements.eq(1).attr('colspan'), 2, 'colspan a second cell in group row');
-        assert.strictEqual($cellElements.eq(2).text(), 'Column5 Max: 4', 'summary value');
+        assert.strictEqual($cellElements.eq(2).find('.dx-datagrid-summary-item').text(), 'Column5 Max: 4', 'summary value');
 
         // group row of the fixed table
         $groupRow = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table').find('tbody > .dx-group-row');
@@ -838,7 +838,7 @@ QUnit.module('Fixed columns', {
         assert.ok($cellElements.eq(0).hasClass('dx-datagrid-expand'), 'first cell in group row');
         assert.strictEqual($cellElements.eq(1).html(), '&nbsp;', 'text second cell in group row'); // T680701
         assert.equal($cellElements.eq(1).attr('colspan'), 2, 'colspan a second cell in group row');
-        assert.strictEqual($cellElements.eq(2).text(), 'Column5 Max: 4', 'summary value');
+        assert.strictEqual($cellElements.eq(2).find('.dx-datagrid-summary-item').text(), 'Column5 Max: 4', 'summary value');
 
         // group row of the fixed table
         $groupRow = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table').find('tbody > .dx-group-row');
@@ -849,7 +849,7 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($cellElements.eq(1).text(), 'Column 4: test4', 'text second cell in group row');
         assert.notEqual($cellElements.eq(1).css('visibility'), 'hidden', 'group cell is visible');
         assert.equal($cellElements.eq(1).attr('colspan'), 1, 'colspan a second cell in group row');
-        assert.strictEqual($cellElements.eq(2).text(), 'Column3 Count: 2', 'summary value');
+        assert.strictEqual($cellElements.eq(2).find('.dx-datagrid-summary-item').text(), 'Column3 Count: 2', 'summary value');
         assert.ok($cellElements.eq(3).hasClass('dx-pointer-events-none'), 'transparent column');
         assert.equal($cellElements.eq(3).attr('colspan'), 2, 'colspan of the transparent column');
     });
@@ -905,7 +905,7 @@ QUnit.module('Fixed columns', {
         assert.ok($table.find('tbody > .dx-group-row').find('td').eq(0).hasClass('dx-datagrid-expand'), 'first cell in group row');
         assert.strictEqual($table.find('tbody > .dx-group-row').find('td').eq(1).text(), 'Column 4: test4', 'text second cell in group row');
         assert.equal($table.find('tbody > .dx-group-row').find('td').eq(1).attr('colspan'), 2, 'colspan a second cell in group row');
-        assert.strictEqual($table.find('tbody > .dx-group-row').find('td').eq(2).text(), 'Column1 Max: 4', 'summary value');
+        assert.strictEqual($table.find('tbody > .dx-group-row').find('td').eq(2).find('.dx-datagrid-summary-item').text(), 'Column1 Max: 4', 'summary value');
         assert.strictEqual($table.find('tbody > .dx-group-row').find('td').last().html(), '&nbsp;', 'text third cell in group row'); // T680701
 
         const $fixTable = $testElement.find('.dx-datagrid-rowsview').children('.dx-datagrid-content-fixed').find('table');
@@ -916,7 +916,7 @@ QUnit.module('Fixed columns', {
         assert.strictEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(1).text(), 'Column 4: test4', 'text second cell in group row');
         assert.equal($fixTable.find('tbody > .dx-group-row').find('td').eq(1).css('visibility'), 'hidden', 'group cell is not visible');
         assert.equal($fixTable.find('tbody > .dx-group-row').find('td').eq(1).attr('colspan'), 3, 'colspan a second cell in group row');
-        assert.strictEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(2).text(), 'Column2 Count: 2', 'summary value');
+        assert.strictEqual($fixTable.find('tbody > .dx-group-row').find('td').eq(2).find('.dx-datagrid-summary-item').text(), 'Column2 Count: 2', 'summary value');
     });
 
     QUnit.test('Update free space row for fixed table', function(assert) {
@@ -969,15 +969,15 @@ QUnit.module('Fixed columns', {
 
         const $table = $footerContentElements.filter(':not(.dx-datagrid-content-fixed)').find('table');
         assert.equal($table.find('tbody > tr').first().find('td').length, 5, 'count column');
-        assert.strictEqual($table.find('tbody > tr').first().find('td').eq(0).text(), 'Count: 2', 'fixed a first column');
-        assert.strictEqual($table.find('tbody > tr').first().find('td').eq(1).text(), 'Count: 3', 'second column');
+        assert.strictEqual($table.find('tbody > tr').first().find('td').eq(0).find('.dx-datagrid-summary-item').text(), 'Count: 2', 'fixed a first column');
+        assert.strictEqual($table.find('tbody > tr').first().find('td').eq(1).find('.dx-datagrid-summary-item').text(), 'Count: 3', 'second column');
         assert.strictEqual($table.find('tbody > tr').first().find('td').eq(2).html(), '', 'third column');
         assert.strictEqual($table.find('tbody > tr').first().find('td').eq(3).html(), '', 'fourth column');
         assert.strictEqual($table.find('tbody > tr').first().find('td').last().html(), '', 'fixed a fifth column');
 
         const $fixTable = $footerContentElements.filter('.dx-datagrid-content-fixed').find('table');
         assert.equal($fixTable.find('tbody > tr').first().find('td').length, 3, 'count fixed column');
-        assert.strictEqual($fixTable.find('tbody > tr').first().find('td').first().text(), 'Count: 2', 'fixed column');
+        assert.strictEqual($fixTable.find('tbody > tr').first().find('td').first().find('.dx-datagrid-summary-item').text(), 'Count: 2', 'fixed column');
         assert.strictEqual($fixTable.find('tbody > tr').first().find('td').eq(1).html(), '&nbsp;', 'transparent column');
         assert.ok($fixTable.find('td').eq(1).hasClass('dx-pointer-events-none'), 'has class dx-pointer-events-none');
         assert.strictEqual($fixTable.find('tbody > tr').first().find('td').last().html(), '', 'fixed column');
@@ -3450,6 +3450,6 @@ QUnit.module('Fixed columns with real dataController and columnController', {
         assert.ok($groupCells.first().hasClass('dx-datagrid-group-space'), 'first cell in group row');
         assert.strictEqual($groupCells.eq(1).text(), 'Field 1: 1', 'text second cell in group row');
         assert.strictEqual($groupCells.eq(1).attr('colspan'), '2', 'colspan a second cell in group row');
-        assert.strictEqual($groupCells.eq(2).text(), '4', 'summary value');
+        assert.strictEqual($groupCells.eq(2).find('.dx-datagrid-summary-item').text(), '4', 'summary value');
     });
 });

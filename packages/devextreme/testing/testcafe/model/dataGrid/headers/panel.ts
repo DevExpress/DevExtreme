@@ -9,6 +9,7 @@ const CLASS = {
   cancelButton: 'cancel-button',
   columnChooserButton: 'column-chooser-button',
   dropDownMenuButton: 'dx-dropdownmenu-button',
+  applyFilterButton: 'dx-apply-button',
 };
 
 export default class HeaderPanel extends FocusableElement {
@@ -41,6 +42,10 @@ export default class HeaderPanel extends FocusableElement {
 
   getDropDownMenuButton(): Selector {
     return this.element.find(`.${CLASS.dropDownMenuButton}`);
+  }
+
+  getApplyFilterButton(): Selector {
+    return this.element.find(`.${CLASS.applyFilterButton}`);
   }
 
   // eslint-disable-next-line class-methods-use-this
