@@ -20,17 +20,17 @@
   <dxi-column dataField="HireDate" dataType="date"></dxi-column>
 
   <ng-container *dxTemplate="let employee of 'dataRowTemplateName'">
-    <tr class="main-row">
-      <td rowspan="2"><img [src]="employee.data.Picture" /></td>
-      <td>{{ employee.data.Prefix }}</td>
-      <td>{{ employee.data.FirstName }}</td>
-      <td>{{ employee.data.LastName }}</td>
-      <td>{{ employee.data.Position }}</td>
-      <td>{{ employee.data.BirthDate | date : "M/d/yyyy" }}</td>
-      <td>{{ employee.data.HireDate | date : "M/d/yyyy" }}</td>
+    <tr class="main-row" role="row">
+      <td rowspan="2" role="gridcell"><img [src]="employee.data.Picture" alt="Image of {{employee.data.FirstName}} {{employee.data.LastName}}" tabindex="0"/></td>
+      <td role="gridcell">{{ employee.data.Prefix }}</td>
+      <td role="gridcell">{{ employee.data.FirstName }}</td>
+      <td role="gridcell">{{ employee.data.LastName }}</td>
+      <td role="gridcell">{{ employee.data.Position }}</td>
+      <td role="gridcell">{{ employee.data.BirthDate | date : "M/d/yyyy" }}</td>
+      <td role="gridcell">{{ employee.data.HireDate | date : "M/d/yyyy" }}</td>
     </tr>
-    <tr class="notes-row">
-      <td colspan="6"
+    <tr class="notes-row" role="row">
+      <td colspan="6" role="gridcell"
         ><div>{{ employee.data.Notes }}</div></td
       >
     </tr>

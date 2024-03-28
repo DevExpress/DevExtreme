@@ -6,17 +6,17 @@ $(() => {
     keyExpr: 'ID',
     dataRowTemplate(container, item) {
       const { data } = item;
-      const markup = '<tr class=\'main-row\'>'
-          + `<td rowspan='2'><img src='${data.Picture}' /></td>`
-          + `<td>${data.Prefix}</td>`
-          + `<td>${data.FirstName}</td>`
-          + `<td>${data.LastName}</td>`
-          + `<td>${data.Position}</td>`
-          + `<td>${formatDate(new Date(data.BirthDate))}</td>`
-          + `<td>${formatDate(new Date(data.HireDate))}</td>`
+      const markup = '<tr class=\'main-row\' role=\'row\'>'
+          + `<td rowspan='2' role="gridcell"><img src='${data.Picture}' alt='Image of ${data.FirstName} ${data.LastName}' tabindex='0'/></td>`
+          + `<td role='gridcell'>${data.Prefix}</td>`
+          + `<td role='gridcell'>${data.FirstName}</td>`
+          + `<td role='gridcell'>${data.LastName}</td>`
+          + `<td role='gridcell'>${data.Position}</td>`
+          + `<td role='gridcell'>${formatDate(new Date(data.BirthDate))}</td>`
+          + `<td role='gridcell'>${formatDate(new Date(data.HireDate))}</td>`
       + '</tr>'
-      + '<tr class=\'notes-row\'>'
-          + `<td colspan='6'><div>${data.Notes}</div></td>`
+      + '<tr class=\'notes-row\' role=\'row\'>'
+          + `<td colspan='6' role='gridcell'><div>${data.Notes}</div></td>`
       + '</tr>';
 
       container.append(markup);
