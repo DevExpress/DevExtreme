@@ -1345,8 +1345,6 @@ QUnit.module('Behavior', moduleConfig, () => {
         ].forEach(({ separatorSize }) => {
             QUnit.test(`Resize handle ${dimension} should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
                 this.reinit({
-                    width: 1008,
-                    height: 1008,
                     dataSource: [{ size: '500px' }, { size: '500px' }],
                     orientation,
                     separatorSize
