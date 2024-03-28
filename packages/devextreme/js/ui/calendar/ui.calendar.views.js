@@ -20,7 +20,7 @@ const Views = {
             return 'month';
         },
 
-        _getCurrentDateFormat: function() {
+        _getCurrentDateFormat() {
             return 'longdate';
         },
 
