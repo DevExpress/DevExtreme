@@ -13,7 +13,7 @@
   <dx-list [dataSource]="dataSource">
     <div *dxTemplate="let item of 'item'">
       <div class="product">
-        <img src="{{ item.ImageSrc }}" />
+        <img src="{{ item.ImageSrc }}" alt="Image of {{ item.Name }}" />
         <div>{{ item.Name }}</div>
         <div class="price">{{
           item.Price | currency : "USD" : "symbol" : "1.0"

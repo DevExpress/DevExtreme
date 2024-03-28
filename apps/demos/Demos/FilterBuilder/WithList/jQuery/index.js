@@ -19,7 +19,7 @@ $(() => {
     height: '100%',
     itemTemplate(data) {
       const result = $('<div>').addClass('product');
-      $('<img>').attr('src', data.ImageSrc).appendTo(result);
+      $('<img>').attr('src', data.ImageSrc).attr('alt', `Image of ${data.Name}`).appendTo(result);
       $('<div>').text(data.Name).appendTo(result);
       $('<div>').addClass('price')
         .html(currencyFormatter.format(data.Price)).appendTo(result);
