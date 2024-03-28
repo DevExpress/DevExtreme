@@ -2181,7 +2181,9 @@ class SchedulerWorkSpace extends WidgetObserver {
       const $rootElement = $(scheduler.element());
 
       this._createDragBehavior(this.getWorkArea(), $rootElement);
-      this._createDragBehavior(this._$allDayPanel, $rootElement);
+      if (!this._isVerticalGroupedWorkSpace()) {
+        this._createDragBehavior(this._$allDayPanel, $rootElement);
+      }
     }
   }
 
