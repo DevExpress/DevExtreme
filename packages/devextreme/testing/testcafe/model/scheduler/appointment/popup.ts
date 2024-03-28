@@ -1,4 +1,5 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 
 export const CLASS = {
   appointmentPopup: 'dx-scheduler-appointment-popup',

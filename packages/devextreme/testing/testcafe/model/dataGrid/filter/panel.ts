@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 import FocusableElement from '../../internal/focusable';
 import Widget from '../../internal/widget';
 import { FilterBuilderPopup } from './builder';
