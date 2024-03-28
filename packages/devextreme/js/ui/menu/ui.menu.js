@@ -493,7 +493,7 @@ class Menu extends MenuBase {
             _parentKey: node.internalFields.key,
             items: items,
             onHoverStart: this._clearTimeouts.bind(this),
-            position: this.getSubmenuPosition($rootItem)
+            position: this.getSubmenuPosition($rootItem),
         }));
 
         this._attachSubmenuHandlers($rootItem, subMenu);
@@ -628,7 +628,8 @@ class Menu extends MenuBase {
             onShowing: this._submenuOnShowingHandler.bind(this, $rootItem, submenu),
             onShown: this._submenuOnShownHandler.bind(this, $rootItem, submenu),
             onHiding: this._submenuOnHidingHandler.bind(this, $rootItem, submenu),
-            onHidden: this._submenuOnHiddenHandler.bind(this, $rootItem, submenu)
+            onHidden: this._submenuOnHiddenHandler.bind(this, $rootItem, submenu),
+            onScrollViewInitialized: this.option('onScrollViewInitialized'),
         });
 
         each(submenus, (index, submenu) => {
@@ -639,10 +640,13 @@ class Menu extends MenuBase {
 
     _submenuOnShowingHandler($rootItem, submenu) {
         const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
+        const itemData = this._getItemData($rootItem);
+        const node = this._dataAdapter.getNodeByItem(itemData);
 
         this._actions.onSubmenuShowing({
             rootItem: getPublicElement($rootItem),
-            submenu: submenu
+            submenuContainer: submenu.getOverlayContent().find(`.${DX_SUBMENU_CLASS}`),
+            itemData: node,
         });
 
         $border.show();
