@@ -70,6 +70,11 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '121.0.6167.160'
+
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
