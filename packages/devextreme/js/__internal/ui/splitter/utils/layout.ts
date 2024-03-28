@@ -2,8 +2,8 @@ import type { Orientation } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import {
-  getOuterHeight,
-  getOuterWidth,
+  getHeight,
+  getWidth,
 } from '@js/core/utils/size';
 import {
   normalizeStyleProp, styleProp,
@@ -249,13 +249,11 @@ export function updateItemsSize(
   });
 }
 
-// eslint-disable-next-line class-methods-use-this
 function isPercentWidth(size: string | number): boolean {
   return isString(size) && size.endsWith('%');
 }
 
-// eslint-disable-next-line class-methods-use-this
-function isPixelWidth(size: string | number): boolean {
+function isPixelWidth(size: string | number | undefined): boolean {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isNumeric(size) || (isString(size) && size.endsWith('px'));
 }
@@ -407,54 +405,13 @@ export function validateLayout(
   return adjustAndDistributeLayoutSize(nextLayout, layoutRestrictions);
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-// export function getInitialLayout(panes, totalPanesSize: number): number[] {
-//   const layout: number[] = [];
-//   let totalSize = 0;
-//   let sizeOverflow = false;
-
-//   // eslint-disable-next-line no-restricted-syntax
-//   for (const pane of panes) {
-//     if (pane.visible === false || sizeOverflow || pane.size === 0) {
-//       layout.push(0);
-//       // todo: refactor
-//     } else if (pane.size && (isPercentWidth(pane.size) || isPixelWidth(pane.size))) {
-//       let ratio = convertSizeToRatio(pane.size, totalPanesSize) ?? 0;
-
-//       ratio = Math.min(100 - totalSize, ratio);
-//       totalSize += ratio;
-
-//       layout.push(ratio);
-
-//       if (totalSize >= 100) {
-//         sizeOverflow = true;
-//       }
-//     } else {
-//       layout.push(-1);
-//     }
-//   }
-
-//   const noSizePanes = panes.filter((p) => p.visible !== false && !p.size && p.size !== 0);
-
-//   if (noSizePanes.length) {
-//     const remainingSpace = Math.max(100 - totalSize, 0);
-
-//     layout.forEach((pane, index) => {
-//       if (layout[index] === -1) {
-//         layout[index] = remainingSpace / noSizePanes.length;
-//       }
-//     });
-//   } else if (totalSize < 100) {
-//     layout[findLastIndexOfVisibleItem(panes)] += 100 - totalSize;
-//   }
-
-//   return layout;
-// }
-
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-function getElementItemsSizeSum($element, orientation, handlesSizeSum): number {
+function getElementItemsSizeSum(
+  $element: dxElementWrapper,
+  orientation: Orientation,
+  handlesSizeSum: number,
+): number {
   const size: number = orientation === ORIENTATION.horizontal
-    ? getOuterWidth($element) : getOuterHeight($element);
+    ? getWidth($element) : getHeight($element);
 
   return size - handlesSizeSum;
 }
@@ -467,11 +424,18 @@ export function getVisibleItemsCount(items: Item[]): number {
   return getVisibleItems(items).length;
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getElementSize($element, orientation, width, height, handlesSizeSum): number {
+export function getElementSize(
+  $element: dxElementWrapper,
+  orientation: Orientation,
+  width: number | string | undefined,
+  height: number | string | undefined,
+  handlesSizeSum: number,
+): number {
   const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
 
   if (isPixelWidth(sizeOption)) {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-expect-error
     return sizeOption - handlesSizeSum;
   }
 
