@@ -15,17 +15,17 @@
     "devextreme-react": "~24.1.1"
   },
   "devDependencies": {
-    "@storybook/addon-essentials": "^7.6.9",
-    "@storybook/addon-interactions": "^7.6.9",
-    "@storybook/addon-links": "^7.6.9",
-    "@storybook/blocks": "^7.6.9",
-    "@storybook/react": "^7.6.9",
-    "@storybook/react-webpack5": "^7.6.9",
-    "@storybook/test": "^7.6.9",
-    "prop-types": "^15.8.1",
-    "react": "~18.0.0",
-    "react-dom": "~18.0.0",
-    "storybook": "^7.6.9",
+    "@storybook/addon-essentials": "7.6.17",
+    "@storybook/addon-interactions": "7.6.17",
+    "@storybook/addon-links": "7.6.17",
+    "@storybook/blocks": "7.6.17",
+    "@storybook/react": "7.6.17",
+    "@storybook/react-webpack5": "7.6.17",
+    "@storybook/test": "7.6.17",
+    "prop-types": "15.8.1",
+    "react": "18.0.0",
+    "react-dom": "18.0.0",
+    "storybook": "7.6.17",
     "typescript": "4.2.4"
   }
 }
