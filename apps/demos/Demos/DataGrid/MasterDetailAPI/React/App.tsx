@@ -20,7 +20,7 @@ const renderDetail = (props: DataGridTypes.MasterDetailTemplateData) => {
   const { Picture, Notes } = props.data;
   return (
     <div className="employee-info">
-      <img className="employee-photo" src={Picture} />
+      <img className="employee-photo" alt="Employee Photo" src={Picture} />
       <p className="employee-notes">{Notes}</p>
     </div>
   );

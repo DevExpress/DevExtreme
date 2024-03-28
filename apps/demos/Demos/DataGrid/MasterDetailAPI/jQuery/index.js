@@ -33,7 +33,7 @@ $(() => {
       enabled: false,
       template(container, options) {
         const currentEmployeeData = options.data;
-        container.append($(`<div class="employeeInfo"><img class="employeePhoto" src="${currentEmployeeData.Picture}" /><p class="employeeNotes">${currentEmployeeData.Notes}</p></div>`));
+        container.append($(`<div class="employeeInfo"><img class="employeePhoto" alt="Employee Photo" src="${currentEmployeeData.Picture}" /><p class="employeeNotes">${currentEmployeeData.Notes}</p></div>`));
       },
     },
   });
