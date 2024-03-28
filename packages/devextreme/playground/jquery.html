@@ -46,16 +46,22 @@
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
 
-        <select id="theme-selector" style="display: block;">
-        </select>
-        <br />
+        <!-- <select id="theme-selector" style="display: block;">
+        </select> -->
+        <!-- <br /> -->
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
-                });
+            $(() => {
+                const msInDay = 1000 * 60 * 60 * 24;
+                const date = new Date().getTime();
+
+                const calendar = $('#button').dxCalendar({
+                    value: [date, date + msInDay + msInDay],
+                    // value: [date],
+                    // value: date,
+                    selectionMode: 'range',
+                    zoomLevel: 'century',
+                }).dxCalendar('instance');
             });
         </script>
     </div>
