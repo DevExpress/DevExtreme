@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from '../../helpers/selector';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';

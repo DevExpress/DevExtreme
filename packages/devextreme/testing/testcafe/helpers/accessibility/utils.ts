@@ -29,7 +29,13 @@ export const a11yCheck = async (
   configuration = {},
 ):
 Promise<void> => {
-  const { error, results } = await axeCheck(t, selector, { rules: {}, ...options });
+  let context: ElementContext | null = null;
+
+  if (process.env.shadowDom === 'true' && typeof selector === 'string') {
+    context = [{ fromShadowDom: ['#parentContainer', selector] }];
+  }
+
+  const { error, results } = await axeCheck(t, context ?? selector, { rules: {}, ...options });
 
   await t
     .expect(error)

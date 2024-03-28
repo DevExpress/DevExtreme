@@ -1,5 +1,5 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from '../../../helpers/selector';
 import url from '../../../helpers/getPageUrl';
 import Autocomplete from '../../../model/autocomplete';
 import { createWidget } from '../../../helpers/createWidget';

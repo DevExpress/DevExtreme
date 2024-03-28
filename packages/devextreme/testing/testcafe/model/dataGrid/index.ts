@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import DataGridInstance from '../../../../js/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
@@ -11,6 +12,7 @@ import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
 import ContextMenu from '../contextMenu';
+import { getRootContainer } from '../../helpers/domUtils';
 
 import type { WidgetName } from '../../helpers/widgetTypings';
 import { Overlay } from './overlay';
@@ -91,13 +93,13 @@ const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): 
 export default class DataGrid extends Widget {
   dataRows: Selector;
 
-  body: Selector;
+  root: Selector;
 
   constructor(id: string | Selector) {
     super(id);
 
     this.dataRows = this.element.find(`.${CLASS.dataRow}`);
-    this.body = Selector('body');
+    this.root = getRootContainer();
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -160,7 +162,14 @@ export default class DataGrid extends Widget {
   }
 
   getFocusedRow(): Selector {
-    return this.dataRows.filter(`.${CLASS.focusedRow}`);
+    const { focusedRow } = CLASS;
+
+    return this.dataRows.filter(
+      (node) => node.classList.contains(focusedRow),
+      {
+        focusedRow,
+      },
+    );
   }
 
   getErrorRow(): Selector {
@@ -180,7 +189,7 @@ export default class DataGrid extends Widget {
   }
 
   getFilterRangeOverlay(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
+    return this.root.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
 
   getFilterEditor<T>(
@@ -203,23 +212,23 @@ export default class DataGrid extends Widget {
   }
 
   getConfirmDeletionButton(): Selector {
-    return this.body.find('[aria-label=\'Yes\']');
+    return this.root.find('[aria-label=\'Yes\']');
   }
 
   getDialog(): Selector {
-    return this.body.find(`.${CLASS.dialogWrapper}`);
+    return this.root.find(`.${CLASS.dialogWrapper}`);
   }
 
   getCancelDeletionButton(): Selector {
-    return this.body.find('[aria-label=\'No\']');
+    return this.root.find('[aria-label=\'No\']');
   }
 
   getRevertTooltip(): Selector {
-    return this.body.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
+    return this.root.find(`.${this.addWidgetPrefix(CLASS.revertTooltip)}`);
   }
 
   getInvalidMessageTooltip(): Selector {
-    return this.body.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
+    return this.root.find(`.dx-${CLASS.invalidMessage}.dx-${CLASS.invalidMessage}-always.${this.addWidgetPrefix(CLASS.invalidMessage)}`);
   }
 
   getPager(): Pager {
@@ -235,15 +244,15 @@ export default class DataGrid extends Widget {
   }
 
   getColumnChooser(): ColumnChooser {
-    return new ColumnChooser(this.body.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
+    return new ColumnChooser(this.root.find(`.${this.addWidgetPrefix(CLASS.columnChooser)}`));
   }
 
   getGroupPanel(): GroupPanel {
-    return new GroupPanel(this.body.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
+    return new GroupPanel(this.root.find(`.${this.addWidgetPrefix(CLASS.groupPanel)}`));
   }
 
   getContextMenu(): ContextMenu {
-    return new ContextMenu(this.body.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
+    return new ContextMenu(this.root.find(`.${CLASS.contextMenu}.${this.addWidgetPrefix()}`));
   }
 
   async scrollTo(

@@ -42,7 +42,7 @@ test('TreeList - Selection CheckBox in a data row isn\'t navigable with Tab butt
   await createWidget('dxButton', {
     text: 'Focus',
     onClick() {
-      const checkbox = $('.dx-checkbox:visible')[1];
+      const checkbox = $('.dx-checkbox').filter(':visible')[1];
       if (checkbox) {
         checkbox.focus();
       }
