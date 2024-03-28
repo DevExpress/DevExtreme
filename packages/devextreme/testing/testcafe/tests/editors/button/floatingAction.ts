@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 import { getThemePostfix, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
