@@ -14,6 +14,7 @@ import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
+import { getSafeSize } from './utils/layout';
 import type { ResizeOffset } from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -34,6 +35,7 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
 };
 
 const KEYBOARD_DELTA = 5;
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -117,7 +119,7 @@ class ResizeHandle extends (Widget as any) {
       showCollapseNext: true,
       onCollapsePrev: null,
       onCollapseNext: null,
-      separatorSize: 8,
+      separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
     });
   }
 
@@ -180,15 +182,16 @@ class ResizeHandle extends (Widget as any) {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
-      this.option('disabled', true);
-      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
-      this.option(inverseDimension, null);
-    } else {
-      this.option(dimension, separatorSize);
-      this.option(inverseDimension, null);
-      this.option('disabled', false);
-    }
+    const disabled = resizable === false
+      && showCollapseNext === false
+      && showCollapsePrev === false;
+
+    this.option('disabled', disabled);
+    this.option(inverseDimension, null);
+
+    const handleSize = disabled ? INACTIVE_RESIZE_HANDLE_SIZE
+      : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
+    this.option(dimension, handleSize);
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {

@@ -383,6 +383,10 @@ function adjustAndDistributeLayoutSize(
   return nextLayout;
 }
 
+export function getSafeSize(size: number | string, fallBackSize: number): number {
+  return isNumeric(size) ? size : fallBackSize;
+}
+
 export function validateLayout(
   prevLayout: number[],
   layoutRestrictions: PaneRestrictions[],
