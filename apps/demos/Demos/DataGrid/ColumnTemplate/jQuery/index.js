@@ -10,7 +10,7 @@ $(() => {
       allowSorting: false,
       cellTemplate(container, options) {
         $('<div>')
-          .append($('<img>', { src: options.value }))
+          .append($('<img>', { src: options.value, alt: `Image of ${options.data.FirstName} ${options.data.LastName}` }))
           .appendTo(container);
       },
     }, {

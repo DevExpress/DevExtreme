@@ -19,6 +19,6 @@
   <dxi-column dataField="HireDate" dataType="date"></dxi-column>
 
   <div *dxTemplate="let data of 'cellTemplate'">
-    <img [src]="data.value" />
+    <img [src]="data.value" alt="Image of {{data.data.FirstName}} {{data.data.LastName}}"/>
   </div>
 </dx-data-grid>
