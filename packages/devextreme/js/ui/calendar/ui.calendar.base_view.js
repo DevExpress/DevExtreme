@@ -110,10 +110,8 @@ const BaseView = Widget.inherit({
         const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
 
         const selectedDatesText = startDate && endDate
-            // NOTE: need to localize
-            ? `Selected date range from ${formattedStartDate} to ${formattedEndDate}`
-            // NOTE: need to localize
-            : `Selected date is ${formattedStartDate}`;
+            ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
+            : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate);
 
         const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
 
