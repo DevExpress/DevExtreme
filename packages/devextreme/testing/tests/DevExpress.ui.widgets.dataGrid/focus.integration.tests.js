@@ -4620,7 +4620,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         }, 'Reverse tabbing to group row skip alignByColumn cell');
 
         assert.ok(!dataGrid.getCellElement(0, 2), 'row 0 column 2 is not accessible');
-        assert.equal($(dataGrid.getCellElement(0, 1)).next().text(), 'Sum: 3', 'row 0 column 2 exists');
+        assert.equal($(dataGrid.getCellElement(0, 1)).next().find('.dx-datagrid-summary-item').text(), 'Sum: 3', 'row 0 column 2 exists');
     });
 
     QUnit.testInActiveWindow('focus method for cell with editor must focus this editor (T404427)', function(assert) {
