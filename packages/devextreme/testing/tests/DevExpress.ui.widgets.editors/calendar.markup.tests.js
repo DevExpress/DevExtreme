@@ -439,8 +439,8 @@ QUnit.module('Aria accessibility', {
     });
 
     QUnit.module('table aria-label', () => {
-        QUnit.test('table should have an aria-label "Calendar"', function(assert) {
-            this.$element.dxCalendar();
+        QUnit.test('table should have an aria-label "Calendar" when value is null', function(assert) {
+            this.$element.dxCalendar({ value: null });
 
             checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar');
         });
@@ -476,6 +476,22 @@ QUnit.module('Aria accessibility', {
             });
 
             QUnit.test(`table aria-label should contain selected date when selectionMode=range, zoomLevel=${zoomLevel}`, function(assert) {
+                const date = new Date(2024, 3, 21);
+
+                this.$element.dxCalendar({
+                    zoomLevel,
+                    selectionMode: 'range',
+                    value: [date],
+                });
+
+                const formattedDateDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
+
+                const expectedAriaLabel = `Calendar. Selected date is ${formattedDateDate}`;
+
+                checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+            });
+
+            QUnit.test(`table aria-label should contain selected date range when selectionMode=range, zoomLevel=${zoomLevel}`, function(assert) {
                 const startDate = new Date(2024, 3, 21);
                 const endDate = new Date(2024, 3, 23);
 
