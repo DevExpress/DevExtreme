@@ -95,7 +95,68 @@ const BaseView = Widget.inherit({
         this._updateTableAriaLabel();
     },
 
+    _getLocalizedWidgetName() {
+        const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
+
+        return localizedWidgetName;
+    },
+
+    _getMultipleModeAriaLabel() {
+        const ariaLabel = this._getLocalizedWidgetName();
+
+        return ariaLabel;
+    },
+
+    _getSingleModeAriaLabel() {
+        const { value } = this.option();
+
+        const localizedWidgetName = this._getLocalizedWidgetName();
+
+        const formattedDate = dateLocalization.format(value, ARIA_LABEL_DATE_FORMAT);
+        const selectedDatesText = messageLocalization.format('dxCalendar-selectedDate', formattedDate);
+
+        const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
+
+        return ariaLabel;
+    },
+
+    _getRangeModeAriaLabel() {
+        const { value } = this.option();
+
+        const localizedWidgetName = this._getLocalizedWidgetName();
+
+        const [startDate, endDate] = value;
+
+        const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
+        const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
+
+        const selectedDatesText = startDate && endDate
+            ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
+            : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate);
+
+        const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
+
+        return ariaLabel;
+    },
+
     _getTableAriaLabel() {
+        const { value, selectionMode } = this.option();
+
+        if(!value) {
+            return this._getLocalizedWidgetName();
+        }
+
+        switch(selectionMode) {
+            case SELECTION_MODE.single:
+                return this._getSingleModeAriaLabel();
+            case SELECTION_MODE.multiple:
+                return this._getMultipleModeAriaLabel();
+            case SELECTION_MODE.range:
+                return this._getRangeModeAriaLabel();
+        }
+    },
+
+    _getTableAriaLabel1() {
         const { value, selectionMode } = this.option();
 
         const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
