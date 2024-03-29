@@ -2277,7 +2277,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  public fireFocusedRowChanged(): void {
+  public _fireFocusedRowChanged(): void {
     const focusedRowEnabled = this.option('focusedRowEnabled');
     const focusedRowKey = this.option('focusedRowKey');
     const focusedRowIndex = this._focusController?.getFocusedRowIndexByKey(focusedRowKey);
