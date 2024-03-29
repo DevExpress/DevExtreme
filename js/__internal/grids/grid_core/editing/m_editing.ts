@@ -863,7 +863,6 @@ class EditingControllerImpl extends modules.ViewController {
   }
 
   private _addInsertInfo(change, parentKey?) {
-    console.log('add insert info');
     let insertInfo;
     change.key = this.getChangeKeyValue(change);
     const { key } = change;
