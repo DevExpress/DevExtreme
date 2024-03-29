@@ -4049,7 +4049,7 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($updatedCellElements.length, 2, 'count cell');
         assert.ok($updatedCellElements.eq(0).is($cellElements.eq(0)), 'first cell isn\'t changed');
         assert.notOk($updatedCellElements.eq(1).is($cellElements.eq(1)), 'second cell is changed');
-        assert.strictEqual($updatedCellElements.eq(1).text(), 'Sum: 500', 'cell value is updated');
+        assert.strictEqual($updatedCellElements.eq(1).find('.dx-datagrid-summary-item').text(), 'Sum: 500', 'cell value is updated');
     });
 
     // T709033
