@@ -253,7 +253,7 @@ class EditingControllerImpl extends modules.ViewController {
     return newRowPosition;
   }
 
-  getChanges(): any {
+  public getChanges(): any {
     return this.option(EDITING_CHANGES_OPTION_NAME);
   }
 
@@ -484,7 +484,7 @@ class EditingControllerImpl extends modules.ViewController {
     return columnIndex;
   }
 
-  getFirstEditableCellInRow(rowIndex): dxElementWrapper | undefined {
+  public getFirstEditableCellInRow(rowIndex): dxElementWrapper | undefined {
     const columnIndex = this.getFirstEditableColumnIndex();
 
     return this._rowsView?._getCellElement(rowIndex || 0, columnIndex);
@@ -506,7 +506,7 @@ class EditingControllerImpl extends modules.ViewController {
     return gridCoreUtils.getIndexByKey(key, items);
   }
 
-  hasChanges(rowIndex?): boolean {
+  public hasChanges(rowIndex?): boolean {
     const changes = this.getChanges();
     let result = false;
 
@@ -1649,7 +1649,7 @@ class EditingControllerImpl extends modules.ViewController {
     });
   }
 
-  _processRemoveIfError(changes, editIndex): any {
+  public _processRemoveIfError(changes, editIndex): any {
     const change = changes[editIndex];
 
     if (change?.type === DATA_EDIT_DATA_REMOVE_TYPE) {
@@ -1669,7 +1669,7 @@ class EditingControllerImpl extends modules.ViewController {
     }
   }
 
-  _processRemoveCore(changes, editIndex, processIfBatch?): any {
+  public _processRemoveCore(changes, editIndex, processIfBatch?): any {
     if (editIndex >= 0) {
       changes.splice(editIndex, 1);
     }
@@ -1990,7 +1990,7 @@ class EditingControllerImpl extends modules.ViewController {
   /**
    * Adds a deferred object to be awaited before other operations are executed
    */
-  addDeferred(deferred: DeferredObj<any>): void {
+  public addDeferred(deferred: DeferredObj<any>): void {
     if (!this._deferreds.includes(deferred)) {
       this._deferreds.push(deferred);
       deferred.always(() => {
@@ -2596,9 +2596,9 @@ export const dataControllerEditingExtenderMixin = (Base: ModuleType<DataControll
 };
 
 const rowsView = (Base: ModuleType<RowsView>) => class RowsViewEditingExtender extends Base {
-  _pointerDownTarget: any;
+  public _pointerDownTarget: any;
 
-  _pointerDownTimeout: any;
+  public _pointerDownTimeout: any;
 
   public getCellIndex($cell, rowIndex?) {
     if (!$cell.is('td') && rowIndex >= 0) {

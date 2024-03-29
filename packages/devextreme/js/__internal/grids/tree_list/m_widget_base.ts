@@ -59,9 +59,9 @@ treeListCore.registerModulesOrder([
   'gridView']);
 
 class TreeList extends Widget<dxTreeListOptions> {
-  _deprecatedOptions: any;
+  public _deprecatedOptions: any;
 
-  _activeStateUnit = DATAGRID_ROW_SELECTOR;
+  public _activeStateUnit = DATAGRID_ROW_SELECTOR;
 
   protected _getDefaultOptions() {
     // @ts-expect-error
@@ -205,7 +205,7 @@ class TreeList extends Widget<dxTreeListOptions> {
     }
   }
 
-  static registerModule() {
+  public static registerModule() {
     treeListCore.registerModule.apply(treeListCore, arguments as any);
   }
 }

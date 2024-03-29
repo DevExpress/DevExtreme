@@ -109,7 +109,7 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  initValidationState() {
+  public initValidationState() {
     this._validationState = [];
     this._validationStateCache = {};
   }
@@ -1081,7 +1081,7 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
 };
 
 export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>) => class ValidatingEditorFactoryExtender extends Base {
-  _revertTooltip: any;
+  public _revertTooltip: any;
 
   private _showRevertButton($container) {
     let $tooltipElement = this._revertTooltip?.$element();

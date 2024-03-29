@@ -47,9 +47,9 @@ export interface ICellBasedEditingControllerExtender {
 }
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class CellBasedEditingControllerExtender extends Base implements ICellBasedEditingControllerExtender {
-  _pointerUpEditorHandler: any;
+  public _pointerUpEditorHandler: any;
 
-  _pointerDownEditorHandler: any;
+  public _pointerDownEditorHandler: any;
 
   public init() {
     const needCreateHandlers = !this._saveEditorHandler;
@@ -271,7 +271,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
   /**
    * @returns whether to cancel cell editing
    */
-  _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
+  public _beforeEditCell(rowIndex: number, columnIndex: number, item: any): DeferredObj<boolean> | boolean {
     if (this.isCellEditMode() && !item.isNewRow && this.hasChanges()) {
       // @ts-expect-error
       const isSaving = new Deferred();
@@ -290,7 +290,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return publicMethods.concat(['editCell', 'closeEditCell']);
   }
 
-  _getNormalizedEditCellOptions({
+  public _getNormalizedEditCellOptions({
     oldColumnIndex, oldRowIndex, columnIndex, rowIndex,
   }) {
     const columnsController = this._columnsController;
@@ -660,7 +660,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super._processDataItemCore(item, change, key, columns, generateDataValues);
   }
 
-  _processRemoveCore(changes, editIndex, processIfBatch): any {
+  public _processRemoveCore(changes, editIndex, processIfBatch): any {
     if (this.isBatchEditMode() && !processIfBatch) {
       return;
     }
@@ -668,7 +668,7 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     return super._processRemoveCore(changes, editIndex, processIfBatch);
   }
 
-  _processRemoveIfError(changes, editIndex): any {
+  public _processRemoveIfError(changes, editIndex): any {
     if (this.isBatchEditMode()) {
       return;
     }

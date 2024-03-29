@@ -30,9 +30,9 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
 
   protected _isSharedDataSource: any;
 
-  _dataSourceType: any;
+  public _dataSourceType: any;
 
-  postCtor() {
+  public postCtor() {
     this.on('disposing', () => {
       this._disposeDataSource();
     });
@@ -78,7 +78,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  _initDataController() {
+  public _initDataController() {
     const dataController = this.option?.('_dataController');
     const dataSource = this._dataSource;
 
@@ -89,7 +89,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  _addDataSourceHandlers() {
+  public _addDataSourceHandlers() {
     if (DATA_SOURCE_CHANGED_METHOD in this) {
       this._addDataSourceChangeHandler();
     }
@@ -105,14 +105,14 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     this._addReadyWatcher();
   }
 
-  _addReadyWatcher() {
+  public _addReadyWatcher() {
     this.readyWatcher = function (isLoading) {
       this._ready && this._ready(!isLoading);
     }.bind(this);
     this._dataSource.on('loadingChanged', this.readyWatcher);
   }
 
-  _addDataSourceChangeHandler() {
+  public _addDataSourceChangeHandler() {
     const dataSource = this._dataSource;
     this._proxiedDataSourceChangedHandler = function (e) {
       this[DATA_SOURCE_CHANGED_METHOD](dataSource.items(), e);
@@ -120,12 +120,12 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     dataSource.on('changed', this._proxiedDataSourceChangedHandler);
   }
 
-  _addDataSourceLoadErrorHandler() {
+  public _addDataSourceLoadErrorHandler() {
     this._proxiedDataSourceLoadErrorHandler = this[DATA_SOURCE_LOAD_ERROR_METHOD].bind(this);
     this._dataSource.on('loadError', this._proxiedDataSourceLoadErrorHandler);
   }
 
-  _addDataSourceLoadingChangedHandler() {
+  public _addDataSourceLoadingChangedHandler() {
     this._proxiedDataSourceLoadingChangedHandler = this[DATA_SOURCE_LOADING_CHANGED_METHOD].bind(this);
     this._dataSource.on('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
   }
@@ -141,16 +141,16 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  _loadSingle(key, value) {
+  public _loadSingle(key, value) {
     key = key === 'this' ? this._dataSource.key() || 'this' : key;
     return this._dataSource.loadSingle(key, value);
   }
 
-  _isLastPage() {
+  public _isLastPage() {
     return !this._dataSource || this._dataSource.isLastPage() || !this._dataSource._pageSize;
   }
 
-  _isDataSourceLoading() {
+  public _isDataSourceLoading() {
     return this._dataSource && this._dataSource.isLoading();
   }
 
@@ -178,7 +178,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
     }
   }
 
-  getDataSource() {
+  public getDataSource() {
     return this._dataSource || null;
   }
 };

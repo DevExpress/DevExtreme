@@ -66,6 +66,30 @@ module.exports = {
                 'no-underscore-dangle': 'off'
             }
         },
+        {
+            files: [
+                '**/grid_core/**/**.ts',
+                '**/data_grid/**/**.ts',
+                '**/tree_list/**/**.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/explicit-member-accessibility': [
+                    'error',
+                    {
+                        'accessibility': 'explicit',
+                        'overrides': {
+                            'constructors': 'off',
+                        },
+                    }
+                ],
+            }
+        },
         // Rules for a new TS files.
         {
             files: [

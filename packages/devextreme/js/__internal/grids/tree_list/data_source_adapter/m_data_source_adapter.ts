@@ -42,33 +42,33 @@ const applySorting = (data: any[], sort: any): any => queryByOptions(
 ).toArray();
 
 class DataSourceAdapterTreeList extends DataSourceAdapter {
-  _indexByKey: any;
+  public _indexByKey: any;
 
-  _keyGetter: any;
+  public _keyGetter: any;
 
-  _parentIdGetter: any;
+  public _parentIdGetter: any;
 
-  _hasItemsGetter: any;
+  public _hasItemsGetter: any;
 
-  _itemsGetter: any;
+  public _itemsGetter: any;
 
-  _keySetter: any;
+  public _keySetter: any;
 
-  _parentIdSetter: any;
+  public _parentIdSetter: any;
 
-  _hasItemsSetter: any;
+  public _hasItemsSetter: any;
 
-  _isChildrenLoaded: any;
+  public _isChildrenLoaded: any;
 
-  _nodeByKey: any;
+  public _nodeByKey: any;
 
-  _isReload: any;
+  public _isReload: any;
 
-  _rootNode: any;
+  public _rootNode: any;
 
-  _isNodesInitializing: any;
+  public _isNodesInitializing: any;
 
-  _totalItemsCount: any;
+  public _totalItemsCount: any;
 
   private _createKeyGetter() {
     const keyExpr = this.getKeyExpr();

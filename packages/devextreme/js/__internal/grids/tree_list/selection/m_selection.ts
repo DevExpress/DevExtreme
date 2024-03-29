@@ -59,9 +59,9 @@ const data = (Base: ModuleType<DataController>) => class DataSelectionTreeListEx
 };
 
 const selection = (Base: ModuleType<SelectionController>) => class SelectionControllerTreeListExtender extends Base {
-  _selectionStateByKey: any;
+  public _selectionStateByKey: any;
 
-  _isSelectionNormalizing: any;
+  public _isSelectionNormalizing: any;
 
   protected _updateSelectColumn = noop;
 

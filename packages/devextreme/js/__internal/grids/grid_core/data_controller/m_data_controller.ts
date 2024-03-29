@@ -606,7 +606,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.dataErrorOccurred.fire(errors.Error.apply(errors, args));
   }
 
-  _setPagingOptions(dataSource): any {
+  public _setPagingOptions(dataSource): any {
     const pageIndex = this.option('paging.pageIndex');
     const pageSize = this.option('paging.pageSize');
     const pagingEnabled = this.option('paging.enabled');
@@ -1708,7 +1708,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return pageIndex === (pageCount - 1);
   }
 
-  load(): any {
+  public load(): any {
     return this._dataSource?.load();
   }
 
@@ -1747,7 +1747,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     return this._dataSource ? this._dataSource?.totalCount() : 0;
   }
 
-  hasLoadOperation(): boolean {
+  public hasLoadOperation(): boolean {
     const operationTypes = this._dataSource?.operationTypes() ?? {};
 
     return Object.keys(operationTypes).some((type) => operationTypes[type]);

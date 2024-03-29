@@ -38,7 +38,7 @@ export interface GroupingDataControllerExtension {
 }
 
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class GroupingDataSourceAdapterExtender extends Base {
-  _grouping: any;
+  public _grouping: any;
 
   public init() {
     super.init.apply(this, arguments as any);
@@ -460,7 +460,7 @@ export const GroupingHeaderPanelExtender = (Base: ModuleType<HeaderPanel>) => cl
     event.preventDefault();
   }
 
-  _isGroupPanelVisible(): boolean {
+  public _isGroupPanelVisible(): boolean {
     return isGroupPanelVisible(this.option('groupPanel'));
   }
 
@@ -687,7 +687,7 @@ const columnHeadersViewExtender = (Base: ModuleType<ColumnHeadersView>) => class
     return items;
   }
 
-  allowDragging(column): boolean {
+  public allowDragging(column): boolean {
     const groupPanelOptions = this.option('groupPanel');
 
     return allowDragging(groupPanelOptions, column) || super.allowDragging(column);

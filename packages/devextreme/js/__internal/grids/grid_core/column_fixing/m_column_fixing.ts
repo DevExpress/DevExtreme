@@ -334,7 +334,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
+  public _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     const cellElements = super._getCellElementsCore.apply(this, arguments as any);
 
     const isGroupRow = cellElements?.parent().hasClass(GROUP_ROW_CLASS);
@@ -463,7 +463,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     this.synchronizeRows();
   }
 
-  setColumnWidths(options): void {
+  public setColumnWidths(options): void {
     const { widths } = options;
 
     const visibleColumns = this._columnsController.getVisibleColumns();
@@ -489,7 +489,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  setFixedTableColumnWidths(columns, widths): void {
+  public setFixedTableColumnWidths(columns, widths): void {
     if (!this._fixedTableElement || !widths) {
       return;
     }
@@ -1093,7 +1093,7 @@ const draggingHeader = (Base: ModuleType<DraggingHeaderViewController>) => class
 };
 
 const columnsResizer = (Base: ModuleType<ColumnsResizerViewController>) => class ColumnResizerColumnFixingExtender extends Base {
-  _pointsByFixedColumns: any;
+  public _pointsByFixedColumns: any;
 
   protected _generatePointsByColumns() {
     const that = this;
