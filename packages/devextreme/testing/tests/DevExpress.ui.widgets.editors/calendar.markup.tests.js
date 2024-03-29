@@ -485,7 +485,6 @@ QUnit.module('Aria accessibility', {
                 });
 
                 const formattedDateDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
-
                 const expectedAriaLabel = `Calendar. Selected date is ${formattedDateDate}`;
 
                 checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
