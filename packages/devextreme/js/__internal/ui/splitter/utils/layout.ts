@@ -63,8 +63,9 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   if (paneRestrictions.collapsed === true) {
     return 0;
   }
-  if (resizable === false) {
-    return paneRestrictions.size as number;
+
+  if (resizable === false && isDefined(paneRestrictions.size)) {
+    return paneRestrictions.size;
   }
 
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
@@ -258,7 +259,7 @@ function isPixelWidth(size: string | number | undefined): boolean {
   return isNumeric(size) || (isString(size) && size.endsWith('px'));
 }
 
-function calculatePercentage(
+function computeRatio(
   totalSize: number,
   size: number,
 ): number {
@@ -270,30 +271,29 @@ function calculatePercentage(
   return percentage;
 }
 
-// We can do it better
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function convertSizeToRatio(
   size: string | number | undefined,
   totalPanesSize: number,
+  handlesSizeSum: number,
 ): number | undefined {
   if (!isDefined(size)) {
     return size;
   }
 
-  const isPixel = isPixelWidth(size);
-  const sizeNumber = parseFloat(size as string);
+  let sizeAsNumber = isNumeric(size)
+    ? size
+    : parseFloat(size);
 
-  if (isPixel) {
-    return parseFloat(calculatePercentage(totalPanesSize, sizeNumber).toFixed(4));
+  if (isPercentWidth(size)) {
+    sizeAsNumber = (totalPanesSize * sizeAsNumber) / 100;
+  } else if (!isPixelWidth(size)) {
+    return 0;
   }
 
-  const isPercentage = isPercentWidth(size);
-  if (isPercentage) {
-    return sizeNumber;
-  }
+  const adjustedSize = totalPanesSize - handlesSizeSum;
+  const ratio = computeRatio(adjustedSize, sizeAsNumber);
 
-  // todo: handle incorrect size input
-  return 0;
+  return parseFloat(ratio.toFixed(PRECISION));
 }
 
 export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
@@ -405,17 +405,6 @@ export function validateLayout(
   return adjustAndDistributeLayoutSize(nextLayout, layoutRestrictions);
 }
 
-function getElementItemsSizeSum(
-  $element: dxElementWrapper,
-  orientation: Orientation,
-  handlesSizeSum: number,
-): number {
-  const size: number = orientation === ORIENTATION.horizontal
-    ? getWidth($element) : getHeight($element);
-
-  return size - handlesSizeSum;
-}
-
 export function getVisibleItems(items: Item[]): Item[] {
   return items.filter((p) => p.visible !== false);
 }
@@ -427,19 +416,11 @@ export function getVisibleItemsCount(items: Item[]): number {
 export function getElementSize(
   $element: dxElementWrapper,
   orientation: Orientation,
-  width: number | string | undefined,
-  height: number | string | undefined,
-  handlesSizeSum: number,
 ): number {
-  const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
-
-  if (isPixelWidth(sizeOption)) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return sizeOption - handlesSizeSum;
-  }
-
-  return getElementItemsSizeSum($element, orientation, handlesSizeSum);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return orientation === ORIENTATION.horizontal
+    ? getWidth($element)
+    : getHeight($element);
 }
 
 export function isElementVisible(element: HTMLElement | undefined | null): boolean {
