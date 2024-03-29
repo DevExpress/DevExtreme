@@ -34,12 +34,18 @@ test('Splitter appearance on different appearance and themes', async (t) => {
   await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
   await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
 
+  await t.dispatchEvent(splitter.resizeHandles.nth(0), 'mousedown');
+
+  await testScreenshot(t, takeScreenshot, getScreenshotName('active'), { element: '#container' });
+  await testScreenshot(t, takeScreenshot, getScreenshotName('active'), { element: '#container', theme: darkTheme });
+
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxSplitter', {
   orientation: 'horizontal',
   width: 600,
+  allowKeyboardNavigation: true,
   height: 300,
   dataSource: [{
     text: 'pane_1',
