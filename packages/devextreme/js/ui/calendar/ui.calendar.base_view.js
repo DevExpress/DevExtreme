@@ -156,35 +156,6 @@ const BaseView = Widget.inherit({
         }
     },
 
-    _getTableAriaLabel1() {
-        const { value, selectionMode } = this.option();
-
-        const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
-
-        // NOTE: SHould be tested all of these cases
-        const isEmptyValue = !value || Array.isArray(value) && !value.length;
-        const isMultipleMode = selectionMode === SELECTION_MODE.multiple;
-
-        const shouldReturnWidgetName = isEmptyValue || isMultipleMode;
-
-        if(shouldReturnWidgetName) {
-            return localizedWidgetName;
-        }
-
-        const [startDate, endDate] = Array.isArray(value) ? value : [value];
-
-        const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
-        const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
-
-        const selectedDatesText = startDate && endDate
-            ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
-            : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate);
-
-        const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
-
-        return ariaLabel;
-    },
-
     _updateTableAriaLabel() {
         const label = this._getTableAriaLabel();
 
