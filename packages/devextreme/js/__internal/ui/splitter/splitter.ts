@@ -348,8 +348,6 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
       onResize: ({ element, event }): void => {
-        console.log(calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize));
-
         const newLayout = getNewLayout(
           this._currentLayout,
           calculateDelta(event.offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
