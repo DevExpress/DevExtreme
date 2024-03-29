@@ -101,12 +101,6 @@ const BaseView = Widget.inherit({
         return localizedWidgetName;
     },
 
-    _getMultipleModeAriaLabel() {
-        const ariaLabel = this._getLocalizedWidgetName();
-
-        return ariaLabel;
-    },
-
     _getSingleModeAriaLabel() {
         const { value } = this.option();
 
@@ -139,6 +133,12 @@ const BaseView = Widget.inherit({
         return ariaLabel;
     },
 
+    _getMultipleModeAriaLabel() {
+        const ariaLabel = this._getLocalizedWidgetName();
+
+        return ariaLabel;
+    },
+
     _getTableAriaLabel() {
         const { value, selectionMode } = this.option();
 
@@ -149,10 +149,10 @@ const BaseView = Widget.inherit({
         switch(selectionMode) {
             case SELECTION_MODE.single:
                 return this._getSingleModeAriaLabel();
-            case SELECTION_MODE.multiple:
-                return this._getMultipleModeAriaLabel();
             case SELECTION_MODE.range:
                 return this._getRangeModeAriaLabel();
+            case SELECTION_MODE.multiple:
+                return this._getMultipleModeAriaLabel();
         }
     },
 
