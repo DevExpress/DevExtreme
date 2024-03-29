@@ -126,7 +126,7 @@ const BaseView = Widget.inherit({
 
         const selectedDatesText = startDate && endDate
             ? messageLocalization.format('dxCalendar-selectedDateRange', formattedStartDate, formattedEndDate)
-            : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate);
+            : messageLocalization.format('dxCalendar-selectedDate', formattedStartDate ?? formattedEndDate);
 
         const ariaLabel = `${localizedWidgetName}. ${selectedDatesText}`;
 
@@ -142,7 +142,9 @@ const BaseView = Widget.inherit({
     _getTableAriaLabel() {
         const { value, selectionMode } = this.option();
 
-        if(!value) {
+        const isValueEmpty = !value || Array.isArray(value) && !value.filter(Boolean).length;
+
+        if(isValueEmpty) {
             return this._getLocalizedWidgetName();
         }
 

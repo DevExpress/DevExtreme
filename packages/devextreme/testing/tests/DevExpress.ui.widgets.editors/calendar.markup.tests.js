@@ -564,6 +564,43 @@ QUnit.module('Aria accessibility', {
 
             checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar');
         });
+
+        QUnit.test('table should have an aria-label "Calendar" when value is [null, null], selectionMode=range', function(assert) {
+            this.$element.dxCalendar({
+                value: [null, null],
+                selectionMode: 'range',
+            });
+
+            checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar');
+        });
+
+        QUnit.test('table should have a correct aria-label when value is [null, date], selectionMode=range', function(assert) {
+            const date = new Date(2024, 3, 21);
+
+            this.$element.dxCalendar({
+                value: [null, date],
+                selectionMode: 'range',
+            });
+
+            const formattedDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
+            const expectedAriaLabel = `Calendar. Selected date is ${formattedDate}`;
+
+            checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+        });
+
+        QUnit.test('table should have a correct aria-label when value is [date, null], selectionMode=range', function(assert) {
+            const date = new Date(2024, 3, 21);
+
+            this.$element.dxCalendar({
+                value: [date, null],
+                selectionMode: 'range',
+            });
+
+            const formattedDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
+            const expectedAriaLabel = `Calendar. Selected date is ${formattedDate}`;
+
+            checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+        });
     });
 });
 
