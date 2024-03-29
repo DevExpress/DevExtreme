@@ -100,11 +100,17 @@ const BaseView = Widget.inherit({
 
         const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
 
-        if(!value || selectionMode === SELECTION_MODE.multiple || Array.isArray(value) && !value.length) {
+        // NOTE: SHould be tested all of these cases
+        const isEmptyValue = !value || Array.isArray(value) && !value.length;
+        const isMultipleMode = selectionMode === SELECTION_MODE.multiple;
+
+        const shouldReturnWidgetName = isEmptyValue || isMultipleMode;
+
+        if(shouldReturnWidgetName) {
             return localizedWidgetName;
         }
 
-        const [startDate, endDate] = value.length ? value : [value];
+        const [startDate, endDate] = Array.isArray(value) ? value : [value];
 
         const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
         const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
