@@ -15,7 +15,9 @@ import {
 import { hasWindow } from '@js/core/utils/window';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
-import type { Item, Properties, ResizeStartEvent } from '@js/ui/splitter';
+import type {
+  Item, Properties, ResizeStartEvent,
+} from '@js/ui/splitter';
 
 import ResizeHandle, { RESIZE_HANDLE_CLASS } from './resize_handle';
 import { getComponentInstance } from './utils/component';
@@ -73,7 +75,6 @@ class SplitterItem extends CollectionWidgetItem {
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
   _getDefaultOptions(): Properties {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       orientation: ORIENTATION.horizontal,
       onItemCollapsed: null,
@@ -83,7 +84,7 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: null,
       allowKeyboardNavigation: true,
       separatorSize: 8,
-    });
+    }) as Properties;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -110,7 +111,7 @@ class Splitter extends (CollectionWidget as any) {
   _getItemDimension(element: Element): number | string {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._isHorizontalOrientation()
-      ? getOuterWidth(element) : (getOuterHeight(element) as number);
+      ? getOuterWidth(element) : getOuterHeight(element);
   }
 
   _shouldUpdateLayout(): boolean {

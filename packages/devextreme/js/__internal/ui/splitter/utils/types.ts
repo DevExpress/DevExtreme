@@ -2,9 +2,9 @@ export interface PaneRestrictions {
   collapsed?: boolean | undefined;
   resizable?: boolean | undefined;
   visible?: boolean | undefined;
-  size?: number | undefined;
-  maxSize?: number | undefined;
-  minSize?: number | undefined;
+  size?: number;
+  maxSize?: number;
+  minSize?: number;
 }
 
 export interface ResizeOffset {
