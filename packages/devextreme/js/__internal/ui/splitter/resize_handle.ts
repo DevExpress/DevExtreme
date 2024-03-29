@@ -109,6 +109,7 @@ class ResizeHandle extends (Widget as any) {
       direction: RESIZE_DIRECTION.horizontal,
       hoverStateEnabled: true,
       focusStateEnabled: true,
+      activeStateEnabled: true,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
