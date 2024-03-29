@@ -62,16 +62,11 @@ class CalendarRangeSelectionStrategy extends CalendarSelectionStrategy {
         super.updateAriaSelected(value, previousValue);
     }
 
-    // updateTableAriaLabel() {
-
-    // }
-
     processValueChanged(value, previousValue) {
         super.processValueChanged(value, previousValue);
 
         const range = this._getRange();
         this._updateViewsOption('range', range);
-        // this.updateTableAriaLabel();
     }
 
     getDefaultCurrentDate() {

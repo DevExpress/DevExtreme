@@ -92,6 +92,7 @@ const normalizeMonth = text => {
 
 const intlFormats = {
     'day': { day: 'numeric' },
+    'date': { year: 'numeric', month: 'long', day: 'numeric' },
     'dayofweek': { weekday: 'long' },
     'longdate': { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' },
     'longdatelongtime': { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric', second: 'numeric' },

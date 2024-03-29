@@ -48,7 +48,12 @@ const CURRENT_DATE_TEXT = {
     decade: messageLocalization.format('dxCalendar-currentYear'),
     century: messageLocalization.format('dxCalendar-currentYearRange'),
 };
-const ARIA_LABEL_DATE_FORMAT = 'longdate';
+const ARIA_LABEL_DATE_FORMAT = 'date';
+const SELECTION_MODE = {
+    single: 'single',
+    multiple: 'multiple',
+    range: 'range',
+};
 
 const BaseView = Widget.inherit({
 
@@ -93,13 +98,9 @@ const BaseView = Widget.inherit({
     _getTableAriaLabel() {
         const { value, selectionMode } = this.option();
 
-        if(selectionMode === 'multiple') {
-            return null;
-        }
-
         const localizedWidgetName = messageLocalization.format('dxCalendar-ariaWidgetName');
 
-        if(Array.isArray(value) && !value.length) {
+        if(!value || selectionMode === SELECTION_MODE.multiple || Array.isArray(value) && !value.length) {
             return localizedWidgetName;
         }
 
@@ -110,7 +111,7 @@ const BaseView = Widget.inherit({
 
         const selectedDatesText = startDate && endDate
             // NOTE: need to localize
-            ? `Selected dates range from ${formattedStartDate} to ${formattedEndDate}`
+            ? `Selected date range from ${formattedStartDate} to ${formattedEndDate}`
             // NOTE: need to localize
             : `Selected date is ${formattedStartDate}`;
 
@@ -218,7 +219,7 @@ const BaseView = Widget.inherit({
             className += ` ${CALENDAR_OTHER_VIEW_CLASS}`;
         }
 
-        if(this.option('selectionMode') === 'range') {
+        if(this.option('selectionMode') === SELECTION_MODE.range) {
             if(cellIndex === 0) {
                 className += ` ${CALENDAR_CELL_START_IN_ROW_CLASS}`;
             }
@@ -270,7 +271,7 @@ const BaseView = Widget.inherit({
         const { selectionMode } = this.option();
 
         eventsEngine.off(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME);
-        if(selectionMode === 'range') {
+        if(selectionMode === SELECTION_MODE.range) {
             this._createCellHoverAction();
 
             eventsEngine.on(this._$table, CALENDAR_DXHOVERSTART_EVENT_NAME, NOT_WEEK_CELL_SELECTOR, ((e) => {
@@ -283,7 +284,7 @@ const BaseView = Widget.inherit({
             }));
         }
 
-        if(selectionMode !== 'single') {
+        if(selectionMode !== SELECTION_MODE.single) {
             this._createWeekNumberCellClickAction();
 
             eventsEngine.on(this._$table, CALENDAR_DXCLICK_EVENT_NAME, `.${CALENDAR_WEEK_NUMBER_CELL_CLASS}`, ((e) => {
@@ -447,7 +448,7 @@ const BaseView = Widget.inherit({
     },
 
     _isRangeMode: function() {
-        return this.option('selectionMode') === 'range';
+        return this.option('selectionMode') === SELECTION_MODE.range;
     },
 
     _getCurrentDateFormat() {
@@ -487,6 +488,7 @@ const BaseView = Widget.inherit({
         switch(name) {
             case 'value':
                 this._renderValue();
+                this._updateTableAriaLabel();
                 break;
             case 'range':
                 this._renderRange();

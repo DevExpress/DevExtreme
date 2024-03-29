@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
+import dateLocalization from 'localization/date';
 import { isDefined, isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import windowUtils from 'core/utils/window';
@@ -18,6 +19,8 @@ const CALENDAR_CAPTION_BUTTON_CLASS = 'dx-calendar-caption-button';
 const CALENDAR_VIEWS_WRAPPER_CLASS = 'dx-calendar-views-wrapper';
 const CALENDAR_MULTIVIEW_CLASS = 'dx-calendar-multiview';
 const CALENDAR_RANGE_CLASS = 'dx-calendar-range';
+
+const ARIA_LABEL_DATE_FORMAT = 'date';
 
 const toSelector = function(className) {
     return '.' + className;
@@ -419,27 +422,132 @@ QUnit.module('Aria accessibility', {
         this.$element.remove();
     }
 }, () => {
+    const checkTableAttribute = (assert, $element, attribute, expectedValue) => {
+        const tables = $element.find('table').toArray();
+
+        tables.forEach(table => {
+            const label = table.getAttribute(attribute);
+
+            assert.strictEqual(label, expectedValue, `${attribute} is correct`);
+        });
+    };
+
     QUnit.test('table should have a role "grid"', function(assert) {
         this.$element.dxCalendar();
 
-        const $tables = this.$element.find('table');
-
-        $tables.each((index, tableElement) => {
-            const role = tableElement.getAttribute('role');
-
-            assert.strictEqual(role, 'grid', 'role is correct');
-        });
+        checkTableAttribute(assert, this.$element, 'role', 'grid');
     });
 
-    QUnit.test('table should have an aria-label "Calendar"', function(assert) {
-        this.$element.dxCalendar();
+    QUnit.module('table aria-label', () => {
+        QUnit.test('table should have an aria-label "Calendar"', function(assert) {
+            this.$element.dxCalendar();
 
-        const $tables = this.$element.find('table');
+            checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar');
+        });
 
-        $tables.each((index, tableElement) => {
-            const label = tableElement.getAttribute('aria-label');
+        ['month', 'year', 'decade', 'century'].forEach(zoomLevel => {
+            QUnit.test(`table aria-label should contain selected date when selectionMode=single, zoomLevel=${zoomLevel}`, function(assert) {
+                const date = new Date(2024, 3, 21);
 
-            assert.strictEqual(label, 'Calendar', 'label is correct');
+                this.$element.dxCalendar({
+                    zoomLevel,
+                    selectionMode: 'single',
+                    value: date,
+                });
+
+                const formattedDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
+                const expectedAriaLabel = `Calendar. Selected date is ${formattedDate}`;
+
+                checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+            });
+
+            QUnit.test(`table aria-label should contain selected date when selectionMode=multiple, zoomLevel=${zoomLevel}`, function(assert) {
+                const date = new Date(2024, 3, 21);
+
+                this.$element.dxCalendar({
+                    zoomLevel,
+                    selectionMode: 'multiple',
+                    value: [date],
+                });
+
+                const expectedAriaLabel = 'Calendar';
+
+                checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+            });
+
+            QUnit.test(`table aria-label should contain selected date when selectionMode=range, zoomLevel=${zoomLevel}`, function(assert) {
+                const startDate = new Date(2024, 3, 21);
+                const endDate = new Date(2024, 3, 23);
+
+                this.$element.dxCalendar({
+                    zoomLevel,
+                    selectionMode: 'range',
+                    value: [startDate, endDate],
+                });
+
+                const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
+                const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
+
+                const expectedAriaLabel = `Calendar. Selected date range from ${formattedStartDate} to ${formattedEndDate}`;
+
+                checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+            });
+        });
+
+        QUnit.test('table aria-label should contain new selected date after value changed when selectionMode=single', function(assert) {
+            const date = new Date(2024, 3, 21);
+            const newDate = new Date(2024, 3, 27);
+
+            const instance = this.$element.dxCalendar({
+                selectionMode: 'single',
+                value: date,
+            }).dxCalendar('instance');
+
+            instance.option({ value: newDate });
+
+            const newFormattedDate = dateLocalization.format(newDate, ARIA_LABEL_DATE_FORMAT);
+            const newExpectedAriaLabel = `Calendar. Selected date is ${newFormattedDate}`;
+
+            checkTableAttribute(assert, this.$element, 'aria-label', newExpectedAriaLabel);
+        });
+
+        QUnit.test('table aria-label should contain new selected dates after value changed when selectionMode=range', function(assert) {
+            const startDate = new Date(2024, 3, 21);
+            const endDate = new Date(2024, 3, 23);
+
+            const newStartDate = new Date(2024, 3, 27);
+            const newEndDate = new Date(2024, 3, 29);
+
+            const instance = this.$element.dxCalendar({
+                selectionMode: 'range',
+                value: [startDate, endDate],
+            }).dxCalendar('instance');
+
+            instance.option({ value: [newStartDate, newEndDate] });
+
+            const newFormattedStartDate = dateLocalization.format(newStartDate, ARIA_LABEL_DATE_FORMAT);
+            const newFormattedEndDate = dateLocalization.format(newEndDate, ARIA_LABEL_DATE_FORMAT);
+
+            const expectedAriaLabel = `Calendar. Selected date range from ${newFormattedStartDate} to ${newFormattedEndDate}`;
+
+            checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
+        });
+
+        QUnit.test('table aria-label should not contain new selected date after value changed when selectionMode=multiple', function(assert) {
+            const firstDate = new Date(2024, 3, 21);
+            const secondDate = new Date(2024, 3, 23);
+
+            const newFirstDate = new Date(2024, 3, 27);
+            const newSecondDate = new Date(2024, 3, 29);
+
+            const instance = this.$element.dxCalendar({
+                selectionMode: 'multiple',
+                value: [firstDate, secondDate],
+            }).dxCalendar('instance');
+
+            instance.option({ value: [newFirstDate, newSecondDate] });
+
+            checkTableAttribute(assert, this.$element, 'aria-label', 'Calendar');
         });
     });
 });
