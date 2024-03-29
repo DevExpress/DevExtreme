@@ -935,9 +935,7 @@ export class GridView extends modules.View {
     }
 
     if (!this._a11yGeneralStatusElement) {
-      this._a11yGeneralStatusElement = A11yStatusContainerComponent(
-        { a11yLiveType: 'polite' },
-      );
+      this._a11yGeneralStatusElement = A11yStatusContainerComponent({});
       this._a11yGeneralStatusElement.attr(E2E_ATTRIBUTES.a11yStatusContainer, 'true');
       this._rootElement.append(this._a11yGeneralStatusElement);
     }
