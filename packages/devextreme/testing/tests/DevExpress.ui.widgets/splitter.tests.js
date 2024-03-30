@@ -1831,7 +1831,7 @@ QUnit.module('Events', moduleConfig, () => {
 
 QUnit.module('Nested Splitter Events', moduleConfig, () => {
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
-        QUnit.test(`${eventHandler} should be called when handle in nested splitter is dragged`, function(assert) {
+        QUnit.test(`${eventHandler} should be invoked when a handle in the nested splitter is dragged`, function(assert) {
             const resizeHandlerStub = sinon.stub();
             this.reinit({
                 [eventHandler]: resizeHandlerStub,
@@ -1847,6 +1847,30 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
             assert.strictEqual(resizeHandlerStub.callCount, 1);
+        });
+
+        // TODO: repair this scenario
+        QUnit.skip(`${eventHandler} should be called when a handle in the nested splitter is dragged, ${eventHandler} has been changed at runtime`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            const newResizeHandlerStub = sinon.stub();
+
+            this.reinit({
+                [eventHandler]: resizeHandlerStub,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            this.instance.option(`${eventHandler}`, newResizeHandlerStub);
+
+            const pointer = pointerMock(this.getResizeHandles(false)[0]);
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 0);
+            assert.strictEqual(newResizeHandlerStub.callCount, 1);
         });
 
         QUnit.test(`nestedSplitter.${eventHandler} should be called instead of parentSplitter.${eventHandler}`, function(assert) {
@@ -1901,7 +1925,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
         });
     });
 
-    QUnit.test('itemRendered should be called when nested splitter panes are rendered', function(assert) {
+    QUnit.test('itemRendered callback should be called when the panes of a nested splitter are rendered', function(assert) {
         const itemRenderedSpy = sinon.spy();
 
         this.reinit({
@@ -1918,7 +1942,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
         assert.strictEqual(itemRenderedSpy.callCount, 4, 'itemRendered.callCount');
     });
 
-    QUnit.test('nested splitter itemRendered should be called instead of parent.itemRendered', function(assert) {
+    QUnit.test('the nested splitter\'s itemRendered should be called instead of the parent\'s itemRendered', function(assert) {
         const itemRenderedSpy = sinon.spy();
         const nestedItemRenderedSpy = sinon.spy();
 
