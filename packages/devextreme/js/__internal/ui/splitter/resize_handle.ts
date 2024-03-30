@@ -424,6 +424,13 @@ class ResizeHandle extends (Widget as any) {
     return this.option('direction') === RESIZE_DIRECTION.horizontal;
   }
 
+  _clean(): void {
+    this._detachResizeEventHandlers();
+    this._detachPointerEventHandlers();
+
+    super._clean();
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 

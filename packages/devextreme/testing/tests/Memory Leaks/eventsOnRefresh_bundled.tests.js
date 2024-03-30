@@ -1,6 +1,7 @@
 import $ from 'jquery';
 import GoogleProvider from 'ui/map/provider.dynamic.google';
 import memoryLeaksHelper from '../../helpers/memoryLeaksHelper.js';
+import ResizeHandle from '__internal/ui/splitter/resize_handle';
 
 import 'bundles/modules/parts/widgets-web';
 
@@ -33,3 +34,19 @@ $.each(DevExpress.ui, function(componentName) {
         });
     }
 });
+
+QUnit.test('Splitter ResizeHandle should not leak memory by creating redundant event subscriptions after refreshing', function(assert) {
+    const testNode = memoryLeaksHelper.createTestNode();
+    const component = new ResizeHandle($(testNode), {});
+
+    this.clock.tick(100);
+    const originalEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+
+    component._refresh();
+    this.clock.tick(100);
+    const newEventSubscriptions = memoryLeaksHelper.getAllEventSubscriptions();
+
+    assert.deepEqual(newEventSubscriptions, originalEventSubscriptions, 'After an option changes and causes re-rendering, no additional event subscriptions must be created');
+    memoryLeaksHelper.destroyTestNode(testNode);
+});
+
