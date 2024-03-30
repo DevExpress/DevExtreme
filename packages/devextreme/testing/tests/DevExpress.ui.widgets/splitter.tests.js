@@ -744,11 +744,16 @@ QUnit.module('Resizing', moduleConfig, () => {
 
         [
             { width: '100%', height: '100%' },
+            { width: '100%%%', height: '100%%%' },
             { width: 600, height: 600 },
             { width: '600px', height: '600px' },
+            { width: '600', height: '600' },
+            { width: '600pxpx', height: '600pxpx' },
             { width: '50vw', height: '50vh' },
             { width: 'incorrect', height: 'incorrect' },
             { width: '10em', height: '10em' },
+            { width: 'auto', height: 'auto' },
+            { width: 'inherit', height: 'inherit' },
         ].forEach(({ width, height }) => {
             QUnit.test(`splitter with width=${width}, height=${height}, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
                 this.reinit({
