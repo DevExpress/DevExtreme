@@ -1,10 +1,12 @@
+'use strict';
+
 const path = require('path');
 const fs = require('fs');
 const babel = require('@babel/core');
 const parseArguments = require('minimist');
 
 // eslint-disable-next-line no-undef
-const root = path.join(__dirname, '..');
+const root = path.join(__dirname, '../..');
 const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
 const transpilePath = path.join(root, '/artifacts/transpiled');
 
