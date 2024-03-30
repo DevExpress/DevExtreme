@@ -240,14 +240,29 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(newEventHandlerStub.callCount, 1);
         });
 
-        QUnit.test(`${eventHandler} should be called once after direction option changed`, function(assert) {
-            const eventHandlerStub = sinon.stub();
-            this.reinit({ [eventHandler]: eventHandlerStub });
-            this.instance.option('direction', 'vertical');
+        ['vertical', 'horizontal'].forEach((direction) => {
+            QUnit.test(`${eventHandler} should be initialized with extra data settings`, function(assert) {
+                const eventHandlerStub = sinon.stub();
+                this.reinit({ direction, [eventHandler]: eventHandlerStub });
 
-            pointerMock(this.$element).start().dragStart().drag(0, 50).dragEnd();
+                pointerMock(this.$element).start().dragStart().drag(50, 50).dragEnd();
 
-            assert.strictEqual(eventHandlerStub.callCount, 1);
+                assert.strictEqual(eventHandlerStub.callCount, 1);
+                assert.deepEqual(eventHandlerStub.args[0][0].event.data, { direction, immediate: true });
+            });
+
+            QUnit.test(`${eventHandler} should be resubscribed after changing the direction option at runtime`, function(assert) {
+                const eventHandlerStub = sinon.stub();
+                this.reinit({ direction, [eventHandler]: eventHandlerStub });
+
+                const oppositeDirection = direction === 'horizontal' ? 'vertical' : 'horizontal';
+                this.instance.option('direction', oppositeDirection);
+
+                pointerMock(this.$element).start().dragStart().drag(50, 50).dragEnd();
+
+                assert.strictEqual(eventHandlerStub.callCount, 1);
+                assert.deepEqual(eventHandlerStub.args[0][0].event.data, { direction: oppositeDirection, immediate: true }, `${eventHandler} event data`);
+            });
         });
 
         QUnit.test(`${eventHandler} should not be called when resizable=false on init`, function(assert) {
@@ -296,6 +311,8 @@ QUnit.module('Events', moduleConfig, () => {
 
     [['onResizeStart', 'dxdragstart'], ['onResize', 'dxdrag'], ['onResizeEnd', 'dxdragend']].forEach(eventData => {
         QUnit.test(`${eventData[0]} event handler should recieve correct arguments`, function(assert) {
+            assert.expect(4);
+
             const eventHandlerName = eventData[0];
             const eventName = eventData[1];
 

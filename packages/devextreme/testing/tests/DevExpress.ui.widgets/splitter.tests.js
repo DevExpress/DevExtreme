@@ -742,15 +742,24 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.assertLayout(['50', '50']);
         });
 
-        QUnit.test(`splitter size in percentages, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
-            this.reinit({
-                width: '100%',
-                height: '100%',
-                orientation,
-                dataSource: [{ }, { }, { }]
-            });
+        [
+            { width: '100%', height: '100%' },
+            { width: 600, height: 600 },
+            { width: '600px', height: '600px' },
+            { width: '50vw', height: '50vh' },
+            { width: 'incorrect', height: 'incorrect' },
+            { width: '10em', height: '10em' },
+        ].forEach(({ width, height }) => {
+            QUnit.test(`splitter with width=${width}, height=${height}, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
+                this.reinit({
+                    width,
+                    height,
+                    orientation,
+                    dataSource: [{ }, { }, { }]
+                });
 
-            this.assertLayout(['33.3333', '33.3333', '33.3333']);
+                this.assertLayout(['33.3333', '33.3333', '33.3333']);
+            });
         });
 
         QUnit.test(`items with nested splitter should be evenly distributed by default with ${orientation} orientation`, function(assert) {
