@@ -1,6 +1,9 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
+import { isRenderer } from 'core/utils/type';
+import config from 'core/config';
 import pointerMock from '../../helpers/pointerMock.js';
+import { camelize } from 'core/utils/inflector';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
@@ -69,9 +72,9 @@ QUnit.module('Initialization', moduleConfig, () => {
 
 QUnit.module('Behavior', moduleConfig, () => {
     [
-        { handler: 'onCollapsePrev', button: 'prev', },
-        { handler: 'onCollapseNext', button: 'next', },
-    ].forEach(({ handler, button }) => {
+        { handler: 'onCollapsePrev', eventName: 'collapsePrev', button: 'prev', },
+        { handler: 'onCollapseNext', eventName: 'collapseNext', button: 'next', },
+    ].forEach(({ handler, eventName, button }) => {
         QUnit.test(`${handler} handler should be fired on collapse ${button} button click`, function(assert) {
             assert.expect(1);
 
@@ -100,6 +103,39 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             assert.strictEqual(handlerStub.callCount, 0);
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
+
+        QUnit.test(`${eventName} event handler should be correctly added with "on" function`, function(assert) {
+            const eventHandlerStub = sinon.stub();
+            this.instance.on(eventName, eventHandlerStub);
+
+            const $collapseButton = button === 'prev' ? this.getCollapsePrevButton() : this.getCollapseNextButton();
+
+            $collapseButton.trigger('dxclick');
+
+            assert.strictEqual(eventHandlerStub.callCount, 1);
+        });
+
+        QUnit.test(`${eventName} event handler should recieve correct arguments`, function(assert) {
+            assert.expect(5);
+
+            const checkArgs = (e) => {
+                assert.strictEqual(e.component, this.instance, 'e.component');
+                assert.strictEqual(isRenderer(e.element), !!config().useJQuery, 'element is correct');
+                assert.strictEqual($(e.element).get(0), this.$element.get(0), 'element field is correct');
+                assert.strictEqual(e.event.type, 'dxclick', 'e.event.type is correct');
+                assert.strictEqual($(e.event.target).get(0), $collapseButton.get(0), 'e.event.target is correct');
+            };
+
+            this.reinit({
+                [handler]: function(e) {
+                    checkArgs(e);
+                },
+            });
+
+            const $collapseButton = button === 'prev' ? this.getCollapsePrevButton() : this.getCollapseNextButton();
+
+            $collapseButton.trigger('dxclick');
         });
     });
 
@@ -311,16 +347,17 @@ QUnit.module('Events', moduleConfig, () => {
 
     [['onResizeStart', 'dxdragstart'], ['onResize', 'dxdrag'], ['onResizeEnd', 'dxdragend']].forEach(eventData => {
         QUnit.test(`${eventData[0]} event handler should recieve correct arguments`, function(assert) {
-            assert.expect(4);
+            assert.expect(5);
 
             const eventHandlerName = eventData[0];
             const eventName = eventData[1];
 
             const checkArgs = (e, expectedEventName) => {
-                assert.strictEqual(e.component.NAME, this.instance.NAME);
-                assert.strictEqual($(e.element).get(0), this.$element.get(0));
-                assert.strictEqual(e.event.type, expectedEventName);
-                assert.strictEqual($(e.event.target).get(0), this.$element.get(0));
+                assert.strictEqual(e.component, this.instance, 'e.component');
+                assert.strictEqual(isRenderer(e.element), !!config().useJQuery, 'element is correct');
+                assert.strictEqual($(e.element).get(0), this.$element.get(0), 'element field is correct');
+                assert.strictEqual(e.event.type, expectedEventName, 'e.event.type is correct');
+                assert.strictEqual($(e.event.target).get(0), this.$element.get(0), 'e.event.target is correct');
             };
 
             this.reinit({

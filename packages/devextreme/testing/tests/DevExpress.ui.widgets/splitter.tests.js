@@ -3,12 +3,13 @@ import Splitter from 'ui/splitter';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { isRenderer, isNumeric } from 'core/utils/type';
+import config from 'core/config';
 import { createEvent } from 'events/utils/index';
 import devices from 'core/devices';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
-import { isNumeric } from 'core/utils/type';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -1626,15 +1627,17 @@ QUnit.module('Events', moduleConfig, () => {
         });
 
         QUnit.test(`${eventHandler} should have correct argument fields`, function(assert) {
-            assert.expect(4);
+            assert.expect(6);
 
             this.reinit({
                 [eventHandler]: ({ component, element, event, handleElement }) => {
                     const $resizeHandle = this.getResizeHandles();
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).get(0), $resizeHandle.get(0), 'event field is correct');
+                    assert.strictEqual(isRenderer(handleElement), !!config().useJQuery, 'handleElement is correct');
                     assert.strictEqual($(handleElement).is($resizeHandle), true, 'handleElement field is correct');
                 },
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
@@ -1756,19 +1759,24 @@ QUnit.module('Events', moduleConfig, () => {
 
     ['left', 'right'].forEach((item) => {
         QUnit.test(`onItemCollapsed should have correct argument fields on ${item} item collapse`, function(assert) {
-            assert.expect(5);
+            assert.expect(8);
 
             this.reinit({
-                onItemCollapsed: ({ component, element, event, itemData, itemElement }) => {
+                onItemCollapsed: (e) => {
+                    const { component, element, event, itemData, itemElement, itemIndex } = e;
+
                     const $resizeHandle = this.getResizeHandles();
                     const $items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
                     const $item = item === 'left' ? $items.first() : $items.last();
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).parent().get(0), $resizeHandle.get(0), 'target event field is correct');
+                    assert.strictEqual(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
                     assert.deepEqual(itemData, { collapsed: true, size: 0, collapsible: true }, 'itemData field is correct');
+                    assert.strictEqual(itemIndex, item === 'left' ? 0 : 1, 'itemIndex is correct');
                 },
                 dataSource: [{ collapsible: true, }, { collapsible: true, }]
             });
@@ -1778,20 +1786,23 @@ QUnit.module('Events', moduleConfig, () => {
             $collapseButton.trigger('dxclick');
         });
 
-        QUnit.test(`onItemCollapsed should have correct argument fields on ${item} item expand`, function(assert) {
-            assert.expect(5);
+        QUnit.test(`onItemExpanded should have correct argument fields on ${item} item expand`, function(assert) {
+            assert.expect(8);
 
             this.reinit({
-                onItemExpanded: ({ component, element, event, itemData, itemElement }) => {
+                onItemExpanded: ({ component, element, event, itemData, itemElement, itemIndex }) => {
                     const $resizeHandle = this.getResizeHandles();
                     const $items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
                     const $item = item === 'left' ? $items.first() : $items.last();
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).parent().is($resizeHandle), true, 'event field is correct');
+                    assert.strictEqual(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
                     assert.strictEqual(itemData.collapsed, false, 'itemData is correct');
+                    assert.strictEqual(itemIndex, item === 'left' ? 0 : 1, 'itemIndex');
                 },
                 dataSource: [{ collapsed: item === 'left', collapsible: true }, { collapsed: item === 'right', collapsible: true }]
             });
