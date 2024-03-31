@@ -1,8 +1,6 @@
 import $ from 'jquery';
 import 'ui/html_editor';
 
-const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
-
 const { test, module: testModule } = QUnit;
 
 testModule('lists', () => {
@@ -29,12 +27,13 @@ testModule('lists', () => {
 
     test('ordered list should have counter-reset property set to default (T1220554)', function(assert) {
         const instance = $('#htmlEditor').dxHtmlEditor({
-            value: '<ol><li></li></ol>'
+            value: 'test'
         }).dxHtmlEditor('instance');
         const $element = instance.$element();
 
-        const $contentOrderedList = $element.find(`.${HTML_EDITOR_CONTENT_CLASS} ol`);
+        instance.formatLine(0, 4, 'list', 'ordered');
 
-        assert.equal($contentOrderedList.css('counterReset'), 'list-item 0', 'dx-htmleditor-content ol has counter-reset: list-item 0;');
+        const $contentOL = $element.find('ol');
+        assert.strictEqual($contentOL.css('counterReset'), 'list-item 0', 'Ordered list has counter-reset property set to list-item 0');
     });
 });
