@@ -197,7 +197,7 @@ jobs:
         retention-days: 1  
 
     - name: Check package-lock
-        git diff --exit-code package-lock.json
+      run: git diff --exit-code package-lock.json
 
   component_exports:
     runs-on: devextreme-shr2
