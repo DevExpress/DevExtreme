@@ -386,8 +386,8 @@ class Splitter extends (CollectionWidget as any) {
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
-        const resizeHandle = $(getPublicElement($(element)));
-        this._toggleActiveState(resizeHandle, true);
+        const resizeHandle = getPublicElement($(element));
+        this._toggleActiveState($(resizeHandle), true);
 
         this._$visibleItems = this._getVisibleItems();
         this._currentLayout = getCurrentLayout(this._$visibleItems);
@@ -428,9 +428,9 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
-        const resizeHandle = $(getPublicElement($(element)));
+        const resizeHandle = getPublicElement($(element));
         this._feedbackDeferred.resolve();
-        this._toggleActiveState(resizeHandle, false);
+        this._toggleActiveState($(resizeHandle), false);
 
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
