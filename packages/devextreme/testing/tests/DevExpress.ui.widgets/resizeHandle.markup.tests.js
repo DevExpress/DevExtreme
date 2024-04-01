@@ -180,6 +180,18 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
 
                     assert.strictEqual(this.$element.css(dimension), '8px');
                 });
+
+
+                QUnit.test(`Resize handle ${dimension} should fallback to default if separatorSize changed at runtime to incorrect value (direction=${direction})`, function(assert) {
+                    this.reinit({
+                        direction,
+                        separatorSize: 5,
+                    });
+
+                    this.instance.option('separatorSize', separatorSize);
+
+                    assert.strictEqual(this.$element.css(dimension), '8px');
+                });
             });
 
             QUnit.test(`Resize handle should correctly set separator ${dimension} on init (direction=${direction})`, function(assert) {
@@ -213,17 +225,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
 
                 assert.strictEqual(this.$element.css(newDimension), '5px');
                 assert.notStrictEqual(this.$element.css(dimension), '5px');
-            });
-
-            QUnit.test(`Resize handle ${dimension} should fallback to default if separatorSize changed at runtime to incorrect value (direction=${direction})`, function(assert) {
-                this.reinit({
-                    direction,
-                    separatorSize: 5,
-                });
-
-                this.instance.option('separatorSize', '20vh');
-
-                assert.strictEqual(this.$element.css(dimension), '8px');
             });
         });
     });

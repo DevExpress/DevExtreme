@@ -1388,14 +1388,14 @@ QUnit.module('Behavior', moduleConfig, () => {
     });
 
     [
-        { orientation: 'horizontal', dimension: 'width' },
-        { orientation: 'vertical', dimension: 'height' },
-    ].forEach(({ orientation, dimension }) => {
+        { orientation: 'horizontal' },
+        { orientation: 'vertical' },
+    ].forEach(({ orientation }) => {
         [
             { separatorSize: '50vh' }, { separatorSize: '20spx' }, { separatorSize: 'd10' }, { separatorSize: 'NaN' },
             { separatorSize: '2%' }, { separatorSize: '20em' }, { separatorSize: '1vw' }, { separatorSize: '' }
         ].forEach(({ separatorSize }) => {
-            QUnit.test(`Resize handle ${dimension} should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
+            QUnit.test(`Resize handle size should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
                 this.reinit({
                     dataSource: [{ size: '500px' }, { size: '500px' }],
                     orientation,
@@ -1405,6 +1405,7 @@ QUnit.module('Behavior', moduleConfig, () => {
                 this.assertLayout([50, 50]);
 
                 const $resizeHandle = this.getResizeHandles();
+                const dimension = orientation === 'horizontal' ? 'width' : 'height';
 
                 assert.strictEqual($resizeHandle.css(dimension), '8px');
             });

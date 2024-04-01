@@ -150,7 +150,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     this.$element().addClass(RESIZE_HANDLE_CLASS);
     this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
-    this._setResizeHandleSize();
+    this._updateDimensions();
 
     this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
     this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
@@ -176,25 +176,24 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       .addClass(this._getCollapseIconClass(true, isHorizontal));
   }
 
-  _setResizeHandleSize(): void {
-    const {
-      separatorSize, resizable, showCollapseNext, showCollapsePrev,
-    } = this.option();
+  _updateDimensions(): void {
     const isHorizontal = this._isHorizontalDirection();
 
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    const disabled = resizable === false
-      && showCollapseNext === false
-      && showCollapsePrev === false;
-
-    this.option('disabled', disabled);
+    this.option('disabled', this._isInactive());
     this.option(inverseDimension, null);
 
-    const handleSize = disabled ? INACTIVE_RESIZE_HANDLE_SIZE
-      : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
-    this.option(dimension, handleSize);
+    this.option(dimension, this.getSize());
+  }
+
+  _isInactive(): boolean {
+    const { resizable, showCollapseNext, showCollapsePrev } = this.option();
+
+    return resizable === false
+      && showCollapseNext === false
+      && showCollapsePrev === false;
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -445,7 +444,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         this._toggleDirectionClass();
         this._detachResizeEventHandlers();
         this._attachResizeEventHandlers();
-        this._setResizeHandleSize();
+        this._updateDimensions();
         this._updateIconsClasses();
         break;
       case 'resizable':
@@ -453,16 +452,16 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachResizeEventHandlers();
         this._attachResizeEventHandlers();
-        this._setResizeHandleSize();
+        this._updateDimensions();
         break;
       case 'separatorSize':
-        this._setResizeHandleSize();
+        this._updateDimensions();
         break;
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
         this._setResizeIconVisibility();
-        this._setResizeHandleSize();
+        this._updateDimensions();
         this._detachPointerEventHandlers();
         this._attachPointerEventHandlers();
         break;
@@ -476,6 +475,13 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  getSize(): number {
+    const { separatorSize } = this.option();
+
+    return this._isInactive() ? INACTIVE_RESIZE_HANDLE_SIZE
+      : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
   }
 }
 

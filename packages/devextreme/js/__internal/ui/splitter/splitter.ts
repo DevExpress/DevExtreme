@@ -45,7 +45,6 @@ import {
   getDimensionByOrientation,
   getElementSize,
   getNewLayout,
-  getSafeSize,
   getVisibleItems,
   getVisibleItemsCount,
   isElementVisible,
@@ -64,7 +63,6 @@ const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
 
-const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 
 const FLEX_PROPERTY: Record<string, FlexProperty> = {
@@ -392,8 +390,7 @@ class Splitter extends (CollectionWidget as any) {
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
-        const resizeHandle = getPublicElement($(element));
-        this._toggleActiveState($(resizeHandle), true);
+        this._toggleActiveState($(getPublicElement($(element))), true);
 
         this._$visibleItems = this._getVisibleItems();
         this._currentLayout = getCurrentLayout(this._$visibleItems);
@@ -410,7 +407,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
-          handleElement: resizeHandle,
+          handleElement: getPublicElement($(element)),
         });
       },
       onResize: (e: ResizeEvent): void => {
@@ -434,9 +431,8 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
-        const resizeHandle = getPublicElement($(element));
         this._feedbackDeferred.resolve();
-        this._toggleActiveState($(resizeHandle), false);
+        this._toggleActiveState($(getPublicElement($(element))), false);
 
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
@@ -444,7 +440,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
-          handleElement: resizeHandle,
+          handleElement: getPublicElement($(element)),
         });
       },
     };
@@ -477,11 +473,8 @@ class Splitter extends (CollectionWidget as any) {
   _getResizeHandlesSize(): number {
     let size = 0;
 
-    this._resizeHandles.forEach((resizeHandle) => {
-      const { disabled, separatorSize } = resizeHandle.option();
-
-      size += disabled ? INACTIVE_RESIZE_HANDLE_SIZE
-        : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
+    this._resizeHandles.forEach((resizeHandle: ResizeHandle) => {
+      size += resizeHandle.getSize();
     });
 
     return size;
