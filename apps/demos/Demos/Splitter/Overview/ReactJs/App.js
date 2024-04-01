@@ -2,6 +2,13 @@ import React from 'react';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.js';
 
+const PaneContentRender = (title) => (data) =>
+  (
+    <PaneContent
+      title={title}
+      {...data}
+    />
+  );
 const App = () => (
   <React.Fragment>
     <Splitter id="splitter">
@@ -9,7 +16,7 @@ const App = () => (
         resizable={true}
         size="140px"
         minSize="70px"
-        render={PaneContent('Left Pane')}
+        render={PaneContentRender('Left Pane')}
       />
       <Item resizable={true}>
         <Splitter orientation="vertical">
@@ -17,7 +24,7 @@ const App = () => (
             resizable={true}
             collapsible={true}
             maxSize="75%"
-            render={PaneContent('Central Pane')}
+            render={PaneContentRender('Central Pane')}
           />
           <Item
             resizable={true}
@@ -29,18 +36,18 @@ const App = () => (
                 collapsible={true}
                 size="30%"
                 minSize="5%"
-                render={PaneContent('Nested Left Pane')}
+                render={PaneContentRender('Nested Left Pane')}
               />
               <Item
                 resizable={true}
-                render={PaneContent('Nested Central Pane')}
+                render={PaneContentRender('Nested Central Pane')}
               />
               <Item
                 resizable={true}
                 collapsible={true}
                 size="30%"
                 minSize="5%"
-                render={PaneContent('Nested Right Pane')}
+                render={PaneContentRender('Nested Right Pane')}
               />
             </Splitter>
           </Item>
@@ -50,7 +57,7 @@ const App = () => (
         resizable={false}
         collapsible={false}
         size="140px"
-        render={PaneContent('Right Pane')}
+        render={PaneContentRender('Right Pane')}
       />
     </Splitter>
   </React.Fragment>

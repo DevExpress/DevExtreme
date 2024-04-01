@@ -29,6 +29,4 @@ const PaneContent = (data) => (
 );
 
 export default PaneContent;
-
-
-    
+  
