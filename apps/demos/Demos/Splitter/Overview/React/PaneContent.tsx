@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 const dimensionOptions = new Set(['size', 'minSize', 'maxSize'])
 
@@ -12,19 +12,21 @@ const getPaneState = (data) => {
   return `${resizableText} and ${collapsibleText}`;
 }
 
-const getFilterDimensionOptions = (data) => Object.entries(data)
-.filter(([key]) => dimensionOptions.has(key))
-.map(([key, value]) => ({key, value}));
+const getFilteredDimensionOptions = (data) => {
+  return Object.entries(data)
+    .filter(([key]) => dimensionOptions.has(key))
+    .map(([key, value]) => ({key, value}));
+}
 
 const PaneContent = (data) => (
   <div className="pane-content">
     <div className="pane-title">{data.title}</div>
     <div className="pane-state">{getPaneState(data)}</div>
-    {getFilterDimensionOptions(data).map((item, index) => (
+    {getFilteredDimensionOptions(data).map((item, index) => (
       <div className="pane-option" key={index}>
-      {item.key}: {item.value}
+        {item.key}: {item.value}
       </div>
-      ))}
+    ))}
   </div>
 );
 
