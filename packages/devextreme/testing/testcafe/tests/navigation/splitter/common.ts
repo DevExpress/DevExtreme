@@ -40,7 +40,6 @@ test('Splitter appearance on different appearance and themes', async (t) => {
 }).before(async () => createWidget('dxSplitter', {
   orientation: 'horizontal',
   width: 600,
-  allowKeyboardNavigation: false,
   height: 300,
   dataSource: [{
     text: 'pane_1',
