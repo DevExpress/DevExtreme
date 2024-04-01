@@ -33,14 +33,13 @@
             size="30%"
             template="Nested Right Pane"
           ></dxi-item>
-
+          
           <ng-container *ngFor="let pane of renderedContentTemplates">
             <div *dxTemplate="let data of pane.name" class="pane-content">
-              <div class="pane-title">{{ pane.name }}</div>
-              <div class="pane-state">{{ getPaneState(data) }}</div>
-              <ng-container *ngFor="let item of filterDimensionOptions(data)">
-                <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
-              </ng-container>
+              <ng-template 
+                  [ngTemplateOutlet]="customPaneTemplate" 
+                  [ngTemplateOutletContext]="{ data: data, title: pane.name }">
+              </ng-template>
             </div>
           </ng-container>
         </dx-splitter>
@@ -48,11 +47,10 @@
 
       <ng-container *ngFor="let pane of renderedContentTemplates">
         <div *dxTemplate="let data of pane.name" class="pane-content">
-          <div class="pane-title">{{ pane.name }}</div>
-          <div class="pane-state">{{ getPaneState(data) }}</div>
-          <ng-container *ngFor="let item of filterDimensionOptions(data)">
-            <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
-          </ng-container>
+          <ng-template 
+              [ngTemplateOutlet]="customPaneTemplate" 
+              [ngTemplateOutletContext]="{ data: data, title: pane.name }">
+          </ng-template>
         </div>
       </ng-container>
     </dx-splitter>
@@ -66,11 +64,18 @@
 
   <ng-container *ngFor="let pane of renderedContentTemplates">
     <div *dxTemplate="let data of pane.name" class="pane-content">
-      <div class="pane-title">{{ pane.name }}</div>
-      <div class="pane-state">{{ getPaneState(data) }}</div>
-      <ng-container *ngFor="let item of filterDimensionOptions(data)">
-        <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
-      </ng-container>
+      <ng-template 
+          [ngTemplateOutlet]="customPaneTemplate" 
+          [ngTemplateOutletContext]="{ data: data, title: pane.name }">
+      </ng-template>
     </div>
   </ng-container>
 </dx-splitter>
+
+<ng-template #customPaneTemplate let-data="data" let-title="title">
+  <div class="pane-title">{{ title }}</div>
+  <div class="pane-state">{{ getPaneState(data) }}</div>
+  <ng-container *ngFor="let item of filterDimensionOptions(data)">
+    <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+  </ng-container>
+</ng-template>
