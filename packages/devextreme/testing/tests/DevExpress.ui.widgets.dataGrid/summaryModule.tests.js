@@ -444,7 +444,7 @@ QUnit.module('Summary footer', {
         });
 
         // assert
-        assert.equal($cellElements[0].text(), 119, 'column is not command');
+        assert.equal($cellElements[0].find('.dx-datagrid-summary-item').text(), 119, 'column is not command');
 
         // act
         summaryModule.renderSummaryCell($cellElements[1], {
@@ -890,9 +890,9 @@ QUnit.module('Footer with real dataController and columnController', {
 
         // assert
         assert.equal($summaryCells.length, 4, 'cells count');
-        assert.equal($summaryCells.eq(0).children().length, 2, '1 cell children count');
-        assert.equal($summaryCells.eq(1).children().length, 0, '2 cell children count');
-        assert.equal($summaryCells.eq(2).children().length, 0, '3 cell children count');
+        assert.equal($summaryCells.eq(0).find('.dx-datagrid-summary-item').length, 2, '1 cell children count');
+        assert.equal($summaryCells.eq(1).find('.dx-datagrid-summary-item').length, 0, '2 cell children count');
+        assert.equal($summaryCells.eq(2).find('.dx-datagrid-summary-item').length, 0, '3 cell children count');
         assert.equal($summary.eq(0).text(), 'Count: 7', 'names count');
         assert.equal($summary.eq(1).text(), 'Max of Test cash is $1,200,700', 'max cash');
     });
@@ -1004,7 +1004,7 @@ QUnit.module('Footer with real dataController and columnController', {
         assert.equal(testElement.find('.dx-datagrid-group-footer').length, 6, 'has group footer rows');
         assert.equal(testElement.find('.dx-datagrid-group-footer').first().find('td').length, 4, 'count cell in group footer row');
         assert.strictEqual(testElement.find('.dx-datagrid-group-footer').first().find('td').eq(0).html(), '&nbsp;', 'text first cell in group footer row');
-        assert.strictEqual(testElement.find('.dx-datagrid-group-footer').first().find('td').eq(1).text(), 'Count: 1', 'text second cell in group footer row');
+        assert.strictEqual(testElement.find('.dx-datagrid-group-footer').first().find('td').eq(1).find('.dx-datagrid-summary-item').text(), 'Count: 1', 'text second cell in group footer row');
         assert.strictEqual(testElement.find('.dx-datagrid-group-footer').first().find('td').eq(2).text(), '', 'text third cell in group footer row');
         assert.ok(!testElement.find('.dx-datagrid-group-footer').first().find('.dx-datagrid-expand').length, 'not has expand cell in group footer row');
     });
@@ -1070,7 +1070,7 @@ QUnit.module('Footer with real dataController and columnController', {
 
         // assert
         assert.equal($testElement.find('.dx-datagrid-group-footer').length, 6, 'count group footer rows');
-        assert.equal($testElement.find('.dx-datagrid-group-footer').eq(0).children().eq(1).text(), 'Sum Group: 0', 'count group footer rows');
+        assert.equal($testElement.find('.dx-datagrid-group-footer').eq(0).children().eq(1).find('.dx-datagrid-summary-item').text(), 'Sum Group: 0', 'count group footer rows');
     });
 
     // T695403

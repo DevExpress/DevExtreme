@@ -390,30 +390,8 @@ class Splitter extends (CollectionWidget as any) {
           true,
         );
 
-        const {
-          items, width, height,
-        } = this.option();
-
-        const handlesSizeSum = this._getResizeHandlesSize();
-        const elementSize = getElementSize(
-          this.$element(),
-          orientation,
-          width,
-          height,
-          handlesSizeSum,
-        );
-
-        this._itemRestrictions = [];
-
-        getVisibleItems(items).forEach((item) => {
-          this._itemRestrictions.push({
-            resizable: item.resizable !== false,
-            visible: item.visible,
-            size: convertSizeToRatio(item.size, elementSize),
-            maxSize: convertSizeToRatio(item.maxSize, elementSize),
-            minSize: convertSizeToRatio(item.minSize, elementSize),
-          });
-        });
+        const { items } = this.option();
+        this._updateItemsRestrictions(getVisibleItems(items));
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
@@ -567,28 +545,37 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getDefaultLayoutBasedOnSize(): number[] {
-    const {
-      items, orientation, width, height,
-    } = this.option();
+    const { items } = this.option();
+
+    this._updateItemsRestrictions(items);
+
+    const defaultLayout = getDefaultLayout(this._itemRestrictions);
+
+    if (items && items.length === 1) {
+      return defaultLayout;
+    }
+
+    return validateLayout(defaultLayout, this._itemRestrictions);
+  }
+
+  _updateItemsRestrictions(items: Item[]): void {
+    const { orientation } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
-    const elementSize = getElementSize(this.$element(), orientation, width, height, handlesSizeSum);
+    const elementSize = getElementSize(this.$element(), orientation);
 
     this._itemRestrictions = [];
 
     items.forEach((item) => {
       this._itemRestrictions.push({
+        resizable: item.resizable !== false,
         visible: item.visible,
         collapsed: item.collapsed === true,
-        size: convertSizeToRatio(item.size, elementSize),
-        maxSize: convertSizeToRatio(item.maxSize, elementSize),
-        minSize: convertSizeToRatio(item.minSize, elementSize),
+        size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
+        maxSize: convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
+        minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
       });
     });
-
-    const defaultLayout = getDefaultLayout(this._itemRestrictions);
-
-    return validateLayout(defaultLayout, this._itemRestrictions);
   }
 
   _applyFlexGrowFromLayout(layout: number[]): void {
