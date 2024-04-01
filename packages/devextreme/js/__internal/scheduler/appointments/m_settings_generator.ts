@@ -385,20 +385,6 @@ export class DateGeneratorBaseStrategy {
         appointment.rawAppointment.startDateTimeZone,
         true,
       ),
-
-      getPostProcessedException: (date) => {
-        if (isEmptyObject(this.timeZone) || timeZoneUtils.isEqualLocalTimeZone(this.timeZone, date)) {
-          return date;
-        }
-
-        const appointmentOffset = this.timeZoneCalculator.getOffsets(originalAppointmentStartDate).common;
-        const exceptionAppointmentOffset = this.timeZoneCalculator.getOffsets(date).common;
-
-        let diff = appointmentOffset - exceptionAppointmentOffset;
-        diff = this._getProcessedNotNativeDateIfCrossDST(date, diff);
-
-        return new Date(date.getTime() - diff * dateUtils.dateToMilliseconds('hour'));
-      },
     };
   }
 

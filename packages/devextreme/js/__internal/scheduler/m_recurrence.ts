@@ -2,6 +2,7 @@
 import errors from '@js/core/errors';
 import dateUtils from '@js/core/utils/date';
 import { each } from '@js/core/utils/iterator';
+import { dateUtilsTs } from '@ts/core/utils/date';
 import { RRule, RRuleSet } from 'rrule';
 
 import timeZoneUtils from './m_utils_time_zone';
@@ -296,13 +297,13 @@ class RecurrenceProcessor {
         .map((rule) => this.getDateByAsciiString(rule));
 
       exceptionDates.forEach((date) => {
-        if (options.getPostProcessedException) {
-          date = options.getPostProcessedException(date);
-        }
-
-        const utcDate = timeZoneUtils.setOffsetsToDate(
+        const currentDateClientOffset = timeZoneUtils.getClientTimezoneOffset(date);
+        const utcDate = dateUtilsTs.addOffsets(
           date,
-          [-timeZoneUtils.getClientTimezoneOffset(date), options.appointmentTimezoneOffset],
+          [
+            -currentDateClientOffset,
+            options.appointmentTimezoneOffset,
+          ],
         );
 
         this.rRuleSet!.exdate(utcDate);
