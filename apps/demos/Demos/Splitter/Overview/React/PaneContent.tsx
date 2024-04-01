@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
+  
+const dimensionOptions = new Set(['size', 'minSize', 'maxSize'])
 
-export default function PaneContent(paneName: string) {
-  const dimensionOptions = new Set(['size', 'minSize', 'maxSize'])
-
-  return function template(data) {
-    const getPaneState = useMemo(() => {  
+export default function PaneContent({data}) {
+  
+    const getPaneState = (data)=>{
       if (data.resizable !== false && !data.collapsible) {
         return 'Resizable only';
       }
@@ -12,17 +12,16 @@ export default function PaneContent(paneName: string) {
       const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
       
       return `${resizableText} and ${collapsibleText}`;
-    }, [data.resizable, data.collapsible]);
+    }
 
-    const filterDimensionOptions = useMemo(() => Object.entries(data)
+    const filterDimensionOptions = Object.entries(data)
       .filter(([key]) => dimensionOptions.has(key))
-      .map(([key, value]) => ({key, value})),
-    [data]);
+      .map(([key, value]) => ({key, value}));
 
     return (
       <div className="pane-content">
-        <div className="pane-title">{paneName}</div>
-        <div className="pane-state">{getPaneState}</div>
+        <div className="pane-title">{data.paneName}</div>
+        <div className="pane-state">{getPaneState(data)}</div>
         {filterDimensionOptions.map((item, index) => (
           <div className="pane-option" key={index}>
             {item.key}: {item.value}
@@ -31,4 +30,3 @@ export default function PaneContent(paneName: string) {
       </div>
     );
   };
-}
