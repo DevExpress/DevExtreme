@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import 'devextreme-react/text-area';
 import Form, {
   SimpleItem,
@@ -11,17 +11,14 @@ import GroupCaption from './GroupCaption.js';
 import service from './data.js';
 
 const employee = service.getEmployee();
-export default function App() {
-  const groupCaptionRender = useCallback(
-    (iconName) => (data) =>
-      (
-        <GroupCaption
-          iconName={iconName}
-          {...data}
-        />
-      ),
-    [],
+const groupCaptionRender = (iconName) => (data) =>
+  (
+    <GroupCaption
+      iconName={iconName}
+      {...data}
+    />
   );
+export default function App() {
   return (
     <React.Fragment>
       <div className="long-title">
