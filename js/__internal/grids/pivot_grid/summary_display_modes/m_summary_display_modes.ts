@@ -85,25 +85,30 @@ const getPrevCellCrossGroup = function (cell, direction) {
   return prevCell;
 };
 
-const createRunningTotalExpr = function (field) {
+const createRunningTotalExpr = (field) => {
   if (!field.runningTotal) {
     return undefined;
   }
+
   const direction = field.runningTotal === COLUMN ? ROW : COLUMN;
-  return function (e) {
+
+  return (e) => {
     const prevCell = field.allowCrossGroupCalculation
       ? getPrevCellCrossGroup(e, direction)
       : e.prev(direction, false);
-    let value = e.value(true);
-    const prevValue = prevCell && prevCell.value(true);
 
-    if (isDefined(prevValue) && isDefined(value)) {
-      value = prevValue + value;
-    } else if (isDefined(prevValue)) {
-      value = prevValue;
+    const calculatedValue = e.value(true);
+    const originalValue = e.value(false);
+    const prevCalculatedValue = prevCell?.value(true);
+
+    switch (true) {
+      case isDefined(calculatedValue) && isDefined(originalValue) && isDefined(prevCalculatedValue):
+        return prevCalculatedValue + calculatedValue;
+      case isDefined(prevCalculatedValue):
+        return prevCalculatedValue;
+      default:
+        return calculatedValue;
     }
-
-    return value;
   };
 };
 
