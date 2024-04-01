@@ -192,8 +192,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         dataSource: [{ size: '40%', maxSize: '30%' }, { }],
         expectedLayout: ['30.6', '69.4'],
         expectedItemSizes: ['40%', undefined]
-    },
-    {
+    }, {
         dataSource: [{ size: '20%', maxSize: '30%' }, { }],
         expectedLayout: ['20.4', '79.6'],
         expectedItemSizes: ['20%', undefined]
@@ -203,24 +202,36 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         expectedItemSizes: ['40%', undefined]
     }, {
         dataSource: [{ }, { maxSize: '20%' }, { }],
-        expectedLayout: ['45.8503', '20.8163', '33.3333'],
+        expectedLayout: ['39.5918', '20.8163', '39.5918'],
         expectedItemSizes: [undefined, undefined, undefined]
+    },
+    // TODO: the first and second pane sizes should be distributed evenly
+    {
+        dataSource: [{ }, { }, { maxSize: '20%' }, { maxSize: '20%' }],
+        expectedLayout: ['31.25', '26.25', '21.25', '21.25'],
+        expectedItemSizes: [undefined, undefined, undefined, undefined]
+    }, {
+        dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '10%' }],
+        expectedLayout: ['34.0625', '21.25', '34.0625', '10.625'],
+        expectedItemSizes: [undefined, undefined, undefined, undefined]
+    }, {
+        dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '40%' }],
+        expectedLayout: ['26.25', '21.25', '26.25', '26.25'],
+        expectedItemSizes: [undefined, undefined, undefined, undefined]
     }, {
         dataSource: [{ maxSize: '20%' }, { }, { }],
-        expectedLayout: ['20.8163', '45.8503', '33.3333'],
+        expectedLayout: ['20.8163', '39.5918', '39.5918'],
         expectedItemSizes: [undefined, undefined, undefined]
     }, {
         dataSource: [{ }, { }, { maxSize: '20%' }],
-        expectedLayout: ['45.8503', '33.3333', '20.8163'],
+        expectedLayout: ['39.5918', '39.5918', '20.8163'],
         expectedItemSizes: [undefined, undefined, undefined]
-    },
-    // TODO: is it correct?
-    {
+    }, {
         dataSource: [{ maxSize: '20%' }, { size: '10%' }, { }],
-        expectedLayout: ['20.8163', '34.3877', '44.7959304'],
+        expectedLayout: ['20.8163', '10.4082', '68.7755'],
         expectedItemSizes: [undefined, '10%', undefined]
     },
-    // TODO: reanimate this boundary scenario
+    // TODO: support this scenario
     // {
     //     dataSource: [{ maxSize: '10%' }, { maxSize: '10%' }, { maxSize: '10%' }],
     //     expectedLayout: ['20', '35', '45'],
@@ -330,13 +341,13 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     }, {
         resizeDistance: -100,
         dataSource: [{ }, { maxSize: '20%' }, { }],
-        expectedLayout: ['20.3401', '20.8163', '58.844'],
-        expectedItemSizes: [79.7344, 81.6016, 230.672]
+        expectedLayout: ['14.0821', '20.8163', '65.1015'],
+        expectedItemSizes: [55.2031, 81.6016, 255.195]
     }, {
         resizeDistance: 100,
         dataSource: [{ maxSize: '20%' }, { }, { }],
-        expectedLayout: ['20.8163', '45.8503', '33.3333'],
-        expectedItemSizes: [81.6016, 179.734, 130.664]
+        expectedLayout: ['20.8163', '39.5918', '39.5918'],
+        expectedItemSizes: [81.6016, 155.203, 155.203]
     }].forEach(({ resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`pane sizes with maxSize option after resize, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({

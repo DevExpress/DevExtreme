@@ -297,25 +297,16 @@ export function convertSizeToRatio(
 }
 
 export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
-  const layout: number[] = new Array(layoutRestrictions.length).fill(0);
+  let layout = new Array(layoutRestrictions.length).fill(null);
 
-  let numPanelsWithSizes = 0;
+  let numPanelsWithDefinedSize = 0;
   let remainingSize = 100;
 
   layoutRestrictions.forEach((panelConstraints, index) => {
     const { size, visible, collapsed } = panelConstraints;
 
-    if (visible === false) {
-      numPanelsWithSizes += 1;
-
-      layout[index] = 0;
-      remainingSize -= 0;
-
-      return;
-    }
-
-    if (collapsed === true) {
-      numPanelsWithSizes += 1;
+    if (visible === false || collapsed === true) {
+      numPanelsWithDefinedSize += 1;
 
       layout[index] = 0;
       remainingSize -= 0;
@@ -324,28 +315,46 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
     }
 
     if (isDefined(size)) {
-      numPanelsWithSizes += 1;
+      numPanelsWithDefinedSize += 1;
 
       layout[index] = size;
       remainingSize -= size;
     }
   });
 
+  let panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
+
   layoutRestrictions.forEach((panelConstraints, index) => {
-    const { size, visible, collapsed } = panelConstraints;
-
-    if (size == null && visible !== false && collapsed !== true) {
-      const numRemainingPanels = layoutRestrictions.length - numPanelsWithSizes;
-      const newSize = remainingSize / numRemainingPanels;
-
-      numPanelsWithSizes += 1;
-
-      layout[index] = newSize;
-      remainingSize -= newSize;
+    if (layout[index] === null) {
+      if (isDefined(panelConstraints.maxSize) && panelsToDistribute === 1) {
+        layout[index] = remainingSize > panelConstraints.maxSize
+          ? remainingSize
+          : panelConstraints.maxSize;
+        remainingSize -= layout[index];
+        numPanelsWithDefinedSize += 1;
+      } else if (isDefined(panelConstraints.maxSize)
+      && panelConstraints.maxSize < (remainingSize / panelsToDistribute)) {
+        layout[index] = panelConstraints.maxSize;
+        remainingSize -= panelConstraints.maxSize;
+        numPanelsWithDefinedSize += 1;
+      }
     }
   });
 
-  return layout;
+  panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
+
+  if (panelsToDistribute > 0) {
+    const spacePerPanel = remainingSize / panelsToDistribute;
+    layout.forEach((panelSize, index) => {
+      if (panelSize === null) {
+        layout[index] = panelsToDistribute === 1 ? remainingSize : spacePerPanel;
+      }
+    });
+  }
+
+  layout = layout.map((size) => (size === null ? 0 : parseFloat(size.toFixed(PRECISION))));
+
+  return layout as number[];
 }
 
 function adjustAndDistributeLayoutSize(
@@ -388,6 +397,7 @@ export function validateLayout(
   layoutRestrictions: PaneRestrictions[],
 ): number[] {
   const nextLayout = [...prevLayout];
+
   const nextLayoutTotalSize = nextLayout.reduce(
     (accumulated, current) => accumulated + current,
     0,
