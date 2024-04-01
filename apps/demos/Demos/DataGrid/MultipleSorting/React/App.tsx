@@ -9,7 +9,7 @@ const App = () => {
 
   const onPositionSortingChanged = useCallback(() => {
     setPositionDisableSorting((previousPositionDisableSorting) => !previousPositionDisableSorting);
-    dataGridRef.current.instance.columnOption(5, 'sortOrder', undefined);
+    dataGridRef.current.instance().columnOption(5, 'sortOrder', undefined);
   }, []);
 
   return (

@@ -41,7 +41,7 @@ QUnit.performanceTest('render with columnAutoWidth', function(assert) {
         columnAutoWidth: true
     });
 
-    assert.measureStyleRecalculation(measureFunction, DataGrid.IS_RENOVATED_WIDGET ? 14 : 13);
+    assert.measureStyleRecalculation(measureFunction, 14);
 });
 
 QUnit.performanceTest('render with columnFixing', function(assert) {
@@ -53,7 +53,7 @@ QUnit.performanceTest('render with columnFixing', function(assert) {
         }
     });
 
-    assert.measureStyleRecalculation(measureFunction, DataGrid.IS_RENOVATED_WIDGET ? 15 : 14);
+    assert.measureStyleRecalculation(measureFunction, 15);
 });
 
 QUnit.performanceTest('render with virtual scrolling', function(assert) {
@@ -63,7 +63,7 @@ QUnit.performanceTest('render with virtual scrolling', function(assert) {
         scrolling: { mode: 'virtual' }
     });
 
-    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 12 : DataGrid.IS_RENOVATED_WIDGET ? 14 : 13);
+    assert.measureStyleRecalculation(measureFunction, Scrollable.IS_RENOVATED_WIDGET ? 12 : 14);
 });
 
 QUnit.performanceTest('updateDimensions', function(assert) {
@@ -131,7 +131,7 @@ QUnit.performanceTest('refresh with columnAutoWidth', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('refresh');
 
-    assert.measureStyleRecalculation(measureFunction, Pager.IS_RENOVATED_WIDGET ? 4 : 3);
+    assert.measureStyleRecalculation(measureFunction, 5);
 });
 
 QUnit.performanceTest('refresh with columnFixing', function(assert) {
@@ -145,7 +145,7 @@ QUnit.performanceTest('refresh with columnFixing', function(assert) {
 
     const measureFunction = createDataGridMeasureFunction('refresh');
 
-    assert.measureStyleRecalculation(measureFunction, Pager.IS_RENOVATED_WIDGET ? 5 : 4);
+    assert.measureStyleRecalculation(measureFunction, 6);
 });
 
 QUnit.performanceTest('refresh with virtual scrolling', function(assert) {

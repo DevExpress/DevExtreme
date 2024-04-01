@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxDiagram, {
     Properties
 } from "devextreme/ui/diagram";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ContentReadyEvent, CustomCommandEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, dxDiagramCustomCommand, dxDiagramShape } from "devextreme/ui/diagram";
@@ -33,10 +34,8 @@ type IDiagramOptionsNarrowedEvents = {
 type IDiagramOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDiagramOptionsNarrowedEvents> & IHtmlOptions & {
   customShapeRender?: (...params: any) => React.ReactNode;
   customShapeComponent?: React.ComponentType<any>;
-  customShapeKeyFn?: (data: any) => string;
   customShapeToolboxRender?: (...params: any) => React.ReactNode;
   customShapeToolboxComponent?: React.ComponentType<any>;
-  customShapeToolboxKeyFn?: (data: any) => string;
   defaultGridSize?: number | Record<string, any>;
   defaultPageSize?: Record<string, any>;
   defaultZoomLevel?: number | Record<string, any>;
@@ -45,138 +44,79 @@ type IDiagramOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDi
   onZoomLevelChange?: (value: number | Record<string, any>) => void;
 }>
 
-class Diagram extends BaseComponent<React.PropsWithChildren<IDiagramOptions>> {
-
-  public get instance(): dxDiagram {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxDiagram;
-
-  protected subscribableOptions = ["gridSize","gridSize.value","pageSize","pageSize.height","pageSize.width","zoomLevel","zoomLevel.value"];
-
-  protected independentEvents = ["onContentReady","onCustomCommand","onDisposing","onInitialized","onItemClick","onItemDblClick","onRequestEditOperation","onRequestLayoutUpdate"];
-
-  protected _defaults = {
-    defaultGridSize: "gridSize",
-    defaultPageSize: "pageSize",
-    defaultZoomLevel: "zoomLevel"
-  };
-
-  protected _expectedChildren = {
-    contextMenu: { optionName: "contextMenu", isCollectionItem: false },
-    contextToolbox: { optionName: "contextToolbox", isCollectionItem: false },
-    customShape: { optionName: "customShapes", isCollectionItem: true },
-    defaultItemProperties: { optionName: "defaultItemProperties", isCollectionItem: false },
-    edges: { optionName: "edges", isCollectionItem: false },
-    editing: { optionName: "editing", isCollectionItem: false },
-    export: { optionName: "export", isCollectionItem: false },
-    gridSize: { optionName: "gridSize", isCollectionItem: false },
-    historyToolbar: { optionName: "historyToolbar", isCollectionItem: false },
-    mainToolbar: { optionName: "mainToolbar", isCollectionItem: false },
-    nodes: { optionName: "nodes", isCollectionItem: false },
-    pageSize: { optionName: "pageSize", isCollectionItem: false },
-    propertiesPanel: { optionName: "propertiesPanel", isCollectionItem: false },
-    toolbox: { optionName: "toolbox", isCollectionItem: false },
-    viewToolbar: { optionName: "viewToolbar", isCollectionItem: false },
-    zoomLevel: { optionName: "zoomLevel", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "customShapeTemplate",
-    render: "customShapeRender",
-    component: "customShapeComponent",
-    keyFn: "customShapeKeyFn"
-  }, {
-    tmplOption: "customShapeToolboxTemplate",
-    render: "customShapeToolboxRender",
-    component: "customShapeToolboxComponent",
-    keyFn: "customShapeToolboxKeyFn"
-  }];
+interface DiagramRef {
+  instance: () => dxDiagram;
 }
-(Diagram as any).propTypes = {
-  autoZoomMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "fitContent",
-      "fitWidth",
-      "disabled"])
-  ]),
-  contextMenu: PropTypes.object,
-  contextToolbox: PropTypes.object,
-  customShapes: PropTypes.array,
-  defaultItemProperties: PropTypes.object,
-  disabled: PropTypes.bool,
-  edges: PropTypes.object,
-  editing: PropTypes.object,
-  elementAttr: PropTypes.object,
-  export: PropTypes.object,
-  fullScreen: PropTypes.bool,
-  gridSize: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.object
-  ]),
-  hasChanges: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  historyToolbar: PropTypes.object,
-  mainToolbar: PropTypes.object,
-  nodes: PropTypes.object,
-  onContentReady: PropTypes.func,
-  onCustomCommand: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onItemClick: PropTypes.func,
-  onItemDblClick: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onRequestEditOperation: PropTypes.func,
-  onRequestLayoutUpdate: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  pageColor: PropTypes.string,
-  pageOrientation: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "portrait",
-      "landscape"])
-  ]),
-  pageSize: PropTypes.object,
-  propertiesPanel: PropTypes.object,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  showGrid: PropTypes.bool,
-  simpleView: PropTypes.bool,
-  snapToGrid: PropTypes.bool,
-  toolbox: PropTypes.object,
-  units: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "in",
-      "cm",
-      "px"])
-  ]),
-  useNativeScrolling: PropTypes.bool,
-  viewToolbar: PropTypes.object,
-  viewUnits: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "in",
-      "cm",
-      "px"])
-  ]),
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  zoomLevel: PropTypes.oneOfType([
-    PropTypes.number,
-    PropTypes.object
-  ])
-};
+
+const Diagram = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IDiagramOptions>, ref: ForwardedRef<DiagramRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["gridSize","gridSize.value","pageSize","pageSize.height","pageSize.width","zoomLevel","zoomLevel.value"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onCustomCommand","onDisposing","onInitialized","onItemClick","onItemDblClick","onRequestEditOperation","onRequestLayoutUpdate"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultGridSize: "gridSize",
+        defaultPageSize: "pageSize",
+        defaultZoomLevel: "zoomLevel",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        contextMenu: { optionName: "contextMenu", isCollectionItem: false },
+        contextToolbox: { optionName: "contextToolbox", isCollectionItem: false },
+        customShape: { optionName: "customShapes", isCollectionItem: true },
+        defaultItemProperties: { optionName: "defaultItemProperties", isCollectionItem: false },
+        edges: { optionName: "edges", isCollectionItem: false },
+        editing: { optionName: "editing", isCollectionItem: false },
+        export: { optionName: "export", isCollectionItem: false },
+        gridSize: { optionName: "gridSize", isCollectionItem: false },
+        historyToolbar: { optionName: "historyToolbar", isCollectionItem: false },
+        mainToolbar: { optionName: "mainToolbar", isCollectionItem: false },
+        nodes: { optionName: "nodes", isCollectionItem: false },
+        pageSize: { optionName: "pageSize", isCollectionItem: false },
+        propertiesPanel: { optionName: "propertiesPanel", isCollectionItem: false },
+        toolbox: { optionName: "toolbox", isCollectionItem: false },
+        viewToolbar: { optionName: "viewToolbar", isCollectionItem: false },
+        zoomLevel: { optionName: "zoomLevel", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "customShapeTemplate",
+          render: "customShapeRender",
+          component: "customShapeComponent"
+        },
+        {
+          tmplOption: "customShapeToolboxTemplate",
+          render: "customShapeToolboxRender",
+          component: "customShapeToolboxComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IDiagramOptions>>, {
+          WidgetClass: dxDiagram,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IDiagramOptions> & { ref?: Ref<DiagramRef> }) => ReactElement | null;
 
 
 // owners:
@@ -185,9 +125,15 @@ type IAutoLayoutProps = React.PropsWithChildren<{
   orientation?: "horizontal" | "vertical";
   type?: "auto" | "off" | "tree" | "layered";
 }>
-class AutoLayout extends NestedOption<IAutoLayoutProps> {
-  public static OptionName = "autoLayout";
-}
+const _componentAutoLayout = memo(
+  (props: IAutoLayoutProps) => {
+    return React.createElement(NestedOption<IAutoLayoutProps>, { ...props });
+  }
+);
+
+const AutoLayout: typeof _componentAutoLayout & IElementDescriptor = Object.assign(_componentAutoLayout, {
+  OptionName: "autoLayout",
+})
 
 // owners:
 // ContextMenu
@@ -203,10 +149,16 @@ type ICommandProps = React.PropsWithChildren<{
   name?: "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox";
   text?: string;
 }>
-class Command extends NestedOption<ICommandProps> {
-  public static OptionName = "commands";
-  public static IsCollectionItem = true;
-}
+const _componentCommand = memo(
+  (props: ICommandProps) => {
+    return React.createElement(NestedOption<ICommandProps>, { ...props });
+  }
+);
+
+const Command: typeof _componentCommand & IElementDescriptor = Object.assign(_componentCommand, {
+  OptionName: "commands",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Command
@@ -217,10 +169,16 @@ type ICommandItemProps = React.PropsWithChildren<{
   name?: "separator" | "exportSvg" | "exportPng" | "exportJpg" | "undo" | "redo" | "cut" | "copy" | "paste" | "selectAll" | "delete" | "fontName" | "fontSize" | "bold" | "italic" | "underline" | "fontColor" | "lineStyle" | "lineWidth" | "lineColor" | "fillColor" | "textAlignLeft" | "textAlignCenter" | "textAlignRight" | "lock" | "unlock" | "sendToBack" | "bringToFront" | "insertShapeImage" | "editShapeImage" | "deleteShapeImage" | "connectorLineType" | "connectorLineStart" | "connectorLineEnd" | "layoutTreeTopToBottom" | "layoutTreeBottomToTop" | "layoutTreeLeftToRight" | "layoutTreeRightToLeft" | "layoutLayeredTopToBottom" | "layoutLayeredBottomToTop" | "layoutLayeredLeftToRight" | "layoutLayeredRightToLeft" | "fullScreen" | "zoomLevel" | "showGrid" | "snapToGrid" | "gridSize" | "units" | "pageSize" | "pageOrientation" | "pageColor" | "simpleView" | "toolbox";
   text?: string;
 }>
-class CommandItem extends NestedOption<ICommandItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-}
+const _componentCommandItem = memo(
+  (props: ICommandItemProps) => {
+    return React.createElement(NestedOption<ICommandItemProps>, { ...props });
+  }
+);
+
+const CommandItem: typeof _componentCommandItem & IElementDescriptor = Object.assign(_componentCommandItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+})
 
 // owners:
 // CustomShape
@@ -228,10 +186,16 @@ type IConnectionPointProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class ConnectionPoint extends NestedOption<IConnectionPointProps> {
-  public static OptionName = "connectionPoints";
-  public static IsCollectionItem = true;
-}
+const _componentConnectionPoint = memo(
+  (props: IConnectionPointProps) => {
+    return React.createElement(NestedOption<IConnectionPointProps>, { ...props });
+  }
+);
+
+const ConnectionPoint: typeof _componentConnectionPoint & IElementDescriptor = Object.assign(_componentConnectionPoint, {
+  OptionName: "connectionPoints",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Diagram
@@ -239,12 +203,18 @@ type IContextMenuProps = React.PropsWithChildren<{
   commands?: Array<dxDiagramCustomCommand>;
   enabled?: boolean;
 }>
-class ContextMenu extends NestedOption<IContextMenuProps> {
-  public static OptionName = "contextMenu";
-  public static ExpectedChildren = {
+const _componentContextMenu = memo(
+  (props: IContextMenuProps) => {
+    return React.createElement(NestedOption<IContextMenuProps>, { ...props });
+  }
+);
+
+const ContextMenu: typeof _componentContextMenu & IElementDescriptor = Object.assign(_componentContextMenu, {
+  OptionName: "contextMenu",
+  ExpectedChildren: {
     command: { optionName: "commands", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Diagram
@@ -256,9 +226,15 @@ type IContextToolboxProps = React.PropsWithChildren<{
   shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
   width?: number;
 }>
-class ContextToolbox extends NestedOption<IContextToolboxProps> {
-  public static OptionName = "contextToolbox";
-}
+const _componentContextToolbox = memo(
+  (props: IContextToolboxProps) => {
+    return React.createElement(NestedOption<IContextToolboxProps>, { ...props });
+  }
+);
+
+const ContextToolbox: typeof _componentContextToolbox & IElementDescriptor = Object.assign(_componentContextToolbox, {
+  OptionName: "contextToolbox",
+})
 
 // owners:
 // Diagram
@@ -306,29 +282,31 @@ type ICustomShapeProps = React.PropsWithChildren<{
   type?: string;
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
-  keyFn?: (data: any) => string;
   toolboxRender?: (...params: any) => React.ReactNode;
   toolboxComponent?: React.ComponentType<any>;
-  toolboxKeyFn?: (data: any) => string;
 }>
-class CustomShape extends NestedOption<ICustomShapeProps> {
-  public static OptionName = "customShapes";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentCustomShape = memo(
+  (props: ICustomShapeProps) => {
+    return React.createElement(NestedOption<ICustomShapeProps>, { ...props });
+  }
+);
+
+const CustomShape: typeof _componentCustomShape & IElementDescriptor = Object.assign(_componentCustomShape, {
+  OptionName: "customShapes",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     connectionPoint: { optionName: "connectionPoints", isCollectionItem: true }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "template",
     render: "render",
-    component: "component",
-    keyFn: "keyFn"
+    component: "component"
   }, {
     tmplOption: "toolboxTemplate",
     render: "toolboxRender",
-    component: "toolboxComponent",
-    keyFn: "toolboxKeyFn"
-  }];
-}
+    component: "toolboxComponent"
+  }],
+})
 
 // owners:
 // Diagram
@@ -343,9 +321,15 @@ type IDefaultItemPropertiesProps = React.PropsWithChildren<{
   style?: Record<string, any>;
   textStyle?: Record<string, any>;
 }>
-class DefaultItemProperties extends NestedOption<IDefaultItemPropertiesProps> {
-  public static OptionName = "defaultItemProperties";
-}
+const _componentDefaultItemProperties = memo(
+  (props: IDefaultItemPropertiesProps) => {
+    return React.createElement(NestedOption<IDefaultItemPropertiesProps>, { ...props });
+  }
+);
+
+const DefaultItemProperties: typeof _componentDefaultItemProperties & IElementDescriptor = Object.assign(_componentDefaultItemProperties, {
+  OptionName: "defaultItemProperties",
+})
 
 // owners:
 // Diagram
@@ -367,9 +351,15 @@ type IEdgesProps = React.PropsWithChildren<{
   toPointIndexExpr?: ((data: any, value: any) => any) | string;
   zIndexExpr?: ((data: any, value: any) => any) | string;
 }>
-class Edges extends NestedOption<IEdgesProps> {
-  public static OptionName = "edges";
-}
+const _componentEdges = memo(
+  (props: IEdgesProps) => {
+    return React.createElement(NestedOption<IEdgesProps>, { ...props });
+  }
+);
+
+const Edges: typeof _componentEdges & IElementDescriptor = Object.assign(_componentEdges, {
+  OptionName: "edges",
+})
 
 // owners:
 // Diagram
@@ -384,18 +374,30 @@ type IEditingProps = React.PropsWithChildren<{
   allowMoveShape?: boolean;
   allowResizeShape?: boolean;
 }>
-class Editing extends NestedOption<IEditingProps> {
-  public static OptionName = "editing";
-}
+const _componentEditing = memo(
+  (props: IEditingProps) => {
+    return React.createElement(NestedOption<IEditingProps>, { ...props });
+  }
+);
+
+const Editing: typeof _componentEditing & IElementDescriptor = Object.assign(_componentEditing, {
+  OptionName: "editing",
+})
 
 // owners:
 // Diagram
 type IExportProps = React.PropsWithChildren<{
   fileName?: string;
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-}
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // Diagram
@@ -405,12 +407,18 @@ type IGridSizeProps = React.PropsWithChildren<{
   defaultValue?: number;
   onValueChange?: (value: number) => void;
 }>
-class GridSize extends NestedOption<IGridSizeProps> {
-  public static OptionName = "gridSize";
-  public static DefaultsProps = {
+const _componentGridSize = memo(
+  (props: IGridSizeProps) => {
+    return React.createElement(NestedOption<IGridSizeProps>, { ...props });
+  }
+);
+
+const GridSize: typeof _componentGridSize & IElementDescriptor = Object.assign(_componentGridSize, {
+  OptionName: "gridSize",
+  DefaultsProps: {
     defaultValue: "value"
-  };
-}
+  },
+})
 
 // owners:
 // Tab
@@ -423,10 +431,16 @@ type IGroupProps = React.PropsWithChildren<{
   expanded?: boolean;
   shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
 }>
-class Group extends NestedOption<IGroupProps> {
-  public static OptionName = "groups";
-  public static IsCollectionItem = true;
-}
+const _componentGroup = memo(
+  (props: IGroupProps) => {
+    return React.createElement(NestedOption<IGroupProps>, { ...props });
+  }
+);
+
+const Group: typeof _componentGroup & IElementDescriptor = Object.assign(_componentGroup, {
+  OptionName: "groups",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Diagram
@@ -434,12 +448,18 @@ type IHistoryToolbarProps = React.PropsWithChildren<{
   commands?: Array<dxDiagramCustomCommand>;
   visible?: boolean;
 }>
-class HistoryToolbar extends NestedOption<IHistoryToolbarProps> {
-  public static OptionName = "historyToolbar";
-  public static ExpectedChildren = {
+const _componentHistoryToolbar = memo(
+  (props: IHistoryToolbarProps) => {
+    return React.createElement(NestedOption<IHistoryToolbarProps>, { ...props });
+  }
+);
+
+const HistoryToolbar: typeof _componentHistoryToolbar & IElementDescriptor = Object.assign(_componentHistoryToolbar, {
+  OptionName: "historyToolbar",
+  ExpectedChildren: {
     command: { optionName: "commands", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Command
@@ -453,10 +473,16 @@ type IItemProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-class Item extends NestedOption<IItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-}
+const _componentItem = memo(
+  (props: IItemProps) => {
+    return React.createElement(NestedOption<IItemProps>, { ...props });
+  }
+);
+
+const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componentItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Diagram
@@ -464,12 +490,18 @@ type IMainToolbarProps = React.PropsWithChildren<{
   commands?: Array<dxDiagramCustomCommand>;
   visible?: boolean;
 }>
-class MainToolbar extends NestedOption<IMainToolbarProps> {
-  public static OptionName = "mainToolbar";
-  public static ExpectedChildren = {
+const _componentMainToolbar = memo(
+  (props: IMainToolbarProps) => {
+    return React.createElement(NestedOption<IMainToolbarProps>, { ...props });
+  }
+);
+
+const MainToolbar: typeof _componentMainToolbar & IElementDescriptor = Object.assign(_componentMainToolbar, {
+  OptionName: "mainToolbar",
+  ExpectedChildren: {
     command: { optionName: "commands", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Diagram
@@ -498,12 +530,18 @@ type INodesProps = React.PropsWithChildren<{
   widthExpr?: ((data: any, value: any) => any) | string;
   zIndexExpr?: ((data: any, value: any) => any) | string;
 }>
-class Nodes extends NestedOption<INodesProps> {
-  public static OptionName = "nodes";
-  public static ExpectedChildren = {
+const _componentNodes = memo(
+  (props: INodesProps) => {
+    return React.createElement(NestedOption<INodesProps>, { ...props });
+  }
+);
+
+const Nodes: typeof _componentNodes & IElementDescriptor = Object.assign(_componentNodes, {
+  OptionName: "nodes",
+  ExpectedChildren: {
     autoLayout: { optionName: "autoLayout", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Diagram
@@ -520,17 +558,23 @@ type IPageSizeProps = React.PropsWithChildren<{
   defaultWidth?: number;
   onWidthChange?: (value: number) => void;
 }>
-class PageSize extends NestedOption<IPageSizeProps> {
-  public static OptionName = "pageSize";
-  public static DefaultsProps = {
+const _componentPageSize = memo(
+  (props: IPageSizeProps) => {
+    return React.createElement(NestedOption<IPageSizeProps>, { ...props });
+  }
+);
+
+const PageSize: typeof _componentPageSize & IElementDescriptor = Object.assign(_componentPageSize, {
+  OptionName: "pageSize",
+  DefaultsProps: {
     defaultHeight: "height",
     defaultWidth: "width"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     item: { optionName: "items", isCollectionItem: true },
     pageSizeItem: { optionName: "items", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // PageSize
@@ -539,10 +583,16 @@ type IPageSizeItemProps = React.PropsWithChildren<{
   text?: string;
   width?: number;
 }>
-class PageSizeItem extends NestedOption<IPageSizeItemProps> {
-  public static OptionName = "items";
-  public static IsCollectionItem = true;
-}
+const _componentPageSizeItem = memo(
+  (props: IPageSizeItemProps) => {
+    return React.createElement(NestedOption<IPageSizeItemProps>, { ...props });
+  }
+);
+
+const PageSizeItem: typeof _componentPageSizeItem & IElementDescriptor = Object.assign(_componentPageSizeItem, {
+  OptionName: "items",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Diagram
@@ -557,12 +607,18 @@ type IPropertiesPanelProps = React.PropsWithChildren<{
   }[];
   visibility?: "auto" | "visible" | "collapsed" | "disabled";
 }>
-class PropertiesPanel extends NestedOption<IPropertiesPanelProps> {
-  public static OptionName = "propertiesPanel";
-  public static ExpectedChildren = {
+const _componentPropertiesPanel = memo(
+  (props: IPropertiesPanelProps) => {
+    return React.createElement(NestedOption<IPropertiesPanelProps>, { ...props });
+  }
+);
+
+const PropertiesPanel: typeof _componentPropertiesPanel & IElementDescriptor = Object.assign(_componentPropertiesPanel, {
+  OptionName: "propertiesPanel",
+  ExpectedChildren: {
     tab: { optionName: "tabs", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // PropertiesPanel
@@ -574,15 +630,21 @@ type ITabProps = React.PropsWithChildren<{
   }[];
   title?: string;
 }>
-class Tab extends NestedOption<ITabProps> {
-  public static OptionName = "tabs";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentTab = memo(
+  (props: ITabProps) => {
+    return React.createElement(NestedOption<ITabProps>, { ...props });
+  }
+);
+
+const Tab: typeof _componentTab & IElementDescriptor = Object.assign(_componentTab, {
+  OptionName: "tabs",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     command: { optionName: "commands", isCollectionItem: true },
     group: { optionName: "groups", isCollectionItem: true },
     tabGroup: { optionName: "groups", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Tab
@@ -590,13 +652,19 @@ type ITabGroupProps = React.PropsWithChildren<{
   commands?: Array<dxDiagramCustomCommand>;
   title?: string;
 }>
-class TabGroup extends NestedOption<ITabGroupProps> {
-  public static OptionName = "groups";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentTabGroup = memo(
+  (props: ITabGroupProps) => {
+    return React.createElement(NestedOption<ITabGroupProps>, { ...props });
+  }
+);
+
+const TabGroup: typeof _componentTabGroup & IElementDescriptor = Object.assign(_componentTabGroup, {
+  OptionName: "groups",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     command: { optionName: "commands", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Diagram
@@ -613,13 +681,19 @@ type IToolboxProps = React.PropsWithChildren<{
   visibility?: "auto" | "visible" | "collapsed" | "disabled";
   width?: number;
 }>
-class Toolbox extends NestedOption<IToolboxProps> {
-  public static OptionName = "toolbox";
-  public static ExpectedChildren = {
+const _componentToolbox = memo(
+  (props: IToolboxProps) => {
+    return React.createElement(NestedOption<IToolboxProps>, { ...props });
+  }
+);
+
+const Toolbox: typeof _componentToolbox & IElementDescriptor = Object.assign(_componentToolbox, {
+  OptionName: "toolbox",
+  ExpectedChildren: {
     group: { optionName: "groups", isCollectionItem: true },
     toolboxGroup: { optionName: "groups", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Toolbox
@@ -630,10 +704,16 @@ type IToolboxGroupProps = React.PropsWithChildren<{
   shapes?: Array<"text" | "rectangle" | "ellipse" | "cross" | "triangle" | "diamond" | "heart" | "pentagon" | "hexagon" | "octagon" | "star" | "arrowLeft" | "arrowTop" | "arrowRight" | "arrowBottom" | "arrowNorthSouth" | "arrowEastWest" | "process" | "decision" | "terminator" | "predefinedProcess" | "document" | "multipleDocuments" | "manualInput" | "preparation" | "data" | "database" | "hardDisk" | "internalStorage" | "paperTape" | "manualOperation" | "delay" | "storedData" | "display" | "merge" | "connector" | "or" | "summingJunction" | "verticalContainer" | "horizontalContainer" | "cardWithImageOnLeft" | "cardWithImageOnTop" | "cardWithImageOnRight">;
   title?: string;
 }>
-class ToolboxGroup extends NestedOption<IToolboxGroupProps> {
-  public static OptionName = "groups";
-  public static IsCollectionItem = true;
-}
+const _componentToolboxGroup = memo(
+  (props: IToolboxGroupProps) => {
+    return React.createElement(NestedOption<IToolboxGroupProps>, { ...props });
+  }
+);
+
+const ToolboxGroup: typeof _componentToolboxGroup & IElementDescriptor = Object.assign(_componentToolboxGroup, {
+  OptionName: "groups",
+  IsCollectionItem: true,
+})
 
 // owners:
 // Diagram
@@ -641,12 +721,18 @@ type IViewToolbarProps = React.PropsWithChildren<{
   commands?: Array<dxDiagramCustomCommand>;
   visible?: boolean;
 }>
-class ViewToolbar extends NestedOption<IViewToolbarProps> {
-  public static OptionName = "viewToolbar";
-  public static ExpectedChildren = {
+const _componentViewToolbar = memo(
+  (props: IViewToolbarProps) => {
+    return React.createElement(NestedOption<IViewToolbarProps>, { ...props });
+  }
+);
+
+const ViewToolbar: typeof _componentViewToolbar & IElementDescriptor = Object.assign(_componentViewToolbar, {
+  OptionName: "viewToolbar",
+  ExpectedChildren: {
     command: { optionName: "commands", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Diagram
@@ -656,17 +742,24 @@ type IZoomLevelProps = React.PropsWithChildren<{
   defaultValue?: number;
   onValueChange?: (value: number) => void;
 }>
-class ZoomLevel extends NestedOption<IZoomLevelProps> {
-  public static OptionName = "zoomLevel";
-  public static DefaultsProps = {
+const _componentZoomLevel = memo(
+  (props: IZoomLevelProps) => {
+    return React.createElement(NestedOption<IZoomLevelProps>, { ...props });
+  }
+);
+
+const ZoomLevel: typeof _componentZoomLevel & IElementDescriptor = Object.assign(_componentZoomLevel, {
+  OptionName: "zoomLevel",
+  DefaultsProps: {
     defaultValue: "value"
-  };
-}
+  },
+})
 
 export default Diagram;
 export {
   Diagram,
   IDiagramOptions,
+  DiagramRef,
   AutoLayout,
   IAutoLayoutProps,
   Command,

@@ -288,6 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Nincs időzóna",
         "dxScheduler-moreAppointments": "{0} több",
 
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearRange": "Current year range",
         "dxCalendar-todayButtonText": "Ma",
         "dxCalendar-ariaWidgetName": "Naptár",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

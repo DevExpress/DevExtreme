@@ -288,6 +288,10 @@
         "dxScheduler-noTimezoneTitle": "Sin zona horaria",
         "dxScheduler-moreAppointments": "{0} más",
 
+        "dxCalendar-currentDay": "Today",
+        "dxCalendar-currentMonth": "Current month",
+        "dxCalendar-currentYear": "Current year",
+        "dxCalendar-currentYearRange": "Current year range",
         "dxCalendar-todayButtonText": "Hoy",
         "dxCalendar-ariaWidgetName": "Calendario",
         "dxCalendar-previousMonthButtonLabel": "Previous month",

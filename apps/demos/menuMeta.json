@@ -5087,6 +5087,7 @@
           {
             "Title": "Overview",
             "Name": "Overview",
+            "Badge": "Updated",
             "DocUrl": "",
             "Widget": "DropDownButton",
             "DemoType": "Web",

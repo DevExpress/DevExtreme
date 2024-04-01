@@ -11,20 +11,44 @@ $(() => {
     items: downloads,
   });
 
-  $('#two-sections').dxDropDownButton({
+  $('#custom-template').dxDropDownButton({
     items: profileSettings,
     splitButton: true,
     onButtonClick(e) {
-      DevExpress.ui.notify(`Go to ${e.component.option('text')}'s profile`, 'success', 600);
+      DevExpress.ui.notify(`Go to ${e.element.find(".button-title").text()}'s profile`, 'success', 600);
     },
     onItemClick(e) {
       DevExpress.ui.notify(e.itemData.name, 'success', 600);
     },
-    text: 'Sandra Johnson',
-    icon: '../../../../images/gym/coach-woman.png',
     displayExpr: 'name',
     keyExpr: 'id',
     useSelectMode: false,
+    template(data, element) {
+      const $imageContainer = $('<div>')
+        .addClass('button-img-container').appendTo(element);
+
+      $('<div>')
+        .addClass('button-img-indicator').appendTo($imageContainer);
+
+      $('<img>')
+        .addClass('button-img')
+        .attr({
+          src: '../../../../images/employees/51.png',
+          alt: 'employee',
+        }).appendTo($imageContainer);
+
+      const $textContainer = $('<div>')
+        .addClass('text-container').appendTo(element);
+
+      $('<div>')
+        .addClass('button-title').text('Olivia Peyton')
+        .appendTo($textContainer);
+
+      $('<div>')
+        .addClass('button-row').text('IT Manager').appendTo($textContainer);
+
+      return $(element);
+    },
   });
 
   $('#template').dxToolbar({

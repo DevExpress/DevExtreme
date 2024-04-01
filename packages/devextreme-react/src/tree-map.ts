@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxTreeMap, {
     Properties
 } from "devextreme/viz/tree_map";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, DrawnEvent, DrillEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, NodesInitializedEvent, NodesRenderingEvent, dxTreeMapNode } from "devextreme/viz/tree_map";
@@ -36,116 +37,55 @@ type ITreeMapOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ITr
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
 }>
 
-class TreeMap extends BaseComponent<React.PropsWithChildren<ITreeMapOptions>> {
-
-  public get instance(): dxTreeMap {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxTreeMap;
-
-  protected subscribableOptions = ["loadingIndicator","loadingIndicator.show"];
-
-  protected independentEvents = ["onClick","onDisposing","onDrawn","onDrill","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onNodesInitialized","onNodesRendering"];
-
-  protected _defaults = {
-    defaultLoadingIndicator: "loadingIndicator"
-  };
-
-  protected _expectedChildren = {
-    colorizer: { optionName: "colorizer", isCollectionItem: false },
-    export: { optionName: "export", isCollectionItem: false },
-    group: { optionName: "group", isCollectionItem: false },
-    loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
-    size: { optionName: "size", isCollectionItem: false },
-    tile: { optionName: "tile", isCollectionItem: false },
-    title: { optionName: "title", isCollectionItem: false },
-    tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
+interface TreeMapRef {
+  instance: () => dxTreeMap;
 }
-(TreeMap as any).propTypes = {
-  childrenField: PropTypes.string,
-  colorField: PropTypes.string,
-  colorizer: PropTypes.object,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  export: PropTypes.object,
-  group: PropTypes.object,
-  hoverEnabled: PropTypes.bool,
-  idField: PropTypes.string,
-  interactWithGroup: PropTypes.bool,
-  labelField: PropTypes.string,
-  layoutAlgorithm: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "sliceanddice",
-      "squarified",
-      "strip"])
-  ])
-  ]),
-  layoutDirection: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "leftBottomRightTop",
-      "leftTopRightBottom",
-      "rightBottomLeftTop",
-      "rightTopLeftBottom"])
-  ]),
-  loadingIndicator: PropTypes.object,
-  maxDepth: PropTypes.number,
-  onClick: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onDrawn: PropTypes.func,
-  onDrill: PropTypes.func,
-  onExported: PropTypes.func,
-  onExporting: PropTypes.func,
-  onFileSaving: PropTypes.func,
-  onHoverChanged: PropTypes.func,
-  onIncidentOccurred: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onNodesInitialized: PropTypes.func,
-  onNodesRendering: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onSelectionChanged: PropTypes.func,
-  parentField: PropTypes.string,
-  pathModified: PropTypes.bool,
-  redrawOnResize: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  selectionMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "single",
-      "multiple",
-      "none"])
-  ]),
-  size: PropTypes.object,
-  theme: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "generic.dark",
-      "generic.light",
-      "generic.contrast",
-      "generic.carmine",
-      "generic.darkmoon",
-      "generic.darkviolet",
-      "generic.greenmist",
-      "generic.softblue",
-      "material.blue.light",
-      "material.lime.light",
-      "material.orange.light",
-      "material.purple.light",
-      "material.teal.light"])
-  ]),
-  tile: PropTypes.object,
-  title: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  tooltip: PropTypes.object,
-  valueField: PropTypes.string
-};
+
+const TreeMap = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ITreeMapOptions>, ref: ForwardedRef<TreeMapRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["loadingIndicator","loadingIndicator.show"]), []);
+      const independentEvents = useMemo(() => (["onClick","onDisposing","onDrawn","onDrill","onExported","onExporting","onFileSaving","onIncidentOccurred","onInitialized","onNodesInitialized","onNodesRendering"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultLoadingIndicator: "loadingIndicator",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        colorizer: { optionName: "colorizer", isCollectionItem: false },
+        export: { optionName: "export", isCollectionItem: false },
+        group: { optionName: "group", isCollectionItem: false },
+        loadingIndicator: { optionName: "loadingIndicator", isCollectionItem: false },
+        size: { optionName: "size", isCollectionItem: false },
+        tile: { optionName: "tile", isCollectionItem: false },
+        title: { optionName: "title", isCollectionItem: false },
+        tooltip: { optionName: "tooltip", isCollectionItem: false }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ITreeMapOptions>>, {
+          WidgetClass: dxTreeMap,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ITreeMapOptions> & { ref?: Ref<TreeMapRef> }) => ReactElement | null;
 
 
 // owners:
@@ -163,9 +103,15 @@ type IBorderProps = React.PropsWithChildren<{
   opacity?: number;
   visible?: boolean;
 }>
-class Border extends NestedOption<IBorderProps> {
-  public static OptionName = "border";
-}
+const _componentBorder = memo(
+  (props: IBorderProps) => {
+    return React.createElement(NestedOption<IBorderProps>, { ...props });
+  }
+);
+
+const Border: typeof _componentBorder & IElementDescriptor = Object.assign(_componentBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // TreeMap
@@ -177,9 +123,15 @@ type IColorizerProps = React.PropsWithChildren<{
   range?: Array<number>;
   type?: "discrete" | "gradient" | "none" | "range";
 }>
-class Colorizer extends NestedOption<IColorizerProps> {
-  public static OptionName = "colorizer";
-}
+const _componentColorizer = memo(
+  (props: IColorizerProps) => {
+    return React.createElement(NestedOption<IColorizerProps>, { ...props });
+  }
+);
+
+const Colorizer: typeof _componentColorizer & IElementDescriptor = Object.assign(_componentColorizer, {
+  OptionName: "colorizer",
+})
 
 // owners:
 // TreeMap
@@ -192,9 +144,15 @@ type IExportProps = React.PropsWithChildren<{
   printingEnabled?: boolean;
   svgToCanvas?: ((svg: any, canvas: any) => any);
 }>
-class Export extends NestedOption<IExportProps> {
-  public static OptionName = "export";
-}
+const _componentExport = memo(
+  (props: IExportProps) => {
+    return React.createElement(NestedOption<IExportProps>, { ...props });
+  }
+);
+
+const Export: typeof _componentExport & IElementDescriptor = Object.assign(_componentExport, {
+  OptionName: "export",
+})
 
 // owners:
 // GroupLabel
@@ -210,9 +168,15 @@ type IFontProps = React.PropsWithChildren<{
   size?: number | string;
   weight?: number;
 }>
-class Font extends NestedOption<IFontProps> {
-  public static OptionName = "font";
-}
+const _componentFont = memo(
+  (props: IFontProps) => {
+    return React.createElement(NestedOption<IFontProps>, { ...props });
+  }
+);
+
+const Font: typeof _componentFont & IElementDescriptor = Object.assign(_componentFont, {
+  OptionName: "font",
+})
 
 // owners:
 // Tooltip
@@ -224,9 +188,15 @@ type IFormatProps = React.PropsWithChildren<{
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
 }>
-class Format extends NestedOption<IFormatProps> {
-  public static OptionName = "format";
-}
+const _componentFormat = memo(
+  (props: IFormatProps) => {
+    return React.createElement(NestedOption<IFormatProps>, { ...props });
+  }
+);
+
+const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_componentFormat, {
+  OptionName: "format",
+})
 
 // owners:
 // TreeMap
@@ -259,17 +229,23 @@ type IGroupProps = React.PropsWithChildren<{
     color?: string;
   };
 }>
-class Group extends NestedOption<IGroupProps> {
-  public static OptionName = "group";
-  public static ExpectedChildren = {
+const _componentGroup = memo(
+  (props: IGroupProps) => {
+    return React.createElement(NestedOption<IGroupProps>, { ...props });
+  }
+);
+
+const Group: typeof _componentGroup & IElementDescriptor = Object.assign(_componentGroup, {
+  OptionName: "group",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     groupLabel: { optionName: "label", isCollectionItem: false },
     hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
     label: { optionName: "label", isCollectionItem: false },
     selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
     treeMapborder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Group
@@ -278,12 +254,18 @@ type IGroupLabelProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   visible?: boolean;
 }>
-class GroupLabel extends NestedOption<IGroupLabelProps> {
-  public static OptionName = "label";
-  public static ExpectedChildren = {
+const _componentGroupLabel = memo(
+  (props: IGroupLabelProps) => {
+    return React.createElement(NestedOption<IGroupLabelProps>, { ...props });
+  }
+);
+
+const GroupLabel: typeof _componentGroupLabel & IElementDescriptor = Object.assign(_componentGroupLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Group
@@ -295,9 +277,15 @@ type IHoverStyleProps = React.PropsWithChildren<{
   };
   color?: string;
 }>
-class HoverStyle extends NestedOption<IHoverStyleProps> {
-  public static OptionName = "hoverStyle";
-}
+const _componentHoverStyle = memo(
+  (props: IHoverStyleProps) => {
+    return React.createElement(NestedOption<IHoverStyleProps>, { ...props });
+  }
+);
+
+const HoverStyle: typeof _componentHoverStyle & IElementDescriptor = Object.assign(_componentHoverStyle, {
+  OptionName: "hoverStyle",
+})
 
 // owners:
 // Group
@@ -308,9 +296,15 @@ type ILabelProps = React.PropsWithChildren<{
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Label extends NestedOption<ILabelProps> {
-  public static OptionName = "label";
-}
+const _componentLabel = memo(
+  (props: ILabelProps) => {
+    return React.createElement(NestedOption<ILabelProps>, { ...props });
+  }
+);
+
+const Label: typeof _componentLabel & IElementDescriptor = Object.assign(_componentLabel, {
+  OptionName: "label",
+})
 
 // owners:
 // TreeMap
@@ -323,15 +317,21 @@ type ILoadingIndicatorProps = React.PropsWithChildren<{
   defaultShow?: boolean;
   onShowChange?: (value: boolean) => void;
 }>
-class LoadingIndicator extends NestedOption<ILoadingIndicatorProps> {
-  public static OptionName = "loadingIndicator";
-  public static DefaultsProps = {
+const _componentLoadingIndicator = memo(
+  (props: ILoadingIndicatorProps) => {
+    return React.createElement(NestedOption<ILoadingIndicatorProps>, { ...props });
+  }
+);
+
+const LoadingIndicator: typeof _componentLoadingIndicator & IElementDescriptor = Object.assign(_componentLoadingIndicator, {
+  OptionName: "loadingIndicator",
+  DefaultsProps: {
     defaultShow: "show"
-  };
-  public static ExpectedChildren = {
+  },
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Title
@@ -341,9 +341,15 @@ type IMarginProps = React.PropsWithChildren<{
   right?: number;
   top?: number;
 }>
-class Margin extends NestedOption<IMarginProps> {
-  public static OptionName = "margin";
-}
+const _componentMargin = memo(
+  (props: IMarginProps) => {
+    return React.createElement(NestedOption<IMarginProps>, { ...props });
+  }
+);
+
+const Margin: typeof _componentMargin & IElementDescriptor = Object.assign(_componentMargin, {
+  OptionName: "margin",
+})
 
 // owners:
 // Group
@@ -355,9 +361,15 @@ type ISelectionStyleProps = React.PropsWithChildren<{
   };
   color?: string;
 }>
-class SelectionStyle extends NestedOption<ISelectionStyleProps> {
-  public static OptionName = "selectionStyle";
-}
+const _componentSelectionStyle = memo(
+  (props: ISelectionStyleProps) => {
+    return React.createElement(NestedOption<ISelectionStyleProps>, { ...props });
+  }
+);
+
+const SelectionStyle: typeof _componentSelectionStyle & IElementDescriptor = Object.assign(_componentSelectionStyle, {
+  OptionName: "selectionStyle",
+})
 
 // owners:
 // Tooltip
@@ -368,9 +380,15 @@ type IShadowProps = React.PropsWithChildren<{
   offsetY?: number;
   opacity?: number;
 }>
-class Shadow extends NestedOption<IShadowProps> {
-  public static OptionName = "shadow";
-}
+const _componentShadow = memo(
+  (props: IShadowProps) => {
+    return React.createElement(NestedOption<IShadowProps>, { ...props });
+  }
+);
+
+const Shadow: typeof _componentShadow & IElementDescriptor = Object.assign(_componentShadow, {
+  OptionName: "shadow",
+})
 
 // owners:
 // TreeMap
@@ -378,9 +396,15 @@ type ISizeProps = React.PropsWithChildren<{
   height?: number;
   width?: number;
 }>
-class Size extends NestedOption<ISizeProps> {
-  public static OptionName = "size";
-}
+const _componentSize = memo(
+  (props: ISizeProps) => {
+    return React.createElement(NestedOption<ISizeProps>, { ...props });
+  }
+);
+
+const Size: typeof _componentSize & IElementDescriptor = Object.assign(_componentSize, {
+  OptionName: "size",
+})
 
 // owners:
 // Title
@@ -391,12 +415,18 @@ type ISubtitleProps = React.PropsWithChildren<{
   textOverflow?: "ellipsis" | "hide" | "none";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Subtitle extends NestedOption<ISubtitleProps> {
-  public static OptionName = "subtitle";
-  public static ExpectedChildren = {
+const _componentSubtitle = memo(
+  (props: ISubtitleProps) => {
+    return React.createElement(NestedOption<ISubtitleProps>, { ...props });
+  }
+);
+
+const Subtitle: typeof _componentSubtitle & IElementDescriptor = Object.assign(_componentSubtitle, {
+  OptionName: "subtitle",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // TreeMap
@@ -427,17 +457,23 @@ type ITileProps = React.PropsWithChildren<{
     color?: string;
   };
 }>
-class Tile extends NestedOption<ITileProps> {
-  public static OptionName = "tile";
-  public static ExpectedChildren = {
+const _componentTile = memo(
+  (props: ITileProps) => {
+    return React.createElement(NestedOption<ITileProps>, { ...props });
+  }
+);
+
+const Tile: typeof _componentTile & IElementDescriptor = Object.assign(_componentTile, {
+  OptionName: "tile",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     hoverStyle: { optionName: "hoverStyle", isCollectionItem: false },
     label: { optionName: "label", isCollectionItem: false },
     selectionStyle: { optionName: "selectionStyle", isCollectionItem: false },
     tileLabel: { optionName: "label", isCollectionItem: false },
     treeMapborder: { optionName: "border", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Tile
@@ -447,12 +483,18 @@ type ITileLabelProps = React.PropsWithChildren<{
   visible?: boolean;
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class TileLabel extends NestedOption<ITileLabelProps> {
-  public static OptionName = "label";
-  public static ExpectedChildren = {
+const _componentTileLabel = memo(
+  (props: ITileLabelProps) => {
+    return React.createElement(NestedOption<ITileLabelProps>, { ...props });
+  }
+);
+
+const TileLabel: typeof _componentTileLabel & IElementDescriptor = Object.assign(_componentTileLabel, {
+  OptionName: "label",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // TreeMap
@@ -478,14 +520,20 @@ type ITitleProps = React.PropsWithChildren<{
   verticalAlignment?: "bottom" | "top";
   wordWrap?: "normal" | "breakWord" | "none";
 }>
-class Title extends NestedOption<ITitleProps> {
-  public static OptionName = "title";
-  public static ExpectedChildren = {
+const _componentTitle = memo(
+  (props: ITitleProps) => {
+    return React.createElement(NestedOption<ITitleProps>, { ...props });
+  }
+);
+
+const Title: typeof _componentTitle & IElementDescriptor = Object.assign(_componentTitle, {
+  OptionName: "title",
+  ExpectedChildren: {
     font: { optionName: "font", isCollectionItem: false },
     margin: { optionName: "margin", isCollectionItem: false },
     subtitle: { optionName: "subtitle", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // TreeMap
@@ -519,24 +567,28 @@ type ITooltipProps = React.PropsWithChildren<{
   zIndex?: number;
   contentRender?: (...params: any) => React.ReactNode;
   contentComponent?: React.ComponentType<any>;
-  contentKeyFn?: (data: any) => string;
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-  public static ExpectedChildren = {
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+  ExpectedChildren: {
     border: { optionName: "border", isCollectionItem: false },
     font: { optionName: "font", isCollectionItem: false },
     format: { optionName: "format", isCollectionItem: false },
     shadow: { optionName: "shadow", isCollectionItem: false },
     tooltipBorder: { optionName: "border", isCollectionItem: false }
-  };
-  public static TemplateProps = [{
+  },
+  TemplateProps: [{
     tmplOption: "contentTemplate",
     render: "contentRender",
-    component: "contentComponent",
-    keyFn: "contentKeyFn"
-  }];
-}
+    component: "contentComponent"
+  }],
+})
 
 // owners:
 // Tooltip
@@ -547,9 +599,15 @@ type ITooltipBorderProps = React.PropsWithChildren<{
   visible?: boolean;
   width?: number;
 }>
-class TooltipBorder extends NestedOption<ITooltipBorderProps> {
-  public static OptionName = "border";
-}
+const _componentTooltipBorder = memo(
+  (props: ITooltipBorderProps) => {
+    return React.createElement(NestedOption<ITooltipBorderProps>, { ...props });
+  }
+);
+
+const TooltipBorder: typeof _componentTooltipBorder & IElementDescriptor = Object.assign(_componentTooltipBorder, {
+  OptionName: "border",
+})
 
 // owners:
 // Group
@@ -562,14 +620,21 @@ type ITreeMapborderProps = React.PropsWithChildren<{
   color?: string;
   width?: number;
 }>
-class TreeMapborder extends NestedOption<ITreeMapborderProps> {
-  public static OptionName = "border";
-}
+const _componentTreeMapborder = memo(
+  (props: ITreeMapborderProps) => {
+    return React.createElement(NestedOption<ITreeMapborderProps>, { ...props });
+  }
+);
+
+const TreeMapborder: typeof _componentTreeMapborder & IElementDescriptor = Object.assign(_componentTreeMapborder, {
+  OptionName: "border",
+})
 
 export default TreeMap;
 export {
   TreeMap,
   ITreeMapOptions,
+  TreeMapRef,
   Border,
   IBorderProps,
   Colorizer,

@@ -7,6 +7,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import dateSerialization from 'core/utils/date_serialization';
 import dateLocalization from 'localization/date';
+import messageLocalization from 'localization/message';
 
 import 'ui/calendar';
 
@@ -15,9 +16,17 @@ const CALENDAR_CELL_CLASS = 'dx-calendar-cell';
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';
 const CALENDAR_CONTOURED_DATE_CLASS = 'dx-calendar-contoured-date';
 const CALENDAR_WEEK_NUMBER_CELL_CLASS = 'dx-calendar-week-number-cell';
+const CALENDAR_CELL_TODAY_CLASS = 'dx-calendar-today';
 
 const UP_ARROW_KEY_CODE = 'ArrowUp';
 const DOWN_ARROW_KEY_CODE = 'ArrowDown';
+
+const CURRENT_DATE_TEXT = {
+    month: messageLocalization.format('dxCalendar-currentDay'),
+    year: messageLocalization.format('dxCalendar-currentMonth'),
+    decade: messageLocalization.format('dxCalendar-currentYear'),
+    century: messageLocalization.format('dxCalendar-currentYearRange'),
+};
 
 const getShortDate = function(date) {
     return dateSerialization.serializeDate(date, dateUtils.getShortDateFormat());
@@ -918,44 +927,59 @@ QUnit.module('CenturyView disabledDates', {
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
         fx.off = true;
+        this.$element = $('<div>').appendTo('#qunit-fixture');
     },
     afterEach: function() {
+        this.$element.remove();
         fx.off = false;
     }
 }, () => {
-    QUnit.test('getCellAriaLabel method', function(assert) {
-        const expectations = {
-            'month': 'Monday, June 1, 2015',
-            'year': 'June 2015',
-            'decade': '2015',
-            'century': '2010 - 2019'
+    QUnit.module('Calendar cell\'s aria-label', () => {
+        const expectedAriaLabel = {
+            month: 'Monday, June 1, 2015',
+            year: 'June 2015',
+            decade: '2015',
+            century: '2010 - 2019',
         };
 
-        $.each(['month', 'year', 'decade', 'century'], function(_, type) {
-            const $element = $('<div>').appendTo('#qunit-fixture');
+        const views = ['month', 'year', 'decade', 'century'];
 
-            new Views[type]($element, {
-                date: new Date(2015, 5, 1),
-                value: new Date(2015, 5, 1),
-                contouredDate: new Date(2015, 5, 1),
-                firstDayOfWeek: 1,
-                focusStateEnabled: true
+        views.forEach(view => {
+            QUnit.test(`Calendar cell should have a correct aria-label attribute when view is ${view}`, function(assert) {
+                new Views[view](this.$element, {
+                    date: new Date(2015, 5, 1),
+                    value: new Date(2015, 5, 1),
+                    contouredDate: new Date(2015, 5, 1),
+                    firstDayOfWeek: 1,
+                    focusStateEnabled: true,
+                });
+
+                const $cell = this.$element.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+
+                assert.strictEqual($cell.attr('aria-label'), expectedAriaLabel[view], 'aria label is correct');
             });
+        });
 
-            try {
-                const $cell = $element.find('.' + CALENDAR_CONTOURED_DATE_CLASS);
-                assert.equal($cell.attr('aria-label'), expectations[type], 'aria label is correct');
-            } finally {
-                $element.remove();
-            }
+        views.forEach(view => {
+            QUnit.test(`Current date cell should have a correct aria-label attribute when view is ${view}`, function(assert) {
+                new Views[view](this.$element, {
+                    date: new Date(2015, 5, 1),
+                    _todayDate: () => new Date(2015, 5, 1),
+                });
+
+                const $cell = this.$element.find(`.${CALENDAR_CELL_TODAY_CLASS}`);
+
+                const cellAriaLabel = $cell.attr('aria-label');
+                const expectedValue = `${expectedAriaLabel[view]}. ${CURRENT_DATE_TEXT[view]}`;
+
+                assert.strictEqual(cellAriaLabel, expectedValue, 'aria label is correct');
+            });
         });
     });
 
     QUnit.test('check roles across the views', function(assert) {
         ['month', 'year', 'decade', 'century'].forEach((viewName) => {
-            const $element = $('<div>').appendTo('#qunit-fixture');
-
-            new Views[viewName]($element, {
+            new Views[viewName](this.$element, {
                 date: new Date(2015, 5, 1),
                 value: new Date(2015, 5, 1),
                 contouredDate: new Date(2015, 5, 1),
@@ -963,30 +987,26 @@ QUnit.module('Aria accessibility', {
                 focusStateEnabled: true
             });
 
-            try {
-                const $cell = $element.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
-                const $row = $cell.closest('tr');
-                const $table = $row.closest('table');
+            const $cell = this.$element.find(`.${CALENDAR_CONTOURED_DATE_CLASS}`);
+            const $row = $cell.closest('tr');
+            const $table = $row.closest('table');
 
-                assert.equal($cell.attr('role'), 'gridcell', `${viewName} - cell role is correct`);
-                assert.equal($row.attr('role'), 'row', `${viewName} - row role is correct`);
-                assert.equal($table.attr('role'), 'grid', `${viewName} - table role is correct`);
-            } finally {
-                $element.remove();
-            }
+            assert.strictEqual($cell.attr('role'), 'gridcell', `${viewName} - cell role is correct`);
+            assert.strictEqual($row.attr('role'), 'row', `${viewName} - row role is correct`);
+            assert.strictEqual($table.attr('role'), 'grid', `${viewName} - table role is correct`);
         });
     });
 
     QUnit.test('header row of the Month view should have correct attributes', function(assert) {
-        const $element = $('<div>').appendTo('#qunit-fixture');
-        const view = new Views.month($element, {
+        const view = new Views.month(this.$element, {
             date: new Date(2015, 5, 1),
             value: new Date(2015, 5, 1),
             contouredDate: new Date(2015, 5, 1),
             firstDayOfWeek: 1,
             focusStateEnabled: true
         });
-        const $headerCells = $element.find('thead > tr').first().find('th');
+
+        const $headerCells = this.$element.find('thead > tr').first().find('th');
 
         $headerCells.each((index, cell) => {
             const scope = cell.getAttribute('scope');
@@ -999,8 +1019,6 @@ QUnit.module('Aria accessibility', {
             assert.strictEqual(abbr, fullDayCaption, `"${cellText}" cell: correct cell "abbr" attribute`);
             assert.strictEqual(cellText, shortDayCaption, `"${cellText}" cell: correct cell text`);
         });
-
-        $element.remove();
     });
 });
 

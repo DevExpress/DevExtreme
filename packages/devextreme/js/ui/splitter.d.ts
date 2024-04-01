@@ -182,7 +182,7 @@ export interface dxSplitterOptions<
      * @default 8
      * @public
      */
-    separatorSize?: number | string;
+    separatorSize?: number;
     /**
      * @docid
      * @default null

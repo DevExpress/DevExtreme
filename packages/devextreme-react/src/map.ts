@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxMap, {
     Properties
 } from "devextreme/ui/map";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { ClickEvent, DisposingEvent, InitializedEvent, MarkerAddedEvent, MarkerRemovedEvent, ReadyEvent, RouteAddedEvent, RouteRemovedEvent } from "devextreme/ui/map";
@@ -35,92 +36,54 @@ type IMapOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IMapOpt
   onZoomChange?: (value: number) => void;
 }>
 
-class Map extends BaseComponent<React.PropsWithChildren<IMapOptions>> {
-
-  public get instance(): dxMap {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxMap;
-
-  protected subscribableOptions = ["center","markers","routes","zoom"];
-
-  protected independentEvents = ["onClick","onDisposing","onInitialized","onMarkerAdded","onMarkerRemoved","onReady","onRouteAdded","onRouteRemoved"];
-
-  protected _defaults = {
-    defaultCenter: "center",
-    defaultMarkers: "markers",
-    defaultRoutes: "routes",
-    defaultZoom: "zoom"
-  };
-
-  protected _expectedChildren = {
-    apiKey: { optionName: "apiKey", isCollectionItem: false },
-    center: { optionName: "center", isCollectionItem: false },
-    marker: { optionName: "markers", isCollectionItem: true },
-    route: { optionName: "routes", isCollectionItem: true }
-  };
+interface MapRef {
+  instance: () => dxMap;
 }
-(Map as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  apiKey: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  autoAdjust: PropTypes.bool,
-  center: PropTypes.oneOfType([
-    PropTypes.array,
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  controls: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  markerIconSrc: PropTypes.string,
-  markers: PropTypes.array,
-  onClick: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onMarkerAdded: PropTypes.func,
-  onMarkerRemoved: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onReady: PropTypes.func,
-  onRouteAdded: PropTypes.func,
-  onRouteRemoved: PropTypes.func,
-  provider: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bing",
-      "google",
-      "googleStatic"])
-  ]),
-  routes: PropTypes.array,
-  rtlEnabled: PropTypes.bool,
-  tabIndex: PropTypes.number,
-  type: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "hybrid",
-      "roadmap",
-      "satellite"])
-  ]),
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  zoom: PropTypes.number
-};
+
+const Map = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<IMapOptions>, ref: ForwardedRef<MapRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["center","markers","routes","zoom"]), []);
+      const independentEvents = useMemo(() => (["onClick","onDisposing","onInitialized","onMarkerAdded","onMarkerRemoved","onReady","onRouteAdded","onRouteRemoved"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultCenter: "center",
+        defaultMarkers: "markers",
+        defaultRoutes: "routes",
+        defaultZoom: "zoom",
+      }), []);
+
+      const expectedChildren = useMemo(() => ({
+        apiKey: { optionName: "apiKey", isCollectionItem: false },
+        center: { optionName: "center", isCollectionItem: false },
+        marker: { optionName: "markers", isCollectionItem: true },
+        route: { optionName: "routes", isCollectionItem: true }
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<IMapOptions>>, {
+          WidgetClass: dxMap,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          expectedChildren,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<IMapOptions> & { ref?: Ref<MapRef> }) => ReactElement | null;
 
 
 // owners:
@@ -130,9 +93,15 @@ type IApiKeyProps = React.PropsWithChildren<{
   google?: string;
   googleStatic?: string;
 }>
-class ApiKey extends NestedOption<IApiKeyProps> {
-  public static OptionName = "apiKey";
-}
+const _componentApiKey = memo(
+  (props: IApiKeyProps) => {
+    return React.createElement(NestedOption<IApiKeyProps>, { ...props });
+  }
+);
+
+const ApiKey: typeof _componentApiKey & IElementDescriptor = Object.assign(_componentApiKey, {
+  OptionName: "apiKey",
+})
 
 // owners:
 // Map
@@ -140,9 +109,15 @@ type ICenterProps = React.PropsWithChildren<{
   lat?: number;
   lng?: number;
 }>
-class Center extends NestedOption<ICenterProps> {
-  public static OptionName = "center";
-}
+const _componentCenter = memo(
+  (props: ICenterProps) => {
+    return React.createElement(NestedOption<ICenterProps>, { ...props });
+  }
+);
+
+const Center: typeof _componentCenter & IElementDescriptor = Object.assign(_componentCenter, {
+  OptionName: "center",
+})
 
 // owners:
 // Marker
@@ -151,9 +126,15 @@ type ILocationProps = React.PropsWithChildren<{
   lat?: number;
   lng?: number;
 }>
-class Location extends NestedOption<ILocationProps> {
-  public static OptionName = "location";
-}
+const _componentLocation = memo(
+  (props: ILocationProps) => {
+    return React.createElement(NestedOption<ILocationProps>, { ...props });
+  }
+);
+
+const Location: typeof _componentLocation & IElementDescriptor = Object.assign(_componentLocation, {
+  OptionName: "location",
+})
 
 // owners:
 // Map
@@ -169,14 +150,20 @@ type IMarkerProps = React.PropsWithChildren<{
     text?: string;
   };
 }>
-class Marker extends NestedOption<IMarkerProps> {
-  public static OptionName = "markers";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentMarker = memo(
+  (props: IMarkerProps) => {
+    return React.createElement(NestedOption<IMarkerProps>, { ...props });
+  }
+);
+
+const Marker: typeof _componentMarker & IElementDescriptor = Object.assign(_componentMarker, {
+  OptionName: "markers",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     location: { optionName: "location", isCollectionItem: false },
     tooltip: { optionName: "tooltip", isCollectionItem: false }
-  };
-}
+  },
+})
 
 // owners:
 // Map
@@ -190,13 +177,19 @@ type IRouteProps = React.PropsWithChildren<{
   opacity?: number;
   weight?: number;
 }>
-class Route extends NestedOption<IRouteProps> {
-  public static OptionName = "routes";
-  public static IsCollectionItem = true;
-  public static ExpectedChildren = {
+const _componentRoute = memo(
+  (props: IRouteProps) => {
+    return React.createElement(NestedOption<IRouteProps>, { ...props });
+  }
+);
+
+const Route: typeof _componentRoute & IElementDescriptor = Object.assign(_componentRoute, {
+  OptionName: "routes",
+  IsCollectionItem: true,
+  ExpectedChildren: {
     location: { optionName: "locations", isCollectionItem: true }
-  };
-}
+  },
+})
 
 // owners:
 // Marker
@@ -204,14 +197,21 @@ type ITooltipProps = React.PropsWithChildren<{
   isShown?: boolean;
   text?: string;
 }>
-class Tooltip extends NestedOption<ITooltipProps> {
-  public static OptionName = "tooltip";
-}
+const _componentTooltip = memo(
+  (props: ITooltipProps) => {
+    return React.createElement(NestedOption<ITooltipProps>, { ...props });
+  }
+);
+
+const Tooltip: typeof _componentTooltip & IElementDescriptor = Object.assign(_componentTooltip, {
+  OptionName: "tooltip",
+})
 
 export default Map;
 export {
   Map,
   IMapOptions,
+  MapRef,
   ApiKey,
   IApiKeyProps,
   Center,

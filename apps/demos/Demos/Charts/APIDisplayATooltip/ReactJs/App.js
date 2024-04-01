@@ -26,7 +26,7 @@ function App() {
   );
   const onRegionChanged = useCallback(
     ({ value }) => {
-      const point = pieChartRef.current.instance.getAllSeries()[0].getPointsByArg(value)[0];
+      const point = pieChartRef.current.instance().getAllSeries()[0].getPointsByArg(value)[0];
       showTooltip(point);
     },
     [showTooltip],

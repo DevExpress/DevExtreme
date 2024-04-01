@@ -1,5 +1,6 @@
 import fs from 'fs';
 import tar from 'tar-fs';
+import pkg from '../../package.json';
 import { createUnzip } from 'zlib';
 
 console.log('This is a workaround for working with demos until the wrappers are reworked');
@@ -7,7 +8,7 @@ console.log('Please run "npm run all:build" before this script');
 console.log('This script should be run again after each "npm install" and "npm run all:build"\n\n');
 
 async function main() {
-  const VERSION = '24.1.0';
+  const VERSION = pkg.version;
   const PACKAGES = ['devextreme-angular', 'devextreme-react', 'devextreme-vue'];
 
   await Promise.all(PACKAGES.map(packageName => new Promise<void>((resolve) => {

@@ -31,7 +31,7 @@ function App() {
 
   const customizePoint = useCallback((arg) => {
     if (arg.seriesName === 'Volume') {
-      const point = chartRef.current.instance.getAllSeries()[0]
+      const point = chartRef.current.instance().getAllSeries()[0]
         .getPointsByArg(arg.argument)[0].data;
       if (point && point.close >= point.open) {
         return { color: '#1db2f5' };

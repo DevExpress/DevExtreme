@@ -78,6 +78,10 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
     }
   }
 
+  .dx-treelist-expanded, .dx-treelist-collapsed {
+    margin-right: $treelist-expanded-collapsed-margin-right;
+  }
+
   tr:not(.dx-row-focused).dx-selection {
     .dx-treelist-empty-space {
       color: $treelist-selection-spin-icon-color;
@@ -133,6 +137,15 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
     left: $treelist-checkbox-offset-left;
     margin-top: $treelist-select-all-checkbox-margin-top;
   }
+
+  .dx-treelist-checkbox-size::before {
+    content: '';
+    width: $treelist-select-all-interaction-area-size;
+    height: $treelist-select-all-interaction-area-size;
+    position: absolute;
+    left: $treelist-select-all-interaction-area-left;
+    top: $treelist-select-all-interaction-area-top;
+  }
 }
 
 .dx-treelist-headers .dx-header-row > .dx-treelist-select-all {
@@ -144,6 +157,9 @@ $treelist-icon-container-padding-right: $generic-grid-base-checkbox-icon-size + 
     .dx-treelist-expanded,
     .dx-treelist-collapsed {
       @include flip-horizontally();
+
+      margin-right: 0;
+      margin-left: $treelist-expanded-collapsed-margin-right;
     }
 
     .dx-treelist-table-fixed {

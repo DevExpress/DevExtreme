@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxSortable, {
     Properties
 } from "devextreme/ui/sortable";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
 import type { AddEvent, DisposingEvent, DragChangeEvent, DragEndEvent, DragMoveEvent, DragStartEvent, InitializedEvent, RemoveEvent, ReorderEvent } from "devextreme/ui/sortable";
@@ -28,86 +29,52 @@ type ISortableOptionsNarrowedEvents = {
 type ISortableOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISortableOptionsNarrowedEvents> & IHtmlOptions & {
   dragRender?: (...params: any) => React.ReactNode;
   dragComponent?: React.ComponentType<any>;
-  dragKeyFn?: (data: any) => string;
 }>
 
-class Sortable extends BaseComponent<React.PropsWithChildren<ISortableOptions>> {
-
-  public get instance(): dxSortable {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxSortable;
-
-  protected independentEvents = ["onAdd","onDisposing","onDragChange","onDragEnd","onDragMove","onDragStart","onInitialized","onRemove","onReorder"];
-
-  protected _expectedChildren = {
-    cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
-  };
-
-  protected _templateProps = [{
-    tmplOption: "dragTemplate",
-    render: "dragRender",
-    component: "dragComponent",
-    keyFn: "dragKeyFn"
-  }];
+interface SortableRef {
+  instance: () => dxSortable;
 }
-(Sortable as any).propTypes = {
-  allowDropInsideItem: PropTypes.bool,
-  allowReordering: PropTypes.bool,
-  autoScroll: PropTypes.bool,
-  cursorOffset: PropTypes.oneOfType([
-    PropTypes.object,
-    PropTypes.string
-  ]),
-  dragDirection: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "both",
-      "horizontal",
-      "vertical"])
-  ]),
-  dropFeedbackMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "push",
-      "indicate"])
-  ]),
-  elementAttr: PropTypes.object,
-  filter: PropTypes.string,
-  group: PropTypes.string,
-  handle: PropTypes.string,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  itemOrientation: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "horizontal",
-      "vertical"])
-  ]),
-  moveItemOnDrop: PropTypes.bool,
-  onAdd: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onDragChange: PropTypes.func,
-  onDragEnd: PropTypes.func,
-  onDragMove: PropTypes.func,
-  onDragStart: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onRemove: PropTypes.func,
-  onReorder: PropTypes.func,
-  rtlEnabled: PropTypes.bool,
-  scrollSensitivity: PropTypes.number,
-  scrollSpeed: PropTypes.number,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Sortable = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ISortableOptions>, ref: ForwardedRef<SortableRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const independentEvents = useMemo(() => (["onAdd","onDisposing","onDragChange","onDragEnd","onDragMove","onDragStart","onInitialized","onRemove","onReorder"]), []);
+
+      const expectedChildren = useMemo(() => ({
+        cursorOffset: { optionName: "cursorOffset", isCollectionItem: false }
+      }), []);
+
+      const templateProps = useMemo(() => ([
+        {
+          tmplOption: "dragTemplate",
+          render: "dragRender",
+          component: "dragComponent"
+        },
+      ]), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ISortableOptions>>, {
+          WidgetClass: dxSortable,
+          ref: baseRef,
+          independentEvents,
+          expectedChildren,
+          templateProps,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ISortableOptions> & { ref?: Ref<SortableRef> }) => ReactElement | null;
 
 
 // owners:
@@ -116,14 +83,21 @@ type ICursorOffsetProps = React.PropsWithChildren<{
   x?: number;
   y?: number;
 }>
-class CursorOffset extends NestedOption<ICursorOffsetProps> {
-  public static OptionName = "cursorOffset";
-}
+const _componentCursorOffset = memo(
+  (props: ICursorOffsetProps) => {
+    return React.createElement(NestedOption<ICursorOffsetProps>, { ...props });
+  }
+);
+
+const CursorOffset: typeof _componentCursorOffset & IElementDescriptor = Object.assign(_componentCursorOffset, {
+  OptionName: "cursorOffset",
+})
 
 export default Sortable;
 export {
   Sortable,
   ISortableOptions,
+  SortableRef,
   CursorOffset,
   ICursorOffsetProps
 };

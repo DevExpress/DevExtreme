@@ -1,10 +1,11 @@
 "use client"
+import * as React from "react";
+import { memo, forwardRef, useImperativeHandle, useRef, useMemo, ForwardedRef, Ref, ReactElement } from "react";
 import dxSwitch, {
     Properties
 } from "devextreme/ui/switch";
 
-import * as PropTypes from "prop-types";
-import { Component as BaseComponent, IHtmlOptions } from "./core/component";
+import { Component as BaseComponent, IHtmlOptions, ComponentRef } from "./core/component";
 
 import type { ContentReadyEvent, DisposingEvent, InitializedEvent, ValueChangedEvent } from "devextreme/ui/switch";
 
@@ -24,82 +25,48 @@ type ISwitchOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, ISwi
   onValueChange?: (value: boolean) => void;
 }>
 
-class Switch extends BaseComponent<React.PropsWithChildren<ISwitchOptions>> {
-
-  public get instance(): dxSwitch {
-    return this._instance;
-  }
-
-  protected _WidgetClass = dxSwitch;
-
-  protected subscribableOptions = ["value"];
-
-  protected independentEvents = ["onContentReady","onDisposing","onInitialized","onValueChanged"];
-
-  protected _defaults = {
-    defaultValue: "value"
-  };
+interface SwitchRef {
+  instance: () => dxSwitch;
 }
-(Switch as any).propTypes = {
-  accessKey: PropTypes.string,
-  activeStateEnabled: PropTypes.bool,
-  disabled: PropTypes.bool,
-  elementAttr: PropTypes.object,
-  focusStateEnabled: PropTypes.bool,
-  height: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ]),
-  hint: PropTypes.string,
-  hoverStateEnabled: PropTypes.bool,
-  isDirty: PropTypes.bool,
-  isValid: PropTypes.bool,
-  name: PropTypes.string,
-  onContentReady: PropTypes.func,
-  onDisposing: PropTypes.func,
-  onInitialized: PropTypes.func,
-  onOptionChanged: PropTypes.func,
-  onValueChanged: PropTypes.func,
-  readOnly: PropTypes.bool,
-  rtlEnabled: PropTypes.bool,
-  switchedOffText: PropTypes.string,
-  switchedOnText: PropTypes.string,
-  tabIndex: PropTypes.number,
-  validationErrors: PropTypes.array,
-  validationMessageMode: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "always",
-      "auto"])
-  ]),
-  validationMessagePosition: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "bottom",
-      "left",
-      "right",
-      "top"])
-  ]),
-  validationStatus: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.oneOf([
-      "valid",
-      "invalid",
-      "pending"])
-  ]),
-  value: PropTypes.bool,
-  visible: PropTypes.bool,
-  width: PropTypes.oneOfType([
-    PropTypes.func,
-    PropTypes.number,
-    PropTypes.string
-  ])
-};
+
+const Switch = memo(
+  forwardRef(
+    (props: React.PropsWithChildren<ISwitchOptions>, ref: ForwardedRef<SwitchRef>) => {
+      const baseRef = useRef<ComponentRef>(null);
+
+      useImperativeHandle(ref, () => (
+        {
+          instance() {
+            return baseRef.current?.getInstance();
+          }
+        }
+      ), [baseRef.current]);
+
+      const subscribableOptions = useMemo(() => (["value"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onValueChanged"]), []);
+
+      const defaults = useMemo(() => ({
+        defaultValue: "value",
+      }), []);
+
+      return (
+        React.createElement(BaseComponent<React.PropsWithChildren<ISwitchOptions>>, {
+          WidgetClass: dxSwitch,
+          ref: baseRef,
+          subscribableOptions,
+          independentEvents,
+          defaults,
+          ...props,
+        })
+      );
+    },
+  ),
+) as (props: React.PropsWithChildren<ISwitchOptions> & { ref?: Ref<SwitchRef> }) => ReactElement | null;
 export default Switch;
 export {
   Switch,
-  ISwitchOptions
+  ISwitchOptions,
+  SwitchRef
 };
 import type * as SwitchTypes from 'devextreme/ui/switch_types';
 export { SwitchTypes };

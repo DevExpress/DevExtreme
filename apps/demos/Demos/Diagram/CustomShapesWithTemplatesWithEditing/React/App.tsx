@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react';
 import Diagram, {
-  CustomShape, ContextToolbox, PropertiesPanel, Group, Tab, Toolbox, Nodes, AutoLayout, DiagramTypes,
+  CustomShape, ContextToolbox, PropertiesPanel, Group, Tab, Toolbox, Nodes, AutoLayout, DiagramTypes, DiagramRef,
 } from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';
@@ -81,7 +81,7 @@ export default function App() {
   const [currentEmployee, setCurrentEmployee] = useState<Partial<Employee>>({});
   const [popupVisible, setPopupVisible] = useState(false);
 
-  const diagramRef = useRef<Diagram>(null);
+  const diagramRef = useRef<DiagramRef>(null);
 
   const editEmployee = useCallback((employee) => {
     setCurrentEmployee({ ...employee });
