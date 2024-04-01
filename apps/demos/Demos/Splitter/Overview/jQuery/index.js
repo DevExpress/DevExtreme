@@ -2,33 +2,35 @@ $(() => {
   const createElementWithClass = function (text, className) {
     return $('<div>').text(text).addClass(className);
   };
-
+  
   const getStateText = function (data) {
     if (data.resizable !== false && !data.collapsible) {
       return 'Resizable only';
     }
-
-    return `${data.resizable ? 'Resizable' : 'Non-resizable'} and ${data.collapsible ? 'collapsible' : 'non-collapsible'}`;
+    const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
+    const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
+    
+    return `${resizableText} and ${collapsibleText}`;
   };
-
+  
   const paneContentTemplate = function (data, paneName) {
     const $content = createElementWithClass('', 'pane-content');
-
+    
     $content.append(createElementWithClass(paneName, 'pane-title'));
-
+    
     $content.append(createElementWithClass(getStateText(data), 'pane-state'));
-
+    
     const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
-
+    
     Object.entries(data)
-      .filter(([key]) => dimensionOptions.has(key))
-      .forEach(([key, value]) => {
-        $content.append(createElementWithClass(`${key}: ${value}`, 'pane-option'));
-      });
-
+    .filter(([key]) => dimensionOptions.has(key))
+    .forEach(([key, value]) => {
+      $content.append(createElementWithClass(`${key}: ${value}`, 'pane-option'));
+    });
+    
     return $content;
   };
-
+  
   $('#splitter').dxSplitter({
     items: [
       {

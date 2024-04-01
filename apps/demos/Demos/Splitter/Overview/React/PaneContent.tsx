@@ -8,7 +8,10 @@ export default function PaneContent(paneName: string) {
       if (data.resizable !== false && !data.collapsible) {
         return 'Resizable only';
       }
-      return `${data.resizable ? 'Resizable' : 'Non-resizable'} and ${data.collapsible ? 'collapsible' : 'non-collapsible'}`;
+      const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
+      const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
+      
+      return `${resizableText} and ${collapsibleText}`;
     }, [data.resizable, data.collapsible]);
 
     const filterDimensionOptions = useMemo(() => Object.entries(data)

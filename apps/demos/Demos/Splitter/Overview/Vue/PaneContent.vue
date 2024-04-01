@@ -32,32 +32,34 @@ const getStateText = function() {
   if (data.resizable !== false && !data.collapsible) {
     return 'Resizable only';
   }
+  const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
+  const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
 
-  return `${data.resizable ? 'Resizable' : 'Non-resizable'} and ${data.collapsible ? 'collapsible' : 'non-collapsible'}`;
+  return `${resizableText} and ${collapsibleText}`;
 };
 const filteredData = computed(() => Object.fromEntries(
   Object.entries(data)
-    .filter(([key]) => dimensionOptions.has(key))
+    .filter(([key]) => dimensionOptions.has(key)),
 ));
 </script>
 
 <style scoped>
-  .pane-content {
-    padding: 12px;
-  }
+.pane-content {
+  padding: 12px;
+}
 
-  .pane-title {
-    font-weight: 600;
-    margin-bottom: 2px;
-  }
+.pane-title {
+  font-weight: 600;
+  margin-bottom: 2px;
+}
 
-  .pane-state {
-    font-size: var(--dx-font-size-xs);
-    margin-bottom: 4px;
-  }
+.pane-state {
+  font-size: var(--dx-font-size-xs);
+  margin-bottom: 4px;
+}
 
-  .pane-option {
-    color: var(--dx-texteditor-color-label);
-    font-size: 10px;
-  }
+.pane-option {
+  color: var(--dx-texteditor-color-label);
+  font-size: 10px;
+}
 </style>

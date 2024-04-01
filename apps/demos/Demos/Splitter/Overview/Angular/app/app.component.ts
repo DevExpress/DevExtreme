@@ -41,8 +41,10 @@ export class AppComponent {
     if (data.resizable !== false && !data.collapsible) {
       return 'Resizable only';
     }
-
-    return `${data.resizable ? 'Resizable' : 'Non-resizable'} and ${data.collapsible ? 'collapsible' : 'non-collapsible'}`;
+    const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
+    const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
+    
+    return `${resizableText} and ${collapsibleText}`;
   }
 
   filterDimensionOptions(data: any): {key: string, value: any}[] {
