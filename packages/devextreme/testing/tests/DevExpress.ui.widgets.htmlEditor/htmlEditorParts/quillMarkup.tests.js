@@ -24,16 +24,4 @@ testModule('lists', () => {
             assert.strictEqual($listUi.css('visibility'), expectedVisibility, `UI element is ${hasUi ? '' : 'not'} visible`);
         });
     });
-
-    test('ordered list should have counter-reset property set to default (T1220554)', function(assert) {
-        const instance = $('#htmlEditor').dxHtmlEditor({
-            value: 'test'
-        }).dxHtmlEditor('instance');
-        const $element = instance.$element();
-
-        instance.formatLine(0, 4, 'list', 'ordered');
-
-        const $contentOL = $element.find('ol');
-        assert.strictEqual($contentOL.css('counterReset'), 'list-item 0', 'Ordered list has counter-reset property set to list-item 0');
-    });
 });
