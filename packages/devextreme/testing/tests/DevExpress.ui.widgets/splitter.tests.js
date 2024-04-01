@@ -17,6 +17,7 @@ const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
+const STATE_ACTIVE_CLASS = 'dx-state-active';
 
 QUnit.testStart(() => {
     const markup =
@@ -1444,11 +1445,11 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             pointer.start().dragStart().drag(10, 10);
 
-            assert.ok(resizeHandle.hasClass('dx-state-active'));
+            assert.ok(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
 
             pointer.dragEnd();
 
-            assert.notOk(resizeHandle.hasClass('dx-state-active'));
+            assert.notOk(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
         });
     });
 
