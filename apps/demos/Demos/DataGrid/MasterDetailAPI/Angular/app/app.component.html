@@ -17,7 +17,11 @@
 
   <div *dxTemplate="let employee of 'detail'">
     <div class="employeeInfo">
-      <img class="employeePhoto" alt="Employee Photo" [src]="employee.data.Picture" />
+      <img
+        class="employeePhoto"
+        alt="Employee Photo"
+        [src]="employee.data.Picture"
+      />
       <p class="employeeNotes">{{ employee.data.Notes }}</p>
     </div>
   </div>

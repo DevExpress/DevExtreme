@@ -21,7 +21,14 @@
 
   <ng-container *dxTemplate="let employee of 'dataRowTemplateName'">
     <tr class="main-row" role="row">
-      <td rowspan="2" role="gridcell"><img [src]="employee.data.Picture" alt="Image of {{employee.data.FirstName}} {{employee.data.LastName}}" tabindex="0"/></td>
+      <td rowspan="2" role="gridcell"
+        ><img
+          [src]="employee.data.Picture"
+          alt="Image of {{ employee.data.FirstName }} {{
+            employee.data.LastName
+          }}"
+          tabindex="0"
+      /></td>
       <td role="gridcell">{{ employee.data.Prefix }}</td>
       <td role="gridcell">{{ employee.data.FirstName }}</td>
       <td role="gridcell">{{ employee.data.LastName }}</td>
