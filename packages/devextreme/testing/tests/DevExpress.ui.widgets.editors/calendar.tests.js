@@ -4724,46 +4724,52 @@ QUnit.module('Aria accessibility', {
 
         calendar.focus();
 
-        let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)));
+        const viewElement = getCurrentViewInstance(calendar).$element();
+        let $cell = $(viewElement.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)));
         const cellId = $cell.attr('id');
 
-        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected exists');
+        assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true');
         assert.notEqual(cellId, undefined, 'contoured cell has id');
 
         keyboard.press('right');
-        assert.equal($cell.attr('id'), undefined, 'id was removed from old contoured date cell');
+        assert.strictEqual($cell.attr('id'), undefined, 'id was removed from old contoured date cell');
 
-        $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)));
+        $cell = $(viewElement.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)));
         const newCellId = $cell.attr('id');
         assert.notEqual(cellId, undefined, 'id was added to new contoured date cell');
         assert.notEqual(cellId, newCellId, 'id was refreshed');
 
         keyboard.press('enter');
-        $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)));
+        $cell = $(viewElement.find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)));
         assert.notEqual($cell.attr('id'), undefined, 'id was not remove when cell was selected');
         assert.notEqual($cell.attr('id'), newCellId, 'id was refreshed again');
     });
 
-    QUnit.test('aria-selected on selected date cell, selectionMode=single', function(assert) {
+    QUnit.test('aria-selected on date cells, selectionMode=single', function(assert) {
         const calendar = this.$element.dxCalendar({
             selectionMode: 'single',
             value: new Date(2015, 5, 1),
-            focusStateEnabled: true
+            focusStateEnabled: true,
         }).dxCalendar('instance');
 
         const keyboard = keyboardMock($(calendar._$viewsWrapper));
 
-        let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+        const viewElement = getCurrentViewInstance(calendar).$element();
+        let $cell = $(viewElement.find(`.${CALENDAR_CELL_CLASS}:not(.${CALENDAR_SELECTED_DATE_CLASS})`)[1]);
+
+        assert.strictEqual($cell.attr('aria-selected'), 'false', 'aria-selected is false on not selected cell');
+
+        $cell = $(viewElement.find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true');
 
         keyboard.press('right');
-        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected still on the cell');
+        assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is still true');
 
         keyboard.press('enter');
-        assert.notOk($cell.attr('aria-selected'), 'aria-selected was removed from the old cell');
+        assert.strictEqual($cell.attr('aria-selected'), 'false', 'aria-selected is false on the old cell');
 
-        $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
+        $cell = $(viewElement.find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+        assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true on the new cell');
     });
 
     QUnit.test('aria-selected on selected date cells on both views when viewsCount option equals 2', function(assert) {
@@ -4773,10 +4779,10 @@ QUnit.module('Aria accessibility', {
         }).dxCalendar('instance');
 
         let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the main view cell');
+        assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true on the main view cell');
 
         $cell = $(getAdditionalViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-        assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the additional view cell');
+        assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true on the additional view cell');
     });
 
     ['multiple', 'range'].forEach((selectionMode) => {
@@ -4784,25 +4790,31 @@ QUnit.module('Aria accessibility', {
             const calendar = this.$element.dxCalendar({
                 value: [new Date(2015, 5, 1)],
                 selectionMode,
-                focusStateEnabled: true
+                focusStateEnabled: true,
             }).dxCalendar('instance');
 
             const keyboard = keyboardMock($(calendar._$viewsWrapper));
 
-            let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-            assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+            const viewElement = getCurrentViewInstance(calendar).$element();
+            let $cell = $(viewElement.find(`.${CALENDAR_CELL_CLASS}:not(.${CALENDAR_SELECTED_DATE_CLASS})`)[1]);
+
+            assert.strictEqual($cell.attr('aria-selected'), 'false', 'aria-selected is false on not selected cell');
+
+            $cell = $(viewElement.find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+            assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true on the cell');
 
             keyboard.press('right');
             keyboard.press('enter');
-            assert.ok($cell.attr('aria-selected'), 'aria-selected was not removed from the old cell');
 
-            $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-            assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the new cell');
+            assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true on the old cell');
+
+            $cell = $(viewElement.find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
+            assert.strictEqual($cell.attr('aria-selected'), 'true', 'aria-selected is true on the new cell');
         });
     });
 
     ['single', 'multiple', 'range'].forEach((selectionMode) => {
-        QUnit.test('aria-selected should be added to selected date cell afrer view change, selectionMode=${selectionMode}', function(assert) {
+        QUnit.test(`aria-selected should be added to selected date cell afrer view change, selectionMode=${selectionMode}`, function(assert) {
             const calendar = this.$element.dxCalendar({
                 selectionMode,
                 value: selectionMode === 'single' ? new Date(2023, 1, 1) : [new Date(2023, 1, 1)],
@@ -4812,13 +4824,13 @@ QUnit.module('Aria accessibility', {
             const keyboard = keyboardMock($(calendar._$viewsWrapper));
 
             let $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-            assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+            assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected is true on the cell');
 
             keyboard.press('up');
             keyboard.press('down');
 
             $cell = $(getCurrentViewInstance(calendar).$element().find(toSelector(CALENDAR_SELECTED_DATE_CLASS)));
-            assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected was added to the cell');
+            assert.equal($cell.attr('aria-selected'), 'true', 'aria-selected is true on the cell');
         });
     });
 

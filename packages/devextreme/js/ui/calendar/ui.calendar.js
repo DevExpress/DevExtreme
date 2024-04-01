@@ -1426,13 +1426,23 @@ const Calendar = Editor.inherit({
         this.setAria('label', localizedNextButtonLabel, this._navigator._nextButton.$element());
     },
 
-    _updateAriaSelected: function(value, previousValue) {
-        previousValue.forEach((item) => { this.setAria('selected', undefined, this._view._getCellByDate(item)); });
-        value.forEach((item) => { this.setAria('selected', true, this._view._getCellByDate(item)); });
+    _updateAriaSelected(value, previousValue) {
+        previousValue.forEach((item) => {
+            this.setAria('selected', false, this._view._getCellByDate(item));
+        });
+
+        value.forEach((item) => {
+            this.setAria('selected', true, this._view._getCellByDate(item));
+        });
 
         if(this.option('viewsCount') > 1) {
-            previousValue.forEach((item) => { this.setAria('selected', undefined, this._additionalView._getCellByDate(item)); });
-            value.forEach((item) => { this.setAria('selected', true, this._additionalView._getCellByDate(item)); });
+            previousValue.forEach((item) => {
+                this.setAria('selected', false, this._additionalView._getCellByDate(item));
+            });
+
+            value.forEach((item) => {
+                this.setAria('selected', true, this._additionalView._getCellByDate(item));
+            });
         }
     },
 

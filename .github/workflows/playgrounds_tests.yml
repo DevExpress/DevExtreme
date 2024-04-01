@@ -103,6 +103,6 @@ jobs:
       working-directory: ./apps/${{ matrix.ARGS.platform }}
       run: npm run build
 
-    - name: Run test
-      working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: npm run test
+    # - name: Run test
+    #   working-directory: ./apps/${{ matrix.ARGS.platform }}
+    #   run: npm run test

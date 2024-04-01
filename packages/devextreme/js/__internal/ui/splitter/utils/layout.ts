@@ -33,8 +33,7 @@ export function getCurrentLayout($items: dxElementWrapper): number[] {
   return itemsDistribution;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function findLastIndexOfVisibleItem(items: any[]): number {
+export function findLastIndexOfVisibleItem(items: Item[]): number {
   for (let i = items.length - 1; i >= 0; i -= 1) {
     if (items[i].visible !== false) {
       return i;
@@ -43,8 +42,7 @@ export function findLastIndexOfVisibleItem(items: any[]): number {
   return -1;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function findIndexOfNextVisibleItem(items: any[], index: number): number {
+export function findIndexOfNextVisibleItem(items: Item[], index: number): number {
   for (let i = index + 1; i < items.length; i += 1) {
     if (items[i].visible !== false) {
       return i;
@@ -63,8 +61,9 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   if (paneRestrictions.collapsed === true) {
     return 0;
   }
-  if (resizable === false) {
-    return paneRestrictions.size as number;
+
+  if (resizable === false && isDefined(paneRestrictions.size)) {
+    return paneRestrictions.size;
   }
 
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
@@ -75,7 +74,6 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   return adjustedSize;
 }
 
-// eslint-disable-next-line max-len
 function findMaxAvailableDelta(
   increment: number,
   currentLayout: number[],
@@ -104,7 +102,6 @@ function findMaxAvailableDelta(
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export function getNewLayout(
   currentLayout: number[],
   delta: number,
@@ -118,7 +115,6 @@ export function getNewLayout(
   const increment = currentDelta < 0 ? 1 : -1;
   let currentItemIndex = currentDelta < 0 ? nextPaneIndex : prevPaneIndex;
 
-  // eslint-disable-next-line max-len
   const maxDelta = findMaxAvailableDelta(
     increment,
     currentLayout,
@@ -254,11 +250,10 @@ function isPercentWidth(size: string | number): boolean {
 }
 
 function isPixelWidth(size: string | number | undefined): boolean {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isNumeric(size) || (isString(size) && size.endsWith('px'));
 }
 
-function calculatePercentage(
+function computeRatio(
   totalSize: number,
   size: number,
 ): number {
@@ -270,52 +265,42 @@ function calculatePercentage(
   return percentage;
 }
 
-// We can do it better
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function convertSizeToRatio(
   size: string | number | undefined,
   totalPanesSize: number,
+  handlesSizeSum: number,
 ): number | undefined {
   if (!isDefined(size)) {
     return size;
   }
 
-  const isPixel = isPixelWidth(size);
-  const sizeNumber = parseFloat(size as string);
+  let sizeAsNumber = isNumeric(size)
+    ? size
+    : parseFloat(size);
 
-  if (isPixel) {
-    return parseFloat(calculatePercentage(totalPanesSize, sizeNumber).toFixed(4));
+  if (isPercentWidth(size)) {
+    sizeAsNumber = (totalPanesSize * sizeAsNumber) / 100;
+  } else if (!isPixelWidth(size)) {
+    return 0;
   }
 
-  const isPercentage = isPercentWidth(size);
-  if (isPercentage) {
-    return sizeNumber;
-  }
+  const adjustedSize = totalPanesSize - handlesSizeSum;
+  const ratio = computeRatio(adjustedSize, sizeAsNumber);
 
-  // todo: handle incorrect size input
-  return 0;
+  return parseFloat(ratio.toFixed(PRECISION));
 }
 
 export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
-  const layout: number[] = new Array(layoutRestrictions.length).fill(0);
+  let layout = new Array(layoutRestrictions.length).fill(null);
 
-  let numPanelsWithSizes = 0;
+  let numPanelsWithDefinedSize = 0;
   let remainingSize = 100;
 
-  layoutRestrictions.forEach((panelConstraints, index) => {
-    const { size, visible, collapsed } = panelConstraints;
+  layoutRestrictions.forEach((paneRestrictions, index) => {
+    const { size, visible, collapsed } = paneRestrictions;
 
-    if (visible === false) {
-      numPanelsWithSizes += 1;
-
-      layout[index] = 0;
-      remainingSize -= 0;
-
-      return;
-    }
-
-    if (collapsed === true) {
-      numPanelsWithSizes += 1;
+    if (visible === false || collapsed === true) {
+      numPanelsWithDefinedSize += 1;
 
       layout[index] = 0;
       remainingSize -= 0;
@@ -324,28 +309,46 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
     }
 
     if (isDefined(size)) {
-      numPanelsWithSizes += 1;
+      numPanelsWithDefinedSize += 1;
 
       layout[index] = size;
       remainingSize -= size;
     }
   });
 
-  layoutRestrictions.forEach((panelConstraints, index) => {
-    const { size, visible, collapsed } = panelConstraints;
+  let panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
 
-    if (size == null && visible !== false && collapsed !== true) {
-      const numRemainingPanels = layoutRestrictions.length - numPanelsWithSizes;
-      const newSize = remainingSize / numRemainingPanels;
-
-      numPanelsWithSizes += 1;
-
-      layout[index] = newSize;
-      remainingSize -= newSize;
+  layoutRestrictions.forEach((paneRestrictions, index) => {
+    if (layout[index] === null) {
+      if (isDefined(paneRestrictions.maxSize) && panelsToDistribute === 1) {
+        layout[index] = remainingSize > paneRestrictions.maxSize
+          ? remainingSize
+          : paneRestrictions.maxSize;
+        remainingSize -= layout[index];
+        numPanelsWithDefinedSize += 1;
+      } else if (isDefined(paneRestrictions.maxSize)
+      && paneRestrictions.maxSize < (remainingSize / panelsToDistribute)) {
+        layout[index] = paneRestrictions.maxSize;
+        remainingSize -= paneRestrictions.maxSize;
+        numPanelsWithDefinedSize += 1;
+      }
     }
   });
 
-  return layout;
+  panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
+
+  if (panelsToDistribute > 0) {
+    const spacePerPanel = remainingSize / panelsToDistribute;
+    layout.forEach((panelSize, index) => {
+      if (panelSize === null) {
+        layout[index] = panelsToDistribute === 1 ? remainingSize : spacePerPanel;
+      }
+    });
+  }
+
+  layout = layout.map((size) => (size === null ? 0 : parseFloat(size.toFixed(PRECISION))));
+
+  return layout as number[];
 }
 
 function adjustAndDistributeLayoutSize(
@@ -392,6 +395,7 @@ export function validateLayout(
   layoutRestrictions: PaneRestrictions[],
 ): number[] {
   const nextLayout = [...prevLayout];
+
   const nextLayoutTotalSize = nextLayout.reduce(
     (accumulated, current) => accumulated + current,
     0,
@@ -409,17 +413,6 @@ export function validateLayout(
   return adjustAndDistributeLayoutSize(nextLayout, layoutRestrictions);
 }
 
-function getElementItemsSizeSum(
-  $element: dxElementWrapper,
-  orientation: Orientation,
-  handlesSizeSum: number,
-): number {
-  const size: number = orientation === ORIENTATION.horizontal
-    ? getWidth($element) : getHeight($element);
-
-  return size - handlesSizeSum;
-}
-
 export function getVisibleItems(items: Item[]): Item[] {
   return items.filter((p) => p.visible !== false);
 }
@@ -431,19 +424,11 @@ export function getVisibleItemsCount(items: Item[]): number {
 export function getElementSize(
   $element: dxElementWrapper,
   orientation: Orientation,
-  width: number | string | undefined,
-  height: number | string | undefined,
-  handlesSizeSum: number,
 ): number {
-  const sizeOption = orientation === ORIENTATION.horizontal ? width : height;
-
-  if (isPixelWidth(sizeOption)) {
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    return sizeOption - handlesSizeSum;
-  }
-
-  return getElementItemsSizeSum($element, orientation, handlesSizeSum);
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+  return orientation === ORIENTATION.horizontal
+    ? getWidth($element)
+    : getHeight($element);
 }
 
 export function isElementVisible(element: HTMLElement | undefined | null): boolean {

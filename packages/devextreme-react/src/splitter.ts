@@ -98,7 +98,6 @@ type IItemProps = React.PropsWithChildren<{
   collapsed?: boolean;
   collapsedSize?: number | string;
   collapsible?: boolean;
-  disabled?: boolean;
   maxSize?: number | string;
   minSize?: number | string;
   resizable?: boolean;
