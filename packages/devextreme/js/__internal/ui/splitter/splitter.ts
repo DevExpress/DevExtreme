@@ -6,6 +6,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import {
@@ -13,6 +14,7 @@ import {
   getOuterWidth,
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import { lock } from '@js/events/core/emitter.feedback';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
@@ -381,6 +383,12 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
+        // @ts-expect-error ts-error
+        this._feedbackDeferred = new Deferred();
+        lock(this._feedbackDeferred);
+        const resizeHandle = $(getPublicElement($(element)));
+        this._toggleActiveState(resizeHandle, true);
+
         this._$visibleItems = this._getVisibleItems();
         this._currentLayout = getCurrentLayout(this._$visibleItems);
         this._activeResizeHandleIndex = this._getResizeHandleItems().index(element);
@@ -396,7 +404,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: resizeHandle,
         });
       },
       onResize: (e: ResizeEvent): void => {
@@ -420,13 +428,17 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
+        const resizeHandle = $(getPublicElement($(element)));
+        this._feedbackDeferred.resolve();
+        this._toggleActiveState(resizeHandle, false);
+
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
         });
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: resizeHandle,
         });
       },
     };
