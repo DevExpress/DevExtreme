@@ -327,7 +327,8 @@ class Splitter extends (CollectionWidget as any) {
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
             itemData: rightItemData,
-            itemElement: $rightItem,
+            itemElement: getPublicElement($rightItem),
+            itemIndex: rightItemIndex,
           });
 
           return;
@@ -340,7 +341,8 @@ class Splitter extends (CollectionWidget as any) {
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
           itemData: leftItemData,
-          itemElement: $leftItem,
+          itemElement: getPublicElement($leftItem),
+          itemIndex: leftItemIndex,
         });
       },
       onCollapseNext: (e: ItemCollapsedEvent | ItemExpandedEvent): void => {
@@ -362,7 +364,8 @@ class Splitter extends (CollectionWidget as any) {
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
             itemData: leftItemData,
-            itemElement: $leftItem,
+            itemElement: getPublicElement($leftItem),
+            itemIndex: leftItemIndex,
           });
 
           return;
@@ -375,7 +378,8 @@ class Splitter extends (CollectionWidget as any) {
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
           itemData: rightItemData,
-          itemElement: $rightItem,
+          itemElement: getPublicElement($rightItem),
+          itemIndex: rightItemIndex,
         });
       },
       onResizeStart: (e: ResizeStartEvent): void => {
