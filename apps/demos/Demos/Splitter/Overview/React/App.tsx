@@ -6,22 +6,31 @@ const PaneContentRender = (title) => (data) => (<PaneContent title={title} {...d
 
 const App = () => (
   <React.Fragment>
-    <Splitter id="splitter">
+    <Splitter 
+    id="splitter"
+    >
       <Item 
       resizable={true} 
       size="140px" 
       minSize="70px" 
       render={PaneContentRender('Left Pane')} 
       />
-      <Item resizable={true}>
-        <Splitter orientation="vertical">
+      <Item 
+      resizable={true}
+      >
+        <Splitter 
+        orientation="vertical"
+        >
           <Item 
           resizable={true} 
           collapsible={true} 
           maxSize="75%" 
           render={PaneContentRender('Central Pane')} 
           /> 
-          <Item resizable={true} collapsible={true}>
+          <Item 
+          resizable={true} 
+          collapsible={true}
+          >
             <Splitter>
               <Item 
               resizable={true} 
