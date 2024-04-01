@@ -30,7 +30,7 @@ fixture.disablePageReloads`HtmlEditor - lists`
 test('ordered list numbering sequence should reset for each list item (T1220554)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'ordered-list-appearance.png', { element: '#dx-htmleditor-content' });
+  await testScreenshot(t, takeScreenshot, 'ordered-list-appearance.png', { element: '#container' });
 
   await t
     .expect(compareResults.isValid())
