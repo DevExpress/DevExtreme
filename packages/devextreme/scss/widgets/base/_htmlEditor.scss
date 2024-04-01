@@ -184,10 +184,6 @@ $transparent-border: 1px solid transparent;
     counter-reset: add-counter-reset($max-indent);
   }
 
-  ol {
-    counter-reset: list-item 0;
-  }
-
   table {
     border-collapse: collapse;
   }
