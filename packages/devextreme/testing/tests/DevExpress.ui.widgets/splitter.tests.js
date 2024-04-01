@@ -1386,6 +1386,29 @@ QUnit.module('Behavoir', moduleConfig, () => {
         assert.strictEqual($resizeHandle.css('width'), '5px');
     });
 
+    [{ allowKeyboardNavigation: true }, { allowKeyboardNavigation: false }].forEach(({ allowKeyboardNavigation }) => {
+        QUnit.test(`Resize handle should have dx-state-active class on interaction when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
+            this.reinit({
+                width: 408,
+                height: 408,
+                allowKeyboardNavigation,
+                dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
+            });
+
+            const resizeHandle = this.getResizeHandles().eq(0);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+
+            pointer.start().dragStart().drag(10, 10);
+
+            assert.ok(resizeHandle.hasClass('dx-state-active'));
+
+            pointer.dragEnd();
+
+            assert.notOk(resizeHandle.hasClass('dx-state-active'));
+        });
+    });
+
     QUnit.test('Resize handle should have correct size when separatorSize is defined on runtime', function(assert) {
         this.reinit({ dataSource: [{ }, { }] });
         this.instance.option('separatorSize', 4);

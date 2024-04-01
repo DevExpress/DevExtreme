@@ -6,6 +6,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import {
@@ -13,6 +14,7 @@ import {
   getOuterWidth,
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import { lock } from '@js/events/core/emitter.feedback';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
@@ -382,8 +384,11 @@ class Splitter extends (CollectionWidget as any) {
         const { element, event } = e;
 
         this._currentLayout = this._layout;
-
-        const $resizeHandle = $(e.element);
+        const $resizeHandle = $(element);
+        // @ts-expect-error ts-error
+        this._feedbackDeferred = new Deferred();
+        lock(this._feedbackDeferred);
+        this._toggleActiveState($resizeHandle, true);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
         const leftItemData = this._getItemData($leftItem);
@@ -402,7 +407,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: getPublicElement($resizeHandle),
         });
       },
       onResize: (e: ResizeEvent): void => {
@@ -426,6 +431,10 @@ class Splitter extends (CollectionWidget as any) {
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
+        const $resizeHandle = $(element);
+
+        this._feedbackDeferred.resolve();
+        this._toggleActiveState($resizeHandle, false);
 
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
@@ -433,7 +442,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: getPublicElement($resizeHandle),
         });
       },
     };
