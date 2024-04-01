@@ -3,7 +3,7 @@ import DataGrid from './index';
 
 const CLASS = {
   dataGrid: 'dx-datagrid',
-
+  cell: 'dx-master-detail-cell',
 };
 
 export default class MasterRow {
@@ -15,5 +15,9 @@ export default class MasterRow {
 
   getDataGrid(): DataGrid {
     return new DataGrid(this.element.find(`.${CLASS.dataGrid}`));
+  }
+
+  getCell(): Selector {
+    return this.element.find(`.${CLASS.cell}`);
   }
 }
