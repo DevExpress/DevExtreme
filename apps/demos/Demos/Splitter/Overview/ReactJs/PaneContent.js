@@ -9,15 +9,14 @@ const getPaneState = (data) => {
   const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
   return `${resizableText} and ${collapsibleText}`;
 };
-const getFilterDimensionOptions = (data) =>
-  Object.entries(data)
-    .filter(([key]) => dimensionOptions.has(key))
-    .map(([key, value]) => ({ key, value }));
+const getFilteredDimensionOptions = (data) => Object.entries(data)
+  .filter(([key]) => dimensionOptions.has(key))
+  .map(([key, value]) => ({ key, value }));
 const PaneContent = (data) => (
   <div className="pane-content">
     <div className="pane-title">{data.title}</div>
     <div className="pane-state">{getPaneState(data)}</div>
-    {getFilterDimensionOptions(data).map((item, index) => (
+    {getFilteredDimensionOptions(data).map((item, index) => (
       <div
         className="pane-option"
         key={index}
