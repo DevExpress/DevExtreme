@@ -30,17 +30,19 @@ fixture.disablePageReloads`Splitter_Icon_Results`
     await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
 
     await t
-      .click(splitter.resizeHandles.nth(0));
-
-    await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
-    await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
-
-    await t
       .dispatchEvent(splitter.resizeHandles.nth(0), 'mousedown')
       .wait(500);
 
     await testScreenshot(t, takeScreenshot, getScreenshotName('active'), { element: '#container' });
     await testScreenshot(t, takeScreenshot, getScreenshotName('active'), { element: '#container', theme: darkTheme });
+
+    await t
+      .dispatchEvent(splitter.resizeHandles.nth(0), 'mouseup');
+
+    if (allowKeyboardNavigation) {
+      await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
+      await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
+    }
 
     await t
       .expect(compareResults.isValid())
