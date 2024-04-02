@@ -378,7 +378,7 @@ function adjustAndDistributeLayoutSize(
 }
 
 export function getSafeSize(size: number, fallBackSize: number): number {
-  return typeof size === 'number' ? size : fallBackSize;
+  return Number.isFinite(size) && size >= 0 ? size : fallBackSize;
 }
 
 export function validateLayout(

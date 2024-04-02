@@ -1376,19 +1376,21 @@ QUnit.module('Initialization', moduleConfig, () => {
 });
 
 QUnit.module('Behavior', moduleConfig, () => {
-    QUnit.test('Resize handle should have correct size when separatorSize is defined on init', function(assert) {
-        this.reinit({
-            dataSource: [{ }, { }],
-            separatorSize: 5,
+    [11, 5, 0].forEach((separatorSize) => {
+        QUnit.test('Resize handle should have correct size when separatorSize is defined on init', function(assert) {
+            this.reinit({
+                dataSource: [{ }, { }],
+                separatorSize,
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+
+            assert.strictEqual($resizeHandle.css('width'), `${separatorSize}px`);
         });
-
-        const $resizeHandle = this.getResizeHandles();
-
-        assert.strictEqual($resizeHandle.css('width'), '5px');
     });
 
     ['horizontal', 'vertical'].forEach((orientation) => {
-        ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 ', '12'].forEach((separatorSize) => {
+        ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 ', '12', -20, NaN, null, undefined].forEach((separatorSize) => {
             QUnit.test(`Resize handle size should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
                 this.reinit({
                     dataSource: [{ size: '500px' }, { size: '500px' }],

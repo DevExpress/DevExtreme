@@ -80,6 +80,8 @@ class SplitterItem extends CollectionWidgetItem {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
+  _resizeHandles: ResizeHandle[] = [];
+
   _getDefaultOptions(): Properties {
     return extend(super._getDefaultOptions(), {
       orientation: ORIENTATION.horizontal,
@@ -388,7 +390,7 @@ class Splitter extends (CollectionWidget as any) {
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
-        this._toggleActiveState($(getPublicElement($(element))), true);
+        this._toggleActiveState($resizeHandle, true);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
         const leftItemData = this._getItemData($leftItem);
@@ -407,7 +409,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: getPublicElement($resizeHandle),
         });
       },
       onResize: (e: ResizeEvent): void => {
@@ -432,8 +434,10 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
+        const $resizeHandle = $(element);
+
         this._feedbackDeferred.resolve();
-        this._toggleActiveState($(getPublicElement($(element))), false);
+        this._toggleActiveState($resizeHandle, false);
 
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
@@ -441,7 +445,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: getPublicElement($resizeHandle),
         });
       },
     };
@@ -472,8 +476,10 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getResizeHandlesSize(): number {
-    // eslint-disable-next-line max-len
-    return this._resizeHandles.reduce((size: number, rh: ResizeHandle) => size + rh.getSize(), 0) as number;
+    return this._resizeHandles.reduce(
+      (size: number, resizeHandle: ResizeHandle) => size + resizeHandle.getSize(),
+      0,
+    );
   }
 
   _renderItemContent(args: unknown): unknown {
