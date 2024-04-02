@@ -5,9 +5,9 @@ import translator from 'animation/translator';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-const { test, module } = QUnit;
+const { test, module, testStart } = QUnit;
 
-initTestMarkup();
+testStart(() => initTestMarkup());
 
 const moduleConfig = {
     beforeEach() {
