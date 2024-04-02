@@ -8,20 +8,33 @@ fixture.disablePageReloads`Splitter_Icon_Results`
   .page(url(__dirname, '../../container.html'));
 
 [true, false].forEach((allowKeyboardNavigation) => {
-  test(`Splitter appearance on different appearance and themes, allowKeyboardNavigation: ${allowKeyboardNavigation}`, async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-    const splitter = new Splitter('#container');
+  const getScreenshotName = (state) => `Splitter apearance - handle in ${state} state.png`;
+  const darkTheme = getFullThemeName().replace('light', 'dark');
 
-    const getScreenshotName = (state) => `Splitter apearance - handle in ${state} state.png`;
-    const darkTheme = getFullThemeName().replace('light', 'dark');
+  test(`ResizeHandle appearance in inactive state, allowKeyboardNavigation: ${allowKeyboardNavigation}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container' });
     await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container', theme: darkTheme });
 
-    await splitter.option('items[1].resizable', true);
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxSplitter', {
+    allowKeyboardNavigation,
+    width: 600,
+    height: 300,
+    dataSource: [{
+      text: 'pane_1',
+    }, {
+      text: 'pane_2',
+      resizable: false,
+    }],
+  }));
 
-    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
-    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
+  test(`ResizeHandle appearance in different states, allowKeyboardNavigation: ${allowKeyboardNavigation}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const splitter = new Splitter('#container');
 
     await t
       .hover(splitter.resizeHandles.nth(0));
@@ -39,7 +52,13 @@ fixture.disablePageReloads`Splitter_Icon_Results`
     await t
       .dispatchEvent(splitter.resizeHandles.nth(0), 'mouseup');
 
+    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
+
     if (allowKeyboardNavigation) {
+      await t
+        .click(splitter.resizeHandles.nth(0));
+
       await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
       await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
     }
@@ -48,17 +67,16 @@ fixture.disablePageReloads`Splitter_Icon_Results`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxSplitter', {
-    orientation: 'horizontal',
     allowKeyboardNavigation,
     width: 600,
     height: 300,
     dataSource: [{
       text: 'pane_1',
+      collapsible: true,
     }, {
       text: 'pane_2',
-      resizable: false,
-    },
-    ],
+      collapsible: true,
+    }],
   }));
 });
 
