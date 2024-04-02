@@ -14,7 +14,6 @@ import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
-import { getSafeSize } from './utils/layout';
 import type {
   CollapseEvents, ResizeEvents, ResizeHandleOptions, ResizeOffset,
 } from './utils/types';
@@ -480,9 +479,13 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   getSize(): number {
     const { separatorSize } = this.option();
 
-    return this._isInactive()
-      ? INACTIVE_RESIZE_HANDLE_SIZE
-      : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
+    if (this._isInactive()) {
+      return INACTIVE_RESIZE_HANDLE_SIZE;
+    }
+
+    return Number.isFinite(separatorSize) && separatorSize >= 0
+      ? separatorSize as number
+      : DEFAULT_RESIZE_HANDLE_SIZE;
   }
 }
 

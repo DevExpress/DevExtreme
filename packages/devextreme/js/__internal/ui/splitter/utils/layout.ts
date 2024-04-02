@@ -377,10 +377,6 @@ function adjustAndDistributeLayoutSize(
   return nextLayout;
 }
 
-export function getSafeSize(size: number, fallBackSize: number): number {
-  return Number.isFinite(size) && size >= 0 ? size : fallBackSize;
-}
-
 export function validateLayout(
   prevLayout: number[],
   layoutRestrictions: PaneRestrictions[],
