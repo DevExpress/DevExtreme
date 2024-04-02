@@ -79,7 +79,7 @@ QUnit.module('Methods', {
         const scheduler = createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
-            timeZone: 5
+            timeZone: 'Etc/GMT-5'
         });
 
         scheduler.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'first' });
@@ -195,7 +195,7 @@ QUnit.module('Methods', {
         const scheduler = createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
-            timeZone: 5
+            timeZone: 'Etc/GMT-5'
         });
 
         this.clock.tick(10);

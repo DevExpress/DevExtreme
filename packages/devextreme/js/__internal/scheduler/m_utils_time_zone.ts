@@ -81,7 +81,13 @@ const calculateTimezoneByValue = (timeZone, date = new Date()) => {
   const correctedDate = new Date(correctedTime);
 
   const utcDate = new Date(correctedDate.toLocaleString('en-US', { timeZone: 'UTC' }));
-  const tzDate = new Date(correctedDate.toLocaleString('en-US', { timeZone }));
+  let tzDate;
+  try {
+    tzDate = new Date(correctedDate.toLocaleString('en-US', { timeZone }));
+  } catch (e) {
+    return undefined;
+  }
+
   const result = (tzDate.getTime() - utcDate.getTime()) / 60 / 1000 / 60;
   // console.log(result);
   return result;
