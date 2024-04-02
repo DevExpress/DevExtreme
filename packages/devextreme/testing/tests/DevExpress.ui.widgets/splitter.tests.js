@@ -1387,14 +1387,8 @@ QUnit.module('Behavior', moduleConfig, () => {
         assert.strictEqual($resizeHandle.css('width'), '5px');
     });
 
-    [
-        { orientation: 'horizontal' },
-        { orientation: 'vertical' },
-    ].forEach(({ orientation }) => {
-        [
-            { separatorSize: '50vh' }, { separatorSize: '20spx' }, { separatorSize: 'd10' }, { separatorSize: 'NaN' },
-            { separatorSize: '2%' }, { separatorSize: '20em' }, { separatorSize: '1vw' }, { separatorSize: '' }
-        ].forEach(({ separatorSize }) => {
+    ['horizontal', 'vertical'].forEach((orientation) => {
+        ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 '].forEach((separatorSize) => {
             QUnit.test(`Resize handle size should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
                 this.reinit({
                     dataSource: [{ size: '500px' }, { size: '500px' }],
@@ -1410,13 +1404,8 @@ QUnit.module('Behavior', moduleConfig, () => {
                 assert.strictEqual($resizeHandle.css(dimension), '8px');
             });
         });
-    });
 
-    [
-        { orientation: 'horizontal', dimension: 'width' },
-        { orientation: 'vertical', dimension: 'height' },
-    ].forEach(({ orientation, dimension }) => {
-        QUnit.test(`Resize handle ${dimension} should fallback to default if separatorSize changed at runtime to incorrect value (orientation=${orientation})`, function(assert) {
+        QUnit.test(`Resize handle size should fallback to default if separatorSize changed at runtime to incorrect value (orientation=${orientation})`, function(assert) {
             this.reinit({
                 dataSource: [{ }, { }],
                 orientation,
@@ -1426,6 +1415,7 @@ QUnit.module('Behavior', moduleConfig, () => {
             this.instance.option('separatorSize', '20vh');
 
             const $resizeHandle = this.getResizeHandles();
+            const dimension = orientation === 'horizontal' ? 'width' : 'height';
 
             assert.strictEqual($resizeHandle.css(dimension), '8px');
         });

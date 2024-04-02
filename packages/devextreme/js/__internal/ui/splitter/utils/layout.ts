@@ -386,8 +386,8 @@ function adjustAndDistributeLayoutSize(
   return nextLayout;
 }
 
-export function getSafeSize(size: number | string, fallBackSize: number): number {
-  return isNumeric(size) ? size : fallBackSize;
+export function getSafeSize(size: number, fallBackSize: number): number {
+  return typeof size === 'number' ? size : fallBackSize;
 }
 
 export function validateLayout(

@@ -168,10 +168,7 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                 assert.strictEqual(this.$element.css(dimension), '8px');
             });
 
-            [
-                { separatorSize: '50vh' }, { separatorSize: '20spx' }, { separatorSize: 'd10' }, { separatorSize: 'NaN' },
-                { separatorSize: '2%' }, { separatorSize: '20em' }, { separatorSize: '1vw' }, { separatorSize: '' }
-            ].forEach(({ separatorSize }) => {
+            ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', '100px ', '100px ', ' 11 '].forEach((separatorSize) => {
                 QUnit.test(`Resize handle ${dimension} should fallback to default if value is incorrect (direction=${direction})`, function(assert) {
                     this.reinit({
                         direction,

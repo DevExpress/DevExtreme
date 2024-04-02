@@ -471,13 +471,8 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getResizeHandlesSize(): number {
-    let size = 0;
-
-    this._resizeHandles.forEach((resizeHandle: ResizeHandle) => {
-      size += resizeHandle.getSize();
-    });
-
-    return size;
+    // eslint-disable-next-line max-len
+    return this._resizeHandles.reduce((size: number, rh: ResizeHandle) => size + rh.getSize(), 0) as number;
   }
 
   _renderItemContent(args: unknown): unknown {

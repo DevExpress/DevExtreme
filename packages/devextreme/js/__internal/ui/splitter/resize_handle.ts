@@ -480,7 +480,8 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   getSize(): number {
     const { separatorSize } = this.option();
 
-    return this._isInactive() ? INACTIVE_RESIZE_HANDLE_SIZE
+    return this._isInactive()
+      ? INACTIVE_RESIZE_HANDLE_SIZE
       : getSafeSize(separatorSize, DEFAULT_RESIZE_HANDLE_SIZE);
   }
 }
