@@ -405,7 +405,7 @@ module('API', moduleConfig, () => {
             currentView: 'week',
             currentDate: new Date(2015, 1, 7),
             dataSource: data,
-            timeZone: 5
+            timeZone: 'Etc/GMT-5',
         });
 
         const updateAppointment = sinon.spy(scheduler.instance, 'updateAppointment');
@@ -1360,7 +1360,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         });
     });
 
-    [5, 'Asia/Calcutta'].forEach(timeZone => {
+    ['Etc/GMT-5', 'Asia/Calcutta'].forEach(timeZone => {
         test(`Appts should be filtered correctly with custom timeZone='${timeZone}'`, function(assert) {
             const scheduler = createWrapper({
                 timeZone,
@@ -1563,7 +1563,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             }],
             startDayHour: 7,
             currentDate: new Date(2015, 4, 25),
-            timeZone: -8,
+            timeZone: 'Etc/GMT+8',
             height: 500,
             currentView: 'week',
             firstDayOfWeek: 1
@@ -1649,7 +1649,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
         startDate: new Date(2015, 1, 4, 5),
         endDate: new Date(2015, 1, 4, 7),
         recurrenceRule: 'FREQ=DAILY',
-        timeZone: 5,
+        timeZone: 'Etc/GMT-5',
         timeZoneNumber: 5
     }, {
         startDate: new Date(2015, 1, 4, 5),
@@ -1782,7 +1782,7 @@ module('Appointment popup', moduleConfig, () => {
         });
     });
 
-    [5, 'Asia/Ashkhabad'].forEach(timeZone => {
+    ['Etc/GMT-5', 'Asia/Ashkhabad'].forEach(timeZone => {
         test(`Appointment startDate and endDate should be correct in the details view, if custom timeZone='${timeZone}' is setting`,
             function(assert) {
                 const startDate = new Date(2015, 3, 11, 11);
@@ -1960,10 +1960,10 @@ module('Fixed client time zone offset', {
             firstDayOfWeek: 1,
             dataSource: appointments,
             startDayHour: 5,
-            timeZone: 3
+            timeZone: 'Etc/GMT-3'
         });
 
-        scheduler.instance.option('timeZone', 4);
+        scheduler.instance.option('timeZone', 'Etc/GMT-4');
 
         const rootElement = scheduler.instance.$element();
         const $appointment = $(rootElement).find(CLASSES.appointment).eq(0);

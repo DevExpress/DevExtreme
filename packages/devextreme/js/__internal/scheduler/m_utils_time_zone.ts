@@ -59,18 +59,34 @@ const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDat
 //   // NOTE: This check could be removed. We don't support numerical timezones
 //   if (typeof timezone === 'string') {
 //     const dateUtc = createUTCDate(date);
-//     return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+//     const result = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+
+//     if (timezone !== undefined) {
+//       // console.log(result);
+//     }
+//     return result;
+//   }
+//   if (timezone !== undefined) {
+//     console.log(timezone);
 //   }
 //   return timezone;
 // };
 
 const calculateTimezoneByValue = (timeZone, date = new Date()) => {
+  if (!timeZone) {
+    return undefined;
+  }
+  if (typeof timeZone !== 'string') {
+    return undefined;
+  }
+
   const correctedTime = date.getTime() - date.getTimezoneOffset() * 60 * 1000;
   const correctedDate = new Date(correctedTime);
 
   const utcDate = new Date(correctedDate.toLocaleString('en-US', { timeZone: 'UTC' }));
   const tzDate = new Date(correctedDate.toLocaleString('en-US', { timeZone }));
   const result = (tzDate.getTime() - utcDate.getTime()) / 60 / 1000 / 60;
+  // console.log(result);
   return result;
 };
 
