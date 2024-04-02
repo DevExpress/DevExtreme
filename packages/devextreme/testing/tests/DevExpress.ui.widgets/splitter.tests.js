@@ -3,12 +3,13 @@ import Splitter from 'ui/splitter';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import { isRenderer, isNumeric } from 'core/utils/type';
+import config from 'core/config';
 import { createEvent } from 'events/utils/index';
 import devices from 'core/devices';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
-import { isNumeric } from 'core/utils/type';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -90,59 +91,65 @@ const moduleConfig = {
 
 QUnit.module('Pane sizing', moduleConfig, () => {
     [{
+        dataSource: [{ minSize: '30%' }],
+        expectedLayout: ['100'],
+        expectedItemSizes: [undefined]
+    }, {
         dataSource: [{ size: '40%', minSize: '30%' }, { }],
-        expectedLayout: ['40', '60'],
+        expectedLayout: ['40.8', '59.2'],
         expectedItemSizes: ['40%', undefined]
-    },
-    {
+    }, {
         dataSource: [{ minSize: '30%' }, { }, { }],
         expectedLayout: ['33.3333', '33.3333', '33.3333'],
         expectedItemSizes: [undefined, undefined, undefined]
-    },
-    {
+    }, {
         dataSource: [{ minSize: '40%' }, { }, { }],
-        expectedLayout: ['40', '26.6667', '33.3333'],
+        expectedLayout: ['41.6326', '25.034', '33.3333'],
         expectedItemSizes: [undefined, undefined, undefined]
     },
     {
         dataSource: [{ }, { minSize: '40%' }, { }],
-        expectedLayout: ['26.6667', '40', '33.3333'],
+        expectedLayout: ['25.034', '41.6326', '33.3333'],
         expectedItemSizes: [undefined, undefined, undefined]
     },
     {
         dataSource: [{ }, { }, { minSize: '40%' }],
-        expectedLayout: ['26.6667', '33.3333', '40'],
+        expectedLayout: ['25.034', '33.3333', '41.6326'],
         expectedItemSizes: [undefined, undefined, undefined]
     },
     {
         dataSource: [{ size: '30%' }, { }, { minSize: '30%' }],
-        expectedLayout: ['30', '35', '35'],
+        expectedLayout: ['31.2245', '34.3877', '34.3877'],
         expectedItemSizes: ['30%', undefined, undefined]
     },
     {
         dataSource: [{ size: '30%' }, { }, { minSize: '30%', size: '40%' }],
-        expectedLayout: ['30', '30', '40'],
+        expectedLayout: ['31.2245', '27.1429', '41.6326'],
         expectedItemSizes: ['30%', undefined, '40%']
     },
-    // TODO: is it correct?
+    {
+        dataSource: [{ }, { }, { size: '20%' }],
+        expectedLayout: ['39.5918', '39.5918', '20.8163'],
+        expectedItemSizes: [undefined, undefined, '20%']
+    },
     {
         dataSource: [{ }, { }, { minSize: '30%', size: '20%' }],
-        expectedLayout: ['30', '40', '30'],
+        expectedLayout: ['29.1837', '39.5918', '31.2245'],
         expectedItemSizes: [undefined, undefined, '20%']
     },
     {
         dataSource: [{ minSize: '50%' }, { }, { minSize: '30%', size: '20%' }],
-        expectedLayout: ['50', '20', '30'],
+        expectedLayout: ['52.0408', '16.7347', '31.2245'],
         expectedItemSizes: [undefined, undefined, '20%']
     },
     {
         dataSource: [{ size: '50%' }, { minSize: '40%' }, { minSize: '40%' }],
-        expectedLayout: ['20', '40', '40'],
+        expectedLayout: ['16.7347', '41.6326', '41.6326'],
         expectedItemSizes: ['50%', undefined, undefined]
     },
     {
         dataSource: [{ }, { size: '40%', minSize: '30%' }],
-        expectedLayout: ['60', '40'],
+        expectedLayout: ['59.2', '40.8'],
         expectedItemSizes: [undefined, '40%']
     },
     {
@@ -165,7 +172,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         expectedLayout: ['75', '25'],
         expectedItemSizes: [200, undefined]
     }].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
-        QUnit.test(`render two panes with minSize option, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+        QUnit.test(`render panes with minSize option, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
                 width: 408,
                 height: 408,
@@ -179,45 +186,60 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     });
 
     [{
+        dataSource: [{ maxSize: '30%' }],
+        expectedLayout: ['100'],
+        expectedItemSizes: [undefined]
+    }, {
         dataSource: [{ size: '40%', maxSize: '30%' }, { }],
-        expectedLayout: ['30', '70'],
+        expectedLayout: ['30.6', '69.4'],
         expectedItemSizes: ['40%', undefined]
-    },
-    {
+    }, {
         dataSource: [{ size: '20%', maxSize: '30%' }, { }],
-        expectedLayout: ['20', '80'],
+        expectedLayout: ['20.4', '79.6'],
         expectedItemSizes: ['20%', undefined]
     }, {
         dataSource: [{ size: '40%' }, { maxSize: '30%' }],
-        expectedLayout: ['70', '30'],
+        expectedLayout: ['69.4', '30.6'],
         expectedItemSizes: ['40%', undefined]
     }, {
         dataSource: [{ }, { maxSize: '20%' }, { }],
-        expectedLayout: ['46.6667', '20', '33.3333'],
+        expectedLayout: ['39.5918', '20.8163', '39.5918'],
         expectedItemSizes: [undefined, undefined, undefined]
+    },
+    // TODO: the first and second pane sizes should be distributed evenly
+    {
+        dataSource: [{ }, { }, { maxSize: '20%' }, { maxSize: '20%' }],
+        expectedLayout: ['31.25', '26.25', '21.25', '21.25'],
+        expectedItemSizes: [undefined, undefined, undefined, undefined]
+    }, {
+        dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '10%' }],
+        expectedLayout: ['34.0625', '21.25', '34.0625', '10.625'],
+        expectedItemSizes: [undefined, undefined, undefined, undefined]
+    }, {
+        dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '40%' }],
+        expectedLayout: ['26.25', '21.25', '26.25', '26.25'],
+        expectedItemSizes: [undefined, undefined, undefined, undefined]
     }, {
         dataSource: [{ maxSize: '20%' }, { }, { }],
-        expectedLayout: ['20', '46.6667', '33.3333'],
+        expectedLayout: ['20.8163', '39.5918', '39.5918'],
         expectedItemSizes: [undefined, undefined, undefined]
     }, {
         dataSource: [{ }, { }, { maxSize: '20%' }],
-        expectedLayout: ['46.6667', '33.3333', '20'],
+        expectedLayout: ['39.5918', '39.5918', '20.8163'],
         expectedItemSizes: [undefined, undefined, undefined]
-    },
-    // TODO: is it correct?
-    {
+    }, {
         dataSource: [{ maxSize: '20%' }, { size: '10%' }, { }],
-        expectedLayout: ['20', '35', '45'],
+        expectedLayout: ['20.8163', '10.4082', '68.7755'],
         expectedItemSizes: [undefined, '10%', undefined]
     },
-    // TODO: reanimate this boundary scenario
+    // TODO: support this scenario
     // {
     //     dataSource: [{ maxSize: '10%' }, { maxSize: '10%' }, { maxSize: '10%' }],
     //     expectedLayout: ['20', '35', '45'],
     //     expectedItemSizes: [undefined, '10%', undefined]
     // }
     ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
-        QUnit.test(`render two panes with maxSize option, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
+        QUnit.test(`render panes with maxSize option, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
                 width: 408,
                 height: 408,
@@ -233,8 +255,8 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     [{
         resizeDistance: 100,
         dataSource: [{ size: '50%', minSize: '30%' }, { }],
-        expectedLayout: ['75', '25'],
-        expectedItemSizes: [300, 100]
+        expectedLayout: ['76', '24'],
+        expectedItemSizes: [304, 96]
     }, {
         resizeDistance: 100,
         dataSource: [{ size: '200px', minSize: '30%' }, { }],
@@ -243,8 +265,8 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     }, {
         resizeDistance: -100,
         dataSource: [{ }, { size: '50%', minSize: '30%' }],
-        expectedLayout: ['25', '75'],
-        expectedItemSizes: [100, 300]
+        expectedLayout: ['24', '76'],
+        expectedItemSizes: [96, 304]
     }, {
         resizeDistance: -100,
         dataSource: [{ }, { size: '200px', minSize: '30%' }],
@@ -253,33 +275,33 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     }, {
         resizeDistance: 100,
         dataSource: [{ }, { minSize: '40%' }],
-        expectedLayout: ['60', '40'],
-        expectedItemSizes: [240, 160]
+        expectedLayout: ['59.2', '40.8'],
+        expectedItemSizes: [236.797, 163.203]
     }, {
         resizeDistance: 100,
         dataSource: [{ }, { size: '60%', minSize: '40%' }],
-        expectedLayout: ['60', '40'],
-        expectedItemSizes: [240, 160]
+        expectedLayout: ['59.2', '40.8'],
+        expectedItemSizes: [236.797, 163.203]
     }, {
         resizeDistance: 100,
         dataSource: [{ size: '10%' }, { minSize: '40%' }],
-        expectedLayout: ['35', '65'],
-        expectedItemSizes: [140, 260]
+        expectedLayout: ['35.2', '64.8'],
+        expectedItemSizes: [140.797, 259.203]
     }, {
         resizeDistance: 200,
         dataSource: [{ size: '10%' }, { minSize: '40%' }],
-        expectedLayout: ['60', '40'],
-        expectedItemSizes: [240, 160]
+        expectedLayout: ['59.2', '40.8'],
+        expectedItemSizes: [236.797, 163.203]
     }, {
         resizeDistance: 100,
         dataSource: [{ }, { minSize: '40%' }, { }],
-        expectedLayout: ['52.1774', '40', '7.82258'],
-        expectedItemSizes: [204.539, 156.797, 30.6641]
+        expectedLayout: ['50.5441', '41.6326', '7.82258'],
+        expectedItemSizes: [198.133, 163.203, 30.6641]
     }, {
         resizeDistance: -200,
         dataSource: [{ minSize: '40%', size: '50%' }, { }, { }],
-        expectedLayout: ['40', '35', '25'],
-        expectedItemSizes: [156.797, 137.203, 98]
+        expectedLayout: ['41.6326', '34.3877', '23.9796'],
+        expectedItemSizes: [163.203, 134.797, 94]
     }].forEach(({ resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`pane sizes with minSize option after resize, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
@@ -300,33 +322,33 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     [{
         resizeDistance: 100,
         dataSource: [{ size: '50%', maxSize: '30%' }, { }],
-        expectedLayout: ['30', '70'],
-        expectedItemSizes: [120, 280]
+        expectedLayout: ['30.6', '69.4'],
+        expectedItemSizes: [122.398, 277.602]
     }, {
         resizeDistance: 100,
         dataSource: [{ size: '300px', maxSize: '30%' }, { }],
-        expectedLayout: ['30', '70'],
-        expectedItemSizes: [120, 280]
+        expectedLayout: ['30.6', '69.4'],
+        expectedItemSizes: [122.398, 277.602]
     }, {
         resizeDistance: -100,
         dataSource: [{ }, { size: '50%', maxSize: '30%' }],
-        expectedLayout: ['70', '30'],
-        expectedItemSizes: [280, 120]
+        expectedLayout: ['69.4', '30.6'],
+        expectedItemSizes: [277.602, 122.398]
     }, {
         resizeDistance: 100,
         dataSource: [{ size: '50%' }, { maxSize: '30%' }],
-        expectedLayout: ['95', '5'],
-        expectedItemSizes: [380, 20]
+        expectedLayout: ['94.4', '5.6'],
+        expectedItemSizes: [377.602, 22.3984]
     }, {
         resizeDistance: -100,
         dataSource: [{ }, { maxSize: '20%' }, { }],
-        expectedLayout: ['21.156', '20', '58.844'],
-        expectedItemSizes: [82.9297, 78.3984, 230.672]
+        expectedLayout: ['14.0821', '20.8163', '65.1015'],
+        expectedItemSizes: [55.2031, 81.6016, 255.195]
     }, {
         resizeDistance: 100,
         dataSource: [{ maxSize: '20%' }, { }, { }],
-        expectedLayout: ['20', '46.6667', '33.3333'],
-        expectedItemSizes: [78.3984, 182.93, 130.664]
+        expectedLayout: ['20.8163', '39.5918', '39.5918'],
+        expectedItemSizes: [81.6016, 155.203, 155.203]
     }].forEach(({ resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`pane sizes with maxSize option after resize, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
@@ -346,76 +368,216 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     ['horizontal', 'vertical'].forEach(orientation => {
         [{
+            dataSource: [{ }],
+            expectedLayout: ['100'],
+            expectedItemSizes: [undefined]
+        }, {
             dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
             expectedLayout: ['30', '60', '10'],
             expectedItemSizes: ['300px', '600px', '100px']
-        },
-        {
+        }, {
             dataSource: [{ }, { }, { size: '248px' }, { } ],
             expectedLayout: ['25', '25', '25', '25'],
             expectedItemSizes: [undefined, undefined, '248px', undefined],
-        },
-        {
+        }, {
             dataSource: [{ size: '248px' }, { }, { size: '248px' }, { } ],
             expectedLayout: ['25', '25', '25', '25'],
             expectedItemSizes: ['248px', undefined, '248px', undefined],
-        },
-        {
+        }, {
             dataSource: [{ size: '248' }, { }, { size: '496px' }, { } ],
             expectedLayout: ['25', '12.5', '50', '12.5'],
             expectedItemSizes: ['248', undefined, '496px', undefined],
-        },
-        {
+        }, {
             dataSource: [{ size: 252 }, { visible: false }, { } ],
             expectedLayout: ['25', '75'],
             expectedItemSizes: [252, undefined, undefined],
-        },
-        {
+        }, {
             dataSource: [{ visible: false }, { visible: false }, { size: '504px' }, { } ],
             expectedLayout: ['50', '50'],
             expectedItemSizes: [undefined, undefined, '504px', undefined],
-        },
-        {
+        }, {
             dataSource: [{ visible: false }, { visible: false }, { }, { size: 504 } ],
             expectedLayout: ['50', '50'],
             expectedItemSizes: [undefined, undefined, undefined, 504],
-        },
-        {
+        }, {
             dataSource: [{ size: 126 }, { size: 126 }, { visible: false }],
             expectedLayout: ['50', '50'],
             expectedItemSizes: [126, 126, undefined],
-        },
-        {
+        }, {
             dataSource: [{ size: '500' }, { size: '5000px' } ],
             expectedLayout: ['9.09091', '90.9091'],
             expectedItemSizes: ['500', '5000px'],
-        },
-        {
+        }, {
             dataSource: [{ size: '5000px' }, { size: '100px' } ],
             expectedLayout: ['98.0392', '1.96078'],
             expectedItemSizes: ['5000px', '100px'],
-        },
-        {
+        }, {
             dataSource: [{ size: '504232px' }, { } ],
             expectedLayout: ['100', '0'],
             expectedItemSizes: ['504232px', undefined],
-        },
-        {
+        }, {
             dataSource: [ { size: 0 }, { size: 128 } ],
             expectedLayout: ['0', '100'],
             expectedItemSizes: [0, 128],
-        },
-        {
+        }, {
             dataSource: [ { size: 0 }, { size: 2 } ],
             expectedLayout: ['0', '100'],
             expectedItemSizes: [0, 2],
-        },
-        {
+        }, {
             dataSource: [ { size: '0px' }, { size: 128 } ],
             expectedLayout: ['0', '100'],
             expectedItemSizes: ['0px', 128],
-        }].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
-            QUnit.test(`pane should respect size option in pixels, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
+        }, {
+            dataSource: [{ size: '25%' }, { size: '25%' }, { size: '248px' }, { } ],
+            expectedLayout: ['25.6048', '25.6048', '25', '23.79035'],
+            expectedItemSizes: ['25%', '25%', '248px', undefined],
+        }, {
+            dataSource: [{ size: '50%' }, { size: '25%' }, { size: 248 }, { } ],
+            expectedLayout: ['49.3952', '25.6048', '25', '0'],
+            expectedItemSizes: ['50%', '25%', 248, undefined]
+        }, {
+            dataSource: [{ size: '30%' }, { size: '60%' }, { size: '10%' }],
+            expectedLayout: ['30', '60', '10'],
+            expectedItemSizes: ['30%', '60%', '10%']
+        }, {
+            dataSource: [{ }, { }, { }, { } ],
+            expectedLayout: ['25', '25', '25', '25'],
+            expectedItemSizes: [undefined, undefined, undefined, undefined]
+        }, {
+            dataSource: [{ }, { size: '10%' }, { }, { } ],
+            expectedLayout: ['29.92', '10.24', '29.92', '29.92'],
+            expectedItemSizes: [undefined, '10%', undefined, undefined]
+        }, {
+            dataSource: [{ size: '30%' }, { }, { size: '50%' }, { } ],
+            expectedLayout: ['30.72', '9.04', '51.2', '9.04'],
+            expectedItemSizes: ['30%', undefined, '50%', undefined]
+        }, {
+            dataSource: [{ size: '30%' }, { }, { size: '30%' } ],
+            expectedLayout: ['30.4762', '39.0476', '30.4762'],
+            expectedItemSizes: ['30%', undefined, '30%']
+        }, {
+            dataSource: [{ }, { visible: false }, { size: '50%' }, { } ],
+            expectedLayout: ['24.6032', '50.7937', '24.6032'],
+            expectedItemSizes: [undefined, undefined, '50%', undefined]
+        }, {
+            dataSource: [{ visible: false }, { visible: false }, { size: '50%' }, { } ],
+            expectedLayout: ['50.3937', '49.6063'],
+            expectedItemSizes: [undefined, undefined, '50%', undefined]
+        }, {
+            dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false } ],
+            expectedLayout: ['40', '60'],
+            expectedItemSizes: ['40%', '60%', undefined]
+        }, {
+            dataSource: [{ size: '30%' }, { size: '200%' } ],
+            expectedLayout: ['13.0435', '86.9565'],
+            expectedItemSizes: ['30%', '200%']
+        }, {
+            dataSource: [{ size: '320%' }, { size: '200%' } ],
+            expectedLayout: ['61.5385', '38.4615'],
+            expectedItemSizes: ['320%', '200%']
+        }, {
+            dataSource: [{ size: '10%' }, { size: '10%' }, { visible: false }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: ['10%', '10%', undefined]
+        }, {
+            dataSource: [{ size: '30%' }, { size: '20%' }, { }, { size: '20%' }, { } ],
+            expectedLayout: ['30.9677', '20.6452', '13.871', '20.6452', '13.871'],
+            expectedItemSizes: ['30%', '20%', undefined, '20%', undefined]
+        }, {
+            dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' } ],
+            expectedLayout: ['46.1538', '38.4615', '15.3846'],
+            expectedItemSizes: ['30%', '25%', '10%']
+        }, {
+            dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' } ],
+            expectedLayout: [ '71.4286', '28.5714'],
+            expectedItemSizes: ['30%', '25%', '10%']
+        }, {
+            dataSource: [{ size: '0%' }, { size: '1%' } ],
+            expectedLayout: ['0', '100'],
+            expectedItemSizes: ['0%', '1%']
+        }, {
+            dataSource: [{ }, { size: '1%' } ],
+            expectedLayout: ['99', '1'],
+            expectedItemSizes: [undefined, '1%']
+        }, {
+            dataSource: [{ visible: false }, { }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [undefined, undefined, undefined]
+        }, {
+            dataSource: [{ }, { visible: false }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [undefined, undefined, undefined]
+        }, {
+            dataSource: [{ }, { }, { visible: false }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [undefined, undefined, undefined]
+        },
+        // TODO: incorrect synchronization
+        // {
+        //     dataSource: [{ size: 'auto' }, { }, { size: 'inherit' }],
+        //     expectedLayout: ['50', '50', '33'],
+        //     expectedItemSizes: [undefined, undefined, undefined]
+        // },
+        {
+            dataSource: [{ }, { size: '100%' }, { }],
+            expectedLayout: ['0', '100', '0'],
+            expectedItemSizes: [undefined, '100%', undefined]
+        },
+        {
+            dataSource: [{ }, { size: '150%' }, { }],
+            expectedLayout: ['0', '100', '0'],
+            // TODO: incorrect synchronization
+            expectedItemSizes: [undefined, '150%', undefined]
+        },
+        // {
+        //     dataSource: [{ }, { size: '50$' }, { }],
+        //     expectedLayout: ['0', '100', '0'],
+        //     // TODO: incorrect synchronization
+        //     expectedItemSizes: [undefined, '150%', undefined]
+        // },
+        // TODO: 50px% should be incorrect value // check assertion
+        // {
+        //     dataSource: [{ }, { size: '50px%' }, { }],
+        //     expectedLayout: ['24.6', '50.8', '24.6'],
+        //     // TODO: incorrect synchronization
+        //     expectedItemSizes: [undefined, '150%', undefined]
+        // },
+        // TODO: 50%px should be incorrect value // check assertion
+        // {
+        //     dataSource: [{ }, { size: '50%px' }, { }],
+        //     expectedLayout: ['47.5', '5', '47.5'],
+        //     // TODO: incorrect synchronization
+        //     expectedItemSizes: [undefined, '150%', undefined]
+        // },
+        // TODO: 50vh shouldn't affect on layout
+        // {
+        //     dataSource: [{ }, { size: '50vh' }, { }],
+        //     expectedLayout: ['33.333', '33.333', '33.333'],
+        //     // TODO: incorrect synchronization
+        //     expectedItemSizes: [undefined, '150%', undefined]
+        // },
+        // TODO: 10em shouldn't affect on layout
+        // {
+        //     dataSource: [{ }, { size: '10em' }, { }],
+        //     expectedLayout: ['33.333', '33.333', '33.333'],
+        //     // TODO: incorrect synchronization
+        //     expectedItemSizes: [undefined, '150%', undefined]
+        // },
+        // TODO: 10px10px% shouldn't affect on layout
+        {
+            dataSource: [{ }, { size: '10px10px%' }, { }],
+            expectedLayout: ['44.92', '10.16', '44.92'],
+            // TODO: incorrect synchronization
+            expectedItemSizes: [undefined, '10px10px%', undefined]
+        },
+        // TODO
+        // {
+        //     dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ],
+        //     expectedLayout: ['20', '10', '70', '20', '0'],
+        //     expectedItemSizes: ['30%', '20%', '300%', '20%', undefined]
+        // },
+        ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
+            QUnit.test(`pane size option, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
                 this.reinit({
                     width: 1016,
                     height: 1016,
@@ -429,150 +591,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
-    // todo: more use cases
     ['horizontal', 'vertical'].forEach(orientation => {
-        [
-            {
-                dataSource: [{ size: '25%' }, { size: '25%' }, { size: '248px' }, { } ],
-                expectedLayout: ['25', '25', '25', '25'],
-                expectedItemSizes: ['25%', '25%', '248px', undefined],
-            },
-            {
-                dataSource: [{ size: '50%' }, { size: '25%' }, { size: 248 }, { } ],
-                expectedLayout: ['50', '25', '25', '0'],
-                expectedItemSizes: ['50%', '25%', 248, undefined]
-            },
-        ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
-            QUnit.test(`pane should respect size option when both pixels and percents are used, dataSource: ${JSON.stringify(dataSource)} ${orientation} orientation`, function(assert) {
-                this.reinit({
-                    width: 1016,
-                    height: 1016,
-                    dataSource,
-                    orientation,
-                });
-
-                this.checkItemSizes(expectedItemSizes);
-                this.assertLayout(expectedLayout);
-            });
-        });
-    });
-
-    ['horizontal', 'vertical'].forEach(orientation => {
-        [
-            {
-                dataSource: [{ size: '30%' }, { size: '60%' }, { size: '10%' }],
-                expectedLayout: ['30', '60', '10'],
-                expectedItemSizes: ['30%', '60%', '10%']
-            },
-            {
-                dataSource: [{ }, { }, { }, { } ],
-                expectedLayout: ['25', '25', '25', '25'],
-                expectedItemSizes: [undefined, undefined, undefined, undefined]
-            },
-            {
-                dataSource: [{ }, { size: '10%' }, { }, { } ],
-                expectedLayout: ['30', '10', '30', '30'],
-                expectedItemSizes: [undefined, '10%', undefined, undefined]
-            },
-            {
-                dataSource: [{ size: '30%' }, { }, { size: '50%' }, { } ],
-                expectedLayout: ['30', '10', '50', '10'],
-                expectedItemSizes: ['30%', undefined, '50%', undefined]
-            },
-            {
-                dataSource: [{ size: '30%' }, { }, { size: '30%' } ],
-                expectedLayout: ['30', '40', '30'],
-                expectedItemSizes: ['30%', undefined, '30%']
-            },
-            {
-                dataSource: [{ }, { visible: false }, { size: '50%' }, { } ],
-                expectedLayout: ['25', '50', '25'],
-                expectedItemSizes: [undefined, undefined, '50%', undefined]
-            },
-            {
-                dataSource: [{ visible: false }, { visible: false }, { size: '50%' }, { } ],
-                expectedLayout: ['50', '50'],
-                expectedItemSizes: [undefined, undefined, '50%', undefined]
-            },
-            {
-                dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false } ],
-                expectedLayout: ['40', '60'],
-                expectedItemSizes: ['40%', '60%', undefined]
-            },
-            {
-                dataSource: [{ size: '30%' }, { size: '200%' } ],
-                expectedLayout: ['13.0435', '86.9565'],
-                expectedItemSizes: ['30%', '200%']
-            },
-            {
-                dataSource: [{ size: '320%' }, { size: '200%' } ],
-                expectedLayout: ['61.5385', '38.4615'],
-                expectedItemSizes: ['320%', '200%']
-            },
-            {
-                dataSource: [{ size: '10%' }, { size: '10%' }, { visible: false }],
-                expectedLayout: ['50', '50'],
-                expectedItemSizes: ['10%', '10%', undefined]
-            },
-            {
-                dataSource: [{ size: '30%' }, { size: '20%' }, { }, { size: '20%' }, { } ],
-                expectedLayout: ['30', '20', '15', '20', '15'],
-                expectedItemSizes: ['30%', '20%', undefined, '20%', undefined]
-            },
-            // TODO
-            // {
-            //     dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ],
-            //     expectedLayout: ['20', '10', '70', '20', '0'],
-            //     expectedItemSizes: ['30%', '20%', '300%', '20%', undefined]
-            // },
-            {
-                dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' } ],
-                expectedLayout: ['46.1538', '38.4615', '15.3846'],
-                expectedItemSizes: ['30%', '25%', '10%']
-            },
-            {
-                dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' } ],
-                expectedLayout: [ '71.4286', '28.5714'],
-                expectedItemSizes: ['30%', '25%', '10%']
-            },
-            {
-                dataSource: [{ size: '0%' }, { size: '1%' } ],
-                expectedLayout: ['0', '100'],
-                expectedItemSizes: ['0%', '1%']
-            },
-            {
-                dataSource: [{ }, { size: '1%' } ],
-                expectedLayout: ['99', '1'],
-                expectedItemSizes: [undefined, '1%']
-            },
-            {
-                dataSource: [{ visible: false }, { }, { }],
-                expectedLayout: ['50', '50'],
-                expectedItemSizes: [undefined, undefined, undefined]
-            },
-            {
-                dataSource: [{ }, { visible: false }, { }],
-                expectedLayout: ['50', '50'],
-                expectedItemSizes: [undefined, undefined, undefined]
-            },
-            {
-                dataSource: [{ }, { }, { visible: false }],
-                expectedLayout: ['50', '50'],
-                expectedItemSizes: [undefined, undefined, undefined]
-            },
-        ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
-            QUnit.test(`pane should respect size option in percentages, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
-                this.reinit({
-                    width: 424, height: 424,
-                    dataSource,
-                    orientation,
-                });
-
-                this.checkItemSizes(expectedItemSizes);
-                this.assertLayout(expectedLayout);
-            });
-        });
-
         // TODO: These tests are failing on CI for iOS, Android, shadowDom. It's necessary to investigate and remove the skips for these tests.
         if(!isIos && !isAndroid && !QUnit.isInShadowDomMode()) {
             QUnit.test(`pane should have an exact size if the size is specified in pixels and the root element has a border, ${orientation} orientation`, function(assert) {
@@ -589,6 +608,24 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
                 this.checkItemSizes([400, undefined, undefined, undefined]);
                 this.assertLayout(['40.8163', '19.7279', '19.7279', '19.7279']);
+            });
+
+            QUnit.test(`pane should have an exact size if the size is specified in percentages and the root element has a border, ${orientation} orientation`, function(assert) {
+                const dimension = orientation === 'horizontal' ? 'width' : 'height';
+
+                this.reinit({
+                    [dimension]: 620,
+                    elementAttr: {
+                        style: 'border: 10px solid black',
+                    },
+                    dataSource: [{ size: '50%' }, { }, { }, { }],
+                    orientation,
+                }, '#splitterInContainer');
+
+                assert.strictEqual(this.getPanes().eq(0).css(dimension), '300px', 'pane[0].size has exact size');
+
+                this.checkItemSizes(['50%', undefined, undefined, undefined]);
+                this.assertLayout(['52.0833', '15.9722', '15.9722', '15.9722']);
             });
         }
     });
@@ -699,15 +736,29 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.assertLayout(['50', '50']);
         });
 
-        QUnit.test(`splitter size in percentages, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
-            this.reinit({
-                width: '100%',
-                height: '100%',
-                orientation,
-                dataSource: [{ }, { }, { }]
-            });
+        [
+            { width: '100%', height: '100%' },
+            { width: '100%%%', height: '100%%%' },
+            { width: 600, height: 600 },
+            { width: '600px', height: '600px' },
+            { width: '600', height: '600' },
+            { width: '600pxpx', height: '600pxpx' },
+            { width: '50vw', height: '50vh' },
+            { width: 'incorrect', height: 'incorrect' },
+            { width: '10em', height: '10em' },
+            { width: 'auto', height: 'auto' },
+            { width: 'inherit', height: 'inherit' },
+        ].forEach(({ width, height }) => {
+            QUnit.test(`splitter, with width=${width} and height=${height}, should have its layout correctly calculated for an orientation of ${orientation}`, function(assert) {
+                this.reinit({
+                    width,
+                    height,
+                    orientation,
+                    dataSource: [{ }, { }, { }]
+                });
 
-            this.assertLayout(['33.3333', '33.3333', '33.3333']);
+                this.assertLayout(['33.3333', '33.3333', '33.3333']);
+            });
         });
 
         QUnit.test(`items with nested splitter should be evenly distributed by default with ${orientation} orientation`, function(assert) {
@@ -1335,6 +1386,29 @@ QUnit.module('Behavoir', moduleConfig, () => {
         assert.strictEqual($resizeHandle.css('width'), '5px');
     });
 
+    [{ allowKeyboardNavigation: true }, { allowKeyboardNavigation: false }].forEach(({ allowKeyboardNavigation }) => {
+        QUnit.test(`Resize handle should have dx-state-active class on interaction when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
+            this.reinit({
+                width: 408,
+                height: 408,
+                allowKeyboardNavigation,
+                dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
+            });
+
+            const resizeHandle = this.getResizeHandles().eq(0);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(0));
+
+            pointer.start().dragStart().drag(10, 10);
+
+            assert.ok(resizeHandle.hasClass('dx-state-active'));
+
+            pointer.dragEnd();
+
+            assert.notOk(resizeHandle.hasClass('dx-state-active'));
+        });
+    });
+
     QUnit.test('Resize handle should have correct size when separatorSize is defined on runtime', function(assert) {
         this.reinit({ dataSource: [{ }, { }] });
         this.instance.option('separatorSize', 4);
@@ -1576,15 +1650,17 @@ QUnit.module('Events', moduleConfig, () => {
         });
 
         QUnit.test(`${eventHandler} should have correct argument fields`, function(assert) {
-            assert.expect(4);
+            assert.expect(6);
 
             this.reinit({
                 [eventHandler]: ({ component, element, event, handleElement }) => {
                     const $resizeHandle = this.getResizeHandles();
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).get(0), $resizeHandle.get(0), 'event field is correct');
+                    assert.strictEqual(isRenderer(handleElement), !!config().useJQuery, 'handleElement is correct');
                     assert.strictEqual($(handleElement).is($resizeHandle), true, 'handleElement field is correct');
                 },
                 dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
@@ -1706,19 +1782,24 @@ QUnit.module('Events', moduleConfig, () => {
 
     ['left', 'right'].forEach((item) => {
         QUnit.test(`onItemCollapsed should have correct argument fields on ${item} item collapse`, function(assert) {
-            assert.expect(5);
+            assert.expect(8);
 
             this.reinit({
-                onItemCollapsed: ({ component, element, event, itemData, itemElement }) => {
+                onItemCollapsed: (e) => {
+                    const { component, element, event, itemData, itemElement, itemIndex } = e;
+
                     const $resizeHandle = this.getResizeHandles();
                     const $items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
                     const $item = item === 'left' ? $items.first() : $items.last();
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).parent().get(0), $resizeHandle.get(0), 'target event field is correct');
+                    assert.strictEqual(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
                     assert.deepEqual(itemData, { collapsed: true, size: 0, collapsible: true }, 'itemData field is correct');
+                    assert.strictEqual(itemIndex, item === 'left' ? 0 : 1, 'itemIndex is correct');
                 },
                 dataSource: [{ collapsible: true, }, { collapsible: true, }]
             });
@@ -1728,20 +1809,23 @@ QUnit.module('Events', moduleConfig, () => {
             $collapseButton.trigger('dxclick');
         });
 
-        QUnit.test(`onItemCollapsed should have correct argument fields on ${item} item expand`, function(assert) {
-            assert.expect(5);
+        QUnit.test(`onItemExpanded should have correct argument fields on ${item} item expand`, function(assert) {
+            assert.expect(8);
 
             this.reinit({
-                onItemExpanded: ({ component, element, event, itemData, itemElement }) => {
+                onItemExpanded: ({ component, element, event, itemData, itemElement, itemIndex }) => {
                     const $resizeHandle = this.getResizeHandles();
                     const $items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
                     const $item = item === 'left' ? $items.first() : $items.last();
 
                     assert.strictEqual(component, this.instance, 'component field is correct');
+                    assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
                     assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
                     assert.strictEqual($(event.target).parent().is($resizeHandle), true, 'event field is correct');
+                    assert.strictEqual(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
                     assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
                     assert.strictEqual(itemData.collapsed, false, 'itemData is correct');
+                    assert.strictEqual(itemIndex, item === 'left' ? 0 : 1, 'itemIndex');
                 },
                 dataSource: [{ collapsed: item === 'left', collapsible: true }, { collapsed: item === 'right', collapsible: true }]
             });
@@ -1781,7 +1865,7 @@ QUnit.module('Events', moduleConfig, () => {
 
 QUnit.module('Nested Splitter Events', moduleConfig, () => {
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
-        QUnit.test(`${eventHandler} should be called when handle in nested splitter is dragged`, function(assert) {
+        QUnit.test(`${eventHandler} should be invoked when a handle in the nested splitter is dragged`, function(assert) {
             const resizeHandlerStub = sinon.stub();
             this.reinit({
                 [eventHandler]: resizeHandlerStub,
@@ -1797,6 +1881,30 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
             pointer.start().dragStart().drag(0, 50).dragEnd();
 
             assert.strictEqual(resizeHandlerStub.callCount, 1);
+        });
+
+        // TODO: repair this scenario
+        QUnit.skip(`${eventHandler} should be called when a handle in the nested splitter is dragged, ${eventHandler} has been changed at runtime`, function(assert) {
+            const resizeHandlerStub = sinon.stub();
+            const newResizeHandlerStub = sinon.stub();
+
+            this.reinit({
+                [eventHandler]: resizeHandlerStub,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            this.instance.option(`${eventHandler}`, newResizeHandlerStub);
+
+            const pointer = pointerMock(this.getResizeHandles(false)[0]);
+
+            pointer.start().dragStart().drag(0, 50).dragEnd();
+
+            assert.strictEqual(resizeHandlerStub.callCount, 0);
+            assert.strictEqual(newResizeHandlerStub.callCount, 1);
         });
 
         QUnit.test(`nestedSplitter.${eventHandler} should be called instead of parentSplitter.${eventHandler}`, function(assert) {
@@ -1851,7 +1959,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
         });
     });
 
-    QUnit.test('itemRendered should be called when nested splitter panes are rendered', function(assert) {
+    QUnit.test('itemRendered callback should be called when the panes of a nested splitter are rendered', function(assert) {
         const itemRenderedSpy = sinon.spy();
 
         this.reinit({
@@ -1868,7 +1976,7 @@ QUnit.module('Nested Splitter Events', moduleConfig, () => {
         assert.strictEqual(itemRenderedSpy.callCount, 4, 'itemRendered.callCount');
     });
 
-    QUnit.test('nested splitter itemRendered should be called instead of parent.itemRendered', function(assert) {
+    QUnit.test('the nested splitter\'s itemRendered should be called instead of the parent\'s itemRendered', function(assert) {
         const itemRenderedSpy = sinon.spy();
         const nestedItemRenderedSpy = sinon.spy();
 

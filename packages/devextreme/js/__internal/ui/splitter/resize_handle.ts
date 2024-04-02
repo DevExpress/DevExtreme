@@ -14,7 +14,9 @@ import {
   getActionNameByEventName,
   RESIZE_EVENT,
 } from './utils/event';
-import type { ResizeOffset } from './utils/types';
+import type {
+  CollapseEvents, ResizeEvents, ResizeHandleOptions, ResizeOffset,
+} from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_RESIZABLE_CLASS = 'dx-resize-handle-resizable';
@@ -37,7 +39,7 @@ const KEYBOARD_DELTA = 5;
 const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class ResizeHandle extends (Widget as any) {
+class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   _supportedKeys(): Record<string, unknown> {
     return extend(super._supportedKeys(), {
       rightArrow(e: KeyboardEvent) {
@@ -109,6 +111,7 @@ class ResizeHandle extends (Widget as any) {
       direction: RESIZE_DIRECTION.horizontal,
       hoverStateEnabled: true,
       focusStateEnabled: true,
+      activeStateEnabled: true,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
@@ -308,7 +311,7 @@ class ResizeHandle extends (Widget as any) {
     });
   }
 
-  _getAction(eventName: string): (e) => void {
+  _getAction(eventName: ResizeEvents | CollapseEvents): (e) => void {
     const actionName = getActionNameByEventName(eventName);
 
     if (!this[actionName]) {
@@ -422,6 +425,13 @@ class ResizeHandle extends (Widget as any) {
 
   _isHorizontalDirection(): boolean {
     return this.option('direction') === RESIZE_DIRECTION.horizontal;
+  }
+
+  _clean(): void {
+    this._detachResizeEventHandlers();
+    this._detachPointerEventHandlers();
+
+    super._clean();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
