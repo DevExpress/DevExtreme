@@ -139,6 +139,9 @@ class Splitter extends (CollectionWidget as any) {
     }
   }
 
+  // eslint-disable-next-line class-methods-use-this
+  _attachHoldEvent(): void {}
+
   _resizeHandler(): void {
     if (!this._shouldRecalculateLayout) {
       return;
