@@ -1388,7 +1388,7 @@ QUnit.module('Behavior', moduleConfig, () => {
     });
 
     ['horizontal', 'vertical'].forEach((orientation) => {
-        ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 '].forEach((separatorSize) => {
+        ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 ', '12'].forEach((separatorSize) => {
             QUnit.test(`Resize handle size should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
                 this.reinit({
                     dataSource: [{ size: '500px' }, { size: '500px' }],
