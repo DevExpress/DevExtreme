@@ -36,11 +36,8 @@ fixture.disablePageReloads`Splitter_Icon_Results`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const splitter = new Splitter('#container');
 
-    await t
-      .hover(splitter.resizeHandles.nth(0));
-
-    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
-    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
 
     await t
       .dispatchEvent(splitter.resizeHandles.nth(0), 'mousedown')
@@ -52,8 +49,8 @@ fixture.disablePageReloads`Splitter_Icon_Results`
     await t
       .dispatchEvent(splitter.resizeHandles.nth(0), 'mouseup');
 
-    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
-    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
 
     if (allowKeyboardNavigation) {
       await t
