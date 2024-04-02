@@ -40,16 +40,12 @@ import {
   convertSizeToRatio,
   findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
-  getCurrentLayout,
   getDefaultLayout,
-  getDimensionByOrientation,
   getElementSize,
-  getNewLayout,
-  getVisibleItems,
+  getNextLayout,
   getVisibleItemsCount,
   isElementVisible,
   setFlexProp,
-  updateItemsSize,
   validateLayout,
 } from './utils/layout';
 import type {
@@ -387,23 +383,27 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
+        this._currentLayout = this._layout;
+        const $resizeHandle = $(element);
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
         this._toggleActiveState($(getPublicElement($(element))), true);
 
-        this._$visibleItems = this._getVisibleItems();
-        this._currentLayout = getCurrentLayout(this._$visibleItems);
-        this._activeResizeHandleIndex = this._getResizeHandleItems().index(element);
+        const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        const leftItemData = this._getItemData($leftItem);
+        const leftItemIndex = this._getIndexByItem(leftItemData);
+        this._activeResizeHandleIndex = leftItemIndex;
 
-        this._splitterItemsSize = this._getSummaryItemsSize(
-          getDimensionByOrientation(this.option('orientation')),
-          this._$visibleItems,
-          true,
+        this._currentOnePxRatio = convertSizeToRatio(
+          1,
+          getElementSize(this.$element(), orientation),
+          this._getResizeHandlesSize(),
         );
 
         const { items } = this.option();
-        this._updateItemsRestrictions(getVisibleItems(items));
+
+        this._updateItemsRestrictions(items);
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
@@ -413,15 +413,16 @@ class Splitter extends (CollectionWidget as any) {
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
 
-        const newLayout = getNewLayout(
+        const newLayout = getNextLayout(
           this._currentLayout,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
+          calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._currentOnePxRatio),
           this._activeResizeHandleIndex,
           this._itemRestrictions,
         );
 
-        updateItemsSize(this._$visibleItems, newLayout);
+        this._applyFlexGrowFromLayout(newLayout);
+        this._layout = newLayout;
 
         this._getAction(RESIZE_EVENT.onResize)({
           event,
@@ -498,8 +499,7 @@ class Splitter extends (CollectionWidget as any) {
     return super._createItemByTemplate(itemTemplate, args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _postprocessRenderItem(args): void {
+  _postprocessRenderItem(args: { itemData: Item; itemContent: Element }): void {
     const splitterConfig = args.itemData.splitter;
     if (!splitterConfig) {
       return;
