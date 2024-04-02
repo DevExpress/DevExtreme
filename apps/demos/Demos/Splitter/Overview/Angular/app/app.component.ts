@@ -5,7 +5,7 @@ import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-bro
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSplitterModule } from 'devextreme-angular';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
@@ -13,7 +13,7 @@ if (!/localhost/.test(document.location.host)) {
   selector: 'demo-app',
   templateUrl: 'app/app.component.html',
   styleUrls: ['app/app.component.css'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
   dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
@@ -37,23 +37,21 @@ export class AppComponent {
     this.renderedContentTemplates = JSON.parse(JSON.stringify(this.paneContentTemplates));
   }
 
-  getPaneState(data: any): string { 
+  getPaneState(data: any): string {
     if (data.resizable !== false && !data.collapsible) {
       return 'Resizable only';
     }
     const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
     const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
-    
+
     return `${resizableText} and ${collapsibleText}`;
   }
 
-  filterDimensionOptions(data: any): {key: string, value: any}[] {
+  filterDimensionOptions(data: any): { key: string; value: any }[] {
     return Object.entries(data)
       .reverse()
       .filter(([key]) => this.dimensionOptions.has(key))
-      .map(([key, value]) => {
-        return ({key, value})
-      });
+      .map(([key, value]) => ({ key, value }));
   }
 }
 

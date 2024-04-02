@@ -71,7 +71,7 @@
 
 <script setup lang="ts">
 import { DxSplitter, DxItem } from 'devextreme-vue/splitter';
-import PaneContent from './PaneContent.vue'
+import PaneContent from './PaneContent.vue';
 </script>
 
 <style scoped>
