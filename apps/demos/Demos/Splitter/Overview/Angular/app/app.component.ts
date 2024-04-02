@@ -33,7 +33,7 @@ export class AppComponent {
     ];
   }
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.renderedContentTemplates = JSON.parse(JSON.stringify(this.paneContentTemplates));
   }
 
