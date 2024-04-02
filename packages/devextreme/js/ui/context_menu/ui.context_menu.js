@@ -38,6 +38,7 @@ const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const SCOLLVIEW_CLASS = 'dx-scrollview';
 
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
@@ -606,9 +607,10 @@ class ContextMenu extends MenuBase {
     }
 
     _initScrollView($container, anchor, considerAnchorHeight = true) {
-        const containerHeight = getOuterHeight($container);
-        const maxHeight = this._getMaxHeight(containerHeight, anchor, considerAnchorHeight);
-        const menuHeight = Math.min(containerHeight, maxHeight);
+        const $itemsContainer = $container.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        const contentHeight = getOuterHeight($itemsContainer);
+        const maxHeight = this._getMaxHeight(contentHeight, anchor, considerAnchorHeight);
+        const menuHeight = Math.min(contentHeight, maxHeight);
         const cssProps = {
             height: menuHeight,
             overflow: 'visible',
@@ -619,16 +621,18 @@ class ContextMenu extends MenuBase {
             cssProps.top = -containerOffset;
         }
         $container.css(cssProps);
-        this._createComponent($container, ScrollView, {});
+        if(!$container.hasClass(SCOLLVIEW_CLASS)) {
+            this._createComponent($container, ScrollView, {});
+        }
     }
 
     _getMaxHeight(containerHeight, anchor, considerAnchorHeight) {
         const windowHeight = getOuterHeight(window);
-        const isContextMenuRootEvent = anchor.type === DEFAULT_SHOW_EVENT || !anchor.offset;
+        const isAnchorRenderer = isRenderer(anchor);
         const document = domAdapter.getDocument();
         const isAnchorDocument = anchor.length && anchor[0] === document;
 
-        if(isContextMenuRootEvent || isAnchorDocument) {
+        if(!isAnchorRenderer || isAnchorDocument) {
             return windowHeight;
         }
 

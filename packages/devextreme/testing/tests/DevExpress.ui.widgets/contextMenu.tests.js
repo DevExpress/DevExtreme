@@ -330,6 +330,34 @@ QUnit.module('Rendering', moduleConfig, () => {
         assert.strictEqual($nestedSubmenu.outerHeight(), $(window).height() - $nestedItemsContainer.offset().top, 'Nested submenu uses all available space');
     });
 
+    QUnit.test('Flipping 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const totalItems = 25;
+        const items = (new Array(totalItems)).fill(null).map((_, idx) => ({ text: idx }));
+        items[totalItems - 1].items = (new Array(99)).fill(null).map((_, idx) => ({ text: idx }));
+
+        const instance = new ContextMenu(this.$element, {
+            items,
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+        const $nestedSubmenu = $submenus.eq(1);
+        const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height());
+
+        assert.roughEqual($nestedSubmenu.offset().top, 0, .1, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
+    });
+
     QUnit.test('height of the context menu should be limited', function(assert) {
         new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),

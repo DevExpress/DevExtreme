@@ -63,6 +63,7 @@ const CLICKTIMEOUT = 51;
 const ANIMATION_TIMEOUT = 100;
 const MENU_ITEM_WIDTH = 100;
 const MOUSETIMEOUT = 50;
+const BORDER_WIDTH = 1;
 
 const EXPECTED_TREEVIEW_SYNC_OPTIONS = [
     // tested in separate tests: 'dataSource', 'items'
@@ -386,7 +387,7 @@ QUnit.module('Menu rendering', {
         fixtures.simple.drop();
     });
 
-    QUnit.test('submenu should init ScrollView', function(assert) {
+    QUnit.test('Submenu should init ScrollView', function(assert) {
         const menu = createMenu({
             items: [{
                 text: 'item 1',
@@ -442,7 +443,7 @@ QUnit.module('Menu rendering', {
         assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested submenu');
     });
 
-    QUnit.test('height of the submenu should be correctly positioned', function(assert) {
+    QUnit.test('Submenu should be correctly positioned', function(assert) {
         const menu = createMenuInWindow({
             items: [{
                 text: 'item 1',
@@ -450,7 +451,6 @@ QUnit.module('Menu rendering', {
             }],
             showFirstSubmenuMode: 'onClick',
         });
-
         const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
         $($item1).trigger('dxclick');
@@ -459,8 +459,8 @@ QUnit.module('Menu rendering', {
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
         assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
-        assert.strictEqual($submenu.offset().top, $item1.offset().top + $item1.outerHeight(), 'submenu aligned to a clicked item');
-        assert.strictEqual($submenu.outerHeight(), $(window).height() - $item1.offset().top - $item1.outerHeight(), 'menu uses all available space');
+        assert.roughEqual($submenu.offset().top, $item1.offset().top + $item1.outerHeight(), .1, 'submenu aligned to a clicked item');
+        assert.roughEqual($submenu.outerHeight(), $(window).height() - $item1.offset().top - $item1.outerHeight(), .1, 'menu uses all available space');
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
@@ -494,8 +494,45 @@ QUnit.module('Menu rendering', {
         const $nestedSubmenu = $($(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1));
         const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
 
-        assert.strictEqual($nestedItemsContainer.offset().top, $menuItem.offset().top, 'Nested submenu positioned to a clicked item');
-        assert.strictEqual($nestedSubmenu.outerHeight(), $(window).height() - $nestedSubmenu.offset().top - 1, 'Nested submenu uses all available space');
+        assert.roughEqual($nestedItemsContainer.offset().top, $menuItem.offset().top, .1, 'Nested submenu positioned to a clicked item');
+        assert.roughEqual(
+            $nestedSubmenu.outerHeight(), $(window).height() - $nestedSubmenu.offset().top - BORDER_WIDTH,
+            .1, 'Nested submenu uses all available space');
+    });
+
+    QUnit.test('Flipping 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const totalItems = 25;
+        const items = (new Array(totalItems)).fill(null).map((_, idx) => ({ text: idx }));
+        items[totalItems - 1].items = (new Array(99)).fill(null).map((_, idx) => ({ text: idx }));
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'item 1',
+                items,
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($rootItem).trigger('dxclick');
+        this.clock.tick(0);
+
+        const submenu = getSubMenuInstance($rootItem);
+        const $menuItem = $($(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).last());
+
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
+        $($menuItem).trigger('dxpointermove');
+        this.clock.tick(0);
+
+        const $nestedSubmenu = $($(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1));
+        const availableHeight = Math.min($menuItem.offset().top + $($menuItem).outerHeight(), $(window).height());
+
+        assert.roughEqual($nestedSubmenu.offset().top, 0, .1, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
     });
 });
 
