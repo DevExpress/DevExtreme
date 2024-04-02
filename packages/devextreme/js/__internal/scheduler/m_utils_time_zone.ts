@@ -62,7 +62,7 @@ const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDat
 //     const result = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
 
 //     if (timezone !== undefined) {
-//       // console.log(result);
+//       console.log(result);
 //     }
 //     return result;
 //   }
@@ -74,9 +74,6 @@ const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDat
 
 const calculateTimezoneByValue = (timeZone, date = new Date()) => {
   if (!timeZone) {
-    return undefined;
-  }
-  if (typeof timeZone !== 'string') {
     return undefined;
   }
 
@@ -94,7 +91,14 @@ const calculateTimezoneByValue = (timeZone, date = new Date()) => {
 // (window as any).calculateTimezoneByValueNew = calculateTimezoneByValueNew;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => calculateTimezoneByValue(timeZone, startDate) - calculateTimezoneByValue(timeZone, endDate);
+const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => {
+  const startDayOffset = calculateTimezoneByValue(timeZone, startDate);
+  const endDayOffset = calculateTimezoneByValue(timeZone, endDate);
+  if (startDayOffset === undefined || endDayOffset === undefined) {
+    return 0;
+  }
+  return startDayOffset - endDayOffset;
+};
 
 const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, convertedDate, date, timeZone, startDateTimezone) => {
   const daylightOffsetByCommonTimezone = _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, timeZone);

@@ -1267,6 +1267,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
 
     test('Task dragging when custom timeZone is set', function(assert) {
         const timezone = -5;
+        const etcTimezone = 'Etc/GMT+5';
         const timezoneDifference = getDeltaTz(timezone, new Date(2015, 1, 9));
         const startDate = new Date(new Date(2015, 1, 9).getTime() - timezoneDifference);
         const endDate = new Date(new Date(2015, 1, 9, 1).getTime() - timezoneDifference);
@@ -1286,7 +1287,7 @@ module('Scheduler grid', moduleConfigWithClock, () => {
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
             editing: true,
-            timeZone: timezone
+            timeZone: etcTimezone
         });
 
         const hour = 3600000;
