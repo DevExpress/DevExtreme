@@ -6,6 +6,7 @@ import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import resizeObserverSingleton from '@js/core/resize_observer';
+import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import {
@@ -13,6 +14,7 @@ import {
   getOuterWidth,
 } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
+import { lock } from '@js/events/core/emitter.feedback';
 import CollectionWidgetItem from '@js/ui/collection/item';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
@@ -38,16 +40,12 @@ import {
   convertSizeToRatio,
   findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
-  getCurrentLayout,
   getDefaultLayout,
-  getDimensionByOrientation,
   getElementSize,
-  getNewLayout,
-  getVisibleItems,
+  getNextLayout,
   getVisibleItemsCount,
   isElementVisible,
   setFlexProp,
-  updateItemsSize,
   validateLayout,
 } from './utils/layout';
 import type {
@@ -327,7 +325,8 @@ class Splitter extends (CollectionWidget as any) {
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
             itemData: rightItemData,
-            itemElement: $rightItem,
+            itemElement: getPublicElement($rightItem),
+            itemIndex: rightItemIndex,
           });
 
           return;
@@ -340,7 +339,8 @@ class Splitter extends (CollectionWidget as any) {
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
           itemData: leftItemData,
-          itemElement: $leftItem,
+          itemElement: getPublicElement($leftItem),
+          itemIndex: leftItemIndex,
         });
       },
       onCollapseNext: (e: ItemCollapsedEvent | ItemExpandedEvent): void => {
@@ -362,7 +362,8 @@ class Splitter extends (CollectionWidget as any) {
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
             itemData: leftItemData,
-            itemElement: $leftItem,
+            itemElement: getPublicElement($leftItem),
+            itemIndex: leftItemIndex,
           });
 
           return;
@@ -375,42 +376,53 @@ class Splitter extends (CollectionWidget as any) {
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
           itemData: rightItemData,
-          itemElement: $rightItem,
+          itemElement: getPublicElement($rightItem),
+          itemIndex: rightItemIndex,
         });
       },
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
-        this._$visibleItems = this._getVisibleItems();
-        this._currentLayout = getCurrentLayout(this._$visibleItems);
-        this._activeResizeHandleIndex = this._getResizeHandleItems().index(element);
+        this._currentLayout = this._layout;
+        const $resizeHandle = $(element);
+        // @ts-expect-error ts-error
+        this._feedbackDeferred = new Deferred();
+        lock(this._feedbackDeferred);
+        this._toggleActiveState($resizeHandle, true);
 
-        this._splitterItemsSize = this._getSummaryItemsSize(
-          getDimensionByOrientation(this.option('orientation')),
-          this._$visibleItems,
-          true,
+        const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        const leftItemData = this._getItemData($leftItem);
+        const leftItemIndex = this._getIndexByItem(leftItemData);
+        this._activeResizeHandleIndex = leftItemIndex;
+
+        this._currentOnePxRatio = convertSizeToRatio(
+          1,
+          getElementSize(this.$element(), orientation),
+          this._getResizeHandlesSize(),
         );
 
         const { items } = this.option();
-        this._updateItemsRestrictions(getVisibleItems(items));
+
+        this._updateItemsRestrictions(items);
 
         this._getAction(RESIZE_EVENT.onResizeStart)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: getPublicElement($resizeHandle),
         });
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
 
-        const newLayout = getNewLayout(
+        const newLayout = getNextLayout(
           this._currentLayout,
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._splitterItemsSize),
+          calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._currentOnePxRatio),
           this._activeResizeHandleIndex,
           this._itemRestrictions,
         );
 
-        updateItemsSize(this._$visibleItems, newLayout);
+        this._applyFlexGrowFromLayout(newLayout);
+        this._layout = newLayout;
 
         this._getAction(RESIZE_EVENT.onResize)({
           event,
@@ -419,6 +431,10 @@ class Splitter extends (CollectionWidget as any) {
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
+        const $resizeHandle = $(element);
+
+        this._feedbackDeferred.resolve();
+        this._toggleActiveState($resizeHandle, false);
 
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
@@ -426,7 +442,7 @@ class Splitter extends (CollectionWidget as any) {
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
-          handleElement: getPublicElement($(element)),
+          handleElement: getPublicElement($resizeHandle),
         });
       },
     };
@@ -491,8 +507,7 @@ class Splitter extends (CollectionWidget as any) {
     return super._createItemByTemplate(itemTemplate, args);
   }
 
-  // eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-  _postprocessRenderItem(args): void {
+  _postprocessRenderItem(args: { itemData: Item; itemContent: Element }): void {
     const splitterConfig = args.itemData.splitter;
     if (!splitterConfig) {
       return;

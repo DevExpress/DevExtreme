@@ -1,6 +1,5 @@
 import type { Orientation } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
 import {
   getHeight,
   getWidth,
@@ -14,27 +13,26 @@ import type { Item } from '@js/ui/splitter';
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
 import type { FlexProperty, PaneRestrictions, ResizeOffset } from './types';
 
-const FLEX_PROPERTY_NAME = 'flexGrow';
+// const FLEX_PROPERTY_NAME = 'flexGrow';
 
 const ORIENTATION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
 
-export function getCurrentLayout($items: dxElementWrapper): number[] {
-  const itemsDistribution: number[] = [];
-  $items.each((index, item) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    itemsDistribution.push(parseFloat(($(item) as any).css(FLEX_PROPERTY_NAME)));
+// export function getCurrentLayout($items: dxElementWrapper): number[] {
+//   const itemsDistribution: number[] = [];
+//   $items.each((index, item) => {
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     itemsDistribution.push(parseFloat(($(item) as any).css(FLEX_PROPERTY_NAME)));
 
-    return true;
-  });
+//     return true;
+//   });
 
-  return itemsDistribution;
-}
+//   return itemsDistribution;
+// }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function findLastIndexOfVisibleItem(items: any[]): number {
+export function findLastIndexOfVisibleItem(items: Item[]): number {
   for (let i = items.length - 1; i >= 0; i -= 1) {
     if (items[i].visible !== false) {
       return i;
@@ -43,8 +41,7 @@ export function findLastIndexOfVisibleItem(items: any[]): number {
   return -1;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function findIndexOfNextVisibleItem(items: any[], index: number): number {
+export function findIndexOfNextVisibleItem(items: Item[], index: number): number {
   for (let i = index + 1; i < items.length; i += 1) {
     if (items[i].visible !== false) {
       return i;
@@ -58,9 +55,11 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
     minSize = 0,
     maxSize = 100,
     resizable,
+    visible,
+    collapsed,
   } = paneRestrictions;
 
-  if (paneRestrictions.collapsed === true) {
+  if (collapsed === true || visible === false) {
     return 0;
   }
 
@@ -76,7 +75,6 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   return adjustedSize;
 }
 
-// eslint-disable-next-line max-len
 function findMaxAvailableDelta(
   increment: number,
   currentLayout: number[],
@@ -105,8 +103,7 @@ function findMaxAvailableDelta(
   );
 }
 
-// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
-export function getNewLayout(
+export function getNextLayout(
   currentLayout: number[],
   delta: number,
   prevPaneIndex: number,
@@ -119,7 +116,6 @@ export function getNewLayout(
   const increment = currentDelta < 0 ? 1 : -1;
   let currentItemIndex = currentDelta < 0 ? nextPaneIndex : prevPaneIndex;
 
-  // eslint-disable-next-line max-len
   const maxDelta = findMaxAvailableDelta(
     increment,
     currentLayout,
@@ -217,17 +213,17 @@ function normalizeOffset(
   return (rtlEnabled ? -1 : 1) * (offset.x ?? 0);
 }
 
-export function getDimensionByOrientation(orientation: string): string {
-  return orientation === ORIENTATION.horizontal ? 'width' : 'height';
-}
+// export function getDimensionByOrientation(orientation: string): string {
+//   return orientation === ORIENTATION.horizontal ? 'width' : 'height';
+// }
 
 export function calculateDelta(
   offset: ResizeOffset,
   orientation: Orientation,
   rtlEnabled: boolean,
-  totalWidth: number,
+  ratio: number,
 ): number {
-  const delta = (normalizeOffset(offset, orientation, rtlEnabled) / totalWidth) * 100;
+  const delta = normalizeOffset(offset, orientation, rtlEnabled) * ratio;
   return delta;
 }
 
@@ -240,22 +236,11 @@ export function setFlexProp(
   element.style[styleProp(prop)] = normalizedProp;
 }
 
-export function updateItemsSize(
-  items: unknown,
-  sizeDistribution: number[],
-): void {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (items as any).each((index, item) => {
-    setFlexProp(item, FLEX_PROPERTY_NAME, sizeDistribution[index]);
-  });
-}
-
 function isPercentWidth(size: string | number): boolean {
   return isString(size) && size.endsWith('%');
 }
 
 function isPixelWidth(size: string | number | undefined): boolean {
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return isNumeric(size) || (isString(size) && size.endsWith('px'));
 }
 
@@ -302,8 +287,8 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
   let numPanelsWithDefinedSize = 0;
   let remainingSize = 100;
 
-  layoutRestrictions.forEach((panelConstraints, index) => {
-    const { size, visible, collapsed } = panelConstraints;
+  layoutRestrictions.forEach((paneRestrictions, index) => {
+    const { size, visible, collapsed } = paneRestrictions;
 
     if (visible === false || collapsed === true) {
       numPanelsWithDefinedSize += 1;
@@ -324,18 +309,18 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
 
   let panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
 
-  layoutRestrictions.forEach((panelConstraints, index) => {
+  layoutRestrictions.forEach((paneRestrictions, index) => {
     if (layout[index] === null) {
-      if (isDefined(panelConstraints.maxSize) && panelsToDistribute === 1) {
-        layout[index] = remainingSize > panelConstraints.maxSize
+      if (isDefined(paneRestrictions.maxSize) && panelsToDistribute === 1) {
+        layout[index] = remainingSize > paneRestrictions.maxSize
           ? remainingSize
-          : panelConstraints.maxSize;
+          : paneRestrictions.maxSize;
         remainingSize -= layout[index];
         numPanelsWithDefinedSize += 1;
-      } else if (isDefined(panelConstraints.maxSize)
-      && panelConstraints.maxSize < (remainingSize / panelsToDistribute)) {
-        layout[index] = panelConstraints.maxSize;
-        remainingSize -= panelConstraints.maxSize;
+      } else if (isDefined(paneRestrictions.maxSize)
+      && paneRestrictions.maxSize < (remainingSize / panelsToDistribute)) {
+        layout[index] = paneRestrictions.maxSize;
+        remainingSize -= paneRestrictions.maxSize;
         numPanelsWithDefinedSize += 1;
       }
     }

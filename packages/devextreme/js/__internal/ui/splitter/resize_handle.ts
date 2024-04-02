@@ -111,6 +111,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       direction: RESIZE_DIRECTION.horizontal,
       hoverStateEnabled: true,
       focusStateEnabled: true,
+      activeStateEnabled: true,
       onResize: null,
       onResizeEnd: null,
       onResizeStart: null,
@@ -424,6 +425,13 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
   _isHorizontalDirection(): boolean {
     return this.option('direction') === RESIZE_DIRECTION.horizontal;
+  }
+
+  _clean(): void {
+    this._detachResizeEventHandlers();
+    this._detachPointerEventHandlers();
+
+    super._clean();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
