@@ -33,10 +33,10 @@
     "devexpress-diagram": "2.2.5",
     "devexpress-gantt": "4.1.52",
     "devextreme-quill": "1.6.4",
-    "devextreme-showdown": "^1.0.1",
+    "showdown": "^2.1.0",
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
-    "jszip": "^3.7.1",
+    "jszip": "^3.10.1",
     "rrule": "^2.7.1",
     "turndown": "~7.1.0"
   },
