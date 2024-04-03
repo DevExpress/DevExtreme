@@ -49,7 +49,7 @@ import {
   validateLayout,
 } from './utils/layout';
 import type {
-  FlexProperty, ResizeEvents, ResizeHandleOptions,
+  FlexProperty, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
 } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -80,6 +80,8 @@ class SplitterItem extends CollectionWidgetItem {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
+  private _renderQueue: RenderQueueItem[] = [];
+
   _getDefaultOptions(): Properties {
     return extend(super._getDefaultOptions(), {
       orientation: ORIENTATION.horizontal,
@@ -90,6 +92,8 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: null,
       allowKeyboardNavigation: true,
       separatorSize: 8,
+
+      _renderQueue: undefined,
     }) as Properties;
   }
 
@@ -101,6 +105,31 @@ class Splitter extends (CollectionWidget as any) {
   // eslint-disable-next-line class-methods-use-this
   _itemDataKey(): string {
     return SPLITTER_ITEM_DATA_KEY;
+  }
+
+  _init(): void {
+    super._init();
+
+    this._initializeRenderQueue();
+  }
+
+  _initializeRenderQueue(): void {
+    this._renderQueue = this.option('_renderQueue') || [];
+  }
+
+  _isRenderQueueEmpty(): boolean {
+    return this._renderQueue.length <= 0;
+  }
+
+  _pushItemToRenderQueue(
+    itemContent: Element,
+    splitterConfig: Properties,
+  ): void {
+    this._renderQueue.push({ itemContent, splitterConfig });
+  }
+
+  _shiftItemFromQueue(): RenderQueueItem | undefined {
+    return this._renderQueue.shift();
   }
 
   _initMarkup(): void {
@@ -166,6 +195,32 @@ class Splitter extends (CollectionWidget as any) {
     } else {
       this._shouldRecalculateLayout = true;
     }
+
+    this._processRenderQueue();
+  }
+
+  _processRenderQueue(): void {
+    if (this._isRenderQueueEmpty()) {
+      return;
+    }
+
+    const item = this._shiftItemFromQueue();
+    if (!item) return;
+
+    this._createComponent($(item.itemContent), Splitter, extend({
+      itemTemplate: this.option('itemTemplate'),
+      onResize: this.option('onResize'),
+      onResizeStart: this.option('onResizeStart'),
+      onResizeEnd: this.option('onResizeEnd'),
+      onItemClick: this.option('onItemClick'),
+      onItemContextMenu: this.option('onItemContextMenu'),
+      onItemRendered: this.option('onItemRendered'),
+      onItemExpanded: this.option('onItemExpanded'),
+      onItemCollapsed: this.option('onItemCollapsed'),
+      _renderQueue: this._renderQueue,
+    }, item.splitterConfig));
+
+    this._processRenderQueue();
   }
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -513,17 +568,7 @@ class Splitter extends (CollectionWidget as any) {
       return;
     }
 
-    this._createComponent($(args.itemContent), Splitter, extend({
-      itemTemplate: this.option('itemTemplate'),
-      onResize: this.option('onResize'),
-      onResizeStart: this.option('onResizeStart'),
-      onResizeEnd: this.option('onResizeEnd'),
-      onItemClick: this.option('onItemClick'),
-      onItemContextMenu: this.option('onItemContextMenu'),
-      onItemRendered: this.option('onItemRendered'),
-      onItemExpanded: this.option('onItemExpanded'),
-      onItemCollapsed: this.option('onItemCollapsed'),
-    }, splitterConfig));
+    this._pushItemToRenderQueue(args.itemContent, splitterConfig);
   }
 
   _isHorizontalOrientation(): boolean {

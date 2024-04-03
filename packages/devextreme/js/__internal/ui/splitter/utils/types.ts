@@ -1,6 +1,6 @@
 import type { DragDirection } from '@js/common';
 import type {
-  ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
+  ItemCollapsedEvent, ItemExpandedEvent, Properties, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
 } from '@js/ui/splitter';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 import Widget from '@js/ui/widget/ui.widget';
@@ -17,6 +17,11 @@ export interface PaneRestrictions {
 export interface ResizeOffset {
   x?: number;
   y?: number;
+}
+
+export interface RenderQueueItem {
+  itemContent: Element;
+  splitterConfig: Properties;
 }
 
 export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
