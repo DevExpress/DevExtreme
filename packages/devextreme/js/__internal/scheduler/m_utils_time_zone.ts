@@ -77,6 +77,11 @@ const calculateTimezoneByValue = (timeZone, date = new Date()) => {
     return undefined;
   }
 
+  const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  if (timeZone === currentTimezone) {
+    return date.getTimezoneOffset() / -60;
+  }
+
   const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
   let tzDate;
   try {
