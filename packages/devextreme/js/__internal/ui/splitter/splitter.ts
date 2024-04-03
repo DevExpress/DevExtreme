@@ -117,8 +117,8 @@ class Splitter extends (CollectionWidget as any) {
     this._renderQueue = this.option('_renderQueue') || [];
   }
 
-  _isRenderQueueNotEmpty(): boolean {
-    return this._renderQueue.length > 0;
+  _isRenderQueueEmpty(): boolean {
+    return this._renderQueue.length <= 0;
   }
 
   _pushItemToRenderQueue(
@@ -200,7 +200,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _processRenderQueue(): void {
-    if (!this._isRenderQueueNotEmpty()) {
+    if (this._isRenderQueueEmpty()) {
       return;
     }
 
