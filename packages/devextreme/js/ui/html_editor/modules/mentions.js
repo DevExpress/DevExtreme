@@ -121,10 +121,12 @@ if(Quill) {
 
             if(this._isMentionActive && !dataSource.isLoading()) {
                 const $focusedItem = $(this._list.option('focusedElement'));
+                const defaultItemPosition = direction === 'next' ? 'first' : 'last';
+                let $nextItem = $focusedItem[direction]();
 
-                this._$activeItem = $('<div>')
-                    .addClass(SCROLLVIEW_CONTENT_CLASS)
-                    .appendTo($focusedItem);
+                $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
+                this._list.option('focusedElement', getPublicElement($nextItem));
+                this._list.scrollToItem($nextItem);
 
                 const ariaId = `dx-${new Guid()}`;
                 const handleAria = {
@@ -132,15 +134,8 @@ if(Quill) {
                     role: 'textbox',
                 };
 
-                this._list.setAria(handleAria, this._$activeItem);
-                this._list.setAria('activedescendant', ariaId);
-
-                const defaultItemPosition = direction === 'next' ? 'first' : 'last';
-                let $nextItem = $focusedItem[direction]();
-
-                $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
-                this._list.option('focusedElement', getPublicElement($nextItem));
-                this._list.scrollToItem($nextItem);
+                this._list.setAria(handleAria, $nextItem);
+                this._list.setAria('aria-activedescendant', ariaId);
             }
 
             return !this._isMentionActive;
