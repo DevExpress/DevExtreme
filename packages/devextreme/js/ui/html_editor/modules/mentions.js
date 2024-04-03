@@ -132,6 +132,9 @@ if(Quill) {
                     role: 'textbox',
                 };
 
+                this._list.setAria(handleAria, this._$activeItem);
+                this._list.setAria('activedescendant', ariaId);
+
                 const defaultItemPosition = direction === 'next' ? 'first' : 'last';
                 let $nextItem = $focusedItem[direction]();
 
