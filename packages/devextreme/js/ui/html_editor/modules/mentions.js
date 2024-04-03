@@ -42,7 +42,6 @@ if(Quill) {
 
     const ALLOWED_PREFIX_CHARS = [' ', '\n'];
 
-    const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
     const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
     Quill.register({ 'formats/mention': Mention }, true);
