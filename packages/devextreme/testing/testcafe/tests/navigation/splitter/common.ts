@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -36,8 +37,16 @@ fixture.disablePageReloads`Splitter_Icon_Results`
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const splitter = new Splitter('#container');
 
+    await t.click(Selector('body'), { offsetX: -50 });
+
     await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
     await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
+
+    await t
+      .hover(splitter.resizeHandles.nth(0));
+
+    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
 
     await t
       .dispatchEvent(splitter.resizeHandles.nth(0), 'mousedown')
@@ -48,9 +57,6 @@ fixture.disablePageReloads`Splitter_Icon_Results`
 
     await t
       .dispatchEvent(splitter.resizeHandles.nth(0), 'mouseup');
-
-    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
-    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
 
     if (allowKeyboardNavigation) {
       await t
