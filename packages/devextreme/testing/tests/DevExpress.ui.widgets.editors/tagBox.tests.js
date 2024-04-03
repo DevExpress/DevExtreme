@@ -33,6 +33,7 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
+const TAGBOX_CLASS = 'dx-tagbox';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
@@ -7772,6 +7773,46 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
+    QUnit.test('root element should have arialabelledby attribute based from multitag id', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+        });
+        const $multiTagContainer = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
+        const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+
+
+        assert.strictEqual($parentTagContainerIds.length, 2, 'root element aria-labelledby attribute contains two ids');
+        assert.strictEqual($parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'aria-labelledby attribute contains multitag id');
+    });
+
+    QUnit.test('check showmultitag option is showing the right count of tags correctly in true and false scenarios', function(assert) {
+        [true, false].forEach(showMultiTagOnly => {
+            [2, 4].forEach(maxDisplayedTags => {
+                const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+                const $tagBox = $('#tagBox').dxTagBox({
+                    items: sampleData,
+                    value: sampleData,
+                    maxDisplayedTags,
+                    showMultiTagOnly,
+                });
+
+                const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+                const stringedMaxDisplayedTagsNumber = maxDisplayedTags === 2 ? 'two' : 'four';
+                const stringedParentTagContainerIdsNumber = $parentTagContainerIds.length === 1 ? 'one' : $parentTagContainerIds.length === 2 ? 'two' : 'four';
+                if(showMultiTagOnly) {
+                    assert.strictEqual($parentTagContainerIds.length, ($parentTagContainerIds.length < maxDisplayedTags) ? 1 : $parentTagContainerIds.length, `root element contains ${stringedParentTagContainerIdsNumber} ids when showMultiTagOnly is true and maxDisplayTags is ${stringedMaxDisplayedTagsNumber}`);
+                } else {
+                    assert.strictEqual($parentTagContainerIds.length, ($parentTagContainerIds.length < maxDisplayedTags) ? maxDisplayedTags : $parentTagContainerIds.length, `root element contains ${stringedParentTagContainerIdsNumber} ids when showMultiTagOnly is false and maxDisplayTags is ${stringedMaxDisplayedTagsNumber}`);
+                }
+            });
+
+        });
+    });
+
     QUnit.test('input should have aria-labelledby with a labelId if label specified', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
