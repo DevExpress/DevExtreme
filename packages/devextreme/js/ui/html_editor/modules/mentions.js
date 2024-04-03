@@ -9,6 +9,7 @@ import eventsEngine from '../../../events/core/events_engine';
 import BaseModule from './base';
 import PopupModule from './popup';
 import Mention from '../formats/mention';
+import Guid from '../../../core/guid';
 
 let MentionModule = BaseModule;
 
@@ -41,6 +42,7 @@ if(Quill) {
 
     const ALLOWED_PREFIX_CHARS = [' ', '\n'];
 
+    const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
     const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
     Quill.register({ 'formats/mention': Mention }, true);
@@ -119,6 +121,17 @@ if(Quill) {
 
             if(this._isMentionActive && !dataSource.isLoading()) {
                 const $focusedItem = $(this._list.option('focusedElement'));
+
+                this._$activeItem = $('<div>')
+                    .addClass(SCROLLVIEW_CONTENT_CLASS)
+                    .appendTo($focusedItem);
+
+                const ariaId = `dx-${new Guid()}`;
+                const handleAria = {
+                    id: ariaId,
+                    role: 'textbox',
+                };
+
                 const defaultItemPosition = direction === 'next' ? 'first' : 'last';
                 let $nextItem = $focusedItem[direction]();
 
