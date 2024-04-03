@@ -34,7 +34,7 @@
             template="Nested Right Pane"
           ></dxi-item>
 
-          <ng-container *ngFor="let pane of renderedContentTemplates">
+          <ng-container *ngFor="let pane of paneContentTemplates">
             <div *dxTemplate="let data of pane.name" class="pane-content">
               <ng-template
                 [ngTemplateOutlet]="customPaneTemplate"
@@ -46,7 +46,7 @@
         </dx-splitter>
       </dxi-item>
 
-      <ng-container *ngFor="let pane of renderedContentTemplates">
+      <ng-container *ngFor="let pane of paneContentTemplates">
         <div *dxTemplate="let data of pane.name" class="pane-content">
           <ng-template
             [ngTemplateOutlet]="customPaneTemplate"
@@ -64,7 +64,7 @@
     template="Right Pane"
   ></dxi-item>
 
-  <ng-container *ngFor="let pane of renderedContentTemplates">
+  <ng-container *ngFor="let pane of paneContentTemplates">
     <div *dxTemplate="let data of pane.name" class="pane-content">
       <ng-template
         [ngTemplateOutlet]="customPaneTemplate"

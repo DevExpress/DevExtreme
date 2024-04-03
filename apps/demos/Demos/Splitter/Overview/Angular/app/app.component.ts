@@ -8,6 +8,10 @@ import { DxSplitterModule } from 'devextreme-angular';
 if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
+interface PaneContentTemplate {
+  name: string;
+  data?: any;
+}
 
 @Component({
   selector: 'demo-app',
@@ -18,24 +22,14 @@ if (!document.location.host.includes('localhost')) {
 export class AppComponent {
   dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
 
-  @Input() paneContentTemplates: any[];
-
-  renderedContentTemplates: any[];
-
-  constructor() {
-    this.paneContentTemplates = [
-      { name: 'Left Pane' },
-      { name: 'Central Pane' },
-      { name: 'Right Pane' },
-      { name: 'Nested Left Pane' },
-      { name: 'Nested Central Pane' },
-      { name: 'Nested Right Pane' },
-    ];
-  }
-
-  ngOnInit(): void {
-    this.renderedContentTemplates = JSON.parse(JSON.stringify(this.paneContentTemplates));
-  }
+  paneContentTemplates: PaneContentTemplate[] = [
+    { name: 'Left Pane' },
+    { name: 'Central Pane' },
+    { name: 'Right Pane' },
+    { name: 'Nested Left Pane' },
+    { name: 'Nested Central Pane' },
+    { name: 'Nested Right Pane' },
+  ];
 
   getPaneState(data: any): string {
     if (data.resizable !== false && !data.collapsible) {
