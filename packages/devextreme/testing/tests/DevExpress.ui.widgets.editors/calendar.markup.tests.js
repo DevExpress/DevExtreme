@@ -456,7 +456,7 @@ QUnit.module('Aria accessibility', {
                 });
 
                 const formattedDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
-                const expectedAriaLabel = `Calendar. Selected date is ${formattedDate}`;
+                const expectedAriaLabel = `Calendar. The selected date is ${formattedDate}`;
 
                 checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
             });
@@ -485,7 +485,7 @@ QUnit.module('Aria accessibility', {
                 });
 
                 const formattedDateDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
-                const expectedAriaLabel = `Calendar. Selected date is ${formattedDateDate}`;
+                const expectedAriaLabel = `Calendar. The selected date is ${formattedDateDate}`;
 
                 checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
             });
@@ -503,7 +503,7 @@ QUnit.module('Aria accessibility', {
                 const formattedStartDate = dateLocalization.format(startDate, ARIA_LABEL_DATE_FORMAT);
                 const formattedEndDate = dateLocalization.format(endDate, ARIA_LABEL_DATE_FORMAT);
 
-                const expectedAriaLabel = `Calendar. Selected date range from ${formattedStartDate} to ${formattedEndDate}`;
+                const expectedAriaLabel = `Calendar. The selected date range is from ${formattedStartDate} to ${formattedEndDate}`;
 
                 checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
             });
@@ -521,7 +521,7 @@ QUnit.module('Aria accessibility', {
             instance.option({ value: newDate });
 
             const newFormattedDate = dateLocalization.format(newDate, ARIA_LABEL_DATE_FORMAT);
-            const newExpectedAriaLabel = `Calendar. Selected date is ${newFormattedDate}`;
+            const newExpectedAriaLabel = `Calendar. The selected date is ${newFormattedDate}`;
 
             checkTableAttribute(assert, this.$element, 'aria-label', newExpectedAriaLabel);
         });
@@ -543,7 +543,7 @@ QUnit.module('Aria accessibility', {
             const newFormattedStartDate = dateLocalization.format(newStartDate, ARIA_LABEL_DATE_FORMAT);
             const newFormattedEndDate = dateLocalization.format(newEndDate, ARIA_LABEL_DATE_FORMAT);
 
-            const expectedAriaLabel = `Calendar. Selected date range from ${newFormattedStartDate} to ${newFormattedEndDate}`;
+            const expectedAriaLabel = `Calendar. The selected date range is from ${newFormattedStartDate} to ${newFormattedEndDate}`;
 
             checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
         });
@@ -583,7 +583,7 @@ QUnit.module('Aria accessibility', {
             });
 
             const formattedDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
-            const expectedAriaLabel = `Calendar. Selected date is ${formattedDate}`;
+            const expectedAriaLabel = `Calendar. The selected date is ${formattedDate}`;
 
             checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
         });
@@ -597,7 +597,7 @@ QUnit.module('Aria accessibility', {
             });
 
             const formattedDate = dateLocalization.format(date, ARIA_LABEL_DATE_FORMAT);
-            const expectedAriaLabel = `Calendar. Selected date is ${formattedDate}`;
+            const expectedAriaLabel = `Calendar. The selected date is ${formattedDate}`;
 
             checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
         });
