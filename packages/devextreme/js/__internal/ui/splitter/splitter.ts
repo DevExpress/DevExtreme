@@ -669,7 +669,7 @@ class Splitter extends (CollectionWidget as any) {
 
   _iterateResizeHandles(callback: (instance: ResizeHandle) => void): void {
     this._getResizeHandleItems().each((index, element) => {
-      callback(getComponentInstance($(element)) as ResizeHandle);
+      callback(getComponentInstance($(element)));
 
       return true;
     });
