@@ -2,11 +2,13 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
 import Splitter from '../../../model/splitter';
 
-fixture.disablePageReloads`Splitter_Icon_Results`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Splitter_common`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => clearTestPage());
 
 [true, false].forEach((allowKeyboardNavigation) => {
   const getScreenshotName = (state) => `Splitter apearance - handle in ${state} state.png`;
