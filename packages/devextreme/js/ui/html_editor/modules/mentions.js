@@ -129,7 +129,7 @@ if(Quill) {
 
                 const ariaId = `dx-${new Guid()}`;
 
-                $focusedItem.removeAttr('id').removeAttr('aria-activedescendant');
+                $focusedItem.removeAttr('aria-activedescendant');
                 this._list.setAria('role', 'option', $focusedItem);
 
                 $nextItem.attr('aria-activedescendant', ariaId).removeAttr('id');
