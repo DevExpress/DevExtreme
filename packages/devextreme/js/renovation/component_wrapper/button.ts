@@ -92,7 +92,7 @@ export default class ButtonWrapper extends Component {
   _initMarkup(): void {
     super._initMarkup();
 
-    const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content');
+    const $content = (this.$element() as unknown as dxElementWrapper).find('.dx-button-content').first();
     const $template = $content.children().filter('.dx-template-wrapper');
     const $input = $content.children().filter('.dx-button-submit-input');
 
