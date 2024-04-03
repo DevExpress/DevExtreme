@@ -4,7 +4,7 @@ interface ColorIconProps {
   key: number;
   color: string;
   // eslint-disable-next-line no-unused-vars
-  onClick: (string)=>void;
+  onClick: (string) => void;
 }
 
 class ColorIcon extends React.Component<ColorIconProps> {

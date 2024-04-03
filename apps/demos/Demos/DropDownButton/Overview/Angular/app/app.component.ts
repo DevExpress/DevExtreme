@@ -6,7 +6,7 @@ import { DxToolbarModule } from 'devextreme-angular';
 import { DxDropDownButtonModule, DxDropDownButtonComponent, DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
 import { ItemObject, Service } from './app.service';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
@@ -63,7 +63,7 @@ export class AppComponent {
   };
 
   onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent) {
-    notify(`Go to ${e.element.querySelector(".button-title").textContent}'s profile`, 'success', 600);
+    notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
   }
 
   onItemClick(e: DxDropDownButtonTypes.ItemClickEvent) {

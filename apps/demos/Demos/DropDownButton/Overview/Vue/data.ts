@@ -29,17 +29,18 @@ const lineHeights = [
 ];
 
 function getEmployeeImageUrl() {
-  return "../../../../images/employees/51.png";
+  return '../../../../images/employees/51.png';
 }
 
 export default {
   getData() {
     return {
-      colors, 
-      profileSettings, 
-      downloads, alignments, 
-      fontSizes, 
-      lineHeights, 
+      colors,
+      profileSettings,
+      downloads,
+      alignments,
+      fontSizes,
+      lineHeights,
       getEmployeeImageUrl,
     };
   },
