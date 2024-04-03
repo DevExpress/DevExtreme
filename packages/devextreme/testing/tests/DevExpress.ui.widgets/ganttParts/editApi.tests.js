@@ -589,6 +589,8 @@ QUnit.module('Edit api', moduleConfig, () => {
         assert.equal(taskResources.length, 2, 'length');
         assert.equal(taskResources[0]['ResourceText'], resources[0]['ResourceText'], 'ResourceText 1');
         assert.equal(taskResources[1]['ResourceText'], resources[1]['ResourceText'], 'ResourceText 2');
+
+        assert.equal(this.instance.getTaskResources(100).length, 0, 'resources for not exists task  should be empty array');
     });
     test('getVisibleKeys', function(assert) {
         const my_tasks = [
