@@ -5,6 +5,7 @@ import { isString } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import eventsEngine from '../../../events/core/events_engine';
+import Guid from '../../../core/guid';
 
 import BaseModule from './base';
 import PopupModule from './popup';
@@ -125,6 +126,8 @@ if(Quill) {
                 $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
                 this._list.option('focusedElement', getPublicElement($nextItem));
                 this._list.scrollToItem($nextItem);
+
+                this._updateAriaLabel($nextItem[0].id);
             }
 
             return !this._isMentionActive;
@@ -355,6 +358,14 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
+
+            this._updateAriaLabel($firstItem[0].id);
+        }
+
+        _updateAriaLabel(ariaId) {
+            const $content = this.editorInstance._$htmlContainer;
+            $content.attr('aria-activedescendant', ariaId).removeAttr('id');
+            this._list.setAria('role', 'textbox', $content);
         }
 
         get _popupPosition() {
@@ -396,6 +407,7 @@ if(Quill) {
                 focusStateEnabled: false
             });
         }
+
 
         get _activeListItems() {
             return this._list.itemElements().filter(`:not(.${DISABLED_STATE_CLASS})`);
