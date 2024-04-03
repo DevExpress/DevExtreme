@@ -6,9 +6,9 @@ import {
     isDesktopEnvironment,
 } from '../../helpers/scheduler/helpers.js';
 
-const { test, module } = QUnit;
+const { test, module, testStart } = QUnit;
 
-initTestMarkup();
+testStart(() => initTestMarkup());
 
 module('Recurrence Dialog', {
     beforeEach: function() {

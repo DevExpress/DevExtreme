@@ -15,9 +15,9 @@ import { noop } from 'core/utils/common';
 import pointerMock from '../../helpers/pointerMock.js';
 import dragEvents from 'events/drag';
 
-const { module, test } = QUnit;
+const { module, test, testStart } = QUnit;
 
-initTestMarkup();
+testStart(() => initTestMarkup());
 
 const moduleConfig = {
     beforeEach() {
