@@ -463,6 +463,29 @@ QUnit.module('Menu rendering', {
         assert.roughEqual($submenu.outerHeight(), $(window).height() - $item1.offset().top - $item1.outerHeight(), .1, 'menu uses all available space');
     });
 
+    QUnit.test('Height of the submenu should not exceed content height', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'item 1',
+                items: [{ text: 'item 11' }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+        });
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($item1).trigger('dxclick');
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+        const $itemsContainer = $submenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`);
+
+        assert.roughEqual($submenu.outerHeight(), $itemsContainer.outerHeight(), .1);
+    });
+
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;

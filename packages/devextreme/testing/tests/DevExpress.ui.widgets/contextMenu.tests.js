@@ -308,6 +308,23 @@ QUnit.module('Rendering', moduleConfig, () => {
         assert.ok($nestedSubmenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested menu');
     });
 
+    QUnit.test('Height of the submenu should not exceed content height', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $rootSubmenu = $(`.${DX_SUBMENU_CLASS}`);
+        const $itemsContainer = $rootSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`);
+
+        assert.roughEqual($rootSubmenu.outerHeight(), $itemsContainer.outerHeight(), .1);
+    });
+
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;

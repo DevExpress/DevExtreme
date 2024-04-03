@@ -606,24 +606,22 @@ class ContextMenu extends MenuBase {
         }
     }
 
-    _initScrollView($container, anchor, considerAnchorHeight = true) {
+    _initScrollView($container, anchor, isNestedSubmenu) {
         const $itemsContainer = $container.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
         const contentHeight = getOuterHeight($itemsContainer);
-        const maxHeight = this._getMaxHeight(contentHeight, anchor, considerAnchorHeight);
+        const maxHeight = this._getMaxHeight(anchor, !isNestedSubmenu);
         const menuHeight = Math.min(contentHeight, maxHeight);
-        const cssProps = {
-            height: menuHeight,
-            overflow: 'visible',
-        };
 
-        $container.css(cssProps);
-        this._overlay._dimensionChanged();
+        $container.css({
+            height: isNestedSubmenu ? menuHeight : '100%',
+            overflow: 'visible',
+        });
         if(!$container.hasClass(SCOLLVIEW_CLASS)) {
             this._createComponent($container, ScrollView, {});
         }
     }
 
-    _getMaxHeight(containerHeight, anchor, considerAnchorHeight) {
+    _getMaxHeight(anchor, considerAnchorHeight = true) {
         const windowHeight = getOuterHeight(window);
         const isAnchorRenderer = isRenderer(anchor);
         const document = domAdapter.getDocument();
@@ -659,7 +657,7 @@ class ContextMenu extends MenuBase {
             $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
         }
 
-        this._initScrollView($submenu, $item, false);
+        this._initScrollView($submenu, $item, true);
         if(!this._isSubmenuVisible($submenu)) {
             this._drawSubmenu($item);
         }
@@ -900,14 +898,22 @@ class ContextMenu extends MenuBase {
             }
 
             this._setOptionWithoutOptionChange('visible', true);
+            this._overlay.option('height', () => {
+                return this._getMaxHeight(position.of);
+            });
+            this._overlay.option('maxHeight', () => {
+                const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
+                const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+                return getOuterHeight($content);
+            });
             this._overlay.option('position', position);
-            promise = this._overlay.show()
-                .then(() => {
-                    const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
-                    if($subMenu.length) {
-                        this._initScrollView($subMenu, position.of);
-                    }
-                });
+
+            const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
+
+            if($subMenu.length) {
+                this._initScrollView($subMenu, position.of, false);
+            }
+            promise = this._overlay.show();
             event && event.stopPropagation();
 
             this._setAriaAttributes();
