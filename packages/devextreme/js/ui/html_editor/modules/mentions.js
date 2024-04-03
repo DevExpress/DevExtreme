@@ -9,7 +9,6 @@ import eventsEngine from '../../../events/core/events_engine';
 import BaseModule from './base';
 import PopupModule from './popup';
 import Mention from '../formats/mention';
-import Guid from '../../../core/guid';
 
 let MentionModule = BaseModule;
 
@@ -126,15 +125,6 @@ if(Quill) {
                 $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
                 this._list.option('focusedElement', getPublicElement($nextItem));
                 this._list.scrollToItem($nextItem);
-
-                const ariaId = `dx-${new Guid()}`;
-
-                $focusedItem.removeAttr('aria-activedescendant');
-                this._list.setAria('role', 'option', $focusedItem);
-
-                $nextItem.attr('aria-activedescendant', ariaId).removeAttr('id');
-                this._list.setAria('role', 'textbox', $nextItem);
-                this._list.setAria('activedescendant', ariaId);
             }
 
             return !this._isMentionActive;
@@ -365,12 +355,6 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
-
-            const ariaId = `dx-${new Guid()}`;
-
-            $firstItem.attr('aria-activedescendant', ariaId).removeAttr('id');
-            this._list.setAria('role', 'textbox', $firstItem);
-            this._list.setAria('activedescendant', ariaId);
         }
 
         get _popupPosition() {
