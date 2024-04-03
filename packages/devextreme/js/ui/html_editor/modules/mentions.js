@@ -364,6 +364,11 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
+
+            const ariaId = `dx-${new Guid()}`;
+
+            $firstItem.attr('aria-activedescendant', ariaId).removeAttr('id');
+            this._list.setAria('role', 'textbox', $firstItem);
         }
 
         get _popupPosition() {
