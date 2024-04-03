@@ -336,14 +336,18 @@ QUnit.module('Rendering', moduleConfig, () => {
             return;
         }
 
-        const totalItems = 25;
-        const items = (new Array(totalItems)).fill(null).map((_, idx) => ({ text: idx }));
-        items[totalItems - 1].items = (new Array(99)).fill(null).map((_, idx) => ({ text: idx }));
-
         const instance = new ContextMenu(this.$element, {
-            items,
+            items: [{
+                text: 'item 11',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            }],
             visible: true,
             showSubmenuMode: { name: 'onHover', delay: 0 },
+            position: {
+                my: 'bottom',
+                at: 'bottom',
+                of: window,
+            }
         });
         const $itemsContainer = instance.itemsContainer();
         const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).last();

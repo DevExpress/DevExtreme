@@ -526,24 +526,25 @@ QUnit.module('Menu rendering', {
             return;
         }
 
-        const totalItems = 25;
-        const items = (new Array(totalItems)).fill(null).map((_, idx) => ({ text: idx }));
-        items[totalItems - 1].items = (new Array(99)).fill(null).map((_, idx) => ({ text: idx }));
         const menu = createMenuInWindow({
             items: [{
                 text: 'item 1',
-                items,
+                items: [{
+                    text: 'item 11',
+                    items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+                }],
             }],
             showFirstSubmenuMode: 'onClick',
             showSubmenuMode: { name: 'onHover', delay: 0 },
         });
         const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
+        menu.element.css('top', 10000 + $(window).height() - 50);
         $($rootItem).trigger('dxclick');
         this.clock.tick(0);
 
         const submenu = getSubMenuInstance($rootItem);
-        const $menuItem = $($(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).last());
+        const $menuItem = $($(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).eq(0));
 
         $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
         $($menuItem).trigger('dxpointermove');
