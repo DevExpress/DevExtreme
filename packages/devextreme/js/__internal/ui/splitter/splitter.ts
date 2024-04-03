@@ -581,19 +581,6 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
-    if (property === 'splitter.onResizeEnd') {
-      const $item = this._findItemElementByItem(item);
-
-      if (!$item.length) {
-        return;
-      }
-
-      const splitInstance = getComponentInstance($item.find('.dx-splitter'));
-      splitInstance.option('onResizeEnd', value);
-
-      return;
-    }
-
     switch (property) {
       case 'size':
       case 'maxSize':
