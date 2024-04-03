@@ -134,6 +134,7 @@ if(Quill) {
 
                 $nextItem.attr('aria-activedescendant', ariaId).removeAttr('id');
                 this._list.setAria('role', 'textbox', $nextItem);
+                this._list.setAria('activedescendant', ariaId);
             }
 
             return !this._isMentionActive;
@@ -369,6 +370,7 @@ if(Quill) {
 
             $firstItem.attr('aria-activedescendant', ariaId).removeAttr('id');
             this._list.setAria('role', 'textbox', $firstItem);
+            this._list.setAria('activedescendant', ariaId);
         }
 
         get _popupPosition() {
