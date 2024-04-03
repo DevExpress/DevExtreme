@@ -615,12 +615,9 @@ class ContextMenu extends MenuBase {
             height: menuHeight,
             overflow: 'visible',
         };
-        const containerOffset = $container.offset().top;
 
-        if(containerOffset < 0) {
-            cssProps.top = -containerOffset;
-        }
         $container.css(cssProps);
+        this._overlay._dimensionChanged();
         if(!$container.hasClass(SCOLLVIEW_CLASS)) {
             this._createComponent($container, ScrollView, {});
         }
@@ -636,14 +633,11 @@ class ContextMenu extends MenuBase {
             return windowHeight;
         }
 
-        const offsetTop = anchor.offset().top;
-        let maxHeight = Math.max(offsetTop, windowHeight - offsetTop);
-
-        if(considerAnchorHeight) {
-            maxHeight -= getOuterHeight(anchor);
-        } else if(offsetTop > windowHeight / 2) {
-            maxHeight += getOuterHeight(anchor);
-        }
+        const offsetTop = getOffsetTop(anchor[0]);
+        const anchorHeight = getOuterHeight(anchor);
+        const maxHeight = considerAnchorHeight
+            ? Math.max(offsetTop, windowHeight - offsetTop - anchorHeight)
+            : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
 
         return Math.min(windowHeight, maxHeight);
     }
@@ -665,11 +659,10 @@ class ContextMenu extends MenuBase {
             $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
         }
 
+        this._initScrollView($submenu, $item, false);
         if(!this._isSubmenuVisible($submenu)) {
             this._drawSubmenu($item);
         }
-
-        this._initScrollView($submenu, $item, false);
     }
 
     _hideSubmenusOnSameLevel($item) {
@@ -1019,6 +1012,15 @@ class ContextMenu extends MenuBase {
     hide() {
         return this.toggle(false);
     }
+}
+
+function getOffsetTop(el) {
+    const rects = el.getClientRects();
+
+    if(!rects.length) {
+        return 0;
+    }
+    return rects[0].top;
 }
 
 registerComponent('dxContextMenu', ContextMenu);

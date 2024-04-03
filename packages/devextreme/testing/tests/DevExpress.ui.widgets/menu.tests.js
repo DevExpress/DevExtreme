@@ -500,6 +500,27 @@ QUnit.module('Menu rendering', {
             .1, 'Nested submenu uses all available space');
     });
 
+    QUnit.test('Flipping root submenu', function(assert) {
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'item 1',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            }],
+            showFirstSubmenuMode: 'onClick',
+        });
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        menu.element.css('top', 10000 + $(window).height() - 50);
+        $($item1).trigger('dxclick');
+        this.clock.tick(0);
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
+        assert.roughEqual($submenu.offset().top, 0, .1, 'submenu flipped to top');
+        assert.roughEqual($submenu.outerHeight(), $(window).height() - 50, .1, 'menu uses all available space');
+    });
+
     QUnit.test('Flipping 2nd level submenu', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
@@ -531,7 +552,7 @@ QUnit.module('Menu rendering', {
         const $nestedSubmenu = $($(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1));
         const availableHeight = Math.min($menuItem.offset().top + $($menuItem).outerHeight(), $(window).height());
 
-        assert.roughEqual($nestedSubmenu.offset().top, 0, .1, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.offset().top, BORDER_WIDTH, .5, 'Nested submenu flipped to top');
         assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
     });
 });

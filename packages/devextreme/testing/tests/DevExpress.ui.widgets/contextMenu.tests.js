@@ -42,6 +42,7 @@ const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
 const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const BORDER_WIDTH = 1;
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -354,7 +355,7 @@ QUnit.module('Rendering', moduleConfig, () => {
         const $nestedSubmenu = $submenus.eq(1);
         const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height());
 
-        assert.roughEqual($nestedSubmenu.offset().top, 0, .1, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.offset().top, BORDER_WIDTH, .1, 'Nested submenu flipped to top');
         assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
     });
 
