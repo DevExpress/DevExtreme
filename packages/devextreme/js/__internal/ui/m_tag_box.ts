@@ -729,7 +729,9 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _renderMultiTag($input) {
+    const tagId = `dx-${new Guid()}`;
     const $tag = $('<div>')
+      .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
       .addClass(TAGBOX_MULTI_TAG_CLASS);
 
@@ -754,7 +756,9 @@ const TagBox = (SelectBox as any).inherit({
       model: args.text,
       container: getPublicElement($tag),
     });
+    this.setAria('labelledby', tagId, $tag);
 
+    this._updateElementAria(tagId);
     return $tag;
   },
 
