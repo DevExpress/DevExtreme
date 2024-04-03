@@ -71,7 +71,6 @@ const options: Options<Properties> = {
 const a11yCheckConfig = {
   rules: {
     'scrollable-region-focusable': { enabled: false },
-    'aria-allowed-attr': { enabled: false },
   },
 };
 

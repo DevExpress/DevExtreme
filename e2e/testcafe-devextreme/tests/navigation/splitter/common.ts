@@ -1,54 +1,89 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
+import { clearTestPage } from '../../../helpers/clearPage';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
 import Splitter from 'devextreme-testcafe-models/splitter';
 
-fixture.disablePageReloads`Splitter_Icon_Results`
-  .page(url(__dirname, '../../container.html'));
+fixture.disablePageReloads`Splitter_common`
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => clearTestPage());
 
-test('Splitter appearance on different appearance and themes', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  const splitter = new Splitter('#container');
-
+[true, false].forEach((allowKeyboardNavigation) => {
   const getScreenshotName = (state) => `Splitter apearance - handle in ${state} state.png`;
   const darkTheme = getFullThemeName().replace('light', 'dark');
 
-  await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container' });
-  await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container', theme: darkTheme });
+  test(`ResizeHandle appearance in inactive state, allowKeyboardNavigation: ${allowKeyboardNavigation}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await splitter.option('items[1].resizable', true);
+    await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('inactive'), { element: '#container', theme: darkTheme });
 
-  await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
-  await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxSplitter', {
+    allowKeyboardNavigation,
+    width: 600,
+    height: 300,
+    dataSource: [{
+      text: 'pane_1',
+    }, {
+      text: 'pane_2',
+      resizable: false,
+    }],
+  }));
 
-  await t
-    .hover(splitter.resizeHandles.nth(0));
+  test(`ResizeHandle appearance in different states, allowKeyboardNavigation: ${allowKeyboardNavigation}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const splitter = new Splitter('#container');
 
-  await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
-  await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
+    await t.click(Selector('body'), { offsetX: -50 });
 
-  await t
-    .click(splitter.resizeHandles.nth(0));
+    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('normal'), { element: '#container', theme: darkTheme });
 
-  await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
-  await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
+    await t
+      .hover(splitter.resizeHandles.nth(0));
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxSplitter', {
-  orientation: 'horizontal',
-  width: 600,
-  height: 300,
-  dataSource: [{
-    text: 'pane_1',
-  }, {
-    text: 'pane_2',
-    resizable: false,
-  },
-  ],
-}));
+    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('hover'), { element: '#container', theme: darkTheme });
+
+    await t
+      .dispatchEvent(splitter.resizeHandles.nth(0), 'mousedown')
+      .wait(500);
+
+    await testScreenshot(t, takeScreenshot, getScreenshotName('active'), { element: '#container' });
+    await testScreenshot(t, takeScreenshot, getScreenshotName('active'), { element: '#container', theme: darkTheme });
+
+    await t
+      .dispatchEvent(splitter.resizeHandles.nth(0), 'mouseup');
+
+    if (allowKeyboardNavigation) {
+      await t
+        .click(splitter.resizeHandles.nth(0));
+
+      await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container' });
+      await testScreenshot(t, takeScreenshot, getScreenshotName('focused'), { element: '#container', theme: darkTheme });
+    }
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxSplitter', {
+    allowKeyboardNavigation,
+    width: 600,
+    height: 300,
+    dataSource: [{
+      text: 'pane_1',
+      collapsible: true,
+    }, {
+      text: 'pane_2',
+      collapsible: true,
+    }],
+  }));
+});
 
 ['horizontal', 'vertical'].forEach((orientation) => {
   test(`Splitter appearance, orientation='${orientation}'`, async (t) => {

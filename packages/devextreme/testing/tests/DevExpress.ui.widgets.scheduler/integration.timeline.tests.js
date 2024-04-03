@@ -41,7 +41,7 @@ QUnit.test('Special classes should be applied in grouped timeline', function(ass
     `);
 
     try {
-        $style.appendTo('head');
+        $('#qunit-fixture').prepend($style);
 
         const resourcesData = [
             { text: 'One', id: 2 },

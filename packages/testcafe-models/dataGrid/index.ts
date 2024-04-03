@@ -63,6 +63,12 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   commandDrag: 'dx-command-drag',
   dialogWrapper: 'dx-dialog-wrapper',
+  summaryTotal: 'dx-datagrid-summary-item',
+};
+
+const E2E_ATTRIBUTES = {
+  a11yStatusContainer: 'e2e-a11y-general-status-container',
+  summaryCellStatusContainer: 'e2e-a11y-summary-cell-status-container',
 };
 
 const moveElement = ($element: JQuery, x: number, y: number, isStart: boolean): void => {
@@ -717,5 +723,17 @@ export default class DataGrid extends Widget {
 
   getScrollBarThumbTrack(scrollbarPosition: string): Selector {
     return this.getRowsView().find(`.dx-scrollbar-${scrollbarPosition.toLowerCase()} .dx-scrollable-scroll`);
+  }
+
+  getGeneralStatusContainer(): Selector {
+    return this.element().find(`[${E2E_ATTRIBUTES.a11yStatusContainer}="true"]`);
+  }
+
+  getSummaryCellStatusContainer(nth = 0): Selector {
+    return this.element().find(`[${E2E_ATTRIBUTES.summaryCellStatusContainer}="true"]`).nth(nth);
+  }
+
+  getSummaryTotalElement(nth = 0): Selector {
+    return this.element().find(`.${CLASS.summaryTotal}`).nth(nth);
   }
 }

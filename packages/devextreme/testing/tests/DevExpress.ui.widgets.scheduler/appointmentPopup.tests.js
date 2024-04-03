@@ -13,8 +13,9 @@ import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_p
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import 'ui/scheduler/ui.scheduler';
 import 'ui/switch';
+import viewPort from 'core/utils/view_port';
 
-const { module, test } = QUnit;
+const { module, test, testStart } = QUnit;
 
 const APPOINTMENT_POPUP_WIDTH = 485;
 const APPOINTMENT_POPUP_WIDTH_WITH_RECURRENCE = 970;
@@ -99,7 +100,10 @@ const setWindowWidth = width => {
 
 const resetWindowWidth = () => delete document.documentElement.clientWidth;
 
-QUnit.testStart(() => initTestMarkup());
+testStart(() => {
+    initTestMarkup();
+    viewPort.value($('.shadow-container').get(0));
+});
 
 const moduleConfig = {
     beforeEach() {

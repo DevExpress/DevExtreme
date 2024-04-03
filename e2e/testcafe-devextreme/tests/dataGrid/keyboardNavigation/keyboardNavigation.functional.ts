@@ -4209,8 +4209,9 @@ test('DataGrid - "Maximum call stack size exceeded" error occurs on navigating s
     .pressKey('left left left tab shift+tab');
 
   // assert
+  const groupCellTotal = dataGrid.getSummaryTotalElement(0);
   await t
-    .expect((await Selector(':focus').innerText).trim())
+    .expect((await groupCellTotal.innerText).trim())
     .eql('Total: 1');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: getData(3, 3),

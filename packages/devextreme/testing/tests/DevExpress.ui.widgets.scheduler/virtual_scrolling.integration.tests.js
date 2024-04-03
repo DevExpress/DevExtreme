@@ -2714,12 +2714,10 @@ module('Virtual scrolling integration', () => {
             }, () => {
                 module('Regular appointmens', () => {
                     test('Scroll Right', function(assert) {
-                        const $style = $('<style nonce="qunit-test">');
+                        const $style = $('<style nonce="qunit-test">').text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 200px } ');
                         const styleBefore = $style.text();
 
-                        $style
-                            .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 200px } ')
-                            .appendTo('head');
+                        $('#qunit-fixture').prepend($style);
 
                         this.createInstance();
 
@@ -3218,12 +3216,10 @@ module('Virtual scrolling integration', () => {
         module('Vertical orientation', () => {
             supportedViews.forEach(viewName => {
                 test(`Cell height should be correct in "${viewName}" view`, function(assert) {
-                    const $style = $('<style nonce="qunit-test">');
+                    const $style = $('<style nonce="qunit-test">').text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ');
                     const styleBefore = $style.text();
 
-                    $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-vertical { height: 80px } ')
-                        .appendTo('head');
+                    $('#qunit-fixture').prepend($style);
 
                     const instance = createWrapper({
                         views: [{
@@ -3249,12 +3245,10 @@ module('Virtual scrolling integration', () => {
         module('Horizontal orientation', () => {
             supportedViews.forEach(viewName => {
                 test(`Cell width should be correct in "${viewName}" view`, function(assert) {
-                    const $style = $('<style nonce="qunit-test">');
+                    const $style = $('<style nonce="qunit-test">').text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 120px } ');
                     const styleBefore = $style.text();
 
-                    $style
-                        .text('#scheduler .dx-scheduler-cell-sizes-horizontal { width: 120px } ')
-                        .appendTo('head');
+                    $('#qunit-fixture').prepend($style);
 
                     const instance = createWrapper({
                         views: [{
