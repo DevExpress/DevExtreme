@@ -306,8 +306,8 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-        "dxCalendar-selectedDate": "Selected date is {0}",
-        "dxCalendar-selectedDateRange": "Selected date range from {0} to {1}",
+        "dxCalendar-selectedDate": "The selected date is {0}",
+        "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
 
         "dxColorView-ariaRed": "Červená",
         "dxColorView-ariaGreen": "Zelená",

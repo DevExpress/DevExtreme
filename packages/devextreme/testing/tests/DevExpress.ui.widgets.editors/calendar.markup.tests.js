@@ -461,7 +461,7 @@ QUnit.module('Aria accessibility', {
                 checkTableAttribute(assert, this.$element, 'aria-label', expectedAriaLabel);
             });
 
-            QUnit.test(`table aria-label should contain selected date when selectionMode=multiple, zoomLevel=${zoomLevel}`, function(assert) {
+            QUnit.test(`table aria-label should be equal to "Calendar" when selectionMode=multiple, zoomLevel=${zoomLevel}`, function(assert) {
                 const date = new Date(2024, 3, 21);
 
                 this.$element.dxCalendar({
