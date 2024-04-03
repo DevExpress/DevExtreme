@@ -128,13 +128,12 @@ if(Quill) {
                 this._list.scrollToItem($nextItem);
 
                 const ariaId = `dx-${new Guid()}`;
-                const handleAria = {
-                    role: 'textbox',
-                };
 
-                $focusedItem.removeAttr('id');
-                $nextItem.attr('aria-activedescendant', ariaId);
-                this._list.setAria(handleAria, $nextItem);
+                $focusedItem.removeAttr('id').removeAttr('aria-activedescendant');
+                this._list.setAria('role', 'option', $focusedItem);
+
+                $nextItem.attr('aria-activedescendant', ariaId).removeAttr('id');
+                this._list.setAria('role', 'textbox', $nextItem);
             }
 
             return !this._isMentionActive;
