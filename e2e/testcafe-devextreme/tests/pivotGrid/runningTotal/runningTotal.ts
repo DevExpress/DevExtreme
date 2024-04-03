@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { isMaterialBased } from '../../../helpers/themeUtils';
 import { createWidget, disposeWidget } from '../../../helpers/createWidget';
-import PivotGrid from '../../../model/pivotGrid';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 
 const testFixture = () => (isMaterialBased() ? fixture.skip : fixture);
 
