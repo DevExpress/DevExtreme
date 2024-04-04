@@ -125,7 +125,7 @@ if(Quill) {
                 $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
                 this._list.option('focusedElement', getPublicElement($nextItem));
                 this._list.scrollToItem($nextItem);
-                this._updateAriaLabel($nextItem[0].id);
+                this._updateAriaLabel($nextItem.attr('id'));
             }
 
             return !this._isMentionActive;
@@ -356,7 +356,7 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
-            this._updateAriaLabel($firstItem[0].id);
+            this._updateAriaLabel($firstItem.attr('id'));
         }
 
         _updateAriaLabel(ariaId) {
