@@ -399,7 +399,7 @@ export class ColumnsController extends modules.Controller {
     }, commonColumnSettings);
   }
 
-  isColumnOptionUsed(optionName): any {
+  public isColumnOptionUsed(optionName): any {
     for (let i = 0; i < this._columns.length; i++) {
       if (this._columns[i][optionName]) {
         return true;
@@ -673,7 +673,7 @@ export class ColumnsController extends modules.Controller {
     return isDefined(column.groupIndex) && !column.showWhenGrouped;
   }
 
-  hasVisibleDataColumns(): boolean {
+  public hasVisibleDataColumns(): boolean {
     const columns: any[] = this._columns;
 
     return columns.some((column) => {
@@ -1210,7 +1210,7 @@ export class ColumnsController extends modules.Controller {
     }
   }
 
-  updateColumns(dataSource?, forceApplying?, isApplyingUserState?): any {
+  public updateColumns(dataSource?, forceApplying?, isApplyingUserState?): any {
     if (!forceApplying) {
       this.updateSortingGrouping(dataSource);
     }

@@ -920,7 +920,7 @@ export const rowsViewSelectionExtenderMixin = (Base: ModuleType<RowsView>) => cl
     return $row;
   }
 
-  _rowClickForTreeList(e): void {
+  public _rowClickForTreeList(e): void {
     super._rowClick(e);
   }
 
