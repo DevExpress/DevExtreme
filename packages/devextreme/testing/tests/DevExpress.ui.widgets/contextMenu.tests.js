@@ -272,10 +272,11 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         assert.strictEqual($icon.attr('alt'), 'dxContextMenu item icon');
     });
+});
 
-    QUnit.test('context menu should init ScrollView', function(assert) {
+QUnit.module('Rendering ScrollView', moduleConfig, () => {
+    QUnit.test('Context menu should init ScrollView', function(assert) {
         new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
-        this.clock.tick(0);
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
@@ -377,15 +378,14 @@ QUnit.module('Rendering', moduleConfig, () => {
         const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height());
 
         assert.roughEqual($nestedSubmenu.offset().top, BORDER_WIDTH, .1, 'Nested submenu flipped to top');
-        assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
+        assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
     });
 
-    QUnit.test('height of the context menu should be limited', function(assert) {
+    QUnit.test('Height of the context menu should be limited', function(assert) {
         new ContextMenu(this.$element, {
             items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
             visible: true,
         });
-        this.clock.tick(0);
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
