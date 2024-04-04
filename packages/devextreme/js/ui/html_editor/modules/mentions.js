@@ -12,6 +12,8 @@ import Mention from '../formats/mention';
 
 let MentionModule = BaseModule;
 
+const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
+
 if(Quill) {
     const USER_ACTION = 'user';
     const DEFAULT_MARKER = '@';
@@ -362,9 +364,7 @@ if(Quill) {
         }
 
         _updateAriaLabel(ariaId) {
-            const $content = this.editorInstance._$htmlContainer;
-            $content.attr('aria-activedescendant', ariaId).removeAttr('id');
-            this._list.setAria('role', 'textbox', $content);
+            this.quill.root.setAttribute('aria-activedescendant', ariaId);
         }
 
         get _popupPosition() {
