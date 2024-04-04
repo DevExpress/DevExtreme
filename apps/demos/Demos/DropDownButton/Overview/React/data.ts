@@ -28,7 +28,7 @@ const lineHeights = [
   { lineHeight: 2, text: '2' },
 ];
 export default {
-  getData() {
+  getData(): object {
     return {
       colors, profileSettings, downloads, alignments, fontSizes, lineHeights,
     };

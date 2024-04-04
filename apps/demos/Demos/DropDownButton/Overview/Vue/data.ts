@@ -28,12 +28,12 @@ const lineHeights = [
   { lineHeight: 2, text: '2' },
 ];
 
-function getEmployeeImageUrl() {
+function getEmployeeImageUrl(): string {
   return '../../../../images/employees/51.png';
 }
 
 export default {
-  getData() {
+  getData(): object {
     return {
       colors,
       profileSettings,
