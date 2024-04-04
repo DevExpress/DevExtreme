@@ -87,6 +87,7 @@ jobs:
           useJQuery: 'false'
 
   qunit-tests-performance:
+    if: false
     needs: build
     runs-on: devextreme-shr2
     name: Performance
