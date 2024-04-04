@@ -5,7 +5,6 @@ import { isString } from '../../../core/utils/type';
 import { extend } from '../../../core/utils/extend';
 import { getPublicElement } from '../../../core/element';
 import eventsEngine from '../../../events/core/events_engine';
-import Guid from '../../../core/guid';
 
 import BaseModule from './base';
 import PopupModule from './popup';
