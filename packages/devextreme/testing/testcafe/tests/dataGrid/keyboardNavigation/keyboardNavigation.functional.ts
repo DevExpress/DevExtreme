@@ -1434,7 +1434,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     .expect(cell01.isFocused)
     .ok()
 
-    .pressKey('tab')
+    .pressKey('down')
+    .pressKey('down')
 
     .expect(cell10.element.focused)
     .ok()
@@ -1455,7 +1456,8 @@ test('The expand cell should not lose focus on expanding a master row (T892203)'
     .expect(cell10.isFocused)
     .ok()
 
-    .pressKey('shift+tab')
+    .pressKey('up')
+    .pressKey('up')
 
     .expect(cell01.element.focused)
     .ok()
