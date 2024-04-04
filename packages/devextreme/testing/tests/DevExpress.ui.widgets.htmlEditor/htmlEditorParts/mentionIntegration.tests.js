@@ -641,5 +641,24 @@ export default function() {
             this.$element.find('p').first().text('@');
             this.clock.tick(10);
         });
+
+        test('aria-activedescendant should exist on textbox when mention pops up', function(assert) {
+            const done = assert.async();
+            const valueChangeSpy = sinon.spy(() => {
+                if(valueChangeSpy.calledOnce) {
+                    this.clock.tick(10);
+                    const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
+                    assert.ok($content.attr('aria-activedescendant'));
+                    done();
+                }
+            });
+
+            this.options.onValueChanged = valueChangeSpy;
+
+            this.createWidget();
+            this.instance.focus();
+            this.$element.find('p').first().text('@');
+            this.clock.tick(10);
+        });
     });
 }
