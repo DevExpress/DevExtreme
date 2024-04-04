@@ -640,6 +640,7 @@ class Splitter extends (CollectionWidget as any) {
         resizable: item.resizable !== false,
         visible: item.visible,
         collapsed: item.collapsed === true,
+        collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
         size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
         maxSize: convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
         minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),

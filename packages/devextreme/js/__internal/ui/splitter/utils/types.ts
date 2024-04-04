@@ -7,6 +7,7 @@ import Widget from '@js/ui/widget/ui.widget';
 
 export interface PaneRestrictions {
   collapsed?: boolean | undefined;
+  collapsedSize?: number;
   resizable?: boolean | undefined;
   visible?: boolean | undefined;
   size?: number;

@@ -657,8 +657,32 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     {
         items: [{}, { collapsed: true }, {}],
         expectedLayout: ['50', '0', '50'],
+    },
+    {
+        items: [{}, { collapsed: true, collapsedSize: '9.9%' }, {}],
+        expectedLayout: ['45', '10', '45'],
+    },
+    {
+        items: [{}, { collapsed: true, collapsedSize: 100 }, {}],
+        expectedLayout: ['45', '10', '45'],
+    },
+    {
+        items: [{}, { collapsed: true, collapsedSize: 100 }, { collapsed: true, collapsedSize: 100 }],
+        expectedLayout: ['80', '10', '10'],
+    },
+    {
+        items: [{ collapsed: true, collapsedSize: 100 }, {}],
+        expectedLayout: ['10', '90'],
+    },
+    {
+        items: [{}, { collapsed: true, collapsedSize: 100 }],
+        expectedLayout: ['90', '10'],
+    },
+    {
+        items: [{ collapsed: true, collapsedSize: 100 }, { visible: false }, {}],
+        expectedLayout: ['10', '90'],
     },].forEach(({ items, expectedLayout }) => {
-        QUnit.test(`Panes with collapsed, items: ${JSON.stringify(items)}`, function(assert) {
+        QUnit.test(`Panes with collapsed/collapsedSize, items: ${JSON.stringify(items)}`, function(assert) {
             this.reinit({ items });
 
             this.assertLayout(expectedLayout);
@@ -666,12 +690,28 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     });
 
     ['prev', 'next'].forEach((scenario) => {
-        QUnit.test(`Pane collapse ${scenario} on runtime`, function(assert) {
+        QUnit.test(`Pane collapse ${scenario} on runtime (without collapsedSize)`, function(assert) {
             this.reinit({
                 items: [{ collapsible: true }, { collapsible: true } ],
             });
 
             const expectedLayout = scenario === 'prev' ? ['0', '100'] : ['100', '0'];
+            const $resizeHandle = this.getResizeHandles();
+            const $collapseButton = scenario === 'prev'
+                ? this.getCollapsePrevButton($resizeHandle)
+                : this.getCollapseNextButton($resizeHandle);
+
+            $collapseButton.trigger('dxclick');
+
+            this.assertLayout(expectedLayout);
+        });
+
+        QUnit.test(`Pane collapse ${scenario} on runtime (with collapsedSize)`, function(assert) {
+            this.reinit({
+                items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ],
+            });
+
+            const expectedLayout = scenario === 'prev' ? ['10', '90'] : ['90', '10'];
             const $resizeHandle = this.getResizeHandles();
             const $collapseButton = scenario === 'prev'
                 ? this.getCollapsePrevButton($resizeHandle)
