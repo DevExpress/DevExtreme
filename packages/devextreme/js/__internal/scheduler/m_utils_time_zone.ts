@@ -55,23 +55,6 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
-// const calculateTimezoneByValue = (timezone, date = new Date()) => {
-//   // NOTE: This check could be removed. We don't support numerical timezones
-//   if (typeof timezone === 'string') {
-//     const dateUtc = createUTCDate(date);
-//     const result = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
-
-//     if (timezone !== undefined) {
-//       console.log(result);
-//     }
-//     return result;
-//   }
-//   if (timezone !== undefined) {
-//     console.log(timezone);
-//   }
-//   return timezone;
-// };
-
 const calculateTimezoneByValue = (timeZone, date = new Date()) => {
   if (!timeZone) {
     return undefined;
@@ -91,12 +74,8 @@ const calculateTimezoneByValue = (timeZone, date = new Date()) => {
   }
   const localDST = (tzDate.getTimezoneOffset() - utcDate.getTimezoneOffset()) / 60;
   const result = (tzDate.getTime() - utcDate.getTime()) / 60 / 1000 / 60;
-  // console.log(result);
   return result - localDST;
 };
-
-// (window as any).calculateTimezoneByValue = calculateTimezoneByValue;
-// (window as any).calculateTimezoneByValueNew = calculateTimezoneByValueNew;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => {
