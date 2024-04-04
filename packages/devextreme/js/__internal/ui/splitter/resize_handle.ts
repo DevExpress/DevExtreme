@@ -242,7 +242,6 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
       roledescription: 'separator',
-      orientation: this._isHorizontalDirection() ? 'vertical' : 'horizontal',
       label: 'Split bar',
     });
   }

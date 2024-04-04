@@ -11,7 +11,7 @@ import dxScheduler from 'ui/scheduler/ui.scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { Deferred } from 'core/utils/deferred';
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Events', {
     beforeEach: function() {

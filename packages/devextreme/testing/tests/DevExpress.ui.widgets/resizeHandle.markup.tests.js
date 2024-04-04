@@ -335,16 +335,6 @@ QUnit.module('Aria attributes', moduleConfig, () => {
         assert.strictEqual(this.$element.attr('aria-label'), 'Split bar');
     });
 
-    ['horizontal', 'vertical'].forEach((direction) => {
-        QUnit.test('aria-orientation attribute should be set correctly', function(assert) {
-            this.reinit({ direction });
-
-            const expectedOrientationAttrValue = direction === 'horizontal' ? 'vertical' : 'horizontal';
-
-            assert.strictEqual(this.$element.attr('aria-orientation'), expectedOrientationAttrValue);
-        });
-    });
-
     QUnit.test('role attribute should be set correctly', function(assert) {
         this.reinit({ });
 
