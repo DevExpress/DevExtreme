@@ -3,7 +3,7 @@ import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Keyboard Navigation', {
     beforeEach: function() {

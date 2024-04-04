@@ -8,7 +8,7 @@ import fx from 'animation/fx';
 import 'ui/scheduler/ui.scheduler';
 import 'generic_light.css!';
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 const createScheduler = (options) => {
     const data = [

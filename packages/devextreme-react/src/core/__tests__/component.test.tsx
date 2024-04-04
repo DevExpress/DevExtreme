@@ -72,6 +72,36 @@ describe('rendering', () => {
     expect(content.children[0].tagName.toLowerCase()).toBe('div');
   });
 
+  describe('nested full components', () => {
+    let didRenderToDetachedBranch = false;
+
+    beforeEach(() => {
+      WidgetClass.mockImplementation((element: Element) => {
+        didRenderToDetachedBranch = didRenderToDetachedBranch || !element.isConnected;
+        return Widget;
+      })
+    });
+
+    afterEach(() => {
+      WidgetClass.mockImplementation(() => Widget);
+    });
+
+    it('does not render a nested component\'s widget to a detached DOM branch in Strict Mode', () => {
+      testingLib.configure({ reactStrictMode: true });
+
+      const component = (
+        <TestComponent>
+          <TestComponent>
+            <div>Test</div>
+          </TestComponent>
+        </TestComponent>
+      );
+      testingLib.render(component);
+  
+      expect(didRenderToDetachedBranch).toBeFalsy();
+    });
+  });
+
   it('renders portal component without children correctly', () => {
     const createPortalFn = jest.spyOn(ReactDOM, 'createPortal');
     const { container } = testingLib.render(<TestPortalComponent />);
