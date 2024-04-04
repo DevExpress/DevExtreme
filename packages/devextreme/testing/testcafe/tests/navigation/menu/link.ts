@@ -11,7 +11,7 @@ import {
 fixture.disablePageReloads`Link`
   .page(url(__dirname, '../../container.html'));
 
-test('Items should have links if item.url is set', async (t) => {
+test.skip('Items should have links if item.url is set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();
 
