@@ -81,3 +81,32 @@ test('Focus goes on master detail using arrow keys', async (t) => {
     .expect(dataGrid.getDataRow(0).getCommandCell(0).element.focused)
     .ok();
 }).before(async () => createWidget('dxDataGrid', gridOptions));
+
+test('Focus goes inside master detail on enter & goes out on esc', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.click(
+    dataGrid.getDataRow(0).getCommandCell(0).element,
+  );
+
+  const innerDataGrid = new DataGrid(dataGrid.getMasterRow(0).element.find('.dx-datagrid').parent());
+
+  await t.click(
+    dataGrid.getDataCell(0, 1).element,
+  );
+
+  await t
+    .pressKey('down')
+    .expect(dataGrid.getMasterRow(0).getCell().focused)
+    .ok();
+
+  await t
+    .pressKey('enter')
+    .expect(innerDataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).isFocused)
+    .ok();
+
+  await t
+    .pressKey('esc')
+    .expect(dataGrid.getMasterRow(0).getCell().focused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', gridOptions));
