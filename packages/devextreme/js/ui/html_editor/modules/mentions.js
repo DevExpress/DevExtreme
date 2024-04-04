@@ -355,10 +355,11 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
-            this._updateAriaLabel($firstItem.attr('id'));
         }
 
-        _updateAriaLabel(ariaId) {
+        _updateAriaLabel() {
+            const $activeItem = this._activeListItems.first();
+            const ariaId = $activeItem.attr('id');
             this.quill.root.setAttribute('aria-activedescendant', ariaId);
         }
 
@@ -391,6 +392,7 @@ if(Quill) {
                     this._isMentionActive = true;
                     this._hasSearch = false;
                     this._focusFirstElement();
+                    this._updateAriaLabel();
                 },
                 onHidden: () => {
                     this._list.unselectAll();
