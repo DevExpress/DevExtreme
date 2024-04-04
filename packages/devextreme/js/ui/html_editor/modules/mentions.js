@@ -357,7 +357,7 @@ if(Quill) {
             this._list.scrollToItem($firstItem);
         }
 
-        _updateAriaLabel() {
+        _addAriaDescendant() {
             const $activeItem = this._activeListItems.first();
             const ariaId = $activeItem.attr('id');
             this.quill.root.setAttribute('aria-activedescendant', ariaId);
@@ -392,7 +392,7 @@ if(Quill) {
                     this._isMentionActive = true;
                     this._hasSearch = false;
                     this._focusFirstElement();
-                    this._updateAriaLabel();
+                    this._addAriaDescendant();
                 },
                 onHidden: () => {
                     this._list.unselectAll();
