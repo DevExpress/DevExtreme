@@ -23,7 +23,11 @@ QUnit.testStart(() => {
             #splitterParentContainer {
                 width: 1024px;
                 height: 1024px;
-            }   
+            }
+
+            .extra-border {
+                border: 10px solid black;
+            }
         </style>
         
         <div id="splitter"></div>
@@ -598,7 +602,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         QUnit.test(`pane should have an exact size if the size is specified in pixels and the root element has a border, ${orientation} orientation`, function(assert) {
             this.reinit({
                 elementAttr: {
-                    style: 'border: 10px solid black',
+                    class: 'extra-border',
                 },
                 dataSource: [{ size: 400 }, { }, { }, { }],
                 orientation,
@@ -617,7 +621,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             this.reinit({
                 [dimension]: 620,
                 elementAttr: {
-                    style: 'border: 10px solid black',
+                    class: 'extra-border',
                 },
                 dataSource: [{ size: '50%' }, { }, { }, { }],
                 orientation,
