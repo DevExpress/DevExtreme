@@ -125,8 +125,8 @@ const TagBox = (SelectBox as any).inherit({
       leftArrow(e) {
         if (
           !this._isCaretAtTheStart()
-          || this._isEmpty()
-          || this._isEditable() && rtlEnabled && !this._$focusedTag
+                    || this._isEmpty()
+                    || this._isEditable() && rtlEnabled && !this._$focusedTag
         ) {
           return;
         }
@@ -140,8 +140,8 @@ const TagBox = (SelectBox as any).inherit({
       rightArrow(e) {
         if (
           !this._isCaretAtTheStart()
-            || this._isEmpty()
-            || this._isEditable() && !rtlEnabled && !this._$focusedTag
+                    || this._isEmpty()
+                    || this._isEditable() && !rtlEnabled && !this._$focusedTag
         ) {
           return;
         }
@@ -730,7 +730,6 @@ const TagBox = (SelectBox as any).inherit({
 
   _renderMultiTag($input) {
     const tagId = `dx-${new Guid()}`;
-
     const $tag = $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
