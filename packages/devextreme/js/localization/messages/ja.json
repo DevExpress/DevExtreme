@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "フィルターの作成",
         "dxDataGrid-filterPanelClearFilter": "クリア",
         "dxDataGrid-filterPanelFilterEnabledHint": "フィルターの有効化",
+        "dxDataGrid-masterDetail": "Detail row",
 
         "dxTreeList-ariaTreeList": "{0} 行と {1} 列のツリー リスト",
         "dxTreeList-ariaSearchInGrid": "ツリー リスト内を検索する",

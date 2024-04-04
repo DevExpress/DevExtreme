@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Izveidot filtru",
         "dxDataGrid-filterPanelClearFilter": "Notīrīt",
         "dxDataGrid-filterPanelFilterEnabledHint": "Iespējot filtru",
+        "dxDataGrid-masterDetail": "Detail row",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Meklēt kokā",

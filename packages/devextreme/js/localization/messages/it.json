@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Nuovo filtro",
         "dxDataGrid-filterPanelClearFilter": "Cancella",
         "dxDataGrid-filterPanelFilterEnabledHint": "Attiva il filtro",
+        "dxDataGrid-masterDetail": "Detail row",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Ricerca nell'albero",

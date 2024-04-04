@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Skapa filter",
         "dxDataGrid-filterPanelClearFilter": "Rensa",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktivera filter",
+        "dxDataGrid-masterDetail": "Detail row",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",

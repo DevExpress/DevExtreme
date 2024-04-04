@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Luo suodatin",
         "dxDataGrid-filterPanelClearFilter": "Tyhjennä",
         "dxDataGrid-filterPanelFilterEnabledHint": "Ota suodatin käyttöön",
+        "dxDataGrid-masterDetail": "Detail row",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
