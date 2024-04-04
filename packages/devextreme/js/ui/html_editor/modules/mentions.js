@@ -355,12 +355,7 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
-        }
-
-        _addAriaDescendant() {
-            const $activeItem = this._activeListItems.first();
-            const ariaId = $activeItem.attr('id');
-            this.quill.root.setAttribute('aria-activedescendant', ariaId);
+            this.quill.root.setAttribute('aria-activedescendant', $firstItem.attr('id'));
         }
 
         get _popupPosition() {
@@ -392,7 +387,6 @@ if(Quill) {
                     this._isMentionActive = true;
                     this._hasSearch = false;
                     this._focusFirstElement();
-                    this._addAriaDescendant();
                 },
                 onHidden: () => {
                     this._list.unselectAll();
