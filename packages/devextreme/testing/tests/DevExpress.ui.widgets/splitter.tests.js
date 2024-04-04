@@ -6,7 +6,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { isRenderer, isNumeric } from 'core/utils/type';
 import config from 'core/config';
 import { createEvent } from 'events/utils/index';
-import devices from 'core/devices';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
@@ -20,8 +19,15 @@ const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 QUnit.testStart(() => {
     const markup =
-        `<div id="splitter"></div>
-        <div id="container" style="width: 1024px; height: 1024px">
+        `<style nonce="qunit-test">
+            #splitterParentContainer {
+                width: 1024px;
+                height: 1024px;
+            }   
+        </style>
+        
+        <div id="splitter"></div>
+        <div id="splitterParentContainer">
             <div id="splitterInContainer"></div>
         </div>`;
 
