@@ -198,6 +198,7 @@ const Tabs = CollectionWidget.inherit({
         const indicatorPosition = this._getIndicatorPosition();
 
         this.callBase();
+        this.setAria('role', 'tablist');
         this.$element().addClass(TABS_CLASS);
         this._toggleScrollingEnabledClass(scrollingEnabled);
         this._toggleOrientationClass(orientation);
@@ -429,7 +430,6 @@ const Tabs = CollectionWidget.inherit({
 
     _renderWrapper: function() {
         this._$wrapper = $('<div>').addClass(TABS_WRAPPER_CLASS);
-        this.setAria('role', 'tablist', this._$wrapper);
         this.$element().append(this._$wrapper);
     },
 
@@ -572,10 +572,6 @@ const Tabs = CollectionWidget.inherit({
         }
 
         this.callBase(e);
-    },
-
-    _refreshActiveDescendant: function() {
-        this.callBase(this._$wrapper);
     },
 
     _clean: function() {
