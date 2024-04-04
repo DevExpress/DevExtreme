@@ -12,8 +12,6 @@ import Mention from '../formats/mention';
 
 let MentionModule = BaseModule;
 
-const HTML_EDITOR_CONTENT_CLASS = 'dx-htmleditor-content';
-
 if(Quill) {
     const USER_ACTION = 'user';
     const DEFAULT_MARKER = '@';
@@ -127,7 +125,6 @@ if(Quill) {
                 $nextItem = $nextItem.length ? $nextItem : this._activeListItems[defaultItemPosition]();
                 this._list.option('focusedElement', getPublicElement($nextItem));
                 this._list.scrollToItem($nextItem);
-
                 this._updateAriaLabel($nextItem[0].id);
             }
 
@@ -359,7 +356,6 @@ if(Quill) {
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
             this._list.scrollToItem($firstItem);
-
             this._updateAriaLabel($firstItem[0].id);
         }
 
@@ -406,7 +402,6 @@ if(Quill) {
                 focusStateEnabled: false
             });
         }
-
 
         get _activeListItems() {
             return this._list.itemElements().filter(`:not(.${DISABLED_STATE_CLASS})`);
