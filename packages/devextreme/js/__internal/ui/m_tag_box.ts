@@ -756,8 +756,10 @@ const TagBox = (SelectBox as any).inherit({
       model: args.text,
       container: getPublicElement($tag),
     });
-    this.setAria('labelledby', tagId, $tag);
 
+    const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
+
+    this._setTagAria($tag, tagData);
     this._updateElementAria(tagId);
     return $tag;
   },
