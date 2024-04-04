@@ -1014,7 +1014,8 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
 
       this._updateFocusedCellPosition($cell);
-    } else if (this.getMasterDetailCell($cell)) {
+      // @ts-expect-error
+    } else if (this.getMasterDetailCell($cell)?.is($cell)) {
       this.focusFirstInteractiveElementInside($cell);
     } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
@@ -1416,7 +1417,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       if ($focusViewElement) {
         $focusViewElement
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
-          .filter((node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
+          .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)
           .removeClass(FOCUSED_CLASS)
@@ -2642,7 +2643,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     const keyboardController = this._keyboardNavigationController;
     const cellElementsLength = cellElements ? cellElements.length : -1;
     const updateCellTabIndex = function ($cell) {
-      const isMasterDetailCell = keyboardController.getMasterDetailCell($cell);
+      const isMasterDetailCell = !!keyboardController.getMasterDetailCell($cell);
       const isValidCell = keyboardController._isCellValid($cell);
       if (!isMasterDetailCell && isValidCell && keyboardController._isCellElement($cell)) {
         keyboardController._applyTabIndexToElement($cell);
