@@ -80,7 +80,7 @@ class SplitterItem extends CollectionWidgetItem {
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
-  private _resizeHandles: ResizeHandle[] = [];
+  private _resizeHandles!: ResizeHandle[];
 
   private _renderQueue: RenderQueueItem[] = [];
 
