@@ -296,9 +296,9 @@ export class FooterView extends ColumnsView {
 }
 
 const dataSourceAdapterExtender = (Base: ModuleType<DataSourceAdapter>) => class SummaryDataSourceAdapterExtender extends Base implements EditingControllerRequired {
-  _totalAggregates: any;
+  private _totalAggregates: any;
 
-  _summaryGetter: any;
+  private _summaryGetter: any;
 
   public _editingController!: EditingController;
 

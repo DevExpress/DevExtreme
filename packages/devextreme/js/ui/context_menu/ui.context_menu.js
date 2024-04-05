@@ -19,6 +19,8 @@ import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
 import { name as contextMenuEventName } from '../../events/contextmenu';
 import holdEvent from '../../events/hold';
+import ScrollView from '../scroll_view/ui.scroll_view';
+import { getOuterHeight } from '../../core/utils/size';
 
 // STYLE contextMenu
 
@@ -624,6 +626,37 @@ class ContextMenu extends MenuBase {
         }
     }
 
+    _initScrollView($container) {
+        this._createComponent($container, ScrollView, {});
+    }
+
+    _setSubMenuHeight($container, anchor, isNestedSubmenu) {
+        const $itemsContainer = $container.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        const contentHeight = getOuterHeight($itemsContainer);
+        const maxHeight = this._getMaxHeight(anchor, !isNestedSubmenu);
+        const menuHeight = Math.min(contentHeight, maxHeight);
+
+        $container.css('height', isNestedSubmenu ? menuHeight : '100%');
+    }
+
+    _getMaxHeight(anchor, considerAnchorHeight = true) {
+        const windowHeight = getOuterHeight(window);
+        const isAnchorRenderer = isRenderer(anchor);
+        const document = domAdapter.getDocument();
+        const isAnchorDocument = anchor.length && anchor[0] === document;
+
+        if(!isAnchorRenderer || isAnchorDocument) {
+            return windowHeight;
+        }
+
+        const offsetTop = anchor[0].getBoundingClientRect().top;
+        const anchorHeight = getOuterHeight(anchor);
+
+        return considerAnchorHeight
+            ? Math.max(offsetTop, windowHeight - offsetTop - anchorHeight)
+            : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
+    }
+
     _showSubmenu($item) {
         const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
 
@@ -631,15 +664,18 @@ class ContextMenu extends MenuBase {
 
         if(!this._hasSubmenu(node)) return;
 
-        const $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
+        let $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
         const isSubmenuRendered = $submenu.length;
 
         super._showSubmenu($item);
 
         if(!isSubmenuRendered) {
             this._renderSubmenuItems(node, $item);
+            $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
+            this._initScrollView($submenu);
         }
 
+        this._setSubMenuHeight($submenu, $item, true);
         if(!this._isSubmenuVisible($submenu)) {
             this._drawSubmenu($item);
         }
@@ -879,8 +915,23 @@ class ContextMenu extends MenuBase {
                 this._renderItems(this._dataAdapter.getRootNodes());
             }
 
+            const $subMenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
+
             this._setOptionWithoutOptionChange('visible', true);
-            this._overlay.option('position', position);
+            this._overlay.option({
+                height: () => {
+                    return this._getMaxHeight(position.of);
+                },
+                maxHeight: () => {
+                    const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+                    return getOuterHeight($content);
+                },
+                position,
+            });
+
+            if($subMenu.length) {
+                this._setSubMenuHeight($subMenu, position.of, false);
+            }
             promise = this._overlay.show();
             event && event.stopPropagation();
 
@@ -893,6 +944,15 @@ class ContextMenu extends MenuBase {
         }
 
         return promise;
+    }
+
+    _renderItems(nodes, submenuContainer) {
+        super._renderItems(nodes, submenuContainer);
+
+        const $submenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
+        if($submenu.length) {
+            this._initScrollView($submenu);
+        }
     }
 
     _setAriaAttributes() {

@@ -1,1 +1,1 @@
-In&nbsp;this demo, the BarGauge uses one of&nbsp;the predefined palettes for coloring bars. This palette is&nbsp;specified by&nbsp;the **palette** property. You are not limited to&nbsp;use only the predefined palettes. To&nbsp;specify your own palette, assign an&nbsp;array of&nbsp;required colors to&nbsp;the property mentioned before.
+In this demo, the BarGauge uses one of the predefined palettes for coloring bars. To specify a custom palette, assign an array of colors to the [palette](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/#palette) property.
