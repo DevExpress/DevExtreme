@@ -16,6 +16,7 @@ const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
+const STATE_ACTIVE_CLASS = 'dx-state-active';
 
 QUnit.testStart(() => {
     const markup =
@@ -1415,16 +1416,52 @@ QUnit.module('Initialization', moduleConfig, () => {
     });
 });
 
-QUnit.module('Behavoir', moduleConfig, () => {
-    QUnit.test('Resize handle should have correct size when separatorSize is defined on init', function(assert) {
-        this.reinit({
-            dataSource: [{ }, { }],
-            separatorSize: 5,
+QUnit.module('Behavior', moduleConfig, () => {
+    [11, 5, 0].forEach((separatorSize) => {
+        QUnit.test('Resize handle should have correct size when separatorSize is defined on init', function(assert) {
+            this.reinit({
+                dataSource: [{ }, { }],
+                separatorSize,
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+
+            assert.strictEqual($resizeHandle.css('width'), `${separatorSize}px`);
+        });
+    });
+
+    ['horizontal', 'vertical'].forEach((orientation) => {
+        ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 ', '12', -20, NaN, null, undefined].forEach((separatorSize) => {
+            QUnit.test(`Resize handle size should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
+                this.reinit({
+                    dataSource: [{ size: '500px' }, { size: '500px' }],
+                    orientation,
+                    separatorSize
+                });
+
+                this.assertLayout([50, 50]);
+
+                const $resizeHandle = this.getResizeHandles();
+                const dimension = orientation === 'horizontal' ? 'width' : 'height';
+
+                assert.strictEqual($resizeHandle.css(dimension), '8px');
+            });
         });
 
-        const $resizeHandle = this.getResizeHandles();
+        QUnit.test(`Resize handle size should fallback to default if separatorSize changed at runtime to incorrect value (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                dataSource: [{ }, { }],
+                orientation,
+                separatorSize: 10
+            });
 
-        assert.strictEqual($resizeHandle.css('width'), '5px');
+            this.instance.option('separatorSize', '20vh');
+
+            const $resizeHandle = this.getResizeHandles();
+            const dimension = orientation === 'horizontal' ? 'width' : 'height';
+
+            assert.strictEqual($resizeHandle.css(dimension), '8px');
+        });
     });
 
     [{ allowKeyboardNavigation: true }, { allowKeyboardNavigation: false }].forEach(({ allowKeyboardNavigation }) => {
@@ -1442,11 +1479,11 @@ QUnit.module('Behavoir', moduleConfig, () => {
 
             pointer.start().dragStart().drag(10, 10);
 
-            assert.ok(resizeHandle.hasClass('dx-state-active'));
+            assert.ok(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
 
             pointer.dragEnd();
 
-            assert.notOk(resizeHandle.hasClass('dx-state-active'));
+            assert.notOk(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
         });
     });
 
