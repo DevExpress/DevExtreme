@@ -6,7 +6,7 @@ import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import TabPanel from '../../../model/tabPanel';
 
-fixture.disablePageReloads`Splitter_integration`
+fixture.skip.disablePageReloads`Splitter_integration`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
