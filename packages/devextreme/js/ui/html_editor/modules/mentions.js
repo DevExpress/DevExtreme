@@ -289,14 +289,7 @@ if(Quill) {
                 this._popup.option('position', this._popupPosition);
                 this._searchValue = '';
                 this._popup.show();
-                this._setAriaAttributes();
             }
-        }
-
-        _setAriaAttributes() {
-            const $content = this._list._$container;
-            this._list.option('focusedElement', getPublicElement($content));
-            this.quill.root.setAttribute('aria-activedescendant', $content.attr('id'));
         }
 
         _isMarkerPartOfText(retain) {
@@ -313,13 +306,16 @@ if(Quill) {
 
         _updateList({ dataSource, displayExpr, valueExpr, itemTemplate, searchExpr }) {
             this.compileGetters({ displayExpr, valueExpr });
-            this._list.unselectAll();
-            this._list.option({
+            const $list = this._list;
+            $list.unselectAll();
+            $list.option({
                 dataSource,
                 displayExpr,
                 itemTemplate,
                 searchExpr
             });
+            this._list.option('focusedElement', getPublicElement($list._$container));
+            this.quill.root.setAttribute('aria-activedescendant', $list._$container.attr('id'));
         }
 
         _filterList(searchValue) {
