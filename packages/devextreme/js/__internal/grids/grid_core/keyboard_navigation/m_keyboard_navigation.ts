@@ -586,7 +586,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const dataSource = this._dataController.dataSource();
     const isRowEditingInCurrentRow = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
     const isEditingNavigationMode = this._isFastEditingStarted();
-    const isInsideMasterDetail = this.isInsideMasterDetail($($event.target));
+    const isInsideMasterDetail = this.isInsideMasterDetail($($event?.target));
     const allowNavigate = (!isRowEditingInCurrentRow || !isEditing || isEditingNavigationMode)
       && $row
       && !isEditForm($row)
