@@ -167,9 +167,8 @@ if(Quill) {
             this.compileGetters(this.options);
             super.renderList($container, options);
 
-            const $content = this._list._$container;
-            this._list.option('focusedElement', getPublicElement($content));
-            this.quill.root.setAttribute('aria-activedescendant', $content.attr('id'));
+            const ariaId = this._list.getFocusedItemId();
+            this.quill.root.setAttribute('aria-activedescendant', ariaId);
         }
 
         compileGetters({ displayExpr, valueExpr }) {
