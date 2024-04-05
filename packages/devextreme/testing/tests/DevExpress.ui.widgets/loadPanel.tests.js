@@ -1,6 +1,7 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
+import messageLocalization from 'localization/message';
 import uiErrors from 'ui/widget/ui.errors';
 import themes from 'ui/themes';
 import fx from 'animation/fx';
@@ -59,8 +60,38 @@ QUnit.module('init', {
         assert.equal($content.find(MESSAGE_SELECTOR).text(), 'Test Loading Message');
     });
 
+    QUnit.test('correct wrapper aria attributes load when showIndicator = false', function(assert) {
+        const label = messageLocalization.format('Loading');
+        const instance = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false }).dxLoadPanel('instance');
+        instance.option({ message: '' });
+
+        assert.strictEqual(instance.$wrapper().attr('role'), 'alert');
+        assert.strictEqual(instance.$wrapper().attr('aria-label'), label);
+    });
+
+    QUnit.test('wrapper aria attributes must not load when showIndicator = true', function(assert) {
+        const instance = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false });
+        const wrapperAttributes = Array.from(instance[0].attributes).map(attr => attr.name);
+        const expectedAttributes = ['role', 'aria-label'];
+
+        assert.strictEqual(!expectedAttributes.every(item => wrapperAttributes.includes(item)), true);
+    });
+
+    QUnit.test('correct load indicator aria attributes load when showIndicator = true', function(assert) {
+        const instance = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: true }).dxLoadPanel('instance');
+        const label = messageLocalization.format('Loading');
+        const indicatorAttributes = Array.from(instance._$indicator.prop('attributes')).map(attr => attr.name);
+        const expectedAttributes = ['role', 'aria-label'];
+        instance.option({ message: '' });
+
+        assert.strictEqual(instance._$indicator[0].role, 'alert');
+        assert.strictEqual(instance._$indicator[0].ariaLabel, label);
+        assert.strictEqual(expectedAttributes.every(item => indicatorAttributes.includes(item)), true);
+    });
+
     QUnit.test('role on wrapper', function(assert) {
         const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
+        instance.option({ message: '' });
 
         assert.strictEqual(instance.$wrapper().attr('role'), 'alert');
     });
