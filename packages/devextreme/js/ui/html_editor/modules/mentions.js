@@ -306,16 +306,17 @@ if(Quill) {
 
         _updateList({ dataSource, displayExpr, valueExpr, itemTemplate, searchExpr }) {
             this.compileGetters({ displayExpr, valueExpr });
-            const $list = this._list;
-            $list.unselectAll();
-            $list.option({
+            this._list.unselectAll();
+            this._list.option({
                 dataSource,
                 displayExpr,
                 itemTemplate,
                 searchExpr
             });
-            this._list.option('focusedElement', getPublicElement($list._$container));
-            this.quill.root.setAttribute('aria-activedescendant', $list._$container.attr('id'));
+
+            const $container = this._list._$container;
+            this._list.option('focusedElement', getPublicElement($container));
+            this.quill.root.setAttribute('aria-activedescendant', $container.attr('id'));
         }
 
         _filterList(searchValue) {
