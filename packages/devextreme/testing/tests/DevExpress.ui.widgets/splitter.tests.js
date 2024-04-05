@@ -6,7 +6,6 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import { isRenderer, isNumeric } from 'core/utils/type';
 import config from 'core/config';
 import { createEvent } from 'events/utils/index';
-import devices from 'core/devices';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
 
 import 'generic_light.css!';
@@ -20,16 +19,24 @@ const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 QUnit.testStart(() => {
     const markup =
-        `<div id="splitter"></div>
-        <div id="container" style="width: 1024px; height: 1024px">
+        `<style nonce="qunit-test">
+            #splitterParentContainer {
+                width: 1024px;
+                height: 1024px;
+            }
+
+            .extra-border {
+                border: 10px solid black;
+            }
+        </style>
+        
+        <div id="splitter"></div>
+        <div id="splitterParentContainer">
             <div id="splitterInContainer"></div>
         </div>`;
 
     $('#qunit-fixture').html(markup);
 });
-
-const isIos = devices.current().platform === 'ios';
-const isAndroid = devices.real().platform === 'android';
 
 const moduleConfig = {
     beforeEach: function() {
@@ -592,42 +599,39 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     });
 
     ['horizontal', 'vertical'].forEach(orientation => {
-        // TODO: These tests are failing on CI for iOS, Android, shadowDom. It's necessary to investigate and remove the skips for these tests.
-        if(!isIos && !isAndroid && !QUnit.isInShadowDomMode()) {
-            QUnit.test(`pane should have an exact size if the size is specified in pixels and the root element has a border, ${orientation} orientation`, function(assert) {
-                this.reinit({
-                    elementAttr: {
-                        style: 'border: 10px solid black',
-                    },
-                    dataSource: [{ size: 400 }, { }, { }, { }],
-                    orientation,
-                }, '#splitterInContainer');
+        QUnit.test(`pane should have an exact size if the size is specified in pixels and the root element has a border, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                elementAttr: {
+                    class: 'extra-border',
+                },
+                dataSource: [{ size: 400 }, { }, { }, { }],
+                orientation,
+            }, '#splitterInContainer');
 
-                const dimension = orientation === 'horizontal' ? 'width' : 'height';
-                assert.strictEqual(this.getPanes().eq(0).css(dimension), '400px', 'pane[0].size has exact size');
+            const dimension = orientation === 'horizontal' ? 'width' : 'height';
+            assert.strictEqual(this.getPanes().eq(0).css(dimension), '400px', 'pane[0].size has exact size');
 
-                this.checkItemSizes([400, undefined, undefined, undefined]);
-                this.assertLayout(['40.8163', '19.7279', '19.7279', '19.7279']);
-            });
+            this.checkItemSizes([400, undefined, undefined, undefined]);
+            this.assertLayout(['40.8163', '19.7279', '19.7279', '19.7279']);
+        });
 
-            QUnit.test(`pane should have an exact size if the size is specified in percentages and the root element has a border, ${orientation} orientation`, function(assert) {
-                const dimension = orientation === 'horizontal' ? 'width' : 'height';
+        QUnit.test(`pane should have an exact size if the size is specified in percentages and the root element has a border, ${orientation} orientation`, function(assert) {
+            const dimension = orientation === 'horizontal' ? 'width' : 'height';
 
-                this.reinit({
-                    [dimension]: 620,
-                    elementAttr: {
-                        style: 'border: 10px solid black',
-                    },
-                    dataSource: [{ size: '50%' }, { }, { }, { }],
-                    orientation,
-                }, '#splitterInContainer');
+            this.reinit({
+                [dimension]: 620,
+                elementAttr: {
+                    class: 'extra-border',
+                },
+                dataSource: [{ size: '50%' }, { }, { }, { }],
+                orientation,
+            }, '#splitterInContainer');
 
-                assert.strictEqual(this.getPanes().eq(0).css(dimension), '300px', 'pane[0].size has exact size');
+            assert.strictEqual(this.getPanes().eq(0).css(dimension), '300px', 'pane[0].size has exact size');
 
-                this.checkItemSizes(['50%', undefined, undefined, undefined]);
-                this.assertLayout(['52.0833', '15.9722', '15.9722', '15.9722']);
-            });
-        }
+            this.checkItemSizes(['50%', undefined, undefined, undefined]);
+            this.assertLayout(['52.0833', '15.9722', '15.9722', '15.9722']);
+        });
     });
 
     [{
@@ -865,54 +869,51 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.assertLayout(['75', '25']);
         });
 
-        // TODO: These tests are failing on CI for iOS, Android, shadowDom. It's necessary to investigate and remove the skips for these tests.
-        if(!isIos && !isAndroid && !QUnit.isInShadowDomMode()) {
-            QUnit.test(`items should be resized when their neighbour item contains splitter, ${orientation} orientation`, function(assert) {
-                this.reinit({
-                    width: '100%',
-                    height: '100%',
-                    orientation,
-                    dataSource: [{ }, { splitter: { dataSource: [{}, {}, {}] } }, { }, { }]
-                }, '#splitterInContainer');
+        QUnit.test(`items should be resized when their neighbour item contains splitter, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ }, { splitter: { dataSource: [{}, {}, {}] } }, { }, { }]
+            }, '#splitterInContainer');
 
-                this.assertLayout(['25', '25', '25', '25'], 1);
+            this.assertLayout(['25', '25', '25', '25'], 1);
 
-                const pointer = pointerMock(this.getResizeHandles().eq(1));
-                pointer.start().dragStart().drag(50, 50).dragEnd();
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(50, 50).dragEnd();
 
-                this.checkItemSizes([250, 300, 200, 250]);
-                this.assertLayout(['25', '30', '20', '25']);
-            });
+            this.checkItemSizes([250, 300, 200, 250]);
+            this.assertLayout(['25', '30', '20', '25']);
+        });
 
-            QUnit.test(`splitter size in percentages, pane size in pixels, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
-                this.reinit({
-                    width: '100%',
-                    height: '100%',
-                    orientation,
-                    dataSource: [{ size: '400px' }, { }, { }, { }]
-                }, '#splitterInContainer');
+        QUnit.test(`splitter size in percentages, pane size in pixels, layout should be calculated correctly with ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ size: '400px' }, { }, { }, { }]
+            }, '#splitterInContainer');
 
-                this.checkItemSizes(['400px', undefined, undefined, undefined]);
-                this.assertLayout(['40', '20', '20', '20'], 1);
-            });
+            this.checkItemSizes(['400px', undefined, undefined, undefined]);
+            this.assertLayout(['40', '20', '20', '20'], 1);
+        });
 
-            QUnit.test(`next item should be resized immediately when the current item is 0 during resizing, ${orientation} orientation`, function(assert) {
-                this.reinit({
-                    width: '100%',
-                    height: '100%',
-                    orientation,
-                    dataSource: [{ }, { }, { }, { }]
-                }, '#splitterInContainer');
+        QUnit.test(`next item should be resized immediately when the current item is 0 during resizing, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ }, { }, { }, { }]
+            }, '#splitterInContainer');
 
-                this.assertLayout(['25', '25', '25', '25'], 1);
+            this.assertLayout(['25', '25', '25', '25'], 1);
 
-                const pointer = pointerMock(this.getResizeHandles().eq(1));
-                pointer.start().dragStart().drag(260, 260).dragEnd();
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(260, 260).dragEnd();
 
-                this.checkItemSizes([250, 510, 0, 240]);
-                this.assertLayout(['25', '51', '0', '24']);
-            });
-        }
+            this.checkItemSizes([250, 510, 0, 240]);
+            this.assertLayout(['25', '51', '0', '24']);
+        });
 
         QUnit.test(`last two items should be able to resize when first item is not visible, ${orientation} orientation`, function(assert) {
             this.reinit({
@@ -2205,137 +2206,131 @@ QUnit.module('Keyboard support', moduleConfig, () => {
         assert.strictEqual(registerKeyHandlerSpy.callCount, 0);
     });
 
-    const isIos = devices.current().platform === 'ios';
-    const isAndroid = devices.real().platform === 'android';
-
-    // TODO: These tests are failing on CI for iOS, Android, shadowDom. It's necessary to investigate and remove the skips for these tests.
-    if(!isIos && !isAndroid && !QUnit.isInShadowDomMode()) {
-        [
-            { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowUp' },
-            { key: 'ArrowUp', orientation: 'vertical', wrongKey: 'ArrowLeft' }
-        ].forEach(({ key, orientation, wrongKey }) => {
-            QUnit.test(`Prev item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
-                this.reinit({
-                    orientation,
-                    items: [{ collapsible: true }, { }],
-                });
-
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
-
-                keyboard.keyDown(key, { ctrlKey: true });
-
-                assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'item is collapsed');
+    [
+        { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowUp' },
+        { key: 'ArrowUp', orientation: 'vertical', wrongKey: 'ArrowLeft' }
+    ].forEach(({ key, orientation, wrongKey }) => {
+        QUnit.test(`Prev item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ collapsible: true }, { }],
             });
 
-            QUnit.test(`Prev item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
-                this.reinit({
-                    orientation,
-                    items: [{ collapsible: true }, { }],
-                });
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
 
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
+            keyboard.keyDown(key, { ctrlKey: true });
 
-                keyboard.keyDown(wrongKey, { ctrlKey: true });
-
-                assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
-            });
-
-            QUnit.test(`Prev item should not be collapsed on command+${wrongKey} if pane is not collapsible`, function(assert) {
-                this.reinit({
-                    orientation,
-                    items: [{ }, { }],
-                });
-
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
-
-                keyboard.keyDown(wrongKey, { ctrlKey: true });
-
-                assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
-            });
-
-            QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
-                const onItemCollapsed = sinon.stub();
-                this.reinit({
-                    orientation,
-                    onItemCollapsed,
-                    items: [{ collapsible: true }, { }],
-                });
-
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
-
-                keyboard.keyDown(key, { ctrlKey: true });
-
-                assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
-            });
-
-            QUnit.test(`onItemCollapsed should not be fired on command+${key} when item is already collapsed`, function(assert) {
-                const onItemCollapsed = sinon.stub();
-                this.reinit({
-                    orientation,
-                    onItemCollapsed,
-                    items: [{ collapsible: true, collapsed: true }, { }],
-                });
-
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
-
-                keyboard.keyDown(key, { ctrlKey: true });
-
-                assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed fired');
-            });
+            assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'item is collapsed');
         });
 
-        [
-            { key: 'ArrowRight', orientation: 'horizontal', wrongKey: 'ArrowDown' },
-            { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowRight' }
-        ].forEach(({ key, orientation, wrongKey }) => {
-            QUnit.test(`Next item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
-                this.reinit({
-                    orientation,
-                    items: [{ }, { collapsible: true }],
-                });
-
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
-
-                keyboard.keyDown(key, { ctrlKey: true });
-
-                assert.strictEqual(this.instance.option('items[1].collapsed'), true, 'item is collapsed');
+        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ collapsible: true }, { }],
             });
 
-            QUnit.test(`Next item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
-                this.reinit({
-                    orientation,
-                    items: [{ }, { collapsible: true }],
-                });
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
 
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
 
-                keyboard.keyDown(wrongKey, { ctrlKey: true });
-
-                assert.strictEqual(this.instance.option('items[1].collapsed'), undefined, 'item is not collapsed');
-            });
-
-            QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
-                const onItemCollapsed = sinon.stub();
-                this.reinit({
-                    orientation,
-                    onItemCollapsed,
-                    items: [{ }, { collapsible: true }],
-                });
-
-                const $resizeHandle = this.getResizeHandles();
-                const keyboard = keyboardMock($resizeHandle);
-
-                keyboard.keyDown(key, { ctrlKey: true });
-
-                assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
-            });
+            assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
         });
-    }
+
+        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} if pane is not collapsible`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
+        });
+
+        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
+            const onItemCollapsed = sinon.stub();
+            this.reinit({
+                orientation,
+                onItemCollapsed,
+                items: [{ collapsible: true }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
+        });
+
+        QUnit.test(`onItemCollapsed should not be fired on command+${key} when item is already collapsed`, function(assert) {
+            const onItemCollapsed = sinon.stub();
+            this.reinit({
+                orientation,
+                onItemCollapsed,
+                items: [{ collapsible: true, collapsed: true }, { }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed fired');
+        });
+    });
+
+    [
+        { key: 'ArrowRight', orientation: 'horizontal', wrongKey: 'ArrowDown' },
+        { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowRight' }
+    ].forEach(({ key, orientation, wrongKey }) => {
+        QUnit.test(`Next item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ }, { collapsible: true }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[1].collapsed'), true, 'item is collapsed');
+        });
+
+        QUnit.test(`Next item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
+            this.reinit({
+                orientation,
+                items: [{ }, { collapsible: true }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[1].collapsed'), undefined, 'item is not collapsed');
+        });
+
+        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
+            const onItemCollapsed = sinon.stub();
+            this.reinit({
+                orientation,
+                onItemCollapsed,
+                items: [{ }, { collapsible: true }],
+            });
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed fired');
+        });
+    });
 });
