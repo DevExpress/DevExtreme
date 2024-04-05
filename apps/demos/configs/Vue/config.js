@@ -56,7 +56,7 @@ window.config = {
     /**/
 
     /** showdown&turndown */
-    'devextreme-showdown': 'npm:devextreme-showdown/dist/showdown.js',
+    'showdown': 'npm:showdown/dist/showdown.js',
     'turndown': 'npm:turndown/lib/turndown.browser.umd.js',
     /**/
 

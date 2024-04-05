@@ -1,0 +1,11 @@
+{
+  "name": "devextreme-testcafe-tests",
+  "version": "24.1.1",
+  "scripts": {
+    "test": "node ./runner.js"
+  },
+  "devDependencies": {
+    "devextreme": "24.1.1",
+    "testcafe": "2.5.0"
+  }
+}

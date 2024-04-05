@@ -90,4 +90,21 @@ QUnit.module('Props: template', {
 
         assert.strictEqual(element.find('.dx-button-submit-input').length, 1, 'render submit input');
     });
+
+    QUnit.test('content of inner button should not be replaced (T1211763)', function(assert) {
+        const $element = this.Button({
+            template() {
+                const $templateWrapper = $('<div>').addClass('dx-template-wrapper');
+
+                $('<div id="innerButton">').dxButton({
+                    text: 'button content'
+                }).appendTo($templateWrapper);
+
+                return $templateWrapper;
+            }
+        });
+        const $innerButton = $element.find('#innerButton');
+
+        assert.notStrictEqual($innerButton.children().length, 0, 'inner button content is not empty');
+    });
 });

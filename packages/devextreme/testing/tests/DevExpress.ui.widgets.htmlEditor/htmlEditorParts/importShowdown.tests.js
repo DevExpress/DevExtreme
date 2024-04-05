@@ -1,6 +1,6 @@
 SystemJS.config({
     map: {
-        'devextreme-showdown': '/packages/devextreme/testing/helpers/quillDependencies/noShowdown.js'
+        'showdown': '/packages/devextreme/testing/helpers/quillDependencies/noShowdown.js'
     }
 });
 
