@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import type { Properties } from '../../../../../../js/ui/data_grid';
+import type { Properties } from 'devextreme/ui/data_grid';
 import { employees, tasks } from './data';
 
 // NOTE: testcafe fails if adding imported variable to dependencies
