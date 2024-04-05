@@ -1,5 +1,5 @@
 // eslint-disable-next-line max-classes-per-file
-import { Selector } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import NavPage from './navPage';
 import FocusableElement from '../internal/focusable';
 import { SelectableElement } from './SelectableElement';

@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../../../helpers/selector';
 
 const CLASS = {
   stateInvisible: 'dx-state-invisible',

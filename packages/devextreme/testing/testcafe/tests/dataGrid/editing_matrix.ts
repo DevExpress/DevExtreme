@@ -1,5 +1,5 @@
 /* eslint-disable max-len */
-import { Selector } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import { CellEditor } from '../../model/dataGrid/data/cellEditor';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';

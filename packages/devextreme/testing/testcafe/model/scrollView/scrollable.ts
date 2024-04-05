@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import { DIRECTION_VERTICAL, DIRECTION_HORIZONTAL } from '../../../../js/renovation/ui/scroll_view/common/consts';
 
 import Widget from '../internal/widget';

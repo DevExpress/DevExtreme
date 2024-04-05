@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
+import { Selector } from '../../../../../helpers/selector';
 import {
   appendElementTo,
   setStyleAttribute,

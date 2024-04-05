@@ -1,4 +1,4 @@
-import { Selector } from 'testcafe';
+import { Selector } from '../../../helpers/selector';
 import Form from '../../form/form';
 import TextBox from '../../textBox';
 import Button from '../../button';

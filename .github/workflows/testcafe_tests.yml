@@ -122,6 +122,7 @@ jobs:
           { componentFolder: "filterBuilder", name: "filterBuilder" },
           { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
           { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "treeList", name: "treeList in shadow DOM", concurrency: 1, shadowDom: true },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
@@ -172,7 +173,8 @@ jobs:
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
-        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
+        [ "${{ matrix.ARGS.shadowDom }}" != "" ] && SHADOWDOM="--shadowDom ${{ matrix.ARGS.shadowDom }}"
+        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME $SHADOWDOM"
         echo "$all_args"
         npm run test-testcafe -- $all_args
 

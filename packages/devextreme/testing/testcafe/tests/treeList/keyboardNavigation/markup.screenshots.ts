@@ -2,6 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import TreeList from '../../../model/treeList';
+import { skipInShadowDomMode } from '../../../helpers/shadowDom/skipInShadowDomMode';
 
 fixture
   .disablePageReloads`Keyboard Navigation - screenshots`
@@ -54,7 +55,7 @@ test('Focused cells should look correctly', async (t) => {
   },
 }));
 
-test('Focused custom buttons should look correctly', async (t) => {
+skipInShadowDomMode('Focused custom buttons should look correctly', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const treeList = new TreeList(TREE_LIST_SELECTOR);
   const headerCellToFocus = treeList.getHeaders().getHeaderRow(0).getHeaderCell(3);

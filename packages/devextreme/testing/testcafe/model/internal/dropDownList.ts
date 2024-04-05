@@ -1,4 +1,5 @@
-import { ClientFunction, Selector, t } from 'testcafe';
+import { ClientFunction, t } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import List from '../list';
 import TextBox from '../textBox';
 

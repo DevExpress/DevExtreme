@@ -1,4 +1,5 @@
-import { ClientFunction, Selector } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import DataGridInstance from '../../../../js/ui/data_grid';
 import Widget from '../internal/widget';
 import Toolbar from '../toolbar';
@@ -166,7 +167,14 @@ export default class DataGrid extends Widget {
   }
 
   getFocusedRow(): Selector {
-    return this.dataRows.filter(`.${CLASS.focusedRow}`);
+    const { focusedRow } = CLASS;
+
+    return this.dataRows.filter(
+      (node) => node.classList.contains(focusedRow),
+      {
+        focusedRow,
+      },
+    );
   }
 
   getErrorRow(): Selector {

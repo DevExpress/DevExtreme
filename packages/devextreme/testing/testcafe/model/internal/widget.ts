@@ -1,4 +1,5 @@
-import { Selector, ClientFunction } from 'testcafe';
+import { ClientFunction } from 'testcafe';
+import { Selector } from '../../helpers/selector';
 import type { WidgetName } from '../../helpers/widgetTypings';
 import { isObject } from '../../../../js/core/utils/type';
 
@@ -6,13 +7,18 @@ function getComponentInstance(
   selector: Selector,
   name?: string,
 ): () => Promise<unknown> {
+  const isShadowDom = process.env.shadowDom === 'true';
+
   return ClientFunction(
     () => {
       const $widgetElement = $(selector());
       const elementData = $widgetElement.data();
-      const widgetNames = elementData.dxComponents;
+      const widgetNames = elementData?.dxComponents ?? [];
 
       if (name) {
+        if (isShadowDom) {
+          return (window as any).DevExpress.ui[name].getInstance($widgetElement.get(0));
+        }
         return elementData[name] ?? elementData[widgetNames[0]];
       }
       if (widgetNames.length > 1) {
@@ -23,7 +29,7 @@ function getComponentInstance(
       }
       return elementData[widgetNames[0]];
     },
-    { dependencies: { selector, name } },
+    { dependencies: { selector, name, isShadowDom } },
   );
 }
 

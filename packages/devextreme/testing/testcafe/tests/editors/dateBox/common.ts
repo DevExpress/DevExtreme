@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Selector } from '../../../helpers/selector';
 import {
   insertStylesheetRulesToPage,
   appendElementTo, setClassAttribute,
