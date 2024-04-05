@@ -1,6 +1,6 @@
 
 import TurnDown from 'turndown';
-import ShowDown from 'devextreme-showdown';
+import ShowDown from 'showdown';
 
 import { getWindow } from '../../../core/utils/window';
 import Errors from '../../widget/ui.errors';
@@ -17,7 +17,7 @@ class MarkdownConverter {
         }
 
         if(!showdown) {
-            throw Errors.Error('E1041', 'DevExtreme-Showdown');
+            throw Errors.Error('E1041', 'Showdown');
         }
 
         this._html2Markdown = new turndown();
