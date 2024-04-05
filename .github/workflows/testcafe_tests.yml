@@ -42,7 +42,7 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
-      run: npx nx build:testcafe devextreme-main
+      run: npx nx build devextreme-main
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -166,7 +166,7 @@ jobs:
       run: 7z x artifacts.zip -aoa
 
     - name: Run TestCafe tests
-      working-directory: ./packages/devextreme
+      working-directory: ./e2e/testcafe-devextreme
       run: |
         [ "${{ matrix.ARGS.theme }}" != "" ] && THEME="--theme ${{ matrix.ARGS.theme }}"
         [ "${{ matrix.ARGS.indices }}" != "" ] && INDICES="--indices ${{ matrix.ARGS.indices }}"
@@ -174,14 +174,14 @@ jobs:
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME"
         echo "$all_args"
-        npm run test-testcafe -- $all_args
+        npm run test -- $all_args
 
     - name: Copy compared screenshot artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
       with:
         name: compared-screenshots
-        path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/compared-screenshots/**/*
+        path: ${{ github.workspace }}/e2e/testcafe/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
 
     - name: Copy failed test artifacts
@@ -189,7 +189,7 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: failed-tests
-        path: ${{ github.workspace }}/packages/devextreme/testing/testcafe/artifacts/failedtests/**/*
+        path: ${{ github.workspace }}/e2e/testcafe/artifacts/failedtests/**/*
         if-no-files-found: ignore
 
   notify:
