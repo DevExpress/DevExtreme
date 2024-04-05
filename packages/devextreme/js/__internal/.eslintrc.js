@@ -167,15 +167,15 @@ module.exports = {
                 //         ]
                 //     },
                 // ],
-                // 'no-restricted-syntax': [
-                //     'error',
-                //     {
-                //         'selector': 'MethodDefinition[kind = "get"]',
-                //     },
-                //     {
-                //         'selector': 'MethodDefinition[kind = "set"]',
-                //     }
-                // ],
+                'no-restricted-syntax': [
+                    'error',
+                    {
+                        'selector': 'MethodDefinition[kind = "get"]',
+                    },
+                    {
+                        'selector': 'MethodDefinition[kind = "set"]',
+                    }
+                ],
                 'class-methods-use-this': 'off',
                 '@typescript-eslint/lines-between-class-members': 'off',
             }
