@@ -1556,7 +1556,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return offset;
   }
 
-  _getCellPosition($cell, direction?): {
+  private _getCellPosition($cell, direction?): {
     rowIndex: number;
     columnIndex: number;
   } | undefined {
@@ -2104,7 +2104,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   * Subsequent assignment of '-' to the editor's value is treated as a text change, causing the inversion of the value from '-0' to '0'.
   * To prevent this inversion, it is necessary to assign to the value the same content as in the editor: '-0'.
   */
-  _getKeyPressInputValue(
+  private _getKeyPressInputValue(
     $input: dxElementWrapper,
     editorValue: any,
   ): any {
@@ -2147,7 +2147,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedCellChanging(
+  private _fireFocusedCellChanging(
     $event: Event,
     $cellElement: dxElementWrapper,
     isHighlighted: boolean,
@@ -2192,7 +2192,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
+  public _fireFocusedCellChanged($cell: dxElementWrapper | undefined): void {
     const columnIndex = this._rowsView.getCellIndex($cell);
     const rowOptions: any = $cell?.parent().data('options');
     const focusedRowKey = rowOptions?.key;
@@ -2200,7 +2200,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._memoFireFocusedCellChanged(focusedRowKey, columnIndex);
   }
 
-  _memoFireFocusedCellChanged(
+  private _memoFireFocusedCellChanged(
     rowKey: RowKey,
     columnIndex: number,
   ): void {
@@ -2267,7 +2267,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return args;
   }
 
-  _fireFocusedRowChanged(): void {
+  public _fireFocusedRowChanged(): void {
     const focusedRowEnabled = this.option('focusedRowEnabled');
     const focusedRowKey = this.option('focusedRowKey');
     const focusedRowIndex = this._focusController?.getFocusedRowIndexByKey(focusedRowKey);
@@ -2279,7 +2279,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._memoFireFocusedRowChanged(focusedRowKey, focusedRowIndex);
   }
 
-  _memoFireFocusedRowChanged(focusedRowKey: RowKey, focusedRowIndex: number): void {
+  private _memoFireFocusedRowChanged(focusedRowKey: RowKey, focusedRowIndex: number): void {
     const localRowIndex = focusedRowIndex - this._dataController.getRowIndexOffset();
 
     this.executeAction('onFocusedRowChanged', {

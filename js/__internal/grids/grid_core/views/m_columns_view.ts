@@ -1108,7 +1108,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   public _findContentElement(isFixedTableRendering?: any): any {}
 
-  _getWidths($cellElements?: dxElementWrapper): number[] {
+  public _getWidths($cellElements?: dxElementWrapper): number[] {
     if (!$cellElements) {
       return [];
     }
@@ -1173,7 +1173,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return columnIndex;
   }
 
-  setColumnWidths({ widths, optionNames }: any): void {
+  protected setColumnWidths({ widths, optionNames }: any): void {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length || !widths) {
@@ -1234,7 +1234,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return this._getCellElementsCore(rowIndex);
   }
 
-  _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
+  protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     if (rowIndex < 0) {
       return undefined;
     }
@@ -1276,7 +1276,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     return undefined;
   }
 
-  getCellElement(rowIndex, columnIdentifier): Element | undefined {
+  private getCellElement(rowIndex, columnIdentifier): Element | undefined {
     const $cell = this._getCellElement(rowIndex, columnIdentifier);
 
     if ($cell) {

@@ -43,13 +43,13 @@ export interface IFormBasedEditingControllerExtender {
 }
 
 const editingControllerExtender = (Base: ModuleType<EditingController>) => class FormBasedEditingControllerExtender extends Base implements IFormBasedEditingControllerExtender {
-  _updateEditFormDeferred: any;
+  private _updateEditFormDeferred: any;
 
-  _firstFormItem: any;
+  private _firstFormItem: any;
 
-  _editPopup: any;
+  private _editPopup: any;
 
-  _$popupContent: any;
+  private _$popupContent: any;
 
   public init() {
     this._editForm = null;
