@@ -289,7 +289,14 @@ if(Quill) {
                 this._popup.option('position', this._popupPosition);
                 this._searchValue = '';
                 this._popup.show();
+                this._setAriaAttributes();
             }
+        }
+
+        _setAriaAttributes() {
+            const $content = this._list._$container;
+            this._list.option('focusedElement', getPublicElement($content));
+            this.quill.root.setAttribute('aria-activedescendant', $content.attr('id'));
         }
 
         _isMarkerPartOfText(retain) {
