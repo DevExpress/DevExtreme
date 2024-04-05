@@ -265,7 +265,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
       }
 
       &:last-of-type {
-        margin-bottom: 0;
+        margin-bottom: $fluent-list-bottom-padding;
       }
     }
   }

@@ -13,6 +13,7 @@ $fluent-list-next-button-horizontal-padding: null !default;
 
 @if $size == "default" {
   $fluent-list-vertical-padding: 4px !default;
+  $fluent-list-bottom-padding: 4px !default;
   $fluent-list-item-height: 32px !default;
   $fluent-list-item-vertical-padding: 6px !default;
   $fluent-list-item-horizontal-padding: 12px !default;
