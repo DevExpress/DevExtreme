@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Vytvořit Filtr",
         "dxDataGrid-filterPanelClearFilter": "Smazat",
         "dxDataGrid-filterPanelFilterEnabledHint": "Povolit Filtr",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
