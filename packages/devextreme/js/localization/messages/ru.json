@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Создать фильтр",
         "dxDataGrid-filterPanelClearFilter": "Очистить",
         "dxDataGrid-filterPanelFilterEnabledHint": "Активировать фильтр",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Иерархическая таблица данных с {0} строками и {1} колонками",
         "dxTreeList-ariaSearchInGrid": "Искать в иерархической таблице данных",
