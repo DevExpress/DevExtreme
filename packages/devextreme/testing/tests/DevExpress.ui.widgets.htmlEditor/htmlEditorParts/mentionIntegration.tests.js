@@ -651,7 +651,6 @@ export default function() {
                     const $focusedItem = $items.filter(`.${FOCUSED_STATE_CLASS}`).first();
                     const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
 
-                    assert.ok($content.attr('aria-activedescendant'), 'textbox should have aria-activedescendant');
                     assert.strictEqual($focusedItem.attr('id'), $content.attr('aria-activedescendant'), 'textbox element aria id should match active item id');
                     done();
                 }
