@@ -354,7 +354,6 @@ if(Quill) {
 
             const $firstItem = this._activeListItems.first();
             this._list.option('focusedElement', getPublicElement($firstItem));
-            this.quill.root.setAttribute('aria-activedescendant', $firstItem.attr('id'));
             this._list.scrollToItem($firstItem);
         }
 
