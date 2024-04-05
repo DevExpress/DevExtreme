@@ -110,3 +110,36 @@ test('Focus goes inside master detail on enter & goes out on esc', async (t) => 
     .expect(dataGrid.getMasterRow(0).getCell().focused)
     .ok();
 }).before(async () => createWidget('dxDataGrid', gridOptions));
+
+test('up/down arrows works only on master detail, not on its content', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+
+  await t.click(
+    dataGrid.getDataRow(0).getCommandCell(0).element,
+  );
+
+  const innerDataGrid = new DataGrid(dataGrid.getMasterRow(0).element.find('.dx-datagrid').parent());
+
+  await t.click(
+    dataGrid.getDataCell(0, 1).element,
+  );
+
+  await t
+    .pressKey('down')
+    .expect(dataGrid.getMasterRow(0).getCell().focused)
+    .ok();
+
+  await t
+    .pressKey('enter')
+    .expect(innerDataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).isFocused)
+    .ok();
+
+  await t
+    .pressKey('up')
+    .expect(innerDataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).isFocused)
+    .ok();
+  await t
+    .pressKey('down')
+    .expect(innerDataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).isFocused)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', gridOptions));

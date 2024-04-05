@@ -571,6 +571,13 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  private isInsideMasterDetail($target): boolean {
+    const $masterDetail = $target.closest(`.${MASTER_DETAIL_CELL_CLASS}`);
+    return !!$masterDetail.get(0)
+      && this.elementIsInsideGrid($masterDetail)
+      && !$target.is($masterDetail);
+  }
+
   private _upDownKeysHandler(eventArgs, isEditing) {
     const visibleRowIndex = this.getVisibleRowIndex();
     const $row = this._focusedView && this._focusedView.getRow(visibleRowIndex);
@@ -579,9 +586,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     const dataSource = this._dataController.dataSource();
     const isRowEditingInCurrentRow = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
     const isEditingNavigationMode = this._isFastEditingStarted();
+    const isInsideMasterDetail = this.isInsideMasterDetail($($event.target));
     const allowNavigate = (!isRowEditingInCurrentRow || !isEditing || isEditingNavigationMode)
       && $row
-      && !isEditForm($row);
+      && !isEditForm($row)
+      && !isInsideMasterDetail;
 
     if (allowNavigate) {
       isEditingNavigationMode && this._closeEditCell();
