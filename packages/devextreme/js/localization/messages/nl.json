@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Maak Filter",
         "dxDataGrid-filterPanelClearFilter": "Wissen",
         "dxDataGrid-filterPanelFilterEnabledHint": "Filter activeren",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
