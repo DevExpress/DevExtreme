@@ -33,7 +33,7 @@ function getEmployeeImageUrl(): string {
 }
 
 export default {
-  getData(): object {
+  getData() {
     return {
       colors,
       profileSettings,
