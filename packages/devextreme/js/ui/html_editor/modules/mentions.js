@@ -166,6 +166,10 @@ if(Quill) {
         renderList($container, options) {
             this.compileGetters(this.options);
             super.renderList($container, options);
+
+            const $content = this._list._$container;
+            this._list.option('focusedElement', getPublicElement($content));
+            this.quill.root.setAttribute('aria-activedescendant', $content.attr('id'));
         }
 
         compileGetters({ displayExpr, valueExpr }) {
@@ -313,10 +317,6 @@ if(Quill) {
                 itemTemplate,
                 searchExpr
             });
-
-            const $container = this._list._$container;
-            this._list.option('focusedElement', getPublicElement($container));
-            this.quill.root.setAttribute('aria-activedescendant', $container.attr('id'));
         }
 
         _filterList(searchValue) {
