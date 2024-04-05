@@ -648,11 +648,11 @@ export default function() {
                 if(valueChangeSpy.calledOnce) {
                     this.clock.tick(10);
                     const $items = this.getItems();
-                    const $firstFocusedItem = $items.filter(`.${FOCUSED_STATE_CLASS}`).first();
+                    const $focusedItem = $items.filter(`.${FOCUSED_STATE_CLASS}`).first();
                     const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
 
                     assert.ok($content.attr('aria-activedescendant'), 'textbox should have aria-activedescendant');
-                    assert.strictEqual($firstFocusedItem.attr('id'), $content.attr('aria-activedescendant'), 'textbox element aria id should match active item id');
+                    assert.strictEqual($focusedItem.attr('id'), $content.attr('aria-activedescendant'), 'textbox element aria id should match active item id');
                     done();
                 }
             });
