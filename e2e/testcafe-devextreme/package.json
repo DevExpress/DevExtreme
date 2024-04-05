@@ -6,6 +6,6 @@
   },
   "devDependencies": {
     "devextreme": "24.1.1",
-    "testcafe": "2.5.0"
+    "testcafe": "3.5.0"
   }
 }
