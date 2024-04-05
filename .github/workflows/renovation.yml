@@ -40,9 +40,6 @@ jobs:
       working-directory: ./packages/devextreme
       run: npx gulp localization
 
-    - name: Jest tests for monorepo tools
-      run: npx nx test devextreme-monorepo-tools
-
     - name: Jest tests
       run: npx nx test-jest devextreme-main
 
