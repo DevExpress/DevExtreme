@@ -28,7 +28,7 @@ The maximum width/height to which a pane can be resized.
 
 You can also place one Splitter inside another to create advanced layouts. For this, use the [splitter](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#splitter) property.
 
-Each Splitter pane can contain various content, from simple HTML markup to components. Use the following properties to declare pane content:
+Each Splitter pane can contain various content, from simple HTML markup to components. You can declare HTML markup inside the item tag or use the following properties to populate panes with content:
 
 - [itemTemplate](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#itemTemplate)    
 Specifies a custom template for all panes.
