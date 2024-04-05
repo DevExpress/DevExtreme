@@ -24,7 +24,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
 
   private rowsViewFocusOutHandlerContext!: (event: Event) => void;
 
-  init(): void {
+  public init(): void {
     super.init();
 
     // eslint-disable-next-line max-len
@@ -87,7 +87,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
-  _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
+  public _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
     super._focus($cell, disableFocus, skipFocusEvent);
 
     this.makeScrollableFocusableIfNeed();
