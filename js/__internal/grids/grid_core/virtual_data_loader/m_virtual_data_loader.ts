@@ -250,7 +250,7 @@ export class VirtualDataLoader {
     return this._dataOptions.pageIndex(pageIndex);
   }
 
-  beginPageIndex(defaultPageIndex) {
+  private beginPageIndex(defaultPageIndex) {
     let beginPageIndex = getBeginPageIndex(this);
     if (beginPageIndex < 0) {
       beginPageIndex = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();

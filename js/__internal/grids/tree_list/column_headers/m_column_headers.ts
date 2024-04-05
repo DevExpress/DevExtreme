@@ -3,7 +3,7 @@ import { columnHeadersModule } from '@ts/grids/grid_core/column_headers/m_column
 import treeListCore from '../m_core';
 
 class TreeListColumnHeadersView extends columnHeadersModule.views.columnHeadersView {
-  setTableRole($tableElement) {
+  public setTableRole($tableElement) {
     this.setAria('role', 'treegrid', $tableElement);
   }
 }
