@@ -27,11 +27,11 @@ export class FocusController extends core.ViewController {
   //  This controller's method used in the data_controler (and maybe others) init methods
   //  And this controller's fields are empty when methods already called
   //  Therefore, as a temporary solution this private getters exist here
-  private get _keyboardController(): KeyboardNavigationController {
+  private getKeyboardController(): KeyboardNavigationController {
     return this.getController('keyboardNavigation');
   }
 
-  private get _dataController(): DataController {
+  private getDataController(): DataController {
     return this.getController('data');
   }
 
@@ -45,7 +45,7 @@ export class FocusController extends core.ViewController {
     switch (name) {
       case 'focusedRowIndex':
         this._focusRowByIndex(value);
-        this._keyboardController._fireFocusedRowChanged();
+        this.getKeyboardController()._fireFocusedRowChanged();
         args.handled = true;
         break;
       case 'focusedRowKey':
@@ -54,7 +54,7 @@ export class FocusController extends core.ViewController {
         }
 
         this._focusRowByKey(value);
-        this._keyboardController._fireFocusedRowChanged();
+        this.getKeyboardController()._fireFocusedRowChanged();
         args.handled = true;
         break;
 
@@ -95,18 +95,18 @@ export class FocusController extends core.ViewController {
   }
 
   private _focusRowByIndexCore(index, operationTypes) {
-    const pageSize = this._dataController.pageSize();
+    const pageSize = this.getDataController().pageSize();
     const setKeyByIndex = () => {
       if (this._isValidFocusedRowIndex(index)) {
-        let rowIndex = index - this._dataController.getRowIndexOffset(true);
+        let rowIndex = index - this.getDataController().getRowIndexOffset(true);
 
         if (!operationTypes || operationTypes.paging && !operationTypes.filtering) {
           // @ts-expect-error
-          const lastItemIndex = this._dataController._getLastItemIndex();
+          const lastItemIndex = this.getDataController()._getLastItemIndex();
           rowIndex = Math.min(rowIndex, lastItemIndex);
         }
 
-        const focusedRowKey = this._dataController.getKeyByRowIndex(rowIndex, true);
+        const focusedRowKey = this.getDataController().getKeyByRowIndex(rowIndex, true);
 
         if (isDefined(focusedRowKey) && !this.isRowFocused(focusedRowKey)) {
           this.option('focusedRowKey', focusedRowKey);
@@ -116,8 +116,8 @@ export class FocusController extends core.ViewController {
 
     if (pageSize >= 0) {
       if (!this._isLocalRowIndex(index)) {
-        const pageIndex = Math.floor(index / this._dataController.pageSize());
-        when(this._dataController.pageIndex(pageIndex), this._dataController.waitReady()).done(() => {
+        const pageIndex = Math.floor(index / this.getDataController().pageSize());
+        when(this.getDataController().pageIndex(pageIndex), this.getDataController().waitReady()).done(() => {
           setKeyByIndex();
         });
       } else {
@@ -127,15 +127,15 @@ export class FocusController extends core.ViewController {
   }
 
   private _isLocalRowIndex(index) {
-    const isVirtualScrolling = this._keyboardController._isVirtualScrolling();
+    const isVirtualScrolling = this.getKeyboardController()._isVirtualScrolling();
 
     if (isVirtualScrolling) {
-      const pageIndex = Math.floor(index / this._dataController.pageSize());
+      const pageIndex = Math.floor(index / this.getDataController().pageSize());
       // @ts-expect-error
-      const virtualItems = this._dataController.virtualItemsCount();
+      const virtualItems = this.getDataController().virtualItemsCount();
       const virtualItemsBegin = virtualItems ? virtualItems.begin : -1;
-      const visibleRowsCount = this._dataController.getVisibleRows().length + this._dataController.getRowIndexOffset();
-      const visiblePagesCount = Math.ceil(visibleRowsCount / this._dataController.pageSize());
+      const visibleRowsCount = this.getDataController().getVisibleRows().length + this.getDataController().getRowIndexOffset();
+      const visiblePagesCount = Math.ceil(visibleRowsCount / this.getDataController().pageSize());
 
       return virtualItemsBegin <= index && visiblePagesCount > pageIndex;
     }
@@ -145,8 +145,8 @@ export class FocusController extends core.ViewController {
 
   private _setFocusedRowKeyByIndex(index) {
     if (this._isValidFocusedRowIndex(index)) {
-      const rowIndex = Math.min(index - this._dataController.getRowIndexOffset(), this._dataController.items().length - 1);
-      const focusedRowKey = this._dataController.getKeyByRowIndex(rowIndex);
+      const rowIndex = Math.min(index - this.getDataController().getRowIndexOffset(), this.getDataController().items().length - 1);
+      const focusedRowKey = this.getDataController().getKeyByRowIndex(rowIndex);
 
       if (isDefined(focusedRowKey) && !this.isRowFocused(focusedRowKey)) {
         this.option('focusedRowKey', focusedRowKey);
@@ -173,18 +173,18 @@ export class FocusController extends core.ViewController {
     if (isFocusedRowKeyDefined) {
       this.option('focusedRowKey', null);
     }
-    this._keyboardController.setFocusedRowIndex(-1);
+    this.getKeyboardController().setFocusedRowIndex(-1);
     this.option('focusedRowIndex', -1);
-    this._dataController.updateItems({
+    this.getDataController().updateItems({
       changeType: 'updateFocusedRow',
       focusedRowKey: null,
     });
 
-    this._keyboardController._fireFocusedRowChanged();
+    this.getKeyboardController()._fireFocusedRowChanged();
   }
 
   private _isValidFocusedRowIndex(rowIndex) {
-    const row = this._dataController.getVisibleRows()[rowIndex];
+    const row = this.getDataController().getVisibleRows()[rowIndex];
 
     return !row || row.rowType === 'data' || row.rowType === 'group';
   }
@@ -202,7 +202,7 @@ export class FocusController extends core.ViewController {
     // @ts-expect-error
     const d = new Deferred();
 
-    if (key === undefined || !this._dataController.dataSource()) {
+    if (key === undefined || !this.getDataController().dataSource()) {
       return d.reject().promise();
     }
 
@@ -212,21 +212,21 @@ export class FocusController extends core.ViewController {
       that._navigateTo(key, d, needFocusRow);
     } else {
       // @ts-expect-error this is the TreeList's method
-      this._dataController.getPageIndexByKey(key).done((pageIndex) => {
+      this.getDataController().getPageIndexByKey(key).done((pageIndex) => {
         if (pageIndex < 0) {
           d.resolve(-1);
           return;
         }
-        if (pageIndex === this._dataController.pageIndex()) {
-          this._dataController.reload().done(() => {
-            if (that.isRowFocused(key) && this._dataController.getRowIndexByKey(key) >= 0) {
+        if (pageIndex === this.getDataController().pageIndex()) {
+          this.getDataController().reload().done(() => {
+            if (that.isRowFocused(key) && this.getDataController().getRowIndexByKey(key) >= 0) {
               d.resolve(that.getFocusedRowIndexByKey(key));
             } else {
               that._navigateTo(key, d, needFocusRow);
             }
           }).fail(d.reject);
         } else {
-          this._dataController.pageIndex(pageIndex).done(() => {
+          this.getDataController().pageIndex(pageIndex).done(() => {
             that._navigateTo(key, d, needFocusRow);
           }).fail(d.reject);
         }
@@ -237,7 +237,7 @@ export class FocusController extends core.ViewController {
   }
 
   private _navigateTo(key, deferred, needFocusRow) {
-    const visibleRowIndex = this._dataController.getRowIndexByKey(key);
+    const visibleRowIndex = this.getDataController().getRowIndexByKey(key);
     const isVirtualRowRenderingMode = gridCoreUtils.isVirtualRowRendering(this);
     const isAutoNavigate = this.isAutoNavigateToFocusedRow();
 
@@ -261,16 +261,16 @@ export class FocusController extends core.ViewController {
   }
 
   private _navigateToVirtualRow(key, deferred, needFocusRow) {
-    const rowsScrollController = this._dataController._rowsScrollController;
-    const rowIndex = gridCoreUtils.getIndexByKey(key, this._dataController.items(true));
+    const rowsScrollController = this.getDataController()._rowsScrollController;
+    const rowIndex = gridCoreUtils.getIndexByKey(key, this.getDataController().items(true));
     const scrollable = this.getView('rowsView').getScrollable();
 
     if (rowsScrollController && scrollable && rowIndex >= 0) {
-      const focusedRowIndex = rowIndex + this._dataController.getRowIndexOffset(true);
+      const focusedRowIndex = rowIndex + this.getDataController().getRowIndexOffset(true);
       const offset = rowsScrollController.getItemOffset(focusedRowIndex);
 
       const triggerUpdateFocusedRow = () => {
-        if (this._dataController.totalCount() && !this._dataController.items().length) {
+        if (this.getDataController().totalCount() && !this.getDataController().items().length) {
           return;
         }
         this.component.off('contentReady', triggerUpdateFocusedRow);
@@ -297,7 +297,7 @@ export class FocusController extends core.ViewController {
       let d;
 
       if (this.option('focusedRowEnabled')) {
-        this._dataController.updateItems({
+        this.getDataController().updateItems({
           changeType: 'updateFocusedRow',
           focusedRowKey: key,
         });
@@ -308,7 +308,7 @@ export class FocusController extends core.ViewController {
       }
 
       when(d).done(() => {
-        this._keyboardController.setFocusedRowIndex(focusedRowIndex);
+        this.getKeyboardController().setFocusedRowIndex(focusedRowIndex);
 
         deferred && deferred.resolve(focusedRowIndex);
       });
@@ -318,8 +318,8 @@ export class FocusController extends core.ViewController {
   }
 
   public getFocusedRowIndexByKey(key) {
-    const loadedRowIndex = this._dataController.getRowIndexByKey(key, true);
-    return loadedRowIndex >= 0 ? loadedRowIndex + this._dataController.getRowIndexOffset(true) : -1;
+    const loadedRowIndex = this.getDataController().getRowIndexByKey(key, true);
+    return loadedRowIndex >= 0 ? loadedRowIndex + this.getDataController().getRowIndexOffset(true) : -1;
   }
 
   public _focusRowByKeyOrIndex() {
@@ -327,19 +327,19 @@ export class FocusController extends core.ViewController {
     let currentFocusedRowIndex = this.option('focusedRowIndex')!;
 
     if (isDefined(focusedRowKey)) {
-      const visibleRowIndex = this._dataController.getRowIndexByKey(focusedRowKey);
+      const visibleRowIndex = this.getDataController().getRowIndexByKey(focusedRowKey);
       if (visibleRowIndex >= 0) {
-        if (this._keyboardController._isVirtualScrolling()) {
-          currentFocusedRowIndex = visibleRowIndex + this._dataController.getRowIndexOffset();
+        if (this.getKeyboardController()._isVirtualScrolling()) {
+          currentFocusedRowIndex = visibleRowIndex + this.getDataController().getRowIndexOffset();
         }
-        this._keyboardController.setFocusedRowIndex(currentFocusedRowIndex);
+        this.getKeyboardController().setFocusedRowIndex(currentFocusedRowIndex);
         this._triggerUpdateFocusedRow(focusedRowKey);
       } else {
         this._navigateToRow(focusedRowKey, true).done((focusedRowIndex) => {
           if (currentFocusedRowIndex >= 0 && focusedRowIndex < 0) {
             this._focusRowByIndex();
           } else if (currentFocusedRowIndex < 0 && focusedRowIndex >= 0) {
-            this._keyboardController.setFocusedRowIndex(focusedRowIndex);
+            this.getKeyboardController().setFocusedRowIndex(focusedRowIndex);
           }
         });
       }
@@ -360,7 +360,7 @@ export class FocusController extends core.ViewController {
 
   public updateFocusedRow({ focusedRowKey }) {
     const that = this;
-    const focusedRowIndex = that._dataController.getRowIndexByKey(focusedRowKey);
+    const focusedRowIndex = that.getDataController().getRowIndexByKey(focusedRowKey);
     const rowsView = that.getView('rowsView');
     let $tableElement;
 
@@ -373,7 +373,7 @@ export class FocusController extends core.ViewController {
       that._clearPreviousFocusedRow($tableElement, focusedRowIndex);
 
       const $row = that._prepareFocusedRow({
-        changedItem: that._dataController.getVisibleRows()[focusedRowIndex],
+        changedItem: that.getDataController().getVisibleRows()[focusedRowIndex],
         $tableElement,
         focusedRowIndex,
       });

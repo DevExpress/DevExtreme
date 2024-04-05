@@ -62,15 +62,15 @@ const restoreFocus = function (focusedElement, selectionRange) {
 export class ResizingController extends modules.ViewController {
   private _refreshSizesHandler: any;
 
-  _dataController!: DataController;
+  public _dataController!: DataController;
 
-  _rowsView!: RowsView;
+  public _rowsView!: RowsView;
 
-  _columnHeadersView!: ColumnHeadersView;
+  private _columnHeadersView!: ColumnHeadersView;
 
-  _columnsController!: ColumnsController;
+  public _columnsController!: ColumnsController;
 
-  _footerView!: FooterView;
+  private _footerView!: FooterView;
 
   private _prevContentMinHeight: any;
 
@@ -105,7 +105,7 @@ export class ResizingController extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
   }
 
-  _initPostRenderHandlers() {
+  private _initPostRenderHandlers() {
     if (!this._refreshSizesHandler) {
       this._refreshSizesHandler = (e) => {
         // @ts-expect-error
@@ -138,7 +138,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  _refreshSizes(e) {
+  private _refreshSizes(e) {
     // @ts-expect-error
     let resizeDeferred = new Deferred<null>().resolve(null);
     const changeType = e?.changeType;
@@ -184,7 +184,7 @@ export class ResizingController extends modules.ViewController {
     return 'dxDataGrid-ariaDataGrid';
   }
 
-  _setAriaLabel() {
+  public _setAriaLabel() {
     const totalItemsCount = Math.max(0, this._dataController.totalItemsCount());
     this.component.setAria('label', messageLocalization.format(
       this._getWidgetAriaLabel(),
@@ -195,7 +195,7 @@ export class ResizingController extends modules.ViewController {
     ), this.component.$element().children(`.${GRIDBASE_CONTAINER_CLASS}`));
   }
 
-  _getBestFitWidths() {
+  private _getBestFitWidths() {
     const rowsView = this._rowsView;
     const columnHeadersView = this._columnHeadersView;
     let widths = rowsView.getColumnWidths();
@@ -210,7 +210,7 @@ export class ResizingController extends modules.ViewController {
     return widths;
   }
 
-  _setVisibleWidths(visibleColumns, widths) {
+  private _setVisibleWidths(visibleColumns, widths) {
     const columnsController = this._columnsController;
     columnsController.beginUpdate();
     each(visibleColumns, (index, column) => {
@@ -220,7 +220,7 @@ export class ResizingController extends modules.ViewController {
     columnsController.endUpdate();
   }
 
-  _toggleBestFitModeForView(view, className, isBestFit) {
+  private _toggleBestFitModeForView(view, className, isBestFit) {
     if (!view || !view.isVisible()) return;
 
     const $rowsTables = this._rowsView.getTableElements();
@@ -271,7 +271,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  _toggleContentMinHeight(value) {
+  private _toggleContentMinHeight(value) {
     const scrollable = this._rowsView.getScrollable();
     const $contentElement = this._rowsView._findContentElement();
 
@@ -286,7 +286,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  _synchronizeColumns() {
+  private _synchronizeColumns() {
     const columnsController = this._columnsController;
     const visibleColumns = columnsController.getVisibleColumns();
     const columnAutoWidth = this.option('columnAutoWidth');
@@ -423,7 +423,7 @@ export class ResizingController extends modules.ViewController {
     return this._columnsController.getVisibleColumns().some((c) => c.width === 'auto' && !c.command);
   }
 
-  _getAverageColumnsWidth(resultWidths) {
+  private _getAverageColumnsWidth(resultWidths) {
     const freeWidth = calculateFreeWidth(this, resultWidths);
     const columnCountWithoutWidth = resultWidths.filter((width) => width === undefined).length;
 
@@ -504,7 +504,7 @@ export class ResizingController extends modules.ViewController {
     return isColumnWidthsCorrected;
   }
 
-  _processStretch(resultSizes, visibleColumns) {
+  private _processStretch(resultSizes, visibleColumns) {
     const groupSize = this._rowsView.contentWidth();
     const tableSize = this._getTotalWidth(resultSizes, groupSize);
     const unusedIndexes = { length: 0 };
@@ -540,7 +540,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  _getRealColumnWidth(columnIndex, columnWidths, groupWidth?) {
+  private _getRealColumnWidth(columnIndex, columnWidths, groupWidth?) {
     let ratio = 1;
     const width = columnWidths[columnIndex];
 
@@ -576,7 +576,7 @@ export class ResizingController extends modules.ViewController {
     return parseFloat(width) * groupWidth * ratio / 100;
   }
 
-  _getTotalWidth(widths, groupWidth) {
+  private _getTotalWidth(widths, groupWidth) {
     let result = 0;
 
     for (let i = 0; i < widths.length; i++) {
@@ -589,12 +589,12 @@ export class ResizingController extends modules.ViewController {
     return Math.ceil(result);
   }
 
-  _getGroupElement() {
+  private _getGroupElement() {
     // @ts-expect-error
     return this.component.$element().children().get(0);
   }
 
-  updateSize(rootElement) {
+  public updateSize(rootElement) {
     const that = this;
     const $rootElement = $(rootElement);
     const importantMarginClass = that.addWidgetPrefix(IMPORTANT_MARGIN_CLASS);
@@ -619,11 +619,11 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  publicMethods() {
+  public publicMethods() {
     return ['resize', 'updateDimensions'];
   }
 
-  _waitAsyncTemplates() {
+  private _waitAsyncTemplates() {
     return when(
       this._columnHeadersView?.waitAsyncTemplates(true),
       this._rowsView?.waitAsyncTemplates(true),
@@ -651,7 +651,7 @@ export class ResizingController extends modules.ViewController {
     return d.promise();
   }
 
-  updateDimensions(checkSize?) {
+  public updateDimensions(checkSize?) {
     const that = this;
 
     that._initPostRenderHandlers();
@@ -687,7 +687,7 @@ export class ResizingController extends modules.ViewController {
     return result.promise();
   }
 
-  _resetGroupElementHeight() {
+  private _resetGroupElementHeight() {
     const groupElement = this._getGroupElement();
     const scrollable = this._rowsView.getScrollable();
 
@@ -696,7 +696,7 @@ export class ResizingController extends modules.ViewController {
     }
   }
 
-  _checkSize(checkSize?) {
+  private _checkSize(checkSize?) {
     const $rootElement = this.component.$element();
     // @ts-expect-error
     const isWidgetVisible = $rootElement.is(':visible');
@@ -707,7 +707,7 @@ export class ResizingController extends modules.ViewController {
     return isWidgetVisible && (!checkSize || isGridSizeChanged);
   }
 
-  _setScrollerSpacingCore() {
+  private _setScrollerSpacingCore() {
     const that = this;
     const vScrollbarWidth = that._rowsView.getScrollbarWidth();
     const hScrollbarWidth = that._rowsView.getScrollbarWidth(true);
@@ -719,7 +719,7 @@ export class ResizingController extends modules.ViewController {
     });
   }
 
-  _setScrollerSpacing() {
+  private _setScrollerSpacing() {
     const scrollable = this._rowsView.getScrollable();
     // T722415, T758955
     const isNativeScrolling = this.option('scrolling.useNative') === true;
@@ -802,7 +802,7 @@ export class ResizingController extends modules.ViewController {
     });
   }
 
-  _updateLastSizes($rootElement) {
+  private _updateLastSizes($rootElement) {
     this._lastWidth = getWidth($rootElement);
     this._lastHeight = getHeight($rootElement);
     this._devicePixelRatio = getWindow().devicePixelRatio;
@@ -825,7 +825,7 @@ export class ResizingController extends modules.ViewController {
 }
 
 export class SynchronizeScrollingController extends modules.ViewController {
-  _scrollChangedHandler(views, pos, viewName) {
+  private _scrollChangedHandler(views, pos, viewName) {
     for (let j = 0; j < views.length; j++) {
       if (views[j] && views[j].name !== viewName) {
         views[j].scrollTo({ left: pos.left, top: pos.top });
