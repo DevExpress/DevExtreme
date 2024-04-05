@@ -477,22 +477,37 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderNavButtons: function() {
-        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option('showNavButtons'));
+        const { showNavButtons, rtlEnabled } = this.option();
 
-        if(!this.option('showNavButtons')) return;
+        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, showNavButtons);
 
-        const rtlEnabled = this.option('rtlEnabled');
+        if(!showNavButtons) {
+            return;
+        }
+
         this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
-
         const $leftButton = this._leftButton.$element();
+
         $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
+
         this.$element().prepend($leftButton);
 
         this._rightButton = this._createNavButton(TAB_OFFSET, rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON);
-
         const $rightButton = this._rightButton.$element();
+
         $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
+
         this.$element().append($rightButton);
+    },
+
+    _updateNavButtonsAriaDisabled() {
+        const $buttons = [ this._leftButton?.$element(), this._rightButton?.$element() ];
+
+        $buttons.forEach($button => {
+            if($button) {
+                this.setAria({ disabled: null }, $button);
+            }
+        });
     },
 
     _updateNavButtonsState() {
@@ -506,6 +521,8 @@ const Tabs = CollectionWidget.inherit({
             this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
             this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
         }
+
+        this._updateNavButtonsAriaDisabled();
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -532,7 +549,12 @@ const Tabs = CollectionWidget.inherit({
             onClick: function() {
                 that._updateScrollPosition(offset, 1);
             },
-            integrationOptions: {}
+            integrationOptions: {},
+            elementAttr: {
+                tabindex: -1,
+                role: null,
+                'aria-label': null,
+            },
         });
 
         const $navButton = navButton.$element();
