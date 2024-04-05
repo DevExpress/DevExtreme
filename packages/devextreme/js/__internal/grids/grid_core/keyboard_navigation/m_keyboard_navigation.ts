@@ -76,6 +76,7 @@ import {
   isCellInHeaderRow,
   isDataRow,
   isDetailRow,
+  isEditForm,
   isEditorCell,
   isElementDefined,
   isFixedColumnIndexOffsetRequired,
@@ -570,6 +571,13 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  private isInsideMasterDetail($target): boolean {
+    const $masterDetail = $target.closest(`.${MASTER_DETAIL_CELL_CLASS}`);
+    return !!$masterDetail.get(0)
+      && this.elementIsInsideGrid($masterDetail)
+      && !$target.is($masterDetail);
+  }
+
   private _upDownKeysHandler(eventArgs, isEditing) {
     const visibleRowIndex = this.getVisibleRowIndex();
     const $row = this._focusedView && this._focusedView.getRow(visibleRowIndex);
@@ -578,9 +586,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     const dataSource = this._dataController.dataSource();
     const isRowEditingInCurrentRow = this._editingController?.isEditRowByIndex?.(visibleRowIndex);
     const isEditingNavigationMode = this._isFastEditingStarted();
+    const isInsideMasterDetail = this.isInsideMasterDetail($($event?.target));
     const allowNavigate = (!isRowEditingInCurrentRow || !isEditing || isEditingNavigationMode)
       && $row
-      && !isDetailRow($row);
+      && !isEditForm($row)
+      && !isInsideMasterDetail;
 
     if (allowNavigate) {
       isEditingNavigationMode && this._closeEditCell();
@@ -1013,9 +1023,16 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
 
       this._updateFocusedCellPosition($cell);
+      // @ts-expect-error
+    } else if (this.getMasterDetailCell($cell)?.is($cell)) {
+      this.focusFirstInteractiveElementInside($cell);
     } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
+  }
+
+  private focusFirstInteractiveElementInside($el: dxElementWrapper): void {
+    ($el.find(INTERACTIVE_ELEMENTS_SELECTOR).get(0) as HTMLElement).focus();
   }
 
   private _processEnterKeyForDataCell(eventArgs, isEditing) {
@@ -1096,6 +1113,12 @@ export class KeyboardNavigationController extends modules.ViewController {
       }
       eventArgs.originalEvent.preventDefault();
 
+      return true;
+    }
+
+    const masterDetailCell = this.getMasterDetailCell($cell);
+    if (masterDetailCell) {
+      this._focusCell(masterDetailCell);
       return true;
     }
 
@@ -1212,7 +1235,7 @@ export class KeyboardNavigationController extends modules.ViewController {
         this._updateFocusedCellPosition($target);
         this._applyTabIndexToElement(this._focusedView!.element());
         this._focusedView!.focus(true);
-      } else if (!this._isMasterDetailCell($target)) {
+      } else if (!this.getMasterDetailCell($target)) {
         this._clickTargetCellHandler(event, $target);
       } else {
         this._updateFocusedCellPosition($target);
@@ -1403,6 +1426,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       if ($focusViewElement) {
         $focusViewElement
           .find('.dx-row[tabindex], .dx-row > td[tabindex]')
+          .filter((i, node) => gridCoreUtils.isElementInCurrentGrid(this, $(node)))
           .not($focusElement)
           .removeClass(CELL_FOCUS_DISABLED_CLASS)
           .removeClass(FOCUSED_CLASS)
@@ -1443,7 +1467,7 @@ export class KeyboardNavigationController extends modules.ViewController {
       let $cell = this._getFocusedCell();
       const isEditing = this._editingController.isEditing();
 
-      if (!this._isMasterDetailCell($cell) || this._isRowEditMode()) {
+      if (!this.getMasterDetailCell($cell) || this._isRowEditMode()) {
         if (this._hasSkipRow($cell.parent())) {
           const direction = this._focusedCellPosition && this._focusedCellPosition.rowIndex > 0
             ? 'upArrow'
@@ -1589,7 +1613,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     return undefined;
   }
 
-  private _focusCell($cell, isDisabled) {
+  private _focusCell($cell, isDisabled?) {
     if (this._isCellValid($cell)) {
       this._focus($cell, isDisabled);
       return true;
@@ -1889,7 +1913,7 @@ export class KeyboardNavigationController extends modules.ViewController {
         return false;
       }
 
-      if (this._isMasterDetailCell($cell)) {
+      if (this.getMasterDetailCell($cell)) {
         return true;
       }
 
@@ -2373,12 +2397,7 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private _hasSkipRow($row) {
     const row = $row && $row.get(0);
-    return (
-      row
-      && (row.style.display === 'none'
-        || (isDetailRow($row)
-          && !$row.hasClass(this.addWidgetPrefix(EDIT_FORM_CLASS))))
-    );
+    return row && row.style.display === 'none';
   }
 
   private _allowEditingOnEnterKey() {
@@ -2455,14 +2474,16 @@ export class KeyboardNavigationController extends modules.ViewController {
     return $editForm.length && this.elementIsInsideGrid($editForm);
   }
 
-  public _isMasterDetailCell(element) {
+  public getMasterDetailCell(element): dxElementWrapper | null {
     const $masterDetailCell = $(element).closest(
       `.${MASTER_DETAIL_CELL_CLASS}`,
     );
 
-    return (
-      $masterDetailCell.length && this.elementIsInsideGrid($masterDetailCell)
-    );
+    if ($masterDetailCell.length && this.elementIsInsideGrid($masterDetailCell)) {
+      return $masterDetailCell;
+    }
+
+    return null;
   }
 
   /**
@@ -2476,7 +2497,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private _handleTabKeyOnMasterDetailCell(target, direction) {
-    if (this._isMasterDetailCell(target)) {
+    if (this.getMasterDetailCell(target)) {
       this._updateFocusedCellPosition($(target), direction);
 
       const $nextCell = this._getNextCell(direction, 'row');
@@ -2631,7 +2652,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     const keyboardController = this._keyboardNavigationController;
     const cellElementsLength = cellElements ? cellElements.length : -1;
     const updateCellTabIndex = function ($cell) {
-      const isMasterDetailCell = keyboardController._isMasterDetailCell($cell);
+      const isMasterDetailCell = !!keyboardController.getMasterDetailCell($cell);
       const isValidCell = keyboardController._isCellValid($cell);
       if (!isMasterDetailCell && isValidCell && keyboardController._isCellElement($cell)) {
         keyboardController._applyTabIndexToElement($cell);

@@ -57,10 +57,15 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
     resizable,
     visible,
     collapsed,
+    collapsedSize,
   } = paneRestrictions;
 
-  if (collapsed === true || visible === false) {
+  if (visible === false) {
     return 0;
+  }
+
+  if (collapsed === true) {
+    return collapsedSize ?? 0;
   }
 
   if (resizable === false && isDefined(paneRestrictions.size)) {
@@ -287,14 +292,25 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
   let numPanelsWithDefinedSize = 0;
   let remainingSize = 100;
 
-  layoutRestrictions.forEach((paneRestrictions, index) => {
-    const { size, visible, collapsed } = paneRestrictions;
+  layoutRestrictions.forEach((panelConstraints, index) => {
+    const {
+      size, visible, collapsed, collapsedSize = 0,
+    } = panelConstraints;
 
-    if (visible === false || collapsed === true) {
+    if (visible === false) {
       numPanelsWithDefinedSize += 1;
 
       layout[index] = 0;
       remainingSize -= 0;
+
+      return;
+    }
+
+    if (collapsed === true) {
+      numPanelsWithDefinedSize += 1;
+
+      layout[index] = collapsedSize;
+      remainingSize -= collapsedSize;
 
       return;
     }

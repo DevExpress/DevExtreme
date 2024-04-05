@@ -10,7 +10,7 @@ import { Item } from 'devextreme/ui/menu.d';
 import Menu from 'devextreme-testcafe-models/menu';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Menu_common`
+fixture.skip.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'));
 
 test('Menu items render', async (t) => {

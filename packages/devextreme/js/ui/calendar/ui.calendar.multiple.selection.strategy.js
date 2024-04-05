@@ -10,7 +10,7 @@ class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
         return {
             value: this.dateOption('value'),
             range: [],
-            selectionMode: 'multi',
+            selectionMode: 'multiple',
             onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
         };
     }
