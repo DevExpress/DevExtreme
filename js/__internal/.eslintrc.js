@@ -130,6 +130,56 @@ module.exports = {
                 '@typescript-eslint/prefer-for-of': 'warn',
             }
         },
+        // Rules for grid controls
+        {
+            files: [
+                '**/grid_core/**/**.ts',
+                '**/data_grid/**/**.ts',
+                '**/tree_list/**/**.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/explicit-member-accessibility': [
+                    'error',
+                    {
+                        'accessibility': 'explicit',
+                        'overrides': {
+                            'constructors': 'off',
+                        },
+                    }
+                ],
+                // '@typescript-eslint/member-ordering': [
+                //     'error',
+                //     {
+                //         'default': [
+                //             'private-field',
+                //             'protected-field',
+                //             'public-field',
+                //             'constructor',
+                //             'private-method',
+                //             'protected-method',
+                //             'public-method'
+                //         ]
+                //     },
+                // ],
+                'no-restricted-syntax': [
+                    'error',
+                    {
+                        'selector': 'MethodDefinition[kind = "get"]',
+                    },
+                    {
+                        'selector': 'MethodDefinition[kind = "set"]',
+                    }
+                ],
+                'class-methods-use-this': 'off',
+                '@typescript-eslint/lines-between-class-members': 'off',
+            }
+        },
     ],
     settings: {
         'import/resolver': {
