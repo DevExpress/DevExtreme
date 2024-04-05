@@ -192,7 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Filtre Oluştur",
         "dxDataGrid-filterPanelClearFilter": "Temizle",
         "dxDataGrid-filterPanelFilterEnabledHint": "Filtreyi etkinleştir",
-        "dxDataGrid-masterDetail": "Detail row",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",

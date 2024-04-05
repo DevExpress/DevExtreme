@@ -192,7 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "ایجاد فیلتر",
         "dxDataGrid-filterPanelClearFilter": "حذف فیلتر",
         "dxDataGrid-filterPanelFilterEnabledHint": "فعال نمودن فیلتر",
-        "dxDataGrid-masterDetail": "Detail row",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "جستجو در لیست درختی",

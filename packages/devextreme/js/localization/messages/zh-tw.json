@@ -192,7 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "創建過濾器",
         "dxDataGrid-filterPanelClearFilter": "清空",
         "dxDataGrid-filterPanelFilterEnabledHint": "啟用該過濾器",
-        "dxDataGrid-masterDetail": "Detail row",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
