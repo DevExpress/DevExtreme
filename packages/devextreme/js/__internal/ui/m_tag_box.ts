@@ -730,6 +730,7 @@ const TagBox = (SelectBox as any).inherit({
 
   _renderMultiTag($input) {
     const tagId = `dx-${new Guid()}`;
+
     const $tag = $('<div>')
       .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
@@ -740,9 +741,12 @@ const TagBox = (SelectBox as any).inherit({
       selectedItems: this.option('selectedItems'),
     };
 
-    const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
+    let tagData = '';
 
     this._multiTagPreparingAction(args);
+
+    // @ts-expect-error
+    tagData = args.text;
 
     // @ts-expect-error
     if (args.cancel) {

@@ -7773,7 +7773,7 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
-    QUnit.test('multitag should have same set of attributes like in simple tags', function(assert) {
+    QUnit.test('multitag should have correct aria attributes', function(assert) {
         const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
         const $tagBox = $('#tagBox').dxTagBox({
             items: sampleData,
@@ -7781,12 +7781,14 @@ QUnit.module('accessibility', () => {
             maxDisplayedTags: 2,
             showMultiTagOnly: false,
         });
-        const $simpleTagContainer = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(${TAGBOX_MULTI_TAG_CLASS})`);
+        const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
         const $multiTagContainer = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
-        const simpleTagAttributes = Array.from($simpleTagContainer.prop('attributes')).map(attr => attr.name);
-        const multiTagAttributes = Array.from($multiTagContainer.prop('attributes')).map(attr => attr.name);
+        const totalSelectedItems = $tagBox.dxTagBox('instance').option().selectedItems.length;
 
-        assert.strictEqual(multiTagAttributes.every(item => simpleTagAttributes.includes(item)), true, 'multitags has same attributes as simpletags');
+        assert.strictEqual($parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'aria-labelledby attribute contains multitag id');
+        assert.strictEqual($multiTagContainer.attr('role'), 'button', 'role attribute is correct');
+        assert.strictEqual($multiTagContainer.attr('aria-label'), `${totalSelectedItems - 1} more`, 'aria-label attribute is correct');
+        assert.strictEqual($multiTagContainer.attr('aria-roledescription'), messageLocalization.format('dxTagBox-tagRoleDescription'), 'aria-roledescription attribute is correct');
     });
 
     QUnit.test('root element should have aria-labelledby attribute based from multitag id', function(assert) {
@@ -7813,9 +7815,7 @@ QUnit.module('accessibility', () => {
             showMultiTagOnly: true,
         });
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map(function() {
-            return $(this).attr('id');
-        }).get();
+        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
 
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = true and maxDisplayTags = 2');
     });
@@ -7829,9 +7829,7 @@ QUnit.module('accessibility', () => {
             showMultiTagOnly: true,
         });
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map(function() {
-            return $(this).attr('id');
-        }).get();
+        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
 
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = true and maxDisplayTags = 4');
     });
@@ -7845,9 +7843,7 @@ QUnit.module('accessibility', () => {
             showMultiTagOnly: false,
         });
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map(function() {
-            return $(this).attr('id');
-        }).get();
+        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
 
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = false and maxDisplayTags = 2');
     });
@@ -7861,9 +7857,7 @@ QUnit.module('accessibility', () => {
             showMultiTagOnly: false,
         });
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map(function() {
-            return $(this).attr('id');
-        }).get();
+        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
 
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = false and maxDisplayTags = 4');
     });
