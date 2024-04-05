@@ -181,9 +181,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    this.option('disabled', this._isInactive());
     this.option(inverseDimension, null);
-
     this.option(dimension, this.getSize());
   }
 
@@ -485,6 +483,10 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     return Number.isFinite(separatorSize) && separatorSize >= 0
       ? separatorSize as number
       : DEFAULT_RESIZE_HANDLE_SIZE;
+  }
+
+  isInactive(): boolean {
+    return this._isInactive();
   }
 }
 
