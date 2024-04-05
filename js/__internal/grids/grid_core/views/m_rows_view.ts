@@ -490,7 +490,7 @@ export class RowsView extends ColumnsView {
     });
   }
 
-  private _createEmptyRow(className, isFixed?, height?) {
+  public _createEmptyRow(className, isFixed?, height?) {
     const that = this;
     let $cell;
     const $row = that._createRow();
