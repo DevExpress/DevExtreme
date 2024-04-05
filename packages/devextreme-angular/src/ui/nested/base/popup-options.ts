@@ -52,13 +52,6 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('contentTemplate', value);
     }
 
-    get copyRootClassesToWrapper(): boolean {
-        return this._getOption('copyRootClassesToWrapper');
-    }
-    set copyRootClassesToWrapper(value: boolean) {
-        this._setOption('copyRootClassesToWrapper', value);
-    }
-
     get deferRendering(): boolean {
         return this._getOption('deferRendering');
     }
@@ -92,13 +85,6 @@ export abstract class DxoPopupOptions extends NestedOption {
     }
     set dragOutsideBoundary(value: boolean) {
         this._setOption('dragOutsideBoundary', value);
-    }
-
-    get elementAttr(): any {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: any) {
-        this._setOption('elementAttr', value);
     }
 
     get enableBodyScroll(): boolean {

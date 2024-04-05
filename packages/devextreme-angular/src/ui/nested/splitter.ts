@@ -19,55 +19,59 @@ import {
 
 
 
-import { dxBoxOptions } from 'devextreme/ui/box';
+import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxoBoxOptions } from './base/box-options';
+import { DxoSplitterOptions } from './base/splitter-options';
 import { DxiItemComponent } from './item-dxi';
 
 
 @Component({
-    selector: 'dxo-box',
+    selector: 'dxo-splitter',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'align',
-        'crossAlign',
+        'allowKeyboardNavigation',
         'dataSource',
-        'direction',
         'disabled',
         'elementAttr',
         'height',
         'hoverStateEnabled',
-        'itemHoldTimeout',
         'items',
         'itemTemplate',
         'onContentReady',
         'onDisposing',
         'onInitialized',
         'onItemClick',
+        'onItemCollapsed',
         'onItemContextMenu',
-        'onItemHold',
+        'onItemExpanded',
         'onItemRendered',
         'onOptionChanged',
+        'onResize',
+        'onResizeEnd',
+        'onResizeStart',
+        'orientation',
+        'repaintChangesOnly',
         'rtlEnabled',
+        'separatorSize',
         'visible',
         'width'
     ]
 })
-export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit  {
+export class DxoSplitterComponent extends DxoSplitterOptions implements OnDestroy, OnInit  {
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
     protected get _optionPath() {
-        return 'box';
+        return 'splitter';
     }
 
 
@@ -105,10 +109,10 @@ export class DxoBoxComponent extends DxoBoxOptions implements OnDestroy, OnInit 
 
 @NgModule({
   declarations: [
-    DxoBoxComponent
+    DxoSplitterComponent
   ],
   exports: [
-    DxoBoxComponent
+    DxoSplitterComponent
   ],
 })
-export class DxoBoxModule { }
+export class DxoSplitterModule { }

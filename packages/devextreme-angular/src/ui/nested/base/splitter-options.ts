@@ -6,40 +6,27 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 @Component({
     template: ''
 })
-export abstract class DxoBoxOptions extends NestedOption {
-    get align(): Distribution {
-        return this._getOption('align');
+export abstract class DxoSplitterOptions extends NestedOption {
+    get allowKeyboardNavigation(): boolean {
+        return this._getOption('allowKeyboardNavigation');
     }
-    set align(value: Distribution) {
-        this._setOption('align', value);
-    }
-
-    get crossAlign(): CrosswiseDistribution {
-        return this._getOption('crossAlign');
-    }
-    set crossAlign(value: CrosswiseDistribution) {
-        this._setOption('crossAlign', value);
+    set allowKeyboardNavigation(value: boolean) {
+        this._setOption('allowKeyboardNavigation', value);
     }
 
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any>) {
         this._setOption('dataSource', value);
-    }
-
-    get direction(): BoxDirection {
-        return this._getOption('direction');
-    }
-    set direction(value: BoxDirection) {
-        this._setOption('direction', value);
     }
 
     get disabled(): boolean {
@@ -70,17 +57,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('hoverStateEnabled', value);
     }
 
-    get itemHoldTimeout(): number {
-        return this._getOption('itemHoldTimeout');
-    }
-    set itemHoldTimeout(value: number) {
-        this._setOption('itemHoldTimeout', value);
-    }
-
-    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -119,6 +99,13 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('onItemClick', value);
     }
 
+    get onItemCollapsed(): ((e: ItemCollapsedEvent) => void) {
+        return this._getOption('onItemCollapsed');
+    }
+    set onItemCollapsed(value: ((e: ItemCollapsedEvent) => void)) {
+        this._setOption('onItemCollapsed', value);
+    }
+
     get onItemContextMenu(): ((e: ItemContextMenuEvent) => void) {
         return this._getOption('onItemContextMenu');
     }
@@ -126,11 +113,11 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('onItemContextMenu', value);
     }
 
-    get onItemHold(): ((e: ItemHoldEvent) => void) {
-        return this._getOption('onItemHold');
+    get onItemExpanded(): ((e: ItemExpandedEvent) => void) {
+        return this._getOption('onItemExpanded');
     }
-    set onItemHold(value: ((e: ItemHoldEvent) => void)) {
-        this._setOption('onItemHold', value);
+    set onItemExpanded(value: ((e: ItemExpandedEvent) => void)) {
+        this._setOption('onItemExpanded', value);
     }
 
     get onItemRendered(): ((e: ItemRenderedEvent) => void) {
@@ -147,11 +134,53 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('onOptionChanged', value);
     }
 
+    get onResize(): ((e: ResizeEvent) => void) {
+        return this._getOption('onResize');
+    }
+    set onResize(value: ((e: ResizeEvent) => void)) {
+        this._setOption('onResize', value);
+    }
+
+    get onResizeEnd(): ((e: ResizeEndEvent) => void) {
+        return this._getOption('onResizeEnd');
+    }
+    set onResizeEnd(value: ((e: ResizeEndEvent) => void)) {
+        this._setOption('onResizeEnd', value);
+    }
+
+    get onResizeStart(): ((e: ResizeStartEvent) => void) {
+        return this._getOption('onResizeStart');
+    }
+    set onResizeStart(value: ((e: ResizeStartEvent) => void)) {
+        this._setOption('onResizeStart', value);
+    }
+
+    get orientation(): Orientation {
+        return this._getOption('orientation');
+    }
+    set orientation(value: Orientation) {
+        this._setOption('orientation', value);
+    }
+
+    get repaintChangesOnly(): boolean {
+        return this._getOption('repaintChangesOnly');
+    }
+    set repaintChangesOnly(value: boolean) {
+        this._setOption('repaintChangesOnly', value);
+    }
+
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+    get separatorSize(): number {
+        return this._getOption('separatorSize');
+    }
+    set separatorSize(value: number) {
+        this._setOption('separatorSize', value);
     }
 
     get visible(): boolean {

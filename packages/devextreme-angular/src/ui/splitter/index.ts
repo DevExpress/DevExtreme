@@ -22,14 +22,15 @@ import {
     QueryList
 } from '@angular/core';
 
-export { ExplicitTypes } from 'devextreme/ui/box';
+export { ExplicitTypes } from 'devextreme/ui/splitter';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 
-import DxBox from 'devextreme/ui/box';
+import DxSplitter from 'devextreme/ui/splitter';
 
 
 import {
@@ -43,18 +44,18 @@ import {
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoBoxModule } from 'devextreme-angular/ui/nested';
+import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
 
 
 /**
- * [descr:dxBox]
+ * [descr:dxSplitter]
 
  */
 @Component({
-    selector: 'dx-box',
+    selector: 'dx-splitter',
     template: '',
     providers: [
         DxTemplateHost,
@@ -63,58 +64,32 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
         IterableDifferHelper
     ]
 })
-export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxBox<TItem, TKey> = null;
+export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
+    instance: DxSplitter<TItem, TKey> = null;
 
     /**
-     * [descr:dxBoxOptions.align]
+     * [descr:dxSplitterOptions.allowKeyboardNavigation]
     
      */
     @Input()
-    get align(): Distribution {
-        return this._getOption('align');
+    get allowKeyboardNavigation(): boolean {
+        return this._getOption('allowKeyboardNavigation');
     }
-    set align(value: Distribution) {
-        this._setOption('align', value);
-    }
-
-
-    /**
-     * [descr:dxBoxOptions.crossAlign]
-    
-     */
-    @Input()
-    get crossAlign(): CrosswiseDistribution {
-        return this._getOption('crossAlign');
-    }
-    set crossAlign(value: CrosswiseDistribution) {
-        this._setOption('crossAlign', value);
+    set allowKeyboardNavigation(value: boolean) {
+        this._setOption('allowKeyboardNavigation', value);
     }
 
 
     /**
-     * [descr:dxBoxOptions.dataSource]
+     * [descr:dxSplitterOptions.dataSource]
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any>) {
         this._setOption('dataSource', value);
-    }
-
-
-    /**
-     * [descr:dxBoxOptions.direction]
-    
-     */
-    @Input()
-    get direction(): BoxDirection {
-        return this._getOption('direction');
-    }
-    set direction(value: BoxDirection) {
-        this._setOption('direction', value);
     }
 
 
@@ -171,27 +146,14 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
 
     /**
-     * [descr:CollectionWidgetOptions.itemHoldTimeout]
+     * [descr:dxSplitterOptions.items]
     
      */
     @Input()
-    get itemHoldTimeout(): number {
-        return this._getOption('itemHoldTimeout');
-    }
-    set itemHoldTimeout(value: number) {
-        this._setOption('itemHoldTimeout', value);
-    }
-
-
-    /**
-     * [descr:dxBoxOptions.items]
-    
-     */
-    @Input()
-    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -210,6 +172,32 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
 
     /**
+     * [descr:dxSplitterOptions.orientation]
+    
+     */
+    @Input()
+    get orientation(): Orientation {
+        return this._getOption('orientation');
+    }
+    set orientation(value: Orientation) {
+        this._setOption('orientation', value);
+    }
+
+
+    /**
+     * [descr:dxSplitterOptions.repaintChangesOnly]
+    
+     */
+    @Input()
+    get repaintChangesOnly(): boolean {
+        return this._getOption('repaintChangesOnly');
+    }
+    set repaintChangesOnly(value: boolean) {
+        this._setOption('repaintChangesOnly', value);
+    }
+
+
+    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -219,6 +207,19 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     }
     set rtlEnabled(value: boolean) {
         this._setOption('rtlEnabled', value);
+    }
+
+
+    /**
+     * [descr:dxSplitterOptions.separatorSize]
+    
+     */
+    @Input()
+    get separatorSize(): number {
+        return this._getOption('separatorSize');
+    }
+    set separatorSize(value: number) {
+        this._setOption('separatorSize', value);
     }
 
 
@@ -249,7 +250,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onContentReady]
+     * [descr:dxSplitterOptions.onContentReady]
     
     
      */
@@ -257,7 +258,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onDisposing]
+     * [descr:dxSplitterOptions.onDisposing]
     
     
      */
@@ -265,7 +266,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onInitialized]
+     * [descr:dxSplitterOptions.onInitialized]
     
     
      */
@@ -273,7 +274,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onItemClick]
+     * [descr:dxSplitterOptions.onItemClick]
     
     
      */
@@ -281,7 +282,15 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onItemContextMenu]
+     * [descr:dxSplitterOptions.onItemCollapsed]
+    
+    
+     */
+    @Output() onItemCollapsed: EventEmitter<ItemCollapsedEvent>;
+
+    /**
+    
+     * [descr:dxSplitterOptions.onItemContextMenu]
     
     
      */
@@ -289,15 +298,15 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onItemHold]
+     * [descr:dxSplitterOptions.onItemExpanded]
     
     
      */
-    @Output() onItemHold: EventEmitter<ItemHoldEvent>;
+    @Output() onItemExpanded: EventEmitter<ItemExpandedEvent>;
 
     /**
     
-     * [descr:dxBoxOptions.onItemRendered]
+     * [descr:dxSplitterOptions.onItemRendered]
     
     
      */
@@ -305,7 +314,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * [descr:dxBoxOptions.onOptionChanged]
+     * [descr:dxSplitterOptions.onOptionChanged]
     
     
      */
@@ -313,31 +322,41 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     /**
     
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+     * [descr:dxSplitterOptions.onResize]
+    
     
      */
-    @Output() alignChange: EventEmitter<Distribution>;
+    @Output() onResize: EventEmitter<ResizeEvent>;
+
+    /**
+    
+     * [descr:dxSplitterOptions.onResizeEnd]
+    
+    
+     */
+    @Output() onResizeEnd: EventEmitter<ResizeEndEvent>;
+
+    /**
+    
+     * [descr:dxSplitterOptions.onResizeStart]
+    
+    
+     */
+    @Output() onResizeStart: EventEmitter<ResizeStartEvent>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() crossAlignChange: EventEmitter<CrosswiseDistribution>;
+    @Output() allowKeyboardNavigationChange: EventEmitter<boolean>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() directionChange: EventEmitter<BoxDirection>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any>>;
 
     /**
     
@@ -372,14 +391,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemHoldTimeoutChange: EventEmitter<number>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { collapsed?: boolean, collapsedSize?: number | string | undefined, collapsible?: boolean, maxSize?: number | string | undefined, minSize?: number | string | undefined, resizable?: boolean, size?: number | string | undefined, splitter?: dxSplitterOptions | undefined, template?: any, text?: string, visible?: boolean }>>;
 
     /**
     
@@ -393,7 +405,28 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() orientationChange: EventEmitter<Orientation>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() separatorSizeChange: EventEmitter<number>;
 
     /**
     
@@ -437,22 +470,26 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'itemClick', emit: 'onItemClick' },
+            { subscribe: 'itemCollapsed', emit: 'onItemCollapsed' },
             { subscribe: 'itemContextMenu', emit: 'onItemContextMenu' },
-            { subscribe: 'itemHold', emit: 'onItemHold' },
+            { subscribe: 'itemExpanded', emit: 'onItemExpanded' },
             { subscribe: 'itemRendered', emit: 'onItemRendered' },
             { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { emit: 'alignChange' },
-            { emit: 'crossAlignChange' },
+            { subscribe: 'resize', emit: 'onResize' },
+            { subscribe: 'resizeEnd', emit: 'onResizeEnd' },
+            { subscribe: 'resizeStart', emit: 'onResizeStart' },
+            { emit: 'allowKeyboardNavigationChange' },
             { emit: 'dataSourceChange' },
-            { emit: 'directionChange' },
             { emit: 'disabledChange' },
             { emit: 'elementAttrChange' },
             { emit: 'heightChange' },
             { emit: 'hoverStateEnabledChange' },
-            { emit: 'itemHoldTimeoutChange' },
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
+            { emit: 'orientationChange' },
+            { emit: 'repaintChangesOnlyChange' },
             { emit: 'rtlEnabledChange' },
+            { emit: 'separatorSizeChange' },
             { emit: 'visibleChange' },
             { emit: 'widthChange' }
         ]);
@@ -463,7 +500,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 
     protected _createInstance(element, options) {
 
-        return new DxBox(element, options);
+        return new DxSplitter(element, options);
     }
 
 
@@ -504,23 +541,23 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
 @NgModule({
   imports: [
     DxiItemModule,
-    DxoBoxModule,
+    DxoSplitterModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
   declarations: [
-    DxBoxComponent
+    DxSplitterComponent
   ],
   exports: [
-    DxBoxComponent,
+    DxSplitterComponent,
     DxiItemModule,
-    DxoBoxModule,
+    DxoSplitterModule,
     DxTemplateModule
   ]
 })
-export class DxBoxModule { }
+export class DxSplitterModule { }
 
-import type * as DxBoxTypes from "devextreme/ui/box_types";
-export { DxBoxTypes };
+import type * as DxSplitterTypes from "devextreme/ui/splitter_types";
+export { DxSplitterTypes };
 
 

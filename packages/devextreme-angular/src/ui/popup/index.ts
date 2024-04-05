@@ -145,21 +145,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
 
 
     /**
-     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
-    
-     * @deprecated [depNote:dxOverlayOptions.copyRootClassesToWrapper]
-    
-     */
-    @Input()
-    get copyRootClassesToWrapper(): boolean {
-        return this._getOption('copyRootClassesToWrapper');
-    }
-    set copyRootClassesToWrapper(value: boolean) {
-        this._setOption('copyRootClassesToWrapper', value);
-    }
-
-
-    /**
      * [descr:dxOverlayOptions.deferRendering]
     
      */
@@ -221,21 +206,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     }
     set dragOutsideBoundary(value: boolean) {
         this._setOption('dragOutsideBoundary', value);
-    }
-
-
-    /**
-     * [descr:dxOverlayOptions.elementAttr]
-    
-     * @deprecated [depNote:dxOverlayOptions.elementAttr]
-    
-     */
-    @Input()
-    get elementAttr(): any {
-        return this._getOption('elementAttr');
-    }
-    set elementAttr(value: any) {
-        this._setOption('elementAttr', value);
     }
 
 
@@ -725,13 +695,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() copyRootClassesToWrapperChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
@@ -761,13 +724,6 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Output() dragOutsideBoundaryChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
-    @Output() elementAttrChange: EventEmitter<any>;
 
     /**
     
@@ -999,13 +955,11 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
             { emit: 'closeOnOutsideClickChange' },
             { emit: 'containerChange' },
             { emit: 'contentTemplateChange' },
-            { emit: 'copyRootClassesToWrapperChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'disabledChange' },
             { emit: 'dragAndResizeAreaChange' },
             { emit: 'dragEnabledChange' },
             { emit: 'dragOutsideBoundaryChange' },
-            { emit: 'elementAttrChange' },
             { emit: 'enableBodyScrollChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'fullScreenChange' },
