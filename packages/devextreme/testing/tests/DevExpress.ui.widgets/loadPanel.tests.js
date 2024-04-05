@@ -113,6 +113,8 @@ QUnit.module('init', {
         try {
             const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
 
+            instance.option({ message: '' });
+
             assert.strictEqual(instance.$wrapper().attr('aria-label'), 'Loading...');
 
             instance.option({ message: 'custom' });
