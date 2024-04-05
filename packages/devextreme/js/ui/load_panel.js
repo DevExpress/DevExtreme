@@ -132,24 +132,24 @@ const LoadPanel = Overlay.inherit({
         const label = message ? defaultLabel : messageLocalization.format('Loading');
 
         const aria = {
-            role: 'status',
+            role: 'alert',
             label,
         };
 
         this.setAria(aria, this.$wrapper());
     },
 
-    _setLoadIndicatorAria() {
+    _getIndicatorAria() {
         const { message } = this.option();
-
         const defaultLabel = isMaterialBased() ? message : null;
         const label = message ? defaultLabel : messageLocalization.format('Loading');
 
         const aria = {
-            role: 'status',
+            role: 'alert',
             label,
         };
-        this.setAria(aria, this._$indicator);
+
+        return aria;
     },
 
     _renderContentImpl: function() {
@@ -220,10 +220,10 @@ const LoadPanel = Overlay.inherit({
             this._$indicator = $('<div>')
                 .addClass(LOADPANEL_INDICATOR_CLASS)
                 .appendTo(this._$loadPanelContentWrapper);
-            this._setLoadIndicatorAria();
         }
 
         this._createComponent(this._$indicator, LoadIndicator, {
+            elementAttr: this._getIndicatorAria(),
             indicatorSrc: this.option('indicatorSrc')
         });
     },

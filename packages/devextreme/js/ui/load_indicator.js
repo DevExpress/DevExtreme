@@ -113,7 +113,7 @@ const LoadIndicator = Widget.inherit({
         this.callBase();
         this.$element().addClass(LOADINDICATOR_CLASS);
 
-        this.setAria(aria, this.$element());
+        this.setAria(aria);
     },
 
     _initMarkup: function() {
