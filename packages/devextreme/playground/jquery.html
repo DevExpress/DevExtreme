@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -43,7 +42,6 @@
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -53,59 +51,12 @@
         <br />
         <div id="button"></div>
         <script>
-            $(() => {
-                const tab1 = $('#button').dxTabs({
-                    width: 300,
-                    rtlEnabled: false,
-                    selectedIndex: 0,
-                    showNavButtons: true,
-                    dataSource: tabsText,
-                    orientation: orientations[0],
-                    stylingMode: stylingModes[1],
-                    iconPosition: iconPositions[0],
-                }).dxTabs('instance');
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
+                });
             });
-
-            const tabsText = [
-                {
-                    id: 0,
-                    text: 'User',
-                },
-                {
-                    id: 1,
-                    text: 'Analytics',
-                },
-                {
-                    id: 2,
-                    text: 'Clients',
-                },
-                {
-                    id: 3,
-                    text: 'Orders',
-                },
-                {
-                    id: 4,
-                    text: 'Favorites',
-                },
-                {
-                    id: 5,
-                    text: 'Search',
-                },
-            ];
-
-            const orientations = ['horizontal', 'vertical'];
-
-            const stylingModes = [
-                'primary',
-                'secondary',
-            ];
-
-            const iconPositions = [
-                'top',
-                'start',
-                'end',
-                'bottom',
-            ];
         </script>
     </div>
 </body>
