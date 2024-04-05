@@ -25,6 +25,7 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/responsive_box';
 
 import DevExpress from 'devextreme/bundles/dx.all';
+import { Mode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/responsive_box';
@@ -68,17 +69,17 @@ import { DxiRowComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxResponsiveBox<TItem, TKey>;
+    instance: DxResponsiveBox<TItem, TKey> = null;
 
     /**
      * [descr:dxResponsiveBoxOptions.cols]
     
      */
     @Input()
-    get cols(): Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }> {
+    get cols(): Array<any | { baseSize?: Mode | number, ratio?: number, screen?: string | undefined, shrink?: number }> {
         return this._getOption('cols');
     }
-    set cols(value: Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>) {
+    set cols(value: Array<any | { baseSize?: Mode | number, ratio?: number, screen?: string | undefined, shrink?: number }>) {
         this._setOption('cols', value);
     }
 
@@ -192,10 +193,10 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
     
      */
     @Input()
-    get rows(): Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }> {
+    get rows(): Array<any | { baseSize?: Mode | number, ratio?: number, screen?: string | undefined, shrink?: number }> {
         return this._getOption('rows');
     }
-    set rows(value: Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>) {
+    set rows(value: Array<any | { baseSize?: Mode | number, ratio?: number, screen?: string | undefined, shrink?: number }>) {
         this._setOption('rows', value);
     }
 
@@ -333,7 +334,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() colsChange: EventEmitter<Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>>;
+    @Output() colsChange: EventEmitter<Array<any | { baseSize?: Mode | number, ratio?: number, screen?: string | undefined, shrink?: number }>>;
 
     /**
     
@@ -396,7 +397,7 @@ export class DxResponsiveBoxComponent<TItem = any, TKey = any> extends DxCompone
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rowsChange: EventEmitter<Array<any | { baseSize?: number | string, ratio?: number, screen?: string | undefined, shrink?: number }>>;
+    @Output() rowsChange: EventEmitter<Array<any | { baseSize?: Mode | number, ratio?: number, screen?: string | undefined, shrink?: number }>>;
 
     /**
     

@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { ButtonStyle, ButtonType, HorizontalAlignment, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
+import { ButtonStyle, ButtonType, HorizontalAlignment, Mode, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
 import { dxBoxOptions } from 'devextreme/ui/box';
 import { dxButtonOptions } from 'devextreme/ui/button';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
@@ -16,7 +16,6 @@ import { FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem 
 import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
-import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
 import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
@@ -102,10 +101,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('type', value);
     }
 
-    get baseSize(): number | string {
+    get baseSize(): Mode | number {
         return this._getOption('baseSize');
     }
-    set baseSize(value: number | string) {
+    set baseSize(value: Mode | number) {
         this._setOption('baseSize', value);
     }
 
@@ -275,13 +274,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set caption(value: string | undefined) {
         this._setOption('caption', value);
-    }
-
-    get captionTemplate(): any {
-        return this._getOption('captionTemplate');
-    }
-    set captionTemplate(value: any) {
-        this._setOption('captionTemplate', value);
     }
 
     get colCount(): number {
@@ -464,62 +456,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set url(value: string) {
         this._setOption('url', value);
-    }
-
-    get collapsed(): boolean {
-        return this._getOption('collapsed');
-    }
-    set collapsed(value: boolean) {
-        this._setOption('collapsed', value);
-    }
-
-    get collapsedSize(): number | string | undefined {
-        return this._getOption('collapsedSize');
-    }
-    set collapsedSize(value: number | string | undefined) {
-        this._setOption('collapsedSize', value);
-    }
-
-    get collapsible(): boolean {
-        return this._getOption('collapsible');
-    }
-    set collapsible(value: boolean) {
-        this._setOption('collapsible', value);
-    }
-
-    get maxSize(): number | string | undefined {
-        return this._getOption('maxSize');
-    }
-    set maxSize(value: number | string | undefined) {
-        this._setOption('maxSize', value);
-    }
-
-    get minSize(): number | string | undefined {
-        return this._getOption('minSize');
-    }
-    set minSize(value: number | string | undefined) {
-        this._setOption('minSize', value);
-    }
-
-    get resizable(): boolean {
-        return this._getOption('resizable');
-    }
-    set resizable(value: boolean) {
-        this._setOption('resizable', value);
-    }
-
-    get size(): number | string | undefined {
-        return this._getOption('size');
-    }
-    set size(value: number | string | undefined) {
-        this._setOption('size', value);
-    }
-
-    get splitter(): dxSplitterOptions | undefined {
-        return this._getOption('splitter');
-    }
-    set splitter(value: dxSplitterOptions | undefined) {
-        this._setOption('splitter', value);
     }
 
     get heightRatio(): number {

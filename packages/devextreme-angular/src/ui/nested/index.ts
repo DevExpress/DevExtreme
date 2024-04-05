@@ -190,7 +190,6 @@ export * from './sorting';
 export * from './source';
 export * from './spline';
 export * from './splinearea';
-export * from './splitter';
 export * from './stackedarea';
 export * from './stackedbar';
 export * from './stackedline';

@@ -65,7 +65,7 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
-    instance: DxLoadPanel;
+    instance: DxLoadPanel = null;
 
     /**
      * [descr:dxLoadPanelOptions.animation]
@@ -109,6 +109,21 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
 
 
     /**
+     * [descr:dxOverlayOptions.copyRootClassesToWrapper]
+    
+     * @deprecated [depNote:dxOverlayOptions.copyRootClassesToWrapper]
+    
+     */
+    @Input()
+    get copyRootClassesToWrapper(): boolean {
+        return this._getOption('copyRootClassesToWrapper');
+    }
+    set copyRootClassesToWrapper(value: boolean) {
+        this._setOption('copyRootClassesToWrapper', value);
+    }
+
+
+    /**
      * [descr:dxOverlayOptions.deferRendering]
     
      */
@@ -131,6 +146,21 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     }
     set delay(value: number) {
         this._setOption('delay', value);
+    }
+
+
+    /**
+     * [descr:dxOverlayOptions.elementAttr]
+    
+     * @deprecated [depNote:dxOverlayOptions.elementAttr]
+    
+     */
+    @Input()
+    get elementAttr(): any {
+        return this._getOption('elementAttr');
+    }
+    set elementAttr(value: any) {
+        this._setOption('elementAttr', value);
     }
 
 
@@ -496,6 +526,13 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
+    @Output() copyRootClassesToWrapperChange: EventEmitter<boolean>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
     @Output() deferRenderingChange: EventEmitter<boolean>;
 
     /**
@@ -504,6 +541,13 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Output() delayChange: EventEmitter<number>;
+
+    /**
+    
+     * This member supports the internal infrastructure and is not intended to be used directly from your code.
+    
+     */
+    @Output() elementAttrChange: EventEmitter<any>;
 
     /**
     
@@ -678,8 +722,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
             { emit: 'animationChange' },
             { emit: 'closeOnOutsideClickChange' },
             { emit: 'containerChange' },
+            { emit: 'copyRootClassesToWrapperChange' },
             { emit: 'deferRenderingChange' },
             { emit: 'delayChange' },
+            { emit: 'elementAttrChange' },
             { emit: 'focusStateEnabledChange' },
             { emit: 'heightChange' },
             { emit: 'hideOnOutsideClickChange' },

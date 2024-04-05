@@ -61,7 +61,7 @@ import { DxoTextsModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxPivotGridFieldChooserComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxPivotGridFieldChooser;
+    instance: DxPivotGridFieldChooser = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

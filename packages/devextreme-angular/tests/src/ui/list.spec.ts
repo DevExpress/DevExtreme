@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     VERSION,
     Component,
@@ -11,8 +10,6 @@ import {
 import {
     TestBed
 } from '@angular/core/testing';
-
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import DxButton from 'devextreme/ui/button';
 
@@ -30,7 +27,7 @@ class TestContainerComponent implements AfterViewChecked {
     emptyItems = undefined;
     items = [1];
     complexItems = [{ text: 'Item 1' }];
-    emptyDataSource = { items: [] };
+    emptyDataSource: Record<string, any> = { items: [] };
     defaultTemplateItems = [{ text: 'test', disabled: false }];
     disabled = false;
     @ViewChild(DxListComponent) innerWidget: DxListComponent;
@@ -45,7 +42,7 @@ describe('DxList', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxListModule, BrowserTransferStateModule]
+                imports: [DxListModule]
             });
     });
 
@@ -95,7 +92,7 @@ describe('DxList', () => {
         testComponent.emptyDataSource.items.push({ id: 1 });
         fixture.detectChanges();
 
-        expect(instance.option('items').length).toBe(1);
+        expect(instance?.option('items')?.length).toBe(1);
     });
 
     it('should not react if the same value is assigned to the collection', () => {
@@ -134,7 +131,7 @@ describe('DxList', () => {
         fixture.detectChanges();
 
         let instance = fixture.componentInstance.innerWidget.instance;
-        expect(instance.option('items').length).toBe(2);
+        expect(instance?.option('items')?.length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
         expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
@@ -155,8 +152,8 @@ describe('DxList', () => {
 
         let instance = fixture.componentInstance.innerWidget.instance;
         let element = instance.element().querySelector('.dx-item-content');
-        expect(element.innerHTML).toBe('item');
-        expect(window.getComputedStyle(element).display).toBe('block');
+        expect(element?.innerHTML).toBe('item');
+        expect(element && window.getComputedStyle(element).display).toBe('block');
     });
 
     it('should react to item option change', () => {
@@ -196,7 +193,7 @@ describe('DxList', () => {
         fixture.detectChanges();
 
         let instance = fixture.componentInstance.innerWidget.instance;
-        expect(instance.option('items').length).toBe(2);
+        expect(instance?.option('items')?.length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item').length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item.dx-state-disabled').length).toBe(1);
     });
@@ -242,14 +239,14 @@ describe('DxList', () => {
         let testComponent = fixture.componentInstance,
             instance = testComponent.innerWidget.instance;
 
-        expect(instance.option('items').length).toBe(1);
+        expect(instance?.option('items')?.length).toBe(1);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
 
         testComponent.items.push(2);
         fixture.detectChanges();
 
-        expect(instance.option('items').length).toBe(2);
+        expect(instance?.option('items')?.length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
         expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('2');
@@ -276,7 +273,7 @@ describe('DxList', () => {
         testComponent.items = [3, 4];
         fixture.detectChanges();
 
-        expect(instance.option('items').length).toBe(2);
+        expect(instance?.option('items')?.length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('3');
         expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('4');
@@ -298,7 +295,7 @@ describe('DxList', () => {
         let testComponent = fixture.componentInstance,
             instance = testComponent.innerWidget.instance;
 
-        expect(instance.option('items').length).toBe(1);
+        expect(instance?.option('items')?.length).toBe(1);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('1');
 
@@ -306,7 +303,7 @@ describe('DxList', () => {
         expect(testComponent.items.length).toBe(0);
         fixture.detectChanges();
 
-        expect(instance.option('items').length).toBe(0);
+        expect(instance?.option('items')?.length).toBe(0);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(0);
     });
 
@@ -326,7 +323,7 @@ describe('DxList', () => {
         let testComponent = fixture.componentInstance,
             instance = testComponent.innerWidget.instance;
 
-        expect(instance.option('items').length).toBe(1);
+        expect(instance?.option('items')?.length).toBe(1);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(1);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
 
@@ -338,7 +335,7 @@ describe('DxList', () => {
         fixture.detectChanges();
 
         expect(instance.option).toHaveBeenCalled;
-        expect(instance.option('items').length).toBe(2);
+        expect(instance?.option('items')?.length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Item 1');
         expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');
@@ -349,7 +346,7 @@ describe('DxList', () => {
 
         expect(optionSpy).toHaveBeenCalledTimes(1);
         expect(optionSpy.calls.allArgs().length).toBe(1);
-        expect(instance.option('items').length).toBe(2);
+        expect(instance?.option('items')?.length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content').length).toBe(2);
         expect(instance.element().querySelectorAll('.dx-item-content')[0].textContent).toBe('Changed');
         expect(instance.element().querySelectorAll('.dx-item-content')[1].textContent).toBe('Item 2');

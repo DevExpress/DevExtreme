@@ -165,14 +165,6 @@ export class DxiViewComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get offset(): number {
-        return this._getOption('offset');
-    }
-    set offset(value: number) {
-        this._setOption('offset', value);
-    }
-
-    @Input()
     get resourceCellTemplate(): any {
         return this._getOption('resourceCellTemplate');
     }

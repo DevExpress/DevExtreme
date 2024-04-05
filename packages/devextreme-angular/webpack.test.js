@@ -13,8 +13,21 @@ module.exports = {
     ],
     resolve: {
         alias: {
-          'devextreme-angular': path.resolve(__dirname, 'npm/dist')
+            'devextreme-angular': path.resolve(__dirname, 'npm/dist'),
         },
         fallback: { "stream": require.resolve("stream-browserify")}
-      }
+    },
+    module: {
+      rules: [{
+          oneOf: [
+            {
+              test: /\.m?js/, // fix:issue: https://github.com/webpack/webpack/issues/11467
+              resolve: {
+                fullySpecified: false,
+              },
+            }
+          ],
+      }]
+    }
+
 };

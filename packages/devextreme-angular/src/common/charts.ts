@@ -15,7 +15,6 @@ export {
     LabelOverlap,
     LabelPosition,
     LegendHoverMode,
-    LegendItem,
     LegendMarkerState,
     Palette,
     PaletteColorSet,

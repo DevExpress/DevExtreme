@@ -50,7 +50,7 @@ import {
     ]
 })
 export class DxLoadIndicatorComponent extends DxComponent implements OnDestroy {
-    instance: DxLoadIndicator;
+    instance: DxLoadIndicator = null;
 
     /**
      * [descr:DOMComponentOptions.elementAttr]

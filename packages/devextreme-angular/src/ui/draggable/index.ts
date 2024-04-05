@@ -53,7 +53,7 @@ import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxDraggableComponent extends DxComponent implements OnDestroy {
-    instance: DxDraggable;
+    instance: DxDraggable = null;
 
     /**
      * [descr:DraggableBaseOptions.autoScroll]

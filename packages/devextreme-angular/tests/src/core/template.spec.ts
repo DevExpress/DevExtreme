@@ -1,293 +1,300 @@
 /* tslint:disable:component-selector */
-
 import {
-    Component,
-    ElementRef,
-    EventEmitter,
-    ViewChild,
-    NgZone,
-    Input,
-    Output,
-    AfterViewInit,
-    PLATFORM_ID,
-    Inject
+  Component,
+  ElementRef,
+  EventEmitter,
+  ViewChild,
+  NgZone,
+  Input,
+  Output,
+  AfterViewInit,
+  PLATFORM_ID,
+  Inject,
 } from '@angular/core';
 
 import { TransferState } from '@angular/platform-browser';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
-    TestBed
+  TestBed,
 } from '@angular/core/testing';
 
 import {
-    DxComponent,
-    DxTemplateHost,
-    DxTemplateModule,
-    DxTemplateDirective,
-    WatcherHelper
+  DxComponent,
+  DxTemplateHost,
+  DxTemplateModule,
+  DxTemplateDirective,
+  WatcherHelper,
 } from 'devextreme-angular';
 
 // TODO: Try to replace dxButton to Widget ('require' required)
 import DxButton from 'devextreme/ui/button';
-let DxTestWidget = DxButton;
+
+const DxTestWidget = DxButton;
 DxTestWidget.defaultOptions({
-    options: {
-        elementAttr: { class: 'dx-test-widget' }
-    }
+  options: {
+    elementAttr: { class: 'dx-test-widget' },
+  },
 });
 
 @Component({
-    selector: 'dx-test-widget',
-    template: '',
-    providers: [DxTemplateHost, WatcherHelper]
+  selector: 'dx-test-widget',
+  template: '',
+  providers: [DxTemplateHost, WatcherHelper],
 })
 export class DxTestWidgetComponent extends DxComponent {
-    @Input()
-    get testTemplate(): any {
-        return this._getOption('testTemplate');
-    }
-    set testTemplate(value: any) {
-        this._setOption('testTemplate', value);
-    };
+  @Input()
+  get testTemplate(): any {
+    return this._getOption('testTemplate');
+  }
 
-    @Output() onOptionChanged = new EventEmitter<any>();
-    @Output() testTemplateChange = new EventEmitter<any>();
+  set testTemplate(value: any) {
+    this._setOption('testTemplate', value);
+  }
 
-    constructor(elementRef: ElementRef,
-        ngZone: NgZone,
-        templateHost: DxTemplateHost,
-        _watcherHelper: WatcherHelper,
-        transferState: TransferState,
-        @Inject(PLATFORM_ID) platformId: any) {
-        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+  @Output() onOptionChanged = new EventEmitter<any>();
 
-        this._createEventEmitters([
-            { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-            { subscribe: 'initialized', emit: 'onInitialized' }
-        ]);
-    }
+  @Output() testTemplateChange = new EventEmitter<any>();
 
-    protected _createInstance(element, options) {
-        return new DxTestWidget(element, options);
-    }
+  constructor(
+    elementRef: ElementRef,
+    ngZone: NgZone,
+    templateHost: DxTemplateHost,
+    _watcherHelper: WatcherHelper,
+    transferState: TransferState,
+    @Inject(PLATFORM_ID) platformId: any,
+  ) {
+    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+
+    this._createEventEmitters([
+      { subscribe: 'optionChanged', emit: 'onOptionChanged' },
+      { subscribe: 'initialized', emit: 'onInitialized' },
+    ]);
+  }
+
+  protected _createInstance(element, options) {
+    return new DxTestWidget(element, options);
+  }
 }
 
 @Component({
-    selector: 'dx-test',
-    template: '',
-    providers: [DxTemplateHost, WatcherHelper]
+  selector: 'dx-test',
+  template: '',
+  providers: [DxTemplateHost, WatcherHelper],
 })
 export class DxTestComponent extends DxComponent implements AfterViewInit {
-    templates: DxTemplateDirective[];
+  templates: DxTemplateDirective[];
 
-    constructor(elementRef: ElementRef,
-        ngZone: NgZone,
-        templateHost: DxTemplateHost,
-        _watcherHelper: WatcherHelper,
-        transferState: TransferState,
-        @Inject(PLATFORM_ID) platformId: any) {
-        super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
-    }
+  constructor(
+    elementRef: ElementRef,
+    ngZone: NgZone,
+    templateHost: DxTemplateHost,
+    _watcherHelper: WatcherHelper,
+    transferState: TransferState,
+    @Inject(PLATFORM_ID) platformId: any,
+  ) {
+    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
+  }
 
-    protected _createInstance(element, options) {
-        return new DxTestWidget(element, options);
-    }
+  protected _createInstance(element, options) {
+    return new DxTestWidget(element, options);
+  }
 
-    renderTemplate(model) {
-        const element = this.element.nativeElement;
-        element.textContent = '';
-        this.templates[0].render({
-            model: model,
-            container: element,
-            index: 5
-        });
-    }
+  renderTemplate(model) {
+    const element = this.element.nativeElement;
+    element.textContent = '';
+    this.templates[0].render({
+      model,
+      container: element,
+      index: 5,
+    });
+  }
 
-    ngAfterViewInit() {
-        this.renderTemplate({
-            value: () => ''
-        });
-    }
+  ngAfterViewInit() {
+    this.renderTemplate({
+      value: () => '',
+    });
+  }
 }
 
 @Component({
-    selector: 'test-container-component',
-    template: '',
-    providers: [DxTemplateHost]
+  selector: 'test-container-component',
+  template: '',
+  providers: [DxTemplateHost],
 })
 export class TestContainerComponent {
-    @ViewChild(DxTestWidgetComponent) widget: DxTestWidgetComponent;
-    @ViewChild(DxTestComponent) testComponent: DxTestComponent;
+  @ViewChild(DxTestWidgetComponent) widget: DxTestWidgetComponent;
 
-    @Output() onInnerElementClicked = new EventEmitter<any>();
+  @ViewChild(DxTestComponent) testComponent: DxTestComponent;
 
-    dynamicTemplateName: string;
+  @Output() onInnerElementClicked = new EventEmitter<any>();
 
-    constructor() {
-        this.dynamicTemplateName = 'start';
-    }
+  dynamicTemplateName: string;
 
-    testFunction() {
-        this.onInnerElementClicked.next();
-    }
+  constructor() {
+    this.dynamicTemplateName = 'start';
+  }
 
-    switchTemplateName() {
-        this.dynamicTemplateName = this.dynamicTemplateName === 'start' ? 'end' : 'start';
-    }
+  testFunction() {
+    this.onInnerElementClicked.next(null);
+  }
+
+  switchTemplateName() {
+    this.dynamicTemplateName = this.dynamicTemplateName === 'start' ? 'end' : 'start';
+  }
 }
 
 @Component({
-    selector: 'dx-imitation',
-    template: `
+  selector: 'dx-imitation',
+  template: `
         <div *dxTemplate="let d of 'ImportedTemlate'">
             <div>123213</div>
         </div>
-    `
+    `,
 })
 export class ImitateImportComponent {
-    constructor() {
-    }
+  constructor() {
+  }
 }
 
-
 describe('DevExtreme Angular widget\'s template', () => {
+  beforeEach(() => {
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestComponent],
+        imports: [DxTemplateModule],
+      },
+    );
+  });
 
-    beforeEach(() => {
-        TestBed.configureTestingModule(
-            {
-                declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestComponent],
-                imports: [DxTemplateModule, BrowserTransferStateModule]
-            });
-    });
-
-    // spec
-    it('should initialize named templates #17', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+  // spec
+  it('should initialize named templates #17', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
             <dx-test-widget>
                 <div *dxTemplate="let d of 'templateName'">Template content</div>
             </dx-test-widget>
-           `}
-        });
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        let instance = fixture.componentInstance.widget.instance,
-            templatesHash = instance.option('integrationOptions.templates');
-
-        expect(templatesHash['templateName']).not.toBeUndefined();
-        expect(typeof templatesHash['templateName'].render).toBe('function');
-
+           `,
+      },
     });
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
-    it('should be able to load template imported from another component', () => {
-        TestBed.configureTestingModule(
-            {
-                declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestComponent, ImitateImportComponent],
-                imports: [DxTemplateModule, BrowserTransferStateModule]
-            });
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+    const { instance } = fixture.componentInstance.widget;
+    const templatesHash = instance.option('integrationOptions.templates');
+
+    expect(templatesHash.templateName).not.toBeUndefined();
+    expect(typeof templatesHash.templateName.render).toBe('function');
+  });
+
+  it('should be able to load template imported from another component', () => {
+    TestBed.configureTestingModule(
+      {
+        declarations: [TestContainerComponent, DxTestWidgetComponent, DxTestComponent, ImitateImportComponent],
+        imports: [DxTemplateModule],
+      },
+    );
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
                     <dx-test-widget testTemplate="ImportedTemlate">
                         <dx-imitation></dx-imitation>
                     </dx-test-widget>
-                `
-            }
-        });
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        let testComponent = fixture.componentInstance,
-        innerComponent = testComponent.widget,
-        templatesHash = innerComponent.instance.option('integrationOptions.templates'),
-        template = innerComponent.testTemplate,
-        container = document.createElement('div');
-
-        expect(template).not.toBeUndefined;
-
-        templatesHash[template].render({ container: container });
-        fixture.detectChanges();
-
-        expect(container.children[0].classList.contains('dx-template-wrapper')).toBe(true);
+                `,
+      },
     });
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
+    const testComponent = fixture.componentInstance;
+    const innerComponent = testComponent.widget;
+    const templatesHash = innerComponent.instance.option('integrationOptions.templates');
+    const template = innerComponent.testTemplate;
+    const container = document.createElement('div');
 
-    it('should add template wrapper class as template has root container', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+    expect(template).not.toBeUndefined;
+
+    templatesHash[template].render({ container });
+    fixture.detectChanges();
+
+    expect(container.children[0].classList.contains('dx-template-wrapper')).toBe(true);
+  });
+
+  it('should add template wrapper class as template has root container', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
             <dx-test-widget testTemplate="templateName">
                 <div *dxTemplate="let d of 'templateName'">Template content: {{d}}</div>
             </dx-test-widget>
-           `}
-        });
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        let testComponent = fixture.componentInstance,
-            innerComponent = testComponent.widget,
-            templatesHash = innerComponent.instance.option('integrationOptions.templates'),
-            template = innerComponent.testTemplate,
-            container = document.createElement('div');
-
-        expect(template).not.toBeUndefined;
-
-        templatesHash[template].render({ container: container });
-        fixture.detectChanges();
-
-        expect(container.children[0].classList.contains('dx-template-wrapper')).toBe(true);
-
+           `,
+      },
     });
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
-    it('should have item index', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+    const testComponent = fixture.componentInstance;
+    const innerComponent = testComponent.widget;
+    const templatesHash = innerComponent.instance.option('integrationOptions.templates');
+    const template = innerComponent.testTemplate;
+    const container = document.createElement('div');
+
+    expect(template).not.toBeUndefined;
+
+    templatesHash[template].render({ container });
+    fixture.detectChanges();
+
+    expect(container.children[0].classList.contains('dx-template-wrapper')).toBe(true);
+  });
+
+  it('should have item index', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
             <dx-test>
                 <div *dxTemplate="let d of 'templateName'; let i = index">index: {{i}}</div>
             </dx-test>
-           `}
-        });
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        let element = fixture.nativeElement.querySelector('div');
-        expect(element.textContent).toBe('index: 5');
+           `,
+      },
     });
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
-    it('should be created within Angular Zone', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+    const element = fixture.nativeElement.querySelector('div');
+    expect(element.textContent).toBe('index: 5');
+  });
+
+  it('should be created within Angular Zone', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
             <dx-test>
                 <div *dxTemplate="let d of 'templateName'">
                     <div class="elem" (click)="d.value()"></div>
                 </div>
             </dx-test>
-           `}
-        });
-
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        fixture.ngZone.runOutsideAngular(() => {
-            fixture.componentInstance.testComponent.renderTemplate({
-                value: () => {
-                    expect(fixture.ngZone.isStable).toBe(false);
-                }
-            });
-        });
-
-        fixture.nativeElement.querySelector('.elem').click();
+           `,
+      },
     });
 
-    it('should work with dynamic template name', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: `
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
+
+    fixture.ngZone.runOutsideAngular(() => {
+      fixture.componentInstance.testComponent.renderTemplate({
+        value: () => {
+          expect(fixture.ngZone.isStable).toBe(false);
+        },
+      });
+    });
+
+    fixture.nativeElement.querySelector('.elem').click();
+  });
+
+  it('should work with dynamic template name', () => {
+    TestBed.overrideComponent(TestContainerComponent, {
+      set: {
+        template: `
             <dx-test-widget [testTemplate]="dynamicTemplateName">
                 <div *dxTemplate="let d of dynamicTemplateName">
                     <div [class]="dynamicTemplateName">
@@ -295,32 +302,32 @@ describe('DevExtreme Angular widget\'s template', () => {
                     </div>
                 </div>
             </dx-test-widget>
-           `}
-        });
-        let fixture = TestBed.createComponent(TestContainerComponent);
-        fixture.detectChanges();
-
-        let testComponent = fixture.componentInstance,
-            innerComponent = testComponent.widget,
-            template = innerComponent.testTemplate,
-            templatesHash = innerComponent.instance.option('integrationOptions.templates'),
-            container = document.createElement('div');
-
-        expect(template).not.toBeUndefined;
-
-        templatesHash[template].render({ container: container });
-        fixture.detectChanges();
-
-        expect(container.querySelector('.start')).not.toBeNull();
-
-        testComponent.switchTemplateName();
-        fixture.detectChanges();
-        expect(template).not.toBeUndefined;
-
-        templatesHash[template].render({ container: container });
-        fixture.detectChanges();
-
-        expect(container.querySelector('.end')).not.toBeNull();
+           `,
+      },
     });
-});
+    const fixture = TestBed.createComponent(TestContainerComponent);
+    fixture.detectChanges();
 
+    const testComponent = fixture.componentInstance;
+    const innerComponent = testComponent.widget;
+    const template = innerComponent.testTemplate;
+    const templatesHash = innerComponent.instance.option('integrationOptions.templates');
+    const container = document.createElement('div');
+
+    expect(template).not.toBeUndefined;
+
+    templatesHash[template].render({ container });
+    fixture.detectChanges();
+
+    expect(container.querySelector('.start')).not.toBeNull();
+
+    testComponent.switchTemplateName();
+    fixture.detectChanges();
+    expect(template).not.toBeUndefined;
+
+    templatesHash[template].render({ container });
+    fixture.detectChanges();
+
+    expect(container.querySelector('.end')).not.toBeNull();
+  });
+});

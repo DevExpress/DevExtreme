@@ -65,10 +65,10 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get height(): number | string {
+    get height(): number {
         return this._getOption('height');
     }
-    set height(value: number | string) {
+    set height(value: number) {
         this._setOption('height', value);
     }
 
@@ -129,10 +129,10 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get width(): number | string {
+    get width(): number {
         return this._getOption('width');
     }
-    set width(value: number | string) {
+    set width(value: number) {
         this._setOption('width', value);
     }
 

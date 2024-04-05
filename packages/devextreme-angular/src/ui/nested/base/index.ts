@@ -43,7 +43,6 @@ export * from './popup-options';
 export * from './position-config';
 export * from './scheduler-scrolling';
 export * from './sortable-options';
-export * from './splitter-options';
 export * from './tab-panel-options';
 export * from './text-box-options';
 export * from './text-editor-button-dxi';

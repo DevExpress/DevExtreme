@@ -64,7 +64,6 @@ export { DxSliderComponent, DxSliderModule } from 'devextreme-angular/ui/slider'
 export { DxSortableComponent, DxSortableModule } from 'devextreme-angular/ui/sortable';
 export { DxSparklineComponent, DxSparklineModule } from 'devextreme-angular/ui/sparkline';
 export { DxSpeedDialActionComponent, DxSpeedDialActionModule } from 'devextreme-angular/ui/speed-dial-action';
-export { DxSplitterComponent, DxSplitterModule } from 'devextreme-angular/ui/splitter';
 export { DxSwitchComponent, DxSwitchModule } from 'devextreme-angular/ui/switch';
 export { DxTabPanelComponent, DxTabPanelModule } from 'devextreme-angular/ui/tab-panel';
 export { DxTabsComponent, DxTabsModule } from 'devextreme-angular/ui/tabs';
