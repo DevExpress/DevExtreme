@@ -333,7 +333,7 @@ Projection.prototype = {
             selectFarthestPoint(rt[0], rb[0], lt[0], lb[0]),
             selectFarthestPoint(lb[1], rb[1], lt[1], rt[1])
         ]);
-        return [].concat(minMax.min, minMax.max);
+        return [].concat(minMax.min[0], minMax.max[1], minMax.max[0], minMax.min[1]);
     },
 
     // T254127

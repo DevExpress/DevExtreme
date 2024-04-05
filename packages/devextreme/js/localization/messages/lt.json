@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Sukurti filtrą",
         "dxDataGrid-filterPanelClearFilter": "Išvalyti",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktyvuoti filtrą",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Ieškoti duomenų medyje",
@@ -306,6 +307,8 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
+        "dxCalendar-selectedDate": "The selected date is {0}",
+        "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
 
         "dxColorView-ariaRed": "Raudona",
         "dxColorView-ariaGreen": "Žalia",

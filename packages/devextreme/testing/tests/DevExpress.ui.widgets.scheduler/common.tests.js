@@ -16,7 +16,7 @@ import Scrollable from 'ui/scroll_view/ui.scrollable.js';
 
 const isRenovatedScrollable = !!Scrollable.IS_RENOVATED_WIDGET;
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Loading', {
     beforeEach: function() {
