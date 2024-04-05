@@ -23,6 +23,10 @@ const TABLE_POSTFIX_CLASS = 'table';
 const CELL_FOCUS_DISABLED_CLASS = 'dx-cell-focus-disabled';
 
 export class FocusController extends core.ViewController {
+  // TODO getController
+  //  This controller's method used in the data_controler (and maybe others) init methods
+  //  And this controller's fields are empty when methods already called
+  //  Therefore, as a temporary solution this private getters exist here
   private getKeyboardController(): KeyboardNavigationController {
     return this.getController('keyboardNavigation');
   }

@@ -54,6 +54,9 @@ export class StateStoringController extends modules.ViewController {
 
   private _savingTimeoutID: any;
 
+  // TODO getController
+  // NOTE: sometimes fields empty in the runtime
+  // getter here is a temporary solution
   protected getDataController(): DataController {
     return this.getController('data');
   }
