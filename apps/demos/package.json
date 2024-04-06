@@ -15,12 +15,12 @@
         "devextreme-vue": "~24.1.1"
     },
     "dependencies": {
-        "@angular/common": "~17.3.2",
-        "@angular/compiler": "~17.3.2",
-        "@angular/core": "~17.3.2",
-        "@angular/forms": "~17.3.2",
-        "@angular/platform-browser": "~17.3.2",
-        "@angular/platform-browser-dynamic": "~17.3.2",
+        "@angular/common": "~16.2.12",
+        "@angular/compiler": "~16.2.12",
+        "@angular/core": "~16.2.12",
+        "@angular/forms": "~16.2.12",
+        "@angular/platform-browser": "~16.2.12",
+        "@angular/platform-browser-dynamic": "~16.2.12",
         "@aspnet/signalr": "1.0.27",
         "angular": "1.8.3",
         "angular-sanitize": "1.8.3",
