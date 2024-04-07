@@ -24,16 +24,16 @@
     "devextreme": "~24.1.1"
   },
   "devDependencies": {
-    "@angular/animations": "~17.3.2",
-    "@angular/common": "~17.3.2",
-    "@angular/compiler": "~17.3.2",
-    "@angular/cli": "~17.3.2",
-    "@angular/compiler-cli": "17.3.2",
-    "@angular/core": "~17.3.2",
-    "@angular/forms": "~17.3.2",
-    "@angular/platform-browser": "~17.3.2",
-    "@angular/platform-browser-dynamic": "~17.3.2",
-    "@angular/platform-server": "17.3.2",
+    "@angular/animations": "17.3.0",
+    "@angular/common": "17.3.0",
+    "@angular/compiler": "17.3.0",
+    "@angular/cli": "17.3.0",
+    "@angular/compiler-cli": "17.3.0",
+    "@angular/core": "17.3.0",
+    "@angular/forms": "17.3.0",
+    "@angular/platform-browser": "17.3.0",
+    "@angular/platform-browser-dynamic": "17.3.0",
+    "@angular/platform-server": "17.3.0",
     "@types/jasmine": "2.8.23",
     "@types/node": "~20.11.0",
     "codelyzer": "6.0.2",
@@ -66,7 +66,7 @@
     "devexpress"
   ],
   "dependencies": {
-    "@angular-devkit/schematics": "~17.3.2",
+    "@angular-devkit/schematics": "17.3.0",
     "devextreme-schematics": "*",
     "inferno-server": "7.4.11"
   },
