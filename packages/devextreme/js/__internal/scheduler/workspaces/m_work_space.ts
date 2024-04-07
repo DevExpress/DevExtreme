@@ -34,14 +34,12 @@ import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 
 // NOTE: Renovation component section
 // @ts-expect-error
-import dxrAllDayPanelTable from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/table.j';
-// @ts-expect-error
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
 // @ts-expect-error
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 // @ts-expect-error
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
-import { DateTableComponent, HeaderPanelComponent } from '../__migration/components/index';
+import { AllDayTableComponent, DateTableComponent, HeaderPanelComponent } from '../__migration/components/index';
 import type { ViewType } from '../__migration/types';
 import {
   calculateIsGroupedAllDayPanel,
@@ -2117,7 +2115,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         ...this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {},
       };
 
-      utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
+      utils.renovation.renderComponent(this, this._$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
       utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
     }
 

@@ -8,7 +8,7 @@ import { createComponentVNode } from 'inferno';
 import type { ViewCellData } from '../../types';
 import { renderUtils } from '../../utils/index';
 import type { DataCellTemplateProps } from '../types';
-import { AllDayPanelCell as Cell } from './all_day_panel_cell';
+import { AllDayPanelCell } from './all_day_panel_cell';
 import { Row } from './row';
 
 export interface AllDayPanelTableBodyProps extends PropsWithClassName {
@@ -66,7 +66,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
           key,
           startDate,
         } = cellData;
-        return createComponentVNode(2, Cell, {
+        return createComponentVNode(2, AllDayPanelCell, {
           isFirstGroupCell: !isVerticalGroupOrientation && isFirstGroupCell,
           isLastGroupCell: !isVerticalGroupOrientation && isLastGroupCell,
           startDate,

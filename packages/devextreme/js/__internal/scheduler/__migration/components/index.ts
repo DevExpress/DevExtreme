@@ -1,4 +1,7 @@
 export {
+  AllDayTableComponent,
+} from './wrappers/all_day_table';
+export {
   DateTableComponent,
 } from './wrappers/date_table';
 export {
