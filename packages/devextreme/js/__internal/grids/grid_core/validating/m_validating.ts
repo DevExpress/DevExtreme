@@ -1415,7 +1415,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
         this._editingController.waitForDeferredOperations().done(() => {
           // NOTE: after waiting for deferred operations another rerender may occur.
           // In this case this validating is outdated
-          const isDetached = $element.closest('tr').length === 0;
+          const isDetached = !this.elementIsInsideGrid($element);
           if (isDetached) {
             return;
           }
