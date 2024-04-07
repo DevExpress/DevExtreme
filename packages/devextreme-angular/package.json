@@ -57,7 +57,7 @@
     "typescript": "^5.4.3",
     "webpack": "^5.88.2",
     "yargs": "^6.6.0",
-    "zone.js": "^0.11.8"
+    "zone.js": "0.11.8"
   },
   "main": "./src/index.ts",
   "keywords": [
