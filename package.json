@@ -32,6 +32,7 @@
   "nx": {},
   "private": true,
   "devDependencies": {
+    "@angular/platform-server": "~16.2.12",
     "@nx/jest": "^16.10.0",
     "@nx/js": "^16.10.0",
     "@types/node": "^20.11.5",
