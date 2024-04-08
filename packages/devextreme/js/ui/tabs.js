@@ -500,16 +500,6 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
-    _updateNavButtonsAriaDisabled() {
-        const $buttons = [ this._leftButton?.$element(), this._rightButton?.$element() ];
-
-        $buttons.forEach($button => {
-            if($button) {
-                this.setAria({ disabled: null }, $button);
-            }
-        });
-    },
-
     _updateNavButtonsState() {
         const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
@@ -521,8 +511,6 @@ const Tabs = CollectionWidget.inherit({
             this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
             this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
         }
-
-        this._updateNavButtonsAriaDisabled();
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -531,11 +519,9 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _createNavButton: function(offset, icon) {
-        const that = this;
-
-        const holdAction = that._createAction(function() {
-            that._holdInterval = setInterval(function() {
-                that._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
+        const holdAction = this._createAction(() => {
+            this._holdInterval = setInterval(() => {
+                this._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
             }, FEEDBACK_DURATION_INTERVAL);
         });
 
@@ -546,25 +532,33 @@ const Tabs = CollectionWidget.inherit({
         const navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
             focusStateEnabled: false,
             icon: icon,
-            onClick: function() {
-                that._updateScrollPosition(offset, 1);
-            },
             integrationOptions: {},
             elementAttr: {
                 tabindex: -1,
                 role: null,
                 'aria-label': null,
+                'aria-disabled': null,
+            },
+            onClick: () => {
+                this._updateScrollPosition(offset, 1);
+            },
+            onOptionChanged: ({ name, value, element }) => {
+                if(name === 'disabled' && value) {
+                    this.setAria({ disabled: null }, $(element));
+                }
             },
         });
 
         const $navButton = navButton.$element();
 
-        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ event: e }); }).bind(this));
-        eventsEngine.on($navButton, pointerUpEventName, function() {
-            that._clearInterval();
+        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (e) => {
+            holdAction({ event: e });
         });
-        eventsEngine.on($navButton, pointerOutEventName, function() {
-            that._clearInterval();
+        eventsEngine.on($navButton, pointerUpEventName, () => {
+            this._clearInterval();
+        });
+        eventsEngine.on($navButton, pointerOutEventName, () => {
+            this._clearInterval();
         });
 
         return navButton;
