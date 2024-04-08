@@ -58,7 +58,8 @@ test('Grouped List last item of last group should have margin-bottom = 4px', asy
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const list = new List('#container');
-  await t.hover(list.getItem(-1).element);
+  const lastItem = list.getItems().length - 1;
+  await t.hover(list.getItem(lastItem).element);
 
   await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
 
