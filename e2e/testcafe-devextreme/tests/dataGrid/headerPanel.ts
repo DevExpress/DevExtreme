@@ -117,3 +117,33 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
     await changeTheme(Themes.genericLight);
   });
 });
+
+
+test(`Toolbar should render on changing visibility if visibiliti is false initially`, async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.getHeaderPanel().element.visible)
+    .notOk();
+  
+  await dataGrid.option('toolbar.visible', true);
+  
+  await t
+    .expect(dataGrid.getHeaderPanel().element.visible)
+    .ok()
+    .expect(dataGrid.getHeaderPanel().element.find('.dx-button').textContent)
+    .eql('myTestButton');
+
+}).before(async () => createWidget('dxDataGrid', {
+  showBorders: true,
+  toolbar: {
+    items: [{
+        location: "before",
+        widget: "dxButton",
+        options: {
+            text: "myTestButton",
+        },
+    }],
+    visible: false,
+  },
+}));
