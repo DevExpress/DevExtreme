@@ -54,6 +54,8 @@ const DX_TREEVIEW_CLASS = 'dx-treeview';
 const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
 const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
 const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -588,6 +590,84 @@ QUnit.module('Rendering ScrollView', {
         assert.roughEqual($nestedSubmenu.offset().top, BORDER_WIDTH, .5, 'Nested submenu flipped to top');
         assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
     });
+
+    QUnit.test('selected item should be always visible during keyboard navigation (root submenu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'Item 1',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+
+        keyboardMock(itemsContainer)
+            .press('down');
+        this.clock.tick(0);
+
+        const $scrollableContainer = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
+
+        keyboardMock(itemsContainer)
+            .press('up')
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to 1st item');
+    });
+
+    QUnit.test('selected item should be always visible during keyboard navigation (nested submenu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'Item 1',
+                items: [{
+                    text: 'Item 11',
+                    items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+
+        keyboardMock(itemsContainer)
+            .press('down')
+            .press('right');
+        this.clock.tick(0);
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
+
+        keyboardMock(itemsContainer)
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to 1st item');
+    });
 });
 
 QUnit.module('Menu - templates', {
@@ -862,7 +942,7 @@ QUnit.module('Menu - selection', {
     // T420860
     QUnit.test('It should be possible to select nested submenu by itemData', function(assert) {
         const items = [{ text: 'Item 1', items: [{ text: 'Item 11', items: [{ text: 'Item 111', selectable: true }] }] }];
-        const menu = createMenu({
+        const menu = createMenuInWindow({
             items: items,
             onItemClick: function(e) {
                 if(e.itemData.selectable) {

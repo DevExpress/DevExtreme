@@ -38,6 +38,7 @@ const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
+const SCROLL_VIEW_NAME = 'dxScrollView';
 
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
@@ -57,6 +58,12 @@ const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
 const window = getWindow();
 
 class ContextMenu extends MenuBase {
+    ctor(...args) {
+        this._scrollViews = [];
+
+        super.ctor(...args);
+    }
+
     getShowEvent(showEventOption) {
         let result = null;
 
@@ -257,6 +264,9 @@ class ContextMenu extends MenuBase {
     _setFocusedElement($element) {
         if($element && $element.length !== 0) {
             this.option('focusedElement', getPublicElement($element));
+            if(this._scrollViews.length) {
+                this._scrollViews[this._scrollViews.length - 1].scrollToElement($element);
+            }
         }
     }
 
@@ -544,6 +554,7 @@ class ContextMenu extends MenuBase {
         if(!arg.cancel) {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
+            this._popScrollView();
         }
     }
 
@@ -657,6 +668,17 @@ class ContextMenu extends MenuBase {
             : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
     }
 
+    _pushScrollView($container) {
+        const scrollViewInstance = $container.data?.(SCROLL_VIEW_NAME);
+        if(scrollViewInstance) {
+            this._scrollViews.push(scrollViewInstance);
+        }
+    }
+
+    _popScrollView() {
+        this._scrollViews.pop();
+    }
+
     _showSubmenu($item) {
         const node = this._dataAdapter.getNodeByItem(this._getItemData($item));
 
@@ -676,6 +698,7 @@ class ContextMenu extends MenuBase {
         }
 
         this._setSubMenuHeight($submenu, $item, true);
+        this._pushScrollView($submenu);
         if(!this._isSubmenuVisible($submenu)) {
             this._drawSubmenu($item);
         }
@@ -837,6 +860,7 @@ class ContextMenu extends MenuBase {
         this._stopAnimate($submenu);
         animation && this._animate($submenu, animation);
         $submenu.css('visibility', 'hidden');
+        this._popScrollView();
     }
 
     _stopAnimate($container) {
@@ -931,6 +955,7 @@ class ContextMenu extends MenuBase {
 
             if($subMenu.length) {
                 this._setSubMenuHeight($subMenu, position.of, false);
+                this._pushScrollView($subMenu);
             }
             promise = this._overlay.show();
             event && event.stopPropagation();

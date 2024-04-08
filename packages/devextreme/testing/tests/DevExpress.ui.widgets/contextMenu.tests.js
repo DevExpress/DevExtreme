@@ -42,6 +42,8 @@ const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
 const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
 const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
+const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 const BORDER_WIDTH = 1;
 
 const isDeviceDesktop = function(assert) {
@@ -392,6 +394,63 @@ QUnit.module('Rendering ScrollView', moduleConfig, () => {
         assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
         assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
         assert.strictEqual($submenu.offset().top, 0, 'menu does not cross the window border');
+    });
+
+    QUnit.test('Selected item should be always visible during keyboard navigation (root menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+            focusStateEnabled: true,
+            visible: true,
+        });
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
+
+        keyboardMock(instance.itemsContainer())
+            .press('up')
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+
+        keyboardMock(instance.itemsContainer())
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
+    });
+
+    QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+            focusStateEnabled: true,
+            visible: true,
+        });
+
+        keyboardMock(instance.itemsContainer())
+            .press('down')
+            .press('right')
+            .press('up');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+
+        keyboardMock(instance.itemsContainer())
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
     });
 });
 
