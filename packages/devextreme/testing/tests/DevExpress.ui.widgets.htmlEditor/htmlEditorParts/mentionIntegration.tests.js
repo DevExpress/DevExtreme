@@ -645,7 +645,7 @@ export default function() {
             this.clock.tick(10);
         });
 
-        test('aria-activedescendant should exist on textbox when mention pops up', function(assert) {
+        test('aria-activedescendant should only exist on textbox when mention pops up', function(assert) {
             const done = assert.async();
             const valueChangeSpy = sinon.spy(() => {
                 const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
