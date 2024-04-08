@@ -166,9 +166,6 @@ if(Quill) {
         renderList($container, options) {
             this.compileGetters(this.options);
             super.renderList($container, options);
-
-            const ariaId = this._list.getFocusedItemId();
-            this.quill.root.setAttribute('aria-activedescendant', ariaId);
         }
 
         compileGetters({ displayExpr, valueExpr }) {
@@ -350,6 +347,11 @@ if(Quill) {
             this._list.option('searchValue', searchValue);
         }
 
+        _setAriaAttribute() {
+            const ariaId = this._list.getFocusedItemId();
+            this.quill.root.setAttribute('aria-activedescendant', ariaId);
+        }
+
         _focusFirstElement() {
             if(!this._list) {
                 return;
@@ -386,6 +388,7 @@ if(Quill) {
             return extend(super._getPopupConfig(), {
                 hideOnParentScroll: false,
                 onShown: () => {
+                    this._setAriaAttribute();
                     this._isMentionActive = true;
                     this._hasSearch = false;
                     this._focusFirstElement();
