@@ -534,7 +534,6 @@ const Tabs = CollectionWidget.inherit({
             icon: icon,
             integrationOptions: {},
             elementAttr: {
-                tabindex: -1,
                 role: null,
                 'aria-label': null,
                 'aria-disabled': null,
