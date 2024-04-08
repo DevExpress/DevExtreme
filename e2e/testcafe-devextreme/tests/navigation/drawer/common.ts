@@ -159,101 +159,96 @@ openedStateModeConfigs.forEach((config) => {
       .ok(compareResults.errorMessages());
   }, [700, 700]);
 
-  // safeSizeTest(`Menu_drawer, openedStateMode:${config.openedStateMode}, shading:true`,
-  // async (t) => {
-  //   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  //
-  //   // eslint-disable-next-line @typescript-eslint/no-shadow
-  //   await ClientFunction(({ createDrawer, config }) => {
-  //     config.createDrawerContent = ($container) => {
-  //       ($('<div id="menu">').appendTo($container) as any).dxMenu({
-  //         dataSource: [{ text: 'item1 very long text wider than panel', items: [{ text:
-  //         'item1/item1 very long text wider than panel' }, { text: 'item1/item2' }] }],
-  //       });
-  //     };
-  //     createDrawer(config);
-  //   })({ createDrawer, config });
-  //
-  //   await t.click('#container #menu .dx-menu-item');
-  //
-  //   await t
-  //     .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#container')}.png`))
-  //     .ok();
-  //
-  //   await t.click(Selector('#showPopupBtn'));
-  //   await t.click('#popup1_template #menu .dx-menu-item');
-  //
-  //   await t
-  //     .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#popup1')}.png`))
-  //     .ok();
-  //
-  //   await t
-  //     .expect(compareResults.isValid())
-  //     .ok(compareResults.errorMessages());
-  // }, [700, 700]);
+  safeSizeTest(`Menu_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // safeSizeTest(`Menu_inner, openedStateMode:${config.openedStateMode}, shading:true`,
-  // async (t) => {
-  //   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  //
-  //   // eslint-disable-next-line @typescript-eslint/no-shadow
-  //   await ClientFunction(({ createDrawer, config }) => {
-  //     config.createInnerContent = ($container) => {
-  //       ($('<div id="menu">').appendTo($container) as any).dxMenu({
-  //         dataSource: [{ text: 'item1', items: [{ text: 'item1/item1' },
-  //         { text: 'item1/item2' }] }],
-  //       });
-  //     };
-  //     createDrawer(config);
-  //   })({ createDrawer, config });
-  //
-  //   await t
-  //     .expect(await takeScreenshot(`${getScreenshotName('MenuInner', '#container')}.png`))
-  //     .ok();
-  //
-  //   await t.click(Selector('#showPopupBtn'));
-  //
-  //   await t
-  //     .expect(await takeScreenshot(`${getScreenshotName('MenuInner', '#popup1')}.png`))
-  //     .ok();
-  //
-  //   await t
-  //     .expect(compareResults.isValid())
-  //     .ok(compareResults.errorMessages());
-  // }, [700, 700]);
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    await ClientFunction(({ createDrawer, config }) => {
+      config.createDrawerContent = ($container) => {
+        ($('<div id="menu">').appendTo($container) as any).dxMenu({
+          dataSource: [{ text: 'item1 very long text wider than panel', items: [{ text: 'item1/item1 very long text wider than panel' }, { text: 'item1/item2' }] }],
+        });
+      };
+      createDrawer(config);
+    })({ createDrawer, config });
 
-  // safeSizeTest(`Menu_outer, openedStateMode:${config.openedStateMode}, shading:true`,
-  // async (t) => {
-  //   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  //
-  //   // eslint-disable-next-line @typescript-eslint/no-shadow
-  //   await ClientFunction(({ createDrawer, config }) => {
-  //     config.createOuterContent = ($container) => {
-  //       ($('<div id="menu">').appendTo($container) as any).dxMenu({
-  //         dataSource: [{ text: 'item1', items: [{ text:
-  //         'item1/item1 very long text wider than panel' }, { text: 'item1/item2' }] }],
-  //       });
-  //     };
-  //     createDrawer(config);
-  //   })({ createDrawer, config });
-  //
-  //   await t.click('#container #menu .dx-menu-item');
-  //
-  //   await t
-  //     .expect(await takeScreenshot(`${getScreenshotName('MenuOuter', '#container')}.png`))
-  //     .ok();
-  //
-  //   await t.click(Selector('#showPopupBtn'));
-  //   await t.click('#popup1_template #menu .dx-menu-item');
-  //
-  //   await t
-  //     .expect(await takeScreenshot(`${getScreenshotName('MenuOuter', '#popup1')}.png`))
-  //     .ok();
-  //
-  //   await t
-  //     .expect(compareResults.isValid())
-  //     .ok(compareResults.errorMessages());
-  // }, [700, 700]);
+    await t.click('#container #menu .dx-menu-item');
+
+    await t
+      .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#container')}.png`))
+      .ok();
+
+    await t.click(Selector('#showPopupBtn'));
+    await t.click('#popup1_template #menu .dx-menu-item');
+
+    await t
+      .expect(await takeScreenshot(`${getScreenshotName('MenuDrawer', '#popup1')}.png`))
+      .ok();
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [700, 700]);
+
+  safeSizeTest(`Menu_inner, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    await ClientFunction(({ createDrawer, config }) => {
+      config.createInnerContent = ($container) => {
+        ($('<div id="menu">').appendTo($container) as any).dxMenu({
+          dataSource: [{ text: 'item1', items: [{ text: 'item1/item1' },
+          { text: 'item1/item2' }] }],
+        });
+      };
+      createDrawer(config);
+    })({ createDrawer, config });
+
+    await t
+      .expect(await takeScreenshot(`${getScreenshotName('MenuInner', '#container')}.png`))
+      .ok();
+
+    await t.click(Selector('#showPopupBtn'));
+
+    await t
+      .expect(await takeScreenshot(`${getScreenshotName('MenuInner', '#popup1')}.png`))
+      .ok();
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [700, 700]);
+
+  safeSizeTest(`Menu_outer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    await ClientFunction(({ createDrawer, config }) => {
+      config.createOuterContent = ($container) => {
+        ($('<div id="menu">').appendTo($container) as any).dxMenu({
+          dataSource: [{ text: 'item1', items: [{ text: 'item1/item1 very long text wider than panel' }, { text: 'item1/item2' }] }],
+        });
+      };
+      createDrawer(config);
+    })({ createDrawer, config });
+
+    await t.click('#container #menu .dx-menu-item');
+
+    await t
+      .expect(await takeScreenshot(`${getScreenshotName('MenuOuter', '#container')}.png`))
+      .ok();
+
+    await t.click(Selector('#showPopupBtn'));
+    await t.click('#popup1_template #menu .dx-menu-item');
+
+    await t
+      .expect(await takeScreenshot(`${getScreenshotName('MenuOuter', '#popup1')}.png`))
+      .ok();
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }, [700, 700]);
 
   safeSizeTest(`SelectBox_drawer, openedStateMode:${config.openedStateMode}, shading:true`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
