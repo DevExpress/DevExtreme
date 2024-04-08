@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Sukurti filtrą",
         "dxDataGrid-filterPanelClearFilter": "Išvalyti",
         "dxDataGrid-filterPanelFilterEnabledHint": "Aktyvuoti filtrą",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Ieškoti duomenų medyje",

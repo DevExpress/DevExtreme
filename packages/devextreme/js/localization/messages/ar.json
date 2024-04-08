@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "إنشاء عامل تصفية",
         "dxDataGrid-filterPanelClearFilter": "مسح",
         "dxDataGrid-filterPanelFilterEnabledHint": "تمكين عامل التصفية",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",

@@ -6,6 +6,7 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getHeight, getWidth } from '@js/core/utils/size';
 import { isDefined } from '@js/core/utils/type';
+import messageLocalization from '@js/localization/message';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
@@ -376,6 +377,12 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewMasterDetailExten
           .addClass(CELL_FOCUS_DISABLED_CLASS)
           .addClass(MASTER_DETAIL_CELL_CLASS)
           .attr('colSpan', visibleColumns.length);
+
+        const isEditForm = row.isEditing;
+
+        if (!isEditForm) {
+          $detailCell.attr('aria-roledescription', messageLocalization.format('dxDataGrid-masterDetail'));
+        }
       }
     } else {
       super._renderCells.apply(this, arguments as any);
