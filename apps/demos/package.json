@@ -98,7 +98,7 @@
         "prettier": "2.8.4",
         "serve-index": "1.9.1",
         "serve-static": "1.15.0",
-        "stylelint": "13.13.1",
+        "stylelint": "15.11.0",
         "stylelint-config-standard": "22.0.0",
         "systemjs-builder": "0.16.15",
         "ts-node": "10.9.1"
