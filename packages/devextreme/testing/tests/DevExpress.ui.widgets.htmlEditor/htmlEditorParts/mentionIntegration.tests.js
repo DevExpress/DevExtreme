@@ -38,8 +38,6 @@ const NAVIGATION_KEYS = [
     KEY_CODES.HOME
 ];
 
-const POPUP_HIDING_TIMEOUT = 500;
-
 const KeyEventsMock = nativePointerMock();
 
 export default function() {
@@ -657,7 +655,7 @@ export default function() {
                     assert.strictEqual($content.attr('aria-activedescendant'), $focusedItem.attr('id'), 'textbox element aria id should match active item id when mentions pops up');
 
                     KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ESCAPE });
-                    this.clock.tick(POPUP_HIDING_TIMEOUT);
+                    this.clock.tick(POPUP_TIMEOUT);
 
                     assert.notOk($content.attr('aria-activedescendant'), 'textbox should not have aria-activedescendant when mentions closes');
                     done();
