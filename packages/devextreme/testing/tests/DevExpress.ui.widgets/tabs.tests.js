@@ -1680,3 +1680,42 @@ QUnit.module('Indicator position', () => {
         assert.ok(tabsElement.hasClass(INDICATOR_POSITION_CLASS.top));
     });
 });
+
+QUnit.module('Accessibility', () => {
+    QUnit.test('navigation buttons should not have aria attributes', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            width: 100,
+        });
+
+        const $leftButton = $element.find(`.${TABS_LEFT_NAV_BUTTON_CLASS}`);
+        const $rightButton = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`);
+
+        const $buttons = [$leftButton, $rightButton];
+        const attributes = ['role', 'aria-label', 'aria-disabled'];
+
+        $buttons.forEach($button => {
+            attributes.forEach(attribute => {
+                const value = $button.attr(attribute);
+
+                assert.strictEqual(value, undefined, `${attribute} is not set`);
+            });
+        });
+    });
+
+    QUnit.test('navigation button should not get aria-disabled when it get disabled state in runtime', function(assert) {
+        const $element = $('#scrollableTabs').dxTabs({
+            items: [{ text: 'item 0' }, { text: 'item 1' }],
+            width: 100,
+        });
+
+        const scrollable = $element.find(`.${TABS_SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+        scrollable.scrollTo(200);
+
+        const $button = $element.find(`.${TABS_RIGHT_NAV_BUTTON_CLASS}`);
+
+        assert.strictEqual($button.hasClass(DISABLED_STATE_CLASS), true, 'button is disabled');
+        assert.strictEqual($button.attr('aria-disabled'), undefined, 'aria-disabled is not set');
+    });
+});
