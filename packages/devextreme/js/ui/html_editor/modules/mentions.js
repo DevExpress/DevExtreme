@@ -394,6 +394,7 @@ if(Quill) {
                     this._focusFirstElement();
                 },
                 onHidden: () => {
+                    this.quill.root.removeAttribute('aria-activedescendant');
                     this._list.unselectAll();
                     this._list.option('focusedElement', null);
                     this._isMentionActive = false;
