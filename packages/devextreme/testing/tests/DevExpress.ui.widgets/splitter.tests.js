@@ -1488,7 +1488,7 @@ QUnit.module('Behavior', moduleConfig, () => {
             assert.notOk($resizeHandle.hasClass(STATE_ACTIVE_CLASS));
         });
 
-        QUnit.test(`The resize handle should not change its focused state after the pane collapses when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
+        QUnit.testInActiveWindow(`The resize handle should not change its focused state after the pane collapses when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
             this.reinit({
                 width: 408,
                 height: 408,
@@ -1498,7 +1498,7 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             const $resizeHandle = this.getResizeHandles().eq(0);
 
-            $resizeHandle.trigger(CLICK_EVENT);
+            $resizeHandle.focusin();
 
             assert.strictEqual($resizeHandle.hasClass(STATE_FOCUSED_CLASS), allowKeyboardNavigation);
 
