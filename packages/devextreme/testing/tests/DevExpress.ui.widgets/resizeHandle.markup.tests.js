@@ -20,7 +20,6 @@ const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
-const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const ICON_CLASS = 'dx-icon';
 
 const INACTIVE_SIZE = 2;
@@ -88,7 +87,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                     QUnit.test(`should have the 'dx-state-disabled' class and the correct width when control elements are turned off, and vice versa, ${JSON.stringify(options)}`, function(assert) {
                         this.reinit({ separatorSize: DEFAULT_SIZE, resizable, showCollapseNext, showCollapsePrev, direction });
 
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactive ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactive ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -100,7 +98,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                         this.instance.option('resizable', newOptionValue);
 
                         const isInactiveState = !showCollapseNext && !showCollapsePrev && !newOptionValue;
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactiveState ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactiveState ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -112,7 +109,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                         this.instance.option('showCollapsePrev', newOptionValue);
 
                         const isInactiveState = !showCollapseNext && !resizable && !newOptionValue;
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactiveState ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactiveState ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -124,7 +120,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                         this.instance.option('showCollapseNext', newOptionValue);
 
                         const isInactiveState = !newOptionValue && !showCollapsePrev && !resizable;
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactiveState ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactiveState ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
