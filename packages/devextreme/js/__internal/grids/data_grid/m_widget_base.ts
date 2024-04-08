@@ -60,7 +60,7 @@ gridCore.registerModulesOrder([
   'gridView']);
 
 class DataGrid extends Widget<Properties> {
-  _activeStateUnit = DATAGRID_ROW_SELECTOR;
+  private readonly _activeStateUnit = DATAGRID_ROW_SELECTOR;
 
   private readonly _controllers: any;
 
@@ -259,7 +259,7 @@ class DataGrid extends Widget<Properties> {
     this.getController('keyboardNavigation').focus(element);
   }
 
-  static registerModule(name, module) {
+  private static registerModule(name, module) {
     gridCore.registerModule(name, module);
   }
 }
