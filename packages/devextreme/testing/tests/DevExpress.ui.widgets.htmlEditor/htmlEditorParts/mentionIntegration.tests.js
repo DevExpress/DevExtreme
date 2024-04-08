@@ -654,7 +654,7 @@ export default function() {
                     const $items = this.getItems();
                     const $focusedItem = $items.filter(`.${FOCUSED_STATE_CLASS}`).first();
 
-                    assert.strictEqual($focusedItem.attr('id'), $content.attr('aria-activedescendant'), 'textbox element aria id should match active item id when mentions pops up');
+                    assert.strictEqual($content.attr('aria-activedescendant'), $focusedItem.attr('id'), 'textbox element aria id should match active item id when mentions pops up');
 
                     KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ESCAPE });
                     this.clock.tick(POPUP_HIDING_TIMEOUT);
