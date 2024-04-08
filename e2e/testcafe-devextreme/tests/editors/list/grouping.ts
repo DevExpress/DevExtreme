@@ -1,3 +1,4 @@
+import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
@@ -52,6 +53,37 @@ test('Grouped list appearance', async (t) => {
     allowReordering: true,
   },
 }));
+
+test('Grouped List last item of last group should have margin-bottom = 4px', async(t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  
+  const items = Selector('.dx-item');
+  const lastItem = items.nth(-1);
+  await t.hover(lastItem);
+  
+  await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
+
+  await t
+  .expect(compareResults.isValid())
+  .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+    dataSource: [{
+      key: 'One',
+      items: ['1_1', '1_2', '1_3'],
+    }, {
+      key: 'Two',
+      items: ['2_1', '2_2', '2_3'],
+    }, {
+      key: 'Three',
+      items: ['3_1', '3_2', '3_3'],
+    }, {
+      key: 'Four',
+      items: ['4_1', '4_2', '4_3'],
+    }],
+    grouped: true,
+    collapsibleGroups: false
+  })
+);
 
 [true, false].forEach((rtlEnabled) => {
   test(`Grouped list appearance with template. rtlEnabled=${rtlEnabled}`, async (t) => {
