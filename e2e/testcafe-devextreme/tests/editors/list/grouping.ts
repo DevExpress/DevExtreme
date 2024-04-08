@@ -56,11 +56,10 @@ test('Grouped list appearance', async (t) => {
 
 test('Grouped List last item of last group should have margin-bottom = 4px', async(t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-  
-  const items = Selector('.dx-item');
-  const lastItem = items.nth(-1);
-  await t.hover(lastItem);
-  
+
+  const list = new List('#container');
+  await t.hover(list.getItem(-1).element);
+
   await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
 
   await t
