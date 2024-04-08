@@ -7,6 +7,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as DOUBLE_CLICK_EVENT } from '@js/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
+import messageLocalization from '@js/localization/message';
 import Widget from '@js/ui/widget/ui.widget';
 
 import {
@@ -242,7 +243,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
       roledescription: 'separator',
-      label: 'Split bar',
+      label: messageLocalization.format('dxSplitter-resizeHandleAriaLabel'),
     });
   }
 

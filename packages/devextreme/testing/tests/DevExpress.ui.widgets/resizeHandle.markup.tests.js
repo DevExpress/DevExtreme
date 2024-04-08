@@ -4,6 +4,7 @@ import 'ui/splitter';
 
 import fx from 'animation/fx';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
+import messageLocalization from 'localization/message';
 
 QUnit.testStart(function() {
     const markup =
@@ -333,6 +334,13 @@ QUnit.module('Aria attributes', moduleConfig, () => {
         this.reinit({ });
 
         assert.strictEqual(this.$element.attr('aria-label'), 'Split bar');
+    });
+
+    QUnit.test('localized aria-label attribute should be set correctly', function(assert) {
+        const localizedAriaLabelAttribute = messageLocalization.format('dxSplitter-resizeHandleAriaLabel');
+
+        assert.strictEqual(localizedAriaLabelAttribute, 'Split bar');
+        assert.strictEqual(this.$element.attr('aria-label'), localizedAriaLabelAttribute);
     });
 
     QUnit.test('role attribute should be set correctly', function(assert) {
