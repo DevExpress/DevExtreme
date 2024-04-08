@@ -25,7 +25,8 @@ const KEY_CODES = {
     PAGE_UP: 33,
     PAGE_DOWN: 34,
     END: 35,
-    HOME: 36
+    HOME: 36,
+    ESCAPE: 27,
 };
 
 const NAVIGATION_KEYS = [
@@ -36,6 +37,8 @@ const NAVIGATION_KEYS = [
     KEY_CODES.END,
     KEY_CODES.HOME
 ];
+
+const POPUP_HIDING_TIMEOUT = 500;
 
 const KeyEventsMock = nativePointerMock();
 
@@ -645,13 +648,18 @@ export default function() {
         test('aria-activedescendant should exist on textbox when mention pops up', function(assert) {
             const done = assert.async();
             const valueChangeSpy = sinon.spy(() => {
+                const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
                 if(valueChangeSpy.calledOnce) {
                     this.clock.tick(10);
                     const $items = this.getItems();
                     const $focusedItem = $items.filter(`.${FOCUSED_STATE_CLASS}`).first();
-                    const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
 
-                    assert.strictEqual($focusedItem.attr('id'), $content.attr('aria-activedescendant'), 'textbox element aria id should match active item id');
+                    assert.strictEqual($focusedItem.attr('id'), $content.attr('aria-activedescendant'), 'textbox element aria id should match active item id when mentions pops up');
+
+                    KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ESCAPE });
+                    this.clock.tick(POPUP_HIDING_TIMEOUT);
+
+                    assert.notOk($content.attr('aria-activedescendant'), 'textbox should not have aria-activedescendant mentions closes');
                     done();
                 }
             });
@@ -660,6 +668,10 @@ export default function() {
 
             this.createWidget();
             this.instance.focus();
+
+            const $content = this.$element.find(`.${HTML_EDITOR_CONTENT}`);
+            assert.notOk($content.attr('aria-activedescendant'), 'textbox should have not aria-activedescendant before mentions pops up');
+
             this.$element.find('p').first().text('@');
             this.clock.tick(10);
         });
