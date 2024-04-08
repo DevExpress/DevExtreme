@@ -1685,6 +1685,7 @@ QUnit.module('Accessibility', () => {
     QUnit.test('navigation buttons should not have aria attributes', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }, { text: 'item 1' }],
+            showNavButtons: true,
             width: 100,
         });
 
@@ -1706,6 +1707,7 @@ QUnit.module('Accessibility', () => {
     QUnit.test('navigation button should not get aria-disabled when it get disabled state in runtime', function(assert) {
         const $element = $('#scrollableTabs').dxTabs({
             items: [{ text: 'item 0' }, { text: 'item 1' }],
+            showNavButtons: true,
             width: 100,
         });
 
