@@ -656,7 +656,7 @@ export default function() {
                     KeyEventsMock.simulateEvent($content.get(0), 'keydown', { keyCode: KEY_CODES.ESCAPE });
                     this.clock.tick(POPUP_TIMEOUT);
 
-                    assert.notOk($content.attr('aria-activedescendant'), 'textbox should not have aria-activedescendant when mentions closes');
+                    assert.notOk($content.attr('aria-activedescendant'), 'textbox should not have aria-activedescendant after mention popup is closed');
                     done();
                 }
             });
