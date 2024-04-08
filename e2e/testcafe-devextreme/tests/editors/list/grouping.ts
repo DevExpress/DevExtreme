@@ -54,12 +54,12 @@ test('Grouped list appearance', async (t) => {
   },
 }));
 
-test('Grouped List last item of last group should have margin-bottom = 4px', async(t) => {
+test('Grouped List last item of last group should have a proper margin-bottom', async(t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const list = new List('#container');
-  const lastItem = list.getItems().length - 1;
-  await t.hover(list.getItem(lastItem).element);
+  const lastItemIndex = list.getItems().length - 1;
+  await t.hover(list.getItem(lastItemIndex).element);
 
   await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
 
@@ -73,12 +73,6 @@ test('Grouped List last item of last group should have margin-bottom = 4px', asy
     }, {
       key: 'Two',
       items: ['2_1', '2_2', '2_3'],
-    }, {
-      key: 'Three',
-      items: ['3_1', '3_2', '3_3'],
-    }, {
-      key: 'Four',
-      items: ['4_1', '4_2', '4_3'],
     }],
     grouped: true,
     collapsibleGroups: false

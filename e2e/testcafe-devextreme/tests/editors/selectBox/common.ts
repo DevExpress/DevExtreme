@@ -1,9 +1,7 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import {
-  appendElementTo, setStyleAttribute,
-} from '../../../helpers/domUtils';
+import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
 import { createWidget } from '../../../helpers/createWidget';
