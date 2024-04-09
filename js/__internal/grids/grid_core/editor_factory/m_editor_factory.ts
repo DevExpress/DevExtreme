@@ -113,8 +113,7 @@ export class EditorFactory extends ViewControllerWithMixin {
       '.dx-lookup-field:focus',
       '.dx-checkbox:focus',
       '.dx-switch:focus',
-      '.dx-dropdownbutton',
-      '.dx-buttongroup:focus',
+      '.dx-dropdownbutton .dx-buttongroup:focus',
       '.dx-adaptive-item-text:focus'].join(',');
 
     // T181706
