@@ -476,8 +476,20 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
-        this._currentLayout = this._layout;
         const $resizeHandle = $(element);
+
+        this._getAction(RESIZE_EVENT.onResizeStart)({
+          event,
+          handleElement: getPublicElement($resizeHandle),
+        });
+
+        // @ts-expect-error typify event members
+        if (event.cancel) {
+          return;
+        }
+
+        this._currentLayout = this._layout;
+
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
@@ -497,14 +509,19 @@ class Splitter extends (CollectionWidget as any) {
         const { items } = this.option();
 
         this._updateItemsRestrictions(items);
-
-        this._getAction(RESIZE_EVENT.onResizeStart)({
-          event,
-          handleElement: getPublicElement($resizeHandle),
-        });
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
+
+        this._getAction(RESIZE_EVENT.onResize)({
+          event,
+          handleElement: getPublicElement($(element)),
+        });
+
+        // @ts-expect-error typify event members
+        if (event.cancel) {
+          return;
+        }
 
         const newLayout = getNextLayout(
           this._currentLayout,
@@ -516,27 +533,27 @@ class Splitter extends (CollectionWidget as any) {
 
         this._applyFlexGrowFromLayout(newLayout);
         this._layout = newLayout;
-
-        this._getAction(RESIZE_EVENT.onResize)({
-          event,
-          handleElement: getPublicElement($(element)),
-        });
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
         const $resizeHandle = $(element);
 
+        this._getAction(RESIZE_EVENT.onResizeEnd)({
+          event,
+          handleElement: getPublicElement($resizeHandle),
+        });
+
+        // @ts-expect-error typify event members
+        if (event.cancel) {
+          return;
+        }
+
         this._feedbackDeferred.resolve();
         this._toggleActiveState($resizeHandle, false);
 
         each(this._itemElements(), (index: number, itemElement: Element) => {
           this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
-        });
-
-        this._getAction(RESIZE_EVENT.onResizeEnd)({
-          event,
-          handleElement: getPublicElement($resizeHandle),
         });
       },
     };

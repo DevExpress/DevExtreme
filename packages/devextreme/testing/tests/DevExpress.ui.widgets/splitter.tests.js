@@ -2113,6 +2113,45 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
         });
     });
+
+    QUnit.test('onResize event should be cancellable', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', }, { size: '200px' }],
+            onResize: function(e) {
+                const { event } = e;
+                event.cancel = true;
+            },
+        });
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(100, 100).dragEnd();
+
+        this.checkItemSizes([200, 200]);
+        this.assertLayout([50, 50]);
+    });
+
+    QUnit.test('onResizeEnd event should be cancellable', function(assert) {
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', }, { size: '200px' }],
+            onResizeEnd: function(e) {
+                const { event } = e;
+                event.cancel = true;
+            },
+        });
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(100, 100).dragEnd();
+
+        const firstPaneSize = this.instance.option('items[0].size');
+        const secondPaneSize = this.instance.option('items[1].size');
+
+        assert.strictEqual(firstPaneSize, '200px');
+        assert.strictEqual(secondPaneSize, '200px');
+    });
 });
 
 QUnit.module('Nested Splitters', moduleConfig, () => {
