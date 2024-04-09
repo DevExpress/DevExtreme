@@ -1,7 +1,7 @@
 import {
   NgModule, Component, enableProdMode, ViewChild,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule, DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
@@ -86,6 +86,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxTabsModule,
     DxCheckBoxModule,
     DxSelectBoxModule,

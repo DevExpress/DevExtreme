@@ -1,7 +1,7 @@
 import {
   NgModule, ViewChild, Component, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxSchedulerComponent } from 'devextreme-angular';
 import { Appointment, Resource, Service } from './app.service';
@@ -33,6 +33,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxSchedulerModule,
   ],
   declarations: [AppComponent],

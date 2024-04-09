@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxTreeMapModule, DxTreeMapTypes } from 'devextreme-angular/ui/tree-map';
@@ -83,6 +83,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxTreeMapModule,
     DxSelectBoxModule,
   ],

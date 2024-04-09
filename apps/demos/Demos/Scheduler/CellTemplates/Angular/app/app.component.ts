@@ -1,7 +1,7 @@
 import {
   NgModule, Component, enableProdMode, Pipe, PipeTransform,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerComponent, DxSchedulerModule, DxTemplateModule } from 'devextreme-angular';
 import DataSource from 'devextreme/data/data_source';
@@ -147,6 +147,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxSchedulerModule,
     DxTemplateModule,
   ],

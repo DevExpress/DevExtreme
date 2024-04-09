@@ -1,7 +1,7 @@
 import {
   NgModule, Component, Pipe, PipeTransform, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClientModule } from '@angular/common/http';
 import ArrayStore from 'devextreme/data/array_store';
@@ -61,6 +61,7 @@ export class StringifyItemsPipe implements PipeTransform {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     HttpClientModule,
     DxDiagramModule,
   ],

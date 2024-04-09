@@ -1,7 +1,7 @@
 import {
   NgModule, Component, Pipe, PipeTransform, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxDataGridModule,
@@ -42,6 +42,7 @@ export class GridCellDataPipe implements PipeTransform {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxDataGridModule,
     DxTemplateModule,
     DxSparklineModule,

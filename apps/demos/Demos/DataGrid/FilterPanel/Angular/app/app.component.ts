@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { PositionConfig } from 'devextreme/animation/position';
 import { DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
@@ -89,6 +89,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxDataGridModule,
   ],
   declarations: [AppComponent],

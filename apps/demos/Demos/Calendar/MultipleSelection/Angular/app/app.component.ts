@@ -1,7 +1,7 @@
 import {
   Component, NgModule, ViewChild, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule, DxCheckBoxModule, DxButtonModule } from 'devextreme-angular';
 import { DxCalendarComponent, DxCalendarModule, DxCalendarTypes } from 'devextreme-angular/ui/calendar';
@@ -67,6 +67,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxSelectBoxModule,
     DxCalendarModule,
     DxCheckBoxModule,

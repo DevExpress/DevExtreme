@@ -1,6 +1,6 @@
 import { ViewEncapsulation } from '@angular/compiler/src/core';
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule, DxSelectBoxModule, DxDateBoxModule } from 'devextreme-angular';
 import { DxGanttModule, DxGanttTypes } from 'devextreme-angular/ui/gantt';
@@ -67,6 +67,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxGanttModule,
     DxCheckBoxModule,
     DxSelectBoxModule,

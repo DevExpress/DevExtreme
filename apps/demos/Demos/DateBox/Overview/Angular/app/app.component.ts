@@ -1,5 +1,5 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDateBoxModule } from 'devextreme-angular';
 import { Service } from './app.service';
@@ -40,6 +40,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxDateBoxModule,
   ],
   declarations: [AppComponent],

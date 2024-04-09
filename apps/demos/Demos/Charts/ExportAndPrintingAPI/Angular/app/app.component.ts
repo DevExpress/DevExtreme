@@ -1,7 +1,7 @@
 import {
   NgModule, Component, ViewChild, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonModule } from 'devextreme-angular';
 import { DxChartComponent, DxChartModule, DxChartTypes } from 'devextreme-angular/ui/chart';
@@ -48,6 +48,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxChartModule,
     DxButtonModule,
   ],

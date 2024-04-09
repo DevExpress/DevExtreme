@@ -1,7 +1,7 @@
 import {
   NgModule, Component, ViewChild, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxListModule, DxRadioGroupModule, DxToolbarModule } from 'devextreme-angular';
 import { DxDrawerModule, DxDrawerComponent, DxDrawerTypes } from 'devextreme-angular/ui/drawer';
@@ -58,6 +58,7 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxDrawerModule,
     DxListModule,
     DxRadioGroupModule,

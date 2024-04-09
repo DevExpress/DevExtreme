@@ -1,7 +1,7 @@
 import {
   NgModule, Component, ViewChild, AfterViewInit, enableProdMode,
 } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxDataGridComponent, DxButtonModule } from 'devextreme-angular';
 import query from 'devextreme/data/query';
@@ -72,6 +72,7 @@ export class AppComponent implements AfterViewInit {
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserTransferStateModule,
     DxDataGridModule,
     DxButtonModule,
   ],
