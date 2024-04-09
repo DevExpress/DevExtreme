@@ -124,6 +124,8 @@ class Callback<TArgs extends any[], TContext> {
   }
 }
 
+export type { Callback };
+
 export default function createCallback<TArgs extends any[] = unknown[], TContext = unknown>(
   options: CallbackOptions,
 ): Callback<TArgs, TContext> {
