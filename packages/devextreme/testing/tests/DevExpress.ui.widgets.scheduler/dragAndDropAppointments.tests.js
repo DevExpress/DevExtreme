@@ -2324,7 +2324,7 @@ module('Appointment dragging', {
 
             try {
                 const tasks = [
-                    { text: 'Task', startDate: new Date(2015, 2, 17), endDate: new Date(2015, 2, 17, 0, 30) }
+                    { text: 'Task', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30) }
                 ];
                 const dataSource = new DataSource({
                     store: tasks
@@ -2337,10 +2337,10 @@ module('Appointment dragging', {
                     _draggingMode: draggingMode,
                 });
 
-                this.scheduler.appointmentList[0].drag.toCell(4);
+                this.scheduler.appointmentList[0].drag.toCell(1);
 
-                assert.deepEqual(tasks[0].startDate, new Date(2015, 2, 19), 'Start date is correct');
-                assert.deepEqual(tasks[0].endDate, new Date(2015, 2, 19, 0, 30), 'End date is correct');
+                assert.deepEqual(tasks[0].startDate, new Date(2015, 2, 16), 'Start date is correct');
+                assert.deepEqual(tasks[0].endDate, new Date(2015, 2, 16, 0, 30), 'End date is correct');
             } finally {
                 $('#qunit-fixture').removeClass('qunit-fixture-visible');
             }
