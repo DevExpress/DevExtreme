@@ -174,6 +174,9 @@ QUnit.test('deepExtendArraySafe utility does not throw an error with \'null\' de
 QUnit.test('deepExtendArraySafe sets undefined', function(assert) {
     const oldValue = { time: { duration: 50 } };
     objectUtils.deepExtendArraySafe(oldValue, { time: { duration: undefined } }, true);
+    assert.equal(oldValue.time.duration, 50);
+
+    objectUtils.deepExtendArraySafe(oldValue, { time: { duration: undefined } }, true, false, true);
     assert.equal(oldValue.time.duration, undefined);
 });
 
