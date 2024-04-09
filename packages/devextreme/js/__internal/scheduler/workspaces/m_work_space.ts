@@ -3311,22 +3311,19 @@ const createDragBehaviorConfig = (
   const getElementsFromPoint = () => {
     const appointmentWidth = getWidth(state.dragElement);
     const cellWidth = getCellWidth();
-
     const isWideAppointment = appointmentWidth > cellWidth;
     const isNarrowAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
-
-    const dragElementContainer = $(state.dragElement).parent();
-    const boundingRect = getBoundingRect(dragElementContainer.get(0));
-
+    const dragElementContainer = $(state.dragElement).parent().get(0);
+    const boundingRect = getBoundingRect(dragElementContainer);
     const newX = boundingRect.left;
     const newY = boundingRect.top;
 
     if (isWideAppointment) {
-      return (domAdapter as any).elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT);
+      return (domAdapter as any).elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT, dragElementContainer);
     } if (isNarrowAppointment) {
-      return (domAdapter as any).elementsFromPoint(newX, newY);
+      return (domAdapter as any).elementsFromPoint(newX, newY, dragElementContainer);
     }
-    return (domAdapter as any).elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT);
+    return (domAdapter as any).elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT, dragElementContainer);
   };
 
   const onDragMove = () => {
