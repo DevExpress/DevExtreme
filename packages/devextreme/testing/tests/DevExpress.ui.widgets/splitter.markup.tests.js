@@ -84,10 +84,10 @@ QUnit.module('Render', moduleConfig, () => {
         { propertyName: 'rtlEnabled', propertyValue: false },
         { propertyName: 'rtlEnabled', propertyValue: true },
         { propertyName: 'separatorSize', propertyValue: 12 },
-    ].forEach(({ propertyName: propName, propertyValue: propValue }) => {
-        QUnit.test(`${propName} property should be passed to nested splitter on initialization`, function(assert) {
+    ].forEach(({ propertyName, propertyValue }) => {
+        QUnit.test(`${propertyName} property should be passed to nested splitter on initialization`, function(assert) {
             this.reinit({
-                [propName]: propValue,
+                [propertyName]: propertyValue,
                 items: [{
                     splitter: {
                         dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
@@ -98,7 +98,7 @@ QUnit.module('Render', moduleConfig, () => {
             const $nestedSplitter = this.getNestedSplitter();
             const nestedSplitterInstance = $nestedSplitter.dxSplitter('instance');
 
-            assert.strictEqual(nestedSplitterInstance.option(propName), propValue);
+            assert.strictEqual(nestedSplitterInstance.option(propertyName), propertyValue);
         });
     });
 
