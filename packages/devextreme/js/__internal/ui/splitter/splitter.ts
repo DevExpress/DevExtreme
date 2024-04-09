@@ -13,6 +13,7 @@ import {
   getOuterHeight,
   getOuterWidth,
 } from '@js/core/utils/size';
+import { isDefined } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { lock } from '@js/events/core/emitter.feedback';
 import CollectionWidgetItem from '@js/ui/collection/item';
@@ -145,7 +146,7 @@ class Splitter extends (CollectionWidget as any) {
     this._attachResizeObserverSubscription();
   }
 
-  _getItemDimension(element: Element): number | string {
+  _getItemDimension(element: Element): number {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._isHorizontalOrientation()
       ? getOuterWidth(element) : getOuterHeight(element);
@@ -373,6 +374,8 @@ class Splitter extends (CollectionWidget as any) {
         'aria-controls': paneId,
       },
       onCollapsePrev: (e: ItemCollapsedEvent | ItemExpandedEvent): void => {
+        e.event?.stopPropagation();
+
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -384,8 +387,18 @@ class Splitter extends (CollectionWidget as any) {
 
         const isRightItemCollapsed = rightItemData.collapsed === true;
 
+        this._activeResizeHandleIndex = leftItemIndex;
+        this._collapseButton = 'prev';
+
         if (isRightItemCollapsed) {
-          this._options.silent(`items[${rightItemIndex}].size`, this._panesCacheSize[rightItemIndex]);
+          this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
+          const leftItemSize = this._getItemDimension($leftItem.get(0));
+
+          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= leftItemSize) {
+            this._collapsedItemSize = leftItemSize / 2;
+          }
+
+          this._panesCacheSize[rightItemIndex] = undefined;
           this.option(`items[${rightItemIndex}].collapsed`, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
@@ -399,6 +412,7 @@ class Splitter extends (CollectionWidget as any) {
         }
 
         this._panesCacheSize[leftItemIndex] = this._getItemDimension($leftItem.get(0));
+        this._collapsedItemSize = this._getItemDimension($leftItem.get(0));
 
         this.option(`items[${leftItemIndex}].collapsed`, true);
 
@@ -410,6 +424,8 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
       onCollapseNext: (e: ItemCollapsedEvent | ItemExpandedEvent): void => {
+        e.event?.stopPropagation();
+
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -421,8 +437,18 @@ class Splitter extends (CollectionWidget as any) {
 
         const isLeftItemCollapsed = leftItemData.collapsed === true;
 
+        this._activeResizeHandleIndex = leftItemIndex;
+        this._collapseButton = 'next';
+
         if (isLeftItemCollapsed) {
-          this._options.silent(`items[${leftItemIndex}].size`, this._panesCacheSize[leftItemIndex]);
+          this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
+          const rightItemSize = this._getItemDimension($rightItem.get(0));
+
+          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= rightItemSize) {
+            this._collapsedItemSize = rightItemSize / 2;
+          }
+
+          this._panesCacheSize[leftItemIndex] = undefined;
           this.option(`items[${leftItemIndex}].collapsed`, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
@@ -436,6 +462,7 @@ class Splitter extends (CollectionWidget as any) {
         }
 
         this._panesCacheSize[rightItemIndex] = this._getItemDimension($rightItem.get(0));
+        this._collapsedItemSize = this._getItemDimension($rightItem.get(0));
 
         this.option(`items[${rightItemIndex}].collapsed`, true);
 
@@ -587,7 +614,7 @@ class Splitter extends (CollectionWidget as any) {
     this.$element().toggleClass(VERTICAL_ORIENTATION_CLASS, !this._isHorizontalOrientation());
   }
 
-  _itemOptionChanged(item: unknown, property: unknown, value: unknown): void {
+  _itemOptionChanged(item: Item, property: unknown, value: unknown): void {
     switch (property) {
       case 'size':
       case 'maxSize':
@@ -598,13 +625,7 @@ class Splitter extends (CollectionWidget as any) {
         this._updatePaneSizesWithOuterWidth();
         break;
       case 'collapsed':
-        this._updateResizeHandlesResizableState();
-        this._updateResizeHandlesCollapsibleState();
-
-        this._layout = this._getDefaultLayoutBasedOnSize();
-
-        this._applyFlexGrowFromLayout(this._layout);
-        this._updatePaneSizesWithOuterWidth();
+        this._itemCollapsedOptionChanged(item);
         break;
       case 'resizable':
         this._updateResizeHandlesResizableState();
@@ -615,6 +636,44 @@ class Splitter extends (CollectionWidget as any) {
       default:
         super._itemOptionChanged(item, property, value);
     }
+  }
+
+  _itemCollapsedOptionChanged(item: Item): void {
+    this._updateItemsRestrictions(this.option('items'));
+
+    this._updateResizeHandlesResizableState();
+    this._updateResizeHandlesCollapsibleState();
+
+    if (isDefined(this._collapsedItemSize)) {
+      this._layout = getNextLayout(
+        this._layout,
+        this._getCollapseDelta(item),
+        this._activeResizeHandleIndex,
+        this._itemRestrictions,
+      );
+    } else {
+      this._layout = this._getDefaultLayoutBasedOnSize();
+    }
+
+    this._collapseButton = undefined;
+    this._collapsedItemSize = undefined;
+
+    this._applyFlexGrowFromLayout(this._layout);
+    this._updatePaneSizesWithOuterWidth();
+  }
+
+  _getCollapseDelta(item: Item): number {
+    const { orientation } = this.option();
+    const handlesSizeSum = this._getResizeHandlesSize();
+    const elementSize = getElementSize(this.$element(), orientation);
+    const collapsedSizeRatio = convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum);
+    const collapsedSize = ((elementSize - handlesSizeSum) / 100) * (collapsedSizeRatio ?? 0);
+    const itemSize = this._collapsedItemSize;
+    const offset = (itemSize - collapsedSize) * (this._collapseButton === 'prev' ? -1 : 1);
+
+    this._currentOnePxRatio = convertSizeToRatio(1, elementSize, handlesSizeSum);
+
+    return calculateDelta({ x: offset, y: offset }, orientation, false, this._currentOnePxRatio);
   }
 
   _getDefaultLayoutBasedOnSize(): number[] {
