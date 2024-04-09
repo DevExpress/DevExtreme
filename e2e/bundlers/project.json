@@ -26,7 +26,8 @@
         "cwd": "{projectRoot}",
         "command": "webpack --config ./webpack.config.cjs.js"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     },
     "test--webpack": {
       "executor": "nx:run-commands",
@@ -34,7 +35,8 @@
         "cwd": "{projectRoot}",
         "command": "webpack --config ./webpack.config.js"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     },
     "test--rollup": {
       "executor": "nx:run-commands",
@@ -42,7 +44,8 @@
         "cwd": "{projectRoot}",
         "command": "rollup -c"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     },
     "test--parcel": {
       "executor": "nx:run-commands",
@@ -50,7 +53,8 @@
         "cwd": "{projectRoot}",
         "command": "parcel build ./entry/modules_esm.js --no-cache --dist-dir ./dist/dist_parsel"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     },
     "test--browserify-cjs": {
       "executor": "nx:run-commands",
@@ -58,7 +62,8 @@
         "cwd": "{projectRoot}",
         "command": "cross-env NODE_PATH=./node_modules:./node_modules/globalize/dist browserify ./entry/modules_cjs.js -o ./dist/dist_browserify/bundle_cjs.js"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     },
     "test--vite": {
       "executor": "nx:run-commands",
@@ -66,7 +71,8 @@
         "cwd": "{projectRoot}",
         "command": "vite build"
       },
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "cache": true
     }
   }
 }
