@@ -19,6 +19,10 @@ module.exports.createNodes = [
           cwd: 'e2e/testcafe-devextreme',
           command: `node runner.js --componentFolder '' --file ${test} --concurrency 1`,
         },
+        dependsOn: [{
+          target: "build",
+          dependencies: true
+        }],
         cache: true,
       },
     ]));
@@ -32,7 +36,6 @@ module.exports.createNodes = [
           executor: 'nx:noop',
           dependsOn: Object.keys(testFileTargets).map((target) => ({
             target,
-            project: 'self',
             params: 'forward'
           }))
         },

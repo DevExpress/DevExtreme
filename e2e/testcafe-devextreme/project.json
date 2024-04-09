@@ -1,0 +1,4 @@
+{
+  "name": "devextreme-testcafe-tests",
+  "implicitDependencies": ["devextreme-main"]
+}
