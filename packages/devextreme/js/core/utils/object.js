@@ -39,16 +39,29 @@ const orderEach = function(map, func) {
     }
 };
 
-const assignValueToProperty = function(target, property, value, assignByReference) {
+const assignValueToProperty = function(target, property, value, extendComplexObject, assignByReference, shouldCopyUndefined) {
     if(!assignByReference && variableWrapper.isWrapped(target[property])) {
         variableWrapper.assign(target[property], value);
+    } else if(!assignByReference && Array.isArray(value)) {
+        target[property] = value.map(item => {
+            let itemTarget = item;
+            if(!assignByReference) {
+                if(Array.isArray(item)) {
+                    itemTarget = [];
+                }
+                if(isObject(item)) {
+                    itemTarget = {};
+                }
+            }
+            return deepExtendArraySafe(itemTarget, item, extendComplexObject, assignByReference, shouldCopyUndefined);
+        });
     } else {
         target[property] = value;
     }
 };
 
 // B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference) {
+const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference, shouldCopyUndefined) {
     let prevValue;
     let newValue;
 
@@ -62,12 +75,31 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
 
         if(isPlainObject(newValue)) {
             const goDeeper = extendComplexObject ? isObject(prevValue) : isPlainObject(prevValue);
-            newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference);
+            newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
 
-        if(newValue !== undefined && prevValue !== newValue) {
-            assignValueToProperty(target, name, newValue, assignByReference);
+        if(Array.isArray(newValue) && !assignByReference) {
+            assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
+
+        if(shouldCopyUndefined && (prevValue !== newValue || prevValue === undefined)) {
+            assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
+        } else if((newValue !== undefined) && prevValue !== newValue) {
+            assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
+        }
+    }
+
+    if(Array.isArray(target) && !assignByReference) {
+        let changesTarget = changes;
+        if(!assignByReference) {
+            if(Array.isArray(changes)) {
+                changesTarget = [];
+            }
+            if(isObject(changes)) {
+                changesTarget = {};
+            }
+        }
+        return deepExtendArraySafe(changesTarget, changes, extendComplexObject, assignByReference, shouldCopyUndefined);
     }
 
     return target;
