@@ -18,8 +18,9 @@ module.exports.createNodes = [
         options: {
           cwd: 'e2e/testcafe-devextreme',
           command: `node runner.js --componentFolder '' --file ${test} --concurrency 1`,
-        }
-      }
+        },
+        cache: true,
+      },
     ]));
 
     /**
