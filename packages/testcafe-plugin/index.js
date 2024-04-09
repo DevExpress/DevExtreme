@@ -17,7 +17,7 @@ module.exports.createNodes = [
         executor: 'nx:run-commands',
         options: {
           cwd: 'e2e/testcafe-devextreme',
-          command: `node runner.js --componentFolder '' --file ${test} --concurrency 1 --browsers='chrome:headless --disable-gpu --window-size=1200,800'`,
+          command: `node runner.js --componentFolder '' --file ${test} --concurrency 1 --browsers=chrome:devextreme-shr2`,
         },
         dependsOn: [{
           target: "build",
