@@ -43,10 +43,8 @@ import {
   findLastIndexOfVisibleItem,
   getElementSize,
   getNextLayout,
-  // getVisibleItemsCount,
   isElementVisible,
   setFlexProp,
-  // validateLayout,
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
 import type {
@@ -251,7 +249,7 @@ class Splitter extends (CollectionWidget as any) {
 
     const itemElement = $itemFrame.get(0);
 
-    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length); // getVisibleItemsCount(this.option('items')));
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length);
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
