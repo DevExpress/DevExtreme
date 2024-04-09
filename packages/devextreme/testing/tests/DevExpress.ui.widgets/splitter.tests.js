@@ -79,7 +79,7 @@ const moduleConfig = {
         };
 
         this.assertLayout = (expectedLayout, epsilon) => {
-            this.getPanes().filter(':visible').toArray().forEach((item, index) => {
+            this.getPanes().toArray().forEach((item, index) => {
                 QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], epsilon || 0.1, `$item[${index}].flexGrow`);
             });
         };
@@ -103,84 +103,79 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     [{
         dataSource: [{ minSize: '30%' }],
         expectedLayout: ['100'],
-        expectedItemSizes: [undefined]
+        expectedItemSizes: [408]
     }, {
         dataSource: [{ size: '40%', minSize: '30%' }, { }],
         expectedLayout: ['40.8', '59.2'],
-        expectedItemSizes: ['40%', undefined]
+        expectedItemSizes: [163.203, 236.797]
     }, {
         dataSource: [{ minSize: '30%' }, { }, { }],
         expectedLayout: ['33.3333', '33.3333', '33.3333'],
-        expectedItemSizes: [undefined, undefined, undefined]
+        expectedItemSizes: [130.664, 130.664, 130.664]
     }, {
         dataSource: [{ minSize: '40%' }, { }, { }],
         expectedLayout: ['41.6326', '25.034', '33.3333'],
-        expectedItemSizes: [undefined, undefined, undefined]
-    },
-    {
+        expectedItemSizes: [163.203, 98.1328, 130.664]
+    }, {
         dataSource: [{ }, { minSize: '40%' }, { }],
         expectedLayout: ['25.034', '41.6326', '33.3333'],
-        expectedItemSizes: [undefined, undefined, undefined]
-    },
-    {
+        expectedItemSizes: [98.1328, 163.203, 130.664]
+    }, {
         dataSource: [{ }, { }, { minSize: '40%' }],
         expectedLayout: ['25.034', '33.3333', '41.6326'],
-        expectedItemSizes: [undefined, undefined, undefined]
-    },
-    {
+        expectedItemSizes: [98.1328, 130.664, 163.203]
+    }, {
         dataSource: [{ size: '30%' }, { }, { minSize: '30%' }],
         expectedLayout: ['31.2245', '34.3877', '34.3877'],
-        expectedItemSizes: ['30%', undefined, undefined]
-    },
-    {
+        expectedItemSizes: [122.398, 134.797, 134.797]
+    }, {
         dataSource: [{ size: '30%' }, { }, { minSize: '30%', size: '40%' }],
         expectedLayout: ['31.2245', '27.1429', '41.6326'],
-        expectedItemSizes: ['30%', undefined, '40%']
-    },
-    {
+        expectedItemSizes: [122.398, 106.398, 163.203]
+    }, {
         dataSource: [{ }, { }, { size: '20%' }],
         expectedLayout: ['39.5918', '39.5918', '20.8163'],
-        expectedItemSizes: [undefined, undefined, '20%']
-    },
-    {
+        expectedItemSizes: [155.203, 155.203, 81.6016]
+    }, {
         dataSource: [{ }, { }, { minSize: '30%', size: '20%' }],
         expectedLayout: ['29.1837', '39.5918', '31.2245'],
-        expectedItemSizes: [undefined, undefined, '20%']
-    },
-    {
+        expectedItemSizes: [114.398, 155.203, 122.398]
+    }, {
         dataSource: [{ minSize: '50%' }, { }, { minSize: '30%', size: '20%' }],
         expectedLayout: ['52.0408', '16.7347', '31.2245'],
-        expectedItemSizes: [undefined, undefined, '20%']
-    },
-    {
+        expectedItemSizes: [204, 65.6016, 122.398]
+    }, {
         dataSource: [{ size: '50%' }, { minSize: '40%' }, { minSize: '40%' }],
         expectedLayout: ['16.7347', '41.6326', '41.6326'],
-        expectedItemSizes: ['50%', undefined, undefined]
-    },
-    {
+        expectedItemSizes: [65.6016, 163.203, 163.203]
+    }, {
         dataSource: [{ }, { size: '40%', minSize: '30%' }],
         expectedLayout: ['59.2', '40.8'],
-        expectedItemSizes: [undefined, '40%']
-    },
-    {
+        expectedItemSizes: [236.797, 163.203]
+    }, {
         dataSource: [{ size: '200px', minSize: '30%' }, { }],
         expectedLayout: ['50', '50'],
-        expectedItemSizes: ['200px', undefined]
-    },
-    {
+        expectedItemSizes: [200, 200]
+    }, {
         dataSource: [{ }, { size: '200px', minSize: '30%' }],
         expectedLayout: ['50', '50'],
-        expectedItemSizes: [undefined, '200px']
-    },
-    {
+        expectedItemSizes: [200, 200]
+    }, {
         dataSource: [{ size: 200, minSize: '30%' }, { }],
         expectedLayout: ['50', '50'],
-        expectedItemSizes: [200, undefined]
-    },
-    {
+        expectedItemSizes: [200, 200]
+    }, {
         dataSource: [{ size: 200, minSize: 300 }, { }],
         expectedLayout: ['75', '25'],
-        expectedItemSizes: [200, undefined]
+        expectedItemSizes: [300, 100]
+    }, {
+        dataSource: [{ minSize: '70%' }, { minSize: 100 }, { minSize: 100 }],
+        expectedLayout: ['72.8571', '25.5102', '25.5102'],
+        expectedItemSizes: [230.547, 80.7266, 80.7266]
+    }, {
+        dataSource: [{ minSize: '50%' }, { minSize: 100 }, { minSize: 100 }],
+        expectedLayout: ['52.0408', '25.5102', '25.5102'],
+        expectedItemSizes: [197.938, 97.0312, 97.0312]
     }].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`render panes with minSize option, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
@@ -195,60 +190,56 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
-    [{
-        dataSource: [{ maxSize: '30%' }],
-        expectedLayout: ['100'],
-        expectedItemSizes: [undefined]
-    }, {
-        dataSource: [{ size: '40%', maxSize: '30%' }, { }],
-        expectedLayout: ['30.6', '69.4'],
-        expectedItemSizes: ['40%', undefined]
-    }, {
-        dataSource: [{ size: '20%', maxSize: '30%' }, { }],
-        expectedLayout: ['20.4', '79.6'],
-        expectedItemSizes: ['20%', undefined]
-    }, {
-        dataSource: [{ size: '40%' }, { maxSize: '30%' }],
-        expectedLayout: ['69.4', '30.6'],
-        expectedItemSizes: ['40%', undefined]
-    }, {
-        dataSource: [{ }, { maxSize: '20%' }, { }],
-        expectedLayout: ['39.5918', '20.8163', '39.5918'],
-        expectedItemSizes: [undefined, undefined, undefined]
-    },
-    // TODO: the first and second pane sizes should be distributed evenly
-    {
-        dataSource: [{ }, { }, { maxSize: '20%' }, { maxSize: '20%' }],
-        expectedLayout: ['31.25', '26.25', '21.25', '21.25'],
-        expectedItemSizes: [undefined, undefined, undefined, undefined]
-    }, {
-        dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '10%' }],
-        expectedLayout: ['34.0625', '21.25', '34.0625', '10.625'],
-        expectedItemSizes: [undefined, undefined, undefined, undefined]
-    }, {
-        dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '40%' }],
-        expectedLayout: ['26.25', '21.25', '26.25', '26.25'],
-        expectedItemSizes: [undefined, undefined, undefined, undefined]
-    }, {
-        dataSource: [{ maxSize: '20%' }, { }, { }],
-        expectedLayout: ['20.8163', '39.5918', '39.5918'],
-        expectedItemSizes: [undefined, undefined, undefined]
-    }, {
-        dataSource: [{ }, { }, { maxSize: '20%' }],
-        expectedLayout: ['39.5918', '39.5918', '20.8163'],
-        expectedItemSizes: [undefined, undefined, undefined]
-    }, {
-        dataSource: [{ maxSize: '20%' }, { size: '10%' }, { }],
-        expectedLayout: ['20.8163', '10.4082', '68.7755'],
-        expectedItemSizes: [undefined, '10%', undefined]
-    },
-    // TODO: support this scenario
-    // {
-    //     dataSource: [{ maxSize: '10%' }, { maxSize: '10%' }, { maxSize: '10%' }],
-    //     expectedLayout: ['20', '35', '45'],
-    //     expectedItemSizes: [undefined, '10%', undefined]
-    // }
-    ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
+    [
+        {
+            dataSource: [{ maxSize: '30%' }],
+            expectedLayout: ['100'],
+            expectedItemSizes: [408]
+        }, {
+            dataSource: [{ size: '40%', maxSize: '30%' }, { }],
+            expectedLayout: ['30.6', '69.4'],
+            expectedItemSizes: [122.398, 277.602]
+        }, {
+            dataSource: [{ size: '20%', maxSize: '30%' }, { }],
+            expectedLayout: ['20.4', '79.6'],
+            expectedItemSizes: [81.6016, 318.398]
+        }, {
+            dataSource: [{ size: '40%' }, { maxSize: '30%' }],
+            expectedLayout: ['69.4', '30.6'],
+            expectedItemSizes: [277.602, 122.398]
+        }, {
+            dataSource: [{ }, { maxSize: '20%' }, { }],
+            expectedLayout: ['39.5918', '20.8163', '39.5918'],
+            expectedItemSizes: [155.203, 81.6016, 155.203]
+        }, {
+            dataSource: [{ }, { }, { maxSize: '20%' }, { maxSize: '20%' }],
+            expectedLayout: ['28.75', '28.75', '21.25', '21.25'],
+            expectedItemSizes: [110.398, 110.398, 81.6016, 81.6016]
+        }, {
+            dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '10%' }],
+            expectedLayout: ['34.0625', '21.25', '34.0625', '10.625'],
+            expectedItemSizes: [130.797, 81.6016, 130.797, 40.7969]
+        }, {
+            dataSource: [{ }, { maxSize: '20%' }, { }, { maxSize: '40%' }],
+            expectedLayout: ['26.25', '21.25', '26.25', '26.25'],
+            expectedItemSizes: [100.797, 81.6016, 100.797, 100.797]
+        }, {
+            dataSource: [{ maxSize: '20%' }, { }, { }],
+            expectedLayout: ['20.8163', '39.5918', '39.5918'],
+            expectedItemSizes: [81.6016, 155.203, 155.203]
+        }, {
+            dataSource: [{ }, { }, { maxSize: '20%' }],
+            expectedLayout: ['39.5918', '39.5918', '20.8163'],
+            expectedItemSizes: [155.203, 155.203, 81.6016]
+        }, {
+            dataSource: [{ maxSize: '20%' }, { size: '10%' }, { }],
+            expectedLayout: ['20.8163', '10.4082', '68.7755'],
+            expectedItemSizes: [81.6016, 40.7969, 269.602]
+        }, {
+            dataSource: [{ maxSize: '10%' }, { maxSize: '10%' }, { maxSize: '10%' }],
+            expectedLayout: ['10.4082', '10.4082', '79.1837'],
+            expectedItemSizes: [40.7969, 40.7969, 310.398]
+        }].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`render panes with maxSize option, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
             this.reinit({
                 width: 408,
@@ -380,212 +371,292 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         [{
             dataSource: [{ }],
             expectedLayout: ['100'],
-            expectedItemSizes: [undefined]
+            expectedItemSizes: [1016]
+        }, {
+            dataSource: [{ size: '100%' }, { }],
+            expectedLayout: ['100', '0'],
+            expectedItemSizes: [1008, 0]
+        }, {
+            dataSource: [{ size: '200', visible: false }],
+            expectedLayout: ['0'],
+            expectedItemSizes: [0]
+        }, {
+            dataSource: [{ size: '100%' }, { visible: false }],
+            expectedLayout: ['100', '0'],
+            expectedItemSizes: [1016, 0]
+        }, {
+            dataSource: [{ size: '100%%' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: '1%00' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: 'incorrect' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ }, { size: '50$' }, { size: '50%px' }],
+            expectedLayout: ['33.3333', '33.3333', '33.3333'],
+            expectedItemSizes: [333.336, 333.336, 333.336]
+        }, {
+            dataSource: [{ size: '600px' }, { }],
+            expectedLayout: ['59.5238', '40.4762'],
+            expectedItemSizes: [600, 408],
+        }, {
+            dataSource: [{ size: '60px0pxpx' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ }, { size: '10px10px%' }, { }],
+            expectedLayout: ['33.3333', '33.3333', '33.3333'],
+            expectedItemSizes: [333.336, 333.336, 333.336]
+        }, {
+            dataSource: [{ size: '600' }, { }],
+            expectedLayout: ['59.5238', '40.4762'],
+            expectedItemSizes: [600, 408],
+        }, {
+            dataSource: [{ size: '600$' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: -600 }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: '-600' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: '-600px' }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: NaN }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: 10e1 }, { }],
+            expectedLayout: ['9.92063', '90.0794'],
+            expectedItemSizes: [100, 908],
+        }, {
+            dataSource: [{ size: Infinity }, { size: -Infinity }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: '10em' }, { size: '50vh' }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ size: 'auto' }, { size: 'inherit' }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504],
+        }, {
+            dataSource: [{ visible: false }, { }, { size: '100%' }, { }],
+            expectedLayout: ['0', '0', '100', '0'],
+            expectedItemSizes: [0, 0, 1000, 0]
+        }, {
+            dataSource: [{ size: null }, { }],
+            expectedLayout: ['50', '50'],
+            expectedItemSizes: [504, 504]
+        }, {
+            dataSource: [{ size: '300%' }],
+            expectedLayout: ['100'],
+            expectedItemSizes: [1016]
+        }, {
+            dataSource: [{ size: '50%' }, { size: '300%' }],
+            expectedLayout: ['50.3968', '49.6032'],
+            expectedItemSizes: [508, 500]
+        }, {
+            dataSource: [{ size: '50%' }, { size: 200 }, { size: '300%' }],
+            expectedLayout: ['50.8', '20', '29.2'],
+            expectedItemSizes: [508, 200, 292]
+        }, {
+            dataSource: [{ size: '50%' }, { minSize: 200, size: 100 }, { size: '300%' }],
+            expectedLayout: ['40.8', '20', '39.2'],
+            expectedItemSizes: [408, 200, 392]
         }, {
             dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
             expectedLayout: ['30', '60', '10'],
-            expectedItemSizes: ['300px', '600px', '100px']
+            expectedItemSizes: ['300', '600', '100']
         }, {
-            dataSource: [{ }, { }, { size: '248px' }, { } ],
+            dataSource: [{ }, { }, { size: '248px' }, { }],
             expectedLayout: ['25', '25', '25', '25'],
-            expectedItemSizes: [undefined, undefined, '248px', undefined],
+            expectedItemSizes: [248, 248, 248, 248],
         }, {
-            dataSource: [{ size: '248px' }, { }, { size: '248px' }, { } ],
+            dataSource: [{ size: '248px' }, { }, { size: '248px' }, { }],
             expectedLayout: ['25', '25', '25', '25'],
-            expectedItemSizes: ['248px', undefined, '248px', undefined],
+            expectedItemSizes: [248, 248, 248, 248],
         }, {
-            dataSource: [{ size: '248' }, { }, { size: '496px' }, { } ],
+            dataSource: [{ size: '248' }, { }, { size: '496px' }, { }],
             expectedLayout: ['25', '12.5', '50', '12.5'],
-            expectedItemSizes: ['248', undefined, '496px', undefined],
+            expectedItemSizes: [248, 124, 496, 124],
         }, {
-            dataSource: [{ size: 252 }, { visible: false }, { } ],
-            expectedLayout: ['25', '75'],
-            expectedItemSizes: [252, undefined, undefined],
+            dataSource: [{ size: 252 }, { visible: false }, { }],
+            expectedLayout: ['25', '0', '75'],
+            expectedItemSizes: [252, 0, 756],
         }, {
-            dataSource: [{ visible: false }, { visible: false }, { size: '504px' }, { } ],
-            expectedLayout: ['50', '50'],
-            expectedItemSizes: [undefined, undefined, '504px', undefined],
+            dataSource: [{ visible: false }, { visible: false }, { size: '504px' }, { }],
+            expectedLayout: ['0', '0', '50', '50'],
+            expectedItemSizes: [0, 0, 504, 504],
         }, {
-            dataSource: [{ visible: false }, { visible: false }, { }, { size: 504 } ],
-            expectedLayout: ['50', '50'],
-            expectedItemSizes: [undefined, undefined, undefined, 504],
+            dataSource: [{ visible: false }, { visible: false }, { }, { size: 504 }],
+            expectedLayout: ['0', '0', '50', '50'],
+            expectedItemSizes: [0, 0, 504, 504],
         }, {
             dataSource: [{ size: 126 }, { size: 126 }, { visible: false }],
+            expectedLayout: ['12.5', '87.5', '0'],
+            expectedItemSizes: [126, 882, 0],
+        }, {
+            dataSource: [{ size: 126 }, { size: 126 }, { visible: true }],
+            expectedLayout: ['12.6', '12.6', '74.8'],
+            expectedItemSizes: [126, 126, 748],
+        }, {
+            dataSource: [{ size: '504' }, { size: '5000px' }],
             expectedLayout: ['50', '50'],
-            expectedItemSizes: [126, 126, undefined],
+            expectedItemSizes: [504, 504],
         }, {
-            dataSource: [{ size: '500' }, { size: '5000px' } ],
-            expectedLayout: ['9.09091', '90.9091'],
-            expectedItemSizes: ['500', '5000px'],
-        }, {
-            dataSource: [{ size: '5000px' }, { size: '100px' } ],
-            expectedLayout: ['98.0392', '1.96078'],
-            expectedItemSizes: ['5000px', '100px'],
-        }, {
-            dataSource: [{ size: '504232px' }, { } ],
+            dataSource: [{ size: '5000px' }, { size: '100px' }],
             expectedLayout: ['100', '0'],
-            expectedItemSizes: ['504232px', undefined],
+            expectedItemSizes: [1008, 0],
         }, {
-            dataSource: [ { size: 0 }, { size: 128 } ],
+            dataSource: [{ size: '504232px' }, { }],
+            expectedLayout: ['100', '0'],
+            expectedItemSizes: [1008, 0],
+        }, {
+            dataSource: [{ size: 0 }, { size: 128 }],
             expectedLayout: ['0', '100'],
-            expectedItemSizes: [0, 128],
+            expectedItemSizes: [0, 1008],
         }, {
-            dataSource: [ { size: 0 }, { size: 2 } ],
+            dataSource: [{ size: 2 }, { size: 128 }],
+            expectedLayout: ['0.198413', '99.8016'],
+            expectedItemSizes: [2, 1006],
+        }, {
+            dataSource: [{ size: 0 }, { size: 200 }, { }],
+            expectedLayout: ['0', '20', '80'],
+            expectedItemSizes: [0, 200, 800],
+        }, {
+            dataSource: [{ size: '0px' }, { size: 128 }],
             expectedLayout: ['0', '100'],
-            expectedItemSizes: [0, 2],
+            expectedItemSizes: [0, 1008],
         }, {
-            dataSource: [ { size: '0px' }, { size: 128 } ],
-            expectedLayout: ['0', '100'],
-            expectedItemSizes: ['0px', 128],
-        }, {
-            dataSource: [{ size: '25%' }, { size: '25%' }, { size: '248px' }, { } ],
+            dataSource: [{ size: '25%' }, { size: '25%' }, { size: '248px' }, { }],
             expectedLayout: ['25.6048', '25.6048', '25', '23.79035'],
-            expectedItemSizes: ['25%', '25%', '248px', undefined],
+            expectedItemSizes: [254, 254, 248, 236],
         }, {
-            dataSource: [{ size: '50%' }, { size: '25%' }, { size: 248 }, { } ],
-            expectedLayout: ['49.3952', '25.6048', '25', '0'],
-            expectedItemSizes: ['50%', '25%', 248, undefined]
+            dataSource: [{ size: '50%' }, { size: '25%' }, { size: 248 }, { }],
+            expectedLayout: ['51.2097', '25.6048', '23.1855', '0'],
+            expectedItemSizes: [508, 254, 230, 0]
         }, {
-            dataSource: [{ size: '30%' }, { size: '60%' }, { size: '10%' }],
-            expectedLayout: ['30', '60', '10'],
-            expectedItemSizes: ['30%', '60%', '10%']
+            dataSource: [{ size: '40%' }, { size: '50%' }, { size: '10%' }],
+            expectedLayout: ['40.64', '50.8', '8.56'],
+            expectedItemSizes: [406.398, 508, 85.6016]
         }, {
-            dataSource: [{ }, { }, { }, { } ],
+            dataSource: [{ }, { }, { }, { }],
             expectedLayout: ['25', '25', '25', '25'],
-            expectedItemSizes: [undefined, undefined, undefined, undefined]
+            expectedItemSizes: [248, 248, 248, 248]
         }, {
-            dataSource: [{ }, { size: '10%' }, { }, { } ],
+            dataSource: [{ }, { size: '10%' }, { }, { }],
             expectedLayout: ['29.92', '10.24', '29.92', '29.92'],
-            expectedItemSizes: [undefined, '10%', undefined, undefined]
+            expectedItemSizes: [296.797, 101.602, 296.797, 296.797]
         }, {
-            dataSource: [{ size: '30%' }, { }, { size: '50%' }, { } ],
+            dataSource: [{ size: '30%' }, { }, { size: '50%' }, { }],
             expectedLayout: ['30.72', '9.04', '51.2', '9.04'],
-            expectedItemSizes: ['30%', undefined, '50%', undefined]
+            expectedItemSizes: [304.797, 89.6016, 508, 89.6016]
         }, {
-            dataSource: [{ size: '30%' }, { }, { size: '30%' } ],
+            dataSource: [{ size: '30%' }, { }, { size: '30%' }],
             expectedLayout: ['30.4762', '39.0476', '30.4762'],
-            expectedItemSizes: ['30%', undefined, '30%']
+            expectedItemSizes: [304.797, 390.398, 304.797]
         }, {
-            dataSource: [{ }, { visible: false }, { size: '50%' }, { } ],
-            expectedLayout: ['24.6032', '50.7937', '24.6032'],
-            expectedItemSizes: [undefined, undefined, '50%', undefined]
+            dataSource: [{ }, { visible: false }, { size: '50%' }, { }],
+            expectedLayout: ['24.6032', '0', '50.7937', '24.6032'],
+            expectedItemSizes: [246, 0, 508, 246]
         }, {
-            dataSource: [{ visible: false }, { visible: false }, { size: '50%' }, { } ],
-            expectedLayout: ['50.3937', '49.6063'],
-            expectedItemSizes: [undefined, undefined, '50%', undefined]
+            dataSource: [{ visible: false }, { visible: false }, { size: '50%' }, { }],
+            expectedLayout: ['0', '0', '50.3937', '49.6063'],
+            expectedItemSizes: [0, 0, 508, 500]
         }, {
-            dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false } ],
-            expectedLayout: ['40', '60'],
-            expectedItemSizes: ['40%', '60%', undefined]
+            dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false }],
+            expectedLayout: ['40.3175', '59.6825', '0'],
+            expectedItemSizes: [406.398, 601.602, 0]
         }, {
-            dataSource: [{ size: '30%' }, { size: '200%' } ],
-            expectedLayout: ['13.0435', '86.9565'],
-            expectedItemSizes: ['30%', '200%']
+            dataSource: [{ size: '30%' }, { size: '200%' }],
+            expectedLayout: ['30.2381', '69.7619'],
+            expectedItemSizes: [304.797, 703.203]
         }, {
-            dataSource: [{ size: '320%' }, { size: '200%' } ],
-            expectedLayout: ['61.5385', '38.4615'],
-            expectedItemSizes: ['320%', '200%']
+            dataSource: [{ size: '10%' }, { size: '10%' }],
+            expectedLayout: ['10.0794', '89.9206'],
+            expectedItemSizes: [101.602, 906.398]
         }, {
-            dataSource: [{ size: '10%' }, { size: '10%' }, { visible: false }],
-            expectedLayout: ['50', '50'],
-            expectedItemSizes: ['10%', '10%', undefined]
+            dataSource: [{ size: '320%' }, { size: '200%' }],
+            expectedLayout: ['100', '0'],
+            expectedItemSizes: [1008, 0]
         }, {
-            dataSource: [{ size: '30%' }, { size: '20%' }, { }, { size: '20%' }, { } ],
+            dataSource: [{ size: '10%' }, { size: '10%' }, { visible: false }, { visible: false }],
+            expectedLayout: ['10.0794', '89.9206', '0', '0'],
+            expectedItemSizes: [101.602, 906.398, 0, 0]
+        }, {
+            dataSource: [{ size: '30%' }, { size: '20%' }, { }, { size: '20%' }, { }],
             expectedLayout: ['30.9677', '20.6452', '13.871', '20.6452', '13.871'],
-            expectedItemSizes: ['30%', '20%', undefined, '20%', undefined]
+            expectedItemSizes: [304.797, 203.203, 136.398, 203.203, 136.398]
         }, {
-            dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' } ],
-            expectedLayout: ['46.1538', '38.4615', '15.3846'],
-            expectedItemSizes: ['30%', '25%', '10%']
+            dataSource: [{ size: '30%' }, { size: '25%' }, { size: '10%' }],
+            expectedLayout: ['30.48', '25.4', '44.12'],
+            expectedItemSizes: [304.797, 254, 441.203]
         }, {
-            dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' } ],
-            expectedLayout: [ '71.4286', '28.5714'],
-            expectedItemSizes: ['30%', '25%', '10%']
+            dataSource: [{ size: '30%', visible: false }, { size: '25%' }, { size: '10%' }],
+            expectedLayout: ['0', '25.1984', '74.8016'],
+            expectedItemSizes: [0, 254, 754]
         }, {
-            dataSource: [{ size: '0%' }, { size: '1%' } ],
+            dataSource: [{ size: '0%' }, { size: '1%' }],
             expectedLayout: ['0', '100'],
-            expectedItemSizes: ['0%', '1%']
+            expectedItemSizes: [0, 1008]
         }, {
-            dataSource: [{ }, { size: '1%' } ],
+            dataSource: [{ }, { size: '1%' }],
             expectedLayout: ['99', '1'],
-            expectedItemSizes: [undefined, '1%']
+            expectedItemSizes: [997.844, 10.1562]
         }, {
             dataSource: [{ visible: false }, { }, { }],
-            expectedLayout: ['50', '50'],
-            expectedItemSizes: [undefined, undefined, undefined]
+            expectedLayout: ['0', '50', '50'],
+            expectedItemSizes: [0, 504, 504]
         }, {
             dataSource: [{ }, { visible: false }, { }],
-            expectedLayout: ['50', '50'],
-            expectedItemSizes: [undefined, undefined, undefined]
+            expectedLayout: ['50', '0', '50'],
+            expectedItemSizes: [504, 0, 504]
         }, {
             dataSource: [{ }, { }, { visible: false }],
-            expectedLayout: ['50', '50'],
-            expectedItemSizes: [undefined, undefined, undefined]
-        },
-        // TODO: incorrect synchronization
-        // {
-        //     dataSource: [{ size: 'auto' }, { }, { size: 'inherit' }],
-        //     expectedLayout: ['50', '50', '33'],
-        //     expectedItemSizes: [undefined, undefined, undefined]
-        // },
-        {
+            expectedLayout: ['50', '50', '0'],
+            expectedItemSizes: [504, 504, 0]
+        }, {
+            dataSource: [{ size: 'auto' }, { }, { size: 'inherit' }],
+            expectedLayout: ['33.3333', '33.3333', '33.3333'],
+            expectedItemSizes: [333.336, 333.336, 333.336]
+        }, {
             dataSource: [{ }, { size: '100%' }, { }],
             expectedLayout: ['0', '100', '0'],
-            expectedItemSizes: [undefined, '100%', undefined]
-        },
-        {
+            expectedItemSizes: [0, 1000, 0]
+        }, {
+            dataSource: [{ visible: false }, { visible: false, size: '20%' }, { visible: false }],
+            expectedLayout: ['0', '0', '0'],
+            expectedItemSizes: [0, 0, 0]
+        }, {
             dataSource: [{ }, { size: '150%' }, { }],
             expectedLayout: ['0', '100', '0'],
-            // TODO: incorrect synchronization
-            expectedItemSizes: [undefined, '150%', undefined]
-        },
-        // {
-        //     dataSource: [{ }, { size: '50$' }, { }],
-        //     expectedLayout: ['0', '100', '0'],
-        //     // TODO: incorrect synchronization
-        //     expectedItemSizes: [undefined, '150%', undefined]
-        // },
-        // TODO: 50px% should be incorrect value // check assertion
-        // {
-        //     dataSource: [{ }, { size: '50px%' }, { }],
-        //     expectedLayout: ['24.6', '50.8', '24.6'],
-        //     // TODO: incorrect synchronization
-        //     expectedItemSizes: [undefined, '150%', undefined]
-        // },
-        // TODO: 50%px should be incorrect value // check assertion
-        // {
-        //     dataSource: [{ }, { size: '50%px' }, { }],
-        //     expectedLayout: ['47.5', '5', '47.5'],
-        //     // TODO: incorrect synchronization
-        //     expectedItemSizes: [undefined, '150%', undefined]
-        // },
-        // TODO: 50vh shouldn't affect on layout
-        // {
-        //     dataSource: [{ }, { size: '50vh' }, { }],
-        //     expectedLayout: ['33.333', '33.333', '33.333'],
-        //     // TODO: incorrect synchronization
-        //     expectedItemSizes: [undefined, '150%', undefined]
-        // },
-        // TODO: 10em shouldn't affect on layout
-        // {
-        //     dataSource: [{ }, { size: '10em' }, { }],
-        //     expectedLayout: ['33.333', '33.333', '33.333'],
-        //     // TODO: incorrect synchronization
-        //     expectedItemSizes: [undefined, '150%', undefined]
-        // },
-        // TODO: 10px10px% shouldn't affect on layout
-        {
-            dataSource: [{ }, { size: '10px10px%' }, { }],
-            expectedLayout: ['44.92', '10.16', '44.92'],
-            // TODO: incorrect synchronization
-            expectedItemSizes: [undefined, '10px10px%', undefined]
-        },
-        // TODO
-        // {
-        //     dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { } ],
-        //     expectedLayout: ['20', '10', '70', '20', '0'],
-        //     expectedItemSizes: ['30%', '20%', '300%', '20%', undefined]
-        // },
+            expectedItemSizes: [0, 1000, 0]
+        }, {
+            dataSource: [{ size: '30%' }, { size: 200 }, { size: '300%' }, { size: '20%' }],
+            expectedLayout: ['30.7258', '20.1613', '49.1129', '0'],
+            expectedItemSizes: [304.797, 200, 487.203, 0]
+        }, {
+            dataSource: [{ size: '30%' }, { size: '20%' }, { size: '300%' }, { size: '20%' }, { }],
+            expectedLayout: ['30.9756', '20.6504', '48.374', '0', '0'],
+            expectedItemSizes: [304.797, 203.203, 476, 0, 0]
+        }, {
+            dataSource: [{ size: 300 }, { size: '5000' }, { }, { }, { }],
+            expectedLayout: ['30.4878', '69.5122', '0', '0', '0'],
+            expectedItemSizes: ['300', '684', 0, 0, 0]
+        }
         ].forEach(({ dataSource, expectedLayout, expectedItemSizes }) => {
             QUnit.test(`pane size option, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
                 this.reinit({
@@ -614,7 +685,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             const dimension = orientation === 'horizontal' ? 'width' : 'height';
             assert.strictEqual(this.getPanes().eq(0).css(dimension), '400px', 'pane[0].size has exact size');
 
-            this.checkItemSizes([400, undefined, undefined, undefined]);
+            this.checkItemSizes([400, 193.336, 193.336, 193.336]);
             this.assertLayout(['40.8163', '19.7279', '19.7279', '19.7279']);
         });
 
@@ -632,7 +703,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             assert.strictEqual(this.getPanes().eq(0).css(dimension), '300px', 'pane[0].size has exact size');
 
-            this.checkItemSizes(['50%', undefined, undefined, undefined]);
+            this.checkItemSizes([300, 92, 92, 92]);
             this.assertLayout(['52.0833', '15.9722', '15.9722', '15.9722']);
         });
     });
@@ -640,55 +711,43 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     [{
         items: [{ collapsed: true }, {}],
         expectedLayout: ['0', '100'],
-    },
-    {
+    }, {
         items: [{}, { collapsed: true }],
         expectedLayout: ['100', '0'],
-    },
-    {
+    }, {
         items: [{ collapsed: true }, { collapsed: true }, { collapsed: true }],
         expectedLayout: ['0', '0', '0'],
-    },
-    {
+    }, {
         items: [{ size: 200 }, { collapsed: true }, { size: 200 }],
-        expectedLayout: ['50', '0', '50'],
-    },
-    {
+        expectedLayout: ['20.0803', '0', '79.9197'],
+    }, {
         items: [{ visible: false }, { collapsed: true }],
         expectedLayout: ['0', '0'],
-    },
-    {
+    }, {
         items: [{}, { visible: false }, { collapsed: true }],
         expectedLayout: ['100', '0', '0'],
-    },
-    {
+    }, {
         items: [{}, { collapsed: true }, {}],
         expectedLayout: ['50', '0', '50'],
-    },
-    {
+    }, {
         items: [{}, { collapsed: true, collapsedSize: '9.9%' }, {}],
         expectedLayout: ['45', '10', '45'],
-    },
-    {
+    }, {
         items: [{}, { collapsed: true, collapsedSize: 100 }, {}],
         expectedLayout: ['45', '10', '45'],
-    },
-    {
+    }, {
         items: [{}, { collapsed: true, collapsedSize: 100 }, { collapsed: true, collapsedSize: 100 }],
         expectedLayout: ['80', '10', '10'],
-    },
-    {
+    }, {
         items: [{ collapsed: true, collapsedSize: 100 }, {}],
         expectedLayout: ['10', '90'],
-    },
-    {
+    }, {
         items: [{}, { collapsed: true, collapsedSize: 100 }],
         expectedLayout: ['90', '10'],
-    },
-    {
+    }, {
         items: [{ collapsed: true, collapsedSize: 100 }, { visible: false }, {}],
-        expectedLayout: ['10', '90'],
-    },].forEach(({ items, expectedLayout }) => {
+        expectedLayout: ['10', '0', '90'],
+    }].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Panes with collapsed/collapsedSize, items: ${JSON.stringify(items)}`, function(assert) {
             this.reinit({ items });
 
@@ -699,7 +758,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     ['prev', 'next'].forEach((scenario) => {
         QUnit.test(`Pane collapse ${scenario} on runtime (without collapsedSize)`, function(assert) {
             this.reinit({
-                items: [{ collapsible: true }, { collapsible: true } ],
+                items: [{ collapsible: true }, { collapsible: true }],
             });
 
             const expectedLayout = scenario === 'prev' ? ['0', '100'] : ['100', '0'];
@@ -715,7 +774,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         QUnit.test(`Pane collapse ${scenario} on runtime (with collapsedSize)`, function(assert) {
             this.reinit({
-                items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ],
+                items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }],
             });
 
             const expectedLayout = scenario === 'prev' ? ['10', '90'] : ['90', '10'];
@@ -748,7 +807,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     },
     {
         items: [{ visible: false }, { collapsible: true }, { collapsible: true }],
-        expectedLayout: ['0', '100'],
+        expectedLayout: ['0', '0', '100'],
     }].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Panes collapse by double click: ${JSON.stringify(items)}`, function(assert) {
             this.reinit({ items });
@@ -771,11 +830,11 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true }],
-        expectedLayout: ['0', '100'],
+        expectedLayout: ['0', '0', '100'],
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true, collapsedSize: 100 }, { collapsible: true }],
-        expectedLayout: ['10', '90'],
+        expectedLayout: ['0', '10', '90'],
     }].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Runtime collapse (collapse prev button): ${JSON.stringify(items)}`, function(assert) {
             this.reinit({ items });
@@ -800,11 +859,11 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true }],
-        expectedLayout: ['100', '0'],
+        expectedLayout: ['0', '100', '0'],
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true, collapsedSize: 100 }],
-        expectedLayout: ['90', '10'],
+        expectedLayout: ['0', '90', '10'],
     }
     ].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Runtime collapse (collapse next button): ${JSON.stringify(items)}`, function(assert) {
@@ -889,12 +948,12 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         this.instance.option('items[0].collapsed', true);
 
-        this.assertLayout(['0', '50', '50']);
+        this.assertLayout(['0', '33.3333', '66.6667']);
     });
 
     QUnit.test('Pane with collapsed=true should have more priority than pane with maxSize', function(assert) {
         this.reinit({
-            items: [ { collapsed: true }, { maxSize: '50%' } ],
+            items: [{ collapsed: true }, { maxSize: '50%' }],
         });
 
         const $leftPane = this.getPanes().first();
@@ -961,7 +1020,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ }, { visible: false }, {}]
             });
 
-            this.assertLayout(['50', '50']);
+            this.assertLayout(['50', '0', '50']);
         });
 
         QUnit.test(`first and second items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
@@ -974,7 +1033,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(-25, -25).dragEnd();
 
-            this.assertLayout(['12.5', '37.5', '25', '25']);
+            this.assertLayout(['12.5', '37.5', '0', '25', '25']);
         });
 
         QUnit.test(`last items resize should work when middle item is invisible, ${orientation} orientation`, function(assert) {
@@ -987,7 +1046,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(this.getResizeHandles().eq(2));
             pointer.start().dragStart().drag(-25, -25).dragEnd();
 
-            this.assertLayout(['25', '25', '12.5', '37.5']);
+            this.assertLayout(['25', '25', '0', '12.5', '37.5']);
         });
 
         QUnit.test(`items should be resized when their neighbour item is not visible, ${orientation} orientation`, function(assert) {
@@ -1000,7 +1059,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
-            this.assertLayout(['75', '25']);
+            this.assertLayout(['75', '0', '25']);
         });
 
         QUnit.test(`items should be resized when their neighbour item contains splitter, ${orientation} orientation`, function(assert) {
@@ -1028,7 +1087,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 dataSource: [{ size: '400px' }, { }, { }, { }]
             }, '#splitterInContainer');
 
-            this.checkItemSizes(['400px', undefined, undefined, undefined]);
+            this.checkItemSizes([400, 200, 200, 200]);
             this.assertLayout(['40', '20', '20', '20'], 1);
         });
 
@@ -1059,7 +1118,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             const pointer = pointerMock(this.getResizeHandles().eq(0));
             pointer.start().dragStart().drag(50, 50).dragEnd();
 
-            this.assertLayout(['75', '25']);
+            this.assertLayout(['0', '75', '25']);
         });
 
         QUnit.test(`splitter should have no resize handles if only 1 item is visible, ${orientation} orientation`, function(assert) {
@@ -1076,7 +1135,7 @@ QUnit.module('Resizing', moduleConfig, () => {
         QUnit.test(`splitter should have 3 resize handles if 4 out of 6 are visible, ${orientation} orientation`, function(assert) {
             this.reinit({
                 orientation,
-                dataSource: [ { }, { }, { visible: false }, { }, { }, { visible: false }]
+                dataSource: [{ }, { }, { visible: false }, { }, { }, { visible: false }]
             });
 
             const resizeHandles = this.$element.find(`.${RESIZE_HANDLE_CLASS}`);
@@ -1131,9 +1190,9 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     [
-        { scenario: 'left', items: [ { resizable: false }, { } ] },
-        { scenario: 'right', items: [ { }, { resizable: false } ] },
-        { scenario: 'left and right', items: [ { resizable: false }, { resizable: false } ] }
+        { scenario: 'left', items: [{ resizable: false }, { }] },
+        { scenario: 'right', items: [{ }, { resizable: false }] },
+        { scenario: 'left and right', items: [{ resizable: false }, { resizable: false }] }
     ].forEach(({ scenario, items }) => {
         QUnit.test(`resize should not work when ${scenario} pane has resizable=false`, function(assert) {
             this.reinit({
@@ -1151,7 +1210,7 @@ QUnit.module('Resizing', moduleConfig, () => {
     QUnit.test('resize should work when pane resizable is enabled on runtime', function(assert) {
         this.reinit({
             width: 208, height: 208,
-            items: [ { resizable: false }, { } ],
+            items: [{ resizable: false }, { }],
         });
 
         this.instance.option('items[0].resizable', true);
@@ -1165,7 +1224,7 @@ QUnit.module('Resizing', moduleConfig, () => {
     QUnit.test('resize should not work when pane resizable is disabled on runtime', function(assert) {
         this.reinit({
             width: 208, height: 208,
-            items: [ { }, { } ],
+            items: [{ }, { }],
         });
 
         this.instance.option('items[0].resizable', false);
@@ -1412,7 +1471,7 @@ QUnit.module('Resizing', moduleConfig, () => {
     });
 
     QUnit.test('resize item with nested splitter should resize all panes beyound neighbour', function(assert) {
-        this.reinit({ width: 208, dataSource: [ { splitter: { dataSource: [{ }] } }, { }, { }, { splitter: { dataSource: [{ }] } }] });
+        this.reinit({ width: 208, dataSource: [{ splitter: { dataSource: [{ }] } }, { }, { }, { splitter: { dataSource: [{ }] } }] });
 
         const pointer = pointerMock(this.getResizeHandles().eq(2));
         pointer.start().dragStart().drag(-400, 0).dragEnd();
@@ -1425,13 +1484,13 @@ QUnit.module('Resizing', moduleConfig, () => {
             width: 1016, dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
         });
 
-        this.checkItemSizes(['300px', '600px', '100px']);
+        this.checkItemSizes([300, 600, 100]);
         this.assertLayout(['30', '60', '10']);
 
         this.instance.option('items[0].size', 100);
 
-        this.checkItemSizes([125, 750, 125]);
-        this.assertLayout(['12.5', '75', '12.5']);
+        this.checkItemSizes([100, 600, 300]);
+        this.assertLayout(['10', '60', '30']);
     });
 
     QUnit.test('Changing the runtime item minSize option should update the layout, if minSize > size', function(assert) {
@@ -1439,7 +1498,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             width: 1016, dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
         });
 
-        this.checkItemSizes(['300px', '600px', '100px']);
+        this.checkItemSizes([300, 600, 100]);
         this.assertLayout(['30', '60', '10']);
 
         this.instance.option('items[0].minSize', 500);
@@ -1453,7 +1512,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             width: 1016, dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
         });
 
-        this.checkItemSizes(['300px', '600px', '100px']);
+        this.checkItemSizes([300, 600, 100]);
         this.assertLayout(['30', '60', '10']);
 
         this.instance.option('items[0].minSize', 100);
@@ -1467,7 +1526,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             width: 1016, dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
         });
 
-        this.checkItemSizes(['300px', '600px', '100px']);
+        this.checkItemSizes([300, 600, 100]);
         this.assertLayout(['30', '60', '10']);
 
         this.instance.option('items[0].maxSize', 100);
@@ -1481,7 +1540,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             width: 1016, dataSource: [{ size: '300px' }, { size: '600px' }, { size: '100px' }],
         });
 
-        this.checkItemSizes(['300px', '600px', '100px']);
+        this.checkItemSizes([300, 600, 100]);
         this.assertLayout(['30', '60', '10']);
 
         this.instance.option('items[0].maxSize', 400);
@@ -1493,7 +1552,7 @@ QUnit.module('Resizing', moduleConfig, () => {
     QUnit.test('resize should work correctly after orientation runtime change', function(assert) {
         this.reinit({
             width: 208, height: 208,
-            items: [ { }, { } ],
+            items: [{ }, { }],
         });
 
         this.instance.option('orientation', 'vertical');
@@ -1567,7 +1626,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', ' 100px', '100px ', ' 11 ', '12', -20, NaN, null, undefined].forEach((separatorSize) => {
             QUnit.test(`Resize handle size should fallback to default if separatorSize is incorrect on init (orientation=${orientation})`, function(assert) {
                 this.reinit({
-                    dataSource: [{ size: '500px' }, { size: '500px' }],
+                    dataSource: [{ size: '496px' }, { size: '496px' }],
                     orientation,
                     separatorSize
                 });

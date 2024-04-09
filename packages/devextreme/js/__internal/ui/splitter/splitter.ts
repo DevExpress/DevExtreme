@@ -41,14 +41,14 @@ import {
   convertSizeToRatio,
   findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
-  getDefaultLayout,
   getElementSize,
   getNextLayout,
-  getVisibleItemsCount,
+  // getVisibleItemsCount,
   isElementVisible,
   setFlexProp,
-  validateLayout,
+  // validateLayout,
 } from './utils/layout';
+import { getDefaultLayout } from './utils/layout_default';
 import type {
   FlexProperty, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
 } from './utils/types';
@@ -198,6 +198,8 @@ class Splitter extends (CollectionWidget as any) {
     if (isElementVisible(this.$element().get(0))) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyFlexGrowFromLayout(this._layout);
+
+      this._updatePaneSizesWithOuterWidth();
     } else {
       this._shouldRecalculateLayout = true;
     }
@@ -249,7 +251,7 @@ class Splitter extends (CollectionWidget as any) {
 
     const itemElement = $itemFrame.get(0);
 
-    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / getVisibleItemsCount(this.option('items')));
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length); // getVisibleItemsCount(this.option('items')));
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
@@ -683,11 +685,8 @@ class Splitter extends (CollectionWidget as any) {
 
     const defaultLayout = getDefaultLayout(this._itemRestrictions);
 
-    if (items && items.length === 1) {
-      return defaultLayout;
-    }
-
-    return validateLayout(defaultLayout, this._itemRestrictions);
+    // return validateLayout(defaultLayout, this._itemRestrictions);
+    return defaultLayout;
   }
 
   _updateItemsRestrictions(items: Item[]): void {
@@ -701,7 +700,7 @@ class Splitter extends (CollectionWidget as any) {
     items.forEach((item) => {
       this._itemRestrictions.push({
         resizable: item.resizable !== false,
-        visible: item.visible,
+        visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
         size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
