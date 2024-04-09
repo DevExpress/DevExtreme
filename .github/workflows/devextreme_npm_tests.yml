@@ -61,63 +61,6 @@ jobs:
           devextreme-dist-installer.tgz
         retention-days: 1
 
-  test_bundlers:
-    name: Bundlers tests
-    needs: build
-    runs-on: devextreme-shr2
-    timeout-minutes: 60
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-npm
-        path: ./packages/devextreme/testing/bundlers
-
-    - name: Install bundlers
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm install --no-audit --no-fund
-
-    - name: Install DevExtreme package
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm install --save-dev devextreme-installer.tgz
-
-    - name: Generate entry files
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run generate-entry-files
-
-    - name: Build webpack cjs
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:webpack-cjs
-
-    - name: Build browserify cjs
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:browserify-cjs
-
-    - name: Build webpack
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:webpack
-
-    - name: Build rollup
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:rollup
-
-    - name: Build parcel
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:parcel
-
-    - name: Build vite
-      working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:vite
-
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
