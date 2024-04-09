@@ -33,7 +33,6 @@ QUnit.testStart(() => {
     $('#qunit-fixture').html(markup);
 });
 
-const TAGBOX_CLASS = 'dx-tagbox';
 const LIST_CLASS = 'dx-list';
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
@@ -7783,11 +7782,11 @@ QUnit.module('accessibility', () => {
         });
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
         const $multiTagContainer = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
-        const totalSelectedItems = $tagBox.dxTagBox('instance').option().selectedItems.length;
+        const selectedItemsLength = $tagBox.dxTagBox('instance').option('selectedItems').length;
 
         assert.strictEqual($parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'aria-labelledby attribute contains multitag id');
         assert.strictEqual($multiTagContainer.attr('role'), 'button', 'role attribute is correct');
-        assert.strictEqual($multiTagContainer.attr('aria-label'), `${totalSelectedItems - 1} more`, 'aria-label attribute is correct');
+        assert.strictEqual($multiTagContainer.attr('aria-label'), `${selectedItemsLength - 1} more`, 'aria-label attribute is correct');
         assert.strictEqual($multiTagContainer.attr('aria-roledescription'), messageLocalization.format('dxTagBox-tagRoleDescription'), 'aria-roledescription attribute is correct');
     });
 
@@ -7806,7 +7805,7 @@ QUnit.module('accessibility', () => {
         assert.strictEqual($parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'aria-labelledby attribute contains multitag id');
     });
 
-    QUnit.test('check if tagBox is showing the right count of tags correctly if showMultiTagOnly=true and maxDisplay tags is 2', function(assert) {
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=true and maxDisplay tags is 2', function(assert) {
         const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
         const $tagBox = $('#tagBox').dxTagBox({
             items: sampleData,
@@ -7815,12 +7814,17 @@ QUnit.module('accessibility', () => {
             showMultiTagOnly: true,
         });
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
 
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
+        const $tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
+
+        assert.strictEqual(simpleTagsLength, 0, 'root element has no simple tag');
+        assert.strictEqual(multiTagsLength, 1, 'root element contains one multitag');
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = true and maxDisplayTags = 2');
     });
 
-    QUnit.test('check if tagBox is showing the right count of tags correctly if showMultiTagOnly=true and maxDisplayTags is 4', function(assert) {
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=true and maxDisplayTags is 4', function(assert) {
         const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
         const $tagBox = $('#tagBox').dxTagBox({
             items: sampleData,
@@ -7828,13 +7832,17 @@ QUnit.module('accessibility', () => {
             maxDisplayedTags: 4,
             showMultiTagOnly: true,
         });
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
+        const $tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
 
+        assert.strictEqual(simpleTagsLength, 4, 'root element contains four simple tag');
+        assert.strictEqual(multiTagsLength, 0, 'root element has no multitag');
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = true and maxDisplayTags = 4');
     });
 
-    QUnit.test('check if tagBox is showing the right count of tags correctly if showMultiTagOnly=false and maxDisplayTags is 2', function(assert) {
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=false and maxDisplayTags is 2', function(assert) {
         const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
         const $tagBox = $('#tagBox').dxTagBox({
             items: sampleData,
@@ -7842,13 +7850,17 @@ QUnit.module('accessibility', () => {
             maxDisplayedTags: 2,
             showMultiTagOnly: false,
         });
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
+        const $tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
 
+        assert.strictEqual(simpleTagsLength, 1, 'root element contains 1 simple tag');
+        assert.strictEqual(multiTagsLength, 1, 'root element contains one multitag');
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = false and maxDisplayTags = 2');
     });
 
-    QUnit.test('check if tagBox is showing the right count of tags correctly if showMultiTagOnly=false and maxDisplayTags is 4', function(assert) {
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=false and maxDisplayTags is 4', function(assert) {
         const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
         const $tagBox = $('#tagBox').dxTagBox({
             items: sampleData,
@@ -7856,9 +7868,13 @@ QUnit.module('accessibility', () => {
             maxDisplayedTags: 4,
             showMultiTagOnly: false,
         });
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
         const $parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
-        const $tagIds = $tagBox.find('.dx-tag').map((_, element) => $(element).attr('id')).get();
+        const $tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
 
+        assert.strictEqual(simpleTagsLength, 4, 'root element contains four simple tag');
+        assert.strictEqual(multiTagsLength, 0, 'root element has no multitag');
         assert.strictEqual($parentTagContainerIds.every(item => $tagIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = false and maxDisplayTags = 4');
     });
 

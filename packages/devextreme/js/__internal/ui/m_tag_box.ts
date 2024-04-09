@@ -741,12 +741,10 @@ const TagBox = (SelectBox as any).inherit({
       selectedItems: this.option('selectedItems'),
     };
 
-    let tagData = '';
-
     this._multiTagPreparingAction(args);
 
     // @ts-expect-error
-    tagData = args.text;
+    const tagText = args.text;
 
     // @ts-expect-error
     if (args.cancel) {
@@ -763,7 +761,7 @@ const TagBox = (SelectBox as any).inherit({
       container: getPublicElement($tag),
     });
 
-    this._setTagAria($tag, tagData);
+    this._setTagAria($tag, tagText);
     this._updateElementAria(tagId);
     return $tag;
   },
