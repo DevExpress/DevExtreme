@@ -55,27 +55,80 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
+// const calculateTimezoneByValue = (timezone, date = new Date()) => {
+//   // NOTE: This check could be removed. We don't support numerical timezones
+//   if (typeof timezone === 'string') {
+//     const dateUtc = createUTCDate(date);
+//     const result = timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+
+//     if (timezone !== undefined) {
+//       console.log(result);
+//     }
+//     return result;
+//   }
+//   if (timezone !== undefined) {
+//     console.log(timezone);
+//   }
+//   return timezone;
+// };
+
+// const calculateTimezoneByValue = (timeZone, date = new Date()) => {
+//   if (!timeZone) {
+//     return undefined;
+//   }
+
+//   const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+//   if (timeZone === currentTimezone) {
+//     return date.getTimezoneOffset() / -60;
+//   }
+
+//   const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
+//   let tzDate;
+//   try {
+//     tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
+//   } catch (e) {
+//     return undefined;
+//   }
+//   const localDST = (tzDate.getTimezoneOffset() - utcDate.getTimezoneOffset()) / 60;
+//   const result = (tzDate.getTime() - utcDate.getTime()) / 60 / 1000 / 60;
+//   return result - localDST;
+// };
+
 const calculateTimezoneByValue = (timeZone, date = new Date()) => {
   if (!timeZone) {
     return undefined;
   }
 
-  const currentTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-  if (timeZone === currentTimezone) {
-    return date.getTimezoneOffset() / -60;
-  }
-
-  const utcDate = new Date(date.toLocaleString('en-US', { timeZone: 'UTC' }));
-  let tzDate;
+  let dateTimeFormat;
   try {
-    tzDate = new Date(date.toLocaleString('en-US', { timeZone }));
+    dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      // @ts-expect-error
+      timeZoneName: 'longOffset',
+    });
   } catch (e) {
     return undefined;
   }
-  const localDST = (tzDate.getTimezoneOffset() - utcDate.getTimezoneOffset()) / 60;
-  const result = (tzDate.getTime() - utcDate.getTime()) / 60 / 1000 / 60;
-  return result - localDST;
+
+  // GMT±XX:YY
+  const offset: string = dateTimeFormat.formatToParts(date)
+    .filter((part) => part.type === 'timeZoneName')
+    .map((p) => p.value)[0];
+
+  if (offset === 'GMT') {
+    return 0;
+  }
+
+  const isMinus = offset.substring(3, 4) === '-';
+  const hours = offset.substring(4, 6);
+  const minutes = offset.substring(7, 9);
+
+  const result = parseInt(hours, 10) + parseInt(minutes, 10) / 60;
+  return isMinus ? -result : result;
 };
+
+// (window as any).calculateTimezoneByValue = calculateTimezoneByValue;
+// (window as any).calculateTimezoneByValueNew = calculateTimezoneByValueNew;
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => {
