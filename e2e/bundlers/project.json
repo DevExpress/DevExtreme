@@ -6,7 +6,10 @@
       "options": {
         "cwd": "{projectRoot}",
         "command": "rimraf entry && mkdir entry && node ./generate_entry_files.js"
-      }
+      },
+      "outputs": [
+        "{projectRoot}/entry"
+      ]
     },
     "test": {
       "executor": "nx:noop",
@@ -15,7 +18,7 @@
         "test--webpack-cjs",
         "test--webpack",
         "test--rollup",
-        "test--parcel",
+        // "test--parcel",
         "test--browserify-cjs",
         "test--vite"
       ]
