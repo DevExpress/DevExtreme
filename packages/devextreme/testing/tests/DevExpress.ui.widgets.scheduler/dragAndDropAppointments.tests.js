@@ -2324,7 +2324,7 @@ module('Appointment dragging', {
 
             try {
                 const tasks = [
-                    { text: 'Task', startDate: new Date(2015, 2, 16), endDate: new Date(2015, 2, 16, 0, 30) }
+                    { text: 'Task', startDate: new Date(2015, 2, 15), endDate: new Date(2015, 2, 15, 0, 30) }
                 ];
                 const dataSource = new DataSource({
                     store: tasks
