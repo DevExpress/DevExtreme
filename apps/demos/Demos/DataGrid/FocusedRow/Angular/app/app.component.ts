@@ -2,7 +2,7 @@ import {
   NgModule, Component, ViewChild, enableProdMode,
 } from '@angular/core';
 import {
-  BrowserModule, BrowserTransferStateModule, DomSanitizer, SafeHtml,
+  BrowserModule, DomSanitizer, SafeHtml,
 } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxNumberBoxComponent, DxNumberBoxModule, DxCheckBoxModule } from 'devextreme-angular';
@@ -113,7 +113,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxDataGridModule,
     DxNumberBoxModule,
     DxCheckBoxModule,
