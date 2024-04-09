@@ -69,6 +69,58 @@ QUnit.module('Render', moduleConfig, () => {
         assert.strictEqual($items.eq(1).text(), 'Pane_2', 'second pane was rendered');
     });
 
+
+    [true, false].forEach(allowKeyboardNavigation => {
+        QUnit.test('allowKeyboardNavigation should be passed to nested splitter on initialization', function(assert) {
+            this.reinit({
+                allowKeyboardNavigation,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }]
+                    }
+                }]
+            });
+
+            const $nestedSplitter = this.getNestedSplitter();
+            const nestedSplitterInstance = $nestedSplitter.dxSplitter('instance');
+
+            assert.strictEqual(nestedSplitterInstance.option('allowKeyboardNavigation'), allowKeyboardNavigation);
+        });
+    });
+
+    [
+        { propertyName: 'onResize', propertyValue: () => { } },
+        { propertyName: 'onResizeStart', propertyValue: () => { } },
+        { propertyName: 'onResizeEnd', propertyValue: () => { } },
+        { propertyName: 'itemTemplate', propertyValue: 'template' },
+        { propertyName: 'onItemClick', propertyValue: () => { } },
+        { propertyName: 'onItemContextMenu', propertyValue: () => { } },
+        { propertyName: 'onItemExpanded', propertyValue: () => { } },
+        { propertyName: 'onItemCollapsed', propertyValue: () => { } },
+        { propertyName: 'onItemRendered', propertyValue: () => { } },
+        { propertyName: 'allowKeyboardNavigation', propertyValue: false },
+        { propertyName: 'allowKeyboardNavigation', propertyValue: true },
+        { propertyName: 'rtlEnabled', propertyValue: false },
+        { propertyName: 'rtlEnabled', propertyValue: true },
+        { propertyName: 'separatorSize', propertyValue: 12 },
+    ].forEach(({ propertyName: propName, propertyValue: propValue }) => {
+        QUnit.test(`${propName} property should be passed to nested splitter on initialization`, function(assert) {
+            this.reinit({
+                [propName]: propValue,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            const $nestedSplitter = this.getNestedSplitter();
+            const nestedSplitterInstance = $nestedSplitter.dxSplitter('instance');
+
+            assert.strictEqual(nestedSplitterInstance.option(propName), propValue);
+        });
+    });
+
     QUnit.test('with nested splitter', function(assert) {
         this.reinit({
             items: [{ splitter: { direction: 'row' } }]

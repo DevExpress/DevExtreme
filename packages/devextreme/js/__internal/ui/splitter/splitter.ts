@@ -223,6 +223,9 @@ class Splitter extends (CollectionWidget as any) {
       onItemRendered: this.option('onItemRendered'),
       onItemExpanded: this.option('onItemExpanded'),
       onItemCollapsed: this.option('onItemCollapsed'),
+      separatorSize: this.option('separatorSize'),
+      allowKeyboardNavigation: this.option('allowKeyboardNavigation'),
+      rtlEnabled: this.option('rtlEnabled'),
       _renderQueue: this._renderQueue,
     }, item.splitterConfig));
 
