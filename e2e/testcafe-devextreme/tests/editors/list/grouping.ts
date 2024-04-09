@@ -13,7 +13,8 @@ test('Grouped List last item of last group should have proper margin-bottom', as
   
   const list = new List('#container');
   const lastItemIndex = list.getItems().length - 1;
-  await t.hover(list.getItem(lastItemIndex).element);
+  const lastItem = list.getItem(lastItemIndex).element;
+  await t.hover(lastItem).click(lastItem);
   
   await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
   
