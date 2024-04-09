@@ -11,6 +11,11 @@ on:
       - "[0-9][0-9]_[0-9]"
 
 env:
+  NX_CLOUD_DISTRIBUTED_EXECUTION: true # this enables DTE
+  NX_CLOUD_DISTRIBUTED_EXECUTION_AGENT_COUNT: 3 # expected number of agents
+  NX_BRANCH: ${{ github.event.number || github.ref_name }}
+  # NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_CLOUD_ACCESS_TOKEN }}
+  # NPM_TOKEN: ${{ secrets.NPM_TOKEN }} # this is needed if our pipeline publishes to npm  
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
 
 jobs:
@@ -32,21 +37,60 @@ jobs:
 
     - name: Run npm install
       run: npm ci --no-audit --no-fund
-    
-    - name: Run targets
-      run: >
-        npx nx run-many
-        -t test
-        --exclude
-        devextreme
-        devextreme-themebuilder
-        devextreme-angular
-        devextreme-react
-        devextreme-vue
-        devextreme-react-storybook
-        devextreme-main
-        devextreme-angular-playground
-        devextreme-testcafe-tests
-        devextreme-demos
-        devextreme-react-playground
-        devextreme-vue-playground
+
+    - name: Initialize the Nx Cloud distributed CI run and stop agents when the build tasks are done
+      run: npx nx-cloud start-ci-run --stop-agents-after=test
+
+    - name: Run commands in parallel
+      run: |
+        # initialize an array to store process IDs (PIDs)
+        pids=()
+
+        # function to run commands and store the PID
+        function run_command() {
+          local command=$1
+          $command &  # run the command in the background
+          pids+=($!)  # store the PID of the background process
+        }
+
+        # list of commands to be run on main has env flag NX_CLOUD_DISTRIBUTED_EXECUTION set to false
+        # run_command "NX_CLOUD_DISTRIBUTED_EXECUTION=false npx nx-cloud record -- nx format:check"
+
+        # list of commands to be run on agents
+        run_command "npx nx run-many -t test --exclude devextreme devextreme-themebuilder devextreme-angular devextreme-react devextreme-vue devextreme-react-storybook devextreme-main devextreme-angular-playground devextreme-testcafe-tests devextreme-demos devextreme-react-playground devextreme-vue-playground"
+
+        # wait for all background processes to finish
+        for pid in ${pids[*]}; do
+          if ! wait $pid; then
+            exit 1  # exit with an error status if any process fails
+          fi
+        done
+
+        exit 0 # exits with success status if a all processes complete successfully
+
+  agents:
+    name: Agent ${{ matrix.agent }}
+    runs-on: devextreme-shr2
+    strategy:
+      matrix:
+        # Add more agents here as your repository expands
+        agent: [1, 2, 3]
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Start Nx Agent ${{ matrix.agent }}
+        run: npx nx-cloud start-agent
+        env:
+          NX_AGENT_NAME: ${{ matrix.agent }}
+
