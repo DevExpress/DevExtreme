@@ -27,7 +27,7 @@ module.exports.createNodes = [
      */
     const projectConfiguration = {
       targets: {
-        test: {
+        e2e: {
           executor: 'nx:noop',
           dependsOn: Object.keys(testFileTargets).map((target) => ({
             target,
