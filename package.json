@@ -32,9 +32,9 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@nx/jest": "^16.10.0",
-    "@nx/js": "^16.10.0",
-    "@types/node": "^20.11.5",
+    "@nx/jest": "18.2.3",
+    "@nx/js": "18.2.3",
+    "@types/node": "18.19.31",
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "^2.0.4",
     "@types/yargs": "^17.0.32",
@@ -65,8 +65,8 @@
     "husky": "^8.0.3",
     "jspdf-autotable": "3.8.1",
     "lint-staged": "14.0.1",
-    "nx": "17.3.2",
-    "nx-cloud": "16.5.2",
+    "nx": "18.2.3",
+    "nx-cloud": "18.0.0",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
     "source-map": "0.7.4",
@@ -91,3 +91,4 @@
     "rxjs": "7.8.0"
   }
 }
+
