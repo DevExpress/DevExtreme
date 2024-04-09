@@ -681,10 +681,7 @@ class Splitter extends (CollectionWidget as any) {
 
     this._updateItemsRestrictions(items);
 
-    const defaultLayout = getDefaultLayout(this._itemRestrictions);
-
-    // return validateLayout(defaultLayout, this._itemRestrictions);
-    return defaultLayout;
+    return getDefaultLayout(this._itemRestrictions);
   }
 
   _updateItemsRestrictions(items: Item[]): void {
