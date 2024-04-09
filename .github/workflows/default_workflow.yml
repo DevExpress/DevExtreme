@@ -62,7 +62,7 @@ jobs:
         # run_command "NX_CLOUD_DISTRIBUTED_EXECUTION=false npx nx-cloud record -- nx format:check"
 
         # list of commands to be run on agents
-        run_command "npx nx run-many -t test --exclude devextreme devextreme-themebuilder devextreme-angular devextreme-react devextreme-vue devextreme-react-storybook devextreme-main devextreme-angular-playground devextreme-testcafe-tests devextreme-demos devextreme-react-playground devextreme-vue-playground"
+        run_command "npx nx run-many -t test --exclude devextreme devextreme-themebuilder devextreme-angular devextreme-react devextreme-vue devextreme-react-storybook devextreme-main devextreme-angular-playground devextreme-demos devextreme-react-playground devextreme-vue-playground"
 
         # wait for all background processes to finish
         for pid in ${pids[*]}; do

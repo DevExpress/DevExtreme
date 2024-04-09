@@ -9,7 +9,7 @@ module.exports.createNodes = [
   'e2e/testcafe-devextreme/package.json',
   (projectConfigurationFile, opts, context) => {
     const path = join(context.workspaceRoot, 'e2e/testcafe-devextreme/tests/')
-    const tests = glob.sync(path + 'treeList/**/*.ts').map((test) => test.slice(path.length, -3));
+    const tests = glob.sync(path + '**/*.ts').map((test) => test.slice(path.length, -3));
 
     const testFileTargets = Object.fromEntries(tests.map((test) => [
       'test--' + test,
@@ -27,7 +27,7 @@ module.exports.createNodes = [
      */
     const projectConfiguration = {
       targets: {
-        e2e: {
+        test: {
           executor: 'nx:noop',
           dependsOn: Object.keys(testFileTargets).map((target) => ({
             target,
