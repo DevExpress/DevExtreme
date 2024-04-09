@@ -86,4 +86,8 @@
       }
     }
   }
+
+  &.dx-overlay-content .dx-scrollview {
+    overflow: visible;
+  }
 }

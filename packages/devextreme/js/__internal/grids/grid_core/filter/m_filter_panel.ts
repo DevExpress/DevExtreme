@@ -70,7 +70,7 @@ export class FilterPanelView extends modules.View {
     this._renderFilterBuilderText($element, $leftContainer);
   }
 
-  _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
+  private _renderFilterBuilderText($element: dxElementWrapper, $leftContainer: dxElementWrapper): void {
     const $filterElement = this._getFilterElement();
     const $textElement = this._getTextElement();
 

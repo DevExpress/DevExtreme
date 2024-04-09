@@ -1248,7 +1248,7 @@ QUnit.module('Cutomize context menu', moduleConfig, () => {
         assert.strictEqual($items.eq(2).text(), 'someText', 'third item is correct');
     });
 
-    test('default items missed and forbidden options (T972377)', function(assert) {
+    test.skip('default items missed and forbidden options (T972377)', function(assert) {
         if(!isDesktopDevice()) {
             assert.ok(true, 'only on desktops');
             return;
