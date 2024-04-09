@@ -84,6 +84,11 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Setup Chrome
+        uses: ./.github/actions/setup-chrome
+        with:
+          chrome-version: '121.0.6167.160'
+
       - name: Restore npm cache
         uses: actions/cache@v4
         with:
