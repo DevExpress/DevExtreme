@@ -24,7 +24,8 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts/internal-tools",
-        "{projectRoot}/artifacts/npm"
+        "{projectRoot}/artifacts/npm",
+        "{projectRoot}/artifacts/js"
       ]
     }
   },
