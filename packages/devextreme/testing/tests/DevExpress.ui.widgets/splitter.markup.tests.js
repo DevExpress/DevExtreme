@@ -194,7 +194,7 @@ QUnit.module('Aria attributes', moduleConfig, () => {
                 text: 'Pane_1'
             }, {
                 splitter: {
-                    dataSource: ['Pane_2', 'Pane_3']
+                    dataSource: [{ text: 'Pane_2' }, { text: 'Pane_3' }]
                 }
             }]
         });
@@ -210,7 +210,7 @@ QUnit.module('Aria attributes', moduleConfig, () => {
                 text: 'Pane_1'
             }, {
                 splitter: {
-                    dataSource: ['Pane_2', 'Pane_3']
+                    dataSource: [{ text: 'Pane_2' }, { text: 'Pane_3' }]
                 }
             }]
         });

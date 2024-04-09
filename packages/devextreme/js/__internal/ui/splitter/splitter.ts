@@ -530,9 +530,7 @@ class Splitter extends (CollectionWidget as any) {
         this._feedbackDeferred.resolve();
         this._toggleActiveState($resizeHandle, false);
 
-        each(this._itemElements(), (index: number, itemElement: Element) => {
-          this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
-        });
+        this._updatePaneSizesWithOuterWidth();
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
