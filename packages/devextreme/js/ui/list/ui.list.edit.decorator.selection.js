@@ -124,6 +124,23 @@ registerDecorator(
             }
         },
 
+        _updateSelectAllAriaLabel() {
+            const defaultText = 'Select all';
+            const { value } = this._selectAllCheckBox.option();
+
+            const indeterminate = value === undefined;
+
+            const selectedText = indeterminate ? 'half checked' : value ? 'checked' : 'not checked';
+
+            const ariaLabel = `${defaultText} ${selectedText}`;
+
+            this._$selectAll.attr({ 'aria-label': ariaLabel });
+        },
+
+        _setSelectAllRole() {
+            this._$selectAll.attr({ role: 'application' });
+        },
+
         _renderSelectAll: function() {
             const $selectAll = this._$selectAll = $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
             const list = this._list;
@@ -150,6 +167,8 @@ registerDecorator(
 
             this._updateSelectAllState();
             this._attachSelectAllHandler();
+            this._setSelectAllRole();
+            this._updateSelectAllAriaLabel();
         },
 
         _attachSelectAllHandler: function() {
@@ -172,6 +191,7 @@ registerDecorator(
             }
 
             this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
+            this._updateSelectAllAriaLabel();
         },
 
         _checkSelectAllCapability: function() {
