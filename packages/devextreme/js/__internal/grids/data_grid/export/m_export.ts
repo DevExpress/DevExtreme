@@ -697,7 +697,7 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  needLoadItemsOnExportingSelectedItems(): boolean {
+  private needLoadItemsOnExportingSelectedItems(): boolean {
     return this.option('loadItemsOnExportingSelectedItems')
       ?? this._dataController._dataSource.remoteOperations().filtering;
   }
@@ -854,7 +854,7 @@ const headerPanel = (Base: ModuleType<HeaderPanel>) => class ExportHeaderPanelEx
     }
   }
 
-  _needDisableExportButton(): boolean {
+  private _needDisableExportButton(): boolean {
     const isDataColumnsInvisible = !this._columnsController.hasVisibleDataColumns();
     const hasUnsavedChanges = this._editingController.hasChanges();
 

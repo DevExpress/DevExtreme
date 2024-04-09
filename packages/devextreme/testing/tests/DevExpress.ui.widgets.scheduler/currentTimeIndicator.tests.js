@@ -473,7 +473,7 @@ QUnit.module('DateTime indicator on Day View, vertical grouping', {
         `);
 
         try {
-            $style.appendTo('head');
+            $('#qunit-fixture').prepend($style);
 
             instance.option({
                 shadeUntilCurrentTime: false,

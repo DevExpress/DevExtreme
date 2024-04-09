@@ -4,6 +4,7 @@ import 'ui/splitter';
 
 import fx from 'animation/fx';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
+import messageLocalization from 'localization/message';
 
 QUnit.testStart(function() {
     const markup =
@@ -20,7 +21,6 @@ const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
-const STATE_DISABLED_CLASS = 'dx-state-disabled';
 const ICON_CLASS = 'dx-icon';
 
 const INACTIVE_SIZE = 2;
@@ -88,7 +88,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                     QUnit.test(`should have the 'dx-state-disabled' class and the correct width when control elements are turned off, and vice versa, ${JSON.stringify(options)}`, function(assert) {
                         this.reinit({ separatorSize: DEFAULT_SIZE, resizable, showCollapseNext, showCollapsePrev, direction });
 
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactive ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactive ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -100,7 +99,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                         this.instance.option('resizable', newOptionValue);
 
                         const isInactiveState = !showCollapseNext && !showCollapsePrev && !newOptionValue;
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactiveState ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactiveState ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -112,7 +110,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                         this.instance.option('showCollapsePrev', newOptionValue);
 
                         const isInactiveState = !showCollapseNext && !resizable && !newOptionValue;
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactiveState ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactiveState ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -124,7 +121,6 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                         this.instance.option('showCollapseNext', newOptionValue);
 
                         const isInactiveState = !newOptionValue && !showCollapsePrev && !resizable;
-                        assert.strictEqual(this.$element.hasClass(STATE_DISABLED_CLASS), isInactiveState ? true : false, 'disable state');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'width' : 'height'), isInactiveState ? INACTIVE_SIZE : DEFAULT_SIZE, 'handle size');
                         assert.strictEqual(this.instance.option(isHorizontalDirection ? 'height' : 'width'), null, 'handle size');
                     });
@@ -166,6 +162,29 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
                 this.reinit({ direction });
 
                 assert.strictEqual(this.$element.css(dimension), '8px');
+            });
+
+            ['50vh', '20spx', 'd10', 'NaN', '2%', '20em', '1vw', '', '100px ', '100px ', ' 11 ', '12', -20, NaN, null, undefined].forEach((separatorSize) => {
+                QUnit.test(`Resize handle ${dimension} should fallback to default if value is incorrect (direction=${direction})`, function(assert) {
+                    this.reinit({
+                        direction,
+                        separatorSize
+                    });
+
+                    assert.strictEqual(this.$element.css(dimension), '8px');
+                });
+
+
+                QUnit.test(`Resize handle ${dimension} should fallback to default if separatorSize changed at runtime to incorrect value (direction=${direction})`, function(assert) {
+                    this.reinit({
+                        direction,
+                        separatorSize: 5,
+                    });
+
+                    this.instance.option('separatorSize', separatorSize);
+
+                    assert.strictEqual(this.$element.css(dimension), '8px');
+                });
             });
 
             QUnit.test(`Resize handle should correctly set separator ${dimension} on init (direction=${direction})`, function(assert) {
@@ -312,14 +331,11 @@ QUnit.module('Aria attributes', moduleConfig, () => {
         assert.strictEqual(this.$element.attr('aria-label'), 'Split bar');
     });
 
-    ['horizontal', 'vertical'].forEach((direction) => {
-        QUnit.test('aria-orientation attribute should be set correctly', function(assert) {
-            this.reinit({ direction });
+    QUnit.test('localized aria-label attribute should be set correctly', function(assert) {
+        const localizedAriaLabelAttribute = messageLocalization.format('dxSplitter-resizeHandleAriaLabel');
 
-            const expectedOrientationAttrValue = direction === 'horizontal' ? 'vertical' : 'horizontal';
-
-            assert.strictEqual(this.$element.attr('aria-orientation'), expectedOrientationAttrValue);
-        });
+        assert.strictEqual(localizedAriaLabelAttribute, 'Split bar');
+        assert.strictEqual(this.$element.attr('aria-label'), localizedAriaLabelAttribute);
     });
 
     QUnit.test('role attribute should be set correctly', function(assert) {

@@ -357,6 +357,15 @@ if(Quill) {
             this._list.scrollToItem($firstItem);
         }
 
+        _toggleActiveDescendant(shown) {
+            if(shown) {
+                const ariaId = this._list.getFocusedItemId();
+                this.quill.root.setAttribute('aria-activedescendant', ariaId);
+            } else {
+                this.quill.root.removeAttribute('aria-activedescendant');
+            }
+        }
+
         get _popupPosition() {
             const position = this.getPosition();
             const { left: mentionLeft, top: mentionTop, height: mentionHeight } = this.quill.getBounds(position ? position - 1 : position);
@@ -383,11 +392,13 @@ if(Quill) {
             return extend(super._getPopupConfig(), {
                 hideOnParentScroll: false,
                 onShown: () => {
+                    this._toggleActiveDescendant(true);
                     this._isMentionActive = true;
                     this._hasSearch = false;
                     this._focusFirstElement();
                 },
                 onHidden: () => {
+                    this._toggleActiveDescendant(false);
                     this._list.unselectAll();
                     this._list.option('focusedElement', null);
                     this._isMentionActive = false;

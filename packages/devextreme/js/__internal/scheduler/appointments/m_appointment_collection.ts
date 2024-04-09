@@ -8,6 +8,7 @@ import { wrapToArray } from '@js/core/utils/array';
 // @ts-expect-error
 import { grep, normalizeKey } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
+import { isElementInDom } from '@js/core/utils/dom';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { deepExtendArraySafe } from '@js/core/utils/object';
@@ -457,7 +458,7 @@ class SchedulerAppointments extends CollectionWidget {
     }
 
     this._appointmentClickTimeout = setTimeout(() => {
-      if (!this._preventSingleAppointmentClick && domAdapter.getBody().contains($target[0])) {
+      if (!this._preventSingleAppointmentClick && isElementInDom($target)) {
         this.notifyObserver('showAppointmentTooltip', { data, target: $target });
       }
 

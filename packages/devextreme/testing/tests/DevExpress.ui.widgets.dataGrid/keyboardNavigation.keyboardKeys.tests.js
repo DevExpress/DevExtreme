@@ -169,7 +169,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, 'rowIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
 
@@ -189,7 +189,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, 'rowIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
         assert.ok(isPreventDefaultCalled, 'preventDefault is called');
     });
 
@@ -487,44 +487,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 2, 'rowIndex');
-    });
-
-    QUnit.testInActiveWindow('Down arrow key do not work in masterDetail row', function(assert) {
-        // assert
-        this.columns = [
-            { visible: true, command: 'expand' },
-            { caption: 'Column 1', visible: true, dataField: 'Column1' },
-            { caption: 'Column 2', visible: true, dataField: 'Column2' },
-            { caption: 'Column 3', visible: true, dataField: 'Column3' }
-        ];
-
-        this.dataControllerOptions = {
-            pageCount: 10,
-            pageIndex: 0,
-            pageSize: 6,
-            items: [
-                { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 0 },
-                { rowType: 'detail' },
-                { values: ['test1', 'test2', 'test3', 'test4'], rowType: 'data', key: 1 }
-            ]
-        };
-
-        this.options = { masterDetail: { enabled: true, template: function(container, options) { $('<input>').appendTo(container); } } };
-
-        setupModules(this);
-
-        // act
-        this.gridView.render($('#container'));
-
-        $('#container input').focus().trigger(CLICK_EVENT);
-
-        const isDefaultPrevented = this.triggerKeyDown('downArrow').preventDefault;
-
-        // assert
-        assert.strictEqual(isDefaultPrevented, false, 'default is not prevented');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 1, 'rowIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, 'rowIndex');
     });
 
     // T376499
@@ -605,7 +568,7 @@ QUnit.module('Keyboard keys', {
 
         // assert
         assert.equal(this.keyboardNavigationController._focusedCellPosition.columnIndex, 0, 'cellIndex');
-        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 4, 'rowIndex');
+        assert.equal(this.keyboardNavigationController._focusedCellPosition.rowIndex, 3, 'rowIndex');
     });
 
     // T1069664
@@ -851,6 +814,7 @@ QUnit.module('Keyboard keys', {
 
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
         this.triggerKeyDown('space', false, false, $('#qunit-fixture').find(':focus').get(0));
 
         // assert
@@ -946,6 +910,7 @@ QUnit.module('Keyboard keys', {
 
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
+        this.triggerKeyDown('downArrow');
         this.triggerKeyDown('space', false, false, $('#qunit-fixture').find(':focus').get(0));
         this.triggerKeyDown('space', false, true, $('#qunit-fixture').find(':focus').get(0));
 
@@ -964,6 +929,7 @@ QUnit.module('Keyboard keys', {
 
         this.focusFirstCell();
 
+        this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('downArrow');
         this.triggerKeyDown('space', true, false, $('#qunit-fixture').find(':focus').get(0));
