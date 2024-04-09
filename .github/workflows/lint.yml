@@ -30,7 +30,7 @@ jobs:
         restore-keys: ${{ runner.os }}-node-modules
 
     - name: Run npm install
-      run: npm install --no-audit --no-fund --legacy-peer-deps
+      run: npm install --no-audit --no-fund
 
     - name: Compile renovation
       working-directory: ./packages/devextreme
