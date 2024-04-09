@@ -1,4 +1,4 @@
-Use Splitter widgets to create resizable panes on a page.
+You can use Splitter widgets to create resizable panes on a page.
 
 [note] To get started with DevExtreme Splitter, refer to the following tutorial for step-by-step instructions: [Getting Started with Splitter](/Documentation/Guide/UI_Components/Splitter/Getting_Started_with_Splitter/).
 
@@ -15,7 +15,7 @@ If true, an arrow appears on the handle. Click the arrow to close the pane.
 - [collapsed](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#collapsed) (default: `false`)    
 Specifies whether the pane is initially collapsed.
 
-To configure the layout of the Splitter component, you can specify its [orientation](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#orientation) as *'vertical'* or *'horizontal'* (default). All Splitter "size" properties depend on the orientation. If it is *'horizontal'*, then "size" means width. Otherwise, it is height. The following "size" properties can be specified:
+To configure the layout of the Splitter component, you can specify its [orientation](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#orientation) as *'vertical'* or *'horizontal'* (default). All Splitter "size" properties depend on the orientation. If it is *'horizontal'*, "size" is the width. Otherwise, it is height. The following "size" properties can be specified:
 
 - [size](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#size)    
 Initial pane width/height.
