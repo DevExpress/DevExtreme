@@ -293,16 +293,20 @@ class Splitter extends (CollectionWidget as any) {
         && rightItemData.collapsed !== true;
 
       resizeHandle.option('resizable', resizable);
+
+      resizeHandle.option('disabled', resizeHandle.isInactive());
     });
   }
 
   _updateResizeHandlesCollapsibleState(): void {
     this._resizeHandles.forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
+
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
+
       const showCollapsePrev = rightItemData.collapsed === true
         ? rightItemData.collapsible === true && leftItemData.collapsed !== true
         : leftItemData.collapsible === true && leftItemData.collapsed !== true;
@@ -312,6 +316,8 @@ class Splitter extends (CollectionWidget as any) {
         : rightItemData.collapsible === true && rightItemData.collapsed !== true;
 
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
+
+      resizeHandle.option('disabled', resizeHandle.isInactive());
     });
   }
 
