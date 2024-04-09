@@ -7,6 +7,7 @@ import { isRenderer, isNumeric } from 'core/utils/type';
 import config from 'core/config';
 import { createEvent } from 'events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
+import { name as CLICK_EVENT } from 'events/click';
 
 import 'generic_light.css!';
 
@@ -17,6 +18,7 @@ const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-p
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
+const STATE_FOCUSED_CLASS = 'dx-state-focused';
 
 QUnit.testStart(() => {
     const markup =
@@ -1464,7 +1466,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         });
     });
 
-    [{ allowKeyboardNavigation: true }, { allowKeyboardNavigation: false }].forEach(({ allowKeyboardNavigation }) => {
+    [true, false].forEach((allowKeyboardNavigation) => {
         QUnit.test(`Resize handle should have dx-state-active class on interaction when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
             this.reinit({
                 width: 408,
@@ -1473,17 +1475,39 @@ QUnit.module('Behavior', moduleConfig, () => {
                 dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
             });
 
-            const resizeHandle = this.getResizeHandles().eq(0);
+            const $resizeHandle = this.getResizeHandles().eq(0);
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
 
             pointer.start().dragStart().drag(10, 10);
 
-            assert.ok(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
+            assert.ok($resizeHandle.hasClass(STATE_ACTIVE_CLASS));
 
             pointer.dragEnd();
 
-            assert.notOk(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
+            assert.notOk($resizeHandle.hasClass(STATE_ACTIVE_CLASS));
+        });
+
+        QUnit.testInActiveWindow(`The resize handle should not change its focused state after the pane collapses when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
+            this.reinit({
+                width: 408,
+                height: 408,
+                allowKeyboardNavigation,
+                dataSource: [{ text: 'Pane_1', collapsible: true }, { text: 'Pane_2' }]
+            });
+
+            const $resizeHandle = this.getResizeHandles().eq(0);
+
+            $resizeHandle.focusin();
+
+            assert.strictEqual($resizeHandle.hasClass(STATE_FOCUSED_CLASS), allowKeyboardNavigation);
+
+            const $collapseButton = $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+
+            $collapseButton.trigger(CLICK_EVENT);
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'pane[0] is collapse');
+            assert.strictEqual($resizeHandle.hasClass(STATE_FOCUSED_CLASS), allowKeyboardNavigation);
         });
     });
 

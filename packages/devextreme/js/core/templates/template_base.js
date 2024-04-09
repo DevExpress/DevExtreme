@@ -40,7 +40,7 @@ export class TemplateBase {
             return;
         }
 
-        const resultInBody = domAdapter.getBody().contains($container.get(0));
+        const resultInBody = contains(domAdapter.getBody(), $container.get(0));
         if(!resultInBody) {
             return;
         }
