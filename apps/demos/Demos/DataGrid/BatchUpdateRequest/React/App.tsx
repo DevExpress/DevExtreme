@@ -1,5 +1,5 @@
 import React from 'react';
-import DataGrid, { Column, DataGridTypes, Editing } from 'devextreme-react/data-grid';
+import DataGrid, { DataGridRef, Column, DataGridTypes, Editing } from 'devextreme-react/data-grid';
 import { createStore } from 'devextreme-aspnet-data-nojquery';
 import 'whatwg-fetch';
 
@@ -30,10 +30,10 @@ async function sendBatchRequest(url: string, changes: DataGridTypes.DataChange[]
   }
 }
 
-async function processBatchRequest(url: string, changes: DataGridTypes.DataChange[], component: DataGrid['instance']) {
+async function processBatchRequest(url: string, changes: DataGridTypes.DataChange[], component: DataGridRef) {
   await sendBatchRequest(url, changes);
-  await component.refresh(true);
-  component.cancelEditData();
+  await component.instance().refresh(true);
+  component.instance().cancelEditData();
 }
 
 const onSaving = (e: DataGridTypes.SavingEvent) => {

@@ -28,7 +28,7 @@ const ratingDataSource = {
 };
 const setAlternatingRowsBackground = (dataGrid, gridCell, pdfCell) => {
   if (gridCell.rowType === 'data') {
-    const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
+    const rowIndex = dataGrid.instance().getRowIndexByKey(gridCell.data.Product_ID);
     if (rowIndex % 2 === 0) {
       pdfCell.backgroundColor = '#D3D3D3';
     }
@@ -46,7 +46,7 @@ const App = () => {
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(priceGridRef.current.instance(), gridCell, pdfCell);
+        setAlternatingRowsBackground(priceGridRef.current, gridCell, pdfCell);
       },
     }).then(() => {
       doc.addPage();
@@ -56,7 +56,7 @@ const App = () => {
         topLeft: { x: 7, y: 5 },
         columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(ratingGridRef.current.instance(), gridCell, pdfCell);
+          setAlternatingRowsBackground(ratingGridRef.current, gridCell, pdfCell);
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');
