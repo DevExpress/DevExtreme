@@ -44,7 +44,7 @@ jobs:
       run: npm ci --no-audit --no-fund
 
     - name: Initialize the Nx Cloud distributed CI run and stop agents when the build tasks are done
-      run: npx nx-cloud start-ci-run --stop-agents-after=test
+      run: npx nx-cloud start-ci-run
 
     - name: Run commands in parallel
       run: |
