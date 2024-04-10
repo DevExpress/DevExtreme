@@ -50,6 +50,12 @@ const moduleConfig = {
 };
 
 QUnit.module('Render', moduleConfig, () => {
+    QUnit.test('with panes declared using string values', function(assert) {
+        this.reinit({ dataSource: ['Pane_1', 'Pane_2', 'Pane_3'] });
+
+        assert.strictEqual(this.getItems().length, 3);
+    });
+
     QUnit.test('with single pane', function(assert) {
         this.reinit({ dataSource: [{ template: () => $('<div>').text('Pane 1') }] });
 
