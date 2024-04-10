@@ -173,7 +173,7 @@
     "webpack": "5.76.0",
     "webpack-stream": "7.0.0",
     "yaml": "2.3.4",
-    "yargs": "7.1.2"
+    "yargs": "17.7.2"
   },
   "scripts": {
     "preinstall": "node build/preinstall.js",
