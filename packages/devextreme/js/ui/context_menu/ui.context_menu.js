@@ -19,7 +19,7 @@ import MenuBase from './ui.menu_base';
 import { Deferred } from '../../core/utils/deferred';
 import { name as contextMenuEventName } from '../../events/contextmenu';
 import holdEvent from '../../events/hold';
-import ScrollView from '../scroll_view/ui.scroll_view';
+import Scrollable from '../scroll_view/ui.scrollable';
 import { getOuterHeight } from '../../core/utils/size';
 
 // STYLE contextMenu
@@ -38,7 +38,7 @@ const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
-const SCROLL_VIEW_CLASS = 'dx-scrollview';
+const SCROLLABLE_CLASS = 'dx-scrollable';
 
 const FOCUS_UP = 'up';
 const FOCUS_DOWN = 'down';
@@ -257,11 +257,11 @@ class ContextMenu extends MenuBase {
 
     _setFocusedElement($element) {
         if($element && $element.length !== 0) {
-            const $scrollViewElement = $element.closest(`.${SCROLL_VIEW_CLASS}`);
-            const scrollViewInstance = $scrollViewElement.dxScrollView('instance');
+            const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
+            const scrollableInstance = $scrollableElement.dxScrollable('instance');
 
             this.option('focusedElement', getPublicElement($element));
-            scrollViewInstance.scrollToElement($element);
+            scrollableInstance.scrollToElement($element);
         }
     }
 
@@ -631,8 +631,8 @@ class ContextMenu extends MenuBase {
         }
     }
 
-    _initScrollView($container) {
-        this._createComponent($container, ScrollView, {});
+    _initScrollable($container) {
+        this._createComponent($container, Scrollable, {});
     }
 
     _setSubMenuHeight($container, anchor, isNestedSubmenu) {
@@ -677,7 +677,7 @@ class ContextMenu extends MenuBase {
         if(!isSubmenuRendered) {
             this._renderSubmenuItems(node, $item);
             $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
-            this._initScrollView($submenu);
+            this._initScrollable($submenu);
         }
 
         this._setSubMenuHeight($submenu, $item, true);
@@ -956,7 +956,7 @@ class ContextMenu extends MenuBase {
 
         const $submenu = $(this._overlay.content()).children(`.${DX_SUBMENU_CLASS}`);
         if($submenu.length) {
-            this._initScrollView($submenu);
+            this._initScrollable($submenu);
         }
     }
 

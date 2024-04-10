@@ -52,10 +52,6 @@ const DX_ADAPTIVE_MODE_CLASS = DX_MENU_CLASS + '-adaptive-mode';
 const DX_ADAPTIVE_MODE_OVERLAY_WRAPPER_CLASS = DX_ADAPTIVE_MODE_CLASS + '-overlay-wrapper';
 const DX_TREEVIEW_CLASS = 'dx-treeview';
 const DX_TREEVIEW_ITEM_CLASS = DX_TREEVIEW_CLASS + '-item';
-const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
-const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
-const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
-const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
 
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
 const DX_STATE_ACTIVE_CLASS = 'dx-state-active';
@@ -392,7 +388,7 @@ QUnit.module('Menu rendering', {
     });
 });
 
-QUnit.module('Rendering ScrollView', {
+QUnit.module('Rendering Scrollablew', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -402,7 +398,11 @@ QUnit.module('Rendering ScrollView', {
         this.clock.restore();
     }
 }, () => {
-    QUnit.test('Submenu should init ScrollView', function(assert) {
+    const DX_SCROLLABLE_CLASS = 'dx-scrollable';
+    const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+    const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+
+    QUnit.test('Submenu should init Scrollable', function(assert) {
         const menu = createMenu({
             items: [{
                 text: 'item 1',
@@ -419,10 +419,10 @@ QUnit.module('Rendering ScrollView', {
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
         assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
-        assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized');
+        assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
     });
 
-    QUnit.test('ScrollView should be initialized on a 2nd level submenu', function(assert) {
+    QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -453,7 +453,7 @@ QUnit.module('Rendering ScrollView', {
         $menuItem.trigger('dxpointermove');
         this.clock.tick(0);
         const $submenu = $(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1);
-        assert.ok($submenu.hasClass(DX_SCROLLVIEW_CLASS), 'ScrollView initialized on nested submenu');
+        assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized on nested submenu');
     });
 
     QUnit.test('Submenu should be correctly positioned', function(assert) {
@@ -470,7 +470,7 @@ QUnit.module('Rendering ScrollView', {
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
-        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
+        assert.ok($submenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
         assert.roughEqual($submenu.offset().top, $item1.offset().top + $item1.outerHeight(), .1, 'submenu aligned to a clicked item');
         assert.roughEqual($submenu.outerHeight(), $(window).height() - $item1.offset().top - $item1.outerHeight(), .1, 'menu uses all available space');
     });
@@ -551,7 +551,7 @@ QUnit.module('Rendering ScrollView', {
 
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
-        assert.ok($submenu.find(`.${DX_SCROLLVIEW_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
+        assert.ok($submenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
         assert.roughEqual($submenu.offset().top, 0, .1, 'submenu flipped to top');
         assert.roughEqual($submenu.outerHeight(), $(window).height() - 50, .1, 'menu uses all available space');
     });
