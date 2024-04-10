@@ -14,11 +14,9 @@
     "test": {
       "executor": "nx:noop",
       "dependsOn": [
-        "build",
         "test--webpack-cjs",
         "test--webpack",
         "test--rollup",
-        // "test--parcel",
         "test--browserify-cjs",
         "test--vite"
       ]
