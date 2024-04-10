@@ -119,7 +119,7 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
 });
 
 
-test(`Toolbar should render on changing visibility if visibiliti is false initially`, async (t) => {
+test(`Toolbar should render on changing visibility if visibility is false initially`, async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
@@ -133,7 +133,12 @@ test(`Toolbar should render on changing visibility if visibiliti is false initia
     .ok()
     .expect(dataGrid.getHeaderPanel().element.find('.dx-button').textContent)
     .eql('myTestButton');
+  
+  await dataGrid.option('toolbar.visible', true);
 
+  await t
+    .expect(dataGrid.getHeaderPanel().element.visible)
+    .notOk();
 }).before(async () => createWidget('dxDataGrid', {
   showBorders: true,
   toolbar: {
