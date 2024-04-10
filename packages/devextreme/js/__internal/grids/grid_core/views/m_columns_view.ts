@@ -174,7 +174,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _requireReady: any;
 
-  public scrollChanged = Callbacks({ unique: true, syncStrategy: true });
+  public scrollChanged = Callbacks<[scrollOffset: { left: number }, viewName: string]>({ unique: true, syncStrategy: true });
 
   protected _columnsController!: ColumnsController;
 
@@ -1057,7 +1057,8 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
     }
 
     eventsEngine.on($scrollContainer, 'scroll', () => {
-      const scrollLeft = $scrollContainer.scrollLeft();
+      // @ts-expect-error
+      const scrollLeft: number = $scrollContainer.scrollLeft();
 
       if (scrollLeft !== this._scrollLeft) {
         this.scrollChanged.fire({ left: scrollLeft }, this.name);

@@ -122,7 +122,7 @@ export class ColumnsController extends modules.Controller {
 
   private __sortingUpdated: any;
 
-  public columnsChanged = Callbacks({ unique: true, syncStrategy: true });
+  public columnsChanged = Callbacks<[any]>({ unique: true, syncStrategy: true });
 
   public _columnChanges: any;
 

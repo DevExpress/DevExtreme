@@ -125,7 +125,10 @@ export class SelectionController extends modules.Controller {
 
   private _selection!: Selection;
 
-  public selectionChanged = Callbacks({ unique: true, syncStrategy: true });
+  public selectionChanged = Callbacks<[
+    | { selectionFilter: unknown }
+    | { selectedRowKeys: unknown },
+  ]>({ unique: true, syncStrategy: true });
 
   private _selectedItemsInternalChange?: boolean;
 

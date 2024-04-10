@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/method-signature-style */
 import positionUtils from '@js/animation/position';
 import domAdapter from '@js/core/dom_adapter';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { extend } from '@js/core/utils/extend';
@@ -61,7 +62,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _focusTimeoutID: any;
 
-  public focused = Callbacks({ unique: true, syncStrategy: true });
+  public focused = Callbacks<[dxElementWrapper]>({ unique: true, syncStrategy: true });
 
   private _$focusOverlay: any;
 

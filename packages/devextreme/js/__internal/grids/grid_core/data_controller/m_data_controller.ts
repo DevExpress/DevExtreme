@@ -128,15 +128,16 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _loadingText: string | undefined;
 
-  public dataErrorOccurred = Callbacks({ unique: true, syncStrategy: true, stopOnFalse: true });
+  public dataErrorOccurred = Callbacks<[any, any?]>({ unique: true, syncStrategy: true, stopOnFalse: true });
 
-  public pageChanged = Callbacks({ unique: true, syncStrategy: true });
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  public pageChanged = Callbacks<[pageIndex: number | void]>({ unique: true, syncStrategy: true });
 
-  public pushed = Callbacks({ unique: true, syncStrategy: true });
+  public pushed = Callbacks<[changes: any]>({ unique: true, syncStrategy: true });
 
-  public changed = Callbacks({ unique: true, syncStrategy: true });
+  public changed = Callbacks<[any]>({ unique: true, syncStrategy: true });
 
-  public loadingChanged = Callbacks({ unique: true, syncStrategy: true });
+  public loadingChanged = Callbacks<[isLoading: boolean, messageText?: string]>({ unique: true, syncStrategy: true });
 
   public dataSourceChanged = Callbacks({ unique: true, syncStrategy: true });
 
