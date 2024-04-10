@@ -4,5 +4,8 @@
   "devDependencies": {
     "devextreme": "24.1.1",
     "testcafe": "2.5.0"
+  },
+  "scripts": {
+    "build": "echo empty"
   }
 }

@@ -19,9 +19,12 @@ module.exports.createNodes = [
           cwd: 'e2e/testcafe-devextreme',
           command: `node runner.js --componentFolder '' --file ${test} --concurrency 1 --browsers=chrome:devextreme-shr2`,
         },
+        outputs: [
+          "{projectRoot}/artifacts/compared-screenshots",
+          "{projectRoot}/artifacts/failedtests",
+        ],
         dependsOn: [{
           target: "build",
-          dependencies: true
         }],
         cache: true,
       },
