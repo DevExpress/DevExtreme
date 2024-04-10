@@ -1,7 +1,7 @@
 import {
   NgModule, Component, OnInit, OnDestroy, enableProdMode,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HttpClientModule } from '@angular/common/http';
 import { DxLoadPanelModule } from 'devextreme-angular';
@@ -81,7 +81,6 @@ export class AppComponent implements OnInit, OnDestroy {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxDataGridModule,
     DxLoadPanelModule,
     HttpClientModule,

@@ -1,5 +1,5 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxButtonGroupModule } from 'devextreme-angular';
 import notify from 'devextreme/ui/notify';
@@ -35,9 +35,7 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,
-    BrowserTransferStateModule,
-    DxButtonGroupModule,
+    BrowserModule,    DxButtonGroupModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

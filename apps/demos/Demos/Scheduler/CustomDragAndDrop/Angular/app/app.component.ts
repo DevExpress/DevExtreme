@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSchedulerModule, DxDraggableModule, DxScrollViewModule } from 'devextreme-angular';
 import { DxSchedulerTypes } from 'devextreme-angular/ui/scheduler';
@@ -66,7 +66,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxSchedulerModule,
     DxDraggableModule,
     DxScrollViewModule,
