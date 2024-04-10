@@ -2318,6 +2318,35 @@ module('Appointment dragging', {
         assert.notOk(immediate, 'immediate option is false');
     });
 
+    ['default', 'outlook'].forEach((draggingMode) => {
+        test(`Drag and drop appointment when draggingMode = ${draggingMode}`, function(assert) {
+            $('#qunit-fixture').addClass('qunit-fixture-visible');
+
+            try {
+                const tasks = [
+                    { text: 'Task', startDate: new Date(2015, 2, 15), endDate: new Date(2015, 2, 15, 0, 30) }
+                ];
+                const dataSource = new DataSource({
+                    store: tasks
+                });
+                this.createInstance({
+                    currentView: 'week',
+                    currentDate: new Date(2015, 2, 16),
+                    dataSource: dataSource,
+                    editing: true,
+                    _draggingMode: draggingMode,
+                });
+
+                this.scheduler.appointmentList[0].drag.toCell(1);
+
+                assert.deepEqual(tasks[0].startDate, new Date(2015, 2, 16), 'Start date is correct');
+                assert.deepEqual(tasks[0].endDate, new Date(2015, 2, 16, 0, 30), 'End date is correct');
+            } finally {
+                $('#qunit-fixture').removeClass('qunit-fixture-visible');
+            }
+        });
+    });
+
     supportedScrollingModes.forEach(scrollingMode => {
         module(`Scrolling mode ${scrollingMode}`, {
             beforeEach: function() {

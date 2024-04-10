@@ -34,16 +34,12 @@ import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 
 // NOTE: Renovation component section
 // @ts-expect-error
-import dxrAllDayPanelTable from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/table.j';
-// @ts-expect-error
 import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
-// @ts-expect-error
-import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
 // @ts-expect-error
 import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 // @ts-expect-error
 import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
-import { HeaderPanelComponent } from '../__migration/components/index';
+import { AllDayTableComponent, DateTableComponent, HeaderPanelComponent } from '../__migration/components/index';
 import type { ViewType } from '../__migration/types';
 import {
   calculateIsGroupedAllDayPanel,
@@ -2074,7 +2070,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     utils.renovation.renderComponent(
       this,
       this._$dateTable,
-      dxrDateTableLayout,
+      DateTableComponent,
       'renovatedDateTable',
       this._getRDateTableProps(),
     );
@@ -2119,7 +2115,7 @@ class SchedulerWorkSpace extends WidgetObserver {
         ...this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {},
       };
 
-      utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
+      utils.renovation.renderComponent(this, this._$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
       utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
     }
 
@@ -3311,22 +3307,19 @@ const createDragBehaviorConfig = (
   const getElementsFromPoint = () => {
     const appointmentWidth = getWidth(state.dragElement);
     const cellWidth = getCellWidth();
-
     const isWideAppointment = appointmentWidth > cellWidth;
     const isNarrowAppointment = appointmentWidth <= DRAGGING_MOUSE_FAULT;
-
-    const dragElementContainer = $(state.dragElement).parent();
-    const boundingRect = getBoundingRect(dragElementContainer.get(0));
-
+    const dragElementContainer = $(state.dragElement).parent().get(0);
+    const boundingRect = getBoundingRect(dragElementContainer);
     const newX = boundingRect.left;
     const newY = boundingRect.top;
 
     if (isWideAppointment) {
-      return (domAdapter as any).elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT);
+      return (domAdapter as any).elementsFromPoint(newX + DRAGGING_MOUSE_FAULT, newY + DRAGGING_MOUSE_FAULT, dragElementContainer);
     } if (isNarrowAppointment) {
-      return (domAdapter as any).elementsFromPoint(newX, newY);
+      return (domAdapter as any).elementsFromPoint(newX, newY, dragElementContainer);
     }
-    return (domAdapter as any).elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT);
+    return (domAdapter as any).elementsFromPoint(newX + appointmentWidth / 2, newY + DRAGGING_MOUSE_FAULT, dragElementContainer);
   };
 
   const onDragMove = () => {
