@@ -11,6 +11,7 @@ import { isDefined, isFunction } from '@js/core/utils/type';
 import messageLocalization from '@js/localization/message';
 import List from '@js/ui/list_light';
 import errors from '@js/ui/widget/ui.errors';
+import Callbacks from '@ts/core/utils/callbacks';
 import { prepareItems } from '@ts/grids/grid_core/m_export';
 
 import type { ColumnHeadersView } from '../../grid_core/column_headers/m_column_headers';
@@ -346,7 +347,7 @@ export class ExportController extends dataGridCore.ViewController {
 
   private _isSelectedRows: any;
 
-  private readonly selectionOnlyChanged: any;
+  private readonly selectionOnlyChanged = Callbacks({ unique: true, syncStrategy: true });
 
   public init() {
     this.throwWarningIfNoOnExportingEvent();
@@ -357,6 +358,11 @@ export class ExportController extends dataGridCore.ViewController {
     this._headersView = this.getView('columnHeadersView');
 
     this.createAction('onExporting', { excludeValidators: ['disabled', 'readOnly'] });
+  }
+
+  public dispose() {
+    super.dispose();
+    this.selectionOnlyChanged.empty();
   }
 
   private _getEmptyCell() {
@@ -644,10 +650,6 @@ export class ExportController extends dataGridCore.ViewController {
     }
   }
 
-  protected callbackNames() {
-    return ['selectionOnlyChanged'];
-  }
-
   private getDataProvider(selectedRowsOnly) {
     const columnWidths = this._getColumnWidths(this._headersView, this._rowsView);
     let initialColumnWidthsByColumnIndex;
@@ -704,18 +706,16 @@ export class ExportController extends dataGridCore.ViewController {
 }
 
 const editing = (Base: ModuleType<EditingController>) => class ExportEditingControllerExtender extends Base {
-  // @ts-expect-error
-  private callbackNames() {
-    const callbackList = super.callbackNames();
-
-    return isDefined(callbackList) ? callbackList.push('editingButtonsUpdated') : ['editingButtonsUpdated'];
-  }
+  public readonly editingButtonsUpdated = Callbacks({ unique: true, syncStrategy: true });
 
   protected _updateEditButtons() {
     super._updateEditButtons();
 
-    // @ts-expect-error
     this.editingButtonsUpdated.fire();
+  }
+  public dispose(): void {
+    super.dispose();
+    this.editingButtonsUpdated.empty();
   }
 };
 

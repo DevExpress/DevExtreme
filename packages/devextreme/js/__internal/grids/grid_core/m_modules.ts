@@ -38,27 +38,11 @@ export class ModuleItem {
     that.component = component;
     that._actions = {};
     that._actionConfigs = {};
-
-    each(this.callbackNames() || [], function (index, name) {
-      const flags = that.callbackFlags(name) || {};
-
-      flags.unique = true;
-      flags.syncStrategy = true;
-
-      that[this] = Callbacks(flags);
-    });
   }
 
   protected _endUpdateCore() { }
 
   public init() { }
-
-  protected callbackNames(): string[] | undefined {
-    return undefined;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected callbackFlags(name): any { }
 
   public publicMethods(): string[] {
     return [];
@@ -192,10 +176,6 @@ export class ModuleItem {
   }
 
   public dispose() {
-    const that = this;
-    each(that.callbackNames() || [], function () {
-      that[this].empty();
-    });
   }
 
   public addWidgetPrefix(className) {

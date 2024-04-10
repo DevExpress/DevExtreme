@@ -122,7 +122,7 @@ export class ColumnsController extends modules.Controller {
 
   private __sortingUpdated: any;
 
-  public columnsChanged: any;
+  public columnsChanged = Callbacks({ unique: true, syncStrategy: true });
 
   public _columnChanges: any;
 
@@ -158,6 +158,10 @@ export class ColumnsController extends modules.Controller {
     }
 
     this._checkColumns();
+  }
+
+  public dispose() {
+    this.columnsChanged.empty();
   }
 
   public _getExpandColumnOptions() {
@@ -200,10 +204,6 @@ export class ColumnsController extends modules.Controller {
 
   protected _endUpdateCore() {
     !this._skipProcessingColumnsChange && fireColumnsChanged(this);
-  }
-
-  protected callbackNames() {
-    return ['columnsChanged'];
   }
 
   public getColumnByPath(path, columns?) {

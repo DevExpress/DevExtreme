@@ -14,6 +14,7 @@ import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import Selection from '@js/ui/selection/selection';
 import errors from '@js/ui/widget/ui.errors';
+import Callbacks from '@ts/core/utils/callbacks';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_context_menu';
@@ -124,7 +125,7 @@ export class SelectionController extends modules.Controller {
 
   private _selection!: Selection;
 
-  public selectionChanged: any;
+  public selectionChanged = Callbacks({ unique: true, syncStrategy: true });
 
   private _selectedItemsInternalChange?: boolean;
 
@@ -151,6 +152,11 @@ export class SelectionController extends modules.Controller {
       this._dataPushedHandler = this._handleDataPushed.bind(this);
       this._dataController.pushed.add(this._dataPushedHandler);
     }
+  }
+
+  public dispose(): void {
+    super.dispose();
+    this.selectionChanged.empty();
   }
 
   private _handleDataPushed(changes) {
@@ -397,10 +403,6 @@ export class SelectionController extends modules.Controller {
     }
 
     return itemIndexes;
-  }
-
-  protected callbackNames() {
-    return ['selectionChanged'];
   }
 
   public optionChanged(args) {

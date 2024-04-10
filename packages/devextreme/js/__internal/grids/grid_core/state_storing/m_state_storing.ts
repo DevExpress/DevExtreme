@@ -4,6 +4,7 @@ import { equalByValue, getKeyHash } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
+import Callbacks from '@ts/core/utils/callbacks';
 
 import type { ColumnsController } from '../columns_controller/m_columns_controller';
 import type { DataController } from '../data_controller/m_data_controller';
@@ -220,13 +221,12 @@ const columns = (Base: ModuleType<ColumnsController>) => class StateStoringColum
 const data = (Base: ModuleType<DataController>) => class StateStoringDataExtender extends Base {
   private _restoreStateTimeoutID: any;
 
+  private readonly stateLoaded = Callbacks({ unique: true, syncStrategy: true });
+
   public dispose() {
     clearTimeout(this._restoreStateTimeoutID);
+    this.stateLoaded.empty();
     super.dispose();
-  }
-
-  protected callbackNames() {
-    return super.callbackNames().concat(['stateLoaded']);
   }
 
   protected _refreshDataSource() {
@@ -240,11 +240,9 @@ const data = (Base: ModuleType<DataController>) => class StateStoringDataExtende
           this._restoreStateTimeoutID = null;
         }).done(() => {
           super._refreshDataSource();
-          // @ts-expect-error
           this.stateLoaded.fire();
           deferred.resolve();
         }).fail((error) => {
-          // @ts-expect-error
           this.stateLoaded.fire();
           this._handleLoadError(error || 'Unknown error');
           deferred.reject();

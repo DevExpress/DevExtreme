@@ -14,6 +14,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, normalizeKeyName } from '@js/events/utils/index';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
+import Callbacks from '@ts/core/utils/callbacks';
 import type {
   ColumnsResizerViewController,
 } from '@ts/grids/grid_core/columns_resizing_reordering/m_columns_resizing_reordering';
@@ -60,7 +61,7 @@ export class EditorFactory extends ViewControllerWithMixin {
 
   private _focusTimeoutID: any;
 
-  public focused: any;
+  public focused = Callbacks({ unique: true, syncStrategy: true });
 
   private _$focusOverlay: any;
 
@@ -103,6 +104,7 @@ export class EditorFactory extends ViewControllerWithMixin {
     clearTimeout(this._focusTimeoutID);
     clearTimeout(this._updateFocusTimeoutID);
     eventsEngine.off(this._subscribedContainerRoot, UPDATE_FOCUS_EVENTS, this._updateFocusHandler);
+    this.focused.empty();
   }
 
   private _getFocusedElement($dataGridElement) {
@@ -205,10 +207,6 @@ export class EditorFactory extends ViewControllerWithMixin {
     }
 
     $element.show();
-  }
-
-  protected callbackNames() {
-    return ['focused'];
   }
 
   /**

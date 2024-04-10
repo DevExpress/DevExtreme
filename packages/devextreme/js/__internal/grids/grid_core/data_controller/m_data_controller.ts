@@ -9,6 +9,7 @@ import { isDefined, isObject } from '@js/core/utils/type';
 import ArrayStore from '@js/data/array_store';
 import CustomStore from '@js/data/custom_store';
 import errors from '@js/ui/widget/ui.errors';
+import Callbacks from '@ts/core/utils/callbacks';
 import type { EditingController } from '@ts/grids/grid_core/editing/m_editing';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ErrorHandlingController } from '@ts/grids/grid_core/error_handling/m_error_handling';
@@ -127,17 +128,17 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   private _loadingText: string | undefined;
 
-  public dataErrorOccurred: any;
+  public dataErrorOccurred = Callbacks({ unique: true, syncStrategy: true, stopOnFalse: true });
 
-  public pageChanged: any;
+  public pageChanged = Callbacks({ unique: true, syncStrategy: true });
 
-  public pushed: any;
+  public pushed = Callbacks({ unique: true, syncStrategy: true });
 
-  public changed: any;
+  public changed = Callbacks({ unique: true, syncStrategy: true });
 
-  public loadingChanged: any;
+  public loadingChanged = Callbacks({ unique: true, syncStrategy: true });
 
-  public dataSourceChanged: any;
+  public dataSourceChanged = Callbacks({ unique: true, syncStrategy: true });
 
   protected _lastRenderingPageIndex: any;
 
@@ -238,18 +239,6 @@ export class DataController extends DataHelperMixin(modules.Controller) {
    */
   protected _getPagingOptionValue(optionName) {
     return this._dataSource[optionName]();
-  }
-
-  protected callbackNames() {
-    return ['changed', 'loadingChanged', 'dataErrorOccurred', 'pageChanged', 'dataSourceChanged', 'pushed'];
-  }
-
-  protected callbackFlags(name?: string) {
-    if (name === 'dataErrorOccurred') {
-      return { stopOnFalse: true };
-    }
-
-    return undefined;
   }
 
   public publicMethods() {
@@ -1666,6 +1655,14 @@ export class DataController extends DataHelperMixin(modules.Controller) {
 
   public dispose() {
     this._disposeDataSource();
+
+    this.changed.empty();
+    this.loadingChanged.empty();
+    this.dataErrorOccurred.empty();
+    this.pageChanged.empty();
+    this.dataSourceChanged.empty();
+    this.pushed.empty();
+
     super.dispose();
   }
 

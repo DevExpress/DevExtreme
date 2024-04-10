@@ -27,6 +27,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
+import Callbacks from '@ts/core/utils/callbacks';
 import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
 import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
 import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
@@ -173,7 +174,7 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
 
   protected _requireReady: any;
 
-  public scrollChanged: any;
+  public scrollChanged = Callbacks({ unique: true, syncStrategy: true });
 
   protected _columnsController!: ColumnsController;
 
@@ -221,6 +222,10 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
   }
 
   public dispose() {
+    super.dispose();
+
+    this.scrollChanged.empty();
+
     if (hasWindow()) {
       const window = getWindow();
 
@@ -1004,10 +1009,6 @@ export class ColumnsView extends ColumnStateMixin(modules.View) {
    * @extended: header_panel
    */
   protected _handleDataChanged(e) {
-  }
-
-  public callbackNames() {
-    return ['scrollChanged'];
   }
 
   protected _updateScrollLeftPosition() {

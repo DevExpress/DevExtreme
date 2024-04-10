@@ -3146,40 +3146,6 @@ QUnit.module('API methods', baseModuleConfig, () => {
         assert.equal($('#testElement').text(), titleText, 'title text after refresh');
     });
 
-    // T257132
-    QUnit.test('refresh $.Callbacks memory leaks', function(assert) {
-        // arrange, act
-        const dataGrid = createDataGrid({
-            loadingTimeout: null,
-            dataSource: []
-        });
-        let addCallCount = 0;
-        let removeCallCount = 0;
-
-        $.each($.extend({}, dataGrid._controllers, dataGrid._views), function(controllerName, controller) {
-            $.each(controller.callbackNames() || [], function(index, callbackName) {
-                const callback = controller[callbackName];
-                const add = callback.add;
-                const remove = callback.remove;
-
-                callback.add = function() {
-                    add.apply(callback, arguments);
-                    addCallCount++;
-                };
-                callback.remove = function() {
-                    remove.apply(callback, arguments);
-                    removeCallCount++;
-                };
-            });
-        });
-
-        // act
-        dataGrid.refresh();
-
-        // assert
-        assert.equal(addCallCount, removeCallCount, 'added call count equals removed call count');
-    });
-
     QUnit.test('getSelectedRowsData when storeSelectedItems enabled', function(assert) {
         // arrange, act
         const dataGrid = createDataGrid({
@@ -5467,24 +5433,6 @@ QUnit.module('Modules', {
         const dataGrid = createDataGrid({});
 
         assert.equal((DataGrid.IS_RENOVATED_WIDGET ? dataGrid.getComponentInstance() : dataGrid).testMethod(), 'test');
-    });
-
-    QUnit.test('callbacks registration', function(assert) {
-        gridCore.registerModule('test', {
-            controllers: {
-                test: class extends gridCore.Controller {
-                    callbackNames() {
-                        return ['callback1', 'callback2'];
-                    }
-                }
-            }
-        });
-        const dataGrid = createDataGrid({});
-
-        assert.ok(dataGrid.getController('test').callback1);
-        assert.equal(typeof dataGrid.getController('test').callback1.add, 'function');
-        assert.ok(dataGrid.getController('test').callback2);
-        assert.equal(typeof dataGrid.getController('test').callback2.add, 'function');
     });
 
     QUnit.test('Begin and end update', function(assert) {
