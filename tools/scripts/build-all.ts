@@ -20,7 +20,7 @@ const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 sh.cd(ROOT_DIR);
 sh.exec('npm run tools:discover-declarations');
 sh.exec(`npm run tools -- make-aspnet-metadata --version ${MAJOR_VERSION}`);
-
+/*
 // Inject descriptions
 const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
 sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
@@ -33,7 +33,7 @@ sh.popd();
 sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
 
 sh.exec('npm run devextreme:inject-descriptions');
-
+*/
 sh.exec('npm run build-dist -w devextreme-main', {
     env: {
         ...sh.env,
