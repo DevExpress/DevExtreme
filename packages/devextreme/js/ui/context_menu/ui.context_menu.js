@@ -21,6 +21,7 @@ import { name as contextMenuEventName } from '../../events/contextmenu';
 import holdEvent from '../../events/hold';
 import Scrollable from '../scroll_view/ui.scrollable';
 import { getOuterHeight } from '../../core/utils/size';
+import { isMaterialBased, current as currentTheme } from '../themes';
 
 // STYLE contextMenu
 
@@ -54,6 +55,8 @@ const ACTIONS = [
 ];
 const LOCAL_SUBMENU_DIRECTIONS = [FOCUS_UP, FOCUS_DOWN, FOCUS_FIRST, FOCUS_LAST];
 const DEFAULT_SHOW_EVENT = 'dxcontextmenu';
+const SUBMENU_PADDING = 10;
+const BORDER_WIDTH = 1;
 
 const window = getWindow();
 
@@ -632,12 +635,18 @@ class ContextMenu extends MenuBase {
     }
 
     _initScrollable($container) {
-        this._createComponent($container, Scrollable, {});
+        const { deviceType, mac } = devices.real();
+
+        this._createComponent($container, Scrollable, {
+            useNative: true,
+            useSimulatedScrollbar: deviceType === 'desktop' && !mac,
+        });
     }
 
     _setSubMenuHeight($container, anchor, isNestedSubmenu) {
         const $itemsContainer = $container.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-        const contentHeight = getOuterHeight($itemsContainer);
+        const borderWidth = this._getSubmenuBorderWidth();
+        const contentHeight = getOuterHeight($itemsContainer) + borderWidth * 2;
         const maxHeight = this._getMaxHeight(anchor, !isNestedSubmenu);
         const menuHeight = Math.min(contentHeight, maxHeight);
 
@@ -656,10 +665,15 @@ class ContextMenu extends MenuBase {
 
         const offsetTop = anchor[0].getBoundingClientRect().top;
         const anchorHeight = getOuterHeight(anchor);
-
-        return considerAnchorHeight
+        const availableHeight = considerAnchorHeight
             ? Math.max(offsetTop, windowHeight - offsetTop - anchorHeight)
             : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
+
+        return availableHeight - SUBMENU_PADDING;
+    }
+
+    _getSubmenuBorderWidth() {
+        return isMaterialBased(currentTheme()) ? 0 : BORDER_WIDTH;
     }
 
     _showSubmenu($item) {
@@ -789,6 +803,7 @@ class ContextMenu extends MenuBase {
         if(shouldRenderSubmenu) {
             this._renderSubmenuItems(node, $itemElement);
             $submenu = $itemElement.find(`.${DX_SUBMENU_CLASS}`);
+            this._initScrollView($submenu);
         }
 
         if($itemElement.context === $submenu.context && $submenu.css('visibility') === 'visible') {
@@ -928,8 +943,7 @@ class ContextMenu extends MenuBase {
                     return this._getMaxHeight(position.of);
                 },
                 maxHeight: () => {
-                    const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-                    return getOuterHeight($content);
+                    return getOuterHeight($subMenu);
                 },
                 position,
             });
