@@ -27,8 +27,8 @@ async function sendBatchRequest(url, changes) {
 }
 async function processBatchRequest(url, changes, component) {
   await sendBatchRequest(url, changes);
-  await component.instance().refresh(true);
-  component.instance().cancelEditData();
+  await component.refresh(true);
+  component.cancelEditData();
 }
 const onSaving = (e) => {
   e.cancel = true;

@@ -19,9 +19,9 @@ const notifyDisableDate = () => {
   );
 };
 const applyDisableDatesToDateEditors = (form) => {
-  const startDateEditor = form.instance().getEditor('startDate');
+  const startDateEditor = form.getEditor('startDate');
   startDateEditor?.option('disabledDates', holidays);
-  const endDateEditor = form.instance().getEditor('endDate');
+  const endDateEditor = form.getEditor('endDate');
   endDateEditor?.option('disabledDates', holidays);
 };
 const onAppointmentFormOpening = (e) => {

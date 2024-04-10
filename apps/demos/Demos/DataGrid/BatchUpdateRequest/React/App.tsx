@@ -30,10 +30,10 @@ async function sendBatchRequest(url: string, changes: DataGridTypes.DataChange[]
   }
 }
 
-async function processBatchRequest(url: string, changes: DataGridTypes.DataChange[], component: DataGridRef) {
+async function processBatchRequest(url: string, changes: DataGridTypes.DataChange[], component: ReturnType<DataGridRef['instance']>) {
   await sendBatchRequest(url, changes);
-  await component.instance().refresh(true);
-  component.instance().cancelEditData();
+  await component.refresh(true);
+  component.cancelEditData();
 }
 
 const onSaving = (e: DataGridTypes.SavingEvent) => {
