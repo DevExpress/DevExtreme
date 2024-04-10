@@ -18,7 +18,7 @@ export interface RowProps extends Partial<PropsWithClassName>,
   isHeaderRow: boolean;
 }
 
-const RowDefaultProps = {
+export const RowDefaultProps = {
   className: '',
   leftVirtualCellWidth: 0,
   rightVirtualCellWidth: 0,
