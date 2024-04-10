@@ -1,4 +1,7 @@
 export {
+  AllDayPanelTitleComponent,
+} from './wrappers/all_day_panel_title';
+export {
   AllDayTableComponent,
 } from './wrappers/all_day_table';
 export {
