@@ -90,6 +90,11 @@ createTestCafe({
         if(testName) {
             filters.push(name => name === testName);
         }
+        if(args.skipUnstable) {
+            filters.push((testName, fixtureName, fixturePath, testMeta) => {
+                return !testMeta.unstable;
+            });
+        }
         if(filters.length) {
             runner.filter((...args) => {
                 for(let i = 0; i < filters.length; i++) {
@@ -176,6 +181,7 @@ function getArgs() {
             platform: '',
             theme: '',
             shadowDom: false,
+            skipUnstable: true,
         }
     });
 }
