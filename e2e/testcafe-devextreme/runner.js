@@ -181,7 +181,7 @@ function getArgs() {
             platform: '',
             theme: '',
             shadowDom: false,
-            skipUnstable: true,
+            skipUnstable: false,
         }
     });
 }
