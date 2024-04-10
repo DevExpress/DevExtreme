@@ -22,7 +22,7 @@ jobs:
   main:
     name: main
     runs-on: devextreme-shr2
-    timeout-minutes: 30
+    timeout-minutes: 90
     
     steps:
     - name: Get sources
