@@ -65,6 +65,7 @@ module.exports = {
                 'no-param-reassign': ['error', { 'props': false }],
                 'no-underscore-dangle': 'off',
                 'no-console': ['error', { 'allow': ['warn', 'error'] }],
+                'class-methods-use-this': 'off',
             }
         },
         // Rules for a new TS files.
@@ -176,7 +177,6 @@ module.exports = {
                         'selector': 'MethodDefinition[kind = "set"]',
                     }
                 ],
-                'class-methods-use-this': 'off',
                 '@typescript-eslint/lines-between-class-members': 'off',
             }
         },

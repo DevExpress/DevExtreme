@@ -1,4 +1,5 @@
-import type { GroupItem } from '@ts/scheduler/__migration/types';
+import type { JSXTemplate } from '@devextreme-generator/declarations';
+import type { GroupItem, ViewDataBase } from '@ts/scheduler/__migration/types';
 
 export interface BaseTemplateProps {
   index: number;
@@ -74,4 +75,42 @@ export interface DateHeaderData {
   weekDayLeftVirtualCellCount?: number;
   weekDayRightVirtualCellCount?: number;
   isMonthDateHeader?: boolean;
+}
+
+interface DataCellTemplateData extends BaseTemplateData {
+  startDate: Date;
+  endDate: Date;
+}
+
+export interface DataCellTemplateProps extends BaseTemplateProps {
+  data: DataCellTemplateData;
+}
+
+interface GroupedViewDataBase {
+  topVirtualRowHeight?: number;
+  bottomVirtualRowHeight?: number;
+  leftVirtualCellWidth?: number;
+  rightVirtualCellWidth?: number;
+  leftVirtualCellCount: number;
+  rightVirtualCellCount: number;
+  topVirtualRowCount: number;
+  bottomVirtualRowCount: number;
+}
+
+interface RowData {
+  cells: ViewCellData[];
+  key: number;
+}
+
+interface ViewData extends ViewDataBase {
+  dateTable: RowData[];
+  allDayPanel?: ViewCellData[];
+}
+
+export interface GroupedViewData extends GroupedViewDataBase {
+  groupedData: ViewData[];
+}
+
+export interface CellTemplateProps extends ViewCellData {
+  dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
