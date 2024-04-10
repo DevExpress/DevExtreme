@@ -106,7 +106,7 @@ registerDecorator(
             const hasSelectAllItem = !!$selectAll;
 
             if(hasSelectAllItem && isFocusOutOfList) {
-                list.option('focusedElement', $selectAll);
+                list.option('focusedElement', this._selectAllCheckBox.$element());
                 list.scrollToItem(list.option('focusedElement'));
 
                 return true;
