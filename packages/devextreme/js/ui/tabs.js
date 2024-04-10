@@ -500,6 +500,14 @@ const Tabs = CollectionWidget.inherit({
         this.$element().append($rightButton);
     },
 
+    _updateNavButtonsAriaDisabled() {
+        const buttons = [this._leftButton, this._rightButton];
+
+        buttons.forEach(button => {
+            button?.$element().attr({ 'aria-disabled': null });
+        });
+    },
+
     _updateNavButtonsState() {
         const isVertical = this._isVertical();
         const scrollable = this.getScrollable();
@@ -511,6 +519,8 @@ const Tabs = CollectionWidget.inherit({
             this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
             this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
         }
+
+        this._updateNavButtonsAriaDisabled();
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -540,11 +550,6 @@ const Tabs = CollectionWidget.inherit({
             },
             onClick: () => {
                 this._updateScrollPosition(offset, 1);
-            },
-            onOptionChanged: ({ name, value, element }) => {
-                if(name === 'disabled' && value) {
-                    this.setAria({ disabled: null }, $(element));
-                }
             },
         });
 
