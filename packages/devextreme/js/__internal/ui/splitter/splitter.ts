@@ -13,7 +13,7 @@ import {
   getOuterHeight,
   getOuterWidth,
 } from '@js/core/utils/size';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { lock } from '@js/events/core/emitter.feedback';
 import CollectionWidgetItem from '@js/ui/collection/item';
@@ -182,14 +182,13 @@ class Splitter extends (CollectionWidget as any) {
     this._layout = this._getDefaultLayoutBasedOnSize();
 
     this._applyFlexGrowFromLayout(this._layout);
-    this._updatePaneSizesWithOuterWidth();
+    this._updateItemSizes();
 
     this._shouldRecalculateLayout = false;
   }
 
   _renderItems(items: Item[]): void {
     this._resizeHandles = [];
-
     super._renderItems(items);
 
     this._updateResizeHandlesResizableState();
@@ -399,7 +398,7 @@ class Splitter extends (CollectionWidget as any) {
           }
 
           this._panesCacheSize[rightItemIndex] = undefined;
-          this.option(`items[${rightItemIndex}].collapsed`, false);
+          this._updateItemData('collapsed', rightItemIndex, false, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
@@ -414,7 +413,7 @@ class Splitter extends (CollectionWidget as any) {
         this._panesCacheSize[leftItemIndex] = this._getItemDimension($leftItem.get(0));
         this._collapsedItemSize = this._getItemDimension($leftItem.get(0));
 
-        this.option(`items[${leftItemIndex}].collapsed`, true);
+        this._updateItemData('collapsed', leftItemIndex, true, false);
 
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
@@ -449,7 +448,8 @@ class Splitter extends (CollectionWidget as any) {
           }
 
           this._panesCacheSize[leftItemIndex] = undefined;
-          this.option(`items[${leftItemIndex}].collapsed`, false);
+
+          this._updateItemData('collapsed', leftItemIndex, false, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
@@ -464,7 +464,7 @@ class Splitter extends (CollectionWidget as any) {
         this._panesCacheSize[rightItemIndex] = this._getItemDimension($rightItem.get(0));
         this._collapsedItemSize = this._getItemDimension($rightItem.get(0));
 
-        this.option(`items[${rightItemIndex}].collapsed`, true);
+        this._updateItemData('collapsed', rightItemIndex, true, false);
 
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
@@ -530,9 +530,7 @@ class Splitter extends (CollectionWidget as any) {
         this._feedbackDeferred.resolve();
         this._toggleActiveState($resizeHandle, false);
 
-        each(this._itemElements(), (index: number, itemElement: Element) => {
-          this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
-        });
+        this._updateItemSizes();
 
         this._getAction(RESIZE_EVENT.onResizeEnd)({
           event,
@@ -622,7 +620,7 @@ class Splitter extends (CollectionWidget as any) {
         this._layout = this._getDefaultLayoutBasedOnSize();
 
         this._applyFlexGrowFromLayout(this._layout);
-        this._updatePaneSizesWithOuterWidth();
+        this._updateItemSizes();
         break;
       case 'collapsed':
         this._itemCollapsedOptionChanged(item);
@@ -659,7 +657,7 @@ class Splitter extends (CollectionWidget as any) {
     this._collapsedItemSize = undefined;
 
     this._applyFlexGrowFromLayout(this._layout);
-    this._updatePaneSizesWithOuterWidth();
+    this._updateItemSizes();
   }
 
   _getCollapseDelta(item: Item): number {
@@ -717,10 +715,37 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  _updatePaneSizesWithOuterWidth(): void {
+  _updateItemSizes(): void {
     this._iterateItems((index, itemElement) => {
-      this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
+      this._updateItemData('size', index, this._getItemDimension(itemElement));
     });
+  }
+
+  _updateItemData(
+    prop: 'size' | 'collapsed',
+    itemIndex: number,
+    value: unknown,
+    silent = true,
+  ): void {
+    const itemPath = `items[${itemIndex}]`;
+    const itemData = this.option(itemPath);
+
+    if (isObject(itemData)) {
+      this._updateItemOption(`${itemPath}.${prop}`, value, silent);
+    } else {
+      this._updateItemOption(itemPath, {
+        text: itemData,
+        [prop]: value,
+      }, silent);
+    }
+  }
+
+  _updateItemOption(path: string, value: unknown, silent = false): void {
+    if (silent) {
+      this._options.silent(path, value);
+    } else {
+      this.option(path, value);
+    }
   }
 
   _iterateItems(callback: (index: number, itemElement: HTMLElement) => void): void {
