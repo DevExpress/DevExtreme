@@ -36,7 +36,7 @@
         "esbuild": "0.19.3",
         "esbuild-plugin-vue3": "0.3.2",
         "eslint-plugin-react-hooks": "4.6.0",
-        "exceljs": "4.3.0",
+        "exceljs": "4.4.0",
         "file-saver-es": "2.0.5",
         "fs-extra": "11.1.1",
         "globalize": "1.7.0",
