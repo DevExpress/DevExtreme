@@ -620,7 +620,7 @@ QUnit.module('Rendering ScrollView', {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
 
         keyboardMock(itemsContainer)
             .press('down');
@@ -661,7 +661,7 @@ QUnit.module('Rendering ScrollView', {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
 
         keyboardMock(itemsContainer)
             .press('down');

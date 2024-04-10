@@ -416,12 +416,12 @@ QUnit.module('Rendering ScrollView', moduleConfig, () => {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
 
         keyboardMock(instance.itemsContainer())
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .1, 'scrolled back to the 1st item');
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
@@ -445,7 +445,7 @@ QUnit.module('Rendering ScrollView', moduleConfig, () => {
         const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottop');
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
 
         keyboardMock(instance.itemsContainer())
             .press('down');
