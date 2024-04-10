@@ -198,6 +198,7 @@ const Tabs = CollectionWidget.inherit({
         const indicatorPosition = this._getIndicatorPosition();
 
         this.callBase();
+        this.setAria('role', 'tablist');
         this.$element().addClass(TABS_CLASS);
         this._toggleScrollingEnabledClass(scrollingEnabled);
         this._toggleOrientationClass(orientation);
@@ -429,7 +430,6 @@ const Tabs = CollectionWidget.inherit({
 
     _renderWrapper: function() {
         this._$wrapper = $('<div>').addClass(TABS_WRAPPER_CLASS);
-        this.setAria('role', 'tablist', this._$wrapper);
         this.$element().append(this._$wrapper);
     },
 
@@ -477,22 +477,35 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _renderNavButtons: function() {
-        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, this.option('showNavButtons'));
+        const { showNavButtons, rtlEnabled } = this.option();
 
-        if(!this.option('showNavButtons')) return;
+        this.$element().toggleClass(TABS_NAV_BUTTONS_CLASS, showNavButtons);
 
-        const rtlEnabled = this.option('rtlEnabled');
+        if(!showNavButtons) {
+            return;
+        }
+
         this._leftButton = this._createNavButton(-TAB_OFFSET, rtlEnabled ? BUTTON_NEXT_ICON : BUTTON_PREV_ICON);
-
         const $leftButton = this._leftButton.$element();
+
         $leftButton.addClass(TABS_LEFT_NAV_BUTTON_CLASS);
+
         this.$element().prepend($leftButton);
 
         this._rightButton = this._createNavButton(TAB_OFFSET, rtlEnabled ? BUTTON_PREV_ICON : BUTTON_NEXT_ICON);
-
         const $rightButton = this._rightButton.$element();
+
         $rightButton.addClass(TABS_RIGHT_NAV_BUTTON_CLASS);
+
         this.$element().append($rightButton);
+    },
+
+    _updateNavButtonsAriaDisabled() {
+        const buttons = [this._leftButton, this._rightButton];
+
+        buttons.forEach(button => {
+            button?.$element().attr({ 'aria-disabled': null });
+        });
     },
 
     _updateNavButtonsState() {
@@ -506,6 +519,8 @@ const Tabs = CollectionWidget.inherit({
             this._leftButton?.option('disabled', isReachedLeft(scrollable.scrollLeft(), 1));
             this._rightButton?.option('disabled', isReachedRight($(scrollable.container()).get(0), scrollable.scrollLeft(), 1));
         }
+
+        this._updateNavButtonsAriaDisabled();
     },
 
     _updateScrollPosition: function(offset, duration) {
@@ -514,11 +529,9 @@ const Tabs = CollectionWidget.inherit({
     },
 
     _createNavButton: function(offset, icon) {
-        const that = this;
-
-        const holdAction = that._createAction(function() {
-            that._holdInterval = setInterval(function() {
-                that._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
+        const holdAction = this._createAction(() => {
+            this._holdInterval = setInterval(() => {
+                this._updateScrollPosition(offset, FEEDBACK_DURATION_INTERVAL);
             }, FEEDBACK_DURATION_INTERVAL);
         });
 
@@ -529,20 +542,27 @@ const Tabs = CollectionWidget.inherit({
         const navButton = this._createComponent($('<div>').addClass(TABS_NAV_BUTTON_CLASS), Button, {
             focusStateEnabled: false,
             icon: icon,
-            onClick: function() {
-                that._updateScrollPosition(offset, 1);
+            integrationOptions: {},
+            elementAttr: {
+                role: null,
+                'aria-label': null,
+                'aria-disabled': null,
             },
-            integrationOptions: {}
+            onClick: () => {
+                this._updateScrollPosition(offset, 1);
+            },
         });
 
         const $navButton = navButton.$element();
 
-        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (function(e) { holdAction({ event: e }); }).bind(this));
-        eventsEngine.on($navButton, pointerUpEventName, function() {
-            that._clearInterval();
+        eventsEngine.on($navButton, holdEventName, { timeout: FEEDBACK_SCROLL_TIMEOUT }, (e) => {
+            holdAction({ event: e });
         });
-        eventsEngine.on($navButton, pointerOutEventName, function() {
-            that._clearInterval();
+        eventsEngine.on($navButton, pointerUpEventName, () => {
+            this._clearInterval();
+        });
+        eventsEngine.on($navButton, pointerOutEventName, () => {
+            this._clearInterval();
         });
 
         return navButton;
@@ -572,10 +592,6 @@ const Tabs = CollectionWidget.inherit({
         }
 
         this.callBase(e);
-    },
-
-    _refreshActiveDescendant: function() {
-        this.callBase(this._$wrapper);
     },
 
     _clean: function() {
