@@ -2618,16 +2618,6 @@ export type RowDragging<TComponent extends GridBase<TRowData, TKey>, TRowData = 
    */
   handle?: string;
   /**
-   * @docid GridBaseOptions.rowDragging.onAdd
-   * @type_function_param1 e:object
-   * @type_function_param1_field component:this
-   * @type_function_param1_field event:event
-   * @type_function_param1_field itemData:any
-   * @type_function_param1_field fromComponent:dxSortable|dxDraggable
-   * @type_function_param1_field toComponent:dxSortable|dxDraggable
-   */
-  onAdd?: ((e: ReducedNativeEventInfo<TComponent> & RowDraggingEventInfo<TRowData> & DragDropInfo) => void);
-  /**
    * @docid GridBaseOptions.rowDragging.onDragChange
    * @type_function_param1 e:object
    * @type_function_param1_field component:this

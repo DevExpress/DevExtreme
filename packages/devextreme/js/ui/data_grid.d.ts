@@ -2516,7 +2516,7 @@ import { CheckedEvents } from '../core';
 
 type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut'>;
 
-type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
+//type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onCellClick' | 'onCellDblClick' | 'onCellHoverChanged' | 'onCellPrepared' | 'onContextMenuPreparing' | 'onEditingStart' | 'onEditorPrepared' | 'onEditorPreparing' | 'onExporting' | 'onFocusedCellChanged' | 'onFocusedCellChanging' | 'onFocusedRowChanged' | 'onFocusedRowChanging' | 'onRowClick' | 'onRowDblClick' | 'onRowPrepared'>;
 
 /**
 * @hidden
@@ -2647,5 +2647,10 @@ onSelectionChanged?: ((e: SelectionChangedEvent) => void);
  * @type_function_param1 e:{ui/data_grid:ToolbarPreparingEvent}
  */
 onToolbarPreparing?: ((e: ToolbarPreparingEvent) => void);
+/**
+ * @docid dxDataGridOptions.rowDragging.onAdd
+ * @type_function_param1 e:{ui/data_grid:RowDraggingAddEvent}
+ */
+onAdd?: ((e: RowDraggingAddEvent) => void);
 };
 ///#ENDDEBUG

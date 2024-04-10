@@ -4370,14 +4370,6 @@ declare module DevExpress.common.grids {
      */
     handle?: string;
     /**
-     * [descr:GridBaseOptions.rowDragging.onAdd]
-     */
-    onAdd?: (
-      e: ReducedNativeEventInfo<TComponent> &
-        RowDraggingEventInfo<TRowData> &
-        DragDropInfo
-    ) => void;
-    /**
      * [descr:GridBaseOptions.rowDragging.onDragChange]
      */
     onDragChange?: (
