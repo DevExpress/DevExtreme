@@ -134,7 +134,7 @@ test(`Toolbar should render on changing visibility if visibility is false initia
     .expect(dataGrid.getHeaderPanel().element.find('.dx-button').textContent)
     .eql('myTestButton');
   
-  await dataGrid.option('toolbar.visible', true);
+  await dataGrid.option('toolbar.visible', false);
 
   await t
     .expect(dataGrid.getHeaderPanel().element.visible)
