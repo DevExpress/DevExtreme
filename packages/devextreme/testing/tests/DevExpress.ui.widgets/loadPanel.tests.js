@@ -37,10 +37,54 @@ QUnit.testStart(function() {
 });
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
+const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
 const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
 const MESSAGE_SELECTOR = '.' + LOADPANEL_MESSAGE_CLASS;
 const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
 const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
+const LOADINDICATOR_CLASS = '.dx-loadpanel-indicator';
+
+QUnit.module('accessibility', () => {
+    QUnit.test('showIndicator option should properly change from true to false during runtime', function(assert) {
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: true }).dxLoadPanel('instance');
+
+        assert.strictEqual($loadPanel.option('showIndicator'), true, 'showIndicator option is true');
+
+        $loadPanel.option({ showIndicator: false });
+
+        assert.strictEqual($loadPanel.option('showIndicator'), false, 'showIndicator option is false');
+    });
+
+    QUnit.test('showIndicator option should properly change from false to true during runtime', function(assert) {
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false, message: '' }).dxLoadPanel('instance');
+
+        assert.strictEqual($loadPanel.option('showIndicator'), false, 'showIndicator option is false');
+
+        $loadPanel.option({ showIndicator: true });
+
+        assert.strictEqual($loadPanel.option('showIndicator'), true, 'showIndicator option is true');
+    });
+
+    QUnit.test('message option should properly change from not empty to empty during runtime', function(assert) {
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false, message: 'Test Message' }).dxLoadPanel('instance');
+
+        assert.strictEqual($loadPanel.option('message'), 'Test Message', 'message option contains correct value');
+
+        $loadPanel.option({ message: '' });
+
+        assert.strictEqual($loadPanel.option('message'), '', 'message option is empty');
+    });
+
+    QUnit.test('message option should properly change from empty to not empty during runtime', function(assert) {
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false, message: '' }).dxLoadPanel('instance');
+
+        assert.strictEqual($loadPanel.option('message'), '', 'message option is empty');
+
+        $loadPanel.option({ message: 'Test Message' });
+
+        assert.strictEqual($loadPanel.option('message'), 'Test Message', 'message option contains correct value');
+    });
+});
 
 QUnit.module('init', {
     beforeEach: function() {
@@ -62,48 +106,38 @@ QUnit.module('init', {
 
     QUnit.test('correct wrapper aria attributes load when showIndicator = false', function(assert) {
         const label = messageLocalization.format('Loading');
-        const instance = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false }).dxLoadPanel('instance');
-        instance.option({ message: '' });
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false }).dxLoadPanel('instance');
 
-        assert.strictEqual(instance.$wrapper().attr('role'), 'alert');
-        assert.strictEqual(instance.$wrapper().attr('aria-label'), label);
+        assert.strictEqual($loadPanel.$wrapper().attr('role'), 'alert', 'role attribute has value alert ');
+        assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), label, 'aria-label attribute has value Loading...');
     });
 
     QUnit.test('wrapper aria attributes must not load when showIndicator = true', function(assert) {
-        const instance = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false });
-        const wrapperAttributes = Array.from(instance[0].attributes).map(attr => attr.name);
-        const expectedAttributes = ['role', 'aria-label'];
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: true });
 
-        assert.strictEqual(!expectedAttributes.every(item => wrapperAttributes.includes(item)), true);
+        assert.strictEqual($loadPanel.attr('role'), undefined, 'role is not set');
+        assert.strictEqual($loadPanel.attr('aria-label'), undefined, 'aria-label is not set');
     });
 
     QUnit.test('correct load indicator aria attributes load when showIndicator = true', function(assert) {
-        const instance = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: true }).dxLoadPanel('instance');
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: true }).dxLoadPanel('instance');
         const label = messageLocalization.format('Loading');
-        const indicatorAttributes = Array.from(instance._$indicator.prop('attributes')).map(attr => attr.name);
+        const indicatorAttributes = Array.from($loadPanel.$content().find(LOADINDICATOR_CLASS).prop('attributes')).map(attr => attr.name);
         const expectedAttributes = ['role', 'aria-label'];
-        instance.option({ message: '' });
 
-        assert.strictEqual(instance._$indicator[0].role, 'alert');
-        assert.strictEqual(instance._$indicator[0].ariaLabel, label);
-        assert.strictEqual(expectedAttributes.every(item => indicatorAttributes.includes(item)), true);
-    });
-
-    QUnit.test('role on wrapper', function(assert) {
-        const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
-        instance.option({ message: '' });
-
-        assert.strictEqual(instance.$wrapper().attr('role'), 'alert');
+        assert.strictEqual($loadPanel.$content().find(LOADINDICATOR_CLASS).attr('role'), 'alert', 'role attribute has value alert');
+        assert.strictEqual($loadPanel.$content().find(LOADINDICATOR_CLASS).attr('aria-label'), label, 'aria-label attribute has value Loading...');
+        assert.strictEqual(expectedAttributes.every(item => indicatorAttributes.includes(item)), true, 'root element has complete set of expected attributes');
     });
 
     QUnit.test('aria-label on wrapper', function(assert) {
-        const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
+        const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
 
-        assert.strictEqual(instance.$wrapper().attr('aria-label'), undefined);
+        assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), undefined, 'aria-label attribute is not set');
 
-        instance.option({ message: '' });
+        $loadPanel.option({ message: '' });
 
-        assert.strictEqual(instance.$wrapper().attr('aria-label'), 'Loading...');
+        assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), 'Loading...', 'aria-label attribute has value Loading...');
     });
 
     QUnit.test('aria-label on wrapper in Material based themes', function(assert) {

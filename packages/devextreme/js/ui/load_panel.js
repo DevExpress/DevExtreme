@@ -6,7 +6,7 @@ import { extend } from '../core/utils/extend';
 import LoadIndicator from './load_indicator';
 import Overlay from './overlay/ui.overlay';
 import { Deferred } from '../core/utils/deferred';
-import { isMaterial, isMaterialBased, isFluent } from './themes';
+import { isMaterial, isFluent } from './themes';
 
 // STYLE loadPanel
 
@@ -126,27 +126,18 @@ const LoadPanel = Overlay.inherit({
     },
 
     _setWrapperAria() {
-        const { message } = this.option();
+        const aria = this._getAriaAttributes();
 
-        const defaultLabel = isMaterialBased() ? message : null;
-        const label = message ? defaultLabel : messageLocalization.format('Loading');
-
-        const aria = {
-            role: 'alert',
-            label,
-        };
-
-        this.setAria(aria, this.$wrapper());
+        this.$wrapper().attr(aria);
     },
 
-    _getIndicatorAria() {
+    _getAriaAttributes() {
         const { message } = this.option();
-        const defaultLabel = isMaterialBased() ? message : null;
-        const label = message ? defaultLabel : messageLocalization.format('Loading');
+        const label = message || messageLocalization.format('Loading');
 
         const aria = {
             role: 'alert',
-            label,
+            'aria-label': label,
         };
 
         return aria;
@@ -223,7 +214,7 @@ const LoadPanel = Overlay.inherit({
         }
 
         this._createComponent(this._$indicator, LoadIndicator, {
-            elementAttr: this._getIndicatorAria(),
+            elementAttr: this._getAriaAttributes(),
             indicatorSrc: this.option('indicatorSrc')
         });
     },
