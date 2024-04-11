@@ -23,6 +23,8 @@ jobs:
     name: main
     runs-on: devextreme-shr2
     timeout-minutes: 90
+    env:
+      NX_PROFILE: profile.json
     
     steps:
     - name: Get sources
@@ -72,6 +74,13 @@ jobs:
         done
 
         exit 0 # exits with success status if a all processes complete successfully
+     
+    - name: Upload artifacts 
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: profile
+        path: profile.json
 
   agents:
     name: Agent ${{ matrix.agent }}
