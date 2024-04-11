@@ -50,8 +50,8 @@ test('Grouped list appearance', async (t) => {
   await testScreenshot(t, takeScreenshot, 'Grouped list appearance,collapsibleGroups=false.png', { element: '#container' });
 
   await t
-  .expect(compareResults.isValid())
-  .ok(compareResults.errorMessages());
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxList', {
   width: 300,
   height: 800,
@@ -94,8 +94,8 @@ test('Grouped list appearance', async (t) => {
     await testScreenshot(t, takeScreenshot, `Grouped list appearance with template. rtlEnabled=${rtlEnabled}.png`, { element: '#container' });
 
     await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
   }).before(async () => createWidget('dxList', {
     width: 300,
     height: 500,
