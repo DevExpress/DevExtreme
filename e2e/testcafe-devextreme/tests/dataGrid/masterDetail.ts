@@ -7,7 +7,7 @@ import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
-fixture.disablePageReloads`Master detail`
+fixture`Master detail`
   .page(url(__dirname, '../container.html'));
 
 ['material.blue.light', 'generic.light'].forEach((theme) => {

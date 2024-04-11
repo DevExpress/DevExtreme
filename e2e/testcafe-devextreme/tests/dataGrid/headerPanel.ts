@@ -6,7 +6,7 @@ import { Themes } from '../../helpers/themes';
 import { changeTheme } from '../../helpers/changeTheme';
 import { getData } from './helpers/generateDataSourceData';
 
-fixture.disablePageReloads`Header Panel`
+fixture`Header Panel`
   .page(url(__dirname, '../container.html'));
 
 test('Drop-down window should be positioned correctly after resizing the toolbar (T1037975)', async (t) => {

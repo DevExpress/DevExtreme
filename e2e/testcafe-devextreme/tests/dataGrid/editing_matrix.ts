@@ -8,7 +8,7 @@ import DataCell from 'devextreme-testcafe-models/dataGrid/data/cell';
 import EditForm from 'devextreme-testcafe-models/dataGrid/editForm';
 import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
 
-fixture.disablePageReloads`Editing`
+fixture`Editing`
   .page(url(__dirname, '../container.html'));
 
 const editingModes = [

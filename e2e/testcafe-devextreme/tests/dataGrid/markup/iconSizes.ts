@@ -4,7 +4,7 @@ import { changeTheme } from '../../../helpers/changeTheme';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
-fixture.disablePageReloads`Icon Sizes`
+fixture`Icon Sizes`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';

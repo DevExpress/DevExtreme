@@ -5,7 +5,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { makeColumnHeadersViewTemplatesAsync } from '../helpers/asyncTemplates';
 
-fixture.disablePageReloads`Grouping Panel`
+fixture`Grouping Panel`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

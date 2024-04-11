@@ -6,7 +6,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { Themes } from '../../../../helpers/themes';
 
 // TODO: Enable multi-theming testcafe run in the future.
-fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
+fixture`Grouping Panel - Borders with enabled alternate rows`
   .page(url(__dirname, '../../../container.html'));
 
 const GRID_SELECTOR = '#container';

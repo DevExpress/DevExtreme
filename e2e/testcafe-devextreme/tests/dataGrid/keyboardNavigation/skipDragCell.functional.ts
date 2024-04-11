@@ -4,7 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 // T1147695
 fixture
-  .disablePageReloads`Keyboard Navigation - skip drag cell`
+  `Keyboard Navigation - skip drag cell`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

@@ -4,7 +4,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { gridOptions } from './options';
 
 fixture
-  .disablePageReloads`Keyboard Navigation - screenshots`
+  `Keyboard Navigation - screenshots`
   .page(url(__dirname, '../../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

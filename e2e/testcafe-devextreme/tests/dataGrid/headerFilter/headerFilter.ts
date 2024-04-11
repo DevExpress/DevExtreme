@@ -5,7 +5,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import { getData } from '../helpers/generateDataSourceData';
 
-fixture.disablePageReloads`Header Filter`
+fixture`Header Filter`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';

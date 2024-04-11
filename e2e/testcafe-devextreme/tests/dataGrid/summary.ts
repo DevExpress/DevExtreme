@@ -3,7 +3,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture.disablePageReloads`Summary`
+fixture`Summary`
   .page(url(__dirname, '../container.html'));
 
 test('Group footer summary should be focusable', async (t) => {

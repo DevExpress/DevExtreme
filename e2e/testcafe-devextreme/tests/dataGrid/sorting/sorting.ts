@@ -2,7 +2,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
-fixture.disablePageReloads`Sorting`
+fixture`Sorting`
   .page(url(__dirname, '../../container.html'));
 
 test('Filter expression should be valid when sortingMethod, remoteOperations, and autoNavigateToFocusedRow are specified (T1200546)', async (t) => {

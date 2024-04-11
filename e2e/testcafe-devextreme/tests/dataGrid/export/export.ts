@@ -2,7 +2,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
-fixture.disablePageReloads`Export`
+fixture`Export`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';

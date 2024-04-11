@@ -6,7 +6,7 @@ import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 
-fixture.disablePageReloads`Selection`
+fixture`Selection`
   .page(url(__dirname, '../container.html'));
 
 test('selectAll state should be correct after unselect item if refresh(true) is called inside onSelectionChanged (T1048081)', async (t) => {

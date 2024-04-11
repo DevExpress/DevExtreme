@@ -5,7 +5,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
 
 fixture
-  .disablePageReloads`Keyboard Navigation - editOnKeyPress`
+  `Keyboard Navigation - editOnKeyPress`
   .page(url(__dirname, '../../container.html'));
 
 const DATA_GRID_SELECTOR = '#container';

@@ -3,7 +3,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
-fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
+fixture`Grouping Panel - Borders with enabled alternate rows`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_SELECTOR = '#container';

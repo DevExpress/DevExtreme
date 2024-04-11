@@ -9,7 +9,7 @@ import { getData } from '../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;
 
-fixture.disablePageReloads`Keyboard Navigation - common`
+fixture`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
 
 test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {

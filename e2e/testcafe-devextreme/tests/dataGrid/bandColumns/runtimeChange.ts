@@ -5,7 +5,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
-fixture.disablePageReloads`Band columns: runtime change`
+fixture`Band columns: runtime change`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';
