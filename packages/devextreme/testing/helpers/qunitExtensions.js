@@ -172,6 +172,10 @@
 
         shadowContainer.className = 'shadow-container';
 
+        if(root.classList.contains('qunit-fixture-visible')) {
+            shadowContainer.classList.add('qunit-fixture-visible');
+        }
+
         style.innerHTML = `
             :host {
                 position: static!important;
