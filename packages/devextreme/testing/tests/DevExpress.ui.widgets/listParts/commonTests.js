@@ -4137,11 +4137,11 @@ if(devices.real().deviceType === 'desktop') {
 
                 this.expectedContainerAttrs = {
                     tabindex: '0',
-                    role: 'group'
+                    role: 'application',
                 };
                 this.expectedItemsContainerAttrs = {
                     role: 'listbox',
-                    'aria-label': 'Items'
+                    'aria-label': 'Items',
                 };
             },
             afterEach: function() {

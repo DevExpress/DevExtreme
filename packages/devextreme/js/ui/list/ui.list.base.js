@@ -44,7 +44,7 @@ const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';
 const LIST_HAS_NEXT_CLASS = 'dx-has-next';
 const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
 const WRAP_ITEM_TEXT_CLASS = 'dx-wrap-item-text';
-const SELECT_ALL_CHECKBOX_SELECTOR = '.dx-list-select-all-checkbox';
+const SELECT_ALL_ITEM_SELECTOR = '.dx-list-select-all';
 
 const LIST_ITEM_DATA_KEY = 'dxListItemData';
 const LIST_FEEDBACK_SHOW_TIMEOUT = 70;
@@ -55,7 +55,7 @@ let _scrollView;
 
 export const ListBase = CollectionWidget.inherit({
 
-    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_CHECKBOX_SELECTOR].join(','),
+    _activeStateUnit: [LIST_ITEM_SELECTOR, SELECT_ALL_ITEM_SELECTOR].join(','),
 
     _supportedKeys: function() {
         const that = this;
