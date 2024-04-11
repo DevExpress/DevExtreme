@@ -37,7 +37,6 @@ QUnit.testStart(function() {
 });
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
-const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
 const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
 const MESSAGE_SELECTOR = '.' + LOADPANEL_MESSAGE_CLASS;
 const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
