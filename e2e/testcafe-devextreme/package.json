@@ -2,7 +2,8 @@
   "name": "devextreme-testcafe-tests",
   "version": "24.1.1",
   "scripts": {
-    "test": "node ./runner.js"
+    "test": "node ./runner.js",
+    "lint": "eslint ."
   },
   "devDependencies": {
     "devextreme": "24.1.1",
