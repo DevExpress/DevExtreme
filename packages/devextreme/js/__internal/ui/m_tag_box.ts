@@ -744,9 +744,6 @@ const TagBox = (SelectBox as any).inherit({
     this._multiTagPreparingAction(args);
 
     // @ts-expect-error
-    const tagText = args.text;
-
-    // @ts-expect-error
     if (args.cancel) {
       return false;
     }
@@ -760,6 +757,9 @@ const TagBox = (SelectBox as any).inherit({
       model: args.text,
       container: getPublicElement($tag),
     });
+
+    // @ts-expect-error
+    const tagText = args.text;
 
     this._setTagAria($tag, tagText);
     this._updateElementAria(tagId);
