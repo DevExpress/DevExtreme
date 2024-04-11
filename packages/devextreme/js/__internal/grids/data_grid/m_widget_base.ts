@@ -13,8 +13,7 @@ import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isFunction, isString } from '@js/core/utils/type';
+import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/data_grid';
 import { isMaterialBased } from '@js/ui/themes';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -58,18 +57,6 @@ gridCore.registerModulesOrder([
   'gridView']);
 
 class DataGrid extends GridCoreWidget<Properties> {
-  private _getDefaultOptions() {
-    // @ts-expect-error
-    const result = super._getDefaultOptions();
-
-    each(gridCore.modules, function () {
-      if (isFunction(this.defaultOptions)) {
-        extend(true, result, this.defaultOptions());
-      }
-    });
-    return result;
-  }
-
   private _defaultOptionsRules() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -151,10 +138,6 @@ class DataGrid extends GridCoreWidget<Properties> {
     this.getView('gridView').render(this.$element());
   }
 
-  protected callModuleItemsMethod(methodName: string, args?: any[]) {
-    gridCore.callModuleItemsMethod(this, methodName, args);
-  }
-
   protected _setDeprecatedOptions() {
     super._setDeprecatedOptions();
 
@@ -163,6 +146,14 @@ class DataGrid extends GridCoreWidget<Properties> {
       useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
       rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
     });
+  }
+
+  private static registerModule(name, module) {
+    gridCore.registerModule(name, module);
+  }
+
+  protected getGridCoreHelper() {
+    return gridCore;
   }
 
   public _getTemplate(templateName) {
@@ -178,10 +169,6 @@ class DataGrid extends GridCoreWidget<Properties> {
 
   public focus(element?) {
     this.getController('keyboardNavigation').focus(element);
-  }
-
-  private static registerModule(name, module) {
-    gridCore.registerModule(name, module);
   }
 }
 

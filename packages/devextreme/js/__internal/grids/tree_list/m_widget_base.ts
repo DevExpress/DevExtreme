@@ -9,9 +9,7 @@ import './m_grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
@@ -55,16 +53,15 @@ treeListCore.registerModulesOrder([
   'gridView']);
 
 class TreeList extends GridCoreWidget<dxTreeListOptions> {
-  protected _getDefaultOptions() {
+  private _initMarkup() {
     // @ts-expect-error
-    const result = super._getDefaultOptions();
+    super._initMarkup.apply(this, arguments);
+    (this.$element() as any).addClass(TREELIST_CLASS);
+    this.getView('gridView').render(this.$element());
+  }
 
-    each(treeListCore.modules, function () {
-      if (isFunction(this.defaultOptions)) {
-        extend(true, result, this.defaultOptions());
-      }
-    });
-    return result;
+  private static registerModule() {
+    treeListCore.registerModule.apply(treeListCore, arguments as any);
   }
 
   protected _defaultOptionsRules() {
@@ -101,22 +98,11 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
 
     treeListCore.processModules(that, treeListCore);
 
-    this.callModuleItemsMethod('init');
+    treeListCore.callModuleItemsMethod(this, 'init');
   }
 
-  private _initMarkup() {
-    // @ts-expect-error
-    super._initMarkup.apply(this, arguments);
-    (this.$element() as any).addClass(TREELIST_CLASS);
-    this.getView('gridView').render(this.$element());
-  }
-
-  private static registerModule() {
-    treeListCore.registerModule.apply(treeListCore, arguments as any);
-  }
-
-  protected callModuleItemsMethod(methodName: string, args?: any[]) {
-    treeListCore.callModuleItemsMethod(this, methodName, args);
+  protected getGridCoreHelper() {
+    return treeListCore;
   }
 
   public focus(element?) {

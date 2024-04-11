@@ -1,5 +1,7 @@
 import { deferRender } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isFunction } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 
 const GRID_CORE_ROW_SELECTOR = '.dx-row';
@@ -10,6 +12,19 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
   private readonly _controllers: any;
 
   private readonly _views: any;
+
+  private _getDefaultOptions() {
+    // @ts-expect-error
+    const result = super._getDefaultOptions();
+
+    each(this.getGridCoreHelper().modules, function () {
+      if (isFunction(this.defaultOptions)) {
+        extend(true, result, this.defaultOptions());
+      }
+    });
+
+    return result;
+  }
 
   protected _setDeprecatedOptions() {
     // @ts-expect-error
@@ -27,7 +42,7 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
   }
 
   private _optionChanged(args) {
-    this.callModuleItemsMethod('optionChanged', [args]);
+    this.getGridCoreHelper().callModuleItemsMethod(this, 'optionChanged', [args]);
     if (!args.handled) {
       // @ts-expect-error
       super._optionChanged(args);
@@ -62,7 +77,7 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
     // @ts-expect-error
     super._dispose();
 
-    this.callModuleItemsMethod('dispose');
+    this.getGridCoreHelper().callModuleItemsMethod(this, 'dispose');
   }
 
   private isReady() {
@@ -73,22 +88,20 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
     return this._controllers[name];
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  protected callModuleItemsMethod(methodName: string, args?: any[]) {
-
-  }
-
   protected getView(name) {
     return this._views[name];
   }
 
+  protected getGridCoreHelper(): any {
+  }
+
   public beginUpdate() {
     super.beginUpdate();
-    this.callModuleItemsMethod('beginUpdate');
+    this.getGridCoreHelper().callModuleItemsMethod(this, 'beginUpdate');
   }
 
   public endUpdate() {
-    this.callModuleItemsMethod('endUpdate');
+    this.getGridCoreHelper().callModuleItemsMethod(this, 'endUpdate');
     super.endUpdate();
   }
 }
