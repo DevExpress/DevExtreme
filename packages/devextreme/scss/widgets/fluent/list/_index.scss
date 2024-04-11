@@ -258,6 +258,14 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
         color: $list-group-color;
       }
     }
+    
+    &:last-of-type {
+      .dx-list-item {
+        &:last-of-type {
+          margin-bottom: $fluent-list-bottom-padding;
+        }
+      }
+    }
 
     .dx-list-item {
       &:first-of-type {
