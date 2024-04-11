@@ -1375,6 +1375,12 @@ export class RowsView extends ColumnsView {
    */
   // eslint-disable-next-line
   protected _restoreErrorRow(contentTable?) { }
+
+  public isElementInside($element) {
+    const $rowsViewElement = $element.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`);
+
+    return $rowsViewElement.is(this.element());
+  }
 }
 
 export const rowsModule = {
