@@ -86,10 +86,10 @@ export abstract class DxiFilterBuilderField extends CollectionNestedOption {
         this._setOption('format', value);
     }
 
-    get lookup(): { allowClearing?: boolean, dataSource?: DataSourceOptions | Store | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined } {
+    get lookup(): { allowClearing?: boolean, dataSource?: Store | DataSourceOptions | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, dataSource?: DataSourceOptions | Store | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, dataSource?: Store | DataSourceOptions | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: Function | string | undefined }) {
         this._setOption('lookup', value);
     }
 

@@ -26,12 +26,11 @@ export { ExplicitTypes } from 'devextreme/ui/context_menu';
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { PositionConfig } from 'devextreme/animation/position';
-import DevExpress from 'devextreme/bundles/dx.all';
 import { SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, ContextSubmenuDirection, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
+import { ContentReadyEvent, ContextSubmenuDirection, DisposingEvent, dxContextMenuItem, HiddenEvent, HidingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, PositioningEvent, SelectionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/context_menu';
 
 import DxContextMenu from 'devextreme/ui/context_menu';
 
@@ -155,10 +154,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxContextMenuItem> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxContextMenuItem> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxContextMenuItem>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxContextMenuItem>) {
         this._setOption('dataSource', value);
     }
 
@@ -285,10 +284,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get items(): Array<DevExpress.ui.dxContextMenuItem> {
+    get items(): Array<dxContextMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxContextMenuItem>) {
+    set items(value: Array<dxContextMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -454,10 +453,10 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
     
      */
     @Input()
-    get target(): string | UserDefinedElement | undefined {
+    get target(): UserDefinedElement | string | undefined {
         return this._getOption('target');
     }
-    set target(value: string | UserDefinedElement | undefined) {
+    set target(value: UserDefinedElement | string | undefined) {
         this._setOption('target', value);
     }
 
@@ -631,7 +630,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxContextMenuItem>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxContextMenuItem>>;
 
     /**
     
@@ -701,7 +700,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<DevExpress.ui.dxContextMenuItem>>;
+    @Output() itemsChange: EventEmitter<Array<dxContextMenuItem>>;
 
     /**
     
@@ -792,7 +791,7 @@ export class DxContextMenuComponent<TKey = any> extends DxComponent implements O
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() targetChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     

@@ -24,10 +24,9 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/box';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
+import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import DxBox from 'devextreme/ui/box';
 
@@ -97,10 +96,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxBoxItem | string | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxBoxItem | string | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -330,7 +329,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxBoxItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxBoxItem | string | any>>;
 
     /**
     

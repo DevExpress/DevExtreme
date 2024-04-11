@@ -23,11 +23,10 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, PageOrientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, CustomCommandEvent, DiagramAutoZoomMode, DiagramCommand, DiagramConnectorLineEnd, DiagramConnectorLineType, DiagramDataLayoutType, DiagramPanelVisibility, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode, DiagramUnits, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent } from 'devextreme/ui/diagram';
+import { ContentReadyEvent, CustomCommandEvent, DiagramAutoZoomMode, DiagramCommand, DiagramConnectorLineEnd, DiagramConnectorLineType, DiagramDataLayoutType, DiagramPanelVisibility, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode, DiagramUnits, DisposingEvent, dxDiagramCustomCommand, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent } from 'devextreme/ui/diagram';
 
 import DxDiagram from 'devextreme/ui/diagram';
 
@@ -104,10 +103,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get contextMenu(): { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, enabled?: boolean } {
+    get contextMenu(): { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, enabled?: boolean } {
         return this._getOption('contextMenu');
     }
-    set contextMenu(value: { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, enabled?: boolean }) {
+    set contextMenu(value: { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, enabled?: boolean }) {
         this._setOption('contextMenu', value);
     }
 
@@ -195,10 +194,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get edges(): { customDataExpr?: Function | string | undefined, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined } {
+    get edges(): { customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined } {
         return this._getOption('edges');
     }
-    set edges(value: { customDataExpr?: Function | string | undefined, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }) {
+    set edges(value: { customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }) {
         this._setOption('edges', value);
     }
 
@@ -299,10 +298,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get historyToolbar(): { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean } {
+    get historyToolbar(): { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean } {
         return this._getOption('historyToolbar');
     }
-    set historyToolbar(value: { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean }) {
+    set historyToolbar(value: { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean }) {
         this._setOption('historyToolbar', value);
     }
 
@@ -312,10 +311,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get mainToolbar(): { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean } {
+    get mainToolbar(): { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean } {
         return this._getOption('mainToolbar');
     }
-    set mainToolbar(value: { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean }) {
+    set mainToolbar(value: { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean }) {
         this._setOption('mainToolbar', value);
     }
 
@@ -325,10 +324,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get nodes(): { autoLayout?: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined } {
+    get nodes(): { autoLayout?: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined } {
         return this._getOption('nodes');
     }
-    set nodes(value: { autoLayout?: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }) {
+    set nodes(value: { autoLayout?: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }) {
         this._setOption('nodes', value);
     }
 
@@ -377,10 +376,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get propertiesPanel(): { tabs?: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, groups?: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }>, title?: string }>, visibility?: DiagramPanelVisibility } {
+    get propertiesPanel(): { tabs?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }>, title?: string }>, visibility?: DiagramPanelVisibility } {
         return this._getOption('propertiesPanel');
     }
-    set propertiesPanel(value: { tabs?: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, groups?: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }>, title?: string }>, visibility?: DiagramPanelVisibility }) {
+    set propertiesPanel(value: { tabs?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }>, title?: string }>, visibility?: DiagramPanelVisibility }) {
         this._setOption('propertiesPanel', value);
     }
 
@@ -494,10 +493,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get viewToolbar(): { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean } {
+    get viewToolbar(): { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean } {
         return this._getOption('viewToolbar');
     }
-    set viewToolbar(value: { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean }) {
+    set viewToolbar(value: { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean }) {
         this._setOption('viewToolbar', value);
     }
 
@@ -645,7 +644,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contextMenuChange: EventEmitter<{ commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, enabled?: boolean }>;
+    @Output() contextMenuChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | DiagramCommand>, enabled?: boolean }>;
 
     /**
     
@@ -694,7 +693,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() edgesChange: EventEmitter<{ customDataExpr?: Function | string | undefined, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }>;
+    @Output() edgesChange: EventEmitter<{ customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, fromExpr?: Function | string, fromLineEndExpr?: Function | string | undefined, fromPointIndexExpr?: Function | string | undefined, keyExpr?: Function | string, lineTypeExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, pointsExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string | undefined, textStyleExpr?: Function | string | undefined, toExpr?: Function | string, toLineEndExpr?: Function | string | undefined, toPointIndexExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }>;
 
     /**
     
@@ -750,21 +749,21 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() historyToolbarChange: EventEmitter<{ commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean }>;
+    @Output() historyToolbarChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mainToolbarChange: EventEmitter<{ commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean }>;
+    @Output() mainToolbarChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() nodesChange: EventEmitter<{ autoLayout?: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }>;
+    @Output() nodesChange: EventEmitter<{ autoLayout?: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }, autoSizeEnabled?: boolean, containerChildrenExpr?: Function | string | undefined, containerKeyExpr?: Function | string, customDataExpr?: Function | string | undefined, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, heightExpr?: Function | string | undefined, imageUrlExpr?: Function | string | undefined, itemsExpr?: Function | string | undefined, keyExpr?: Function | string, leftExpr?: Function | string | undefined, lockedExpr?: Function | string | undefined, parentKeyExpr?: Function | string | undefined, styleExpr?: Function | string | undefined, textExpr?: Function | string, textStyleExpr?: Function | string | undefined, topExpr?: Function | string | undefined, typeExpr?: Function | string, widthExpr?: Function | string | undefined, zIndexExpr?: Function | string | undefined }>;
 
     /**
     
@@ -792,7 +791,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() propertiesPanelChange: EventEmitter<{ tabs?: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, groups?: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }>, title?: string }>, visibility?: DiagramPanelVisibility }>;
+    @Output() propertiesPanelChange: EventEmitter<{ tabs?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }>, title?: string }>, visibility?: DiagramPanelVisibility }>;
 
     /**
     
@@ -855,7 +854,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewToolbarChange: EventEmitter<{ commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, visible?: boolean }>;
+    @Output() viewToolbarChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | DiagramCommand>, visible?: boolean }>;
 
     /**
     
