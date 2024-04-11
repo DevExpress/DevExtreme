@@ -1,4 +1,3 @@
-import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
@@ -13,9 +12,12 @@ test('Grouped List last item of last group should have proper margin-bottom', as
   
   const list = new List('#container');
   const lastItemIndex = list.getItems().length - 1;
-  const lastItem = list.getItem(lastItemIndex).element;
-  await t.hover(lastItem).click(lastItem);
-  
+
+  await t
+    .hover(list.getItem(lastItemIndex).element)
+    .expect(list.getItem(lastItemIndex).isHovered)
+    .ok();
+
   await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
   
   await t
