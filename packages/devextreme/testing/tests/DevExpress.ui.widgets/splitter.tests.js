@@ -2120,8 +2120,7 @@ QUnit.module('Events', moduleConfig, () => {
             height: 408,
             dataSource: [{ size: '200px', }, { size: '200px' }],
             onResize: function(e) {
-                const { event } = e;
-                event.cancel = true;
+                e.cancel = true;
             },
         });
 
@@ -2138,8 +2137,7 @@ QUnit.module('Events', moduleConfig, () => {
             height: 408,
             dataSource: [{ size: '200px', }, { size: '200px' }],
             onResizeEnd: function(e) {
-                const { event } = e;
-                event.cancel = true;
+                e.cancel = true;
             },
         });
 

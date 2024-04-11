@@ -478,13 +478,16 @@ class Splitter extends (CollectionWidget as any) {
 
         const $resizeHandle = $(element);
 
-        this._getAction(RESIZE_EVENT.onResizeStart)({
+        const resizeStartEventsArgs = {
           event,
           handleElement: getPublicElement($resizeHandle),
-        });
+        } as ResizeStartEvent;
 
-        // @ts-expect-error typify event members
-        if (event.cancel) {
+        this._getAction(RESIZE_EVENT.onResizeStart)(resizeStartEventsArgs);
+
+        if (resizeStartEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
           return;
         }
 
@@ -513,13 +516,16 @@ class Splitter extends (CollectionWidget as any) {
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
 
-        this._getAction(RESIZE_EVENT.onResize)({
+        const resizeEventsArgs = {
           event,
           handleElement: getPublicElement($(element)),
-        });
+        } as ResizeEvent;
 
-        // @ts-expect-error typify event members
-        if (event.cancel) {
+        this._getAction(RESIZE_EVENT.onResize)(resizeEventsArgs);
+
+        if (resizeEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
           return;
         }
 
@@ -539,13 +545,16 @@ class Splitter extends (CollectionWidget as any) {
 
         const $resizeHandle = $(element);
 
-        this._getAction(RESIZE_EVENT.onResizeEnd)({
+        const resizeEndEventsArgs = {
           event,
           handleElement: getPublicElement($resizeHandle),
-        });
+        } as ResizeEndEvent;
 
-        // @ts-expect-error typify event members
-        if (event.cancel) {
+        this._getAction(RESIZE_EVENT.onResizeEnd)(resizeEndEventsArgs);
+
+        if (resizeEndEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
           return;
         }
 
