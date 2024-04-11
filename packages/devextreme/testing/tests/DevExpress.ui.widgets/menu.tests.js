@@ -627,6 +627,19 @@ QUnit.module('Menu - templates', {
         assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
     });
+
+    checkStyleHelper.testInChromeOnDesktopActiveWindow('Root item styles when item is expanded', function(assert) {
+        const options = { showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
+        const menu = createMenu(options);
+        menu.instance.focus();
+
+        const $itemB = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
+
+        $($itemB).trigger('dxclick');
+
+        assert.strictEqual(checkStyleHelper.getColor($itemB[0]), 'rgb(51, 51, 51)', 'color');
+        assert.strictEqual(checkStyleHelper.getBackgroundColor($itemB[0]), 'rgba(0, 0, 0, 0)', 'backgroundColor');
+    });
 });
 
 QUnit.module('Menu - selection', {
