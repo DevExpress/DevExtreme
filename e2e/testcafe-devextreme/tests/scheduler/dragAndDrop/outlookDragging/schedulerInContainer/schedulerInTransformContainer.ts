@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import {
   appendElementTo,
   setStyleAttribute,
 } from '../../../../../helpers/domUtils';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Outlook dragging, for case scheduler in container with transform style`
   .page(url(__dirname, '../../../../container.html'));

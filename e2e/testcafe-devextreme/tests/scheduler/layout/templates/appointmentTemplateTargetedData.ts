@@ -1,12 +1,11 @@
-import { createWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
-
 import type {
   Appointment,
   Orientation,
   ScrollMode,
   ViewType,
 } from 'devextreme/ui/scheduler';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 import { generateOptionMatrix } from '../../../../helpers/generateOptionMatrix';
 import { scrollTo } from '../../virtualScrolling/utils';

@@ -1,10 +1,10 @@
 import { ClientFunction } from 'testcafe';
+import { Properties } from 'devextreme/ui/date_box.d';
+import DateBox from 'devextreme-testcafe-models/dateBox';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from 'devextreme/ui/date_box.d';
-import DateBox from 'devextreme-testcafe-models/dateBox';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))

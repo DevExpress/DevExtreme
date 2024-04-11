@@ -1,6 +1,6 @@
 import { ClientFunction, Selector } from 'testcafe';
-import url from '../../../helpers/getPageUrl';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   setStyleAttribute,

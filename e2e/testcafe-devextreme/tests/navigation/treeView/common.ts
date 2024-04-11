@@ -1,12 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import TreeView from 'devextreme-testcafe-models/treeView';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { employees } from './data.js';
 import { setAttribute } from '../../../helpers/domUtils';
-import TreeView from 'devextreme-testcafe-models/treeView';
 
 fixture.disablePageReloads`TreeView`
   .page(url(__dirname, '../../container.html'));

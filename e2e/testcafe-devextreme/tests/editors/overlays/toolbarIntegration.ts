@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { testScreenshot } from '../../../helpers/themeUtils';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
 import Popup from 'devextreme-testcafe-models/popup';
 import Popover from 'devextreme-testcafe-models/popover';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
+import { testScreenshot } from '../../../helpers/themeUtils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Popup_toolbar`

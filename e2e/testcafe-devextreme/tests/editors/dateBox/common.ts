@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Guid from 'devextreme/core/guid';
 import {
   insertStylesheetRulesToPage,
   appendElementTo, setClassAttribute,
@@ -8,7 +9,6 @@ import {
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const DATEBOX_CLASS = 'dx-datebox';

@@ -1,8 +1,8 @@
 import { RequestLogger, RequestMock } from 'testcafe';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { isMaterial } from '../../../helpers/themeUtils';
-import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 
 const testFixture = () => (isMaterial() ? fixture.skip : fixture);
 

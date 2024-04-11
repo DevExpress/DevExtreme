@@ -1,9 +1,9 @@
 import { Selector } from 'testcafe';
+import ScrollView from 'devextreme-testcafe-models/scrollView/scrollView';
+import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import ScrollView from 'devextreme-testcafe-models/scrollView/scrollView';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
 
 fixture.disablePageReloads`ScrollView`
   .page(url(__dirname, '../../container.html'));

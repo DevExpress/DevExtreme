@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
