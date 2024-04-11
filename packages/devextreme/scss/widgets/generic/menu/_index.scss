@@ -32,10 +32,9 @@
 }
 
 .dx-menu {
-  color: $menu-color;
-
   .dx-menu-item-expanded {
     background-color: $menu-popup-bg;
+    color: $menu-color;
   }
 
   .dx-menu-item-has-icon.dx-menu-item-has-submenu {
