@@ -64,3 +64,30 @@ test('The previous resize handle should be focused after shift+tab press', async
     { text: 'Pane_2' },
   ],
 }));
+
+[true, false].forEach((allowKeyboardNavigation) => {
+  test(`The resize handle should not change its focused state after the pane collapses, allowKeyboardNavigation=${allowKeyboardNavigation}`, async (t) => {
+    const splitter = new Splitter('#container');
+
+    await t
+      .click(splitter.getResizeHandle(0).getCollapsePrev());
+
+    if (allowKeyboardNavigation) {
+      await t
+        .expect(splitter.getResizeHandle(0).isFocused)
+        .ok();
+    } else {
+      await t
+        .expect(splitter.getResizeHandle(0).isFocused)
+        .notOk();
+    }
+  }).before(async () => createWidget('dxSplitter', {
+    width: 400,
+    height: 400,
+    allowKeyboardNavigation,
+    dataSource: [
+      { text: 'Pane_1', collapsible: true },
+      { text: 'Pane_2' },
+    ],
+  }));
+});

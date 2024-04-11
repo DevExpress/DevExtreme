@@ -7,6 +7,7 @@ import { isRenderer, isNumeric } from 'core/utils/type';
 import config from 'core/config';
 import { createEvent } from 'events/utils/index';
 import { name as DOUBLE_CLICK_EVENT } from 'events/double_click';
+import { name as CLICK_EVENT } from 'events/click';
 
 import 'generic_light.css!';
 
@@ -17,6 +18,7 @@ const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-p
 const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
+const STATE_FOCUSED_CLASS = 'dx-state-focused';
 
 QUnit.testStart(() => {
     const markup =
@@ -759,6 +761,137 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
+    [{
+        items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }],
+        expectedLayout: ['0', '66.6', '33.3'],
+    },
+    {
+        items: [{ collapsible: true, size: 98 }, { collapsible: true, size: 98 }, { collapsible: true }],
+        expectedLayout: ['0', '20', '80'],
+    },
+    {
+        items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true }],
+        expectedLayout: ['0', '100'],
+    },
+    {
+        items: [{ collapsible: true, visible: false }, { collapsible: true, collapsedSize: 100 }, { collapsible: true }],
+        expectedLayout: ['10', '90'],
+    }].forEach(({ items, expectedLayout }) => {
+        QUnit.test(`Runtime collapse (collapse prev button): ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            const $resizeHandle = this.getResizeHandles().first();
+
+            const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+            $collapsePrevButton.trigger('dxclick');
+
+            this.assertLayout(expectedLayout);
+        });
+    });
+
+    [{
+        items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }],
+        expectedLayout: ['66.6', '0', '33.3'],
+    },
+    {
+        items: [{ collapsible: true, size: 98 }, { collapsible: true, size: 98 }, { collapsible: true }],
+        expectedLayout: ['20', '0', '80'],
+    },
+    {
+        items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true }],
+        expectedLayout: ['100', '0'],
+    },
+    {
+        items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true, collapsedSize: 100 }],
+        expectedLayout: ['90', '10'],
+    }
+    ].forEach(({ items, expectedLayout }) => {
+        QUnit.test(`Runtime collapse (collapse next button): ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            const $resizeHandle = this.getResizeHandles().first();
+
+            const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+            $collapseNextButton.trigger('dxclick');
+
+            this.assertLayout(expectedLayout);
+        });
+    });
+
+    QUnit.test('Expanded pane that was collapsed on init should take half of next pane size', function(assert) {
+        this.reinit({
+            items: [ { collapsible: true, }, { collapsible: true, collapsed: true }, { collapsible: true } ],
+        });
+
+        this.assertLayout(['50', '0', '50']);
+
+        const $resizeHandle = this.getResizeHandles().first();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['25', '25', '50']);
+    });
+
+    QUnit.test('Collapsed + expanded pane should have old size', function(assert) {
+        this.reinit({
+            items: [ { collapsible: true, }, { collapsible: true, size: 98 }, { collapsible: true } ],
+        });
+
+        this.assertLayout(['45', '10', '45']);
+
+        const $resizeHandle = this.getResizeHandles().first();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(['55', '0', '45']);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['45', '10', '45']);
+    });
+
+    QUnit.test('Collapsed + expanded pane should have 50% of next pane size if next pane is now less than cached size', function(assert) {
+        this.reinit({
+            items: [ { collapsible: true, }, { collapsible: true, size: 500 }, { collapsible: true } ],
+        });
+
+        this.assertLayout(['24.5', '50.8', '24.5']);
+
+        const $resizeHandle = this.getResizeHandles().first();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['0', '75.4', '24.6']);
+
+        const pointer = pointerMock(this.getResizeHandles()[1]);
+        pointer.start().dragStart().drag(-500, 0).dragEnd();
+
+        this.assertLayout(['0', '24.6', '75.4']);
+
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(['12.3', '12.3', '75.4']);
+    });
+
+    QUnit.test('Whole layout should be repositined on collapse using api', function(assert) {
+        this.reinit({
+            items: [ { collapsible: true }, { collapsible: true }, { collapsible: true } ],
+        });
+
+        this.assertLayout(['33.3', '33.3', '33.3']);
+
+        this.instance.option('items[0].collapsed', true);
+
+        this.assertLayout(['0', '50', '50']);
+    });
+
     QUnit.test('Pane with collapsed=true should have more priority than pane with maxSize', function(assert) {
         this.reinit({
             items: [ { collapsed: true }, { maxSize: '50%' } ],
@@ -1464,7 +1597,7 @@ QUnit.module('Behavior', moduleConfig, () => {
         });
     });
 
-    [{ allowKeyboardNavigation: true }, { allowKeyboardNavigation: false }].forEach(({ allowKeyboardNavigation }) => {
+    [true, false].forEach((allowKeyboardNavigation) => {
         QUnit.test(`Resize handle should have dx-state-active class on interaction when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
             this.reinit({
                 width: 408,
@@ -1473,17 +1606,39 @@ QUnit.module('Behavior', moduleConfig, () => {
                 dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
             });
 
-            const resizeHandle = this.getResizeHandles().eq(0);
+            const $resizeHandle = this.getResizeHandles().eq(0);
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
 
             pointer.start().dragStart().drag(10, 10);
 
-            assert.ok(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
+            assert.ok($resizeHandle.hasClass(STATE_ACTIVE_CLASS));
 
             pointer.dragEnd();
 
-            assert.notOk(resizeHandle.hasClass(STATE_ACTIVE_CLASS));
+            assert.notOk($resizeHandle.hasClass(STATE_ACTIVE_CLASS));
+        });
+
+        QUnit.testInActiveWindow(`The resize handle should not change its focused state after the pane collapses when allowKeyboardNavigation is ${allowKeyboardNavigation}`, function(assert) {
+            this.reinit({
+                width: 408,
+                height: 408,
+                allowKeyboardNavigation,
+                dataSource: [{ text: 'Pane_1', collapsible: true }, { text: 'Pane_2' }]
+            });
+
+            const $resizeHandle = this.getResizeHandles().eq(0);
+
+            $resizeHandle.focusin();
+
+            assert.strictEqual($resizeHandle.hasClass(STATE_FOCUSED_CLASS), allowKeyboardNavigation);
+
+            const $collapseButton = $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+
+            $collapseButton.trigger(CLICK_EVENT);
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'pane[0] is collapse');
+            assert.strictEqual($resizeHandle.hasClass(STATE_FOCUSED_CLASS), allowKeyboardNavigation);
         });
     });
 
@@ -1856,6 +2011,25 @@ QUnit.module('Events', moduleConfig, () => {
 
         assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
         assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');
+    });
+
+    QUnit.test('Two clicks on collapse buttons should not trigger double click event on resizeHandle', function(assert) {
+        const doubleClickStub = sinon.stub();
+
+        this.reinit({
+            dataSource: [{ collapsible: true }, { collapsible: true }]
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+
+        $resizeHandle.on(DOUBLE_CLICK_EVENT, doubleClickStub);
+
+        $collapsePrevButton.trigger('dxclick');
+        $collapseNextButton.trigger('dxclick');
+
+        assert.strictEqual(doubleClickStub.callCount, 0, 'double click event is not triggered');
     });
 
     ['left', 'right'].forEach((item) => {

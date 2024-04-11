@@ -189,12 +189,21 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Check package-lock
+    - name: Update package-lock
       run: |
         node -v
         npm -v
         npm install --no-audit --no-fund --ignore-scripts
-        git diff --exit-code package-lock.json
+
+    - name: Upload package-lock
+      uses: actions/upload-artifact@v3
+      with:
+        name: package-lock.json
+        path: ./package-lock.json
+        retention-days: 1  
+
+    - name: Check package-lock
+      run: git diff --exit-code package-lock.json
 
   component_exports:
     runs-on: devextreme-shr2

@@ -4600,3 +4600,32 @@ test('Keyboard navigation should work after opening-closing master-detal', async
     enabled: true,
   },
 }));
+
+test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includes a DropDownButton item (T1225005)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element)
+    .pressKey('tab')
+
+    .expect(dataGrid.getFocusOverlay().exists)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(1, 2),
+  toolbar: {
+    items: [
+      {
+        widget: 'dxDropDownButton',
+        location: 'before',
+        options: {
+          text: 'Clear Batch',
+          items: [
+            { text: 'Delete All Lines' },
+            { text: 'Zero All Values' },
+          ],
+        },
+      },
+    ],
+  },
+  keyExpr: 'field_0',
+  showBorders: true,
+}));
