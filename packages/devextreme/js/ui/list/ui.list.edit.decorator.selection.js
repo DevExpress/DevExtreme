@@ -128,8 +128,7 @@ registerDecorator(
         },
 
         _renderSelectAll() {
-            this._$selectAll = $('<div>')
-                .addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
+            this._$selectAll = $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
 
             const downArrowHandler = this._list._supportedKeys().downArrow.bind(this._list);
 

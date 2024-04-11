@@ -32,6 +32,7 @@ const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
 const LIST_SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const LIST_SELECT_RADIOBUTTON_CLASS = 'dx-list-select-radiobutton';
+const LIST_SELECT_ALL_CLASS = 'dx-list-select-all';
 const LIST_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const LIST_CONTEXT_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
@@ -4267,6 +4268,71 @@ QUnit.module('Accessibility', () => {
         const $selectAllCheckBox = $(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
 
         assert.strictEqual($selectAllCheckBox.attr('aria-label'), 'Select All');
+    });
+
+    QUnit.test('Select all element should have correct aria-label', function(assert) {
+        $('#list').dxList({
+            selectionMode: 'all',
+            showSelectionControls: true,
+        });
+
+        const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, not checked');
+    });
+
+    QUnit.test('Select all element should have correct aria-label when all items are selected', function(assert) {
+        const items = ['text 1', 'text 2'];
+
+        $('#list').dxList({
+            items,
+            selectedItems: items,
+            selectionMode: 'all',
+            showSelectionControls: true,
+        });
+
+        const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, checked');
+    });
+
+    QUnit.test('Select all element should have correct aria-label when not all items are selected', function(assert) {
+        const items = ['text 1', 'text 2'];
+
+        $('#list').dxList({
+            items,
+            selectedItems: [items[0]],
+            selectionMode: 'all',
+            showSelectionControls: true,
+        });
+
+        const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, half checked');
+    });
+
+    QUnit.test('Select all element should have correct aria-label when selected items change in runtime', function(assert) {
+        const items = ['text 1', 'text 2'];
+
+        const instance = $('#list').dxList({
+            items,
+            selectionMode: 'all',
+            showSelectionControls: true,
+        }).dxList('instance');
+
+        instance.option({ selectedItems: [items[0]] });
+
+        const $selectAll = $(`.${LIST_SELECT_ALL_CLASS}`);
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, half checked');
+
+        instance.option({ selectedItems: items });
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, checked');
+
+        instance.option({ selectedItems: [] });
+
+        assert.strictEqual($selectAll.attr('aria-label'), 'Select All, not checked');
     });
 
     QUnit.test('checkbox should have aria-label="Check State" attribute', function(assert) {
