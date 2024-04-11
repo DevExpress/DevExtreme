@@ -2,15 +2,17 @@ import { ClientFunction } from 'testcafe';
 
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import { DateBoxPopup } from 'devextreme-testcafe-models/filterBuilder/dateboxPopup';
+import { clearTestPage } from '../../helpers/clearPage';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);
 });
 
 fixture.disablePageReloads`Filter Builder`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
 
 test('Field menu should be opened on field click if window scroll exists (T852701)', async (t) => {
   const filterBuilder = new FilterBuilder('#container');

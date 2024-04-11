@@ -1,13 +1,16 @@
-import { createWidget } from '../../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../../helpers/callbackTestHelper';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 // TODO: Something wrong with test cleanup with 'disablePageReloads'
 //       old events from previous test still alive on the next test case run
 //       So, we should disable it for these tests until this problem exists.
 fixture`Focused row - new rows T1162227`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 type FocusCellChangingData =
   [[prevRowIdx: number, prevColumnIdx: number], [rowIdx: number, columnIdx: number]];

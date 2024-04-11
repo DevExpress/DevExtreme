@@ -2,9 +2,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { clearTestPage } from '../../helpers/clearPage';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -54,7 +55,9 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
 };
 
 fixture.disablePageReloads`Row dragging`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 // T903351
 test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {

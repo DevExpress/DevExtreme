@@ -1,13 +1,16 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
 import { changeTheme } from '../../../helpers/changeTheme';
 import { getNumberData } from '../helpers/generateDataSourceData';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`FilterRow`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 test('Filter row\'s height should be adjusted by content (T1072609)', async (t) => {
   const dataGrid = new DataGrid('#container');

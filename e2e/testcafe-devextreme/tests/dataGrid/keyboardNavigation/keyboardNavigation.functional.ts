@@ -1,16 +1,19 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { getData } from '../helpers/generateDataSourceData';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 const CLASS = ClassNames;
 
 fixture.disablePageReloads`Keyboard Navigation - common`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
   const dataGrid = new DataGrid('#container');

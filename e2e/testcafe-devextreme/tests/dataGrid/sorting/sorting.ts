@@ -1,9 +1,13 @@
-import { createWidget } from '../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
+import { clearTestPage } from '../../../helpers/clearPage';
+
 fixture.disablePageReloads`Sorting`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 test('Filter expression should be valid when sortingMethod, remoteOperations, and autoNavigateToFocusedRow are specified (T1200546)', async (t) => {
   const dataGrid = new DataGrid('#container');

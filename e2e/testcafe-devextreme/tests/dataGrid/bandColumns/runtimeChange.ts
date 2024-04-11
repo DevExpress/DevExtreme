@@ -2,11 +2,14 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Button from 'devextreme-testcafe-models/button';
 import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`Band columns: runtime change`
-  .page(url(__dirname, '../../container.html'));
+  .page(url(__dirname, '../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 const GRID_CONTAINER = '#container';
 

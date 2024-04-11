@@ -2,10 +2,11 @@ import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screens
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
 import TextBox from 'devextreme-testcafe-models/textBox';
 import { changeTheme } from '../../helpers/changeTheme';
+import { clearTestPage } from '../../helpers/clearPage';
 
 async function createDataGridWithPager(): Promise<any> {
   const dataSource = Array.from({ length: 100 }, (_, room) => ({ name: 'Alex', phone: '555555', room }));
@@ -25,7 +26,9 @@ async function createDataGridWithPager(): Promise<any> {
   });
 }
 fixture.disablePageReloads`Pager`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 safeSizeTest('Full size pager', async (t) => {
   const dataGrid = new DataGrid('#container');

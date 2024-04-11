@@ -1,12 +1,15 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../../helpers/changeTheme';
-import { createWidget } from '../../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { Themes } from '../../../../helpers/themes';
+import { clearTestPage } from '../../../../helpers/clearPage';
 
 fixture.disablePageReloads`Focused row - markup`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 // TODO: Enable multi-theming testcafe run in the future.
 [

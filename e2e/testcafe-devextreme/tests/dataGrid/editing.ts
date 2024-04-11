@@ -3,15 +3,19 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from 'devextreme-testcafe-models/dataGrid/overlay';
 import { getData } from './helpers/generateDataSourceData';
+import { clearTestPage } from '../../helpers/clearPage';
+
 
 fixture.disablePageReloads`Editing`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 const getGridConfig = (config): Record<string, unknown> => {
   const defaultConfig = {

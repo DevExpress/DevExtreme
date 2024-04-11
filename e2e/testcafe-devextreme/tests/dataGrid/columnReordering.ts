@@ -1,10 +1,11 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { MouseAction, MouseUpEvents } from '../../helpers/mouseUpEvents';
+import { clearTestPage } from '../../helpers/clearPage';
 
 const CLASS = ClassNames;
 
@@ -21,7 +22,9 @@ const getVisibleColumns = (dataGrid: DataGrid): Promise<string[]> => {
 const getColumnsSeparatorOffset = ClientFunction(() => $(`.${CLASS.columnsSeparator}`).offset(), { dependencies: { CLASS } });
 
 fixture.disablePageReloads`Column reordering`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 // T975549
 test('The column reordering should work correctly when there is a fixed column with zero width', async (t) => {

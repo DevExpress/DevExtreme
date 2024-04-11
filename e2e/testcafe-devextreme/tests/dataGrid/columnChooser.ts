@@ -1,13 +1,15 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
+import { clearTestPage } from '../../helpers/clearPage';
 
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Column chooser`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
 
 test('Column chooser screenshot', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

@@ -2,13 +2,16 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { clearTestPage } from '../../helpers/clearPage';
 
 fixture.disablePageReloads`Master detail`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 ['material.blue.light', 'generic.light'].forEach((theme) => {
   test.meta({unstable: true})(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {

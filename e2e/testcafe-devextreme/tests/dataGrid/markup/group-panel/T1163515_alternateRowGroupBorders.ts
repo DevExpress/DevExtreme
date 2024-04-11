@@ -1,13 +1,17 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../../helpers/changeTheme';
-import { createWidget } from '../../../../helpers/createWidget';
+import { createWidget, disposeWidgets } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { Themes } from '../../../../helpers/themes';
+import { clearTestPage } from '../../../../helpers/clearPage';
+
 
 // TODO: Enable multi-theming testcafe run in the future.
 fixture.disablePageReloads`Grouping Panel - Borders with enabled alternate rows`
-  .page(url(__dirname, '../../../container.html'));
+  .page(url(__dirname, '../../../container.html'))
+  .afterEach(async () => {await disposeWidgets(); await clearTestPage()});
+
 
 const GRID_SELECTOR = '#container';
 
