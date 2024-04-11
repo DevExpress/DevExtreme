@@ -21,8 +21,8 @@ test('Grouped List last item of last group should have proper margin-bottom', as
   await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
   
   await t
-  .expect(compareResults.isValid())
-  .ok(compareResults.errorMessages());
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
 }).before(async () => createWidget('dxList', {
   dataSource: [{
     key: 'One',
@@ -60,27 +60,26 @@ test('Grouped list appearance', async (t) => {
     items: ['item_1_1', 'item_1_2', 'item_1_3'],
     expanded: false,
   }, {
-    key: 'group_2',
-    items: [
-      { text: 'item_2_1', disabled: true },
-      { text: 'item_2_2', icon: 'home' },
-      { text: 'item_2_3', showChevron: true, badge: 'item_2_3' },
-      { text: 'item_2_4', badge: 'item_2_4' },
-      'item_2_5'],
-    }, {
-      key: 'group_3',
-      items: ['item_3_1', 'item_3_2', 'item_3_3'],
-      expanded: false,
-    }],
-    collapsibleGroups: true,
-    grouped: true,
-    allowItemDeleting: true,
-    itemDeleteMode: 'static',
-    itemDragging: {
-      allowReordering: true,
-    },
-  })
-);
+  key: 'group_2',
+  items: [
+    { text: 'item_2_1', disabled: true },
+    { text: 'item_2_2', icon: 'home' },
+    { text: 'item_2_3', showChevron: true, badge: 'item_2_3' },
+    { text: 'item_2_4', badge: 'item_2_4' },
+    'item_2_5'],
+  }, {
+    key: 'group_3',
+    items: ['item_3_1', 'item_3_2', 'item_3_3'],
+    expanded: false,
+  }],
+  collapsibleGroups: true,
+  grouped: true,
+  allowItemDeleting: true,
+  itemDeleteMode: 'static',
+  itemDragging: {
+    allowReordering: true,
+  },
+}));
 
 [true, false].forEach((rtlEnabled) => {
   test(`Grouped list appearance with template. rtlEnabled=${rtlEnabled}`, async (t) => {
