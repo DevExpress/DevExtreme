@@ -50,7 +50,7 @@ import {
   validateLayout,
 } from './utils/layout';
 import type {
-  FlexProperty, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
+  FlexProperty, InteractionEvent, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
 } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -476,12 +476,14 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
+        if (!event) { return; }
+
         const $resizeHandle = $(element);
 
-        const resizeStartEventsArgs = {
+        const resizeStartEventsArgs = this._getResizeStartEventArgs(
           event,
-          handleElement: getPublicElement($resizeHandle),
-        } as ResizeStartEvent;
+          getPublicElement($resizeHandle),
+        );
 
         this._getAction(RESIZE_EVENT.onResizeStart)(resizeStartEventsArgs);
 
@@ -516,10 +518,9 @@ class Splitter extends (CollectionWidget as any) {
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
 
-        const resizeEventsArgs = {
-          event,
-          handleElement: getPublicElement($(element)),
-        } as ResizeEvent;
+        if (!event) { return; }
+
+        const resizeEventsArgs = this._getResizeEventArgs(event, getPublicElement($(element)));
 
         this._getAction(RESIZE_EVENT.onResize)(resizeEventsArgs);
 
@@ -543,12 +544,14 @@ class Splitter extends (CollectionWidget as any) {
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
+        if (!event) { return; }
+
         const $resizeHandle = $(element);
 
-        const resizeEndEventsArgs = {
+        const resizeEndEventsArgs = this._getResizeEndEventArgs(
           event,
-          handleElement: getPublicElement($resizeHandle),
-        } as ResizeEndEvent;
+          getPublicElement($resizeHandle),
+        );
 
         this._getAction(RESIZE_EVENT.onResizeEnd)(resizeEndEventsArgs);
 
@@ -566,6 +569,21 @@ class Splitter extends (CollectionWidget as any) {
         });
       },
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeStartEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeStartEvent {
+    return { event, handleElement } as ResizeStartEvent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeEvent {
+    return { event, handleElement } as ResizeEvent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeEndEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeEndEvent {
+    return { event, handleElement } as ResizeEndEvent;
   }
 
   // eslint-disable-next-line class-methods-use-this

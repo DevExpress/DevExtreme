@@ -16,7 +16,7 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 import type {
-  CollapseEvents, ResizeEvents, ResizeHandleOptions, ResizeOffset,
+  CollapseEvents, InteractionEvent, ResizeEvents, ResizeHandleOptions, ResizeOffset,
 } from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -256,31 +256,31 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     this._attachEventHandlers();
   }
 
-  _resizeStartHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _resizeStartHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResizeStart)({
       event: e,
     });
   }
 
-  _resizeHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _resizeHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
   }
 
-  _resizeEndHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _resizeEndHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResizeEnd)({
       event: e,
     });
   }
 
-  _collapsePrevHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _collapsePrevHandler(e: InteractionEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapsePrev)({
       event: e,
     });
   }
 
-  _collapseNextHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _collapseNextHandler(e: InteractionEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapseNext)({
       event: e,
     });
