@@ -28,18 +28,19 @@ const lineHeights = [
   { lineHeight: 2, text: '2' },
 ];
 
-function getEmployeeImageUrl() {
-  return "../../../../images/employees/51.png";
+function getEmployeeImageUrl(): string {
+  return '../../../../images/employees/51.png';
 }
 
 export default {
   getData() {
     return {
-      colors, 
-      profileSettings, 
-      downloads, alignments, 
-      fontSizes, 
-      lineHeights, 
+      colors,
+      profileSettings,
+      downloads,
+      alignments,
+      fontSizes,
+      lineHeights,
       getEmployeeImageUrl,
     };
   },

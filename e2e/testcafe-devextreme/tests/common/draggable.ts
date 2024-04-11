@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
+import Scrollable from 'devextreme-testcafe-models/scrollView/scrollable';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import Scrollable from 'devextreme-testcafe-models/scrollView/scrollable';
 
 fixture.disablePageReloads`Draggable`
   .page(url(__dirname, '../container.html'));

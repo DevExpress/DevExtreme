@@ -1,15 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import DropDownButton from 'devextreme-testcafe-models/dropDownButton';
+import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import DropDownButton from 'devextreme-testcafe-models/dropDownButton';
 import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo,
   insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
-import Guid from 'devextreme/core/guid';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';

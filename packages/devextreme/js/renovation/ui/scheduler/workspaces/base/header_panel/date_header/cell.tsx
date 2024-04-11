@@ -10,7 +10,7 @@ import {
 import { CellBaseProps } from '../../cell';
 import { DateTimeCellTemplateProps } from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
-import { renderUtils } from '../../../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../../../__internal/scheduler/r1/utils/index';
 import { DateHeaderText } from './dateHeaderText';
 
 export const viewFunction = ({

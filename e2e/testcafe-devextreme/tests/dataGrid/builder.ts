@@ -1,9 +1,9 @@
 import { ClientFunction } from 'testcafe';
 
-import url from '../../helpers/getPageUrl';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
-import { createWidget } from '../../helpers/createWidget';
 import { DateBoxPopup } from 'devextreme-testcafe-models/filterBuilder/dateboxPopup';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/createWidget';
 
 const scrollTo = ClientFunction((x, y) => {
   window.scrollTo(x, y);

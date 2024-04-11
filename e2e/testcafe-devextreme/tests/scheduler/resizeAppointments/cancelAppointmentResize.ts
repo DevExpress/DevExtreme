@@ -1,8 +1,8 @@
 import { ClientFunction } from 'testcafe';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import createScheduler from '../dragAndDrop/init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Cancel appointment Resizing`
   .page(url(__dirname, '../../container.html'));

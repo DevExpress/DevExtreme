@@ -14,8 +14,8 @@ import {
 } from '../../../types';
 import { DateHeaderCell } from './cell';
 import getThemeType from '../../../../../../utils/getThemeType';
-import { Group, GroupOrientation } from '../../../../../../../__internal/scheduler/__migration/types';
-import { isHorizontalGroupingApplied } from '../../../../../../../__internal/scheduler/__migration/utils/index';
+import { Group, GroupOrientation } from '../../../../../../../__internal/scheduler/r1/types';
+import { isHorizontalGroupingApplied } from '../../../../../../../__internal/scheduler/r1/utils/index';
 
 const { isMaterialBased } = getThemeType();
 

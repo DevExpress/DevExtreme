@@ -1,6 +1,8 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Guid from 'devextreme/core/guid';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import {
   insertStylesheetRulesToPage,
   appendElementTo,
@@ -10,10 +12,8 @@ import {
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
-import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 const DROP_DOWN_EDITOR_ACTIVE_CLASS = 'dx-dropdowneditor-active';

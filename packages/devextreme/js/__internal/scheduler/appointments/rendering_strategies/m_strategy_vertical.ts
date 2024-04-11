@@ -3,8 +3,8 @@ import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
 
-import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '../../__migration/utils/index';
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { ExpressionUtils } from '../../m_expression_utils';
 import BaseAppointmentsStrategy from './m_strategy_base';

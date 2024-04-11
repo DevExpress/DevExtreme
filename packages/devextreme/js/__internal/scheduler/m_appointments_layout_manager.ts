@@ -1,7 +1,7 @@
 import { equalByValue } from '@js/core/utils/common';
 import dateUtils from '@js/core/utils/date';
+import { getAppointmentRenderingStrategyName, getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
 
-import { getAppointmentRenderingStrategyName, getCellDuration, getGroupCount } from './__migration/utils/index';
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
 import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
 

@@ -2,9 +2,9 @@ import {
   Component, ComponentBindings, CSSAttributes, ForwardRef, JSXComponent, RefObject,
 } from '@devextreme-generator/declarations';
 import { Row } from './row';
-import { renderUtils } from '../../../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../../../__internal/scheduler/r1/utils/index';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';
-import { GroupRenderItem } from '../../../../../../../__internal/scheduler/__migration/types';
+import { GroupRenderItem } from '../../../../../../../__internal/scheduler/r1/types';
 
 export const viewFunction = ({
   style,

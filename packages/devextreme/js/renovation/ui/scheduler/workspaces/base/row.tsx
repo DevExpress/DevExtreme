@@ -2,7 +2,7 @@ import {
   Component, ComponentBindings, JSXComponent, Slot, OneWay, CSSAttributes,
 } from '@devextreme-generator/declarations';
 import { VirtualCell } from './virtual_cell';
-import { splitNumber } from '../../../../../__internal/scheduler/__migration/utils/index';
+import { splitNumber } from '../../../../../__internal/scheduler/r1/utils/index';
 
 const MAX_COL_SPAN = 1000;
 

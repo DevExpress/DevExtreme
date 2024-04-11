@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../../helpers/getPageUrl';
-import { createWidget } from '../../../../helpers/createWidget';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import AppointmentDialog from 'devextreme-testcafe-models/scheduler/appointment/dialog';
 import Appointment from 'devextreme-testcafe-models/scheduler/appointment';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Editing recurrent appointment in DST time`
   .page(url(__dirname, '../../../container.html'));

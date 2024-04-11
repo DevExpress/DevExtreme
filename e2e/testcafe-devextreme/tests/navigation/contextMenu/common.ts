@@ -1,16 +1,16 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import ContextMenu from 'devextreme-testcafe-models/contextMenu';
+import { Item } from 'devextreme/ui/context_menu.d';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import ContextMenu from 'devextreme-testcafe-models/contextMenu';
-import { Item } from 'devextreme/ui/context_menu.d';
 import {
   appendElementTo, setAttribute,
   insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
 
-fixture.skip.disablePageReloads`ContextMenu_common`
+fixture.disablePageReloads`ContextMenu_common`
   .page(url(__dirname, '../../container.html'));
 
 test('ContextMenu items render', async (t) => {

@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
+import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
 import { isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
 
 const testFixture = () => {
   if (isMaterialBased()) {

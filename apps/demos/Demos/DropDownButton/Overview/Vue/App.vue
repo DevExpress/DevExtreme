@@ -36,7 +36,7 @@
                 <div class="button-img-indicator"/>
                 <img
                   class="button-img"
-                  :src=employeeImageUrl
+                  :src="employeeImageUrl"
                   alt="employee"
                 >
               </div>
@@ -175,7 +175,7 @@ const toolbarItems = [
 ];
 
 function onButtonClick(e) {
-  notify(`Go to ${e.element.querySelector(".button-title").textContent}'s profile`, 'success', 600);
+  notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
 }
 function onItemClick(e) {
   notify(e.itemData.name || e.itemData, 'success', 600);

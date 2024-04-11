@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Appointment tooltip behavior during scrolling in the Scheduler (T755449)`
   .page(url(__dirname, '../../container.html'));
@@ -93,7 +93,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   false,
   true,
 ].forEach((adaptivityEnabled) => {
-  /* safeSizeTest */test.skip('The tooltip screenshot', async (t) => {
+  safeSizeTest('The tooltip screenshot', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
@@ -112,7 +112,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }/* , [600, 400] */).before(async () => createScheduler({
+  }, [600, 400]).meta({ unstable: true }).before(async () => createScheduler({
     views: ['week'],
     currentView: 'week',
     dataSource,

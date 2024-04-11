@@ -1,6 +1,6 @@
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Layout:AppointmentForm:TimezoneEditors(T1080932)`
   .page(url(__dirname, '../../container.html'));

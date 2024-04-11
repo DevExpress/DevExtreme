@@ -1,11 +1,11 @@
 import { ClientFunction } from 'testcafe';
+import { Properties } from 'devextreme/ui/button.d';
+import Button from 'devextreme-testcafe-models/button';
 import { isMaterialBased } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from 'devextreme/ui/button.d';
-import Button from 'devextreme-testcafe-models/button';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))
