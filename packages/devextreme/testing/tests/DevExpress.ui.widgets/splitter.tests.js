@@ -19,6 +19,7 @@ const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-p
 const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 const STATE_ACTIVE_CLASS = 'dx-state-active';
 const STATE_FOCUSED_CLASS = 'dx-state-focused';
+const SPLITTER_CLASS = 'dx-splitter';
 
 QUnit.testStart(() => {
     const markup =
@@ -2116,6 +2117,98 @@ QUnit.module('Events', moduleConfig, () => {
 });
 
 QUnit.module('Nested Splitters', moduleConfig, () => {
+    function getNestedSplitter(splitterElement) {
+        return splitterElement.find(`.${SPLITTER_CLASS}`);
+    }
+
+    [
+        { propertyName: 'allowKeyboardNavigation', propertyValue: false },
+        { propertyName: 'allowKeyboardNavigation', propertyValue: true },
+        { propertyName: 'rtlEnabled', propertyValue: false },
+        { propertyName: 'rtlEnabled', propertyValue: true },
+        { propertyName: 'separatorSize', propertyValue: 12 },
+    ].forEach(({ propertyName, propertyValue }) => {
+        QUnit.test(`${propertyName} property should be passed to nested splitter on initialization`, function(assert) {
+            this.reinit({
+                [propertyName]: propertyValue,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }]
+            });
+
+            const $nestedSplitter = getNestedSplitter(this.$element);
+            const nestedSplitterInstance = $nestedSplitter.dxSplitter('instance');
+
+            assert.strictEqual(nestedSplitterInstance.option(propertyName), propertyValue);
+        });
+    });
+
+    [
+        { propertyName: 'allowKeyboardNavigation', propertyValue: false },
+        { propertyName: 'allowKeyboardNavigation', propertyValue: true },
+        { propertyName: 'rtlEnabled', propertyValue: false },
+        { propertyName: 'rtlEnabled', propertyValue: true },
+        { propertyName: 'separatorSize', propertyValue: 12 },
+    ].forEach(({ propertyName, propertyValue }) => {
+        QUnit.test(`${propertyName} property should be passed to nested splitters at runtime`, function(assert) {
+            this.reinit({
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }, {},
+                {
+                    splitter: {
+                        dataSource: [
+                            { text: 'pane 1' },
+                            {
+                                splitter: {
+                                    dataSource: [
+                                        { text: 'pane 1' },
+                                        { text: 'pane 2' }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }]
+            });
+
+            this.instance.option(propertyName, propertyValue);
+
+            const $nestedItems = getNestedSplitter(this.$element);
+
+            for(let i = 0; i < $nestedItems.length; i++) {
+                const nestedSplitterInstance = $nestedItems.eq(i).dxSplitter('instance');
+
+                assert.strictEqual(nestedSplitterInstance.option(propertyName), propertyValue);
+            }
+
+            const secondLevelNestedSplitterElement = getNestedSplitter($nestedItems.eq(1));
+            const secondLevelNestingSplitter = secondLevelNestedSplitterElement.dxSplitter('instance');
+
+            assert.strictEqual(secondLevelNestingSplitter.option(propertyName), propertyValue);
+        });
+    });
+
+    QUnit.test('updating nested splitter"s property should not affect parent', function(assert) {
+        this.reinit({
+            items: [{
+                splitter: {
+                    dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                }
+            }]
+        });
+
+        const $nestedSplitter = getNestedSplitter(this.$element);
+        const nestedSplitterInstance = $nestedSplitter.eq(0).dxSplitter('instance');
+        nestedSplitterInstance.option('separatorSize', 5);
+
+        assert.strictEqual(this.instance.option('separatorSize'), 8);
+    });
+
     QUnit.test('panes should be rendered after the rendering of all the panes of the parent splitter', function(assert) {
         const onItemRenderedHandler = sinon.stub();
         this.reinit({
