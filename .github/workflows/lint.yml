@@ -86,6 +86,12 @@ jobs:
       env:
         DEBUG: eslint:cli-engine
       run: npm run lint-dts
+    
+    - name: Lint Testcafe tests
+      working-directory: ./e2e/testcafe-devextreme
+      env:
+        DEBUG: eslint:cli-engine
+      run: npm run lint
 
   JS:
     runs-on: devextreme-shr2
