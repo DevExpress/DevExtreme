@@ -1784,7 +1784,6 @@ QUnit.module('Menu tests', {
         assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(0)).option('visible'), false, 'submenu_1.not_visible');
         assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(1)).option('visible'), true, 'submenu_2.visible');
     });
-
     // T431949
     QUnit.test('Menu should stop show submenu timeout when another level submenu was hovered', function(assert) {
         if(!isDeviceDesktop(assert)) return;
