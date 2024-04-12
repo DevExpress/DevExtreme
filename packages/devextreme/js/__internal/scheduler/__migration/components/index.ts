@@ -10,3 +10,6 @@ export {
 export {
   HeaderPanelComponent,
 } from './wrappers/header_panel';
+export {
+  TimePanelComponent,
+} from './wrappers/time_panel';
