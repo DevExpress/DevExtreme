@@ -106,9 +106,10 @@ QUnit.module('init', {
     QUnit.test('correct wrapper aria attributes load when showIndicator = false', function(assert) {
         const label = messageLocalization.format('Loading');
         const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true, showIndicator: false }).dxLoadPanel('instance');
+        const loadPanelWrapper = $loadPanel.$wrapper();
 
-        assert.strictEqual($loadPanel.$wrapper().attr('role'), 'alert', 'role attribute has value alert ');
-        assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), label, 'aria-label attribute has value Loading...');
+        assert.strictEqual(loadPanelWrapper.attr('role'), 'alert', 'role attribute has value alert ');
+        assert.strictEqual(loadPanelWrapper.attr('aria-label'), label, 'aria-label attribute has value Loading...');
     });
 
     QUnit.test('wrapper aria attributes must not load when showIndicator = true', function(assert) {
@@ -123,20 +124,22 @@ QUnit.module('init', {
         const label = messageLocalization.format('Loading');
         const indicatorAttributes = Array.from($loadPanel.$content().find(LOADINDICATOR_CLASS).prop('attributes')).map(attr => attr.name);
         const expectedAttributes = ['role', 'aria-label'];
+        const loadPanelIndicator = $loadPanel.$content().find(LOADINDICATOR_CLASS);
 
-        assert.strictEqual($loadPanel.$content().find(LOADINDICATOR_CLASS).attr('role'), 'alert', 'role attribute has value alert');
-        assert.strictEqual($loadPanel.$content().find(LOADINDICATOR_CLASS).attr('aria-label'), label, 'aria-label attribute has value Loading...');
+        assert.strictEqual(loadPanelIndicator.attr('role'), 'alert', 'role attribute has value alert');
+        assert.strictEqual(loadPanelIndicator.attr('aria-label'), label, 'aria-label attribute has value Loading...');
         assert.strictEqual(expectedAttributes.every(item => indicatorAttributes.includes(item)), true, 'root element has complete set of expected attributes');
     });
 
     QUnit.test('aria-label on wrapper', function(assert) {
         const $loadPanel = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
+        const loadPanelWrapper = $loadPanel.$wrapper();
 
-        assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), undefined, 'aria-label attribute is not set');
+        assert.strictEqual(loadPanelWrapper.attr('aria-label'), undefined, 'aria-label attribute is not set');
 
         $loadPanel.option({ message: '' });
 
-        assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), 'Loading...', 'aria-label attribute has value Loading...');
+        assert.strictEqual(loadPanelWrapper.attr('aria-label'), 'Loading...', 'aria-label attribute has value Loading...');
     });
 
     QUnit.test('load panel created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
