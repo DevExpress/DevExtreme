@@ -24,9 +24,10 @@ export interface DateHeaderProps {
   dateHeaderData: DateHeaderData;
   groups: Group[];
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
+  timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
-const DateHeaderDefaultProps = {
+export const DateHeaderDefaultProps = {
   groupOrientation: 'horizontal',
   groupByDate: false,
   groups: [],
