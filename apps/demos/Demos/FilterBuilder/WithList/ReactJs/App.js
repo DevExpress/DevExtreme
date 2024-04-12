@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import FilterBuilder from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import List from 'devextreme-react/list';
@@ -12,30 +12,22 @@ const App = () => {
       store: products,
     }),
   );
-  const filterBuilderInstance = useRef(null);
-  const [value, setValue] = useState(filter);
-  const setFilterBuilderInstance = (ref) => {
-    filterBuilderInstance.current = ref.instance;
-    refreshDataSource();
-  };
-  const onValueChanged = useCallback(
-    (e) => {
-      setValue(e.value);
-    },
-    [setValue],
-  );
+  const filterBuilderRef = useRef(null);
   const refreshDataSource = useCallback(() => {
-    dataSource.current.filter(filterBuilderInstance.current.getFilterExpression());
+    const filterExpression = filterBuilderRef.current.instance().getFilterExpression();
+    dataSource.current.filter(filterExpression);
     dataSource.current.load();
   }, []);
+  useEffect(() => {
+    refreshDataSource();
+  });
   return (
     <div>
       <div className="filter-container">
         <FilterBuilder
-          ref={setFilterBuilderInstance}
+          ref={filterBuilderRef}
           fields={fields}
-          value={value}
-          onValueChanged={onValueChanged}
+          defaultValue={filter}
         />
         <Button
           text="Apply Filter"
