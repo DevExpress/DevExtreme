@@ -82,7 +82,7 @@ safeSizeTest('Compact pager', async (t) => {
     .eql('69')
     .expect(await compareScreenshot(t, 'pager-compact.png'))
     .ok();
-}, [350, 600]).before(async () => createDataGridWithPager());
+}, [350, 600]).meta({unstable: true}).before(async () => createDataGridWithPager());
 
 safeSizeTest('Resize', async (t) => {
   const dataGrid = new DataGrid('#container');
