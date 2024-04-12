@@ -2224,7 +2224,7 @@ QUnit.module('keyboard navigation', {
         assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item lose focus');
     });
 
-    checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text color should not disappear when shift+tab is pressed (T1227670)', function(assert) {
+    checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not blend with background when item is focused (T1227670)', function(assert) {
         const items = [{
             text: 'item_1',
             items: [{ text: 'item_1_1' }]
