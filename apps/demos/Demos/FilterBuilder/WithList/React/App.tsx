@@ -1,4 +1,4 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useCallback, useRef, useEffect } from 'react';
 import FilterBuilder from 'devextreme-react/filter-builder';
 import Button from 'devextreme-react/button';
 import List from 'devextreme-react/list';
@@ -17,6 +17,10 @@ const App = () => {
     dataSource.current.filter(filterExpression);
     dataSource.current.load();
   }, []);
+
+  useEffect(() => {
+    refreshDataSource();
+  });
 
   return (
     <div>
