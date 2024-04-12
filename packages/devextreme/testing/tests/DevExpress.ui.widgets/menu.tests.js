@@ -398,14 +398,12 @@ QUnit.module('Rendering Scrollablew', {
     const DX_SCROLLABLE_CLASS = 'dx-scrollable';
     const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
     const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
-
-    QUnit.test('Submenu should init Scrollable', function(assert) {
     const BORDER_WIDTH = 1;
     const SUBMENU_PADDING = 10;
     const FIXTURE_OFFSET = 10000;
     const menuRootOffset = $(window).height() - 50;
 
-    QUnit.test('Submenu should init ScrollView', function(assert) {
+    QUnit.test('Submenu should init Scrollable', function(assert) {
         const menu = createMenu({
             items: [{
                 text: 'item 1',

@@ -803,7 +803,7 @@ class ContextMenu extends MenuBase {
         if(shouldRenderSubmenu) {
             this._renderSubmenuItems(node, $itemElement);
             $submenu = $itemElement.find(`.${DX_SUBMENU_CLASS}`);
-            this._initScrollView($submenu);
+            this._initScrollable($submenu);
         }
 
         if($itemElement.context === $submenu.context && $submenu.css('visibility') === 'visible') {

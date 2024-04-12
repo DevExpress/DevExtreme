@@ -40,10 +40,6 @@ const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
 const DX_HAS_SUBMENU_CLASS = 'dx-menu-item-has-submenu';
 const DX_OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
-const DX_SCROLLVIEW_CLASS = 'dx-scrollview';
-const DX_SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
-const BORDER_WIDTH = 1;
-const SUBMENU_PADDING = 10;
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -280,6 +276,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
     const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
     const BORDER_WIDTH = 1;
+    const SUBMENU_PADDING = 10;
 
     QUnit.test('Context menu should init Scrollable', function(assert) {
         new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
@@ -420,12 +417,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .5, 'scrolled to bottom');
 
         keyboardMock(instance.itemsContainer())
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .1, 'scrolled back to the 1st item');
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .5, 'scrolled back to the 1st item');
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {

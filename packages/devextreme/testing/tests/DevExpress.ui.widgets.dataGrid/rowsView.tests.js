@@ -1979,7 +1979,7 @@ QUnit.module('Rows view', {
 
         // assert
         assert.strictEqual(selectionOptions.changeItemSelectionCallsCount, undefined, 'selection is not called');
-        assert.strictEqual($('.dx-datagrid.dx-context-menu .dx-scrollview-content').text(), 'test', 'context menu is rendered');
+        assert.strictEqual($('.dx-datagrid.dx-context-menu .dx-scrollable-content').text(), 'test', 'context menu is rendered');
 
         support.touch = oldTouch;
     });
