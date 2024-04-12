@@ -627,19 +627,6 @@ QUnit.module('Menu - templates', {
         assert.strictEqual(checkStyleHelper.getTextOverflow($template[0].parentNode), 'clip', 'textOverflow');
         assert.strictEqual(checkStyleHelper.getWhiteSpace($template[0].parentNode), 'nowrap', 'whiteSpace');
     });
-
-    checkStyleHelper.testInChromeOnDesktopActiveWindow('Root item styles when item is expanded', function(assert) {
-        const options = { showFirstSubmenuMode: 'onClick', items: [{ text: 'itemB', items: [{ text: 'itemB-A' }] }] };
-        const menu = createMenu(options);
-        menu.instance.focus();
-
-        const $itemB = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
-
-        $($itemB).trigger('dxclick');
-
-        assert.strictEqual(checkStyleHelper.getColor($itemB[0]), 'rgb(51, 51, 51)', 'color');
-        assert.strictEqual(checkStyleHelper.getBackgroundColor($itemB[0]), 'rgba(0, 0, 0, 0)', 'backgroundColor');
-    });
 });
 
 QUnit.module('Menu - selection', {
@@ -1797,6 +1784,7 @@ QUnit.module('Menu tests', {
         assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(0)).option('visible'), false, 'submenu_1.not_visible');
         assert.strictEqual(getSubMenuInstance($rootMenuItems.eq(1)).option('visible'), true, 'submenu_2.visible');
     });
+
     // T431949
     QUnit.test('Menu should stop show submenu timeout when another level submenu was hovered', function(assert) {
         if(!isDeviceDesktop(assert)) return;
@@ -2235,6 +2223,30 @@ QUnit.module('keyboard navigation', {
 
         assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'item was not focused');
         assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item lose focus');
+    });
+
+    checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text color should not disappear when shift+tab is pressed (T1227670)', function(assert) {
+        const items = [{
+            text: 'item_1',
+            items: [{ text: 'item_1_1' }]
+        }, {
+            text: 'item_2',
+            items: [{ text: 'item_2_1' }]
+        }];
+
+        this.instance.option('items', items);
+
+        $(this.instance.itemsContainer())
+            .find('.' + DX_MENU_ITEM_CLASS)
+            .eq(0)
+            .trigger('dxhoverstart')
+            .trigger('dxclick');
+
+        const $rootMenuItem = this.instance.itemElements().eq(0);
+
+        assert.ok(this.instance.itemElements().eq(0).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
+        debugger
+        assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
     });
 
     [false, true].forEach(rtlEnabled => {
