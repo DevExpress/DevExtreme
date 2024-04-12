@@ -104,14 +104,14 @@ const LoadIndicator = Widget.inherit({
     },
 
     _init: function() {
+        this.callBase();
+        this.$element().addClass(LOADINDICATOR_CLASS);
+
         const label = messageLocalization.format('Loading');
         const aria = {
             role: 'alert',
             label,
         };
-
-        this.callBase();
-        this.$element().addClass(LOADINDICATOR_CLASS);
 
         this.setAria(aria);
     },
