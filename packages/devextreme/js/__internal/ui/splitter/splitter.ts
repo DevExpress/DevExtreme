@@ -48,7 +48,7 @@ import {
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
 import type {
-  FlexProperty, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
+  FlexProperty, InteractionEvent, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
 } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -476,8 +476,25 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
-        this._currentLayout = this._layout;
+        if (!event) { return; }
+
         const $resizeHandle = $(element);
+
+        const resizeStartEventsArgs = this._getResizeStartEventArgs(
+          event,
+          getPublicElement($resizeHandle),
+        );
+
+        this._getAction(RESIZE_EVENT.onResizeStart)(resizeStartEventsArgs);
+
+        if (resizeStartEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
+          return;
+        }
+
+        this._currentLayout = this._layout;
+
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
@@ -497,14 +514,21 @@ class Splitter extends (CollectionWidget as any) {
         const { items } = this.option();
 
         this._updateItemsRestrictions(items);
-
-        this._getAction(RESIZE_EVENT.onResizeStart)({
-          event,
-          handleElement: getPublicElement($resizeHandle),
-        });
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
+
+        if (!event) { return; }
+
+        const resizeEventsArgs = this._getResizeEventArgs(event, getPublicElement($(element)));
+
+        this._getAction(RESIZE_EVENT.onResize)(resizeEventsArgs);
+
+        if (resizeEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
+          return;
+        }
 
         const newLayout = getNextLayout(
           this._currentLayout,
@@ -516,28 +540,48 @@ class Splitter extends (CollectionWidget as any) {
 
         this._applyFlexGrowFromLayout(newLayout);
         this._layout = newLayout;
-
-        this._getAction(RESIZE_EVENT.onResize)({
-          event,
-          handleElement: getPublicElement($(element)),
-        });
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
+        if (!event) { return; }
+
         const $resizeHandle = $(element);
+
+        const resizeEndEventsArgs = this._getResizeEndEventArgs(
+          event,
+          getPublicElement($resizeHandle),
+        );
+
+        this._getAction(RESIZE_EVENT.onResizeEnd)(resizeEndEventsArgs);
+
+        if (resizeEndEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
+          return;
+        }
 
         this._feedbackDeferred.resolve();
         this._toggleActiveState($resizeHandle, false);
 
         this._updateItemSizes();
-
-        this._getAction(RESIZE_EVENT.onResizeEnd)({
-          event,
-          handleElement: getPublicElement($resizeHandle),
-        });
       },
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeStartEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeStartEvent {
+    return { event, handleElement } as ResizeStartEvent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeEvent {
+    return { event, handleElement } as ResizeEvent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeEndEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeEndEvent {
+    return { event, handleElement } as ResizeEndEvent;
   }
 
   // eslint-disable-next-line class-methods-use-this

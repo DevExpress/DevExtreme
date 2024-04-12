@@ -11,13 +11,15 @@ import GroupCaption from './GroupCaption.js';
 import service from './data.js';
 
 const employee = service.getEmployee();
-const groupCaptionRender = (iconName) => (data) =>
-  (
+const groupCaptionNamedRender = (iconName) => {
+  const groupCaptionRender = (data) => (
     <GroupCaption
       iconName={iconName}
       {...data}
     />
   );
+  return groupCaptionRender;
+};
 export default function App() {
   return (
     <React.Fragment>
@@ -31,12 +33,12 @@ export default function App() {
           formData={employee}
         >
           <GroupItem
-            captionRender={groupCaptionRender('info')}
+            captionRender={groupCaptionNamedRender('info')}
             caption="System Information"
           >
             <SimpleItem dataField="ID" />
             <GroupItem
-              captionRender={groupCaptionRender('user')}
+              captionRender={groupCaptionNamedRender('user')}
               caption="Main Information"
             >
               <SimpleItem dataField="FirstName" />
@@ -47,12 +49,12 @@ export default function App() {
             </GroupItem>
           </GroupItem>
           <GroupItem
-            captionRender={groupCaptionRender('card')}
+            captionRender={groupCaptionNamedRender('card')}
             caption="Personal Data"
           >
             <SimpleItem dataField="BirthDate" />
             <GroupItem
-              captionRender={groupCaptionRender('home')}
+              captionRender={groupCaptionNamedRender('home')}
               caption="Home Address"
             >
               <SimpleItem dataField="Address" />
@@ -62,7 +64,7 @@ export default function App() {
             </GroupItem>
           </GroupItem>
           <GroupItem
-            captionRender={groupCaptionRender('tel')}
+            captionRender={groupCaptionNamedRender('tel')}
             caption="Contact Information"
           >
             <TabbedItem>

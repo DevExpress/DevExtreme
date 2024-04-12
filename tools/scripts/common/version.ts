@@ -10,12 +10,12 @@ export function updateVersion(version: string | undefined): void {
     process.exit(1);
   }
 
-  const packagesPath = path.join(ROOT_DIR, 'packages', '**', 'package.json');
-  const appsPath = path.join(ROOT_DIR, 'apps', '**', 'package.json');
+  const workspacesFolders = ['packages', 'apps', 'e2e'];
+  const workspacesPaths = workspacesFolders.map(folder => path.join(ROOT_DIR, folder, '**', 'package.json'));
 
   sh.exec(`npm version ${version} -ws --allow-same-version --include-workspace-root --git-tag-version=false --workspaces-update=false`);
 
-  sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, [packagesPath, appsPath]);
+  sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, workspacesPaths);
 
   sh.exec('npm i --legacy-peer-deps');
 }

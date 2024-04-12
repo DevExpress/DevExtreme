@@ -205,33 +205,30 @@ export class HeaderPanel extends ColumnsView {
       args.handled = true;
     }
     if (args.name === 'toolbar') {
-      args.handled = true;
-      if (this._toolbar) {
-        const parts = getPathParts(args.fullName);
-        const optionName = args.fullName.replace(/^toolbar\./, '');
+      const parts = getPathParts(args.fullName);
+      const optionName = args.fullName.replace(/^toolbar\./, '');
 
-        if (parts.length === 1) {
-          // `toolbar` case
+      if (parts.length === 1) {
+        // `toolbar` case
+        this._invalidate();
+      } else if (parts[1] === 'items') {
+        if (parts.length === 2) {
+          // `toolbar.items` case
           const toolbarOptions = this._getToolbarOptions();
-          this._toolbar.option(toolbarOptions);
-        } else if (parts[1] === 'items') {
-          if (parts.length === 2) {
-            // `toolbar.items` case
-            const toolbarOptions = this._getToolbarOptions();
-            this._toolbar.option('items', toolbarOptions.items);
-          } else if (parts.length === 3) {
-            // `toolbar.items[i]` case
-            const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
-            this._toolbar.option(optionName, normalizedItem);
-          } else if (parts.length >= 4) {
-            // `toolbar.items[i].prop` case
-            this._toolbar.option(optionName, args.value);
-          }
-        } else {
-          // `toolbar.visible`, `toolbar.disabled` case
-          this._toolbar.option(optionName, args.value);
+          this._toolbar?.option('items', toolbarOptions.items);
+        } else if (parts.length === 3) {
+          // `toolbar.items[i]` case
+          const normalizedItem = this._normalizeToolbarItems(this._getToolbarItems(), args.value);
+          this._toolbar?.option(optionName, normalizedItem);
+        } else if (parts.length >= 4) {
+          // `toolbar.items[i].prop` case
+          this._toolbar?.option(optionName, args.value);
         }
+      } else {
+        // `toolbar.visible`, `toolbar.disabled` case
+        this._invalidate();
       }
+      args.handled = true;
     }
     super.optionChanged(args);
   }
