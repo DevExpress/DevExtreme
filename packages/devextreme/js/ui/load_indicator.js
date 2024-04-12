@@ -105,6 +105,7 @@ const LoadIndicator = Widget.inherit({
 
     _init: function() {
         this.callBase();
+
         this.$element().addClass(LOADINDICATOR_CLASS);
 
         const label = messageLocalization.format('Loading');
