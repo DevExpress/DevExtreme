@@ -1,7 +1,7 @@
 import React, { useCallback, useRef } from 'react';
 import Button from 'devextreme-react/button';
 import TabPanel, { Item } from 'devextreme-react/tab-panel';
-import DataGrid, { Column } from 'devextreme-react/data-grid';
+import DataGrid, { Column, DataGridRef } from 'devextreme-react/data-grid';
 import { exportDataGrid } from 'devextreme/pdf_exporter';
 import { jsPDF } from 'jspdf';
 
@@ -28,9 +28,9 @@ const ratingDataSource = {
   filter: ['Product_ID', '<', 10],
 };
 
-const setAlternatingRowsBackground = (dataGrid: DataGrid['instance'], gridCell, pdfCell) => {
+const setAlternatingRowsBackground = (dataGrid: DataGridRef, gridCell, pdfCell) => {
   if (gridCell.rowType === 'data') {
-    const rowIndex = dataGrid.getRowIndexByKey(gridCell.data.Product_ID);
+    const rowIndex = dataGrid.instance().getRowIndexByKey(gridCell.data.Product_ID);
     if (rowIndex % 2 === 0) {
       pdfCell.backgroundColor = '#D3D3D3';
     }
@@ -51,7 +51,7 @@ const App = () => {
       topLeft: { x: 7, y: 5 },
       columnWidths: [20, 50, 50, 50],
       customizeCell: ({ gridCell, pdfCell }) => {
-        setAlternatingRowsBackground(priceGridRef.current.instance(), gridCell, pdfCell);
+        setAlternatingRowsBackground(priceGridRef.current, gridCell, pdfCell);
       },
     }).then(() => {
       doc.addPage();
@@ -61,7 +61,7 @@ const App = () => {
         topLeft: { x: 7, y: 5 },
         columnWidths: [20, 50, 50, 50],
         customizeCell: ({ gridCell, pdfCell }) => {
-          setAlternatingRowsBackground(ratingGridRef.current.instance(), gridCell, pdfCell);
+          setAlternatingRowsBackground(ratingGridRef.current, gridCell, pdfCell);
         },
       }).then(() => {
         doc.save('MultipleGrids.pdf');
