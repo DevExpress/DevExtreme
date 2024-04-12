@@ -2241,9 +2241,10 @@ QUnit.module('keyboard navigation', {
             .trigger('dxhoverstart')
             .trigger('dxclick');
 
-        const $rootMenuItem = this.instance.itemElements().eq(0);
+        const $rootMenuItem = $(this.instance.itemElements().eq(0));
 
-        assert.ok(this.instance.itemElements().eq(0).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
+        assert.ok($rootMenuItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
+        
         assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
     });
 
