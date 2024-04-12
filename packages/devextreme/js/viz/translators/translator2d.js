@@ -285,7 +285,7 @@ _Translator2d.prototype = {
         if(breaks !== undefined) {
             const visibleRangeLength = canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length;
             if(visibleRangeLength !== 0) {
-                canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) / denominator;
+                canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) / visibleRangeLength;
             }
         }
 
