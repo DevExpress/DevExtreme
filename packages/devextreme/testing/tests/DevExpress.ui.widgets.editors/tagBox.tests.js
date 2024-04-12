@@ -7772,6 +7772,48 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
+    QUnit.test('Tags aria labels should match inputAttr aria-label mappings', function(assert) {
+        const productsData = [{
+            ID: 1,
+            Name: '1',
+        }, {
+            ID: 2,
+            Name: '2',
+        }];
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: productsData,
+            valueExpr: 'ID',
+            value: [productsData[0].ID, productsData[1].ID],
+            displayExpr: 'Name',
+            inputAttr: { 'aria-label': 'Name' }
+        }).dxTagBox('instance');
+        const inputAttrValue = $tagBox.option('inputAttr')['aria-label'];
+        const simpleTags = $tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        const isTaggedCorrectly = simpleTags.toArray().every(tag => productsData.some(product => product[inputAttrValue] === $(tag).attr('aria-label')));
+
+        assert.strictEqual(isTaggedCorrectly, true, 'aria-labels are tagged correctly');
+    });
+
+    QUnit.test('Tags aria labels should be the value when inputAttr is not defined', function(assert) {
+        const productsData = [{
+            ID: 1,
+            Name: '1',
+        }, {
+            ID: 2,
+            Name: '2',
+        }];
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: productsData,
+            valueExpr: 'ID',
+            value: [productsData[0].ID, productsData[1].ID],
+            displayExpr: 'Name',
+        }).dxTagBox('instance');
+        const simpleTags = $tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        const isTaggedCorrectly = simpleTags.toArray().every((tag, index) => index + 1 === parseInt($(tag).attr('aria-label')));
+
+        assert.strictEqual(isTaggedCorrectly, true, 'aria-labels are tagged correctly');
+    });
+
     QUnit.test('input should have aria-labelledby with a labelId if label specified', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);

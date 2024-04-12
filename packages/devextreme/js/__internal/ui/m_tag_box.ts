@@ -1102,6 +1102,14 @@ const TagBox = (SelectBox as any).inherit({
     });
   },
 
+  _getAriaLabelByInputAttrKey(itemModel, value) {
+    const ariaLabelKey = this.option('inputAttr')['aria-label'];
+    const ariaLabel = itemModel[ariaLabelKey] ?? value;
+
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return ariaLabel;
+  },
+
   _renderTag(item, $input) {
     const value = this._valueGetter(item);
 
@@ -1127,7 +1135,9 @@ const TagBox = (SelectBox as any).inherit({
 
       $tag = this._createTag(value, $input, tagId);
 
-      this._setTagAria($tag, displayValue);
+      const ariaLabel = this._getAriaLabelByInputAttrKey(itemModel, value);
+
+      this._setTagAria($tag, ariaLabel);
 
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
