@@ -173,7 +173,7 @@ jobs:
         [ "${{ matrix.ARGS.concurrency }}" != "" ] && CONCURRENCY="--concurrency ${{ matrix.ARGS.concurrency }}"
         [ "${{ matrix.ARGS.platform }}" != "" ] && PLATFORM="--platform ${{ matrix.ARGS.platform }}"
         WITH_UNSTABLE="--withUnstable=${{ (github.event_name == 'pull_request' && contains( github.event.pull_request.labels.*.name, 'with-unstable')) && 'true' || 'false' }}"
-        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME" $WITH_UNSTABLE"
+        all_args="--browsers=chrome:devextreme-shr2 --componentFolder ${{ matrix.ARGS.componentFolder }} $CONCURRENCY $INDICES $PLATFORM $THEME $WITH_UNSTABLE"
         echo "$all_args"
         npm run test -- $all_args
 
