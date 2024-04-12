@@ -8,8 +8,7 @@ import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
 
 // NOTE: Renovation component import.
-// @ts-expect-error
-import dxrTimelineDateHeader from '../../../renovation/ui/scheduler/workspaces/timeline/header_panel/layout.j';
+import { HeaderPanelTimelineComponent } from '../__migration/components/index';
 import { formatWeekdayAndDay, timelineWeekUtils } from '../__migration/utils/index';
 import {
   GROUP_HEADER_CONTENT_CLASS,
@@ -42,7 +41,7 @@ class SchedulerTimeline extends SchedulerWorkSpace {
 
   readonly viewDirection = 'horizontal';
 
-  get renovatedHeaderPanelComponent() { return dxrTimelineDateHeader; }
+  get renovatedHeaderPanelComponent() { return HeaderPanelTimelineComponent; }
 
   getGroupTableWidth() {
     return this._$sidebarTable ? getOuterWidth(this._$sidebarTable) : 0;
