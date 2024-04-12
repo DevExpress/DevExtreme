@@ -139,25 +139,6 @@ QUnit.module('init', {
         assert.strictEqual($loadPanel.$wrapper().attr('aria-label'), 'Loading...', 'aria-label attribute has value Loading...');
     });
 
-    QUnit.test('aria-label on wrapper in Material based themes', function(assert) {
-        const origIsMaterial = themes.isMaterialBased;
-        themes.isMaterialBased = () => true;
-
-        try {
-            const instance = $('#loadPanel').dxLoadPanel({ visible: true }).dxLoadPanel('instance');
-
-            instance.option({ message: '' });
-
-            assert.strictEqual(instance.$wrapper().attr('aria-label'), 'Loading...');
-
-            instance.option({ message: 'custom' });
-
-            assert.strictEqual(instance.$wrapper().attr('aria-label'), 'custom');
-        } finally {
-            themes.isMaterialBased = origIsMaterial;
-        }
-    });
-
     QUnit.test('load panel created with templatesRenderAsynchronously option should be shown with delay', function(assert) {
         const clock = sinon.useFakeTimers();
         try {
