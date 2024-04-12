@@ -2244,7 +2244,6 @@ QUnit.module('keyboard navigation', {
         const $rootMenuItem = this.instance.itemElements().eq(0);
 
         assert.ok(this.instance.itemElements().eq(0).hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
-        debugger
         assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
     });
 
