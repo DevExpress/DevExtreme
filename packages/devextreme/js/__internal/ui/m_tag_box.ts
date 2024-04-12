@@ -1110,6 +1110,7 @@ const TagBox = (SelectBox as any).inherit({
     }
 
     let $tag = this._getTag(value);
+
     const displayValue = this._displayGetter(item);
     const itemModel = this._getItemModel(item, displayValue);
 
@@ -1126,7 +1127,7 @@ const TagBox = (SelectBox as any).inherit({
 
       $tag = this._createTag(value, $input, tagId);
 
-      this._setTagAria($tag, value);
+      this._setTagAria($tag, displayValue);
 
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);
