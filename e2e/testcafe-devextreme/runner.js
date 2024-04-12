@@ -182,6 +182,7 @@ function getArgs() {
             theme: '',
             shadowDom: false,
             withUnstable: false,
-        }
+        },
+        boolean: ['withUnstable'],
     });
 }
