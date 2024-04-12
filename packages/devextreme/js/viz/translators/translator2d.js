@@ -283,8 +283,8 @@ _Translator2d.prototype = {
         canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible);
 
         if(breaks !== undefined) {
-            const denominator = canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length;
-            if(denominator !== 0) {
+            const visibleRangeLength = canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length;
+            if(visibleRangeLength !== 0) {
                 canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) / denominator;
             }
         }
