@@ -804,11 +804,7 @@ QUnit.test('Translate. Scale breaks. Translator should handle division by zero (
 
     translator.updateBusinessRange({ min: -11.9, max: 20.3, breaks: breaks });
 
-    const denominator = translator._canvasOptions.rangeMaxVisible - translator._canvasOptions.rangeMinVisible - translator._breaks[translator._breaks.length - 1].length;
-
-    if(denominator === 0) {
-        assert.notEqual(translator.ratioOfCanvasRange(), Infinity);
-    }
+    assert.notEqual(translator.ratioOfCanvasRange(), Infinity);
 });
 
 QUnit.test('Translate. Scale breaks. Values out of the breaks and should be traslated', function(assert) {
