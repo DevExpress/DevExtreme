@@ -7794,7 +7794,7 @@ QUnit.module('accessibility', () => {
         assert.strictEqual(isTaggedCorrectly, true, 'aria-labels are tagged correctly');
     });
 
-    QUnit.test('Tags aria labels should be the value when inputAttr is not defined', function(assert) {
+    QUnit.test('Tag aria label should be the tags value when inputAttr is not defined', function(assert) {
         const productsData = [{
             ID: 1,
             Name: '1',
