@@ -807,7 +807,7 @@ QUnit.test('Translate. Scale breaks. Translator should handle division by zero (
     const denominator = translator._canvasOptions.rangeMaxVisible - translator._canvasOptions.rangeMinVisible - translator._breaks[translator._breaks.length - 1].length;
 
     if(denominator === 0) {
-        assert.notEqual(translator._canvasOptions.ratioOfCanvasRange, Infinity);
+        assert.notEqual(translator.ratioOfCanvasRange(), Infinity);
     }
 });
 
