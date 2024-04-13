@@ -2224,26 +2224,23 @@ QUnit.module('keyboard navigation', {
         assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item lose focus');
     });
 
-    checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not blend with background when item is focused (T1227670)', function(assert) {
-        const items = [{
-            text: 'item_1',
-            items: [{ text: 'item_1_1' }]
-        }, {
-            text: 'item_2',
-            items: [{ text: 'item_2_1' }]
-        }];
-
-        this.instance.option('items', items);
-
-        $(this.instance.itemsContainer())
-            .find('.' + DX_MENU_ITEM_CLASS)
-            .eq(0)
-            .trigger('dxhoverstart')
-            .trigger('dxclick');
+    checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from template when focused (T1227670)', function(assert) {
+        this.instance.option({
+            'items': [{
+                text: 'item_1',
+                items: [{ text: 'item_1_1' }]
+            }, {
+                text: 'item_2',
+                items: [{ text: 'item_2_1' }]
+            }],
+            focusStateEnabled: true
+        });
 
         const $rootMenuItem = $(this.instance.itemElements().eq(0));
 
-        assert.ok($rootMenuItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
+        this.instance.focus();
+
+        assert.ok($rootMenuItem.hasClass(DX_STATE_FOCUSED_CLASS), 'root item should have focused class');
 
         assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
     });
