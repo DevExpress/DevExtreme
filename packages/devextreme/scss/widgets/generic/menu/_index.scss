@@ -46,6 +46,10 @@
   }
 
   .dx-menu-item-has-text {
+    &.dx-state-focused {
+      color: $menu-color;
+    }
+
     .dx-menu-item-text {
       padding: $generic-menu-item-padding-base;
       padding-top: $generic-menu-item-padding-top-base;
