@@ -2228,16 +2228,13 @@ QUnit.module('keyboard navigation', {
         [{ text: 'item1', items: [{ name: 'item_1_1' }] }],
         [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
         [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
-    ].forEach(item => {
+    ].forEach(items => {
         checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it\'s opened (T1227670)', function(assert) {
-            this.instance.option('items', item);
-
-            $(this.instance.itemsContainer())
-                .find(`.${DX_MENU_ITEM_CLASS}`)
-                .eq(0)
-                .trigger('dxclick');
+            this.instance.option('items', items);
 
             const $rootMenuItem = $(this.instance.itemElements().eq(0));
+
+            $($rootMenuItem).trigger('dxclick');
 
             assert.ok($rootMenuItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
             assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
