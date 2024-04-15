@@ -2229,7 +2229,7 @@ QUnit.module('keyboard navigation', {
         [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
         [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
     ].forEach(item => {
-        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from template when focused (T1227670)', function(assert) {
+        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from item template when focused (T1227670)', function(assert) {
             this.instance.option('items', item);
 
             const $rootMenuItem = $(this.instance.itemElements().eq(0));
