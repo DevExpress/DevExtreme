@@ -326,12 +326,14 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
-    this.option('items').forEach((item) => {
-      if (item?.splitter) {
-        const splitterItem = this._findItemElementByItem(item).children(`.${SPLITTER_CLASS}`);
+    const { items } = this.option();
 
-        if (splitterItem) {
-          getComponentInstance(splitterItem).option(optionName, optionValue);
+    items.forEach((item) => {
+      if (item?.splitter) {
+        const $nestedSplitter = this._findItemElementByItem(item).find(`.${SPLITTER_CLASS}`).eq(0);
+
+        if ($nestedSplitter.length) {
+          getComponentInstance($nestedSplitter).option(optionName, optionValue);
         }
       }
     });

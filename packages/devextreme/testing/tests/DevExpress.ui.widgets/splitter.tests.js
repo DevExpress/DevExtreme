@@ -94,6 +94,18 @@ const moduleConfig = {
                 }
             });
         };
+
+        this.checkItemsOption = ($items, optionName, optionValue) => {
+            for(let i = 0; i < $items.length; i++) {
+                const nestedSplitterInstance = $items.eq(i).dxSplitter('instance');
+
+                QUnit.assert.strictEqual(nestedSplitterInstance.option(optionName), optionValue);
+            }
+        };
+
+        this.getNestedSplitter = (splitterElement) => {
+            return splitterElement.find(`.${SPLITTER_CLASS}`);
+        };
     },
     afterEach: function() {
         fx.off = false;
@@ -2117,10 +2129,6 @@ QUnit.module('Events', moduleConfig, () => {
 });
 
 QUnit.module('Nested Splitters', moduleConfig, () => {
-    function getNestedSplitter(splitterElement) {
-        return splitterElement.find(`.${SPLITTER_CLASS}`);
-    }
-
     [
         { propertyName: 'onResizeStart', propertyValue: () => {} },
         { propertyName: 'onResizeEnd', propertyValue: () => {} },
@@ -2143,27 +2151,82 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 }]
             });
 
-            const $nestedSplitter = getNestedSplitter(this.$element);
+            const $nestedSplitter = this.getNestedSplitter(this.$element);
             const nestedSplitterInstance = $nestedSplitter.dxSplitter('instance');
 
             assert.strictEqual(nestedSplitterInstance.option(propertyName), propertyValue);
         });
     });
 
+
+    ['onItemCollapsed'].forEach(eventHandler => {
+        QUnit.test(`${eventHandler} qqq onItemCollapsed should be invoked when pane in the nested splitter is collapsed after runtime option change`, function(assert) {
+            const handlerStub = sinon.stub();
+            const handlerStubAfterUpdate = sinon.stub();
+
+            this.reinit({
+                [eventHandler]: handlerStub,
+                items: [{
+                    splitter: {
+                        [eventHandler]: handlerStub,
+                        dataSource: [{ collapsible: true }, { collapsible: true }]
+                    }
+                }]
+            });
+
+            this.instance.option(`${eventHandler}`, handlerStubAfterUpdate);
+
+            const $resizeHandle = this.getResizeHandles(false)[0];
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown('ArrowLeft', { ctrlKey: true });
+
+            assert.strictEqual(handlerStub.callCount, 0);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
+    });
+
     [
-        { propertyName: 'onResizeStart', propertyValue: () => {} },
-        { propertyName: 'onResizeEnd', propertyValue: () => {} },
-        { propertyName: 'onResize', propertyValue: () => {} },
-        { propertyName: 'onItemCollapsed', propertyValue: () => {} },
-        { propertyName: 'onItemExpanded', propertyValue: () => {} },
-        { propertyName: 'allowKeyboardNavigation', propertyValue: false },
-        { propertyName: 'allowKeyboardNavigation', propertyValue: true },
-        { propertyName: 'rtlEnabled', propertyValue: false },
-        { propertyName: 'rtlEnabled', propertyValue: true },
-        { propertyName: 'separatorSize', propertyValue: 12 },
-    ].forEach(({ propertyName, propertyValue }) => {
+        { eventHandler: 'onItemCollapsed', arrowKey: 'ArrowLeft', dataSource: [{ collapsible: true }, { collapsible: true }] },
+        { eventHandler: 'onItemExpanded', arrowKey: 'ArrowRight', dataSource: [{ collapsed: true, collapsible: true, }, { }] },
+    ].forEach(({ eventHandler, arrowKey, dataSource }) => {
+        QUnit.test(`${eventHandler} should be invoked when nested splitter's pane collapsed state changed`, function(assert) {
+            const handlerStub = sinon.stub();
+            const handlerStubAfterUpdate = sinon.stub();
+
+            this.reinit({
+                [eventHandler]: handlerStub,
+                items: [{
+                    splitter: {
+                        [eventHandler]: handlerStub,
+                        dataSource
+                    }
+                }]
+            });
+
+            this.instance.option(`${eventHandler}`, handlerStubAfterUpdate);
+
+            const $resizeHandle = this.getResizeHandles(false)[0];
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(arrowKey, { ctrlKey: true });
+
+            assert.strictEqual(handlerStub.callCount, 0);
+            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
+        });
+    });
+
+    [
+        { propertyName: 'allowKeyboardNavigation', propertyValue: true, newPropertyValue: false },
+        { propertyName: 'allowKeyboardNavigation', propertyValue: false, newPropertyValue: true },
+        { propertyName: 'rtlEnabled', propertyValue: true, newPropertyValue: false },
+        { propertyName: 'rtlEnabled', propertyValue: false, newPropertyValue: true },
+        { propertyName: 'rtlEnabled', propertyValue: true, newPropertyValue: false },
+        { propertyName: 'separatorSize', propertyValue: 9, newPropertyValue: 12 },
+    ].forEach(({ propertyName, propertyValue, newPropertyValue }) => {
         QUnit.test(`${propertyName} property should be passed to nested splitters at runtime`, function(assert) {
             this.reinit({
+                [propertyName]: propertyValue,
                 items: [{
                     splitter: {
                         dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
@@ -2186,20 +2249,61 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 }]
             });
 
-            this.instance.option(propertyName, propertyValue);
+            this.instance.option(propertyName, newPropertyValue);
 
-            const $nestedItems = getNestedSplitter(this.$element);
+            const $nestedItems = this.getNestedSplitter(this.$element);
 
-            for(let i = 0; i < $nestedItems.length; i++) {
-                const nestedSplitterInstance = $nestedItems.eq(i).dxSplitter('instance');
+            this.checkItemsOption($nestedItems, propertyName, newPropertyValue);
 
-                assert.strictEqual(nestedSplitterInstance.option(propertyName), propertyValue);
-            }
-
-            const secondLevelNestedSplitterElement = getNestedSplitter($nestedItems.eq(1));
+            const secondLevelNestedSplitterElement = this.getNestedSplitter($nestedItems.eq(1));
             const secondLevelNestingSplitter = secondLevelNestedSplitterElement.dxSplitter('instance');
 
-            assert.strictEqual(secondLevelNestingSplitter.option(propertyName), propertyValue);
+            assert.strictEqual(secondLevelNestingSplitter.option(propertyName), newPropertyValue);
+        });
+    });
+
+    [
+        { propertyName: 'onResizeStart', propertyValue: () => {} },
+        { propertyName: 'onResizeEnd', propertyValue: () => {} },
+        { propertyName: 'onResize', propertyValue: () => {} },
+        { propertyName: 'onItemCollapsed', propertyValue: () => {} },
+        { propertyName: 'onItemExpanded', propertyValue: () => {} },
+    ].forEach(({ propertyName, propertyValue, newPropertyValue }) => {
+        QUnit.test(`${propertyName} handler property should be passed to nested splitters at runtime`, function(assert) {
+            this.reinit({
+                [propertyName]: propertyValue,
+                items: [{
+                    splitter: {
+                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    }
+                }, {},
+                {
+                    splitter: {
+                        dataSource: [
+                            { text: 'pane 1' },
+                            {
+                                splitter: {
+                                    dataSource: [
+                                        { text: 'pane 1' },
+                                        { text: 'pane 2' }
+                                    ]
+                                }
+                            }
+                        ]
+                    }
+                }]
+            });
+
+            this.instance.option(propertyName, newPropertyValue);
+
+            const $nestedItems = this.getNestedSplitter(this.$element);
+
+            this.checkItemsOption($nestedItems, propertyName, newPropertyValue);
+
+            const secondLevelNestedSplitterElement = this.getNestedSplitter($nestedItems.eq(1));
+            const secondLevelNestingSplitter = secondLevelNestedSplitterElement.dxSplitter('instance');
+
+            assert.strictEqual(secondLevelNestingSplitter.option(propertyName), newPropertyValue);
         });
     });
 
@@ -2212,7 +2316,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
             }]
         });
 
-        const $nestedSplitter = getNestedSplitter(this.$element);
+        const $nestedSplitter = this.getNestedSplitter(this.$element);
         const nestedSplitterInstance = $nestedSplitter.eq(0).dxSplitter('instance');
         nestedSplitterInstance.option('separatorSize', 5);
 
