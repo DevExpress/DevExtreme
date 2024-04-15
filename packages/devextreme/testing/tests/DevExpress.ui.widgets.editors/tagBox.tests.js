@@ -7772,6 +7772,27 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
+    QUnit.test('Tag aria-label should be tag text value not index', function(assert) {
+        const productsData = [
+            'HD Video Player',
+            'SuperHD Video Player',
+            'SuperPlasma 50',
+        ];
+        const productLabel = { 'aria-label': 'Product' };
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: productsData,
+            inputAttr: productLabel,
+            value: [...productsData],
+            maxDisplayedTags: 3,
+            showMultiTagOnly: false
+        }).dxTagBox('instance');
+        const simpleTags = $tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($(simpleTags[0]).attr('aria-label'), 'HD Video Player', 'aria-label is tagged correctly');
+        assert.strictEqual($(simpleTags[1]).attr('aria-label'), 'SuperHD Video Player', 'aria-label is tagged correctly');
+        assert.strictEqual($(simpleTags[2]).attr('aria-label'), 'SuperPlasma 50', 'aria-label is tagged correctly');
+    });
+
     QUnit.test('Tags aria labels should match inputAttr aria-label mappings', function(assert) {
         const productsData = [{
             ID: 1,
@@ -7787,11 +7808,10 @@ QUnit.module('accessibility', () => {
             displayExpr: 'Name',
             inputAttr: { 'aria-label': 'Name' }
         }).dxTagBox('instance');
-        const inputAttrValue = $tagBox.option('inputAttr')['aria-label'];
         const simpleTags = $tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
-        const isTaggedCorrectly = simpleTags.toArray().every(tag => productsData.some(product => product[inputAttrValue] === $(tag).attr('aria-label')));
 
-        assert.strictEqual(isTaggedCorrectly, true, 'aria-labels are tagged correctly');
+        assert.strictEqual($(simpleTags[0]).attr('aria-label'), '1', 'aria-label is tagged correctly');
+        assert.strictEqual($(simpleTags[1]).attr('aria-label'), '2', 'aria-label is tagged correctly');
     });
 
     QUnit.test('Tag aria label should be the tags value when inputAttr is not defined', function(assert) {
@@ -7809,9 +7829,9 @@ QUnit.module('accessibility', () => {
             displayExpr: 'Name',
         }).dxTagBox('instance');
         const simpleTags = $tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
-        const isTaggedCorrectly = simpleTags.toArray().every((tag, index) => index + 1 === parseInt($(tag).attr('aria-label')));
 
-        assert.strictEqual(isTaggedCorrectly, true, 'aria-labels are tagged correctly');
+        assert.strictEqual(parseInt($(simpleTags[0]).attr('aria-label')), 1, 'aria-label is tagged correctly');
+        assert.strictEqual(parseInt($(simpleTags[1]).attr('aria-label')), 2, 'aria-label is tagged correctly');
     });
 
     QUnit.test('input should have aria-labelledby with a labelId if label specified', function(assert) {
