@@ -6,7 +6,16 @@ import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-import type { License, LicenseVerifyResult, Token } from './types';
+import {
+  DX_LICENSE_TRIGGER_NAME,
+  trialPanelAttributeNames,
+} from './trial-panel';
+import type {
+  License,
+  LicenseCheckParams,
+  ParsedVersion,
+  Token,
+} from './types';
 import { TokenKind } from './types';
 
 interface Payload extends Partial<License> {
@@ -17,6 +26,9 @@ interface Payload extends Partial<License> {
 const SPLITTER = '.';
 const FORMAT = 1;
 const RTM_MIN_PATCH_VERSION = 3;
+const MAX_MINOR_VERSION = 2;
+
+const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtreme.aspx';
 
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
@@ -97,18 +109,24 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
   };
 }
 
+function parseVersion(version: string): ParsedVersion {
+  const [major, minor, patch] = version.split('.').map(Number);
+
+  return {
+    major,
+    minor,
+    patch,
+  };
+}
+
 function getLicenseCheckParams({ licenseKey, version }: {
   licenseKey: string | undefined;
   version: string;
-}): {
-    preview: boolean;
-    internal?: true;
-    error: LicenseVerifyResult | undefined;
-  } {
+}): LicenseCheckParams {
   let preview = false;
 
   try {
-    const [major, minor, patch] = version.split('.').map(Number);
+    const { major, minor, patch } = parseVersion(version);
     preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 
     if (!licenseKey) {
@@ -139,13 +157,57 @@ function getLicenseCheckParams({ licenseKey, version }: {
   }
 }
 
+export function showTrialPanel(buyNowUrl: string, version: string): void {
+  const trialPanelTrigger = document.createElement(DX_LICENSE_TRIGGER_NAME);
+
+  trialPanelTrigger.setAttribute(trialPanelAttributeNames.buyNow, buyNowUrl);
+  trialPanelTrigger.setAttribute(trialPanelAttributeNames.version, version);
+
+  document.body.appendChild(trialPanelTrigger);
+}
+
+function shouldShowTrialPanel(
+  { preview, internal, error }: LicenseCheckParams,
+  licenseKey: string,
+  version: string,
+): boolean {
+  if (!error || internal) {
+    return false;
+  }
+
+  if (preview) {
+    const { major, minor, patch } = parseVersion(version);
+
+    const previousMajor = (
+      minor === 1 ? [major - 1, MAX_MINOR_VERSION, patch] : [major, minor - 1, patch]
+    ).join(SPLITTER);
+
+    const { error: previousMajorError } = getLicenseCheckParams({
+      licenseKey,
+      version: previousMajor,
+    });
+
+    if (!previousMajorError) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function validateLicense(licenseKey: string, version: string = packageVersion): void {
   if (validationPerformed) {
     return;
   }
   validationPerformed = true;
 
-  const { preview, internal, error } = getLicenseCheckParams({ licenseKey, version });
+  const checkParams = getLicenseCheckParams({ licenseKey, version });
+
+  if (shouldShowTrialPanel(checkParams, licenseKey, version)) {
+    showTrialPanel(BUY_NOW_LINK, version);
+  }
+
+  const { preview, internal, error } = checkParams;
 
   if (error) {
     errors.log(preview ? 'W0022' : error);
