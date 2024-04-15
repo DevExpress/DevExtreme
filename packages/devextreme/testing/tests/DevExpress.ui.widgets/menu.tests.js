@@ -2233,6 +2233,23 @@ QUnit.module('keyboard navigation', {
         assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
     });
 
+    [
+        [{ text: 'item1', items: [{ name: 'item_1_1' }] }],
+        [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }]}],
+        [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }]}],
+    ].forEach(item => {
+        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from template when focused (T1227670)', function(assert) {
+            this.instance.option('items', item);
+
+            const $rootMenuItem = $(this.instance.itemElements().eq(0));
+
+            this.instance.focus();
+
+            assert.ok($rootMenuItem.hasClass(DX_STATE_FOCUSED_CLASS), 'root item should have focused class');
+            assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
+        });
+    });
+
     [false, true].forEach(rtlEnabled => {
         QUnit.test(`rtlEnabled: ${rtlEnabled}, orientation: horizontal. focusedElement is null after expanding and closing submenu with 1 nesting level (T952882)`, function(assert) {
             this.instance.option({ rtlEnabled, orientation: 'horizontal', items: [{ text: 'Item 1', items: [{ text: 'Item 11' }] }, { text: 'Item 2' }] });
