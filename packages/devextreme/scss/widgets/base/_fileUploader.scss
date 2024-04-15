@@ -66,6 +66,12 @@
   }
 }
 
+.dx-fileuploader-dragover {
+  .dx-fileuploader-input::-webkit-file-upload-button {
+    width: 100%;
+  }
+}
+
 .dx-fileuploader-content {
   display: table-row-group;
   vertical-align: middle;
