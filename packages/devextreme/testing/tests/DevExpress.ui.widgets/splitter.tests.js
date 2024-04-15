@@ -2122,6 +2122,11 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
     }
 
     [
+        { propertyName: 'onResizeStart', propertyValue: () => {} },
+        { propertyName: 'onResizeEnd', propertyValue: () => {} },
+        { propertyName: 'onResize', propertyValue: () => {} },
+        { propertyName: 'onItemCollapsed', propertyValue: () => {} },
+        { propertyName: 'onItemExpanded', propertyValue: () => {} },
         { propertyName: 'allowKeyboardNavigation', propertyValue: false },
         { propertyName: 'allowKeyboardNavigation', propertyValue: true },
         { propertyName: 'rtlEnabled', propertyValue: false },
@@ -2146,6 +2151,11 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
     });
 
     [
+        { propertyName: 'onResizeStart', propertyValue: () => {} },
+        { propertyName: 'onResizeEnd', propertyValue: () => {} },
+        { propertyName: 'onResize', propertyValue: () => {} },
+        { propertyName: 'onItemCollapsed', propertyValue: () => {} },
+        { propertyName: 'onItemExpanded', propertyValue: () => {} },
         { propertyName: 'allowKeyboardNavigation', propertyValue: false },
         { propertyName: 'allowKeyboardNavigation', propertyValue: true },
         { propertyName: 'rtlEnabled', propertyValue: false },
@@ -2316,8 +2326,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
             assert.strictEqual(resizeHandlerStub.callCount, 1);
         });
 
-        // TODO: repair this scenario
-        QUnit.skip(`${eventHandler} should be called when a handle in the nested splitter is dragged, ${eventHandler} has been changed at runtime`, function(assert) {
+        QUnit.test(`${eventHandler} should be called when a handle in the nested splitter is dragged, ${eventHandler} has been changed at runtime`, function(assert) {
             const resizeHandlerStub = sinon.stub();
             const newResizeHandlerStub = sinon.stub();
 

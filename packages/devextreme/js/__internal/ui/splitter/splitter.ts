@@ -326,16 +326,13 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
-    this._iterateItems((index, itemElement) => {
-      const splitter = $(itemElement).children(`.${SPLITTER_CLASS}`);
+    this.option('items').forEach((item) => {
+      if (item?.splitter) {
+        const splitterItem = this._findItemElementByItem(item).children(`.${SPLITTER_CLASS}`);
 
-      if (splitter.length) {
-        // @ts-expect-error ts-error
-        const nestedSplitter = splitter.dxSplitter('instance');
-        nestedSplitter.option(optionName, optionValue);
-
-        // NOTE: should we do this?
-        // this._options.silent(`items[${index}].splitter.${optionName}`, optionValue);
+        if (splitterItem) {
+          getComponentInstance(splitterItem).option(optionName, optionValue);
+        }
       }
     });
   }
@@ -765,10 +762,10 @@ class Splitter extends (CollectionWidget as any) {
 
     switch (name) {
       case 'allowKeyboardNavigation':
-        this._updateNestedSplitterOption(name, value);
         this._iterateResizeHandles((instance) => {
           instance.option('focusStateEnabled', value);
         });
+        this._updateNestedSplitterOption(name, value);
         break;
       case 'orientation':
         this._toggleOrientationClass();
@@ -779,14 +776,11 @@ class Splitter extends (CollectionWidget as any) {
       case 'onResize':
       case 'onItemCollapsed':
       case 'onItemExpanded':
-        this._updateNestedSplitterOption(name, value);
         this._createEventAction(name);
+        this._updateNestedSplitterOption(name, value);
         break;
       case 'separatorSize':
         this._updateResizeHandlesOption(name, value);
-        this._updateNestedSplitterOption(name, value);
-        break;
-      case 'rtlEnabled':
         this._updateNestedSplitterOption(name, value);
         break;
       default:
