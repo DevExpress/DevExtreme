@@ -37,6 +37,8 @@ jobs:
         run: npm install --no-audit --no-fund
 
       - name: DevExtreme - Build-all
+        env:
+          BUILD_INTERNAL_PACKAGE: true
         run: npm run all:build
 
       - name: Move packages
