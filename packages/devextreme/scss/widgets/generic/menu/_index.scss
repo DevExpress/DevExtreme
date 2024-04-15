@@ -39,6 +39,10 @@
   }
 
   .dx-menu-item-has-icon.dx-menu-item-has-submenu {
+    &.dx-state-focused {
+      color: $menu-color;
+    }
+
     .dx-icon {
       margin-inline-end: $generic-menu-padding-small;
       margin-inline-start: $generic-menu-item-padding-reduced;
