@@ -33,14 +33,14 @@ import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
 import { dateUtilsTs } from '@ts/core/utils/date';
-
-import { createTimeZoneCalculator } from './__migration/timezone_calculator/index';
+import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
 import {
   excludeFromRecurrence,
   getAppointmentTakesAllDay,
   getPreparedDataItems,
   isDateAndTimeView, isTimelineView, viewsUtils,
-} from './__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';

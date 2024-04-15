@@ -2,7 +2,7 @@ import { getViewSwitcher, getDropDownViewSwitcher } from './view_switcher';
 import { getDateNavigator } from './date_navigator';
 
 import { ItemOptions, ItemView } from './types';
-import { ViewType } from '../../../../__internal/scheduler/__migration/types';
+import { ViewType } from '../../../../__internal/scheduler/r1/types';
 
 import { ToolbarItem } from '../../toolbar/toolbar_props';
 import { ViewProps } from '../props';

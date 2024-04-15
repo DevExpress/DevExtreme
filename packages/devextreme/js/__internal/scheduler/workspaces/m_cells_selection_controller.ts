@@ -1,4 +1,4 @@
-import { isDateAndTimeView } from '../__migration/utils/index';
+import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
 export class CellsSelectionController {
   handleArrowClick(options) {
