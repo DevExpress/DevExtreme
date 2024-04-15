@@ -2229,7 +2229,7 @@ QUnit.module('keyboard navigation', {
         [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
         [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
     ].forEach(item => {
-        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from item template when focused (T1227670)', function(assert) {
+        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it\'s opened (T1227670)', function(assert) {
             this.instance.option('items', item);
 
             $(this.instance.itemsContainer())
