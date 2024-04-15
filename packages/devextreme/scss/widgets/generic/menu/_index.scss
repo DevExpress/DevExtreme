@@ -34,7 +34,9 @@
 .dx-menu {
   color: $menu-color;
 
-  .dx-menu-item-expanded {
+  .dx-menu-item-expanded,
+  .dx-menu-item-expanded.dx-state-focused {
+    color: $menu-item-expanded-color;
     background-color: $menu-popup-bg;
   }
 
@@ -77,11 +79,6 @@
       @include dx-icon(spinright);
       @include dx-icon-font-centered-sizing($generic-base-icon-size);
     }
-  }
-
-  .dx-menu-item-has-icon.dx-state-focused,
-  .dx-menu-item-has-text.dx-state-focused {
-    color: $menu-item-expanded-color;
   }
 }
 
