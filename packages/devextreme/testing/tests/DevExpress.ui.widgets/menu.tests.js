@@ -2235,8 +2235,8 @@ QUnit.module('keyboard navigation', {
 
     [
         [{ text: 'item1', items: [{ name: 'item_1_1' }] }],
-        [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }]}],
-        [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }]}],
+        [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
+        [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
     ].forEach(item => {
         checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from template when focused (T1227670)', function(assert) {
             this.instance.option('items', item);
