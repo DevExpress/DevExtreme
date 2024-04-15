@@ -5,8 +5,7 @@ import { getBoundingRect } from '@js/core/utils/position';
 import { hasWindow } from '@js/core/utils/window';
 
 // NOTE: Renovation component import.
-// @ts-expect-error
-import dxrMonthDateTableLayout from '../../../renovation/ui/scheduler/workspaces/month/date_table/layout.j';
+import { DateTableMonthComponent } from '../__migration/components/index';
 import { formatWeekday, monthUtils } from '../__migration/utils/index';
 import { VIEWS } from '../m_constants';
 import { utils } from '../m_utils';
@@ -136,7 +135,7 @@ class SchedulerWorkSpaceMonth extends SchedulerWorkSpace {
     utils.renovation.renderComponent(
       this,
       this._$dateTable,
-      dxrMonthDateTableLayout,
+      DateTableMonthComponent,
       'renovatedDateTable',
       this._getRDateTableProps(),
     );

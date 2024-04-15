@@ -2114,6 +2114,67 @@ QUnit.module('Events', moduleConfig, () => {
             assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
         });
     });
+
+    QUnit.test('onResizeStart event should be cancellable', function(assert) {
+        let resizeEvent;
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', }, { size: '200px' }],
+            onResizeStart: function(e) {
+                resizeEvent = e;
+                e.cancel = true;
+            },
+        });
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart();
+
+        assert.true(resizeEvent.event.cancel);
+    });
+
+    QUnit.test('onResize event should be cancellable', function(assert) {
+        let resizeEvent;
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', }, { size: '200px' }],
+            onResize: function(e) {
+                resizeEvent = e;
+                e.cancel = true;
+            },
+        });
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(100, 100).dragEnd();
+
+        this.checkItemSizes([200, 200]);
+        this.assertLayout([50, 50]);
+        assert.true(resizeEvent.event.cancel);
+    });
+
+    QUnit.test('onResizeEnd event should be cancellable', function(assert) {
+        let resizeEvent;
+        this.reinit({
+            width: 408,
+            height: 408,
+            dataSource: [{ size: '200px', }, { size: '200px' }],
+            onResizeEnd: function(e) {
+                resizeEvent = e;
+                e.cancel = true;
+            },
+        });
+
+        const pointer = pointerMock(this.getResizeHandles().eq(0));
+        pointer.start().dragStart().drag(100, 100).dragEnd();
+
+        const firstPaneSize = this.instance.option('items[0].size');
+        const secondPaneSize = this.instance.option('items[1].size');
+
+        assert.strictEqual(firstPaneSize, '200px');
+        assert.strictEqual(secondPaneSize, '200px');
+        assert.true(resizeEvent.event.cancel);
+    });
 });
 
 QUnit.module('Nested Splitters', moduleConfig, () => {

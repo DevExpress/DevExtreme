@@ -8,6 +8,7 @@ import RadioButton from '../radio_group/radio_button';
 import { addNamespace } from '../../events/utils/index';
 import { register as registerDecorator } from './ui.list.edit.decorator_registry';
 import EditDecorator from './ui.list.edit.decorator';
+import messageLocalization from '../../localization/message';
 
 
 const SELECT_DECORATOR_ENABLED_CLASS = 'dx-list-select-decorator-enabled';
@@ -25,6 +26,8 @@ const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const CLICK_EVENT_NAME = addNamespace(clickEventName, 'dxListEditDecorator');
+
+const DEFAULT_SELECT_ALL_ARIA_LABEL = messageLocalization.format('dxList-selectAll');
 
 registerDecorator(
     'selection',
@@ -124,19 +127,22 @@ registerDecorator(
             }
         },
 
-        _renderSelectAll: function() {
-            const $selectAll = this._$selectAll = $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
-            const list = this._list;
-            const downArrowHandler = list._supportedKeys().downArrow.bind(list);
+        _renderSelectAll() {
+            this._$selectAll = $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_CLASS);
 
-            this._selectAllCheckBox = list._createComponent(
-                $('<div>')
-                    .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
-                    .appendTo($selectAll),
-                CheckBox, {
-                    elementAttr: { 'aria-label': 'Select All' },
+            const downArrowHandler = this._list._supportedKeys().downArrow.bind(this._list);
+
+            const selectAllCheckBoxElement = $('<div>')
+                .addClass(SELECT_DECORATOR_SELECT_ALL_CHECKBOX_CLASS)
+                .appendTo(this._$selectAll);
+
+            this._selectAllCheckBox = this._list._createComponent(
+                selectAllCheckBoxElement,
+                CheckBox,
+                {
+                    elementAttr: { 'aria-label': DEFAULT_SELECT_ALL_ARIA_LABEL },
                     focusStateEnabled: false,
-                    hoverStateEnabled: false
+                    hoverStateEnabled: false,
                 }
             );
 
@@ -144,11 +150,12 @@ registerDecorator(
 
             $('<div>').addClass(SELECT_DECORATOR_SELECT_ALL_LABEL_CLASS)
                 .text(this._list.option('selectAllText'))
-                .appendTo($selectAll);
+                .appendTo(this._$selectAll);
 
-            this._list.itemsContainer().prepend($selectAll);
+            this._list.itemsContainer().prepend(this._$selectAll);
 
             this._updateSelectAllState();
+            this._updateSelectAllAriaLabel();
             this._attachSelectAllHandler();
         },
 
@@ -159,19 +166,32 @@ registerDecorator(
             eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, this._selectAllClickHandler.bind(this));
         },
 
+        _updateSelectAllAriaLabel() {
+            const { value } = this._selectAllCheckBox.option();
+
+            const indeterminate = value === undefined;
+
+            const checkedText = indeterminate ? 'half checked' : value ? 'checked' : 'not checked';
+            const label = `${DEFAULT_SELECT_ALL_ARIA_LABEL}, ${checkedText}`;
+
+            this._$selectAll.attr({ 'aria-label': label });
+        },
+
         _selectAllHandler: function(e) {
             e.event && e.event.stopPropagation();
-
-            const isSelectedAll = this._selectAllCheckBox.option('value');
-
             e.event && this._list._saveSelectionChangeEvent(e.event);
-            if(isSelectedAll === true) {
+
+            const { value } = this._selectAllCheckBox.option();
+
+            if(value) {
                 this._selectAllItems();
-            } else if(isSelectedAll === false) {
+            } else if(value === false) {
                 this._unselectAllItems();
             }
 
-            this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
+            this._updateSelectAllAriaLabel();
+
+            this._list._createActionByOption('onSelectAllValueChanged')({ value });
         },
 
         _checkSelectAllCapability: function() {

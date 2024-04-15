@@ -13,7 +13,7 @@ import {
   getOuterHeight,
   getOuterWidth,
 } from '@js/core/utils/size';
-import { isDefined } from '@js/core/utils/type';
+import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { lock } from '@js/events/core/emitter.feedback';
 import CollectionWidgetItem from '@js/ui/collection/item';
@@ -50,7 +50,7 @@ import {
   validateLayout,
 } from './utils/layout';
 import type {
-  FlexProperty, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
+  FlexProperty, InteractionEvent, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
 } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -182,14 +182,13 @@ class Splitter extends (CollectionWidget as any) {
     this._layout = this._getDefaultLayoutBasedOnSize();
 
     this._applyFlexGrowFromLayout(this._layout);
-    this._updatePaneSizesWithOuterWidth();
+    this._updateItemSizes();
 
     this._shouldRecalculateLayout = false;
   }
 
   _renderItems(items: Item[]): void {
     this._resizeHandles = [];
-
     super._renderItems(items);
 
     this._updateResizeHandlesResizableState();
@@ -417,7 +416,7 @@ class Splitter extends (CollectionWidget as any) {
           }
 
           this._panesCacheSize[rightItemIndex] = undefined;
-          this.option(`items[${rightItemIndex}].collapsed`, false);
+          this._updateItemData('collapsed', rightItemIndex, false, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
@@ -432,7 +431,7 @@ class Splitter extends (CollectionWidget as any) {
         this._panesCacheSize[leftItemIndex] = this._getItemDimension($leftItem.get(0));
         this._collapsedItemSize = this._getItemDimension($leftItem.get(0));
 
-        this.option(`items[${leftItemIndex}].collapsed`, true);
+        this._updateItemData('collapsed', leftItemIndex, true, false);
 
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
@@ -467,7 +466,8 @@ class Splitter extends (CollectionWidget as any) {
           }
 
           this._panesCacheSize[leftItemIndex] = undefined;
-          this.option(`items[${leftItemIndex}].collapsed`, false);
+
+          this._updateItemData('collapsed', leftItemIndex, false, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
             event: e.event,
@@ -482,7 +482,7 @@ class Splitter extends (CollectionWidget as any) {
         this._panesCacheSize[rightItemIndex] = this._getItemDimension($rightItem.get(0));
         this._collapsedItemSize = this._getItemDimension($rightItem.get(0));
 
-        this.option(`items[${rightItemIndex}].collapsed`, true);
+        this._updateItemData('collapsed', rightItemIndex, true, false);
 
         this._getAction(ITEM_COLLAPSED_EVENT)({
           event: e.event,
@@ -494,8 +494,25 @@ class Splitter extends (CollectionWidget as any) {
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
 
-        this._currentLayout = this._layout;
+        if (!event) { return; }
+
         const $resizeHandle = $(element);
+
+        const resizeStartEventsArgs = this._getResizeStartEventArgs(
+          event,
+          getPublicElement($resizeHandle),
+        );
+
+        this._getAction(RESIZE_EVENT.onResizeStart)(resizeStartEventsArgs);
+
+        if (resizeStartEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
+          return;
+        }
+
+        this._currentLayout = this._layout;
+
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
@@ -515,14 +532,21 @@ class Splitter extends (CollectionWidget as any) {
         const { items } = this.option();
 
         this._updateItemsRestrictions(items);
-
-        this._getAction(RESIZE_EVENT.onResizeStart)({
-          event,
-          handleElement: getPublicElement($resizeHandle),
-        });
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
+
+        if (!event) { return; }
+
+        const resizeEventsArgs = this._getResizeEventArgs(event, getPublicElement($(element)));
+
+        this._getAction(RESIZE_EVENT.onResize)(resizeEventsArgs);
+
+        if (resizeEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
+          return;
+        }
 
         const newLayout = getNextLayout(
           this._currentLayout,
@@ -534,30 +558,48 @@ class Splitter extends (CollectionWidget as any) {
 
         this._applyFlexGrowFromLayout(newLayout);
         this._layout = newLayout;
-
-        this._getAction(RESIZE_EVENT.onResize)({
-          event,
-          handleElement: getPublicElement($(element)),
-        });
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
+        if (!event) { return; }
+
         const $resizeHandle = $(element);
+
+        const resizeEndEventsArgs = this._getResizeEndEventArgs(
+          event,
+          getPublicElement($resizeHandle),
+        );
+
+        this._getAction(RESIZE_EVENT.onResizeEnd)(resizeEndEventsArgs);
+
+        if (resizeEndEventsArgs.cancel) {
+          // @ts-expect-error ts-error
+          event.cancel = true;
+          return;
+        }
 
         this._feedbackDeferred.resolve();
         this._toggleActiveState($resizeHandle, false);
 
-        each(this._itemElements(), (index: number, itemElement: Element) => {
-          this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
-        });
-
-        this._getAction(RESIZE_EVENT.onResizeEnd)({
-          event,
-          handleElement: getPublicElement($resizeHandle),
-        });
+        this._updateItemSizes();
       },
     };
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeStartEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeStartEvent {
+    return { event, handleElement } as ResizeStartEvent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeEvent {
+    return { event, handleElement } as ResizeEvent;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _getResizeEndEventArgs(event: InteractionEvent, handleElement: HTMLElement): ResizeEndEvent {
+    return { event, handleElement } as ResizeEndEvent;
   }
 
   // eslint-disable-next-line class-methods-use-this
@@ -640,7 +682,7 @@ class Splitter extends (CollectionWidget as any) {
         this._layout = this._getDefaultLayoutBasedOnSize();
 
         this._applyFlexGrowFromLayout(this._layout);
-        this._updatePaneSizesWithOuterWidth();
+        this._updateItemSizes();
         break;
       case 'collapsed':
         this._itemCollapsedOptionChanged(item);
@@ -677,7 +719,7 @@ class Splitter extends (CollectionWidget as any) {
     this._collapsedItemSize = undefined;
 
     this._applyFlexGrowFromLayout(this._layout);
-    this._updatePaneSizesWithOuterWidth();
+    this._updateItemSizes();
   }
 
   _getCollapseDelta(item: Item): number {
@@ -735,10 +777,37 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  _updatePaneSizesWithOuterWidth(): void {
+  _updateItemSizes(): void {
     this._iterateItems((index, itemElement) => {
-      this._options.silent(`items[${index}].size`, this._getItemDimension(itemElement));
+      this._updateItemData('size', index, this._getItemDimension(itemElement));
     });
+  }
+
+  _updateItemData(
+    prop: 'size' | 'collapsed',
+    itemIndex: number,
+    value: unknown,
+    silent = true,
+  ): void {
+    const itemPath = `items[${itemIndex}]`;
+    const itemData = this.option(itemPath);
+
+    if (isObject(itemData)) {
+      this._updateItemOption(`${itemPath}.${prop}`, value, silent);
+    } else {
+      this._updateItemOption(itemPath, {
+        text: itemData,
+        [prop]: value,
+      }, silent);
+    }
+  }
+
+  _updateItemOption(path: string, value: unknown, silent = false): void {
+    if (silent) {
+      this._options.silent(path, value);
+    } else {
+      this.option(path, value);
+    }
   }
 
   _iterateItems(callback: (index: number, itemElement: HTMLElement) => void): void {
