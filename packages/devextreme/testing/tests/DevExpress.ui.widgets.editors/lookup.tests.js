@@ -3417,7 +3417,7 @@ if(devices.real().deviceType === 'desktop') {
 
                 const listItemContainerAttributes = {
                     tabindex: '0',
-                    role: 'group',
+                    role: 'application',
                 };
 
                 let fieldAttributes = {
@@ -3569,15 +3569,15 @@ if(devices.real().deviceType === 'desktop') {
                 const $scrollView = $list.find(`.${SCROLL_VIEW_CONTENT_CLASS}`);
                 const $itemsContainer = $list.find(`.${LIST_ITEMS_CLASS}`);
 
-                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'application' });
                 helper.checkAttributes($itemsContainer, { });
 
                 helper.widget.option(dataSourcePropertyName, [1, 2, 3]);
-                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'application' });
                 helper.checkAttributes($itemsContainer, { 'aria-label': 'Items', role: 'listbox' });
 
                 helper.widget.option(dataSourcePropertyName, []);
-                helper.checkAttributes($scrollView, { tabindex: '0', role: 'group' });
+                helper.checkAttributes($scrollView, { tabindex: '0', role: 'application' });
                 helper.checkAttributes($itemsContainer, { });
             });
         });

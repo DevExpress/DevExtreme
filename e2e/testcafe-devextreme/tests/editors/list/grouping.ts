@@ -5,11 +5,39 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Grouping`
-  .page(url(__dirname, '../../container.html'));
+.page(url(__dirname, '../../container.html'));
+
+test('Grouped List last item of last group should have proper margin-bottom', async(t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  const list = new List('#container');
+  const lastItemIndex = list.getItems().length - 1;
+
+  await t
+    .hover(list.getItem(lastItemIndex).element)
+    .expect(list.getItem(lastItemIndex).isHovered)
+    .ok();
+
+  await testScreenshot(t, takeScreenshot, 'Grouped List with correct margin bottom.png', { element: '#container' });
+  
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+  dataSource: [{
+    key: 'One',
+    items: ['1_1', '1_2', '1_3'],
+  }, {
+    key: 'Two',
+    items: ['2_1', '2_2', '2_3'],
+  }],
+  grouped: true,
+  collapsibleGroups: false
+}));
 
 test('Grouped list appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
+  
   const list = new List('#container');
 
   await t.click(list.getGroup(0).header);
