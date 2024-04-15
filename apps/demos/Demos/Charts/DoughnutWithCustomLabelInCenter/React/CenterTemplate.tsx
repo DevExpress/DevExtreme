@@ -1,11 +1,11 @@
-import PieChart from 'devextreme-react/pie-chart';
+import { PieChartRef } from 'devextreme-react/pie-chart';
 import React from 'react';
 
 const formatNumber = new Intl.NumberFormat('en-US', {
   minimumFractionDigits: 0,
 }).format;
 
-function calculateTotal(pieChart: PieChart['instance']) {
+function calculateTotal(pieChart: ReturnType<PieChartRef['instance']>) {
   return formatNumber(pieChart
     .getAllSeries()[0]
     .getVisiblePoints()
@@ -16,7 +16,7 @@ function getImagePath(country: string) {
   return `../../../../images/flags/${country.replace(/\s/, '').toLowerCase()}.svg`;
 }
 
-export default function TooltipTemplate(pieChart: PieChart['instance']) {
+export default function TooltipTemplate(pieChart: ReturnType<PieChartRef['instance']>) {
   const { country } = pieChart.getAllSeries()[0].getVisiblePoints()[0].data;
   return (
     <svg>

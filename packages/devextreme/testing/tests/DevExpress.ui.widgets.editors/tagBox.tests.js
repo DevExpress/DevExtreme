@@ -7834,6 +7834,132 @@ QUnit.module('accessibility', () => {
         assert.strictEqual(parseInt($(simpleTags[1]).attr('aria-label')), 2, 'aria-label is tagged correctly');
     });
 
+    QUnit.test('multitag should have correct aria attributes', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+        });
+        const parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+        const $multiTagContainer = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
+        const selectedItemsLength = $tagBox.dxTagBox('instance').option('selectedItems').length;
+
+        assert.strictEqual(parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'aria-labelledby attribute contains multitag id');
+        assert.strictEqual($multiTagContainer.attr('role'), 'button', 'role attribute is correct');
+        assert.strictEqual($multiTagContainer.attr('aria-label'), `${selectedItemsLength - 1} more`, 'aria-label attribute is correct');
+        assert.strictEqual($multiTagContainer.attr('aria-roledescription'), messageLocalization.format('dxTagBox-tagRoleDescription'), 'aria-roledescription attribute is correct');
+    });
+
+    QUnit.test('root element should have aria-labelledby attribute based from multitag id', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+        });
+        const $multiTagContainer = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
+        const parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+
+        assert.strictEqual(parentTagContainerIds.length, 2, 'root element aria-labelledby attribute contains two ids');
+        assert.strictEqual(parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'aria-labelledby attribute contains multitag id');
+    });
+
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=true and maxDisplay tags is 2', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: true,
+        });
+        const parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
+        const tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
+
+        assert.strictEqual(simpleTagsLength, 0, 'root element has no simple tag');
+        assert.strictEqual(multiTagsLength, 1, 'root element contains one multitag');
+        assert.strictEqual(tagIds.every(item => parentTagContainerIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = true and maxDisplayTags = 2');
+    });
+
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=true and maxDisplayTags is 4', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 4,
+            showMultiTagOnly: true,
+        });
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
+        const parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+        const tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
+
+        assert.strictEqual(simpleTagsLength, 4, 'root element contains four simple tag');
+        assert.strictEqual(multiTagsLength, 0, 'root element has no multitag');
+        assert.strictEqual(tagIds.every(item => parentTagContainerIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = true and maxDisplayTags = 4');
+    });
+
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=false and maxDisplayTags is 2', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+        });
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
+        const parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+        const tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
+
+        assert.strictEqual(simpleTagsLength, 1, 'root element contains 1 simple tag');
+        assert.strictEqual(multiTagsLength, 1, 'root element contains one multitag');
+        assert.strictEqual(tagIds.every(item => parentTagContainerIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = false and maxDisplayTags = 2');
+    });
+
+    QUnit.test('tagBox should show correct count of tags if showMultiTagOnly=false and maxDisplayTags is 4', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 4,
+            showMultiTagOnly: false,
+        });
+        const simpleTagsLength = $tagBox.find(`.${TAGBOX_TAG_CLASS}:not(.${TAGBOX_MULTI_TAG_CLASS})`).length;
+        const multiTagsLength = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`).length;
+        const parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+        const tagIds = $tagBox.find(`.${TAGBOX_TAG_CLASS}`).map((_, element) => $(element).attr('id')).get();
+
+        assert.strictEqual(simpleTagsLength, 4, 'root element contains four simple tag');
+        assert.strictEqual(multiTagsLength, 0, 'root element has no multitag');
+        assert.strictEqual(tagIds.every(item => parentTagContainerIds.includes(item)), true, 'root element contains all tag ids when showMultiTagOnly = false and maxDisplayTags = 4');
+    });
+
+    QUnit.test('root element should not have multitag id when its deleted', function(assert) {
+        const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: sampleData,
+            value: sampleData,
+            maxDisplayedTags: 2,
+            showMultiTagOnly: false,
+        });
+
+        const $multiTagContainer = $tagBox.find(`.${TAGBOX_MULTI_TAG_CLASS}`);
+        let parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+
+        assert.strictEqual(parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'root element includes multitag id when multitag is not removed');
+
+        $multiTagContainer.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).trigger('dxclick');
+
+        parentTagContainerIds = $tagBox.attr('aria-labelledby').split(' ');
+
+        assert.strictEqual(!parentTagContainerIds.includes($multiTagContainer.attr('id')), true, 'root element contains one id when multitag is removed');
+    });
+
     QUnit.test('input should have aria-labelledby with a labelId if label specified', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);

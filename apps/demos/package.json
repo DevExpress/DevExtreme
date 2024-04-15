@@ -100,7 +100,7 @@
         "stylelint": "13.13.1",
         "stylelint-config-standard": "22.0.0",
         "systemjs-builder": "0.16.15",
-        "ts-node": "10.9.1"
+        "ts-node": "10.9.2"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",

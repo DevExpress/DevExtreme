@@ -32,13 +32,13 @@ import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
 
-// NOTE: Renovation component section
-// @ts-expect-error
-import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
-// @ts-expect-error
-import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import {
-  AllDayPanelTitleComponent, AllDayTableComponent, DateTableComponent, HeaderPanelComponent,
+  AllDayPanelTitleComponent,
+  AllDayTableComponent,
+  DateTableComponent,
+  GroupPanelComponent,
+  HeaderPanelComponent,
+  TimePanelComponent,
 } from '../__migration/components/index';
 import type { ViewType } from '../__migration/types';
 import {
@@ -2093,7 +2093,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       utils.renovation.renderComponent(
         this,
         this._getGroupHeaderContainer(),
-        dxrGroupPanel,
+        GroupPanelComponent,
         'renovatedGroupPanel',
         options,
       );
@@ -2126,7 +2126,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     utils.renovation.renderComponent(
       this,
       this._$timePanel,
-      dxrTimePanelTableLayout,
+      TimePanelComponent,
       'renovatedTimePanel',
       {
         timePanelData: this.viewDataProvider.timePanelData,
