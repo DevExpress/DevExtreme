@@ -333,13 +333,12 @@ const DropDownButton = Widget.inherit({
             stylingMode,
             accessKey,
             tabIndex,
+            elementAttr: {
+                role: splitButton ? 'menu' : 'group',
+            },
             onItemClick: this._buttonGroupItemClick.bind(this),
             onKeyboardHandled: (e) => this._keyboardHandler(e),
         }, this._options.cache('buttonGroupOptions'));
-
-        if(splitButton) {
-            buttonGroupOptions.elementAttr = { role: 'menu' };
-        }
 
         return buttonGroupOptions;
     },
