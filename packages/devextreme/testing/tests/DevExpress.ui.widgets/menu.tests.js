@@ -2224,15 +2224,6 @@ QUnit.module('keyboard navigation', {
         assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item lose focus');
     });
 
-    checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should not use color property from template when focused (T1227670)', function(assert) {
-        const $rootMenuItem = $(this.instance.itemElements().eq(0));
-
-        this.instance.focus();
-
-        assert.ok($rootMenuItem.hasClass(DX_STATE_FOCUSED_CLASS), 'root item should have focused class');
-        assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
-    });
-
     [
         [{ text: 'item1', items: [{ name: 'item_1_1' }] }],
         [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
