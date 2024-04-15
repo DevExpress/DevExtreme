@@ -152,6 +152,7 @@ $icon-position: relative;
   .dx-checkbox-icon {
     background-color: $checkbox-foreground-color;
     border: 1px solid $checkbox-accent-color;
+    padding: .1em;
 
     &::before {
       content: '';
