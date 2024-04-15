@@ -150,7 +150,5 @@ export function registerLicenseComponent(): void {
   }
 }
 
-registerLicenseComponent();
-
 export const DX_LICENSE_TRIGGER_NAME = componentNames.trigger;
 export const trialPanelAttributeNames = attributeNames;

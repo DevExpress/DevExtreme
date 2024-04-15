@@ -8,6 +8,7 @@ import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
 import {
   DX_LICENSE_TRIGGER_NAME,
+  registerLicenseComponent,
   trialPanelAttributeNames,
 } from './trial-panel';
 import type {
@@ -158,6 +159,8 @@ function getLicenseCheckParams({ licenseKey, version }: {
 }
 
 export function showTrialPanel(buyNowUrl: string, version: string): void {
+  registerLicenseComponent();
+
   const trialPanelTrigger = document.createElement(DX_LICENSE_TRIGGER_NAME);
 
   trialPanelTrigger.setAttribute(trialPanelAttributeNames.buyNow, buyNowUrl);
