@@ -22,7 +22,6 @@
         "@angular/platform-browser": "12.2.17",
         "@angular/platform-browser-dynamic": "12.2.17",
         "@aspnet/signalr": "1.0.27",
-        "angular-sanitize": "1.8.3",
         "cldr-core": "40.0.0",
         "cldr-data": "36.0.1",
         "cldr-dates-full": "40.0.0",
