@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import {
   appendElementTo,
   setAttribute,
@@ -7,7 +8,6 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { clearTestPage } from '../../../helpers/clearPage';
-import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
 

@@ -1,6 +1,6 @@
+import Splitter from 'devextreme-testcafe-models/splitter';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Splitter from 'devextreme-testcafe-models/splitter';
 
 fixture.disablePageReloads`Splitter_keyboard`
   .page(url(__dirname, '../../container.html'));

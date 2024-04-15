@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
 

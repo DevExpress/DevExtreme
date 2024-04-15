@@ -1,10 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Item, ButtonType } from 'devextreme/ui/button_group.d';
 import { setStyleAttribute, appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Item, ButtonType } from 'devextreme/ui/button_group.d';
 
 interface ButtonGroupItem extends Item {
   id: string;

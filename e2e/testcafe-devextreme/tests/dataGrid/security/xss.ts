@@ -1,5 +1,5 @@
-import url from '../../../helpers/getPageUrl';
 import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
+import url from '../../../helpers/getPageUrl';
 
 fixture`XSS`
   .page('about:blank')

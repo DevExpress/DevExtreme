@@ -1,6 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector } from 'testcafe';
+import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -11,7 +12,6 @@ import {
   setAttribute,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import Guid from 'devextreme/core/guid';
 
 const BUTTON_CLASS = 'dx-button';
 const BUTTON_TEXT_CLASS = 'dx-button-text';
