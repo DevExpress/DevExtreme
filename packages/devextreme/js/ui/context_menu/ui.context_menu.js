@@ -635,12 +635,7 @@ class ContextMenu extends MenuBase {
     }
 
     _initScrollable($container) {
-        const { deviceType, mac } = devices.real();
-
-        this._createComponent($container, Scrollable, {
-            useNative: true,
-            useSimulatedScrollbar: deviceType === 'desktop' && !mac,
-        });
+        this._createComponent($container, Scrollable, {});
     }
 
     _setSubMenuHeight($submenu, anchor, isNestedSubmenu) {

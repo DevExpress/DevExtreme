@@ -94,5 +94,13 @@
 
   &.dx-overlay-content .dx-scrollable {
     overflow: visible;
+
+    .dx-scrollable-content {
+      transform: none !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .dx-scrollable-container {
+      overscroll-behavior: contain;
+    }
   }
 }

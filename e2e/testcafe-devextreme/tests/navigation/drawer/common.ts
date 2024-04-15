@@ -197,8 +197,12 @@ openedStateModeConfigs.forEach((config) => {
     await ClientFunction(({ createDrawer, config }) => {
       config.createInnerContent = ($container) => {
         ($('<div id="menu">').appendTo($container) as any).dxMenu({
-          dataSource: [{ text: 'item1', items: [{ text: 'item1/item1' },
-          { text: 'item1/item2' }] }],
+          dataSource: [
+            {
+              text: 'item1',
+              items: [{ text: 'item1/item1' }, { text: 'item1/item2' }],
+            },
+          ],
         });
       };
       createDrawer(config);
