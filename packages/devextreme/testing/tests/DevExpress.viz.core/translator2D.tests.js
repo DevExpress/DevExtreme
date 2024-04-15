@@ -798,7 +798,7 @@ QUnit.test('Translate. Update translator with business range with empty scale br
     assert.strictEqual(translator.translate(450), 1000);
 });
 
-QUnit.test('Translate. Scale breaks. Translator should calculate ratioOfCanvasRange correctly when visible range length = 0 (T1222629)', function(assert) {
+QUnit.test('Translate. Scale breaks. Translator should calculate ratioOfCanvasRange correctly when visible range length equals to 0 (T1222629)', function(assert) {
     const breaks = [{ from: -11.9, to: -10.3, cumulativeWidth: 5 }, { from: -10.3, to: 20.3, cumulativeWidth: 10 }];
     const translator = createTranslatorWithScaleBreaks.call(this, {
         min: -11.9, max: 20.3, breaks: breaks
