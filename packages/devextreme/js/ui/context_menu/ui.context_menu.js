@@ -643,14 +643,13 @@ class ContextMenu extends MenuBase {
         });
     }
 
-    _setSubMenuHeight($container, anchor, isNestedSubmenu) {
-        const $itemsContainer = $container.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
-        const borderWidth = this._getSubmenuBorderWidth();
-        const contentHeight = getOuterHeight($itemsContainer) + borderWidth * 2;
+    _setSubMenuHeight($submenu, anchor, isNestedSubmenu) {
+        const $itemsContainer = $submenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+        const contentHeight = getOuterHeight($itemsContainer);
         const maxHeight = this._getMaxHeight(anchor, !isNestedSubmenu);
         const menuHeight = Math.min(contentHeight, maxHeight);
 
-        $container.css('height', isNestedSubmenu ? menuHeight : '100%');
+        $submenu.css('height', isNestedSubmenu ? menuHeight : '100%');
     }
 
     _getMaxHeight(anchor, considerAnchorHeight = true) {
@@ -943,7 +942,10 @@ class ContextMenu extends MenuBase {
                     return this._getMaxHeight(position.of);
                 },
                 maxHeight: () => {
-                    return getOuterHeight($subMenu);
+                    const $content = $subMenu.find(`.${DX_MENU_ITEMS_CONTAINER_CLASS}`);
+                    const borderWidth = this._getSubmenuBorderWidth();
+
+                    return getOuterHeight($content) + borderWidth * 2;
                 },
                 position,
             });
