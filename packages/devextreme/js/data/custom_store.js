@@ -140,7 +140,12 @@ function runRawLoad(pendingDeferred, store, userFuncOptions, continuation) {
                 }
                 continuation(rawData);
             })
-            .fail(createUserFuncFailureHandler(pendingDeferred));
+            .fail((error) => {
+                const userFuncFailureHandler = createUserFuncFailureHandler(pendingDeferred);
+
+                store._errorHandler?.(error);
+                userFuncFailureHandler(error);
+            });
     }
 }
 
