@@ -2233,9 +2233,8 @@ QUnit.module('keyboard navigation', {
             this.instance.option('items', item);
 
             $(this.instance.itemsContainer())
-                .find('.' + DX_MENU_ITEM_CLASS)
+                .find(`.${DX_MENU_ITEM_CLASS}`)
                 .eq(0)
-                .trigger('dxhoverstart')
                 .trigger('dxclick');
 
             const $rootMenuItem = $(this.instance.itemElements().eq(0));
