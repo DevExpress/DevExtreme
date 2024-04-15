@@ -39,10 +39,6 @@
   }
 
   .dx-menu-item-has-icon.dx-menu-item-has-submenu {
-    &.dx-state-focused {
-      color: $menu-color;
-    }
-
     .dx-icon {
       margin-inline-end: $generic-menu-padding-small;
       margin-inline-start: $generic-menu-item-padding-reduced;
@@ -50,10 +46,6 @@
   }
 
   .dx-menu-item-has-text {
-    &.dx-state-focused {
-      color: $menu-color;
-    }
-
     .dx-menu-item-text {
       padding: $generic-menu-item-padding-base;
       padding-top: $generic-menu-item-padding-top-base;
@@ -85,6 +77,11 @@
       @include dx-icon(spinright);
       @include dx-icon-font-centered-sizing($generic-base-icon-size);
     }
+  }
+
+  .dx-menu-item-has-icon.dx-state-focused,
+  .dx-menu-item-has-text.dx-state-focused {
+    color: $menu-item-expanded-color;
   }
 }
 
