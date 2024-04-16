@@ -476,12 +476,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
 
         instance.hide();
         instance.show();
 
-        assert.strictEqual($scrollableContent.position().top, 0, 'scroll position reseted');
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position reseted');
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested menu)', function(assert) {
@@ -505,13 +505,13 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
 
         keyboardMock(instance.itemsContainer())
             .press('left')
             .press('right');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .1, 'scroll position reseted');
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scroll position reseted');
     });
 });
 

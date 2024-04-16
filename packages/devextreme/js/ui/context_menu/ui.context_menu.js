@@ -556,19 +556,21 @@ class ContextMenu extends MenuBase {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
 
-            const $firstMenuItem = this._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).first();
-            const $scrollableElement = $firstMenuItem.closest(`.${SCROLLABLE_CLASS}`);
+            const $scrollableElement = this._overlay.$content().find(`.${SCROLLABLE_CLASS}`).first();
+
+            if(!$scrollableElement.length) {
+                return;
+            }
+
             const scrollableInstance = $scrollableElement.dxScrollable('instance');
 
-            scrollableInstance?.scrollTo(0);
+            scrollableInstance.scrollTo(0);
+            this.option('focusedElement', null);
         }
     }
 
     _overlayHiddenActionHandler(arg) {
         this._actions.onHidden(arg);
-
-        const $firstMenuItem = this._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).first();
-        this._setFocusedElement($firstMenuItem);
     }
 
     _shouldHideOnOutsideClick(e) {

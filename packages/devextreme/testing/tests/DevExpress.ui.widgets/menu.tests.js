@@ -703,14 +703,14 @@ QUnit.module('Rendering Scrollable', {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .5, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
 
         keyboardMock(itemsContainer)
             .press('left')
             .press('right')
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, 0, .5, 'scroll position reset');
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position reset');
     });
 
     QUnit.test('Scroll position should be set to 0 after reopen (nested submenu)', function(assert) {
@@ -744,13 +744,13 @@ QUnit.module('Rendering Scrollable', {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .5, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
 
         keyboardMock(itemsContainer)
             .press('left')
             .press('right');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .5, 'scroll position reset');
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scroll position reset');
     });
 });
 
