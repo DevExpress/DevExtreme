@@ -555,11 +555,20 @@ class ContextMenu extends MenuBase {
         if(!arg.cancel) {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
+
+            const $firstMenuItem = this._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).first();
+            const $scrollableElement = $firstMenuItem.closest(`.${SCROLLABLE_CLASS}`);
+            const scrollableInstance = $scrollableElement.dxScrollable('instance');
+
+            scrollableInstance?.scrollTo(0);
         }
     }
 
     _overlayHiddenActionHandler(arg) {
         this._actions.onHidden(arg);
+
+        const $firstMenuItem = this._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).first();
+        this._setFocusedElement($firstMenuItem);
     }
 
     _shouldHideOnOutsideClick(e) {
