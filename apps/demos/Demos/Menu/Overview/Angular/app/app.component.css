@@ -36,7 +36,7 @@
   color: #f0f0f0;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   position: absolute;
   bottom: 0;

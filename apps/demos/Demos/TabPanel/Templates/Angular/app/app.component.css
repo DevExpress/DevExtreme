@@ -29,7 +29,7 @@
   margin: 15px 0 45px 10px;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;

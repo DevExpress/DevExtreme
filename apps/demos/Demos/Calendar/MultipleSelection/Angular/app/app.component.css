@@ -15,7 +15,7 @@
   font-size: 18px;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
 }

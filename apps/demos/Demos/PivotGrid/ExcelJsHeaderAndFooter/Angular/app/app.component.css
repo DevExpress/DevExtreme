@@ -17,7 +17,7 @@
   font-weight: 500;
 }
 
-::ng-deep .options {
+.options {
   display: grid;
   grid-template-columns: repeat(1, 1fr);
   gap: 12px;

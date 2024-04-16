@@ -7,7 +7,7 @@
   max-width: 450px;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   position: absolute;
   bottom: 0;

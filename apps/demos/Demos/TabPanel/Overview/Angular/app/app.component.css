@@ -33,7 +33,7 @@
   min-width: 120px;
 }
 
-::ng-deep .options {
+.options {
   display: inline-flex;
   flex-direction: column;
   flex-shrink: 0;

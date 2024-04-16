@@ -61,7 +61,7 @@
   width: 100px;
 }
 
-::ng-deep .options {
+.options {
   grid-area: options;
   padding: 20px;
   margin-bottom: 40px;
