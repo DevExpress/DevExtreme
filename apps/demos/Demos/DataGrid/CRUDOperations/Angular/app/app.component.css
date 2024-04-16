@@ -18,7 +18,7 @@
   margin-bottom: 10px;
 }
 
-::ng-deep .option > span {
+.option > span {
   position: relative;
   top: 2px;
   margin-right: 10px;

@@ -13,7 +13,7 @@
   margin-top: 10px;
 }
 
-::ng-deep .option > span {
+.option > span {
   margin-right: 10px;
 }
 

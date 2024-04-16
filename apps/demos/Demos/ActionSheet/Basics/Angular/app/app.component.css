@@ -26,6 +26,6 @@
   width: 100%;
 }
 
-::ng-deep .option > span {
+.option > span {
   float: left;
 }

@@ -21,7 +21,7 @@
   margin-top: 20px;
 }
 
-::ng-deep .option > span {
+.option > span {
   width: 120px;
   display: inline-block;
 }

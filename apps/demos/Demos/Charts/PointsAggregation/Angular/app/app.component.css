@@ -23,7 +23,7 @@
   margin-top: 10px;
 }
 
-::ng-deep .option > span {
+.option > span {
   width: 50px;
   display: inline-block;
   margin-right: 10px;

@@ -26,6 +26,6 @@
   vertical-align: middle;
 }
 
-::ng-deep .option > span {
+.option > span {
   margin-right: 10px;
 }

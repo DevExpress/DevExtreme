@@ -17,7 +17,7 @@
   font-weight: 500;
 }
 
-::ng-deep .option > span {
+.option > span {
   margin-right: 10px;
 }
 

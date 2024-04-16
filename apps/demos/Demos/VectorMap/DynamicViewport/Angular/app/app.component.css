@@ -31,6 +31,6 @@
   font-weight: 500;
 }
 
-::ng-deep .option > span {
+.option > span {
   width: 140px;
 }

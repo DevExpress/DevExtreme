@@ -15,7 +15,7 @@
   align-items: center;
 }
 
-::ng-deep .option > span {
+.option > span {
   display: inline-block;
   width: 100px;
 }
