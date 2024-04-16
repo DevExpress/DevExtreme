@@ -1,6 +1,6 @@
 import { getOuterHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import { move } from '../../animation/translator';
 import { eventData } from '../../events/utils/index';
 import NativeStrategy from './ui.scrollable.native';

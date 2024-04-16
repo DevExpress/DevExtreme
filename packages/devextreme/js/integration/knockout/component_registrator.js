@@ -1,7 +1,7 @@
 import $ from '../../core/renderer';
 // eslint-disable-next-line no-restricted-imports
 import ko from 'knockout';
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import { isPlainObject } from '../../core/utils/type';
 import registerComponentCallbacks from '../../core/component_registrator_callbacks';
 import Widget from '../../ui/widget/ui.widget';

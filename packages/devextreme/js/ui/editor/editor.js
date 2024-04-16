@@ -1,6 +1,6 @@
 import $ from '../../core/renderer';
 import { data } from '../../core/element_data';
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import { hasWindow } from '../../core/utils/window';
 import { addNamespace, normalizeKeyName } from '../../events/utils/index';
 import { extend } from '../../core/utils/extend';

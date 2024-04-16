@@ -1,6 +1,6 @@
 import { getHeight } from '../../core/utils/size';
 import $ from '../../core/renderer';
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import { each } from '../../core/utils/iterator';
 import { executeAsync } from '../../core/utils/common';
 import { extend } from '../../core/utils/extend';

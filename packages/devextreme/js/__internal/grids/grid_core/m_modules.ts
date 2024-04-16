@@ -4,7 +4,6 @@
 import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import Callbacks from '@js/core/utils/callbacks';
 // @ts-expect-error
 import { grep } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
@@ -12,6 +11,7 @@ import { isFunction } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import messageLocalization from '@js/localization/message';
 import errors from '@js/ui/widget/ui.errors';
+import Callbacks from '@ts/core/utils/callbacks';
 
 import type {
   Controllers, GridPropertyType, InternalGrid, InternalGridOptions, Module,

@@ -2,7 +2,7 @@ import {
   ComponentPublicInstance, defineComponent, h, VNode,
 } from 'vue';
 
-import CreateCallback from 'devextreme/core/utils/callbacks';
+import CreateCallback from 'devextreme/__internal/core/utils/callbacks';
 import { triggerHandler } from 'devextreme/events';
 
 import {

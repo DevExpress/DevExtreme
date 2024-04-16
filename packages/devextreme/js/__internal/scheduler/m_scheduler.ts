@@ -4,7 +4,6 @@ import devices from '@js/core/devices';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import Callbacks from '@js/core/utils/callbacks';
 import { noop } from '@js/core/utils/common';
 import { compileGetter } from '@js/core/utils/data';
 import dateUtils from '@js/core/utils/date';
@@ -32,6 +31,7 @@ import { custom as customDialog } from '@js/ui/dialog';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import Callbacks from '@ts/core/utils/callbacks';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
 import {

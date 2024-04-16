@@ -5,7 +5,7 @@ import { convertRulesToOptions } from './options/utils';
 import Class from './class';
 import Action from './action';
 import errors from './errors';
-import Callbacks from './utils/callbacks';
+import Callbacks from '../__internal/core/utils/callbacks';
 import { EventsStrategy } from './events_strategy';
 import { name as publicComponentName } from './utils/public_component';
 import { PostponedOperations } from './postponed_operations';

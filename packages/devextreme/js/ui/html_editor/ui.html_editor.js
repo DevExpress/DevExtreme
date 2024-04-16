@@ -7,7 +7,7 @@ import registerComponent from '../../core/component_registrator';
 import { EmptyTemplate } from '../../core/templates/empty_template';
 import Editor from '../editor/editor';
 import Errors from '../widget/ui.errors';
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import { Deferred } from '../../core/utils/deferred';
 import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';

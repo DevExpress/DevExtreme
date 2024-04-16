@@ -1,4 +1,4 @@
-import Callbacks from './utils/callbacks';
+import Callbacks from '../__internal/core/utils/callbacks';
 import { each } from './utils/iterator';
 import { isFunction, isPlainObject } from './utils/type';
 

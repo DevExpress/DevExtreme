@@ -4,7 +4,7 @@ import Guid from '../core/guid';
 import { getWindow } from '../core/utils/window';
 import eventsEngine from '../events/core/events_engine';
 import registerComponent from '../core/component_registrator';
-import Callbacks from '../core/utils/callbacks';
+import Callbacks from '../__internal/core/utils/callbacks';
 import { isDefined, isFunction, isNumeric } from '../core/utils/type';
 import { each } from '../core/utils/iterator';
 import { extend } from '../core/utils/extend';

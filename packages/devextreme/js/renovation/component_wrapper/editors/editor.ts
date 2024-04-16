@@ -5,7 +5,7 @@ import { extend } from '../../../core/utils/extend';
 // eslint-disable-next-line import/named
 import $ from '../../../core/renderer';
 import { data } from '../../../core/element_data';
-import Callbacks from '../../../core/utils/callbacks';
+import Callbacks from '../../../__internal/core/utils/callbacks';
 import OldEditor from '../../../ui/editor/editor';
 import { Option } from '../common/types';
 import { querySelectorInSameDocument } from '../../utils/dom';

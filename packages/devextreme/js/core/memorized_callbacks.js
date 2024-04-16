@@ -1,5 +1,5 @@
 import { each } from '../core/utils/iterator';
-import Callbacks from './utils/callbacks';
+import Callbacks from '../__internal/core/utils/callbacks';
 
 export default class MemorizedCallbacks {
     constructor() {

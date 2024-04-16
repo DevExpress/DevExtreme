@@ -2,7 +2,6 @@
 import fx from '@js/animation/fx';
 import domAdapter from '@js/core/dom_adapter';
 import $ from '@js/core/renderer';
-import Callbacks from '@js/core/utils/callbacks';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -20,6 +19,7 @@ import {
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, eventData as getEventData, isTouchEvent } from '@js/events/utils/index';
 import swatchContainer from '@js/ui/widget/swatch_container';
+import Callbacks from '@ts/core/utils/callbacks';
 import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';

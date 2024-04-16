@@ -1,5 +1,5 @@
 import { data as elementData } from '../core/element_data';
-import Callbacks from '../core/utils/callbacks';
+import Callbacks from '../__internal/core/utils/callbacks';
 import errors from './widget/ui.errors';
 import DOMComponent from '../core/dom_component';
 import { extend } from '../core/utils/extend';

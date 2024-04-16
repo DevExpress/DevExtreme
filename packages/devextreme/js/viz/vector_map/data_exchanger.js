@@ -1,4 +1,4 @@
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 
 export function DataExchanger() {
     this._store = {};

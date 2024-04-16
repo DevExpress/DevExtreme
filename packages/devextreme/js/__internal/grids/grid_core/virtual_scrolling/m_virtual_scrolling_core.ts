@@ -1,12 +1,12 @@
 import positionUtils from '@js/animation/position';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
-import Callbacks from '@js/core/utils/callbacks';
 import { Deferred } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { isDefined } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
+import Callbacks from '@ts/core/utils/callbacks';
 
 import gridCoreUtils from '../m_utils';
 import { VirtualDataLoader } from '../virtual_data_loader/m_virtual_data_loader';

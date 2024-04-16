@@ -1,4 +1,4 @@
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 
 const eventEmitterMethods = {
     _initEvents: function() {

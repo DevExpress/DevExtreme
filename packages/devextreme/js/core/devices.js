@@ -4,7 +4,7 @@ import { getWindow, getNavigator, hasWindow } from './utils/window';
 import { extend } from './utils/extend';
 import { isPlainObject } from './utils/type';
 import errors from './errors';
-import Callbacks from './utils/callbacks';
+import Callbacks from '../__internal/core/utils/callbacks';
 import readyCallbacks from './utils/ready_callbacks';
 import resizeCallbacks from './utils/resize_callbacks';
 import { EventsStrategy } from './events_strategy';

@@ -1,11 +1,11 @@
 import Class from '@js/core/class';
-import Callbacks from '@js/core/utils/callbacks';
 import { deferUpdate } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each, map } from '@js/core/utils/iterator';
 import { format } from '@js/core/utils/string';
 import { isDefined, isString } from '@js/core/utils/type';
+import Callbacks from '@ts/core/utils/callbacks';
 import stateStoring from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import { createColumnsInfo, foreachColumnInfo } from '@ts/grids/grid_core/virtual_columns/m_virtual_columns_core';
 import VirtualScrollControllerModule from '@ts/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';

@@ -1,6 +1,6 @@
 import $ from '../renderer';
 import domAdapter from '../dom_adapter';
-import Callbacks from '../utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import { contains } from '../utils/dom';
 import { triggerShownEvent } from '../../events/visibility_change';
 import errors from '../errors';

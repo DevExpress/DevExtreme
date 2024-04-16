@@ -2,7 +2,6 @@
 import type { ColumnBase } from '@js/common/grids';
 import config from '@js/core/config';
 import $ from '@js/core/renderer';
-import Callbacks from '@js/core/utils/callbacks';
 import { compileGetter } from '@js/core/utils/data';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
@@ -21,6 +20,7 @@ import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import filterUtils from '@js/ui/shared/filtering';
 import errors from '@js/ui/widget/ui.errors';
+import Callbacks from '@ts/core/utils/callbacks';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { FocusController } from '@ts/grids/grid_core/focus/m_focus';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';

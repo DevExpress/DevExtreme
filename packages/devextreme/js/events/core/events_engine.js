@@ -5,7 +5,7 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
 import injector from '../../core/utils/dependency_injector';
 import { isWindow, isFunction, isString, isObject } from '../../core/utils/type';
-import Callbacks from '../../core/utils/callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import errors from '../../core/errors';
 import hookTouchProps from '../../events/core/hook_touch_props';
 import callOnce from '../../core/utils/call_once';

@@ -1,7 +1,7 @@
 import $ from '../renderer';
 import readyCallbacks from './ready_callbacks';
 const ready = readyCallbacks.add;
-import callbacks from './callbacks';
+import callbacks from '../../__internal/core/utils/callbacks';
 const changeCallback = callbacks();
 let $originalViewPort = $();
 

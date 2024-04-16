@@ -1,6 +1,6 @@
 import { hasWindow, getWindow } from './window';
 import domAdapter from '../dom_adapter';
-import Callbacks from './callbacks';
+import Callbacks from '../../__internal/core/utils/callbacks';
 import readyCallbacks from './ready_callbacks';
 import callOnce from './call_once';
 
