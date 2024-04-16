@@ -2,7 +2,7 @@ import React from 'react';
 import { shallow } from 'enzyme';
 import { viewFunction as LayoutView } from '../layout';
 import { MonthDateTableCell } from '../cell';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/r1/const';
 
 jest.mock('../../../base/date_table/layout', () => ({
   ...jest.requireActual('../../../base/date_table/layout'),

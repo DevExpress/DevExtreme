@@ -1,4 +1,5 @@
-import { dayUtils } from '../../__migration/utils/index';
+import { dayUtils } from '@ts/scheduler/r1/utils/index';
+
 import { ViewDataGenerator } from './m_view_data_generator';
 
 export class ViewDataGeneratorDay extends ViewDataGenerator {

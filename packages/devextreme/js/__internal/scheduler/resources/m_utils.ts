@@ -9,8 +9,7 @@ import { isDefined } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import { current, isFluent } from '@js/ui/themes';
-
-import { getGroupCount, hasResourceValue } from '../__migration/utils/index';
+import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
 
 export const getValueExpr = (resource) => resource.valueExpr || 'id';
 export const getDisplayExpr = (resource) => resource.displayExpr || 'text';

@@ -6,10 +6,10 @@ import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { getOuterHeight, getOuterWidth, setHeight } from '@js/core/utils/size';
 import { hasWindow } from '@js/core/utils/window';
-
 // NOTE: Renovation component import.
-import { HeaderPanelTimelineComponent } from '../__migration/components/index';
-import { formatWeekdayAndDay, timelineWeekUtils } from '../__migration/utils/index';
+import { HeaderPanelTimelineComponent } from '@ts/scheduler/r1/components/index';
+import { formatWeekdayAndDay, timelineWeekUtils } from '@ts/scheduler/r1/utils/index';
+
 import {
   GROUP_HEADER_CONTENT_CLASS,
   GROUP_ROW_CLASS,

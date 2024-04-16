@@ -4,7 +4,7 @@ import {
 } from '@devextreme-generator/declarations';
 import { Row } from './row';
 import { GroupPanelLayoutProps } from '../group_panel_layout_props';
-import { GroupRenderItem } from '../../../../../../../__internal/scheduler/__migration/types';
+import { GroupRenderItem } from '../../../../../../../__internal/scheduler/r1/types';
 
 export const viewFunction = ({
   props: {

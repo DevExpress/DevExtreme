@@ -10,7 +10,7 @@ import {
   ViewCellData, ViewDataBase, ViewDataMap,
   ViewDataProviderType,
   ViewType,
-} from '../../../../__internal/scheduler/__migration/types';
+} from '../../../../__internal/scheduler/r1/types';
 
 interface RowData {
   cells: ViewCellData[];

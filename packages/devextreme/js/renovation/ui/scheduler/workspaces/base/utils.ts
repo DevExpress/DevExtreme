@@ -16,12 +16,12 @@ import {
   Group,
   GroupOrientation,
   ViewDataProviderType,
-} from '../../../../../__internal/scheduler/__migration/types';
+} from '../../../../../__internal/scheduler/r1/types';
 import {
   getGroupCount,
   isHorizontalGroupingApplied,
   isVerticalGroupingApplied,
-} from '../../../../../__internal/scheduler/__migration/utils/index';
+} from '../../../../../__internal/scheduler/r1/utils/index';
 
 const DAY_MS = dateUtils.dateToMilliseconds('day');
 const HOUR_MS = dateUtils.dateToMilliseconds('hour');

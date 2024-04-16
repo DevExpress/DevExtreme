@@ -1,5 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
-import { weekUtils } from '@ts/scheduler/__migration/utils/index';
+import { weekUtils } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../m_constants';
 import SchedulerWorkSpaceVertical from './m_work_space_vertical';

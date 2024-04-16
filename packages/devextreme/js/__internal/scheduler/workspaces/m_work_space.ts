@@ -31,7 +31,6 @@ import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
-
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
@@ -39,14 +38,15 @@ import {
   GroupPanelComponent,
   HeaderPanelComponent,
   TimePanelComponent,
-} from '../__migration/components/index';
-import type { ViewType } from '../__migration/types';
+} from '@ts/scheduler/r1/components/index';
+import type { ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
-} from '../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import WidgetObserver from '../base/m_widget_observer';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {

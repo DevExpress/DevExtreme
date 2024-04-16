@@ -13,7 +13,7 @@ import {
 import { GroupPanel, GroupPanelProps } from '../group_panel/group_panel';
 import { DateHeaderLayout, DateHeaderLayoutProps } from './date_header/layout';
 import { HeaderPanel } from '../../../../../component_wrapper/scheduler/header_panel';
-import { isHorizontalGroupingApplied } from '../../../../../../__internal/scheduler/__migration/utils/index';
+import { isHorizontalGroupingApplied } from '../../../../../../__internal/scheduler/r1/utils/index';
 
 export const viewFunction = ({
   isHorizontalGrouping,

@@ -3,7 +3,7 @@ import { shallow } from 'enzyme';
 import {
   viewFunction as LayoutView,
 } from '../layout';
-import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
+import { HORIZONTAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/r1/const';
 import { TimelineDateHeaderLayout } from '../date_header/layout';
 import { DateHeaderData } from '../../../types';
 

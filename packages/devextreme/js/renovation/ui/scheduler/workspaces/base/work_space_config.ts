@@ -8,8 +8,8 @@ import {
   formatWeekday,
   formatWeekdayAndDay, isVerticalGroupingApplied,
   timelineWeekUtils,
-} from '../../../../../__internal/scheduler/__migration/utils/index';
-import { Group, GroupOrientation, ViewType } from '../../../../../__internal/scheduler/__migration/types';
+} from '../../../../../__internal/scheduler/r1/utils/index';
+import { Group, GroupOrientation, ViewType } from '../../../../../__internal/scheduler/r1/types';
 
 const TIMELINE_CLASS = 'dx-scheduler-timeline';
 
