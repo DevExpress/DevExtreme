@@ -34,8 +34,7 @@
 .dx-menu {
   color: $menu-color;
 
-  .dx-menu-item-expanded,
-  .dx-menu-item-expanded.dx-state-focused {
+  .dx-menu-item-expanded {
     color: $menu-item-expanded-color;
     background-color: $menu-popup-bg;
   }
