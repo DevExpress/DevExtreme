@@ -25,6 +25,7 @@ export interface RenderQueueItem {
   splitterConfig: Properties;
 }
 
+export type InteractionEvent = KeyboardEvent | PointerEvent | MouseEvent | TouchEvent;
 export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
 export type CollapseEvents = 'onCollapsePrev' | 'onCollapseNext';
 

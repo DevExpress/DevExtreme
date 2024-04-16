@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import FilterBuilder from 'devextreme-testcafe-models/filterBuilder';
 import { fields, filter } from './data';
 import { testScreenshot } from '../../helpers/themeUtils';
 

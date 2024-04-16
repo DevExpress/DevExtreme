@@ -2,12 +2,12 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import Guid from 'devextreme/core/guid';
 import { getThemeName, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import {
   appendElementTo,
 } from '../../helpers/domUtils';
-import Guid from 'devextreme/core/guid';
 
 const ICON_CLASS = 'dx-icon';
 const iconSet = {

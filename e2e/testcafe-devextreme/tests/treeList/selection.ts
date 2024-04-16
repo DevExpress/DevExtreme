@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import TreeList from 'devextreme-testcafe-models/treeList';
 
 fixture`Selection`
   .page(url(__dirname, '../container.html'));

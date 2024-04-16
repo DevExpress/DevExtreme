@@ -2,7 +2,7 @@ import {
   formatWeekdayAndDay,
   formatWeekday,
   timelineWeekUtils,
-} from '../../../../../../__internal/scheduler/__migration/utils/index';
+} from '../../../../../../__internal/scheduler/r1/utils/index';
 import { DateTableLayoutBase } from '../date_table/layout';
 import { HeaderPanelLayout } from '../header_panel/layout';
 import { getViewRenderConfigByType } from '../work_space_config';

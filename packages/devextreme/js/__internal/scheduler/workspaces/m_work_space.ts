@@ -31,26 +31,22 @@ import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
-
-// NOTE: Renovation component section
-// @ts-expect-error
-import dxrAllDayPanelTable from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/table.j';
-// @ts-expect-error
-import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
-// @ts-expect-error
-import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
-// @ts-expect-error
-import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
-// @ts-expect-error
-import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
-import { HeaderPanelComponent } from '../__migration/components/index';
-import type { ViewType } from '../__migration/types';
+import {
+  AllDayPanelTitleComponent,
+  AllDayTableComponent,
+  DateTableComponent,
+  GroupPanelComponent,
+  HeaderPanelComponent,
+  TimePanelComponent,
+} from '@ts/scheduler/r1/components/index';
+import type { ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
-} from '../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import WidgetObserver from '../base/m_widget_observer';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
@@ -2074,7 +2070,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     utils.renovation.renderComponent(
       this,
       this._$dateTable,
-      dxrDateTableLayout,
+      DateTableComponent,
       'renovatedDateTable',
       this._getRDateTableProps(),
     );
@@ -2097,7 +2093,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       utils.renovation.renderComponent(
         this,
         this._getGroupHeaderContainer(),
-        dxrGroupPanel,
+        GroupPanelComponent,
         'renovatedGroupPanel',
         options,
       );
@@ -2119,8 +2115,8 @@ class SchedulerWorkSpace extends WidgetObserver {
         ...this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {},
       };
 
-      utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
-      utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
+      utils.renovation.renderComponent(this, this._$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
+      utils.renovation.renderComponent(this, this._$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
 
     this._toggleAllDayVisibility(true);
@@ -2130,7 +2126,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     utils.renovation.renderComponent(
       this,
       this._$timePanel,
-      dxrTimePanelTableLayout,
+      TimePanelComponent,
       'renovatedTimePanel',
       {
         timePanelData: this.viewDataProvider.timePanelData,

@@ -5,8 +5,8 @@ import {
   TimelineDateHeaderLayout,
 } from '../layout';
 import { Row } from '../../../../base/row';
-import * as MigratedUtils from '../../../../../../../../__internal/scheduler/__migration/utils/index';
-import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../../__internal/scheduler/__migration/const';
+import * as MigratedUtils from '../../../../../../../../__internal/scheduler/r1/utils/index';
+import { HORIZONTAL_GROUP_ORIENTATION, VERTICAL_GROUP_ORIENTATION } from '../../../../../../../../__internal/scheduler/r1/const';
 import { DateHeaderCell } from '../../../../base/header_panel/date_header/cell';
 
 jest.mock('../../../../../../../utils/getThemeType', () => ({

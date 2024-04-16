@@ -10,8 +10,8 @@ import { extend } from '@js/core/utils/extend';
 import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
 import Widget from '@js/ui/widget/ui.widget';
+import { viewsUtils } from '@ts/scheduler/r1/utils/index';
 
-import { viewsUtils } from '../__migration/utils/index';
 import SchedulerCalendar from './m_calendar';
 import {
   getDateNavigator,

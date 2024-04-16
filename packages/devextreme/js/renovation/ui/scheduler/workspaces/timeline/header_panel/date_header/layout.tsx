@@ -7,7 +7,7 @@ import { Row } from '../../../base/row';
 import { DateHeaderCell } from '../../../base/header_panel/date_header/cell';
 import { DateHeaderLayoutProps } from '../../../base/header_panel/date_header/layout';
 import getThemeType from '../../../../../../utils/getThemeType';
-import { isHorizontalGroupingApplied } from '../../../../../../../__internal/scheduler/__migration/utils/index';
+import { isHorizontalGroupingApplied } from '../../../../../../../__internal/scheduler/r1/utils/index';
 
 const { isMaterialBased } = getThemeType();
 

@@ -1,5 +1,5 @@
-import url from '../../../helpers/getPageUrl';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import url from '../../../helpers/getPageUrl';
 import {
   createScheduler,
   scrollTo,

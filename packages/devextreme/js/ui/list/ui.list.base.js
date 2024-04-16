@@ -681,8 +681,9 @@ export const ListBase = CollectionWidget.inherit({
             'role': 'group',
             'roledescription': 'list',
         };
+
         this.setAria(elementAria, this.$element());
-        this.setAria({ role: 'group' }, this._focusTarget());
+        this.setAria({ role: 'application' }, this._focusTarget());
 
         this._setListAria();
     },

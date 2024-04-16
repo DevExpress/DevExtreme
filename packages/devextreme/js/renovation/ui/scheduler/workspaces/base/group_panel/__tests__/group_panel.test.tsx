@@ -5,7 +5,7 @@ import {
   viewFunction as GroupPanelView,
 } from '../group_panel';
 import { GroupPanelVerticalLayout } from '../vertical/layout';
-import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/__migration/const';
+import { VERTICAL_GROUP_ORIENTATION, HORIZONTAL_GROUP_ORIENTATION } from '../../../../../../../__internal/scheduler/r1/const';
 
 describe('GroupPanel', () => {
   describe('Render', () => {

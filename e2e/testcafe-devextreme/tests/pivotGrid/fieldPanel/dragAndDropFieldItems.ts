@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { MouseAction, MouseUpEvents } from '../../../helpers/mouseUpEvents';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { DRAG_MOUSE_OPTIONS } from '../const';
 
 fixture.disablePageReloads`pivotGrid_fieldPanel_drag-n-drop`

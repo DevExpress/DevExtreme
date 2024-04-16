@@ -1,10 +1,10 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CommandCell from 'devextreme-testcafe-models/dataGrid/commandCell';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 import { getData } from '../helpers/generateDataSourceData';
 
 const CLASS = ClassNames;

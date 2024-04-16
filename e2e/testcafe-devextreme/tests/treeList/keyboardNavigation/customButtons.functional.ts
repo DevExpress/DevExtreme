@@ -1,6 +1,6 @@
+import TreeList from 'devextreme-testcafe-models/treeList';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TreeList from 'devextreme-testcafe-models/treeList';
 
 fixture
   .disablePageReloads`Keyboard Navigation - custom buttons`

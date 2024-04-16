@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Item } from 'devextreme/ui/accordion.d';
+import Accordion from 'devextreme-testcafe-models/accordion';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Item } from 'devextreme/ui/accordion.d';
-import Accordion from 'devextreme-testcafe-models/accordion';
 
 fixture.disablePageReloads`Accordion_common`
   .page(url(__dirname, '../../container.html'));

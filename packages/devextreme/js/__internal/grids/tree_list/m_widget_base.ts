@@ -9,20 +9,14 @@ import './m_grid_view';
 import './module_not_extended/header_panel';
 
 import registerComponent from '@js/core/component_registrator';
-import { deferRender } from '@js/core/utils/common';
-import { extend } from '@js/core/utils/extend';
-import { each } from '@js/core/utils/iterator';
-import { isDefined, isFunction } from '@js/core/utils/type';
+import { isDefined } from '@js/core/utils/type';
 import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
-import Widget from '@js/ui/widget/ui.widget';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
+import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
 import treeListCore from './m_core';
 
-const { callModuleItemsMethod } = treeListCore;
-
-const DATAGRID_ROW_SELECTOR = '.dx-row';
 const TREELIST_CLASS = 'dx-treelist';
 
 treeListCore.registerModulesOrder([
@@ -58,31 +52,16 @@ treeListCore.registerModulesOrder([
   'export',
   'gridView']);
 
-class TreeList extends Widget<dxTreeListOptions> {
-  private readonly _deprecatedOptions: any;
-
-  private readonly _activeStateUnit = DATAGRID_ROW_SELECTOR;
-
-  protected _getDefaultOptions() {
+class TreeList extends GridCoreWidget<dxTreeListOptions> {
+  private _initMarkup() {
     // @ts-expect-error
-    const result = super._getDefaultOptions();
-
-    each(treeListCore.modules, function () {
-      if (isFunction(this.defaultOptions)) {
-        extend(true, result, this.defaultOptions());
-      }
-    });
-    return result;
+    super._initMarkup.apply(this, arguments);
+    (this.$element() as any).addClass(TREELIST_CLASS);
+    this.getView('gridView').render(this.$element());
   }
 
-  protected _setDeprecatedOptions() {
-    // @ts-expect-error
-    super._setDeprecatedOptions();
-
-    extend(this._deprecatedOptions, {
-      'columnChooser.allowSearch': { since: '23.1', message: 'Use the "columnChooser.search.enabled" option instead' },
-      'columnChooser.searchTimeout': { since: '23.1', message: 'Use the "columnChooser.search.timeout" option instead' },
-    });
+  private static registerModule() {
+    treeListCore.registerModule.apply(treeListCore, arguments as any);
   }
 
   protected _defaultOptionsRules() {
@@ -119,82 +98,11 @@ class TreeList extends Widget<dxTreeListOptions> {
 
     treeListCore.processModules(that, treeListCore);
 
-    callModuleItemsMethod(that, 'init');
+    treeListCore.callModuleItemsMethod(this, 'init');
   }
 
-  protected _clean() {}
-
-  protected _optionChanged(args) {
-    const that = this;
-
-    callModuleItemsMethod(that, 'optionChanged', [args]);
-    if (!args.handled) {
-      // @ts-expect-error
-      super._optionChanged(args);
-    }
-  }
-
-  private _dimensionChanged() {
-    // @ts-expect-error
-    this.updateDimensions(true);
-  }
-
-  private _visibilityChanged(visible) {
-    if (visible) {
-      // @ts-expect-error
-      this.updateDimensions();
-    }
-  }
-
-  private _initMarkup() {
-    // @ts-expect-error
-    super._initMarkup.apply(this, arguments);
-    (this.$element() as any).addClass(TREELIST_CLASS);
-    this.getView('gridView').render(this.$element());
-  }
-
-  private _renderContentImpl() {
-    this.getView('gridView').update();
-  }
-
-  private _renderContent() {
-    const that = this;
-
-    deferRender(() => {
-      that._renderContentImpl();
-    });
-  }
-
-  private _dispose() {
-    const that = this;
-    // @ts-expect-error
-    super._dispose();
-
-    callModuleItemsMethod(that, 'dispose');
-  }
-
-  private isReady() {
-    return this.getController('data').isReady();
-  }
-
-  public beginUpdate() {
-    super.beginUpdate();
-    callModuleItemsMethod(this, 'beginUpdate');
-  }
-
-  public endUpdate() {
-    callModuleItemsMethod(this, 'endUpdate');
-    super.endUpdate();
-  }
-
-  private getController(name) {
-    // @ts-expect-error
-    return this._controllers[name];
-  }
-
-  private getView(name) {
-    // @ts-expect-error
-    return this._views[name];
+  protected getGridCoreHelper() {
+    return treeListCore;
   }
 
   public focus(element?) {
@@ -203,10 +111,6 @@ class TreeList extends Widget<dxTreeListOptions> {
     if (isDefined(element)) {
       this.getController('keyboardNavigation').focus(element);
     }
-  }
-
-  private static registerModule() {
-    treeListCore.registerModule.apply(treeListCore, arguments as any);
   }
 }
 

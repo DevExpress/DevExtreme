@@ -1,10 +1,10 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setAttribute, setStyleAttribute } from '../../../helpers/domUtils';
-import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 
 fixture.disablePageReloads`Toolbar_common`
   .page(url(__dirname, '../../container.html'));

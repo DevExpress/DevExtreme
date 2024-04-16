@@ -15,8 +15,8 @@ import Editor from '@js/ui/editor/editor';
 import Form from '@js/ui/form';
 import NumberBox from '@js/ui/number_box';
 import { current, isFluent } from '@js/ui/themes';
+import { PathTimeZoneConversion } from '@ts/scheduler/r1/timezone_calculator/index';
 
-import { PathTimeZoneConversion } from './__migration/timezone_calculator/index';
 import { getRecurrenceProcessor } from './m_recurrence';
 
 const RECURRENCE_EDITOR = 'dx-recurrence-editor';
