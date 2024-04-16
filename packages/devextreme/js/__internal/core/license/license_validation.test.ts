@@ -5,7 +5,7 @@ import {
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
-import { DX_LICENSE_TRIGGER_NAME } from './trial-panel';
+import { DX_LICENSE_TRIGGER_NAME } from './trial_panel';
 
 jest.mock('./key', () => ({
   PUBLIC_KEY: {

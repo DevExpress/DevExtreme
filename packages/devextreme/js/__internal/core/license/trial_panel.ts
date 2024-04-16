@@ -1,5 +1,10 @@
 /* eslint-disable max-classes-per-file */
-const licensePanelId = 'dx-licence-panel';
+import { format } from '../../../core/utils/string';
+
+const LICENSE_PANEL_ID = 'dx-licence-panel';
+const DEFAULT_PRE_LINK_TEXT = 'For evaluation purposes only. Redistribution not authorized. Please ';
+const DEFAULT_LINK_TEXT = 'purchase a license';
+const DEFAULT_POST_LINK_TEXT = ' to continue use of DevExpress product libraries (v{0}).';
 const componentNames = {
   trigger: 'dx-license-trigger',
   panel: 'dx-license',
@@ -7,6 +12,8 @@ const componentNames = {
 const attributeNames = {
   buyNow: 'buy-now',
   version: 'version',
+  linkText: 'link-text',
+  message: 'message',
 };
 const commonStyles = {
   opacity: '1',
@@ -82,15 +89,45 @@ class DxLicense extends HTMLElement {
     return link;
   }
 
+  private _createDefaultTextNodes(): Node[] {
+    return [
+      this._createSpan(DEFAULT_PRE_LINK_TEXT),
+      this._createLink(DEFAULT_LINK_TEXT, this.getAttribute(attributeNames.buyNow) as string),
+      this._createSpan(format(DEFAULT_POST_LINK_TEXT, this.getAttribute(attributeNames.version))),
+    ];
+  }
+
+  private _createCustomTextNodes(messagePattern: string, linkText: string | null): Node[] {
+    const nodes: Node[] = [];
+    const [preLinkText, postLinkText] = messagePattern.split('{0}');
+
+    if (preLinkText) {
+      nodes.push(this._createSpan(preLinkText));
+    }
+
+    if (linkText) {
+      nodes.push(this._createLink(linkText, this.getAttribute(attributeNames.buyNow) as string));
+    }
+
+    if (postLinkText) {
+      nodes.push(this._createSpan(postLinkText));
+    }
+
+    return nodes;
+  }
+
   private _reassignComponent(): void {
     this.innerHTML = '';
-    this.id = licensePanelId;
+    this.id = LICENSE_PANEL_ID;
     this.style.cssText = this._containerStyles;
-    this.append(
-      this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
-      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
-      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
-    );
+
+    const linkText = this.getAttribute(attributeNames.linkText);
+    const messagePattern = this.getAttribute(attributeNames.message);
+    const nodes = messagePattern
+      ? this._createCustomTextNodes(messagePattern, linkText)
+      : this._createDefaultTextNodes();
+
+    this.append(...nodes);
   }
 
   public connectedCallback(): void {
@@ -114,7 +151,7 @@ class DxLicense extends HTMLElement {
 
   public disconnectedCallback(): void {
     setTimeout(() => {
-      const licensePanel = document.getElementById(licensePanelId);
+      const licensePanel = document.getElementById(LICENSE_PANEL_ID);
       if (!licensePanel) {
         document.body.prepend(this);
       }
@@ -123,27 +160,25 @@ class DxLicense extends HTMLElement {
 }
 class DxLicenseTrigger extends HTMLElement {
   public connectedCallback(): void {
-    const licensePanel = document.getElementById(licensePanelId);
+    const licensePanel = document.getElementById(LICENSE_PANEL_ID);
     if (!licensePanel) {
       const license = document.createElement(componentNames.panel);
 
-      license.setAttribute(
-        attributeNames.version,
-        this.getAttribute(attributeNames.version) as string,
-      );
+      Object.values(attributeNames).forEach((attrName) => {
+        const attrValue = this.getAttribute(attrName);
 
-      license.setAttribute(
-        attributeNames.buyNow,
-        this.getAttribute(attributeNames.buyNow) as string,
-      );
+        if (attrValue) {
+          license.setAttribute(attrName, attrValue);
+        }
+      });
 
-      license.id = licensePanelId;
+      license.id = LICENSE_PANEL_ID;
       document.body.prepend(license);
     }
   }
 }
 
-export function registerLicenseComponent(): void {
+export function registerTrialPanelComponents(): void {
   if (!customElements.get(componentNames.trigger)) {
     customElements.define(componentNames.trigger, DxLicenseTrigger);
     customElements.define(componentNames.panel, DxLicense);

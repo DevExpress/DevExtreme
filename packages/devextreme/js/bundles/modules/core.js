@@ -24,6 +24,7 @@ DevExpress.Component = require('../../core/component').Component;
 
 DevExpress.registerComponent = require('../../core/component_registrator');
 DevExpress.devices = require('../../core/devices');
+DevExpress.trial = require('../../core/trial_panel');
 
 DevExpress.Color = require('../../color');
 
