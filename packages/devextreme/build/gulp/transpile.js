@@ -44,7 +44,7 @@ const esmTranspileSrc = src.concat([
     '!**/*.json'
 ]);
 
-const srcTsPattern = 'js/__internal/**/*.ts';
+const srcTsPattern = 'js/__internal/**/*.{ts,tsx}';
 const srcTsIgnorePatterns = [
     '**/__tests__/**/*'
 ];
@@ -66,7 +66,7 @@ const generatedTs = [
 const bundlesSrc = ['js/bundles/**/*.js'];
 
 const TS_OUTPUT_BASE_DIR = 'artifacts/dist_ts';
-const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.js`];
+const TS_OUTPUT_SRC = [`${TS_OUTPUT_BASE_DIR}/__internal/**/*.{js,jsx}`];
 const TS_COMPILER_CONFIG = {
     baseAbsPath: path.resolve(__dirname, '../..'),
     relativePath: {
