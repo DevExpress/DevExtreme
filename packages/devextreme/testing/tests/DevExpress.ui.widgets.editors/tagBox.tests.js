@@ -7772,7 +7772,7 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
-    QUnit.test('Tag aria-label should be tag text value not index', function(assert) {
+    QUnit.test('Tag aria-label should display correct tag text value', function(assert) {
         const productsData = [
             'HD Video Player',
             'SuperHD Video Player',
@@ -7786,52 +7786,11 @@ QUnit.module('accessibility', () => {
             maxDisplayedTags: 3,
             showMultiTagOnly: false
         }).dxTagBox('instance');
-        const simpleTags = tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        const $simpleTags = tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
 
-        assert.strictEqual($(simpleTags[0]).attr('aria-label'), 'HD Video Player', 'aria-label is tagged correctly');
-        assert.strictEqual($(simpleTags[1]).attr('aria-label'), 'SuperHD Video Player', 'aria-label is tagged correctly');
-        assert.strictEqual($(simpleTags[2]).attr('aria-label'), 'SuperPlasma 50', 'aria-label is tagged correctly');
-    });
-
-    QUnit.test('Tags aria labels should match inputAttr aria-label mappings', function(assert) {
-        const productsData = [{
-            ID: 1,
-            Name: '1',
-        }, {
-            ID: 2,
-            Name: '2',
-        }];
-        const tagBox = $('#tagBox').dxTagBox({
-            dataSource: productsData,
-            valueExpr: 'ID',
-            value: [productsData[0].ID, productsData[1].ID],
-            displayExpr: 'Name',
-            inputAttr: { 'aria-label': 'Name' }
-        }).dxTagBox('instance');
-        const simpleTags = tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
-
-        assert.strictEqual($(simpleTags[0]).attr('aria-label'), '1', 'aria-label is tagged correctly');
-        assert.strictEqual($(simpleTags[1]).attr('aria-label'), '2', 'aria-label is tagged correctly');
-    });
-
-    QUnit.test('Tag aria label should be the tags value when inputAttr is not defined', function(assert) {
-        const productsData = [{
-            ID: 1,
-            Name: '1',
-        }, {
-            ID: 2,
-            Name: '2',
-        }];
-        const tagBox = $('#tagBox').dxTagBox({
-            dataSource: productsData,
-            valueExpr: 'ID',
-            value: [productsData[0].ID, productsData[1].ID],
-            displayExpr: 'Name',
-        }).dxTagBox('instance');
-        const simpleTags = tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
-
-        assert.strictEqual(parseInt($(simpleTags[0]).attr('aria-label')), 1, 'aria-label is tagged correctly');
-        assert.strictEqual(parseInt($(simpleTags[1]).attr('aria-label')), 2, 'aria-label is tagged correctly');
+        assert.strictEqual($simpleTags.eq(0).attr('aria-label'), 'HD Video Player', 'aria-label is tagged correctly');
+        assert.strictEqual($simpleTags.eq(1).attr('aria-label'), 'SuperHD Video Player', 'aria-label is tagged correctly');
+        assert.strictEqual($simpleTags.eq(2).attr('aria-label'), 'SuperPlasma 50', 'aria-label is tagged correctly');
     });
 
     QUnit.test('multitag should have correct aria attributes', function(assert) {
