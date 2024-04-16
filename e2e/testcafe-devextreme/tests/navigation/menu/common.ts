@@ -10,7 +10,7 @@ import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.skip.disablePageReloads`Menu_common`
+fixture.disablePageReloads`Menu_common`
   .page(url(__dirname, '../../container.html'));
 
 test('Menu items render', async (t) => {
