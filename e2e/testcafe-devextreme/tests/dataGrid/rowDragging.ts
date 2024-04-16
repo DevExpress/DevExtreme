@@ -546,7 +546,7 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
-test.meta({unstable: true})('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+test.meta({ unstable: true })('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollBy({ top: 10000 });
@@ -633,7 +633,7 @@ test('The placeholder should have correct position after dragging the row to the
 });
 
 // T1126013
-test.meta({unstable: true})('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+test.meta({ unstable: true })('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -688,7 +688,7 @@ test.meta({unstable: true})('toIndex should not be corrected when source item ge
 });
 
 // T1139685
-test.meta({unstable: true})('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+test.meta({ unstable: true })('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 

@@ -250,7 +250,7 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
 }));
 
 // T1180834
-test.meta({unstable: true})('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
+test.meta({ unstable: true })('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

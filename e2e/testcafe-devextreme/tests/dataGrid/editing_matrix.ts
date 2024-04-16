@@ -413,7 +413,7 @@ editingModes.forEach((mode) => {
             && useKeyboard
             && !useMask
             && !isAdding
-              ? test.meta({unstable: true}) : test;
+              ? test.meta({ unstable: true }) : test;
 
             testCase(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,

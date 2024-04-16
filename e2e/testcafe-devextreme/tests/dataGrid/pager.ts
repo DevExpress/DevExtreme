@@ -82,7 +82,7 @@ safeSizeTest('Compact pager', async (t) => {
     .eql('69')
     .expect(await compareScreenshot(t, 'pager-compact.png'))
     .ok();
-}, [350, 600]).meta({unstable: true}).before(async () => createDataGridWithPager());
+}, [350, 600]).meta({ unstable: true }).before(async () => createDataGridWithPager());
 
 safeSizeTest('Resize', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -145,7 +145,7 @@ safeSizeTest('Resize without navigation buttons', async (t) => {
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }, [700, 600])
-    .meta({unstable: theme === 'material.blue.light'})  
+    .meta({ unstable: theme === 'material.blue.light' })
     .before(async () => {
       await changeTheme(theme);
       await createWidget('dxDataGrid', {

@@ -144,7 +144,7 @@ safeSizeTest('Export is disabled when no data columns is in grid header, menu: t
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800]).meta({unstable: true}).before(async () => createWidget('dxDataGrid', {
+}, [800, 800]).meta({ unstable: true }).before(async () => createWidget('dxDataGrid', {
   dataSource: [{ value: 1 }],
   columns: [
     { dataField: 'value', visible: false },
