@@ -2,7 +2,7 @@
   display: flex;
 }
 
-::ng-deep .calendar-container {
+.calendar-container {
   display: flex;
   flex-direction: column;
   flex-grow: 1;

@@ -33,18 +33,15 @@
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-::ng-deep .options > .caption {
+.options > .caption {
   font-weight: 500;
   font-size: 18px;
+  margin-top: 10px;
+  display: inline-block;
 }
 
 .option {
   margin-top: 10px;
-}
-
-::ng-deep .option > .caption {
-  margin-top: 10px;
-  display: inline-block;
 }
 
 ::ng-deep .option > .dx-tagbox {

@@ -45,7 +45,7 @@
   justify-content: center;
 }
 
-::ng-deep .options-container {
+.options-container {
   display: flex;
   justify-content: space-between;
   align-items: stretch;

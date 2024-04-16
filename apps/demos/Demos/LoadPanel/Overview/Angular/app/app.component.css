@@ -1,4 +1,4 @@
-::ng-deep .header {
+.header {
   font-size: 34px;
   display: inline-block;
   vertical-align: middle;
@@ -6,7 +6,7 @@
   margin: 0;
 }
 
-::ng-deep #employee {
+#employee {
   margin: 20px 0;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
@@ -18,12 +18,12 @@
   border-bottom: 1px solid lightgray;
 }
 
-::ng-deep #employee > p {
+#employee > p {
   padding: 10px 20px;
   margin: 0;
 }
 
-::ng-deep .address {
+.address {
   height: 60px;
 }
 

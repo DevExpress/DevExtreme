@@ -15,7 +15,7 @@
   width: 19%;
 }
 
-::ng-deep .options-container {
+.options-container {
   display: flex;
   align-items: center;
 }

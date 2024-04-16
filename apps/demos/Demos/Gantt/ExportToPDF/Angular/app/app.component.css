@@ -28,7 +28,7 @@
   vertical-align: middle;
 }
 
-::ng-deep .label {
+.label {
   width: 180px;
 }
 

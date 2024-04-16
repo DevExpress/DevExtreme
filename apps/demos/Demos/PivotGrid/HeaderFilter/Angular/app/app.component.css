@@ -19,7 +19,7 @@
   margin-top: 10px;
 }
 
-::ng-deep .options-container {
+.options-container {
   display: flex;
   align-items: center;
 }
