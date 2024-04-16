@@ -2219,39 +2219,11 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
         });
     });
 
-
-    ['onItemCollapsed'].forEach(eventHandler => {
-        QUnit.test(`${eventHandler} qqq onItemCollapsed should be invoked when pane in the nested splitter is collapsed after runtime option change`, function(assert) {
-            const handlerStub = sinon.stub();
-            const handlerStubAfterUpdate = sinon.stub();
-
-            this.reinit({
-                [eventHandler]: handlerStub,
-                items: [{
-                    splitter: {
-                        [eventHandler]: handlerStub,
-                        dataSource: [{ collapsible: true }, { collapsible: true }]
-                    }
-                }]
-            });
-
-            this.instance.option(`${eventHandler}`, handlerStubAfterUpdate);
-
-            const $resizeHandle = this.getResizeHandles(false)[0];
-            const keyboard = keyboardMock($resizeHandle);
-
-            keyboard.keyDown('ArrowLeft', { ctrlKey: true });
-
-            assert.strictEqual(handlerStub.callCount, 0);
-            assert.strictEqual(handlerStubAfterUpdate.callCount, 1);
-        });
-    });
-
     [
         { eventHandler: 'onItemCollapsed', arrowKey: 'ArrowLeft', dataSource: [{ collapsible: true }, { collapsible: true }] },
         { eventHandler: 'onItemExpanded', arrowKey: 'ArrowRight', dataSource: [{ collapsed: true, collapsible: true, }, { }] },
     ].forEach(({ eventHandler, arrowKey, dataSource }) => {
-        QUnit.test(`${eventHandler} should be invoked when nested splitter's pane collapsed state changed`, function(assert) {
+        QUnit.test(`${eventHandler} should be invoked when nested splitter's pane collapsed state changed if option was changed at runtime`, function(assert) {
             const handlerStub = sinon.stub();
             const handlerStubAfterUpdate = sinon.stub();
 
