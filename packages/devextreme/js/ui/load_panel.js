@@ -119,7 +119,6 @@ const LoadPanel = Overlay.inherit({
 
         this.$element().addClass(LOADPANEL_CLASS);
         this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
-
         if(!showIndicator) {
             this._setWrapperAria();
         }
@@ -230,15 +229,19 @@ const LoadPanel = Overlay.inherit({
     },
 
     _optionChanged: function(args) {
+        const { showIndicator } = this.option();
         switch(args.name) {
             case 'delay':
                 break;
             case 'message':
             case 'showIndicator':
+                this.$wrapper().removeAttr('aria-label');
                 this._cleanPreviousContent();
                 this._renderLoadIndicator();
                 this._renderMessage();
-                this._setWrapperAria();
+                if(!showIndicator) {
+                    this._setWrapperAria();
+                }
                 break;
             case 'showPane':
                 this._togglePaneVisible();
