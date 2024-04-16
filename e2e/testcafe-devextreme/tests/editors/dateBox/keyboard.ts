@@ -1,7 +1,7 @@
 import { Selector } from 'testcafe';
+import DateBox from 'devextreme-testcafe-models/dateBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DateBox from 'devextreme-testcafe-models/dateBox';
 import { clearTestPage } from '../../../helpers/clearPage';
 import { appendElementTo } from '../../../helpers/domUtils';
 

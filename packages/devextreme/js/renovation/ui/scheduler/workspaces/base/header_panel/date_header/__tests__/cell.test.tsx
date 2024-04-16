@@ -1,6 +1,6 @@
 import { shallow } from 'enzyme';
 import { combineClasses } from '../../../../../../../utils/combine_classes';
-import { renderUtils } from '../../../../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../../../../__internal/scheduler/r1/utils/index';
 import {
   DateHeaderCell,
   viewFunction as CellView,
@@ -10,7 +10,7 @@ import { DateHeaderText } from '../dateHeaderText';
 jest.mock('../../../../../../../utils/combine_classes', () => ({
   combineClasses: jest.fn(() => 'combineClasses'),
 }));
-jest.mock('../../../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+jest.mock('../../../../../../../../__internal/scheduler/r1/utils/index', () => ({
   renderUtils: {
     getGroupCellClasses: jest.fn(() => 'getGroupCellClasses'),
   },

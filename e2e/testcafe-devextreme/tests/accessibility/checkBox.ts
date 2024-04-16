@@ -1,8 +1,8 @@
+import { Properties } from 'devextreme/ui/check_box.d';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from 'devextreme/ui/check_box.d';
 
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'))

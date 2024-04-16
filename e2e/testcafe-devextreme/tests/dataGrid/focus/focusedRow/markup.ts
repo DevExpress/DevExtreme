@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { changeTheme } from '../../../../helpers/changeTheme';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { Themes } from '../../../../helpers/themes';
 
 fixture.disablePageReloads`Focused row - markup`

@@ -1,8 +1,8 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import List from 'devextreme-testcafe-models/list';
 import { isMaterialBased, isFluent, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import List from 'devextreme-testcafe-models/list';
 import { createWidget } from '../../../helpers/createWidget';
 import { a11yCheck } from '../../../helpers/accessibility/utils';
 

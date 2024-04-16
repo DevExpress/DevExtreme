@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import List from 'devextreme-testcafe-models/list';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import List from 'devextreme-testcafe-models/list';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture`List`

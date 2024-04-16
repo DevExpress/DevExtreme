@@ -1,9 +1,9 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Calendar from 'devextreme-testcafe-models/calendar';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import Calendar from 'devextreme-testcafe-models/calendar';
 import {
   appendElementTo, setClassAttribute, setStyleAttribute,
 } from '../../../helpers/domUtils';

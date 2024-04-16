@@ -1,15 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Lookup from 'devextreme-testcafe-models/lookup';
+import Guid from 'devextreme/core/guid';
 import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import Lookup from 'devextreme-testcafe-models/lookup';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {
   appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
-import Guid from 'devextreme/core/guid';
 import { clearTestPage } from '../../../helpers/clearPage';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';

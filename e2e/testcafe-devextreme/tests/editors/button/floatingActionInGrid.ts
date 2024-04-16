@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 
 const scrollWindowTo = async (position: object) => {

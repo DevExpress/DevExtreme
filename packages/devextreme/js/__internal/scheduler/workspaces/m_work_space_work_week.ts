@@ -1,8 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
-
 import {
   getWeekendsCount,
-} from '../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import { VIEWS } from '../m_constants';
 import SchedulerWorkSpaceWeek from './m_work_space_week';
 

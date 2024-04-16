@@ -1,6 +1,6 @@
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture.disablePageReloads`Focus`
   .page(url(__dirname, '../../container.html'));
