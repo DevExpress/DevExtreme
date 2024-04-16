@@ -90,7 +90,7 @@ createTestCafe({
         if(testName) {
             filters.push(name => name === testName);
         }
-        if(!args.withUnstable) {
+        if(args.skipUnstable) {
             filters.push((testName, fixtureName, fixturePath, testMeta) => {
                 return !testMeta.unstable;
             });
@@ -181,8 +181,7 @@ function getArgs() {
             platform: '',
             theme: '',
             shadowDom: false,
-            withUnstable: false,
-        },
-        boolean: ['withUnstable'],
+            skipUnstable: true,
+        }
     });
 }
