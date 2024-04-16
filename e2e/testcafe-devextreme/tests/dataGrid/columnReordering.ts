@@ -1,9 +1,9 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/createWidget';
 import { MouseAction, MouseUpEvents } from '../../helpers/mouseUpEvents';
 
 const CLASS = ClassNames;

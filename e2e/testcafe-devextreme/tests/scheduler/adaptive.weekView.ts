@@ -1,7 +1,7 @@
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Week view in adaptive mode`
   .page(url(__dirname, '../container.html'));

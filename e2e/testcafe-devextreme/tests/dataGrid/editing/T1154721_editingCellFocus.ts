@@ -1,7 +1,7 @@
 import { RequestMock } from 'testcafe';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture`Editing - cell focus`
   .page(url(__dirname, '../../containerAspNet.html'));

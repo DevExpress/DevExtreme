@@ -2,12 +2,12 @@
 
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
-import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from 'devextreme-testcafe-models/dataGrid/overlay';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/createWidget';
+import { changeTheme } from '../../helpers/changeTheme';
 import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Editing`

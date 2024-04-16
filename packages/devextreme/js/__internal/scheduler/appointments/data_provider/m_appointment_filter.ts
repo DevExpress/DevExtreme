@@ -5,11 +5,11 @@ import { each, map } from '@js/core/utils/iterator';
 import { isDefined, isFunction } from '@js/core/utils/type';
 import query from '@js/data/query';
 import { dateUtilsTs } from '@ts/core/utils/date';
-import { isTimelineView } from '@ts/scheduler/__migration/utils/index';
-
 import {
   getAppointmentTakesAllDay, getDatesWithoutTime, hasResourceValue, isDateAndTimeView,
-} from '../../__migration/utils/index';
+  isTimelineView,
+} from '@ts/scheduler/r1/utils/index';
+
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { getRecurrenceProcessor } from '../../m_recurrence';
 import {

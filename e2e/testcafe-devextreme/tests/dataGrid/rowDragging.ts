@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
+import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
+import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
-import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 

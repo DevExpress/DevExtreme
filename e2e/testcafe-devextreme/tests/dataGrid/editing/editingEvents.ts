@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction } from 'testcafe';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture`Editing events`
   .page(url(__dirname, '../../container.html'));

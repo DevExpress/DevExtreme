@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Master detail`

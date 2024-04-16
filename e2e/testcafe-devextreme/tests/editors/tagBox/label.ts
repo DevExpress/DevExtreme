@@ -1,5 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import TagBox from 'devextreme-testcafe-models/tagBox';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
@@ -8,7 +9,6 @@ import {
   appendElementTo,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import TagBox from 'devextreme-testcafe-models/tagBox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];

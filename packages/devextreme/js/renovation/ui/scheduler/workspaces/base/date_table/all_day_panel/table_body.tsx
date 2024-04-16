@@ -12,7 +12,7 @@ import {
   DataCellTemplateProps,
 } from '../../../types';
 import { combineClasses } from '../../../../../../utils/combine_classes';
-import { ViewCellData } from '../../../../../../../__internal/scheduler/__migration/types';
+import { ViewCellData } from '../../../../../../../__internal/scheduler/r1/types';
 
 export const viewFunction = (viewModel: AllDayPanelTableBody): JSX.Element => (
   <Row

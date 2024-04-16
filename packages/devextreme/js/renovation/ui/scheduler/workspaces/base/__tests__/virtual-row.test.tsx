@@ -1,10 +1,10 @@
 import React from 'react';
 import { shallow } from 'enzyme';
 import { VirtualRow, viewFunction as RowView } from '../virtual_row';
-import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../../__internal/scheduler/r1/utils/index';
 import { VirtualCell } from '../virtual_cell';
 
-jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+jest.mock('../../../../../../__internal/scheduler/r1/utils/index', () => ({
   renderUtils: {
     addHeightToStyle: jest.fn(() => 'style'),
   },

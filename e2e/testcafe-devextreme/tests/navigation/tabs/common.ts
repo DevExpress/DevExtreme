@@ -1,11 +1,11 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
+import { Item } from 'devextreme/ui/tabs.d';
+import Tabs from 'devextreme-testcafe-models/tabs';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Item } from 'devextreme/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
-import Tabs from 'devextreme-testcafe-models/tabs';
 
 const TAB_CLASS = 'dx-tab';
 

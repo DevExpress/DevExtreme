@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Menu from 'devextreme-testcafe-models/menu';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Menu from 'devextreme-testcafe-models/menu';
 import {
   setAttribute, appendElementTo,
 } from '../../../helpers/domUtils';

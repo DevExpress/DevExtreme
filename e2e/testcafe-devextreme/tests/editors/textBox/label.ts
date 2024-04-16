@@ -2,6 +2,8 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import TextBox from 'devextreme-testcafe-models/textBox';
+import Guid from 'devextreme/core/guid';
 import {
   removeStylesheetRulesFromPage, insertStylesheetRulesToPage, setStyleAttribute,
   appendElementTo, setClassAttribute,
@@ -10,8 +12,6 @@ import {
 import { testScreenshot, getThemeName } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TextBox from 'devextreme-testcafe-models/textBox';
-import Guid from 'devextreme/core/guid';
 import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`TextBox_Label`

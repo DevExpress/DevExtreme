@@ -1,5 +1,6 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import SelectBox from 'devextreme-testcafe-models/selectBox';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -7,7 +8,6 @@ import {
   appendElementTo,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import SelectBox from 'devextreme-testcafe-models/selectBox';
 
 const labelMods = ['floating', 'static', 'outside'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
