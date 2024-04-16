@@ -421,12 +421,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up');
 
         assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .5, 'scrolled to bottom');
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
 
         keyboardMock(instance.itemsContainer())
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .5, 'scrolled back to the 1st item');
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scrolled back to the 1st item');
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {

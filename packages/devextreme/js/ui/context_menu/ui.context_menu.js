@@ -506,11 +506,15 @@ class ContextMenu extends MenuBase {
 
     _renderSubmenuItems(node, $itemFrame) {
         this._renderItems(this._getChildNodes(node), $itemFrame);
+
+        const $submenu = $itemFrame.children(`.${DX_SUBMENU_CLASS}`);
+
         this._actions.onSubmenuCreated({
             itemElement: getPublicElement($itemFrame),
             itemData: node.internalFields.item,
-            submenuElement: getPublicElement($itemFrame.children(`.${DX_SUBMENU_CLASS}`))
+            submenuElement: getPublicElement($submenu)
         });
+        this._initScrollable($submenu);
     }
 
     _getOverlayOptions() {
@@ -685,7 +689,6 @@ class ContextMenu extends MenuBase {
         if(!isSubmenuRendered) {
             this._renderSubmenuItems(node, $item);
             $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
-            this._initScrollable($submenu);
         }
 
         this._setSubMenuHeight($submenu, $item, true);
@@ -797,7 +800,6 @@ class ContextMenu extends MenuBase {
         if(shouldRenderSubmenu) {
             this._renderSubmenuItems(node, $itemElement);
             $submenu = $itemElement.find(`.${DX_SUBMENU_CLASS}`);
-            this._initScrollable($submenu);
         }
 
         if($itemElement.context === $submenu.context && $submenu.css('visibility') === 'visible') {
