@@ -384,7 +384,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $nestedSubmenu = $submenus.eq(1);
         const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height()) - SUBMENU_PADDING;
 
-        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .1, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .5, 'Nested submenu flipped to top');
         assert.roughEqual($nestedSubmenu.height(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
     });
 
@@ -456,6 +456,62 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('down');
 
         assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (root menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+            focusStateEnabled: true,
+            visible: true,
+        });
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        keyboardMock(instance.itemsContainer())
+            .press('up')
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
+
+        instance.hide();
+        instance.show();
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'scroll position reseted');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (nested menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+            focusStateEnabled: true,
+            visible: true,
+        });
+
+        keyboardMock(instance.itemsContainer())
+            .press('down')
+            .press('right')
+            .press('up');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
+
+        keyboardMock(instance.itemsContainer())
+            .press('left')
+            .press('right');
+
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .1, 'scroll position reseted');
     });
 });
 

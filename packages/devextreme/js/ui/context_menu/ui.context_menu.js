@@ -4,12 +4,12 @@ import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import { isObject, isRenderer, isWindow, isFunction, isPlainObject, isDefined } from '../../core/utils/type';
+import { isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow } from '../../core/utils/type';
 import { contains } from '../../core/utils/dom';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
 import animationPosition from '../../animation/position';
 import devices from '../../core/devices';
@@ -306,7 +306,6 @@ class ContextMenu extends MenuBase {
         }
 
         this._actions.onCloseRootSubmenu($curItem);
-        return $curItem;
     }
 
     _expandSubmenuHandler($items, location) {
@@ -556,11 +555,20 @@ class ContextMenu extends MenuBase {
         if(!arg.cancel) {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
+
+            const $firstMenuItem = this._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).first();
+            const $scrollableElement = $firstMenuItem.closest(`.${SCROLLABLE_CLASS}`);
+            const scrollableInstance = $scrollableElement.dxScrollable('instance');
+
+            scrollableInstance?.scrollTo(0);
         }
     }
 
     _overlayHiddenActionHandler(arg) {
         this._actions.onHidden(arg);
+
+        const $firstMenuItem = this._overlay.$content().find(`.${DX_MENU_ITEM_CLASS}`).first();
+        this._setFocusedElement($firstMenuItem);
     }
 
     _shouldHideOnOutsideClick(e) {
