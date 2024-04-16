@@ -2,7 +2,7 @@
   overflow: visible;
 }
 
-.flex-container {
+::ng-deep .flex-container {
   display: flex;
   flex-direction: column;
 }
@@ -11,7 +11,7 @@
   display: flex;
 }
 
-#toolbar {
+::ng-deep #toolbar {
   background-color: var(--dx-component-color-bg);
   box-shadow: 0 2px 8px 0 rgba(0, 0, 0, 0.12), 0 2px 2px 0 rgba(0, 0, 0, 0.08);
   padding: 5px 10px;
@@ -29,7 +29,7 @@
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-.options-container {
+::ng-deep .options-container {
   display: flex;
   align-items: center;
 }
@@ -45,15 +45,15 @@
   margin-right: 50px;
 }
 
-label {
+::ng-deep label {
   font-weight: bold;
 }
 
-#content {
+::ng-deep #content {
   padding: 0 24px;
   background-color: var(--dx-component-color-bg);
 }
 
-#content h2 {
+::ng-deep #content h2 {
   font-size: 26px;
 }
