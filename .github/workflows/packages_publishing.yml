@@ -135,3 +135,18 @@ jobs:
         run: |
           npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
           npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable
+
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [ build, publish ]
+    if: failure()
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
