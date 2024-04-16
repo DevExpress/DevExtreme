@@ -1,7 +1,5 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { PropsWithChildren, PropsWithClassName } from '@ts/core/r1/index';
-import type { VNode } from 'inferno';
-import { createVNode } from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import type { ContentTemplateProps } from '../types';
@@ -36,7 +34,7 @@ export const CellBaseDefaultProps: CellBaseProps = {
   },
 };
 export class CellBase extends BaseInfernoComponent<CellBaseProps> {
-  render(): VNode {
+  render(): JSX.Element {
     const {
       className,
       isFirstGroupCell,
@@ -45,12 +43,17 @@ export class CellBase extends BaseInfernoComponent<CellBaseProps> {
       ariaLabel,
     } = this.props;
 
-    const classNames = renderUtils
+    const classes = renderUtils
       .getGroupCellClasses(isFirstGroupCell, isLastGroupCell, className);
 
-    return createVNode(1, 'td', classNames, children, 0, {
-      'aria-label': ariaLabel,
-    });
+    return (
+      <td
+        className={classes}
+        aria-label={ariaLabel}
+      >
+        {children}
+      </td>
+    );
   }
 }
 
