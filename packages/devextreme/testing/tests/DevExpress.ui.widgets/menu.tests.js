@@ -2235,7 +2235,7 @@ QUnit.module('keyboard navigation', {
             const $rootMenuItem = $(this.instance.itemElements().eq(0));
 
             $($rootMenuItem).trigger('dxclick');
-            $rootMenuItem.addClass(DX_STATE_FOCUSED_CLASS);
+            this.$element.trigger('focusin');
 
             assert.ok($rootMenuItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
             assert.ok($rootMenuItem.hasClass(DX_STATE_FOCUSED_CLASS), 'root item should have focused class');
