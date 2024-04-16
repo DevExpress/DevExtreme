@@ -135,7 +135,7 @@ import { DxiSortByGroupSummaryInfoComponent } from 'devextreme-angular/ui/nested
     ]
 })
 export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxDataGrid<TRowData, TKey>;
+    instance: DxDataGrid<TRowData, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
