@@ -1717,7 +1717,7 @@ test('Horizontal moving by keydown if scrolling.columnRenderingMode: virtual', a
   });
 });
 
-test.skip('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', async (t) => {
+test.meta({ unstable: true })('Vertical moving by keydown if scrolling.mode: virtual, scrolling.rowRenderingMode: virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   let rowIndex = 0;
   let cell = dataGrid.getDataCell(rowIndex, 0);
@@ -2390,7 +2390,7 @@ test('Empty row should lose focus on Tab (T941246)', async (t) => {
     });
   });
 
-  test.skip(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
+  test.meta({ unstable: true })(`The first cell should be focused on pressing shift and tab keys after clicking on the document when command column is ${isCommandColumnFixed ? 'fixed' : 'unfixed'} and on the right side (T951849)`, async (t) => {
     const dataGrid = new DataGrid('#container');
     const headers = dataGrid.getHeaders();
     const dataGridOffsetBottom = await dataGrid.element.getBoundingClientRectProperty('bottom');

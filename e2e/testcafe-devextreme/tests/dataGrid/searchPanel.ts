@@ -4,12 +4,13 @@ import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Themes } from '../../helpers/themes';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Search Panel`
   .page(url(__dirname, '../container.html'));
 
 // T1046688
-test.skip('searchPanel has correct view inside masterDetail', async (t) => {
+safeSizeTest('searchPanel has correct view inside masterDetail', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   const dataGrid = new DataGrid('#container');
@@ -26,7 +27,7 @@ test.skip('searchPanel has correct view inside masterDetail', async (t) => {
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
+}, [800, 800]).meta({ unstable: true }).before(async () => {
   await changeTheme(Themes.materialBlue);
 
   return createWidget('dxDataGrid', {

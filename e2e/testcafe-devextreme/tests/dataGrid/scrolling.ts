@@ -970,9 +970,8 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
   });
 });
 
-// TODO: this test is unstable
 // T1129252
-test.skip('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1146,8 +1145,7 @@ fixture`Remote Scrolling`
     await t.maximizeWindow();
   });
 
-// TODO: this test is unstable
-test.skip('Scroll to the bottom after expand several group', async (t) => {
+test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
@@ -1616,7 +1614,7 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
   });
 });
 
-test.skip('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test.meta({ unstable: true })('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 
