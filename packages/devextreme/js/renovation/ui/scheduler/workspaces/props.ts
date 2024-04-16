@@ -23,7 +23,7 @@ import {
   Group,
   GroupOrientation,
   ViewType,
-} from '../../../../__internal/scheduler/__migration/types';
+} from '../../../../__internal/scheduler/r1/types';
 
 // TODO: WA for bug in generators: they use getters for default props
 const DEFAULT_GROUPS = [];

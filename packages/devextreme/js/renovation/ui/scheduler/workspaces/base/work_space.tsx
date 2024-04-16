@@ -67,13 +67,13 @@ import {
   GroupOrientation, GroupPanelData, TimePanelData,
   ViewCellData, ViewDataMap,
   ViewDataProviderOptions, ViewDataProviderType,
-} from '../../../../../__internal/scheduler/__migration/types';
+} from '../../../../../__internal/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel, getGroupPanelData,
   isGroupingByDate,
   isHorizontalGroupingApplied,
   isVerticalGroupingApplied,
-} from '../../../../../__internal/scheduler/__migration/utils/index';
+} from '../../../../../__internal/scheduler/r1/utils/index';
 ///#ENDDEBUG
 const DATA_CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_PANEL_CELL_CLASS}`;
 

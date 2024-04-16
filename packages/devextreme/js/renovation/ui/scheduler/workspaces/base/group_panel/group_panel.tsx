@@ -11,9 +11,9 @@ import { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelVerticalLayout } from './vertical/layout';
 import { GroupPanelHorizontalLayout } from './horizontal/layout';
 import { GroupPanelWrapper } from '../../../../../component_wrapper/scheduler/group_panel';
-import { Group, GroupOrientation } from '../../../../../../__internal/scheduler/__migration/types';
-import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../__internal/scheduler/__migration/const';
-import { isVerticalGroupingApplied } from '../../../../../../__internal/scheduler/__migration/utils/index';
+import { Group, GroupOrientation } from '../../../../../../__internal/scheduler/r1/types';
+import { VERTICAL_GROUP_ORIENTATION } from '../../../../../../__internal/scheduler/r1/const';
+import { isVerticalGroupingApplied } from '../../../../../../__internal/scheduler/r1/utils/index';
 
 export const viewFunction = ({
   restAttributes,
