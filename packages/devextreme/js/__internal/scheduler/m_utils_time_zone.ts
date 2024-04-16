@@ -4,6 +4,7 @@ import { dateUtilsTs } from '@ts/core/utils/date';
 import dateUtils from '../../core/utils/date';
 import DateAdapter from './m_date_adapter';
 import timeZoneDataUtils from './timezones/m_utils_timezones_data';
+import timeZoneList from './timezones/timezone_list';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
@@ -34,10 +35,11 @@ const createDateFromUTCWithLocalOffset = (date) => {
   return result.source;
 };
 
-const getTimeZones = (date = new Date()) => {
-  const dateInUTC = createUTCDate(date);
-  return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
-};
+const getTimeZones = (date = new Date()) => timeZoneList.value.map((tz) => ({
+  offset: calculateTimezoneByValue(tz, date),
+  title: getTimezoneTitle(tz, date),
+  id: tz,
+}));
 
 const createUTCDate = (date) => new Date(Date.UTC(
   date.getUTCFullYear(),
@@ -55,25 +57,17 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
-const calculateTimezoneByValue = (timeZone, date = new Date()) => {
+const calculateTimezoneByValue = (timeZone, date = new Date()): number | undefined => {
   if (!timeZone) {
     return undefined;
   }
 
-  let dateTimeFormat;
+  let offset;
   try {
-    dateTimeFormat = new Intl.DateTimeFormat('en-US', {
-      timeZone,
-      timeZoneName: 'longOffset',
-    } as any);
+    offset = getStringOffset(timeZone, date);
   } catch (e) {
     return undefined;
   }
-
-  // GMT±XX:YY
-  const offset: string = dateTimeFormat.formatToParts(date)
-    .filter((part) => part.type === 'timeZoneName')
-    .map((p) => p.value)[0];
 
   if (offset === 'GMT') {
     return 0;
@@ -85,6 +79,33 @@ const calculateTimezoneByValue = (timeZone, date = new Date()) => {
 
   const result = parseInt(hours, 10) + parseInt(minutes, 10) / 60;
   return isMinus ? -result : result;
+};
+
+// 'GMT±XX:YY' or 'GMT' format
+const getStringOffset = (timeZone, date = new Date()): string => {
+  const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+    timeZone,
+    timeZoneName: 'longOffset',
+  } as any);
+
+  return dateTimeFormat.formatToParts(date)
+    .filter((part) => part.type === 'timeZoneName')
+    .map((p) => p.value)[0];
+};
+
+const getOffsetNamePart = (offset: string): string => {
+  if (offset === 'GMT') {
+    const GMTNamePart = `${offset} +00:00`;
+    return `${GMTNamePart}`;
+  }
+  return offset.replace('GMT', 'GMT ');
+};
+
+const getTimezoneTitle = (timeZone, date = new Date()): string => {
+  const tzNamePart = timeZone.replaceAll('/', ' - ').replaceAll('_', ' ');
+  const offset = getStringOffset(timeZone, date);
+  const offsetNamePart = getOffsetNamePart(offset);
+  return `(${offsetNamePart}) ${tzNamePart}`;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
