@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Form from 'devextreme-testcafe-models/form/form';
+import RadioGroup from 'devextreme-testcafe-models/radioGroup';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Form from 'devextreme-testcafe-models/form/form';
-import RadioGroup from 'devextreme-testcafe-models/radioGroup';
 
 const RADIO_GROUP_CLASS = 'dx-radiogroup';
 

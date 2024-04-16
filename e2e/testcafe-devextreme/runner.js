@@ -67,7 +67,7 @@ createTestCafe({
             .browsers(browsers)
             .reporter(reporter)
             .src([`./tests/${componentFolder}/${file}.ts`]);
-    
+
         runner.compilerOptions({
             'typescript': {
                 customCompilerModulePath: '../../node_modules/typescript',

@@ -5,7 +5,7 @@ import {
   OneWay,
   Slot,
 } from '@devextreme-generator/declarations';
-import { renderUtils } from '../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../__internal/scheduler/r1/utils/index';
 import { ContentTemplateProps } from '../types';
 
 export const viewFunction = (viewModel: CellBase): JSX.Element => (

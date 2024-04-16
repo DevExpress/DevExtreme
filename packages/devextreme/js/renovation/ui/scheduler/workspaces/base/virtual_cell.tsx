@@ -1,7 +1,7 @@
 import {
   Component, ComponentBindings, CSSAttributes, JSXComponent, OneWay,
 } from '@devextreme-generator/declarations';
-import { renderUtils } from '../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../__internal/scheduler/r1/utils/index';
 import { HeaderCell } from './header_cell';
 import { OrdinaryCell } from './ordinary_cell';
 

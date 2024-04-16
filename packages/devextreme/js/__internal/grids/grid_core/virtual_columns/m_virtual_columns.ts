@@ -104,7 +104,7 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
 
     that._beginPageIndex = null;
     that._endPageIndex = null;
-    that._position = 0;
+    that._position ??= 0;
     that._virtualVisibleColumns = {};
   }
 

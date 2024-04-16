@@ -1,6 +1,5 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
-
 import {
   calculateCellIndex,
   calculateDayDuration,
@@ -12,7 +11,8 @@ import {
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
   isHorizontalView,
-} from '../../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
 import timezoneUtils from '../../m_utils_time_zone';
 import { getAllGroups } from '../../resources/m_utils';

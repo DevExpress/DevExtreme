@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import { monthUtils, setOptionHour, timelineMonthUtils } from '@ts/scheduler/__migration/utils/index';
+import { monthUtils, setOptionHour, timelineMonthUtils } from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
 import { ViewDataGenerator } from './m_view_data_generator';

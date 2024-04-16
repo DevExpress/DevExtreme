@@ -1,9 +1,9 @@
+import { Properties } from 'devextreme/ui/tag_box.d';
+import TagBox from 'devextreme-testcafe-models/tagBox';
 import url from '../../helpers/getPageUrl';
 import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Properties } from 'devextreme/ui/tag_box.d';
-import TagBox from 'devextreme-testcafe-models/tagBox';
 
 const TIME_TO_WAIT = 150;
 

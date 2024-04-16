@@ -1,7 +1,7 @@
 import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screenshot-comparer';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 import {
   resources,
   createDataSetForScreenShotTests,

@@ -13,7 +13,7 @@ import { LayoutProps } from '../layout_props';
 import { DateTableCellBase } from './cell';
 import { combineClasses } from '../../../../../utils/combine_classes';
 import { DATE_TABLE_ROW_CLASS } from '../../const';
-import { ViewCellData } from '../../../../../../__internal/scheduler/__migration/types';
+import { ViewCellData } from '../../../../../../__internal/scheduler/r1/types';
 
 export interface CellTemplateProps extends ViewCellData {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;

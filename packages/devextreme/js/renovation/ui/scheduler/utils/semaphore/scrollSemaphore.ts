@@ -1,4 +1,4 @@
-import { Semaphore } from '../../../../../__internal/scheduler/__migration/semaphore/index';
+import { Semaphore } from '../../../../../__internal/scheduler/r1/semaphore/index';
 
 interface IPosition {
   left?: number;

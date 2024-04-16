@@ -1,4 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { Item } from 'devextreme/ui/menu.d';
+import Menu from 'devextreme-testcafe-models/menu';
 import {
   insertStylesheetRulesToPage,
   appendElementTo, setAttribute,
@@ -6,8 +8,6 @@ import {
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { Item } from 'devextreme/ui/menu.d';
-import Menu from 'devextreme-testcafe-models/menu';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture.skip.disablePageReloads`Menu_common`

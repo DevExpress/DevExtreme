@@ -1,10 +1,10 @@
 import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Splitter from 'devextreme-testcafe-models/splitter';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { clearTestPage } from '../../../helpers/clearPage';
 import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
-import Splitter from 'devextreme-testcafe-models/splitter';
 
 fixture.disablePageReloads`Splitter_common`
   .page(url(__dirname, '../../container.html'))

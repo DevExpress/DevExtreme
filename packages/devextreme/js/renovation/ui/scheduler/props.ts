@@ -13,7 +13,7 @@ import DataSource from '../../../data/data_source';
 import type { DataSourceOptions } from '../../../data/data_source';
 
 import { DataCellTemplateProps, DateTimeCellTemplateProps, ResourceCellTemplateProps } from './workspaces/types';
-import type { AllDayPanelModeType, ViewType } from '../../../__internal/scheduler/__migration/types';
+import type { AllDayPanelModeType, ViewType } from '../../../__internal/scheduler/r1/types';
 
 @ComponentBindings()
 export class ScrollingProps {

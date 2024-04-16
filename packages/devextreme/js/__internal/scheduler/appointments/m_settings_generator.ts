@@ -4,8 +4,8 @@ import { extend } from '@js/core/utils/extend';
 import { isEmptyObject } from '@js/core/utils/type';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { getGroupCount, isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
-import { getGroupCount, isDateAndTimeView } from '../__migration/utils/index';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
