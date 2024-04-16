@@ -5,12 +5,12 @@ import {
   viewFunction as LayoutView,
 } from '../layout';
 import { Row } from '../row';
-import { renderUtils } from '../../../../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../../../../__internal/scheduler/r1/utils/index';
 
 jest.mock('../row', () => ({
   Row: () => null,
 }));
-jest.mock('.../../../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+jest.mock('.../../../../../../../../__internal/scheduler/r1/utils/index', () => ({
   renderUtils: {
     addHeightToStyle: jest.fn(() => 'style'),
   },

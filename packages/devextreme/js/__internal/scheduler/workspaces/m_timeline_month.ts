@@ -1,9 +1,9 @@
 import registerComponent from '@js/core/component_registrator';
 import dateUtils from '@js/core/utils/date';
-
 // NOTE: Renovation component import.
-import { HeaderPanelComponent } from '../__migration/components/index';
-import { formatWeekdayAndDay, monthUtils } from '../__migration/utils/index';
+import { HeaderPanelComponent } from '@ts/scheduler/r1/components/index';
+import { formatWeekdayAndDay, monthUtils } from '@ts/scheduler/r1/utils/index';
+
 import { VIEWS } from '../m_constants';
 import SchedulerTimeline from './m_timeline';
 

@@ -1,12 +1,12 @@
 import dateUtils from '@js/core/utils/date';
 import { VIEWS } from '@ts/scheduler/m_constants';
-
 import {
   formatWeekdayAndDay, getDisplayedCellCount, getGroupCount,
   getHeaderCellText,
   getHorizontalGroupCount, getTotalCellCountByCompleteData,
   isTimelineView,
-} from '../../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import timeZoneUtils from '../../m_utils_time_zone';
 
 export class DateHeaderDataGenerator {

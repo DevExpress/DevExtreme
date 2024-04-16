@@ -16,7 +16,7 @@ import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
 import { DateTimeCellTemplateProps } from '../../types';
 import { TimePanel } from '../../../../../component_wrapper/scheduler/time_panel';
-import { GroupOrientation, TimePanelData } from '../../../../../../__internal/scheduler/__migration/types';
+import { GroupOrientation, TimePanelData } from '../../../../../../__internal/scheduler/r1/types';
 
 export const viewFunction = ({
   props: {
