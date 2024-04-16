@@ -10,8 +10,8 @@ interface CallbackOptions {
 }
 
 type CallbackType<TArgs extends any[], TContext>
-  = ((this: TContext, ...args: TArgs) => boolean)
-  | ((this: TContext, ...args: TArgs) => void);
+  // eslint-disable-next-line @typescript-eslint/no-invalid-void-type
+  = ((this: TContext, ...args: TArgs) => boolean | void);
 
 class Callback<TArgs extends any[], TContext> {
   private _list: CallbackType<TArgs, TContext>[] = [];
@@ -33,10 +33,9 @@ class Callback<TArgs extends any[], TContext> {
     const step = firingIndexes.length;
 
     for (firingIndexes[step] = 0; firingIndexes[step] < list.length; firingIndexes[step] += 1) {
-      // @ts-expect-error
       const result = list[firingIndexes[step]].apply(context, args);
 
-      if (!result && stopOnFalse) {
+      if (result === false && stopOnFalse) {
         break;
       }
     }
