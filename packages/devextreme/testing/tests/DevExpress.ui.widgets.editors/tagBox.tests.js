@@ -750,8 +750,8 @@ QUnit.module('multi tag support', {
         this.clock = sinon.useFakeTimers();
         messageLocalization.load({
             'en': {
-                'dxTagBox-seleced': '{0} selected',
-                'dxTagBox-moreSeleced': '{0} more'
+                'dxTagBox-selected': '{0} selected',
+                'dxTagBox-moreSelected': '{0} more'
             }
         });
     },
@@ -7772,26 +7772,113 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
-    QUnit.test('Tag aria-label should display correct tag text value', function(assert) {
+    QUnit.test('Custom aria-label attribute should be added to input if inputAttr property is used', function(assert) {
         const productsData = [
             'HD Video Player',
             'SuperHD Video Player',
             'SuperPlasma 50',
         ];
         const productLabel = { 'aria-label': 'Product' };
-        const tagBox = $('#tagBox').dxTagBox({
+        const $tagBox = $('#tagBox').dxTagBox({
             items: productsData,
             inputAttr: productLabel,
             value: [...productsData],
             maxDisplayedTags: 3,
             showMultiTagOnly: false
-        }).dxTagBox('instance');
-        const $simpleTags = tagBox.$element().find(`.${TAGBOX_TAG_CLASS}`);
+        });
 
-        assert.strictEqual($simpleTags.eq(0).attr('aria-label'), 'HD Video Player', 'aria-label is tagged correctly');
-        assert.strictEqual($simpleTags.eq(1).attr('aria-label'), 'SuperHD Video Player', 'aria-label is tagged correctly');
-        assert.strictEqual($simpleTags.eq(2).attr('aria-label'), 'SuperPlasma 50', 'aria-label is tagged correctly');
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-label'), 'Product', 'input aria-label attribute is correct');
     });
+
+    QUnit.test('input should not have aria-attribute by default', function(assert) {
+        const productsData = [
+            'HD Video Player',
+            'SuperHD Video Player',
+            'SuperPlasma 50',
+        ];
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: productsData,
+            value: [...productsData],
+            maxDisplayedTags: 3,
+            showMultiTagOnly: false
+        });
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-label'), undefined, 'input aria-label attribute is not presented');
+    });
+
+    QUnit.test('Tag aria-label should contain correct tag text value', function(assert) {
+        const productsData = [
+            'HD Video Player',
+            'SuperHD Video Player',
+            'SuperPlasma 50',
+        ];
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            items: productsData,
+            value: [...productsData],
+            maxDisplayedTags: 3,
+            showMultiTagOnly: false
+        });
+        const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($tags.length, 3, 'tags count is correct');
+        assert.strictEqual($tags.eq(0).attr('aria-label'), 'HD Video Player', 'aria-label is tagged correctly');
+        assert.strictEqual($tags.eq(1).attr('aria-label'), 'SuperHD Video Player', 'aria-label is tagged correctly');
+        assert.strictEqual($tags.eq(2).attr('aria-label'), 'SuperPlasma 50', 'aria-label is tagged correctly');
+    });
+
+    QUnit.test('Multitag should have an aria-label that includes the count of selected items', function(assert) {
+        const productsData = [{
+            ID: 1,
+            Name: 'Tag_1',
+        }, {
+            ID: 2,
+            Name: 'Tag_2',
+        }];
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: productsData,
+            valueExpr: 'ID',
+            value: [productsData[0].ID, productsData[1].ID],
+            displayExpr: 'Name',
+            maxDisplayedTags: 1,
+            showMultiTagOnly: true
+        });
+
+        const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($tag.length, 1, 'only one tag is presented');
+        assert.strictEqual($tag.attr('aria-label'), '2 selected', 'aria-label is tagged correctly');
+    });
+
+    QUnit.test('Tag aria-label attribute should have correct text value according displayExpr setting', function(assert) {
+        const productsData = [{
+            ID: 1,
+            Name: 'Tag_1',
+        }, {
+            ID: 2,
+            Name: 'Tag_2',
+        }];
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: productsData,
+            valueExpr: 'ID',
+            value: [productsData[0].ID, productsData[1].ID],
+            displayExpr: 'Name',
+            maxDisplayedTags: 3,
+            showMultiTagOnly: true
+        });
+
+        const $tags = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
+
+        assert.strictEqual($tags.length, 2, 'tags count is correct');
+        assert.strictEqual($tags.eq(0).attr('aria-label'), 'Tag_1', 'aria-label is tagged correctly');
+        assert.strictEqual($tags.eq(1).attr('aria-label'), 'Tag_2', 'aria-label is tagged correctly');
+    });
+
 
     QUnit.test('multitag should have correct aria attributes', function(assert) {
         const sampleData = ['First Item', 'Second Item', 'Third Item', 'Fourth Item'];
