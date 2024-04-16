@@ -12,7 +12,7 @@
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }

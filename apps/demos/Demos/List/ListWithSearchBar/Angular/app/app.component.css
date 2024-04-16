@@ -14,7 +14,7 @@
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
 

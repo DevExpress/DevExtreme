@@ -38,7 +38,7 @@
   font-size: 18px;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
 

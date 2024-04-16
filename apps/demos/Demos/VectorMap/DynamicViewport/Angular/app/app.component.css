@@ -20,13 +20,13 @@
   flex-direction: column;
 }
 
-::ng-deep .option {
+.option {
   display: flex;
   align-items: center;
   min-height: 34px;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }

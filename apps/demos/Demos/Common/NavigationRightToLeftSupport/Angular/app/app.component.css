@@ -14,7 +14,7 @@ sup {
   margin: 0;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
   padding-right: 15px;

@@ -4,7 +4,7 @@
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
   display: flex;
   align-items: center;
@@ -15,7 +15,7 @@
   margin-right: 20px;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 700;
 }

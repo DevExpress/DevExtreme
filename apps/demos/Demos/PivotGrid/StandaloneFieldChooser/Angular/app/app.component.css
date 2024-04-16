@@ -13,12 +13,12 @@
   width: 180px;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
 

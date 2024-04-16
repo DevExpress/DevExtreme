@@ -8,12 +8,12 @@
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   width: 24%;
   display: inline-block;
   margin-top: 10px;
