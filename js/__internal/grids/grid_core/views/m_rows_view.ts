@@ -1252,6 +1252,12 @@ export class RowsView extends ColumnsView {
   setScrollerSpacing() { }
 
   _restoreErrorRow() { }
+
+  public isElementInside($element) {
+    const $rowsViewElement = $element.closest(`.${this.addWidgetPrefix(ROWS_VIEW_CLASS)}`);
+
+    return $rowsViewElement.is(this.element());
+  }
 }
 
 export const rowsModule = {
