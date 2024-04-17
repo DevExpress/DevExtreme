@@ -30,32 +30,6 @@ describe('CheckBoxIconIcon', () => {
     });
   });
 
-  describe('Behavior', () => {
-    describe('Methods', () => {
-      describe('getComputedIconSize', () => {
-        beforeEach(() => {
-          jest.resetAllMocks();
-        });
-
-        it('should return element computed style width as a number', () => {
-          const checkBoxIcon = new CheckBoxIcon({});
-          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          (getElementComputedStyle as Mock).mockReturnValue({ width: '200px' });
-
-          expect(checkBoxIcon.getComputedIconSize()).toEqual(200);
-        });
-
-        it('should not raise any error if getElementComputedStyle returns null', () => {
-          const checkBoxIcon = new CheckBoxIcon({});
-          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          (getElementComputedStyle as Mock).mockReturnValue(null);
-
-          expect(() => { checkBoxIcon.getComputedIconSize(); }).not.toThrow();
-        });
-      });
-    });
-  });
-
   describe('Logic', () => {
     describe('Getters', () => {
       describe('cssStyles', () => {
