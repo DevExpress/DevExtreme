@@ -295,7 +295,7 @@ function getHandlersController(element, eventName) {
 
                     // if(isTargetInShadowDOM && e.type === 'wheel') {
                     if(isTargetInShadowDOM) {
-                        const composedPath = e.original;
+                        const composedPath = e.originalEvent.composedPath();
                         const target = composedPath[0];
 
                         e.target = target;
