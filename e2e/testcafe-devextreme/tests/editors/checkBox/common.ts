@@ -60,13 +60,13 @@ fixture.disablePageReloads`CheckBox`
   });
 });
 
-[false, true].forEach((multipleLabels) => {
-  test(`Checkbox configurations multipleLabels=${multipleLabels}`, async (t) => {
+['one two three', 'label'].forEach((text) => {
+  test(`Checkbox configurations label=${text}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations label=${text}.png`, { element: '#container', shouldTestInCompact: true });
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations label=${text}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
 
     await t
       .expect(compareResults.isValid())
@@ -86,21 +86,19 @@ fixture.disablePageReloads`CheckBox`
     ];
 
     for (const rtlEnabled of [false, true]) {
-      for (const iconScaled of [false, true]) {
-        for (const limitedWidth of [false, true]) {
+      for (const iconSize of [undefined, 30]) {
+        for (const width of [undefined, 60]) {
           for (const state of stateClasses) {
-            for (const valueMode of valueModes) {
+            for (const value of valueModes) {
               const id = `dx${new Guid()}`;
               await appendElementTo('#container', 'div', id, {});
 
-              const width = iconScaled ? 80 : 40;
-
               await createWidget('dxCheckBox', {
-                text: multipleLabels ? 'one two three' : 'label',
-                value: valueMode,
+                text,
+                value,
+                width,
+                iconSize,
                 rtlEnabled,
-                width: limitedWidth ? width : undefined,
-                iconSize: iconScaled ? 30 : undefined,
               }, `#${id}`);
               await setClassAttribute(Selector(`#${id}`), state);
             }
