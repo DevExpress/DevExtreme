@@ -28,12 +28,6 @@ export class CheckBoxIconProps {
 export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
   @Ref() elementRef!: RefObject<HTMLDivElement>;
 
-  setIconFontSize(fontSize: number): void {
-    const element = this.elementRef.current!;
-
-    element.style.fontSize = `${fontSize}px`;
-  }
-
   getIconSize(size: number | string): number {
     if (isNumber(size)) {
       return size;

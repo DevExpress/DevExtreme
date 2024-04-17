@@ -32,18 +32,6 @@ describe('CheckBoxIconIcon', () => {
 
   describe('Behavior', () => {
     describe('Methods', () => {
-      describe('setIconFontSize', () => {
-        it('should set element font size', () => {
-          const checkBoxIcon = new CheckBoxIcon({});
-          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          const icon = checkBoxIcon.elementRef.current!;
-
-          checkBoxIcon.setIconFontSize(50);
-
-          expect(icon.style.fontSize).toEqual('50px');
-        });
-      });
-
       describe('getComputedIconSize', () => {
         beforeEach(() => {
           jest.resetAllMocks();
