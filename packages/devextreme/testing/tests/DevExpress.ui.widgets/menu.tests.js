@@ -865,6 +865,46 @@ QUnit.module('Rendering Scrollable', {
 
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
+
+    QUnit.test('Option focusedElement should be null after reopen root submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const submenuItemText = '1st submenu item';
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'Item 1',
+                items: [
+                    { text: submenuItemText },
+                    { text: 'Another item' },
+                ],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $rootItem.trigger('dxclick');
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
+
+        keyboardMock(itemsContainer)
+            .press('left')
+            .press('right')
+            .press('down');
+
+        assert.strictEqual(menu.instance.option('focusedElement'), null, 'option is null');
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
+    });
 });
 
 QUnit.module('Menu - templates', {
