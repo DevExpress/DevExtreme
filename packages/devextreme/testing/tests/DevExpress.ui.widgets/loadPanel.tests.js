@@ -128,7 +128,7 @@ QUnit.module('accessibility', () => {
         });
     });
 
-    QUnit.module('wrapper / load indicator aria-label tests', () => {
+    QUnit.module('wrapper / load indicator aria-label', () => {
         QUnit.test('wrapper aria label is removed and insert into load indicator when showIndicator = true on runtime', function(assert) {
             const loadPanel = $('#loadPanel').dxLoadPanel({
                 visible: true,
