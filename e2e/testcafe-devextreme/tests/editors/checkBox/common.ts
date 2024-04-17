@@ -36,8 +36,8 @@ fixture.disablePageReloads`CheckBox render`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), `padding: 5px; width: 900px; height: 200px; ${isColumnCountStyle ? 'column-count: 12' : ''};`);
-    await setStyleAttribute(Selector('#otherContainer'), `padding: 5px; width: 900px; height: 200px; ${isColumnCountStyle ? 'column-count: 12' : ''};`);
+    await setStyleAttribute(Selector('#container'), `padding: 5px; width: 1800px; height: 200px; ${isColumnCountStyle ? 'column-count: 24' : ''};`);
+    await setStyleAttribute(Selector('#otherContainer'), `padding: 5px; width: 1800px; height: 200px; ${isColumnCountStyle ? 'column-count: 24' : ''};`);
 
     await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
@@ -51,20 +51,24 @@ fixture.disablePageReloads`CheckBox render`
         DISABLED_STATE_CLASS,
       ];
 
-      for (const limitedWidth of [false, true]) {
-        for (const state of stateClasses) {
-          for (const mode of modes) {
-            const id = `dx${new Guid()}`;
+      for (const iconScaled of [false, true]) {
+        for (const limitedWidth of [false, true]) {
+          for (const state of stateClasses) {
+            for (const mode of modes) {
+              const id = `dx${new Guid()}`;
+              await appendElementTo(containerSelector, 'div', id, {});
 
-            await appendElementTo(containerSelector, 'div', id, {});
+              const width = iconScaled ? 80 : 40;
 
-            await createWidget('dxCheckBox', {
-              text: 'Label',
-              value: mode,
-              rtlEnabled,
-              width: limitedWidth ? 30 : undefined,
-            }, `#${id}`);
-            await setClassAttribute(Selector(`#${id}`), state);
+              await createWidget('dxCheckBox', {
+                text: 'Label',
+                value: mode,
+                rtlEnabled,
+                width: limitedWidth ? width : undefined,
+                iconSize: iconScaled ? 30 : undefined,
+              }, `#${id}`);
+              await setClassAttribute(Selector(`#${id}`), state);
+            }
           }
         }
       }
