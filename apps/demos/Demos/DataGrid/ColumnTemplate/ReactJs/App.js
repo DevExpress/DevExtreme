@@ -2,7 +2,12 @@ import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
 import { employees } from './data.js';
 
-const cellRender = (data) => <img src={data.value} alt={`Picture of ${data.data.FirstName} ${data.data.LastName}`}/>;
+const cellRender = (data) => (
+  <img
+    src={data.value}
+    alt={`Picture of ${data.data.FirstName} ${data.data.LastName}`}
+  />
+);
 const App = () => (
   <DataGrid
     id="gridContainer"

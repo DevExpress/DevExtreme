@@ -3,9 +3,19 @@ import React from 'react';
 const formatDate = new Intl.DateTimeFormat('en-US').format;
 const DataRow = (rowInfo) => (
   <React.Fragment>
-    <tr className="main-row" role="row">
-      <td rowSpan={2} role="gridcell">
-        <img src={rowInfo.data.Picture} alt={`Image of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`} tabIndex={0} />
+    <tr
+      className="main-row"
+      role="row"
+    >
+      <td
+        rowSpan={2}
+        role="gridcell"
+      >
+        <img
+          src={rowInfo.data.Picture}
+          alt={`Picture of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`}
+          tabIndex={0}
+        />
       </td>
       <td role="gridcell">{rowInfo.data.Prefix}</td>
       <td role="gridcell">{rowInfo.data.FirstName}</td>
@@ -14,8 +24,14 @@ const DataRow = (rowInfo) => (
       <td role="gridcell">{formatDate(new Date(rowInfo.data.BirthDate))}</td>
       <td role="gridcell">{formatDate(new Date(rowInfo.data.HireDate))}</td>
     </tr>
-    <tr className="notes-row" role="row">
-      <td colSpan={6} role="gridcell">
+    <tr
+      className="notes-row"
+      role="row"
+    >
+      <td
+        colSpan={6}
+        role="gridcell"
+      >
         <div>{rowInfo.data.Notes}</div>
       </td>
     </tr>
