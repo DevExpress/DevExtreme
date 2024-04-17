@@ -53,35 +53,6 @@ describe('CheckBoxIconIcon', () => {
           expect(() => { checkBoxIcon.getComputedIconSize(); }).not.toThrow();
         });
       });
-
-      describe('getIconSize', () => {
-        beforeEach(() => {
-          jest.resetAllMocks();
-        });
-
-        it('should return size prop if it is a number', () => {
-          const size = 17;
-          const checkBoxIcon = new CheckBoxIcon({ size: 17 });
-
-          expect(checkBoxIcon.getIconSize(size)).toEqual(17);
-        });
-
-        it('should return parsed number if size is specified as a pixel string', () => {
-          const size = '17px';
-          const checkBoxIcon = new CheckBoxIcon({ size });
-
-          expect(checkBoxIcon.getIconSize(size)).toEqual(17);
-        });
-
-        it('should return computed style width if size is specified not as a number and not as a pixel string', () => {
-          const size = '100%';
-          const checkBoxIcon = new CheckBoxIcon({ size });
-          checkBoxIcon.elementRef = { current: { style: {} } } as RefObject<HTMLDivElement>;
-          (getElementComputedStyle as Mock).mockReturnValue({ width: '100px' });
-
-          expect(checkBoxIcon.getIconSize(size)).toEqual(100);
-        });
-      });
     });
   });
 
