@@ -43,7 +43,7 @@ jobs:
 
     - name: Build
       env:
-        BUILD_INTERNAL_PACKAGE: true
+        BUILD_TEST_INTERNAL_PACKAGE: true
       run: npx nx build devextreme-main
 
     - name: Zip artifacts
