@@ -60,32 +60,32 @@ fixture.disablePageReloads`CheckBox`
   });
 });
 
-[false, true].forEach((rtlEnabled) => {
-  [false, true].forEach((multipleLabels) => {
-    test(`Checkbox styles, rtlEnabled=${rtlEnabled} multipleLabels=${multipleLabels}`, async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[false, true].forEach((multipleLabels) => {
+  test(`Checkbox configurations multipleLabels=${multipleLabels}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `CheckBox states rtlEnabled=${rtlEnabled} multipleLabels=${multipleLabels}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels}.png`, { element: '#container', shouldTestInCompact: true });
 
-      await testScreenshot(t, takeScreenshot, `CheckBox states rtlEnabled=${rtlEnabled} multipleLabels=${multipleLabels}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 1000px; height: 400px; column-count: 12;');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 1000px; height: 600px; column-count: 10;');
 
-      await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
+    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
-      const stateClasses = [
-        READONLY_STATE_CLASS,
-        DEFAULT_STATE_CLASS,
-        ACTIVE_STATE_CLASS,
-        HOVER_STATE_CLASS,
-        FOCUSED_STATE_CLASS,
-        DISABLED_STATE_CLASS,
-      ];
+    const stateClasses = [
+      READONLY_STATE_CLASS,
+      DEFAULT_STATE_CLASS,
+      ACTIVE_STATE_CLASS,
+      HOVER_STATE_CLASS,
+      FOCUSED_STATE_CLASS,
+      DISABLED_STATE_CLASS,
+    ];
 
+    for (const rtlEnabled of [false, true]) {
       for (const iconScaled of [false, true]) {
         for (const limitedWidth of [false, true]) {
           for (const state of stateClasses) {
@@ -107,6 +107,6 @@ fixture.disablePageReloads`CheckBox`
           }
         }
       }
-    });
+    }
   });
 });
