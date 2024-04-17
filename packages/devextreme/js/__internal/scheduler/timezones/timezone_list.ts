@@ -48,7 +48,8 @@ export default {
     'MST',
     'PST8PDT',
     'US/Arizona',
-    'US/Pacific-New',
+    // Not supported in CI tests
+    // 'US/Pacific-New',
     'US/Pacific',
     'America/Belize',
     'America/Boise',

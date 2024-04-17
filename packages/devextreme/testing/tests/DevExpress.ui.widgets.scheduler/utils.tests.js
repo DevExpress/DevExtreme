@@ -152,6 +152,9 @@ module('getTimeZone', {}, () => {
             'Asia/Almaty', // old: 6, actual: 5 (actual is correct)
             'Asia/Qostanay', // old: 6, actual: 5 (actual is correct)
             'Antarctica/Macquarie', // old: 11, actual: 10 (actual is correct)
+
+            // CI error
+            'Antarctica/Casey', // old: 8, actual: 11 (actual is correct)
         ];
         for(let i = 0; i < newOutput.length; i++) {
             if(!exceptions.includes(newOutput[i].id)) {
