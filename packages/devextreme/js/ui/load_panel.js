@@ -17,7 +17,6 @@ const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
 const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
 const LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper';
 const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
-const LOADINDICATOR_CLASS = 'dx-loadpanel-indicator';
 
 const LoadPanel = Overlay.inherit({
 
@@ -119,18 +118,17 @@ const LoadPanel = Overlay.inherit({
 
         this.$element().addClass(LOADPANEL_CLASS);
         this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
-        this._setWrapperAria();
+        this._updateWrapperAria();
     },
 
-    _setWrapperAria() {
-        const aria = this._getAriaAttributes();
-        const showIndicator = this.option('showIndicator');
-        const $indicator = this.$content().find(`.${LOADINDICATOR_CLASS}`);
-        if($indicator.length !== 0) {
-            this.$wrapper().removeAttr('aria-label').removeAttr('role');
-        }
+    _updateWrapperAria() {
+        this.$wrapper()
+            .removeAttr('aria-label')
+            .removeAttr('role');
 
+        const showIndicator = this.option('showIndicator');
         if(!showIndicator) {
+            const aria = this._getAriaAttributes();
             this.$wrapper().attr(aria);
         }
     },
@@ -242,7 +240,7 @@ const LoadPanel = Overlay.inherit({
                 this._cleanPreviousContent();
                 this._renderLoadIndicator();
                 this._renderMessage();
-                this._setWrapperAria();
+                this._updateWrapperAria();
                 break;
             case 'showPane':
                 this._togglePaneVisible();
