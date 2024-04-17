@@ -1,16 +1,9 @@
 /* eslint-disable jest/no-standalone-expect */
 import { shallow } from 'enzyme';
 import each from 'jest-each';
-import { RefObject } from '@devextreme-generator/declarations';
-import getElementComputedStyle from '../../../../utils/get_computed_style';
-import { current } from '../../../../../ui/themes';
 import {
   CheckBoxIcon, viewFunction,
 } from '../check_box_icon';
-import { getDefaultIconSize, getFontSizeByIconSize } from '../utils';
-import { getWindow, setWindow } from '../../../../../core/utils/window';
-
-interface Mock extends jest.Mock {}
 
 jest.mock('../../../../utils/get_computed_style');
 
