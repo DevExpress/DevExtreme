@@ -264,10 +264,6 @@ const registerEmitter = function(emitterConfig) {
                 emitter.configure(extend({
                     delegateSelector: handleObj.selector
                 }, handleObj.data), handleObj.type);
-
-                // if(handleObj.type === 'dxscrollinit') {
-                //     debugger;
-                // }
             },
 
             teardown: function(element) {

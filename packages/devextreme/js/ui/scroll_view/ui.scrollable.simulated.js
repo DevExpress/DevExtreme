@@ -622,8 +622,6 @@ export const SimulatedStrategy = Class.inherit({
         this._suppressDirections(e);
         this._eventForUserAction = e;
         this._eventHandler('init', e);
-
-        // debugger;
     },
 
     _suppressDirections: function(e) {
@@ -660,7 +658,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleStart: function(e) {
-        // debugger;
         this._eventForUserAction = e;
         this._eventHandler('start').done(this._startAction);
     },
@@ -676,7 +673,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleMove: function(e) {
-        // debugger;
         if(this._isLocked()) {
             e.cancel = true;
             this._resetActive();
@@ -708,7 +704,6 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleEnd: function(e) {
-        // debugger;
         this._resetActive();
         this._refreshCursorState(e.originalEvent && e.originalEvent.target);
 
@@ -718,20 +713,17 @@ export const SimulatedStrategy = Class.inherit({
     },
 
     handleCancel: function(e) {
-        // debugger;
         this._resetActive();
         this._eventForUserAction = e;
         return this._eventHandler('end', { x: 0, y: 0 });
     },
 
     handleStop: function() {
-        // debugger;
         this._resetActive();
         this._eventHandler('stop');
     },
 
     handleScroll: function() {
-        // debugger;
         this._updateRtlConfig();
         this._scrollAction();
     },
@@ -879,7 +871,7 @@ export const SimulatedStrategy = Class.inherit({
             left: scrollerX && offset.left
         };
 
-        const actionArgs = {
+        return {
             event: this._eventForUserAction,
             scrollOffset: this._scrollOffset,
             reachedLeft: scrollerX && scrollerX._reachedMax(),
@@ -887,8 +879,6 @@ export const SimulatedStrategy = Class.inherit({
             reachedTop: scrollerY && scrollerY._reachedMax(),
             reachedBottom: scrollerY && scrollerY._reachedMin()
         };
-
-        return actionArgs;
     },
 
     _getScrollOffset() {

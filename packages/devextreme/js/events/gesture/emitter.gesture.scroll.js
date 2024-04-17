@@ -245,8 +245,6 @@ const ScrollEmitter = GestureEmitter.inherit((function() {
                 }
             }.bind(this));
 
-            // debugger;
-
             this._fireEvent(SCROLL_INIT_EVENT, e);
 
             this._prevEventData = eventData(e);

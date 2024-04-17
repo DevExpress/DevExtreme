@@ -173,7 +173,6 @@ export const createEvent = (originalEvent, args) => {
 };
 
 export const fireEvent = props => {
-    // debugger;
     const { originalEvent, delegateTarget } = props;
     const event = createEvent(originalEvent, props);
 

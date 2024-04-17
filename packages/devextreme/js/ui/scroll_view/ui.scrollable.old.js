@@ -152,50 +152,19 @@ const Scrollable = DOMComponent.inherit({
             getDirection: strategy.getDirection.bind(strategy),
             validate: this._validate.bind(this),
             isNative: this.option('useNative'),
-            scrollTarget: this._$container,
-            composed: true,
+            scrollTarget: this._$container
         };
 
-        // const shadowRoot = document.getElementById('host').shadowRoot;
-
-        // debugger;
-
         eventsEngine.off(this._$wrapper, '.' + SCROLLABLE);
-        // debugger;
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, (e) => {
-            // debugger;
-            this._initHandler.bind(this);
-        });
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.start, SCROLLABLE), (e) => {
-            // debugger;
-            strategy.handleStart.bind(strategy);
-        });
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.move, SCROLLABLE), (e) => {
-            // debugger;
-            strategy.handleMove.bind(strategy);
-        });
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.end, SCROLLABLE), (e) => {
-            // debugger;
-            strategy.handleEnd.bind(strategy);
-        });
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), (e) => {
-            // debugger;
-            strategy.handleCancel.bind(strategy);
-        });
-        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), (e) => {
-            // debugger;
-            strategy.handleStop.bind(strategy);
-        });
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.init, SCROLLABLE), initEventData, this._initHandler.bind(this));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.start, SCROLLABLE), strategy.handleStart.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.move, SCROLLABLE), strategy.handleMove.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.end, SCROLLABLE), strategy.handleEnd.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.cancel, SCROLLABLE), strategy.handleCancel.bind(strategy));
+        eventsEngine.on(this._$wrapper, addNamespace(scrollEvents.stop, SCROLLABLE), strategy.handleStop.bind(strategy));
 
         eventsEngine.off(this._$container, '.' + SCROLLABLE);
-        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), () => {
-            // debugger;
-            strategy.handleScroll.bind(strategy);
-        });
-
-        // this._$wrapper[0].dispatchEvent(new CustomEvent('dxscrollinit'));
-
-        // this._$container[0].dispatchEvent(new CustomEvent('scroll'));
+        eventsEngine.on(this._$container, addNamespace('scroll', SCROLLABLE), strategy.handleScroll.bind(strategy));
     },
 
     _validate: function(e) {
@@ -221,7 +190,6 @@ const Scrollable = DOMComponent.inherit({
     },
 
     _initHandler: function() {
-        // debugger;
         const strategy = this._strategy;
         strategy.handleInit.apply(strategy, arguments);
     },

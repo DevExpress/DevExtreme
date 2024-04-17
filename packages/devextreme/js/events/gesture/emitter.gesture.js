@@ -83,7 +83,6 @@ const GestureEmitter = Emitter.inherit({
     },
 
     start: function(e) {
-        // debugger;
         if(e._needSkipEvent || needSkipEvent(e)) {
             this._cancel(e);
             return;
@@ -93,10 +92,6 @@ const GestureEmitter = Emitter.inherit({
         this._startEventData = eventData(e);
 
         this._stage = INITED;
-
-        // if(e.type === 'dxmousewheel') {
-        //     debugger;
-        // }
         this._init(e);
 
         this._setupImmediateTimer();
