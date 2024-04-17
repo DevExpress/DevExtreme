@@ -1,11 +1,7 @@
 import {
-  Component, ComponentBindings, JSXComponent, Ref, Effect, OneWay, RefObject,
+  Component, ComponentBindings, JSXComponent, Ref, OneWay, RefObject,
 } from '@devextreme-generator/declarations';
-import getElementComputedStyle from '../../../utils/get_computed_style';
-import { hasWindow } from '../../../../core/utils/window';
 import { normalizeStyleProp } from '../../../../core/utils/style';
-import { isNumeric as isNumber } from '../../../../core/utils/type';
-import { getFontSizeByIconSize } from './utils';
 
 export const viewFunction = (viewModel: CheckBoxIcon): JSX.Element => {
   const { elementRef, cssStyles } = viewModel;
