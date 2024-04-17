@@ -556,7 +556,7 @@ class ContextMenu extends MenuBase {
             this._hideAllShownSubmenus();
             this._setOptionWithoutOptionChange('visible', false);
 
-            const $scrollableElement = this._overlay.$content().find(`.${SCROLLABLE_CLASS}`).first();
+            const $scrollableElement = this._getRootScrollableElement();
 
             if(!$scrollableElement.length) {
                 return;
@@ -566,6 +566,10 @@ class ContextMenu extends MenuBase {
 
             scrollableInstance.scrollTo(0);
         }
+    }
+
+    _getRootScrollableElement() {
+        return this._overlay.$content().find(`.${SCROLLABLE_CLASS}`).first();
     }
 
     _overlayHiddenActionHandler(arg) {
