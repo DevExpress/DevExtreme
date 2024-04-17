@@ -25,13 +25,13 @@ fixture.disablePageReloads`CheckBox render`
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((isColumnCountStyle) => {
-  [false, true].forEach((limitedWidth) => {
-    test.only(`Checkbox styles, ${!isColumnCountStyle ? 'default' : 'with column-count style on container'} limitedWidth=${limitedWidth}`, async (t) => {
+  [false, true].forEach((croppedLabel) => {
+    test.only(`Checkbox styles, ${!isColumnCountStyle ? 'default' : 'with column-count style on container'} croppedLabel=${croppedLabel}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `CheckBox states${isColumnCountStyle ? ' with column count style' : ''} limitedWidth=${limitedWidth}.png`, { element: '#container', shouldTestInCompact: true });
+      await testScreenshot(t, takeScreenshot, `CheckBox states${isColumnCountStyle ? ' with column count style' : ''} croppedLabel=${croppedLabel}.png`, { element: '#container', shouldTestInCompact: true });
 
-      await testScreenshot(t, takeScreenshot, `CheckBox states${isColumnCountStyle ? ' with column count style' : ''} limitedWidth=${limitedWidth}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
+      await testScreenshot(t, takeScreenshot, `CheckBox states${isColumnCountStyle ? ' with column count style' : ''} croppedLabel=${croppedLabel}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
 
       await t
         .expect(compareResults.isValid())
@@ -40,8 +40,8 @@ fixture.disablePageReloads`CheckBox render`
       // const croppedWidth = iconSize === 20 ? 400 : 450;
       // const fullWidth = iconSize === 20 ? 450 : 500;
 
-      await setStyleAttribute(Selector('#container'), `padding: 5px; width: ${limitedWidth ? 350 : 400}px; height: 200px; ${isColumnCountStyle ? 'column-count: 6' : ''};`);
-      await setStyleAttribute(Selector('#otherContainer'), `padding: 5px; width: ${limitedWidth ? 350 : 400}px; height: 200px; ${isColumnCountStyle ? 'column-count: 6' : ''};`);
+      await setStyleAttribute(Selector('#container'), `padding: 5px; width: ${croppedLabel ? 350 : 400}px; height: 200px; ${isColumnCountStyle ? 'column-count: 6' : ''};`);
+      await setStyleAttribute(Selector('#otherContainer'), `padding: 5px; width: ${croppedLabel ? 350 : 400}px; height: 200px; ${isColumnCountStyle ? 'column-count: 6' : ''};`);
 
       await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
