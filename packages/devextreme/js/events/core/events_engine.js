@@ -280,7 +280,7 @@ function getHandlersController(element, eventName) {
                     // }
 
                     /**
-                     * Проблемы
+                     * Problems
                      * 1. How do we determine the necessary target?
                      * Answer: Event.composedPath();
                      *
