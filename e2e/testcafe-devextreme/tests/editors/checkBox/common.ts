@@ -21,7 +21,7 @@ const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
 
-fixture.disablePageReloads`CheckBox render`
+fixture.disablePageReloads`CheckBox`
   .page(url(__dirname, '../../container.html'));
 
 [false, true].forEach((isColumnCountStyle) => {
