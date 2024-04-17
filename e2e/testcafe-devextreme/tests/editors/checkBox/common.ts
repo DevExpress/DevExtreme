@@ -62,7 +62,7 @@ fixture.disablePageReloads`CheckBox`
 
 [false, true].forEach((rtlEnabled) => {
   [false, true].forEach((multipleLabels) => {
-    test.only(`Checkbox styles, rtlEnabled=${rtlEnabled} multipleLabels=${multipleLabels}`, async (t) => {
+    test(`Checkbox styles, rtlEnabled=${rtlEnabled} multipleLabels=${multipleLabels}`, async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
       await testScreenshot(t, takeScreenshot, `CheckBox states rtlEnabled=${rtlEnabled} multipleLabels=${multipleLabels}.png`, { element: '#container', shouldTestInCompact: true });
