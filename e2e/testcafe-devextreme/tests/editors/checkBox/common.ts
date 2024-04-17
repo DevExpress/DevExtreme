@@ -37,9 +37,7 @@ fixture.disablePageReloads`CheckBox render`
         await t
           .expect(compareResults.isValid())
           .ok(compareResults.errorMessages());
-      }).before(async (t) => {
-        t.ctx.ids = [];
-
+      }).before(async () => {
         const croppedWidth = iconSize === 20 ? 400 : 450;
         const fullWidth = iconSize === 20 ? 450 : 500;
 
@@ -59,7 +57,6 @@ fixture.disablePageReloads`CheckBox render`
           for (const valueMode of valueModes) {
             const id = `${`dx${new Guid()}`}`;
 
-            t.ctx.ids.push(id);
             await appendElementTo('#container', 'div', id, { });
 
             const options: any = {
