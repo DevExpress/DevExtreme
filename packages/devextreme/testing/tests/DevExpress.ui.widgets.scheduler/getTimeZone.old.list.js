@@ -241,11 +241,12 @@ export const oldGetTimeZone = [
         'title': '(GMT -07:00) US - Arizona',
         'id': 'US/Arizona'
     },
-    {
-        'offset': -7,
-        'title': '(GMT -07:00) US - Pacific-New',
-        'id': 'US/Pacific-New'
-    },
+    // Not supported in CI tests
+    // {
+    //     'offset': -7,
+    //     'title': '(GMT -07:00) US - Pacific-New',
+    //     'id': 'US/Pacific-New'
+    // },
     {
         'offset': -7,
         'title': '(GMT -07:00) US - Pacific',
