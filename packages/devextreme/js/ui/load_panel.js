@@ -17,6 +17,7 @@ const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
 const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
 const LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper';
 const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
+const LOADINDICATOR_CLASS = 'dx-loadpanel-indicator';
 
 const LoadPanel = Overlay.inherit({
 
@@ -114,20 +115,24 @@ const LoadPanel = Overlay.inherit({
     },
 
     _render: function() {
-        const { showIndicator } = this.option();
         this.callBase();
 
         this.$element().addClass(LOADPANEL_CLASS);
         this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
-        if(!showIndicator) {
-            this._setWrapperAria();
-        }
+        this._setWrapperAria();
     },
 
     _setWrapperAria() {
         const aria = this._getAriaAttributes();
+        const showIndicator = this.option('showIndicator');
+        const $indicator = this.$content().find(`.${LOADINDICATOR_CLASS}`);
+        if($indicator.length !== 0) {
+            this.$wrapper().removeAttr('aria-label').removeAttr('role');
+        }
 
-        this.$wrapper().attr(aria);
+        if(!showIndicator) {
+            this.$wrapper().attr(aria);
+        }
     },
 
     _getAriaAttributes() {
@@ -229,19 +234,15 @@ const LoadPanel = Overlay.inherit({
     },
 
     _optionChanged: function(args) {
-        const { showIndicator } = this.option();
         switch(args.name) {
             case 'delay':
                 break;
             case 'message':
             case 'showIndicator':
-                this.$wrapper().removeAttr('aria-label');
                 this._cleanPreviousContent();
                 this._renderLoadIndicator();
                 this._renderMessage();
-                if(!showIndicator) {
-                    this._setWrapperAria();
-                }
+                this._setWrapperAria();
                 break;
             case 'showPane':
                 this._togglePaneVisible();
