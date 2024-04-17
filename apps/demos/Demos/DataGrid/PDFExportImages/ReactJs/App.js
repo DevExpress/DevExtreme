@@ -37,7 +37,7 @@ const onExporting = ({ component }) => {
 };
 const renderGridCell = (cellData) => (
   <div>
-    <img src={cellData.value}></img>
+    <img src={cellData.value} alt="Employee Photo"></img>
   </div>
 );
 const App = () => (
