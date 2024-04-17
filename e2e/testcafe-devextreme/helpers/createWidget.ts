@@ -53,24 +53,6 @@ export const createWidget = async<TWidgetName extends WidgetName>(
   },
 )();
 
-export const disposeWidget = async <TWidgetName extends WidgetName>(
-  widgetName: TWidgetName,
-  selector = DEFAULT_SELECTOR,
-): Promise<void> => ClientFunction(() => {
-  if (shadowDom) {
-    (window as any).DevExpress.ui[widgetName].getInstance(($(`${selector}`) as any).get(0)).dispose();
-  } else {
-    ($(`${selector}`) as any)[widgetName]('dispose');
-  }
-  (window as any).widget = undefined;
-}, {
-  dependencies: {
-    widgetName,
-    selector,
-    shadowDom,
-  },
-})();
-
 export async function disposeWidgets(): Promise<void> {
   await ClientFunction(() => {
     const widgetSelector = '.dx-widget';
