@@ -864,11 +864,6 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
 
     $row.attr('tabIndex', tabIndex);
 
-    if (rowIndex < 0) {
-      this._focusController._resetFocusedRow();
-      return;
-    }
-
     if (rowIndex >= 0 && !preventScroll) {
       if (columnIndex < 0) {
         columnIndex = 0;
