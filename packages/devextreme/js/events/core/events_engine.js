@@ -273,16 +273,32 @@ function getHandlersController(element, eventName) {
                         currentTarget = currentTarget.parentNode;
                     }
                 } else {
-                    // debugger;
+                    // if(e.type === 'wheel') {
+                    //     const realTarget = e.target;
+
+                    //     // debugger;
+                    // }
+
+                    /**
+                     * Проблемы
+                     * 1. How do we determine the necessary target?
+                     * Answer: Event.composedPath();
+                     *
+                     * 2. How do we recognize that ShadowDOM is being used?
+                     * Answer: !!e.target.shadowRoot
+                     *
+                     * 3. Do we need to integrate this for individual events like wheel, or do we do it for all?
+                     * 4. At what level should we address these issues?
+                     */
+
                     const isTargetInShadowDOM = !!e.target.shadowRoot;
 
-                    if(isTargetInShadowDOM && e.type === 'wheel') {
-                        const scrollViewContentID = 'scrollview-content';
-
-                        const target = e.target.shadowRoot.getElementById(scrollViewContentID);
+                    // if(isTargetInShadowDOM && e.type === 'wheel') {
+                    if(isTargetInShadowDOM) {
+                        const composedPath = e.original;
+                        const target = composedPath[0];
 
                         e.target = target;
-                        e.toElement = target;
                     } else {
                         e.currentTarget = e.delegateTarget || e.target;
                     }
