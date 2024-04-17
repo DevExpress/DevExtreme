@@ -719,13 +719,20 @@ QUnit.module('Rendering Scrollable', {
         }
 
         const menu = createMenuInWindow({
-            items: [{
-                text: 'Item 1',
-                items: [{
-                    text: 'Item 11',
-                    items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
-                }],
-            }],
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        {
+                            text: 'Item 11',
+                            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+                        },
+                        {
+                            text: 'Item 22',
+                        },
+                    ],
+                },
+            ],
             showFirstSubmenuMode: 'onClick',
             showSubmenuMode: { name: 'onHover', delay: 0 },
         });
@@ -734,7 +741,6 @@ QUnit.module('Rendering Scrollable', {
         keyboardMock(itemsContainer)
             .press('down')
             .press('right');
-        this.clock.tick(0);
 
         const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
         const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
@@ -750,7 +756,27 @@ QUnit.module('Rendering Scrollable', {
             .press('left')
             .press('right');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scroll position reset');
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset (KBN)');
+
+        keyboardMock(itemsContainer)
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+
+        const $rootMenuItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+        const submenu = getSubMenuInstance($rootMenuItem);
+        const $firstMenuItem = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).first();
+        const $lastMenuItem = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $lastMenuItem.get(0) }));
+        $lastMenuItem.eq(0).trigger('dxpointermove');
+        this.clock.tick(0);
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $firstMenuItem.get(0) }));
+        $firstMenuItem.eq(0).trigger('dxpointermove');
+        this.clock.tick(0);
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset (hover)');
     });
 
     QUnit.test('Option focusedElement should be null after reopen root submenu', function(assert) {
