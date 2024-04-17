@@ -1,7 +1,6 @@
 import { getOuterWidth, getOuterHeight } from 'core/utils/size';
 import $ from 'jquery';
 import keyboardMock from '../../helpers/keyboardMock.js';
-import localization from 'localization';
 import messageLocalization from 'localization/message';
 import uiErrors from 'ui/widget/ui.errors';
 import fx from 'animation/fx';
