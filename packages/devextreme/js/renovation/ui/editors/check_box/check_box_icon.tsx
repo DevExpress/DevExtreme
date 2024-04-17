@@ -1,5 +1,5 @@
 import {
-  Component, ComponentBindings, JSXComponent, Ref, Effect, OneWay, RefObject,
+  Component, ComponentBindings, JSXComponent, Ref, OneWay, RefObject,
 } from '@devextreme-generator/declarations';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import { hasWindow } from '../../../../core/utils/window';
@@ -28,24 +28,6 @@ export class CheckBoxIconProps {
 export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
   @Ref() elementRef!: RefObject<HTMLDivElement>;
 
-  @Effect()
-  updateFontSize(): void {
-    const { size, isChecked } = this.props;
-
-    if (hasWindow() && size) {
-      const newIconSize = this.getIconSize(size);
-      const newFontSize = getFontSizeByIconSize(newIconSize, isChecked);
-
-      this.setIconFontSize(newFontSize);
-    }
-  }
-
-  setIconFontSize(fontSize: number): void {
-    const element = this.elementRef.current!;
-
-    element.style.fontSize = `${fontSize}px`;
-  }
-
   getIconSize(size: number | string): number {
     if (isNumber(size)) {
       return size;
@@ -60,18 +42,19 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
 
   getComputedIconSize(): number {
     const element = this.elementRef.current!;
-
     const iconComputedStyle = getElementComputedStyle(element) as CSSStyleDeclaration;
-    const computedIconSize = parseInt(iconComputedStyle?.width, 10);
-
-    return computedIconSize;
+    return parseInt(iconComputedStyle?.width, 10);
   }
 
-  get cssStyles(): { [key: string]: string | number } {
-    const { size } = this.props;
-    const width = normalizeStyleProp('width', size);
-    const height = normalizeStyleProp('height', size);
+  get cssStyles(): { [key: string]: string | number | undefined } {
+    const { size, isChecked } = this.props;
+    const iconSize = size && hasWindow() ? this.getIconSize(size) : null;
+    const fontSize = iconSize ? getFontSizeByIconSize(iconSize, isChecked) : null;
 
-    return { height, width };
+    return {
+      fontSize: fontSize ? `${fontSize}px` : undefined,
+      ...normalizeStyleProp('width', size) || {},
+      ...normalizeStyleProp('height', size) || {},
+    };
   }
 }
