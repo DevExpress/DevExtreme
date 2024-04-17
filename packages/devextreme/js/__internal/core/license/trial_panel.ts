@@ -2,6 +2,7 @@
 import { format } from '../../../core/utils/string';
 
 const LICENSE_PANEL_ID = 'dx-licence-panel';
+const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const DEFAULT_PRE_LINK_TEXT = 'For evaluation purposes only. Redistribution not authorized. Please ';
 const DEFAULT_LINK_TEXT = 'purchase a license';
 const DEFAULT_POST_LINK_TEXT = ' to continue use of DevExpress product libraries (v{0}).';
@@ -24,28 +25,30 @@ const containerStyles = {
   width: '100%',
   height: 'auto',
   lineHeight: 'auto',
-  display: 'block',
+  display: 'flex',
+  'justify-content': 'center',
   'z-index': '2147483647',
   position: 'relative',
   top: '0px',
   left: '0px',
   transform: 'translate(0px, 0px)',
-  padding: '5px',
-  'background-color': 'white',
-  border: '1px solid black',
+  padding: '8px',
+  'background-color': '#FF7200',
+  border: 'none',
   margin: 'auto',
   'box-sizing': 'border-box',
+  'white-space': 'pre',
 };
-const commonTextStyles = {
+const textStyles = {
   ...commonStyles,
   display: 'inline',
   position: 'static',
   padding: '0px',
   margin: '0px',
-};
-const spanTextStyles = {
-  ...commonTextStyles,
-  color: 'black',
+  color: 'white',
+  'font-family': '"Open Sans Condensed","HelveticaNeue-CondensedBold",Helvetica,"Arial Narrow",Calibri,Arial,"Lucida Grande",sans-serif',
+  'font-size': '14px',
+  'font-wight': '600',
 };
 class DxLicense extends HTMLElement {
   private _observer: MutationObserver | null = null;
@@ -60,8 +63,8 @@ class DxLicense extends HTMLElement {
 
   constructor() {
     super();
-    this._spanStyles = this._createImportantStyles(spanTextStyles);
-    this._linkStyles = this._createImportantStyles(commonTextStyles);
+    this._spanStyles = this._createImportantStyles(textStyles);
+    this._linkStyles = this._createImportantStyles(textStyles);
     this._containerStyles = this._createImportantStyles(containerStyles);
   }
 
@@ -171,6 +174,8 @@ class DxLicenseTrigger extends HTMLElement {
           license.setAttribute(attrName, attrValue);
         }
       });
+
+      license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
 
       license.id = LICENSE_PANEL_ID;
       document.body.prepend(license);
