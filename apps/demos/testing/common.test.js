@@ -50,13 +50,10 @@ const COMMON_SKIP_RULES = ['color-contrast'];
 const getTestSpecificSkipRules = (testName) => {
   switch (testName) {
     case 'Calendar-MultipleSelection':
-    case 'DataGrid-ExcelJSCellCustomization':
     case 'DataGrid-HorizontalVirtualScrolling':
-    case 'DataGrid-FilterPanel':
+      return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
-    case 'DataGrid-ExcelJSExportImages':
-    case 'DataGrid-FilteringAPI':
-    case 'DataGrid-PDFExportImages':
+      return ['label'];
     case 'TagBox-Overview':
       return ['image-alt', 'image-redundant-alt'];
     default:
