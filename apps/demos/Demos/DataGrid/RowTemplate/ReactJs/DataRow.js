@@ -13,7 +13,7 @@ const DataRow = (rowInfo) => (
       >
         <img
           src={rowInfo.data.Picture}
-          alt={`Picture of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`}
+          alt={`Image of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`}
           tabIndex={0}
         />
       </td>
