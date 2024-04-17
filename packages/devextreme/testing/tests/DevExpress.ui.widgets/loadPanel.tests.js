@@ -220,7 +220,8 @@ QUnit.module('init', {
     }
 }, () => {
     QUnit.test('rendered markup', function(assert) {
-        const $element = $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true }); const $content = $element.dxLoadPanel('instance').$content();
+        const $element = $('#loadPanel').dxLoadPanel({ message: 'Test Loading Message', visible: true });
+        const $content = $element.dxLoadPanel('instance').$content();
 
         assert.ok($element.hasClass(LOADPANEL_CLASS));
         assert.ok($content.hasClass(LOADPANEL_CONTENT_CLASS), 'Load Indicator created');
