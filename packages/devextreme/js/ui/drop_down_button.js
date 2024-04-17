@@ -250,30 +250,48 @@ const DropDownButton = Widget.inherit({
             };
     },
 
-    _actionButtonConfig() {
-        const { icon, text, type } = this.option();
+    _getActionButtonConfig() {
+        const { icon, text, type, splitButton } = this.option();
 
-        return {
+        const actionButtonConfig = {
             text,
             icon,
             type,
             template: this._getButtonTemplate(),
-            elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS }
+            elementAttr: { class: DROP_DOWN_BUTTON_ACTION_CLASS },
         };
+
+        if(splitButton) {
+            actionButtonConfig.elementAttr.role = 'menuitem';
+        }
+
+        return actionButtonConfig;
+    },
+
+    _getSpinButtonConfig() {
+        const { type } = this.option();
+
+        const config = {
+            type,
+            icon: 'spindown',
+            elementAttr: {
+                class: DROP_DOWN_BUTTON_TOGGLE_CLASS,
+                role: 'menuitem',
+            }
+        };
+
+        return config;
     },
 
     _getButtonGroupItems() {
-        const { splitButton, type } = this.option();
+        const { splitButton } = this.option();
 
-        const items = [];
-        items.push(this._actionButtonConfig());
+        const items = [this._getActionButtonConfig()];
+
         if(splitButton) {
-            items.push({
-                icon: 'spindown',
-                type,
-                elementAttr: { class: DROP_DOWN_BUTTON_TOGGLE_CLASS }
-            });
+            items.push(this._getSpinButtonConfig());
         }
+
         return items;
     },
 
@@ -295,28 +313,34 @@ const DropDownButton = Widget.inherit({
         }
     },
 
-    _buttonGroupOptions() {
+    _getButtonGroupOptions() {
         const {
+            accessKey,
             focusStateEnabled,
             hoverStateEnabled,
+            splitButton,
             stylingMode,
-            accessKey,
             tabIndex,
         } = this.option();
 
-        return extend({
+        const buttonGroupOptions = extend({
             items: this._getButtonGroupItems(),
-            onItemClick: this._buttonGroupItemClick.bind(this),
             width: '100%',
             height: '100%',
             selectionMode: 'none',
-            onKeyboardHandled: (e) => this._keyboardHandler(e),
             focusStateEnabled,
             hoverStateEnabled,
             stylingMode,
             accessKey,
             tabIndex,
+            elementAttr: {
+                role: splitButton ? 'menu' : 'group',
+            },
+            onItemClick: this._buttonGroupItemClick.bind(this),
+            onKeyboardHandled: (e) => this._keyboardHandler(e),
         }, this._options.cache('buttonGroupOptions'));
+
+        return buttonGroupOptions;
     },
 
     _renderPopupContent() {
@@ -509,7 +533,7 @@ const DropDownButton = Widget.inherit({
             this.$element().append($buttonGroup);
         }
 
-        this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._buttonGroupOptions());
+        this._buttonGroup = this._createComponent($buttonGroup, ButtonGroup, this._getButtonGroupOptions());
 
         this._buttonGroup.registerKeyHandler('downArrow', this._upDownKeyHandler.bind(this));
         this._buttonGroup.registerKeyHandler('tab', this._tabHandler.bind(this));
@@ -592,7 +616,7 @@ const DropDownButton = Widget.inherit({
     _actionButtonOptionChanged({ name, value }) {
         const newConfig = {};
         newConfig[name] = value;
-        this._updateButtonGroup('items[0]', extend({}, this._actionButtonConfig(), newConfig));
+        this._updateButtonGroup('items[0]', extend({}, this._getActionButtonConfig(), newConfig));
         this._popup && this._popup.repaint();
     },
 

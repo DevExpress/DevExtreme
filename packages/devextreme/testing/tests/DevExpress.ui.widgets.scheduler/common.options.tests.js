@@ -12,7 +12,7 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 const checkDate = function(instance, assert) {
 

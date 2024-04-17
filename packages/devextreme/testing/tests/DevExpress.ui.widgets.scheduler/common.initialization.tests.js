@@ -7,7 +7,7 @@ import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Initialization', {
     beforeEach: function() {

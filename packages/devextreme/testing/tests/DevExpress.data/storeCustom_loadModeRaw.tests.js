@@ -96,6 +96,28 @@ QUnit.module('load', function() {
         }, done, assert);
     });
 
+    QUnit.test('call errorHandler if load throw error', function(assert) {
+        const done = assert.async();
+        let errorHandlerCallsCount = 0;
+        let errorMessage = null;
+
+        new CustomStore({
+            loadMode: RAW,
+            async load() {
+                throw Error('expected error');
+            },
+            errorHandler() {
+                ++errorHandlerCallsCount;
+            }
+        }).load().fail((error) => {
+            errorMessage = error.message;
+        }).always(() => {
+            assert.equal(errorHandlerCallsCount, 1, 'errorHandler must be called 1 time');
+            assert.equal(errorMessage, 'expected error', 'error is equal to expected');
+            done();
+        });
+    });
+
 });
 
 QUnit.module('totalCount', function() {

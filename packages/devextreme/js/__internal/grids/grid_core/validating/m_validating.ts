@@ -109,7 +109,7 @@ export class ValidatingController extends modules.Controller {
     }
   }
 
-  initValidationState() {
+  public initValidationState() {
     this._validationState = [];
     this._validationStateCache = {};
   }
@@ -1081,7 +1081,7 @@ const getBoundaryNonFixedColumnsInfo = function (fixedColumns) {
 };
 
 export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>) => class ValidatingEditorFactoryExtender extends Base {
-  _revertTooltip: any;
+  private _revertTooltip: any;
 
   private _showRevertButton($container) {
     let $tooltipElement = this._revertTooltip?.$element();
@@ -1415,7 +1415,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
         this._editingController.waitForDeferredOperations().done(() => {
           // NOTE: after waiting for deferred operations another rerender may occur.
           // In this case this validating is outdated
-          const isDetached = $element.closest('tr').length === 0;
+          const isDetached = !this._rowsView.isElementInside($element);
           if (isDetached) {
             return;
           }

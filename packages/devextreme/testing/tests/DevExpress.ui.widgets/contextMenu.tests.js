@@ -26,6 +26,7 @@ QUnit.testStart(() => {
 });
 
 const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
+const DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS = 'dx-menu-items-container';
 const DX_MENU_ITEM_CLASS = 'dx-menu-item';
 const DX_ICON_CLASS = 'dx-icon';
 const DX_MENU_ITEM_CONTENT_CLASS = 'dx-menu-item-content';
@@ -211,7 +212,8 @@ QUnit.module('Rendering', moduleConfig, () => {
 
         instance.option('items', [{ text: 3 }, { text: 4 }]);
         instance.show();
-        assert.equal($('.dx-overlay').length, 1, 'only one overlay should exists');
+        this.clock.tick(0);
+        assert.equal(this.$element.find('.dx-overlay').length, 1, 'only one overlay should exists');
     });
 
     QUnit.test('submenus in the same level should have same horizontal offset', function(assert) {
@@ -269,6 +271,194 @@ QUnit.module('Rendering', moduleConfig, () => {
     });
 });
 
+QUnit.module('Rendering Scrollable', moduleConfig, () => {
+    const DX_SCROLLABLE_CLASS = 'dx-scrollable';
+    const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
+    const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+    const BORDER_WIDTH = 1;
+    const SUBMENU_PADDING = 10;
+
+    QUnit.test('Context menu should init Scrollable', function(assert) {
+        new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenu.length, 1, 'only 1 submenu exists');
+        assert.ok($submenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized');
+    });
+
+    QUnit.test('Scrollable should be initialized on a 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($submenus.length, 2, '2 submenu exists');
+
+        const $nestedSubmenu = $submenus.eq(1);
+        assert.ok($nestedSubmenu.hasClass(DX_SCROLLABLE_CLASS), 'Scrollable initialized on nested menu');
+    });
+
+    QUnit.test('Height of the submenu should not exceed content height', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $rootSubmenu = $(`.${DX_SUBMENU_CLASS}`);
+        const $itemsContainer = $rootSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`);
+
+        assert.roughEqual($rootSubmenu.height(), $itemsContainer.outerHeight(), .1);
+    });
+
+    QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })) }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+        const $nestedSubmenu = $submenus.eq(1);
+        const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
+        assert.strictEqual($rootItem.offset().top, $nestedItemsContainer.offset().top, 'Nested submenu aligned to a clicked item');
+        assert.strictEqual(
+            $nestedSubmenu.height(),
+            $(window).height() - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+            'Nested submenu uses all available space'
+        );
+    });
+
+    QUnit.test('Flipping 2nd level submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{
+                text: 'item 11',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+            position: {
+                my: 'bottom',
+                at: 'bottom',
+                of: window,
+            }
+        });
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        const $submenus = $(`.${DX_SUBMENU_CLASS}`);
+        const $nestedSubmenu = $submenus.eq(1);
+        const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height()) - SUBMENU_PADDING;
+
+        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .1, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.height(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
+    });
+
+    QUnit.test('Height of the context menu should be limited', function(assert) {
+        new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: idx })),
+            visible: true,
+        });
+
+        const $submenu = $(`.${DX_SUBMENU_CLASS}`);
+
+        assert.ok($submenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window');
+        assert.strictEqual($submenu.outerHeight(), $(window).height(), 'menu uses the full height of the window');
+        assert.strictEqual($submenu.offset().top, 0, 'menu does not cross the window border');
+    });
+
+    QUnit.test('Selected item should be always visible during keyboard navigation (root menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+            focusStateEnabled: true,
+            visible: true,
+        });
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.strictEqual($scrollableContent.position().top, 0, 'initial position');
+
+        keyboardMock(instance.itemsContainer())
+            .press('up')
+            .press('up');
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+
+        keyboardMock(instance.itemsContainer())
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scrolled back to the 1st item');
+    });
+
+    QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+            focusStateEnabled: true,
+            visible: true,
+        });
+
+        keyboardMock(instance.itemsContainer())
+            .press('down')
+            .press('right')
+            .press('up');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.roughEqual($scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
+
+        keyboardMock(instance.itemsContainer())
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
+    });
+});
+
 QUnit.module('Showing and hiding context menu', moduleConfig, () => {
     QUnit.test('visible option should toggle menu\'s visibility', function(assert) {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1, items: [{ text: 11 }] }], visible: true });
@@ -287,7 +477,8 @@ QUnit.module('Showing and hiding context menu', moduleConfig, () => {
         const instance = new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
 
         instance.option('items', [{ text: 1 }]);
-        assert.equal($('.dx-overlay').length, 1, 'overlays cleaned correctly');
+        this.clock.tick(0);
+        assert.equal(this.$element.find('.dx-overlay').length, 1, 'overlays cleaned correctly');
     });
 
     QUnit.test('show method should toggle menu\'s visibility', function(assert) {

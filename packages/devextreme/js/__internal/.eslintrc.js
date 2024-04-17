@@ -65,6 +65,7 @@ module.exports = {
                 'no-param-reassign': ['error', { 'props': false }],
                 'no-underscore-dangle': 'off',
                 'no-console': ['error', { 'allow': ['warn', 'error'] }],
+                'class-methods-use-this': 'off',
             }
         },
         // Rules for a new TS files.
@@ -128,6 +129,55 @@ module.exports = {
                 '@typescript-eslint/no-implied-eval': 'warn',
                 '@typescript-eslint/ban-ts-comment': 'warn',
                 '@typescript-eslint/prefer-for-of': 'warn',
+            }
+        },
+        // Rules for grid controls
+        {
+            files: [
+                '**/grid_core/**/**.ts',
+                '**/data_grid/**/**.ts',
+                '**/tree_list/**/**.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/explicit-member-accessibility': [
+                    'error',
+                    {
+                        'accessibility': 'explicit',
+                        'overrides': {
+                            'constructors': 'off',
+                        },
+                    }
+                ],
+                // '@typescript-eslint/member-ordering': [
+                //     'error',
+                //     {
+                //         'default': [
+                //             'private-field',
+                //             'protected-field',
+                //             'public-field',
+                //             'constructor',
+                //             'private-method',
+                //             'protected-method',
+                //             'public-method'
+                //         ]
+                //     },
+                // ],
+                'no-restricted-syntax': [
+                    'error',
+                    {
+                        'selector': 'MethodDefinition[kind = "get"]',
+                    },
+                    {
+                        'selector': 'MethodDefinition[kind = "set"]',
+                    }
+                ],
+                '@typescript-eslint/lines-between-class-members': 'off',
             }
         },
         // Rules for Jest tests.

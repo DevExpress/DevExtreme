@@ -1923,8 +1923,7 @@ QUnit.module('T986577', () => {
         resizeEventSpy.restore();
     });
 
-
-    QUnit.skipInShadowDomMode('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
+    QUnit.test('Toolbar is rendered inside form. alignItemLabels = true', function(assert) {
         const resizeEventSpy = sinon.spy(visibilityEventsModule, 'triggerResizeEvent');
         const $form = $('#form').dxForm(extend({ alignItemLabels: true }, getFormConfig()));
 

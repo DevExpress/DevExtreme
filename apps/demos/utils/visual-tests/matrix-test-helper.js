@@ -400,7 +400,7 @@ export function getPortByIndex(testIndex) {
 export function updateConfig(customSettings) {
   settings.verbose = true;
   settings.manualTestIndex = 0;
-  settings.demoExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|angularjs|jquery|react|vue)\/.*/i;
+  settings.demoExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<framework>angular|jquery|react|vue)\/.*/i;
   settings.demoFilesExpr = /Demos\/(?<product>\w+)\/(?<demo>\w+)\/(?<data>.*)/i;
   settings.commonEtalonsExpr = /testing\/etalons\/(?<product>\w+)-(?<demo>\w+)(?<suffix>.*).png/i;
   settings.manualEtalonsExpr = /testing\/widgets\/(?<product>\w+)\/.*/i;

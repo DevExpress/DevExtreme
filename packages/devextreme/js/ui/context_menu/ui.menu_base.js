@@ -400,36 +400,37 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _renderItems(nodes, submenuContainer) {
-        if(nodes.length) {
-            this.hasIcons = false;
-
-            const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
-            let firstVisibleIndex = -1;
-            let nextGroupFirstIndex = -1;
-
-            each(nodes, (index, node) => {
-                const isVisibleNode = node.visible !== false;
-
-                if(isVisibleNode && firstVisibleIndex < 0) {
-                    firstVisibleIndex = index;
-                }
-
-                const isBeginGroup = firstVisibleIndex < index && (node.beginGroup || index === nextGroupFirstIndex);
-
-                if(isBeginGroup) {
-                    nextGroupFirstIndex = isVisibleNode ? index : index + 1;
-                }
-
-                if(index === nextGroupFirstIndex && firstVisibleIndex < index) {
-                    this._renderSeparator($nodeContainer);
-                }
-
-                this._renderItem(index, node, $nodeContainer);
-            });
-
-            if(!this.hasIcons) $nodeContainer.addClass(DX_MENU_NO_ICONS_CLASS);
+        if(!nodes.length) {
+            return;
         }
 
+        this.hasIcons = false;
+
+        const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
+        let firstVisibleIndex = -1;
+        let nextGroupFirstIndex = -1;
+
+        each(nodes, (index, node) => {
+            const isVisibleNode = node.visible !== false;
+
+            if(isVisibleNode && firstVisibleIndex < 0) {
+                firstVisibleIndex = index;
+            }
+
+            const isBeginGroup = firstVisibleIndex < index && (node.beginGroup || index === nextGroupFirstIndex);
+
+            if(isBeginGroup) {
+                nextGroupFirstIndex = isVisibleNode ? index : index + 1;
+            }
+
+            if(index === nextGroupFirstIndex && firstVisibleIndex < index) {
+                this._renderSeparator($nodeContainer);
+            }
+
+            this._renderItem(index, node, $nodeContainer);
+        });
+
+        if(!this.hasIcons) $nodeContainer.addClass(DX_MENU_NO_ICONS_CLASS);
     }
 
     _renderContainer($wrapper) {
