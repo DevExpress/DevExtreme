@@ -869,25 +869,23 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
       return;
     }
 
-    if (preventScroll) {
-      return;
-    }
+    if (rowIndex >= 0 && !preventScroll) {
+      if (columnIndex < 0) {
+        columnIndex = 0;
+      }
 
-    if (columnIndex < 0) {
-      columnIndex = 0;
-    }
+      rowIndex += this._dataController.getRowIndexOffset();
+      columnIndex += columnsController.getColumnIndexOffset();
+      this._keyboardNavigationController.setFocusedCellPosition(rowIndex, columnIndex);
 
-    rowIndex += this._dataController.getRowIndexOffset();
-    columnIndex += columnsController.getColumnIndexOffset();
-    this._keyboardNavigationController.setFocusedCellPosition(rowIndex, columnIndex);
-
-    if (this._focusController.isAutoNavigateToFocusedRow()) {
-      const dataSource = this._dataController.dataSource();
-      const operationTypes = dataSource && dataSource.operationTypes();
-      // @ts-expect-error
-      if (operationTypes && !operationTypes.paging && !this._dataController.isPagingByRendering()) {
-        this.resizeCompleted.remove(this._scrollToFocusOnResize);
-        this.resizeCompleted.add(this._scrollToFocusOnResize);
+      if (this._focusController.isAutoNavigateToFocusedRow()) {
+        const dataSource = this._dataController.dataSource();
+        const operationTypes = dataSource && dataSource.operationTypes();
+        // @ts-expect-error
+        if (operationTypes && !operationTypes.paging && !this._dataController.isPagingByRendering()) {
+          this.resizeCompleted.remove(this._scrollToFocusOnResize);
+          this.resizeCompleted.add(this._scrollToFocusOnResize);
+        }
       }
     }
   }
