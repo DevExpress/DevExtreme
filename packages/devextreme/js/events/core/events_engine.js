@@ -74,6 +74,10 @@ const special = (function() {
             return specialData[eventName] && specialData[eventName][field];
         },
         callMethod: function(eventName, methodName, context, args) {
+            // if(eventName === 'dxscrollinit' && methodName === 'add') {
+            //     debugger;
+            // }
+
             return specialData[eventName] && specialData[eventName][methodName] && specialData[eventName][methodName].apply(context, args);
         }
     };
@@ -228,6 +232,7 @@ function getHandlersController(element, eventName) {
     return {
         addHandler: function(handler, selector, data) {
             const callHandler = function(e, extraParameters) {
+                // debugger;
                 const handlerArgs = [e];
                 const target = e.currentTarget;
                 const relatedTarget = e.relatedTarget;
@@ -273,7 +278,21 @@ function getHandlersController(element, eventName) {
                         currentTarget = currentTarget.parentNode;
                     }
                 } else {
-                    e.currentTarget = e.delegateTarget || e.target;
+                    const isTargetInShadowDOM = !!e.target.shadowRoot;
+
+                    if(isTargetInShadowDOM && e.type === 'wheel') {
+                        const scrollViewContentID = 'scrollview-content';
+
+                        const target = e.target.shadowRoot.getElementById(scrollViewContentID);
+
+                        e.target = target;
+                        e.toElement = target;
+                    } else {
+                        e.currentTarget = e.delegateTarget || e.target;
+                    }
+
+                    // debugger;
+
                     callHandler(e, extraParameters);
                 }
             };
@@ -300,6 +319,10 @@ function getHandlersController(element, eventName) {
             }
 
             if(shouldAddNativeListener) {
+                // if(eventName === 'dxscrollinit') {
+                //     debugger;
+                // }
+
                 eventData.nativeHandler = getNativeHandler(eventName);
 
                 if(passiveEventHandlersSupported() && forcePassiveFalseEventNames.indexOf(eventName) > -1) {
@@ -368,6 +391,10 @@ function getHandlersController(element, eventName) {
             let forceStop = false;
 
             const handleCallback = function(handleObject) {
+                // if(handleObject.type === 'dxscrollinit') {
+                //     debugger;
+                // }
+
                 if(forceStop) {
                     return;
                 }
@@ -377,6 +404,10 @@ function getHandlersController(element, eventName) {
                     forceStop = event.isImmediatePropagationStopped();
                 }
             };
+
+            // const handleObjects = eventData.handleObjects;
+
+            // debugger;
 
             eventData.handleObjects.forEach(handleCallback);
             if(namespaces.length && elementData[EMPTY_EVENT_NAME]) {
@@ -390,6 +421,12 @@ function getNativeHandler(subscribeName) {
     return function(event, extraParameters) {
         const handlersController = getHandlersController(this, subscribeName);
         event = eventsEngine.Event(event);
+        // debugger;
+
+
+        // if(event.type === 'wheel') {
+        //     debugger;
+        // }
         handlersController.callHandlers(event, extraParameters);
     };
 }
