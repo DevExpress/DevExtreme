@@ -93,7 +93,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
   false,
   true,
 ].forEach((adaptivityEnabled) => {
-  /* safeSizeTest */test.skip('The tooltip screenshot', async (t) => {
+  safeSizeTest('The tooltip screenshot', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const scheduler = new Scheduler('#container');
     const appointment = scheduler.getAppointment('Brochure Design Review');
@@ -112,7 +112,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }/* , [600, 400] */).before(async () => createScheduler({
+  }, [600, 400]).meta({ unstable: true }).before(async () => createScheduler({
     views: ['week'],
     currentView: 'week',
     dataSource,

@@ -61,9 +61,6 @@ const CLICKTIMEOUT = 51;
 const ANIMATION_TIMEOUT = 100;
 const MENU_ITEM_WIDTH = 100;
 const MOUSETIMEOUT = 50;
-const BORDER_WIDTH = 1;
-const FIXTURE_OFFSET = 10000;
-const menuRootOffset = $(window).height() - 50;
 
 const EXPECTED_TREEVIEW_SYNC_OPTIONS = [
     // tested in separate tests: 'dataSource', 'items'
@@ -401,6 +398,10 @@ QUnit.module('Rendering Scrollablew', {
     const DX_SCROLLABLE_CLASS = 'dx-scrollable';
     const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
     const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
+    const BORDER_WIDTH = 1;
+    const SUBMENU_PADDING = 10;
+    const FIXTURE_OFFSET = 10000;
+    const menuRootOffset = $(window).height() - 50;
 
     QUnit.test('Submenu should init Scrollable', function(assert) {
         const menu = createMenu({
@@ -472,7 +473,12 @@ QUnit.module('Rendering Scrollablew', {
 
         assert.ok($submenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
         assert.roughEqual($submenu.offset().top, $item1.offset().top + $item1.outerHeight(), .1, 'submenu aligned to a clicked item');
-        assert.roughEqual($submenu.outerHeight(), $(window).height() - $item1.offset().top - $item1.outerHeight(), .1, 'menu uses all available space');
+        assert.roughEqual(
+            $submenu.outerHeight(),
+            $(window).height() - $item1.offset().top - $item1.outerHeight() - SUBMENU_PADDING,
+            .1,
+            'menu uses all available space'
+        );
     });
 
     QUnit.test('Height of the submenu should not exceed content height', function(assert) {
@@ -494,7 +500,7 @@ QUnit.module('Rendering Scrollablew', {
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
         const $itemsContainer = $submenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`);
 
-        assert.roughEqual($submenu.outerHeight(), $itemsContainer.outerHeight(), .1);
+        assert.roughEqual($submenu.height(), $itemsContainer.outerHeight(), .1);
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
@@ -529,8 +535,8 @@ QUnit.module('Rendering Scrollablew', {
 
         assert.roughEqual($nestedItemsContainer.offset().top, $menuItem.offset().top, .1, 'Nested submenu positioned to a clicked item');
         assert.roughEqual(
-            $nestedSubmenu.outerHeight(),
-            $(window).height() - $nestedSubmenu.offset().top - BORDER_WIDTH,
+            $nestedSubmenu.height(),
+            $(window).height() - $nestedSubmenu.offset().top - BORDER_WIDTH - SUBMENU_PADDING,
             .1,
             'Nested submenu uses all available space'
         );
@@ -552,8 +558,8 @@ QUnit.module('Rendering Scrollablew', {
         const $submenu = $(`.${DX_SUBMENU_CLASS}`);
 
         assert.ok($submenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).height() > $(window).height(), 'total height of submenu exceeds the window height');
-        assert.roughEqual($submenu.offset().top, 0, .1, 'submenu flipped to top');
-        assert.roughEqual($submenu.outerHeight(), $(window).height() - 50, .1, 'menu uses all available space');
+        assert.roughEqual($submenu.offset().top, SUBMENU_PADDING, .1, 'submenu flipped to top');
+        assert.roughEqual($submenu.outerHeight(), menuRootOffset - SUBMENU_PADDING, .1, 'menu uses all available space');
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
@@ -585,10 +591,10 @@ QUnit.module('Rendering Scrollablew', {
         this.clock.tick(0);
 
         const $nestedSubmenu = $(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1);
-        const availableHeight = Math.min($menuItem.offset().top + $menuItem.outerHeight(), $(window).height());
+        const availableHeight = Math.min($menuItem.offset().top + $menuItem.outerHeight(), $(window).height()) - SUBMENU_PADDING;
 
-        assert.roughEqual($nestedSubmenu.offset().top, BORDER_WIDTH, .5, 'Nested submenu flipped to top');
-        assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
+        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .5, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.height(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
     });
 
     QUnit.test('selected item should be always visible during keyboard navigation (root submenu)', function(assert) {

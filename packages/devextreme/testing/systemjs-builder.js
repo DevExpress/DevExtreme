@@ -72,7 +72,6 @@ const transpileCommonJSFile = (source, pathToFile) => {
         pathToFile,
         buildAmdModule(
             `${pre}${source}${post}`.replace(/(\n|\r)/g, '$1    ')
-                .replace('require(\'./angular\');', 'require(\'./angular.js\');')
         )
     );
 };
@@ -241,15 +240,6 @@ const transpileJsVendors = async() => {
                 )
             );
         }),
-    );
-
-    await Promise.all(
-        getFileList(path.dirname(require.resolve('angular'))).map((filePath) => {
-            return transpileFile(
-                filePath,
-                filePath.replace('node_modules', 'packages/devextreme/artifacts/js-systemjs'),
-            );
-        })
     );
 
     await transpileIntl();

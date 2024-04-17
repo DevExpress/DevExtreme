@@ -6,7 +6,7 @@ import { clearTestPage } from '../../../helpers/clearPage';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
-fixture.skip.disablePageReloads`Splitter_integration`
+fixture.disablePageReloads`Splitter_integration`
   .page(url(__dirname, '../../container.html'))
   .afterEach(async () => clearTestPage());
 
