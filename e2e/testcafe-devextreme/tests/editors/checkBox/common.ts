@@ -86,8 +86,8 @@ fixture.disablePageReloads`CheckBox`
     ];
 
     for (const rtlEnabled of [false, true]) {
-      for (const iconSize of [undefined, 30]) {
-        for (const width of [undefined, 60]) {
+      for (const iconSize of [undefined, 25]) {
+        for (const width of [undefined, 40]) {
           for (const state of stateClasses) {
             for (const value of valueModes) {
               const id = `dx${new Guid()}`;
