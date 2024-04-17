@@ -3,7 +3,7 @@ import React, { useCallback, useMemo, useState } from 'react';
 
 import Scheduler, { SchedulerTypes } from 'devextreme-react/scheduler';
 import notify from 'devextreme/ui/notify';
-import Form from 'devextreme-react/form';
+import { FormRef } from 'devextreme-react/form';
 import { data, holidays } from './data.ts';
 import Utils from './utils.ts';
 import DataCell from './DataCell.tsx';
@@ -18,7 +18,7 @@ const notifyDisableDate = () => {
   notify('Cannot create or move an appointment/event to disabled time/date regions.', 'warning', 1000);
 };
 
-const applyDisableDatesToDateEditors = (form: Form['instance']) => {
+const applyDisableDatesToDateEditors = (form: ReturnType<FormRef['instance']>) => {
   const startDateEditor = form.getEditor('startDate');
   startDateEditor?.option('disabledDates', holidays);
 

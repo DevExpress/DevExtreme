@@ -192,6 +192,7 @@
         "dxDataGrid-filterPanelCreateFilter": "Vytvořit Filtr",
         "dxDataGrid-filterPanelClearFilter": "Smazat",
         "dxDataGrid-filterPanelFilterEnabledHint": "Povolit Filtr",
+        "dxDataGrid-masterDetail": "Cell with details",
 
         "dxTreeList-ariaTreeList": "Tree list with {0} rows and {1} columns",
         "dxTreeList-ariaSearchInGrid": "Search in the tree list",
@@ -306,6 +307,8 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
+        "dxCalendar-selectedDate": "The selected date is {0}",
+        "dxCalendar-selectedDateRange": "The selected date range is from {0} to {1}",
 
         "dxColorView-ariaRed": "Červená",
         "dxColorView-ariaGreen": "Zelená",
@@ -726,6 +729,8 @@
         "dxMultiView-elementAriaRoleDescription": "MultiView",
         "dxMultiView-elementAriaLabel": "Use the arrow keys or swipe to navigate between views",
         "dxMultiView-itemAriaRoleDescription": "View",
-        "dxMultiView-itemAriaLabel": "{0} of {1}"
+        "dxMultiView-itemAriaLabel": "{0} of {1}",
+
+        "dxSplitter-resizeHandleAriaLabel": "Split bar"
     }
 }

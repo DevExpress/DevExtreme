@@ -1,4 +1,4 @@
-export const PRECISION = 5;
+export const PRECISION = 10;
 
 export function compareNumbersWithPrecision(
   actual: number,

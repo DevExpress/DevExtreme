@@ -4,7 +4,6 @@
     var isServerSideTest = Model.ScriptVirtualPath.Contains("DevExpress.serverSide");
     var isSelfSufficientTest  = Model.ScriptVirtualPath.Contains("_bundled")
         || Model.ScriptVirtualPath.Contains("Bundles")
-        || Model.ScriptVirtualPath.Contains("DevExpress.angular")
         || Model.ScriptVirtualPath.Contains("DevExpress.jquery");
 
     var renovationPart = Model.NoRenovation ? "" : "-renovation";
@@ -185,7 +184,6 @@
             const cspMap = '@Model.NoCsp' !== 'True'
                 ? {
                     'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
-                    'angular': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/angular/index.js")',
                     'intl': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/intl/index.js")',
                     'knockout': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/knockout.js")',
 
@@ -223,7 +221,6 @@
                     'cldr': '@Url.Content("~/packages/devextreme/artifacts/js/cldr")',
                     'jquery': '@GetJQueryUrl()',
                     'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
-                    'angular': '@Url.Content("~/packages/devextreme/artifacts/js/angular.js")',
                     'jszip': '@Url.Content("~/packages/devextreme/artifacts/js/jszip.js")',
                     'underscore': '@Url.Content("~/node_modules/underscore/underscore-min.js")',
                     '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
@@ -241,7 +238,7 @@
                     'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.umd.js")',
                     'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
                     'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
-                    'devextreme-showdown': '@Url.Content("~/node_modules/devextreme-showdown/dist/showdown.js")',
+                    'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
                     'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
 
                     // Inferno
@@ -328,12 +325,6 @@
                         deps: ['jquery'],
                         exports: 'ko'
                     },
-
-                    '@Url.Content("~/packages/devextreme/artifacts/js/angular.js")': {
-                        deps: ['jquery'],
-                        format: 'global',
-                        expots: 'angular'
-                    }
                 }
             });
         })();

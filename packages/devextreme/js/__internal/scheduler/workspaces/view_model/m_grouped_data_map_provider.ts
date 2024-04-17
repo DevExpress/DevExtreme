@@ -1,7 +1,7 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
+import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
-import { isDateAndTimeView } from '../../__migration/utils/index';
 import timezoneUtils from '../../m_utils_time_zone';
 
 export class GroupedDataMapProvider {

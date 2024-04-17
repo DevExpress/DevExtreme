@@ -1,6 +1,5 @@
 import type { Orientation } from '@js/common';
 import type { dxElementWrapper } from '@js/core/renderer';
-import $ from '@js/core/renderer';
 import {
   getHeight,
   getWidth,
@@ -14,24 +13,24 @@ import type { Item } from '@js/ui/splitter';
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
 import type { FlexProperty, PaneRestrictions, ResizeOffset } from './types';
 
-const FLEX_PROPERTY_NAME = 'flexGrow';
+// const FLEX_PROPERTY_NAME = 'flexGrow';
 
 const ORIENTATION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
 
-export function getCurrentLayout($items: dxElementWrapper): number[] {
-  const itemsDistribution: number[] = [];
-  $items.each((index, item) => {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    itemsDistribution.push(parseFloat(($(item) as any).css(FLEX_PROPERTY_NAME)));
+// export function getCurrentLayout($items: dxElementWrapper): number[] {
+//   const itemsDistribution: number[] = [];
+//   $items.each((index, item) => {
+//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
+//     itemsDistribution.push(parseFloat(($(item) as any).css(FLEX_PROPERTY_NAME)));
 
-    return true;
-  });
+//     return true;
+//   });
 
-  return itemsDistribution;
-}
+//   return itemsDistribution;
+// }
 
 export function findLastIndexOfVisibleItem(items: Item[]): number {
   for (let i = items.length - 1; i >= 0; i -= 1) {
@@ -56,10 +55,17 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
     minSize = 0,
     maxSize = 100,
     resizable,
+    visible,
+    collapsed,
+    collapsedSize,
   } = paneRestrictions;
 
-  if (paneRestrictions.collapsed === true) {
+  if (visible === false) {
     return 0;
+  }
+
+  if (collapsed === true) {
+    return collapsedSize ?? 0;
   }
 
   if (resizable === false && isDefined(paneRestrictions.size)) {
@@ -102,7 +108,7 @@ function findMaxAvailableDelta(
   );
 }
 
-export function getNewLayout(
+export function getNextLayout(
   currentLayout: number[],
   delta: number,
   prevPaneIndex: number,
@@ -212,17 +218,17 @@ function normalizeOffset(
   return (rtlEnabled ? -1 : 1) * (offset.x ?? 0);
 }
 
-export function getDimensionByOrientation(orientation: string): string {
-  return orientation === ORIENTATION.horizontal ? 'width' : 'height';
-}
+// export function getDimensionByOrientation(orientation: string): string {
+//   return orientation === ORIENTATION.horizontal ? 'width' : 'height';
+// }
 
 export function calculateDelta(
   offset: ResizeOffset,
   orientation: Orientation,
   rtlEnabled: boolean,
-  totalWidth: number,
+  ratio: number,
 ): number {
-  const delta = (normalizeOffset(offset, orientation, rtlEnabled) / totalWidth) * 100;
+  const delta = normalizeOffset(offset, orientation, rtlEnabled) * ratio;
   return delta;
 }
 
@@ -233,16 +239,6 @@ export function setFlexProp(
 ): void {
   const normalizedProp = normalizeStyleProp(prop, value);
   element.style[styleProp(prop)] = normalizedProp;
-}
-
-export function updateItemsSize(
-  items: unknown,
-  sizeDistribution: number[],
-): void {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  (items as any).each((index, item) => {
-    setFlexProp(item, FLEX_PROPERTY_NAME, sizeDistribution[index]);
-  });
 }
 
 function isPercentWidth(size: string | number): boolean {
@@ -296,14 +292,25 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
   let numPanelsWithDefinedSize = 0;
   let remainingSize = 100;
 
-  layoutRestrictions.forEach((paneRestrictions, index) => {
-    const { size, visible, collapsed } = paneRestrictions;
+  layoutRestrictions.forEach((panelConstraints, index) => {
+    const {
+      size, visible, collapsed, collapsedSize = 0,
+    } = panelConstraints;
 
-    if (visible === false || collapsed === true) {
+    if (visible === false) {
       numPanelsWithDefinedSize += 1;
 
       layout[index] = 0;
       remainingSize -= 0;
+
+      return;
+    }
+
+    if (collapsed === true) {
+      numPanelsWithDefinedSize += 1;
+
+      layout[index] = collapsedSize;
+      remainingSize -= collapsedSize;
 
       return;
     }

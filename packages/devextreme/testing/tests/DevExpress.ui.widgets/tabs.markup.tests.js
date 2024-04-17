@@ -145,16 +145,14 @@ QUnit.module('Aria accessibility', {
             QUnit.test(`3 items, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function() {
                 helper.createWidget({ [`${sourceName}`]: this.items, repaintChangesOnly });
 
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
             });
 
             QUnit.test(`[item1], add new item2, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function(assert) {
                 helper.createWidget({ [`${sourceName}`]: [{ text: 'Item_1' }], repaintChangesOnly });
 
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
 
                 if(!windowUtils.hasWindow()) {
@@ -165,30 +163,26 @@ QUnit.module('Aria accessibility', {
                 helper.widget.option(sourceName, [{ text: 'Item_1' }, { text: 'Item_2' }]);
 
                 assert.strictEqual(helper.getItems().length, 2, 'items count');
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
             });
 
             QUnit.test(`3 items, reorder item3 <--> item2, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function(assert) {
                 helper.createWidget({ [`${sourceName}`]: this.items, repaintChangesOnly });
 
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
 
                 helper.widget.option(sourceName, [{ text: 'Item_1' }, { text: 'Item_3' }, { text: 'Item_2' }]);
                 assert.strictEqual(helper.getItems().length, 3, 'items count');
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([], { attributes: ['aria-selected'], role: 'tab' });
             });
 
             QUnit.test(`3 items, selectedIndex: 1, repaintChangesOnly: ${repaintChangesOnly}, use: ${sourceName}`, function() {
                 helper.createWidget({ [`${sourceName}`]: this.items, selectedIndex: 1, repaintChangesOnly });
 
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
             });
 
@@ -196,13 +190,11 @@ QUnit.module('Aria accessibility', {
                 helper.createWidget({ [`${sourceName}`]: this.items, selectedIndex: 1, repaintChangesOnly });
 
                 helper.widget.option('focusedElement', helper.getItems().eq(1));
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist', 'aria-activedescendant': helper.widget.getFocusedItemId(), }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', 'aria-activedescendant': helper.widget.getFocusedItemId(), tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([1], { focusedItemIndex: 1, attributes: ['aria-selected'], role: 'tab' });
 
                 helper.widget.option('focusedElement', null);
-                helper.checkAttributes(helper.$widget, { tabindex: '0' }, 'widget');
-                helper.checkAttributes(helper.$widget.find(`.${TABS_WRAPPER_CLASS}`), { role: 'tablist' }, 'tabsWrapper');
+                helper.checkAttributes(helper.$widget, { role: 'tablist', tabindex: '0' }, 'widget');
                 helper.checkItemsAttributes([1], { attributes: ['aria-selected'], role: 'tab' });
             });
         });

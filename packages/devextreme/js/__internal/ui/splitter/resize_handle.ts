@@ -7,6 +7,7 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as DOUBLE_CLICK_EVENT } from '@js/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
+import messageLocalization from '@js/localization/message';
 import Widget from '@js/ui/widget/ui.widget';
 
 import {
@@ -15,7 +16,7 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 import type {
-  CollapseEvents, ResizeEvents, ResizeHandleOptions, ResizeOffset,
+  CollapseEvents, InteractionEvent, ResizeEvents, ResizeHandleOptions, ResizeOffset,
 } from './utils/types';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
@@ -36,6 +37,7 @@ const RESIZE_DIRECTION: Record<string, DragDirection> = {
 };
 
 const KEYBOARD_DELTA = 5;
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -120,7 +122,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       showCollapseNext: true,
       onCollapsePrev: null,
       onCollapseNext: null,
-      separatorSize: 8,
+      separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
     });
   }
 
@@ -148,7 +150,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     this.$element().addClass(RESIZE_HANDLE_CLASS);
     this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
-    this._setResizeHandleSize();
+    this._updateDimensions();
 
     this._$collapsePrevButton = $('<div>').addClass(this._getIconClass('prev')).appendTo(this.$element());
     this._$resizeHandle = $('<div>').addClass(this._getIconClass('icon')).appendTo(this.$element());
@@ -174,24 +176,22 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       .addClass(this._getCollapseIconClass(true, isHorizontal));
   }
 
-  _setResizeHandleSize(): void {
-    const {
-      separatorSize, resizable, showCollapseNext, showCollapsePrev,
-    } = this.option();
+  _updateDimensions(): void {
     const isHorizontal = this._isHorizontalDirection();
 
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    if (resizable === false && showCollapseNext === false && showCollapsePrev === false) {
-      this.option('disabled', true);
-      this.option(dimension, INACTIVE_RESIZE_HANDLE_SIZE);
-      this.option(inverseDimension, null);
-    } else {
-      this.option(dimension, separatorSize);
-      this.option(inverseDimension, null);
-      this.option('disabled', false);
-    }
+    this.option(inverseDimension, null);
+    this.option(dimension, this.getSize());
+  }
+
+  _isInactive(): boolean {
+    const { resizable, showCollapseNext, showCollapsePrev } = this.option();
+
+    return resizable === false
+      && showCollapseNext === false
+      && showCollapsePrev === false;
   }
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
@@ -241,8 +241,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
       roledescription: 'separator',
-      orientation: this._isHorizontalDirection() ? 'vertical' : 'horizontal',
-      label: 'Split bar',
+      label: messageLocalization.format('dxSplitter-resizeHandleAriaLabel'),
     });
   }
 
@@ -257,31 +256,31 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     this._attachEventHandlers();
   }
 
-  _resizeStartHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _resizeStartHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResizeStart)({
       event: e,
     });
   }
 
-  _resizeHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _resizeHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResize)({
       event: e,
     });
   }
 
-  _resizeEndHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _resizeEndHandler(e: InteractionEvent): void {
     this._getAction(RESIZE_EVENT.onResizeEnd)({
       event: e,
     });
   }
 
-  _collapsePrevHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _collapsePrevHandler(e: InteractionEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapsePrev)({
       event: e,
     });
   }
 
-  _collapseNextHandler(e: KeyboardEvent | PointerEvent | MouseEvent | TouchEvent): void {
+  _collapseNextHandler(e: InteractionEvent): void {
     this._getAction(COLLAPSE_EVENT.onCollapseNext)({
       event: e,
     });
@@ -442,7 +441,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         this._toggleDirectionClass();
         this._detachResizeEventHandlers();
         this._attachResizeEventHandlers();
-        this._setResizeHandleSize();
+        this._updateDimensions();
         this._updateIconsClasses();
         break;
       case 'resizable':
@@ -450,16 +449,16 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachResizeEventHandlers();
         this._attachResizeEventHandlers();
-        this._setResizeHandleSize();
+        this._updateDimensions();
         break;
       case 'separatorSize':
-        this._setResizeHandleSize();
+        this._updateDimensions();
         break;
       case 'showCollapsePrev':
       case 'showCollapseNext':
         this._setCollapseButtonsVisibility();
         this._setResizeIconVisibility();
-        this._setResizeHandleSize();
+        this._updateDimensions();
         this._detachPointerEventHandlers();
         this._attachPointerEventHandlers();
         break;
@@ -473,6 +472,22 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       default:
         super._optionChanged(args);
     }
+  }
+
+  getSize(): number {
+    const { separatorSize } = this.option();
+
+    if (this._isInactive()) {
+      return INACTIVE_RESIZE_HANDLE_SIZE;
+    }
+
+    return Number.isFinite(separatorSize) && separatorSize >= 0
+      ? separatorSize as number
+      : DEFAULT_RESIZE_HANDLE_SIZE;
+  }
+
+  isInactive(): boolean {
+    return this._isInactive();
   }
 }
 

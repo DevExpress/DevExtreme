@@ -22,8 +22,6 @@
         "@angular/platform-browser": "12.2.17",
         "@angular/platform-browser-dynamic": "12.2.17",
         "@aspnet/signalr": "1.0.27",
-        "angular": "1.8.3",
-        "angular-sanitize": "1.8.3",
         "cldr-core": "40.0.0",
         "cldr-data": "36.0.1",
         "cldr-dates-full": "40.0.0",
@@ -72,11 +70,11 @@
         "@types/fs-extra": "11.0.2",
         "@types/react": "17.0.2",
         "@types/react-dom": "17.0.2",
-        "@types/yargs": "17.0.24",
+        "@types/yargs": "17.0.32",
         "@types/eslint": "8.56.2",
         "@typescript-eslint/parser": "5.62.0",
         "@vue/eslint-config-typescript": "12.0.0",
-        "axe-core": "4.7.2",
+        "axe-core": "4.9.0",
         "babel-jest": "27.5.1",
         "consola": "3.2.3",
         "cookie-parser": "1.4.6",
@@ -100,7 +98,7 @@
         "stylelint": "13.13.1",
         "stylelint-config-standard": "22.0.0",
         "systemjs-builder": "0.16.15",
-        "ts-node": "10.9.1"
+        "ts-node": "10.9.2"
     },
     "scripts": {
         "test": "jest --coverage --runInBand",

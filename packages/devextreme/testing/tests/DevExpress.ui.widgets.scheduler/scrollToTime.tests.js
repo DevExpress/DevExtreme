@@ -3,7 +3,7 @@ import fx from 'animation/fx';
 import errors from 'ui/widget/ui.errors';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
-initTestMarkup();
+QUnit.testStart(() => initTestMarkup());
 
 QUnit.module('Scrolling to time', () => {
     ['standard', 'virtual'].forEach((scrollingMode) => {

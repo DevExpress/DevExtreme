@@ -7,7 +7,7 @@ import {
 import {
   ResourceCellTemplateProps,
 } from '../../types';
-import { GroupPanelData } from '../../../../../../__internal/scheduler/__migration/types';
+import { GroupPanelData } from '../../../../../../__internal/scheduler/r1/types';
 
 @ComponentBindings()
 export class GroupPanelBaseProps {

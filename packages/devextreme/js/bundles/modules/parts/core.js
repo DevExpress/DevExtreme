@@ -7,7 +7,6 @@ const DevExpress = require('../../../bundles/modules/core');
 /* Integrations (dx.module-core.js) */
 
 require('../../../integration/jquery');
-require('../../../integration/angular');
 require('../../../integration/knockout');
 
 require('../../../localization/globalize/core');

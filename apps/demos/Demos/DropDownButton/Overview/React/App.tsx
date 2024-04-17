@@ -15,12 +15,12 @@ const buttonDropDownOptions = { width: 230 };
 
 const data = service.getData();
 
-const itemTemplateRender = (item) => (
+const itemTemplateRender: React.FC<{ size: number; text: string }> = (item) => (
   <div style={{ fontSize: `${item.size}px` }}>
     {item.text}
   </div>
 );
-const App = () => {
+const App: React.FC = () => {
   const [alignment, setAlignment] = useState<TextAlign>('left');
   const [color, setColor] = useState(null);
   const [fontSize, setFontSize] = useState(14);
@@ -57,7 +57,7 @@ const App = () => {
         width: 125,
         stylingMode: 'text',
         useSelectMode: true,
-        onSelectionChanged: (e) => {
+        onSelectionChanged: (e): void => {
           setAlignment(e.item.name.toLowerCase());
         },
         items: data.alignments,
@@ -85,7 +85,7 @@ const App = () => {
         useSelectMode: true,
         items: data.fontSizes,
         selectedItemKey: 14,
-        onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent) => {
+        onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent): void => {
           setFontSize(e.item.size);
         },
         itemTemplate: 'fontItem',
@@ -102,7 +102,7 @@ const App = () => {
         useSelectMode: true,
         items: data.lineHeights,
         selectedItemKey: 1.35,
-        onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent) => {
+        onSelectionChanged: (e: DropDownButtonTypes.SelectionChangedEvent): void => {
           setLineHeight(e.item.lineHeight);
         },
       },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { shallow, ShallowWrapper } from 'enzyme';
 import { viewFunction as CellView, VirtualCell } from '../virtual_cell';
-import { renderUtils } from '../../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../../__internal/scheduler/r1/utils/index';
 import { HeaderCell } from '../header_cell';
 import { OrdinaryCell } from '../ordinary_cell';
 
@@ -10,7 +10,7 @@ jest.mock('../../utils', () => ({
   getGroupCellClasses: jest.fn(),
 }));
 
-jest.mock('../../../../../../__internal/scheduler/__migration/utils/index', () => ({
+jest.mock('../../../../../../__internal/scheduler/r1/utils/index', () => ({
   renderUtils: {
     addWidthToStyle: jest.fn(() => 'style'),
   },

@@ -13,10 +13,13 @@ import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 const {
     module,
-    test
+    test,
+    testStart,
 } = QUnit;
 
-initTestMarkup();
+testStart(() => {
+    initTestMarkup();
+});
 
 function getDeltaTz(schedulerTz) {
     const defaultTz = -10800000;

@@ -121,7 +121,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
   public isLoading() {
     // @ts-expect-error
-    return super.isLoading() || this._dataController.isStateLoading();
+    return super.isLoading() || this.getDataController().isStateLoading();
   }
 
   protected state(state?) {
@@ -169,12 +169,12 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
 
     this.component.beginUpdate();
 
-    if (this._columnsController) {
-      this._columnsController.setUserState(state.columns);
+    if (this.getColumnsController()) {
+      this.getColumnsController().setUserState(state.columns);
     }
 
-    if (this._exportController) {
-      this._exportController.selectionOnly(state.exportSelectionOnly);
+    if (this.getExportController()) {
+      this.getExportController().selectionOnly(state.exportSelectionOnly);
     }
 
     if (!this.option('selection.deferred')) {
@@ -204,7 +204,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
     this.option('paging.pageIndex', (!isVirtualScrollingMode || hasHeight) && state.pageIndex || 0);
     this.option('paging.pageSize', (!isVirtualScrollingMode || showPageSizeSelector) && isDefined(state.pageSize) ? state.pageSize : this._initialPageSize);
 
-    this._dataController && this._dataController.reset();
+    this.getDataController() && this.getDataController().reset();
   }
 };
 

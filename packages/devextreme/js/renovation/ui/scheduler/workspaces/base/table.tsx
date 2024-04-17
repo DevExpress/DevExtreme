@@ -9,7 +9,7 @@ import {
   RefObject,
   Slot,
 } from '@devextreme-generator/declarations';
-import { renderUtils } from '../../../../../__internal/scheduler/__migration/utils/index';
+import { renderUtils } from '../../../../../__internal/scheduler/r1/utils/index';
 import { VirtualRow } from './virtual_row';
 
 export const viewFunction = ({
