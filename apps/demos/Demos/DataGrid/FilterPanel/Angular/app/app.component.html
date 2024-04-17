@@ -4,7 +4,6 @@
   keyExpr="ID"
   [columns]="columns"
   [filterValue]="filterValue"
-  (onInitialized)="onInitialized($event)"
   [showBorders]="true"
 >
   <dxo-filter-panel [visible]="true"></dxo-filter-panel>
@@ -26,7 +25,16 @@
     <dxo-header-filter [groupInterval]="10000"></dxo-header-filter>
   </dxi-column>
   <dxi-column dataField="OrderDate" dataType="date"></dxi-column>
-  <dxi-column dataField="SaleAmount" format="currency" dataType="number">
+  <dxi-column 
+    dataField="SaleAmount" 
+    format="currency" 
+    dataType="number" 
+    [editorOptions]="{
+      format: 'currency',
+      showClearButton: true,
+      inputAttr: {'aria-label': 'Filter Cell'}
+    }"
+  >
     <dxo-header-filter
       [dataSource]="saleAmountHeaderFilter"
     ></dxo-header-filter>
