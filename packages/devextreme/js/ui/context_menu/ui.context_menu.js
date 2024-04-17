@@ -565,7 +565,6 @@ class ContextMenu extends MenuBase {
             const scrollableInstance = $scrollableElement.dxScrollable('instance');
 
             scrollableInstance.scrollTo(0);
-            this.option('focusedElement', null);
         }
     }
 
