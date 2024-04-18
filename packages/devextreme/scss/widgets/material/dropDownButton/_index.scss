@@ -18,6 +18,10 @@
   $material-dropdownbutton-action-horizontal-padding,
 );
 
+.dx-dropdownbutton {
+  height: $material-dropdownbutton-height;
+}
+
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();
 }

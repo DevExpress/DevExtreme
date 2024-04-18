@@ -23,6 +23,8 @@
 }
 
 .dx-dropdownbutton {
+  height: $fluent-dropdownbutton-height;
+
   &:not(.dx-dropdownbutton-has-arrow) {
     .dx-button-has-icon:not(.dx-button-has-text) {
       @include dx-button-onlyicon-sizing();

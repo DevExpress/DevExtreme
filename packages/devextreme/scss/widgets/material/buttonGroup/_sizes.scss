@@ -2,7 +2,7 @@
 
 // adduse
 
-$material-button-group-button-height: 100% !default;
+$material-button-group-button-height: auto !default;
 $material-button-group-button-min-height: null !default;
 
 @if $size == "default" {
