@@ -45,7 +45,7 @@ const textStyles = {
   padding: '0px',
   margin: '0px',
   color: 'white',
-  'font-family': '"Open Sans Condensed","HelveticaNeue-CondensedBold",Helvetica,"Arial Narrow",Calibri,Arial,"Lucida Grande",sans-serif',
+  'font-family': '"Segoe UI","HelveticaNeue-CondensedBold",Helvetica,"Arial Narrow",Calibri,Arial,"Lucida Grande",sans-serif',
   'font-size': '14px',
   'font-wight': '600',
 };
@@ -154,7 +154,7 @@ class DxLicense extends HTMLElement {
   public disconnectedCallback(): void {
     setTimeout(() => {
       const licensePanel = document.getElementsByTagName(componentNames.panel);
-      if (!licensePanel) {
+      if (!licensePanel.length) {
         document.body.prepend(this);
       }
     }, 100);
@@ -163,7 +163,7 @@ class DxLicense extends HTMLElement {
 class DxLicenseTrigger extends HTMLElement {
   public connectedCallback(): void {
     const licensePanel = document.getElementsByTagName(componentNames.panel);
-    if (!licensePanel) {
+    if (!licensePanel.length) {
       const license = document.createElement(componentNames.panel);
 
       Object.values(attributeNames).forEach((attrName) => {
