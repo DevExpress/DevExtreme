@@ -1,6 +1,6 @@
-System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundles/dx.all', 'devextreme/ui/data_grid', './devextreme-angular-core.js', './devextreme-angular-ui-nested.js', '@angular/common', 'devextreme/core/dom_adapter', 'devextreme/events', 'devextreme/core/utils/common', 'devextreme/core/renderer', 'devextreme/core/http_request', 'devextreme/core/utils/ready_callbacks', 'devextreme/events/core/events_engine', 'devextreme/core/utils/ajax', 'devextreme/core/utils/deferred'], (function (exports) {
+System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundles/dx.all', 'devextreme/ui/tree_list', './devextreme-angular-core.js', './devextreme-angular-ui-nested.js', '@angular/common', 'devextreme/core/dom_adapter', 'devextreme/events', 'devextreme/core/utils/common', 'devextreme/core/renderer', 'devextreme/core/http_request', 'devextreme/core/utils/ready_callbacks', 'devextreme/events/core/events_engine', 'devextreme/core/utils/ajax', 'devextreme/core/utils/deferred'], (function (exports) {
     'use strict';
-    var i2, i0, PLATFORM_ID, Component, Inject, Input, Output, ContentChildren, NgModule, DxDataGrid, DxComponent, DxTemplateHost, WatcherHelper, IterableDifferHelper, NestedOptionHost, DxIntegrationModule, DxTemplateModule, DxiColumnComponent, DxiSortByGroupSummaryInfoComponent, DxoColumnChooserModule, DxoPositionModule, DxoAtModule, DxoBoundaryOffsetModule, DxoCollisionModule, DxoMyModule, DxoOffsetModule, DxoSearchModule, DxoSelectionModule, DxoColumnFixingModule, DxoTextsModule, DxiColumnModule, DxiButtonModule, DxoHeaderFilterModule, DxoLookupModule, DxoFormatModule, DxoFormItemModule, DxoLabelModule, DxiValidationRuleModule, DxoEditingModule, DxiChangeModule, DxoFormModule, DxoColCountByScreenModule, DxiItemModule, DxoTabPanelOptionsModule, DxiTabModule, DxoButtonOptionsModule, DxoPopupModule, DxoAnimationModule, DxoHideModule, DxoFromModule, DxoToModule, DxoShowModule, DxiToolbarItemModule, DxoExportModule, DxoFilterBuilderModule, DxiCustomOperationModule, DxiFieldModule, DxoFilterOperationDescriptionsModule, DxoGroupOperationDescriptionsModule, DxoFilterBuilderPopupModule, DxoFilterPanelModule, DxoFilterRowModule, DxoOperationDescriptionsModule, DxoGroupingModule, DxoGroupPanelModule, DxoKeyboardNavigationModule, DxoLoadPanelModule, DxoMasterDetailModule, DxoPagerModule, DxoPagingModule, DxoRemoteOperationsModule, DxoRowDraggingModule, DxoCursorOffsetModule, DxoScrollingModule, DxoSearchPanelModule, DxiSortByGroupSummaryInfoModule, DxoSortingModule, DxoStateStoringModule, DxoSummaryModule, DxiGroupItemModule, DxoValueFormatModule, DxiTotalItemModule, DxoToolbarModule;
+    var i2, i0, PLATFORM_ID, Component, Inject, Input, Output, ContentChildren, NgModule, DxTreeList, DxComponent, DxTemplateHost, WatcherHelper, IterableDifferHelper, NestedOptionHost, DxIntegrationModule, DxTemplateModule, DxiColumnComponent, DxoColumnChooserModule, DxoPositionModule, DxoAtModule, DxoBoundaryOffsetModule, DxoCollisionModule, DxoMyModule, DxoOffsetModule, DxoSearchModule, DxoSelectionModule, DxoColumnFixingModule, DxoTextsModule, DxiColumnModule, DxiButtonModule, DxoHeaderFilterModule, DxoLookupModule, DxoFormatModule, DxoFormItemModule, DxoLabelModule, DxiValidationRuleModule, DxoEditingModule, DxiChangeModule, DxoFormModule, DxoColCountByScreenModule, DxiItemModule, DxoTabPanelOptionsModule, DxiTabModule, DxoButtonOptionsModule, DxoPopupModule, DxoAnimationModule, DxoHideModule, DxoFromModule, DxoToModule, DxoShowModule, DxiToolbarItemModule, DxoFilterBuilderModule, DxiCustomOperationModule, DxiFieldModule, DxoFilterOperationDescriptionsModule, DxoGroupOperationDescriptionsModule, DxoFilterBuilderPopupModule, DxoFilterPanelModule, DxoFilterRowModule, DxoOperationDescriptionsModule, DxoKeyboardNavigationModule, DxoLoadPanelModule, DxoPagerModule, DxoPagingModule, DxoRemoteOperationsModule, DxoRowDraggingModule, DxoCursorOffsetModule, DxoScrollingModule, DxoSearchPanelModule, DxoSortingModule, DxoStateStoringModule, DxoToolbarModule;
     return {
         setters: [function (module) {
             i2 = module;
@@ -14,7 +14,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
             ContentChildren = module.ContentChildren;
             NgModule = module.NgModule;
         }, null, function (module) {
-            DxDataGrid = module.default;
+            DxTreeList = module.default;
         }, function (module) {
             DxComponent = module.c;
             DxTemplateHost = module.h;
@@ -25,7 +25,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
             DxTemplateModule = module.D;
         }, function (module) {
             DxiColumnComponent = module.DxiColumnComponent;
-            DxiSortByGroupSummaryInfoComponent = module.DxiSortByGroupSummaryInfoComponent;
             DxoColumnChooserModule = module.DxoColumnChooserModule;
             DxoPositionModule = module.DxoPositionModule;
             DxoAtModule = module.DxoAtModule;
@@ -60,7 +59,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
             DxoToModule = module.DxoToModule;
             DxoShowModule = module.DxoShowModule;
             DxiToolbarItemModule = module.DxiToolbarItemModule;
-            DxoExportModule = module.DxoExportModule;
             DxoFilterBuilderModule = module.DxoFilterBuilderModule;
             DxiCustomOperationModule = module.DxiCustomOperationModule;
             DxiFieldModule = module.DxiFieldModule;
@@ -70,11 +68,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
             DxoFilterPanelModule = module.DxoFilterPanelModule;
             DxoFilterRowModule = module.DxoFilterRowModule;
             DxoOperationDescriptionsModule = module.DxoOperationDescriptionsModule;
-            DxoGroupingModule = module.DxoGroupingModule;
-            DxoGroupPanelModule = module.DxoGroupPanelModule;
             DxoKeyboardNavigationModule = module.DxoKeyboardNavigationModule;
             DxoLoadPanelModule = module.DxoLoadPanelModule;
-            DxoMasterDetailModule = module.DxoMasterDetailModule;
             DxoPagerModule = module.DxoPagerModule;
             DxoPagingModule = module.DxoPagingModule;
             DxoRemoteOperationsModule = module.DxoRemoteOperationsModule;
@@ -82,13 +77,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
             DxoCursorOffsetModule = module.DxoCursorOffsetModule;
             DxoScrollingModule = module.DxoScrollingModule;
             DxoSearchPanelModule = module.DxoSearchPanelModule;
-            DxiSortByGroupSummaryInfoModule = module.DxiSortByGroupSummaryInfoModule;
             DxoSortingModule = module.DxoSortingModule;
             DxoStateStoringModule = module.DxoStateStoringModule;
-            DxoSummaryModule = module.DxoSummaryModule;
-            DxiGroupItemModule = module.DxiGroupItemModule;
-            DxoValueFormatModule = module.DxoValueFormatModule;
-            DxiTotalItemModule = module.DxiTotalItemModule;
             DxoToolbarModule = module.DxoToolbarModule;
         }, null, null, null, null, null, null, null, null, null, null],
         execute: (function () {
@@ -107,10 +97,10 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
              */
             /* tslint:disable:max-line-length */
             /**
-             * The DataGrid is a UI component that represents data from a local or remote source in the form of a grid. This UI component offers such basic features as sorting, grouping, filtering, as well as more advanced capabilities, like state storing, client-side exporting, master-detail interface, and many others.
+             * The TreeList is a UI component that represents data from a local or remote source in the form of a multi-column tree view. This UI component offers such features as sorting, filtering, editing, selection, etc.
 
              */
-            class DxDataGridComponent extends DxComponent {
+            class DxTreeListComponent extends DxComponent {
                 _watcherHelper;
                 _idh;
                 instance = null;
@@ -153,6 +143,16 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 set allowColumnResizing(value) {
                     this._setOption('allowColumnResizing', value);
+                }
+                /**
+                 * Specifies whether all rows are expanded initially.
+                
+                 */
+                get autoExpandAll() {
+                    return this._getOption('autoExpandAll');
+                }
+                set autoExpandAll(value) {
+                    this._setOption('autoExpandAll', value);
                 }
                 /**
                  * Automatically scrolls the component to the focused row when the focusedRowKey is changed.
@@ -245,7 +245,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('columnResizingMode', value);
                 }
                 /**
-                 * An array of grid columns.
+                 * Configures columns.
                 
                  */
                 get columns() {
@@ -275,16 +275,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('customizeColumns', value);
                 }
                 /**
-                 * Specifies a custom template for data rows.
-                
-                 */
-                get dataRowTemplate() {
-                    return this._getOption('dataRowTemplate');
-                }
-                set dataRowTemplate(value) {
-                    this._setOption('dataRowTemplate', value);
-                }
-                /**
                  * Binds the UI component to data.
                 
                  */
@@ -293,6 +283,16 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 set dataSource(value) {
                     this._setOption('dataSource', value);
+                }
+                /**
+                 * Notifies the UI component of the used data structure.
+                
+                 */
+                get dataStructure() {
+                    return this._getOption('dataStructure');
+                }
+                set dataStructure(value) {
+                    this._setOption('dataStructure', value);
                 }
                 /**
                  * Specifies the format in which date-time values should be sent to the server.
@@ -345,14 +345,24 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('errorRowEnabled', value);
                 }
                 /**
-                 * Configures client-side exporting.
+                 * Specifies keys of the initially expanded rows.
                 
                  */
-                get export() {
-                    return this._getOption('export');
+                get expandedRowKeys() {
+                    return this._getOption('expandedRowKeys');
                 }
-                set export(value) {
-                    this._setOption('export', value);
+                set expandedRowKeys(value) {
+                    this._setOption('expandedRowKeys', value);
+                }
+                /**
+                 * Specifies whether nodes appear expanded or collapsed after filtering is applied.
+                
+                 */
+                get expandNodesOnFiltering() {
+                    return this._getOption('expandNodesOnFiltering');
+                }
+                set expandNodesOnFiltering(value) {
+                    this._setOption('expandNodesOnFiltering', value);
                 }
                 /**
                  * Configures the integrated filter builder.
@@ -373,6 +383,16 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 set filterBuilderPopup(value) {
                     this._setOption('filterBuilderPopup', value);
+                }
+                /**
+                 * Specifies whether filter and search results should include matching rows only, matching rows with ancestors, or matching rows with ancestors and descendants (full branch).
+                
+                 */
+                get filterMode() {
+                    return this._getOption('filterMode');
+                }
+                set filterMode(value) {
+                    this._setOption('filterMode', value);
                 }
                 /**
                  * Configures the filter panel.
@@ -455,24 +475,14 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('focusedRowKey', value);
                 }
                 /**
-                 * Configures grouping.
+                 * Specifies which data field defines whether the node has children.
                 
                  */
-                get grouping() {
-                    return this._getOption('grouping');
+                get hasItemsExpr() {
+                    return this._getOption('hasItemsExpr');
                 }
-                set grouping(value) {
-                    this._setOption('grouping', value);
-                }
-                /**
-                 * Configures the group panel.
-                
-                 */
-                get groupPanel() {
-                    return this._getOption('groupPanel');
-                }
-                set groupPanel(value) {
-                    this._setOption('groupPanel', value);
+                set hasItemsExpr(value) {
+                    this._setOption('hasItemsExpr', value);
                 }
                 /**
                  * Configures the header filter feature.
@@ -525,6 +535,16 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('hoverStateEnabled', value);
                 }
                 /**
+                 * Specifies which data field contains nested items. Set this property when your data has a hierarchical structure.
+                
+                 */
+                get itemsExpr() {
+                    return this._getOption('itemsExpr');
+                }
+                set itemsExpr(value) {
+                    this._setOption('itemsExpr', value);
+                }
+                /**
                  * Configures keyboard navigation.
                 
                  */
@@ -535,7 +555,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('keyboardNavigation', value);
                 }
                 /**
-                 * Specifies the key property (or properties) that provide(s) key values to access data items. Each key value must be unique. This property applies only if data is a simple array.
+                 * Specifies the key property (or properties) that provide(s) key values to access data items. Each key value must be unique.
                 
                  */
                 get keyExpr() {
@@ -553,16 +573,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 set loadPanel(value) {
                     this._setOption('loadPanel', value);
-                }
-                /**
-                 * Allows you to build a master-detail interface in the grid.
-                
-                 */
-                get masterDetail() {
-                    return this._getOption('masterDetail');
-                }
-                set masterDetail(value) {
-                    this._setOption('masterDetail', value);
                 }
                 /**
                  * Specifies a text string shown when the widget does not display any data.
@@ -595,7 +605,17 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('paging', value);
                 }
                 /**
-                 * Notifies the DataGrid of the server&apos;s data processing operations.
+                 * Specifies which data field provides parent keys.
+                
+                 */
+                get parentIdExpr() {
+                    return this._getOption('parentIdExpr');
+                }
+                set parentIdExpr(value) {
+                    this._setOption('parentIdExpr', value);
+                }
+                /**
+                 * Notifies the TreeList of the server&apos;s data processing operations. Applies only if data has a plain structure.
                 
                  */
                 get remoteOperations() {
@@ -625,6 +645,16 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('repaintChangesOnly', value);
                 }
                 /**
+                 * Specifies the root node&apos;s identifier. Applies if dataStructure is &apos;plain&apos;.
+                
+                 */
+                get rootValue() {
+                    return this._getOption('rootValue');
+                }
+                set rootValue(value) {
+                    this._setOption('rootValue', value);
+                }
+                /**
                  * Specifies whether rows should be shaded differently.
                 
                  */
@@ -643,18 +673,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 set rowDragging(value) {
                     this._setOption('rowDragging', value);
-                }
-                /**
-                 * Specifies a custom template for rows.
-                
-                 * @deprecated Use the dataRowTemplate option instead.
-                
-                 */
-                get rowTemplate() {
-                    return this._getOption('rowTemplate');
-                }
-                set rowTemplate(value) {
-                    this._setOption('rowTemplate', value);
                 }
                 /**
                  * Switches the UI component to a right-to-left representation.
@@ -707,16 +725,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('selection', value);
                 }
                 /**
-                 * Specifies filters for the rows that must be selected initially. Applies only if selection.deferred is true.
-                
-                 */
-                get selectionFilter() {
-                    return this._getOption('selectionFilter');
-                }
-                set selectionFilter(value) {
-                    this._setOption('selectionFilter', value);
-                }
-                /**
                  * Specifies whether the outer borders of the UI component are visible.
                 
                  */
@@ -757,16 +765,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     this._setOption('showRowLines', value);
                 }
                 /**
-                 * Allows you to sort groups according to the values of group summary items.
-                
-                 */
-                get sortByGroupSummaryInfo() {
-                    return this._getOption('sortByGroupSummaryInfo');
-                }
-                set sortByGroupSummaryInfo(value) {
-                    this._setOption('sortByGroupSummaryInfo', value);
-                }
-                /**
                  * Configures runtime sorting.
                 
                  */
@@ -785,16 +783,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 set stateStoring(value) {
                     this._setOption('stateStoring', value);
-                }
-                /**
-                 * Specifies the properties of the grid summary.
-                
-                 */
-                get summary() {
-                    return this._getOption('summary');
-                }
-                set summary(value) {
-                    this._setOption('summary', value);
                 }
                 /**
                  * Specifies whether to show only relevant values in the header filter and filter row.
@@ -966,35 +954,28 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 onEditorPreparing;
                 /**
                 
-                 * A function that is executed before data is exported.
-                
-                
-                 */
-                onExporting;
-                /**
-                
-                 * A function that is executed after the focused cell changes. Applies only to cells in data or group rows.
+                 * A function that is executed after the focused cell changes. Applies only to cells in data rows.
                 
                 
                  */
                 onFocusedCellChanged;
                 /**
                 
-                 * A function that is executed before the focused cell changes. Applies only to cells in data or group rows.
+                 * A function that is executed before the focused cell changes. Applies only to cells in data rows.
                 
                 
                  */
                 onFocusedCellChanging;
                 /**
                 
-                 * A function that is executed after the focused row changes. Applies only to data or group rows. focusedRowEnabled should be true.
+                 * A function that executed when the focused row changes. Applies only to data rows. focusedRowEnabled should be true.
                 
                 
                  */
                 onFocusedRowChanged;
                 /**
                 
-                 * A function that is executed before the focused row changes. Applies only to data or group rows. focusedRowEnabled should be true.
+                 * A function that is executed before the focused row changes. Applies only to data rows. focusedRowEnabled should be true.
                 
                 
                  */
@@ -1022,6 +1003,13 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 onKeyDown;
                 /**
                 
+                 * A function that is executed after the loaded nodes are initialized.
+                
+                
+                 */
+                onNodesInitialized;
+                /**
+                
                  * A function that is executed after a UI component property is changed.
                 
                 
@@ -1029,7 +1017,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 onOptionChanged;
                 /**
                 
-                 * A function that is executed when a row is clicked or tapped.
+                 * A function that is executed when a grid row is clicked or tapped.
                 
                 
                  */
@@ -1182,6 +1170,12 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
+                autoExpandAllChange;
+                /**
+                
+                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
+                
+                 */
                 autoNavigateToFocusedRowChange;
                 /**
                 
@@ -1254,13 +1248,13 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
-                dataRowTemplateChange;
+                dataSourceChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
-                dataSourceChange;
+                dataStructureChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1296,7 +1290,13 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
-                exportChange;
+                expandedRowKeysChange;
+                /**
+                
+                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
+                
+                 */
+                expandNodesOnFilteringChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1309,6 +1309,12 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 
                  */
                 filterBuilderPopupChange;
+                /**
+                
+                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
+                
+                 */
+                filterModeChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1362,13 +1368,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
-                groupingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                groupPanelChange;
+                hasItemsExprChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1404,6 +1404,12 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
+                itemsExprChange;
+                /**
+                
+                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
+                
+                 */
                 keyboardNavigationChange;
                 /**
                 
@@ -1417,12 +1423,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 
                  */
                 loadPanelChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                masterDetailChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1446,6 +1446,12 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
+                parentIdExprChange;
+                /**
+                
+                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
+                
+                 */
                 remoteOperationsChange;
                 /**
                 
@@ -1464,6 +1470,12 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
+                rootValueChange;
+                /**
+                
+                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
+                
+                 */
                 rowAlternationEnabledChange;
                 /**
                 
@@ -1471,12 +1483,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 
                  */
                 rowDraggingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                rowTemplateChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1512,12 +1518,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
-                selectionFilterChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
                 showBordersChange;
                 /**
                 
@@ -1542,12 +1542,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
                 
                  */
-                sortByGroupSummaryInfoChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
                 sortingChange;
                 /**
                 
@@ -1555,12 +1549,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 
                  */
                 stateStoringChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                summaryChange;
                 /**
                 
                  * This member supports the internal infrastructure and is not intended to be used directly from your code.
@@ -1609,12 +1597,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 set columnsChildren(value) {
                     this.setChildren('columns', value);
                 }
-                get sortByGroupSummaryInfoChildren() {
-                    return this._getOption('sortByGroupSummaryInfo');
-                }
-                set sortByGroupSummaryInfoChildren(value) {
-                    this.setChildren('sortByGroupSummaryInfo', value);
-                }
                 constructor(elementRef, ngZone, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId) {
                     super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
                     this._watcherHelper = _watcherHelper;
@@ -1634,7 +1616,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         { subscribe: 'editingStart', emit: 'onEditingStart' },
                         { subscribe: 'editorPrepared', emit: 'onEditorPrepared' },
                         { subscribe: 'editorPreparing', emit: 'onEditorPreparing' },
-                        { subscribe: 'exporting', emit: 'onExporting' },
                         { subscribe: 'focusedCellChanged', emit: 'onFocusedCellChanged' },
                         { subscribe: 'focusedCellChanging', emit: 'onFocusedCellChanging' },
                         { subscribe: 'focusedRowChanged', emit: 'onFocusedRowChanged' },
@@ -1642,6 +1623,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         { subscribe: 'initialized', emit: 'onInitialized' },
                         { subscribe: 'initNewRow', emit: 'onInitNewRow' },
                         { subscribe: 'keyDown', emit: 'onKeyDown' },
+                        { subscribe: 'nodesInitialized', emit: 'onNodesInitialized' },
                         { subscribe: 'optionChanged', emit: 'onOptionChanged' },
                         { subscribe: 'rowClick', emit: 'onRowClick' },
                         { subscribe: 'rowCollapsed', emit: 'onRowCollapsed' },
@@ -1665,6 +1647,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         { emit: 'activeStateEnabledChange' },
                         { emit: 'allowColumnReorderingChange' },
                         { emit: 'allowColumnResizingChange' },
+                        { emit: 'autoExpandAllChange' },
                         { emit: 'autoNavigateToFocusedRowChange' },
                         { emit: 'cacheEnabledChange' },
                         { emit: 'cellHintEnabledChange' },
@@ -1677,16 +1660,18 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         { emit: 'columnsChange' },
                         { emit: 'columnWidthChange' },
                         { emit: 'customizeColumnsChange' },
-                        { emit: 'dataRowTemplateChange' },
                         { emit: 'dataSourceChange' },
+                        { emit: 'dataStructureChange' },
                         { emit: 'dateSerializationFormatChange' },
                         { emit: 'disabledChange' },
                         { emit: 'editingChange' },
                         { emit: 'elementAttrChange' },
                         { emit: 'errorRowEnabledChange' },
-                        { emit: 'exportChange' },
+                        { emit: 'expandedRowKeysChange' },
+                        { emit: 'expandNodesOnFilteringChange' },
                         { emit: 'filterBuilderChange' },
                         { emit: 'filterBuilderPopupChange' },
+                        { emit: 'filterModeChange' },
                         { emit: 'filterPanelChange' },
                         { emit: 'filterRowChange' },
                         { emit: 'filterSyncEnabledChange' },
@@ -1695,40 +1680,37 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         { emit: 'focusedRowEnabledChange' },
                         { emit: 'focusedRowIndexChange' },
                         { emit: 'focusedRowKeyChange' },
-                        { emit: 'groupingChange' },
-                        { emit: 'groupPanelChange' },
+                        { emit: 'hasItemsExprChange' },
                         { emit: 'headerFilterChange' },
                         { emit: 'heightChange' },
                         { emit: 'highlightChangesChange' },
                         { emit: 'hintChange' },
                         { emit: 'hoverStateEnabledChange' },
+                        { emit: 'itemsExprChange' },
                         { emit: 'keyboardNavigationChange' },
                         { emit: 'keyExprChange' },
                         { emit: 'loadPanelChange' },
-                        { emit: 'masterDetailChange' },
                         { emit: 'noDataTextChange' },
                         { emit: 'pagerChange' },
                         { emit: 'pagingChange' },
+                        { emit: 'parentIdExprChange' },
                         { emit: 'remoteOperationsChange' },
                         { emit: 'renderAsyncChange' },
                         { emit: 'repaintChangesOnlyChange' },
+                        { emit: 'rootValueChange' },
                         { emit: 'rowAlternationEnabledChange' },
                         { emit: 'rowDraggingChange' },
-                        { emit: 'rowTemplateChange' },
                         { emit: 'rtlEnabledChange' },
                         { emit: 'scrollingChange' },
                         { emit: 'searchPanelChange' },
                         { emit: 'selectedRowKeysChange' },
                         { emit: 'selectionChange' },
-                        { emit: 'selectionFilterChange' },
                         { emit: 'showBordersChange' },
                         { emit: 'showColumnHeadersChange' },
                         { emit: 'showColumnLinesChange' },
                         { emit: 'showRowLinesChange' },
-                        { emit: 'sortByGroupSummaryInfoChange' },
                         { emit: 'sortingChange' },
                         { emit: 'stateStoringChange' },
-                        { emit: 'summaryChange' },
                         { emit: 'syncLookupFilterValuesChange' },
                         { emit: 'tabIndexChange' },
                         { emit: 'toolbarChange' },
@@ -1741,7 +1723,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     optionHost.setHost(this);
                 }
                 _createInstance(element, options) {
-                    return new DxDataGrid(element, options);
+                    return new DxTreeList(element, options);
                 }
                 ngOnDestroy() {
                     this._destroyWidget();
@@ -1750,9 +1732,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                     super.ngOnChanges(changes);
                     this.setupChanges('columns', changes);
                     this.setupChanges('dataSource', changes);
-                    this.setupChanges('keyExpr', changes);
+                    this.setupChanges('expandedRowKeys', changes);
                     this.setupChanges('selectedRowKeys', changes);
-                    this.setupChanges('sortByGroupSummaryInfo', changes);
                 }
                 setupChanges(prop, changes) {
                     if (!(prop in this._optionsToUpdate)) {
@@ -1762,9 +1743,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 ngDoCheck() {
                     this._idh.doCheck('columns');
                     this._idh.doCheck('dataSource');
-                    this._idh.doCheck('keyExpr');
+                    this._idh.doCheck('expandedRowKeys');
                     this._idh.doCheck('selectedRowKeys');
-                    this._idh.doCheck('sortByGroupSummaryInfo');
                     this._watcherHelper.checkWatchers();
                     super.ngDoCheck();
                     super.clearChangedOptions();
@@ -1776,18 +1756,18 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         super._setOption(name, value);
                     }
                 }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridComponent, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: DxTemplateHost }, { token: WatcherHelper }, { token: IterableDifferHelper }, { token: NestedOptionHost }, { token: i2.TransferState }, { token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxDataGridComponent, selector: "dx-data-grid", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", allowColumnReordering: "allowColumnReordering", allowColumnResizing: "allowColumnResizing", autoNavigateToFocusedRow: "autoNavigateToFocusedRow", cacheEnabled: "cacheEnabled", cellHintEnabled: "cellHintEnabled", columnAutoWidth: "columnAutoWidth", columnChooser: "columnChooser", columnFixing: "columnFixing", columnHidingEnabled: "columnHidingEnabled", columnMinWidth: "columnMinWidth", columnResizingMode: "columnResizingMode", columns: "columns", columnWidth: "columnWidth", customizeColumns: "customizeColumns", dataRowTemplate: "dataRowTemplate", dataSource: "dataSource", dateSerializationFormat: "dateSerializationFormat", disabled: "disabled", editing: "editing", elementAttr: "elementAttr", errorRowEnabled: "errorRowEnabled", export: "export", filterBuilder: "filterBuilder", filterBuilderPopup: "filterBuilderPopup", filterPanel: "filterPanel", filterRow: "filterRow", filterSyncEnabled: "filterSyncEnabled", filterValue: "filterValue", focusedColumnIndex: "focusedColumnIndex", focusedRowEnabled: "focusedRowEnabled", focusedRowIndex: "focusedRowIndex", focusedRowKey: "focusedRowKey", grouping: "grouping", groupPanel: "groupPanel", headerFilter: "headerFilter", height: "height", highlightChanges: "highlightChanges", hint: "hint", hoverStateEnabled: "hoverStateEnabled", keyboardNavigation: "keyboardNavigation", keyExpr: "keyExpr", loadPanel: "loadPanel", masterDetail: "masterDetail", noDataText: "noDataText", pager: "pager", paging: "paging", remoteOperations: "remoteOperations", renderAsync: "renderAsync", repaintChangesOnly: "repaintChangesOnly", rowAlternationEnabled: "rowAlternationEnabled", rowDragging: "rowDragging", rowTemplate: "rowTemplate", rtlEnabled: "rtlEnabled", scrolling: "scrolling", searchPanel: "searchPanel", selectedRowKeys: "selectedRowKeys", selection: "selection", selectionFilter: "selectionFilter", showBorders: "showBorders", showColumnHeaders: "showColumnHeaders", showColumnLines: "showColumnLines", showRowLines: "showRowLines", sortByGroupSummaryInfo: "sortByGroupSummaryInfo", sorting: "sorting", stateStoring: "stateStoring", summary: "summary", syncLookupFilterValues: "syncLookupFilterValues", tabIndex: "tabIndex", toolbar: "toolbar", twoWayBindingEnabled: "twoWayBindingEnabled", visible: "visible", width: "width", wordWrapEnabled: "wordWrapEnabled" }, outputs: { onAdaptiveDetailRowPreparing: "onAdaptiveDetailRowPreparing", onCellClick: "onCellClick", onCellDblClick: "onCellDblClick", onCellHoverChanged: "onCellHoverChanged", onCellPrepared: "onCellPrepared", onContentReady: "onContentReady", onContextMenuPreparing: "onContextMenuPreparing", onDataErrorOccurred: "onDataErrorOccurred", onDisposing: "onDisposing", onEditCanceled: "onEditCanceled", onEditCanceling: "onEditCanceling", onEditingStart: "onEditingStart", onEditorPrepared: "onEditorPrepared", onEditorPreparing: "onEditorPreparing", onExporting: "onExporting", onFocusedCellChanged: "onFocusedCellChanged", onFocusedCellChanging: "onFocusedCellChanging", onFocusedRowChanged: "onFocusedRowChanged", onFocusedRowChanging: "onFocusedRowChanging", onInitialized: "onInitialized", onInitNewRow: "onInitNewRow", onKeyDown: "onKeyDown", onOptionChanged: "onOptionChanged", onRowClick: "onRowClick", onRowCollapsed: "onRowCollapsed", onRowCollapsing: "onRowCollapsing", onRowDblClick: "onRowDblClick", onRowExpanded: "onRowExpanded", onRowExpanding: "onRowExpanding", onRowInserted: "onRowInserted", onRowInserting: "onRowInserting", onRowPrepared: "onRowPrepared", onRowRemoved: "onRowRemoved", onRowRemoving: "onRowRemoving", onRowUpdated: "onRowUpdated", onRowUpdating: "onRowUpdating", onRowValidating: "onRowValidating", onSaved: "onSaved", onSaving: "onSaving", onSelectionChanged: "onSelectionChanged", onToolbarPreparing: "onToolbarPreparing", accessKeyChange: "accessKeyChange", activeStateEnabledChange: "activeStateEnabledChange", allowColumnReorderingChange: "allowColumnReorderingChange", allowColumnResizingChange: "allowColumnResizingChange", autoNavigateToFocusedRowChange: "autoNavigateToFocusedRowChange", cacheEnabledChange: "cacheEnabledChange", cellHintEnabledChange: "cellHintEnabledChange", columnAutoWidthChange: "columnAutoWidthChange", columnChooserChange: "columnChooserChange", columnFixingChange: "columnFixingChange", columnHidingEnabledChange: "columnHidingEnabledChange", columnMinWidthChange: "columnMinWidthChange", columnResizingModeChange: "columnResizingModeChange", columnsChange: "columnsChange", columnWidthChange: "columnWidthChange", customizeColumnsChange: "customizeColumnsChange", dataRowTemplateChange: "dataRowTemplateChange", dataSourceChange: "dataSourceChange", dateSerializationFormatChange: "dateSerializationFormatChange", disabledChange: "disabledChange", editingChange: "editingChange", elementAttrChange: "elementAttrChange", errorRowEnabledChange: "errorRowEnabledChange", exportChange: "exportChange", filterBuilderChange: "filterBuilderChange", filterBuilderPopupChange: "filterBuilderPopupChange", filterPanelChange: "filterPanelChange", filterRowChange: "filterRowChange", filterSyncEnabledChange: "filterSyncEnabledChange", filterValueChange: "filterValueChange", focusedColumnIndexChange: "focusedColumnIndexChange", focusedRowEnabledChange: "focusedRowEnabledChange", focusedRowIndexChange: "focusedRowIndexChange", focusedRowKeyChange: "focusedRowKeyChange", groupingChange: "groupingChange", groupPanelChange: "groupPanelChange", headerFilterChange: "headerFilterChange", heightChange: "heightChange", highlightChangesChange: "highlightChangesChange", hintChange: "hintChange", hoverStateEnabledChange: "hoverStateEnabledChange", keyboardNavigationChange: "keyboardNavigationChange", keyExprChange: "keyExprChange", loadPanelChange: "loadPanelChange", masterDetailChange: "masterDetailChange", noDataTextChange: "noDataTextChange", pagerChange: "pagerChange", pagingChange: "pagingChange", remoteOperationsChange: "remoteOperationsChange", renderAsyncChange: "renderAsyncChange", repaintChangesOnlyChange: "repaintChangesOnlyChange", rowAlternationEnabledChange: "rowAlternationEnabledChange", rowDraggingChange: "rowDraggingChange", rowTemplateChange: "rowTemplateChange", rtlEnabledChange: "rtlEnabledChange", scrollingChange: "scrollingChange", searchPanelChange: "searchPanelChange", selectedRowKeysChange: "selectedRowKeysChange", selectionChange: "selectionChange", selectionFilterChange: "selectionFilterChange", showBordersChange: "showBordersChange", showColumnHeadersChange: "showColumnHeadersChange", showColumnLinesChange: "showColumnLinesChange", showRowLinesChange: "showRowLinesChange", sortByGroupSummaryInfoChange: "sortByGroupSummaryInfoChange", sortingChange: "sortingChange", stateStoringChange: "stateStoringChange", summaryChange: "summaryChange", syncLookupFilterValuesChange: "syncLookupFilterValuesChange", tabIndexChange: "tabIndexChange", toolbarChange: "toolbarChange", twoWayBindingEnabledChange: "twoWayBindingEnabledChange", visibleChange: "visibleChange", widthChange: "widthChange", wordWrapEnabledChange: "wordWrapEnabledChange" }, providers: [
+                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTreeListComponent, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: DxTemplateHost }, { token: WatcherHelper }, { token: IterableDifferHelper }, { token: NestedOptionHost }, { token: i2.TransferState }, { token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Component });
+                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxTreeListComponent, selector: "dx-tree-list", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", allowColumnReordering: "allowColumnReordering", allowColumnResizing: "allowColumnResizing", autoExpandAll: "autoExpandAll", autoNavigateToFocusedRow: "autoNavigateToFocusedRow", cacheEnabled: "cacheEnabled", cellHintEnabled: "cellHintEnabled", columnAutoWidth: "columnAutoWidth", columnChooser: "columnChooser", columnFixing: "columnFixing", columnHidingEnabled: "columnHidingEnabled", columnMinWidth: "columnMinWidth", columnResizingMode: "columnResizingMode", columns: "columns", columnWidth: "columnWidth", customizeColumns: "customizeColumns", dataSource: "dataSource", dataStructure: "dataStructure", dateSerializationFormat: "dateSerializationFormat", disabled: "disabled", editing: "editing", elementAttr: "elementAttr", errorRowEnabled: "errorRowEnabled", expandedRowKeys: "expandedRowKeys", expandNodesOnFiltering: "expandNodesOnFiltering", filterBuilder: "filterBuilder", filterBuilderPopup: "filterBuilderPopup", filterMode: "filterMode", filterPanel: "filterPanel", filterRow: "filterRow", filterSyncEnabled: "filterSyncEnabled", filterValue: "filterValue", focusedColumnIndex: "focusedColumnIndex", focusedRowEnabled: "focusedRowEnabled", focusedRowIndex: "focusedRowIndex", focusedRowKey: "focusedRowKey", hasItemsExpr: "hasItemsExpr", headerFilter: "headerFilter", height: "height", highlightChanges: "highlightChanges", hint: "hint", hoverStateEnabled: "hoverStateEnabled", itemsExpr: "itemsExpr", keyboardNavigation: "keyboardNavigation", keyExpr: "keyExpr", loadPanel: "loadPanel", noDataText: "noDataText", pager: "pager", paging: "paging", parentIdExpr: "parentIdExpr", remoteOperations: "remoteOperations", renderAsync: "renderAsync", repaintChangesOnly: "repaintChangesOnly", rootValue: "rootValue", rowAlternationEnabled: "rowAlternationEnabled", rowDragging: "rowDragging", rtlEnabled: "rtlEnabled", scrolling: "scrolling", searchPanel: "searchPanel", selectedRowKeys: "selectedRowKeys", selection: "selection", showBorders: "showBorders", showColumnHeaders: "showColumnHeaders", showColumnLines: "showColumnLines", showRowLines: "showRowLines", sorting: "sorting", stateStoring: "stateStoring", syncLookupFilterValues: "syncLookupFilterValues", tabIndex: "tabIndex", toolbar: "toolbar", twoWayBindingEnabled: "twoWayBindingEnabled", visible: "visible", width: "width", wordWrapEnabled: "wordWrapEnabled" }, outputs: { onAdaptiveDetailRowPreparing: "onAdaptiveDetailRowPreparing", onCellClick: "onCellClick", onCellDblClick: "onCellDblClick", onCellHoverChanged: "onCellHoverChanged", onCellPrepared: "onCellPrepared", onContentReady: "onContentReady", onContextMenuPreparing: "onContextMenuPreparing", onDataErrorOccurred: "onDataErrorOccurred", onDisposing: "onDisposing", onEditCanceled: "onEditCanceled", onEditCanceling: "onEditCanceling", onEditingStart: "onEditingStart", onEditorPrepared: "onEditorPrepared", onEditorPreparing: "onEditorPreparing", onFocusedCellChanged: "onFocusedCellChanged", onFocusedCellChanging: "onFocusedCellChanging", onFocusedRowChanged: "onFocusedRowChanged", onFocusedRowChanging: "onFocusedRowChanging", onInitialized: "onInitialized", onInitNewRow: "onInitNewRow", onKeyDown: "onKeyDown", onNodesInitialized: "onNodesInitialized", onOptionChanged: "onOptionChanged", onRowClick: "onRowClick", onRowCollapsed: "onRowCollapsed", onRowCollapsing: "onRowCollapsing", onRowDblClick: "onRowDblClick", onRowExpanded: "onRowExpanded", onRowExpanding: "onRowExpanding", onRowInserted: "onRowInserted", onRowInserting: "onRowInserting", onRowPrepared: "onRowPrepared", onRowRemoved: "onRowRemoved", onRowRemoving: "onRowRemoving", onRowUpdated: "onRowUpdated", onRowUpdating: "onRowUpdating", onRowValidating: "onRowValidating", onSaved: "onSaved", onSaving: "onSaving", onSelectionChanged: "onSelectionChanged", onToolbarPreparing: "onToolbarPreparing", accessKeyChange: "accessKeyChange", activeStateEnabledChange: "activeStateEnabledChange", allowColumnReorderingChange: "allowColumnReorderingChange", allowColumnResizingChange: "allowColumnResizingChange", autoExpandAllChange: "autoExpandAllChange", autoNavigateToFocusedRowChange: "autoNavigateToFocusedRowChange", cacheEnabledChange: "cacheEnabledChange", cellHintEnabledChange: "cellHintEnabledChange", columnAutoWidthChange: "columnAutoWidthChange", columnChooserChange: "columnChooserChange", columnFixingChange: "columnFixingChange", columnHidingEnabledChange: "columnHidingEnabledChange", columnMinWidthChange: "columnMinWidthChange", columnResizingModeChange: "columnResizingModeChange", columnsChange: "columnsChange", columnWidthChange: "columnWidthChange", customizeColumnsChange: "customizeColumnsChange", dataSourceChange: "dataSourceChange", dataStructureChange: "dataStructureChange", dateSerializationFormatChange: "dateSerializationFormatChange", disabledChange: "disabledChange", editingChange: "editingChange", elementAttrChange: "elementAttrChange", errorRowEnabledChange: "errorRowEnabledChange", expandedRowKeysChange: "expandedRowKeysChange", expandNodesOnFilteringChange: "expandNodesOnFilteringChange", filterBuilderChange: "filterBuilderChange", filterBuilderPopupChange: "filterBuilderPopupChange", filterModeChange: "filterModeChange", filterPanelChange: "filterPanelChange", filterRowChange: "filterRowChange", filterSyncEnabledChange: "filterSyncEnabledChange", filterValueChange: "filterValueChange", focusedColumnIndexChange: "focusedColumnIndexChange", focusedRowEnabledChange: "focusedRowEnabledChange", focusedRowIndexChange: "focusedRowIndexChange", focusedRowKeyChange: "focusedRowKeyChange", hasItemsExprChange: "hasItemsExprChange", headerFilterChange: "headerFilterChange", heightChange: "heightChange", highlightChangesChange: "highlightChangesChange", hintChange: "hintChange", hoverStateEnabledChange: "hoverStateEnabledChange", itemsExprChange: "itemsExprChange", keyboardNavigationChange: "keyboardNavigationChange", keyExprChange: "keyExprChange", loadPanelChange: "loadPanelChange", noDataTextChange: "noDataTextChange", pagerChange: "pagerChange", pagingChange: "pagingChange", parentIdExprChange: "parentIdExprChange", remoteOperationsChange: "remoteOperationsChange", renderAsyncChange: "renderAsyncChange", repaintChangesOnlyChange: "repaintChangesOnlyChange", rootValueChange: "rootValueChange", rowAlternationEnabledChange: "rowAlternationEnabledChange", rowDraggingChange: "rowDraggingChange", rtlEnabledChange: "rtlEnabledChange", scrollingChange: "scrollingChange", searchPanelChange: "searchPanelChange", selectedRowKeysChange: "selectedRowKeysChange", selectionChange: "selectionChange", showBordersChange: "showBordersChange", showColumnHeadersChange: "showColumnHeadersChange", showColumnLinesChange: "showColumnLinesChange", showRowLinesChange: "showRowLinesChange", sortingChange: "sortingChange", stateStoringChange: "stateStoringChange", syncLookupFilterValuesChange: "syncLookupFilterValuesChange", tabIndexChange: "tabIndexChange", toolbarChange: "toolbarChange", twoWayBindingEnabledChange: "twoWayBindingEnabledChange", visibleChange: "visibleChange", widthChange: "widthChange", wordWrapEnabledChange: "wordWrapEnabledChange" }, providers: [
                         DxTemplateHost,
                         WatcherHelper,
                         NestedOptionHost,
                         IterableDifferHelper
-                    ], queries: [{ propertyName: "columnsChildren", predicate: DxiColumnComponent }, { propertyName: "sortByGroupSummaryInfoChildren", predicate: DxiSortByGroupSummaryInfoComponent }], usesInheritance: true, usesOnChanges: true, ngImport: i0, template: '', isInline: true });
-            } exports("DxDataGridComponent", DxDataGridComponent);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridComponent, decorators: [{
+                    ], queries: [{ propertyName: "columnsChildren", predicate: DxiColumnComponent }], usesInheritance: true, usesOnChanges: true, ngImport: i0, template: '', isInline: true });
+            } exports("DxTreeListComponent", DxTreeListComponent);
+            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTreeListComponent, decorators: [{
                         type: Component,
                         args: [{
-                                selector: 'dx-data-grid',
+                                selector: 'dx-tree-list',
                                 template: '',
                                 providers: [
                                     DxTemplateHost,
@@ -1806,6 +1786,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         }], allowColumnReordering: [{
                             type: Input
                         }], allowColumnResizing: [{
+                            type: Input
+                        }], autoExpandAll: [{
                             type: Input
                         }], autoNavigateToFocusedRow: [{
                             type: Input
@@ -1831,9 +1813,9 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], customizeColumns: [{
                             type: Input
-                        }], dataRowTemplate: [{
-                            type: Input
                         }], dataSource: [{
+                            type: Input
+                        }], dataStructure: [{
                             type: Input
                         }], dateSerializationFormat: [{
                             type: Input
@@ -1845,11 +1827,15 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], errorRowEnabled: [{
                             type: Input
-                        }], export: [{
+                        }], expandedRowKeys: [{
+                            type: Input
+                        }], expandNodesOnFiltering: [{
                             type: Input
                         }], filterBuilder: [{
                             type: Input
                         }], filterBuilderPopup: [{
+                            type: Input
+                        }], filterMode: [{
                             type: Input
                         }], filterPanel: [{
                             type: Input
@@ -1867,9 +1853,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], focusedRowKey: [{
                             type: Input
-                        }], grouping: [{
-                            type: Input
-                        }], groupPanel: [{
+                        }], hasItemsExpr: [{
                             type: Input
                         }], headerFilter: [{
                             type: Input
@@ -1881,13 +1865,13 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], hoverStateEnabled: [{
                             type: Input
+                        }], itemsExpr: [{
+                            type: Input
                         }], keyboardNavigation: [{
                             type: Input
                         }], keyExpr: [{
                             type: Input
                         }], loadPanel: [{
-                            type: Input
-                        }], masterDetail: [{
                             type: Input
                         }], noDataText: [{
                             type: Input
@@ -1895,17 +1879,19 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], paging: [{
                             type: Input
+                        }], parentIdExpr: [{
+                            type: Input
                         }], remoteOperations: [{
                             type: Input
                         }], renderAsync: [{
                             type: Input
                         }], repaintChangesOnly: [{
                             type: Input
+                        }], rootValue: [{
+                            type: Input
                         }], rowAlternationEnabled: [{
                             type: Input
                         }], rowDragging: [{
-                            type: Input
-                        }], rowTemplate: [{
                             type: Input
                         }], rtlEnabled: [{
                             type: Input
@@ -1917,8 +1903,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], selection: [{
                             type: Input
-                        }], selectionFilter: [{
-                            type: Input
                         }], showBorders: [{
                             type: Input
                         }], showColumnHeaders: [{
@@ -1927,13 +1911,9 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Input
                         }], showRowLines: [{
                             type: Input
-                        }], sortByGroupSummaryInfo: [{
-                            type: Input
                         }], sorting: [{
                             type: Input
                         }], stateStoring: [{
-                            type: Input
-                        }], summary: [{
                             type: Input
                         }], syncLookupFilterValues: [{
                             type: Input
@@ -1977,8 +1957,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], onEditorPreparing: [{
                             type: Output
-                        }], onExporting: [{
-                            type: Output
                         }], onFocusedCellChanged: [{
                             type: Output
                         }], onFocusedCellChanging: [{
@@ -1992,6 +1970,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         }], onInitNewRow: [{
                             type: Output
                         }], onKeyDown: [{
+                            type: Output
+                        }], onNodesInitialized: [{
                             type: Output
                         }], onOptionChanged: [{
                             type: Output
@@ -2039,6 +2019,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], allowColumnResizingChange: [{
                             type: Output
+                        }], autoExpandAllChange: [{
+                            type: Output
                         }], autoNavigateToFocusedRowChange: [{
                             type: Output
                         }], cacheEnabledChange: [{
@@ -2063,9 +2045,9 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], customizeColumnsChange: [{
                             type: Output
-                        }], dataRowTemplateChange: [{
-                            type: Output
                         }], dataSourceChange: [{
+                            type: Output
+                        }], dataStructureChange: [{
                             type: Output
                         }], dateSerializationFormatChange: [{
                             type: Output
@@ -2077,11 +2059,15 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], errorRowEnabledChange: [{
                             type: Output
-                        }], exportChange: [{
+                        }], expandedRowKeysChange: [{
+                            type: Output
+                        }], expandNodesOnFilteringChange: [{
                             type: Output
                         }], filterBuilderChange: [{
                             type: Output
                         }], filterBuilderPopupChange: [{
+                            type: Output
+                        }], filterModeChange: [{
                             type: Output
                         }], filterPanelChange: [{
                             type: Output
@@ -2099,9 +2085,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], focusedRowKeyChange: [{
                             type: Output
-                        }], groupingChange: [{
-                            type: Output
-                        }], groupPanelChange: [{
+                        }], hasItemsExprChange: [{
                             type: Output
                         }], headerFilterChange: [{
                             type: Output
@@ -2113,13 +2097,13 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], hoverStateEnabledChange: [{
                             type: Output
+                        }], itemsExprChange: [{
+                            type: Output
                         }], keyboardNavigationChange: [{
                             type: Output
                         }], keyExprChange: [{
                             type: Output
                         }], loadPanelChange: [{
-                            type: Output
-                        }], masterDetailChange: [{
                             type: Output
                         }], noDataTextChange: [{
                             type: Output
@@ -2127,17 +2111,19 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], pagingChange: [{
                             type: Output
+                        }], parentIdExprChange: [{
+                            type: Output
                         }], remoteOperationsChange: [{
                             type: Output
                         }], renderAsyncChange: [{
                             type: Output
                         }], repaintChangesOnlyChange: [{
                             type: Output
+                        }], rootValueChange: [{
+                            type: Output
                         }], rowAlternationEnabledChange: [{
                             type: Output
                         }], rowDraggingChange: [{
-                            type: Output
-                        }], rowTemplateChange: [{
                             type: Output
                         }], rtlEnabledChange: [{
                             type: Output
@@ -2149,8 +2135,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], selectionChange: [{
                             type: Output
-                        }], selectionFilterChange: [{
-                            type: Output
                         }], showBordersChange: [{
                             type: Output
                         }], showColumnHeadersChange: [{
@@ -2159,13 +2143,9 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                             type: Output
                         }], showRowLinesChange: [{
                             type: Output
-                        }], sortByGroupSummaryInfoChange: [{
-                            type: Output
                         }], sortingChange: [{
                             type: Output
                         }], stateStoringChange: [{
-                            type: Output
-                        }], summaryChange: [{
                             type: Output
                         }], syncLookupFilterValuesChange: [{
                             type: Output
@@ -2184,13 +2164,10 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         }], columnsChildren: [{
                             type: ContentChildren,
                             args: [DxiColumnComponent]
-                        }], sortByGroupSummaryInfoChildren: [{
-                            type: ContentChildren,
-                            args: [DxiSortByGroupSummaryInfoComponent]
                         }] } });
-            class DxDataGridModule {
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-                /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, declarations: [DxDataGridComponent], imports: [DxoColumnChooserModule,
+            class DxTreeListModule {
+                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTreeListModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
+                /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxTreeListModule, declarations: [DxTreeListComponent], imports: [DxoColumnChooserModule,
                         DxoPositionModule,
                         DxoAtModule,
                         DxoBoundaryOffsetModule,
@@ -2224,7 +2201,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoToModule,
                         DxoShowModule,
                         DxiToolbarItemModule,
-                        DxoExportModule,
                         DxoFilterBuilderModule,
                         DxiCustomOperationModule,
                         DxiFieldModule,
@@ -2234,11 +2210,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoFilterPanelModule,
                         DxoFilterRowModule,
                         DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
                         DxoKeyboardNavigationModule,
                         DxoLoadPanelModule,
-                        DxoMasterDetailModule,
                         DxoPagerModule,
                         DxoPagingModule,
                         DxoRemoteOperationsModule,
@@ -2246,16 +2219,11 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoCursorOffsetModule,
                         DxoScrollingModule,
                         DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
                         DxoSortingModule,
                         DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
                         DxoToolbarModule,
                         DxIntegrationModule,
-                        DxTemplateModule], exports: [DxDataGridComponent, DxoColumnChooserModule,
+                        DxTemplateModule], exports: [DxTreeListComponent, DxoColumnChooserModule,
                         DxoPositionModule,
                         DxoAtModule,
                         DxoBoundaryOffsetModule,
@@ -2289,7 +2257,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoToModule,
                         DxoShowModule,
                         DxiToolbarItemModule,
-                        DxoExportModule,
                         DxoFilterBuilderModule,
                         DxiCustomOperationModule,
                         DxiFieldModule,
@@ -2299,11 +2266,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoFilterPanelModule,
                         DxoFilterRowModule,
                         DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
                         DxoKeyboardNavigationModule,
                         DxoLoadPanelModule,
-                        DxoMasterDetailModule,
                         DxoPagerModule,
                         DxoPagingModule,
                         DxoRemoteOperationsModule,
@@ -2311,16 +2275,11 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoCursorOffsetModule,
                         DxoScrollingModule,
                         DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
                         DxoSortingModule,
                         DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
                         DxoToolbarModule,
                         DxTemplateModule] });
-                /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, imports: [DxoColumnChooserModule,
+                /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTreeListModule, imports: [DxoColumnChooserModule,
                         DxoPositionModule,
                         DxoAtModule,
                         DxoBoundaryOffsetModule,
@@ -2354,7 +2313,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoToModule,
                         DxoShowModule,
                         DxiToolbarItemModule,
-                        DxoExportModule,
                         DxoFilterBuilderModule,
                         DxiCustomOperationModule,
                         DxiFieldModule,
@@ -2364,11 +2322,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoFilterPanelModule,
                         DxoFilterRowModule,
                         DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
                         DxoKeyboardNavigationModule,
                         DxoLoadPanelModule,
-                        DxoMasterDetailModule,
                         DxoPagerModule,
                         DxoPagingModule,
                         DxoRemoteOperationsModule,
@@ -2376,13 +2331,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoCursorOffsetModule,
                         DxoScrollingModule,
                         DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
                         DxoSortingModule,
                         DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
                         DxoToolbarModule,
                         DxIntegrationModule,
                         DxTemplateModule, DxoColumnChooserModule,
@@ -2419,7 +2369,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoToModule,
                         DxoShowModule,
                         DxiToolbarItemModule,
-                        DxoExportModule,
                         DxoFilterBuilderModule,
                         DxiCustomOperationModule,
                         DxiFieldModule,
@@ -2429,11 +2378,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoFilterPanelModule,
                         DxoFilterRowModule,
                         DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
                         DxoKeyboardNavigationModule,
                         DxoLoadPanelModule,
-                        DxoMasterDetailModule,
                         DxoPagerModule,
                         DxoPagingModule,
                         DxoRemoteOperationsModule,
@@ -2441,17 +2387,12 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                         DxoCursorOffsetModule,
                         DxoScrollingModule,
                         DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
                         DxoSortingModule,
                         DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
                         DxoToolbarModule,
                         DxTemplateModule] });
-            } exports("DxDataGridModule", DxDataGridModule);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, decorators: [{
+            } exports("DxTreeListModule", DxTreeListModule);
+            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTreeListModule, decorators: [{
                         type: NgModule,
                         args: [{
                                 imports: [
@@ -2489,7 +2430,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                     DxoToModule,
                                     DxoShowModule,
                                     DxiToolbarItemModule,
-                                    DxoExportModule,
                                     DxoFilterBuilderModule,
                                     DxiCustomOperationModule,
                                     DxiFieldModule,
@@ -2499,11 +2439,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                     DxoFilterPanelModule,
                                     DxoFilterRowModule,
                                     DxoOperationDescriptionsModule,
-                                    DxoGroupingModule,
-                                    DxoGroupPanelModule,
                                     DxoKeyboardNavigationModule,
                                     DxoLoadPanelModule,
-                                    DxoMasterDetailModule,
                                     DxoPagerModule,
                                     DxoPagingModule,
                                     DxoRemoteOperationsModule,
@@ -2511,22 +2448,17 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                     DxoCursorOffsetModule,
                                     DxoScrollingModule,
                                     DxoSearchPanelModule,
-                                    DxiSortByGroupSummaryInfoModule,
                                     DxoSortingModule,
                                     DxoStateStoringModule,
-                                    DxoSummaryModule,
-                                    DxiGroupItemModule,
-                                    DxoValueFormatModule,
-                                    DxiTotalItemModule,
                                     DxoToolbarModule,
                                     DxIntegrationModule,
                                     DxTemplateModule
                                 ],
                                 declarations: [
-                                    DxDataGridComponent
+                                    DxTreeListComponent
                                 ],
                                 exports: [
-                                    DxDataGridComponent,
+                                    DxTreeListComponent,
                                     DxoColumnChooserModule,
                                     DxoPositionModule,
                                     DxoAtModule,
@@ -2561,7 +2493,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                     DxoToModule,
                                     DxoShowModule,
                                     DxiToolbarItemModule,
-                                    DxoExportModule,
                                     DxoFilterBuilderModule,
                                     DxiCustomOperationModule,
                                     DxiFieldModule,
@@ -2571,11 +2502,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                     DxoFilterPanelModule,
                                     DxoFilterRowModule,
                                     DxoOperationDescriptionsModule,
-                                    DxoGroupingModule,
-                                    DxoGroupPanelModule,
                                     DxoKeyboardNavigationModule,
                                     DxoLoadPanelModule,
-                                    DxoMasterDetailModule,
                                     DxoPagerModule,
                                     DxoPagingModule,
                                     DxoRemoteOperationsModule,
@@ -2583,13 +2511,8 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                     DxoCursorOffsetModule,
                                     DxoScrollingModule,
                                     DxoSearchPanelModule,
-                                    DxiSortByGroupSummaryInfoModule,
                                     DxoSortingModule,
                                     DxoStateStoringModule,
-                                    DxoSummaryModule,
-                                    DxiGroupItemModule,
-                                    DxoValueFormatModule,
-                                    DxiTotalItemModule,
                                     DxoToolbarModule,
                                     DxTemplateModule
                                 ]

@@ -1,1097 +1,28 @@
-System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundles/dx.all', 'devextreme/ui/data_grid', '@angular/common', 'devextreme/core/dom_adapter', 'devextreme/events', 'devextreme/core/utils/common', 'devextreme/core/renderer', 'devextreme/core/http_request', 'devextreme/core/utils/ready_callbacks', 'devextreme/events/core/events_engine', 'devextreme/core/utils/ajax', 'devextreme/core/utils/deferred'], (function (exports) {
+System.register(['@angular/core', './devextreme-angular-core.js', '@angular/common', '@angular/platform-browser', 'devextreme/core/dom_adapter', 'devextreme/events', 'devextreme/core/utils/common', 'devextreme/core/renderer', 'devextreme/core/http_request', 'devextreme/core/utils/ready_callbacks', 'devextreme/events/core/events_engine', 'devextreme/core/utils/ajax', 'devextreme/core/utils/deferred'], (function (exports) {
     'use strict';
-    var i2, makeStateKey, i0, Injectable, Directive, Input, NgModule, EventEmitter, Component, PLATFORM_ID, Inject, Optional, VERSION, SkipSelf, Host, Output, ContentChildren, forwardRef, DxDataGrid, isPlatformServer, DOCUMENT, i1, domAdapter, one, triggerHandler, equalByValue, render, httpRequest, readyCallbacks, eventsEngine, ajax, Deferred;
+    var i0, Component, SkipSelf, Host, Input, NgModule, Output, ContentChildren, forwardRef, Inject, NestedOption, NestedOptionHost, CollectionNestedOption, extractTemplate, DxTemplateHost, DOCUMENT;
     return {
         setters: [function (module) {
-            i2 = module;
-            makeStateKey = module.makeStateKey;
-        }, function (module) {
             i0 = module;
-            Injectable = module.Injectable;
-            Directive = module.Directive;
-            Input = module.Input;
-            NgModule = module.NgModule;
-            EventEmitter = module.EventEmitter;
             Component = module.Component;
-            PLATFORM_ID = module.PLATFORM_ID;
-            Inject = module.Inject;
-            Optional = module.Optional;
-            VERSION = module.VERSION;
             SkipSelf = module.SkipSelf;
             Host = module.Host;
+            Input = module.Input;
+            NgModule = module.NgModule;
             Output = module.Output;
             ContentChildren = module.ContentChildren;
             forwardRef = module.forwardRef;
-        }, null, function (module) {
-            DxDataGrid = module.default;
+            Inject = module.Inject;
         }, function (module) {
-            isPlatformServer = module.isPlatformServer;
+            NestedOption = module.N;
+            NestedOptionHost = module.i;
+            CollectionNestedOption = module.C;
+            extractTemplate = module.k;
+            DxTemplateHost = module.h;
+        }, function (module) {
             DOCUMENT = module.DOCUMENT;
-            i1 = module;
-        }, function (module) {
-            domAdapter = module.default;
-        }, function (module) {
-            one = module.one;
-            triggerHandler = module.triggerHandler;
-        }, function (module) {
-            equalByValue = module.equalByValue;
-        }, function (module) {
-            render = module.default;
-        }, function (module) {
-            httpRequest = module.default;
-        }, function (module) {
-            readyCallbacks = module.default;
-        }, function (module) {
-            eventsEngine = module.default;
-        }, function (module) {
-            ajax = module.default;
-        }, function (module) {
-            Deferred = module.Deferred;
-        }],
+        }, null, null, null, null, null, null, null, null, null, null],
         execute: (function () {
-
-            exports({
-                dx: extractTemplate,
-                dy: getElement
-            });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            class DxTemplateHost {
-                host;
-                setHost(host) {
-                    this.host = host;
-                }
-                setTemplate(template) {
-                    this.host.setTemplate(template);
-                }
-            } exports("a", DxTemplateHost);
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            class NgEventsStrategy {
-                instance;
-                zone;
-                subscriptions = {};
-                events = {};
-                constructor(instance, zone) {
-                    this.instance = instance;
-                    this.zone = zone;
-                }
-                hasEvent(name) {
-                    return this.getEmitter(name).observers.length !== 0;
-                }
-                fireEvent(name, args) {
-                    const emitter = this.getEmitter(name);
-                    if (emitter.observers.length) {
-                        const internalSubs = this.subscriptions[name] || [];
-                        if (internalSubs.length === emitter.observers.length) {
-                            emitter.next(args && args[0]);
-                        }
-                        else {
-                            this.zone.run(() => emitter.next(args && args[0]));
-                        }
-                    }
-                }
-                on(name, handler) {
-                    if (typeof name === 'string') {
-                        const eventSubscriptions = this.subscriptions[name] || [];
-                        const subcription = this.getEmitter(name).subscribe(handler?.bind(this.instance));
-                        const unsubscribe = subcription.unsubscribe.bind(subcription);
-                        eventSubscriptions.push({ handler, unsubscribe });
-                        this.subscriptions[name] = eventSubscriptions;
-                    }
-                    else {
-                        const handlersObj = name;
-                        Object.keys(handlersObj).forEach((event) => this.on(event, handlersObj[event]));
-                    }
-                }
-                off(name, handler) {
-                    const eventSubscriptions = this.subscriptions[name] || [];
-                    if (handler) {
-                        eventSubscriptions.some((subscription, i) => {
-                            if (subscription.handler === handler) {
-                                subscription.unsubscribe();
-                                eventSubscriptions.splice(i, 1);
-                                return true;
-                            }
-                            return false;
-                        });
-                    }
-                    else {
-                        eventSubscriptions.forEach((subscription) => {
-                            subscription.unsubscribe();
-                        });
-                        eventSubscriptions.splice(0, eventSubscriptions.length);
-                    }
-                }
-                dispose() { }
-                addEmitter(eventName, emitter) {
-                    this.events[eventName] = emitter;
-                }
-                getEmitter(eventName) {
-                    if (!this.events[eventName]) {
-                        this.events[eventName] = new EventEmitter();
-                    }
-                    return this.events[eventName];
-                }
-            } exports("dv", NgEventsStrategy);
-            class EmitterHelper {
-                zone;
-                component;
-                lockedValueChangeEvent = false;
-                constructor(zone, component) {
-                    this.zone = zone;
-                    this.component = component;
-                }
-                fireNgEvent(eventName, eventArgs) {
-                    if (this.lockedValueChangeEvent && eventName === 'valueChange') {
-                        return;
-                    }
-                    const emitter = this.component[eventName];
-                    if (emitter && emitter.observers.length) {
-                        this.zone.run(() => {
-                            emitter.next(eventArgs && eventArgs[0]);
-                        });
-                    }
-                }
-                createEmitters(events) {
-                    events.forEach((event) => {
-                        this.component[event.emit] = new EventEmitter();
-                    });
-                }
-            } exports("dt", EmitterHelper);
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            class WatcherHelper {
-                _watchers = [];
-                getWatchMethod() {
-                    const watchMethod = (valueGetter, valueChangeCallback, options) => {
-                        let oldValue = valueGetter();
-                        options = options || {};
-                        if (!options.skipImmediate) {
-                            valueChangeCallback(oldValue);
-                        }
-                        const watcher = () => {
-                            const newValue = valueGetter();
-                            if (this._isDifferentValues(oldValue, newValue, options.deep)) {
-                                valueChangeCallback(newValue);
-                                oldValue = newValue;
-                            }
-                        };
-                        this._watchers.push(watcher);
-                        return () => {
-                            const index = this._watchers.indexOf(watcher);
-                            if (index !== -1) {
-                                this._watchers.splice(index, 1);
-                            }
-                        };
-                    };
-                    return watchMethod;
-                }
-                _isDifferentValues(oldValue, newValue, deepCheck) {
-                    const comparableNewValue = this._toComparable(newValue);
-                    const comparableOldValue = this._toComparable(oldValue);
-                    const isObjectValues = comparableNewValue instanceof Object && comparableOldValue instanceof Object;
-                    if (deepCheck && isObjectValues) {
-                        return this._checkObjectsFields(newValue, oldValue);
-                    }
-                    return comparableNewValue !== comparableOldValue;
-                }
-                _toComparable(value) {
-                    if (value instanceof Date) {
-                        return value.getTime();
-                    }
-                    return value;
-                }
-                _checkObjectsFields(checkingFromObject, checkingToObject) {
-                    for (const field in checkingFromObject) {
-                        const oldValue = this._toComparable(checkingFromObject[field]);
-                        const newValue = this._toComparable(checkingToObject[field]);
-                        let isEqualObjects = false;
-                        if (typeof oldValue === 'object' && typeof newValue === 'object') {
-                            isEqualObjects = equalByValue(oldValue, newValue);
-                        }
-                        if (oldValue !== newValue && !isEqualObjects) {
-                            return true;
-                        }
-                    }
-                }
-                checkWatchers() {
-                    for (const watcher of this._watchers) {
-                        watcher();
-                    }
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: WatcherHelper, deps: [], target: i0.ɵɵFactoryTarget.Injectable });
-                /** @nocollapse */ static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: WatcherHelper });
-            } exports("W", WatcherHelper);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: WatcherHelper, decorators: [{
-                        type: Injectable
-                    }] });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            function getElement(element) {
-                return element.get ? element.get(0) : element;
-            }
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            /* tslint:disable:use-input-property-decorator */
-            const DX_TEMPLATE_WRAPPER_CLASS = exports("dq", 'dx-template-wrapper');
-            class RenderData {
-                model;
-                index;
-                container;
-            } exports("dw", RenderData);
-            class DxTemplateDirective {
-                templateRef;
-                viewContainerRef;
-                renderer;
-                zone;
-                set dxTemplateOf(value) {
-                    this.name = value;
-                }
-                name;
-                constructor(templateRef, viewContainerRef, templateHost, renderer, zone) {
-                    this.templateRef = templateRef;
-                    this.viewContainerRef = viewContainerRef;
-                    this.renderer = renderer;
-                    this.zone = zone;
-                    templateHost.setTemplate(this);
-                }
-                renderTemplate(renderData) {
-                    const childView = this.viewContainerRef.createEmbeddedView(this.templateRef, {
-                        $implicit: renderData.model,
-                        index: renderData.index,
-                    });
-                    const container = getElement(renderData.container);
-                    if (renderData.container) {
-                        childView.rootNodes.forEach((element) => {
-                            this.renderer.appendChild(container, element);
-                        });
-                    }
-                    return childView;
-                }
-                render(renderData) {
-                    let childView;
-                    if (this.zone.isStable) {
-                        childView = this.zone.run(() => this.renderTemplate(renderData));
-                    }
-                    else {
-                        childView = this.renderTemplate(renderData);
-                    }
-                    // =========== WORKAROUND =============
-                    // https://github.com/angular/angular/issues/12243
-                    childView.detectChanges();
-                    // =========== /WORKAROUND =============
-                    childView.rootNodes.forEach((element) => {
-                        if (element.nodeType === 1) {
-                            domAdapter.setClass(element, DX_TEMPLATE_WRAPPER_CLASS, true);
-                        }
-                        one(element, 'dxremove', ({}, params) => {
-                            if (!params || !params._angularIntegration) {
-                                childView.destroy();
-                            }
-                        });
-                    });
-                    return childView.rootNodes;
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTemplateDirective, deps: [{ token: i0.TemplateRef }, { token: i0.ViewContainerRef }, { token: DxTemplateHost }, { token: i0.Renderer2 }, { token: i0.NgZone }], target: i0.ɵɵFactoryTarget.Directive });
-                /** @nocollapse */ static ɵdir = i0.ɵɵngDeclareDirective({ minVersion: "14.0.0", version: "17.3.0", type: DxTemplateDirective, selector: "[dxTemplate]", inputs: { dxTemplateOf: "dxTemplateOf" }, ngImport: i0 });
-            } exports("ds", DxTemplateDirective);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTemplateDirective, decorators: [{
-                        type: Directive,
-                        args: [{
-                                selector: '[dxTemplate]',
-                            }]
-                    }], ctorParameters: () => [{ type: i0.TemplateRef }, { type: i0.ViewContainerRef }, { type: DxTemplateHost }, { type: i0.Renderer2 }, { type: i0.NgZone }], propDecorators: { dxTemplateOf: [{
-                            type: Input
-                        }] } });
-            class DxTemplateModule {
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTemplateModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-                /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxTemplateModule, declarations: [DxTemplateDirective], exports: [DxTemplateDirective] });
-                /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTemplateModule });
-            } exports("e", DxTemplateModule);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxTemplateModule, decorators: [{
-                        type: NgModule,
-                        args: [{
-                                declarations: [DxTemplateDirective],
-                                exports: [DxTemplateDirective],
-                            }]
-                    }] });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            const VISIBILITY_CHANGE_SELECTOR = 'dx-visibility-change-handler';
-            class BaseNestedOption {
-                _host;
-                _hostOptionPath;
-                _collectionContainerImpl;
-                _initialOptions = {};
-                constructor() {
-                    this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this), this._filterItems.bind(this));
-                }
-                _optionChangedHandler(e) {
-                    const fullOptionPath = this._fullOptionPath();
-                    if (e.fullName.indexOf(fullOptionPath) === 0) {
-                        const optionName = e.fullName.slice(fullOptionPath.length);
-                        const emitter = this[`${optionName}Change`];
-                        if (emitter) {
-                            emitter.next(e.value);
-                        }
-                    }
-                }
-                _createEventEmitters(events) {
-                    events.forEach((event) => {
-                        this[event.emit] = new EventEmitter();
-                    });
-                }
-                _getOption(name) {
-                    if (this.isLinked) {
-                        return this.instance.option(this._fullOptionPath() + name);
-                    }
-                    return this._initialOptions[name];
-                }
-                _setOption(name, value) {
-                    if (this.isLinked) {
-                        const fullPath = this._fullOptionPath() + name;
-                        this.instance.option(fullPath, value);
-                    }
-                    else {
-                        this._initialOptions[name] = value;
-                    }
-                }
-                _addRemovedOption(name) {
-                    if (this.instance && this.removedNestedComponents) {
-                        this.removedNestedComponents.push(name);
-                    }
-                }
-                _deleteRemovedOptions(name) {
-                    if (this.instance && this.removedNestedComponents) {
-                        this.removedNestedComponents = this.removedNestedComponents.filter((x) => !x.startsWith(name));
-                    }
-                }
-                _addRecreatedComponent() {
-                    if (this.instance && this.recreatedNestedComponents) {
-                        this.recreatedNestedComponents.push({ getOptionPath: () => this._getOptionPath() });
-                    }
-                }
-                _getOptionPath() {
-                    return this._hostOptionPath() + this._optionPath;
-                }
-                setHost(host, optionPath) {
-                    this._host = host;
-                    this._hostOptionPath = optionPath;
-                    this.optionChangedHandlers.subscribe(this._optionChangedHandler.bind(this));
-                }
-                setChildren(propertyName, items) {
-                    this.resetOptions(propertyName);
-                    return this._collectionContainerImpl.setChildren(propertyName, items);
-                }
-                _filterItems(items) {
-                    return items.filter((item) => item !== this);
-                }
-                get instance() {
-                    return this._host && this._host.instance;
-                }
-                get resetOptions() {
-                    return this._host && this._host.resetOptions;
-                }
-                get isRecreated() {
-                    return this._host && this._host.isRecreated;
-                }
-                get removedNestedComponents() {
-                    return this._host && this._host.removedNestedComponents;
-                }
-                set removedNestedComponents(value) {
-                    this._host.removedNestedComponents = value;
-                }
-                get recreatedNestedComponents() {
-                    return this._host && this._host.recreatedNestedComponents;
-                }
-                set recreatedNestedComponents(value) {
-                    this._host.recreatedNestedComponents = value;
-                }
-                get isLinked() {
-                    return !!this.instance && this._host.isLinked;
-                }
-                get optionChangedHandlers() {
-                    return this._host && this._host.optionChangedHandlers;
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: BaseNestedOption, deps: [], target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: BaseNestedOption, selector: "ng-component", ngImport: i0, template: '', isInline: true });
-            } exports("dm", BaseNestedOption);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: BaseNestedOption, decorators: [{
-                        type: Component,
-                        args: [{
-                                template: '',
-                            }]
-                    }], ctorParameters: () => [] });
-            class CollectionNestedOptionContainerImpl {
-                _setOption;
-                _filterItems;
-                _activatedQueries = {};
-                constructor(_setOption, _filterItems) {
-                    this._setOption = _setOption;
-                    this._filterItems = _filterItems;
-                }
-                setChildren(propertyName, items) {
-                    if (this._filterItems) {
-                        items = this._filterItems(items);
-                    }
-                    if (items.length) {
-                        this._activatedQueries[propertyName] = true;
-                    }
-                    if (this._activatedQueries[propertyName]) {
-                        const widgetItems = items.map((item, index) => {
-                            item._index = index;
-                            return item._value;
-                        });
-                        this._setOption(propertyName, widgetItems);
-                    }
-                }
-            } exports("dp", CollectionNestedOptionContainerImpl);
-            class NestedOption extends BaseNestedOption {
-                setHost(host, optionPath) {
-                    super.setHost(host, optionPath);
-                    this._host[this._optionPath] = this._initialOptions;
-                }
-                _fullOptionPath() {
-                    return `${this._getOptionPath()}.`;
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: NestedOption, deps: null, target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: NestedOption, selector: "ng-component", usesInheritance: true, ngImport: i0, template: '', isInline: true });
-            } exports("du", NestedOption);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: NestedOption, decorators: [{
-                        type: Component,
-                        args: [{
-                                template: '',
-                            }]
-                    }] });
-            class CollectionNestedOption extends BaseNestedOption {
-                _index;
-                _fullOptionPath() {
-                    return `${this._getOptionPath()}[${this._index}].`;
-                }
-                get _value() {
-                    return this._initialOptions;
-                }
-                get isLinked() {
-                    return this._index !== undefined && !!this.instance && this._host.isLinked;
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: CollectionNestedOption, deps: null, target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: CollectionNestedOption, selector: "ng-component", usesInheritance: true, ngImport: i0, template: '', isInline: true });
-            } exports("dn", CollectionNestedOption);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: CollectionNestedOption, decorators: [{
-                        type: Component,
-                        args: [{
-                                template: '',
-                            }]
-                    }] });
-            const triggerShownEvent = function (element) {
-                const changeHandlers = [];
-                if (!render(element).hasClass(VISIBILITY_CHANGE_SELECTOR)) {
-                    changeHandlers.push(element);
-                }
-                changeHandlers.push.apply(changeHandlers, element.querySelectorAll(`.${VISIBILITY_CHANGE_SELECTOR}`));
-                for (let i = 0; i < changeHandlers.length; i++) {
-                    triggerHandler(changeHandlers[i], 'dxshown');
-                }
-            };
-            function extractTemplate(option, element, renderer, document) {
-                if (!option.template === undefined || !element.nativeElement.hasChildNodes()) {
-                    return;
-                }
-                const childNodes = [].slice.call(element.nativeElement.childNodes);
-                const userContent = childNodes.filter((n) => {
-                    if (n.tagName) {
-                        const tagNamePrefix = n.tagName.toLowerCase().substr(0, 3);
-                        return !(tagNamePrefix === 'dxi' || tagNamePrefix === 'dxo');
-                    }
-                    return n.nodeName !== '#comment' && n.textContent.replace(/\s/g, '').length;
-                });
-                if (!userContent.length) {
-                    return;
-                }
-                option.template = {
-                    render: (renderData) => {
-                        const result = element.nativeElement;
-                        domAdapter.setClass(result, DX_TEMPLATE_WRAPPER_CLASS, true);
-                        if (renderData.container) {
-                            const container = getElement(renderData.container);
-                            const resultInContainer = container.contains(element.nativeElement);
-                            renderer.appendChild(container, element.nativeElement);
-                            if (!resultInContainer) {
-                                const resultInBody = document.body.contains(container);
-                                if (resultInBody) {
-                                    triggerShownEvent(result);
-                                }
-                            }
-                        }
-                        return result;
-                    },
-                };
-            }
-            class NestedOptionHost {
-                _host;
-                _optionPath;
-                getHost() {
-                    return this._host;
-                }
-                setHost(host, optionPath) {
-                    this._host = host;
-                    this._optionPath = optionPath || (() => '');
-                }
-                setNestedOption(nestedOption) {
-                    nestedOption.setHost(this._host, this._optionPath);
-                }
-            } exports("N", NestedOptionHost);
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            let serverStateKey;
-            const getServerStateKey = exports("dz", () => {
-                if (!serverStateKey) {
-                    serverStateKey = makeStateKey('DX_isPlatformServer');
-                }
-                return serverStateKey;
-            });
-            class DxComponent {
-                element;
-                ngZone;
-                watcherHelper;
-                transferState;
-                platformId;
-                _initialOptions = {};
-                _optionsToUpdate = {};
-                _collectionContainerImpl;
-                eventHelper;
-                optionChangedHandlers = new EventEmitter();
-                templates;
-                instance;
-                isLinked = true;
-                changedOptions = {};
-                removedNestedComponents = [];
-                recreatedNestedComponents;
-                widgetUpdateLocked = false;
-                templateUpdateRequired = false;
-                _updateTemplates() {
-                    if (this.templates.length && this.templateUpdateRequired) {
-                        const updatedTemplates = {};
-                        this.templates.forEach((template) => {
-                            updatedTemplates[template.name] = template;
-                        });
-                        this.instance.option('integrationOptions.templates', updatedTemplates);
-                        this.templates = Object.values(updatedTemplates);
-                        this.templateUpdateRequired = false;
-                    }
-                }
-                _initEvents() {
-                    this.instance.on('optionChanged', (e) => {
-                        this.changedOptions[e.name] = e.value;
-                        const value = e.name === e.fullName ? e.value : e.component.option(e.name);
-                        this.eventHelper.fireNgEvent(`${e.name}Change`, [value]);
-                        this.optionChangedHandlers.emit(e);
-                    });
-                }
-                _initOptions() {
-                    this._initialOptions.integrationOptions.watchMethod = this.watcherHelper.getWatchMethod();
-                }
-                _initPlatform() {
-                    if (this.transferState.hasKey(getServerStateKey())) {
-                        this._initialOptions.integrationOptions.renderedOnServer = this.transferState.get(getServerStateKey(), null);
-                    }
-                    else if (isPlatformServer(this.platformId)) {
-                        this.transferState.set(getServerStateKey(), true);
-                    }
-                }
-                _createEventEmitters(events) {
-                    const zone = this.ngZone;
-                    this.eventHelper.createEmitters(events);
-                    this._initialOptions.eventsStrategy = (instance) => {
-                        const strategy = new NgEventsStrategy(instance, zone);
-                        events.filter((event) => event.subscribe).forEach((event) => {
-                            strategy.addEmitter(event.subscribe, this[event.emit]);
-                        });
-                        return strategy;
-                    };
-                    this._initialOptions.nestedComponentOptions = function (component) {
-                        return {
-                            eventsStrategy: (instance) => new NgEventsStrategy(instance, zone),
-                            nestedComponentOptions: component.option('nestedComponentOptions'),
-                        };
-                    };
-                }
-                _shouldOptionChange(name, value) {
-                    if (this.changedOptions.hasOwnProperty(name)) {
-                        const prevValue = this.changedOptions[name];
-                        delete this.changedOptions[name];
-                        return value !== prevValue;
-                    }
-                    return true;
-                }
-                clearChangedOptions() {
-                    this.changedOptions = {};
-                }
-                _getOption(name) {
-                    return this.instance
-                        ? this.instance.option(name)
-                        : this._initialOptions[name];
-                }
-                lockWidgetUpdate() {
-                    if (!this.widgetUpdateLocked && this.instance) {
-                        this.instance.beginUpdate();
-                        this.widgetUpdateLocked = true;
-                    }
-                }
-                unlockWidgetUpdate() {
-                    if (this.widgetUpdateLocked) {
-                        this.widgetUpdateLocked = false;
-                        this.instance.endUpdate();
-                    }
-                }
-                _setOption(name, value) {
-                    this.lockWidgetUpdate();
-                    if (!this._shouldOptionChange(name, value)) {
-                        return;
-                    }
-                    if (this.instance) {
-                        this.instance.option(name, value);
-                    }
-                    else {
-                        this._initialOptions[name] = value;
-                    }
-                }
-                _createWidget(element) {
-                    this._initialOptions.integrationOptions = {};
-                    this._initPlatform();
-                    this._initOptions();
-                    this._initialOptions.onInitializing = function () {
-                        this.beginUpdate();
-                    };
-                    this.instance = this._createInstance(element, this._initialOptions);
-                    this._initEvents();
-                    this._initialOptions = {};
-                }
-                _destroyWidget() {
-                    this.removedNestedComponents = [];
-                    if (this.instance) {
-                        const element = this.instance.element();
-                        triggerHandler(element, 'dxremove', { _angularIntegration: true });
-                        this.instance.dispose();
-                        domAdapter.removeElement(element);
-                    }
-                }
-                constructor(element, ngZone, templateHost, watcherHelper, transferState, platformId) {
-                    this.element = element;
-                    this.ngZone = ngZone;
-                    this.watcherHelper = watcherHelper;
-                    this.transferState = transferState;
-                    this.platformId = platformId;
-                    this.templates = [];
-                    templateHost.setHost(this);
-                    this._collectionContainerImpl = new CollectionNestedOptionContainerImpl(this._setOption.bind(this));
-                    this.eventHelper = new EmitterHelper(ngZone, this);
-                }
-                ngOnChanges(changes) {
-                    for (const key in changes) {
-                        const change = changes[key];
-                        if (change.currentValue !== this[key]) {
-                            this._optionsToUpdate[key] = changes[key].currentValue;
-                        }
-                    }
-                }
-                ngOnInit() {
-                    this._createWidget(this.element.nativeElement);
-                }
-                ngDoCheck() {
-                    this.applyOptions();
-                }
-                ngAfterContentChecked() {
-                    this.applyOptions();
-                    this.resetOptions();
-                    this.unlockWidgetUpdate();
-                }
-                ngAfterViewInit() {
-                    this._updateTemplates();
-                    this.instance.endUpdate();
-                    this.recreatedNestedComponents = [];
-                }
-                ngAfterViewChecked() {
-                    this._updateTemplates();
-                }
-                applyOptions() {
-                    if (Object.keys(this._optionsToUpdate).length) {
-                        if (this.instance) {
-                            this.instance.option(this._optionsToUpdate);
-                        }
-                        this._optionsToUpdate = {};
-                    }
-                }
-                resetOptions(collectionName) {
-                    if (this.instance) {
-                        this.removedNestedComponents.filter((option) => (option
-                            && !this.isRecreated(option)
-                            && collectionName ? option.startsWith(collectionName) : true))
-                            .forEach((option) => {
-                            this.instance.resetOption(option);
-                        });
-                        this.removedNestedComponents = [];
-                        this.recreatedNestedComponents = [];
-                    }
-                }
-                isRecreated(name) {
-                    return this.recreatedNestedComponents
-                        && this.recreatedNestedComponents.some((nestedComponent) => nestedComponent.getOptionPath() === name);
-                }
-                setTemplate(template) {
-                    this.templates.push(template);
-                    this.templateUpdateRequired = true;
-                }
-                setChildren(propertyName, items) {
-                    this.resetOptions(propertyName);
-                    return this._collectionContainerImpl.setChildren(propertyName, items);
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxComponent, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: DxTemplateHost }, { token: WatcherHelper }, { token: i2.TransferState }, { token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxComponent, selector: "ng-component", usesOnChanges: true, ngImport: i0, template: '', isInline: true });
-            } exports("D", DxComponent);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxComponent, decorators: [{
-                        type: Component,
-                        args: [{
-                                template: '',
-                            }]
-                    }], ctorParameters: () => [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: DxTemplateHost }, { type: WatcherHelper }, { type: i2.TransferState }, { type: undefined, decorators: [{
-                                type: Inject,
-                                args: [PLATFORM_ID]
-                            }] }] });
-            class DxComponentExtension extends DxComponent {
-                createInstance(element) {
-                    this._createWidget(element);
-                }
-                ngOnInit() {
-                }
-                ngAfterViewInit() {
-                    this._createWidget(this.element.nativeElement);
-                    this.instance.endUpdate();
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxComponentExtension, deps: null, target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxComponentExtension, selector: "ng-component", usesInheritance: true, ngImport: i0, template: '', isInline: true });
-            } exports("da", DxComponentExtension);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxComponentExtension, decorators: [{
-                        type: Component,
-                        args: [{
-                                template: '',
-                            }]
-                    }] });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            /* tslint:disable:max-line-length */
-            const outsideZoneEvents = ['mousemove', 'mouseover', 'mouseout'];
-            const insideZoneEvents = ['mouseup', 'click', 'mousedown', 'transitionend', 'wheel'];
-            let originalAdd;
-            let callbacks = [];
-            let readyCallbackAdd = function (callback) {
-                if (!originalAdd) {
-                    originalAdd = this.callBase.bind(this);
-                }
-                callbacks.push(callback);
-            };
-            readyCallbacks.inject({
-                add(callback) {
-                    return readyCallbackAdd.call(this, callback);
-                },
-            });
-            let doInjections = (document, ngZone, xhrFactory) => {
-                if (Number(VERSION.major) < 12) {
-                    console.warn('Your version of Angular is not supported. Please update your project to version 12 or later.'
-                        + ' Please refer to the Angular Update Guide for more information: https://update.angular.io');
-                }
-                domAdapter.inject({
-                    _document: document,
-                    listen(...args) {
-                        const eventName = args[1];
-                        if (outsideZoneEvents.includes(eventName)) {
-                            return ngZone.runOutsideAngular(() => this.callBase.apply(this, args));
-                        }
-                        if (ngZone.isStable && insideZoneEvents.includes(eventName)) {
-                            return ngZone.run(() => this.callBase.apply(this, args));
-                        }
-                        return this.callBase.apply(this, args);
-                    },
-                    isElementNode(element) {
-                        return element && element.nodeType === 1;
-                    },
-                    isTextNode(element) {
-                        return element && element.nodeType === 3;
-                    },
-                    isDocument(element) {
-                        return element && element.nodeType === 9;
-                    },
-                });
-                httpRequest.inject({
-                    getXhr() {
-                        if (!xhrFactory) {
-                            return this.callBase.apply(this);
-                        }
-                        const _xhr = xhrFactory.build();
-                        if (!('withCredentials' in _xhr)) {
-                            _xhr.withCredentials = false;
-                        }
-                        return _xhr;
-                    },
-                });
-                const runReadyCallbacksInZone = () => {
-                    ngZone.run(() => {
-                        eventsEngine.set({});
-                        callbacks.forEach((callback) => originalAdd.call(null, callback));
-                        callbacks = [];
-                        readyCallbacks.fire();
-                    });
-                };
-                runReadyCallbacksInZone();
-                readyCallbackAdd = (callback) => ngZone.run(() => callback());
-                doInjections = runReadyCallbacksInZone;
-            };
-            class DxIntegrationModule {
-                constructor(document, ngZone, xhrFactory) {
-                    doInjections(document, ngZone, xhrFactory);
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxIntegrationModule, deps: [{ token: DOCUMENT }, { token: i0.NgZone }, { token: i1.XhrFactory, optional: true }], target: i0.ɵɵFactoryTarget.NgModule });
-                /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxIntegrationModule });
-                /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxIntegrationModule });
-            } exports("d", DxIntegrationModule);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxIntegrationModule, decorators: [{
-                        type: NgModule,
-                        args: [{}]
-                    }], ctorParameters: () => [{ type: undefined, decorators: [{
-                                type: Inject,
-                                args: [DOCUMENT]
-                            }] }, { type: i0.NgZone }, { type: i1.XhrFactory, decorators: [{
-                                type: Optional
-                            }] }] });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            function isIterable(value) {
-                return value && (typeof value[Symbol.iterator] === 'function');
-            }
-            class IterableDifferHelper {
-                _differs;
-                _host;
-                _propertyDiffers = {};
-                constructor(_differs) {
-                    this._differs = _differs;
-                }
-                setHost(host) {
-                    this._host = host;
-                }
-                setup(prop, changes) {
-                    if (prop in changes) {
-                        const value = changes[prop].currentValue;
-                        this.setupSingle(prop, value);
-                    }
-                }
-                setupSingle(prop, value) {
-                    if (value && Array.isArray(value)) {
-                        if (!this._propertyDiffers[prop]) {
-                            try {
-                                this._propertyDiffers[prop] = this._differs.find(value).create(null);
-                                return true;
-                            }
-                            catch (e) { }
-                        }
-                    }
-                    else {
-                        delete this._propertyDiffers[prop];
-                    }
-                    return false;
-                }
-                getChanges(prop, value) {
-                    if (this._propertyDiffers[prop]) {
-                        return this._propertyDiffers[prop].diff(value);
-                    }
-                }
-                checkChangedOptions(propName, hostValue) {
-                    return this._host.changedOptions[propName] === hostValue;
-                }
-                doCheck(prop) {
-                    if (this._propertyDiffers[prop] && this._host.instance) {
-                        const hostValue = this._host[prop];
-                        const changes = isIterable(hostValue) && this.getChanges(prop, hostValue);
-                        if (changes && !this.checkChangedOptions(prop, hostValue)) {
-                            this._host.lockWidgetUpdate();
-                            this._host.instance.option(prop, hostValue);
-                        }
-                    }
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: IterableDifferHelper, deps: [{ token: i0.IterableDiffers }], target: i0.ɵɵFactoryTarget.Injectable });
-                /** @nocollapse */ static ɵprov = i0.ɵɵngDeclareInjectable({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: IterableDifferHelper });
-            } exports("I", IterableDifferHelper);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: IterableDifferHelper, decorators: [{
-                        type: Injectable
-                    }], ctorParameters: () => [{ type: i0.IterableDiffers }] });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            class DxServerTransferStateModule {
-                state;
-                platformId;
-                constructor(state, platformId) {
-                    this.state = state;
-                    this.platformId = platformId;
-                    const that = this;
-                    ajax.inject({
-                        sendRequest(...args) {
-                            const key = makeStateKey(that.generateKey(args));
-                            const cachedData = that.state.get(key, null);
-                            if (isPlatformServer(that.platformId)) {
-                                const result = this.callBase.apply(this, args);
-                                result.always((data, status) => {
-                                    const dataForCache = {
-                                        data,
-                                        status,
-                                    };
-                                    that.state.set(key, dataForCache);
-                                });
-                                return result;
-                            }
-                            if (cachedData) {
-                                const d = Deferred();
-                                d.resolve(cachedData.data, cachedData.status);
-                                that.state.set(key, null);
-                                return d.promise();
-                            }
-                            return this.callBase.apply(this, args);
-                        },
-                    });
-                }
-                generateKey(args) {
-                    let keyValue = '';
-                    for (const key in args) {
-                        if (typeof args[key] === 'object') {
-                            const objKey = this.generateKey(args[key]);
-                            keyValue += key + objKey;
-                        }
-                        else {
-                            keyValue += key + args[key];
-                        }
-                    }
-                    return keyValue;
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxServerTransferStateModule, deps: [{ token: i2.TransferState }, { token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.NgModule });
-                /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxServerTransferStateModule });
-                /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxServerTransferStateModule });
-            } exports("dr", DxServerTransferStateModule);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxServerTransferStateModule, decorators: [{
-                        type: NgModule,
-                        args: [{}]
-                    }], ctorParameters: () => [{ type: i2.TransferState }, { type: undefined, decorators: [{
-                                type: Inject,
-                                args: [PLATFORM_ID]
-                            }] }] });
 
             /*!
              * devextreme-angular
@@ -1159,7 +90,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdapterComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAdapterComponent, selector: "dxo-adapter", inputs: { applyValidationResults: "applyValidationResults", bypass: "bypass", focus: "focus", getValue: "getValue", reset: "reset", validationRequestsCallbacks: "validationRequestsCallbacks" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAdapterComponent", DxoAdapterComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdapterComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-adapter', template: '', providers: [NestedOptionHost] }]
@@ -1186,7 +117,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdapterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAdapterModule, declarations: [DxoAdapterComponent], exports: [DxoAdapterComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdapterModule });
-            } exports("dc", DxoAdapterModule);
+            } exports("DxoAdapterModule", DxoAdapterModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdapterModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -1247,7 +178,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdaptiveLayoutComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAdaptiveLayoutComponent, selector: "dxo-adaptive-layout", inputs: { height: "height", keepLabels: "keepLabels", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAdaptiveLayoutComponent", DxoAdaptiveLayoutComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdaptiveLayoutComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-adaptive-layout', template: '', providers: [NestedOptionHost] }]
@@ -1268,7 +199,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdaptiveLayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAdaptiveLayoutModule, declarations: [DxoAdaptiveLayoutComponent], exports: [DxoAdaptiveLayoutComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdaptiveLayoutModule });
-            } exports("S", DxoAdaptiveLayoutModule);
+            } exports("DxoAdaptiveLayoutModule", DxoAdaptiveLayoutModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAdaptiveLayoutModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -1365,7 +296,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationIntervalComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAggregationIntervalComponent, selector: "dxo-aggregation-interval", inputs: { days: "days", hours: "hours", milliseconds: "milliseconds", minutes: "minutes", months: "months", quarters: "quarters", seconds: "seconds", weeks: "weeks", years: "years" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAggregationIntervalComponent", DxoAggregationIntervalComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationIntervalComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-aggregation-interval', template: '', providers: [NestedOptionHost] }]
@@ -1398,7 +329,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationIntervalModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationIntervalModule, declarations: [DxoAggregationIntervalComponent], exports: [DxoAggregationIntervalComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationIntervalModule });
-            } exports("X", DxoAggregationIntervalModule);
+            } exports("DxoAggregationIntervalModule", DxoAggregationIntervalModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationIntervalModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -1459,7 +390,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAggregationComponent, selector: "dxo-aggregation", inputs: { calculate: "calculate", enabled: "enabled", method: "method" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAggregationComponent", DxoAggregationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-aggregation', template: '', providers: [NestedOptionHost] }]
@@ -1480,7 +411,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationModule, declarations: [DxoAggregationComponent], exports: [DxoAggregationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationModule });
-            } exports("ae", DxoAggregationModule);
+            } exports("DxoAggregationModule", DxoAggregationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAggregationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -1632,7 +563,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAnimationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAnimationComponent, selector: "dxo-animation", inputs: { hide: "hide", show: "show", duration: "duration", easing: "easing", enabled: "enabled", maxPointCountSupported: "maxPointCountSupported", complete: "complete", delay: "delay", direction: "direction", from: "from", staggerDelay: "staggerDelay", start: "start", to: "to", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAnimationComponent", DxoAnimationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAnimationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-animation', template: '', providers: [NestedOptionHost], inputs: [
@@ -1662,7 +593,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAnimationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAnimationModule, declarations: [DxoAnimationComponent], exports: [DxoAnimationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAnimationModule });
-            } exports("j", DxoAnimationModule);
+            } exports("DxoAnimationModule", DxoAnimationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAnimationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -1943,7 +874,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiAnnotationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiAnnotationComponent, selector: "dxi-annotation", inputs: { allowDragging: "allowDragging", argument: "argument", arrowLength: "arrowLength", arrowWidth: "arrowWidth", axis: "axis", border: "border", color: "color", customizeTooltip: "customizeTooltip", data: "data", description: "description", font: "font", height: "height", image: "image", name: "name", offsetX: "offsetX", offsetY: "offsetY", opacity: "opacity", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", series: "series", shadow: "shadow", template: "template", text: "text", textOverflow: "textOverflow", tooltipEnabled: "tooltipEnabled", tooltipTemplate: "tooltipTemplate", type: "type", value: "value", width: "width", wordWrap: "wordWrap", x: "x", y: "y", location: "location", angle: "angle", radius: "radius", coordinates: "coordinates" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("O", DxiAnnotationComponent);
+            } exports("DxiAnnotationComponent", DxiAnnotationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiAnnotationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-annotation', template: '', providers: [NestedOptionHost], inputs: [
@@ -1995,7 +926,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiAnnotationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiAnnotationModule, declarations: [DxiAnnotationComponent], exports: [DxiAnnotationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiAnnotationModule });
-            } exports("T", DxiAnnotationModule);
+            } exports("DxiAnnotationModule", DxiAnnotationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiAnnotationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -2056,7 +987,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoApiKeyComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoApiKeyComponent, selector: "dxo-api-key", inputs: { bing: "bing", google: "google", googleStatic: "googleStatic" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoApiKeyComponent", DxoApiKeyComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoApiKeyComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-api-key', template: '', providers: [NestedOptionHost] }]
@@ -2077,7 +1008,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoApiKeyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoApiKeyModule, declarations: [DxoApiKeyComponent], exports: [DxoApiKeyComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoApiKeyModule });
-            } exports("ch", DxoApiKeyModule);
+            } exports("DxoApiKeyModule", DxoApiKeyModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoApiKeyModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -2180,7 +1111,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAppointmentDraggingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAppointmentDraggingComponent, selector: "dxo-appointment-dragging", inputs: { autoScroll: "autoScroll", data: "data", group: "group", onAdd: "onAdd", onDragEnd: "onDragEnd", onDragMove: "onDragMove", onDragStart: "onDragStart", onRemove: "onRemove", scrollSensitivity: "scrollSensitivity", scrollSpeed: "scrollSpeed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAppointmentDraggingComponent", DxoAppointmentDraggingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAppointmentDraggingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-appointment-dragging', template: '', providers: [NestedOptionHost] }]
@@ -2215,7 +1146,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAppointmentDraggingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAppointmentDraggingModule, declarations: [DxoAppointmentDraggingComponent], exports: [DxoAppointmentDraggingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAppointmentDraggingModule });
-            } exports("cP", DxoAppointmentDraggingModule);
+            } exports("DxoAppointmentDraggingModule", DxoAppointmentDraggingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAppointmentDraggingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -2673,7 +1604,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAreaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAreaComponent, selector: "dxo-area", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAreaComponent", DxoAreaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAreaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-area', template: '', providers: [NestedOptionHost], inputs: [
@@ -2751,7 +1682,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAreaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAreaModule, declarations: [DxoAreaComponent], exports: [DxoAreaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAreaModule });
-            } exports("af", DxoAreaModule);
+            } exports("DxoAreaModule", DxoAreaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAreaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -2828,7 +1759,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiBreakComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiBreakComponent, selector: "dxi-break", inputs: { endValue: "endValue", startValue: "startValue" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiBreakComponent", DxiBreakComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiBreakComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-break', template: '', providers: [NestedOptionHost], inputs: [
@@ -2846,7 +1777,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiBreakModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiBreakModule, declarations: [DxiBreakComponent], exports: [DxiBreakComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiBreakModule });
-            } exports("Y", DxiBreakModule);
+            } exports("DxiBreakModule", DxiBreakModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiBreakModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -2940,7 +1871,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConstantLineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiConstantLineComponent, selector: "dxi-constant-line", inputs: { color: "color", dashStyle: "dashStyle", displayBehindSeries: "displayBehindSeries", extendAxis: "extendAxis", label: "label", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", value: "value", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiConstantLineComponent", DxiConstantLineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConstantLineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-constant-line', template: '', providers: [NestedOptionHost] }]
@@ -2973,7 +1904,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConstantLineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiConstantLineModule, declarations: [DxiConstantLineComponent], exports: [DxiConstantLineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConstantLineModule });
-            } exports("_", DxiConstantLineModule);
+            } exports("DxiConstantLineModule", DxiConstantLineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConstantLineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -3049,7 +1980,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiStripComponent, selector: "dxi-strip", inputs: { color: "color", endValue: "endValue", label: "label", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", startValue: "startValue" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiStripComponent", DxiStripComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-strip', template: '', providers: [NestedOptionHost] }]
@@ -3076,7 +2007,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiStripModule, declarations: [DxiStripComponent], exports: [DxiStripComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripModule });
-            } exports("a5", DxiStripModule);
+            } exports("DxiStripModule", DxiStripModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -3477,7 +2408,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentAxisComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoArgumentAxisComponent, selector: "dxo-argument-axis", inputs: { aggregateByCategory: "aggregateByCategory", aggregatedPointsPosition: "aggregatedPointsPosition", aggregationGroupWidth: "aggregationGroupWidth", aggregationInterval: "aggregationInterval", allowDecimals: "allowDecimals", argumentType: "argumentType", axisDivisionFactor: "axisDivisionFactor", breaks: "breaks", breakStyle: "breakStyle", categories: "categories", color: "color", constantLines: "constantLines", constantLineStyle: "constantLineStyle", customPosition: "customPosition", customPositionAxis: "customPositionAxis", discreteAxisDivisionMode: "discreteAxisDivisionMode", endOnTick: "endOnTick", grid: "grid", holidays: "holidays", hoverMode: "hoverMode", inverted: "inverted", label: "label", linearThreshold: "linearThreshold", logarithmBase: "logarithmBase", maxValueMargin: "maxValueMargin", minorGrid: "minorGrid", minorTick: "minorTick", minorTickCount: "minorTickCount", minorTickInterval: "minorTickInterval", minValueMargin: "minValueMargin", minVisualRangeLength: "minVisualRangeLength", offset: "offset", opacity: "opacity", placeholderSize: "placeholderSize", position: "position", singleWorkdays: "singleWorkdays", strips: "strips", stripStyle: "stripStyle", tick: "tick", tickInterval: "tickInterval", title: "title", type: "type", valueMarginsEnabled: "valueMarginsEnabled", visible: "visible", visualRange: "visualRange", visualRangeUpdateMode: "visualRangeUpdateMode", wholeRange: "wholeRange", width: "width", workdaysOnly: "workdaysOnly", workWeek: "workWeek", firstPointOnStartAngle: "firstPointOnStartAngle", originValue: "originValue", period: "period", startAngle: "startAngle" }, outputs: { categoriesChange: "categoriesChange", visualRangeChange: "visualRangeChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "breaksChildren", predicate: i0.forwardRef(() => DxiBreakComponent) }, { propertyName: "constantLinesChildren", predicate: i0.forwardRef(() => DxiConstantLineComponent) }, { propertyName: "stripsChildren", predicate: i0.forwardRef(() => DxiStripComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoArgumentAxisComponent", DxoArgumentAxisComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentAxisComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-argument-axis', template: '', providers: [NestedOptionHost] }]
@@ -3613,7 +2544,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentAxisModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentAxisModule, declarations: [DxoArgumentAxisComponent], exports: [DxoArgumentAxisComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentAxisModule });
-            } exports("V", DxoArgumentAxisModule);
+            } exports("DxoArgumentAxisModule", DxoArgumentAxisModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentAxisModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -3717,7 +2648,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentFormatComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoArgumentFormatComponent, selector: "dxo-argument-format", inputs: { currency: "currency", formatter: "formatter", parser: "parser", precision: "precision", type: "type", useCurrencyAccountingStyle: "useCurrencyAccountingStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoArgumentFormatComponent", DxoArgumentFormatComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentFormatComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-argument-format', template: '', providers: [NestedOptionHost], inputs: [
@@ -3739,7 +2670,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentFormatModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentFormatModule, declarations: [DxoArgumentFormatComponent], exports: [DxoArgumentFormatComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentFormatModule });
-            } exports("az", DxoArgumentFormatModule);
+            } exports("DxoArgumentFormatModule", DxoArgumentFormatModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoArgumentFormatModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -3794,7 +2725,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAtComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAtComponent, selector: "dxo-at", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAtComponent", DxoAtComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAtComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-at', template: '', providers: [NestedOptionHost] }]
@@ -3813,7 +2744,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAtModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAtModule, declarations: [DxoAtComponent], exports: [DxoAtComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAtModule });
-            } exports("n", DxoAtModule);
+            } exports("DxoAtModule", DxoAtModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAtModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -3868,7 +2799,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAutoLayoutComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoAutoLayoutComponent, selector: "dxo-auto-layout", inputs: { orientation: "orientation", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoAutoLayoutComponent", DxoAutoLayoutComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAutoLayoutComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-auto-layout', template: '', providers: [NestedOptionHost] }]
@@ -3887,7 +2818,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAutoLayoutModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoAutoLayoutModule, declarations: [DxoAutoLayoutComponent], exports: [DxoAutoLayoutComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAutoLayoutModule });
-            } exports("bl", DxoAutoLayoutModule);
+            } exports("DxoAutoLayoutModule", DxoAutoLayoutModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoAutoLayoutModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -3967,7 +2898,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundColorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBackgroundColorComponent, selector: "dxo-background-color", inputs: { base: "base", fillId: "fillId" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBackgroundColorComponent", DxoBackgroundColorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundColorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-background-color', template: '', providers: [NestedOptionHost], inputs: [
@@ -3985,7 +2916,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundColorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundColorModule, declarations: [DxoBackgroundColorComponent], exports: [DxoBackgroundColorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundColorModule });
-            } exports("ac", DxoBackgroundColorModule);
+            } exports("DxoBackgroundColorModule", DxoBackgroundColorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundColorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -4052,7 +2983,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBackgroundComponent, selector: "dxo-background", inputs: { color: "color", image: "image", visible: "visible", borderColor: "borderColor" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBackgroundComponent", DxoBackgroundComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-background', template: '', providers: [NestedOptionHost] }]
@@ -4075,7 +3006,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundModule, declarations: [DxoBackgroundComponent], exports: [DxoBackgroundComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundModule });
-            } exports("cx", DxoBackgroundModule);
+            } exports("DxoBackgroundModule", DxoBackgroundModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBackgroundModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -4119,7 +3050,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBarComponent, selector: "dxo-bar", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBarComponent", DxoBarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-bar', template: '', providers: [NestedOptionHost], inputs: [
@@ -4197,7 +3128,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBarModule, declarations: [DxoBarComponent], exports: [DxoBarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBarModule });
-            } exports("aq", DxoBarModule);
+            } exports("DxoBarModule", DxoBarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -4282,7 +3213,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBehaviorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBehaviorComponent, selector: "dxo-behavior", inputs: { allowSlidersSwap: "allowSlidersSwap", animationEnabled: "animationEnabled", callValueChanged: "callValueChanged", manualRangeSelectionEnabled: "manualRangeSelectionEnabled", moveSelectedRangeByClick: "moveSelectedRangeByClick", snapToTicks: "snapToTicks", valueChangeMode: "valueChangeMode" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBehaviorComponent", DxoBehaviorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBehaviorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-behavior', template: '', providers: [NestedOptionHost] }]
@@ -4311,7 +3242,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBehaviorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBehaviorModule, declarations: [DxoBehaviorComponent], exports: [DxoBehaviorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBehaviorModule });
-            } exports("cy", DxoBehaviorModule);
+            } exports("DxoBehaviorModule", DxoBehaviorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBehaviorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -4414,7 +3345,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBorderComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBorderComponent, selector: "dxo-border", inputs: { color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", opacity: "opacity", visible: "visible", width: "width", bottom: "bottom", left: "left", right: "right", top: "top" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBorderComponent", DxoBorderComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBorderComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-border', template: '', providers: [NestedOptionHost] }]
@@ -4449,7 +3380,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBorderModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBorderModule, declarations: [DxoBorderComponent], exports: [DxoBorderComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBorderModule });
-            } exports("B", DxoBorderModule);
+            } exports("DxoBorderModule", DxoBorderModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBorderModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -4504,7 +3435,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoundaryOffsetComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBoundaryOffsetComponent, selector: "dxo-boundary-offset", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBoundaryOffsetComponent", DxoBoundaryOffsetComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoundaryOffsetComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-boundary-offset', template: '', providers: [NestedOptionHost] }]
@@ -4523,7 +3454,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoundaryOffsetModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBoundaryOffsetModule, declarations: [DxoBoundaryOffsetComponent], exports: [DxoBoundaryOffsetComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoundaryOffsetModule });
-            } exports("o", DxoBoundaryOffsetModule);
+            } exports("DxoBoundaryOffsetModule", DxoBoundaryOffsetModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoundaryOffsetModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -5271,7 +4202,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValidationRuleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiValidationRuleComponent, selector: "dxi-validation-rule", inputs: { message: "message", trim: "trim", type: "type", ignoreEmptyValue: "ignoreEmptyValue", max: "max", min: "min", reevaluate: "reevaluate", validationCallback: "validationCallback", comparisonTarget: "comparisonTarget", comparisonType: "comparisonType", pattern: "pattern" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("db", DxiValidationRuleComponent);
+            } exports("DxiValidationRuleComponent", DxiValidationRuleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValidationRuleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-validation-rule', template: '', providers: [NestedOptionHost] }]
@@ -5308,7 +4239,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValidationRuleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiValidationRuleModule, declarations: [DxiValidationRuleComponent], exports: [DxiValidationRuleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValidationRuleModule });
-            } exports("bK", DxiValidationRuleModule);
+            } exports("DxiValidationRuleModule", DxiValidationRuleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValidationRuleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -5511,7 +4442,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCommandComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiCommandComponent, selector: "dxi-command", inputs: { icon: "icon", items: "items", location: "location", name: "name", text: "text" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiCommandComponent", DxiCommandComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCommandComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-command', template: '', providers: [NestedOptionHost], inputs: [
@@ -5535,7 +4466,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCommandModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiCommandModule, declarations: [DxiCommandComponent], exports: [DxiCommandComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCommandModule });
-            } exports("ba", DxiCommandModule);
+            } exports("DxiCommandModule", DxiCommandModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCommandModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -5617,7 +4548,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiGroupComponent, selector: "dxi-group", inputs: { commands: "commands", title: "title", category: "category", displayMode: "displayMode", expanded: "expanded", shapes: "shapes" }, providers: [NestedOptionHost], queries: [{ propertyName: "commandsChildren", predicate: i0.forwardRef(() => DxiCommandComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiGroupComponent", DxiGroupComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-group', template: '', providers: [NestedOptionHost] }]
@@ -5647,7 +4578,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupModule, declarations: [DxiGroupComponent], exports: [DxiGroupComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupModule });
-            } exports("bp", DxiGroupModule);
+            } exports("DxiGroupModule", DxiGroupModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -5719,7 +4650,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTabComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }, { token: i0.Renderer2 }, { token: DOCUMENT }, { token: DxTemplateHost, host: true }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiTabComponent, selector: "dxi-tab", inputs: { alignItemLabels: "alignItemLabels", badge: "badge", colCount: "colCount", colCountByScreen: "colCountByScreen", disabled: "disabled", icon: "icon", items: "items", tabTemplate: "tabTemplate", template: "template", title: "title", commands: "commands", groups: "groups", name: "name" }, providers: [NestedOptionHost, DxTemplateHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }, { propertyName: "commandsChildren", predicate: i0.forwardRef(() => DxiCommandComponent) }, { propertyName: "groupsChildren", predicate: i0.forwardRef(() => DxiGroupComponent) }], usesInheritance: true, ngImport: i0, template: '<ng-content></ng-content>', isInline: true, styles: [":host{display:block}\n"] });
-            }
+            } exports("DxiTabComponent", DxiTabComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTabComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-tab', template: '<ng-content></ng-content>', providers: [NestedOptionHost, DxTemplateHost], inputs: [
@@ -5762,7 +4693,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTabModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiTabModule, declarations: [DxiTabComponent], exports: [DxiTabComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTabModule });
-            } exports("bo", DxiTabModule);
+            } exports("DxiTabModule", DxiTabModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTabModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -5844,7 +4775,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLocationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiLocationComponent, selector: "dxi-location", inputs: { lat: "lat", lng: "lng", col: "col", colspan: "colspan", row: "row", rowspan: "rowspan", screen: "screen" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiLocationComponent", DxiLocationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLocationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-location', template: '', providers: [NestedOptionHost] }]
@@ -5873,7 +4804,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLocationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiLocationModule, declarations: [DxiLocationComponent], exports: [DxiLocationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLocationModule });
-            } exports("ck", DxiLocationModule);
+            } exports("DxiLocationModule", DxiLocationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLocationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -5951,7 +4882,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }, { token: i0.Renderer2 }, { token: DOCUMENT }, { token: DxTemplateHost, host: true }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiItemComponent, selector: "dxi-item", inputs: { disabled: "disabled", html: "html", icon: "icon", template: "template", text: "text", title: "title", titleTemplate: "titleTemplate", visible: "visible", onClick: "onClick", stylingMode: "stylingMode", type: "type", baseSize: "baseSize", box: "box", ratio: "ratio", shrink: "shrink", elementAttr: "elementAttr", hint: "hint", beginGroup: "beginGroup", closeMenuOnClick: "closeMenuOnClick", items: "items", selectable: "selectable", selected: "selected", colSpan: "colSpan", cssClass: "cssClass", dataField: "dataField", editorOptions: "editorOptions", editorType: "editorType", helpText: "helpText", isRequired: "isRequired", itemType: "itemType", label: "label", name: "name", validationRules: "validationRules", visibleIndex: "visibleIndex", alignItemLabels: "alignItemLabels", caption: "caption", captionTemplate: "captionTemplate", colCount: "colCount", colCountByScreen: "colCountByScreen", tabPanelOptions: "tabPanelOptions", tabs: "tabs", badge: "badge", tabTemplate: "tabTemplate", buttonOptions: "buttonOptions", horizontalAlignment: "horizontalAlignment", verticalAlignment: "verticalAlignment", locateInMenu: "locateInMenu", location: "location", menuItemTemplate: "menuItemTemplate", options: "options", showText: "showText", widget: "widget", height: "height", width: "width", imageAlt: "imageAlt", imageSrc: "imageSrc", acceptedValues: "acceptedValues", formatName: "formatName", formatValues: "formatValues", key: "key", showChevron: "showChevron", linkAttr: "linkAttr", url: "url", collapsed: "collapsed", collapsedSize: "collapsedSize", collapsible: "collapsible", maxSize: "maxSize", minSize: "minSize", resizable: "resizable", size: "size", splitter: "splitter", heightRatio: "heightRatio", widthRatio: "widthRatio", expanded: "expanded", hasItems: "hasItems", id: "id", parentId: "parentId" }, providers: [NestedOptionHost, DxTemplateHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }, { propertyName: "validationRulesChildren", predicate: i0.forwardRef(() => DxiValidationRuleComponent) }, { propertyName: "tabsChildren", predicate: i0.forwardRef(() => DxiTabComponent) }, { propertyName: "locationChildren", predicate: i0.forwardRef(() => DxiLocationComponent) }], usesInheritance: true, ngImport: i0, template: '<ng-content></ng-content>', isInline: true, styles: [":host{display:block}\n"] });
-            } exports("b", DxiItemComponent);
+            } exports("DxiItemComponent", DxiItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-item', template: '<ng-content></ng-content>', providers: [NestedOptionHost, DxTemplateHost], inputs: [
@@ -6061,7 +4992,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiItemModule, declarations: [DxiItemComponent], exports: [DxiItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiItemModule });
-            } exports("c", DxiItemModule);
+            } exports("DxiItemModule", DxiItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -6120,7 +5051,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoxComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBoxComponent, selector: "dxo-box", inputs: { align: "align", crossAlign: "crossAlign", dataSource: "dataSource", direction: "direction", disabled: "disabled", elementAttr: "elementAttr", height: "height", hoverStateEnabled: "hoverStateEnabled", itemHoldTimeout: "itemHoldTimeout", items: "items", itemTemplate: "itemTemplate", onContentReady: "onContentReady", onDisposing: "onDisposing", onInitialized: "onInitialized", onItemClick: "onItemClick", onItemContextMenu: "onItemContextMenu", onItemHold: "onItemHold", onItemRendered: "onItemRendered", onOptionChanged: "onOptionChanged", rtlEnabled: "rtlEnabled", visible: "visible", width: "width" }, outputs: { itemsChange: "itemsChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBoxComponent", DxoBoxComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoxComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-box', template: '', providers: [NestedOptionHost], inputs: [
@@ -6163,7 +5094,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoxModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBoxModule, declarations: [DxoBoxComponent], exports: [DxoBoxComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoxModule });
-            } exports("M", DxoBoxModule);
+            } exports("DxoBoxModule", DxoBoxModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBoxModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -6224,7 +5155,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBreakStyleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBreakStyleComponent, selector: "dxo-break-style", inputs: { color: "color", line: "line", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBreakStyleComponent", DxoBreakStyleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBreakStyleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-break-style', template: '', providers: [NestedOptionHost] }]
@@ -6245,7 +5176,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBreakStyleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBreakStyleModule, declarations: [DxoBreakStyleComponent], exports: [DxoBreakStyleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBreakStyleModule });
-            } exports("Z", DxoBreakStyleModule);
+            } exports("DxoBreakStyleModule", DxoBreakStyleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBreakStyleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -6289,7 +5220,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBubbleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoBubbleComponent, selector: "dxo-bubble", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoBubbleComponent", DxoBubbleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBubbleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-bubble', template: '', providers: [NestedOptionHost], inputs: [
@@ -6366,7 +5297,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBubbleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoBubbleModule, declarations: [DxoBubbleComponent], exports: [DxoBubbleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBubbleModule });
-            } exports("ar", DxoBubbleModule);
+            } exports("DxoBubbleModule", DxoBubbleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoBubbleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -6497,7 +5428,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiButtonComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiButtonComponent, selector: "dxi-button", inputs: { location: "location", name: "name", options: "options", cssClass: "cssClass", disabled: "disabled", hint: "hint", icon: "icon", onClick: "onClick", template: "template", text: "text", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("f", DxiButtonComponent);
+            } exports("DxiButtonComponent", DxiButtonComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiButtonComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-button', template: '', providers: [NestedOptionHost], inputs: [
@@ -6524,7 +5455,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiButtonModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiButtonModule, declarations: [DxiButtonComponent], exports: [DxiButtonComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiButtonModule });
-            } exports("g", DxiButtonModule);
+            } exports("DxiButtonModule", DxiButtonModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiButtonModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -6736,7 +5667,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoButtonOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoButtonOptionsComponent, selector: "dxo-button-options", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", disabled: "disabled", elementAttr: "elementAttr", focusStateEnabled: "focusStateEnabled", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", icon: "icon", onClick: "onClick", onContentReady: "onContentReady", onDisposing: "onDisposing", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", rtlEnabled: "rtlEnabled", stylingMode: "stylingMode", tabIndex: "tabIndex", template: "template", text: "text", type: "type", useSubmitBehavior: "useSubmitBehavior", validationGroup: "validationGroup", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoButtonOptionsComponent", DxoButtonOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoButtonOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-button-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -6776,7 +5707,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoButtonOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoButtonOptionsModule, declarations: [DxoButtonOptionsComponent], exports: [DxoButtonOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoButtonOptionsModule });
-            } exports("bM", DxoButtonOptionsModule);
+            } exports("DxoButtonOptionsModule", DxoButtonOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoButtonOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -7100,7 +6031,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCalendarOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCalendarOptionsComponent, selector: "dxo-calendar-options", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", cellTemplate: "cellTemplate", dateSerializationFormat: "dateSerializationFormat", disabled: "disabled", disabledDates: "disabledDates", elementAttr: "elementAttr", firstDayOfWeek: "firstDayOfWeek", focusStateEnabled: "focusStateEnabled", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", isDirty: "isDirty", isValid: "isValid", max: "max", maxZoomLevel: "maxZoomLevel", min: "min", minZoomLevel: "minZoomLevel", name: "name", onDisposing: "onDisposing", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onValueChanged: "onValueChanged", readOnly: "readOnly", rtlEnabled: "rtlEnabled", selectionMode: "selectionMode", selectWeekOnClick: "selectWeekOnClick", showTodayButton: "showTodayButton", showWeekNumbers: "showWeekNumbers", tabIndex: "tabIndex", validationError: "validationError", validationErrors: "validationErrors", validationMessageMode: "validationMessageMode", validationMessagePosition: "validationMessagePosition", validationStatus: "validationStatus", value: "value", visible: "visible", weekNumberRule: "weekNumberRule", width: "width", zoomLevel: "zoomLevel" }, outputs: { valueChange: "valueChange", zoomLevelChange: "zoomLevelChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCalendarOptionsComponent", DxoCalendarOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCalendarOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-calendar-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -7160,7 +6091,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCalendarOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCalendarOptionsModule, declarations: [DxoCalendarOptionsComponent], exports: [DxoCalendarOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCalendarOptionsModule });
-            } exports("b6", DxoCalendarOptionsModule);
+            } exports("DxoCalendarOptionsModule", DxoCalendarOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCalendarOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -7204,7 +6135,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCandlestickComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCandlestickComponent, selector: "dxo-candlestick", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCandlestickComponent", DxoCandlestickComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCandlestickComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-candlestick', template: '', providers: [NestedOptionHost], inputs: [
@@ -7281,7 +6212,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCandlestickModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCandlestickModule, declarations: [DxoCandlestickComponent], exports: [DxoCandlestickComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCandlestickModule });
-            } exports("as", DxoCandlestickModule);
+            } exports("DxoCandlestickModule", DxoCandlestickModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCandlestickModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -7333,7 +6264,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCenterComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiCenterComponent, selector: "dxi-center", inputs: { lat: "lat", lng: "lng" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("ce", DxiCenterComponent);
+            } exports("DxiCenterComponent", DxiCenterComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCenterComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-center', template: '', providers: [NestedOptionHost] }]
@@ -7352,7 +6283,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCenterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiCenterModule, declarations: [DxiCenterComponent], exports: [DxiCenterComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCenterModule });
-            } exports("ci", DxiCenterModule);
+            } exports("DxiCenterModule", DxiCenterModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCenterModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -7447,7 +6378,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiChangeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiChangeComponent, selector: "dxi-change", inputs: { data: "data", insertAfterKey: "insertAfterKey", insertBeforeKey: "insertBeforeKey", key: "key", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiChangeComponent", DxiChangeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiChangeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-change', template: '', providers: [NestedOptionHost], inputs: [
@@ -7468,7 +6399,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiChangeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiChangeModule, declarations: [DxiChangeComponent], exports: [DxiChangeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiChangeModule });
-            } exports("cX", DxiChangeModule);
+            } exports("DxiChangeModule", DxiChangeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiChangeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -7797,7 +6728,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSeriesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiSeriesComponent, selector: "dxi-series", inputs: { aggregation: "aggregation", argumentField: "argumentField", axis: "axis", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", name: "name", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", stack: "stack", tag: "tag", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", argumentType: "argumentType", minSegmentSize: "minSegmentSize", smallValuesGrouping: "smallValuesGrouping", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("Q", DxiSeriesComponent);
+            } exports("DxiSeriesComponent", DxiSeriesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSeriesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-series', template: '', providers: [NestedOptionHost], inputs: [
@@ -7857,7 +6788,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSeriesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiSeriesModule, declarations: [DxiSeriesComponent], exports: [DxiSeriesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSeriesModule });
-            } exports("aU", DxiSeriesModule);
+            } exports("DxiSeriesModule", DxiSeriesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSeriesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -7990,7 +6921,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoChartComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoChartComponent, selector: "dxo-chart", inputs: { barGroupPadding: "barGroupPadding", barGroupWidth: "barGroupWidth", bottomIndent: "bottomIndent", commonSeriesSettings: "commonSeriesSettings", dataPrepareSettings: "dataPrepareSettings", maxBubbleSize: "maxBubbleSize", minBubbleSize: "minBubbleSize", negativesAsZeroes: "negativesAsZeroes", palette: "palette", paletteExtensionMode: "paletteExtensionMode", series: "series", seriesTemplate: "seriesTemplate", topIndent: "topIndent", valueAxis: "valueAxis" }, providers: [NestedOptionHost], queries: [{ propertyName: "seriesChildren", predicate: i0.forwardRef(() => DxiSeriesComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoChartComponent", DxoChartComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoChartComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-chart', template: '', providers: [NestedOptionHost] }]
@@ -8036,7 +6967,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoChartModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoChartModule, declarations: [DxoChartComponent], exports: [DxoChartComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoChartModule });
-            } exports("cz", DxoChartModule);
+            } exports("DxoChartModule", DxoChartModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoChartModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -8103,7 +7034,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColCountByScreenComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoColCountByScreenComponent, selector: "dxo-col-count-by-screen", inputs: { lg: "lg", md: "md", sm: "sm", xs: "xs" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoColCountByScreenComponent", DxoColCountByScreenComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColCountByScreenComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-col-count-by-screen', template: '', providers: [NestedOptionHost] }]
@@ -8126,7 +7057,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColCountByScreenModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoColCountByScreenModule, declarations: [DxoColCountByScreenComponent], exports: [DxoColCountByScreenComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColCountByScreenModule });
-            } exports("bJ", DxoColCountByScreenModule);
+            } exports("DxoColCountByScreenModule", DxoColCountByScreenModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColCountByScreenModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -8190,7 +7121,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiColComponent, selector: "dxi-col", inputs: { baseSize: "baseSize", ratio: "ratio", screen: "screen", shrink: "shrink" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("cH", DxiColComponent);
+            } exports("DxiColComponent", DxiColComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-col', template: '', providers: [NestedOptionHost] }]
@@ -8213,7 +7144,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiColModule, declarations: [DxiColComponent], exports: [DxiColComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColModule });
-            } exports("cJ", DxiColModule);
+            } exports("DxiColModule", DxiColModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -8268,7 +7199,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCollisionComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCollisionComponent, selector: "dxo-collision", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCollisionComponent", DxoCollisionComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCollisionComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-collision', template: '', providers: [NestedOptionHost] }]
@@ -8287,7 +7218,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCollisionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCollisionModule, declarations: [DxoCollisionComponent], exports: [DxoCollisionComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCollisionModule });
-            } exports("p", DxoCollisionModule);
+            } exports("DxoCollisionModule", DxoCollisionModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCollisionModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -8331,7 +7262,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoColorComponent, selector: "dxo-color", inputs: { base: "base", fillId: "fillId" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoColorComponent", DxoColorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-color', template: '', providers: [NestedOptionHost], inputs: [
@@ -8349,7 +7280,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoColorModule, declarations: [DxoColorComponent], exports: [DxoColorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorModule });
-            } exports("at", DxoColorModule);
+            } exports("DxoColorModule", DxoColorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -8428,7 +7359,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorizerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoColorizerComponent, selector: "dxo-colorizer", inputs: { colorCodeField: "colorCodeField", colorizeGroups: "colorizeGroups", palette: "palette", paletteExtensionMode: "paletteExtensionMode", range: "range", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoColorizerComponent", DxoColorizerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorizerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-colorizer', template: '', providers: [NestedOptionHost] }]
@@ -8455,7 +7386,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorizerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoColorizerModule, declarations: [DxoColorizerComponent], exports: [DxoColorizerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorizerModule });
-            } exports("d7", DxoColorizerModule);
+            } exports("DxoColorizerModule", DxoColorizerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColorizerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -8576,7 +7507,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnChooserComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoColumnChooserComponent, selector: "dxo-column-chooser", inputs: { allowSearch: "allowSearch", container: "container", emptyPanelText: "emptyPanelText", enabled: "enabled", height: "height", mode: "mode", position: "position", search: "search", searchTimeout: "searchTimeout", selection: "selection", sortOrder: "sortOrder", title: "title", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoColumnChooserComponent", DxoColumnChooserComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnChooserComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-column-chooser', template: '', providers: [NestedOptionHost] }]
@@ -8617,7 +7548,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnChooserModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnChooserModule, declarations: [DxoColumnChooserComponent], exports: [DxoColumnChooserComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnChooserModule });
-            } exports("cT", DxoColumnChooserModule);
+            } exports("DxoColumnChooserModule", DxoColumnChooserModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnChooserModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -9136,7 +8067,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColumnComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiColumnComponent, selector: "dxi-column", inputs: { alignment: "alignment", allowEditing: "allowEditing", allowExporting: "allowExporting", allowFiltering: "allowFiltering", allowFixing: "allowFixing", allowGrouping: "allowGrouping", allowHeaderFiltering: "allowHeaderFiltering", allowHiding: "allowHiding", allowReordering: "allowReordering", allowResizing: "allowResizing", allowSearch: "allowSearch", allowSorting: "allowSorting", autoExpandGroup: "autoExpandGroup", buttons: "buttons", calculateCellValue: "calculateCellValue", calculateDisplayValue: "calculateDisplayValue", calculateFilterExpression: "calculateFilterExpression", calculateGroupValue: "calculateGroupValue", calculateSortValue: "calculateSortValue", caption: "caption", cellTemplate: "cellTemplate", columns: "columns", cssClass: "cssClass", customizeText: "customizeText", dataField: "dataField", dataType: "dataType", editCellTemplate: "editCellTemplate", editorOptions: "editorOptions", encodeHtml: "encodeHtml", falseText: "falseText", filterOperations: "filterOperations", filterType: "filterType", filterValue: "filterValue", filterValues: "filterValues", fixed: "fixed", fixedPosition: "fixedPosition", format: "format", formItem: "formItem", groupCellTemplate: "groupCellTemplate", groupIndex: "groupIndex", headerCellTemplate: "headerCellTemplate", headerFilter: "headerFilter", hidingPriority: "hidingPriority", isBand: "isBand", lookup: "lookup", minWidth: "minWidth", name: "name", ownerBand: "ownerBand", renderAsync: "renderAsync", selectedFilterOperation: "selectedFilterOperation", setCellValue: "setCellValue", showEditorAlways: "showEditorAlways", showInColumnChooser: "showInColumnChooser", showWhenGrouped: "showWhenGrouped", sortIndex: "sortIndex", sortingMethod: "sortingMethod", sortOrder: "sortOrder", trueText: "trueText", type: "type", validationRules: "validationRules", visible: "visible", visibleIndex: "visibleIndex", width: "width" }, outputs: { filterValueChange: "filterValueChange", filterValuesChange: "filterValuesChange", groupIndexChange: "groupIndexChange", selectedFilterOperationChange: "selectedFilterOperationChange", sortIndexChange: "sortIndexChange", sortOrderChange: "sortOrderChange", visibleChange: "visibleChange", visibleIndexChange: "visibleIndexChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "buttonsChildren", predicate: i0.forwardRef(() => DxiButtonComponent) }, { propertyName: "columnsChildren", predicate: i0.forwardRef(() => DxiColumnComponent) }, { propertyName: "validationRulesChildren", predicate: i0.forwardRef(() => DxiValidationRuleComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("bO", DxiColumnComponent);
+            } exports("DxiColumnComponent", DxiColumnComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColumnComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-column', template: '', providers: [NestedOptionHost], inputs: [
@@ -9240,7 +8171,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColumnModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiColumnModule, declarations: [DxiColumnComponent], exports: [DxiColumnComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColumnModule });
-            } exports("bw", DxiColumnModule);
+            } exports("DxiColumnModule", DxiColumnModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiColumnModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -9295,7 +8226,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnFixingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoColumnFixingComponent, selector: "dxo-column-fixing", inputs: { enabled: "enabled", texts: "texts" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoColumnFixingComponent", DxoColumnFixingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnFixingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-column-fixing', template: '', providers: [NestedOptionHost] }]
@@ -9314,7 +8245,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnFixingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnFixingModule, declarations: [DxoColumnFixingComponent], exports: [DxoColumnFixingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnFixingModule });
-            } exports("cV", DxoColumnFixingModule);
+            } exports("DxoColumnFixingModule", DxoColumnFixingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoColumnFixingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -9592,7 +8523,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAnnotationSettingsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCommonAnnotationSettingsComponent, selector: "dxo-common-annotation-settings", inputs: { allowDragging: "allowDragging", argument: "argument", arrowLength: "arrowLength", arrowWidth: "arrowWidth", axis: "axis", border: "border", color: "color", customizeTooltip: "customizeTooltip", data: "data", description: "description", font: "font", height: "height", image: "image", offsetX: "offsetX", offsetY: "offsetY", opacity: "opacity", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", series: "series", shadow: "shadow", template: "template", text: "text", textOverflow: "textOverflow", tooltipEnabled: "tooltipEnabled", tooltipTemplate: "tooltipTemplate", type: "type", value: "value", width: "width", wordWrap: "wordWrap", x: "x", y: "y", location: "location", angle: "angle", radius: "radius", coordinates: "coordinates" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCommonAnnotationSettingsComponent", DxoCommonAnnotationSettingsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAnnotationSettingsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-common-annotation-settings', template: '', providers: [NestedOptionHost], inputs: [
@@ -9643,7 +8574,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAnnotationSettingsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAnnotationSettingsModule, declarations: [DxoCommonAnnotationSettingsComponent], exports: [DxoCommonAnnotationSettingsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAnnotationSettingsModule });
-            } exports("a9", DxoCommonAnnotationSettingsModule);
+            } exports("DxoCommonAnnotationSettingsModule", DxoCommonAnnotationSettingsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAnnotationSettingsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -9818,7 +8749,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAxisSettingsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCommonAxisSettingsComponent, selector: "dxo-common-axis-settings", inputs: { aggregatedPointsPosition: "aggregatedPointsPosition", allowDecimals: "allowDecimals", breakStyle: "breakStyle", color: "color", constantLineStyle: "constantLineStyle", discreteAxisDivisionMode: "discreteAxisDivisionMode", endOnTick: "endOnTick", grid: "grid", inverted: "inverted", label: "label", maxValueMargin: "maxValueMargin", minorGrid: "minorGrid", minorTick: "minorTick", minValueMargin: "minValueMargin", opacity: "opacity", placeholderSize: "placeholderSize", stripStyle: "stripStyle", tick: "tick", title: "title", valueMarginsEnabled: "valueMarginsEnabled", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCommonAxisSettingsComponent", DxoCommonAxisSettingsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAxisSettingsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-common-axis-settings', template: '', providers: [NestedOptionHost] }]
@@ -9877,7 +8808,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAxisSettingsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAxisSettingsModule, declarations: [DxoCommonAxisSettingsComponent], exports: [DxoCommonAxisSettingsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAxisSettingsModule });
-            } exports("aa", DxoCommonAxisSettingsModule);
+            } exports("DxoCommonAxisSettingsModule", DxoCommonAxisSettingsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonAxisSettingsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -9932,7 +8863,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonPaneSettingsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCommonPaneSettingsComponent, selector: "dxo-common-pane-settings", inputs: { backgroundColor: "backgroundColor", border: "border" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCommonPaneSettingsComponent", DxoCommonPaneSettingsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonPaneSettingsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-common-pane-settings', template: '', providers: [NestedOptionHost] }]
@@ -9951,7 +8882,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonPaneSettingsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonPaneSettingsModule, declarations: [DxoCommonPaneSettingsComponent], exports: [DxoCommonPaneSettingsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonPaneSettingsModule });
-            } exports("ab", DxoCommonPaneSettingsModule);
+            } exports("DxoCommonPaneSettingsModule", DxoCommonPaneSettingsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonPaneSettingsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -9995,7 +8926,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonSeriesSettingsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCommonSeriesSettingsComponent, selector: "dxo-common-series-settings", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", argumentType: "argumentType", minSegmentSize: "minSegmentSize", smallValuesGrouping: "smallValuesGrouping", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCommonSeriesSettingsComponent", DxoCommonSeriesSettingsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonSeriesSettingsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-common-series-settings', template: '', providers: [NestedOptionHost], inputs: [
@@ -10076,7 +9007,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonSeriesSettingsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonSeriesSettingsModule, declarations: [DxoCommonSeriesSettingsComponent], exports: [DxoCommonSeriesSettingsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonSeriesSettingsModule });
-            } exports("ad", DxoCommonSeriesSettingsModule);
+            } exports("DxoCommonSeriesSettingsModule", DxoCommonSeriesSettingsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCommonSeriesSettingsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10128,7 +9059,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConnectionPointComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiConnectionPointComponent, selector: "dxi-connection-point", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiConnectionPointComponent", DxiConnectionPointComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConnectionPointComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-connection-point', template: '', providers: [NestedOptionHost] }]
@@ -10147,7 +9078,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConnectionPointModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiConnectionPointModule, declarations: [DxiConnectionPointComponent], exports: [DxiConnectionPointComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConnectionPointModule });
-            } exports("bd", DxiConnectionPointModule);
+            } exports("DxiConnectionPointModule", DxiConnectionPointModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiConnectionPointModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10214,7 +9145,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConnectorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoConnectorComponent, selector: "dxo-connector", inputs: { color: "color", visible: "visible", width: "width", opacity: "opacity" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoConnectorComponent", DxoConnectorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConnectorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-connector', template: '', providers: [NestedOptionHost] }]
@@ -10237,7 +9168,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConnectorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoConnectorModule, declarations: [DxoConnectorComponent], exports: [DxoConnectorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConnectorModule });
-            } exports("ai", DxoConnectorModule);
+            } exports("DxoConnectorModule", DxoConnectorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConnectorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10316,7 +9247,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConstantLineStyleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoConstantLineStyleComponent, selector: "dxo-constant-line-style", inputs: { color: "color", dashStyle: "dashStyle", label: "label", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoConstantLineStyleComponent", DxoConstantLineStyleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConstantLineStyleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-constant-line-style', template: '', providers: [NestedOptionHost] }]
@@ -10343,7 +9274,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConstantLineStyleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoConstantLineStyleModule, declarations: [DxoConstantLineStyleComponent], exports: [DxoConstantLineStyleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConstantLineStyleModule });
-            } exports("$", DxoConstantLineStyleModule);
+            } exports("DxoConstantLineStyleModule", DxoConstantLineStyleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoConstantLineStyleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10441,7 +9372,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextMenuComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoContextMenuComponent, selector: "dxo-context-menu", inputs: { commands: "commands", enabled: "enabled", items: "items" }, providers: [NestedOptionHost], queries: [{ propertyName: "commandsChildren", predicate: i0.forwardRef(() => DxiCommandComponent) }, { propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoContextMenuComponent", DxoContextMenuComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextMenuComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-context-menu', template: '', providers: [NestedOptionHost], inputs: [
@@ -10466,7 +9397,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextMenuModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoContextMenuModule, declarations: [DxoContextMenuComponent], exports: [DxoContextMenuComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextMenuModule });
-            } exports("b9", DxoContextMenuModule);
+            } exports("DxoContextMenuModule", DxoContextMenuModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextMenuModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10545,7 +9476,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextToolboxComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoContextToolboxComponent, selector: "dxo-context-toolbox", inputs: { category: "category", displayMode: "displayMode", enabled: "enabled", shapeIconsPerRow: "shapeIconsPerRow", shapes: "shapes", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoContextToolboxComponent", DxoContextToolboxComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextToolboxComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-context-toolbox', template: '', providers: [NestedOptionHost] }]
@@ -10572,7 +9503,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextToolboxModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoContextToolboxModule, declarations: [DxoContextToolboxComponent], exports: [DxoContextToolboxComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextToolboxModule });
-            } exports("bb", DxoContextToolboxModule);
+            } exports("DxoContextToolboxModule", DxoContextToolboxModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoContextToolboxModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10669,7 +9600,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoControlBarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoControlBarComponent, selector: "dxo-control-bar", inputs: { borderColor: "borderColor", color: "color", enabled: "enabled", horizontalAlignment: "horizontalAlignment", margin: "margin", opacity: "opacity", panVisible: "panVisible", verticalAlignment: "verticalAlignment", zoomVisible: "zoomVisible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoControlBarComponent", DxoControlBarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoControlBarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-control-bar', template: '', providers: [NestedOptionHost] }]
@@ -10702,7 +9633,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoControlBarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoControlBarModule, declarations: [DxoControlBarComponent], exports: [DxoControlBarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoControlBarModule });
-            } exports("df", DxoControlBarModule);
+            } exports("DxoControlBarModule", DxoControlBarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoControlBarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10793,7 +9724,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCrosshairComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCrosshairComponent, selector: "dxo-crosshair", inputs: { color: "color", dashStyle: "dashStyle", enabled: "enabled", horizontalLine: "horizontalLine", label: "label", opacity: "opacity", verticalLine: "verticalLine", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCrosshairComponent", DxoCrosshairComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCrosshairComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-crosshair', template: '', providers: [NestedOptionHost] }]
@@ -10824,7 +9755,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCrosshairModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCrosshairModule, declarations: [DxoCrosshairComponent], exports: [DxoCrosshairComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCrosshairModule });
-            } exports("aO", DxoCrosshairModule);
+            } exports("DxoCrosshairModule", DxoCrosshairModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCrosshairModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -10879,7 +9810,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCursorOffsetComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoCursorOffsetComponent, selector: "dxo-cursor-offset", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoCursorOffsetComponent", DxoCursorOffsetComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCursorOffsetComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-cursor-offset', template: '', providers: [NestedOptionHost] }]
@@ -10898,7 +9829,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCursorOffsetModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoCursorOffsetModule, declarations: [DxoCursorOffsetComponent], exports: [DxoCursorOffsetComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCursorOffsetModule });
-            } exports("bt", DxoCursorOffsetModule);
+            } exports("DxoCursorOffsetModule", DxoCursorOffsetModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoCursorOffsetModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -11011,7 +9942,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomOperationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiCustomOperationComponent, selector: "dxi-custom-operation", inputs: { calculateFilterExpression: "calculateFilterExpression", caption: "caption", customizeText: "customizeText", dataTypes: "dataTypes", editorTemplate: "editorTemplate", hasValue: "hasValue", icon: "icon", name: "name" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("bC", DxiCustomOperationComponent);
+            } exports("DxiCustomOperationComponent", DxiCustomOperationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomOperationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-custom-operation', template: '', providers: [NestedOptionHost], inputs: [
@@ -11035,7 +9966,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomOperationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomOperationModule, declarations: [DxiCustomOperationComponent], exports: [DxiCustomOperationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomOperationModule });
-            } exports("bE", DxiCustomOperationModule);
+            } exports("DxiCustomOperationModule", DxiCustomOperationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomOperationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -11322,7 +10253,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomShapeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }, { token: i0.Renderer2 }, { token: DOCUMENT }, { token: DxTemplateHost, host: true }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiCustomShapeComponent, selector: "dxi-custom-shape", inputs: { allowEditImage: "allowEditImage", allowEditText: "allowEditText", allowResize: "allowResize", backgroundImageHeight: "backgroundImageHeight", backgroundImageLeft: "backgroundImageLeft", backgroundImageToolboxUrl: "backgroundImageToolboxUrl", backgroundImageTop: "backgroundImageTop", backgroundImageUrl: "backgroundImageUrl", backgroundImageWidth: "backgroundImageWidth", baseType: "baseType", category: "category", connectionPoints: "connectionPoints", defaultHeight: "defaultHeight", defaultImageUrl: "defaultImageUrl", defaultText: "defaultText", defaultWidth: "defaultWidth", imageHeight: "imageHeight", imageLeft: "imageLeft", imageTop: "imageTop", imageWidth: "imageWidth", keepRatioOnAutoSize: "keepRatioOnAutoSize", maxHeight: "maxHeight", maxWidth: "maxWidth", minHeight: "minHeight", minWidth: "minWidth", template: "template", templateHeight: "templateHeight", templateLeft: "templateLeft", templateTop: "templateTop", templateWidth: "templateWidth", textHeight: "textHeight", textLeft: "textLeft", textTop: "textTop", textWidth: "textWidth", title: "title", toolboxTemplate: "toolboxTemplate", toolboxWidthToHeightRatio: "toolboxWidthToHeightRatio", type: "type" }, providers: [NestedOptionHost, DxTemplateHost], queries: [{ propertyName: "connectionPointsChildren", predicate: i0.forwardRef(() => DxiConnectionPointComponent) }], usesInheritance: true, ngImport: i0, template: '<ng-content></ng-content>', isInline: true, styles: [":host{display:block}\n"] });
-            } exports("b8", DxiCustomShapeComponent);
+            } exports("DxiCustomShapeComponent", DxiCustomShapeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomShapeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-custom-shape', template: '<ng-content></ng-content>', providers: [NestedOptionHost, DxTemplateHost], styles: [":host{display:block}\n"] }]
@@ -11421,7 +10352,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomShapeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomShapeModule, declarations: [DxiCustomShapeComponent], exports: [DxiCustomShapeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomShapeModule });
-            } exports("bc", DxiCustomShapeModule);
+            } exports("DxiCustomShapeModule", DxiCustomShapeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiCustomShapeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -11482,7 +10413,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataPrepareSettingsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDataPrepareSettingsComponent, selector: "dxo-data-prepare-settings", inputs: { checkTypeForAllData: "checkTypeForAllData", convertToAxisDataType: "convertToAxisDataType", sortingMethod: "sortingMethod" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDataPrepareSettingsComponent", DxoDataPrepareSettingsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataPrepareSettingsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-data-prepare-settings', template: '', providers: [NestedOptionHost] }]
@@ -11503,7 +10434,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataPrepareSettingsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDataPrepareSettingsModule, declarations: [DxoDataPrepareSettingsComponent], exports: [DxoDataPrepareSettingsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataPrepareSettingsModule });
-            } exports("aR", DxoDataPrepareSettingsModule);
+            } exports("DxoDataPrepareSettingsModule", DxoDataPrepareSettingsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataPrepareSettingsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -11928,7 +10859,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFieldComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiFieldComponent, selector: "dxi-field", inputs: { calculateFilterExpression: "calculateFilterExpression", caption: "caption", customizeText: "customizeText", dataField: "dataField", dataType: "dataType", editorOptions: "editorOptions", editorTemplate: "editorTemplate", falseText: "falseText", filterOperations: "filterOperations", format: "format", lookup: "lookup", name: "name", trueText: "trueText", allowCrossGroupCalculation: "allowCrossGroupCalculation", allowExpandAll: "allowExpandAll", allowFiltering: "allowFiltering", allowSorting: "allowSorting", allowSortingBySummary: "allowSortingBySummary", area: "area", areaIndex: "areaIndex", calculateCustomSummary: "calculateCustomSummary", calculateSummaryValue: "calculateSummaryValue", displayFolder: "displayFolder", expanded: "expanded", filterType: "filterType", filterValues: "filterValues", groupIndex: "groupIndex", groupInterval: "groupInterval", groupName: "groupName", headerFilter: "headerFilter", isMeasure: "isMeasure", precision: "precision", runningTotal: "runningTotal", selector: "selector", showGrandTotals: "showGrandTotals", showTotals: "showTotals", showValues: "showValues", sortBy: "sortBy", sortBySummaryField: "sortBySummaryField", sortBySummaryPath: "sortBySummaryPath", sortingMethod: "sortingMethod", sortOrder: "sortOrder", summaryDisplayMode: "summaryDisplayMode", summaryType: "summaryType", visible: "visible", width: "width", wordWrapEnabled: "wordWrapEnabled" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("bD", DxiFieldComponent);
+            } exports("DxiFieldComponent", DxiFieldComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFieldComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-field', template: '', providers: [NestedOptionHost], inputs: [
@@ -11991,7 +10922,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFieldModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiFieldModule, declarations: [DxiFieldComponent], exports: [DxiFieldComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFieldModule });
-            } exports("bF", DxiFieldModule);
+            } exports("DxiFieldModule", DxiFieldModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFieldModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12046,7 +10977,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataSourceComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDataSourceComponent, selector: "dxo-data-source", inputs: { fields: "fields", filter: "filter", onChanged: "onChanged", onFieldsPrepared: "onFieldsPrepared", onLoadError: "onLoadError", onLoadingChanged: "onLoadingChanged", remoteOperations: "remoteOperations", retrieveFields: "retrieveFields", store: "store" }, providers: [NestedOptionHost], queries: [{ propertyName: "fieldsChildren", predicate: i0.forwardRef(() => DxiFieldComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDataSourceComponent", DxoDataSourceComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataSourceComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-data-source', template: '', providers: [NestedOptionHost], inputs: [
@@ -12074,7 +11005,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataSourceModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDataSourceModule, declarations: [DxoDataSourceComponent], exports: [DxoDataSourceComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataSourceModule });
-            } exports("co", DxoDataSourceModule);
+            } exports("DxoDataSourceModule", DxoDataSourceModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDataSourceModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12171,7 +11102,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDefaultItemPropertiesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDefaultItemPropertiesComponent, selector: "dxo-default-item-properties", inputs: { connectorLineEnd: "connectorLineEnd", connectorLineStart: "connectorLineStart", connectorLineType: "connectorLineType", shapeMaxHeight: "shapeMaxHeight", shapeMaxWidth: "shapeMaxWidth", shapeMinHeight: "shapeMinHeight", shapeMinWidth: "shapeMinWidth", style: "style", textStyle: "textStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDefaultItemPropertiesComponent", DxoDefaultItemPropertiesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDefaultItemPropertiesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-default-item-properties', template: '', providers: [NestedOptionHost] }]
@@ -12204,7 +11135,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDefaultItemPropertiesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDefaultItemPropertiesModule, declarations: [DxoDefaultItemPropertiesComponent], exports: [DxoDefaultItemPropertiesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDefaultItemPropertiesModule });
-            } exports("be", DxoDefaultItemPropertiesModule);
+            } exports("DxoDefaultItemPropertiesModule", DxoDefaultItemPropertiesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDefaultItemPropertiesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12259,7 +11190,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDelayComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDelayComponent, selector: "dxo-delay", inputs: { hide: "hide", show: "show" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDelayComponent", DxoDelayComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDelayComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-delay', template: '', providers: [NestedOptionHost] }]
@@ -12278,7 +11209,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDelayModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDelayModule, declarations: [DxoDelayComponent], exports: [DxoDelayComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDelayModule });
-            } exports("b5", DxoDelayModule);
+            } exports("DxoDelayModule", DxoDelayModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDelayModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12351,7 +11282,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDependenciesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDependenciesComponent, selector: "dxo-dependencies", inputs: { dataSource: "dataSource", keyExpr: "keyExpr", predecessorIdExpr: "predecessorIdExpr", successorIdExpr: "successorIdExpr", typeExpr: "typeExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDependenciesComponent", DxoDependenciesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDependenciesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-dependencies', template: '', providers: [NestedOptionHost] }]
@@ -12376,7 +11307,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDependenciesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDependenciesModule, declarations: [DxoDependenciesComponent], exports: [DxoDependenciesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDependenciesModule });
-            } exports("bS", DxoDependenciesModule);
+            } exports("DxoDependenciesModule", DxoDependenciesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDependenciesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12431,7 +11362,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDetailsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDetailsComponent, selector: "dxo-details", inputs: { columns: "columns" }, providers: [NestedOptionHost], queries: [{ propertyName: "columnsChildren", predicate: i0.forwardRef(() => DxiColumnComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDetailsComponent", DxoDetailsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDetailsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-details', template: '', providers: [NestedOptionHost] }]
@@ -12451,7 +11382,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDetailsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDetailsModule, declarations: [DxoDetailsComponent], exports: [DxoDetailsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDetailsModule });
-            } exports("bv", DxoDetailsModule);
+            } exports("DxoDetailsModule", DxoDetailsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDetailsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12495,7 +11426,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDisplayFormatComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDisplayFormatComponent, selector: "dxo-display-format", inputs: { currency: "currency", formatter: "formatter", parser: "parser", precision: "precision", type: "type", useCurrencyAccountingStyle: "useCurrencyAccountingStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDisplayFormatComponent", DxoDisplayFormatComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDisplayFormatComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-display-format', template: '', providers: [NestedOptionHost], inputs: [
@@ -12517,7 +11448,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDisplayFormatModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDisplayFormatModule, declarations: [DxoDisplayFormatComponent], exports: [DxoDisplayFormatComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDisplayFormatModule });
-            } exports("b7", DxoDisplayFormatModule);
+            } exports("DxoDisplayFormatModule", DxoDisplayFormatModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDisplayFormatModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -12572,7 +11503,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDragBoxStyleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDragBoxStyleComponent, selector: "dxo-drag-box-style", inputs: { color: "color", opacity: "opacity" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDragBoxStyleComponent", DxoDragBoxStyleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDragBoxStyleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-drag-box-style', template: '', providers: [NestedOptionHost] }]
@@ -12591,7 +11522,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDragBoxStyleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDragBoxStyleModule, declarations: [DxoDragBoxStyleComponent], exports: [DxoDragBoxStyleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDragBoxStyleModule });
-            } exports("aY", DxoDragBoxStyleModule);
+            } exports("DxoDragBoxStyleModule", DxoDragBoxStyleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDragBoxStyleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -13058,7 +11989,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiToolbarItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }, { token: i0.Renderer2 }, { token: DOCUMENT }, { token: DxTemplateHost, host: true }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiToolbarItemComponent, selector: "dxi-toolbar-item", inputs: { cssClass: "cssClass", disabled: "disabled", html: "html", locateInMenu: "locateInMenu", location: "location", menuItemTemplate: "menuItemTemplate", options: "options", showText: "showText", template: "template", text: "text", toolbar: "toolbar", visible: "visible", widget: "widget" }, providers: [NestedOptionHost, DxTemplateHost], usesInheritance: true, ngImport: i0, template: '<ng-content></ng-content>', isInline: true, styles: [":host{display:block}\n"] });
-            } exports("cw", DxiToolbarItemComponent);
+            } exports("DxiToolbarItemComponent", DxiToolbarItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiToolbarItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-toolbar-item', template: '<ng-content></ng-content>', providers: [NestedOptionHost, DxTemplateHost], styles: [":host{display:block}\n"] }]
@@ -13104,7 +12035,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiToolbarItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiToolbarItemModule, declarations: [DxiToolbarItemComponent], exports: [DxiToolbarItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiToolbarItemModule });
-            } exports("u", DxiToolbarItemModule);
+            } exports("DxiToolbarItemModule", DxiToolbarItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiToolbarItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -13184,7 +12115,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDropDownOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoDropDownOptionsComponent, selector: "dxo-drop-down-options", inputs: { accessKey: "accessKey", animation: "animation", closeOnOutsideClick: "closeOnOutsideClick", container: "container", contentTemplate: "contentTemplate", deferRendering: "deferRendering", disabled: "disabled", dragAndResizeArea: "dragAndResizeArea", dragEnabled: "dragEnabled", dragOutsideBoundary: "dragOutsideBoundary", enableBodyScroll: "enableBodyScroll", focusStateEnabled: "focusStateEnabled", fullScreen: "fullScreen", height: "height", hideOnOutsideClick: "hideOnOutsideClick", hideOnParentScroll: "hideOnParentScroll", hint: "hint", hoverStateEnabled: "hoverStateEnabled", maxHeight: "maxHeight", maxWidth: "maxWidth", minHeight: "minHeight", minWidth: "minWidth", onContentReady: "onContentReady", onDisposing: "onDisposing", onHidden: "onHidden", onHiding: "onHiding", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onResize: "onResize", onResizeEnd: "onResizeEnd", onResizeStart: "onResizeStart", onShowing: "onShowing", onShown: "onShown", onTitleRendered: "onTitleRendered", position: "position", resizeEnabled: "resizeEnabled", restorePosition: "restorePosition", rtlEnabled: "rtlEnabled", shading: "shading", shadingColor: "shadingColor", showCloseButton: "showCloseButton", showTitle: "showTitle", tabIndex: "tabIndex", title: "title", titleTemplate: "titleTemplate", toolbarItems: "toolbarItems", visible: "visible", width: "width", wrapperAttr: "wrapperAttr", hideEvent: "hideEvent", showEvent: "showEvent", target: "target" }, outputs: { heightChange: "heightChange", positionChange: "positionChange", visibleChange: "visibleChange", widthChange: "widthChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "toolbarItemsChildren", predicate: i0.forwardRef(() => DxiToolbarItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoDropDownOptionsComponent", DxoDropDownOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDropDownOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-drop-down-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -13263,7 +12194,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDropDownOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoDropDownOptionsModule, declarations: [DxoDropDownOptionsComponent], exports: [DxoDropDownOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDropDownOptionsModule });
-            } exports("i", DxoDropDownOptionsModule);
+            } exports("DxoDropDownOptionsModule", DxoDropDownOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoDropDownOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -13402,7 +12333,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEdgesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoEdgesComponent, selector: "dxo-edges", inputs: { customDataExpr: "customDataExpr", dataSource: "dataSource", fromExpr: "fromExpr", fromLineEndExpr: "fromLineEndExpr", fromPointIndexExpr: "fromPointIndexExpr", keyExpr: "keyExpr", lineTypeExpr: "lineTypeExpr", lockedExpr: "lockedExpr", pointsExpr: "pointsExpr", styleExpr: "styleExpr", textExpr: "textExpr", textStyleExpr: "textStyleExpr", toExpr: "toExpr", toLineEndExpr: "toLineEndExpr", toPointIndexExpr: "toPointIndexExpr", zIndexExpr: "zIndexExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoEdgesComponent", DxoEdgesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEdgesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-edges', template: '', providers: [NestedOptionHost] }]
@@ -13449,7 +12380,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEdgesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoEdgesModule, declarations: [DxoEdgesComponent], exports: [DxoEdgesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEdgesModule });
-            } exports("bf", DxoEdgesModule);
+            } exports("DxoEdgesModule", DxoEdgesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEdgesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -13749,7 +12680,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEditingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoEditingComponent, selector: "dxo-editing", inputs: { allowAdding: "allowAdding", allowDeleting: "allowDeleting", allowUpdating: "allowUpdating", changes: "changes", confirmDelete: "confirmDelete", editColumnName: "editColumnName", editRowKey: "editRowKey", form: "form", mode: "mode", newRowPosition: "newRowPosition", popup: "popup", refreshMode: "refreshMode", selectTextOnEditStart: "selectTextOnEditStart", startEditAction: "startEditAction", texts: "texts", useIcons: "useIcons", allowAddShape: "allowAddShape", allowChangeConnection: "allowChangeConnection", allowChangeConnectorPoints: "allowChangeConnectorPoints", allowChangeConnectorText: "allowChangeConnectorText", allowChangeShapeText: "allowChangeShapeText", allowDeleteConnector: "allowDeleteConnector", allowDeleteShape: "allowDeleteShape", allowMoveShape: "allowMoveShape", allowResizeShape: "allowResizeShape", allowDependencyAdding: "allowDependencyAdding", allowDependencyDeleting: "allowDependencyDeleting", allowResourceAdding: "allowResourceAdding", allowResourceDeleting: "allowResourceDeleting", allowResourceUpdating: "allowResourceUpdating", allowTaskAdding: "allowTaskAdding", allowTaskDeleting: "allowTaskDeleting", allowTaskResourceUpdating: "allowTaskResourceUpdating", allowTaskUpdating: "allowTaskUpdating", enabled: "enabled", allowDragging: "allowDragging", allowResizing: "allowResizing", allowTimeZoneEditing: "allowTimeZoneEditing" }, outputs: { changesChange: "changesChange", editColumnNameChange: "editColumnNameChange", editRowKeyChange: "editRowKeyChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "changesChildren", predicate: i0.forwardRef(() => DxiChangeComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoEditingComponent", DxoEditingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEditingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-editing', template: '', providers: [NestedOptionHost] }]
@@ -13849,7 +12780,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEditingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoEditingModule, declarations: [DxoEditingComponent], exports: [DxoEditingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEditingModule });
-            } exports("bg", DxoEditingModule);
+            } exports("DxoEditingModule", DxoEditingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoEditingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -13946,7 +12877,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoExportComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoExportComponent, selector: "dxo-export", inputs: { backgroundColor: "backgroundColor", enabled: "enabled", fileName: "fileName", formats: "formats", margin: "margin", printingEnabled: "printingEnabled", svgToCanvas: "svgToCanvas", allowExportSelectedData: "allowExportSelectedData", texts: "texts" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoExportComponent", DxoExportComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoExportComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-export', template: '', providers: [NestedOptionHost] }]
@@ -13979,7 +12910,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoExportModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoExportModule, declarations: [DxoExportComponent], exports: [DxoExportComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoExportModule });
-            } exports("v", DxoExportModule);
+            } exports("DxoExportModule", DxoExportModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoExportModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -14076,7 +13007,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldChooserComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFieldChooserComponent, selector: "dxo-field-chooser", inputs: { allowSearch: "allowSearch", applyChangesMode: "applyChangesMode", enabled: "enabled", height: "height", layout: "layout", searchTimeout: "searchTimeout", texts: "texts", title: "title", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFieldChooserComponent", DxoFieldChooserComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldChooserComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-field-chooser', template: '', providers: [NestedOptionHost] }]
@@ -14109,7 +13040,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldChooserModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldChooserModule, declarations: [DxoFieldChooserComponent], exports: [DxoFieldChooserComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldChooserModule });
-            } exports("cq", DxoFieldChooserModule);
+            } exports("DxoFieldChooserModule", DxoFieldChooserModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldChooserModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -14194,7 +13125,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldPanelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFieldPanelComponent, selector: "dxo-field-panel", inputs: { allowFieldDragging: "allowFieldDragging", showColumnFields: "showColumnFields", showDataFields: "showDataFields", showFilterFields: "showFilterFields", showRowFields: "showRowFields", texts: "texts", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFieldPanelComponent", DxoFieldPanelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldPanelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-field-panel', template: '', providers: [NestedOptionHost] }]
@@ -14223,7 +13154,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldPanelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldPanelModule, declarations: [DxoFieldPanelComponent], exports: [DxoFieldPanelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldPanelModule });
-            } exports("cr", DxoFieldPanelModule);
+            } exports("DxoFieldPanelModule", DxoFieldPanelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFieldPanelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -14354,7 +13285,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFileSelectionItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiFileSelectionItemComponent, selector: "dxi-file-selection-item", inputs: { cssClass: "cssClass", disabled: "disabled", icon: "icon", locateInMenu: "locateInMenu", location: "location", name: "name", options: "options", showText: "showText", text: "text", visible: "visible", widget: "widget" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiFileSelectionItemComponent", DxiFileSelectionItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFileSelectionItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-file-selection-item', template: '', providers: [NestedOptionHost], inputs: [
@@ -14381,7 +13312,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFileSelectionItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiFileSelectionItemModule, declarations: [DxiFileSelectionItemComponent], exports: [DxiFileSelectionItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFileSelectionItemModule });
-            } exports("bA", DxiFileSelectionItemModule);
+            } exports("DxiFileSelectionItemModule", DxiFileSelectionItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiFileSelectionItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -14842,7 +13773,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFileUploaderOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFileUploaderOptionsComponent, selector: "dxo-file-uploader-options", inputs: { abortUpload: "abortUpload", accept: "accept", accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", allowCanceling: "allowCanceling", allowedFileExtensions: "allowedFileExtensions", chunkSize: "chunkSize", dialogTrigger: "dialogTrigger", disabled: "disabled", dropZone: "dropZone", elementAttr: "elementAttr", focusStateEnabled: "focusStateEnabled", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", inputAttr: "inputAttr", invalidFileExtensionMessage: "invalidFileExtensionMessage", invalidMaxFileSizeMessage: "invalidMaxFileSizeMessage", invalidMinFileSizeMessage: "invalidMinFileSizeMessage", isDirty: "isDirty", isValid: "isValid", labelText: "labelText", maxFileSize: "maxFileSize", minFileSize: "minFileSize", multiple: "multiple", name: "name", onBeforeSend: "onBeforeSend", onContentReady: "onContentReady", onDisposing: "onDisposing", onDropZoneEnter: "onDropZoneEnter", onDropZoneLeave: "onDropZoneLeave", onFilesUploaded: "onFilesUploaded", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onProgress: "onProgress", onUploadAborted: "onUploadAborted", onUploaded: "onUploaded", onUploadError: "onUploadError", onUploadStarted: "onUploadStarted", onValueChanged: "onValueChanged", progress: "progress", readOnly: "readOnly", readyToUploadMessage: "readyToUploadMessage", rtlEnabled: "rtlEnabled", selectButtonText: "selectButtonText", showFileList: "showFileList", tabIndex: "tabIndex", uploadAbortedMessage: "uploadAbortedMessage", uploadButtonText: "uploadButtonText", uploadChunk: "uploadChunk", uploadCustomData: "uploadCustomData", uploadedMessage: "uploadedMessage", uploadFailedMessage: "uploadFailedMessage", uploadFile: "uploadFile", uploadHeaders: "uploadHeaders", uploadMethod: "uploadMethod", uploadMode: "uploadMode", uploadUrl: "uploadUrl", validationError: "validationError", validationErrors: "validationErrors", validationStatus: "validationStatus", value: "value", visible: "visible", width: "width" }, outputs: { valueChange: "valueChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFileUploaderOptionsComponent", DxoFileUploaderOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFileUploaderOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-file-uploader-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -14924,7 +13855,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFileUploaderOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFileUploaderOptionsModule, declarations: [DxoFileUploaderOptionsComponent], exports: [DxoFileUploaderOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFileUploaderOptionsModule });
-            } exports("c3", DxoFileUploaderOptionsModule);
+            } exports("DxoFileUploaderOptionsModule", DxoFileUploaderOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFileUploaderOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -15004,7 +13935,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderPopupComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFilterBuilderPopupComponent, selector: "dxo-filter-builder-popup", inputs: { accessKey: "accessKey", animation: "animation", closeOnOutsideClick: "closeOnOutsideClick", container: "container", contentTemplate: "contentTemplate", deferRendering: "deferRendering", disabled: "disabled", dragAndResizeArea: "dragAndResizeArea", dragEnabled: "dragEnabled", dragOutsideBoundary: "dragOutsideBoundary", enableBodyScroll: "enableBodyScroll", focusStateEnabled: "focusStateEnabled", fullScreen: "fullScreen", height: "height", hideOnOutsideClick: "hideOnOutsideClick", hideOnParentScroll: "hideOnParentScroll", hint: "hint", hoverStateEnabled: "hoverStateEnabled", maxHeight: "maxHeight", maxWidth: "maxWidth", minHeight: "minHeight", minWidth: "minWidth", onContentReady: "onContentReady", onDisposing: "onDisposing", onHidden: "onHidden", onHiding: "onHiding", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onResize: "onResize", onResizeEnd: "onResizeEnd", onResizeStart: "onResizeStart", onShowing: "onShowing", onShown: "onShown", onTitleRendered: "onTitleRendered", position: "position", resizeEnabled: "resizeEnabled", restorePosition: "restorePosition", rtlEnabled: "rtlEnabled", shading: "shading", shadingColor: "shadingColor", showCloseButton: "showCloseButton", showTitle: "showTitle", tabIndex: "tabIndex", title: "title", titleTemplate: "titleTemplate", toolbarItems: "toolbarItems", visible: "visible", width: "width", wrapperAttr: "wrapperAttr" }, outputs: { heightChange: "heightChange", positionChange: "positionChange", visibleChange: "visibleChange", widthChange: "widthChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "toolbarItemsChildren", predicate: i0.forwardRef(() => DxiToolbarItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFilterBuilderPopupComponent", DxoFilterBuilderPopupComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderPopupComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-filter-builder-popup', template: '', providers: [NestedOptionHost], inputs: [
@@ -15080,7 +14011,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderPopupModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderPopupModule, declarations: [DxoFilterBuilderPopupComponent], exports: [DxoFilterBuilderPopupComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderPopupModule });
-            } exports("c$", DxoFilterBuilderPopupModule);
+            } exports("DxoFilterBuilderPopupModule", DxoFilterBuilderPopupModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderPopupModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -15331,7 +14262,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFilterBuilderComponent, selector: "dxo-filter-builder", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", allowHierarchicalFields: "allowHierarchicalFields", customOperations: "customOperations", disabled: "disabled", elementAttr: "elementAttr", fields: "fields", filterOperationDescriptions: "filterOperationDescriptions", focusStateEnabled: "focusStateEnabled", groupOperationDescriptions: "groupOperationDescriptions", groupOperations: "groupOperations", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", maxGroupLevel: "maxGroupLevel", onContentReady: "onContentReady", onDisposing: "onDisposing", onEditorPrepared: "onEditorPrepared", onEditorPreparing: "onEditorPreparing", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onValueChanged: "onValueChanged", rtlEnabled: "rtlEnabled", tabIndex: "tabIndex", value: "value", visible: "visible", width: "width" }, outputs: { valueChange: "valueChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "customOperationsChildren", predicate: i0.forwardRef(() => DxiCustomOperationComponent) }, { propertyName: "fieldsChildren", predicate: i0.forwardRef(() => DxiFieldComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFilterBuilderComponent", DxoFilterBuilderComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-filter-builder', template: '', providers: [NestedOptionHost], inputs: [
@@ -15382,7 +14313,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderModule, declarations: [DxoFilterBuilderComponent], exports: [DxoFilterBuilderComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderModule });
-            } exports("c_", DxoFilterBuilderModule);
+            } exports("DxoFilterBuilderModule", DxoFilterBuilderModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterBuilderModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -15503,7 +14434,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterOperationDescriptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFilterOperationDescriptionsComponent, selector: "dxo-filter-operation-descriptions", inputs: { between: "between", contains: "contains", endsWith: "endsWith", equal: "equal", greaterThan: "greaterThan", greaterThanOrEqual: "greaterThanOrEqual", isBlank: "isBlank", isNotBlank: "isNotBlank", lessThan: "lessThan", lessThanOrEqual: "lessThanOrEqual", notContains: "notContains", notEqual: "notEqual", startsWith: "startsWith" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFilterOperationDescriptionsComponent", DxoFilterOperationDescriptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterOperationDescriptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-filter-operation-descriptions', template: '', providers: [NestedOptionHost] }]
@@ -15544,7 +14475,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterOperationDescriptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterOperationDescriptionsModule, declarations: [DxoFilterOperationDescriptionsComponent], exports: [DxoFilterOperationDescriptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterOperationDescriptionsModule });
-            } exports("bH", DxoFilterOperationDescriptionsModule);
+            } exports("DxoFilterOperationDescriptionsModule", DxoFilterOperationDescriptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterOperationDescriptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -15620,7 +14551,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterPanelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFilterPanelComponent, selector: "dxo-filter-panel", inputs: { customizeText: "customizeText", filterEnabled: "filterEnabled", texts: "texts", visible: "visible" }, outputs: { filterEnabledChange: "filterEnabledChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFilterPanelComponent", DxoFilterPanelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterPanelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-filter-panel', template: '', providers: [NestedOptionHost] }]
@@ -15645,7 +14576,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterPanelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterPanelModule, declarations: [DxoFilterPanelComponent], exports: [DxoFilterPanelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterPanelModule });
-            } exports("d0", DxoFilterPanelModule);
+            } exports("DxoFilterPanelModule", DxoFilterPanelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterPanelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -15767,7 +14698,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterRowComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFilterRowComponent, selector: "dxo-filter-row", inputs: { applyFilter: "applyFilter", applyFilterText: "applyFilterText", betweenEndText: "betweenEndText", betweenStartText: "betweenStartText", operationDescriptions: "operationDescriptions", resetOperationText: "resetOperationText", showAllText: "showAllText", showOperationChooser: "showOperationChooser", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFilterRowComponent", DxoFilterRowComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterRowComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-filter-row', template: '', providers: [NestedOptionHost], inputs: [
@@ -15792,7 +14723,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterRowModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterRowModule, declarations: [DxoFilterRowComponent], exports: [DxoFilterRowComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterRowModule });
-            } exports("bT", DxoFilterRowModule);
+            } exports("DxoFilterRowModule", DxoFilterRowModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFilterRowModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -15890,7 +14821,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFontComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFontComponent, selector: "dxo-font", inputs: { color: "color", family: "family", opacity: "opacity", size: "size", weight: "weight" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFontComponent", DxoFontComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFontComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-font', template: '', providers: [NestedOptionHost], inputs: [
@@ -15911,7 +14842,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFontModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFontModule, declarations: [DxoFontComponent], exports: [DxoFontComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFontModule });
-            } exports("y", DxoFontModule);
+            } exports("DxoFontModule", DxoFontModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFontModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16069,7 +15000,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFormItemComponent, selector: "dxo-form-item", inputs: { colSpan: "colSpan", cssClass: "cssClass", dataField: "dataField", editorOptions: "editorOptions", editorType: "editorType", helpText: "helpText", isRequired: "isRequired", itemType: "itemType", label: "label", name: "name", template: "template", validationRules: "validationRules", visible: "visible", visibleIndex: "visibleIndex" }, providers: [NestedOptionHost], queries: [{ propertyName: "validationRulesChildren", predicate: i0.forwardRef(() => DxiValidationRuleComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFormItemComponent", DxoFormItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-form-item', template: '', providers: [NestedOptionHost], inputs: [
@@ -16102,7 +15033,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFormItemModule, declarations: [DxoFormItemComponent], exports: [DxoFormItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormItemModule });
-            } exports("cW", DxoFormItemModule);
+            } exports("DxoFormItemModule", DxoFormItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16425,7 +15356,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFormComponent, selector: "dxo-form", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", alignItemLabels: "alignItemLabels", alignItemLabelsInAllGroups: "alignItemLabelsInAllGroups", colCount: "colCount", colCountByScreen: "colCountByScreen", customizeItem: "customizeItem", disabled: "disabled", elementAttr: "elementAttr", focusStateEnabled: "focusStateEnabled", formData: "formData", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", isDirty: "isDirty", items: "items", labelLocation: "labelLocation", labelMode: "labelMode", minColWidth: "minColWidth", onContentReady: "onContentReady", onDisposing: "onDisposing", onEditorEnterKey: "onEditorEnterKey", onFieldDataChanged: "onFieldDataChanged", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", optionalMark: "optionalMark", readOnly: "readOnly", requiredMark: "requiredMark", requiredMessage: "requiredMessage", rtlEnabled: "rtlEnabled", screenByWidth: "screenByWidth", scrollingEnabled: "scrollingEnabled", showColonAfterLabel: "showColonAfterLabel", showOptionalMark: "showOptionalMark", showRequiredMark: "showRequiredMark", showValidationSummary: "showValidationSummary", tabIndex: "tabIndex", validationGroup: "validationGroup", visible: "visible", width: "width" }, outputs: { formDataChange: "formDataChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFormComponent", DxoFormComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-form', template: '', providers: [NestedOptionHost], inputs: [
@@ -16486,7 +15417,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFormModule, declarations: [DxoFormComponent], exports: [DxoFormComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormModule });
-            } exports("cY", DxoFormModule);
+            } exports("DxoFormModule", DxoFormModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16530,7 +15461,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormatComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFormatComponent, selector: "dxo-format", inputs: { currency: "currency", formatter: "formatter", parser: "parser", precision: "precision", type: "type", useCurrencyAccountingStyle: "useCurrencyAccountingStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFormatComponent", DxoFormatComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormatComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-format', template: '', providers: [NestedOptionHost], inputs: [
@@ -16552,7 +15483,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormatModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFormatModule, declarations: [DxoFormatComponent], exports: [DxoFormatComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormatModule });
-            } exports("z", DxoFormatModule);
+            } exports("DxoFormatModule", DxoFormatModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFormatModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16650,7 +15581,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFromComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFromComponent, selector: "dxo-from", inputs: { left: "left", opacity: "opacity", position: "position", scale: "scale", top: "top" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFromComponent", DxoFromComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFromComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-from', template: '', providers: [NestedOptionHost], inputs: [
@@ -16671,7 +15602,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFromModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFromModule, declarations: [DxoFromComponent], exports: [DxoFromComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFromModule });
-            } exports("l", DxoFromModule);
+            } exports("DxoFromModule", DxoFromModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFromModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16715,7 +15646,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFullstackedareaComponent, selector: "dxo-fullstackedarea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFullstackedareaComponent", DxoFullstackedareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-fullstackedarea', template: '', providers: [NestedOptionHost], inputs: [
@@ -16792,7 +15723,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedareaModule, declarations: [DxoFullstackedareaComponent], exports: [DxoFullstackedareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedareaModule });
-            } exports("au", DxoFullstackedareaModule);
+            } exports("DxoFullstackedareaModule", DxoFullstackedareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16836,7 +15767,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedbarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFullstackedbarComponent, selector: "dxo-fullstackedbar", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFullstackedbarComponent", DxoFullstackedbarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedbarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-fullstackedbar', template: '', providers: [NestedOptionHost], inputs: [
@@ -16913,7 +15844,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedbarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedbarModule, declarations: [DxoFullstackedbarComponent], exports: [DxoFullstackedbarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedbarModule });
-            } exports("av", DxoFullstackedbarModule);
+            } exports("DxoFullstackedbarModule", DxoFullstackedbarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedbarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -16957,7 +15888,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedlineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFullstackedlineComponent, selector: "dxo-fullstackedline", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFullstackedlineComponent", DxoFullstackedlineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedlineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-fullstackedline', template: '', providers: [NestedOptionHost], inputs: [
@@ -17034,7 +15965,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedlineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedlineModule, declarations: [DxoFullstackedlineComponent], exports: [DxoFullstackedlineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedlineModule });
-            } exports("aw", DxoFullstackedlineModule);
+            } exports("DxoFullstackedlineModule", DxoFullstackedlineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedlineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17078,7 +16009,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFullstackedsplineComponent, selector: "dxo-fullstackedspline", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFullstackedsplineComponent", DxoFullstackedsplineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-fullstackedspline', template: '', providers: [NestedOptionHost], inputs: [
@@ -17155,7 +16086,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineModule, declarations: [DxoFullstackedsplineComponent], exports: [DxoFullstackedsplineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineModule });
-            } exports("ax", DxoFullstackedsplineModule);
+            } exports("DxoFullstackedsplineModule", DxoFullstackedsplineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17199,7 +16130,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoFullstackedsplineareaComponent, selector: "dxo-fullstackedsplinearea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoFullstackedsplineareaComponent", DxoFullstackedsplineareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-fullstackedsplinearea', template: '', providers: [NestedOptionHost], inputs: [
@@ -17276,7 +16207,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineareaModule, declarations: [DxoFullstackedsplineareaComponent], exports: [DxoFullstackedsplineareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineareaModule });
-            } exports("ay", DxoFullstackedsplineareaModule);
+            } exports("DxoFullstackedsplineareaModule", DxoFullstackedsplineareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoFullstackedsplineareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17337,7 +16268,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGeometryComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGeometryComponent, selector: "dxo-geometry", inputs: { endAngle: "endAngle", startAngle: "startAngle", orientation: "orientation" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGeometryComponent", DxoGeometryComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGeometryComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-geometry', template: '', providers: [NestedOptionHost] }]
@@ -17358,7 +16289,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGeometryModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGeometryModule, declarations: [DxoGeometryComponent], exports: [DxoGeometryComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGeometryModule });
-            } exports("w", DxoGeometryModule);
+            } exports("DxoGeometryModule", DxoGeometryModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGeometryModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17422,7 +16353,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridSizeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGridSizeComponent, selector: "dxo-grid-size", inputs: { items: "items", value: "value" }, outputs: { valueChange: "valueChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGridSizeComponent", DxoGridSizeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridSizeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-grid-size', template: '', providers: [NestedOptionHost] }]
@@ -17443,7 +16374,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridSizeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGridSizeModule, declarations: [DxoGridSizeComponent], exports: [DxoGridSizeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridSizeModule });
-            } exports("bh", DxoGridSizeModule);
+            } exports("DxoGridSizeModule", DxoGridSizeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridSizeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17510,7 +16441,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGridComponent, selector: "dxo-grid", inputs: { color: "color", opacity: "opacity", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGridComponent", DxoGridComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-grid', template: '', providers: [NestedOptionHost] }]
@@ -17533,7 +16464,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGridModule, declarations: [DxoGridComponent], exports: [DxoGridComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridModule });
-            } exports("a0", DxoGridModule);
+            } exports("DxoGridModule", DxoGridModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGridModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17633,7 +16564,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiGroupItemComponent, selector: "dxi-group-item", inputs: { alignByColumn: "alignByColumn", column: "column", customizeText: "customizeText", displayFormat: "displayFormat", name: "name", showInColumn: "showInColumn", showInGroupFooter: "showInGroupFooter", skipEmptyValues: "skipEmptyValues", summaryType: "summaryType", valueFormat: "valueFormat" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiGroupItemComponent", DxiGroupItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-group-item', template: '', providers: [NestedOptionHost] }]
@@ -17668,7 +16599,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupItemModule, declarations: [DxiGroupItemComponent], exports: [DxiGroupItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupItemModule });
-            }
+            } exports("DxiGroupItemModule", DxiGroupItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiGroupItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17735,7 +16666,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupOperationDescriptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGroupOperationDescriptionsComponent, selector: "dxo-group-operation-descriptions", inputs: { and: "and", notAnd: "notAnd", notOr: "notOr", or: "or" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGroupOperationDescriptionsComponent", DxoGroupOperationDescriptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupOperationDescriptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-group-operation-descriptions', template: '', providers: [NestedOptionHost] }]
@@ -17758,7 +16689,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupOperationDescriptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupOperationDescriptionsModule, declarations: [DxoGroupOperationDescriptionsComponent], exports: [DxoGroupOperationDescriptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupOperationDescriptionsModule });
-            } exports("bI", DxoGroupOperationDescriptionsModule);
+            } exports("DxoGroupOperationDescriptionsModule", DxoGroupOperationDescriptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupOperationDescriptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17828,7 +16759,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupPanelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGroupPanelComponent, selector: "dxo-group-panel", inputs: { allowColumnDragging: "allowColumnDragging", emptyPanelText: "emptyPanelText", visible: "visible" }, outputs: { visibleChange: "visibleChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGroupPanelComponent", DxoGroupPanelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupPanelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-group-panel', template: '', providers: [NestedOptionHost] }]
@@ -17851,7 +16782,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupPanelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupPanelModule, declarations: [DxoGroupPanelComponent], exports: [DxoGroupPanelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupPanelModule });
-            }
+            } exports("DxoGroupPanelModule", DxoGroupPanelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupPanelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -17942,7 +16873,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGroupComponent, selector: "dxo-group", inputs: { border: "border", color: "color", headerHeight: "headerHeight", hoverEnabled: "hoverEnabled", hoverStyle: "hoverStyle", label: "label", padding: "padding", selectionStyle: "selectionStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGroupComponent", DxoGroupComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-group', template: '', providers: [NestedOptionHost] }]
@@ -17973,7 +16904,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupModule, declarations: [DxoGroupComponent], exports: [DxoGroupComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupModule });
-            } exports("d8", DxoGroupModule);
+            } exports("DxoGroupModule", DxoGroupModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18046,7 +16977,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoGroupingComponent, selector: "dxo-grouping", inputs: { allowCollapsing: "allowCollapsing", autoExpandAll: "autoExpandAll", contextMenuEnabled: "contextMenuEnabled", expandMode: "expandMode", texts: "texts" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoGroupingComponent", DxoGroupingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-grouping', template: '', providers: [NestedOptionHost] }]
@@ -18071,7 +17002,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupingModule, declarations: [DxoGroupingComponent], exports: [DxoGroupingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupingModule });
-            }
+            } exports("DxoGroupingModule", DxoGroupingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoGroupingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18138,7 +17069,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHatchingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHatchingComponent, selector: "dxo-hatching", inputs: { direction: "direction", opacity: "opacity", step: "step", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHatchingComponent", DxoHatchingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHatchingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-hatching', template: '', providers: [NestedOptionHost] }]
@@ -18161,7 +17092,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHatchingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHatchingModule, declarations: [DxoHatchingComponent], exports: [DxoHatchingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHatchingModule });
-            } exports("ah", DxoHatchingModule);
+            } exports("DxoHatchingModule", DxoHatchingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHatchingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18301,7 +17232,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeaderFilterComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHeaderFilterComponent, selector: "dxo-header-filter", inputs: { allowSearch: "allowSearch", allowSelectAll: "allowSelectAll", dataSource: "dataSource", groupInterval: "groupInterval", height: "height", search: "search", searchMode: "searchMode", width: "width", searchTimeout: "searchTimeout", texts: "texts", visible: "visible", showRelevantValues: "showRelevantValues" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHeaderFilterComponent", DxoHeaderFilterComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeaderFilterComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-header-filter', template: '', providers: [NestedOptionHost], inputs: [
@@ -18329,7 +17260,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeaderFilterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHeaderFilterModule, declarations: [DxoHeaderFilterComponent], exports: [DxoHeaderFilterComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeaderFilterModule });
-            } exports("bQ", DxoHeaderFilterModule);
+            } exports("DxoHeaderFilterModule", DxoHeaderFilterModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeaderFilterModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18384,7 +17315,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeightComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHeightComponent, selector: "dxo-height", inputs: { rangeMaxPoint: "rangeMaxPoint", rangeMinPoint: "rangeMinPoint" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHeightComponent", DxoHeightComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeightComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-height', template: '', providers: [NestedOptionHost] }]
@@ -18403,7 +17334,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeightModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHeightModule, declarations: [DxoHeightComponent], exports: [DxoHeightComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeightModule });
-            } exports("ak", DxoHeightModule);
+            } exports("DxoHeightModule", DxoHeightModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHeightModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18458,7 +17389,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideEventComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHideEventComponent, selector: "dxo-hide-event", inputs: { delay: "delay", name: "name" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHideEventComponent", DxoHideEventComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideEventComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-hide-event', template: '', providers: [NestedOptionHost] }]
@@ -18477,7 +17408,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideEventModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHideEventModule, declarations: [DxoHideEventComponent], exports: [DxoHideEventComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideEventModule });
-            } exports("cd", DxoHideEventModule);
+            } exports("DxoHideEventModule", DxoHideEventModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideEventModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18521,7 +17452,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHideComponent, selector: "dxo-hide", inputs: { complete: "complete", delay: "delay", direction: "direction", duration: "duration", easing: "easing", from: "from", staggerDelay: "staggerDelay", start: "start", to: "to", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHideComponent", DxoHideComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-hide', template: '', providers: [NestedOptionHost], inputs: [
@@ -18547,7 +17478,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHideModule, declarations: [DxoHideComponent], exports: [DxoHideComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideModule });
-            } exports("k", DxoHideModule);
+            } exports("DxoHideModule", DxoHideModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHideModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18608,7 +17539,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHistoryToolbarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHistoryToolbarComponent, selector: "dxo-history-toolbar", inputs: { commands: "commands", visible: "visible" }, providers: [NestedOptionHost], queries: [{ propertyName: "commandsChildren", predicate: i0.forwardRef(() => DxiCommandComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHistoryToolbarComponent", DxoHistoryToolbarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHistoryToolbarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-history-toolbar', template: '', providers: [NestedOptionHost] }]
@@ -18630,7 +17561,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHistoryToolbarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHistoryToolbarModule, declarations: [DxoHistoryToolbarComponent], exports: [DxoHistoryToolbarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHistoryToolbarModule });
-            } exports("bi", DxoHistoryToolbarModule);
+            } exports("DxoHistoryToolbarModule", DxoHistoryToolbarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHistoryToolbarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18709,7 +17640,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHorizontalLineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHorizontalLineComponent, selector: "dxo-horizontal-line", inputs: { color: "color", dashStyle: "dashStyle", label: "label", opacity: "opacity", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHorizontalLineComponent", DxoHorizontalLineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHorizontalLineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-horizontal-line', template: '', providers: [NestedOptionHost] }]
@@ -18736,7 +17667,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHorizontalLineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHorizontalLineModule, declarations: [DxoHorizontalLineComponent], exports: [DxoHorizontalLineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHorizontalLineModule });
-            } exports("aP", DxoHorizontalLineModule);
+            } exports("DxoHorizontalLineModule", DxoHorizontalLineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHorizontalLineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18827,7 +17758,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHoverStyleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoHoverStyleComponent, selector: "dxo-hover-style", inputs: { border: "border", color: "color", dashStyle: "dashStyle", hatching: "hatching", highlight: "highlight", width: "width", size: "size", opacity: "opacity" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoHoverStyleComponent", DxoHoverStyleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHoverStyleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-hover-style', template: '', providers: [NestedOptionHost] }]
@@ -18858,7 +17789,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHoverStyleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoHoverStyleModule, declarations: [DxoHoverStyleComponent], exports: [DxoHoverStyleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHoverStyleModule });
-            } exports("ag", DxoHoverStyleModule);
+            } exports("DxoHoverStyleModule", DxoHoverStyleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoHoverStyleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -18962,7 +17893,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageUploadComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoImageUploadComponent, selector: "dxo-image-upload", inputs: { fileUploaderOptions: "fileUploaderOptions", fileUploadMode: "fileUploadMode", tabs: "tabs", uploadDirectory: "uploadDirectory", uploadUrl: "uploadUrl" }, providers: [NestedOptionHost], queries: [{ propertyName: "tabsChildren", predicate: i0.forwardRef(() => DxiTabComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoImageUploadComponent", DxoImageUploadComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageUploadComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-image-upload', template: '', providers: [NestedOptionHost], inputs: [
@@ -18986,7 +17917,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageUploadModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoImageUploadModule, declarations: [DxoImageUploadComponent], exports: [DxoImageUploadComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageUploadModule });
-            } exports("c2", DxoImageUploadModule);
+            } exports("DxoImageUploadModule", DxoImageUploadModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageUploadModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19053,7 +17984,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoImageComponent, selector: "dxo-image", inputs: { height: "height", url: "url", width: "width", location: "location" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoImageComponent", DxoImageComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-image', template: '', providers: [NestedOptionHost] }]
@@ -19076,7 +18007,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoImageModule, declarations: [DxoImageComponent], exports: [DxoImageComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageModule });
-            } exports("U", DxoImageModule);
+            } exports("DxoImageModule", DxoImageModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoImageModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19131,7 +18062,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoIndentComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoIndentComponent, selector: "dxo-indent", inputs: { left: "left", right: "right" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoIndentComponent", DxoIndentComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoIndentComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-indent', template: '', providers: [NestedOptionHost] }]
@@ -19150,7 +18081,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoIndentModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoIndentModule, declarations: [DxoIndentComponent], exports: [DxoIndentComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoIndentModule });
-            } exports("cA", DxoIndentModule);
+            } exports("DxoIndentModule", DxoIndentModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoIndentModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19404,7 +18335,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemDraggingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoItemDraggingComponent, selector: "dxo-item-dragging", inputs: { allowDropInsideItem: "allowDropInsideItem", allowReordering: "allowReordering", autoScroll: "autoScroll", boundary: "boundary", container: "container", cursorOffset: "cursorOffset", data: "data", dragDirection: "dragDirection", dragTemplate: "dragTemplate", dropFeedbackMode: "dropFeedbackMode", elementAttr: "elementAttr", filter: "filter", group: "group", handle: "handle", height: "height", itemOrientation: "itemOrientation", moveItemOnDrop: "moveItemOnDrop", onAdd: "onAdd", onDisposing: "onDisposing", onDragChange: "onDragChange", onDragEnd: "onDragEnd", onDragMove: "onDragMove", onDragStart: "onDragStart", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onRemove: "onRemove", onReorder: "onReorder", rtlEnabled: "rtlEnabled", scrollSensitivity: "scrollSensitivity", scrollSpeed: "scrollSpeed", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoItemDraggingComponent", DxoItemDraggingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemDraggingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-item-dragging', template: '', providers: [NestedOptionHost], inputs: [
@@ -19451,7 +18382,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemDraggingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoItemDraggingModule, declarations: [DxoItemDraggingComponent], exports: [DxoItemDraggingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemDraggingModule });
-            } exports("ca", DxoItemDraggingModule);
+            } exports("DxoItemDraggingModule", DxoItemDraggingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemDraggingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19495,7 +18426,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemTextFormatComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoItemTextFormatComponent, selector: "dxo-item-text-format", inputs: { currency: "currency", formatter: "formatter", parser: "parser", precision: "precision", type: "type", useCurrencyAccountingStyle: "useCurrencyAccountingStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoItemTextFormatComponent", DxoItemTextFormatComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemTextFormatComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-item-text-format', template: '', providers: [NestedOptionHost], inputs: [
@@ -19517,7 +18448,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemTextFormatModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoItemTextFormatModule, declarations: [DxoItemTextFormatComponent], exports: [DxoItemTextFormatComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemTextFormatModule });
-            } exports("C", DxoItemTextFormatModule);
+            } exports("DxoItemTextFormatModule", DxoItemTextFormatModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemTextFormatModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19584,7 +18515,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemViewComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoItemViewComponent, selector: "dxo-item-view", inputs: { details: "details", mode: "mode", showFolders: "showFolders", showParentFolder: "showParentFolder" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoItemViewComponent", DxoItemViewComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemViewComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-item-view', template: '', providers: [NestedOptionHost] }]
@@ -19607,7 +18538,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemViewModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoItemViewModule, declarations: [DxoItemViewComponent], exports: [DxoItemViewComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemViewModule });
-            } exports("bu", DxoItemViewModule);
+            } exports("DxoItemViewModule", DxoItemViewModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemViewModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19668,7 +18599,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoItemComponent, selector: "dxo-item", inputs: { border: "border", hoverStyle: "hoverStyle", selectionStyle: "selectionStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoItemComponent", DxoItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-item', template: '', providers: [NestedOptionHost] }]
@@ -19689,7 +18620,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoItemModule, declarations: [DxoItemComponent], exports: [DxoItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemModule });
-            } exports("bN", DxoItemModule);
+            } exports("DxoItemModule", DxoItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -19756,7 +18687,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoKeyboardNavigationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoKeyboardNavigationComponent, selector: "dxo-keyboard-navigation", inputs: { editOnKeyPress: "editOnKeyPress", enabled: "enabled", enterKeyAction: "enterKeyAction", enterKeyDirection: "enterKeyDirection" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoKeyboardNavigationComponent", DxoKeyboardNavigationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoKeyboardNavigationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-keyboard-navigation', template: '', providers: [NestedOptionHost] }]
@@ -19779,7 +18710,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoKeyboardNavigationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoKeyboardNavigationModule, declarations: [DxoKeyboardNavigationComponent], exports: [DxoKeyboardNavigationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoKeyboardNavigationModule });
-            } exports("d1", DxoKeyboardNavigationModule);
+            } exports("DxoKeyboardNavigationModule", DxoKeyboardNavigationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoKeyboardNavigationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -20062,7 +18993,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLabelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLabelComponent, selector: "dxo-label", inputs: { connectorColor: "connectorColor", connectorWidth: "connectorWidth", customizeText: "customizeText", font: "font", format: "format", indent: "indent", visible: "visible", horizontalAlignment: "horizontalAlignment", position: "position", text: "text", verticalAlignment: "verticalAlignment", alignment: "alignment", customizeHint: "customizeHint", displayMode: "displayMode", indentFromAxis: "indentFromAxis", overlappingBehavior: "overlappingBehavior", rotationAngle: "rotationAngle", staggeringSpacing: "staggeringSpacing", template: "template", textOverflow: "textOverflow", wordWrap: "wordWrap", argumentFormat: "argumentFormat", backgroundColor: "backgroundColor", border: "border", connector: "connector", displayFormat: "displayFormat", horizontalOffset: "horizontalOffset", showForZeroValues: "showForZeroValues", verticalOffset: "verticalOffset", hideFirstOrLast: "hideFirstOrLast", indentFromTick: "indentFromTick", useRangeColors: "useRangeColors", location: "location", showColon: "showColon", radialOffset: "radialOffset", topIndent: "topIndent", shadow: "shadow", useNodeColors: "useNodeColors", dataField: "dataField", enabled: "enabled" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLabelComponent", DxoLabelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLabelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-label', template: '', providers: [NestedOptionHost] }]
@@ -20157,7 +19088,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLabelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLabelModule, declarations: [DxoLabelComponent], exports: [DxoLabelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLabelModule });
-            } exports("x", DxoLabelModule);
+            } exports("DxoLabelModule", DxoLabelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLabelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -20371,7 +19302,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLayerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiLayerComponent, selector: "dxi-layer", inputs: { borderColor: "borderColor", borderWidth: "borderWidth", color: "color", colorGroupingField: "colorGroupingField", colorGroups: "colorGroups", customize: "customize", dataField: "dataField", dataSource: "dataSource", elementType: "elementType", hoveredBorderColor: "hoveredBorderColor", hoveredBorderWidth: "hoveredBorderWidth", hoveredColor: "hoveredColor", hoverEnabled: "hoverEnabled", label: "label", maxSize: "maxSize", minSize: "minSize", name: "name", opacity: "opacity", palette: "palette", paletteIndex: "paletteIndex", paletteSize: "paletteSize", selectedBorderColor: "selectedBorderColor", selectedBorderWidth: "selectedBorderWidth", selectedColor: "selectedColor", selectionMode: "selectionMode", size: "size", sizeGroupingField: "sizeGroupingField", sizeGroups: "sizeGroups", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("dd", DxiLayerComponent);
+            } exports("DxiLayerComponent", DxiLayerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLayerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-layer', template: '', providers: [NestedOptionHost] }]
@@ -20444,7 +19375,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLayerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiLayerModule, declarations: [DxiLayerComponent], exports: [DxiLayerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLayerModule });
-            } exports("dg", DxiLayerModule);
+            } exports("DxiLayerModule", DxiLayerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLayerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -20634,7 +19565,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLegendComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiLegendComponent, selector: "dxi-legend", inputs: { backgroundColor: "backgroundColor", border: "border", columnCount: "columnCount", columnItemSpacing: "columnItemSpacing", customizeHint: "customizeHint", customizeItems: "customizeItems", customizeText: "customizeText", font: "font", horizontalAlignment: "horizontalAlignment", itemsAlignment: "itemsAlignment", itemTextPosition: "itemTextPosition", margin: "margin", markerColor: "markerColor", markerShape: "markerShape", markerSize: "markerSize", markerTemplate: "markerTemplate", orientation: "orientation", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", rowCount: "rowCount", rowItemSpacing: "rowItemSpacing", source: "source", title: "title", verticalAlignment: "verticalAlignment", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("de", DxiLegendComponent);
+            } exports("DxiLegendComponent", DxiLegendComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLegendComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-legend', template: '', providers: [NestedOptionHost] }]
@@ -20699,7 +19630,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLegendModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiLegendModule, declarations: [DxiLegendComponent], exports: [DxiLegendComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLegendModule });
-            } exports("dh", DxiLegendModule);
+            } exports("DxiLegendModule", DxiLegendModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiLegendModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -20892,7 +19823,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLegendComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLegendComponent, selector: "dxo-legend", inputs: { backgroundColor: "backgroundColor", border: "border", columnCount: "columnCount", columnItemSpacing: "columnItemSpacing", customizeHint: "customizeHint", customizeItems: "customizeItems", customizeText: "customizeText", font: "font", horizontalAlignment: "horizontalAlignment", itemsAlignment: "itemsAlignment", itemTextFormat: "itemTextFormat", itemTextPosition: "itemTextPosition", margin: "margin", markerSize: "markerSize", markerTemplate: "markerTemplate", orientation: "orientation", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", rowCount: "rowCount", rowItemSpacing: "rowItemSpacing", title: "title", verticalAlignment: "verticalAlignment", visible: "visible", hoverMode: "hoverMode", position: "position" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLegendComponent", DxoLegendComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLegendComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-legend', template: '', providers: [NestedOptionHost] }]
@@ -20957,7 +19888,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLegendModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLegendModule, declarations: [DxoLegendComponent], exports: [DxoLegendComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLegendModule });
-            } exports("A", DxoLegendModule);
+            } exports("DxoLegendModule", DxoLegendModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLegendModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21001,7 +19932,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLineComponent, selector: "dxo-line", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLineComponent", DxoLineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-line', template: '', providers: [NestedOptionHost], inputs: [
@@ -21079,7 +20010,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLineModule, declarations: [DxoLineComponent], exports: [DxoLineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLineModule });
-            } exports("aA", DxoLineModule);
+            } exports("DxoLineModule", DxoLineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21152,7 +20083,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLinkComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLinkComponent, selector: "dxo-link", inputs: { border: "border", color: "color", colorMode: "colorMode", hoverStyle: "hoverStyle", opacity: "opacity" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLinkComponent", DxoLinkComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLinkComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-link', template: '', providers: [NestedOptionHost] }]
@@ -21177,7 +20108,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLinkModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLinkModule, declarations: [DxoLinkComponent], exports: [DxoLinkComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLinkModule });
-            } exports("cL", DxoLinkModule);
+            } exports("DxoLinkModule", DxoLinkModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLinkModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21274,7 +20205,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadPanelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLoadPanelComponent, selector: "dxo-load-panel", inputs: { enabled: "enabled", height: "height", indicatorSrc: "indicatorSrc", shading: "shading", shadingColor: "shadingColor", showIndicator: "showIndicator", showPane: "showPane", text: "text", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLoadPanelComponent", DxoLoadPanelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadPanelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-load-panel', template: '', providers: [NestedOptionHost] }]
@@ -21307,7 +20238,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadPanelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadPanelModule, declarations: [DxoLoadPanelComponent], exports: [DxoLoadPanelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadPanelModule });
-            } exports("cs", DxoLoadPanelModule);
+            } exports("DxoLoadPanelModule", DxoLoadPanelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadPanelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21389,7 +20320,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadingIndicatorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLoadingIndicatorComponent, selector: "dxo-loading-indicator", inputs: { backgroundColor: "backgroundColor", font: "font", show: "show", text: "text", enabled: "enabled" }, outputs: { showChange: "showChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLoadingIndicatorComponent", DxoLoadingIndicatorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadingIndicatorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-loading-indicator', template: '', providers: [NestedOptionHost] }]
@@ -21416,7 +20347,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadingIndicatorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadingIndicatorModule, declarations: [DxoLoadingIndicatorComponent], exports: [DxoLoadingIndicatorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadingIndicatorModule });
-            } exports("H", DxoLoadingIndicatorModule);
+            } exports("DxoLoadingIndicatorModule", DxoLoadingIndicatorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLoadingIndicatorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21489,7 +20420,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLookupComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoLookupComponent, selector: "dxo-lookup", inputs: { allowClearing: "allowClearing", calculateCellValue: "calculateCellValue", dataSource: "dataSource", displayExpr: "displayExpr", valueExpr: "valueExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoLookupComponent", DxoLookupComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLookupComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-lookup', template: '', providers: [NestedOptionHost] }]
@@ -21514,7 +20445,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLookupModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoLookupModule, declarations: [DxoLookupComponent], exports: [DxoLookupComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLookupModule });
-            } exports("bG", DxoLookupModule);
+            } exports("DxoLookupModule", DxoLookupModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoLookupModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21575,7 +20506,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMainToolbarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMainToolbarComponent, selector: "dxo-main-toolbar", inputs: { commands: "commands", visible: "visible" }, providers: [NestedOptionHost], queries: [{ propertyName: "commandsChildren", predicate: i0.forwardRef(() => DxiCommandComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMainToolbarComponent", DxoMainToolbarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMainToolbarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-main-toolbar', template: '', providers: [NestedOptionHost] }]
@@ -21597,7 +20528,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMainToolbarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMainToolbarModule, declarations: [DxoMainToolbarComponent], exports: [DxoMainToolbarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMainToolbarModule });
-            } exports("bj", DxoMainToolbarModule);
+            } exports("DxoMainToolbarModule", DxoMainToolbarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMainToolbarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21664,7 +20595,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarginComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMarginComponent, selector: "dxo-margin", inputs: { bottom: "bottom", left: "left", right: "right", top: "top" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMarginComponent", DxoMarginComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarginComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-margin', template: '', providers: [NestedOptionHost] }]
@@ -21687,7 +20618,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarginModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMarginModule, declarations: [DxoMarginComponent], exports: [DxoMarginComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarginModule });
-            } exports("E", DxoMarginModule);
+            } exports("DxoMarginModule", DxoMarginModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarginModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21757,7 +20688,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMarkerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiMarkerComponent, selector: "dxi-marker", inputs: { iconSrc: "iconSrc", location: "location", onClick: "onClick", tooltip: "tooltip" }, providers: [NestedOptionHost], queries: [{ propertyName: "locationChildren", predicate: i0.forwardRef(() => DxiLocationComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("cf", DxiMarkerComponent);
+            } exports("DxiMarkerComponent", DxiMarkerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMarkerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-marker', template: '', providers: [NestedOptionHost] }]
@@ -21783,7 +20714,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMarkerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiMarkerModule, declarations: [DxiMarkerComponent], exports: [DxiMarkerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMarkerModule });
-            } exports("cj", DxiMarkerModule);
+            } exports("DxiMarkerModule", DxiMarkerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMarkerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21862,7 +20793,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarkerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMarkerComponent, selector: "dxo-marker", inputs: { label: "label", separatorHeight: "separatorHeight", textLeftIndent: "textLeftIndent", textTopIndent: "textTopIndent", topIndent: "topIndent", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMarkerComponent", DxoMarkerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarkerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-marker', template: '', providers: [NestedOptionHost] }]
@@ -21889,7 +20820,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarkerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMarkerModule, declarations: [DxoMarkerComponent], exports: [DxoMarkerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarkerModule });
-            } exports("cB", DxoMarkerModule);
+            } exports("DxoMarkerModule", DxoMarkerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMarkerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -21963,7 +20894,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMasterDetailComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }, { token: i0.Renderer2 }, { token: DOCUMENT }, { token: DxTemplateHost, host: true }, { token: i0.ElementRef }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMasterDetailComponent, selector: "dxo-master-detail", inputs: { autoExpandAll: "autoExpandAll", enabled: "enabled", template: "template" }, providers: [NestedOptionHost, DxTemplateHost], usesInheritance: true, ngImport: i0, template: '<ng-content></ng-content>', isInline: true, styles: [":host{display:block}\n"] });
-            }
+            } exports("DxoMasterDetailComponent", DxoMasterDetailComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMasterDetailComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-master-detail', template: '<ng-content></ng-content>', providers: [NestedOptionHost, DxTemplateHost], styles: [":host{display:block}\n"] }]
@@ -21989,7 +20920,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMasterDetailModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMasterDetailModule, declarations: [DxoMasterDetailComponent], exports: [DxoMasterDetailComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMasterDetailModule });
-            }
+            } exports("DxoMasterDetailModule", DxoMasterDetailModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMasterDetailModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22086,7 +21017,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMaxRangeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMaxRangeComponent, selector: "dxo-max-range", inputs: { days: "days", hours: "hours", milliseconds: "milliseconds", minutes: "minutes", months: "months", quarters: "quarters", seconds: "seconds", weeks: "weeks", years: "years" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMaxRangeComponent", DxoMaxRangeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMaxRangeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-max-range', template: '', providers: [NestedOptionHost] }]
@@ -22119,7 +21050,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMaxRangeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMaxRangeModule, declarations: [DxoMaxRangeComponent], exports: [DxoMaxRangeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMaxRangeModule });
-            } exports("cC", DxoMaxRangeModule);
+            } exports("DxoMaxRangeModule", DxoMaxRangeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMaxRangeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22199,7 +21130,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMediaResizingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMediaResizingComponent, selector: "dxo-media-resizing", inputs: { allowedTargets: "allowedTargets", enabled: "enabled" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMediaResizingComponent", DxoMediaResizingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMediaResizingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-media-resizing', template: '', providers: [NestedOptionHost], inputs: [
@@ -22217,7 +21148,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMediaResizingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMediaResizingModule, declarations: [DxoMediaResizingComponent], exports: [DxoMediaResizingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMediaResizingModule });
-            } exports("c4", DxoMediaResizingModule);
+            } exports("DxoMediaResizingModule", DxoMediaResizingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMediaResizingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22336,7 +21267,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMentionComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiMentionComponent, selector: "dxi-mention", inputs: { dataSource: "dataSource", displayExpr: "displayExpr", itemTemplate: "itemTemplate", marker: "marker", minSearchLength: "minSearchLength", searchExpr: "searchExpr", searchTimeout: "searchTimeout", template: "template", valueExpr: "valueExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("c1", DxiMentionComponent);
+            } exports("DxiMentionComponent", DxiMentionComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMentionComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-mention', template: '', providers: [NestedOptionHost], inputs: [
@@ -22361,7 +21292,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMentionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiMentionModule, declarations: [DxiMentionComponent], exports: [DxiMentionComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMentionModule });
-            } exports("c5", DxiMentionModule);
+            } exports("DxiMentionModule", DxiMentionModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMentionModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22413,7 +21344,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMenuItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiMenuItemComponent, selector: "dxi-menu-item", inputs: { action: "action", text: "text" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("c9", DxiMenuItemComponent);
+            } exports("DxiMenuItemComponent", DxiMenuItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMenuItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-menu-item', template: '', providers: [NestedOptionHost] }]
@@ -22432,7 +21363,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMenuItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiMenuItemModule, declarations: [DxiMenuItemComponent], exports: [DxiMenuItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMenuItemModule });
-            } exports("cb", DxiMenuItemModule);
+            } exports("DxiMenuItemModule", DxiMenuItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiMenuItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22529,7 +21460,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinRangeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMinRangeComponent, selector: "dxo-min-range", inputs: { days: "days", hours: "hours", milliseconds: "milliseconds", minutes: "minutes", months: "months", quarters: "quarters", seconds: "seconds", weeks: "weeks", years: "years" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMinRangeComponent", DxoMinRangeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinRangeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-min-range', template: '', providers: [NestedOptionHost] }]
@@ -22562,7 +21493,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinRangeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMinRangeModule, declarations: [DxoMinRangeComponent], exports: [DxoMinRangeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinRangeModule });
-            } exports("cD", DxoMinRangeModule);
+            } exports("DxoMinRangeModule", DxoMinRangeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinRangeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22659,7 +21590,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinVisualRangeLengthComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMinVisualRangeLengthComponent, selector: "dxo-min-visual-range-length", inputs: { days: "days", hours: "hours", milliseconds: "milliseconds", minutes: "minutes", months: "months", quarters: "quarters", seconds: "seconds", weeks: "weeks", years: "years" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMinVisualRangeLengthComponent", DxoMinVisualRangeLengthComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinVisualRangeLengthComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-min-visual-range-length', template: '', providers: [NestedOptionHost] }]
@@ -22692,7 +21623,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinVisualRangeLengthModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMinVisualRangeLengthModule, declarations: [DxoMinVisualRangeLengthComponent], exports: [DxoMinVisualRangeLengthComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinVisualRangeLengthModule });
-            } exports("a4", DxoMinVisualRangeLengthModule);
+            } exports("DxoMinVisualRangeLengthModule", DxoMinVisualRangeLengthModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinVisualRangeLengthModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22759,7 +21690,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorGridComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMinorGridComponent, selector: "dxo-minor-grid", inputs: { color: "color", opacity: "opacity", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMinorGridComponent", DxoMinorGridComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorGridComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-minor-grid', template: '', providers: [NestedOptionHost] }]
@@ -22782,7 +21713,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorGridModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorGridModule, declarations: [DxoMinorGridComponent], exports: [DxoMinorGridComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorGridModule });
-            } exports("a1", DxoMinorGridModule);
+            } exports("DxoMinorGridModule", DxoMinorGridModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorGridModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22879,7 +21810,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickIntervalComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMinorTickIntervalComponent, selector: "dxo-minor-tick-interval", inputs: { days: "days", hours: "hours", milliseconds: "milliseconds", minutes: "minutes", months: "months", quarters: "quarters", seconds: "seconds", weeks: "weeks", years: "years" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMinorTickIntervalComponent", DxoMinorTickIntervalComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickIntervalComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-minor-tick-interval', template: '', providers: [NestedOptionHost] }]
@@ -22912,7 +21843,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickIntervalModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickIntervalModule, declarations: [DxoMinorTickIntervalComponent], exports: [DxoMinorTickIntervalComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickIntervalModule });
-            } exports("a3", DxoMinorTickIntervalModule);
+            } exports("DxoMinorTickIntervalModule", DxoMinorTickIntervalModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickIntervalModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -22991,7 +21922,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMinorTickComponent, selector: "dxo-minor-tick", inputs: { color: "color", length: "length", opacity: "opacity", shift: "shift", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMinorTickComponent", DxoMinorTickComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-minor-tick', template: '', providers: [NestedOptionHost] }]
@@ -23018,7 +21949,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickModule, declarations: [DxoMinorTickComponent], exports: [DxoMinorTickComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickModule });
-            } exports("a2", DxoMinorTickModule);
+            } exports("DxoMinorTickModule", DxoMinorTickModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMinorTickModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23073,7 +22004,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMyComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoMyComponent, selector: "dxo-my", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoMyComponent", DxoMyComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMyComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-my', template: '', providers: [NestedOptionHost] }]
@@ -23092,7 +22023,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMyModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoMyModule, declarations: [DxoMyComponent], exports: [DxoMyComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMyModule });
-            } exports("q", DxoMyModule);
+            } exports("DxoMyModule", DxoMyModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoMyModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23171,7 +22102,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoNodeComponent, selector: "dxo-node", inputs: { border: "border", color: "color", hoverStyle: "hoverStyle", opacity: "opacity", padding: "padding", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoNodeComponent", DxoNodeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-node', template: '', providers: [NestedOptionHost] }]
@@ -23198,7 +22129,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoNodeModule, declarations: [DxoNodeComponent], exports: [DxoNodeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodeModule });
-            } exports("cM", DxoNodeModule);
+            } exports("DxoNodeModule", DxoNodeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23361,7 +22292,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoNodesComponent, selector: "dxo-nodes", inputs: { autoLayout: "autoLayout", autoSizeEnabled: "autoSizeEnabled", containerChildrenExpr: "containerChildrenExpr", containerKeyExpr: "containerKeyExpr", customDataExpr: "customDataExpr", dataSource: "dataSource", heightExpr: "heightExpr", imageUrlExpr: "imageUrlExpr", itemsExpr: "itemsExpr", keyExpr: "keyExpr", leftExpr: "leftExpr", lockedExpr: "lockedExpr", parentKeyExpr: "parentKeyExpr", styleExpr: "styleExpr", textExpr: "textExpr", textStyleExpr: "textStyleExpr", topExpr: "topExpr", typeExpr: "typeExpr", widthExpr: "widthExpr", zIndexExpr: "zIndexExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoNodesComponent", DxoNodesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-nodes', template: '', providers: [NestedOptionHost] }]
@@ -23416,7 +22347,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoNodesModule, declarations: [DxoNodesComponent], exports: [DxoNodesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodesModule });
-            } exports("bk", DxoNodesModule);
+            } exports("DxoNodesModule", DxoNodesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNodesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23471,7 +22402,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNotificationsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoNotificationsComponent, selector: "dxo-notifications", inputs: { showPanel: "showPanel", showPopup: "showPopup" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoNotificationsComponent", DxoNotificationsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNotificationsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-notifications', template: '', providers: [NestedOptionHost] }]
@@ -23490,7 +22421,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNotificationsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoNotificationsModule, declarations: [DxoNotificationsComponent], exports: [DxoNotificationsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNotificationsModule });
-            } exports("bx", DxoNotificationsModule);
+            } exports("DxoNotificationsModule", DxoNotificationsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoNotificationsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23545,7 +22476,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOffsetComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoOffsetComponent, selector: "dxo-offset", inputs: { x: "x", y: "y" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoOffsetComponent", DxoOffsetComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOffsetComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-offset', template: '', providers: [NestedOptionHost] }]
@@ -23564,7 +22495,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOffsetModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoOffsetModule, declarations: [DxoOffsetComponent], exports: [DxoOffsetComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOffsetModule });
-            } exports("r", DxoOffsetModule);
+            } exports("DxoOffsetModule", DxoOffsetModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOffsetModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23698,7 +22629,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOperationDescriptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoOperationDescriptionsComponent, selector: "dxo-operation-descriptions", inputs: { between: "between", contains: "contains", endsWith: "endsWith", equal: "equal", greaterThan: "greaterThan", greaterThanOrEqual: "greaterThanOrEqual", lessThan: "lessThan", lessThanOrEqual: "lessThanOrEqual", notContains: "notContains", notEqual: "notEqual", startsWith: "startsWith" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoOperationDescriptionsComponent", DxoOperationDescriptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOperationDescriptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-operation-descriptions', template: '', providers: [NestedOptionHost], inputs: [
@@ -23725,7 +22656,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOperationDescriptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoOperationDescriptionsModule, declarations: [DxoOperationDescriptionsComponent], exports: [DxoOperationDescriptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOperationDescriptionsModule });
-            } exports("bU", DxoOperationDescriptionsModule);
+            } exports("DxoOperationDescriptionsModule", DxoOperationDescriptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOperationDescriptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23769,7 +22700,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoOptionsComponent, selector: "dxo-options", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", disabled: "disabled", elementAttr: "elementAttr", focusStateEnabled: "focusStateEnabled", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", icon: "icon", onClick: "onClick", onContentReady: "onContentReady", onDisposing: "onDisposing", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", rtlEnabled: "rtlEnabled", stylingMode: "stylingMode", tabIndex: "tabIndex", template: "template", text: "text", type: "type", useSubmitBehavior: "useSubmitBehavior", validationGroup: "validationGroup", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoOptionsComponent", DxoOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -23809,7 +22740,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoOptionsModule, declarations: [DxoOptionsComponent], exports: [DxoOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOptionsModule });
-            } exports("h", DxoOptionsModule);
+            } exports("DxoOptionsModule", DxoOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -23892,7 +22823,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPageSizeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPageSizeComponent, selector: "dxo-page-size", inputs: { height: "height", items: "items", width: "width" }, outputs: { heightChange: "heightChange", widthChange: "widthChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPageSizeComponent", DxoPageSizeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPageSizeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-page-size', template: '', providers: [NestedOptionHost] }]
@@ -23920,7 +22851,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPageSizeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPageSizeModule, declarations: [DxoPageSizeComponent], exports: [DxoPageSizeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPageSizeModule });
-            } exports("bm", DxoPageSizeModule);
+            } exports("DxoPageSizeModule", DxoPageSizeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPageSizeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24011,7 +22942,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPagerComponent, selector: "dxo-pager", inputs: { allowedPageSizes: "allowedPageSizes", displayMode: "displayMode", infoText: "infoText", label: "label", showInfo: "showInfo", showNavigationButtons: "showNavigationButtons", showPageSizeSelector: "showPageSizeSelector", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPagerComponent", DxoPagerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-pager', template: '', providers: [NestedOptionHost] }]
@@ -24042,7 +22973,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPagerModule, declarations: [DxoPagerComponent], exports: [DxoPagerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagerModule });
-            } exports("d2", DxoPagerModule);
+            } exports("DxoPagerModule", DxoPagerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24119,7 +23050,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPagingComponent, selector: "dxo-paging", inputs: { enabled: "enabled", pageIndex: "pageIndex", pageSize: "pageSize" }, outputs: { pageIndexChange: "pageIndexChange", pageSizeChange: "pageSizeChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPagingComponent", DxoPagingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-paging', template: '', providers: [NestedOptionHost] }]
@@ -24144,7 +23075,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPagingModule, declarations: [DxoPagingComponent], exports: [DxoPagingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagingModule });
-            } exports("d3", DxoPagingModule);
+            } exports("DxoPagingModule", DxoPagingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPagingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24208,7 +23139,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiPaneComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiPaneComponent, selector: "dxi-pane", inputs: { backgroundColor: "backgroundColor", border: "border", height: "height", name: "name" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("P", DxiPaneComponent);
+            } exports("DxiPaneComponent", DxiPaneComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiPaneComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-pane', template: '', providers: [NestedOptionHost] }]
@@ -24231,7 +23162,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiPaneModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiPaneModule, declarations: [DxiPaneComponent], exports: [DxiPaneComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiPaneModule });
-            } exports("aS", DxiPaneModule);
+            } exports("DxiPaneModule", DxiPaneModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiPaneModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24316,7 +23247,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPermissionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPermissionsComponent, selector: "dxo-permissions", inputs: { copy: "copy", create: "create", delete: "delete", download: "download", move: "move", rename: "rename", upload: "upload" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPermissionsComponent", DxoPermissionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPermissionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-permissions', template: '', providers: [NestedOptionHost] }]
@@ -24345,7 +23276,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPermissionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPermissionsModule, declarations: [DxoPermissionsComponent], exports: [DxoPermissionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPermissionsModule });
-            } exports("by", DxoPermissionsModule);
+            } exports("DxoPermissionsModule", DxoPermissionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPermissionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24448,7 +23379,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPointComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPointComponent, selector: "dxo-point", inputs: { border: "border", color: "color", hoverMode: "hoverMode", hoverStyle: "hoverStyle", image: "image", selectionMode: "selectionMode", selectionStyle: "selectionStyle", size: "size", symbol: "symbol", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPointComponent", DxoPointComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPointComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-point', template: '', providers: [NestedOptionHost] }]
@@ -24483,7 +23414,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPointModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPointModule, declarations: [DxoPointComponent], exports: [DxoPointComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPointModule });
-            } exports("aj", DxoPointModule);
+            } exports("DxoPointModule", DxoPointModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPointModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24563,7 +23494,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPopupComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPopupComponent, selector: "dxo-popup", inputs: { accessKey: "accessKey", animation: "animation", closeOnOutsideClick: "closeOnOutsideClick", container: "container", contentTemplate: "contentTemplate", deferRendering: "deferRendering", disabled: "disabled", dragAndResizeArea: "dragAndResizeArea", dragEnabled: "dragEnabled", dragOutsideBoundary: "dragOutsideBoundary", enableBodyScroll: "enableBodyScroll", focusStateEnabled: "focusStateEnabled", fullScreen: "fullScreen", height: "height", hideOnOutsideClick: "hideOnOutsideClick", hideOnParentScroll: "hideOnParentScroll", hint: "hint", hoverStateEnabled: "hoverStateEnabled", maxHeight: "maxHeight", maxWidth: "maxWidth", minHeight: "minHeight", minWidth: "minWidth", onContentReady: "onContentReady", onDisposing: "onDisposing", onHidden: "onHidden", onHiding: "onHiding", onInitialized: "onInitialized", onOptionChanged: "onOptionChanged", onResize: "onResize", onResizeEnd: "onResizeEnd", onResizeStart: "onResizeStart", onShowing: "onShowing", onShown: "onShown", onTitleRendered: "onTitleRendered", position: "position", resizeEnabled: "resizeEnabled", restorePosition: "restorePosition", rtlEnabled: "rtlEnabled", shading: "shading", shadingColor: "shadingColor", showCloseButton: "showCloseButton", showTitle: "showTitle", tabIndex: "tabIndex", title: "title", titleTemplate: "titleTemplate", toolbarItems: "toolbarItems", visible: "visible", width: "width", wrapperAttr: "wrapperAttr" }, outputs: { heightChange: "heightChange", positionChange: "positionChange", visibleChange: "visibleChange", widthChange: "widthChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "toolbarItemsChildren", predicate: i0.forwardRef(() => DxiToolbarItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPopupComponent", DxoPopupComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPopupComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-popup', template: '', providers: [NestedOptionHost], inputs: [
@@ -24639,7 +23570,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPopupModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPopupModule, declarations: [DxoPopupComponent], exports: [DxoPopupComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPopupModule });
-            } exports("cZ", DxoPopupModule);
+            } exports("DxoPopupModule", DxoPopupModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPopupModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24749,7 +23680,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPositionComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPositionComponent, selector: "dxo-position", inputs: { at: "at", boundary: "boundary", boundaryOffset: "boundaryOffset", collision: "collision", my: "my", of: "of", offset: "offset" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPositionComponent", DxoPositionComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPositionComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-position', template: '', providers: [NestedOptionHost], inputs: [
@@ -24772,7 +23703,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPositionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPositionModule, declarations: [DxoPositionComponent], exports: [DxoPositionComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPositionModule });
-            } exports("m", DxoPositionModule);
+            } exports("DxoPositionModule", DxoPositionModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPositionModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24858,7 +23789,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoProjectionComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoProjectionComponent, selector: "dxo-projection", inputs: { aspectRatio: "aspectRatio", from: "from", to: "to" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoProjectionComponent", DxoProjectionComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoProjectionComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-projection', template: '', providers: [NestedOptionHost], inputs: [
@@ -24877,7 +23808,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoProjectionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoProjectionModule, declarations: [DxoProjectionComponent], exports: [DxoProjectionComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoProjectionModule });
-            } exports("dj", DxoProjectionModule);
+            } exports("DxoProjectionModule", DxoProjectionModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoProjectionModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -24938,7 +23869,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPropertiesPanelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoPropertiesPanelComponent, selector: "dxo-properties-panel", inputs: { tabs: "tabs", visibility: "visibility" }, providers: [NestedOptionHost], queries: [{ propertyName: "tabsChildren", predicate: i0.forwardRef(() => DxiTabComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoPropertiesPanelComponent", DxoPropertiesPanelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPropertiesPanelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-properties-panel', template: '', providers: [NestedOptionHost] }]
@@ -24960,7 +23891,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPropertiesPanelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoPropertiesPanelModule, declarations: [DxoPropertiesPanelComponent], exports: [DxoPropertiesPanelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPropertiesPanelModule });
-            } exports("bn", DxoPropertiesPanelModule);
+            } exports("DxoPropertiesPanelModule", DxoPropertiesPanelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoPropertiesPanelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25018,7 +23949,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRangeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiRangeComponent, selector: "dxi-range", inputs: { color: "color", endValue: "endValue", startValue: "startValue" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiRangeComponent", DxiRangeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRangeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-range', template: '', providers: [NestedOptionHost] }]
@@ -25039,7 +23970,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRangeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiRangeModule, declarations: [DxiRangeComponent], exports: [DxiRangeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRangeModule });
-            } exports("a_", DxiRangeModule);
+            } exports("DxiRangeModule", DxiRangeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRangeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25142,7 +24073,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeContainerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoRangeContainerComponent, selector: "dxo-range-container", inputs: { backgroundColor: "backgroundColor", offset: "offset", orientation: "orientation", palette: "palette", paletteExtensionMode: "paletteExtensionMode", ranges: "ranges", width: "width", horizontalOrientation: "horizontalOrientation", verticalOrientation: "verticalOrientation" }, providers: [NestedOptionHost], queries: [{ propertyName: "rangesChildren", predicate: i0.forwardRef(() => DxiRangeComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoRangeContainerComponent", DxoRangeContainerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeContainerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-range-container', template: '', providers: [NestedOptionHost] }]
@@ -25178,7 +24109,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeContainerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeContainerModule, declarations: [DxoRangeContainerComponent], exports: [DxoRangeContainerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeContainerModule });
-            } exports("aZ", DxoRangeContainerModule);
+            } exports("DxoRangeContainerModule", DxoRangeContainerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeContainerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25222,7 +24153,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoRangeareaComponent, selector: "dxo-rangearea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoRangeareaComponent", DxoRangeareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-rangearea', template: '', providers: [NestedOptionHost], inputs: [
@@ -25299,7 +24230,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeareaModule, declarations: [DxoRangeareaComponent], exports: [DxoRangeareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeareaModule });
-            } exports("aB", DxoRangeareaModule);
+            } exports("DxoRangeareaModule", DxoRangeareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangeareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25343,7 +24274,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangebarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoRangebarComponent, selector: "dxo-rangebar", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoRangebarComponent", DxoRangebarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangebarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-rangebar', template: '', providers: [NestedOptionHost], inputs: [
@@ -25420,7 +24351,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangebarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoRangebarModule, declarations: [DxoRangebarComponent], exports: [DxoRangebarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangebarModule });
-            } exports("aC", DxoRangebarModule);
+            } exports("DxoRangebarModule", DxoRangebarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRangebarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25475,7 +24406,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoReductionComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoReductionComponent, selector: "dxo-reduction", inputs: { color: "color", level: "level" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoReductionComponent", DxoReductionComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoReductionComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-reduction', template: '', providers: [NestedOptionHost] }]
@@ -25494,7 +24425,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoReductionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoReductionModule, declarations: [DxoReductionComponent], exports: [DxoReductionComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoReductionModule });
-            } exports("ao", DxoReductionModule);
+            } exports("DxoReductionModule", DxoReductionModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoReductionModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25573,7 +24504,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRemoteOperationsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoRemoteOperationsComponent, selector: "dxo-remote-operations", inputs: { filtering: "filtering", grouping: "grouping", groupPaging: "groupPaging", paging: "paging", sorting: "sorting", summary: "summary" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoRemoteOperationsComponent", DxoRemoteOperationsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRemoteOperationsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-remote-operations', template: '', providers: [NestedOptionHost] }]
@@ -25600,7 +24531,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRemoteOperationsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoRemoteOperationsModule, declarations: [DxoRemoteOperationsComponent], exports: [DxoRemoteOperationsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRemoteOperationsModule });
-            } exports("d4", DxoRemoteOperationsModule);
+            } exports("DxoRemoteOperationsModule", DxoRemoteOperationsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRemoteOperationsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25667,7 +24598,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourceAssignmentsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoResourceAssignmentsComponent, selector: "dxo-resource-assignments", inputs: { dataSource: "dataSource", keyExpr: "keyExpr", resourceIdExpr: "resourceIdExpr", taskIdExpr: "taskIdExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoResourceAssignmentsComponent", DxoResourceAssignmentsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourceAssignmentsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-resource-assignments', template: '', providers: [NestedOptionHost] }]
@@ -25690,7 +24621,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourceAssignmentsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoResourceAssignmentsModule, declarations: [DxoResourceAssignmentsComponent], exports: [DxoResourceAssignmentsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourceAssignmentsModule });
-            } exports("bW", DxoResourceAssignmentsModule);
+            } exports("DxoResourceAssignmentsModule", DxoResourceAssignmentsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourceAssignmentsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25778,7 +24709,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiResourceComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiResourceComponent, selector: "dxi-resource", inputs: { allowMultiple: "allowMultiple", colorExpr: "colorExpr", dataSource: "dataSource", displayExpr: "displayExpr", fieldExpr: "fieldExpr", label: "label", useColorAsDefault: "useColorAsDefault", valueExpr: "valueExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("cN", DxiResourceComponent);
+            } exports("DxiResourceComponent", DxiResourceComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiResourceComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-resource', template: '', providers: [NestedOptionHost] }]
@@ -25809,7 +24740,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiResourceModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiResourceModule, declarations: [DxiResourceComponent], exports: [DxiResourceComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiResourceModule });
-            } exports("cQ", DxiResourceModule);
+            } exports("DxiResourceModule", DxiResourceModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiResourceModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25876,7 +24807,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourcesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoResourcesComponent, selector: "dxo-resources", inputs: { colorExpr: "colorExpr", dataSource: "dataSource", keyExpr: "keyExpr", textExpr: "textExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoResourcesComponent", DxoResourcesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourcesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-resources', template: '', providers: [NestedOptionHost] }]
@@ -25899,7 +24830,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourcesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoResourcesModule, declarations: [DxoResourcesComponent], exports: [DxoResourcesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourcesModule });
-            } exports("bX", DxoResourcesModule);
+            } exports("DxoResourcesModule", DxoResourcesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoResourcesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -25975,7 +24906,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRouteComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiRouteComponent, selector: "dxi-route", inputs: { color: "color", locations: "locations", mode: "mode", opacity: "opacity", weight: "weight" }, providers: [NestedOptionHost], queries: [{ propertyName: "locationsChildren", predicate: i0.forwardRef(() => DxiLocationComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("cg", DxiRouteComponent);
+            } exports("DxiRouteComponent", DxiRouteComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRouteComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-route', template: '', providers: [NestedOptionHost] }]
@@ -26003,7 +24934,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRouteModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiRouteModule, declarations: [DxiRouteComponent], exports: [DxiRouteComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRouteModule });
-            } exports("cl", DxiRouteModule);
+            } exports("DxiRouteModule", DxiRouteModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRouteModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -26184,7 +25115,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRowDraggingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoRowDraggingComponent, selector: "dxo-row-dragging", inputs: { allowDropInsideItem: "allowDropInsideItem", allowReordering: "allowReordering", autoScroll: "autoScroll", boundary: "boundary", container: "container", cursorOffset: "cursorOffset", data: "data", dragDirection: "dragDirection", dragTemplate: "dragTemplate", dropFeedbackMode: "dropFeedbackMode", filter: "filter", group: "group", handle: "handle", onAdd: "onAdd", onDragChange: "onDragChange", onDragEnd: "onDragEnd", onDragMove: "onDragMove", onDragStart: "onDragStart", onRemove: "onRemove", onReorder: "onReorder", scrollSensitivity: "scrollSensitivity", scrollSpeed: "scrollSpeed", showDragIcons: "showDragIcons" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoRowDraggingComponent", DxoRowDraggingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRowDraggingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-row-dragging', template: '', providers: [NestedOptionHost] }]
@@ -26245,7 +25176,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRowDraggingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoRowDraggingModule, declarations: [DxoRowDraggingComponent], exports: [DxoRowDraggingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRowDraggingModule });
-            } exports("d5", DxoRowDraggingModule);
+            } exports("DxoRowDraggingModule", DxoRowDraggingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoRowDraggingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -26309,7 +25240,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRowComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiRowComponent, selector: "dxi-row", inputs: { baseSize: "baseSize", ratio: "ratio", screen: "screen", shrink: "shrink" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("cI", DxiRowComponent);
+            } exports("DxiRowComponent", DxiRowComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRowComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-row', template: '', providers: [NestedOptionHost] }]
@@ -26332,7 +25263,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRowModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiRowModule, declarations: [DxiRowComponent], exports: [DxiRowComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRowModule });
-            } exports("cK", DxiRowModule);
+            } exports("DxiRowModule", DxiRowModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiRowModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -26387,7 +25318,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleTypeRangeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoScaleTypeRangeComponent, selector: "dxo-scale-type-range", inputs: { max: "max", min: "min" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoScaleTypeRangeComponent", DxoScaleTypeRangeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleTypeRangeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-scale-type-range', template: '', providers: [NestedOptionHost] }]
@@ -26406,7 +25337,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleTypeRangeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleTypeRangeModule, declarations: [DxoScaleTypeRangeComponent], exports: [DxoScaleTypeRangeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleTypeRangeModule });
-            } exports("bY", DxoScaleTypeRangeModule);
+            } exports("DxoScaleTypeRangeModule", DxoScaleTypeRangeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleTypeRangeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -26671,7 +25602,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoScaleComponent, selector: "dxo-scale", inputs: { allowDecimals: "allowDecimals", customMinorTicks: "customMinorTicks", customTicks: "customTicks", endValue: "endValue", label: "label", minorTick: "minorTick", minorTickInterval: "minorTickInterval", orientation: "orientation", scaleDivisionFactor: "scaleDivisionFactor", startValue: "startValue", tick: "tick", tickInterval: "tickInterval", horizontalOrientation: "horizontalOrientation", verticalOrientation: "verticalOrientation", aggregateByCategory: "aggregateByCategory", aggregationGroupWidth: "aggregationGroupWidth", aggregationInterval: "aggregationInterval", breaks: "breaks", breakStyle: "breakStyle", categories: "categories", discreteAxisDivisionMode: "discreteAxisDivisionMode", endOnTick: "endOnTick", holidays: "holidays", linearThreshold: "linearThreshold", logarithmBase: "logarithmBase", marker: "marker", maxRange: "maxRange", minorTickCount: "minorTickCount", minRange: "minRange", placeholderHeight: "placeholderHeight", showCustomBoundaryTicks: "showCustomBoundaryTicks", singleWorkdays: "singleWorkdays", type: "type", valueType: "valueType", workdaysOnly: "workdaysOnly", workWeek: "workWeek" }, providers: [NestedOptionHost], queries: [{ propertyName: "breaksChildren", predicate: i0.forwardRef(() => DxiBreakComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoScaleComponent", DxoScaleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-scale', template: '', providers: [NestedOptionHost] }]
@@ -26761,7 +25692,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleModule, declarations: [DxoScaleComponent], exports: [DxoScaleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleModule });
-            } exports("a$", DxoScaleModule);
+            } exports("DxoScaleModule", DxoScaleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScaleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -26805,7 +25736,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScatterComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoScatterComponent, selector: "dxo-scatter", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoScatterComponent", DxoScatterComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScatterComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-scatter', template: '', providers: [NestedOptionHost], inputs: [
@@ -26883,7 +25814,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScatterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoScatterModule, declarations: [DxoScatterComponent], exports: [DxoScatterComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScatterModule });
-            } exports("aD", DxoScatterModule);
+            } exports("DxoScatterModule", DxoScatterModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScatterModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -26962,7 +25893,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollBarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoScrollBarComponent, selector: "dxo-scroll-bar", inputs: { color: "color", offset: "offset", opacity: "opacity", position: "position", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoScrollBarComponent", DxoScrollBarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollBarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-scroll-bar', template: '', providers: [NestedOptionHost] }]
@@ -26989,7 +25920,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollBarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollBarModule, declarations: [DxoScrollBarComponent], exports: [DxoScrollBarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollBarModule });
-            } exports("aT", DxoScrollBarModule);
+            } exports("DxoScrollBarModule", DxoScrollBarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollBarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -27111,7 +26042,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoScrollingComponent, selector: "dxo-scrolling", inputs: { columnRenderingMode: "columnRenderingMode", mode: "mode", preloadEnabled: "preloadEnabled", renderAsync: "renderAsync", rowRenderingMode: "rowRenderingMode", scrollByContent: "scrollByContent", scrollByThumb: "scrollByThumb", showScrollbar: "showScrollbar", useNative: "useNative" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoScrollingComponent", DxoScrollingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-scrolling', template: '', providers: [NestedOptionHost], inputs: [
@@ -27136,7 +26067,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollingModule, declarations: [DxoScrollingComponent], exports: [DxoScrollingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollingModule });
-            } exports("ct", DxoScrollingModule);
+            } exports("DxoScrollingModule", DxoScrollingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoScrollingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -27556,7 +26487,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchEditorOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSearchEditorOptionsComponent, selector: "dxo-search-editor-options", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", buttons: "buttons", disabled: "disabled", elementAttr: "elementAttr", focusStateEnabled: "focusStateEnabled", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", inputAttr: "inputAttr", isDirty: "isDirty", isValid: "isValid", label: "label", labelMode: "labelMode", mask: "mask", maskChar: "maskChar", maskInvalidMessage: "maskInvalidMessage", maskRules: "maskRules", maxLength: "maxLength", mode: "mode", name: "name", onChange: "onChange", onContentReady: "onContentReady", onCopy: "onCopy", onCut: "onCut", onDisposing: "onDisposing", onEnterKey: "onEnterKey", onFocusIn: "onFocusIn", onFocusOut: "onFocusOut", onInitialized: "onInitialized", onInput: "onInput", onKeyDown: "onKeyDown", onKeyUp: "onKeyUp", onOptionChanged: "onOptionChanged", onPaste: "onPaste", onValueChanged: "onValueChanged", placeholder: "placeholder", readOnly: "readOnly", rtlEnabled: "rtlEnabled", showClearButton: "showClearButton", showMaskMode: "showMaskMode", spellcheck: "spellcheck", stylingMode: "stylingMode", tabIndex: "tabIndex", text: "text", useMaskedValue: "useMaskedValue", validationError: "validationError", validationErrors: "validationErrors", validationMessageMode: "validationMessageMode", validationMessagePosition: "validationMessagePosition", validationStatus: "validationStatus", value: "value", valueChangeEvent: "valueChangeEvent", visible: "visible", width: "width" }, outputs: { textChange: "textChange", valueChange: "valueChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "buttonsChildren", predicate: i0.forwardRef(() => DxiButtonComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSearchEditorOptionsComponent", DxoSearchEditorOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchEditorOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-search-editor-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -27634,7 +26565,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchEditorOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchEditorOptionsModule, declarations: [DxoSearchEditorOptionsComponent], exports: [DxoSearchEditorOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchEditorOptionsModule });
-            } exports("cc", DxoSearchEditorOptionsModule);
+            } exports("DxoSearchEditorOptionsModule", DxoSearchEditorOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchEditorOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -27728,7 +26659,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchPanelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSearchPanelComponent, selector: "dxo-search-panel", inputs: { highlightCaseSensitive: "highlightCaseSensitive", highlightSearchText: "highlightSearchText", placeholder: "placeholder", searchVisibleColumnsOnly: "searchVisibleColumnsOnly", text: "text", visible: "visible", width: "width" }, outputs: { textChange: "textChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSearchPanelComponent", DxoSearchPanelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchPanelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-search-panel', template: '', providers: [NestedOptionHost] }]
@@ -27759,7 +26690,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchPanelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchPanelModule, declarations: [DxoSearchPanelComponent], exports: [DxoSearchPanelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchPanelModule });
-            } exports("d6", DxoSearchPanelModule);
+            } exports("DxoSearchPanelModule", DxoSearchPanelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchPanelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -27857,7 +26788,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSearchComponent, selector: "dxo-search", inputs: { editorOptions: "editorOptions", enabled: "enabled", timeout: "timeout", mode: "mode", searchExpr: "searchExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSearchComponent", DxoSearchComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-search', template: '', providers: [NestedOptionHost], inputs: [
@@ -27878,7 +26809,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchModule, declarations: [DxoSearchComponent], exports: [DxoSearchComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchModule });
-            } exports("bR", DxoSearchModule);
+            } exports("DxoSearchModule", DxoSearchModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSearchModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -27963,7 +26894,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionStyleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSelectionStyleComponent, selector: "dxo-selection-style", inputs: { border: "border", color: "color", size: "size", dashStyle: "dashStyle", hatching: "hatching", highlight: "highlight", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSelectionStyleComponent", DxoSelectionStyleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionStyleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-selection-style', template: '', providers: [NestedOptionHost] }]
@@ -27992,7 +26923,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionStyleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionStyleModule, declarations: [DxoSelectionStyleComponent], exports: [DxoSelectionStyleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionStyleModule });
-            } exports("an", DxoSelectionStyleModule);
+            } exports("DxoSelectionStyleModule", DxoSelectionStyleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionStyleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28102,7 +27033,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSelectionComponent, selector: "dxo-selection", inputs: { allowSelectAll: "allowSelectAll", recursive: "recursive", selectByClick: "selectByClick", deferred: "deferred", mode: "mode", selectAllMode: "selectAllMode", showCheckBoxesMode: "showCheckBoxesMode" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSelectionComponent", DxoSelectionComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-selection', template: '', providers: [NestedOptionHost], inputs: [
@@ -28125,7 +27056,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionModule, declarations: [DxoSelectionComponent], exports: [DxoSelectionComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionModule });
-            } exports("cU", DxoSelectionModule);
+            } exports("DxoSelectionModule", DxoSelectionModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSelectionModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28180,7 +27111,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSeriesTemplateComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSeriesTemplateComponent, selector: "dxo-series-template", inputs: { customizeSeries: "customizeSeries", nameField: "nameField" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSeriesTemplateComponent", DxoSeriesTemplateComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSeriesTemplateComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-series-template', template: '', providers: [NestedOptionHost] }]
@@ -28199,7 +27130,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSeriesTemplateModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSeriesTemplateModule, declarations: [DxoSeriesTemplateComponent], exports: [DxoSeriesTemplateComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSeriesTemplateModule });
-            } exports("aV", DxoSeriesTemplateModule);
+            } exports("DxoSeriesTemplateModule", DxoSeriesTemplateModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSeriesTemplateModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28272,7 +27203,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShadowComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoShadowComponent, selector: "dxo-shadow", inputs: { blur: "blur", color: "color", offsetX: "offsetX", offsetY: "offsetY", opacity: "opacity" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoShadowComponent", DxoShadowComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShadowComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-shadow', template: '', providers: [NestedOptionHost] }]
@@ -28297,7 +27228,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShadowModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoShadowModule, declarations: [DxoShadowComponent], exports: [DxoShadowComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShadowModule });
-            } exports("L", DxoShadowModule);
+            } exports("DxoShadowModule", DxoShadowModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShadowModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28352,7 +27283,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowEventComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoShowEventComponent, selector: "dxo-show-event", inputs: { delay: "delay", name: "name" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoShowEventComponent", DxoShowEventComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowEventComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-show-event', template: '', providers: [NestedOptionHost] }]
@@ -28371,7 +27302,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowEventModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoShowEventModule, declarations: [DxoShowEventComponent], exports: [DxoShowEventComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowEventModule });
-            } exports("b3", DxoShowEventModule);
+            } exports("DxoShowEventModule", DxoShowEventModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowEventModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28426,7 +27357,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowFirstSubmenuModeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoShowFirstSubmenuModeComponent, selector: "dxo-show-first-submenu-mode", inputs: { delay: "delay", name: "name" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoShowFirstSubmenuModeComponent", DxoShowFirstSubmenuModeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowFirstSubmenuModeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-show-first-submenu-mode', template: '', providers: [NestedOptionHost] }]
@@ -28445,7 +27376,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowFirstSubmenuModeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoShowFirstSubmenuModeModule, declarations: [DxoShowFirstSubmenuModeComponent], exports: [DxoShowFirstSubmenuModeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowFirstSubmenuModeModule });
-            } exports("cm", DxoShowFirstSubmenuModeModule);
+            } exports("DxoShowFirstSubmenuModeModule", DxoShowFirstSubmenuModeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowFirstSubmenuModeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28500,7 +27431,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowSubmenuModeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoShowSubmenuModeComponent, selector: "dxo-show-submenu-mode", inputs: { delay: "delay", name: "name" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoShowSubmenuModeComponent", DxoShowSubmenuModeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowSubmenuModeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-show-submenu-mode', template: '', providers: [NestedOptionHost] }]
@@ -28519,7 +27450,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowSubmenuModeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoShowSubmenuModeModule, declarations: [DxoShowSubmenuModeComponent], exports: [DxoShowSubmenuModeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowSubmenuModeModule });
-            } exports("b4", DxoShowSubmenuModeModule);
+            } exports("DxoShowSubmenuModeModule", DxoShowSubmenuModeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowSubmenuModeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28563,7 +27494,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoShowComponent, selector: "dxo-show", inputs: { complete: "complete", delay: "delay", direction: "direction", duration: "duration", easing: "easing", from: "from", staggerDelay: "staggerDelay", start: "start", to: "to", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoShowComponent", DxoShowComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-show', template: '', providers: [NestedOptionHost], inputs: [
@@ -28589,7 +27520,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoShowModule, declarations: [DxoShowComponent], exports: [DxoShowComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowModule });
-            } exports("t", DxoShowModule);
+            } exports("DxoShowModule", DxoShowModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShowModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28644,7 +27575,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShutterComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoShutterComponent, selector: "dxo-shutter", inputs: { color: "color", opacity: "opacity" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoShutterComponent", DxoShutterComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShutterComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-shutter', template: '', providers: [NestedOptionHost] }]
@@ -28663,7 +27594,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShutterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoShutterModule, declarations: [DxoShutterComponent], exports: [DxoShutterComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShutterModule });
-            } exports("cE", DxoShutterModule);
+            } exports("DxoShutterModule", DxoShutterModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoShutterModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28718,7 +27649,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSizeComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSizeComponent, selector: "dxo-size", inputs: { height: "height", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSizeComponent", DxoSizeComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSizeComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-size', template: '', providers: [NestedOptionHost] }]
@@ -28737,7 +27668,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSizeModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSizeModule, declarations: [DxoSizeComponent], exports: [DxoSizeComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSizeModule });
-            } exports("J", DxoSizeModule);
+            } exports("DxoSizeModule", DxoSizeModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSizeModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28798,7 +27729,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderHandleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSliderHandleComponent, selector: "dxo-slider-handle", inputs: { color: "color", opacity: "opacity", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSliderHandleComponent", DxoSliderHandleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderHandleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-slider-handle', template: '', providers: [NestedOptionHost] }]
@@ -28819,7 +27750,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderHandleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderHandleModule, declarations: [DxoSliderHandleComponent], exports: [DxoSliderHandleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderHandleModule });
-            } exports("cF", DxoSliderHandleModule);
+            } exports("DxoSliderHandleModule", DxoSliderHandleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderHandleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -28916,7 +27847,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderMarkerComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSliderMarkerComponent, selector: "dxo-slider-marker", inputs: { color: "color", customizeText: "customizeText", font: "font", format: "format", invalidRangeColor: "invalidRangeColor", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", placeholderHeight: "placeholderHeight", visible: "visible" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSliderMarkerComponent", DxoSliderMarkerComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderMarkerComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-slider-marker', template: '', providers: [NestedOptionHost] }]
@@ -28949,7 +27880,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderMarkerModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderMarkerModule, declarations: [DxoSliderMarkerComponent], exports: [DxoSliderMarkerComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderMarkerModule });
-            } exports("cG", DxoSliderMarkerModule);
+            } exports("DxoSliderMarkerModule", DxoSliderMarkerModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSliderMarkerModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29016,7 +27947,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSmallValuesGroupingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSmallValuesGroupingComponent, selector: "dxo-small-values-grouping", inputs: { groupName: "groupName", mode: "mode", threshold: "threshold", topCount: "topCount" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSmallValuesGroupingComponent", DxoSmallValuesGroupingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSmallValuesGroupingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-small-values-grouping', template: '', providers: [NestedOptionHost] }]
@@ -29039,7 +27970,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSmallValuesGroupingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSmallValuesGroupingModule, declarations: [DxoSmallValuesGroupingComponent], exports: [DxoSmallValuesGroupingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSmallValuesGroupingModule });
-            } exports("cn", DxoSmallValuesGroupingModule);
+            } exports("DxoSmallValuesGroupingModule", DxoSmallValuesGroupingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSmallValuesGroupingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29097,7 +28028,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSortByGroupSummaryInfoComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiSortByGroupSummaryInfoComponent, selector: "dxi-sort-by-group-summary-info", inputs: { groupColumn: "groupColumn", sortOrder: "sortOrder", summaryItem: "summaryItem" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiSortByGroupSummaryInfoComponent", DxiSortByGroupSummaryInfoComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSortByGroupSummaryInfoComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-sort-by-group-summary-info', template: '', providers: [NestedOptionHost] }]
@@ -29118,7 +28049,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSortByGroupSummaryInfoModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiSortByGroupSummaryInfoModule, declarations: [DxiSortByGroupSummaryInfoComponent], exports: [DxiSortByGroupSummaryInfoComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSortByGroupSummaryInfoModule });
-            }
+            } exports("DxiSortByGroupSummaryInfoModule", DxiSortByGroupSummaryInfoModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiSortByGroupSummaryInfoModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29216,7 +28147,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSortingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSortingComponent, selector: "dxo-sorting", inputs: { ascendingText: "ascendingText", clearText: "clearText", descendingText: "descendingText", mode: "mode", showSortIndexes: "showSortIndexes" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSortingComponent", DxoSortingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSortingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-sorting', template: '', providers: [NestedOptionHost], inputs: [
@@ -29237,7 +28168,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSortingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSortingModule, declarations: [DxoSortingComponent], exports: [DxoSortingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSortingModule });
-            } exports("bZ", DxoSortingModule);
+            } exports("DxoSortingModule", DxoSortingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSortingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29292,7 +28223,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSourceComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSourceComponent, selector: "dxo-source", inputs: { grouping: "grouping", layer: "layer" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSourceComponent", DxoSourceComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSourceComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-source', template: '', providers: [NestedOptionHost] }]
@@ -29311,7 +28242,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSourceModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSourceModule, declarations: [DxoSourceComponent], exports: [DxoSourceComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSourceModule });
-            } exports("di", DxoSourceModule);
+            } exports("DxoSourceModule", DxoSourceModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSourceModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29355,7 +28286,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSplineComponent, selector: "dxo-spline", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSplineComponent", DxoSplineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-spline', template: '', providers: [NestedOptionHost], inputs: [
@@ -29432,7 +28363,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineModule, declarations: [DxoSplineComponent], exports: [DxoSplineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineModule });
-            } exports("aE", DxoSplineModule);
+            } exports("DxoSplineModule", DxoSplineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29476,7 +28407,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSplineareaComponent, selector: "dxo-splinearea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSplineareaComponent", DxoSplineareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-splinearea', template: '', providers: [NestedOptionHost], inputs: [
@@ -29553,7 +28484,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineareaModule, declarations: [DxoSplineareaComponent], exports: [DxoSplineareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineareaModule });
-            } exports("aF", DxoSplineareaModule);
+            } exports("DxoSplineareaModule", DxoSplineareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplineareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29792,7 +28723,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplitterComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSplitterComponent, selector: "dxo-splitter", inputs: { allowKeyboardNavigation: "allowKeyboardNavigation", dataSource: "dataSource", disabled: "disabled", elementAttr: "elementAttr", height: "height", hoverStateEnabled: "hoverStateEnabled", items: "items", itemTemplate: "itemTemplate", onContentReady: "onContentReady", onDisposing: "onDisposing", onInitialized: "onInitialized", onItemClick: "onItemClick", onItemCollapsed: "onItemCollapsed", onItemContextMenu: "onItemContextMenu", onItemExpanded: "onItemExpanded", onItemRendered: "onItemRendered", onOptionChanged: "onOptionChanged", onResize: "onResize", onResizeEnd: "onResizeEnd", onResizeStart: "onResizeStart", orientation: "orientation", repaintChangesOnly: "repaintChangesOnly", rtlEnabled: "rtlEnabled", separatorSize: "separatorSize", visible: "visible", width: "width" }, outputs: { itemsChange: "itemsChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSplitterComponent", DxoSplitterComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplitterComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-splitter', template: '', providers: [NestedOptionHost], inputs: [
@@ -29839,7 +28770,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplitterModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSplitterModule, declarations: [DxoSplitterComponent], exports: [DxoSplitterComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplitterModule });
-            } exports("cS", DxoSplitterModule);
+            } exports("DxoSplitterModule", DxoSplitterModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSplitterModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -29883,7 +28814,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStackedareaComponent, selector: "dxo-stackedarea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStackedareaComponent", DxoStackedareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stackedarea', template: '', providers: [NestedOptionHost], inputs: [
@@ -29960,7 +28891,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedareaModule, declarations: [DxoStackedareaComponent], exports: [DxoStackedareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedareaModule });
-            } exports("aG", DxoStackedareaModule);
+            } exports("DxoStackedareaModule", DxoStackedareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30004,7 +28935,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedbarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStackedbarComponent, selector: "dxo-stackedbar", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width", closed: "closed" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStackedbarComponent", DxoStackedbarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedbarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stackedbar', template: '', providers: [NestedOptionHost], inputs: [
@@ -30082,7 +29013,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedbarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedbarModule, declarations: [DxoStackedbarComponent], exports: [DxoStackedbarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedbarModule });
-            } exports("aH", DxoStackedbarModule);
+            } exports("DxoStackedbarModule", DxoStackedbarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedbarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30126,7 +29057,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedlineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStackedlineComponent, selector: "dxo-stackedline", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStackedlineComponent", DxoStackedlineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedlineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stackedline', template: '', providers: [NestedOptionHost], inputs: [
@@ -30203,7 +29134,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedlineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedlineModule, declarations: [DxoStackedlineComponent], exports: [DxoStackedlineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedlineModule });
-            } exports("aI", DxoStackedlineModule);
+            } exports("DxoStackedlineModule", DxoStackedlineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedlineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30247,7 +29178,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStackedsplineComponent, selector: "dxo-stackedspline", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStackedsplineComponent", DxoStackedsplineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stackedspline', template: '', providers: [NestedOptionHost], inputs: [
@@ -30324,7 +29255,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineModule, declarations: [DxoStackedsplineComponent], exports: [DxoStackedsplineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineModule });
-            } exports("aJ", DxoStackedsplineModule);
+            } exports("DxoStackedsplineModule", DxoStackedsplineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30368,7 +29299,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStackedsplineareaComponent, selector: "dxo-stackedsplinearea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStackedsplineareaComponent", DxoStackedsplineareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stackedsplinearea', template: '', providers: [NestedOptionHost], inputs: [
@@ -30445,7 +29376,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineareaModule, declarations: [DxoStackedsplineareaComponent], exports: [DxoStackedsplineareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineareaModule });
-            } exports("aK", DxoStackedsplineareaModule);
+            } exports("DxoStackedsplineareaModule", DxoStackedsplineareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStackedsplineareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30524,7 +29455,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStateStoringComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStateStoringComponent, selector: "dxo-state-storing", inputs: { customLoad: "customLoad", customSave: "customSave", enabled: "enabled", savingTimeout: "savingTimeout", storageKey: "storageKey", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStateStoringComponent", DxoStateStoringComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStateStoringComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-state-storing', template: '', providers: [NestedOptionHost] }]
@@ -30551,7 +29482,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStateStoringModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStateStoringModule, declarations: [DxoStateStoringComponent], exports: [DxoStateStoringComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStateStoringModule });
-            } exports("cu", DxoStateStoringModule);
+            } exports("DxoStateStoringModule", DxoStateStoringModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStateStoringModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30595,7 +29526,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStepareaComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStepareaComponent, selector: "dxo-steparea", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStepareaComponent", DxoStepareaComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStepareaComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-steparea', template: '', providers: [NestedOptionHost], inputs: [
@@ -30672,7 +29603,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStepareaModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStepareaModule, declarations: [DxoStepareaComponent], exports: [DxoStepareaComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStepareaModule });
-            } exports("aL", DxoStepareaModule);
+            } exports("DxoStepareaModule", DxoStepareaModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStepareaModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30716,7 +29647,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSteplineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSteplineComponent, selector: "dxo-stepline", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSteplineComponent", DxoSteplineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSteplineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stepline', template: '', providers: [NestedOptionHost], inputs: [
@@ -30793,7 +29724,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSteplineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSteplineModule, declarations: [DxoSteplineComponent], exports: [DxoSteplineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSteplineModule });
-            } exports("aM", DxoSteplineModule);
+            } exports("DxoSteplineModule", DxoSteplineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSteplineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30837,7 +29768,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStockComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStockComponent, selector: "dxo-stock", inputs: { aggregation: "aggregation", area: "area", argumentField: "argumentField", axis: "axis", bar: "bar", barOverlapGroup: "barOverlapGroup", barPadding: "barPadding", barWidth: "barWidth", border: "border", bubble: "bubble", candlestick: "candlestick", closeValueField: "closeValueField", color: "color", cornerRadius: "cornerRadius", dashStyle: "dashStyle", fullstackedarea: "fullstackedarea", fullstackedbar: "fullstackedbar", fullstackedline: "fullstackedline", fullstackedspline: "fullstackedspline", fullstackedsplinearea: "fullstackedsplinearea", highValueField: "highValueField", hoverMode: "hoverMode", hoverStyle: "hoverStyle", ignoreEmptyPoints: "ignoreEmptyPoints", innerColor: "innerColor", label: "label", line: "line", lowValueField: "lowValueField", maxLabelCount: "maxLabelCount", minBarSize: "minBarSize", opacity: "opacity", openValueField: "openValueField", pane: "pane", point: "point", rangearea: "rangearea", rangebar: "rangebar", rangeValue1Field: "rangeValue1Field", rangeValue2Field: "rangeValue2Field", reduction: "reduction", scatter: "scatter", selectionMode: "selectionMode", selectionStyle: "selectionStyle", showInLegend: "showInLegend", sizeField: "sizeField", spline: "spline", splinearea: "splinearea", stack: "stack", stackedarea: "stackedarea", stackedbar: "stackedbar", stackedline: "stackedline", stackedspline: "stackedspline", stackedsplinearea: "stackedsplinearea", steparea: "steparea", stepline: "stepline", stock: "stock", tagField: "tagField", type: "type", valueErrorBar: "valueErrorBar", valueField: "valueField", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStockComponent", DxoStockComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStockComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-stock', template: '', providers: [NestedOptionHost], inputs: [
@@ -30914,7 +29845,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStockModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStockModule, declarations: [DxoStockComponent], exports: [DxoStockComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStockModule });
-            } exports("aN", DxoStockModule);
+            } exports("DxoStockModule", DxoStockModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStockModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -30963,7 +29894,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStoreComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStoreComponent, selector: "dxo-store", inputs: { type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStoreComponent", DxoStoreComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStoreComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-store', template: '', providers: [NestedOptionHost] }]
@@ -30980,7 +29911,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStoreModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStoreModule, declarations: [DxoStoreComponent], exports: [DxoStoreComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStoreModule });
-            } exports("cp", DxoStoreModule);
+            } exports("DxoStoreModule", DxoStoreModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStoreModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -31069,7 +30000,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripLineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiStripLineComponent, selector: "dxi-strip-line", inputs: { cssClass: "cssClass", end: "end", start: "start", title: "title" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("bP", DxiStripLineComponent);
+            } exports("DxiStripLineComponent", DxiStripLineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripLineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-strip-line', template: '', providers: [NestedOptionHost], inputs: [
@@ -31089,7 +30020,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripLineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiStripLineModule, declarations: [DxiStripLineComponent], exports: [DxiStripLineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripLineModule });
-            } exports("b_", DxiStripLineModule);
+            } exports("DxiStripLineModule", DxiStripLineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiStripLineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -31150,7 +30081,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStripStyleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoStripStyleComponent, selector: "dxo-strip-style", inputs: { label: "label", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoStripStyleComponent", DxoStripStyleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStripStyleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-strip-style', template: '', providers: [NestedOptionHost] }]
@@ -31171,7 +30102,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStripStyleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoStripStyleModule, declarations: [DxoStripStyleComponent], exports: [DxoStripStyleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStripStyleModule });
-            } exports("a6", DxoStripStyleModule);
+            } exports("DxoStripStyleModule", DxoStripStyleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoStripStyleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -31244,7 +30175,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubtitleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSubtitleComponent, selector: "dxo-subtitle", inputs: { font: "font", offset: "offset", text: "text", textOverflow: "textOverflow", wordWrap: "wordWrap" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSubtitleComponent", DxoSubtitleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubtitleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-subtitle', template: '', providers: [NestedOptionHost] }]
@@ -31269,7 +30200,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubtitleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSubtitleModule, declarations: [DxoSubtitleComponent], exports: [DxoSubtitleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubtitleModule });
-            } exports("G", DxoSubtitleModule);
+            } exports("DxoSubtitleModule", DxoSubtitleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubtitleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -31451,7 +30382,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubvalueIndicatorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSubvalueIndicatorComponent, selector: "dxo-subvalue-indicator", inputs: { arrowLength: "arrowLength", backgroundColor: "backgroundColor", baseValue: "baseValue", beginAdaptingAtRadius: "beginAdaptingAtRadius", color: "color", horizontalOrientation: "horizontalOrientation", indentFromCenter: "indentFromCenter", length: "length", offset: "offset", palette: "palette", secondColor: "secondColor", secondFraction: "secondFraction", size: "size", spindleGapSize: "spindleGapSize", spindleSize: "spindleSize", text: "text", type: "type", verticalOrientation: "verticalOrientation", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSubvalueIndicatorComponent", DxoSubvalueIndicatorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubvalueIndicatorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-subvalue-indicator', template: '', providers: [NestedOptionHost], inputs: [
@@ -31486,7 +30417,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubvalueIndicatorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSubvalueIndicatorModule, declarations: [DxoSubvalueIndicatorComponent], exports: [DxoSubvalueIndicatorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubvalueIndicatorModule });
-            } exports("b0", DxoSubvalueIndicatorModule);
+            } exports("DxoSubvalueIndicatorModule", DxoSubvalueIndicatorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSubvalueIndicatorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -31586,7 +30517,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTotalItemComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiTotalItemComponent, selector: "dxi-total-item", inputs: { alignment: "alignment", column: "column", cssClass: "cssClass", customizeText: "customizeText", displayFormat: "displayFormat", name: "name", showInColumn: "showInColumn", skipEmptyValues: "skipEmptyValues", summaryType: "summaryType", valueFormat: "valueFormat" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxiTotalItemComponent", DxiTotalItemComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTotalItemComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-total-item', template: '', providers: [NestedOptionHost] }]
@@ -31621,7 +30552,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTotalItemModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiTotalItemModule, declarations: [DxiTotalItemComponent], exports: [DxiTotalItemComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTotalItemModule });
-            }
+            } exports("DxiTotalItemModule", DxiTotalItemModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiTotalItemModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -31712,7 +30643,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSummaryComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoSummaryComponent, selector: "dxo-summary", inputs: { calculateCustomSummary: "calculateCustomSummary", groupItems: "groupItems", recalculateWhileEditing: "recalculateWhileEditing", skipEmptyValues: "skipEmptyValues", texts: "texts", totalItems: "totalItems" }, providers: [NestedOptionHost], queries: [{ propertyName: "groupItemsChildren", predicate: i0.forwardRef(() => DxiGroupItemComponent) }, { propertyName: "totalItemsChildren", predicate: i0.forwardRef(() => DxiTotalItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoSummaryComponent", DxoSummaryComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSummaryComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-summary', template: '', providers: [NestedOptionHost] }]
@@ -31745,7 +30676,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSummaryModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoSummaryModule, declarations: [DxoSummaryComponent], exports: [DxoSummaryComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSummaryModule });
-            }
+            } exports("DxoSummaryModule", DxoSummaryModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoSummaryModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -32100,7 +31031,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTabPanelOptionsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTabPanelOptionsComponent, selector: "dxo-tab-panel-options", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", animationEnabled: "animationEnabled", dataSource: "dataSource", deferRendering: "deferRendering", disabled: "disabled", elementAttr: "elementAttr", focusStateEnabled: "focusStateEnabled", height: "height", hint: "hint", hoverStateEnabled: "hoverStateEnabled", iconPosition: "iconPosition", itemHoldTimeout: "itemHoldTimeout", items: "items", itemTemplate: "itemTemplate", itemTitleTemplate: "itemTitleTemplate", loop: "loop", noDataText: "noDataText", onContentReady: "onContentReady", onDisposing: "onDisposing", onInitialized: "onInitialized", onItemClick: "onItemClick", onItemContextMenu: "onItemContextMenu", onItemHold: "onItemHold", onItemRendered: "onItemRendered", onOptionChanged: "onOptionChanged", onSelectionChanged: "onSelectionChanged", onTitleClick: "onTitleClick", onTitleHold: "onTitleHold", onTitleRendered: "onTitleRendered", repaintChangesOnly: "repaintChangesOnly", rtlEnabled: "rtlEnabled", scrollByContent: "scrollByContent", scrollingEnabled: "scrollingEnabled", selectedIndex: "selectedIndex", selectedItem: "selectedItem", showNavButtons: "showNavButtons", stylingMode: "stylingMode", swipeEnabled: "swipeEnabled", tabIndex: "tabIndex", tabsPosition: "tabsPosition", visible: "visible", width: "width" }, outputs: { itemsChange: "itemsChange", selectedIndexChange: "selectedIndexChange", selectedItemChange: "selectedItemChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTabPanelOptionsComponent", DxoTabPanelOptionsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTabPanelOptionsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-tab-panel-options', template: '', providers: [NestedOptionHost], inputs: [
@@ -32168,7 +31099,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTabPanelOptionsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTabPanelOptionsModule, declarations: [DxoTabPanelOptionsComponent], exports: [DxoTabPanelOptionsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTabPanelOptionsModule });
-            } exports("bL", DxoTabPanelOptionsModule);
+            } exports("DxoTabPanelOptionsModule", DxoTabPanelOptionsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTabPanelOptionsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -32254,7 +31185,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableContextMenuComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTableContextMenuComponent, selector: "dxo-table-context-menu", inputs: { enabled: "enabled", items: "items" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTableContextMenuComponent", DxoTableContextMenuComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableContextMenuComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-table-context-menu', template: '', providers: [NestedOptionHost], inputs: [
@@ -32275,7 +31206,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableContextMenuModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTableContextMenuModule, declarations: [DxoTableContextMenuComponent], exports: [DxoTableContextMenuComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableContextMenuModule });
-            } exports("c6", DxoTableContextMenuModule);
+            } exports("DxoTableContextMenuModule", DxoTableContextMenuModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableContextMenuModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -32361,7 +31292,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableResizingComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTableResizingComponent, selector: "dxo-table-resizing", inputs: { enabled: "enabled", minColumnWidth: "minColumnWidth", minRowHeight: "minRowHeight" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTableResizingComponent", DxoTableResizingComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableResizingComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-table-resizing', template: '', providers: [NestedOptionHost], inputs: [
@@ -32380,7 +31311,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableResizingModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTableResizingModule, declarations: [DxoTableResizingComponent], exports: [DxoTableResizingComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableResizingModule });
-            } exports("c7", DxoTableResizingModule);
+            } exports("DxoTableResizingModule", DxoTableResizingModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTableResizingModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -32471,7 +31402,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTasksComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTasksComponent, selector: "dxo-tasks", inputs: { colorExpr: "colorExpr", dataSource: "dataSource", endExpr: "endExpr", keyExpr: "keyExpr", parentIdExpr: "parentIdExpr", progressExpr: "progressExpr", startExpr: "startExpr", titleExpr: "titleExpr" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTasksComponent", DxoTasksComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTasksComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-tasks', template: '', providers: [NestedOptionHost] }]
@@ -32502,7 +31433,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTasksModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTasksModule, declarations: [DxoTasksComponent], exports: [DxoTasksComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTasksModule });
-            } exports("b$", DxoTasksModule);
+            } exports("DxoTasksModule", DxoTasksModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTasksModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -32569,7 +31500,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTextComponent, selector: "dxo-text", inputs: { customizeText: "customizeText", font: "font", format: "format", indent: "indent" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTextComponent", DxoTextComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-text', template: '', providers: [NestedOptionHost] }]
@@ -32592,7 +31523,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTextModule, declarations: [DxoTextComponent], exports: [DxoTextComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextModule });
-            } exports("b1", DxoTextModule);
+            } exports("DxoTextModule", DxoTextModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33014,7 +31945,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextsComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTextsComponent, selector: "dxo-texts", inputs: { fix: "fix", leftPosition: "leftPosition", rightPosition: "rightPosition", unfix: "unfix", addRow: "addRow", cancelAllChanges: "cancelAllChanges", cancelRowChanges: "cancelRowChanges", confirmDeleteMessage: "confirmDeleteMessage", confirmDeleteTitle: "confirmDeleteTitle", deleteRow: "deleteRow", editRow: "editRow", saveAllChanges: "saveAllChanges", saveRowChanges: "saveRowChanges", undeleteRow: "undeleteRow", validationCancelChanges: "validationCancelChanges", exportAll: "exportAll", exportSelectedRows: "exportSelectedRows", exportTo: "exportTo", clearFilter: "clearFilter", createFilter: "createFilter", filterEnabledHint: "filterEnabledHint", groupByThisColumn: "groupByThisColumn", groupContinuedMessage: "groupContinuedMessage", groupContinuesMessage: "groupContinuesMessage", ungroup: "ungroup", ungroupAll: "ungroupAll", cancel: "cancel", emptyValue: "emptyValue", ok: "ok", avg: "avg", avgOtherColumn: "avgOtherColumn", count: "count", max: "max", maxOtherColumn: "maxOtherColumn", min: "min", minOtherColumn: "minOtherColumn", sum: "sum", sumOtherColumn: "sumOtherColumn", allFields: "allFields", columnFields: "columnFields", dataFields: "dataFields", filterFields: "filterFields", rowFields: "rowFields", columnFieldArea: "columnFieldArea", dataFieldArea: "dataFieldArea", filterFieldArea: "filterFieldArea", rowFieldArea: "rowFieldArea", collapseAll: "collapseAll", dataNotAvailable: "dataNotAvailable", expandAll: "expandAll", exportToExcel: "exportToExcel", grandTotal: "grandTotal", noData: "noData", removeAllSorting: "removeAllSorting", showFieldChooser: "showFieldChooser", sortColumnBySummary: "sortColumnBySummary", sortRowBySummary: "sortRowBySummary", total: "total", addRowToNode: "addRowToNode" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTextsComponent", DxoTextsComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextsComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-texts', template: '', providers: [NestedOptionHost], inputs: [
@@ -33089,7 +32020,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextsModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTextsModule, declarations: [DxoTextsComponent], exports: [DxoTextsComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextsModule });
-            } exports("bV", DxoTextsModule);
+            } exports("DxoTextsModule", DxoTextsModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTextsModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33186,7 +32117,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickIntervalComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTickIntervalComponent, selector: "dxo-tick-interval", inputs: { days: "days", hours: "hours", milliseconds: "milliseconds", minutes: "minutes", months: "months", quarters: "quarters", seconds: "seconds", weeks: "weeks", years: "years" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTickIntervalComponent", DxoTickIntervalComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickIntervalComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-tick-interval', template: '', providers: [NestedOptionHost] }]
@@ -33219,7 +32150,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickIntervalModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTickIntervalModule, declarations: [DxoTickIntervalComponent], exports: [DxoTickIntervalComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickIntervalModule });
-            } exports("a8", DxoTickIntervalModule);
+            } exports("DxoTickIntervalModule", DxoTickIntervalModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickIntervalModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33298,7 +32229,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTickComponent, selector: "dxo-tick", inputs: { color: "color", length: "length", opacity: "opacity", shift: "shift", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTickComponent", DxoTickComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-tick', template: '', providers: [NestedOptionHost] }]
@@ -33325,7 +32256,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTickModule, declarations: [DxoTickComponent], exports: [DxoTickComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickModule });
-            } exports("a7", DxoTickModule);
+            } exports("DxoTickModule", DxoTickModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTickModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33398,7 +32329,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTileComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTileComponent, selector: "dxo-tile", inputs: { border: "border", color: "color", hoverStyle: "hoverStyle", label: "label", selectionStyle: "selectionStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTileComponent", DxoTileComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTileComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-tile', template: '', providers: [NestedOptionHost] }]
@@ -33423,7 +32354,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTileModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTileModule, declarations: [DxoTileComponent], exports: [DxoTileComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTileModule });
-            } exports("d9", DxoTileModule);
+            } exports("DxoTileModule", DxoTileModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTileModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33526,7 +32457,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTitleComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTitleComponent, selector: "dxo-title", inputs: { font: "font", horizontalAlignment: "horizontalAlignment", margin: "margin", placeholderSize: "placeholderSize", subtitle: "subtitle", text: "text", verticalAlignment: "verticalAlignment", textOverflow: "textOverflow", wordWrap: "wordWrap", alignment: "alignment" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTitleComponent", DxoTitleComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTitleComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-title', template: '', providers: [NestedOptionHost] }]
@@ -33561,7 +32492,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTitleModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTitleModule, declarations: [DxoTitleComponent], exports: [DxoTitleComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTitleModule });
-            } exports("F", DxoTitleModule);
+            } exports("DxoTitleModule", DxoTitleModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTitleModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33605,7 +32536,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoToComponent, selector: "dxo-to", inputs: { left: "left", opacity: "opacity", position: "position", scale: "scale", top: "top" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoToComponent", DxoToComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-to', template: '', providers: [NestedOptionHost], inputs: [
@@ -33626,7 +32557,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoToModule, declarations: [DxoToComponent], exports: [DxoToComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToModule });
-            } exports("s", DxoToModule);
+            } exports("DxoToModule", DxoToModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33742,7 +32673,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolbarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoToolbarComponent, selector: "dxo-toolbar", inputs: { disabled: "disabled", items: "items", visible: "visible", fileSelectionItems: "fileSelectionItems", container: "container", multiline: "multiline" }, providers: [NestedOptionHost], queries: [{ propertyName: "itemsChildren", predicate: i0.forwardRef(() => DxiItemComponent) }, { propertyName: "fileSelectionItemsChildren", predicate: i0.forwardRef(() => DxiFileSelectionItemComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoToolbarComponent", DxoToolbarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolbarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-toolbar', template: '', providers: [NestedOptionHost], inputs: [
@@ -33770,7 +32701,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolbarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoToolbarModule, declarations: [DxoToolbarComponent], exports: [DxoToolbarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolbarModule });
-            } exports("bz", DxoToolbarModule);
+            } exports("DxoToolbarModule", DxoToolbarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolbarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -33849,7 +32780,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolboxComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoToolboxComponent, selector: "dxo-toolbox", inputs: { groups: "groups", shapeIconsPerRow: "shapeIconsPerRow", showSearch: "showSearch", visibility: "visibility", width: "width" }, providers: [NestedOptionHost], queries: [{ propertyName: "groupsChildren", predicate: i0.forwardRef(() => DxiGroupComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoToolboxComponent", DxoToolboxComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolboxComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-toolbox', template: '', providers: [NestedOptionHost] }]
@@ -33877,7 +32808,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolboxModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoToolboxModule, declarations: [DxoToolboxComponent], exports: [DxoToolboxComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolboxModule });
-            } exports("bq", DxoToolboxModule);
+            } exports("DxoToolboxModule", DxoToolboxModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoToolboxModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -34082,7 +33013,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTooltipComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoTooltipComponent, selector: "dxo-tooltip", inputs: { arrowLength: "arrowLength", border: "border", color: "color", container: "container", contentTemplate: "contentTemplate", cornerRadius: "cornerRadius", customizeTooltip: "customizeTooltip", enabled: "enabled", font: "font", format: "format", interactive: "interactive", opacity: "opacity", paddingLeftRight: "paddingLeftRight", paddingTopBottom: "paddingTopBottom", shadow: "shadow", zIndex: "zIndex", argumentFormat: "argumentFormat", location: "location", shared: "shared", isShown: "isShown", text: "text", position: "position", showMode: "showMode", customizeLinkTooltip: "customizeLinkTooltip", customizeNodeTooltip: "customizeNodeTooltip", linkTooltipTemplate: "linkTooltipTemplate", nodeTooltipTemplate: "nodeTooltipTemplate" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoTooltipComponent", DxoTooltipComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTooltipComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-tooltip', template: '', providers: [NestedOptionHost] }]
@@ -34151,7 +33082,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTooltipModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoTooltipModule, declarations: [DxoTooltipComponent], exports: [DxoTooltipComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTooltipModule });
-            } exports("K", DxoTooltipModule);
+            } exports("DxoTooltipModule", DxoTooltipModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoTooltipModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -34206,7 +33137,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUploadComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoUploadComponent, selector: "dxo-upload", inputs: { chunkSize: "chunkSize", maxFileSize: "maxFileSize" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoUploadComponent", DxoUploadComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUploadComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-upload', template: '', providers: [NestedOptionHost] }]
@@ -34225,7 +33156,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUploadModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoUploadModule, declarations: [DxoUploadComponent], exports: [DxoUploadComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUploadModule });
-            } exports("bB", DxoUploadModule);
+            } exports("DxoUploadModule", DxoUploadModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUploadModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -34280,7 +33211,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUrlComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoUrlComponent, selector: "dxo-url", inputs: { rangeMaxPoint: "rangeMaxPoint", rangeMinPoint: "rangeMinPoint" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoUrlComponent", DxoUrlComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUrlComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-url', template: '', providers: [NestedOptionHost] }]
@@ -34299,7 +33230,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUrlModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoUrlModule, declarations: [DxoUrlComponent], exports: [DxoUrlComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUrlModule });
-            } exports("al", DxoUrlModule);
+            } exports("DxoUrlModule", DxoUrlModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoUrlModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -34360,7 +33291,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValidationComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoValidationComponent, selector: "dxo-validation", inputs: { autoUpdateParentTasks: "autoUpdateParentTasks", enablePredecessorGap: "enablePredecessorGap", validateDependencies: "validateDependencies" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoValidationComponent", DxoValidationComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValidationComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-validation', template: '', providers: [NestedOptionHost] }]
@@ -34381,7 +33312,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValidationModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoValidationModule, declarations: [DxoValidationComponent], exports: [DxoValidationComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValidationModule });
-            } exports("c0", DxoValidationModule);
+            } exports("DxoValidationModule", DxoValidationModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValidationModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -34743,7 +33674,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValueAxisComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiValueAxisComponent, selector: "dxi-value-axis", inputs: { aggregatedPointsPosition: "aggregatedPointsPosition", allowDecimals: "allowDecimals", autoBreaksEnabled: "autoBreaksEnabled", axisDivisionFactor: "axisDivisionFactor", breaks: "breaks", breakStyle: "breakStyle", categories: "categories", color: "color", constantLines: "constantLines", constantLineStyle: "constantLineStyle", customPosition: "customPosition", discreteAxisDivisionMode: "discreteAxisDivisionMode", endOnTick: "endOnTick", grid: "grid", inverted: "inverted", label: "label", linearThreshold: "linearThreshold", logarithmBase: "logarithmBase", maxAutoBreakCount: "maxAutoBreakCount", maxValueMargin: "maxValueMargin", minorGrid: "minorGrid", minorTick: "minorTick", minorTickCount: "minorTickCount", minorTickInterval: "minorTickInterval", minValueMargin: "minValueMargin", minVisualRangeLength: "minVisualRangeLength", multipleAxesSpacing: "multipleAxesSpacing", name: "name", offset: "offset", opacity: "opacity", pane: "pane", placeholderSize: "placeholderSize", position: "position", showZero: "showZero", strips: "strips", stripStyle: "stripStyle", synchronizedValue: "synchronizedValue", tick: "tick", tickInterval: "tickInterval", title: "title", type: "type", valueMarginsEnabled: "valueMarginsEnabled", valueType: "valueType", visible: "visible", visualRange: "visualRange", visualRangeUpdateMode: "visualRangeUpdateMode", wholeRange: "wholeRange", width: "width" }, outputs: { categoriesChange: "categoriesChange", visualRangeChange: "visualRangeChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "breaksChildren", predicate: i0.forwardRef(() => DxiBreakComponent) }, { propertyName: "constantLinesChildren", predicate: i0.forwardRef(() => DxiConstantLineComponent) }, { propertyName: "stripsChildren", predicate: i0.forwardRef(() => DxiStripComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("R", DxiValueAxisComponent);
+            } exports("DxiValueAxisComponent", DxiValueAxisComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValueAxisComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-value-axis', template: '', providers: [NestedOptionHost] }]
@@ -34867,7 +33798,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValueAxisModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiValueAxisModule, declarations: [DxiValueAxisComponent], exports: [DxiValueAxisComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValueAxisModule });
-            } exports("aW", DxiValueAxisModule);
+            } exports("DxiValueAxisModule", DxiValueAxisModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiValueAxisModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35147,7 +34078,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueAxisComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoValueAxisComponent, selector: "dxo-value-axis", inputs: { allowDecimals: "allowDecimals", axisDivisionFactor: "axisDivisionFactor", categories: "categories", color: "color", constantLines: "constantLines", constantLineStyle: "constantLineStyle", discreteAxisDivisionMode: "discreteAxisDivisionMode", endOnTick: "endOnTick", grid: "grid", inverted: "inverted", label: "label", linearThreshold: "linearThreshold", logarithmBase: "logarithmBase", maxValueMargin: "maxValueMargin", minorGrid: "minorGrid", minorTick: "minorTick", minorTickCount: "minorTickCount", minorTickInterval: "minorTickInterval", minValueMargin: "minValueMargin", minVisualRangeLength: "minVisualRangeLength", opacity: "opacity", showZero: "showZero", strips: "strips", stripStyle: "stripStyle", tick: "tick", tickInterval: "tickInterval", type: "type", valueMarginsEnabled: "valueMarginsEnabled", valueType: "valueType", visible: "visible", visualRange: "visualRange", visualRangeUpdateMode: "visualRangeUpdateMode", wholeRange: "wholeRange", width: "width", max: "max", min: "min" }, outputs: { visualRangeChange: "visualRangeChange" }, providers: [NestedOptionHost], queries: [{ propertyName: "constantLinesChildren", predicate: i0.forwardRef(() => DxiConstantLineComponent) }, { propertyName: "stripsChildren", predicate: i0.forwardRef(() => DxiStripComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoValueAxisComponent", DxoValueAxisComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueAxisComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-value-axis', template: '', providers: [NestedOptionHost] }]
@@ -35242,7 +34173,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueAxisModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoValueAxisModule, declarations: [DxoValueAxisComponent], exports: [DxoValueAxisComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueAxisModule });
-            } exports("cv", DxoValueAxisModule);
+            } exports("DxoValueAxisModule", DxoValueAxisModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueAxisModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35339,7 +34270,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueErrorBarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoValueErrorBarComponent, selector: "dxo-value-error-bar", inputs: { color: "color", displayMode: "displayMode", edgeLength: "edgeLength", highValueField: "highValueField", lineWidth: "lineWidth", lowValueField: "lowValueField", opacity: "opacity", type: "type", value: "value" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoValueErrorBarComponent", DxoValueErrorBarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueErrorBarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-value-error-bar', template: '', providers: [NestedOptionHost] }]
@@ -35372,7 +34303,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueErrorBarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoValueErrorBarModule, declarations: [DxoValueErrorBarComponent], exports: [DxoValueErrorBarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueErrorBarModule });
-            } exports("ap", DxoValueErrorBarModule);
+            } exports("DxoValueErrorBarModule", DxoValueErrorBarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueErrorBarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35416,7 +34347,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueFormatComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoValueFormatComponent, selector: "dxo-value-format", inputs: { currency: "currency", formatter: "formatter", parser: "parser", precision: "precision", type: "type", useCurrencyAccountingStyle: "useCurrencyAccountingStyle" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoValueFormatComponent", DxoValueFormatComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueFormatComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-value-format', template: '', providers: [NestedOptionHost], inputs: [
@@ -35438,7 +34369,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueFormatModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoValueFormatModule, declarations: [DxoValueFormatComponent], exports: [DxoValueFormatComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueFormatModule });
-            }
+            } exports("DxoValueFormatModule", DxoValueFormatModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueFormatModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35482,7 +34413,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueIndicatorComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoValueIndicatorComponent, selector: "dxo-value-indicator", inputs: { arrowLength: "arrowLength", backgroundColor: "backgroundColor", baseValue: "baseValue", beginAdaptingAtRadius: "beginAdaptingAtRadius", color: "color", horizontalOrientation: "horizontalOrientation", indentFromCenter: "indentFromCenter", length: "length", offset: "offset", palette: "palette", secondColor: "secondColor", secondFraction: "secondFraction", size: "size", spindleGapSize: "spindleGapSize", spindleSize: "spindleSize", text: "text", type: "type", verticalOrientation: "verticalOrientation", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoValueIndicatorComponent", DxoValueIndicatorComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueIndicatorComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-value-indicator', template: '', providers: [NestedOptionHost], inputs: [
@@ -35517,7 +34448,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueIndicatorModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoValueIndicatorModule, declarations: [DxoValueIndicatorComponent], exports: [DxoValueIndicatorComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueIndicatorModule });
-            } exports("b2", DxoValueIndicatorModule);
+            } exports("DxoValueIndicatorModule", DxoValueIndicatorModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoValueIndicatorModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35597,7 +34528,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVariablesComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoVariablesComponent, selector: "dxo-variables", inputs: { dataSource: "dataSource", escapeChar: "escapeChar" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoVariablesComponent", DxoVariablesComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVariablesComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-variables', template: '', providers: [NestedOptionHost], inputs: [
@@ -35615,7 +34546,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVariablesModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoVariablesModule, declarations: [DxoVariablesComponent], exports: [DxoVariablesComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVariablesModule });
-            } exports("c8", DxoVariablesModule);
+            } exports("DxoVariablesModule", DxoVariablesModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVariablesModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35694,7 +34625,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVerticalLineComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoVerticalLineComponent, selector: "dxo-vertical-line", inputs: { color: "color", dashStyle: "dashStyle", label: "label", opacity: "opacity", visible: "visible", width: "width" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoVerticalLineComponent", DxoVerticalLineComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVerticalLineComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-vertical-line', template: '', providers: [NestedOptionHost] }]
@@ -35721,7 +34652,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVerticalLineModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoVerticalLineModule, declarations: [DxoVerticalLineComponent], exports: [DxoVerticalLineComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVerticalLineModule });
-            } exports("aQ", DxoVerticalLineModule);
+            } exports("DxoVerticalLineModule", DxoVerticalLineModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoVerticalLineModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -35905,7 +34836,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiViewComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxiViewComponent, selector: "dxi-view", inputs: { agendaDuration: "agendaDuration", allDayPanelMode: "allDayPanelMode", appointmentCollectorTemplate: "appointmentCollectorTemplate", appointmentTemplate: "appointmentTemplate", appointmentTooltipTemplate: "appointmentTooltipTemplate", cellDuration: "cellDuration", dataCellTemplate: "dataCellTemplate", dateCellTemplate: "dateCellTemplate", dropDownAppointmentTemplate: "dropDownAppointmentTemplate", endDayHour: "endDayHour", firstDayOfWeek: "firstDayOfWeek", groupByDate: "groupByDate", groupOrientation: "groupOrientation", groups: "groups", intervalCount: "intervalCount", maxAppointmentsPerCell: "maxAppointmentsPerCell", name: "name", offset: "offset", resourceCellTemplate: "resourceCellTemplate", scrolling: "scrolling", startDate: "startDate", startDayHour: "startDayHour", timeCellTemplate: "timeCellTemplate", type: "type" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            } exports("cO", DxiViewComponent);
+            } exports("DxiViewComponent", DxiViewComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiViewComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxi-view', template: '', providers: [NestedOptionHost] }]
@@ -35968,7 +34899,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiViewModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxiViewModule, declarations: [DxiViewComponent], exports: [DxiViewComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiViewModule });
-            } exports("cR", DxiViewModule);
+            } exports("DxiViewModule", DxiViewModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxiViewModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -36029,7 +34960,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoViewToolbarComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoViewToolbarComponent, selector: "dxo-view-toolbar", inputs: { commands: "commands", visible: "visible" }, providers: [NestedOptionHost], queries: [{ propertyName: "commandsChildren", predicate: i0.forwardRef(() => DxiCommandComponent) }], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoViewToolbarComponent", DxoViewToolbarComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoViewToolbarComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-view-toolbar', template: '', providers: [NestedOptionHost] }]
@@ -36051,7 +34982,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoViewToolbarModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoViewToolbarModule, declarations: [DxoViewToolbarComponent], exports: [DxoViewToolbarComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoViewToolbarModule });
-            } exports("br", DxoViewToolbarModule);
+            } exports("DxoViewToolbarModule", DxoViewToolbarModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoViewToolbarModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -36118,7 +35049,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoWidthComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoWidthComponent, selector: "dxo-width", inputs: { rangeMaxPoint: "rangeMaxPoint", rangeMinPoint: "rangeMinPoint", end: "end", start: "start" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoWidthComponent", DxoWidthComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoWidthComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-width', template: '', providers: [NestedOptionHost] }]
@@ -36141,7 +35072,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoWidthModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoWidthModule, declarations: [DxoWidthComponent], exports: [DxoWidthComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoWidthModule });
-            } exports("am", DxoWidthModule);
+            } exports("DxoWidthModule", DxoWidthModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoWidthModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -36226,7 +35157,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomAndPanComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoZoomAndPanComponent, selector: "dxo-zoom-and-pan", inputs: { allowMouseWheel: "allowMouseWheel", allowTouchGestures: "allowTouchGestures", argumentAxis: "argumentAxis", dragBoxStyle: "dragBoxStyle", dragToZoom: "dragToZoom", panKey: "panKey", valueAxis: "valueAxis" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoZoomAndPanComponent", DxoZoomAndPanComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomAndPanComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-zoom-and-pan', template: '', providers: [NestedOptionHost] }]
@@ -36255,7 +35186,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomAndPanModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomAndPanModule, declarations: [DxoZoomAndPanComponent], exports: [DxoZoomAndPanComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomAndPanModule });
-            } exports("aX", DxoZoomAndPanModule);
+            } exports("DxoZoomAndPanModule", DxoZoomAndPanModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomAndPanModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -36319,7 +35250,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 }
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomLevelComponent, deps: [{ token: NestedOptionHost, host: true, skipSelf: true }, { token: NestedOptionHost, host: true }], target: i0.ɵɵFactoryTarget.Component });
                 /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxoZoomLevelComponent, selector: "dxo-zoom-level", inputs: { items: "items", value: "value" }, outputs: { valueChange: "valueChange" }, providers: [NestedOptionHost], usesInheritance: true, ngImport: i0, template: '', isInline: true, styles: [""] });
-            }
+            } exports("DxoZoomLevelComponent", DxoZoomLevelComponent);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomLevelComponent, decorators: [{
                         type: Component,
                         args: [{ selector: 'dxo-zoom-level', template: '', providers: [NestedOptionHost] }]
@@ -36340,7 +35271,7 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                 /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomLevelModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
                 /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomLevelModule, declarations: [DxoZoomLevelComponent], exports: [DxoZoomLevelComponent] });
                 /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomLevelModule });
-            } exports("bs", DxoZoomLevelModule);
+            } exports("DxoZoomLevelModule", DxoZoomLevelModule);
             i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxoZoomLevelModule, decorators: [{
                         type: NgModule,
                         args: [{
@@ -36350,2509 +35281,6 @@ System.register(['@angular/platform-browser', '@angular/core', 'devextreme/bundl
                                 exports: [
                                     DxoZoomLevelComponent
                                 ],
-                            }]
-                    }] });
-
-            /*!
-             * devextreme-angular
-             * Version: 24.1.1
-             * Build date: Mon Apr 15 2024
-             *
-             * Copyright (c) 2012 - 2024 Developer Express Inc. ALL RIGHTS RESERVED
-             *
-             * This software may be modified and distributed under the terms
-             * of the MIT license. See the LICENSE file in the root of the project for details.
-             *
-             * https://github.com/DevExpress/devextreme-angular
-             */
-            /* tslint:disable:max-line-length */
-            /**
-             * The DataGrid is a UI component that represents data from a local or remote source in the form of a grid. This UI component offers such basic features as sorting, grouping, filtering, as well as more advanced capabilities, like state storing, client-side exporting, master-detail interface, and many others.
-
-             */
-            class DxDataGridComponent extends DxComponent {
-                _watcherHelper;
-                _idh;
-                instance = null;
-                /**
-                 * Specifies the shortcut key that sets focus on the UI component.
-                
-                 */
-                get accessKey() {
-                    return this._getOption('accessKey');
-                }
-                set accessKey(value) {
-                    this._setOption('accessKey', value);
-                }
-                /**
-                 * Specifies whether the UI component changes its visual state as a result of user interaction.
-                
-                 */
-                get activeStateEnabled() {
-                    return this._getOption('activeStateEnabled');
-                }
-                set activeStateEnabled(value) {
-                    this._setOption('activeStateEnabled', value);
-                }
-                /**
-                 * Specifies whether a user can reorder columns.
-                
-                 */
-                get allowColumnReordering() {
-                    return this._getOption('allowColumnReordering');
-                }
-                set allowColumnReordering(value) {
-                    this._setOption('allowColumnReordering', value);
-                }
-                /**
-                 * Specifies whether a user can resize columns.
-                
-                 */
-                get allowColumnResizing() {
-                    return this._getOption('allowColumnResizing');
-                }
-                set allowColumnResizing(value) {
-                    this._setOption('allowColumnResizing', value);
-                }
-                /**
-                 * Automatically scrolls the component to the focused row when the focusedRowKey is changed.
-                
-                 */
-                get autoNavigateToFocusedRow() {
-                    return this._getOption('autoNavigateToFocusedRow');
-                }
-                set autoNavigateToFocusedRow(value) {
-                    this._setOption('autoNavigateToFocusedRow', value);
-                }
-                /**
-                 * Specifies whether data should be cached.
-                
-                 */
-                get cacheEnabled() {
-                    return this._getOption('cacheEnabled');
-                }
-                set cacheEnabled(value) {
-                    this._setOption('cacheEnabled', value);
-                }
-                /**
-                 * Enables a hint that appears when a user hovers the mouse pointer over a cell with truncated content.
-                
-                 */
-                get cellHintEnabled() {
-                    return this._getOption('cellHintEnabled');
-                }
-                set cellHintEnabled(value) {
-                    this._setOption('cellHintEnabled', value);
-                }
-                /**
-                 * Specifies whether columns should adjust their widths to the content.
-                
-                 */
-                get columnAutoWidth() {
-                    return this._getOption('columnAutoWidth');
-                }
-                set columnAutoWidth(value) {
-                    this._setOption('columnAutoWidth', value);
-                }
-                /**
-                 * Configures the column chooser.
-                
-                 */
-                get columnChooser() {
-                    return this._getOption('columnChooser');
-                }
-                set columnChooser(value) {
-                    this._setOption('columnChooser', value);
-                }
-                /**
-                 * Configures column fixing.
-                
-                 */
-                get columnFixing() {
-                    return this._getOption('columnFixing');
-                }
-                set columnFixing(value) {
-                    this._setOption('columnFixing', value);
-                }
-                /**
-                 * Specifies whether the UI component should hide columns to adapt to the screen or container size. Ignored if allowColumnResizing is true and columnResizingMode is &apos;widget&apos;.
-                
-                 */
-                get columnHidingEnabled() {
-                    return this._getOption('columnHidingEnabled');
-                }
-                set columnHidingEnabled(value) {
-                    this._setOption('columnHidingEnabled', value);
-                }
-                /**
-                 * Specifies the minimum width of columns.
-                
-                 */
-                get columnMinWidth() {
-                    return this._getOption('columnMinWidth');
-                }
-                set columnMinWidth(value) {
-                    this._setOption('columnMinWidth', value);
-                }
-                /**
-                 * Specifies how the UI component resizes columns. Applies only if allowColumnResizing is true.
-                
-                 */
-                get columnResizingMode() {
-                    return this._getOption('columnResizingMode');
-                }
-                set columnResizingMode(value) {
-                    this._setOption('columnResizingMode', value);
-                }
-                /**
-                 * An array of grid columns.
-                
-                 */
-                get columns() {
-                    return this._getOption('columns');
-                }
-                set columns(value) {
-                    this._setOption('columns', value);
-                }
-                /**
-                 * Specifies the width for all data columns. Has a lower priority than the column.width property.
-                
-                 */
-                get columnWidth() {
-                    return this._getOption('columnWidth');
-                }
-                set columnWidth(value) {
-                    this._setOption('columnWidth', value);
-                }
-                /**
-                 * Customizes columns after they are created.
-                
-                 */
-                get customizeColumns() {
-                    return this._getOption('customizeColumns');
-                }
-                set customizeColumns(value) {
-                    this._setOption('customizeColumns', value);
-                }
-                /**
-                 * Specifies a custom template for data rows.
-                
-                 */
-                get dataRowTemplate() {
-                    return this._getOption('dataRowTemplate');
-                }
-                set dataRowTemplate(value) {
-                    this._setOption('dataRowTemplate', value);
-                }
-                /**
-                 * Binds the UI component to data.
-                
-                 */
-                get dataSource() {
-                    return this._getOption('dataSource');
-                }
-                set dataSource(value) {
-                    this._setOption('dataSource', value);
-                }
-                /**
-                 * Specifies the format in which date-time values should be sent to the server.
-                
-                 */
-                get dateSerializationFormat() {
-                    return this._getOption('dateSerializationFormat');
-                }
-                set dateSerializationFormat(value) {
-                    this._setOption('dateSerializationFormat', value);
-                }
-                /**
-                 * Specifies whether the UI component responds to user interaction.
-                
-                 */
-                get disabled() {
-                    return this._getOption('disabled');
-                }
-                set disabled(value) {
-                    this._setOption('disabled', value);
-                }
-                /**
-                 * Configures editing.
-                
-                 */
-                get editing() {
-                    return this._getOption('editing');
-                }
-                set editing(value) {
-                    this._setOption('editing', value);
-                }
-                /**
-                 * Specifies the global attributes to be attached to the UI component&apos;s container element.
-                
-                 */
-                get elementAttr() {
-                    return this._getOption('elementAttr');
-                }
-                set elementAttr(value) {
-                    this._setOption('elementAttr', value);
-                }
-                /**
-                 * Indicates whether to show the error row.
-                
-                 */
-                get errorRowEnabled() {
-                    return this._getOption('errorRowEnabled');
-                }
-                set errorRowEnabled(value) {
-                    this._setOption('errorRowEnabled', value);
-                }
-                /**
-                 * Configures client-side exporting.
-                
-                 */
-                get export() {
-                    return this._getOption('export');
-                }
-                set export(value) {
-                    this._setOption('export', value);
-                }
-                /**
-                 * Configures the integrated filter builder.
-                
-                 */
-                get filterBuilder() {
-                    return this._getOption('filterBuilder');
-                }
-                set filterBuilder(value) {
-                    this._setOption('filterBuilder', value);
-                }
-                /**
-                 * Configures the popup in which the integrated filter builder is shown.
-                
-                 */
-                get filterBuilderPopup() {
-                    return this._getOption('filterBuilderPopup');
-                }
-                set filterBuilderPopup(value) {
-                    this._setOption('filterBuilderPopup', value);
-                }
-                /**
-                 * Configures the filter panel.
-                
-                 */
-                get filterPanel() {
-                    return this._getOption('filterPanel');
-                }
-                set filterPanel(value) {
-                    this._setOption('filterPanel', value);
-                }
-                /**
-                 * Configures the filter row.
-                
-                 */
-                get filterRow() {
-                    return this._getOption('filterRow');
-                }
-                set filterRow(value) {
-                    this._setOption('filterRow', value);
-                }
-                /**
-                 * Specifies whether to synchronize the filter row, header filter, and filter builder. The synchronized filter expression is stored in the filterValue property.
-                
-                 */
-                get filterSyncEnabled() {
-                    return this._getOption('filterSyncEnabled');
-                }
-                set filterSyncEnabled(value) {
-                    this._setOption('filterSyncEnabled', value);
-                }
-                /**
-                 * Specifies a filter expression.
-                
-                 */
-                get filterValue() {
-                    return this._getOption('filterValue');
-                }
-                set filterValue(value) {
-                    this._setOption('filterValue', value);
-                }
-                /**
-                 * The index of the column that contains the focused data cell. This index is taken from the columns array.
-                
-                 */
-                get focusedColumnIndex() {
-                    return this._getOption('focusedColumnIndex');
-                }
-                set focusedColumnIndex(value) {
-                    this._setOption('focusedColumnIndex', value);
-                }
-                /**
-                 * Specifies whether the focused row feature is enabled.
-                
-                 */
-                get focusedRowEnabled() {
-                    return this._getOption('focusedRowEnabled');
-                }
-                set focusedRowEnabled(value) {
-                    this._setOption('focusedRowEnabled', value);
-                }
-                /**
-                 * Specifies or indicates the focused data row&apos;s index.
-                
-                 */
-                get focusedRowIndex() {
-                    return this._getOption('focusedRowIndex');
-                }
-                set focusedRowIndex(value) {
-                    this._setOption('focusedRowIndex', value);
-                }
-                /**
-                 * Specifies initially or currently focused grid row&apos;s key.
-                
-                 */
-                get focusedRowKey() {
-                    return this._getOption('focusedRowKey');
-                }
-                set focusedRowKey(value) {
-                    this._setOption('focusedRowKey', value);
-                }
-                /**
-                 * Configures grouping.
-                
-                 */
-                get grouping() {
-                    return this._getOption('grouping');
-                }
-                set grouping(value) {
-                    this._setOption('grouping', value);
-                }
-                /**
-                 * Configures the group panel.
-                
-                 */
-                get groupPanel() {
-                    return this._getOption('groupPanel');
-                }
-                set groupPanel(value) {
-                    this._setOption('groupPanel', value);
-                }
-                /**
-                 * Configures the header filter feature.
-                
-                 */
-                get headerFilter() {
-                    return this._getOption('headerFilter');
-                }
-                set headerFilter(value) {
-                    this._setOption('headerFilter', value);
-                }
-                /**
-                 * Specifies the UI component&apos;s height.
-                
-                 */
-                get height() {
-                    return this._getOption('height');
-                }
-                set height(value) {
-                    this._setOption('height', value);
-                }
-                /**
-                 * Specifies whether to highlight rows and cells with edited data. repaintChangesOnly should be true.
-                
-                 */
-                get highlightChanges() {
-                    return this._getOption('highlightChanges');
-                }
-                set highlightChanges(value) {
-                    this._setOption('highlightChanges', value);
-                }
-                /**
-                 * Specifies text for a hint that appears when a user pauses on the UI component.
-                
-                 */
-                get hint() {
-                    return this._getOption('hint');
-                }
-                set hint(value) {
-                    this._setOption('hint', value);
-                }
-                /**
-                 * Specifies whether the UI component changes its state when a user pauses on it.
-                
-                 */
-                get hoverStateEnabled() {
-                    return this._getOption('hoverStateEnabled');
-                }
-                set hoverStateEnabled(value) {
-                    this._setOption('hoverStateEnabled', value);
-                }
-                /**
-                 * Configures keyboard navigation.
-                
-                 */
-                get keyboardNavigation() {
-                    return this._getOption('keyboardNavigation');
-                }
-                set keyboardNavigation(value) {
-                    this._setOption('keyboardNavigation', value);
-                }
-                /**
-                 * Specifies the key property (or properties) that provide(s) key values to access data items. Each key value must be unique. This property applies only if data is a simple array.
-                
-                 */
-                get keyExpr() {
-                    return this._getOption('keyExpr');
-                }
-                set keyExpr(value) {
-                    this._setOption('keyExpr', value);
-                }
-                /**
-                 * Configures the load panel.
-                
-                 */
-                get loadPanel() {
-                    return this._getOption('loadPanel');
-                }
-                set loadPanel(value) {
-                    this._setOption('loadPanel', value);
-                }
-                /**
-                 * Allows you to build a master-detail interface in the grid.
-                
-                 */
-                get masterDetail() {
-                    return this._getOption('masterDetail');
-                }
-                set masterDetail(value) {
-                    this._setOption('masterDetail', value);
-                }
-                /**
-                 * Specifies a text string shown when the widget does not display any data.
-                
-                 */
-                get noDataText() {
-                    return this._getOption('noDataText');
-                }
-                set noDataText(value) {
-                    this._setOption('noDataText', value);
-                }
-                /**
-                 * Configures the pager.
-                
-                 */
-                get pager() {
-                    return this._getOption('pager');
-                }
-                set pager(value) {
-                    this._setOption('pager', value);
-                }
-                /**
-                 * Configures paging.
-                
-                 */
-                get paging() {
-                    return this._getOption('paging');
-                }
-                set paging(value) {
-                    this._setOption('paging', value);
-                }
-                /**
-                 * Notifies the DataGrid of the server&apos;s data processing operations.
-                
-                 */
-                get remoteOperations() {
-                    return this._getOption('remoteOperations');
-                }
-                set remoteOperations(value) {
-                    this._setOption('remoteOperations', value);
-                }
-                /**
-                 * Specifies whether to render the filter row, command columns, and columns with showEditorAlways set to true after other elements.
-                
-                 */
-                get renderAsync() {
-                    return this._getOption('renderAsync');
-                }
-                set renderAsync(value) {
-                    this._setOption('renderAsync', value);
-                }
-                /**
-                 * Specifies whether to repaint only those cells whose data changed.
-                
-                 */
-                get repaintChangesOnly() {
-                    return this._getOption('repaintChangesOnly');
-                }
-                set repaintChangesOnly(value) {
-                    this._setOption('repaintChangesOnly', value);
-                }
-                /**
-                 * Specifies whether rows should be shaded differently.
-                
-                 */
-                get rowAlternationEnabled() {
-                    return this._getOption('rowAlternationEnabled');
-                }
-                set rowAlternationEnabled(value) {
-                    this._setOption('rowAlternationEnabled', value);
-                }
-                /**
-                 * Configures row reordering using drag and drop gestures.
-                
-                 */
-                get rowDragging() {
-                    return this._getOption('rowDragging');
-                }
-                set rowDragging(value) {
-                    this._setOption('rowDragging', value);
-                }
-                /**
-                 * Specifies a custom template for rows.
-                
-                 * @deprecated Use the dataRowTemplate option instead.
-                
-                 */
-                get rowTemplate() {
-                    return this._getOption('rowTemplate');
-                }
-                set rowTemplate(value) {
-                    this._setOption('rowTemplate', value);
-                }
-                /**
-                 * Switches the UI component to a right-to-left representation.
-                
-                 */
-                get rtlEnabled() {
-                    return this._getOption('rtlEnabled');
-                }
-                set rtlEnabled(value) {
-                    this._setOption('rtlEnabled', value);
-                }
-                /**
-                 * Configures scrolling.
-                
-                 */
-                get scrolling() {
-                    return this._getOption('scrolling');
-                }
-                set scrolling(value) {
-                    this._setOption('scrolling', value);
-                }
-                /**
-                 * Configures the search panel.
-                
-                 */
-                get searchPanel() {
-                    return this._getOption('searchPanel');
-                }
-                set searchPanel(value) {
-                    this._setOption('searchPanel', value);
-                }
-                /**
-                 * Allows you to select rows or determine which rows are selected.
-                
-                 */
-                get selectedRowKeys() {
-                    return this._getOption('selectedRowKeys');
-                }
-                set selectedRowKeys(value) {
-                    this._setOption('selectedRowKeys', value);
-                }
-                /**
-                 * Configures runtime selection.
-                
-                 */
-                get selection() {
-                    return this._getOption('selection');
-                }
-                set selection(value) {
-                    this._setOption('selection', value);
-                }
-                /**
-                 * Specifies filters for the rows that must be selected initially. Applies only if selection.deferred is true.
-                
-                 */
-                get selectionFilter() {
-                    return this._getOption('selectionFilter');
-                }
-                set selectionFilter(value) {
-                    this._setOption('selectionFilter', value);
-                }
-                /**
-                 * Specifies whether the outer borders of the UI component are visible.
-                
-                 */
-                get showBorders() {
-                    return this._getOption('showBorders');
-                }
-                set showBorders(value) {
-                    this._setOption('showBorders', value);
-                }
-                /**
-                 * Specifies whether column headers are visible.
-                
-                 */
-                get showColumnHeaders() {
-                    return this._getOption('showColumnHeaders');
-                }
-                set showColumnHeaders(value) {
-                    this._setOption('showColumnHeaders', value);
-                }
-                /**
-                 * Specifies whether vertical lines that separate one column from another are visible.
-                
-                 */
-                get showColumnLines() {
-                    return this._getOption('showColumnLines');
-                }
-                set showColumnLines(value) {
-                    this._setOption('showColumnLines', value);
-                }
-                /**
-                 * Specifies whether horizontal lines that separate one row from another are visible.
-                
-                 */
-                get showRowLines() {
-                    return this._getOption('showRowLines');
-                }
-                set showRowLines(value) {
-                    this._setOption('showRowLines', value);
-                }
-                /**
-                 * Allows you to sort groups according to the values of group summary items.
-                
-                 */
-                get sortByGroupSummaryInfo() {
-                    return this._getOption('sortByGroupSummaryInfo');
-                }
-                set sortByGroupSummaryInfo(value) {
-                    this._setOption('sortByGroupSummaryInfo', value);
-                }
-                /**
-                 * Configures runtime sorting.
-                
-                 */
-                get sorting() {
-                    return this._getOption('sorting');
-                }
-                set sorting(value) {
-                    this._setOption('sorting', value);
-                }
-                /**
-                 * Configures state storing.
-                
-                 */
-                get stateStoring() {
-                    return this._getOption('stateStoring');
-                }
-                set stateStoring(value) {
-                    this._setOption('stateStoring', value);
-                }
-                /**
-                 * Specifies the properties of the grid summary.
-                
-                 */
-                get summary() {
-                    return this._getOption('summary');
-                }
-                set summary(value) {
-                    this._setOption('summary', value);
-                }
-                /**
-                 * Specifies whether to show only relevant values in the header filter and filter row.
-                
-                 */
-                get syncLookupFilterValues() {
-                    return this._getOption('syncLookupFilterValues');
-                }
-                set syncLookupFilterValues(value) {
-                    this._setOption('syncLookupFilterValues', value);
-                }
-                /**
-                 * Specifies the number of the element when the Tab key is used for navigating.
-                
-                 */
-                get tabIndex() {
-                    return this._getOption('tabIndex');
-                }
-                set tabIndex(value) {
-                    this._setOption('tabIndex', value);
-                }
-                /**
-                 * Configures the toolbar.
-                
-                 */
-                get toolbar() {
-                    return this._getOption('toolbar');
-                }
-                set toolbar(value) {
-                    this._setOption('toolbar', value);
-                }
-                /**
-                 * Specifies whether to enable two-way data binding.
-                
-                 */
-                get twoWayBindingEnabled() {
-                    return this._getOption('twoWayBindingEnabled');
-                }
-                set twoWayBindingEnabled(value) {
-                    this._setOption('twoWayBindingEnabled', value);
-                }
-                /**
-                 * Specifies whether the UI component is visible.
-                
-                 */
-                get visible() {
-                    return this._getOption('visible');
-                }
-                set visible(value) {
-                    this._setOption('visible', value);
-                }
-                /**
-                 * Specifies the UI component&apos;s width.
-                
-                 */
-                get width() {
-                    return this._getOption('width');
-                }
-                set width(value) {
-                    this._setOption('width', value);
-                }
-                /**
-                 * Specifies whether text that does not fit into a column should be wrapped.
-                
-                 */
-                get wordWrapEnabled() {
-                    return this._getOption('wordWrapEnabled');
-                }
-                set wordWrapEnabled(value) {
-                    this._setOption('wordWrapEnabled', value);
-                }
-                /**
-                
-                 * A function that is executed before an adaptive detail row is rendered.
-                
-                
-                 */
-                onAdaptiveDetailRowPreparing;
-                /**
-                
-                 * A function that is executed when a cell is clicked or tapped. Executed before onRowClick.
-                
-                
-                 */
-                onCellClick;
-                /**
-                
-                 * A function that is executed when a cell is double-clicked or double-tapped. Executed before onRowDblClick.
-                
-                
-                 */
-                onCellDblClick;
-                /**
-                
-                 * A function that is executed after the pointer enters or leaves a cell.
-                
-                
-                 */
-                onCellHoverChanged;
-                /**
-                
-                 * A function that is executed after a grid cell is created.
-                
-                
-                 */
-                onCellPrepared;
-                /**
-                
-                 * A function that is executed when the UI component is rendered and each time the component is repainted.
-                
-                
-                 */
-                onContentReady;
-                /**
-                
-                 * A function that is executed before the context menu is rendered.
-                
-                
-                 */
-                onContextMenuPreparing;
-                /**
-                
-                 * A function that is executed when an error occurs in the data source.
-                
-                
-                 */
-                onDataErrorOccurred;
-                /**
-                
-                 * A function that is executed before the UI component is disposed of.
-                
-                
-                 */
-                onDisposing;
-                /**
-                
-                 * A function that is executed after row changes are discarded.
-                
-                
-                 */
-                onEditCanceled;
-                /**
-                
-                 * A function that is executed when the edit operation is canceled, but row changes are not yet discarded.
-                
-                
-                 */
-                onEditCanceling;
-                /**
-                
-                 * A function that is executed before a cell or row switches to the editing state.
-                
-                
-                 */
-                onEditingStart;
-                /**
-                
-                 * A function that is executed after an editor is created. Not executed for cells with an editCellTemplate.
-                
-                
-                 */
-                onEditorPrepared;
-                /**
-                
-                 * A function used to customize a cell&apos;s editor. Not executed for cells with an editCellTemplate.
-                
-                
-                 */
-                onEditorPreparing;
-                /**
-                
-                 * A function that is executed before data is exported.
-                
-                
-                 */
-                onExporting;
-                /**
-                
-                 * A function that is executed after the focused cell changes. Applies only to cells in data or group rows.
-                
-                
-                 */
-                onFocusedCellChanged;
-                /**
-                
-                 * A function that is executed before the focused cell changes. Applies only to cells in data or group rows.
-                
-                
-                 */
-                onFocusedCellChanging;
-                /**
-                
-                 * A function that is executed after the focused row changes. Applies only to data or group rows. focusedRowEnabled should be true.
-                
-                
-                 */
-                onFocusedRowChanged;
-                /**
-                
-                 * A function that is executed before the focused row changes. Applies only to data or group rows. focusedRowEnabled should be true.
-                
-                
-                 */
-                onFocusedRowChanging;
-                /**
-                
-                 * A function used in JavaScript frameworks to save the UI component instance.
-                
-                
-                 */
-                onInitialized;
-                /**
-                
-                 * A function that is executed before a new row is added to the UI component.
-                
-                
-                 */
-                onInitNewRow;
-                /**
-                
-                 * A function that is executed when the UI component is in focus and a key has been pressed down.
-                
-                
-                 */
-                onKeyDown;
-                /**
-                
-                 * A function that is executed after a UI component property is changed.
-                
-                
-                 */
-                onOptionChanged;
-                /**
-                
-                 * A function that is executed when a row is clicked or tapped.
-                
-                
-                 */
-                onRowClick;
-                /**
-                
-                 * A function that is executed after a row is collapsed.
-                
-                
-                 */
-                onRowCollapsed;
-                /**
-                
-                 * A function that is executed before a row is collapsed.
-                
-                
-                 */
-                onRowCollapsing;
-                /**
-                
-                 * A function that is executed when a row is double-clicked or double-tapped. Executed after onCellDblClick.
-                
-                
-                 */
-                onRowDblClick;
-                /**
-                
-                 * A function that is executed after a row is expanded.
-                
-                
-                 */
-                onRowExpanded;
-                /**
-                
-                 * A function that is executed before a row is expanded.
-                
-                
-                 */
-                onRowExpanding;
-                /**
-                
-                 * A function that is executed after a new row has been inserted into the data source.
-                
-                
-                 */
-                onRowInserted;
-                /**
-                
-                 * A function that is executed before a new row is inserted into the data source.
-                
-                
-                 */
-                onRowInserting;
-                /**
-                
-                 * A function that is executed after a row is created.
-                
-                
-                 */
-                onRowPrepared;
-                /**
-                
-                 * A function that is executed after a row has been removed from the data source.
-                
-                
-                 */
-                onRowRemoved;
-                /**
-                
-                 * A function that is executed before a row is removed from the data source.
-                
-                
-                 */
-                onRowRemoving;
-                /**
-                
-                 * A function that is executed after a row has been updated in the data source.
-                
-                
-                 */
-                onRowUpdated;
-                /**
-                
-                 * A function that is executed before a row is updated in the data source.
-                
-                
-                 */
-                onRowUpdating;
-                /**
-                
-                 * A function that is executed after cells in a row are validated against validation rules.
-                
-                
-                 */
-                onRowValidating;
-                /**
-                
-                 * A function that is executed after row changes are saved.
-                
-                
-                 */
-                onSaved;
-                /**
-                
-                 * A function that is executed before pending row changes are saved.
-                
-                
-                 */
-                onSaving;
-                /**
-                
-                 * A function that is executed after selecting a row or clearing its selection.
-                
-                
-                 */
-                onSelectionChanged;
-                /**
-                
-                 * A function that is executed before the toolbar is created.
-                
-                
-                 */
-                onToolbarPreparing;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                accessKeyChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                activeStateEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                allowColumnReorderingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                allowColumnResizingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                autoNavigateToFocusedRowChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                cacheEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                cellHintEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnAutoWidthChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnChooserChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnFixingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnHidingEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnMinWidthChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnResizingModeChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnsChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                columnWidthChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                customizeColumnsChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                dataRowTemplateChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                dataSourceChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                dateSerializationFormatChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                disabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                editingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                elementAttrChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                errorRowEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                exportChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                filterBuilderChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                filterBuilderPopupChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                filterPanelChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                filterRowChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                filterSyncEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                filterValueChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                focusedColumnIndexChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                focusedRowEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                focusedRowIndexChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                focusedRowKeyChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                groupingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                groupPanelChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                headerFilterChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                heightChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                highlightChangesChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                hintChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                hoverStateEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                keyboardNavigationChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                keyExprChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                loadPanelChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                masterDetailChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                noDataTextChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                pagerChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                pagingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                remoteOperationsChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                renderAsyncChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                repaintChangesOnlyChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                rowAlternationEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                rowDraggingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                rowTemplateChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                rtlEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                scrollingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                searchPanelChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                selectedRowKeysChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                selectionChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                selectionFilterChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                showBordersChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                showColumnHeadersChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                showColumnLinesChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                showRowLinesChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                sortByGroupSummaryInfoChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                sortingChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                stateStoringChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                summaryChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                syncLookupFilterValuesChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                tabIndexChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                toolbarChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                twoWayBindingEnabledChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                visibleChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                widthChange;
-                /**
-                
-                 * This member supports the internal infrastructure and is not intended to be used directly from your code.
-                
-                 */
-                wordWrapEnabledChange;
-                get columnsChildren() {
-                    return this._getOption('columns');
-                }
-                set columnsChildren(value) {
-                    this.setChildren('columns', value);
-                }
-                get sortByGroupSummaryInfoChildren() {
-                    return this._getOption('sortByGroupSummaryInfo');
-                }
-                set sortByGroupSummaryInfoChildren(value) {
-                    this.setChildren('sortByGroupSummaryInfo', value);
-                }
-                constructor(elementRef, ngZone, templateHost, _watcherHelper, _idh, optionHost, transferState, platformId) {
-                    super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
-                    this._watcherHelper = _watcherHelper;
-                    this._idh = _idh;
-                    this._createEventEmitters([
-                        { subscribe: 'adaptiveDetailRowPreparing', emit: 'onAdaptiveDetailRowPreparing' },
-                        { subscribe: 'cellClick', emit: 'onCellClick' },
-                        { subscribe: 'cellDblClick', emit: 'onCellDblClick' },
-                        { subscribe: 'cellHoverChanged', emit: 'onCellHoverChanged' },
-                        { subscribe: 'cellPrepared', emit: 'onCellPrepared' },
-                        { subscribe: 'contentReady', emit: 'onContentReady' },
-                        { subscribe: 'contextMenuPreparing', emit: 'onContextMenuPreparing' },
-                        { subscribe: 'dataErrorOccurred', emit: 'onDataErrorOccurred' },
-                        { subscribe: 'disposing', emit: 'onDisposing' },
-                        { subscribe: 'editCanceled', emit: 'onEditCanceled' },
-                        { subscribe: 'editCanceling', emit: 'onEditCanceling' },
-                        { subscribe: 'editingStart', emit: 'onEditingStart' },
-                        { subscribe: 'editorPrepared', emit: 'onEditorPrepared' },
-                        { subscribe: 'editorPreparing', emit: 'onEditorPreparing' },
-                        { subscribe: 'exporting', emit: 'onExporting' },
-                        { subscribe: 'focusedCellChanged', emit: 'onFocusedCellChanged' },
-                        { subscribe: 'focusedCellChanging', emit: 'onFocusedCellChanging' },
-                        { subscribe: 'focusedRowChanged', emit: 'onFocusedRowChanged' },
-                        { subscribe: 'focusedRowChanging', emit: 'onFocusedRowChanging' },
-                        { subscribe: 'initialized', emit: 'onInitialized' },
-                        { subscribe: 'initNewRow', emit: 'onInitNewRow' },
-                        { subscribe: 'keyDown', emit: 'onKeyDown' },
-                        { subscribe: 'optionChanged', emit: 'onOptionChanged' },
-                        { subscribe: 'rowClick', emit: 'onRowClick' },
-                        { subscribe: 'rowCollapsed', emit: 'onRowCollapsed' },
-                        { subscribe: 'rowCollapsing', emit: 'onRowCollapsing' },
-                        { subscribe: 'rowDblClick', emit: 'onRowDblClick' },
-                        { subscribe: 'rowExpanded', emit: 'onRowExpanded' },
-                        { subscribe: 'rowExpanding', emit: 'onRowExpanding' },
-                        { subscribe: 'rowInserted', emit: 'onRowInserted' },
-                        { subscribe: 'rowInserting', emit: 'onRowInserting' },
-                        { subscribe: 'rowPrepared', emit: 'onRowPrepared' },
-                        { subscribe: 'rowRemoved', emit: 'onRowRemoved' },
-                        { subscribe: 'rowRemoving', emit: 'onRowRemoving' },
-                        { subscribe: 'rowUpdated', emit: 'onRowUpdated' },
-                        { subscribe: 'rowUpdating', emit: 'onRowUpdating' },
-                        { subscribe: 'rowValidating', emit: 'onRowValidating' },
-                        { subscribe: 'saved', emit: 'onSaved' },
-                        { subscribe: 'saving', emit: 'onSaving' },
-                        { subscribe: 'selectionChanged', emit: 'onSelectionChanged' },
-                        { subscribe: 'toolbarPreparing', emit: 'onToolbarPreparing' },
-                        { emit: 'accessKeyChange' },
-                        { emit: 'activeStateEnabledChange' },
-                        { emit: 'allowColumnReorderingChange' },
-                        { emit: 'allowColumnResizingChange' },
-                        { emit: 'autoNavigateToFocusedRowChange' },
-                        { emit: 'cacheEnabledChange' },
-                        { emit: 'cellHintEnabledChange' },
-                        { emit: 'columnAutoWidthChange' },
-                        { emit: 'columnChooserChange' },
-                        { emit: 'columnFixingChange' },
-                        { emit: 'columnHidingEnabledChange' },
-                        { emit: 'columnMinWidthChange' },
-                        { emit: 'columnResizingModeChange' },
-                        { emit: 'columnsChange' },
-                        { emit: 'columnWidthChange' },
-                        { emit: 'customizeColumnsChange' },
-                        { emit: 'dataRowTemplateChange' },
-                        { emit: 'dataSourceChange' },
-                        { emit: 'dateSerializationFormatChange' },
-                        { emit: 'disabledChange' },
-                        { emit: 'editingChange' },
-                        { emit: 'elementAttrChange' },
-                        { emit: 'errorRowEnabledChange' },
-                        { emit: 'exportChange' },
-                        { emit: 'filterBuilderChange' },
-                        { emit: 'filterBuilderPopupChange' },
-                        { emit: 'filterPanelChange' },
-                        { emit: 'filterRowChange' },
-                        { emit: 'filterSyncEnabledChange' },
-                        { emit: 'filterValueChange' },
-                        { emit: 'focusedColumnIndexChange' },
-                        { emit: 'focusedRowEnabledChange' },
-                        { emit: 'focusedRowIndexChange' },
-                        { emit: 'focusedRowKeyChange' },
-                        { emit: 'groupingChange' },
-                        { emit: 'groupPanelChange' },
-                        { emit: 'headerFilterChange' },
-                        { emit: 'heightChange' },
-                        { emit: 'highlightChangesChange' },
-                        { emit: 'hintChange' },
-                        { emit: 'hoverStateEnabledChange' },
-                        { emit: 'keyboardNavigationChange' },
-                        { emit: 'keyExprChange' },
-                        { emit: 'loadPanelChange' },
-                        { emit: 'masterDetailChange' },
-                        { emit: 'noDataTextChange' },
-                        { emit: 'pagerChange' },
-                        { emit: 'pagingChange' },
-                        { emit: 'remoteOperationsChange' },
-                        { emit: 'renderAsyncChange' },
-                        { emit: 'repaintChangesOnlyChange' },
-                        { emit: 'rowAlternationEnabledChange' },
-                        { emit: 'rowDraggingChange' },
-                        { emit: 'rowTemplateChange' },
-                        { emit: 'rtlEnabledChange' },
-                        { emit: 'scrollingChange' },
-                        { emit: 'searchPanelChange' },
-                        { emit: 'selectedRowKeysChange' },
-                        { emit: 'selectionChange' },
-                        { emit: 'selectionFilterChange' },
-                        { emit: 'showBordersChange' },
-                        { emit: 'showColumnHeadersChange' },
-                        { emit: 'showColumnLinesChange' },
-                        { emit: 'showRowLinesChange' },
-                        { emit: 'sortByGroupSummaryInfoChange' },
-                        { emit: 'sortingChange' },
-                        { emit: 'stateStoringChange' },
-                        { emit: 'summaryChange' },
-                        { emit: 'syncLookupFilterValuesChange' },
-                        { emit: 'tabIndexChange' },
-                        { emit: 'toolbarChange' },
-                        { emit: 'twoWayBindingEnabledChange' },
-                        { emit: 'visibleChange' },
-                        { emit: 'widthChange' },
-                        { emit: 'wordWrapEnabledChange' }
-                    ]);
-                    this._idh.setHost(this);
-                    optionHost.setHost(this);
-                }
-                _createInstance(element, options) {
-                    return new DxDataGrid(element, options);
-                }
-                ngOnDestroy() {
-                    this._destroyWidget();
-                }
-                ngOnChanges(changes) {
-                    super.ngOnChanges(changes);
-                    this.setupChanges('columns', changes);
-                    this.setupChanges('dataSource', changes);
-                    this.setupChanges('keyExpr', changes);
-                    this.setupChanges('selectedRowKeys', changes);
-                    this.setupChanges('sortByGroupSummaryInfo', changes);
-                }
-                setupChanges(prop, changes) {
-                    if (!(prop in this._optionsToUpdate)) {
-                        this._idh.setup(prop, changes);
-                    }
-                }
-                ngDoCheck() {
-                    this._idh.doCheck('columns');
-                    this._idh.doCheck('dataSource');
-                    this._idh.doCheck('keyExpr');
-                    this._idh.doCheck('selectedRowKeys');
-                    this._idh.doCheck('sortByGroupSummaryInfo');
-                    this._watcherHelper.checkWatchers();
-                    super.ngDoCheck();
-                    super.clearChangedOptions();
-                }
-                _setOption(name, value) {
-                    let isSetup = this._idh.setupSingle(name, value);
-                    let isChanged = this._idh.getChanges(name, value) !== null;
-                    if (isSetup || isChanged) {
-                        super._setOption(name, value);
-                    }
-                }
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridComponent, deps: [{ token: i0.ElementRef }, { token: i0.NgZone }, { token: DxTemplateHost }, { token: WatcherHelper }, { token: IterableDifferHelper }, { token: NestedOptionHost }, { token: i2.TransferState }, { token: PLATFORM_ID }], target: i0.ɵɵFactoryTarget.Component });
-                /** @nocollapse */ static ɵcmp = i0.ɵɵngDeclareComponent({ minVersion: "14.0.0", version: "17.3.0", type: DxDataGridComponent, selector: "dx-data-grid", inputs: { accessKey: "accessKey", activeStateEnabled: "activeStateEnabled", allowColumnReordering: "allowColumnReordering", allowColumnResizing: "allowColumnResizing", autoNavigateToFocusedRow: "autoNavigateToFocusedRow", cacheEnabled: "cacheEnabled", cellHintEnabled: "cellHintEnabled", columnAutoWidth: "columnAutoWidth", columnChooser: "columnChooser", columnFixing: "columnFixing", columnHidingEnabled: "columnHidingEnabled", columnMinWidth: "columnMinWidth", columnResizingMode: "columnResizingMode", columns: "columns", columnWidth: "columnWidth", customizeColumns: "customizeColumns", dataRowTemplate: "dataRowTemplate", dataSource: "dataSource", dateSerializationFormat: "dateSerializationFormat", disabled: "disabled", editing: "editing", elementAttr: "elementAttr", errorRowEnabled: "errorRowEnabled", export: "export", filterBuilder: "filterBuilder", filterBuilderPopup: "filterBuilderPopup", filterPanel: "filterPanel", filterRow: "filterRow", filterSyncEnabled: "filterSyncEnabled", filterValue: "filterValue", focusedColumnIndex: "focusedColumnIndex", focusedRowEnabled: "focusedRowEnabled", focusedRowIndex: "focusedRowIndex", focusedRowKey: "focusedRowKey", grouping: "grouping", groupPanel: "groupPanel", headerFilter: "headerFilter", height: "height", highlightChanges: "highlightChanges", hint: "hint", hoverStateEnabled: "hoverStateEnabled", keyboardNavigation: "keyboardNavigation", keyExpr: "keyExpr", loadPanel: "loadPanel", masterDetail: "masterDetail", noDataText: "noDataText", pager: "pager", paging: "paging", remoteOperations: "remoteOperations", renderAsync: "renderAsync", repaintChangesOnly: "repaintChangesOnly", rowAlternationEnabled: "rowAlternationEnabled", rowDragging: "rowDragging", rowTemplate: "rowTemplate", rtlEnabled: "rtlEnabled", scrolling: "scrolling", searchPanel: "searchPanel", selectedRowKeys: "selectedRowKeys", selection: "selection", selectionFilter: "selectionFilter", showBorders: "showBorders", showColumnHeaders: "showColumnHeaders", showColumnLines: "showColumnLines", showRowLines: "showRowLines", sortByGroupSummaryInfo: "sortByGroupSummaryInfo", sorting: "sorting", stateStoring: "stateStoring", summary: "summary", syncLookupFilterValues: "syncLookupFilterValues", tabIndex: "tabIndex", toolbar: "toolbar", twoWayBindingEnabled: "twoWayBindingEnabled", visible: "visible", width: "width", wordWrapEnabled: "wordWrapEnabled" }, outputs: { onAdaptiveDetailRowPreparing: "onAdaptiveDetailRowPreparing", onCellClick: "onCellClick", onCellDblClick: "onCellDblClick", onCellHoverChanged: "onCellHoverChanged", onCellPrepared: "onCellPrepared", onContentReady: "onContentReady", onContextMenuPreparing: "onContextMenuPreparing", onDataErrorOccurred: "onDataErrorOccurred", onDisposing: "onDisposing", onEditCanceled: "onEditCanceled", onEditCanceling: "onEditCanceling", onEditingStart: "onEditingStart", onEditorPrepared: "onEditorPrepared", onEditorPreparing: "onEditorPreparing", onExporting: "onExporting", onFocusedCellChanged: "onFocusedCellChanged", onFocusedCellChanging: "onFocusedCellChanging", onFocusedRowChanged: "onFocusedRowChanged", onFocusedRowChanging: "onFocusedRowChanging", onInitialized: "onInitialized", onInitNewRow: "onInitNewRow", onKeyDown: "onKeyDown", onOptionChanged: "onOptionChanged", onRowClick: "onRowClick", onRowCollapsed: "onRowCollapsed", onRowCollapsing: "onRowCollapsing", onRowDblClick: "onRowDblClick", onRowExpanded: "onRowExpanded", onRowExpanding: "onRowExpanding", onRowInserted: "onRowInserted", onRowInserting: "onRowInserting", onRowPrepared: "onRowPrepared", onRowRemoved: "onRowRemoved", onRowRemoving: "onRowRemoving", onRowUpdated: "onRowUpdated", onRowUpdating: "onRowUpdating", onRowValidating: "onRowValidating", onSaved: "onSaved", onSaving: "onSaving", onSelectionChanged: "onSelectionChanged", onToolbarPreparing: "onToolbarPreparing", accessKeyChange: "accessKeyChange", activeStateEnabledChange: "activeStateEnabledChange", allowColumnReorderingChange: "allowColumnReorderingChange", allowColumnResizingChange: "allowColumnResizingChange", autoNavigateToFocusedRowChange: "autoNavigateToFocusedRowChange", cacheEnabledChange: "cacheEnabledChange", cellHintEnabledChange: "cellHintEnabledChange", columnAutoWidthChange: "columnAutoWidthChange", columnChooserChange: "columnChooserChange", columnFixingChange: "columnFixingChange", columnHidingEnabledChange: "columnHidingEnabledChange", columnMinWidthChange: "columnMinWidthChange", columnResizingModeChange: "columnResizingModeChange", columnsChange: "columnsChange", columnWidthChange: "columnWidthChange", customizeColumnsChange: "customizeColumnsChange", dataRowTemplateChange: "dataRowTemplateChange", dataSourceChange: "dataSourceChange", dateSerializationFormatChange: "dateSerializationFormatChange", disabledChange: "disabledChange", editingChange: "editingChange", elementAttrChange: "elementAttrChange", errorRowEnabledChange: "errorRowEnabledChange", exportChange: "exportChange", filterBuilderChange: "filterBuilderChange", filterBuilderPopupChange: "filterBuilderPopupChange", filterPanelChange: "filterPanelChange", filterRowChange: "filterRowChange", filterSyncEnabledChange: "filterSyncEnabledChange", filterValueChange: "filterValueChange", focusedColumnIndexChange: "focusedColumnIndexChange", focusedRowEnabledChange: "focusedRowEnabledChange", focusedRowIndexChange: "focusedRowIndexChange", focusedRowKeyChange: "focusedRowKeyChange", groupingChange: "groupingChange", groupPanelChange: "groupPanelChange", headerFilterChange: "headerFilterChange", heightChange: "heightChange", highlightChangesChange: "highlightChangesChange", hintChange: "hintChange", hoverStateEnabledChange: "hoverStateEnabledChange", keyboardNavigationChange: "keyboardNavigationChange", keyExprChange: "keyExprChange", loadPanelChange: "loadPanelChange", masterDetailChange: "masterDetailChange", noDataTextChange: "noDataTextChange", pagerChange: "pagerChange", pagingChange: "pagingChange", remoteOperationsChange: "remoteOperationsChange", renderAsyncChange: "renderAsyncChange", repaintChangesOnlyChange: "repaintChangesOnlyChange", rowAlternationEnabledChange: "rowAlternationEnabledChange", rowDraggingChange: "rowDraggingChange", rowTemplateChange: "rowTemplateChange", rtlEnabledChange: "rtlEnabledChange", scrollingChange: "scrollingChange", searchPanelChange: "searchPanelChange", selectedRowKeysChange: "selectedRowKeysChange", selectionChange: "selectionChange", selectionFilterChange: "selectionFilterChange", showBordersChange: "showBordersChange", showColumnHeadersChange: "showColumnHeadersChange", showColumnLinesChange: "showColumnLinesChange", showRowLinesChange: "showRowLinesChange", sortByGroupSummaryInfoChange: "sortByGroupSummaryInfoChange", sortingChange: "sortingChange", stateStoringChange: "stateStoringChange", summaryChange: "summaryChange", syncLookupFilterValuesChange: "syncLookupFilterValuesChange", tabIndexChange: "tabIndexChange", toolbarChange: "toolbarChange", twoWayBindingEnabledChange: "twoWayBindingEnabledChange", visibleChange: "visibleChange", widthChange: "widthChange", wordWrapEnabledChange: "wordWrapEnabledChange" }, providers: [
-                        DxTemplateHost,
-                        WatcherHelper,
-                        NestedOptionHost,
-                        IterableDifferHelper
-                    ], queries: [{ propertyName: "columnsChildren", predicate: DxiColumnComponent }, { propertyName: "sortByGroupSummaryInfoChildren", predicate: DxiSortByGroupSummaryInfoComponent }], usesInheritance: true, usesOnChanges: true, ngImport: i0, template: '', isInline: true });
-            } exports("dl", DxDataGridComponent);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridComponent, decorators: [{
-                        type: Component,
-                        args: [{
-                                selector: 'dx-data-grid',
-                                template: '',
-                                providers: [
-                                    DxTemplateHost,
-                                    WatcherHelper,
-                                    NestedOptionHost,
-                                    IterableDifferHelper
-                                ]
-                            }]
-                    }], ctorParameters: () => [{ type: i0.ElementRef }, { type: i0.NgZone }, { type: DxTemplateHost }, { type: WatcherHelper }, { type: IterableDifferHelper }, { type: NestedOptionHost }, { type: i2.TransferState }, { type: undefined, decorators: [{
-                                type: Inject,
-                                args: [PLATFORM_ID]
-                            }] }], propDecorators: { accessKey: [{
-                            type: Input
-                        }], activeStateEnabled: [{
-                            type: Input
-                        }], allowColumnReordering: [{
-                            type: Input
-                        }], allowColumnResizing: [{
-                            type: Input
-                        }], autoNavigateToFocusedRow: [{
-                            type: Input
-                        }], cacheEnabled: [{
-                            type: Input
-                        }], cellHintEnabled: [{
-                            type: Input
-                        }], columnAutoWidth: [{
-                            type: Input
-                        }], columnChooser: [{
-                            type: Input
-                        }], columnFixing: [{
-                            type: Input
-                        }], columnHidingEnabled: [{
-                            type: Input
-                        }], columnMinWidth: [{
-                            type: Input
-                        }], columnResizingMode: [{
-                            type: Input
-                        }], columns: [{
-                            type: Input
-                        }], columnWidth: [{
-                            type: Input
-                        }], customizeColumns: [{
-                            type: Input
-                        }], dataRowTemplate: [{
-                            type: Input
-                        }], dataSource: [{
-                            type: Input
-                        }], dateSerializationFormat: [{
-                            type: Input
-                        }], disabled: [{
-                            type: Input
-                        }], editing: [{
-                            type: Input
-                        }], elementAttr: [{
-                            type: Input
-                        }], errorRowEnabled: [{
-                            type: Input
-                        }], export: [{
-                            type: Input
-                        }], filterBuilder: [{
-                            type: Input
-                        }], filterBuilderPopup: [{
-                            type: Input
-                        }], filterPanel: [{
-                            type: Input
-                        }], filterRow: [{
-                            type: Input
-                        }], filterSyncEnabled: [{
-                            type: Input
-                        }], filterValue: [{
-                            type: Input
-                        }], focusedColumnIndex: [{
-                            type: Input
-                        }], focusedRowEnabled: [{
-                            type: Input
-                        }], focusedRowIndex: [{
-                            type: Input
-                        }], focusedRowKey: [{
-                            type: Input
-                        }], grouping: [{
-                            type: Input
-                        }], groupPanel: [{
-                            type: Input
-                        }], headerFilter: [{
-                            type: Input
-                        }], height: [{
-                            type: Input
-                        }], highlightChanges: [{
-                            type: Input
-                        }], hint: [{
-                            type: Input
-                        }], hoverStateEnabled: [{
-                            type: Input
-                        }], keyboardNavigation: [{
-                            type: Input
-                        }], keyExpr: [{
-                            type: Input
-                        }], loadPanel: [{
-                            type: Input
-                        }], masterDetail: [{
-                            type: Input
-                        }], noDataText: [{
-                            type: Input
-                        }], pager: [{
-                            type: Input
-                        }], paging: [{
-                            type: Input
-                        }], remoteOperations: [{
-                            type: Input
-                        }], renderAsync: [{
-                            type: Input
-                        }], repaintChangesOnly: [{
-                            type: Input
-                        }], rowAlternationEnabled: [{
-                            type: Input
-                        }], rowDragging: [{
-                            type: Input
-                        }], rowTemplate: [{
-                            type: Input
-                        }], rtlEnabled: [{
-                            type: Input
-                        }], scrolling: [{
-                            type: Input
-                        }], searchPanel: [{
-                            type: Input
-                        }], selectedRowKeys: [{
-                            type: Input
-                        }], selection: [{
-                            type: Input
-                        }], selectionFilter: [{
-                            type: Input
-                        }], showBorders: [{
-                            type: Input
-                        }], showColumnHeaders: [{
-                            type: Input
-                        }], showColumnLines: [{
-                            type: Input
-                        }], showRowLines: [{
-                            type: Input
-                        }], sortByGroupSummaryInfo: [{
-                            type: Input
-                        }], sorting: [{
-                            type: Input
-                        }], stateStoring: [{
-                            type: Input
-                        }], summary: [{
-                            type: Input
-                        }], syncLookupFilterValues: [{
-                            type: Input
-                        }], tabIndex: [{
-                            type: Input
-                        }], toolbar: [{
-                            type: Input
-                        }], twoWayBindingEnabled: [{
-                            type: Input
-                        }], visible: [{
-                            type: Input
-                        }], width: [{
-                            type: Input
-                        }], wordWrapEnabled: [{
-                            type: Input
-                        }], onAdaptiveDetailRowPreparing: [{
-                            type: Output
-                        }], onCellClick: [{
-                            type: Output
-                        }], onCellDblClick: [{
-                            type: Output
-                        }], onCellHoverChanged: [{
-                            type: Output
-                        }], onCellPrepared: [{
-                            type: Output
-                        }], onContentReady: [{
-                            type: Output
-                        }], onContextMenuPreparing: [{
-                            type: Output
-                        }], onDataErrorOccurred: [{
-                            type: Output
-                        }], onDisposing: [{
-                            type: Output
-                        }], onEditCanceled: [{
-                            type: Output
-                        }], onEditCanceling: [{
-                            type: Output
-                        }], onEditingStart: [{
-                            type: Output
-                        }], onEditorPrepared: [{
-                            type: Output
-                        }], onEditorPreparing: [{
-                            type: Output
-                        }], onExporting: [{
-                            type: Output
-                        }], onFocusedCellChanged: [{
-                            type: Output
-                        }], onFocusedCellChanging: [{
-                            type: Output
-                        }], onFocusedRowChanged: [{
-                            type: Output
-                        }], onFocusedRowChanging: [{
-                            type: Output
-                        }], onInitialized: [{
-                            type: Output
-                        }], onInitNewRow: [{
-                            type: Output
-                        }], onKeyDown: [{
-                            type: Output
-                        }], onOptionChanged: [{
-                            type: Output
-                        }], onRowClick: [{
-                            type: Output
-                        }], onRowCollapsed: [{
-                            type: Output
-                        }], onRowCollapsing: [{
-                            type: Output
-                        }], onRowDblClick: [{
-                            type: Output
-                        }], onRowExpanded: [{
-                            type: Output
-                        }], onRowExpanding: [{
-                            type: Output
-                        }], onRowInserted: [{
-                            type: Output
-                        }], onRowInserting: [{
-                            type: Output
-                        }], onRowPrepared: [{
-                            type: Output
-                        }], onRowRemoved: [{
-                            type: Output
-                        }], onRowRemoving: [{
-                            type: Output
-                        }], onRowUpdated: [{
-                            type: Output
-                        }], onRowUpdating: [{
-                            type: Output
-                        }], onRowValidating: [{
-                            type: Output
-                        }], onSaved: [{
-                            type: Output
-                        }], onSaving: [{
-                            type: Output
-                        }], onSelectionChanged: [{
-                            type: Output
-                        }], onToolbarPreparing: [{
-                            type: Output
-                        }], accessKeyChange: [{
-                            type: Output
-                        }], activeStateEnabledChange: [{
-                            type: Output
-                        }], allowColumnReorderingChange: [{
-                            type: Output
-                        }], allowColumnResizingChange: [{
-                            type: Output
-                        }], autoNavigateToFocusedRowChange: [{
-                            type: Output
-                        }], cacheEnabledChange: [{
-                            type: Output
-                        }], cellHintEnabledChange: [{
-                            type: Output
-                        }], columnAutoWidthChange: [{
-                            type: Output
-                        }], columnChooserChange: [{
-                            type: Output
-                        }], columnFixingChange: [{
-                            type: Output
-                        }], columnHidingEnabledChange: [{
-                            type: Output
-                        }], columnMinWidthChange: [{
-                            type: Output
-                        }], columnResizingModeChange: [{
-                            type: Output
-                        }], columnsChange: [{
-                            type: Output
-                        }], columnWidthChange: [{
-                            type: Output
-                        }], customizeColumnsChange: [{
-                            type: Output
-                        }], dataRowTemplateChange: [{
-                            type: Output
-                        }], dataSourceChange: [{
-                            type: Output
-                        }], dateSerializationFormatChange: [{
-                            type: Output
-                        }], disabledChange: [{
-                            type: Output
-                        }], editingChange: [{
-                            type: Output
-                        }], elementAttrChange: [{
-                            type: Output
-                        }], errorRowEnabledChange: [{
-                            type: Output
-                        }], exportChange: [{
-                            type: Output
-                        }], filterBuilderChange: [{
-                            type: Output
-                        }], filterBuilderPopupChange: [{
-                            type: Output
-                        }], filterPanelChange: [{
-                            type: Output
-                        }], filterRowChange: [{
-                            type: Output
-                        }], filterSyncEnabledChange: [{
-                            type: Output
-                        }], filterValueChange: [{
-                            type: Output
-                        }], focusedColumnIndexChange: [{
-                            type: Output
-                        }], focusedRowEnabledChange: [{
-                            type: Output
-                        }], focusedRowIndexChange: [{
-                            type: Output
-                        }], focusedRowKeyChange: [{
-                            type: Output
-                        }], groupingChange: [{
-                            type: Output
-                        }], groupPanelChange: [{
-                            type: Output
-                        }], headerFilterChange: [{
-                            type: Output
-                        }], heightChange: [{
-                            type: Output
-                        }], highlightChangesChange: [{
-                            type: Output
-                        }], hintChange: [{
-                            type: Output
-                        }], hoverStateEnabledChange: [{
-                            type: Output
-                        }], keyboardNavigationChange: [{
-                            type: Output
-                        }], keyExprChange: [{
-                            type: Output
-                        }], loadPanelChange: [{
-                            type: Output
-                        }], masterDetailChange: [{
-                            type: Output
-                        }], noDataTextChange: [{
-                            type: Output
-                        }], pagerChange: [{
-                            type: Output
-                        }], pagingChange: [{
-                            type: Output
-                        }], remoteOperationsChange: [{
-                            type: Output
-                        }], renderAsyncChange: [{
-                            type: Output
-                        }], repaintChangesOnlyChange: [{
-                            type: Output
-                        }], rowAlternationEnabledChange: [{
-                            type: Output
-                        }], rowDraggingChange: [{
-                            type: Output
-                        }], rowTemplateChange: [{
-                            type: Output
-                        }], rtlEnabledChange: [{
-                            type: Output
-                        }], scrollingChange: [{
-                            type: Output
-                        }], searchPanelChange: [{
-                            type: Output
-                        }], selectedRowKeysChange: [{
-                            type: Output
-                        }], selectionChange: [{
-                            type: Output
-                        }], selectionFilterChange: [{
-                            type: Output
-                        }], showBordersChange: [{
-                            type: Output
-                        }], showColumnHeadersChange: [{
-                            type: Output
-                        }], showColumnLinesChange: [{
-                            type: Output
-                        }], showRowLinesChange: [{
-                            type: Output
-                        }], sortByGroupSummaryInfoChange: [{
-                            type: Output
-                        }], sortingChange: [{
-                            type: Output
-                        }], stateStoringChange: [{
-                            type: Output
-                        }], summaryChange: [{
-                            type: Output
-                        }], syncLookupFilterValuesChange: [{
-                            type: Output
-                        }], tabIndexChange: [{
-                            type: Output
-                        }], toolbarChange: [{
-                            type: Output
-                        }], twoWayBindingEnabledChange: [{
-                            type: Output
-                        }], visibleChange: [{
-                            type: Output
-                        }], widthChange: [{
-                            type: Output
-                        }], wordWrapEnabledChange: [{
-                            type: Output
-                        }], columnsChildren: [{
-                            type: ContentChildren,
-                            args: [DxiColumnComponent]
-                        }], sortByGroupSummaryInfoChildren: [{
-                            type: ContentChildren,
-                            args: [DxiSortByGroupSummaryInfoComponent]
-                        }] } });
-            class DxDataGridModule {
-                /** @nocollapse */ static ɵfac = i0.ɵɵngDeclareFactory({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, deps: [], target: i0.ɵɵFactoryTarget.NgModule });
-                /** @nocollapse */ static ɵmod = i0.ɵɵngDeclareNgModule({ minVersion: "14.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, declarations: [DxDataGridComponent], imports: [DxoColumnChooserModule,
-                        DxoPositionModule,
-                        DxoAtModule,
-                        DxoBoundaryOffsetModule,
-                        DxoCollisionModule,
-                        DxoMyModule,
-                        DxoOffsetModule,
-                        DxoSearchModule,
-                        DxoSelectionModule,
-                        DxoColumnFixingModule,
-                        DxoTextsModule,
-                        DxiColumnModule,
-                        DxiButtonModule,
-                        DxoHeaderFilterModule,
-                        DxoLookupModule,
-                        DxoFormatModule,
-                        DxoFormItemModule,
-                        DxoLabelModule,
-                        DxiValidationRuleModule,
-                        DxoEditingModule,
-                        DxiChangeModule,
-                        DxoFormModule,
-                        DxoColCountByScreenModule,
-                        DxiItemModule,
-                        DxoTabPanelOptionsModule,
-                        DxiTabModule,
-                        DxoButtonOptionsModule,
-                        DxoPopupModule,
-                        DxoAnimationModule,
-                        DxoHideModule,
-                        DxoFromModule,
-                        DxoToModule,
-                        DxoShowModule,
-                        DxiToolbarItemModule,
-                        DxoExportModule,
-                        DxoFilterBuilderModule,
-                        DxiCustomOperationModule,
-                        DxiFieldModule,
-                        DxoFilterOperationDescriptionsModule,
-                        DxoGroupOperationDescriptionsModule,
-                        DxoFilterBuilderPopupModule,
-                        DxoFilterPanelModule,
-                        DxoFilterRowModule,
-                        DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
-                        DxoKeyboardNavigationModule,
-                        DxoLoadPanelModule,
-                        DxoMasterDetailModule,
-                        DxoPagerModule,
-                        DxoPagingModule,
-                        DxoRemoteOperationsModule,
-                        DxoRowDraggingModule,
-                        DxoCursorOffsetModule,
-                        DxoScrollingModule,
-                        DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
-                        DxoSortingModule,
-                        DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
-                        DxoToolbarModule,
-                        DxIntegrationModule,
-                        DxTemplateModule], exports: [DxDataGridComponent, DxoColumnChooserModule,
-                        DxoPositionModule,
-                        DxoAtModule,
-                        DxoBoundaryOffsetModule,
-                        DxoCollisionModule,
-                        DxoMyModule,
-                        DxoOffsetModule,
-                        DxoSearchModule,
-                        DxoSelectionModule,
-                        DxoColumnFixingModule,
-                        DxoTextsModule,
-                        DxiColumnModule,
-                        DxiButtonModule,
-                        DxoHeaderFilterModule,
-                        DxoLookupModule,
-                        DxoFormatModule,
-                        DxoFormItemModule,
-                        DxoLabelModule,
-                        DxiValidationRuleModule,
-                        DxoEditingModule,
-                        DxiChangeModule,
-                        DxoFormModule,
-                        DxoColCountByScreenModule,
-                        DxiItemModule,
-                        DxoTabPanelOptionsModule,
-                        DxiTabModule,
-                        DxoButtonOptionsModule,
-                        DxoPopupModule,
-                        DxoAnimationModule,
-                        DxoHideModule,
-                        DxoFromModule,
-                        DxoToModule,
-                        DxoShowModule,
-                        DxiToolbarItemModule,
-                        DxoExportModule,
-                        DxoFilterBuilderModule,
-                        DxiCustomOperationModule,
-                        DxiFieldModule,
-                        DxoFilterOperationDescriptionsModule,
-                        DxoGroupOperationDescriptionsModule,
-                        DxoFilterBuilderPopupModule,
-                        DxoFilterPanelModule,
-                        DxoFilterRowModule,
-                        DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
-                        DxoKeyboardNavigationModule,
-                        DxoLoadPanelModule,
-                        DxoMasterDetailModule,
-                        DxoPagerModule,
-                        DxoPagingModule,
-                        DxoRemoteOperationsModule,
-                        DxoRowDraggingModule,
-                        DxoCursorOffsetModule,
-                        DxoScrollingModule,
-                        DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
-                        DxoSortingModule,
-                        DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
-                        DxoToolbarModule,
-                        DxTemplateModule] });
-                /** @nocollapse */ static ɵinj = i0.ɵɵngDeclareInjector({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, imports: [DxoColumnChooserModule,
-                        DxoPositionModule,
-                        DxoAtModule,
-                        DxoBoundaryOffsetModule,
-                        DxoCollisionModule,
-                        DxoMyModule,
-                        DxoOffsetModule,
-                        DxoSearchModule,
-                        DxoSelectionModule,
-                        DxoColumnFixingModule,
-                        DxoTextsModule,
-                        DxiColumnModule,
-                        DxiButtonModule,
-                        DxoHeaderFilterModule,
-                        DxoLookupModule,
-                        DxoFormatModule,
-                        DxoFormItemModule,
-                        DxoLabelModule,
-                        DxiValidationRuleModule,
-                        DxoEditingModule,
-                        DxiChangeModule,
-                        DxoFormModule,
-                        DxoColCountByScreenModule,
-                        DxiItemModule,
-                        DxoTabPanelOptionsModule,
-                        DxiTabModule,
-                        DxoButtonOptionsModule,
-                        DxoPopupModule,
-                        DxoAnimationModule,
-                        DxoHideModule,
-                        DxoFromModule,
-                        DxoToModule,
-                        DxoShowModule,
-                        DxiToolbarItemModule,
-                        DxoExportModule,
-                        DxoFilterBuilderModule,
-                        DxiCustomOperationModule,
-                        DxiFieldModule,
-                        DxoFilterOperationDescriptionsModule,
-                        DxoGroupOperationDescriptionsModule,
-                        DxoFilterBuilderPopupModule,
-                        DxoFilterPanelModule,
-                        DxoFilterRowModule,
-                        DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
-                        DxoKeyboardNavigationModule,
-                        DxoLoadPanelModule,
-                        DxoMasterDetailModule,
-                        DxoPagerModule,
-                        DxoPagingModule,
-                        DxoRemoteOperationsModule,
-                        DxoRowDraggingModule,
-                        DxoCursorOffsetModule,
-                        DxoScrollingModule,
-                        DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
-                        DxoSortingModule,
-                        DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
-                        DxoToolbarModule,
-                        DxIntegrationModule,
-                        DxTemplateModule, DxoColumnChooserModule,
-                        DxoPositionModule,
-                        DxoAtModule,
-                        DxoBoundaryOffsetModule,
-                        DxoCollisionModule,
-                        DxoMyModule,
-                        DxoOffsetModule,
-                        DxoSearchModule,
-                        DxoSelectionModule,
-                        DxoColumnFixingModule,
-                        DxoTextsModule,
-                        DxiColumnModule,
-                        DxiButtonModule,
-                        DxoHeaderFilterModule,
-                        DxoLookupModule,
-                        DxoFormatModule,
-                        DxoFormItemModule,
-                        DxoLabelModule,
-                        DxiValidationRuleModule,
-                        DxoEditingModule,
-                        DxiChangeModule,
-                        DxoFormModule,
-                        DxoColCountByScreenModule,
-                        DxiItemModule,
-                        DxoTabPanelOptionsModule,
-                        DxiTabModule,
-                        DxoButtonOptionsModule,
-                        DxoPopupModule,
-                        DxoAnimationModule,
-                        DxoHideModule,
-                        DxoFromModule,
-                        DxoToModule,
-                        DxoShowModule,
-                        DxiToolbarItemModule,
-                        DxoExportModule,
-                        DxoFilterBuilderModule,
-                        DxiCustomOperationModule,
-                        DxiFieldModule,
-                        DxoFilterOperationDescriptionsModule,
-                        DxoGroupOperationDescriptionsModule,
-                        DxoFilterBuilderPopupModule,
-                        DxoFilterPanelModule,
-                        DxoFilterRowModule,
-                        DxoOperationDescriptionsModule,
-                        DxoGroupingModule,
-                        DxoGroupPanelModule,
-                        DxoKeyboardNavigationModule,
-                        DxoLoadPanelModule,
-                        DxoMasterDetailModule,
-                        DxoPagerModule,
-                        DxoPagingModule,
-                        DxoRemoteOperationsModule,
-                        DxoRowDraggingModule,
-                        DxoCursorOffsetModule,
-                        DxoScrollingModule,
-                        DxoSearchPanelModule,
-                        DxiSortByGroupSummaryInfoModule,
-                        DxoSortingModule,
-                        DxoStateStoringModule,
-                        DxoSummaryModule,
-                        DxiGroupItemModule,
-                        DxoValueFormatModule,
-                        DxiTotalItemModule,
-                        DxoToolbarModule,
-                        DxTemplateModule] });
-            } exports("dk", DxDataGridModule);
-            i0.ɵɵngDeclareClassMetadata({ minVersion: "12.0.0", version: "17.3.0", ngImport: i0, type: DxDataGridModule, decorators: [{
-                        type: NgModule,
-                        args: [{
-                                imports: [
-                                    DxoColumnChooserModule,
-                                    DxoPositionModule,
-                                    DxoAtModule,
-                                    DxoBoundaryOffsetModule,
-                                    DxoCollisionModule,
-                                    DxoMyModule,
-                                    DxoOffsetModule,
-                                    DxoSearchModule,
-                                    DxoSelectionModule,
-                                    DxoColumnFixingModule,
-                                    DxoTextsModule,
-                                    DxiColumnModule,
-                                    DxiButtonModule,
-                                    DxoHeaderFilterModule,
-                                    DxoLookupModule,
-                                    DxoFormatModule,
-                                    DxoFormItemModule,
-                                    DxoLabelModule,
-                                    DxiValidationRuleModule,
-                                    DxoEditingModule,
-                                    DxiChangeModule,
-                                    DxoFormModule,
-                                    DxoColCountByScreenModule,
-                                    DxiItemModule,
-                                    DxoTabPanelOptionsModule,
-                                    DxiTabModule,
-                                    DxoButtonOptionsModule,
-                                    DxoPopupModule,
-                                    DxoAnimationModule,
-                                    DxoHideModule,
-                                    DxoFromModule,
-                                    DxoToModule,
-                                    DxoShowModule,
-                                    DxiToolbarItemModule,
-                                    DxoExportModule,
-                                    DxoFilterBuilderModule,
-                                    DxiCustomOperationModule,
-                                    DxiFieldModule,
-                                    DxoFilterOperationDescriptionsModule,
-                                    DxoGroupOperationDescriptionsModule,
-                                    DxoFilterBuilderPopupModule,
-                                    DxoFilterPanelModule,
-                                    DxoFilterRowModule,
-                                    DxoOperationDescriptionsModule,
-                                    DxoGroupingModule,
-                                    DxoGroupPanelModule,
-                                    DxoKeyboardNavigationModule,
-                                    DxoLoadPanelModule,
-                                    DxoMasterDetailModule,
-                                    DxoPagerModule,
-                                    DxoPagingModule,
-                                    DxoRemoteOperationsModule,
-                                    DxoRowDraggingModule,
-                                    DxoCursorOffsetModule,
-                                    DxoScrollingModule,
-                                    DxoSearchPanelModule,
-                                    DxiSortByGroupSummaryInfoModule,
-                                    DxoSortingModule,
-                                    DxoStateStoringModule,
-                                    DxoSummaryModule,
-                                    DxiGroupItemModule,
-                                    DxoValueFormatModule,
-                                    DxiTotalItemModule,
-                                    DxoToolbarModule,
-                                    DxIntegrationModule,
-                                    DxTemplateModule
-                                ],
-                                declarations: [
-                                    DxDataGridComponent
-                                ],
-                                exports: [
-                                    DxDataGridComponent,
-                                    DxoColumnChooserModule,
-                                    DxoPositionModule,
-                                    DxoAtModule,
-                                    DxoBoundaryOffsetModule,
-                                    DxoCollisionModule,
-                                    DxoMyModule,
-                                    DxoOffsetModule,
-                                    DxoSearchModule,
-                                    DxoSelectionModule,
-                                    DxoColumnFixingModule,
-                                    DxoTextsModule,
-                                    DxiColumnModule,
-                                    DxiButtonModule,
-                                    DxoHeaderFilterModule,
-                                    DxoLookupModule,
-                                    DxoFormatModule,
-                                    DxoFormItemModule,
-                                    DxoLabelModule,
-                                    DxiValidationRuleModule,
-                                    DxoEditingModule,
-                                    DxiChangeModule,
-                                    DxoFormModule,
-                                    DxoColCountByScreenModule,
-                                    DxiItemModule,
-                                    DxoTabPanelOptionsModule,
-                                    DxiTabModule,
-                                    DxoButtonOptionsModule,
-                                    DxoPopupModule,
-                                    DxoAnimationModule,
-                                    DxoHideModule,
-                                    DxoFromModule,
-                                    DxoToModule,
-                                    DxoShowModule,
-                                    DxiToolbarItemModule,
-                                    DxoExportModule,
-                                    DxoFilterBuilderModule,
-                                    DxiCustomOperationModule,
-                                    DxiFieldModule,
-                                    DxoFilterOperationDescriptionsModule,
-                                    DxoGroupOperationDescriptionsModule,
-                                    DxoFilterBuilderPopupModule,
-                                    DxoFilterPanelModule,
-                                    DxoFilterRowModule,
-                                    DxoOperationDescriptionsModule,
-                                    DxoGroupingModule,
-                                    DxoGroupPanelModule,
-                                    DxoKeyboardNavigationModule,
-                                    DxoLoadPanelModule,
-                                    DxoMasterDetailModule,
-                                    DxoPagerModule,
-                                    DxoPagingModule,
-                                    DxoRemoteOperationsModule,
-                                    DxoRowDraggingModule,
-                                    DxoCursorOffsetModule,
-                                    DxoScrollingModule,
-                                    DxoSearchPanelModule,
-                                    DxiSortByGroupSummaryInfoModule,
-                                    DxoSortingModule,
-                                    DxoStateStoringModule,
-                                    DxoSummaryModule,
-                                    DxiGroupItemModule,
-                                    DxoValueFormatModule,
-                                    DxiTotalItemModule,
-                                    DxoToolbarModule,
-                                    DxTemplateModule
-                                ]
                             }]
                     }] });
 
