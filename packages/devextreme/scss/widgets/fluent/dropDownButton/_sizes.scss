@@ -16,7 +16,7 @@ $fluent-dropdownbutton-icon-spindown-right-size: null !default;
 
 @else if $size == "compact" {
   $fluent-dropdownbutton-action-horizontal-padding: 8px !default;
-  $fluent-dropdownbutton-action-vertical-padding: null !default;
+  $fluent-dropdownbutton-action-vertical-padding: 2px !default;
   $fluent-dropdownbutton-icon-spindown-size: 18px;
   $fluent-dropdownbutton-icon-spindown-right-size: 12px !default;
 }
