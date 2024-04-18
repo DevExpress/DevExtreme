@@ -11,7 +11,7 @@
   white-space: pre-wrap;
 }
 
-::ng-deep .options {
+.options {
   margin-top: 20px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);

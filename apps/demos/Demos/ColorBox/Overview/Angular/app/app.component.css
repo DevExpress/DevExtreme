@@ -1,4 +1,4 @@
-::ng-deep .form {
+.form {
   min-height: 690px;
 }
 
@@ -10,31 +10,31 @@
   padding: 10px 0;
 }
 
-::ng-deep .color-block {
+.color-block {
   width: 360px;
   height: 254px;
   background-color: #f05b41;
   position: relative;
 }
 
-::ng-deep .hero-color-box {
+.hero-color-box {
   position: absolute;
   right: 0;
   left: 400px;
   top: 110px;
 }
 
-::ng-deep .color-block .superhero {
+.color-block .superhero {
   position: absolute;
   height: 100%;
   width: 100%;
 }
 
-::ng-deep .hero-block {
+.hero-block {
   position: relative;
 }
 
-::ng-deep .superhero {
+.superhero {
   background-image: url(../../../../images/hero_white.png);
 }
 

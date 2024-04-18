@@ -38,8 +38,7 @@ async function getTestLoadCount(): Promise<number> {
 }
 
 fixture`Scrolling`
-  .page(url(__dirname, '../container.html'))
-  .beforeEach(async (t) => { await t.maximizeWindow(); });
+  .page(url(__dirname, '../container.html'));
 
 safeSizeTest('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -1140,10 +1139,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
 })());
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../containerAspNet.html'))
-  .beforeEach(async (t) => {
-    await t.maximizeWindow();
-  });
+  .page(url(__dirname, '../containerAspNet.html'));
 
 test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');

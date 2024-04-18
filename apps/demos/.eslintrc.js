@@ -380,9 +380,7 @@ module.exports = {
   }, {
     files: [
       'Demos/**/jQuery/*.*',
-      'Demos/**/AngularJS/*.*',
       'utils/templates/jQuery/**/*.*',
-      'utils/templates/AngularJS/**/*.*',
     ],
     env: {
       jquery: true,

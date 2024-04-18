@@ -13,6 +13,6 @@
   height: 300px;
 }
 
-::ng-deep .label {
+.label {
   color: #767676;
 }
