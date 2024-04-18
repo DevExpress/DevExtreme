@@ -1,4 +1,4 @@
-::ng-deep .form {
+.form {
   padding: 20px;
 }
 
@@ -7,6 +7,6 @@
   margin: 10px 0 30px;
 }
 
-::ng-deep .label {
+.label {
   font-size: 16px;
 }

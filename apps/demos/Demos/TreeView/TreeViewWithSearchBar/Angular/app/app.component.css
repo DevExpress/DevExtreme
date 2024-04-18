@@ -2,7 +2,7 @@
   height: 400px;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   position: absolute;
   bottom: 0;
@@ -12,12 +12,12 @@
   background-color: #f5f5f5;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
 
