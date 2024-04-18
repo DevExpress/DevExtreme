@@ -16,8 +16,12 @@ if (!/localhost/.test(document.location.host)) {
 export class AppComponent {
   customers: Customer[];
 
+	columns: string[];
+
   constructor(service: Service) {
     this.customers = service.getCustomers();
+		
+		this.columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
   }
 }
 
