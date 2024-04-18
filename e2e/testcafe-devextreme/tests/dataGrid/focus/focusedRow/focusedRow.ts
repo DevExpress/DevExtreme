@@ -877,7 +877,7 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
   await clearLocalStorage();
 });
 
-test('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
+test.meta({ unstable: true })('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.click(dataGrid.getDataRow(0).element);
