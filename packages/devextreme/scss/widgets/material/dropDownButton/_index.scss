@@ -16,11 +16,8 @@
 @include dx-dropdownbutton(
   $material-dropdownbutton-icon-spindown-size,
   $material-dropdownbutton-action-horizontal-padding,
+  $material-dropdownbutton-action-vertical-padding,
 );
-
-.dx-dropdownbutton {
-  height: $material-dropdownbutton-height;
-}
 
 .dx-dropdownbutton-popup-wrapper {
   @include dx-dropdownlist-list-appearance();

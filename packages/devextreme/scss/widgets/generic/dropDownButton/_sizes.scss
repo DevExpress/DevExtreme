@@ -4,6 +4,7 @@
 
 $generic-dropdownbutton-icon-spindown-size: null !default;
 $generic-dropdownbutton-action-horizontal-padding: null !default;
+$generic-dropdownbutton-action-vertical-padding: null !default;
 
 @if $size == "default" {
   $generic-dropdownbutton-icon-spindown-size: 18px;

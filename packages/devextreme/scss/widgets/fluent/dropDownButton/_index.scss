@@ -16,6 +16,7 @@
 @include dx-dropdownbutton(
   $fluent-dropdownbutton-icon-spindown-size,
   $fluent-dropdownbutton-action-horizontal-padding,
+  $fluent-dropdownbutton-action-vertical-padding,
 );
 
 .dx-dropdownbutton-popup-wrapper {
@@ -23,8 +24,6 @@
 }
 
 .dx-dropdownbutton {
-  height: $fluent-dropdownbutton-height;
-
   &:not(.dx-dropdownbutton-has-arrow) {
     .dx-button-has-icon:not(.dx-button-has-text) {
       @include dx-button-onlyicon-sizing();

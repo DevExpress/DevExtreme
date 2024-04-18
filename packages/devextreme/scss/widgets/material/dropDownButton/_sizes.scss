@@ -3,8 +3,8 @@
 // adduse
 
 $material-dropdownbutton-action-horizontal-padding: null !default;
-$material-dropdownbutton-icon-spindown-size: null !default;
-$material-dropdownbutton-height: auto !default;
+$material-dropdownbutton-action-vertical-padding: null !default;
+$material-dropdownbutton-icon-spindown-size: 4px !default;
 
 @if $size == "default" {
   $material-dropdownbutton-action-horizontal-padding: 12px !default;
