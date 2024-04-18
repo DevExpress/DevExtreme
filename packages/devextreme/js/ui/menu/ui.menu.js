@@ -704,6 +704,25 @@ class Menu extends MenuBase {
         };
     }
 
+    _getVisibilityChangeEventParams(submenuItem, submenu, $rootItem, isHide) {
+        let itemData;
+        let $submenuContainer;
+
+        if(submenuItem) {
+            const anchor = isHide ? $(submenuItem).closest(`.${DX_MENU_ITEM_CLASS}`)[0] : submenuItem;
+
+            itemData = this._getItemData(anchor);
+            $submenuContainer = $(anchor).find(`.${DX_SUBMENU_CLASS}`).first();
+        } else {
+            const $overlayContent = $(submenu._overlay?.content());
+
+            itemData = this._getItemData($rootItem);
+            $submenuContainer = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).first();
+        }
+
+        return { itemData, $submenuContainer };
+    }
+
     _submenuMouseLeaveHandler($rootItem, eventArgs) {
         const target = $(eventArgs.relatedTarget).parents(`.${DX_CONTEXT_MENU_CLASS}`)[0];
         const contextMenu = this._getSubmenuByRootElement($rootItem).getOverlayContent()[0];

@@ -20953,9 +20953,17 @@ declare module DevExpress.ui {
       dxMenu<TKey>
     > & {
       /**
+       * [descr:_ui_menu_SubmenuHiddenEvent.itemData]
+       */
+      readonly itemData?: MenuBasePlainItem;
+      /**
        * [descr:_ui_menu_SubmenuHiddenEvent.rootItem]
        */
       readonly rootItem?: DevExpress.core.DxElement;
+      /**
+       * [descr:_ui_menu_SubmenuHiddenEvent.submenuContainer]
+       */
+      readonly submenuContainer?: DevExpress.core.DxElement;
     };
     /**
      * [descr:_ui_menu_SubmenuHidingEvent]
@@ -20963,9 +20971,17 @@ declare module DevExpress.ui {
     export type SubmenuHidingEvent<TKey = any> = DevExpress.events.Cancelable &
       DevExpress.events.EventInfo<dxMenu<TKey>> & {
         /**
+         * [descr:_ui_menu_SubmenuHidingEvent.itemData]
+         */
+        readonly itemData?: MenuBasePlainItem;
+        /**
          * [descr:_ui_menu_SubmenuHidingEvent.rootItem]
          */
         readonly rootItem?: DevExpress.core.DxElement;
+        /**
+         * [descr:_ui_menu_SubmenuHidingEvent.submenuContainer]
+         */
+        readonly submenuContainer?: DevExpress.core.DxElement;
       };
     /**
      * [descr:_ui_menu_SubmenuShowingEvent]
@@ -20974,9 +20990,17 @@ declare module DevExpress.ui {
       dxMenu<TKey>
     > & {
       /**
+       * [descr:_ui_menu_SubmenuShowingEvent.itemData]
+       */
+      readonly itemData?: MenuBasePlainItem;
+      /**
        * [descr:_ui_menu_SubmenuShowingEvent.rootItem]
        */
       readonly rootItem?: DevExpress.core.DxElement;
+      /**
+       * [descr:_ui_menu_SubmenuShowingEvent.submenuContainer]
+       */
+      readonly submenuContainer?: DevExpress.core.DxElement;
     };
     /**
      * [descr:_ui_menu_SubmenuShownEvent]
@@ -20985,9 +21009,17 @@ declare module DevExpress.ui {
       dxMenu<TKey>
     > & {
       /**
+       * [descr:_ui_menu_SubmenuShownEvent.itemData]
+       */
+      readonly itemData?: MenuBasePlainItem;
+      /**
        * [descr:_ui_menu_SubmenuShownEvent.rootItem]
        */
       readonly rootItem?: DevExpress.core.DxElement;
+      /**
+       * [descr:_ui_menu_SubmenuShownEvent.submenuContainer]
+       */
+      readonly submenuContainer?: DevExpress.core.DxElement;
     };
   }
   /**
