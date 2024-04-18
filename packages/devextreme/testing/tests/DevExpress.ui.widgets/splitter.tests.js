@@ -912,6 +912,34 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
 QUnit.module('Resizing', moduleConfig, () => {
     ['horizontal', 'vertical'].forEach(orientation => {
+        QUnit.test(`collapsed pane should move its neighboring pane on expansion, orientation ${orientation}`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ minSize: '250px', collapsible: true }, { }, { }, { }]
+            }, '#splitterInContainer');
+
+            const $resizeHandle = this.getResizeHandles().eq(0);
+            const keyboard = keyboardMock($resizeHandle);
+
+            const collapseKey = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+
+            keyboard.keyDown(collapseKey, { ctrlKey: true });
+
+            this.assertLayout(['0', '50', '25', '25']);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(-300, -300).dragEnd();
+
+            this.assertLayout(['0', '20', '55', '25']);
+
+            const expandKey = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+            keyboard.keyDown(expandKey, { ctrlKey: true });
+
+            this.assertLayout(['25', '0', '50', '25']);
+        });
+
         QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
             this.reinit({
                 orientation,

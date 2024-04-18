@@ -410,8 +410,10 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
           const leftItemSize = this._getItemDimension($leftItem.get(0));
 
-          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= leftItemSize) {
-            this._collapsedItemSize = leftItemSize / 2;
+          if (!rightItemData.minSize || leftItemSize > rightItemData.minSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= leftItemSize) {
+              this._collapsedItemSize = leftItemSize / 2;
+            }
           }
 
           this._panesCacheSize[rightItemIndex] = undefined;
@@ -460,8 +462,10 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
           const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= rightItemSize) {
-            this._collapsedItemSize = rightItemSize / 2;
+          if (!leftItemData.minSize || rightItemSize > leftItemData.minSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= rightItemSize) {
+              this._collapsedItemSize = rightItemSize / 2;
+            }
           }
 
           this._panesCacheSize[leftItemIndex] = undefined;
