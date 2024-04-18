@@ -1,0 +1,135 @@
+name: Demos Visual Tests
+
+concurrency:
+  group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
+  cancel-in-progress: true
+
+on:
+  pull_request:
+  push:
+    branches:
+      - "[0-9][0-9]_[0-9]"
+  workflow_dispatch:
+
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build devextreme
+    timeout-minutes: 20
+
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Restore npm cache
+        uses: actions/cache@v4
+        with:
+          path: '**/node_modules'
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+          restore-keys: ${{ runner.os }}-node-modules
+
+      - name: DevExtreme - Install packages
+        run: npm install --no-audit --no-fund
+
+      - name: DevExtreme - Build
+        run: npx nx build devextreme-main
+
+  testcafe:
+    needs:
+      - build
+    strategy:
+      fail-fast: false
+      matrix:
+        STRATEGY: [screenshots, accessibility]
+        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+        CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
+    env:
+      ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
+
+    runs-on: ubuntu-latest
+    name: ${{ matrix.CONSTEL }}-${{ matrix.STRATEGY }}-${{ matrix.THEME }}
+    timeout-minutes: 30
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Setup Chrome
+      uses: ./.github/actions/setup-chrome
+      with:
+        chrome-version: '121.0.6167.160'
+
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - name: Restore npm cache
+      uses: actions/cache@v4
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: DevExtreme - Install packages
+      run: npm install --no-audit --no-fund
+
+    - name: DevExtreme - Build
+      run: npx nx build devextreme-main
+
+    - name: Run Web Server
+      run: |
+        python -m http.server 8080 &
+        python -m http.server 8081 &
+        python -m http.server 8082 &
+        python -m http.server 8083 &
+
+    - name: Run TestCafe tests
+      shell: bash
+      working-directory: apps/demos
+      env:
+        STRATEGY: ${{ matrix.STRATEGY }}
+        CHANGEDFILEINFOSPATH: changed-files.json
+        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        #DEBUG: hammerhead:*,testcafe:*
+        CONCURRENCY: 4
+        TCQUARANTINE: true
+        CONSTEL: ${{ matrix.CONSTEL }}
+        THEME: ${{ matrix.THEME }}
+        # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
+        # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
+        # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
+        CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
+      run: npm run test-testcafe
+
+    - name: Show accessibility warnings
+      if: matrix.STRATEGY == 'accessibility'
+      working-directory: apps/demos
+      run: |
+        message=$(cat $ACCESSIBILITY_TESTCAFE_REPORT_PATH)
+        echo "::warning ::$message"
+
+    - name: Copy screenshots artifacts
+      if: failure() && matrix.STRATEGY == 'screenshots'
+      uses: actions/upload-artifact@v3
+      with:
+        name: screenshots
+        path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+        if-no-files-found: ignore
+
+    - name: Copy accessibility report
+      if: matrix.STRATEGY == 'accessibility'
+      uses: actions/upload-artifact@v3
+      with:
+        name: accessibility-reports
+        path: apps/demos/testing/artifacts/axe-reports/*
+        if-no-files-found: ignore
