@@ -85,8 +85,8 @@ fixture.disablePageReloads`CheckBox`
       DISABLED_STATE_CLASS,
     ];
 
-    for (const iconSize of [undefined, 25]) {
-      for (const rtlEnabled of [false, true]) {
+    for (const rtlEnabled of [false, true]) {
+      for (const iconSize of [undefined, 25]) {
         for (const width of [undefined, 35]) {
           for (const state of stateClasses) {
             for (const value of valueModes) {
