@@ -126,7 +126,7 @@ module('Date utils', () => {
 });
 
 module('getTimeZone', {}, () => {
-    test('Old output shoul be equal new one', function(assert) {
+    test('Old output should be equal new one', function(assert) {
         const newOutput = timeZoneUtils.getTimeZones(new Date(2024, 3, 16));
         const exceptions = [
             'Pacific/Marquesas', // old: GMT -10:30, actual GMT -9:30 (actual is correct, offset == -9.5 is correct for both)
