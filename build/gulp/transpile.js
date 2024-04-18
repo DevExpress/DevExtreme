@@ -133,13 +133,22 @@ const createTranspileTask = (input, output, pipes) =>
 
 
 const transpile = (src, dist, { jsPipes, tsPipes }) => {
-    const transpileJS = createTranspileTask(src, dist, jsPipes);
-    const transpileTS = createTranspileTask(TS_OUTPUT_SRC, `${dist}/__internal`, tsPipes);
+    const transpilePipes = [];
 
-    transpileJS.displayName = `transpile JS: ${dist}`;
-    transpileTS.displayName = `transpile TS: ${dist}`;
+    if(tsPipes) {
+        const transpileTS = createTranspileTask(TS_OUTPUT_SRC, `${dist}/__internal`, tsPipes);
+        transpileTS.displayName = `transpile TS: ${dist}`;
+        transpilePipes.push(transpileTS);
+    }
 
-    return gulp.series(transpileTS, transpileJS);
+    if(jsPipes) {
+        const transpileJS = createTranspileTask(src, dist, jsPipes);
+        transpileJS.displayName = `transpile JS: ${dist}`;
+        transpilePipes.push(transpileJS);
+    }
+
+
+    return gulp.series(...transpilePipes);
 };
 
 const cachedJsBabelCjs = () =>
@@ -195,7 +204,6 @@ const transpileEsm = (dist) => gulp.series.apply(gulp, [
     transpileProd(path.join(dist, './esm'), true),
     transpile(bundlesSrc, path.join(dist, './bundles'), {
         jsPipes: [ removeDebug(), cachedJsBabelCjs() ],
-        tsPipes: [ removeDebug(), babel(transpileConfig.tsCjs) ],
     }),
     () => gulp
         .src(esmTranspileSrc)
