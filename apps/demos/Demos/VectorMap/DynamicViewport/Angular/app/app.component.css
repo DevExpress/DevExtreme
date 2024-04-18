@@ -2,7 +2,7 @@
   height: 420px;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;
@@ -20,17 +20,17 @@
   flex-direction: column;
 }
 
-::ng-deep .option {
+.option {
   display: flex;
   align-items: center;
   min-height: 34px;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option > span {
+.option > span {
   width: 140px;
 }

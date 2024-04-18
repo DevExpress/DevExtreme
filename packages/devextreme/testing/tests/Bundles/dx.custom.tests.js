@@ -1,5 +1,4 @@
 const $ = require('jquery');
-const angular = require('angular');
 
 require('bundles/dx.custom.js');
 
@@ -15,8 +14,6 @@ QUnit.test('DevExpress namespaces', function(assert) {
     $.each(namespaces, function(index, namespace) {
         assert.ok(DevExpress[namespace], namespace + ' namespace');
     });
-
-    assert.ok(angular.module('dx'), 'angular integration');
 });
 
 require('./bundlesParts/core.tests.js');

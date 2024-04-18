@@ -2814,6 +2814,48 @@ QUnit.module('Accessibility', {
         assert.strictEqual($buttonElements.eq(1).attr('aria-expanded'), 'false');
     });
 
+    QUnit.test('button group element should have correct role if splitButton=true', function(assert) {
+        const instance = this.createInstance({ splitButton: true });
+
+        const buttonGroup = getButtonGroup(instance).$element();
+
+        assert.strictEqual(buttonGroup.attr('role'), 'menu');
+    });
+
+    QUnit.test('button group element should have correct role if splitButton was changed in runtime', function(assert) {
+        const instance = this.createInstance({ splitButton: true });
+
+        instance.option({ splitButton: false });
+
+        assert.strictEqual(getButtonGroup(instance).$element().attr('role'), 'group');
+
+        instance.option({ splitButton: true });
+
+        assert.strictEqual(getButtonGroup(instance).$element().attr('role'), 'menu');
+    });
+
+    QUnit.test('buttons should have role menuitem if splitButton=true', function(assert) {
+        this.createInstance({ splitButton: true });
+
+        const buttonElements = this.getButtons();
+
+        assert.strictEqual(buttonElements.eq(0).attr('role'), 'menuitem');
+        assert.strictEqual(buttonElements.eq(1).attr('role'), 'menuitem');
+    });
+
+    QUnit.test('buttons should have correct role if splitButton was changed in runtime', function(assert) {
+        const instance = this.createInstance({ splitButton: true });
+
+        instance.option({ splitButton: false });
+
+        assert.strictEqual(this.getButtons().eq(0).attr('role'), 'button');
+
+        instance.option({ splitButton: true });
+
+        assert.strictEqual(this.getButtons().eq(0).attr('role'), 'menuitem');
+        assert.strictEqual(this.getButtons().eq(1).attr('role'), 'menuitem');
+    });
+
     QUnit.test('check aria-owns attr for element', function(assert) {
         const instance = this.createInstance();
 

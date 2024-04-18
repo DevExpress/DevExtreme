@@ -8,7 +8,7 @@ import { sales } from './data';
 fixture.disablePageReloads`pivotGrid_headerFilter`
   .page(url(__dirname, '../container.html'));
 
-test.skip('Header filter popup', async (t) => {
+test.meta({ unstable: true })('Header filter popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
 
