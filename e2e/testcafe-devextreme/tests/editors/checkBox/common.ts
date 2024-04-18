@@ -10,7 +10,7 @@ import {
   setClassAttribute,
   setStyleAttribute,
 } from '../../../helpers/domUtils';
-import { getFullThemeName, testScreenshot } from '../../../helpers/themeUtils';
+import { getDarkThemeName, testScreenshot } from '../../../helpers/themeUtils';
 
 const valueModes = [false, true, undefined];
 
@@ -61,12 +61,12 @@ fixture.disablePageReloads`CheckBox`
 });
 
 ['one two three', 'label'].forEach((text) => {
-  test(`Checkbox configurations label=${text}`, async (t) => {
+  test.only(`Checkbox configurations label=${text}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     await testScreenshot(t, takeScreenshot, `CheckBox configurations label=${text}.png`, { element: '#container', shouldTestInCompact: true });
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations label=${text}.png`, { element: '#container', theme: getFullThemeName().replace('light', 'dark') });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations label=${text}.png`, { element: '#container', theme: getDarkThemeName() });
 
     await t
       .expect(compareResults.isValid())

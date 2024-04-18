@@ -18,6 +18,8 @@ export const getFullThemeName = (): string => process.env.theme ?? defaultThemeN
 
 export const getThemeName = (): string => getFullThemeName().split('.')[0];
 
+export const getDarkThemeName = (): string => getFullThemeName().replace('light', 'dark');
+
 export async function testScreenshot(
   t: TestController,
   takeScreenshot: (screenshotName: string, element?: Selector | string | null) => Promise<boolean>,
