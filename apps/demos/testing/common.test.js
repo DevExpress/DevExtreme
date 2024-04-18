@@ -73,6 +73,8 @@ const getTestSpecificSkipRules = (testName) => {
     case 'DataGrid-RowSelection':
     case 'FilterBuilder-WithList':
       return ['image-alt'];
+    case 'DataGrid-InfiniteScrolling':
+      return ['aria-required-children'];
     case 'Splitter-Overview':
       return ['aria-allowed-attr'];
     case 'TagBox-Overview':
