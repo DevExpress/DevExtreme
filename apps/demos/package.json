@@ -39,7 +39,7 @@
         "fs-extra": "11.1.1",
         "globalize": "1.7.0",
         "html-react-parser": "1.4.14",
-        "jquery": "3.6.3",
+        "jquery": "3.7.1",
         "jspdf": "2.5.1",
         "jspdf-autotable": "3.5.28",
         "mustache": "4.2.0",
