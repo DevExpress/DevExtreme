@@ -246,10 +246,16 @@ export class AppointmentPopup {
         return;
       }
 
+      const { repeat } = this.form.formData;
       const adapter = this._createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter.clone({ pathTimeZone: 'fromAppointment' } as any); // TODO:
+      const shouldClearRecurrenceRule = !repeat && !!clonedAdapter.recurrenceRule;
 
       this._addMissingDSTTime(adapter, clonedAdapter);
+
+      if (shouldClearRecurrenceRule) {
+        clonedAdapter.recurrenceRule = '';
+      }
 
       const appointment = clonedAdapter.source();
       delete appointment.repeat; // TODO
