@@ -1,6 +1,13 @@
 /* eslint-disable import/no-extraneous-dependencies, no-console */
 const path = require('path');
 const fs = require('fs-extra');
+
+const rollup = require('rollup');
+const nodeResolve =   require('@rollup/plugin-node-resolve');
+const commonjs =   require('@rollup/plugin-commonjs');
+const replace =   require('@rollup/plugin-replace');
+const babel =   require('@rollup/plugin-babel');
+
 const Builder = require('systemjs-builder');
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
@@ -78,7 +85,29 @@ const getDefaultBuilderConfig = (framework, additionPaths) => ({
   },
 });
 
-const prepareConfigs = (framework) => {
+const generateDxAngularBundles = async () => {
+  const baseDir = '../../node_modules/devextreme-angular/';
+  const srcDir = path.join(baseDir, 'fesm2022');
+  const componentNames = fs.readdirSync(srcDir)
+      .filter((fileName) => fileName.indexOf('mjs.map') !== -1)
+      .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
+      .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.mjs.map', ''));
+
+  const files = [
+    `devextreme-angular.mjs`,
+    `devextreme-angular-core.mjs`,
+     ...componentNames.map((componentName) => `devextreme-angular-ui-${componentName}.mjs`),
+
+  ];
+
+  for (let i = 0; i < files.length; i++) {
+    await buildUmd(srcDir, files[i]);
+  }
+
+
+}
+
+const prepareConfigs = async (framework) => {
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const currentPackage = require(`devextreme-${framework}/package.json`);
 
@@ -104,14 +133,17 @@ const prepareConfigs = (framework) => {
     ];
 
     // eslint-disable-next-line spellcheck/spell-checker
-    if (currentPackage.fesm2015) {
+    if (currentPackage.module?.startsWith('fesm2022')) {
       main = `devextreme-${framework}`;
       minify = false;
+
+      await generateDxAngularBundles();
+
       const bundlesRoot = '../../node_modules/devextreme-angular/bundles';
       const componentNames = fs.readdirSync(bundlesRoot)
-        .filter((fileName) => fileName.indexOf('umd.js.map') !== -1)
+        .filter((fileName) => fileName.indexOf('umd.js') !== -1)
         .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
-        .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js.map', ''));
+        .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
 
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
@@ -174,13 +206,60 @@ const prepareConfigs = (framework) => {
   };
 };
 
+async function buildUmd(dir, file) {
+  const bundle = await rollup.rollup({
+    input: path.join(dir,file),
+    plugins:[
+      replace({
+        preventAssignment: true,
+        'process.env.NODE_ENV': JSON.stringify( 'production' )
+      }),
+      nodeResolve({
+        preferBuiltins: false,
+        browser: true
+      }),
+      commonjs(),
+      babel({
+        babelHelpers: 'bundled',
+        presets: ['@babel/preset-env']
+      }),
+    ],
+    external: id => {
+      return /^@angular\//.test(id)
+          || /^devextreme\//.test(id)
+          || /^devextreme-angular\//.test(id)
+    },
+  });
+  const libName = file
+      .replace(/\.\w+$/, '')
+      .replace(/^devextreme-angular-ui-/,'devextreme-angular/ui/')
+      .replace(/^devextreme-angular-/,'devextreme-angular/');
+
+  await bundle.write({
+    file: path.join(path.dirname(dir), 'bundles', file.replace(/\.mjs$/, '.umd.js')),
+    format: 'umd',
+    amd: {
+      id: libName
+    },
+    globals: {
+      '@angular/core': 'ng.core',
+      '@angular/common': 'ng.common',
+      '@angular/forms': 'ng.forms',
+      '@angular/platform-browser': 'ng.platformBrowser',
+    },
+    name: libName
+  });
+  await bundle.close();
+}
+
+
 const build = async (framework) => {
   const builder = new Builder();
   prepareModulesToNamedImport();
 
   const {
     builderConfig, packages, bundlePath, bundleOpts,
-  } = prepareConfigs(framework);
+  } = await prepareConfigs(framework);
 
   builder.config(builderConfig);
 
