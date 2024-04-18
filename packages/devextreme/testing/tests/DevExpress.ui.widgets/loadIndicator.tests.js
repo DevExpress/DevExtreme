@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import support from 'core/utils/support';
-
+import messageLocalization from 'localization/message';
 import 'ui/load_indicator';
 
 import 'generic_light.css!';
@@ -86,3 +86,17 @@ QUnit.module('Events', () => {
     });
 });
 
+QUnit.module('accessability', () => {
+    QUnit.test('role on load indicator', function(assert) {
+        const instance = $('#loadIndicator').dxLoadIndicator({ visible: true }).dxLoadIndicator('instance');
+
+        assert.strictEqual(instance.$element().attr('role'), 'alert');
+    });
+
+    QUnit.test('load indicator has correct aria-label', function(assert) {
+        const label = messageLocalization.format('Loading');
+        const instance = $('#loadIndicator').dxLoadIndicator({ visible: true }).dxLoadIndicator('instance');
+
+        assert.strictEqual(instance.$element().attr('aria-label'), label);
+    });
+});

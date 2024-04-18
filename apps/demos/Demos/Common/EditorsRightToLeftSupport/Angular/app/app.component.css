@@ -1,4 +1,4 @@
-::ng-deep .options {
+.options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
 }
@@ -7,17 +7,17 @@
   margin: 0;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
   padding-right: 15px;
 }
 
-::ng-deep .option > span {
+.option > span {
   margin-right: 10px;
 }
 

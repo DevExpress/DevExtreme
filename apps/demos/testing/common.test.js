@@ -54,6 +54,8 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
+    case 'DataGrid-InfiniteScrolling':
+      return ['aria-required-children'];
     case 'Splitter-Overview':
       return ['aria-allowed-attr'];
     case 'TagBox-Overview':

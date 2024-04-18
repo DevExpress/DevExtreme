@@ -2,7 +2,7 @@
   display: flex;
 }
 
-::ng-deep .calendar-container {
+.calendar-container {
   display: flex;
   flex-direction: column;
   flex-grow: 1;
@@ -10,16 +10,16 @@
   justify-content: center;
 }
 
-::ng-deep .caption {
+.caption {
   font-weight: 500;
   font-size: 18px;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }

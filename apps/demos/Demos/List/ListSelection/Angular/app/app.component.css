@@ -1,5 +1,5 @@
 ::ng-deep .selected-data,
-::ng-deep .options {
+.options {
   margin-top: 20px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
@@ -15,11 +15,11 @@
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
 
-::ng-deep .option > span {
+.option > span {
   width: 120px;
   display: inline-block;
 }

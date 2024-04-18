@@ -76,7 +76,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxBarGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxBarGauge;
+    instance: DxBarGauge = null;
 
     /**
      * [descr:dxBarGaugeOptions.animation]
