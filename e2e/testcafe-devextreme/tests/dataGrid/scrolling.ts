@@ -1141,7 +1141,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'));
 
-test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
+test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
@@ -1610,7 +1610,7 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
   });
 });
 
-test.meta({ unstable: true })('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

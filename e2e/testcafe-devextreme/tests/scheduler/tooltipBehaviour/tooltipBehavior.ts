@@ -112,7 +112,7 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
       .ok()
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-  }, [600, 400]).meta({ unstable: true }).before(async () => createScheduler({
+  }, [600, 400]).before(async () => createScheduler({
     views: ['week'],
     currentView: 'week',
     dataSource,
