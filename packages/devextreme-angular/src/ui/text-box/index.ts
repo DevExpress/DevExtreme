@@ -75,7 +75,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTextBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxTextBox;
+    instance: DxTextBox = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

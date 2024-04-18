@@ -153,7 +153,7 @@ import { DxiValueAxisComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxChart;
+    instance: DxChart = null;
 
     /**
      * [descr:BaseChartOptions.adaptiveLayout]
