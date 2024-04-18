@@ -1,12 +1,6 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import {
-  createComponentVNode,
-  createFragment,
-  createVNode,
-} from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps } from '../types';
@@ -25,7 +19,7 @@ export interface DateHeaderCellProps extends CellBaseProps {
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
-const DateHeaderCellDefaultProps: DateHeaderCellProps = {
+export const DateHeaderCellDefaultProps: DateHeaderCellProps = {
   ...CellBaseDefaultProps,
   today: false,
   colSpan: 1,
@@ -35,7 +29,7 @@ const DateHeaderCellDefaultProps: DateHeaderCellProps = {
 };
 
 export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
-  render(): VNode {
+  render(): JSX.Element {
     const {
       colSpan,
       dateCellTemplate,
@@ -53,51 +47,62 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
       isWeekDayCell,
       today,
     } = this.props;
-    const timeCellTemplateComponent = getTemplate(timeCellTemplate);
-    const dateCellTemplateComponent = getTemplate(dateCellTemplate);
     const cellClasses = renderUtils.combineClasses({
       'dx-scheduler-header-panel-cell': true,
       'dx-scheduler-cell-sizes-horizontal': true,
       'dx-scheduler-header-panel-current-time-cell': today,
       'dx-scheduler-header-panel-week-cell': isWeekDayCell,
-      [className]: !!className,
+      [className ?? '']: !!className,
     });
-    const classNames = renderUtils
+    const classes = renderUtils
       .getGroupCellClasses(isFirstGroupCell, isLastGroupCell, cellClasses);
     const useTemplate = (!isTimeCellTemplate && !!dateCellTemplate)
       || (isTimeCellTemplate && !!timeCellTemplate);
+    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
+    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
 
-    const children = useTemplate
-      ? createFragment([isTimeCellTemplate
-      && timeCellTemplateComponent
-      && timeCellTemplateComponent({
-        data: {
-          date: startDate,
-          text,
-          groups,
-          groupIndex,
-        },
-        index,
-      }), !isTimeCellTemplate
-      && dateCellTemplateComponent
-      && dateCellTemplateComponent({
-        data: {
-          date: startDate,
-          text,
-          groups,
-          groupIndex,
-        },
-        index,
-      })], 0)
-      : createComponentVNode(2, DateHeaderText, {
-        splitText,
-        text,
-      });
+    const children = useTemplate ? (
+        // TODO: this is a workaround for https://github.com/DevExpress/devextreme-renovation/issues/574
+        <>
+          {isTimeCellTemplate && TimeCellTemplateComponent
+            && TimeCellTemplateComponent({
+              data: {
+                date: startDate,
+                text,
+                groups,
+                groupIndex,
+              },
+              index,
+            })}
+          {!isTimeCellTemplate && DateCellTemplateComponent
+            && DateCellTemplateComponent({
+              data: {
+                date: startDate,
+                text,
+                groups,
+                groupIndex,
+              },
+              index,
+            })}
+        </>
+    )
+      : (
+        <DateHeaderText
+          splitText={splitText}
+          text={text}
+        />
+      );
 
-    return createVNode(1, 'th', classNames, children, 0, {
-      colSpan,
-      title: text,
-    });
+    return (
+      <th
+        className={classes}
+        colSpan={colSpan}
+        title={text}
+      >
+        {children}
+      </th>
+    );
   }
 }
+
 DateHeaderCell.defaultProps = DateHeaderCellDefaultProps;

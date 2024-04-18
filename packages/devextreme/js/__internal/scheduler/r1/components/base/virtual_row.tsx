@@ -1,11 +1,9 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import type { RowProps } from './row';
 import { Row, RowDefaultProps } from './row';
-import { VirtualCell } from './virtual_cell';
+import { VirtualCell, VirtualCellDefaultProps } from './virtual_cell';
 
 export interface VirtualRowProps extends RowProps {
   height?: number;
@@ -45,7 +43,7 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       className,
       leftVirtualCellCount,
@@ -56,19 +54,30 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
       height,
     } = this.props;
     const classes = `dx-scheduler-virtual-row ${className}`;
-    const resultStyles = renderUtils.addHeightToStyle(height, styles);
+    const modifiedStyles = renderUtils.addHeightToStyle(height, styles);
     const virtualCells = this.getVirtualCells();
 
-    return createComponentVNode(2, Row, {
-      styles: resultStyles,
-      className: classes,
-      leftVirtualCellWidth,
-      rightVirtualCellWidth,
-      leftVirtualCellCount,
-      rightVirtualCellCount,
-      children: virtualCells
-        .map((_, index) => createComponentVNode(2, VirtualCell, null, index.toString())),
-    });
+    return (
+      <Row
+        className={classes}
+        styles={modifiedStyles}
+        leftVirtualCellWidth={leftVirtualCellWidth}
+        rightVirtualCellWidth={rightVirtualCellWidth}
+        leftVirtualCellCount={leftVirtualCellCount}
+        rightVirtualCellCount={rightVirtualCellCount}
+      >
+        {
+          virtualCells.map(
+            (_, index) => (
+              <VirtualCell
+                key={index.toString()}
+                width={VirtualCellDefaultProps.width}
+                isHeaderCell={VirtualCellDefaultProps.isHeaderCell} />
+            ),
+          )
+        }
+      </Row>
+    );
   }
 }
 VirtualRow.defaultProps = VirtualRowDefaultProps;

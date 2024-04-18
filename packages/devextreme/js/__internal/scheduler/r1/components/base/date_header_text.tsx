@@ -1,6 +1,4 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { VNode } from 'inferno';
-import { createFragment, createVNode } from 'inferno';
 
 export interface DateHeaderTextProps {
   text?: string;
@@ -31,24 +29,26 @@ export class DateHeaderText extends BaseInfernoComponent<DateHeaderTextProps> {
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       splitText,
       text,
     } = this.props;
     const textParts = this.getTextParts();
 
-    return createFragment(splitText
-      ? textParts.map(
-        (part) => createVNode(
-          1,
-          'div',
-          'dx-scheduler-header-panel-cell-date',
-          createVNode(1, 'span', null, part, 0),
-          2,
-        ),
-      )
-      : text, 0);
+    return (
+      <>
+        {
+          splitText
+            ? textParts.map((part) => (
+              <div className="dx-scheduler-header-panel-cell-date">
+                <span>{part}</span>
+              </div>
+            ))
+            : text
+        }
+      </>
+    );
   }
 }
 

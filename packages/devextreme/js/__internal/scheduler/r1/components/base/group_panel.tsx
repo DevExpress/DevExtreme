@@ -2,8 +2,6 @@ import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { RefObject } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import { VERTICAL_GROUP_ORIENTATION } from '../../const';
 import type { Group, GroupOrientation } from '../../types';
@@ -31,7 +29,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
     return [createReRenderEffect()];
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       className,
       elementRef,
@@ -42,24 +40,27 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
       groups,
       styles,
     } = this.props;
-    const resourceCellTemplateComponent = getTemplate(resourceCellTemplate);
+    const ResourceCellTemplateComponent = getTemplate(
+      resourceCellTemplate,
+    );
     const isVerticalLayout = isVerticalGroupingApplied(groups, groupOrientation);
 
-    return isVerticalLayout ? createComponentVNode(2, GroupPanelVertical, {
-      height,
-      resourceCellTemplate: resourceCellTemplateComponent,
-      className,
-      groupPanelData,
-      elementRef,
-      styles,
-    }) : createComponentVNode(2, GroupPanelHorizontal, {
-      height,
-      resourceCellTemplate: resourceCellTemplateComponent,
-      className,
-      groupPanelData,
-      elementRef,
-      styles,
-    });
+    const Layout = isVerticalLayout ? GroupPanelVertical : GroupPanelHorizontal;
+
+    return (
+     <Layout
+       height={height}
+       resourceCellTemplate={ResourceCellTemplateComponent}
+       className={className}
+       groupPanelData={groupPanelData}
+       elementRef={elementRef}
+       styles={styles}
+       groups={GroupPanelDefaultProps.groups}
+       groupOrientation={GroupPanelDefaultProps.groupOrientation}
+       groupByDate={GroupPanelDefaultProps.groupByDate}
+     />
+    );
   }
 }
+
 GroupPanel.defaultProps = GroupPanelDefaultProps;

@@ -2,11 +2,9 @@ import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate, RefObject } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import type { CellTemplateProps } from '../types';
-import { DateTableBody } from './date_table_body';
+import { DateTableBody, DateTableBodyDefaultProps } from './date_table_body';
 import { DateTableCellBase } from './date_table_cell_base';
 import type { LayoutProps } from './layout_props';
 import { LayoutDefaultProps } from './layout_props';
@@ -28,7 +26,7 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
     return [createReRenderEffect()];
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       addDateTableClass,
       tableRef,
@@ -46,31 +44,38 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
     const leftVirtualCellWidth = viewData.leftVirtualCellWidth ?? 0;
     const rightVirtualCellWidth = viewData.rightVirtualCellWidth ?? 0;
     const virtualCellsCount = viewData.groupedData[0].dateTable[0].cells.length;
-    const cellTemplateComponent = getTemplate(cellTemplate);
-    const dataCellTemplateComponent = getTemplate(dataCellTemplate);
+    const CellTemplateComponent = getTemplate(cellTemplate);
+    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
-    return createComponentVNode(2, Table, {
-      ...restProps,
-      tableRef,
-      topVirtualRowHeight,
-      bottomVirtualRowHeight,
-      leftVirtualCellWidth,
-      rightVirtualCellWidth,
-      leftVirtualCellCount: viewData.leftVirtualCellCount,
-      rightVirtualCellCount: viewData.rightVirtualCellCount,
-      virtualCellsCount,
-      className: classes,
-      width,
-      children: createComponentVNode(2, DateTableBody, {
-        cellTemplate: cellTemplateComponent,
-        viewData,
-        dataCellTemplate: dataCellTemplateComponent,
-        leftVirtualCellWidth,
-        rightVirtualCellWidth,
-        groupOrientation,
-        addVerticalSizesClassToRows,
-      }),
-    });
+    return (
+      <Table
+        {...restProps}
+        tableRef={tableRef}
+        topVirtualRowHeight={topVirtualRowHeight}
+        bottomVirtualRowHeight={bottomVirtualRowHeight}
+        leftVirtualCellWidth={leftVirtualCellWidth}
+        rightVirtualCellWidth={rightVirtualCellWidth}
+        leftVirtualCellCount={viewData.leftVirtualCellCount}
+        rightVirtualCellCount={viewData.rightVirtualCellCount}
+        virtualCellsCount={virtualCellsCount}
+        className={classes}
+        width={width}
+      >
+        <DateTableBody
+          cellTemplate={CellTemplateComponent}
+          viewData={viewData}
+          dataCellTemplate={DataCellTemplateComponent}
+          leftVirtualCellWidth={leftVirtualCellWidth}
+          rightVirtualCellWidth={rightVirtualCellWidth}
+          groupOrientation={groupOrientation}
+          addVerticalSizesClassToRows={addVerticalSizesClassToRows}
+          topVirtualRowHeight={DateTableBodyDefaultProps.topVirtualRowHeight}
+          bottomVirtualRowHeight={DateTableBodyDefaultProps.bottomVirtualRowHeight}
+          addDateTableClass={DateTableBodyDefaultProps.addDateTableClass}
+        />
+      </Table>
+    );
   }
 }
+
 DateTable.defaultProps = DateTableDefaultProps;
