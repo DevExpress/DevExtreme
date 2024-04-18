@@ -1,10 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { format } from '../../../core/utils/string';
-
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
-const DEFAULT_PRE_LINK_TEXT = 'For evaluation purposes only. Redistribution not authorized. Please ';
-const DEFAULT_LINK_TEXT = 'purchase a license';
-const DEFAULT_POST_LINK_TEXT = ' to continue use of DevExpress product libraries (v{0}).';
 const componentNames = {
   trigger: 'dx-license-trigger',
   panel: 'dx-license',
@@ -12,8 +7,6 @@ const componentNames = {
 const attributeNames = {
   buyNow: 'buy-now',
   version: 'version',
-  linkText: 'link-text',
-  message: 'message',
 };
 const commonStyles = {
   opacity: '1',
@@ -91,44 +84,14 @@ class DxLicense extends HTMLElement {
     return link;
   }
 
-  private _createDefaultTextNodes(): Node[] {
-    return [
-      this._createSpan(DEFAULT_PRE_LINK_TEXT),
-      this._createLink(DEFAULT_LINK_TEXT, this.getAttribute(attributeNames.buyNow) as string),
-      this._createSpan(format(DEFAULT_POST_LINK_TEXT, this.getAttribute(attributeNames.version))),
-    ];
-  }
-
-  private _createCustomTextNodes(messagePattern: string, linkText: string | null): Node[] {
-    const nodes: Node[] = [];
-    const [preLinkText, postLinkText] = messagePattern.split('{0}');
-
-    if (preLinkText) {
-      nodes.push(this._createSpan(preLinkText));
-    }
-
-    if (linkText) {
-      nodes.push(this._createLink(linkText, this.getAttribute(attributeNames.buyNow) as string));
-    }
-
-    if (postLinkText) {
-      nodes.push(this._createSpan(postLinkText));
-    }
-
-    return nodes;
-  }
-
   private _reassignComponent(): void {
     this.innerHTML = '';
     this.style.cssText = this._containerStyles;
-
-    const linkText = this.getAttribute(attributeNames.linkText);
-    const messagePattern = this.getAttribute(attributeNames.message);
-    const nodes = messagePattern
-      ? this._createCustomTextNodes(messagePattern, linkText)
-      : this._createDefaultTextNodes();
-
-    this.append(...nodes);
+    this.append(
+      this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
+      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
+      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
+    );
   }
 
   public connectedCallback(): void {
@@ -166,13 +129,15 @@ class DxLicenseTrigger extends HTMLElement {
     if (!licensePanel.length) {
       const license = document.createElement(componentNames.panel);
 
-      Object.values(attributeNames).forEach((attrName) => {
-        const attrValue = this.getAttribute(attrName);
+      license.setAttribute(
+        attributeNames.version,
+        this.getAttribute(attributeNames.version) as string,
+      );
 
-        if (attrValue) {
-          license.setAttribute(attrName, attrValue);
-        }
-      });
+      license.setAttribute(
+        attributeNames.buyNow,
+        this.getAttribute(attributeNames.buyNow) as string,
+      );
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
 

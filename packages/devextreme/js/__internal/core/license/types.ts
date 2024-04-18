@@ -29,17 +29,6 @@ export interface LicenseCheckParams {
   error: LicenseVerifyResult | undefined;
 }
 
-export interface TrialPanelOptions {
-  buyNowUrl: string;
-  version: string;
-}
-
-export interface CustomTrialPanelOptions {
-  customMessagePattern: string;
-  customLinkText?: string;
-  buyNowUrl?: string;
-}
-
 export interface ParsedVersion {
   major: number;
   minor: number;

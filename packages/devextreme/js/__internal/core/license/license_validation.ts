@@ -12,12 +12,10 @@ import {
   trialPanelAttributeNames,
 } from './trial_panel';
 import type {
-  CustomTrialPanelOptions,
   License,
   LicenseCheckParams,
   ParsedVersion,
   Token,
-  TrialPanelOptions,
 } from './types';
 import { TokenKind } from './types';
 
@@ -160,43 +158,15 @@ function getLicenseCheckParams({ licenseKey, version }: {
   }
 }
 
-function renderTrialPanel(attributes: Record<string, string>): void {
+export function showTrialPanel(buyNowUrl: string, version: string): void {
   registerTrialPanelComponents();
 
   const trialPanelTrigger = document.createElement(DX_LICENSE_TRIGGER_NAME);
 
-  Object.entries(attributes).forEach(([attrName, attrValue]) => {
-    trialPanelTrigger.setAttribute(attrName, attrValue);
-  });
+  trialPanelTrigger.setAttribute(trialPanelAttributeNames.buyNow, buyNowUrl);
+  trialPanelTrigger.setAttribute(trialPanelAttributeNames.version, version);
 
   document.body.appendChild(trialPanelTrigger);
-}
-
-export function showTrialPanel({
-  buyNowUrl,
-  version,
-}: TrialPanelOptions): void {
-  renderTrialPanel({
-    [trialPanelAttributeNames.buyNow]: buyNowUrl,
-    [trialPanelAttributeNames.version]: version,
-  });
-}
-
-export function showCustomTrialPanel({
-  buyNowUrl,
-  customMessagePattern,
-  customLinkText,
-}: CustomTrialPanelOptions): void {
-  const attributes: Record<string, string> = {};
-
-  attributes[trialPanelAttributeNames.message] = customMessagePattern;
-
-  if (customLinkText && buyNowUrl) {
-    attributes[trialPanelAttributeNames.buyNow] = buyNowUrl;
-    attributes[trialPanelAttributeNames.linkText] = customLinkText;
-  }
-
-  renderTrialPanel(attributes);
 }
 
 function shouldShowTrialPanel(
@@ -237,10 +207,7 @@ export function validateLicense(licenseKey: string, version: string = packageVer
   const checkParams = getLicenseCheckParams({ licenseKey, version });
 
   if (shouldShowTrialPanel(checkParams, licenseKey, version)) {
-    showTrialPanel({
-      buyNowUrl: BUY_NOW_LINK,
-      version,
-    });
+    showTrialPanel(BUY_NOW_LINK, version);
   }
 
   const { preview, internal, error } = checkParams;
