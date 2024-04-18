@@ -14,7 +14,7 @@ module.exports = {
                 const widgetNames = $widgetElement.data().dxComponents;
                 widgetNames?.forEach((name) => {
                     if($widgetElement.hasClass('dx-widget')) {
-                        $widgetElement[name]('dispose');
+                        $widgetElement[name]?.('dispose');
                     }
                 });
                 $widgetElement.empty();
