@@ -145,6 +145,7 @@ class DxLicense extends HTMLElement {
       this._observer.observe(this, {
         childList: true,
         attributes: true,
+        // eslint-disable-next-line spellcheck/spell-checker
         subtree: true,
       });
     }
