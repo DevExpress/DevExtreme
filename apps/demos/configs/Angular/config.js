@@ -40,16 +40,36 @@ window.config = {
   },
   paths: {
     'npm:': '../../../../../../node_modules/',
+    'npm-demos:': '../../../../node_modules/',
+    'bundles:': '../../../../bundles-ng/',
+    'bundles-dx:': '../../../../bundles-dx/',
   },
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
-    '@angular/core': 'npm:@angular/core',
-    '@angular/platform-browser': 'npm:@angular/platform-browser',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic',
-    '@angular/forms': 'npm:@angular/forms',
-    '@angular/common': 'npm:@angular/common',
-    '@angular/compiler': 'npm:@angular/compiler',
+
+    '@angular/compiler': 'bundles:@angular/compiler.umd.js',
+    '@angular/platform-browser-dynamic': 'bundles:@angular/platform-browser-dynamic.umd.js',
+    '@angular/core': 'bundles:@angular/core.umd.js',
+    '@angular/core/primitives/signals': 'bundles:@angular/core.primitives.signals.umd.js',
+    '@angular/common': 'bundles:@angular/common.umd.js',
+    '@angular/common/http': 'bundles:@angular/common-http.umd.js',
+    '@angular/platform-browser': 'bundles:@angular/platform-browser.umd.js',
+    '@angular/platform-browser/animations': 'bundles:@angular/platform-browser.umd.js',
+    '@angular/forms': 'bundles:@angular/forms.umd.js',
+
+    'devextreme': 'npm:devextreme/cjs',
+    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
+    'jszip': 'npm:jszip/dist/jszip.min.js',
+    'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
+    'devexpress-diagram': 'npm:devexpress-diagram',
+    'devexpress-gantt': 'npm:devexpress-gantt',
+
+    'devextreme-angular': 'bundles-dx:devextreme-angular/devextreme-angular.js',
+    'devextreme-angular/ui/data-grid': 'bundles-dx:devextreme-angular/devextreme-angular-ui-data-grid.js',
+
+    '@devextreme/runtime': 'npm:@devextreme/runtime',
+
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
@@ -107,14 +127,6 @@ window.config = {
     'luxon': 'npm:luxon/build/global/luxon.min.js',
     'es6-object-assign': 'npm:es6-object-assign',
 
-    'devextreme': 'npm:devextreme/cjs',
-    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
-    'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
-    'devexpress-diagram': 'npm:devexpress-diagram',
-    'devexpress-gantt': 'npm:devexpress-gantt',
-    'devextreme-angular': 'npm:devextreme-angular',
-    '@devextreme/runtime': 'npm:@devextreme/runtime',
     'inferno': 'npm:inferno/dist/inferno.min.js',
     'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
     'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
@@ -164,13 +176,8 @@ window.config = {
   packageConfigPaths: [
     'npm:@devextreme/*/package.json',
     'npm:@devextreme/runtime/inferno/package.json',
-    'npm:@angular/*/package.json',
-    'npm:@angular/common/*/package.json',
     'npm:rxjs/package.json',
     'npm:rxjs/operators/package.json',
-    'npm:devextreme-angular/*/package.json',
-    'npm:devextreme-angular/ui/*/package.json',
-    'npm:devextreme-angular/package.json',
     'npm:devexpress-diagram/package.json',
     'npm:devexpress-gantt/package.json',
 
@@ -181,3 +188,4 @@ window.config = {
 };
 
 System.config(window.config);
+System.import('@angular/compiler').catch(console.error.bind(console));
