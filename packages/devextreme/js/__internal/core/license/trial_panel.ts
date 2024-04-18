@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
 import { format } from '../../../core/utils/string';
 
-const LICENSE_PANEL_ID = 'dx-licence-panel';
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const DEFAULT_PRE_LINK_TEXT = 'For evaluation purposes only. Redistribution not authorized. Please ';
 const DEFAULT_LINK_TEXT = 'purchase a license';
@@ -121,7 +120,6 @@ class DxLicense extends HTMLElement {
 
   private _reassignComponent(): void {
     this.innerHTML = '';
-    this.id = LICENSE_PANEL_ID;
     this.style.cssText = this._containerStyles;
 
     const linkText = this.getAttribute(attributeNames.linkText);
@@ -154,7 +152,7 @@ class DxLicense extends HTMLElement {
 
   public disconnectedCallback(): void {
     setTimeout(() => {
-      const licensePanel = document.getElementById(LICENSE_PANEL_ID);
+      const licensePanel = document.getElementsByTagName(componentNames.panel);
       if (!licensePanel) {
         document.body.prepend(this);
       }
@@ -163,7 +161,7 @@ class DxLicense extends HTMLElement {
 }
 class DxLicenseTrigger extends HTMLElement {
   public connectedCallback(): void {
-    const licensePanel = document.getElementById(LICENSE_PANEL_ID);
+    const licensePanel = document.getElementsByTagName(componentNames.panel);
     if (!licensePanel) {
       const license = document.createElement(componentNames.panel);
 
@@ -177,7 +175,6 @@ class DxLicenseTrigger extends HTMLElement {
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
 
-      license.id = LICENSE_PANEL_ID;
       document.body.prepend(license);
     }
   }
