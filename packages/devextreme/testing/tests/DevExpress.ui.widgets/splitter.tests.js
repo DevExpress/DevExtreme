@@ -912,7 +912,37 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
 QUnit.module('Resizing', moduleConfig, () => {
     ['horizontal', 'vertical'].forEach(orientation => {
-        QUnit.test(`collapsed pane should move its neighboring pane on expansion, orientation ${orientation}`, function(assert) {
+        QUnit.test(`collapsed pane should move its neighboring pane on expansion to left, orientation ${orientation}`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ }, { }, { }, { minSize: '250px', collapsible: true }]
+            }, '#splitterInContainer');
+
+            const $resizeHandle = this.getResizeHandles().eq(2);
+            const keyboard = keyboardMock($resizeHandle);
+
+            const collapseKey = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+
+            this.assertLayout(['25', '25', '25', '25']);
+
+            keyboard.keyDown(collapseKey, { ctrlKey: true });
+
+            this.assertLayout(['25', '25', '50', '0']);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(300, 300).dragEnd();
+
+            this.assertLayout(['25', '55', '20', '0']);
+
+            const expandKey = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+            keyboard.keyDown(expandKey, { ctrlKey: true });
+
+            this.assertLayout(['25', '50', '0', '25']);
+        });
+
+        QUnit.test(`collapsed pane should move its neighboring pane on expansion to right, orientation ${orientation}`, function(assert) {
             this.reinit({
                 width: '100%',
                 height: '100%',
