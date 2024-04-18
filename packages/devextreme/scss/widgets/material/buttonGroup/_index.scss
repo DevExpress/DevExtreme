@@ -21,6 +21,11 @@
   1px,
 );
 
+.dx-buttongroup-wrapper .dx-button {
+  height: $material-button-group-button-height;
+  min-height: $material-button-group-button-min-height;
+}
+
 .dx-buttongroup-mode-contained {
   border-radius: $button-border-radius;
   box-shadow: $material-button-box-shadow-size $button-hover-shadow-color;
