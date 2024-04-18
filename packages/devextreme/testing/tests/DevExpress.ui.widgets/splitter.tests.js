@@ -709,31 +709,25 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
-    ['prev', 'next'].forEach((scenario) => {
-        QUnit.test(`Pane collapse ${scenario} on runtime (without collapsedSize)`, function(assert) {
-            this.reinit({
-                items: [{ collapsible: true }, { collapsible: true } ],
-            });
+    [
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'next', expectedLayout: ['100', '0'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
+        { position: 'next', expectedLayout: ['100', '0'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ collapsible: true }, { collapsible: true }] },
+        { position: 'next', expectedLayout: ['100', '0'], items: [{ collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: [ '10', '90'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'next', expectedLayout: ['90', '10'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'prev', expectedLayout: [ '10', '90'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'next', expectedLayout: ['90', '10'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'prev', expectedLayout: [ '10', '90'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'next', expectedLayout: ['90', '10'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+    ].forEach(({ position, expectedLayout, items }) => {
+        QUnit.test(`Pane collapse ${position} on runtime`, function(assert) {
+            this.reinit({ items });
 
-            const expectedLayout = scenario === 'prev' ? ['0', '100'] : ['100', '0'];
             const $resizeHandle = this.getResizeHandles();
-            const $collapseButton = scenario === 'prev'
-                ? this.getCollapsePrevButton($resizeHandle)
-                : this.getCollapseNextButton($resizeHandle);
-
-            $collapseButton.trigger('dxclick');
-
-            this.assertLayout(expectedLayout);
-        });
-
-        QUnit.test(`Pane collapse ${scenario} on runtime (with collapsedSize)`, function(assert) {
-            this.reinit({
-                items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ],
-            });
-
-            const expectedLayout = scenario === 'prev' ? ['10', '90'] : ['90', '10'];
-            const $resizeHandle = this.getResizeHandles();
-            const $collapseButton = scenario === 'prev'
+            const $collapseButton = position === 'prev'
                 ? this.getCollapsePrevButton($resizeHandle)
                 : this.getCollapseNextButton($resizeHandle);
 

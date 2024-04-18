@@ -698,7 +698,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _itemCollapsedOptionChanged(item: Item): void {
-    this._updateItemsRestrictions(this.option('items'));
+    this._updateItemsRestrictions(this.option('items'), true);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
@@ -749,7 +749,7 @@ class Splitter extends (CollectionWidget as any) {
     return validateLayout(defaultLayout, this._itemRestrictions);
   }
 
-  _updateItemsRestrictions(items: Item[]): void {
+  _updateItemsRestrictions(items: Item[], collapseStateRestrictions = false): void {
     const { orientation } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
@@ -764,8 +764,12 @@ class Splitter extends (CollectionWidget as any) {
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
         size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
-        maxSize: convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
-        minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
+        maxSize: collapseStateRestrictions
+          ? undefined
+          : convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
+        minSize: collapseStateRestrictions
+          ? undefined
+          : convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
       });
     });
   }
