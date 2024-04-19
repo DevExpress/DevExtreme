@@ -1,8 +1,6 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode, createVNode } from 'inferno';
 
 import type { DateTimeCellTemplateProps } from '../types';
 import type { CellBaseProps } from './cell';
@@ -51,7 +49,7 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       className,
       highlighted,
@@ -61,20 +59,32 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
       timeCellTemplate,
     } = this.props;
     const timeCellTemplateProps = this.getTimeCellTemplateProps();
-    const timeCellTemplateComponent = getTemplate(timeCellTemplate);
+    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
-    return createComponentVNode(2, CellBase, {
-      isFirstGroupCell,
-      isLastGroupCell,
-      className: 'dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical '.concat(highlighted ? 'dx-scheduler-time-panel-current-time-cell' : '', ' ').concat(className),
-      children: [
-        !timeCellTemplateComponent
-        && createVNode(1, 'div', null, text, 0),
-        !!timeCellTemplateComponent && timeCellTemplateComponent({
-          index: timeCellTemplateProps.index,
-          data: timeCellTemplateProps.data,
-        })],
-    });
+    return (
+      <CellBase
+        className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${highlighted ? 'dx-scheduler-time-panel-current-time-cell' : ''} ${className}`}
+        isFirstGroupCell={isFirstGroupCell}
+        isLastGroupCell={isLastGroupCell}
+        startDate={CellBaseDefaultProps.startDate}
+        endDate={CellBaseDefaultProps.endDate}
+        index={CellBaseDefaultProps.index}
+      >
+        {
+          TimeCellTemplateComponent
+            ? TimeCellTemplateComponent({
+              index: timeCellTemplateProps.index,
+              data: timeCellTemplateProps.data,
+            })
+            : (
+              <div>
+                {text}
+              </div>
+            )
+        }
+      </CellBase>
+    );
   }
 }
+
 TimePanelCell.defaultProps = CellBaseDefaultProps;
