@@ -7782,7 +7782,7 @@ QUnit.module('accessibility', () => {
         const $tagBox = $('#tagBox').dxTagBox({
             items: productsData,
             inputAttr: productLabel,
-            value: [...productsData],
+            value: productsData,
             maxDisplayedTags: 3,
             showMultiTagOnly: false
         });
@@ -7801,7 +7801,7 @@ QUnit.module('accessibility', () => {
 
         const $tagBox = $('#tagBox').dxTagBox({
             items: productsData,
-            value: [...productsData],
+            value: productsData,
             maxDisplayedTags: 3,
             showMultiTagOnly: false
         });
@@ -7820,7 +7820,7 @@ QUnit.module('accessibility', () => {
 
         const $tagBox = $('#tagBox').dxTagBox({
             items: productsData,
-            value: [...productsData],
+            value: productsData,
             maxDisplayedTags: 3,
             showMultiTagOnly: false
         });
