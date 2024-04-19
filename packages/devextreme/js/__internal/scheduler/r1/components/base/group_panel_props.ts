@@ -32,9 +32,9 @@ export interface GroupPanelCellProps extends PropsWithClassName {
 export const GroupPanelCellDefaultProps = {
   id: 0,
   text: '',
-  data: Object.freeze({
+  data: {
     id: 0,
-  }),
+  },
   className: '',
 };
 
@@ -44,6 +44,6 @@ export interface GroupPanelRowProps extends PropsWithClassName {
 }
 
 export const GroupPanelRowDefaultProps = {
-  groupItems: Object.freeze([]),
+  groupItems: [],
   className: '',
 };

@@ -1,7 +1,5 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode, createVNode } from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import type { DateTableCellBaseProps } from '../base/date_table_cell_base';
@@ -11,7 +9,7 @@ import type { ContentTemplateProps } from '../types';
 export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBaseProps> {
   private contentTemplateProps: ContentTemplateProps | null = null;
 
-  getContentTemplateProps(): ContentTemplateProps {
+  private getContentTemplateProps(): ContentTemplateProps {
     if (this.contentTemplateProps !== null) {
       return this.contentTemplateProps;
     }
@@ -36,7 +34,7 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       dataCellTemplate,
       endDate,
@@ -58,27 +56,32 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       'dx-scheduler-date-table-other-month': !!otherMonth,
       'dx-scheduler-date-table-current-date': !!today,
       'dx-scheduler-date-table-first-of-month': !!firstDayOfMonth,
-      [className]: !!className,
+      [className ?? '']: !!className,
     });
     const contentTemplateProps = this.getContentTemplateProps();
-    const dataCellTemplateComponent = getTemplate(dataCellTemplate);
+    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
-    return createComponentVNode(2, DateTableCellBase, {
-      className: classes,
-      dataCellTemplate: dataCellTemplateComponent,
-      startDate,
-      endDate,
-      text,
-      groups,
-      groupIndex,
-      index,
-      isFirstGroupCell,
-      isLastGroupCell,
-      isSelected,
-      isFocused,
-      contentTemplateProps,
-      children: createVNode(1, 'div', 'dx-scheduler-date-table-cell-text', text, 0),
-    });
+    return (
+      <DateTableCellBase
+        className={classes}
+        dataCellTemplate={DataCellTemplateComponent}
+        startDate={startDate}
+        endDate={endDate}
+        text={text}
+        groups={groups}
+        groupIndex={groupIndex}
+        index={index}
+        isFirstGroupCell={isFirstGroupCell}
+        isLastGroupCell={isLastGroupCell}
+        isSelected={isSelected}
+        isFocused={isFocused}
+        contentTemplateProps={contentTemplateProps}
+      >
+        <div className="dx-scheduler-date-table-cell-text">
+          {text}
+        </div>
+      </DateTableCellBase>
+    );
   }
 }
 DateTableMonthCell.defaultProps = DateTableCallBaseDefaultProps;

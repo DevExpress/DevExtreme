@@ -1,8 +1,6 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import { DATE_TABLE_CELL_CLASS } from '../const';
@@ -13,7 +11,7 @@ import { CellBase, CellBaseDefaultProps } from './cell';
 export interface DateTableCellBaseProps extends CellBaseProps {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
   otherMonth?: boolean;
-  today?: boolean ;
+  today?: boolean;
   firstDayOfMonth?: boolean;
   isSelected: boolean;
   isFocused: boolean;
@@ -56,7 +54,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
         groupIndex: groups ? groupIndex : undefined,
         text: '',
         allDay: !!allDay || undefined,
-        ...contentTemplateProps.data,
+        ...contentTemplateProps?.data,
       },
       index,
     };
@@ -76,7 +74,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       allDay,
       className,
@@ -93,24 +91,36 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
       [DATE_TABLE_CELL_CLASS]: !allDay,
       'dx-state-focused': isSelected,
       'dx-scheduler-focused-cell': isFocused,
-      [className]: true,
+      [className ?? '']: true,
     });
     const ariaLabel = isSelected ? ADD_APPOINTMENT_LABEL : undefined;
     const dataCellTemplateProps = this.getDataCellTemplateProps();
-    const dataCellTemplateComponent = getTemplate(dataCellTemplate);
+    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
-    return createComponentVNode(2, CellBase, {
-      isFirstGroupCell,
-      isLastGroupCell,
-      className: classes,
-      ariaLabel,
-      children: [
-        !dataCellTemplateComponent && children,
-        !!dataCellTemplateComponent && dataCellTemplateComponent({
-          index: dataCellTemplateProps.index,
-          data: dataCellTemplateProps.data,
-        })],
-    });
+    return (
+      <CellBase
+        isFirstGroupCell={isFirstGroupCell}
+        isLastGroupCell={isLastGroupCell}
+        className={classes}
+        ariaLabel={ariaLabel}
+        startDate={CellBaseDefaultProps.startDate}
+        endDate={CellBaseDefaultProps.endDate}
+        index={CellBaseDefaultProps.index}
+      >
+        <>
+          {
+            !DataCellTemplateComponent && children
+          }
+          {
+            !!DataCellTemplateComponent && DataCellTemplateComponent({
+              index: dataCellTemplateProps.index,
+              data: dataCellTemplateProps.data,
+            })
+          }
+        </>
+      </CellBase>
+    );
   }
 }
+
 DateTableCellBase.defaultProps = DateTableCallBaseDefaultProps;
