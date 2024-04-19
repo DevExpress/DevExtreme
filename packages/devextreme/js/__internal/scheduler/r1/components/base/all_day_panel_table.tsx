@@ -3,11 +3,9 @@ import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runti
 import type { RefObject } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 import type { ViewCellData } from '@ts/scheduler/r1/types';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import { DefaultSizes } from '../const';
-import { AllDayPanelTableBody } from './all_day_panel_table_body';
+import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';
 import type { LayoutProps } from './layout_props';
 import { LayoutDefaultProps } from './layout_props';
 import { Table } from './table';
@@ -40,7 +38,7 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       width,
       tableRef,
@@ -48,22 +46,28 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
       dataCellTemplate,
     } = this.props;
     const allDayPanelData = this.getAllDayPanelData();
-    const dataCellTemplateComponent = getTemplate(dataCellTemplate);
+    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
-    return createComponentVNode(2, Table, {
-      className: 'dx-scheduler-all-day-table',
-      height: allDayPanelData ? undefined : DefaultSizes.allDayPanelHeight,
-      width,
-      tableRef,
-      children: createComponentVNode(2, AllDayPanelTableBody, {
-        viewData: allDayPanelData,
-        leftVirtualCellWidth: viewData.leftVirtualCellWidth,
-        rightVirtualCellWidth: viewData.rightVirtualCellWidth,
-        leftVirtualCellCount: viewData.leftVirtualCellCount,
-        rightVirtualCellCount: viewData.rightVirtualCellCount,
-        dataCellTemplate: dataCellTemplateComponent,
-      }),
-    });
+    return (
+      <Table
+        className="dx-scheduler-all-day-table"
+        height={allDayPanelData ? undefined : DefaultSizes.allDayPanelHeight}
+        width={width}
+        tableRef={tableRef}
+      >
+        <AllDayPanelTableBody
+          viewData={allDayPanelData ?? AllDayPanelTableBodyDefaultProps.viewData}
+          leftVirtualCellWidth={viewData.leftVirtualCellWidth
+            ?? AllDayPanelTableBodyDefaultProps.leftVirtualCellWidth}
+          rightVirtualCellWidth={viewData.rightVirtualCellWidth
+            ?? AllDayPanelTableBodyDefaultProps.rightVirtualCellWidth}
+          leftVirtualCellCount={viewData.leftVirtualCellCount}
+          rightVirtualCellCount={viewData.rightVirtualCellCount}
+          dataCellTemplate={DataCellTemplateComponent}
+        />
+      </Table>
+    );
   }
 }
+
 AllDayTable.defaultProps = LayoutDefaultProps;

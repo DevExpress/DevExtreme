@@ -13,11 +13,11 @@ export interface Option {
 export type TemplateComponent = (model: TemplateModel) => VNode;
 
 export interface PropsWithClassName {
-  className: string;
+  className?: string;
 }
 
 export interface PropsWithStyles {
-  styles: CSS.Properties<string | number>;
+  styles?: CSS.Properties<string | number>;
 }
 
 export interface PropsWithChildren {

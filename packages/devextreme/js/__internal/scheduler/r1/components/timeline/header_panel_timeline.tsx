@@ -1,8 +1,6 @@
 import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import type { HeaderPanelProps } from '../base/header_panel';
 import { HeaderPanel, HeaderPanelDefaultProps } from '../base/header_panel';
@@ -13,7 +11,7 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
     return [createReRenderEffect()];
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       dateCellTemplate,
       dateHeaderData,
@@ -25,22 +23,25 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
       resourceCellTemplate,
       timeCellTemplate,
     } = this.props;
-    const dateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const resourceCellTemplateComponent = getTemplate(resourceCellTemplate);
-    const timeCellTemplateComponent = getTemplate(timeCellTemplate);
+    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
+    const ResourceCellTemplateComponent = getTemplate(resourceCellTemplate);
+    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
-    return createComponentVNode(2, HeaderPanel, {
-      dateHeaderTemplate: TimelineDateHeaderLayout,
-      dateHeaderData,
-      groupPanelData,
-      groupByDate,
-      groups,
-      groupOrientation,
-      isRenderDateHeader,
-      resourceCellTemplate: resourceCellTemplateComponent,
-      dateCellTemplate: dateCellTemplateComponent,
-      timeCellTemplate: timeCellTemplateComponent,
-    });
+    return (
+      <HeaderPanel
+        dateHeaderData={dateHeaderData}
+        groupPanelData={groupPanelData}
+        groupByDate={groupByDate}
+        groups={groups}
+        groupOrientation={groupOrientation}
+        isRenderDateHeader={isRenderDateHeader}
+        // @ts-expect-error JSXTemplate types issue
+        dateHeaderTemplate={TimelineDateHeaderLayout}
+        resourceCellTemplate={ResourceCellTemplateComponent}
+        dateCellTemplate={DateCellTemplateComponent}
+        timeCellTemplate={TimeCellTemplateComponent}
+      />
+    );
   }
 }
 HeaderPanelTimeline.defaultProps = HeaderPanelDefaultProps;

@@ -2,8 +2,6 @@ import type { InfernoEffect } from '@devextreme/runtime/inferno';
 import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode, createVNode } from 'inferno';
 
 import type { DateHeaderData } from '../../types';
 import { isHorizontalGroupingApplied } from '../../utils/index';
@@ -33,7 +31,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
     return [createReRenderEffect()];
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       dateHeaderData,
       groupByDate,
@@ -46,40 +44,47 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       resourceCellTemplate,
       timeCellTemplate,
     } = this.props;
-    const dateCellTemplateComponent = getTemplate(dateCellTemplate);
-    const dateHeaderTemplateComponent = getTemplate(dateHeaderTemplate);
-    const resourceCellTemplateComponent = getTemplate(resourceCellTemplate);
-    const timeCellTemplateComponent = getTemplate(timeCellTemplate);
-
     const isHorizontalGrouping = isHorizontalGroupingApplied(groups, groupOrientation);
+    const DateCellTemplateComponent = getTemplate(dateCellTemplate);
+    const DateHeaderTemplateComponent = getTemplate(dateHeaderTemplate);
+    const ResourceCellTemplateComponent = getTemplate(resourceCellTemplate);
+    const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
-    return createVNode(
-      1,
-      'thead',
-      null,
-      [isHorizontalGrouping
-      && !groupByDate
-      && createComponentVNode(2, GroupPanel, {
-        groupPanelData,
-        groups,
-        groupByDate,
-        groupOrientation,
-        resourceCellTemplate: resourceCellTemplateComponent,
-      }), isRenderDateHeader && dateHeaderTemplateComponent({
-        groupByDate,
-        dateHeaderData,
-        groupOrientation,
-        groups,
-        dateCellTemplate: dateCellTemplateComponent,
-        timeCellTemplate: timeCellTemplateComponent,
-      }), groupByDate && createComponentVNode(2, GroupPanel, {
-        groupPanelData,
-        groups,
-        groupByDate,
-        groupOrientation,
-        resourceCellTemplate: resourceCellTemplateComponent,
-      })],
-      0,
+    return (
+      <thead>
+      {
+        isHorizontalGrouping && !groupByDate && (
+          <GroupPanel
+            groupPanelData={groupPanelData}
+            groups={groups}
+            groupByDate={groupByDate}
+            groupOrientation={groupOrientation}
+            resourceCellTemplate={ResourceCellTemplateComponent}
+          />
+        )
+      }
+      {
+        isRenderDateHeader && DateHeaderTemplateComponent({
+          groupByDate,
+          dateHeaderData,
+          groupOrientation,
+          groups,
+          dateCellTemplate: DateCellTemplateComponent,
+          timeCellTemplate: TimeCellTemplateComponent,
+        })
+      }
+      {
+        groupByDate && (
+          <GroupPanel
+            groupPanelData={groupPanelData}
+            groups={groups}
+            groupByDate={groupByDate}
+            groupOrientation={groupOrientation}
+            resourceCellTemplate={ResourceCellTemplateComponent}
+          />
+        )
+      }
+      </thead>
     );
   }
 }

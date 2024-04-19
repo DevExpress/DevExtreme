@@ -15,7 +15,7 @@ export interface CellBaseProps extends PropsWithClassName,
   groupIndex?: number;
   text?: string;
   index: number;
-  contentTemplateProps: ContentTemplateProps;
+  contentTemplateProps?: ContentTemplateProps;
   ariaLabel?: string;
 }
 

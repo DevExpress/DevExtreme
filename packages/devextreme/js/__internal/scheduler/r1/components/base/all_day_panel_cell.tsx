@@ -1,14 +1,12 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import { ALL_DAY_PANEL_CELL_CLASS } from '../const';
 import type { DateTableCellBaseProps } from './date_table_cell_base';
 import { DateTableCallBaseDefaultProps, DateTableCellBase } from './date_table_cell_base';
 
 export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps> {
-  render(): VNode {
+  render(): JSX.Element {
     const {
       className,
       dataCellTemplate,
@@ -22,22 +20,25 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
       isSelected,
       startDate,
     } = this.props;
-    const dataCellTemplateComponent = getTemplate(dataCellTemplate);
+    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
-    return createComponentVNode(2, DateTableCellBase, {
-      className: `${ALL_DAY_PANEL_CELL_CLASS} ${className}`,
-      startDate,
-      endDate,
-      groups,
-      groupIndex,
-      allDay: true,
-      isFirstGroupCell,
-      isLastGroupCell,
-      index,
-      dataCellTemplate: dataCellTemplateComponent,
-      isSelected,
-      isFocused,
-    });
+    return (
+      <DateTableCellBase
+        className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
+        startDate={startDate}
+        endDate={endDate}
+        groups={groups}
+        groupIndex={groupIndex}
+        allDay
+        isFirstGroupCell={isFirstGroupCell}
+        isLastGroupCell={isLastGroupCell}
+        index={index}
+        dataCellTemplate={DataCellTemplateComponent}
+        isSelected={isSelected}
+        isFocused={isFocused}
+      />
+    );
   }
 }
+
 AllDayPanelCell.defaultProps = DateTableCallBaseDefaultProps;
