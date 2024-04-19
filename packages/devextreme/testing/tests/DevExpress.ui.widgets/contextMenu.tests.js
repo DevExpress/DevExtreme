@@ -420,8 +420,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up')
             .press('up');
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
 
         keyboardMock(instance.itemsContainer())
             .press('down');
@@ -449,8 +453,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
         const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(),
+            2,
+            'scrolled to bottom'
+        );
 
         keyboardMock(instance.itemsContainer())
             .press('down');
@@ -508,8 +516,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
         const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
 
         keyboardMock(instance.itemsContainer())
             .press('left')
@@ -545,8 +557,12 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
         const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
 
         $(item2).trigger('dxclick');
         $(item1).trigger('dxclick');

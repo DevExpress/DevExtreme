@@ -702,8 +702,12 @@ QUnit.module('Rendering Scrollable', {
             .press('up')
             .press('up');
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom',
+        );
 
         keyboardMock(itemsContainer)
             .press('left')
@@ -749,8 +753,12 @@ QUnit.module('Rendering Scrollable', {
         keyboardMock(itemsContainer)
             .press('up');
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
 
         keyboardMock(itemsContainer)
             .press('left')
@@ -805,8 +813,12 @@ QUnit.module('Rendering Scrollable', {
         keyboardMock(itemsContainer)
             .press('up');
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, 1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
 
         $menuItem2.trigger('dxclick');
         $menuItem1.trigger('dxclick');
