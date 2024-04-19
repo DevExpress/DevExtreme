@@ -1,14 +1,3 @@
 @use "../sizes" as *;
 
 // adduse
-
-$fluent-button-group-button-height: auto !default;
-$fluent-button-group-button-min-height: null !default;
-
-@if $size == "default" {
-  $fluent-button-group-button-min-height: $fluent-button-height !default;
-}
-  
-@else if $size == "compact" {
-  $fluent-button-group-button-min-height: $fluent-button-height !default;
-}
