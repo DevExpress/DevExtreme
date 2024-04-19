@@ -38,6 +38,8 @@
 // NOTE: Button styles
 
 .dx-button-mode-contained {
+  @include dx-button-border(transparent);
+
   &.dx-button-normal {
     box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
   }
@@ -102,6 +104,7 @@
 }
 
 .dx-button-mode-text {
+  @include dx-button-border(transparent);
   @include dx-button-flat-color-styling(
     $button-normal-color,
     $button-normal-color,
