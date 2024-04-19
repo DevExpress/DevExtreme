@@ -60,23 +60,23 @@ fixture.disablePageReloads`CheckBox`
   });
 });
 
-[false, true].forEach((multipleLabels) => {
-  [20, undefined, 25].forEach((iconSize) => {
-    test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[20, undefined, 25].forEach((iconSize) => {
+  test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels} iconSize=${iconSize}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations iconSize=${iconSize === undefined ? 'default' : iconSize}.png`, { element: '#container', shouldTestInCompact: true });
 
-      await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels} iconSize=${iconSize}.png`, { element: '#container', theme: getDarkThemeName() });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations iconSize=${iconSize === undefined ? 'default' : iconSize}.png`, { element: '#container', theme: getDarkThemeName() });
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 200px; column-count: 2;');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 400px; column-count: 2;');
 
-      await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
+    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
+    for (const text of ['label', 'one two three']) {
       for (const rtlEnabled of [false, true]) {
         for (const state of [
           READONLY_STATE_CLASS,
@@ -92,7 +92,7 @@ fixture.disablePageReloads`CheckBox`
             await appendElementTo('#container', 'div', id, {});
 
             await createWidget('dxCheckBox', {
-              text: multipleLabels ? 'one two three' : 'label',
+              text,
               value,
               iconSize,
               rtlEnabled,
@@ -101,25 +101,27 @@ fixture.disablePageReloads`CheckBox`
           }
         }
       }
-    });
+    }
   });
+});
 
-  [45, undefined, 65].forEach((width) => {
-    test('Checkbox configuration, different Checkbox widths', async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[45, undefined, 65].forEach((width) => {
+  test('Checkbox configuration, different Checkbox widths', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-      await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels} width=${width}.png`, { element: '#container', shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations width=${width === undefined ? 'default' : width}.png`, { element: '#container', shouldTestInCompact: true });
 
-      await testScreenshot(t, takeScreenshot, `CheckBox configurations multipleLabels=${multipleLabels} width=${width}.png`, { element: '#container', theme: getDarkThemeName() });
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations width=${width === undefined ? 'default' : width}.png`, { element: '#container', theme: getDarkThemeName() });
 
-      await t
-        .expect(compareResults.isValid())
-        .ok(compareResults.errorMessages());
-    }).before(async () => {
-      await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 200px; column-count: 2;');
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 400px; column-count: 2;');
 
-      await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
+    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
 
+    for (const text of ['label', 'one two three']) {
       for (const rtlEnabled of [false, true]) {
         for (const state of [
           READONLY_STATE_CLASS,
@@ -135,7 +137,7 @@ fixture.disablePageReloads`CheckBox`
             await appendElementTo('#container', 'div', id, {});
 
             await createWidget('dxCheckBox', {
-              text: multipleLabels ? 'one two three' : 'label',
+              text,
               value,
               width,
               rtlEnabled,
@@ -144,6 +146,6 @@ fixture.disablePageReloads`CheckBox`
           }
         }
       }
-    });
+    }
   });
 });
