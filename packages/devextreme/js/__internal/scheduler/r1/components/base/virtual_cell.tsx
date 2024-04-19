@@ -1,7 +1,5 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { PropsWithStyles } from '@ts/core/r1/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import { HeaderCell } from './header_cell';
@@ -13,27 +11,30 @@ export interface VirtualCellProps extends Partial<PropsWithStyles> {
   isHeaderCell: boolean;
 }
 
-const VirtualCellDefaultProps = {
+export const VirtualCellDefaultProps = {
   width: 0,
   isHeaderCell: false,
 };
 
 export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
-  render(): VNode {
+  render(): JSX.Element {
     const {
       colSpan,
       isHeaderCell,
       width,
       styles,
     } = this.props;
-    const style = renderUtils.addWidthToStyle(width, styles);
+    const modifiedStyles = renderUtils.addWidthToStyle(width, styles);
+
     const Cell = isHeaderCell ? HeaderCell : OrdinaryCell;
 
-    return createComponentVNode(2, Cell, {
-      className: 'dx-scheduler-virtual-cell',
-      styles: style,
-      colSpan,
-    });
+    return (
+      <Cell
+        className="dx-scheduler-virtual-cell"
+        styles={modifiedStyles}
+        colSpan={colSpan}
+      />
+    );
   }
 }
 VirtualCell.defaultProps = VirtualCellDefaultProps;

@@ -12,7 +12,7 @@ module.exports = {
         // General TS rules.
         {
             files: [
-                '**/*.ts'
+                '**/*.ts?(x)'
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -71,7 +71,7 @@ module.exports = {
         // Rules for a new TS files.
         {
             files: [
-                '**/*.ts',
+                '**/*.ts?(x)',
             ],
             excludedFiles: '**/m_*.ts',
             parser: '@typescript-eslint/parser',
@@ -134,9 +134,9 @@ module.exports = {
         // Rules for grid controls
         {
             files: [
-                '**/grid_core/**/**.ts',
-                '**/data_grid/**/**.ts',
-                '**/tree_list/**/**.ts',
+                '**/grid_core/**/**.ts?(x)',
+                '**/data_grid/**/**.ts?(x)',
+                '**/tree_list/**/**.ts?(x)',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {

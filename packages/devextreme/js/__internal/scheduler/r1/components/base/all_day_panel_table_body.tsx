@@ -2,8 +2,6 @@ import type { PropsWithClassName } from '__internal/core/r1';
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import { createComponentVNode } from 'inferno';
 
 import type { ViewCellData } from '../../types';
 import { renderUtils } from '../../utils/index';
@@ -30,7 +28,7 @@ export const AllDayPanelTableBodyDefaultProps: AllDayPanelTableBodyProps = {
 };
 
 export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableBodyProps> {
-  render(): VNode {
+  render(): JSX.Element {
     const {
       className,
       leftVirtualCellWidth,
@@ -43,43 +41,49 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
     } = this.props;
     const classes = renderUtils.combineClasses({
       'dx-scheduler-all-day-table-row': true,
-      [className]: !!className,
+      [className ?? '']: !!className,
     });
-    const dataCellTemplateComponent = getTemplate(dataCellTemplate);
+    const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
-    return createComponentVNode(2, Row, {
-      leftVirtualCellWidth,
-      rightVirtualCellWidth,
-      leftVirtualCellCount,
-      rightVirtualCellCount,
-      className: classes,
-      children: viewData.map((cellData) => {
-        const {
-          endDate,
-          groupIndex: cellGroupIndex,
-          groups,
-          index: cellIndex,
-          isFirstGroupCell,
-          isFocused,
-          isLastGroupCell,
-          isSelected,
-          key,
-          startDate,
-        } = cellData;
-        return createComponentVNode(2, AllDayPanelCell, {
-          isFirstGroupCell: !isVerticalGroupOrientation && isFirstGroupCell,
-          isLastGroupCell: !isVerticalGroupOrientation && isLastGroupCell,
-          startDate,
-          endDate,
-          groups,
-          groupIndex: cellGroupIndex,
-          index: cellIndex,
-          dataCellTemplate: dataCellTemplateComponent,
-          isSelected,
-          isFocused,
-        }, key);
-      }),
-    });
+    return (
+      <Row
+        leftVirtualCellWidth={leftVirtualCellWidth}
+        rightVirtualCellWidth={rightVirtualCellWidth}
+        leftVirtualCellCount={leftVirtualCellCount}
+        rightVirtualCellCount={rightVirtualCellCount}
+        className={classes}
+      >
+        {
+          viewData.map(({
+            endDate,
+            groupIndex: cellGroupIndex,
+            groups,
+            index: cellIndex,
+            isFirstGroupCell,
+            isFocused,
+            isLastGroupCell,
+            isSelected,
+            key,
+            startDate,
+          }) => (
+            <AllDayPanelCell
+              key={key}
+              isFirstGroupCell={!isVerticalGroupOrientation && isFirstGroupCell}
+              isLastGroupCell={!isVerticalGroupOrientation && isLastGroupCell}
+              startDate={startDate}
+              endDate={endDate}
+              groups={groups}
+              groupIndex={cellGroupIndex}
+              index={cellIndex}
+              dataCellTemplate={DataCellTemplateComponent}
+              isSelected={isSelected ?? false}
+              isFocused={isFocused ?? false}
+            />
+          ))
+        }
+      </Row>
+    );
   }
 }
+
 AllDayPanelTableBody.defaultProps = AllDayPanelTableBodyDefaultProps;

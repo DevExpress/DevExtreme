@@ -1,22 +1,12 @@
 import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
-import type { RefObject } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
-import type { VNode } from 'inferno';
-import {
-  createComponentVNode,
-  createFragment,
-} from 'inferno';
 
 import type { GroupRenderItem } from '../../types';
 import { GroupPanelHorizontalRow } from './group_panel_horizontal_row';
 import type { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
 
-export interface GroupPanelHorizontalProps extends GroupPanelBaseProps {
-  elementRef?: RefObject<HTMLDivElement>;
-}
-
-export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelHorizontalProps> {
+export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelBaseProps> {
   private _groupPanelItems: GroupRenderItem[][] | null = null;
 
   getGroupPanelItems(): GroupRenderItem[][] {
@@ -60,25 +50,30 @@ export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelHorizon
     return this._groupPanelItems;
   }
 
-  componentWillUpdate(nextProps: GroupPanelHorizontalProps): void {
+  componentWillUpdate(nextProps: GroupPanelBaseProps): void {
     if (this.props.groupPanelData !== nextProps.groupPanelData) {
       this._groupPanelItems = null;
     }
   }
 
-  render(): VNode {
+  render(): JSX.Element {
     const {
       resourceCellTemplate,
     } = this.props;
-    const resourceCellTemplateComponent = getTemplate(resourceCellTemplate);
     const groupPanelItems = this.getGroupPanelItems();
+    const ResourceCellTemplateComponent = getTemplate(resourceCellTemplate);
 
-    return createFragment(groupPanelItems.map((
-      group,
-    ) => createComponentVNode(2, GroupPanelHorizontalRow, {
-      groupItems: group,
-      cellTemplate: resourceCellTemplateComponent,
-    }, group[0].key)), 0);
+    return (
+      <>
+        {
+          groupPanelItems.map((group) => <GroupPanelHorizontalRow
+              key={group[0].key}
+              groupItems={group}
+              cellTemplate={ResourceCellTemplateComponent}
+            />)
+        }
+      </>
+    );
   }
 }
 
