@@ -1,6 +1,7 @@
 @mixin dx-dropdownbutton(
   $dropdownbutton-icon-spindown-size,
   $dropdownbutton-action-horizontal-padding,
+  $dropdownbutton-action-vertical-padding: null,
 ) {
   .dx-dropdownbutton-toggle {
     .dx-icon-spindown {
@@ -30,6 +31,7 @@
       &.dx-button-has-text {
         .dx-button-content {
           padding-inline-end: $dropdownbutton-action-horizontal-padding;
+          padding-block: $dropdownbutton-action-vertical-padding;
         }
       }
     }
