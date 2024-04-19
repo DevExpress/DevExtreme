@@ -1489,6 +1489,119 @@ QUnit.module('Menu tests', {
         assert.equal(handlerHidden.callCount, 1);
     });
 
+    QUnit.test('Submenu show/hide events should provide correct arguments', function(assert) {
+        const handlerShowing = sinon.spy();
+        const handlerShown = sinon.spy();
+        const handlerHiding = sinon.spy();
+        const handlerHidden = sinon.spy();
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: 'onClick',
+            items: [{
+                id: 1,
+                text: 'rootItem',
+                items: [{
+                    id: 11,
+                    text: 'item1',
+                    items: [{ text: 'item1-1' }],
+                }, {
+                    id: 12,
+                    text: 'item2',
+                    items: [{ text: 'item2-1' }],
+                }]
+            }],
+            onSubmenuShowing: handlerShowing,
+            onSubmenuShown: handlerShown,
+            onSubmenuHiding: handlerHiding,
+            onSubmenuHidden: handlerHidden
+        };
+        const menu = createMenuInWindow(options);
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        const checkArgs = function(handler, callNumber, itemData, submenuContainer, comment) {
+            assert.strictEqual(getDomNode(handler.args[callNumber][0].rootItem), $rootItem[0], `${comment} - rootItem`);
+            assert.deepEqual(handler.args[callNumber][0].itemData, itemData, `${comment} - itemData`);
+            assert.strictEqual(getDomNode(handler.args[callNumber][0].submenuContainer), submenuContainer, `${comment} - submenuContainer`);
+        };
+
+        // show submenu
+        $($rootItem).trigger('dxclick');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const $submenuItems = submenu.itemElements();
+        const $subItem1 = $submenuItems.eq(0);
+        const $subItem2 = $submenuItems.eq(1);
+        const rootSubmenu = $(submenu.getOverlayContent()).find(`.${DX_SUBMENU_CLASS}`)[0];
+
+        checkArgs(handlerShowing, 0, options.items[0], rootSubmenu, '1st level showing');
+        checkArgs(handlerShown, 0, options.items[0], rootSubmenu, '1st level shown');
+
+        $($subItem1).trigger('dxclick');
+
+        const nestedSubmenu1 = $subItem1.find(`.${DX_SUBMENU_CLASS}`)[0];
+
+        checkArgs(handlerShowing, 1, options.items[0].items[0], nestedSubmenu1, '2nd level showing submenu1');
+        checkArgs(handlerShown, 1, options.items[0].items[0], nestedSubmenu1, '2nd level shown submenu1');
+
+        $($subItem2).trigger('dxclick');
+
+        const nestedSubmenu2 = $subItem2.find(`.${DX_SUBMENU_CLASS}`)[0];
+
+        checkArgs(handlerHiding, 0, options.items[0].items[0], nestedSubmenu1, '2nd level hiding submenu1');
+        checkArgs(handlerHidden, 0, options.items[0].items[0], nestedSubmenu1, '2nd level hidden submenu1');
+        checkArgs(handlerShowing, 2, options.items[0].items[1], nestedSubmenu2, '2nd level showing submenu2');
+        checkArgs(handlerShown, 2, options.items[0].items[1], nestedSubmenu2, '2nd level shown submenu2');
+
+        $(document).trigger('dxpointerdown');
+
+        checkArgs(handlerHiding, 1, options.items[0], rootSubmenu, '1st level hiding root');
+        checkArgs(handlerHiding, 2, options.items[0].items[1], nestedSubmenu2, '2nd level hiding submenu2');
+        checkArgs(handlerHidden, 1, options.items[0].items[1], nestedSubmenu2, '2nd level hidden submenu2');
+        checkArgs(handlerHidden, 2, options.items[0], rootSubmenu, '1st level hidden root');
+    });
+
+    QUnit.test('onSubmenuShowing handler should provide ability to change submenu css', function(assert) {
+        const options = {
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: 'onClick',
+            items: [{
+                id: 1,
+                text: 'rootItem',
+                items: [{
+                    id: 11,
+                    text: 'item1',
+                    items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+                }, {
+                    id: 12,
+                    text: 'item2',
+                    items: [{ text: 'item2-1' }],
+                }]
+            }],
+            onSubmenuShowing: ({ submenuContainer }) => {
+                $(submenuContainer).css('maxHeight', 42);
+                $(submenuContainer).css('boxSizing', 'border-box');
+            },
+        };
+        const menu = createMenuInWindow(options);
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        // show submenu
+        $($rootItem).trigger('dxclick');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const $submenuItems = submenu.itemElements();
+        const $subItem1 = $submenuItems.eq(0);
+        const $rootSubmenu = $(submenu.getOverlayContent()).find(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($rootSubmenu.outerHeight(), 42, 'root submenu height');
+
+        $($subItem1).trigger('dxclick');
+
+        const nestedSubmenu = $subItem1.find(`.${DX_SUBMENU_CLASS}`);
+
+        assert.strictEqual($(nestedSubmenu).outerHeight(), 42, 'nestedSubmenu submenu height');
+    });
+
     QUnit.test('Changing event handler via option affects submenu (T955742)', function(assert) {
         const eventLog = [];
 
@@ -3600,6 +3713,9 @@ QUnit.module('adaptivity: behavior', {
     });
 });
 
+function getDomNode(el) {
+    return $(el)[0];
+}
 
 function createMenu(options) {
     const $menu = $('#menu').dxMenu(options);
