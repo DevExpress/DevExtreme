@@ -61,7 +61,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxButtonGroupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxButtonGroup;
+    instance: DxButtonGroup = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

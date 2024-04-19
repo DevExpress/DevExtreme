@@ -63,7 +63,7 @@ import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxValidatorComponent extends DxComponentExtension implements OnDestroy, OnChanges, DoCheck {
-    instance: DxValidator;
+    instance: DxValidator = null;
 
     /**
      * [descr:dxValidatorOptions.adapter]

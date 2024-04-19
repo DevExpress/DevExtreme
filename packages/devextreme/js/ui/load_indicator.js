@@ -1,5 +1,6 @@
 import { getWidth, getHeight } from '../core/utils/size';
 import $ from '../core/renderer';
+import messageLocalization from '../localization/message';
 import { getNavigator } from '../core/utils/window';
 const navigator = getNavigator();
 import { animation } from '../core/utils/support';
@@ -106,6 +107,14 @@ const LoadIndicator = Widget.inherit({
         this.callBase();
 
         this.$element().addClass(LOADINDICATOR_CLASS);
+
+        const label = messageLocalization.format('Loading');
+        const aria = {
+            role: 'alert',
+            label,
+        };
+
+        this.setAria(aria);
     },
 
     _initMarkup: function() {

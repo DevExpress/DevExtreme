@@ -71,7 +71,7 @@ import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxPivotGridComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxPivotGrid;
+    instance: DxPivotGrid = null;
 
     /**
      * [descr:dxPivotGridOptions.allowExpandAll]

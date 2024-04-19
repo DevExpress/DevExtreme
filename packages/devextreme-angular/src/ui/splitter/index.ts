@@ -65,7 +65,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxSplitter<TItem, TKey>;
+    instance: DxSplitter<TItem, TKey> = null;
 
     /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
