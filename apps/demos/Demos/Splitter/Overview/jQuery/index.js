@@ -16,6 +16,8 @@ $(() => {
   const paneContentTemplate = function (data, paneName) {
     const $content = createElementWithClass('', 'pane-content');
 
+    $content.attr('tabindex', '0');
+
     $content.append(createElementWithClass(paneName, 'pane-title'));
 
     $content.append(createElementWithClass(getStateText(data), 'pane-state'));
