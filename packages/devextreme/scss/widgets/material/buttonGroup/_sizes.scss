@@ -2,7 +2,13 @@
 
 // adduse
 
-.dx-buttongroup-wrapper .dx-button {
-  height: auto;
-  min-height: 36px;
+$material-button-group-button-height: auto !default;
+$material-button-group-button-min-height: null !default;
+
+@if $size == "default" {
+  $material-button-group-button-min-height: $material-button-height !default;
+}
+
+@else if $size == "compact" {
+  $material-button-group-button-min-height: $material-button-height !default;
 }
