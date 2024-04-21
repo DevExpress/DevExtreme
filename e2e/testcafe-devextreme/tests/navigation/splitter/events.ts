@@ -11,8 +11,8 @@ test('Panes should not be able to resize when onResizeStart event canceled', asy
   await t
     .drag(splitter.resizeHandles.nth(0), 100, 0);
 
-  await t.expect(splitter.option('items[0].size')).eql('200px');
-  await t.expect(splitter.option('items[1].size')).eql('200px');
+  await t.expect(splitter.option('items[0].size')).eql(200);
+  await t.expect(splitter.option('items[1].size')).eql(200);
 }).before(async () => createWidget('dxSplitter', {
   width: 400,
   height: 400,
