@@ -1,7 +1,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Scheduler: different intervalCount option's values`
   .page(url(__dirname, '../../container.html'));

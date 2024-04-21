@@ -3,8 +3,7 @@ import React from 'react';
 interface ColorIconProps {
   key: number;
   color: string;
-  // eslint-disable-next-line no-unused-vars
-  onClick: (string)=>void;
+  onClick: Function;
 }
 
 class ColorIcon extends React.Component<ColorIconProps> {
@@ -13,11 +12,11 @@ class ColorIcon extends React.Component<ColorIconProps> {
     this.onClick = this.onClick.bind(this);
   }
 
-  onClick() {
+  onClick(): void {
     this.props.onClick(this.props.color);
   }
 
-  render() {
+  render(): JSX.Element {
     return (
       <i
         onClick={this.onClick}

@@ -94,7 +94,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTagBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxTagBox;
+    instance: DxTagBox = null;
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]

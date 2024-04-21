@@ -124,7 +124,7 @@ import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTreeListComponent<TRowData = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTreeList<TRowData, TKey>;
+    instance: DxTreeList<TRowData, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

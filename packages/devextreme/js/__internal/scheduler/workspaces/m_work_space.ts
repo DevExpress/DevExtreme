@@ -31,24 +31,22 @@ import messageLocalization from '@js/localization/message';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
 import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
-
-// NOTE: Renovation component section
-// @ts-expect-error
-import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
 import {
   AllDayPanelTitleComponent,
   AllDayTableComponent,
   DateTableComponent,
+  GroupPanelComponent,
   HeaderPanelComponent,
   TimePanelComponent,
-} from '../__migration/components/index';
-import type { ViewType } from '../__migration/types';
+} from '@ts/scheduler/r1/components/index';
+import type { ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
   calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
   getViewStartByOptions,
   isDateAndTimeView,
-} from '../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
+
 import WidgetObserver from '../base/m_widget_observer';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
@@ -2095,7 +2093,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       utils.renovation.renderComponent(
         this,
         this._getGroupHeaderContainer(),
-        dxrGroupPanel,
+        GroupPanelComponent,
         'renovatedGroupPanel',
         options,
       );

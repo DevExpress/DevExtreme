@@ -79,7 +79,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTreeMapComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTreeMap;
+    instance: DxTreeMap = null;
 
     /**
      * [descr:dxTreeMapOptions.childrenField]

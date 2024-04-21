@@ -1,12 +1,12 @@
 /* eslint-disable no-restricted-syntax, no-unsafe-optional-chaining */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
+import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
+import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Scrollable from 'devextreme-testcafe-models/scrollView/internal/scrollable';
 import { appendElementTo } from '../../../helpers/domUtils';
-import { ScrollableDirection } from 'devextreme/renovation/ui/scroll_view/common/types';
-import Guid from 'devextreme/core/guid';
 
 fixture.disablePageReloads`Scrollable_ScrollToElement`
   .page(url(__dirname, '../../container.html'));

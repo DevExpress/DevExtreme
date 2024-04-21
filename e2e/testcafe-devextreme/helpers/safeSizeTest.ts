@@ -21,7 +21,7 @@ const decorateTestCafeBefore = (
   const decoratedBefore = (beforeFunc: TestCafeFn): TestFn => {
     const decoratedFunc = async (t: TestController) => {
       await setBrowserSize(t, size);
-      return beforeFunc(t);
+      await beforeFunc(t);
     };
 
     originBefore(decoratedFunc);
@@ -40,8 +40,8 @@ const decorateTestCafeAfter = (
 
   const decoratedAfter = (afterFunc: TestCafeFn): TestFn => {
     const decoratedFunc = async (t: TestController) => {
+      await afterFunc(t);
       await restoreBrowserSize(t);
-      return afterFunc(t);
     };
 
     originAfter(decoratedFunc);

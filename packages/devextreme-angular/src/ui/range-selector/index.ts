@@ -145,7 +145,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxRangeSelectorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxRangeSelector;
+    instance: DxRangeSelector = null;
 
     /**
      * [descr:dxRangeSelectorOptions.background]

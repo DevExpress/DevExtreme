@@ -116,7 +116,7 @@ import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxPolarChartComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxPolarChart;
+    instance: DxPolarChart = null;
 
     /**
      * [descr:dxPolarChartOptions.adaptiveLayout]

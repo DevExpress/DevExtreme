@@ -1,9 +1,9 @@
-import { a11yCheck } from '../../../helpers/accessibility/utils';
-import url from '../../../helpers/getPageUrl';
-import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import HeaderFilter from 'devextreme-testcafe-models/dataGrid/headers/headerFilter';
 import FilterTextBox from 'devextreme-testcafe-models/dataGrid/editors/filterTextBox';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture`Status areas tests`
   .page(url(__dirname, '../../container.html'));

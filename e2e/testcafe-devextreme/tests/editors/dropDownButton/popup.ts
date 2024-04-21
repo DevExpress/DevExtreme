@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
-import url from '../../../helpers/getPageUrl';
 import DropDownButton from 'devextreme-testcafe-models/dropDownButton';
+import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Drop Down Button's Popup`

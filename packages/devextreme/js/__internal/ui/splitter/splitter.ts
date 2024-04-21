@@ -222,6 +222,9 @@ class Splitter extends (CollectionWidget as any) {
       onItemRendered: this.option('onItemRendered'),
       onItemExpanded: this.option('onItemExpanded'),
       onItemCollapsed: this.option('onItemCollapsed'),
+      separatorSize: this.option('separatorSize'),
+      allowKeyboardNavigation: this.option('allowKeyboardNavigation'),
+      rtlEnabled: this.option('rtlEnabled'),
       _renderQueue: this._renderQueue,
     }, item.splitterConfig));
 
@@ -318,6 +321,20 @@ class Splitter extends (CollectionWidget as any) {
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
 
       resizeHandle.option('disabled', resizeHandle.isInactive());
+    });
+  }
+
+  _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
+    const { items } = this.option();
+
+    items.forEach((item) => {
+      if (item?.splitter) {
+        const $nestedSplitter = this._findItemElementByItem(item).find(`.${SPLITTER_CLASS}`).eq(0);
+
+        if ($nestedSplitter.length) {
+          getComponentInstance($nestedSplitter).option(optionName, optionValue);
+        }
+      }
     });
   }
 
@@ -813,6 +830,7 @@ class Splitter extends (CollectionWidget as any) {
         this._iterateResizeHandles((instance) => {
           instance.option('focusStateEnabled', value);
         });
+        this._updateNestedSplitterOption(name, value);
         break;
       case 'orientation':
         this._toggleOrientationClass();
@@ -824,9 +842,11 @@ class Splitter extends (CollectionWidget as any) {
       case 'onItemCollapsed':
       case 'onItemExpanded':
         this._createEventAction(name);
+        this._updateNestedSplitterOption(name, value);
         break;
       case 'separatorSize':
         this._updateResizeHandlesOption(name, value);
+        this._updateNestedSplitterOption(name, value);
         break;
       default:
         super._optionChanged(args);

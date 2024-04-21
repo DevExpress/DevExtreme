@@ -61,7 +61,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxBulletComponent extends DxComponent implements OnDestroy {
-    instance: DxBullet;
+    instance: DxBullet = null;
 
     /**
      * [descr:dxBulletOptions.color]

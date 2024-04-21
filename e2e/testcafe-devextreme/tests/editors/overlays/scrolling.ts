@@ -1,5 +1,6 @@
 /* eslint-disable no-multi-str */
 import { ClientFunction } from 'testcafe';
+import Popup from 'devextreme-testcafe-models/popup';
 import { isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -10,7 +11,6 @@ import {
   insertStylesheetRulesToPage,
   removeAttribute,
 } from '../../../helpers/domUtils';
-import Popup from 'devextreme-testcafe-models/popup';
 
 const POPUP_CONTENT_CLASS = 'dx-popup-content';
 

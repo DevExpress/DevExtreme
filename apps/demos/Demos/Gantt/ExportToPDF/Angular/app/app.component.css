@@ -2,7 +2,7 @@
   height: 700px;
 }
 
-::ng-deep .options {
+.options {
   background-color: rgba(191, 191, 191, 0.15);
   margin-top: 20px;
   display: flex;
@@ -16,7 +16,7 @@
   text-align: left;
 }
 
-::ng-deep .option {
+.option {
   padding: 5px 0;
   display: flex;
   align-items: center;
@@ -28,7 +28,7 @@
   vertical-align: middle;
 }
 
-::ng-deep .label {
+.label {
   width: 180px;
 }
 
@@ -36,7 +36,7 @@
   width: 30%;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }

@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget, disposeWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication`
   .page(url(__dirname, '../../../container.html'));

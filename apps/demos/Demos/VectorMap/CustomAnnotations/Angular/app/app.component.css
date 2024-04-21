@@ -19,7 +19,7 @@
   font-size: 14px;
 }
 
-::ng-deep .caption {
+.caption {
   font-weight: 500;
 }
 
