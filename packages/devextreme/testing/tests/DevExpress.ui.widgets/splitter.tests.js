@@ -2229,8 +2229,8 @@ QUnit.module('Events', moduleConfig, () => {
         const firstPaneSize = this.instance.option('items[0].size');
         const secondPaneSize = this.instance.option('items[1].size');
 
-        assert.strictEqual(firstPaneSize, '200px');
-        assert.strictEqual(secondPaneSize, '200px');
+        assert.strictEqual(firstPaneSize, 200);
+        assert.strictEqual(secondPaneSize, 200);
         assert.true(resizeEvent.event.cancel);
     });
 });
