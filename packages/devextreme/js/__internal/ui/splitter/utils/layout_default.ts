@@ -1,4 +1,5 @@
 import { isDefined } from '@js/core/utils/type';
+import { toFixed } from '@js/localization/utils';
 
 import { findLastIndexOfVisibleItem, normalizePanelSize } from './layout';
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
@@ -83,7 +84,7 @@ export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number
     }
   }
 
-  layout = layout.map((size) => (size === null ? 0 : parseFloat(size.toFixed(PRECISION))));
+  layout = layout.map((size) => (size === null ? 0 : parseFloat(toFixed(size, PRECISION))));
 
   if (layout.length === 1) {
     return layout;

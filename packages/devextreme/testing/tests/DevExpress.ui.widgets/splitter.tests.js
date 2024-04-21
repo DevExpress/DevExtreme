@@ -78,16 +78,16 @@ const moduleConfig = {
             return this.$element.children(`.${SPLITTER_ITEM_CLASS}`);
         };
 
-        this.assertLayout = (expectedLayout, epsilon) => {
+        this.assertLayout = (expectedLayout) => {
             this.getPanes().toArray().forEach((item, index) => {
-                QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], epsilon || 0.1, `$item[${index}].flexGrow`);
+                QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], 0.05, `$item[${index}].flexGrow`);
             });
         };
 
         this.checkItemSizes = (expectedItemSizes) => {
             this.instance.option('items').forEach((item, index) => {
                 if(isNumeric(item.size)) {
-                    QUnit.assert.roughEqual(item.size, expectedItemSizes[index], 0.1, `item[${index}].size`);
+                    QUnit.assert.roughEqual(item.size, expectedItemSizes[index], 0.05, `item[${index}].size`);
                 } else {
                     QUnit.assert.strictEqual(item.size, expectedItemSizes[index], `item[${index}].size`);
                 }
@@ -114,23 +114,23 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         expectedItemSizes: [130.664, 130.664, 130.664]
     }, {
         dataSource: [{ minSize: '40%' }, { }, { }],
-        expectedLayout: ['41.6326', '25.034', '33.3333'],
+        expectedLayout: ['41.6327', '25.034', '33.3333'],
         expectedItemSizes: [163.203, 98.1328, 130.664]
     }, {
         dataSource: [{ }, { minSize: '40%' }, { }],
-        expectedLayout: ['25.034', '41.6326', '33.3333'],
+        expectedLayout: ['25.034', '41.6327', '33.3333'],
         expectedItemSizes: [98.1328, 163.203, 130.664]
     }, {
         dataSource: [{ }, { }, { minSize: '40%' }],
-        expectedLayout: ['25.034', '33.3333', '41.6326'],
+        expectedLayout: ['25.034', '33.3333', '41.6327'],
         expectedItemSizes: [98.1328, 130.664, 163.203]
     }, {
         dataSource: [{ size: '30%' }, { }, { minSize: '30%' }],
-        expectedLayout: ['31.2245', '34.3877', '34.3877'],
+        expectedLayout: ['31.2245', '34.3878', '34.3878'],
         expectedItemSizes: [122.398, 134.797, 134.797]
     }, {
         dataSource: [{ size: '30%' }, { }, { minSize: '30%', size: '40%' }],
-        expectedLayout: ['31.2245', '27.1429', '41.6326'],
+        expectedLayout: ['31.2245', '27.1429', '41.6327'],
         expectedItemSizes: [122.398, 106.398, 163.203]
     }, {
         dataSource: [{ }, { }, { size: '20%' }],
@@ -146,7 +146,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         expectedItemSizes: [204, 65.6016, 122.398]
     }, {
         dataSource: [{ size: '50%' }, { minSize: '40%' }, { minSize: '40%' }],
-        expectedLayout: ['16.7347', '41.6326', '41.6326'],
+        expectedLayout: ['16.7347', '41.6327', '41.6327'],
         expectedItemSizes: [65.6016, 163.203, 163.203]
     }, {
         dataSource: [{ }, { size: '40%', minSize: '30%' }],
@@ -296,12 +296,12 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     }, {
         resizeDistance: 100,
         dataSource: [{ }, { minSize: '40%' }, { }],
-        expectedLayout: ['50.5441', '41.6326', '7.82258'],
+        expectedLayout: ['50.5442', '41.6327', '7.82313'],
         expectedItemSizes: [198.133, 163.203, 30.6641]
     }, {
         resizeDistance: -200,
         dataSource: [{ minSize: '40%', size: '50%' }, { }, { }],
-        expectedLayout: ['41.6326', '34.3877', '23.9796'],
+        expectedLayout: ['41.6327', '34.3878', '23.9796'],
         expectedItemSizes: [163.203, 134.797, 94]
     }].forEach(({ resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {
         QUnit.test(`pane sizes with minSize option after resize, dataSource: ${JSON.stringify(dataSource)}`, function(assert) {
@@ -343,7 +343,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     }, {
         resizeDistance: -100,
         dataSource: [{ }, { maxSize: '20%' }, { }],
-        expectedLayout: ['14.0821', '20.8163', '65.1015'],
+        expectedLayout: ['14.0816', '20.8163', '65.102'],
         expectedItemSizes: [55.2031, 81.6016, 255.195]
     }, {
         resizeDistance: 100,
@@ -542,7 +542,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             expectedItemSizes: [0, 1008],
         }, {
             dataSource: [{ size: '25%' }, { size: '25%' }, { size: '248px' }, { }],
-            expectedLayout: ['25.6048', '25.6048', '25', '23.79035'],
+            expectedLayout: ['25.6048', '25.6048', '25', '23.7903'],
             expectedItemSizes: [254, 254, 248, 236],
         }, {
             dataSource: [{ size: '50%' }, { size: '25%' }, { size: 248 }, { }],
@@ -558,23 +558,23 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             expectedItemSizes: [248, 248, 248, 248]
         }, {
             dataSource: [{ }, { size: '10%' }, { }, { }],
-            expectedLayout: ['29.92', '10.24', '29.92', '29.92'],
+            expectedLayout: ['29.9194', '10.2419', '29.9194', '29.9194'],
             expectedItemSizes: [296.797, 101.602, 296.797, 296.797]
         }, {
             dataSource: [{ size: '30%' }, { }, { size: '50%' }, { }],
-            expectedLayout: ['30.72', '9.04', '51.2', '9.04'],
+            expectedLayout: ['30.7258', '9.03226', '51.2097', '9.03226'],
             expectedItemSizes: [304.797, 89.6016, 508, 89.6016]
         }, {
             dataSource: [{ size: '30%' }, { }, { size: '30%' }],
-            expectedLayout: ['30.4762', '39.0476', '30.4762'],
+            expectedLayout: ['30.48', '39.04', '30.48'],
             expectedItemSizes: [304.797, 390.398, 304.797]
         }, {
             dataSource: [{ }, { visible: false }, { size: '50%' }, { }],
-            expectedLayout: ['24.6032', '0', '50.7937', '24.6032'],
+            expectedLayout: ['24.6', '0', '50.8', '24.6'],
             expectedItemSizes: [246, 0, 508, 246]
         }, {
             dataSource: [{ visible: false }, { visible: false }, { size: '50%' }, { }],
-            expectedLayout: ['0', '0', '50.3937', '49.6063'],
+            expectedLayout: ['0', '0', '50.3968', '49.6032'],
             expectedItemSizes: [0, 0, 508, 500]
         }, {
             dataSource: [{ size: '40%' }, { size: '60%' }, { visible: false }],
@@ -614,7 +614,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             expectedItemSizes: [0, 1008]
         }, {
             dataSource: [{ }, { size: '1%' }],
-            expectedLayout: ['99', '1'],
+            expectedLayout: ['98.9921', '1.00794'],
             expectedItemSizes: [997.844, 10.1562]
         }, {
             dataSource: [{ visible: false }, { }, { }],
@@ -731,13 +731,13 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         expectedLayout: ['50', '0', '50'],
     }, {
         items: [{}, { collapsed: true, collapsedSize: '9.9%' }, {}],
-        expectedLayout: ['45', '10', '45'],
+        expectedLayout: ['45', '9.93976', '45'],
     }, {
         items: [{}, { collapsed: true, collapsedSize: 100 }, {}],
         expectedLayout: ['45', '10', '45'],
     }, {
         items: [{}, { collapsed: true, collapsedSize: 100 }, { collapsed: true, collapsedSize: 100 }],
-        expectedLayout: ['80', '10', '10'],
+        expectedLayout: ['79.9197', '10.0806', '10.0806'],
     }, {
         items: [{ collapsed: true, collapsedSize: 100 }, {}],
         expectedLayout: ['10', '90'],
@@ -777,7 +777,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }],
             });
 
-            const expectedLayout = scenario === 'prev' ? ['10', '90'] : ['90', '10'];
+            const expectedLayout = scenario === 'prev' ? ['10.0806', '89.9194'] : ['89.9194', '10.0806'];
             const $resizeHandle = this.getResizeHandles();
             const $collapseButton = scenario === 'prev'
                 ? this.getCollapsePrevButton($resizeHandle)
@@ -822,11 +822,11 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     [{
         items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }],
-        expectedLayout: ['0', '66.6', '33.3'],
+        expectedLayout: ['0', '66.6667', '33.3'],
     },
     {
         items: [{ collapsible: true, size: 98 }, { collapsible: true, size: 98 }, { collapsible: true }],
-        expectedLayout: ['0', '20', '80'],
+        expectedLayout: ['0', '19.9187', '80.0813'],
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true }],
@@ -834,7 +834,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true, collapsedSize: 100 }, { collapsible: true }],
-        expectedLayout: ['0', '10', '90'],
+        expectedLayout: ['0', '10.0806', '89.9194'],
     }].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Runtime collapse (collapse prev button): ${JSON.stringify(items)}`, function(assert) {
             this.reinit({ items });
@@ -851,11 +851,11 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     [{
         items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }],
-        expectedLayout: ['66.6', '0', '33.3'],
+        expectedLayout: ['66.6667', '0', '33.3'],
     },
     {
         items: [{ collapsible: true, size: 98 }, { collapsible: true, size: 98 }, { collapsible: true }],
-        expectedLayout: ['20', '0', '80'],
+        expectedLayout: ['19.9187', '0', '80.0813'],
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true }],
@@ -863,7 +863,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     },
     {
         items: [{ collapsible: true, visible: false }, { collapsible: true }, { collapsible: true, collapsedSize: 100 }],
-        expectedLayout: ['0', '90', '10'],
+        expectedLayout: ['0', '89.9194', '10.0806'],
     }
     ].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Runtime collapse (collapse next button): ${JSON.stringify(items)}`, function(assert) {
@@ -919,7 +919,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             items: [ { collapsible: true, }, { collapsible: true, size: 500 }, { collapsible: true } ],
         });
 
-        this.assertLayout(['24.5', '50.8', '24.5']);
+        this.assertLayout(['24.5935', '50.8', '24.5935']);
 
         const $resizeHandle = this.getResizeHandles().first();
         const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
@@ -1162,14 +1162,14 @@ QUnit.module('Resizing', moduleConfig, () => {
                 resizeHandleIndex: 0,
                 resizeDistance: 800,
                 dataSource: [{ }, { }, { resizable: false, size: '100px' }, { }],
-                expectedLayout: ['90', '0', '10', '0'],
+                expectedLayout: ['90.0596', '0', '9.94036', '0'],
                 expectedItemSizes: [906, 0, 100, 0]
             },
             {
                 resizeHandleIndex: 2,
                 resizeDistance: -800,
                 dataSource: [{ }, { resizable: false, size: '100px' }, { }, { }],
-                expectedLayout: ['0', '10', '0', '90'],
+                expectedLayout: ['0', '9.94036', '0', '90.0596'],
                 expectedItemSizes: [0, 100, 0, 906]
             },
         ].forEach(({ resizeHandleIndex, resizeDistance, dataSource, expectedLayout, expectedItemSizes }) => {

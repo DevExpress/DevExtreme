@@ -8,6 +8,7 @@ import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
+import { toFixed } from '@js/localization/utils';
 import type { Item } from '@js/ui/splitter';
 
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
@@ -78,7 +79,7 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
 
   adjustedSize = Math.min(maxSize, adjustedSize);
-  adjustedSize = parseFloat(adjustedSize.toFixed(PRECISION));
+  adjustedSize = parseFloat(toFixed(adjustedSize, PRECISION));
 
   return adjustedSize;
 }
@@ -146,8 +147,8 @@ export function getNextLayout(
       deltaApplied += prevSize - safeSize;
       nextLayout[currentItemIndex] = safeSize;
 
-      if (parseFloat(deltaApplied.toFixed(PRECISION))
-        >= parseFloat(Math.abs(currentDelta).toFixed(PRECISION))) {
+      if (parseFloat(toFixed(deltaApplied, PRECISION))
+        >= parseFloat(toFixed(Math.abs(currentDelta), PRECISION))) {
         break;
       }
     }
@@ -254,11 +255,11 @@ function isValidFormat(size: string | number, unit: string): boolean {
   return regex.test(size);
 }
 
-function isPercentWidth(size: string | number): boolean {
+export function isPercentWidth(size: string | number): boolean {
   return isValidFormat(size, PERCENT_UNIT);
 }
 
-function isPixelWidth(size: string | number): boolean {
+export function isPixelWidth(size: string | number): boolean {
   if (typeof size === 'number') {
     return size >= 0;
   }
@@ -277,7 +278,14 @@ function computeRatio(
   return percentage;
 }
 
-function tryConvertToNumber(size: string | number, totalPanesSize: number): number | undefined {
+export function tryConvertToNumber(
+  size: string | number | undefined,
+  totalPanesSize: number,
+): number | undefined {
+  if (!isDefined(size)) {
+    return undefined;
+  }
+
   if (isNumeric(size) && size >= 0) {
     return Number(size);
   }
@@ -298,10 +306,6 @@ export function convertSizeToRatio(
   totalPanesSize: number,
   handlesSizeSum: number,
 ): number | undefined {
-  if (!isDefined(size)) {
-    return undefined;
-  }
-
   const sizeInPx = tryConvertToNumber(size, totalPanesSize);
 
   if (!isDefined(sizeInPx)) {
@@ -311,7 +315,7 @@ export function convertSizeToRatio(
   const adjustedSize = totalPanesSize - handlesSizeSum;
   const ratio = computeRatio(adjustedSize, sizeInPx);
 
-  return parseFloat(ratio.toFixed(PRECISION));
+  return parseFloat(toFixed(ratio, PRECISION));
 }
 
 export function getVisibleItems(items: Item[]): Item[] {
