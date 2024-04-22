@@ -105,7 +105,10 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & Select
  * @inherits EventInfo
  */
 export type SubmenuHiddenEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
-    /** @docid _ui_menu_SubmenuHiddenEvent.itemData */
+    /**
+     * @docid _ui_menu_SubmenuHiddenEvent.itemData
+     * @type object
+     */
     readonly itemData?: MenuBasePlainItem;
     /** @docid _ui_menu_SubmenuHiddenEvent.rootItem */
     readonly rootItem?: DxElement;
@@ -120,7 +123,10 @@ export type SubmenuHiddenEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
  * @inherits Cancelable,EventInfo
  */
 export type SubmenuHidingEvent<TKey = any> = Cancelable & EventInfo<dxMenu<TKey>> & {
-    /** @docid _ui_menu_SubmenuHidingEvent.itemData */
+    /**
+     * @docid _ui_menu_SubmenuHidingEvent.itemData
+     * @type object
+     */
     readonly itemData?: MenuBasePlainItem;
     /** @docid _ui_menu_SubmenuHidingEvent.rootItem */
     readonly rootItem?: DxElement;
@@ -135,7 +141,10 @@ export type SubmenuHidingEvent<TKey = any> = Cancelable & EventInfo<dxMenu<TKey>
  * @inherits EventInfo
  */
 export type SubmenuShowingEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
-    /** @docid _ui_menu_SubmenuShowingEvent.itemData */
+    /**
+     * @docid _ui_menu_SubmenuShowingEvent.itemData
+     * @type object
+     */
     readonly itemData?: MenuBasePlainItem;
     /** @docid _ui_menu_SubmenuShowingEvent.rootItem */
     readonly rootItem?: DxElement;
@@ -150,7 +159,10 @@ export type SubmenuShowingEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
  * @inherits EventInfo
  */
 export type SubmenuShownEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
-    /** @docid _ui_menu_SubmenuShownEvent.itemData */
+    /**
+     * @docid _ui_menu_SubmenuShownEvent.itemData
+     * @type object
+     */
     readonly itemData?: MenuBasePlainItem;
     /** @docid _ui_menu_SubmenuShownEvent.rootItem */
     readonly rootItem?: DxElement;
