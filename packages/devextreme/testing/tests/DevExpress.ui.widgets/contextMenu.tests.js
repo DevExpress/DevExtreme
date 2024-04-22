@@ -2,7 +2,7 @@ import $ from 'jquery';
 import devices from 'core/devices';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import support from 'core/utils/support';
-import { getWidth, getHeight } from 'core/utils/size';
+import { implementationsMap, getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
@@ -596,6 +596,49 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         assert.strictEqual(args[0], $nestedSubmenu[0], 'height recalculation is called for the nested submenu');
         assert.strictEqual(spy.callCount, 1, 'no other recalculations');
+    });
+
+    QUnit.module('on dimension changed', {
+        setWindowHeight: function(windowHeight) {
+            implementationsMap.getOuterHeight = (el, ...args) => {
+                if(el === window) {
+                    return windowHeight;
+                }
+                return this._originalGetOuterHeight(el, ...args);
+            };
+        },
+        beforeEach: function() {
+            this._originalGetOuterHeight = implementationsMap.getOuterHeight;
+        },
+        afterEach: function() {
+            implementationsMap.getOuterHeight = this._originalGetOuterHeight;
+        }
+    }, () => {
+        QUnit.test('Submenu height should be recalculated', function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+                focusStateEnabled: true,
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay: 0 }
+            });
+            const $itemsContainer = instance.itemsContainer();
+            const $item1 = $($itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0));
+
+            $item1.trigger('dxclick');
+
+            const windowHeight = 100;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+            const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
+
+            assert.strictEqual(
+                $nestedSubmenu.height(),
+                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+                'Nested submenu uses height is updated'
+            );
+        });
     });
 });
 
