@@ -80,7 +80,7 @@ test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
         HOVER_STATE_CLASS,
         FOCUSED_STATE_CLASS,
         DISABLED_STATE_CLASS,
-      ] as any[]
+      ] as string[]
       ) {
         for (const value of valueModes) {
           const id = `dx${new Guid()}`;
@@ -118,7 +118,7 @@ test('Checkbox configuration, different Checkbox widths', async (t) => {
         HOVER_STATE_CLASS,
         FOCUSED_STATE_CLASS,
         DISABLED_STATE_CLASS,
-      ] as any[]
+      ] as string[]
       ) {
         for (const value of valueModes) {
           const id = `dx${new Guid()}`;
