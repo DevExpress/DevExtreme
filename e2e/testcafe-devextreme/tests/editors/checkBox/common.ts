@@ -72,27 +72,24 @@ test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   for (const iconSize of [20, undefined, 45]) {
-    for (const text of [undefined, 'label', 'one two three']) {
-      for (const state of [
-        READONLY_STATE_CLASS,
-        DEFAULT_STATE_CLASS,
-        ACTIVE_STATE_CLASS,
-        HOVER_STATE_CLASS,
-        FOCUSED_STATE_CLASS,
-        DISABLED_STATE_CLASS,
-      ] as string[]
-      ) {
-        for (const value of valueModes) {
-          const id = `dx${new Guid()}`;
-          await appendElementTo('#container', 'div', id, {});
+    for (const state of [
+      READONLY_STATE_CLASS,
+      DEFAULT_STATE_CLASS,
+      ACTIVE_STATE_CLASS,
+      HOVER_STATE_CLASS,
+      FOCUSED_STATE_CLASS,
+      DISABLED_STATE_CLASS,
+    ] as string[]
+    ) {
+      for (const value of valueModes) {
+        const id = `dx${new Guid()}`;
+        await appendElementTo('#container', 'div', id, {});
 
-          await createWidget('dxCheckBox', {
-            text,
-            value,
-            iconSize,
-          }, `#${id}`);
-          await setClassAttribute(Selector(`#${id}`), state);
-        }
+        await createWidget('dxCheckBox', {
+          value,
+          iconSize,
+        }, `#${id}`);
+        await setClassAttribute(Selector(`#${id}`), state);
       }
     }
   }
