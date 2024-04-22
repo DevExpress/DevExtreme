@@ -44,7 +44,7 @@ const App = () => {
           &nbsp;
           <img
             src="../../../../images/logo-tasks.png"
-            alt="tasks"
+            alt="Tasks"
           />
         </div>
       </div>
