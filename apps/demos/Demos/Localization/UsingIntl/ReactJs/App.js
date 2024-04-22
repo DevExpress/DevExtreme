@@ -16,7 +16,7 @@ const amountEditorOptions = {
   format: 'currency',
   showClearButton: true,
   inputAttr: {
-    'aria-label': 'Filter Cell',
+    'aria-label': 'Filter cell',
   },
 };
 const selectBoxInputAttr = { id: 'selectInput' };

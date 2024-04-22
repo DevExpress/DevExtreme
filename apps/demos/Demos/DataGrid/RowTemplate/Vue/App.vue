@@ -34,7 +34,7 @@
       />
       <template #dataRowTemplate="{ data: rowInfo }">
         <tr class="main-row" role="row">
-          <td rowspan="2" role="gridcell"><img :src="rowInfo.data.Picture" :alt="`Image of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`" tabindex="0"></td>
+          <td rowspan="2" role="gridcell"><img :src="rowInfo.data.Picture" :alt="`Picture of ${rowInfo.data.FirstName} ${rowInfo.data.LastName}`" tabindex="0"></td>
           <td role="gridcell">{{ rowInfo.data.Prefix }}</td>
           <td role="gridcell">{{ rowInfo.data.FirstName }}</td>
           <td role="gridcell">{{ rowInfo.data.LastName }}</td>

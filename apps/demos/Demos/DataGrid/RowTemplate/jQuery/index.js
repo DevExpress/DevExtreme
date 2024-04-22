@@ -7,7 +7,7 @@ $(() => {
     dataRowTemplate(container, item) {
       const { data } = item;
       const markup = '<tr class=\'main-row\' role=\'row\'>'
-          + `<td rowspan='2' role="gridcell"><img src='${data.Picture}' alt='Image of ${data.FirstName} ${data.LastName}' tabindex='0'/></td>`
+          + `<td rowspan='2' role="gridcell"><img src='${data.Picture}' alt='Picture of ${data.FirstName} ${data.LastName}' tabindex='0'/></td>`
           + `<td role='gridcell'>${data.Prefix}</td>`
           + `<td role='gridcell'>${data.FirstName}</td>`
           + `<td role='gridcell'>${data.LastName}</td>`

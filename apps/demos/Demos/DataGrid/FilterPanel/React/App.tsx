@@ -13,7 +13,7 @@ const saleAmountEditorOptions = {
   format: 'currency', 
   showClearButton: true, 
   inputAttr: {
-    'aria-label': 'Filter Cell',
+    'aria-label': 'Filter cell',
   }, 
 };
 const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();

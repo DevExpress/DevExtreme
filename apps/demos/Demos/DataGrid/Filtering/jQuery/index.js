@@ -59,7 +59,7 @@ $(() => {
         format: 'currency',
         showClearButton: true,
         inputAttr: {
-          'aria-label': 'Filter Cell',
+          'aria-label': 'Filter cell',
         },
       },
       headerFilter: {

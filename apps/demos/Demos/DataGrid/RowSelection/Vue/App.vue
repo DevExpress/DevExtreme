@@ -37,7 +37,7 @@
       <img
         :src="selectedRowPicture"
         class="employee-photo"
-        alt="Employee Photo"
+        alt="Employee photo"
       >
       <p class="employee-notes">{{ selectedRowNotes }}</p>
     </div>

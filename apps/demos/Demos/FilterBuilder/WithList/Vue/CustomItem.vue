@@ -3,7 +3,7 @@
     <div class="product">
       <img
         :src="item.ImageSrc"
-        :alt="'Image of {{item.Name}}'"
+        :alt="'Picture of {{item.Name}}'"
       >
       <div>{{ item.Name }}</div>
       <div class="price">{{ currency(item.Price) }}</div>

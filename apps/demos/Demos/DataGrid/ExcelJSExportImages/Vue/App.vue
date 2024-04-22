@@ -30,7 +30,7 @@
         <div>
           <img
             :src="data.value"
-            alt="Employee Photo"
+            alt="Employee photo"
           >
         </div>
       </template>

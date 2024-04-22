@@ -39,7 +39,7 @@ const renderGridCell = (cellData) => (
   <div>
     <img
       src={cellData.value}
-      alt="Employee Photo"
+      alt="Employee photo"
     ></img>
   </div>
 );
