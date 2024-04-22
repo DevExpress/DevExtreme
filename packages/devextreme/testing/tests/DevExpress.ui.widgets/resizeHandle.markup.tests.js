@@ -233,6 +233,33 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for corresponding icon');
         });
 
+        QUnit.test(`should have collapse and expand buttons with correct classes after change rtl at runtime, (direction=${direction})`, function(assert) {
+            this.reinit({ direction, rtlEnabled: false });
+            const firstCollapseButton = $(this.$element.children()[0]);
+            const secondCollapseButton = $(this.$element.children()[2]);
+
+            const isHorizontal = direction === 'horizontal';
+            const expectedFirstIconClass = `dx-icon-triangle${isHorizontal ? 'left' : 'up'}`;
+            const expectedSecondIconClass = `dx-icon-triangle${isHorizontal ? 'right' : 'down'}`;
+
+            assert.ok(firstCollapseButton.hasClass(expectedFirstIconClass));
+            assert.notOk(firstCollapseButton.hasClass(expectedSecondIconClass));
+
+            assert.ok(secondCollapseButton.hasClass(expectedSecondIconClass));
+            assert.notOk(secondCollapseButton.hasClass(expectedFirstIconClass));
+
+            this.instance.option('rtlEnabled', true);
+
+            const updatedFirstCollapseButton = $(this.$element.children()[0]);
+            const updatedSecondCollapseButton = $(this.$element.children()[2]);
+
+            assert.ok(updatedFirstCollapseButton.hasClass(isHorizontal ? expectedSecondIconClass : expectedFirstIconClass));
+            assert.notOk(updatedFirstCollapseButton.hasClass(isHorizontal ? expectedFirstIconClass : expectedSecondIconClass));
+
+            assert.ok(updatedSecondCollapseButton.hasClass(isHorizontal ? expectedFirstIconClass : expectedSecondIconClass));
+            assert.notOk(updatedSecondCollapseButton.hasClass(isHorizontal ? expectedSecondIconClass : expectedFirstIconClass));
+        });
+
         QUnit.test(`should have collapse next button with correct classes (direction=${direction}) on init`, function(assert) {
             this.reinit({ direction });
             const $collapseNextButton = $(this.$element.children()[2]);
@@ -253,19 +280,22 @@ QUnit.module('ResizeHandle markup', moduleConfig, () => {
             assert.ok($resizeHandleIcon.hasClass(expectedIconClass), 'has class for corresponding icon');
         });
 
-        QUnit.test(`collapse prev button should have correct icon class on runtime direction change (initial direction=${direction})`, function(assert) {
-            this.reinit({ direction });
-            const $collapsePrevButton = this.getCollapsePrevButton();
-            const newDirection = direction === 'horizontal' ? 'vertical' : 'horizontal';
-            const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? 'left' : 'up'}`;
-            const newExpectedIconClass = `dx-icon-triangle${newDirection === 'horizontal' ? 'left' : 'up'}`;
+        [false, true].forEach((rtlEnabled) => {
+            QUnit.test(`collapse prev button should have correct icon class on runtime direction change (initial direction=${direction}, rtlEnabled=${rtlEnabled})`, function(assert) {
+                this.reinit({ direction, rtlEnabled });
+                const $collapsePrevButton = this.getCollapsePrevButton();
+                const newDirection = direction === 'horizontal' ? 'vertical' : 'horizontal';
+                const horizontalArrowDirection = rtlEnabled ? 'right' : 'left';
+                const expectedIconClass = `dx-icon-triangle${direction === 'horizontal' ? horizontalArrowDirection : 'up'}`;
+                const newExpectedIconClass = `dx-icon-triangle${newDirection === 'horizontal' ? horizontalArrowDirection : 'up'}`;
 
-            assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for corresponding icon');
+                assert.ok($collapsePrevButton.hasClass(expectedIconClass), 'has class for corresponding icon');
 
-            this.instance.option('direction', newDirection);
+                this.instance.option('direction', newDirection);
 
-            assert.notOk($collapsePrevButton.hasClass(expectedIconClass), 'has no class for old icon');
-            assert.ok($collapsePrevButton.hasClass(newExpectedIconClass), 'has class for new icon');
+                assert.notOk($collapsePrevButton.hasClass(expectedIconClass), 'has no class for old icon');
+                assert.ok($collapsePrevButton.hasClass(newExpectedIconClass), 'has class for new icon');
+            });
         });
 
         QUnit.test(`collapse next button should have correct icon class on runtime direction change (initial direction=${direction})`, function(assert) {
