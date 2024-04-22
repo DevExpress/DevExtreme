@@ -656,16 +656,14 @@ class Menu extends MenuBase {
 
     _submenuOnHidingHandler($menuAnchorItem, submenu, eventArgs) {
         const $border = $menuAnchorItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
-        const args = eventArgs;
         const params = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $menuAnchorItem, true);
 
-        args.itemData = params.itemData;
-        args.rootItem = params.rootItem;
-        args.submenuContainer = params.submenuContainer;
-        args.submenu = params.submenu;
+        eventArgs.itemData = params.itemData;
+        eventArgs.rootItem = params.rootItem;
+        eventArgs.submenuContainer = params.submenuContainer;
+        eventArgs.submenu = params.submenu;
 
-        this._actions.onSubmenuHiding(args);
-        eventArgs = args;
+        this._actions.onSubmenuHiding(eventArgs);
 
         if(!eventArgs.cancel) {
             if(this._visibleSubmenu === submenu) this._visibleSubmenu = null;
@@ -690,7 +688,7 @@ class Menu extends MenuBase {
             itemData = this._getItemData(anchor);
             $submenuContainer = $(anchor).find(`.${DX_SUBMENU_CLASS}`).first();
         } else {
-            const $overlayContent = $(submenu._overlay?.content());
+            const $overlayContent = $(submenu._overlay.content());
 
             itemData = this._getItemData($menuAnchorItem);
             $submenuContainer = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).first();
@@ -702,25 +700,6 @@ class Menu extends MenuBase {
             submenuContainer: getPublicElement($submenuContainer),
             submenu,
         };
-    }
-
-    _getVisibilityChangeEventParams(submenuItem, submenu, $rootItem, isHide) {
-        let itemData;
-        let $submenuContainer;
-
-        if(submenuItem) {
-            const anchor = isHide ? $(submenuItem).closest(`.${DX_MENU_ITEM_CLASS}`)[0] : submenuItem;
-
-            itemData = this._getItemData(anchor);
-            $submenuContainer = $(anchor).find(`.${DX_SUBMENU_CLASS}`).first();
-        } else {
-            const $overlayContent = $(submenu._overlay?.content());
-
-            itemData = this._getItemData($rootItem);
-            $submenuContainer = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).first();
-        }
-
-        return { itemData, $submenuContainer };
     }
 
     _submenuMouseLeaveHandler($rootItem, eventArgs) {
