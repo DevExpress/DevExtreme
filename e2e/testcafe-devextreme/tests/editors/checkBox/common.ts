@@ -72,10 +72,6 @@ fixture.disablePageReloads`CheckBox`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 400px; column-count: 2;');
-
-    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
-
     for (const text of ['label', 'one two three']) {
       for (const rtlEnabled of [false, true]) {
         for (const state of [
@@ -117,10 +113,6 @@ fixture.disablePageReloads`CheckBox`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 400px; column-count: 2;');
-
-    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
-
     for (const text of ['label', 'one two three']) {
       for (const rtlEnabled of [false, true]) {
         for (const state of [
@@ -162,10 +154,6 @@ fixture.disablePageReloads`CheckBox`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 400px; column-count: 3;');
-
-    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
-
     for (const width of [undefined, 45, 65]) {
       for (const text of [undefined, 'label', 'one two three']) {
         for (const value of valueModes) {
