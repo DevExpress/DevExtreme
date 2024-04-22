@@ -1,3 +1,5 @@
+import { toFixed } from '@js/localization/utils';
+
 export const PRECISION = 10;
 
 export function compareNumbersWithPrecision(
@@ -5,7 +7,7 @@ export function compareNumbersWithPrecision(
   expected: number,
   precision: number = PRECISION,
 ): number {
-  const delta = parseFloat(actual.toFixed(precision)) - parseFloat(expected.toFixed(precision));
+  const delta = parseFloat(toFixed(actual, precision)) - parseFloat(toFixed(expected, precision));
   if (delta === 0) {
     return 0;
   }
