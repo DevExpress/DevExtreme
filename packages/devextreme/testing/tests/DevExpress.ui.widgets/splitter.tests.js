@@ -773,6 +773,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
         { position: 'next', expectedLayout: ['100', '0'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ collapsible: true }, { collapsible: true }] },
         { position: 'next', expectedLayout: ['100', '0'], items: [{ collapsible: true }, { collapsible: true }] },
