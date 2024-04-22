@@ -8,6 +8,7 @@ import {
   normalizeStyleProp, styleProp,
 } from '@js/core/utils/style';
 import { isDefined, isNumeric, isString } from '@js/core/utils/type';
+import { toFixed } from '@js/localization/utils';
 import type { Item } from '@js/ui/splitter';
 
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
@@ -19,6 +20,9 @@ const ORIENTATION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
+
+const PERCENT_UNIT = '%';
+const PIXEL_UNIT = 'px';
 
 // export function getCurrentLayout($items: dxElementWrapper): number[] {
 //   const itemsDistribution: number[] = [];
@@ -75,7 +79,7 @@ export function normalizePanelSize(paneRestrictions: PaneRestrictions, size: num
   let adjustedSize = compareNumbersWithPrecision(size, minSize) < 0 ? minSize : size;
 
   adjustedSize = Math.min(maxSize, adjustedSize);
-  adjustedSize = parseFloat(adjustedSize.toFixed(PRECISION));
+  adjustedSize = parseFloat(toFixed(adjustedSize, PRECISION));
 
   return adjustedSize;
 }
@@ -143,8 +147,8 @@ export function getNextLayout(
       deltaApplied += prevSize - safeSize;
       nextLayout[currentItemIndex] = safeSize;
 
-      if (parseFloat(deltaApplied.toFixed(PRECISION))
-        >= parseFloat(Math.abs(currentDelta).toFixed(PRECISION))) {
+      if (parseFloat(toFixed(deltaApplied, PRECISION))
+        >= parseFloat(toFixed(Math.abs(currentDelta), PRECISION))) {
         break;
       }
     }
@@ -241,12 +245,25 @@ export function setFlexProp(
   element.style[styleProp(prop)] = normalizedProp;
 }
 
-function isPercentWidth(size: string | number): boolean {
-  return isString(size) && size.endsWith('%');
+function isValidFormat(size: string | number, unit: string): boolean {
+  if (!isString(size)) {
+    return false;
+  }
+
+  const regex = new RegExp(`^\\d+(\\.\\d+)?${unit}$`);
+
+  return regex.test(size);
 }
 
-function isPixelWidth(size: string | number | undefined): boolean {
-  return isNumeric(size) || (isString(size) && size.endsWith('px'));
+export function isPercentWidth(size: string | number): boolean {
+  return isValidFormat(size, PERCENT_UNIT);
+}
+
+export function isPixelWidth(size: string | number): boolean {
+  if (typeof size === 'number') {
+    return size >= 0;
+  }
+  return isValidFormat(size, PIXEL_UNIT);
 }
 
 function computeRatio(
@@ -261,159 +278,44 @@ function computeRatio(
   return percentage;
 }
 
+export function tryConvertToNumber(
+  size: string | number | undefined,
+  totalPanesSize: number,
+): number | undefined {
+  if (!isDefined(size)) {
+    return undefined;
+  }
+
+  if (isNumeric(size) && size >= 0) {
+    return Number(size);
+  }
+
+  if (isString(size)) {
+    if (isPercentWidth(size)) {
+      return (parseFloat(size) / 100) * totalPanesSize;
+    } if (isPixelWidth(size)) {
+      return parseFloat(size.slice(0, -2));
+    }
+  }
+
+  return undefined;
+}
+
 export function convertSizeToRatio(
   size: string | number | undefined,
   totalPanesSize: number,
   handlesSizeSum: number,
 ): number | undefined {
-  if (!isDefined(size)) {
-    return size;
-  }
+  const sizeInPx = tryConvertToNumber(size, totalPanesSize);
 
-  let sizeAsNumber = isNumeric(size)
-    ? size
-    : parseFloat(size);
-
-  if (isPercentWidth(size)) {
-    sizeAsNumber = (totalPanesSize * sizeAsNumber) / 100;
-  } else if (!isPixelWidth(size)) {
-    return 0;
+  if (!isDefined(sizeInPx)) {
+    return undefined;
   }
 
   const adjustedSize = totalPanesSize - handlesSizeSum;
-  const ratio = computeRatio(adjustedSize, sizeAsNumber);
+  const ratio = computeRatio(adjustedSize, sizeInPx);
 
-  return parseFloat(ratio.toFixed(PRECISION));
-}
-
-export function getDefaultLayout(layoutRestrictions: PaneRestrictions[]): number[] {
-  let layout = new Array(layoutRestrictions.length).fill(null);
-
-  let numPanelsWithDefinedSize = 0;
-  let remainingSize = 100;
-
-  layoutRestrictions.forEach((panelConstraints, index) => {
-    const {
-      size, visible, collapsed, collapsedSize = 0,
-    } = panelConstraints;
-
-    if (visible === false) {
-      numPanelsWithDefinedSize += 1;
-
-      layout[index] = 0;
-      remainingSize -= 0;
-
-      return;
-    }
-
-    if (collapsed === true) {
-      numPanelsWithDefinedSize += 1;
-
-      layout[index] = collapsedSize;
-      remainingSize -= collapsedSize;
-
-      return;
-    }
-
-    if (isDefined(size)) {
-      numPanelsWithDefinedSize += 1;
-
-      layout[index] = size;
-      remainingSize -= size;
-    }
-  });
-
-  let panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
-
-  layoutRestrictions.forEach((paneRestrictions, index) => {
-    if (layout[index] === null) {
-      if (isDefined(paneRestrictions.maxSize) && panelsToDistribute === 1) {
-        layout[index] = remainingSize > paneRestrictions.maxSize
-          ? remainingSize
-          : paneRestrictions.maxSize;
-        remainingSize -= layout[index];
-        numPanelsWithDefinedSize += 1;
-      } else if (isDefined(paneRestrictions.maxSize)
-      && paneRestrictions.maxSize < (remainingSize / panelsToDistribute)) {
-        layout[index] = paneRestrictions.maxSize;
-        remainingSize -= paneRestrictions.maxSize;
-        numPanelsWithDefinedSize += 1;
-      }
-    }
-  });
-
-  panelsToDistribute = layoutRestrictions.length - numPanelsWithDefinedSize;
-
-  if (panelsToDistribute > 0) {
-    const spacePerPanel = remainingSize / panelsToDistribute;
-    layout.forEach((panelSize, index) => {
-      if (panelSize === null) {
-        layout[index] = panelsToDistribute === 1 ? remainingSize : spacePerPanel;
-      }
-    });
-  }
-
-  layout = layout.map((size) => (size === null ? 0 : parseFloat(size.toFixed(PRECISION))));
-
-  return layout as number[];
-}
-
-function adjustAndDistributeLayoutSize(
-  layout: number[],
-  layoutRestrictions: PaneRestrictions[],
-): number[] {
-  let remainingSize = 0;
-
-  const nextLayout = layout.map((panelSize, index) => {
-    const restriction = layoutRestrictions[index];
-    const adjustedSize = normalizePanelSize(restriction, panelSize);
-
-    remainingSize += panelSize - adjustedSize;
-    return adjustedSize;
-  });
-
-  if (compareNumbersWithPrecision(remainingSize, 0) !== 0) {
-    for (
-      let index = 0;
-      index < nextLayout.length && compareNumbersWithPrecision(remainingSize, 0) !== 0;
-      index += 1
-    ) {
-      const currentSize = nextLayout[index];
-      const adjustedSize = normalizePanelSize(
-        layoutRestrictions[index],
-        currentSize + remainingSize,
-      );
-
-      remainingSize -= adjustedSize - currentSize;
-
-      nextLayout[index] = adjustedSize;
-    }
-  }
-
-  return nextLayout;
-}
-
-export function validateLayout(
-  prevLayout: number[],
-  layoutRestrictions: PaneRestrictions[],
-): number[] {
-  const nextLayout = [...prevLayout];
-
-  const nextLayoutTotalSize = nextLayout.reduce(
-    (accumulated, current) => accumulated + current,
-    0,
-  );
-
-  if (!(compareNumbersWithPrecision(nextLayoutTotalSize, 100) === 0)) {
-    for (let index = 0; index < layoutRestrictions.length; index += 1) {
-      const unsafeSize = nextLayout[index];
-
-      const safeSize = (100 / nextLayoutTotalSize) * unsafeSize;
-      nextLayout[index] = safeSize;
-    }
-  }
-
-  return adjustAndDistributeLayoutSize(nextLayout, layoutRestrictions);
+  return parseFloat(toFixed(ratio, PRECISION));
 }
 
 export function getVisibleItems(items: Item[]): Item[] {

@@ -3,7 +3,7 @@ import $ from '../../core/renderer';
 import eventsEngine from '../../events/core/events_engine';
 import { nativeScrolling } from '../../core/utils/support';
 import browser from '../../core/utils/browser';
-import { ensureDefined } from '../../core/utils/common';
+import { ensureDefined, noop } from '../../core/utils/common';
 import { isPlainObject, isDefined } from '../../core/utils/type';
 import { extend } from '../../core/utils/extend';
 import { getPublicElement } from '../../core/element';
@@ -49,7 +49,8 @@ const Scrollable = DOMComponent.inherit({
             useSimulatedScrollbar: false,
             useKeyboard: true,
             inertiaEnabled: true,
-            updateManually: false
+            updateManually: false,
+            _onVisibilityChanged: noop,
         });
     },
 
@@ -91,6 +92,7 @@ const Scrollable = DOMComponent.inherit({
             this._updateRtlPosition();
             this._savedScrollOffset && this.scrollTo(this._savedScrollOffset);
             delete this._savedScrollOffset;
+            this.option('_onVisibilityChanged')(this);
         } else {
             this._savedScrollOffset = this.scrollOffset();
         }
@@ -261,6 +263,7 @@ const Scrollable = DOMComponent.inherit({
                 break;
             case 'updateManually':
             case 'scrollByContent':
+            case '_onVisibilityChanged':
                 break;
             case 'width':
                 this.callBase(args);

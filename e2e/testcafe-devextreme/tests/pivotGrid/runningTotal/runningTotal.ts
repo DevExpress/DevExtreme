@@ -2,7 +2,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import url from '../../../helpers/getPageUrl';
 import { isMaterialBased } from '../../../helpers/themeUtils';
-import { createWidget, disposeWidget } from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 
 const testFixture = () => (isMaterialBased() ? fixture.skip : fixture);
 
@@ -106,7 +106,7 @@ test('Should correctly sum cells values with runningTotal', async (t) => {
     ],
     store: seamlessData,
   },
-})).after(async () => disposeWidget('dxPivotGrid'));
+}));
 
 test('Should correctly sum cells values with runningTotal with partial data (T1144885)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -148,4 +148,4 @@ test('Should correctly sum cells values with runningTotal with partial data (T11
     ],
     store: partialData,
   },
-})).after(async () => disposeWidget('dxPivotGrid'));
+}));
