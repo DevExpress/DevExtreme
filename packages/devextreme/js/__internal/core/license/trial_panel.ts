@@ -38,7 +38,7 @@ const textStyles = {
   padding: '0px',
   margin: '0px',
   color: 'white',
-  'font-family': '"Segoe UI","HelveticaNeue-CondensedBold",Helvetica,"Arial Narrow",Calibri,Arial,"Lucida Grande",sans-serif',
+  'font-family': '"Segoe UI","Open Sans Condensed",-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif',
   'font-size': '14px',
   'font-wight': '600',
 };
@@ -147,7 +147,7 @@ class DxLicenseTrigger extends HTMLElement {
 }
 
 export function registerTrialPanelComponents(): void {
-  if (!customElements.get(componentNames.trigger)) {
+  if (typeof customElements !== 'undefined' && !customElements.get(componentNames.trigger)) {
     customElements.define(componentNames.trigger, DxLicenseTrigger);
     customElements.define(componentNames.panel, DxLicense);
   }

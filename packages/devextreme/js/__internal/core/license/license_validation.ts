@@ -159,6 +159,10 @@ function getLicenseCheckParams({ licenseKey, version }: {
 }
 
 export function showTrialPanel(buyNowUrl: string, version: string): void {
+  if (typeof customElements === 'undefined') {
+    return;
+  }
+
   registerTrialPanelComponents();
 
   const trialPanelTrigger = document.createElement(DX_LICENSE_TRIGGER_NAME);
