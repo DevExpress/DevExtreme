@@ -50,10 +50,12 @@
     "verbose": false,
     "resolveFullPaths": false,
     "fileExtensions": {
-      "inputGlob": "js,ts",
+      "inputGlob": "js,jsx,ts,tsx",
       "outputCheck": [
         "js",
-        "ts"
+        "jsx",
+        "ts",
+        "tsx"
       ]
     }
   }

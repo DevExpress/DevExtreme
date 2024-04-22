@@ -97,7 +97,7 @@ interface GroupedViewDataBase {
   bottomVirtualRowCount: number;
 }
 
-interface RowData {
+export interface RowData {
   cells: ViewCellData[];
   key: number;
 }
