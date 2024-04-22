@@ -26,17 +26,6 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
     return result;
   }
 
-  protected _setDeprecatedOptions() {
-    // @ts-expect-error
-    super._setDeprecatedOptions();
-
-    // @ts-expect-error
-    extend(this._deprecatedOptions, {
-      'columnChooser.allowSearch': { since: '23.1', message: 'Use the "columnChooser.search.enabled" option instead' },
-      'columnChooser.searchTimeout': { since: '23.1', message: 'Use the "columnChooser.search.timeout" option instead' },
-    });
-  }
-
   private _clean() {
 
   }

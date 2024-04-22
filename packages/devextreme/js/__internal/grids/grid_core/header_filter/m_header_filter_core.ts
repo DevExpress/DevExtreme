@@ -393,22 +393,7 @@ export class HeaderFilterView extends Modules.View {
     const generalHeaderFilter = this.option('headerFilter') || {};
     const specificHeaderFilter = options.headerFilter || {};
 
-    const generalDeprecated = {
-      search: {
-        enabled: generalHeaderFilter.allowSearch,
-        timeout: generalHeaderFilter.searchTimeout,
-      },
-    };
-
-    const specificDeprecated = {
-      search: {
-        enabled: specificHeaderFilter.allowSearch,
-        mode: specificHeaderFilter.searchMode,
-        timeout: specificHeaderFilter.searchTimeout,
-      },
-    };
-
-    return extend(true, {}, generalHeaderFilter, generalDeprecated, specificHeaderFilter, specificDeprecated);
+    return extend(true, {}, generalHeaderFilter, specificHeaderFilter);
   }
 
   protected _renderCore() {

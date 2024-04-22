@@ -473,12 +473,6 @@ export interface ColumnButtonBase {
  */
 export type ColumnChooser = {
   /**
-   * @docid GridBaseOptions.columnChooser.allowSearch
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
      * @docid GridBaseOptions.columnChooser.container
      * @default undefined
      * @public
@@ -513,12 +507,6 @@ export type ColumnChooser = {
    * @docid GridBaseOptions.columnChooser.search
    */
   search?: ColumnChooserSearchConfig;
-  /**
-   * @docid GridBaseOptions.columnChooser.searchTimeout
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid GridBaseOptions.columnChooser.selection
    */
@@ -655,12 +643,6 @@ export type ColumnFixingTexts = {
  */
 export type ColumnHeaderFilter = {
   /**
-   * @docid GridBaseColumn.headerFilter.allowSearch
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
    * @docid GridBaseColumn.headerFilter.allowSelectAll
    * @default true
    */
@@ -686,12 +668,6 @@ export type ColumnHeaderFilter = {
    * @docid GridBaseColumn.headerFilter.search
    */
   search?: ColumnHeaderFilterSearchConfig;
-  /**
-   * @docid GridBaseColumn.headerFilter.searchMode
-   * @default 'contains'
-   * @deprecated
-   */
-  searchMode?: SearchMode;
   /**
    * @docid GridBaseColumn.headerFilter.width
    * @default undefined
@@ -1216,12 +1192,6 @@ export type FilterType = 'exclude' | 'include';
  */
 export type HeaderFilter = {
   /**
-   * @docid GridBaseOptions.headerFilter.allowSearch
-   * @default false
-   * @deprecated
-   */
-  allowSearch?: boolean;
-  /**
    * @docid GridBaseOptions.headerFilter.allowSelectAll
    * @default true
    */
@@ -1237,12 +1207,6 @@ export type HeaderFilter = {
    * @docid GridBaseOptions.headerFilter.search
    */
   search?: HeaderFilterSearchConfig;
-  /**
-   * @docid GridBaseOptions.headerFilter.searchTimeout
-   * @default 500
-   * @deprecated
-   */
-  searchTimeout?: number;
   /**
    * @docid GridBaseOptions.headerFilter.texts
    * @type object

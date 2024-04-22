@@ -1621,12 +1621,6 @@ export interface dxGanttHeaderFilter {
     search?: HeaderFilterSearchConfig;
     /**
      * @docid
-     * @default 500
-     * @deprecated
-     */
-    searchTimeout?: number;
-    /**
-     * @docid
      */
     texts?: dxGanttHeaderFilterTexts;
     /**
