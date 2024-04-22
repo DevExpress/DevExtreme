@@ -11,7 +11,7 @@ const getPaneState = (data) => {
 };
 const getFilteredDimensionOptions = (data) =>
   Object.entries(data)
-    .filter(([key]) => dimensionOptions.has(key))
+    .filter(([key, value]) => dimensionOptions.has(key) && value)
     .map(([key, value]) => ({ key, value }));
 const PaneContent = (data) => (
   <div className="pane-content">

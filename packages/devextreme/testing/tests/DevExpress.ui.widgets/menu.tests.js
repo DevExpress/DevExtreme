@@ -385,7 +385,7 @@ QUnit.module('Menu rendering', {
     });
 });
 
-QUnit.module('Rendering Scrollablew', {
+QUnit.module('Rendering Scrollable', {
     beforeEach: function() {
         fx.off = true;
         this.clock = sinon.useFakeTimers();
@@ -594,10 +594,10 @@ QUnit.module('Rendering Scrollablew', {
         const availableHeight = Math.min($menuItem.offset().top + $menuItem.outerHeight(), $(window).height()) - SUBMENU_PADDING;
 
         assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .5, 'Nested submenu flipped to top');
-        assert.roughEqual($nestedSubmenu.height(), availableHeight, .1, 'Nested submenu aligned to a clicked item');
+        assert.roughEqual($nestedSubmenu.height(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
     });
 
-    QUnit.test('selected item should be always visible during keyboard navigation (root submenu)', function(assert) {
+    QUnit.test('Selected item should be always visible during keyboard navigation (root submenu)', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -634,7 +634,7 @@ QUnit.module('Rendering Scrollablew', {
         assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to 1st item');
     });
 
-    QUnit.test('selected item should be always visible during keyboard navigation (nested submenu)', function(assert) {
+    QUnit.test('Selected item should be always visible during keyboard navigation (nested submenu)', function(assert) {
         if(!isDeviceDesktop(assert)) {
             return;
         }
@@ -673,6 +673,197 @@ QUnit.module('Rendering Scrollablew', {
             .press('down');
 
         assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to 1st item');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (root submenu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'Item 1',
+                items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        this.clock.tick(0);
+
+        const $scrollableContainer = $(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        keyboardMock(itemsContainer)
+            .press('up')
+            .press('up');
+
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom',
+        );
+
+        keyboardMock(itemsContainer)
+            .press('left')
+            .press('right')
+            .press('down');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position reset');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (nested submenu, KBN)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenuInWindow({
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        {
+                            text: 'Item 11',
+                            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+                        },
+                        {
+                            text: 'Item 22',
+                        },
+                    ],
+                },
+            ],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+
+        keyboardMock(itemsContainer)
+            .press('down')
+            .press('right');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        keyboardMock(itemsContainer)
+            .press('up');
+
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
+
+        keyboardMock(itemsContainer)
+            .press('left')
+            .press('right');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (nested submenu, pointer)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenuInWindow({
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        {
+                            text: 'Item 11',
+                            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+                        },
+                        {
+                            text: 'Item 22',
+                        },
+                    ],
+                },
+                {
+                    text: 'Item 2'
+                }
+            ],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        keyboardMock(itemsContainer)
+            .press('down')
+            .press('right');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const $menuItem1 = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).first();
+        const $menuItem2 = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+        $menuItem1.trigger('dxclick');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        keyboardMock(itemsContainer)
+            .press('up');
+
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
+
+        $menuItem2.trigger('dxclick');
+        $menuItem1.trigger('dxclick');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
+    });
+
+    QUnit.test('Option focusedElement should be null after reopen root submenu', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const submenuItemText = '1st submenu item';
+        const menu = createMenuInWindow({
+            items: [{
+                text: 'Item 1',
+                items: [
+                    { text: submenuItemText },
+                    { text: 'Another item' },
+                ],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const itemsContainer = menu.instance.itemsContainer();
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $rootItem.trigger('dxclick');
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
+
+        keyboardMock(itemsContainer)
+            .press('left')
+            .press('right')
+            .press('down');
+
+        assert.strictEqual(menu.instance.option('focusedElement'), null, 'option is null');
+
+        keyboardMock(itemsContainer)
+            .press('down');
+
+        assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
 });
 

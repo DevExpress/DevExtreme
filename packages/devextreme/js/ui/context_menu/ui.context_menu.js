@@ -4,12 +4,12 @@ import eventsEngine from '../../events/core/events_engine';
 import Guid from '../../core/guid';
 import registerComponent from '../../core/component_registrator';
 import { noop } from '../../core/utils/common';
-import { isObject, isRenderer, isWindow, isFunction, isPlainObject, isDefined } from '../../core/utils/type';
+import { isDefined, isFunction, isObject, isPlainObject, isRenderer, isWindow } from '../../core/utils/type';
 import { contains } from '../../core/utils/dom';
 import { getPublicElement } from '../../core/element';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
-import { hasWindow, getWindow } from '../../core/utils/window';
+import { getWindow, hasWindow } from '../../core/utils/window';
 import fx from '../../animation/fx';
 import animationPosition from '../../animation/position';
 import devices from '../../core/devices';
@@ -306,7 +306,6 @@ class ContextMenu extends MenuBase {
         }
 
         this._actions.onCloseRootSubmenu($curItem);
-        return $curItem;
     }
 
     _expandSubmenuHandler($items, location) {
@@ -639,7 +638,11 @@ class ContextMenu extends MenuBase {
     }
 
     _initScrollable($container) {
-        this._createComponent($container, Scrollable, {});
+        this._createComponent($container, Scrollable, {
+            _onVisibilityChanged: (scrollable) => {
+                scrollable.scrollTo(0);
+            },
+        });
     }
 
     _setSubMenuHeight($submenu, anchor, isNestedSubmenu) {
@@ -853,6 +856,11 @@ class ContextMenu extends MenuBase {
         this._stopAnimate($submenu);
         animation && this._animate($submenu, animation);
         $submenu.css('visibility', 'hidden');
+
+        const scrollableInstance = $submenu.dxScrollable('instance');
+
+        scrollableInstance.scrollTo(0);
+        this.option('focusedElement', null);
     }
 
     _stopAnimate($container) {
