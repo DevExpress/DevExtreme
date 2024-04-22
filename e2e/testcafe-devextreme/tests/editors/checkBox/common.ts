@@ -90,7 +90,6 @@ fixture.disablePageReloads`CheckBox`
             text,
             value,
             iconSize,
-            rtlEnabled,
           }, `#${id}`);
           await setClassAttribute(Selector(`#${id}`), state);
         }
@@ -129,7 +128,6 @@ fixture.disablePageReloads`CheckBox`
             text,
             value,
             width,
-            rtlEnabled,
           }, `#${id}`);
           await setClassAttribute(Selector(`#${id}`), state);
         }
