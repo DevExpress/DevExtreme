@@ -520,7 +520,7 @@ QUnit.module('getEventTarget module', () => {
         div.addEventListener('click', (event) => {
             const target = getEventTarget(event);
 
-            assert.strictEqual(event.target, target, 'getEventTarget returned target correctly');
+            assert.strictEqual(div, target, 'getEventTarget returned target correctly');
         });
 
         div.dispatchEvent(clickEvent);
@@ -540,7 +540,7 @@ QUnit.module('getEventTarget module', () => {
         div.addEventListener('click', (event) => {
             const target = getEventTarget(event);
 
-            assert.strictEqual(event.target, target, 'getEventTarget returned target correctly in ShadowDOM');
+            assert.strictEqual(div, target, 'getEventTarget returned target correctly in ShadowDOM');
         });
 
         div.dispatchEvent(clickEvent);
