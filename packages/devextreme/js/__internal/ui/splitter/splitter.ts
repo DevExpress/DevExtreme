@@ -43,6 +43,7 @@ import {
   findLastIndexOfVisibleItem,
   getElementSize,
   getNextLayout,
+  isElementVisible,
   setFlexProp,
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
@@ -188,7 +189,9 @@ class Splitter extends (CollectionWidget as any) {
     this._layout = this._getDefaultLayoutBasedOnSize();
     this._applyFlexGrowFromLayout(this._layout);
 
-    this._updateItemSizes();
+    if (isElementVisible(this.$element().get(0))) {
+      this._updateItemSizes();
+    }
 
     this._processRenderQueue();
   }
