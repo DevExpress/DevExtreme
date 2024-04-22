@@ -507,44 +507,52 @@ QUnit.module('event utils', () => {
 });
 
 QUnit.module('getEventTarget module', () => {
-    test('getEventTarget in DOM', function(assert) {
+    test('getEventTarget returns the element on which the event was raised', function(assert) {
         assert.expect(1);
 
-        const container = document.getElementById('qunit-fixture');
+        const host = document.getElementById('qunit-fixture');
         const div = document.createElement('div');
 
-        container.appendChild(div);
+        host.appendChild(div);
 
-        const clickEvent = new Event('click');
+        const customEvent = new Event('customEvent', {
+            bubbles: true,
+            composed: true,
+        });
 
-        div.addEventListener('click', (event) => {
+        host.addEventListener('customEvent', (event) => {
             const target = getEventTarget(event);
 
             assert.strictEqual(div, target, 'getEventTarget returned target correctly');
         });
 
-        div.dispatchEvent(clickEvent);
+        div.dispatchEvent(customEvent);
     });
 
-    skipInShadowDomMode('getEventTarget in ShadowDOM', function(assert) {
-        assert.expect(1);
+    if(QUnit.urlParams['nojquery']) {
+        skipInShadowDomMode('getEventTarget returns the element on which the event was raised if there is ShadowDOM', function(assert) {
+            assert.expect(1);
 
-        const container = document.getElementById('qunit-fixture');
-        const shadowRoot = container.attachShadow({ mode: 'open' });
-        const div = document.createElement('div');
+            const shadowHost = document.getElementById('qunit-fixture');
+            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+            const div = document.createElement('div');
 
-        shadowRoot.appendChild(div);
+            shadowRoot.appendChild(div);
 
-        const clickEvent = new Event('click');
+            shadowHost.addEventListener('customEvent', (event) => {
+                const target = getEventTarget(event);
 
-        div.addEventListener('click', (event) => {
-            const target = getEventTarget(event);
+                assert.strictEqual(div, target, 'getEventTarget returned target correctly in ShadowDOM');
+            });
 
-            assert.strictEqual(div, target, 'getEventTarget returned target correctly in ShadowDOM');
+            const customEvent = new Event('customEvent', {
+                bubbles: true,
+                composed: true,
+            });
+
+            div.dispatchEvent(customEvent);
         });
-
-        div.dispatchEvent(clickEvent);
-    });
+    }
 });
 
 QUnit.module('skip mousewheel event test', () => {
