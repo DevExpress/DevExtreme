@@ -10,7 +10,6 @@ import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {
   appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
@@ -18,8 +17,7 @@ const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
 
 fixture.disablePageReloads`Lookup`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async (t) => {
   const lookup = new Lookup('#container');

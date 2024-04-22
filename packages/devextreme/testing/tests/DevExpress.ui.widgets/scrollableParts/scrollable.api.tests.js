@@ -788,6 +788,26 @@ QUnit.test('scrollTo should not reset unused position', function(assert) {
     assert.equal(scrollable.scrollTop(), 40, 'top position set');
 });
 
+QUnit.test('_onVisibilityChanged option should allow to set custom position', function(assert) {
+    const scrollPosition = 42;
+    const $scrollable = $('#scrollable');
+
+    $scrollable.wrapInner('<div>').children();
+
+    const scrollable = $scrollable.dxScrollable({
+        useNative: false,
+        _onVisibilityChanged: (instance) => {
+            instance.scrollTo(scrollPosition);
+        }
+    }).dxScrollable('instance');
+
+    scrollable.scrollTo(99);
+    $scrollable.trigger('dxhiding');
+    $scrollable.trigger('dxshown');
+
+    assert.strictEqual(scrollable.scrollTop(), scrollPosition, 'top position set');
+});
+
 [true, false].forEach((useNative) => {
     [DIRECTION_HORIZONTAL, DIRECTION_VERTICAL, DIRECTION_BOTH].forEach((direction) => {
         let scrollToValue = 40;

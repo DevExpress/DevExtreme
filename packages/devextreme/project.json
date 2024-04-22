@@ -23,8 +23,8 @@
         "{projectRoot}/*.js"
       ],
       "outputs": [
-        "{projectRoot}/artifacts/internal-tools",
-        "{projectRoot}/artifacts/npm"
+        "{projectRoot}/artifacts",
+        "{projectRoot}/scss/bundles"
       ]
     }
   },

@@ -2,12 +2,10 @@ import { Selector } from 'testcafe';
 import DateBox from 'devextreme-testcafe-models/dateBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { clearTestPage } from '../../../helpers/clearPage';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateBox keyboard navigation`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('DateBox should be closed by press esc key when navigator element in popup is focused, applyValueMode is useButtons', async (t) => {
   const dateBox = new DateBox('#container');

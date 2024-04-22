@@ -8,6 +8,7 @@
   .dx-splitter-item {
     display: flex;
     overflow: hidden;
+    flex: 1 1 auto;
   }
 
   .dx-splitter-item-content {
