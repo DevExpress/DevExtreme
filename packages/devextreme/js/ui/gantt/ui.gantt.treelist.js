@@ -50,7 +50,6 @@ export class GanttTreeList {
             onRowClick: (e) => { this.onRowClick(e); },
             onRowDblClick: (e) => { this.onRowDblClick(e); },
             onNodesInitialized: (e) => { this._onNodesInitialized(e); },
-            _disableDeprecationWarnings: true
         });
 
         return this._treeList;

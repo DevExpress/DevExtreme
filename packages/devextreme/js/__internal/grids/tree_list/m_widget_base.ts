@@ -12,7 +12,6 @@ import registerComponent from '@js/core/component_registrator';
 import { isDefined } from '@js/core/utils/type';
 import { isMaterialBased } from '@js/ui/themes';
 import type { Properties as dxTreeListOptions } from '@js/ui/tree_list';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
 
 import treeListCore from './m_core';
@@ -91,10 +90,6 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
 
     // @ts-expect-error
     super._init();
-
-    if (!this.option('_disableDeprecationWarnings')) {
-      gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
-    }
 
     treeListCore.processModules(that, treeListCore);
 

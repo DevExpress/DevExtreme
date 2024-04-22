@@ -16,7 +16,6 @@ import {
   HeaderFilterView as HeaderFilterViewBase,
   updateHeaderFilterItemSelectionState,
 } from '@ts/grids/grid_core/header_filter/m_header_filter_core';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import sortingMixin from '@ts/grids/grid_core/sorting/m_sorting_mixin';
 
 import { createPath, foreachTree } from '../m_widget_utils';
@@ -126,8 +125,6 @@ export class FieldChooserBase extends mixinWidget {
     this._headerFilterView = new HeaderFilterView(this);
     this._refreshDataSource();
     this.subscribeToEvents();
-
-    gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(this);
   }
 
   _refreshDataSource() {
