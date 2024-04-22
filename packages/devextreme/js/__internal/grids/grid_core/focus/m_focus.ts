@@ -865,10 +865,11 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     }
 
     $row.attr('tabIndex', tabIndex);
+    const rowIndexFromOption = this.option('focusedRowIndex')! - this._dataController.getRowIndexOffset(true);
 
-    if (rowIndex < 0 && this.option('focusedRowIndex')! >= 0) {
+    if (rowIndex < 0 && rowIndexFromOption >= 0) {
       this._focusController.updateFocusedRow({
-        focusedRowIndex: this.option('focusedRowIndex')!,
+        focusedRowIndex: rowIndexFromOption,
         preventScroll,
       });
     }
