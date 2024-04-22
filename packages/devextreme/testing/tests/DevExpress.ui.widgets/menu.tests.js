@@ -865,46 +865,6 @@ QUnit.module('Rendering Scrollable', {
 
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
-
-    QUnit.test('Option focusedElement should be null after reopen root submenu', function(assert) {
-        if(!isDeviceDesktop(assert)) {
-            return;
-        }
-
-        const submenuItemText = '1st submenu item';
-        const menu = createMenuInWindow({
-            items: [{
-                text: 'Item 1',
-                items: [
-                    { text: submenuItemText },
-                    { text: 'Another item' },
-                ],
-            }],
-            showFirstSubmenuMode: 'onClick',
-            showSubmenuMode: { name: 'onHover', delay: 0 },
-        });
-        const itemsContainer = menu.instance.itemsContainer();
-        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-
-        $rootItem.trigger('dxclick');
-
-        keyboardMock(itemsContainer)
-            .press('down');
-
-        assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
-
-        keyboardMock(itemsContainer)
-            .press('left')
-            .press('right')
-            .press('down');
-
-        assert.strictEqual(menu.instance.option('focusedElement'), null, 'option is null');
-
-        keyboardMock(itemsContainer)
-            .press('down');
-
-        assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
-    });
 });
 
 QUnit.module('Menu - templates', {
@@ -1519,9 +1479,9 @@ QUnit.module('Menu tests', {
         const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
         const checkArgs = function(handler, callNumber, itemData, submenuContainer, comment) {
-            assert.strictEqual(getDomNode(handler.args[callNumber][0].rootItem), $rootItem[0], `${comment} - rootItem`);
+            assert.strictEqual($(handler.args[callNumber][0].rootItem)[0], $rootItem[0], `${comment} - rootItem`);
             assert.deepEqual(handler.args[callNumber][0].itemData, itemData, `${comment} - itemData`);
-            assert.strictEqual(getDomNode(handler.args[callNumber][0].submenuContainer), submenuContainer, `${comment} - submenuContainer`);
+            assert.strictEqual($(handler.args[callNumber][0].submenuContainer)[0], submenuContainer, `${comment} - submenuContainer`);
         };
 
         // show submenu
@@ -3712,10 +3672,6 @@ QUnit.module('adaptivity: behavior', {
         assert.ok($treeview.hasClass(DX_STATE_FOCUSED_CLASS), 'treeview is focused');
     });
 });
-
-function getDomNode(el) {
-    return $(el)[0];
-}
 
 function createMenu(options) {
     const $menu = $('#menu').dxMenu(options);

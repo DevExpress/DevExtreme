@@ -619,60 +619,50 @@ class Menu extends MenuBase {
         this._actions['onItemRendered'](e);
     }
 
-    _attachSubmenuHandlers($rootItem, submenu) {
+    _attachSubmenuHandlers($menuAnchorItem, submenu) {
         const $submenuOverlayContent = submenu.getOverlayContent();
         const submenus = $submenuOverlayContent.find(`.${DX_SUBMENU_CLASS}`);
         const submenuMouseLeaveName = addNamespace(hoverEventEnd, this.NAME + '_submenu');
 
         submenu.option({
-            onShowing: this._submenuOnShowingHandler.bind(this, $rootItem, submenu),
-            onShown: this._submenuOnShownHandler.bind(this, $rootItem, submenu),
-            onHiding: this._submenuOnHidingHandler.bind(this, $rootItem, submenu),
-            onHidden: this._submenuOnHiddenHandler.bind(this, $rootItem, submenu),
+            onShowing: this._submenuOnShowingHandler.bind(this, $menuAnchorItem, submenu),
+            onShown: this._submenuOnShownHandler.bind(this, $menuAnchorItem, submenu),
+            onHiding: this._submenuOnHidingHandler.bind(this, $menuAnchorItem, submenu),
+            onHidden: this._submenuOnHiddenHandler.bind(this, $menuAnchorItem, submenu),
         });
 
         each(submenus, (index, submenu) => {
             eventsEngine.off(submenu, submenuMouseLeaveName);
-            eventsEngine.on(submenu, submenuMouseLeaveName, null, this._submenuMouseLeaveHandler.bind(this, $rootItem));
+            eventsEngine.on(submenu, submenuMouseLeaveName, null, this._submenuMouseLeaveHandler.bind(this, $menuAnchorItem));
         });
     }
 
-    _submenuOnShowingHandler($rootItem, submenu, eventArgs) {
-        const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
-        const { itemData, $submenuContainer } = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $rootItem);
+    _submenuOnShowingHandler($menuAnchorItem, submenu, { rootItem }) {
+        const $border = $menuAnchorItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
+        const params = this._getVisibilityChangeEventParams(rootItem, submenu, $menuAnchorItem);
 
-        this._actions.onSubmenuShowing({
-            itemData,
-            rootItem: getPublicElement($rootItem),
-            submenuContainer: getPublicElement($submenuContainer),
-            submenu,
-        });
+        this._actions.onSubmenuShowing(params);
 
         $border.show();
 
-        $rootItem.addClass(DX_MENU_ITEM_EXPANDED_CLASS);
+        $menuAnchorItem.addClass(DX_MENU_ITEM_EXPANDED_CLASS);
     }
 
-    _submenuOnShownHandler($rootItem, submenu, eventArgs) {
-        const { itemData, $submenuContainer } = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $rootItem);
+    _submenuOnShownHandler($menuAnchorItem, submenu, { rootItem }) {
+        const params = this._getVisibilityChangeEventParams(rootItem, submenu, $menuAnchorItem);
 
-        this._actions.onSubmenuShown({
-            itemData,
-            rootItem: getPublicElement($rootItem),
-            submenuContainer: getPublicElement($submenuContainer),
-            submenu,
-        });
+        this._actions.onSubmenuShown(params);
     }
 
-    _submenuOnHidingHandler($rootItem, submenu, eventArgs) {
-        const $border = $rootItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
+    _submenuOnHidingHandler($menuAnchorItem, submenu, eventArgs) {
+        const $border = $menuAnchorItem.children(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
         const args = eventArgs;
-        const { itemData, $submenuContainer } = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $rootItem, true);
+        const params = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $menuAnchorItem, true);
 
-        args.itemData = itemData;
-        args.rootItem = getPublicElement($rootItem);
-        args.submenuContainer = getPublicElement($submenuContainer);
-        args.submenu = submenu;
+        args.itemData = params.itemData;
+        args.rootItem = params.rootItem;
+        args.submenuContainer = params.submenuContainer;
+        args.submenu = params.submenu;
 
         this._actions.onSubmenuHiding(args);
         eventArgs = args;
@@ -680,22 +670,17 @@ class Menu extends MenuBase {
         if(!eventArgs.cancel) {
             if(this._visibleSubmenu === submenu) this._visibleSubmenu = null;
             $border.hide();
-            $rootItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
+            $menuAnchorItem.removeClass(DX_MENU_ITEM_EXPANDED_CLASS);
         }
     }
 
-    _submenuOnHiddenHandler($rootItem, submenu, eventArgs) {
-        const { itemData, $submenuContainer } = this._getVisibilityChangeEventParams(eventArgs.rootItem, submenu, $rootItem, true);
+    _submenuOnHiddenHandler($menuAnchorItem, submenu, { rootItem }) {
+        const params = this._getVisibilityChangeEventParams(rootItem, submenu, $menuAnchorItem, true);
 
-        this._actions.onSubmenuHidden({
-            itemData,
-            rootItem: getPublicElement($rootItem),
-            submenuContainer: getPublicElement($submenuContainer),
-            submenu,
-        });
+        this._actions.onSubmenuHidden(params);
     }
 
-    _getVisibilityChangeEventParams(submenuItem, submenu, $rootItem, isHide) {
+    _getVisibilityChangeEventParams(submenuItem, submenu, $menuAnchorItem, isHide) {
         let itemData;
         let $submenuContainer;
 
@@ -707,11 +692,16 @@ class Menu extends MenuBase {
         } else {
             const $overlayContent = $(submenu._overlay?.content());
 
-            itemData = this._getItemData($rootItem);
+            itemData = this._getItemData($menuAnchorItem);
             $submenuContainer = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).first();
         }
 
-        return { itemData, $submenuContainer };
+        return {
+            itemData,
+            rootItem: getPublicElement($menuAnchorItem),
+            submenuContainer: getPublicElement($submenuContainer),
+            submenu,
+        };
     }
 
     _submenuMouseLeaveHandler($rootItem, eventArgs) {
