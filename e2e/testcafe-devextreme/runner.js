@@ -117,6 +117,13 @@ createTestCafe({
             runOptions.hooks = {
                 test: {
                     before: async() => {
+                        createTestCafe.ClientFunction(() => {
+                            const widgetSelector = '.dx-widget';
+                            if($(widgetSelector).length > 0) {
+                                throw new Exception('TestCafe leaks');
+                            }
+                        });
+
                         if(args.shadowDom) {
                             await addShadowRootTree();
                         }
