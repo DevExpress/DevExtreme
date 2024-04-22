@@ -358,7 +358,7 @@ export class FocusController extends core.ViewController {
     return undefined;
   }
 
-  public updateFocusedRow(e: { focusedRowKey?: number; focusedRowIndex?: number }) {
+  public updateFocusedRow(e: { focusedRowKey?: number; focusedRowIndex?: number; preventScroll?: boolean }) {
     const that = this;
     const focusedRowIndex = e.focusedRowIndex ?? that.getDataController().getRowIndexByKey(e.focusedRowKey);
     const rowsView = that.getView('rowsView');
@@ -383,8 +383,10 @@ export class FocusController extends core.ViewController {
       }
     });
 
-    // @ts-expect-error
-    $mainRow && rowsView.scrollToElementVertically($mainRow);
+    if (!e.preventScroll && $mainRow) {
+      // @ts-expect-error
+      rowsView.scrollToElementVertically($mainRow);
+    }
   }
 
   private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
@@ -867,6 +869,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     if (rowIndex < 0 && this.option('focusedRowIndex')! >= 0) {
       this._focusController.updateFocusedRow({
         focusedRowIndex: this.option('focusedRowIndex')!,
+        preventScroll,
       });
     }
 
