@@ -24,6 +24,7 @@
 
 .dx-resize-handle {
   display: flex;
+  flex: 0 0 auto;
   justify-content: center;
   align-items: center;
   gap: 8px;

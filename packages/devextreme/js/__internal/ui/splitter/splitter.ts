@@ -43,7 +43,6 @@ import {
   findLastIndexOfVisibleItem,
   getElementSize,
   getNextLayout,
-  isElementVisible,
   setFlexProp,
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
@@ -173,16 +172,10 @@ class Splitter extends (CollectionWidget as any) {
   _attachHoldEvent(): void {}
 
   _resizeHandler(): void {
-    if (!this._shouldRecalculateLayout) {
-      return;
-    }
-
     this._layout = this._getDefaultLayoutBasedOnSize();
 
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
-
-    this._shouldRecalculateLayout = false;
   }
 
   _renderItems(items: Item[]): void {
@@ -192,14 +185,10 @@ class Splitter extends (CollectionWidget as any) {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    if (isElementVisible(this.$element().get(0))) {
-      this._layout = this._getDefaultLayoutBasedOnSize();
-      this._applyFlexGrowFromLayout(this._layout);
+    this._layout = this._getDefaultLayoutBasedOnSize();
+    this._applyFlexGrowFromLayout(this._layout);
 
-      this._updateItemSizes();
-    } else {
-      this._shouldRecalculateLayout = true;
-    }
+    this._updateItemSizes();
 
     this._processRenderQueue();
   }
@@ -510,8 +499,6 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
-        this._currentLayout = this._layout;
-
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
@@ -528,9 +515,9 @@ class Splitter extends (CollectionWidget as any) {
           this._getResizeHandlesSize(),
         );
 
-        const { items } = this.option();
+        this._currentLayout = this._layout;
 
-        this._updateItemsRestrictions(items);
+        this._updateItemsRestrictions(this.option('items'));
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
