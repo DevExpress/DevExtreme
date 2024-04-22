@@ -20955,7 +20955,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_menu_SubmenuHiddenEvent.itemData]
        */
-      readonly itemData?: MenuBasePlainItem;
+      readonly itemData?: Item;
       /**
        * [descr:_ui_menu_SubmenuHiddenEvent.rootItem]
        */
@@ -20973,7 +20973,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_menu_SubmenuHidingEvent.itemData]
          */
-        readonly itemData?: MenuBasePlainItem;
+        readonly itemData?: Item;
         /**
          * [descr:_ui_menu_SubmenuHidingEvent.rootItem]
          */
@@ -20992,7 +20992,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_menu_SubmenuShowingEvent.itemData]
        */
-      readonly itemData?: MenuBasePlainItem;
+      readonly itemData?: Item;
       /**
        * [descr:_ui_menu_SubmenuShowingEvent.rootItem]
        */
@@ -21011,7 +21011,7 @@ declare module DevExpress.ui {
       /**
        * [descr:_ui_menu_SubmenuShownEvent.itemData]
        */
-      readonly itemData?: MenuBasePlainItem;
+      readonly itemData?: Item;
       /**
        * [descr:_ui_menu_SubmenuShownEvent.rootItem]
        */

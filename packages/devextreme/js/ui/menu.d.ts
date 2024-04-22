@@ -109,7 +109,7 @@ export type SubmenuHiddenEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
      * @docid _ui_menu_SubmenuHiddenEvent.itemData
      * @type object
      */
-    readonly itemData?: MenuBasePlainItem;
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuHiddenEvent.rootItem */
     readonly rootItem?: DxElement;
     /** @docid _ui_menu_SubmenuHiddenEvent.submenuContainer */
@@ -127,7 +127,7 @@ export type SubmenuHidingEvent<TKey = any> = Cancelable & EventInfo<dxMenu<TKey>
      * @docid _ui_menu_SubmenuHidingEvent.itemData
      * @type object
      */
-    readonly itemData?: MenuBasePlainItem;
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuHidingEvent.rootItem */
     readonly rootItem?: DxElement;
     /** @docid _ui_menu_SubmenuHidingEvent.submenuContainer */
@@ -145,7 +145,7 @@ export type SubmenuShowingEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
      * @docid _ui_menu_SubmenuShowingEvent.itemData
      * @type object
      */
-    readonly itemData?: MenuBasePlainItem;
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuShowingEvent.rootItem */
     readonly rootItem?: DxElement;
     /** @docid _ui_menu_SubmenuShowingEvent.submenuContainer */
@@ -163,7 +163,7 @@ export type SubmenuShownEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
      * @docid _ui_menu_SubmenuShownEvent.itemData
      * @type object
      */
-    readonly itemData?: MenuBasePlainItem;
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuShownEvent.rootItem */
     readonly rootItem?: DxElement;
     /** @docid _ui_menu_SubmenuShownEvent.submenuContainer */
