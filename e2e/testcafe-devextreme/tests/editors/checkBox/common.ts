@@ -149,3 +149,38 @@ fixture.disablePageReloads`CheckBox`
     }
   });
 });
+
+[false, true].forEach((rtlEnabled) => {
+  test('Checkbox configuration, different Checkbox orientation', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations rtlEnabled=${rtlEnabled}.png`, { element: '#container', shouldTestInCompact: true });
+
+    await testScreenshot(t, takeScreenshot, `CheckBox configurations rtlEnabled=${rtlEnabled}.png`, { element: '#container', theme: getDarkThemeName() });
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await setStyleAttribute(Selector('#container'), 'padding: 5px; width: 300px; height: 400px; column-count: 3;');
+
+    await insertStylesheetRulesToPage(`.${CHECKBOX_CLASS} { display: block; }`);
+
+    for (const width of [undefined, 45, 65]) {
+      for (const text of [undefined, 'label', 'one two three']) {
+        for (const value of valueModes) {
+          const id = `dx${new Guid()}`;
+          await appendElementTo('#container', 'div', id, {});
+
+          await createWidget('dxCheckBox', {
+            text,
+            value,
+            width,
+            rtlEnabled,
+          }, `#${id}`);
+          await setClassAttribute(Selector(`#${id}`), DEFAULT_STATE_CLASS);
+        }
+      }
+    }
+  });
+});
