@@ -71,7 +71,7 @@ test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  for (const iconSize of [20, undefined, 25]) {
+  for (const iconSize of [20, undefined, 45]) {
     for (const text of [undefined, 'label', 'one two three']) {
       for (const state of [
         READONLY_STATE_CLASS,
