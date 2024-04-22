@@ -60,18 +60,18 @@ fixture.disablePageReloads`CheckBox`
   });
 });
 
-[20, undefined, 25].forEach((iconSize) => {
-  test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations iconSize=${iconSize === undefined ? 'default' : iconSize}.png`, { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different iconSizes.png', { element: '#container', shouldTestInCompact: true });
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations iconSize=${iconSize === undefined ? 'default' : iconSize}.png`, { element: '#container', theme: getDarkThemeName() });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different iconSizes.png', { element: '#container', theme: getDarkThemeName() });
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const iconSize of [20, undefined, 25]) {
     for (const text of [undefined, 'label', 'one two three']) {
       for (const state of [
         READONLY_STATE_CLASS,
@@ -95,21 +95,21 @@ fixture.disablePageReloads`CheckBox`
         }
       }
     }
-  });
+  }
 });
 
-[45, undefined, 65].forEach((width) => {
-  test('Checkbox configuration, different Checkbox widths', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Checkbox configuration, different Checkbox widths', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations width=${width === undefined ? 'default' : width}.png`, { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different widths.png', { element: '#container', shouldTestInCompact: true });
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations width=${width === undefined ? 'default' : width}.png`, { element: '#container', theme: getDarkThemeName() });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different widths.png', { element: '#container', theme: getDarkThemeName() });
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const width of [45, undefined, 65]) {
     for (const text of [undefined, 'label', 'one two three']) {
       for (const state of [
         READONLY_STATE_CLASS,
@@ -133,21 +133,21 @@ fixture.disablePageReloads`CheckBox`
         }
       }
     }
-  });
+  }
 });
 
-[false, true].forEach((rtlEnabled) => {
-  test('Checkbox configuration, different Checkbox orientation', async (t) => {
-    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+test('Checkbox configuration, different Checkbox orientation', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations rtlEnabled=${rtlEnabled}.png`, { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation.png', { element: '#container', shouldTestInCompact: true });
 
-    await testScreenshot(t, takeScreenshot, `CheckBox configurations rtlEnabled=${rtlEnabled}.png`, { element: '#container', theme: getDarkThemeName() });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation.png', { element: '#container', theme: getDarkThemeName() });
 
-    await t
-      .expect(compareResults.isValid())
-      .ok(compareResults.errorMessages());
-  }).before(async () => {
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  for (const rtlEnabled of [false, true]) {
     for (const width of [undefined, 45, 65]) {
       for (const text of [undefined, 'label', 'one two three']) {
         for (const value of valueModes) {
@@ -164,5 +164,5 @@ fixture.disablePageReloads`CheckBox`
         }
       }
     }
-  });
+  }
 });
