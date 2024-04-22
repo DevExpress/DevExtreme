@@ -7,12 +7,13 @@ import {
     addNamespace,
     normalizeKeyName,
     getChar,
-    isCommandKeyPressed
+    isCommandKeyPressed,
+    getEventTarget,
 } from 'events/utils/index';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 
-const { test, testStart, testInActiveWindow } = QUnit;
+const { test, testStart, testInActiveWindow, skipInShadowDomMode } = QUnit;
 
 const W3CEventProps = [
     'bubbles',
@@ -502,6 +503,47 @@ QUnit.module('event utils', () => {
                 assert.strictEqual(isCommandKeyPressed(event), expectedResult, `command key is ${expectedResult ? '' : 'not'} pressed (metaKey=${metaKey}, ctrlKey=${ctrlKey})`);
             });
         });
+    });
+});
+
+QUnit.module('getEventTarget module', () => {
+    test('getEventTarget in DOM', function(assert) {
+        assert.expect(1);
+
+        const container = document.getElementById('qunit-fixture');
+        const div = document.createElement('div');
+
+        container.appendChild(div);
+
+        const clickEvent = new Event('click');
+
+        div.addEventListener('click', (event) => {
+            const target = getEventTarget(event);
+
+            assert.strictEqual(event.target, target, 'getEventTarget returned target correctly');
+        });
+
+        div.dispatchEvent(clickEvent);
+    });
+
+    skipInShadowDomMode('getEventTarget in ShadowDOM', function(assert) {
+        assert.expect(1);
+
+        const container = document.getElementById('qunit-fixture');
+        const shadowRoot = container.attachShadow({ mode: 'open' });
+        const div = document.createElement('div');
+
+        shadowRoot.appendChild(div);
+
+        const clickEvent = new Event('click');
+
+        div.addEventListener('click', (event) => {
+            const target = getEventTarget(event);
+
+            assert.strictEqual(event.target, target, 'getEventTarget returned target correctly in ShadowDOM');
+        });
+
+        div.dispatchEvent(clickEvent);
     });
 });
 
