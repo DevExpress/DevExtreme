@@ -6,7 +6,7 @@ import { exportDataGrid } from 'devextreme/excel_exporter';
 
 import { employees } from './data.ts';
 
-const renderGridCell = (cellData) => (<div><img src={cellData.value}></img></div>);
+const renderGridCell = (cellData) => (<div><img src={cellData.value} alt='Employee photo'></img></div>);
 
 const onExporting = (e: DataGridTypes.ExportingEvent) => {
   const workbook = new Workbook();

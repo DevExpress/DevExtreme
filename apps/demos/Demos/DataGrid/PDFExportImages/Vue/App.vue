@@ -34,6 +34,7 @@
         <div>
           <img
             :src="data.value"
+            alt="Employee photo"
           >
         </div>
       </template>

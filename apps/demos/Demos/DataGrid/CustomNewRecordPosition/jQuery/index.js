@@ -28,6 +28,7 @@ $(() => {
         type: 'buttons',
         buttons: [{
           icon: 'add',
+          text: 'Add',
           onClick(e) {
             const key = new DevExpress.data.Guid().toString();
             dataGrid.option('editing.changes', [{
