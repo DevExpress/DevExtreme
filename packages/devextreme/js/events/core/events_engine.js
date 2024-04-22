@@ -1,5 +1,6 @@
 import registerEventCallbacks from './event_registrator_callbacks';
 import { extend } from '../../core/utils/extend';
+import { getEventTarget } from '../utils/event_target';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -273,34 +274,14 @@ function getHandlersController(element, eventName) {
                         currentTarget = currentTarget.parentNode;
                     }
                 } else {
-                    // if(e.type === 'wheel') {
-                    //     const realTarget = e.target;
+                    e.currentTarget = e.delegateTarget || e.target;
 
-                    //     // debugger;
-                    // }
+                    const isTargetInShadowDOM = !!e.target?.shadowRoot;
 
-                    /**
-                     * Problems
-                     * 1. How do we determine the necessary target?
-                     * Answer: Event.composedPath();
-                     *
-                     * 2. How do we recognize that ShadowDOM is being used?
-                     * Answer: !!e.target.shadowRoot
-                     *
-                     * 3. Do we need to integrate this for individual events like wheel, or do we do it for all?
-                     * 4. At what level should we address these issues?
-                     */
-
-                    const isTargetInShadowDOM = !!e.target.shadowRoot;
-
-                    // if(isTargetInShadowDOM && e.type === 'wheel') {
                     if(isTargetInShadowDOM) {
-                        const composedPath = e.originalEvent.composedPath();
-                        const target = composedPath[0];
+                        const target = getEventTarget(e.originalEvent);
 
                         e.target = target;
-                    } else {
-                        e.currentTarget = e.delegateTarget || e.target;
                     }
 
                     callHandler(e, extraParameters);

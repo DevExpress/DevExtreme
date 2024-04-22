@@ -1,5 +1,5 @@
 export const getEventTarget = (event) => {
-    const isShadowDOMUsed = event.target?.shadowRoot;
+    const isShadowDOMUsed = Boolean(event?.target?.shadowRoot);
 
     if(isShadowDOMUsed) {
         const path = event.path ?? event.composedPath?.();
@@ -8,5 +8,5 @@ export const getEventTarget = (event) => {
         return target;
     }
 
-    return event.target;
+    return event?.target;
 };
