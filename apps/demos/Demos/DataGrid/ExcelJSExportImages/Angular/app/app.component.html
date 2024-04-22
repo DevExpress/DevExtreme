@@ -19,7 +19,7 @@
   <dxi-column dataField="HireDate" dataType="date"></dxi-column>
 
   <div *dxTemplate="let cell of 'cellTemplate'">
-    <img src="{{ cell.value }}" />
+    <img src="{{ cell.value }}" alt="Employee photo" />
   </div>
 
   <dxo-export [enabled]="true"></dxo-export>

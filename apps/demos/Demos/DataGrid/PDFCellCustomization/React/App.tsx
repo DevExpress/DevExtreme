@@ -74,7 +74,7 @@ const App = () => (
       <Column dataField="City" />
       <Column dataField="State" groupIndex={0} />
       <Column dataField="Phone" format={(e) => phoneNumberFormat(e)} />
-      <Column dataField="Website" caption="" alignment="center" width={100} cellRender={(e) => renderGridCell(e)} />
+      <Column dataField="Website" alignment="center" width={100} cellRender={(e) => renderGridCell(e)} />
 
       <Summary>
         <TotalItem

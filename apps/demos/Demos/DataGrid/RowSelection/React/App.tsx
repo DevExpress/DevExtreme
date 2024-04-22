@@ -34,7 +34,7 @@ const App = () => {
       </DataGrid>
       {showEmployeeInfo && (
         <div id="employee-info">
-          <img src={selectedRowPicture} className="employee-photo" />
+          <img src={selectedRowPicture} className="employee-photo" alt="Employee photo" />
           <p className="employee-notes">{selectedRowNotes}</p>
         </div>
       )}
