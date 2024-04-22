@@ -862,7 +862,33 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['45', '10', '45']);
     });
 
-    QUnit.test('Collapsed + expanded pane should have 50% of next pane size if next pane is now less than cached size', function(assert) {
+    QUnit.test('Collapsed pane should expand to its previous size', function(assert) {
+        this.reinit({
+            items: [
+                { resizable: true, collapsible: true },
+                { resizable: false, collapsible: true, size: 500 },
+                { resizable: true, collapsible: false }
+            ],
+        });
+
+        const initialLayout = ['24.5', '50.8', '24.5'];
+
+        this.assertLayout(initialLayout);
+
+        const $resizeHandle = this.getResizeHandles().eq(1);
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['24.6', '0', '75.4']);
+
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(initialLayout);
+    });
+
+    QUnit.test('Collapsed pane should restore full width when size to next neighbor is 0', function(assert) {
         this.reinit({
             items: [ { collapsible: true, }, { collapsible: true, size: 500 }, { collapsible: true } ],
         });
@@ -884,7 +910,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         $collapseNextButton.trigger('dxclick');
 
-        this.assertLayout(['12.3', '12.3', '75.4']);
+        this.assertLayout(['24.6', '0', '75.4']);
     });
 
     QUnit.test('Whole layout should be repositined on collapse using api', function(assert) {
@@ -1877,6 +1903,55 @@ QUnit.module('Behavior', moduleConfig, () => {
         const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
 
         assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is invisible');
+    });
+
+    [
+        {
+            orientation: 'horizontal', expandKey: 'ArrowRight',
+            dataSource: [{ minSize: '50px', collapsible: true, collapsed: true }, { size: 50 }, { }, { }],
+            handleIndex: 0,
+            expectedLayout: ['25', '0', '37.5', '37.5'],
+            expectedItemSizes: [50, 0, 75, 75],
+        },
+        {
+            orientation: 'vertical', expandKey: 'ArrowDown',
+            dataSource: [{ minSize: '50px', collapsible: true, collapsed: true }, { size: 50 }, { }, { }],
+            handleIndex: 0,
+            expectedLayout: ['25', '0', '37.5', '37.5'],
+            expectedItemSizes: [50, 0, 75, 75],
+        },
+
+        {
+            orientation: 'horizontal', expandKey: 'ArrowLeft',
+            dataSource: [ { }, { }, { size: 50 }, { minSize: '50px', collapsible: true, collapsed: true }],
+            handleIndex: 2,
+            expectedLayout: ['37.5', '37.5', '0', '25'],
+            expectedItemSizes: [75, 75, 0, 50],
+        },
+        {
+            orientation: 'vertical', expandKey: 'ArrowUp',
+            dataSource: [ { }, { }, { size: 50 }, { minSize: '50px', collapsible: true, collapsed: true }],
+            handleIndex: 2,
+            expectedLayout: ['37.5', '37.5', '0', '25'],
+            expectedItemSizes: [75, 75, 0, 50],
+        },
+    ].forEach(({ orientation, expandKey, dataSource, expectedLayout, handleIndex, expectedItemSizes }) => {
+        QUnit.test(`pane should be expanded to to minSize, orientation ${orientation}`, function(assert) {
+            this.reinit({
+                width: 224,
+                height: 224,
+                orientation,
+                dataSource
+            }, '#splitterInContainer');
+
+            const $resizeHandle = this.getResizeHandles().eq(handleIndex);
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(expandKey, { ctrlKey: true });
+
+            this.assertLayout(expectedLayout);
+            this.checkItemSizes(expectedItemSizes);
+        });
     });
 
     ['left', 'right'].forEach((item) => {

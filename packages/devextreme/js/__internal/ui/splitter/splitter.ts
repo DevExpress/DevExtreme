@@ -410,9 +410,12 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
           const leftItemSize = this._getItemDimension($leftItem.get(0));
 
-          if (!rightItemData.minSize || leftItemSize > rightItemData.minSize) {
-            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= leftItemSize) {
-              this._collapsedItemSize = leftItemSize / 2;
+          // todo: refactor
+          const minItemSize = parseFloat(rightItemData.minSize);
+
+          if (!rightItemData.minSize || leftItemSize >= minItemSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > leftItemSize) {
+              this._collapsedItemSize = Math.max(leftItemSize / 2, minItemSize || -Infinity);
             }
           }
 
@@ -462,9 +465,12 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
           const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          if (!leftItemData.minSize || rightItemSize > leftItemData.minSize) {
-            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= rightItemSize) {
-              this._collapsedItemSize = rightItemSize / 2;
+          // todo: refactor
+          const minItemSize = parseFloat(leftItemData.minSize);
+
+          if (!leftItemData.minSize || rightItemSize >= minItemSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > rightItemSize) {
+              this._collapsedItemSize = Math.max(rightItemSize / 2, minItemSize || -Infinity);
             }
           }
 
@@ -763,7 +769,8 @@ class Splitter extends (CollectionWidget as any) {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        resizable: item.resizable !== false,
+        // todo: test
+        resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
         visible: item.visible,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
