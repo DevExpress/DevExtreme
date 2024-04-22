@@ -72,7 +72,7 @@ fixture.disablePageReloads`CheckBox`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    for (const text of ['label', 'one two three']) {
+    for (const text of [undefined, 'label', 'one two three']) {
       for (const state of [
         READONLY_STATE_CLASS,
         DEFAULT_STATE_CLASS,
@@ -111,7 +111,7 @@ fixture.disablePageReloads`CheckBox`
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
   }).before(async () => {
-    for (const text of ['label', 'one two three']) {
+    for (const text of [undefined, 'label', 'one two three']) {
       for (const state of [
         READONLY_STATE_CLASS,
         DEFAULT_STATE_CLASS,
