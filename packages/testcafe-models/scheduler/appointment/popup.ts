@@ -21,6 +21,8 @@ export const CLASS = {
   endDateTimeZoneEditor: 'e2e-dx-scheduler-form-end-date-timezone',
   allDaySwitch: 'e2e-dx-scheduler-form-all-day-switch',
   recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch',
+  selectItem: 'dx-list-item',
+  radioButton: 'dx-radiobutton',
 };
 export const SELECTORS = {
   textInput: `.${CLASS.textEditor} .${CLASS.textEditorInput}`,
@@ -62,6 +64,8 @@ export default class AppointmentPopup {
 
   freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
 
+  recurrenceTypeElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(0);
+
   endRepeatDateElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(2);
 
   repeatEveryElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(1);
@@ -86,5 +90,16 @@ export default class AppointmentPopup {
 
   getRecurrenceRuleSwitchValue(): Promise<string | undefined> {
     return this.recurrenceElement.find('input[type="hidden"]').value;
+  }
+
+  getRecurrenceTypeSelectItem(nth = 0): Selector {
+    return Selector(`.${CLASS.overlayWrapper}`)
+        .nth(1)
+        .find(`.${CLASS.selectItem}`)
+        .nth(nth);
+  }
+
+  getEndRepeatRadioButton(nth = 0): Selector {
+    return this.wrapper.find(`.${CLASS.radioButton}`).nth(nth);
   }
 }
