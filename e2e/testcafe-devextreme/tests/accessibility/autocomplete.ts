@@ -1,12 +1,10 @@
 import { Properties } from 'devextreme/ui/autocomplete.d';
 import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 const items = ['Item_1', 'Item_2', 'Item_3'];
 

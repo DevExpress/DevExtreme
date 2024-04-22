@@ -7,15 +7,13 @@ import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 const NUMBERBOX_CLASS = 'dx-numberbox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`NumberBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
   test(`Label for dxNumberBox stylingMode=${stylingMode}`, async (t) => {
