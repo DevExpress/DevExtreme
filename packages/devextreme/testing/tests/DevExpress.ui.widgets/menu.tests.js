@@ -865,6 +865,45 @@ QUnit.module('Rendering Scrollable', {
 
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
+
+    QUnit.test('Submenu height should be recalculated on dimension changes', function(assert) {
+        const menu = createMenuInWindow({
+            items: [
+                {
+                    text: 'Item 1',
+                    items: [
+                        {
+                            text: 'Item 11',
+                            items: [{ text: 'Item 111' }],
+                        },
+                    ],
+                },
+            ],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $rootItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const $overlayContent = $(submenu._overlay.content());
+        const $menuItem1 = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+        $menuItem1.trigger('dxclick');
+
+        const spy = sinon.spy();
+
+        submenu._setSubMenuHeight = spy;
+
+        resizeCallbacks.fire();
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const args = spy.args[0][0];
+
+        assert.strictEqual(args[0], $nestedSubmenu[0], 'height recalculation is called for the nested submenu');
+        assert.strictEqual(spy.callCount, 1, 'no other recalculations');
+    });
 });
 
 QUnit.module('Menu - templates', {
@@ -1424,7 +1463,6 @@ QUnit.module('Menu tests', {
         const menu = createMenu(options);
         const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
-        // show submenu
         $($rootItem).trigger('dxclick');
         assert.equal(handlerShowing.callCount, 1);
         assert.equal(handlerShown.callCount, 1);
@@ -1484,7 +1522,6 @@ QUnit.module('Menu tests', {
             assert.strictEqual($(handler.args[callNumber][0].submenuContainer)[0], submenuContainer, `${comment} - submenuContainer`);
         };
 
-        // show submenu
         $($rootItem).trigger('dxclick');
 
         const submenu = getSubMenuInstance($rootItem);
@@ -1545,7 +1582,6 @@ QUnit.module('Menu tests', {
         const menu = createMenuInWindow(options);
         const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
-        // show submenu
         $($rootItem).trigger('dxclick');
 
         const submenu = getSubMenuInstance($rootItem);

@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import support from 'core/utils/support';
 import { getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
@@ -568,6 +569,33 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         $(item1).trigger('dxclick');
 
         assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
+    });
+
+    QUnit.test('Submenu height should be recalculated on dimension changes', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [
+                { text: 1, items: [{ text: 11 }] },
+            ],
+            focusStateEnabled: true,
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 }
+        });
+        const $itemsContainer = instance.itemsContainer();
+        const item1 = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+        $(item1).trigger('dxclick');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const spy = sinon.spy();
+
+        instance._setSubMenuHeight = spy;
+
+        resizeCallbacks.fire();
+
+        const args = spy.args[0][0];
+
+        assert.strictEqual(args[0], $nestedSubmenu[0], 'height recalculation is called for the nested submenu');
+        assert.strictEqual(spy.callCount, 1, 'no other recalculations');
     });
 });
 

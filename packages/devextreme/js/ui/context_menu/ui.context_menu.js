@@ -260,12 +260,16 @@ class ContextMenu extends MenuBase {
 
     _setFocusedElement($element) {
         if($element && $element.length !== 0) {
-            const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
-            const scrollableInstance = $scrollableElement.dxScrollable('instance');
-
             this.option('focusedElement', getPublicElement($element));
-            scrollableInstance.scrollToElement($element);
+            this._scrollToElement($element);
         }
+    }
+
+    _scrollToElement($element) {
+        const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
+        const scrollableInstance = $scrollableElement.dxScrollable('instance');
+
+        scrollableInstance?.scrollToElement($element);
     }
 
     _getItemsByLocation(location) {
@@ -671,6 +675,18 @@ class ContextMenu extends MenuBase {
             : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
 
         return availableHeight - SUBMENU_PADDING;
+    }
+
+    _dimensionChanged() {
+        $(`.${DX_MENU_ITEM_EXPANDED_CLASS}`).each((_, item) => {
+            const $item = $(item);
+            const $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
+
+            if($submenu.length) {
+                this._setSubMenuHeight($submenu, $item, true);
+                this._scrollToElement($item);
+            }
+        });
     }
 
     _getSubmenuBorderWidth() {
