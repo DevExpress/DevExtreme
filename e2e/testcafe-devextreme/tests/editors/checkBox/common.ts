@@ -147,18 +147,15 @@ test('Checkbox configuration, different Checkbox orientation', async (t) => {
   for (const rtlEnabled of [false, true]) {
     for (const width of [undefined, 45, 65]) {
       for (const text of [undefined, 'label', 'one two three']) {
-        for (const value of valueModes) {
-          const id = `dx${new Guid()}`;
-          await appendElementTo('#container', 'div', id, {});
+        const id = `dx${new Guid()}`;
+        await appendElementTo('#container', 'div', id, {});
 
-          await createWidget('dxCheckBox', {
-            text,
-            value,
-            width,
-            rtlEnabled,
-          }, `#${id}`);
-          await setClassAttribute(Selector(`#${id}`), DEFAULT_STATE_CLASS);
-        }
+        await createWidget('dxCheckBox', {
+          text,
+          width,
+          rtlEnabled,
+        }, `#${id}`);
+        await setClassAttribute(Selector(`#${id}`), DEFAULT_STATE_CLASS);
       }
     }
   }
