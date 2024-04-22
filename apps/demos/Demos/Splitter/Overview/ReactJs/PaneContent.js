@@ -1,12 +1,11 @@
-import React from 'react';
-
-const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+import React from "react";
+const dimensionOptions = new Set(["size", "minSize", "maxSize"]);
 const getPaneState = (data) => {
   if (data.resizable !== false && !data.collapsible) {
-    return 'Resizable only';
+    return "Resizable only";
   }
-  const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
-  const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
+  const resizableText = data.resizable ? "Resizable" : "Non-resizable";
+  const collapsibleText = data.collapsible ? "collapsible" : "non-collapsible";
   return `${resizableText} and ${collapsibleText}`;
 };
 const getFilteredDimensionOptions = (data) =>
@@ -14,7 +13,10 @@ const getFilteredDimensionOptions = (data) =>
     .filter(([key, value]) => dimensionOptions.has(key) && value)
     .map(([key, value]) => ({ key, value }));
 const PaneContent = (data) => (
-  <div className="pane-content" tabIndex={0}>
+  <div
+    className="pane-content"
+    tabIndex={0}
+  >
     <div className="pane-title">{data.title}</div>
     <div className="pane-state">{getPaneState(data)}</div>
     {getFilteredDimensionOptions(data).map((item, index) => (
