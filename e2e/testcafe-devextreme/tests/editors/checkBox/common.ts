@@ -60,7 +60,7 @@ fixture.disablePageReloads`CheckBox`
   });
 });
 
-test('Checkbox configuration, different Checkbox icon sizes', async (t) => {
+test('Checkbox configuration, different Checkbox icon sizes, states, value Modes', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await testScreenshot(t, takeScreenshot, 'CheckBox configurations different iconSizes.png', { element: '#container', shouldTestInCompact: true });
