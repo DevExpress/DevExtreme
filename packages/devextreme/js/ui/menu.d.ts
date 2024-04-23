@@ -105,8 +105,15 @@ export type SelectionChangedEvent<TKey = any> = EventInfo<dxMenu<TKey>> & Select
  * @inherits EventInfo
  */
 export type SubmenuHiddenEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
+    /**
+     * @docid _ui_menu_SubmenuHiddenEvent.itemData
+     * @type dxMenuItem
+     */
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuHiddenEvent.rootItem */
     readonly rootItem?: DxElement;
+    /** @docid _ui_menu_SubmenuHiddenEvent.submenuContainer */
+    readonly submenuContainer?: DxElement;
 };
 
 /**
@@ -116,8 +123,15 @@ export type SubmenuHiddenEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
  * @inherits Cancelable,EventInfo
  */
 export type SubmenuHidingEvent<TKey = any> = Cancelable & EventInfo<dxMenu<TKey>> & {
+    /**
+     * @docid _ui_menu_SubmenuHidingEvent.itemData
+     * @type dxMenuItem
+     */
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuHidingEvent.rootItem */
     readonly rootItem?: DxElement;
+    /** @docid _ui_menu_SubmenuHidingEvent.submenuContainer */
+    readonly submenuContainer?: DxElement;
 };
 
 /**
@@ -127,8 +141,15 @@ export type SubmenuHidingEvent<TKey = any> = Cancelable & EventInfo<dxMenu<TKey>
  * @inherits EventInfo
  */
 export type SubmenuShowingEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
+    /**
+     * @docid _ui_menu_SubmenuShowingEvent.itemData
+     * @type dxMenuItem
+     */
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuShowingEvent.rootItem */
     readonly rootItem?: DxElement;
+    /** @docid _ui_menu_SubmenuShowingEvent.submenuContainer */
+    readonly submenuContainer?: DxElement;
 };
 
 /**
@@ -138,8 +159,15 @@ export type SubmenuShowingEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
  * @inherits EventInfo
  */
 export type SubmenuShownEvent<TKey = any> = EventInfo<dxMenu<TKey>> & {
+    /**
+     * @docid _ui_menu_SubmenuShownEvent.itemData
+     * @type dxMenuItem
+     */
+    readonly itemData?: Item;
     /** @docid _ui_menu_SubmenuShownEvent.rootItem */
     readonly rootItem?: DxElement;
+    /** @docid _ui_menu_SubmenuShownEvent.submenuContainer */
+    readonly submenuContainer?: DxElement;
 };
 
 /**
