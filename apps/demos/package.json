@@ -41,7 +41,7 @@
         "html-react-parser": "1.4.14",
         "jquery": "3.6.3",
         "jspdf": "2.5.1",
-        "jspdf-autotable": "3.5.28",
+        "jspdf-autotable": "3.8.2",
         "mustache": "4.2.0",
         "plugin-typescript": "8.0.0",
         "preact": "10.12.1",

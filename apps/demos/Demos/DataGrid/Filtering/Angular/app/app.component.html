@@ -37,7 +37,13 @@
     dataField="SaleAmount"
     alignment="right"
     format="currency"
-    [editorOptions]="{ format: 'currency', showClearButton: true }"
+    [editorOptions]="{
+      format: 'currency',
+      showClearButton: true,
+      inputAttr: {
+        'aria-label': 'Filter cell'
+      }
+    }"
   >
     <dxo-header-filter
       [dataSource]="saleAmountHeaderFilter"

@@ -67,6 +67,7 @@ const App = () => {
         <Column dataField='ShipCountry' />
         <Column type='buttons'>
           <Button icon='add'
+            text='Add'
             onClick={onAddButtonClick}
             visible={isAddButtonVisible}
           />

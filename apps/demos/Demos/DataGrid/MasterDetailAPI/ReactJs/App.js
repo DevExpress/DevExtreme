@@ -17,6 +17,7 @@ const renderDetail = (props) => {
     <div className="employee-info">
       <img
         className="employee-photo"
+        alt="Employee photo"
         src={Picture}
       />
       <p className="employee-notes">{Notes}</p>

@@ -31,7 +31,8 @@ module.exports = {
         './js/renovation/utils/get_element_offset.ts',
         './js/renovation/utils/dom.ts',
         './js/renovation/utils/render_template.ts', // TODO: this is temporary file
-        './js/renovation/ui/scheduler/' // NOTE: disabled coverage for migration
+        './js/renovation/ui/scheduler/', // NOTE: disabled coverage for migration
+        './js/renovation/utils/diagnostic' // NOTE: unused after the scheduler's code migration
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {

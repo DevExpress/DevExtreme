@@ -7,13 +7,11 @@ import {
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 const STATE_HOVER_CLASS = 'dx-state-hover';
 
 fixture.disablePageReloads`DateRangeBox range selection`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('DateRangeBox calendar appearance after change rtl mode in runtime', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

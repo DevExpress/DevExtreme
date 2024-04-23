@@ -5,13 +5,11 @@ import { testScreenshot, isMaterialBased } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
-import { clearTestPage } from '../../helpers/clearPage';
 
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../containerQuill.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../containerQuill.html'));
 
 test('Color of the mark (T882067)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

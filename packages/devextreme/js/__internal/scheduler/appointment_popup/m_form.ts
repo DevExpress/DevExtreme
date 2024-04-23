@@ -55,7 +55,6 @@ const validateAppointmentFormDate = (editor, value, previousValue) => {
 
 const updateRecurrenceItemVisibility = (recurrenceRuleExpr, value, form) => {
   form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'visible', value);
-  !value && form.updateData(recurrenceRuleExpr, '');
   form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
 };
 

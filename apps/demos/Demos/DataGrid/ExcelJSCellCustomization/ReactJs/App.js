@@ -100,7 +100,6 @@ const App = () => (
       />
       <Column
         dataField="Website"
-        caption=""
         alignment="center"
         width={100}
         cellRender={renderGridCell}

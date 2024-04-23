@@ -26,7 +26,7 @@
         data-type="date"
       />
       <DxColumn
-        :editor-options="{ format: 'currency', showClearButton: true }"
+        :editor-options="saleAmountEditorOptions"
         :header-filter="{ dataSource: saleAmountHeaderFilters }"
         data-field="SaleAmount"
         data-type="number"
@@ -61,6 +61,14 @@ import {
 } from 'devextreme-vue/data-grid';
 import { PositionConfig } from 'devextreme/animation/position';
 import { orders, Order } from './data.ts';
+
+const saleAmountEditorOptions = { 
+  format: 'currency', 
+  showClearButton: true, 
+  inputAttr: {
+    'aria-label': 'Filter cell',
+  }, 
+};
 
 const filterBuilderPopupPosition: PositionConfig = {
   of: window,
