@@ -43,9 +43,9 @@ const App = () => {
     <div>
       <div className="left-side">
         <div className="logo">
-          <img src="../../../../images/logo-devav.png" />
+          <img src="../../../../images/logo-devav.png" alt="DEVAV"/>
           &nbsp;
-          <img src="../../../../images/logo-tasks.png" />
+          <img src="../../../../images/logo-tasks.png" alt="Tasks"/>
         </div>
       </div>
       <div className="right-side">

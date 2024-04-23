@@ -768,31 +768,27 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
-    ['prev', 'next'].forEach((scenario) => {
-        QUnit.test(`Pane collapse ${scenario} on runtime (without collapsedSize)`, function(assert) {
-            this.reinit({
-                items: [{ collapsible: true }, { collapsible: true }],
-            });
+    [
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ maxSize: '75%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['100', '0'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['0', '100'], items: [{ collapsible: true }, { collapsible: true }] },
+        { position: 'next', expectedLayout: ['100', '0'], items: [{ collapsible: true }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
+    ].forEach(({ position, expectedLayout, items }) => {
+        QUnit.test(`Pane collapse ${position} on runtime`, function(assert) {
+            this.reinit({ items });
 
-            const expectedLayout = scenario === 'prev' ? ['0', '100'] : ['100', '0'];
             const $resizeHandle = this.getResizeHandles();
-            const $collapseButton = scenario === 'prev'
-                ? this.getCollapsePrevButton($resizeHandle)
-                : this.getCollapseNextButton($resizeHandle);
-
-            $collapseButton.trigger('dxclick');
-
-            this.assertLayout(expectedLayout);
-        });
-
-        QUnit.test(`Pane collapse ${scenario} on runtime (with collapsedSize)`, function(assert) {
-            this.reinit({
-                items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }],
-            });
-
-            const expectedLayout = scenario === 'prev' ? ['10.0806', '89.9194'] : ['89.9194', '10.0806'];
-            const $resizeHandle = this.getResizeHandles();
-            const $collapseButton = scenario === 'prev'
+            const $collapseButton = position === 'prev'
                 ? this.getCollapsePrevButton($resizeHandle)
                 : this.getCollapseNextButton($resizeHandle);
 
@@ -927,7 +923,33 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         this.assertLayout(['45', '10', '45']);
     });
 
-    QUnit.test('Collapsed + expanded pane should have 50% of next pane size if next pane is now less than cached size', function(assert) {
+    QUnit.test('Collapsed pane should expand to its previous size', function(assert) {
+        this.reinit({
+            items: [
+                { resizable: true, collapsible: true },
+                { resizable: false, collapsible: true, size: 500 },
+                { resizable: true, collapsible: false }
+            ],
+        });
+
+        const initialLayout = ['24.5935', '50.8', '24.5935'];
+
+        this.assertLayout(initialLayout);
+
+        const $resizeHandle = this.getResizeHandles().eq(1);
+        const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
+
+        $collapsePrevButton.trigger('dxclick');
+
+        this.assertLayout(['24.6', '0', '75.4']);
+
+        const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
+        $collapseNextButton.trigger('dxclick');
+
+        this.assertLayout(initialLayout);
+    });
+
+    QUnit.test('Collapsed pane should restore full width when size to next neighbor is 0', function(assert) {
         this.reinit({
             items: [ { collapsible: true, }, { collapsible: true, size: 500 }, { collapsible: true } ],
         });
@@ -949,7 +971,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         $collapseNextButton.trigger('dxclick');
 
-        this.assertLayout(['12.3', '12.3', '75.4']);
+        this.assertLayout(['24.6', '0', '75.4']);
     });
 
     QUnit.test('Whole layout should be repositined on collapse using api', function(assert) {
@@ -977,6 +999,64 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
 QUnit.module('Resizing', moduleConfig, () => {
     ['horizontal', 'vertical'].forEach(orientation => {
+        QUnit.test(`collapsed pane should move its neighboring pane on expansion to left, orientation ${orientation}`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ }, { }, { }, { minSize: '250px', collapsible: true }]
+            }, '#splitterInContainer');
+
+            const $resizeHandle = this.getResizeHandles().eq(2);
+            const keyboard = keyboardMock($resizeHandle);
+
+            const collapseKey = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+
+            this.assertLayout(['25', '25', '25', '25']);
+
+            keyboard.keyDown(collapseKey, { ctrlKey: true });
+
+            this.assertLayout(['25', '25', '50', '0']);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(300, 300).dragEnd();
+
+            this.assertLayout(['25', '55', '20', '0']);
+
+            const expandKey = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+            keyboard.keyDown(expandKey, { ctrlKey: true });
+
+            this.assertLayout(['25', '50', '0', '25']);
+        });
+
+        QUnit.test(`collapsed pane should move its neighboring pane on expansion to right, orientation ${orientation}`, function(assert) {
+            this.reinit({
+                width: '100%',
+                height: '100%',
+                orientation,
+                dataSource: [{ minSize: '250px', collapsible: true }, { }, { }, { }]
+            }, '#splitterInContainer');
+
+            const $resizeHandle = this.getResizeHandles().eq(0);
+            const keyboard = keyboardMock($resizeHandle);
+
+            const collapseKey = orientation === 'horizontal' ? 'ArrowLeft' : 'ArrowUp';
+
+            keyboard.keyDown(collapseKey, { ctrlKey: true });
+
+            this.assertLayout(['0', '50', '25', '25']);
+
+            const pointer = pointerMock(this.getResizeHandles().eq(1));
+            pointer.start().dragStart().drag(-300, -300).dragEnd();
+
+            this.assertLayout(['0', '20', '55', '25']);
+
+            const expandKey = orientation === 'horizontal' ? 'ArrowRight' : 'ArrowDown';
+            keyboard.keyDown(expandKey, { ctrlKey: true });
+
+            this.assertLayout(['25', '0', '50', '25']);
+        });
+
         QUnit.test(`items should be evenly distributed by default with ${orientation} orientation`, function(assert) {
             this.reinit({
                 orientation,
@@ -1904,6 +1984,55 @@ QUnit.module('Behavior', moduleConfig, () => {
         const $collapseNextButton = this.getCollapseNextButton($resizeHandle);
 
         assert.ok($collapseNextButton.hasClass(STATE_INVISIBLE_CLASS), 'collapse next button is invisible');
+    });
+
+    [
+        {
+            orientation: 'horizontal', expandKey: 'ArrowRight',
+            dataSource: [{ minSize: '50px', collapsible: true, collapsed: true }, { size: 50 }, { }, { }],
+            handleIndex: 0,
+            expectedLayout: ['25', '0', '37.5', '37.5'],
+            expectedItemSizes: [50, 0, 75, 75],
+        },
+        {
+            orientation: 'vertical', expandKey: 'ArrowDown',
+            dataSource: [{ minSize: '50px', collapsible: true, collapsed: true }, { size: 50 }, { }, { }],
+            handleIndex: 0,
+            expectedLayout: ['25', '0', '37.5', '37.5'],
+            expectedItemSizes: [50, 0, 75, 75],
+        },
+
+        {
+            orientation: 'horizontal', expandKey: 'ArrowLeft',
+            dataSource: [ { }, { }, { size: 50 }, { minSize: '50px', collapsible: true, collapsed: true }],
+            handleIndex: 2,
+            expectedLayout: ['37.5', '37.5', '0', '25'],
+            expectedItemSizes: [75, 75, 0, 50],
+        },
+        {
+            orientation: 'vertical', expandKey: 'ArrowUp',
+            dataSource: [ { }, { }, { size: 50 }, { minSize: '50px', collapsible: true, collapsed: true }],
+            handleIndex: 2,
+            expectedLayout: ['37.5', '37.5', '0', '25'],
+            expectedItemSizes: [75, 75, 0, 50],
+        },
+    ].forEach(({ orientation, expandKey, dataSource, expectedLayout, handleIndex, expectedItemSizes }) => {
+        QUnit.test(`pane should be expanded to to minSize, orientation ${orientation}`, function(assert) {
+            this.reinit({
+                width: 224,
+                height: 224,
+                orientation,
+                dataSource
+            }, '#splitterInContainer');
+
+            const $resizeHandle = this.getResizeHandles().eq(handleIndex);
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(expandKey, { ctrlKey: true });
+
+            this.assertLayout(expectedLayout);
+            this.checkItemSizes(expectedItemSizes);
+        });
     });
 
     ['left', 'right'].forEach((item) => {

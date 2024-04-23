@@ -13,6 +13,8 @@ import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import Draggable from '@ts/m_draggable';
 
+import { isDefined } from '../core/utils/type';
+
 const window = getWindow();
 
 const SORTABLE = 'dxSortable';
@@ -881,7 +883,7 @@ const Sortable = Draggable.inherit({
 
       if (toIndex === null || fromIndex === null) {
         stopAnimation(itemElement);
-      } else if (prevPosition !== position || fullUpdate && position) {
+      } else if (prevPosition !== position || (fullUpdate && isDefined(position))) {
         animate(itemElement, extend({}, animationConfig, {
           to: { [positionPropName]: !isVerticalOrientation && rtlEnabled ? -position : position },
         }));

@@ -73,7 +73,7 @@ const App = () => (
       <Column dataField="City" />
       <Column dataField="State" groupIndex={0} />
       <Column dataField="Phone" format={phoneNumberFormat} />
-      <Column dataField="Website" caption="" alignment="center" width={100} cellRender={renderGridCell} />
+      <Column dataField="Website" alignment="center" width={100} cellRender={renderGridCell} />
 
       <Export enabled={true} />
 

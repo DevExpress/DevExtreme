@@ -402,8 +402,13 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
           const leftItemSize = this._getItemDimension($leftItem.get(0));
 
-          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= leftItemSize) {
-            this._collapsedItemSize = leftItemSize / 2;
+          // todo: refactor
+          const minItemSize = parseFloat(rightItemData.minSize);
+
+          if (!rightItemData.minSize || leftItemSize >= minItemSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > leftItemSize) {
+              this._collapsedItemSize = Math.max(leftItemSize / 2, minItemSize || -Infinity);
+            }
           }
 
           this._panesCacheSize[rightItemIndex] = undefined;
@@ -452,8 +457,13 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
           const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= rightItemSize) {
-            this._collapsedItemSize = rightItemSize / 2;
+          // todo: refactor
+          const minItemSize = parseFloat(leftItemData.minSize);
+
+          if (!leftItemData.minSize || rightItemSize >= minItemSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > rightItemSize) {
+              this._collapsedItemSize = Math.max(rightItemSize / 2, minItemSize || -Infinity);
+            }
           }
 
           this._panesCacheSize[leftItemIndex] = undefined;
@@ -688,7 +698,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _itemCollapsedOptionChanged(item: Item): void {
-    this._updateItemsRestrictions(this.option('items'));
+    this._updateItemsRestrictions(this.option('items'), true);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
@@ -733,7 +743,7 @@ class Splitter extends (CollectionWidget as any) {
     return getDefaultLayout(this._itemRestrictions);
   }
 
-  _updateItemsRestrictions(items: Item[]): void {
+  _updateItemsRestrictions(items: Item[], collapseStateRestrictions = false): void {
     const { orientation } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
@@ -743,13 +753,18 @@ class Splitter extends (CollectionWidget as any) {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        resizable: item.resizable !== false,
+        // todo: test
+        resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
         size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
-        maxSize: convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
-        minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
+        maxSize: collapseStateRestrictions
+          ? undefined
+          : convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
+        minSize: collapseStateRestrictions
+          ? undefined
+          : convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
       });
     });
   }
