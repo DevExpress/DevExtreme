@@ -108,37 +108,24 @@ test('Checkbox configuration, different Checkbox widths', async (t) => {
 }).before(async () => {
   for (const width of [45, undefined, 65]) {
     for (const text of [undefined, 'label', 'one two three']) {
-      for (const state of [
-        READONLY_STATE_CLASS,
-        DEFAULT_STATE_CLASS,
-        ACTIVE_STATE_CLASS,
-        HOVER_STATE_CLASS,
-        FOCUSED_STATE_CLASS,
-        DISABLED_STATE_CLASS,
-      ] as string[]
-      ) {
-        for (const value of valueModes) {
-          const id = `dx${new Guid()}`;
-          await appendElementTo('#container', 'div', id, {});
+      const id = `dx${new Guid()}`;
+      await appendElementTo('#container', 'div', id, {});
 
-          await createWidget('dxCheckBox', {
-            text,
-            value,
-            width,
-          }, `#${id}`);
-          await setClassAttribute(Selector(`#${id}`), state);
-        }
-      }
+      await createWidget('dxCheckBox', {
+        text,
+        width,
+      }, `#${id}`);
+      await setClassAttribute(Selector(`#${id}`), state);
     }
   }
 });
 
-test('Checkbox configuration, different Checkbox orientation', async (t) => {
+test('Checkbox configuration, different Checkbox orientation and width', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation.png', { element: '#container', shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation and width.png', { element: '#container', shouldTestInCompact: true });
 
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation.png', { element: '#container', theme: getDarkThemeName() });
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation and width.png', { element: '#container', theme: getDarkThemeName() });
 
   await t
     .expect(compareResults.isValid())
