@@ -72,6 +72,8 @@ test('Checkbox configuration, different Checkbox icon sizes, states, value Modes
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'width: 600px; height: 200px;');
+
   for (const iconSize of [20, undefined, 45]) {
     for (const state of [
       READONLY_STATE_CLASS,
