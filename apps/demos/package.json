@@ -128,7 +128,7 @@
         "fix-lint": "prettier --write . && eslint --fix . && stylelint **/*.{css,vue} --fix",
         "prettier": "prettier",
         "build-bundles": "gulp bundles",
-        "prepare-bundles": "gulp bundles && gulp update-config",
+        "prepare-bundles": "npm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
         "make-demos-bundle": "ts-node ./utils/create-bundles"

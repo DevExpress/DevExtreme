@@ -216,7 +216,7 @@ const build = async (framework) => {
   builder.config(builderConfig);
 
   try {
-    console.log('START systemjs-builder bundling...');
+    console.log(`START systemjs-builder ${framework} bundling...`);
     await builder.bundle(packages, bundlePath, bundleOpts);
   } catch (err) {
     console.error(`Build ${framework} error `, err);
