@@ -274,7 +274,7 @@ jobs:
         if git diff --exit-code . ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
-            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js ./Demos/**/React' and commit changes."
+            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js split' and commit changes."
             echo "If you see another diff, ensure that extra listed files have LF endings."
             exit 1
         fi
