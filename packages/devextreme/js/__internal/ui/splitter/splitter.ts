@@ -150,12 +150,6 @@ class Splitter extends (CollectionWidget as any) {
       ? getOuterWidth(element) : getOuterHeight(element);
   }
 
-  _shouldUpdateLayout(): boolean {
-    const size: number = this._getDimension(this.$element().get(0));
-
-    return size === 0;
-  }
-
   _render(): void {
     super._render();
   }
@@ -173,10 +167,16 @@ class Splitter extends (CollectionWidget as any) {
   _attachHoldEvent(): void {}
 
   _resizeHandler(): void {
+    if (!this._shouldRecalculateLayout) {
+      return;
+    }
+
     this._layout = this._getDefaultLayoutBasedOnSize();
 
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
+
+    this._shouldRecalculateLayout = false;
   }
 
   _renderItems(items: Item[]): void {
@@ -186,11 +186,13 @@ class Splitter extends (CollectionWidget as any) {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    this._layout = this._getDefaultLayoutBasedOnSize();
-    this._applyFlexGrowFromLayout(this._layout);
-
     if (isElementVisible(this.$element().get(0))) {
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      this._applyFlexGrowFromLayout(this._layout);
+
       this._updateItemSizes();
+    } else {
+      this._shouldRecalculateLayout = true;
     }
 
     this._processRenderQueue();
@@ -827,10 +829,23 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _dimensionChanged(): void {
+    this._layout = this._getDefaultLayoutBasedOnSize();
+
+    this._applyFlexGrowFromLayout(this._layout);
+    this._updateItemSizes();
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {
+      case 'width':
+      case 'height':
+        super._optionChanged(args);
+
+        this._dimensionChanged();
+        break;
       case 'allowKeyboardNavigation':
         this._iterateResizeHandles((instance) => {
           instance.option('focusStateEnabled', value);

@@ -1282,8 +1282,6 @@ QUnit.module('Resizing', moduleConfig, () => {
         });
 
         QUnit.test(`non resizable panes shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
-            const done = assert.async();
-
             this.reinit({
                 width: 1018,
                 height: 1018,
@@ -1293,12 +1291,8 @@ QUnit.module('Resizing', moduleConfig, () => {
 
             this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
 
-            setTimeout(() => {
-                this.checkItemSizes([0, 166.672, 215.328, 300]);
-                this.assertLayout([0, 24.4387, 31.573, 43.9883]);
-
-                done();
-            });
+            this.checkItemSizes([0, 166.672, 215.328, 300]);
+            this.assertLayout([0, 24.4387, 31.573, 43.9883]);
         });
     });
 
