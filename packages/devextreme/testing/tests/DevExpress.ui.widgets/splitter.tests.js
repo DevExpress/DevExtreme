@@ -1663,7 +1663,7 @@ QUnit.module('Initialization', moduleConfig, () => {
     });
 
     QUnit.test('items count should be the same as datasource items count', function(assert) {
-        this.reinit({ dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }, { text: 'pane 3' }] });
+        this.reinit({ dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }] });
 
         const items = this.$element.find(`.${SPLITTER_ITEM_CLASS}`);
 
@@ -1683,7 +1683,7 @@ QUnit.module('Initialization', moduleConfig, () => {
     });
 
     QUnit.test('Splitter with three items should have two resize handles', function(assert) {
-        this.reinit({ dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }, { text: 'pane 3' }] });
+        this.reinit({ dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }, { text: 'Pane_3' }] });
 
         assert.strictEqual(this.getResizeHandles().length, 2);
     });
@@ -2051,7 +2051,7 @@ QUnit.module('Events', moduleConfig, () => {
             const resizeHandlerStub = sinon.stub();
             this.reinit({
                 [eventHandler]: resizeHandlerStub,
-                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
             });
 
             const pointer = pointerMock(this.getResizeHandles(false).eq(0));
@@ -2067,7 +2067,7 @@ QUnit.module('Events', moduleConfig, () => {
 
             this.reinit({
                 [eventHandler]: handlerStub,
-                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
             });
 
 
@@ -2097,7 +2097,7 @@ QUnit.module('Events', moduleConfig, () => {
                     assert.strictEqual(isRenderer(handleElement), !!config().useJQuery, 'handleElement is correct');
                     assert.strictEqual($(handleElement).is($resizeHandle), true, 'handleElement field is correct');
                 },
-                dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -2395,7 +2395,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 [propertyName]: propertyValue,
                 items: [{
                     splitter: {
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }]
             });
@@ -2450,18 +2450,18 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 [propertyName]: propertyValue,
                 items: [{
                     splitter: {
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }, {},
                 {
                     splitter: {
                         dataSource: [
-                            { text: 'pane 1' },
+                            { text: 'Pane_1' },
                             {
                                 splitter: {
                                     dataSource: [
-                                        { text: 'pane 1' },
-                                        { text: 'pane 2' }
+                                        { text: 'Pane_1' },
+                                        { text: 'Pane_2' }
                                     ]
                                 }
                             }
@@ -2495,18 +2495,18 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 [propertyName]: propertyValue,
                 items: [{
                     splitter: {
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }, {},
                 {
                     splitter: {
                         dataSource: [
-                            { text: 'pane 1' },
+                            { text: 'Pane_1' },
                             {
                                 splitter: {
                                     dataSource: [
-                                        { text: 'pane 1' },
-                                        { text: 'pane 2' }
+                                        { text: 'Pane_1' },
+                                        { text: 'Pane_2' }
                                     ]
                                 }
                             }
@@ -2532,7 +2532,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
         this.reinit({
             items: [{
                 splitter: {
-                    dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                    dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                 }
             }]
         });
@@ -2639,7 +2639,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 [eventHandler]: resizeHandlerStub,
                 items: [{
                     splitter: {
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }]
             });
@@ -2659,7 +2659,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 [eventHandler]: resizeHandlerStub,
                 items: [{
                     splitter: {
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }]
             });
@@ -2682,7 +2682,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 items: [{
                     splitter: {
                         [eventHandler]: nestedSplitterResizeHandlerStub,
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }]
             });
@@ -2704,7 +2704,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                 items: [{
                     splitter: {
                         [eventHandler]: handlerStub,
-                        dataSource: [{ text: 'pane 1' }, { text: 'pane 2' }]
+                        dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
                 }]
             });
@@ -2827,6 +2827,43 @@ QUnit.module('Keyboard support', moduleConfig, () => {
         this.getResizeHandles().eq(1).trigger(createEvent('keydown', { key: 'Enter' }));
         assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, this.getResizeHandles().eq(1).get(0), 'event target is correct');
         assert.strictEqual(registerKeyHandlerSpy.callCount, 1);
+    });
+
+    QUnit.test('RegisterKeyHandler registers key handling for all resize handles of nested splitter components', function(assert) {
+        const registerKeyHandlerSpy = sinon.spy();
+
+        this.reinit({
+            items: [{
+                splitter: {
+                    dataSource: [{
+                        text: 'Pane_1'
+                    }, {
+                        splitter: {
+                            dataSource: [{
+                                text: 'Pane_2'
+                            }, {
+                                text: 'Pane_3'
+                            }]
+                        }
+                    }]
+                }
+            }],
+        });
+
+        this.instance.registerKeyHandler('enter', registerKeyHandlerSpy);
+
+        const $resizeHandles = this.getResizeHandles(false);
+
+        $resizeHandles.eq(0).trigger(createEvent('keydown', { key: 'Enter' }));
+
+        assert.strictEqual(registerKeyHandlerSpy.callCount, 1);
+        assert.strictEqual(registerKeyHandlerSpy.args[0][0].target, $resizeHandles.get(0), 'event target is correct');
+
+        $resizeHandles.eq(1).trigger(createEvent('keydown', { key: 'Enter' }));
+
+        assert.strictEqual(registerKeyHandlerSpy.callCount, 2);
+        assert.strictEqual(registerKeyHandlerSpy.args[1][0].target, $resizeHandles.get(1), 'event target is correct');
+
     });
 
     QUnit.test('RegisterKeyHandler registers key handling on all internal resizeHandle components, allowKeyboardNavigation is false', function(assert) {
