@@ -51,7 +51,7 @@ function run_test_impl {
         npm run build
         fi
 
-        dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
+        dotnet ../../packages/qunit-runner/bin/runner.dll --single-run & runner_pid=$!
 
         for i in {15..0}; do
             if [ -n "$runner_pid" ] && [ ! -e "/proc/$runner_pid" ]; then
