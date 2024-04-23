@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
+
+import { SimplifiedSearchMode } from 'devextreme-react/common.js';
+
 import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
+
 import DataSource from 'devextreme/data/data_source';
 
-import { SimplifiedSearchMode } from 'devextreme/common.js';
 import {
   simpleProducts,
   products,

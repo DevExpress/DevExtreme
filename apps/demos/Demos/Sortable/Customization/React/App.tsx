@@ -1,10 +1,13 @@
 import React, { useCallback, useState } from 'react';
+
+import { DragDirection, DragHighlight, Orientation } from 'devextreme-react/common';
+
 import ScrollView from 'devextreme-react/scroll-view';
-import Sortable, { SortableTypes } from 'devextreme-react/sortable';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import CheckBox, { CheckBoxTypes } from 'devextreme-react/check-box';
-import NumberBox, { NumberBoxTypes } from 'devextreme-react/number-box';
-import { DragDirection, DragHighlight, Orientation } from 'devextreme/common';
+import { Sortable, SortableTypes } from 'devextreme-react/sortable';
+import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { CheckBox, CheckBoxTypes } from 'devextreme-react/check-box';
+import { NumberBox, NumberBoxTypes } from 'devextreme-react/number-box';
+
 import {
   tasks,
   scrollSensitivityLabel,
