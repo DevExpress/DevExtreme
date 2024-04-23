@@ -3971,9 +3971,9 @@ QUnit.module('update', moduleConfig, () => {
         sortable.update();
 
         // assert
-        assert.equal(getElement(0).get(0).style.transform, '', 'item 1 is not moved');
+        assert.equal(getElement(0).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 1 is not moved');
         assert.equal(getElement(1).get(0).style.transform, 'translate(0px, -30px)', 'item 2 is not moved');
-        assert.equal(getElement(2).get(0).style.transform, '', 'item 3 is not moved');
+        assert.equal(getElement(2).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 3 is not moved');
     });
 
     QUnit.test('placeholder should be updated if dropFeedbackMode is indicate', function(assert) {
@@ -4006,9 +4006,9 @@ QUnit.module('update', moduleConfig, () => {
         sortable.update();
 
         // assert
-        assert.equal(getElement(0).get(0).style.transform, '', 'item 1 is not moved');
+        assert.equal(getElement(0).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 1 is not moved');
         assert.equal(getElement(1).get(0).style.transform, 'translate(0px, -30px)', 'item 2 is moved');
-        assert.equal(getElement(2).get(0).style.transform, '', 'item 3 is not moved');
+        assert.equal(getElement(2).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 3 is not moved');
     });
 
     QUnit.test('items should be moved correctly if offset is increased', function(assert) {
@@ -4025,7 +4025,7 @@ QUnit.module('update', moduleConfig, () => {
         // assert
         assert.equal(getElement(0).get(0).style.transform, 'translate(0px, -30px)', 'item 1 is moved');
         assert.equal(getElement(1).get(0).style.transform, 'translate(0px, -30px)', 'item 2 is moved');
-        assert.equal(getElement(2).get(0).style.transform, '', 'item 3 is not moved');
+        assert.equal(getElement(2).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 3 is not moved');
     });
 
     QUnit.test('items should be moved correctly if offset is decreased', function(assert) {
@@ -4040,8 +4040,8 @@ QUnit.module('update', moduleConfig, () => {
         sortable.update();
 
         // assert
-        assert.equal(getElement(0).get(0).style.transform, '', 'item 1 is not moved');
-        assert.equal(getElement(1).get(0).style.transform, '', 'item 2 is not moved');
+        assert.equal(getElement(0).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 1 is not moved');
+        assert.equal(getElement(1).get(0).style.transform, browser.mozilla ? 'translate(0px)' : 'translate(0px, 0px)', 'item 2 is not moved');
         assert.equal(getElement(2).get(0).style.transform, 'translate(0px, 30px)', 'item 3 is moved');
     });
 });

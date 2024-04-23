@@ -1,10 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import type { Column } from 'devextreme/ui/data_grid';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/createWidget';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
@@ -29,11 +30,10 @@ const generateData = (rowCount: number, columnCount: number): Record<string, unk
   return items;
 };
 
-const generateColumns = (columnCount: number): Column[] => {
-  return [...new Array(columnCount)].map((_, index) => ({
-    dataField: `field${index + 1}`
-  }))
-} 
+const generateColumns = (columnCount: number): Column[] => [...new Array(columnCount)]
+  .map((_, index) => ({
+    dataField: `field${index + 1}`,
+  }));
 
 test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -101,7 +101,7 @@ test('DataGrid should not scroll back to the focused cell after horizontal scrol
 }));
 
 // T1090735
-test('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
+safeSizeTest('The updateDimensions method should render the grid if a container was hidden and columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -262,14 +262,14 @@ test('Columns should be rendered correctly after reinit of columns controller', 
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await dataGrid.scrollTo(t, {x: 1000});
+  await dataGrid.scrollTo(t, { x: 1000 });
   await t.expect(dataGrid.getScrollLeft()).eql(1000);
 
   const columns = generateColumns(500);
   columns[0].visible = false;
   await dataGrid.option('columns', columns);
   await t.expect(dataGrid.getScrollLeft()).eql(1000);
-  
+
   columns[0].visible = true;
   await dataGrid.option('columns', columns);
   await t.expect(dataGrid.getScrollLeft()).eql(1000);
@@ -279,14 +279,12 @@ test('Columns should be rendered correctly after reinit of columns controller', 
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async () => {
-  return createWidget('dxDataGrid', {
-    height: 440,
-    dataSource: generateData(150, 500),
-    columns: generateColumns(500),
-    columnWidth: 100,
-    scrolling: {
-      columnRenderingMode: 'virtual',
-    },
-  });
-});
+}).before(async () => createWidget('dxDataGrid', {
+  height: 440,
+  dataSource: generateData(150, 500),
+  columns: generateColumns(500),
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));

@@ -276,6 +276,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
     const DX_SCROLLABLE_CONTAINER_CLASS = 'dx-scrollable-container';
     const DX_SCROLLABLE_CONTENT_CLASS = 'dx-scrollable-content';
     const BORDER_WIDTH = 1;
+    const SUBMENU_PADDING = 10;
 
     QUnit.test('Context menu should init Scrollable', function(assert) {
         new ContextMenu(this.$element, { items: [{ text: 1 }], visible: true });
@@ -325,7 +326,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $rootSubmenu = $(`.${DX_SUBMENU_CLASS}`);
         const $itemsContainer = $rootSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`);
 
-        assert.roughEqual($rootSubmenu.outerHeight(), $itemsContainer.outerHeight(), .1);
+        assert.roughEqual($rootSubmenu.height(), $itemsContainer.outerHeight(), .1);
     });
 
     QUnit.test('Nested submenu should be positioned to a clicked item', function(assert) {
@@ -348,7 +349,11 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $nestedSubmenu = $submenus.eq(1);
         const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
         assert.strictEqual($rootItem.offset().top, $nestedItemsContainer.offset().top, 'Nested submenu aligned to a clicked item');
-        assert.strictEqual($nestedSubmenu.outerHeight(), $(window).height() - $nestedItemsContainer.offset().top, 'Nested submenu uses all available space');
+        assert.strictEqual(
+            $nestedSubmenu.height(),
+            $(window).height() - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+            'Nested submenu uses all available space'
+        );
     });
 
     QUnit.test('Flipping 2nd level submenu', function(assert) {
@@ -377,10 +382,10 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
 
         const $submenus = $(`.${DX_SUBMENU_CLASS}`);
         const $nestedSubmenu = $submenus.eq(1);
-        const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height());
+        const availableHeight = Math.min($rootItem.offset().top + $($rootItem).outerHeight(), $(window).height()) - SUBMENU_PADDING;
 
-        assert.roughEqual($nestedSubmenu.offset().top, BORDER_WIDTH, .1, 'Nested submenu flipped to top');
-        assert.roughEqual($nestedSubmenu.outerHeight(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
+        assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, .5, 'Nested submenu flipped to top');
+        assert.roughEqual($nestedSubmenu.height(), availableHeight, .5, 'Nested submenu aligned to a clicked item');
     });
 
     QUnit.test('Height of the context menu should be limited', function(assert) {
@@ -415,13 +420,17 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             .press('up')
             .press('up');
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH, .1, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
 
         keyboardMock(instance.itemsContainer())
             .press('down');
 
-        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, .1, 'scrolled back to the 1st item');
+        assert.roughEqual($scrollableContent.position().top, -BORDER_WIDTH, 1, 'scrolled back to the 1st item');
     });
 
     QUnit.test('Selected item should be always visible during keyboard navigation (nested menu)', function(assert) {
@@ -444,13 +453,121 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
         const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
 
-        assert.roughEqual($scrollableContent.position().top,
-            $scrollableContainer.height() - $scrollableContent.height(), 2, 'scrolled to bottom');
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height(),
+            2,
+            'scrolled to bottom'
+        );
 
         keyboardMock(instance.itemsContainer())
             .press('down');
 
         assert.roughEqual($scrollableContent.position().top, 0, 2, 'scrolled back to the 1st item');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (root menu)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })),
+            focusStateEnabled: true,
+            visible: true,
+        });
+        const $scrollableContainer = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $(instance.itemsContainer()).find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        keyboardMock(instance.itemsContainer())
+            .press('up')
+            .press('up');
+
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
+
+        instance.hide();
+        instance.show();
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (nested menu, KBN)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+            focusStateEnabled: true,
+            visible: true,
+        });
+
+        keyboardMock(instance.itemsContainer())
+            .press('down')
+            .press('right')
+            .press('up');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
+
+        keyboardMock(instance.itemsContainer())
+            .press('left')
+            .press('right');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
+    });
+
+    QUnit.test('Scroll position should be set to 0 after reopen (nested menu, pointer)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const instance = new ContextMenu(this.$element, {
+            items: [
+                { text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                { text: 2, items: [{ text: 21 }] },
+            ],
+            focusStateEnabled: true,
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 }
+        });
+        const $itemsContainer = instance.itemsContainer();
+        const item1 = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).first();
+        const item2 = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+        keyboardMock(instance.itemsContainer())
+            .press('down')
+            .press('right')
+            .press('up');
+
+        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $scrollableContainer = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTAINER_CLASS}`);
+        const $scrollableContent = $nestedSubmenu.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`);
+
+        assert.roughEqual(
+            $scrollableContent.position().top,
+            $scrollableContainer.height() - $scrollableContent.height() + BORDER_WIDTH,
+            1,
+            'scrolled to bottom'
+        );
+
+        $(item2).trigger('dxclick');
+        $(item1).trigger('dxclick');
+
+        assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
     });
 });
 

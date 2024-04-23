@@ -200,7 +200,7 @@ QUnit.module('Aria attributes', moduleConfig, () => {
                 text: 'Pane_1'
             }, {
                 splitter: {
-                    dataSource: ['Pane_2', 'Pane_3']
+                    dataSource: [{ text: 'Pane_2' }, { text: 'Pane_3' }]
                 }
             }]
         });
@@ -216,7 +216,7 @@ QUnit.module('Aria attributes', moduleConfig, () => {
                 text: 'Pane_1'
             }, {
                 splitter: {
-                    dataSource: ['Pane_2', 'Pane_3']
+                    dataSource: [{ text: 'Pane_2' }, { text: 'Pane_3' }]
                 }
             }]
         });
@@ -224,7 +224,7 @@ QUnit.module('Aria attributes', moduleConfig, () => {
         assert.strictEqual(this.getItems().last().attr('id'), undefined, 'id attribute is not set for the last item');
     });
 
-    QUnit.test('invisible items should not have an id attribute', function(assert) {
+    QUnit.test('invisible item should not have an id attribute', function(assert) {
         this.reinit({
             dataSource: [{
                 text: 'Pane_1'
@@ -232,11 +232,115 @@ QUnit.module('Aria attributes', moduleConfig, () => {
                 text: 'Pane_2',
                 visible: false,
             }, {
-                text: 'Pane_2'
+                text: 'Pane_3'
             }]
         });
 
         assert.strictEqual(this.getItems().eq(1).attr('id'), undefined, 'id attribute is not set for invisible item');
+    });
+
+    QUnit.test('resize handle should be rendered after changing visible option to true at runtime', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+                visible: false,
+            }, {
+                text: 'Pane_3'
+            }]
+        });
+
+        assert.strictEqual(this.getResizeHandles().length, 1, 'resize handles count');
+
+        this.instance.option('items[1].visible', true);
+
+        assert.strictEqual(this.getResizeHandles().length, 2, 'resize handles count');
+    });
+
+    QUnit.test('resize handle should be removed after changing visible option to false at runtime', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+            }, {
+                text: 'Pane_3'
+            }]
+        });
+
+        assert.strictEqual(this.getResizeHandles().length, 2, 'resize handles count');
+
+        this.instance.option('items[1].visible', false);
+
+        assert.strictEqual(this.getResizeHandles().length, 1, 'resize handles count');
+    });
+
+    QUnit.test('item should have id attribute after changing visible option to true at runtime', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+                visible: false,
+            }, {
+                text: 'Pane_3'
+            }]
+        });
+
+        this.instance.option('items[1].visible', true);
+
+        assert.strictEqual(this.getItems().eq(1).attr('id'), this.getResizeHandles().eq(1).attr('aria-controls'), 'aria-controls of the resize handle are linked with id attribute of the pane');
+    });
+
+    QUnit.test('item should not have id attribute after changing visibile option to false at runtime', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+            }, {
+                text: 'Pane_3'
+            }]
+        });
+
+        this.instance.option('items[1].visible', false);
+
+        assert.strictEqual(this.getItems().eq(1).attr('id'), undefined, 'id attribute is not set for invisible item');
+    });
+
+    QUnit.test('item should not have id attribute after changing visibile option of the last item to true at runtime', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+            }, {
+                text: 'Pane_3',
+                visible: false
+            }]
+        });
+
+        this.instance.option('items[2].visible', true);
+
+        assert.strictEqual(this.getItems().eq(2).attr('id'), undefined, 'id attribute is not set for invisible item');
+    });
+
+    QUnit.test('last visible item should have id attribute after changing visibile option of the last item to true at runtime', function(assert) {
+        this.reinit({
+            dataSource: [{
+                text: 'Pane_1'
+            }, {
+                text: 'Pane_2',
+            }, {
+                text: 'Pane_3',
+                visible: false
+            }]
+        });
+
+        this.instance.option('items[2].visible', true);
+
+        assert.strictEqual(this.getItems().eq(1).attr('id'), this.getResizeHandles().eq(1).attr('aria-controls'), 'aria-controls of the resize handle are linked with id attribute of the pane');
     });
 
     QUnit.test('aria-controls attribute value of the resizeHandle should be equal to the id attribute of the item', function(assert) {

@@ -51,8 +51,6 @@ const distGlobsPattern = (jsFolder, exclude) => [
     '!artifacts/ts/cldr*',
     '!artifacts/css/dx-diagram.*',
     '!artifacts/css/dx-gantt.*',
-    `!${jsFolder}/angular**/*.*`,
-    `!${jsFolder}/angular*`,
     `!${jsFolder}/knockout*`,
     `!${jsFolder}/cldr/*.*`,
     `!${jsFolder}/cldr*`,

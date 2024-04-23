@@ -1,8 +1,8 @@
-::ng-deep .option {
+.option {
   display: flex;
 }
 
-::ng-deep .option > span {
+.option > span {
   display: flex;
   align-items: center;
   margin-right: 10px;

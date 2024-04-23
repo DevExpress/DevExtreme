@@ -1,6 +1,6 @@
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/callbackTestHelper';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler dragging - drag events`

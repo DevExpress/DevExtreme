@@ -1,11 +1,11 @@
+import Scheduler from 'devextreme-testcafe-models/scheduler';
+import type { Appointment } from 'devextreme/ui/scheduler';
 import url from '../../../helpers/getPageUrl';
 import { getTimezoneTest, MACHINE_TIMEZONES, MachineTimezonesType } from '../../../helpers/machineTimezones';
-import { createWidget, disposeWidget } from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 import asyncForEach from '../../../helpers/asyncForEach';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
-import type { Appointment } from 'devextreme/ui/scheduler';
 
 interface TestCase {
   timezone: MachineTimezonesType;
@@ -180,6 +180,5 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
     });
   }).after(async () => {
     await removeStylesheetRulesFromPage();
-    await disposeWidget('dxScheduler');
   });
 });

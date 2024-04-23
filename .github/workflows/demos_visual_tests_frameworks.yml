@@ -274,7 +274,7 @@ jobs:
         if git diff --exit-code . ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
-            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js ./Demos/**/React' and commit changes."
+            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js split' and commit changes."
             echo "If you see another diff, ensure that extra listed files have LF endings."
             exit 1
         fi
@@ -385,7 +385,7 @@ jobs:
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v3
       with:
         name: screenshots-${{ steps.screenshotname.outputs.value }}-${{ matrix.THEME }}
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*

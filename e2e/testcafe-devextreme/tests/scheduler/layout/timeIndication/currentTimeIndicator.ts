@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget, disposeWidget } from '../../../../helpers/createWidget';
-import url from '../../../../helpers/getPageUrl';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { createWidget } from '../../../../helpers/createWidget';
+import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Current Time Indication`
   .page(url(__dirname, '../../../container.html'));
@@ -48,7 +48,7 @@ test('Current time indicator should be placed correctly when there are many grou
       ],
     }],
   });
-}).after(async () => disposeWidget('dxScheduler'));
+});
 
 [
   'none',
@@ -138,7 +138,7 @@ endDayHour: ${endDayHour}
             cellDuration,
             ...additionalOptions,
           });
-        }).after(async () => disposeWidget('dxScheduler'));
+        });
       });
     });
   });

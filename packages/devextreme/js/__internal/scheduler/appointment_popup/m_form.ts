@@ -14,8 +14,8 @@ import messageLocalization from '@js/localization/message';
 import Form from '@js/ui/form';
 import { current, isFluent } from '@js/ui/themes';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
+import { Semaphore } from '@ts/scheduler/r1/semaphore/index';
 
-import { Semaphore } from '../__migration/semaphore/index';
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import timeZoneDataUtils from '../timezones/m_utils_timezones_data';
 
@@ -55,7 +55,6 @@ const validateAppointmentFormDate = (editor, value, previousValue) => {
 
 const updateRecurrenceItemVisibility = (recurrenceRuleExpr, value, form) => {
   form.itemOption(APPOINTMENT_FORM_GROUP_NAMES.Recurrence, 'visible', value);
-  !value && form.updateData(recurrenceRuleExpr, '');
   form.getEditor(recurrenceRuleExpr)?.changeValueByVisibility(value);
 };
 

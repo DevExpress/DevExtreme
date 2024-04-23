@@ -35,14 +35,14 @@
   box-sizing: border-box;
 }
 
-::ng-deep .options-container {
+.options-container {
   margin-top: 20px;
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   position: relative;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
   margin-bottom: 10px;

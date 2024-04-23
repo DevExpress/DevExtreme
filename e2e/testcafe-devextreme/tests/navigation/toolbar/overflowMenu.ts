@@ -1,11 +1,11 @@
 /* eslint-disable no-restricted-syntax */
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
+import Guid from 'devextreme/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
-import Guid from 'devextreme/core/guid';
 import { appendElementTo, setAttribute, setClassAttribute } from '../../../helpers/domUtils';
 
 const BUTTON_CLASS = 'dx-button';

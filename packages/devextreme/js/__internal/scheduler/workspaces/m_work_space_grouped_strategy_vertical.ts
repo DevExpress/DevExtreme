@@ -1,6 +1,6 @@
 import { getBoundingRect } from '@js/core/utils/position';
+import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
 
-import { calculateDayDuration, getVerticalGroupCountClass } from '../__migration/utils/index';
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
 import { Cache } from './m_cache';
 

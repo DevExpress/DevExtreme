@@ -1,4 +1,4 @@
-::ng-deep .label {
+.label {
   font-size: 12px;
 }
 
@@ -23,7 +23,7 @@
   font-size: 12px;
 }
 
-::ng-deep .caption {
+.caption {
   padding-bottom: 8px;
   font-weight: 500;
 }

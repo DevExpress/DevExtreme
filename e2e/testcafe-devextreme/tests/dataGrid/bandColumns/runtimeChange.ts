@@ -1,9 +1,9 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Button from 'devextreme-testcafe-models/button';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture.disablePageReloads`Band columns: runtime change`
   .page(url(__dirname, '../../container.html'));

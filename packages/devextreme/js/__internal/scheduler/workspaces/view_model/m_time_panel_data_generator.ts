@@ -1,10 +1,9 @@
 import dateUtils from '@js/core/utils/date';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { shiftIntegerByModule } from '@ts/core/utils/math';
-
 import {
   getDisplayedRowCount, getIsGroupedAllDayPanel, getKeyByGroup, weekUtils,
-} from '../../__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
 
 const toMs = dateUtils.dateToMilliseconds;
 

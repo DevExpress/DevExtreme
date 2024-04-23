@@ -1,12 +1,10 @@
 import { ClientFunction } from 'testcafe';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture.disablePageReloads`DateRangeBox behavior (applyValueMode='instantly')`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Open by click on startDate input and select date in calendar, value: [null, null]', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');
@@ -814,8 +812,7 @@ test('Value in calendar should be updated after change start date value by keybo
 });
 
 fixture.disablePageReloads`DateRangeBox behavior (applyValueMode='useButtons')`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Value should be saved after select range in calendar and click on apply button, value: [null, null]', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');

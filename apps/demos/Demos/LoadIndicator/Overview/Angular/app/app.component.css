@@ -1,17 +1,17 @@
-::ng-deep .form {
+.form {
   padding: 10px 0 0 10px;
 }
 
-::ng-deep .label {
+.label {
   margin-bottom: 10px;
   font-size: 16px;
 }
 
-::ng-deep .label:not(:first-child) {
+.label:not(:first-child) {
   margin-top: 30px;
 }
 
-::ng-deep #small-indicator,
+#small-indicator,
 #medium-indicator,
 #large-indicator {
   vertical-align: middle;
@@ -23,7 +23,7 @@
   padding: 0;
 }
 
-::ng-deep #button .button-indicator {
+#button .button-indicator {
   height: 32px;
   width: 32px;
   display: inline-block;
@@ -31,7 +31,7 @@
   margin-right: 5px;
 }
 
-::ng-deep .indicators {
+.indicators {
   display: flex;
   align-items: center;
 }

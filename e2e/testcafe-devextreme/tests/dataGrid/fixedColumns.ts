@@ -1,9 +1,9 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
 
 const DATA_GRID_SELECTOR = '#container';
@@ -249,9 +249,8 @@ safeSizeTest('Fixed to the right columns should appear when any column has undef
   ],
 }));
 
-// TODO: this test is unstable
 // T1180834
-test.skip('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
+test.meta({ unstable: true })('Hovering over a row should work correctly after scrolling when there is a fixed column with a cellTemplate and virtual scrolling is used (React)', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

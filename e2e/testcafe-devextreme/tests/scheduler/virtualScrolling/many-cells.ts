@@ -1,10 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 
+import Scheduler from 'devextreme-testcafe-models/scheduler';
+import type { ViewType, Orientation } from 'devextreme/ui/scheduler';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
-import type { ViewType, Orientation } from 'devextreme/ui/scheduler';
 
 fixture.disablePageReloads`Scheduler: Virtual scrolling (many cells)`
   .page(url(__dirname, '../../container.html'));

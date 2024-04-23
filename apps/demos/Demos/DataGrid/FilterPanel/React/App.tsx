@@ -9,7 +9,13 @@ import DataGrid, {
 } from 'devextreme-react/data-grid';
 import { orders } from './data.ts';
 
-const saleAmountEditorOptions = { format: 'currency', showClearButton: true };
+const saleAmountEditorOptions = { 
+  format: 'currency', 
+  showClearButton: true, 
+  inputAttr: {
+    'aria-label': 'Filter cell',
+  }, 
+};
 const getOrderDay = (rowData) => (new Date(rowData.OrderDate)).getDay();
 
 const filterBuilderPopupPosition = {

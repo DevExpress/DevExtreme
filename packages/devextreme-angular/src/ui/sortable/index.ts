@@ -53,7 +53,7 @@ import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxSortableComponent extends DxComponent implements OnDestroy {
-    instance: DxSortable;
+    instance: DxSortable = null;
 
     /**
      * [descr:dxSortableOptions.allowDropInsideItem]

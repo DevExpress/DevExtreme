@@ -1,14 +1,12 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import { clearTestPage } from '../../../helpers/clearPage';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
-import TabPanel from 'devextreme-testcafe-models/tabPanel';
 
-fixture.skip.disablePageReloads`Splitter_integration`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+fixture.disablePageReloads`Splitter_integration`
+  .page(url(__dirname, '../../container.html'));
 
 safeSizeTest('The splitter pane should be rendered with the correct ratio inside the tab content of TabPanel if pane.size uses pixels', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

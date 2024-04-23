@@ -23,7 +23,7 @@ import { ExpressionUtils } from '__internal/scheduler/m_expression_utils';
 import { Deferred } from 'core/utils/deferred';
 import { createExpressions } from '__internal/scheduler/resources/m_utils';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider.js';
-import { createTimeZoneCalculator } from '__internal/scheduler/__migration/timezone_calculator/index.js';
+import { createTimeZoneCalculator } from '__internal/scheduler/r1/timezone_calculator/index.js';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html(`

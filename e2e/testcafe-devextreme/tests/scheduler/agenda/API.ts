@@ -1,5 +1,5 @@
-import { createWidget } from '../../../helpers/createWidget';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Agenda:API`

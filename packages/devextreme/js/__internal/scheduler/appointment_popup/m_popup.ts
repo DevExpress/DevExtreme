@@ -5,12 +5,12 @@ import { Deferred, when } from '@js/core/utils/deferred';
 import { triggerResizeEvent } from '@js/events/visibility_change';
 import Popup from '@js/ui/popup/ui.popup';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
-
 import {
   getMaxWidth,
   getPopupToolbarItems,
   isPopupFullScreenNeeded,
-} from '../__migration/appointment_popup/index';
+} from '@ts/scheduler/r1/appointment_popup/index';
+
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
 import { getNormalizedResources } from '../resources/m_utils';
@@ -246,10 +246,16 @@ export class AppointmentPopup {
         return;
       }
 
+      const { repeat } = this.form.formData;
       const adapter = this._createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter.clone({ pathTimeZone: 'fromAppointment' } as any); // TODO:
+      const shouldClearRecurrenceRule = !repeat && !!clonedAdapter.recurrenceRule;
 
       this._addMissingDSTTime(adapter, clonedAdapter);
+
+      if (shouldClearRecurrenceRule) {
+        clonedAdapter.recurrenceRule = '';
+      }
 
       const appointment = clonedAdapter.source();
       delete appointment.repeat; // TODO

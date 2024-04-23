@@ -31,7 +31,6 @@
       />
       <DxColumn
         data-field="Website"
-        caption=""
         alignment="center"
         :width="100"
         cell-template="grid-cell"

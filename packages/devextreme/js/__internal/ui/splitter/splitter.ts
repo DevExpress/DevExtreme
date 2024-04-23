@@ -41,14 +41,12 @@ import {
   convertSizeToRatio,
   findIndexOfNextVisibleItem,
   findLastIndexOfVisibleItem,
-  getDefaultLayout,
   getElementSize,
   getNextLayout,
-  getVisibleItemsCount,
   isElementVisible,
   setFlexProp,
-  validateLayout,
 } from './utils/layout';
+import { getDefaultLayout } from './utils/layout_default';
 import type {
   FlexProperty, InteractionEvent, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
 } from './utils/types';
@@ -76,13 +74,60 @@ const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-class SplitterItem extends CollectionWidgetItem {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class SplitterItem extends (CollectionWidgetItem as any) {
+  constructor($element, options, rawData) {
+    options._id = `dx_${new Guid()}`;
+
+    super($element, options, rawData);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get owner(): Splitter {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._options.owner;
+  }
+
+  get resizeHandle(): ResizeHandle {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._options._resizeHandle;
+  }
+
+  get option(): SplitterItem {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._rawData;
+  }
+
+  get index(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.owner._getIndexByItemData(this.option);
+  }
+
+  _render(): void {
+    super._render();
+  }
+
+  _renderResizeHandle(): void {
+    if (this.option.visible !== false && !this.isLast()) {
+      this._setIdAttr();
+      const config = this.owner._getResizeHandleConfig(this._options._id);
+      this._options._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
+
+      this.resizeHandle.$element().insertAfter(this._$element);
+    }
+  }
+
+  _setIdAttr(): void {
+    this._$element.attr('id', this._options._id);
+  }
+
+  isLast(): boolean {
+    return this.owner._isLastVisibleItem(this.index);
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
-  private _resizeHandles!: ResizeHandle[];
-
   private _renderQueue: RenderQueueItem[] = [];
 
   _getDefaultOptions(): Properties {
@@ -96,6 +141,7 @@ class Splitter extends (CollectionWidget as any) {
       allowKeyboardNavigation: true,
       separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
 
+      _itemAttributes: { role: 'group' },
       _renderQueue: undefined,
     }) as Properties;
   }
@@ -152,12 +198,6 @@ class Splitter extends (CollectionWidget as any) {
       ? getOuterWidth(element) : getOuterHeight(element);
   }
 
-  _shouldUpdateLayout(): boolean {
-    const size: number = this._getDimension(this.$element().get(0));
-
-    return size === 0;
-  }
-
   _render(): void {
     super._render();
   }
@@ -188,7 +228,6 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _renderItems(items: Item[]): void {
-    this._resizeHandles = [];
     super._renderItems(items);
 
     this._updateResizeHandlesResizableState();
@@ -197,6 +236,8 @@ class Splitter extends (CollectionWidget as any) {
     if (isElementVisible(this.$element().get(0))) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyFlexGrowFromLayout(this._layout);
+
+      this._updateItemSizes();
     } else {
       this._shouldRecalculateLayout = true;
     }
@@ -222,6 +263,9 @@ class Splitter extends (CollectionWidget as any) {
       onItemRendered: this.option('onItemRendered'),
       onItemExpanded: this.option('onItemExpanded'),
       onItemCollapsed: this.option('onItemCollapsed'),
+      separatorSize: this.option('separatorSize'),
+      allowKeyboardNavigation: this.option('allowKeyboardNavigation'),
+      rtlEnabled: this.option('rtlEnabled'),
       _renderQueue: this._renderQueue,
     }, item.splitterConfig));
 
@@ -248,39 +292,30 @@ class Splitter extends (CollectionWidget as any) {
 
     const itemElement = $itemFrame.get(0);
 
-    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / getVisibleItemsCount(this.option('items')));
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length);
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
-    const groupAriaAttributes: { role: string; id?: string } = {
-      role: 'group',
-    };
-
-    if (itemData.visible !== false && !this._isLastVisibleItem(index)) {
-      const itemId = `dx_${new Guid()}`;
-
-      groupAriaAttributes.id = itemId;
-
-      this._renderResizeHandle(itemId);
-    }
-
-    this.setAria(groupAriaAttributes, $itemFrame);
+    this._getItemInstance($itemFrame)._renderResizeHandle();
 
     return $itemFrame;
   }
 
-  _renderResizeHandle(paneId: string): void {
-    const $resizeHandle = $('<div>')
-      .appendTo(this.$element());
+  _getItemInstance($item: dxElementWrapper): SplitterItem {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return Splitter.ItemClass.getInstance($item);
+  }
 
-    const config = this._getResizeHandleConfig(paneId);
-    const resizeHandle = this._createComponent($resizeHandle, ResizeHandle, config);
+  _renderResizeHandle($itemFrame: dxElementWrapper): void {
+    const { resizeHandle } = this._getItemInstance($itemFrame);
 
-    this._resizeHandles.push(resizeHandle);
+    if (resizeHandle) {
+      this.$element().append(resizeHandle.$element());
+    }
   }
 
   _updateResizeHandlesResizableState(): void {
-    this._resizeHandles.forEach((resizeHandle) => {
+    this._getResizeHandles().forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -299,7 +334,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _updateResizeHandlesCollapsibleState(): void {
-    this._resizeHandles.forEach((resizeHandle) => {
+    this._getResizeHandles().forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -321,8 +356,22 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
+    const { items } = this.option();
+
+    items.forEach((item) => {
+      if (item?.splitter) {
+        const $nestedSplitter = this._findItemElementByItem(item).find(`.${SPLITTER_CLASS}`).eq(0);
+
+        if ($nestedSplitter.length) {
+          getComponentInstance($nestedSplitter).option(optionName, optionValue);
+        }
+      }
+    });
+  }
+
   _updateResizeHandlesOption(optionName: string, optionValue: unknown): void {
-    this._resizeHandles.forEach((resizeHandle) => {
+    this._getResizeHandles().forEach((resizeHandle) => {
       resizeHandle.option(optionName, optionValue);
     });
   }
@@ -393,8 +442,13 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
           const leftItemSize = this._getItemDimension($leftItem.get(0));
 
-          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= leftItemSize) {
-            this._collapsedItemSize = leftItemSize / 2;
+          // todo: refactor
+          const minItemSize = parseFloat(rightItemData.minSize);
+
+          if (!rightItemData.minSize || leftItemSize >= minItemSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > leftItemSize) {
+              this._collapsedItemSize = Math.max(leftItemSize / 2, minItemSize || -Infinity);
+            }
           }
 
           this._panesCacheSize[rightItemIndex] = undefined;
@@ -443,8 +497,13 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
           const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize >= rightItemSize) {
-            this._collapsedItemSize = rightItemSize / 2;
+          // todo: refactor
+          const minItemSize = parseFloat(leftItemData.minSize);
+
+          if (!leftItemData.minSize || rightItemSize >= minItemSize) {
+            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > rightItemSize) {
+              this._collapsedItemSize = Math.max(rightItemSize / 2, minItemSize || -Infinity);
+            }
           }
 
           this._panesCacheSize[leftItemIndex] = undefined;
@@ -493,8 +552,6 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
-        this._currentLayout = this._layout;
-
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
@@ -511,9 +568,9 @@ class Splitter extends (CollectionWidget as any) {
           this._getResizeHandlesSize(),
         );
 
-        const { items } = this.option();
+        this._currentLayout = this._layout;
 
-        this._updateItemsRestrictions(items);
+        this._updateItemsRestrictions(this.option('items'));
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
@@ -609,7 +666,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getResizeHandlesSize(): number {
-    return this._resizeHandles.reduce(
+    return this._getResizeHandles().reduce(
       (size: number, resizeHandle: ResizeHandle) => size + resizeHandle.getSize(),
       0,
     );
@@ -675,13 +732,16 @@ class Splitter extends (CollectionWidget as any) {
       case 'collapsible':
         this._updateResizeHandlesCollapsibleState();
         break;
+      case 'visible':
+        this._invalidate();
+        break;
       default:
         super._itemOptionChanged(item, property, value);
     }
   }
 
   _itemCollapsedOptionChanged(item: Item): void {
-    this._updateItemsRestrictions(this.option('items'));
+    this._updateItemsRestrictions(this.option('items'), true);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
@@ -723,16 +783,10 @@ class Splitter extends (CollectionWidget as any) {
 
     this._updateItemsRestrictions(items);
 
-    const defaultLayout = getDefaultLayout(this._itemRestrictions);
-
-    if (items && items.length === 1) {
-      return defaultLayout;
-    }
-
-    return validateLayout(defaultLayout, this._itemRestrictions);
+    return getDefaultLayout(this._itemRestrictions);
   }
 
-  _updateItemsRestrictions(items: Item[]): void {
+  _updateItemsRestrictions(items: Item[], collapseStateRestrictions = false): void {
     const { orientation } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
@@ -742,13 +796,18 @@ class Splitter extends (CollectionWidget as any) {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        resizable: item.resizable !== false,
-        visible: item.visible,
+        // todo: test
+        resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
+        visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
         size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
-        maxSize: convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
-        minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
+        maxSize: collapseStateRestrictions
+          ? undefined
+          : convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
+        minSize: collapseStateRestrictions
+          ? undefined
+          : convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
       });
     });
   }
@@ -798,6 +857,20 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _getResizeHandles(): ResizeHandle[] {
+    const handles: ResizeHandle[] = [];
+
+    this._iterateItems((index, itemElement) => {
+      const instance = this._getItemInstance($(itemElement));
+
+      if (instance.resizeHandle) {
+        handles.push(instance.resizeHandle);
+      }
+    });
+
+    return handles;
+  }
+
   _getResizeHandleItems(): dxElementWrapper {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.$element().children(`.${RESIZE_HANDLE_CLASS}`);
@@ -811,14 +884,28 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _dimensionChanged(): void {
+    this._layout = this._getDefaultLayoutBasedOnSize();
+
+    this._applyFlexGrowFromLayout(this._layout);
+    this._updateItemSizes();
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {
+      case 'width':
+      case 'height':
+        super._optionChanged(args);
+
+        this._dimensionChanged();
+        break;
       case 'allowKeyboardNavigation':
         this._iterateResizeHandles((instance) => {
           instance.option('focusStateEnabled', value);
         });
+        this._updateNestedSplitterOption(name, value);
         break;
       case 'orientation':
         this._toggleOrientationClass();
@@ -830,9 +917,11 @@ class Splitter extends (CollectionWidget as any) {
       case 'onItemCollapsed':
       case 'onItemExpanded':
         this._createEventAction(name);
+        this._updateNestedSplitterOption(name, value);
         break;
       case 'separatorSize':
         this._updateResizeHandlesOption(name, value);
+        this._updateNestedSplitterOption(name, value);
         break;
       default:
         super._optionChanged(args);
@@ -840,8 +929,10 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   registerKeyHandler(key: string, handler: () => void): void {
-    this._iterateResizeHandles((instance) => {
-      instance.registerKeyHandler(key, handler);
+    this.$element().find(`.${RESIZE_HANDLE_CLASS}`).each((index, element) => {
+      getComponentInstance($(element)).registerKeyHandler(key, handler);
+
+      return true;
     });
   }
 }
