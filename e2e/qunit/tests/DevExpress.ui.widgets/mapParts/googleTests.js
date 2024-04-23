@@ -41,7 +41,7 @@ QUnit.module('google provider', {
             url: fakeURL,
             callback: function() {
                 $.getScript({
-                    url: '../../packages/devextreme/testing/helpers/forMap/googleMock.js',
+                    url: '../../e2e/qunit/helpers/forMap/googleMock.js',
                     scriptAttrs: { nonce: 'qunit-test' }
                 }).done(function() {
                     prepareTestingGoogleProvider();
@@ -65,7 +65,7 @@ QUnit.test('map initialize with loaded map', function(assert) {
     const done = assert.async();
 
     $.getScript({
-        url: '../../packages/devextreme/testing/helpers/forMap/googleMock.js',
+        url: '../../e2e/qunit/helpers/forMap/googleMock.js',
         scriptAttrs: { nonce: 'qunit-test' }
     }).done(function() {
         window.google.maps.customFlag = true;

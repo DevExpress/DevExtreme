@@ -1,7 +1,7 @@
 
 SystemJS.config({
     map: {
-        'devexpress-gantt': '/packages/devextreme/testing/helpers/noGantt.js'
+        'devexpress-gantt': '/e2e/qunit/helpers/noGantt.js'
     }
 });
 

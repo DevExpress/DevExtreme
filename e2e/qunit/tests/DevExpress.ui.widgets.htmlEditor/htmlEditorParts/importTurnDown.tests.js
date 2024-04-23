@@ -1,6 +1,6 @@
 SystemJS.config({
     map: {
-        'turndown': '/packages/devextreme/testing/helpers/quillDependencies/noTurndown.js'
+        'turndown': '/e2e/qunit/helpers/quillDependencies/noTurndown.js'
     }
 });
 

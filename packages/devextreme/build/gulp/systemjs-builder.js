@@ -102,7 +102,7 @@ SystemJS.register([], function(exports) {
 const transpileFile = async(sourcePath, targetPath) => {
     const code = fs.readFileSync(sourcePath)
         .toString()
-        .replaceAll('/packages/devextreme/testing/helpers/wrapRenovatedWidget.js', '/packages/devextreme/artifacts/transpiled-testing/helpers/wrapRenovatedWidget.js')
+        .replaceAll('/e2e/qunit/helpers/wrapRenovatedWidget.js', '/packages/devextreme/artifacts/transpiled-testing/helpers/wrapRenovatedWidget.js')
         .replaceAll(path.normalize('/testing/helpers/'), path.normalize('/artifacts/transpiled-testing/helpers/'))
         // TODO see packages/devextreme/testing/tests/DevExpress.viz.vectorMap.utils/tests.js
         // import { parse } from '../../../artifacts/js/vectormap-utils/dx.vectormaputils.js';

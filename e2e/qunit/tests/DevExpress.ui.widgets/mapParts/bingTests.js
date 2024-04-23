@@ -45,7 +45,7 @@ QUnit.module('bing provider', {
             url: fakeURL,
             callback: function() {
                 $.getScript({
-                    url: '../../packages/devextreme/testing/helpers/forMap/bingMock.js',
+                    url: '../../e2e/qunit/helpers/forMap/bingMock.js',
                     scriptAttrs: { nonce: 'qunit-test' }
                 }).done(function() {
                     prepareTestingBingProvider(this.abortDirectionsUpdate);

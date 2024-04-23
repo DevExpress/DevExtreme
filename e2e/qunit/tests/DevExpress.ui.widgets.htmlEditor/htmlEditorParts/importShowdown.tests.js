@@ -1,6 +1,6 @@
 SystemJS.config({
     map: {
-        'showdown': '/packages/devextreme/testing/helpers/quillDependencies/noShowdown.js'
+        'showdown': '/e2e/qunit/helpers/quillDependencies/noShowdown.js'
     }
 });
 
