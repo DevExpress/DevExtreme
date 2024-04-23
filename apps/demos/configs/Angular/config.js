@@ -121,17 +121,35 @@ window.config = {
       'esModule': true,
     },
     /**/
+    '@angular/platform-browser-dynamic': {
+      'esModule': true,
+    },
+    '@angular/platform-browser': {
+      'esModule': true,
+    },
+    '@angular/core': {
+      'esModule': true,
+    },
+    '@angular/common': {
+      'esModule': true,
+    },
+    '@angular/animations': {
+      'esModule': true,
+    },
+    '@angular/forms': {
+      'esModule': true,
+    }
   },
   paths: {
     'npm:': '../../../../../../node_modules/',
     'npm-demos:': '../../../../node_modules/',
-    'bundles:': '../../../../bundles-ng/',
-    'bundles-dx:': '../../../../bundles-dx/',
+    'bundles:': '../../../../bundles/',
   },
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
 
+    /* @angular */
     '@angular/compiler': 'bundles:@angular/compiler.umd.js',
     '@angular/platform-browser-dynamic': 'bundles:@angular/platform-browser-dynamic.umd.js',
     '@angular/core': 'bundles:@angular/core.umd.js',
@@ -142,22 +160,23 @@ window.config = {
     '@angular/platform-browser/animations': 'bundles:@angular/platform-browser.umd.js',
     '@angular/forms': 'bundles:@angular/forms.umd.js',
 
+    /* devextreme */
     'devextreme': 'npm:devextreme/cjs',
+    '@devextreme/runtime': 'npm:@devextreme/runtime',
     'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram',
     'devexpress-gantt': 'npm:devexpress-gantt',
 
-    'devextreme-angular': 'bundles-dx:devextreme-angular/devextreme-angular.js',
-    'devextreme-angular/core': 'bundles-dx:devextreme-angular/devextreme-angular-core.js',
+     /* devextreme-angular umd maps */
+    'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
+    'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
     ...componentNames.reduce((acc, name) => {
-      acc[`devextreme-angular/ui/${name}`] = `bundles-dx:devextreme-angular/devextreme-angular-ui-${name}.js`;
+      acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
       return acc;
     }, {}),
 
-    '@devextreme/runtime': 'npm:@devextreme/runtime',
-
+    'jszip': 'npm:jszip/dist/jszip.min.js',
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',

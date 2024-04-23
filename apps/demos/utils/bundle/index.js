@@ -47,7 +47,7 @@ const prepareModulesToNamedImport = () => {
   });
 };
 
-const getDefaultBuilderConfig = (framework, additionPaths) => ({
+const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   defaultExtension: false,
   defaultJSExtensions: 'js',
   packages: {
@@ -58,6 +58,7 @@ const getDefaultBuilderConfig = (framework, additionPaths) => ({
       main: 'index',
     },
   },
+  map,
   meta: {
     '*': {
       build: false,
@@ -85,29 +86,24 @@ const getDefaultBuilderConfig = (framework, additionPaths) => ({
   },
 });
 
-const generateDxAngularBundles = async () => {
-  const baseDir = '../../node_modules/devextreme-angular/';
-  const srcDir = path.join(baseDir, 'fesm2022');
-  const componentNames = fs.readdirSync(srcDir)
-      .filter((fileName) => fileName.indexOf('mjs.map') !== -1)
-      .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
-      .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.mjs.map', ''));
+const prepareDevextremexAngularFiles = () => {
+  const dxNgBaseDir = path.resolve('../../node_modules/devextreme-angular/bundles');
 
-  const files = [
-    `devextreme-angular.mjs`,
-    `devextreme-angular-core.mjs`,
-     ...componentNames.map((componentName) => `devextreme-angular-ui-${componentName}.mjs`),
+  try {
+    fs.rmSync(dxNgBaseDir, { recursive: true });
+  } catch (e){}
 
-  ];
+  try {
+    fs.mkdirSync('../../node_modules/devextreme-angular/bundles');
+    console.log(`Directory ${dxNgBaseDir} CLEANED successfully`);
+  } catch (e) {}
 
-  for (let i = 0; i < files.length; i++) {
-    await buildUmd(srcDir, files[i]);
-  }
-
-
+  fs.copySync('./bundles/devextreme-angular', '../../node_modules/devextreme-angular/bundles');
+  console.log('Copy devextreme-angular files to node_modules/devextreme-angular/bundles completed!');
 }
 
 const prepareConfigs = async (framework) => {
+  let modulesMap = {};
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const currentPackage = require(`devextreme-${framework}/package.json`);
 
@@ -137,23 +133,31 @@ const prepareConfigs = async (framework) => {
       main = `devextreme-${framework}`;
       minify = false;
 
-      await generateDxAngularBundles();
+      prepareDevextremexAngularFiles();
 
       const bundlesRoot = '../../node_modules/devextreme-angular/bundles';
       const componentNames = fs.readdirSync(bundlesRoot)
-        .filter((fileName) => fileName.indexOf('umd.js') !== -1)
-        .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
-        .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
+          .filter((fileName) => fileName.indexOf('umd.js') !== -1)
+          .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
+          .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
 
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
+               ...componentNames.reduce((items, item) => {
+                 // eslint-disable-next-line no-param-reassign
+                 items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
+                 return items;
+               }, {}),
+      };
+
+      modulesMap = {
         ...componentNames.reduce((items, item) => {
           // eslint-disable-next-line no-param-reassign
           items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
           return items;
         }, {}),
-      };
+      }
     }
   }
 
@@ -183,7 +187,7 @@ const prepareConfigs = async (framework) => {
     ];
   }
 
-  const builderConfig = getDefaultBuilderConfig(framework, additionPaths);
+  const builderConfig = getDefaultBuilderConfig(framework, additionPaths, modulesMap);
 
   additionPackage.forEach((p) => {
     builderConfig.meta[p.name] = p.metaValue;
@@ -206,53 +210,6 @@ const prepareConfigs = async (framework) => {
   };
 };
 
-async function buildUmd(dir, file) {
-  const bundle = await rollup.rollup({
-    input: path.join(dir,file),
-    plugins:[
-      replace({
-        preventAssignment: true,
-        'process.env.NODE_ENV': JSON.stringify( 'production' )
-      }),
-      nodeResolve({
-        preferBuiltins: false,
-        browser: true
-      }),
-      commonjs(),
-      babel({
-        babelHelpers: 'bundled',
-        presets: ['@babel/preset-env']
-      }),
-    ],
-    external: id => {
-      return /^@angular\//.test(id)
-          || /^devextreme\//.test(id)
-          || /^devextreme-angular\//.test(id)
-    },
-  });
-  const libName = file
-      .replace(/\.\w+$/, '')
-      .replace(/^devextreme-angular-ui-/,'devextreme-angular/ui/')
-      .replace(/^devextreme-angular-/,'devextreme-angular/');
-
-  await bundle.write({
-    file: path.join(path.dirname(dir), 'bundles', file.replace(/\.mjs$/, '.umd.js')),
-    format: 'umd',
-    amd: {
-      id: libName
-    },
-    globals: {
-      '@angular/core': 'ng.core',
-      '@angular/common': 'ng.common',
-      '@angular/forms': 'ng.forms',
-      '@angular/platform-browser': 'ng.platformBrowser',
-    },
-    name: libName
-  });
-  await bundle.close();
-}
-
-
 const build = async (framework) => {
   const builder = new Builder();
   prepareModulesToNamedImport();
@@ -261,9 +218,11 @@ const build = async (framework) => {
     builderConfig, packages, bundlePath, bundleOpts,
   } = await prepareConfigs(framework);
 
+
   builder.config(builderConfig);
 
   try {
+    console.log('START systemjs-builder bundling...');
     await builder.bundle(packages, bundlePath, bundleOpts);
   } catch (err) {
     console.error(`Build ${framework} error `, err);
