@@ -6,9 +6,11 @@ const babel = require('@babel/core');
 const parseArguments = require('minimist');
 
 // eslint-disable-next-line no-undef
-const root = path.join(__dirname, '../..');
-const transpileRenovationPath = path.join(root, '/artifacts/transpiled-renovation');
-const transpilePath = path.join(root, '/artifacts/transpiled');
+const devextremeRoot = path.join(__dirname, '../..');
+const monorepoRoot = path.join(__dirname, '../../../..');
+const qunitRoot = path.join(monorepoRoot, 'e2e/qunit');
+const transpileRenovationPath = path.join(devextremeRoot, '/artifacts/transpiled-renovation');
+const transpilePath = path.join(devextremeRoot, '/artifacts/transpiled');
 
 const getFileList = (dirName) => {
     let files = [];
@@ -54,7 +56,7 @@ const transpileModules = async() => {
             plugins: ['@babel/plugin-transform-modules-systemjs'],
         });
 
-        const destPath = filePath.replace(infernoPath, path.join(root, 'artifacts/transpiled-systemjs/runtime/inferno'));
+        const destPath = filePath.replace(infernoPath, path.join(devextremeRoot, 'artifacts/transpiled-systemjs/runtime/inferno'));
         writeFileSync(destPath, code);
     }
 };
@@ -161,7 +163,7 @@ const transpileCss = async() => {
 
     // eslint-disable-next-line no-restricted-syntax
     for(const [cssFile, styleName] of cssList) {
-        const destPath = path.join(root, cssFile.replace('css', 'css-systemjs'));
+        const destPath = path.join(devextremeRoot, cssFile.replace('css', 'css-systemjs'));
 
         writeFileSync(destPath, buildCssAsSystemModule(styleName, cssFile));
     }
@@ -181,11 +183,11 @@ const transpileIntl = async() => {
     const listIntlFiles = [
         {
             filePath: require.resolve('intl/lib/core.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.js'),
+            destPath: path.join(devextremeRoot, 'artifacts/js-systemjs/intl/intl.js'),
         },
         {
             filePath: require.resolve('intl/locale-data/complete.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/intl/intl.complete.js'),
+            destPath: path.join(devextremeRoot, 'artifacts/js-systemjs/intl/intl.complete.js'),
         },
     ];
 
@@ -215,18 +217,18 @@ const transpileIntl = async() => {
         });
     `;
 
-    writeFileSync(path.join(root, 'artifacts/js-systemjs/intl/index.js'), intlIndex);
+    writeFileSync(path.join(devextremeRoot, 'artifacts/js-systemjs/intl/index.js'), intlIndex);
 };
 
 const transpileJsVendors = async() => {
     const pluginsList = [
         {
             filePath: require.resolve('systemjs-plugin-css/css.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/css.js'),
+            destPath: path.join(devextremeRoot, 'artifacts/js-systemjs/css.js'),
         },
         {
             filePath: require.resolve('systemjs-plugin-json/json.js'),
-            destPath: path.join(root, 'artifacts/js-systemjs/json.js'),
+            destPath: path.join(devextremeRoot, 'artifacts/js-systemjs/json.js'),
         },
     ];
 
@@ -248,13 +250,13 @@ const transpileJsVendors = async() => {
 
     await transpileFile(
         require.resolve('knockout/build/output/knockout-latest.debug.js'),
-        path.join(root, 'artifacts/js-systemjs/knockout.js')
+        path.join(devextremeRoot, 'artifacts/js-systemjs/knockout.js')
     );
 
 
     [].concat(
-        getFileList(path.join(root, '../..', 'node_modules/devextreme-cldr-data')),
-        getFileList(path.join(root, '../..', 'node_modules/cldr-core/supplemental'))
+        getFileList(path.join(monorepoRoot, 'node_modules/devextreme-cldr-data')),
+        getFileList(path.join(monorepoRoot, 'node_modules/cldr-core/supplemental'))
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {
@@ -263,9 +265,9 @@ const transpileJsVendors = async() => {
 };
 
 const transpileTesting = async() => {
-    const contentList = getFileList(path.join(root, 'testing/content'));
-    const helpersList = getFileList(path.join(root, 'testing/helpers'));
-    const testsList = getFileList(path.join(root, 'testing/tests'));
+    const contentList = getFileList(path.join(qunitRoot, 'content'));
+    const helpersList = getFileList(path.join(qunitRoot, 'helpers'));
+    const testsList = getFileList(path.join(qunitRoot, 'tests'));
 
     [].concat(contentList, helpersList, testsList)
         .forEach((filePath) => {
