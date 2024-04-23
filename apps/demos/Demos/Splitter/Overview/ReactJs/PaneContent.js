@@ -1,11 +1,11 @@
-import React from "react";
-const dimensionOptions = new Set(["size", "minSize", "maxSize"]);
+import React from 'react';
+const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
 const getPaneState = (data) => {
   if (data.resizable !== false && !data.collapsible) {
-    return "Resizable only";
+    return 'Resizable only';
   }
-  const resizableText = data.resizable ? "Resizable" : "Non-resizable";
-  const collapsibleText = data.collapsible ? "collapsible" : "non-collapsible";
+  const resizableText = data.resizable ? 'Resizable' : 'Non-resizable';
+  const collapsibleText = data.collapsible ? 'collapsible' : 'non-collapsible';
   return `${resizableText} and ${collapsibleText}`;
 };
 const getFilteredDimensionOptions = (data) =>
