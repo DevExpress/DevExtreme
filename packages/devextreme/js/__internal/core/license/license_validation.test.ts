@@ -5,7 +5,6 @@ import {
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
-import { DX_LICENSE_TRIGGER_NAME } from './trial_panel';
 
 jest.mock('./key', () => ({
   PUBLIC_KEY: {
@@ -176,7 +175,7 @@ describe('license check', () => {
   ])('trial panel should be displayed if license is empty, preview or not', ({ token, version }) => {
     validateLicense(token as string, version);
     expect(document.body.appendChild).toHaveBeenCalledTimes(1);
-    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual(DX_LICENSE_TRIGGER_NAME);
+    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual('dx-license-trigger');
   });
 
   test.each([
@@ -257,7 +256,7 @@ describe('license check', () => {
   ])('Trial panel should be displayed if license is outdated (>=1 major for RTM, >=2 major for preview)', ({ token, version }) => {
     validateLicense(token, version);
     expect(document.body.appendChild).toHaveBeenCalledTimes(1);
-    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual(DX_LICENSE_TRIGGER_NAME);
+    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual('dx-license-trigger');
   });
 
   test.each([
@@ -307,7 +306,7 @@ describe('license check', () => {
   ])('trial panel should be displayed if license is corrupted/invalid, preview or not', ({ token, version }) => {
     validateLicense(token, version);
     expect(document.body.appendChild).toHaveBeenCalledTimes(1);
-    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual(DX_LICENSE_TRIGGER_NAME);
+    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual('dx-license-trigger');
   });
 });
 

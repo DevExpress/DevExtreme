@@ -28,9 +28,3 @@ export interface LicenseCheckParams {
   internal?: true;
   error: LicenseVerifyResult | undefined;
 }
-
-export interface ParsedVersion {
-  major: number;
-  minor: number;
-  patch: number;
-}

@@ -153,5 +153,17 @@ export function registerTrialPanelComponents(): void {
   }
 }
 
-export const DX_LICENSE_TRIGGER_NAME = componentNames.trigger;
-export const trialPanelAttributeNames = attributeNames;
+export function showTrialPanel(buyNowUrl: string, version: string): void {
+  if (typeof customElements === 'undefined') {
+    return;
+  }
+
+  registerTrialPanelComponents();
+
+  const trialPanelTrigger = document.createElement(componentNames.trigger);
+
+  trialPanelTrigger.setAttribute(attributeNames.buyNow, buyNowUrl);
+  trialPanelTrigger.setAttribute(attributeNames.version, version);
+
+  document.body.appendChild(trialPanelTrigger);
+}
