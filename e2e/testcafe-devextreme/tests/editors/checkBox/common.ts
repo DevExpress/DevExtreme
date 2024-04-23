@@ -21,6 +21,7 @@ const ACTIVE_STATE_CLASS = 'dx-state-active';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const DISABLED_STATE_CLASS = 'dx-state-disabled';
+const INVALID_STATE_CLASS = 'dx-invalid';
 
 fixture.disablePageReloads`CheckBox`
   .page(url(__dirname, '../../container.html'));
@@ -79,6 +80,7 @@ test('Checkbox configuration, different Checkbox icon sizes, states, value Modes
       HOVER_STATE_CLASS,
       FOCUSED_STATE_CLASS,
       DISABLED_STATE_CLASS,
+      INVALID_STATE_CLASS,
     ] as string[]
     ) {
       for (const value of valueModes) {
