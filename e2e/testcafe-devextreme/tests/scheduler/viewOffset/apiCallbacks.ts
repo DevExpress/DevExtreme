@@ -1,5 +1,5 @@
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 // @ts-nocheck
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/callbackTestHelper';
 import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
