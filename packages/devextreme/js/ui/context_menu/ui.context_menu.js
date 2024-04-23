@@ -678,14 +678,19 @@ class ContextMenu extends MenuBase {
     }
 
     _dimensionChanged() {
-        $(`.${DX_MENU_ITEM_EXPANDED_CLASS}`).each((_, item) => {
-            const $item = $(item);
-            const $submenu = $item.children(`.${DX_SUBMENU_CLASS}`);
+        if(!this._shownSubmenus) {
+            return;
+        }
 
-            if($submenu.length) {
-                this._setSubMenuHeight($submenu, $item, true);
-                this._scrollToElement($item);
-            }
+        this._shownSubmenus.forEach(($submenu) => {
+            const $item = $submenu.closest(`.${DX_MENU_ITEM_CLASS}`);
+
+            this._setSubMenuHeight($submenu, $item, true);
+            this._scrollToElement($item);
+
+            const submenuPosition = this._getSubmenuPosition($item);
+
+            animationPosition.setup($submenu, submenuPosition);
         });
     }
 

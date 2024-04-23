@@ -904,6 +904,152 @@ QUnit.module('Rendering Scrollable', {
         assert.strictEqual(args[0], $nestedSubmenu[0], 'height recalculation is called for the nested submenu');
         assert.strictEqual(spy.callCount, 1, 'no other recalculations');
     });
+
+    QUnit.module('On dimension changed', {
+        setWindowHeight: function(windowHeight) {
+            implementationsMap.getOuterHeight = (el, ...args) => {
+                if(el === window) {
+                    return windowHeight;
+                }
+                return this._originalGetOuterHeight(el, ...args);
+            };
+            implementationsMap.getHeight = (el, ...args) => {
+                if($(el)[0] === window) {
+                    return windowHeight;
+                }
+                return this._originalGetHeight(el, ...args);
+            };
+        },
+        beforeEach: function() {
+            this._originalGetOuterHeight = implementationsMap.getOuterHeight;
+            this._originalGetHeight = implementationsMap.getHeight;
+        },
+        afterEach: function() {
+            implementationsMap.getOuterHeight = this._originalGetOuterHeight;
+            implementationsMap.getHeight = this._originalGetHeight;
+        }
+    }, () => {
+        QUnit.test('Submenu height should be recalculated', function(assert) {
+            const menu = createMenuInWindow({
+                items: [
+                    {
+                        text: 'root',
+                        items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+                    },
+                ],
+                showFirstSubmenuMode: 'onClick',
+                showSubmenuMode: { name: 'onHover', delay: 0 },
+            });
+            const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $rootItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($rootItem);
+            const $overlayContent = $(submenu._overlay.content());
+            const $menuItem1 = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            $menuItem1.trigger('dxclick');
+
+            const windowHeight = 300;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            const $nestedSubmenu = $menuItem1.find(`.${DX_SUBMENU_CLASS}`).eq(0);
+            const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
+
+            assert.roughEqual(
+                $nestedSubmenu.height(),
+                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+                1,
+                'Nested submenu uses height is updated'
+            );
+        });
+
+        QUnit.test('Submenu flipping on dimension change', function(assert) {
+            const menu = createMenuInWindow({
+                items: [
+                    {
+                        text: 'root',
+                        items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+                    },
+                ],
+                showFirstSubmenuMode: 'onClick',
+                showSubmenuMode: { name: 'onHover', delay: 0 },
+            });
+            const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $rootItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($rootItem);
+            const $overlayContent = $(submenu._overlay.content());
+            const $menuItem1 = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            $menuItem1.trigger('dxclick');
+
+            const $nestedSubmenu = $menuItem1.find(`.${DX_SUBMENU_CLASS}`).eq(0);
+
+            assert.roughEqual($nestedSubmenu.offset().top + BORDER_WIDTH, $menuItem1.offset().top, 1, 'submenu expanded to bottom');
+
+            const windowHeight = 200;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
+        });
+
+        QUnit.test('Submenu scrolling to an expanded item on dimension change', function(assert) {
+            const menu = createMenuInWindow({
+                items: [
+                    {
+                        text: 'root',
+                        items: [
+                            {
+                                text: 'nested',
+                                items: [
+                                    { text: 1 },
+                                    { text: 2 },
+                                    { text: 3 },
+                                    { text: 4 },
+                                    { text: 5 },
+                                    { text: 6 },
+                                    { text: 7 },
+                                    { text: 8 },
+                                    { text: 9 },
+                                    { text: 10, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                                ]
+                            }
+                        ],
+                    },
+                ],
+                showFirstSubmenuMode: 'onClick',
+                showSubmenuMode: { name: 'onHover', delay: 0 },
+            });
+            const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $rootItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($rootItem);
+            const $overlayContent = $(submenu._overlay.content());
+            const $nestedItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            $nestedItem.trigger('dxclick');
+
+            const $lastItem = $nestedItem.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+            $lastItem.trigger('dxclick');
+
+            const windowHeight = 200;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual(
+                $lastItem.offset().top,
+                $nestedItem.offset().top,
+                1,
+                'expanded item still visible'
+            );
+        });
+    });
 });
 
 QUnit.module('Menu - templates', {

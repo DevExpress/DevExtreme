@@ -598,7 +598,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.strictEqual(spy.callCount, 1, 'no other recalculations');
     });
 
-    QUnit.module('on dimension changed', {
+    QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
                 if(el === window) {
@@ -606,12 +606,20 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
                 }
                 return this._originalGetOuterHeight(el, ...args);
             };
+            implementationsMap.getHeight = (el, ...args) => {
+                if($(el)[0] === window) {
+                    return windowHeight;
+                }
+                return this._originalGetHeight(el, ...args);
+            };
         },
         beforeEach: function() {
             this._originalGetOuterHeight = implementationsMap.getOuterHeight;
+            this._originalGetHeight = implementationsMap.getHeight;
         },
         afterEach: function() {
             implementationsMap.getOuterHeight = this._originalGetOuterHeight;
+            implementationsMap.getHeight = this._originalGetHeight;
         }
     }, () => {
         QUnit.test('Submenu height should be recalculated', function(assert) {
@@ -637,6 +645,74 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
                 $nestedSubmenu.height(),
                 windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
                 'Nested submenu uses height is updated'
+            );
+        });
+
+        QUnit.test('Submenu flipping on dimension change', function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                items: [
+                    { text: 1 },
+                    { text: 2 },
+                    { text: 3, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                    { text: 4 },
+                    { text: 5 },
+                ],
+                focusStateEnabled: true,
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay: 0 }
+            });
+            const $itemsContainer = instance.itemsContainer();
+            const $item = $($itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(2));
+
+            $item.trigger('dxclick');
+
+            const $nestedSubmenu = $item.find(`.${DX_SUBMENU_CLASS}`).eq(0);
+
+            assert.roughEqual($nestedSubmenu.offset().top, $item.offset().top, 1, 'submenu expanded to bottom');
+
+            const windowHeight = 100;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
+        });
+
+        QUnit.test('Submenu scrolling to an expanded item on dimension change', function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                items: [
+                    {
+                        text: 'root',
+                        items: [
+                            { text: 1 },
+                            { text: 2 },
+                            { text: 3 },
+                            { text: 4 },
+                            { text: 5, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                        ],
+                    },
+                ],
+                focusStateEnabled: true,
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay: 0 }
+            });
+            const $itemsContainer = instance.itemsContainer();
+            const $item = $($itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).first());
+
+            $item.trigger('dxclick');
+
+            const $nestedItem = $item.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+            $nestedItem.trigger('dxclick');
+
+            const windowHeight = 100;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual(
+                $nestedItem.offset().top,
+                windowHeight - SUBMENU_PADDING - $nestedItem.outerHeight(),
+                1,
+                'expanded item still visible'
             );
         });
     });
