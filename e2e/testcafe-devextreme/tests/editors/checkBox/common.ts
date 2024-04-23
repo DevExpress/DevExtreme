@@ -95,31 +95,6 @@ test('Checkbox configuration, different Checkbox icon sizes, states, value Modes
   }
 });
 
-test('Checkbox configuration, different Checkbox widths', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different widths.png', { element: '#container', shouldTestInCompact: true });
-
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different widths.png', { element: '#container', theme: getDarkThemeName() });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  for (const width of [45, undefined, 65]) {
-    for (const text of [undefined, 'label', 'one two three']) {
-      const id = `dx${new Guid()}`;
-      await appendElementTo('#container', 'div', id, {});
-
-      await createWidget('dxCheckBox', {
-        text,
-        width,
-      }, `#${id}`);
-      await setClassAttribute(Selector(`#${id}`), state);
-    }
-  }
-});
-
 test('Checkbox configuration, different Checkbox orientation and width', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
