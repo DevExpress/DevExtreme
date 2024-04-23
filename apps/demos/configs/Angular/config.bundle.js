@@ -56,11 +56,14 @@ if (window.config) {
     // 'devextreme/bundles/dx.all',
   ].forEach((pkg) => delete window.config.map[pkg]);
 
-/*  window.config.map = Object.keys(window.config.map).reduce((acc, item) => {
-    if (!item.startsWith('devextreme-angular/')) {
-      acc[item] = window.config.map[item];
+  /*
+ Object.keys(window.config.map).forEach((pkg) => {
+    if (pkg.startsWith('devextreme-angular/')) {
+      delete window.config.map[pkg];
     }
-  }, {});*/
+  });
+  */
+
   System.config(window.config);
 }
 
