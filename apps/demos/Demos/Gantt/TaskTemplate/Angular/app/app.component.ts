@@ -1,4 +1,4 @@
-import { ViewEncapsulation } from '@angular/compiler/src/core';
+import { ViewEncapsulation } from '@angular/compiler';
 import { NgModule, Component, enableProdMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

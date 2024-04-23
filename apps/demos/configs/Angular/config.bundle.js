@@ -56,5 +56,12 @@ if (window.config) {
     // 'devextreme/bundles/dx.all',
   ].forEach((pkg) => delete window.config.map[pkg]);
 
+/*  window.config.map = Object.keys(window.config.map).reduce((acc, item) => {
+    if (!item.startsWith('devextreme-angular/')) {
+      acc[item] = window.config.map[item];
+    }
+  }, {});*/
   System.config(window.config);
 }
+
+System.import('@angular/compiler').catch(console.error.bind(console));

@@ -1,16 +1,16 @@
 # DevExtreme Demos
- 
+
 This repository contains technical DevExtreme demos for Angular, React, Vue, jQuery, ASP.NET MVC, and ASP.NET Core.
 
 To run the demos on your machine, clone this repository, run `npm install`, and follow the instructions below.
 
 ## Prepare Demos for Development
+Before running you need execute in `monorepo/root`:
+
+```npm run overwrite-wrappers-packages```
 
 To prepare demos for development, you can run a script for all technologies or scripts for JavaScript and ASP.NET individually:
 
-```
-npm run prepare-all
-```
 ```
 npm run prepare-js
 ```
@@ -31,19 +31,10 @@ To return to using separate files from `node_modules`, run `npm run prepare-js`.
 
 ### Launch
 
-1. Run the launch script:
-
-    ```
-    npm run launch-demo
-    ```
-
-1. Navigate to http://localhost:3000/.
+1. Run ```run npm webserver ``` from `monorepo/root`
+2. Navigate to http://localhost:8080/apps/demos.
 
 You can pass additional parameter to specify port. It can be useful when you need to fast switching beatween one demo on different frameworks:
-
-```
-npm run launch-demo -- 3010
-```
 
 ### Before Commiting Сhanges
 
@@ -65,7 +56,7 @@ npm run fix-lint
 
 ### TS React Infrastructure
 
-1. After you make any changes in React TypeScript sources, run the following command:  
+1. After you make any changes in React TypeScript sources, run the following command:
 
 ```
 npm run convert-to-js split
@@ -81,7 +72,7 @@ npm run convert-to-js "JSDemos/Demos/Diagram/**/React"
 
 ## ASP.NET Demos
 
-> **_NOTE:_** You will need Windows. 
+> **_NOTE:_** You will need Windows.
 
 1. Clone the [devextreme-aspnet](https://github.com/DevExpress/devextreme-aspnet) repo.
 
@@ -98,7 +89,7 @@ npm run convert-to-js "JSDemos/Demos/Diagram/**/React"
     ```
     npm run prepare-all
     ```
-    For this, you need .NET Framework 4.5.2 installed on your device. You can download a full Developer Pack here: [.NET 4.5.2 Developer Pack Installer](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net452-developer-pack-offline-installer).
+   For this, you need .NET Framework 4.5.2 installed on your device. You can download a full Developer Pack here: [.NET 4.5.2 Developer Pack Installer](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net452-developer-pack-offline-installer).
 
 1. Open the `NetCoreDemos/DevExtreme.NETCore.Demos.sln` or `MVCDemos/DevExtreme.MVC.Demos.sln` project in Visual Studio and add or edit demos there.
 
@@ -122,7 +113,7 @@ npm run convert-to-js "JSDemos/Demos/Diagram/**/React"
     ```
     npm run prepare-all
     ```
-    Ensure you have .NET Framework 4.5.2 installed on your device. You can download the full Developer Pack here: [.NET 4.5.2 Developer Pack Installer](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net452-developer-pack-offline-installer).
+   Ensure you have .NET Framework 4.5.2 installed on your device. You can download the full Developer Pack here: [.NET 4.5.2 Developer Pack Installer](https://dotnet.microsoft.com/en-us/download/dotnet-framework/thank-you/net452-developer-pack-offline-installer).
 
 ### Launch .NET core Demos
 
