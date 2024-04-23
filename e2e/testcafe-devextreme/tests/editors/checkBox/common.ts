@@ -76,7 +76,7 @@ test('Checkbox appearance', async (t) => {
       dependencies: { scale },
     })();
 
-    await testScreenshot(t, takeScreenshot, `CheckBox appearance is scaled container, scale=${scale}.png`, { shouldTestInCompact: true });
+    await testScreenshot(t, takeScreenshot, `CheckBox appearance in scaled container, scale=${scale}.png`, { shouldTestInCompact: true });
   }
 
   await t
