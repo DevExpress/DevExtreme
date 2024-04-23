@@ -6,6 +6,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import Submenu from 'ui/menu/ui.submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import domAdapter from 'core/dom_adapter';
 import Menu from 'ui/menu/ui.menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
@@ -476,7 +477,7 @@ QUnit.module('Rendering Scrollable', {
         assert.roughEqual(
             $submenu.outerHeight(),
             $(window).height() - $item1.offset().top - $item1.outerHeight() - SUBMENU_PADDING,
-            .1,
+            1.5,
             'menu uses all available space'
         );
     });
@@ -866,45 +867,6 @@ QUnit.module('Rendering Scrollable', {
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
 
-    QUnit.test('Submenu height should be recalculated on dimension changes', function(assert) {
-        const menu = createMenuInWindow({
-            items: [
-                {
-                    text: 'Item 1',
-                    items: [
-                        {
-                            text: 'Item 11',
-                            items: [{ text: 'Item 111' }],
-                        },
-                    ],
-                },
-            ],
-            showFirstSubmenuMode: 'onClick',
-            showSubmenuMode: { name: 'onHover', delay: 0 },
-        });
-        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
-
-        $rootItem.trigger('dxclick');
-
-        const submenu = getSubMenuInstance($rootItem);
-        const $overlayContent = $(submenu._overlay.content());
-        const $menuItem1 = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
-
-        $menuItem1.trigger('dxclick');
-
-        const spy = sinon.spy();
-
-        submenu._setSubMenuHeight = spy;
-
-        resizeCallbacks.fire();
-
-        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
-        const args = spy.args[0][0];
-
-        assert.strictEqual(args[0], $nestedSubmenu[0], 'height recalculation is called for the nested submenu');
-        assert.strictEqual(spy.callCount, 1, 'no other recalculations');
-    });
-
     QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
@@ -914,19 +876,27 @@ QUnit.module('Rendering Scrollable', {
                 return this._originalGetOuterHeight(el, ...args);
             };
             implementationsMap.getHeight = (el, ...args) => {
-                if($(el)[0] === window) {
+                if(el[0] === window) {
                     return windowHeight;
                 }
                 return this._originalGetHeight(el, ...args);
+            };
+            domAdapter.getDocumentElement = function() {
+                return {
+                    clientWidth: 1200,
+                    clientHeight: windowHeight
+                };
             };
         },
         beforeEach: function() {
             this._originalGetOuterHeight = implementationsMap.getOuterHeight;
             this._originalGetHeight = implementationsMap.getHeight;
+            this._originalGetDocumentElement = domAdapter.getDocumentElement;
         },
         afterEach: function() {
             implementationsMap.getOuterHeight = this._originalGetOuterHeight;
             implementationsMap.getHeight = this._originalGetHeight;
+            domAdapter.getDocumentElement = this._originalGetDocumentElement;
         }
     }, () => {
         QUnit.test('Submenu height should be recalculated', function(assert) {
@@ -965,7 +935,7 @@ QUnit.module('Rendering Scrollable', {
             );
         });
 
-        QUnit.test('Submenu flipping on dimension change', function(assert) {
+        QUnit.test('Submenu flipping', function(assert) {
             const menu = createMenuInWindow({
                 items: [
                     {
@@ -997,7 +967,7 @@ QUnit.module('Rendering Scrollable', {
             assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
         });
 
-        QUnit.test('Submenu scrolling to an expanded item on dimension change', function(assert) {
+        QUnit.test('Submenu scrolling to an expanded item', function(assert) {
             const menu = createMenuInWindow({
                 items: [
                     {

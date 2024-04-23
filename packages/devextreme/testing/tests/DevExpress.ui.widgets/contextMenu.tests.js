@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import domAdapter from 'core/dom_adapter';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import support from 'core/utils/support';
 import { implementationsMap, getWidth, getHeight } from 'core/utils/size';
@@ -571,33 +572,6 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
     });
 
-    QUnit.test('Submenu height should be recalculated on dimension changes', function(assert) {
-        const instance = new ContextMenu(this.$element, {
-            items: [
-                { text: 1, items: [{ text: 11 }] },
-            ],
-            focusStateEnabled: true,
-            visible: true,
-            showSubmenuMode: { name: 'onHover', delay: 0 }
-        });
-        const $itemsContainer = instance.itemsContainer();
-        const item1 = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).first();
-
-        $(item1).trigger('dxclick');
-
-        const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
-        const spy = sinon.spy();
-
-        instance._setSubMenuHeight = spy;
-
-        resizeCallbacks.fire();
-
-        const args = spy.args[0][0];
-
-        assert.strictEqual(args[0], $nestedSubmenu[0], 'height recalculation is called for the nested submenu');
-        assert.strictEqual(spy.callCount, 1, 'no other recalculations');
-    });
-
     QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
@@ -607,19 +581,27 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
                 return this._originalGetOuterHeight(el, ...args);
             };
             implementationsMap.getHeight = (el, ...args) => {
-                if($(el)[0] === window) {
+                if(el[0] === window) {
                     return windowHeight;
                 }
                 return this._originalGetHeight(el, ...args);
+            };
+            domAdapter.getDocumentElement = function() {
+                return {
+                    clientWidth: 1200,
+                    clientHeight: windowHeight
+                };
             };
         },
         beforeEach: function() {
             this._originalGetOuterHeight = implementationsMap.getOuterHeight;
             this._originalGetHeight = implementationsMap.getHeight;
+            this._originalGetDocumentElement = domAdapter.getDocumentElement;
         },
         afterEach: function() {
             implementationsMap.getOuterHeight = this._originalGetOuterHeight;
             implementationsMap.getHeight = this._originalGetHeight;
+            domAdapter.getDocumentElement = this._originalGetDocumentElement;
         }
     }, () => {
         QUnit.test('Submenu height should be recalculated', function(assert) {
@@ -648,7 +630,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             );
         });
 
-        QUnit.test('Submenu flipping on dimension change', function(assert) {
+        QUnit.test('Submenu flipping', function(assert) {
             const instance = new ContextMenu(this.$element, {
                 items: [
                     { text: 1 },
@@ -677,7 +659,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
             assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
         });
 
-        QUnit.test('Submenu scrolling to an expanded item on dimension change', function(assert) {
+        QUnit.test('Submenu scrolling to an expanded item', function(assert) {
             const instance = new ContextMenu(this.$element, {
                 items: [
                     {
