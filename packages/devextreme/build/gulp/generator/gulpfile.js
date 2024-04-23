@@ -34,7 +34,7 @@ const SRC = [
     '!js/renovation/test_utils/**/*'
 ];
 
-const COMPAT_TESTS_PARTS = 'testing/tests/Renovation/';
+const COMPAT_TESTS_PARTS = '../../e2e/qunit/tests/Renovation/';
 
 const knownErrors = [
     'js/renovation/component_wrapper/',
