@@ -1,6 +1,6 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { Selector } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
 import Guid from 'devextreme/core/guid';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
@@ -61,106 +61,75 @@ fixture.disablePageReloads`CheckBox`
   });
 });
 
-test('Checkbox configuration, different Checkbox icon sizes, states, value Modes', async (t) => {
+test('Checkbox appearance', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different iconSizes.png', { element: '#container', shouldTestInCompact: true });
+  await insertStylesheetRulesToPage('.dx-checkbox.dx-widget { display: inline-flex; vertical-align: middle; margin-inline: 10px; }');
 
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different iconSizes.png', { element: '#container', theme: getDarkThemeName() });
+  await testScreenshot(t, takeScreenshot, 'CheckBox appearance.png', { shouldTestInCompact: true });
+  await testScreenshot(t, takeScreenshot, 'CheckBox appearance.png', { theme: getDarkThemeName() });
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  await setStyleAttribute(Selector('#container'), 'width: 600px; height: 200px;');
+  for (const scale of [1.15, 0.67]) {
+    await ClientFunction(() => {
+      $('#container').css('transform', `scale(${scale})`);
+    }, {
+      dependencies: { scale },
+    })();
 
-  for (const iconSize of [20, undefined, 45]) {
-    for (const state of [
-      READONLY_STATE_CLASS,
-      DEFAULT_STATE_CLASS,
-      ACTIVE_STATE_CLASS,
-      HOVER_STATE_CLASS,
-      FOCUSED_STATE_CLASS,
-      DISABLED_STATE_CLASS,
-      INVALID_STATE_CLASS,
-    ] as string[]
-    ) {
-      for (const value of valueModes) {
-        const id = `dx${new Guid()}`;
-        await appendElementTo('#container', 'div', id, {});
-
-        await createWidget('dxCheckBox', {
-          value,
-          iconSize,
-        }, `#${id}`);
-        await setClassAttribute(Selector(`#${id}`), state);
-      }
-    }
+    await testScreenshot(t, takeScreenshot, `CheckBox appearance is scaled container, scale=${scale}.png`, { shouldTestInCompact: true });
   }
-});
-
-test('Checkbox configuration, different Checkbox scaling sizes, states, value Modes', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different scaling sizes.png', { element: '#container', shouldTestInCompact: true });
-
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different scaling sizes.png', { element: '#container', theme: getDarkThemeName() });
 
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
 }).before(async () => {
-  await setStyleAttribute(Selector('#container'), 'width: 600px; height: 200px;');
+  for (const state of [
+    DEFAULT_STATE_CLASS,
+    READONLY_STATE_CLASS,
+    DISABLED_STATE_CLASS,
+    HOVER_STATE_CLASS,
+    ACTIVE_STATE_CLASS,
+    FOCUSED_STATE_CLASS,
+    `${FOCUSED_STATE_CLASS} ${HOVER_STATE_CLASS}`,
+    INVALID_STATE_CLASS,
+    `${INVALID_STATE_CLASS} ${FOCUSED_STATE_CLASS}`,
+  ] as string[]) {
+    await ClientFunction(() => {
+      $('#container').append($('<div>').text(`State: ${state}`).css('fontSize', 10));
+    }, {
+      dependencies: {
+        state,
+      },
+    })();
 
-  for (const scale of [0.90, 1.00, 1.25]) {
-    for (const state of [
-      READONLY_STATE_CLASS,
-      DEFAULT_STATE_CLASS,
-      ACTIVE_STATE_CLASS,
-      HOVER_STATE_CLASS,
-      FOCUSED_STATE_CLASS,
-      DISABLED_STATE_CLASS,
-      INVALID_STATE_CLASS,
-    ] as string[]
-    ) {
-      for (const value of valueModes) {
-        const id = `dx${new Guid()}`;
-        await appendElementTo('#container', 'div', id, {});
+    for (const iconSize of [undefined, 25]) {
+      for (const text of [undefined, 'Label text']) {
+        for (const rtlEnabled of [false, true]) {
+          for (const value of valueModes) {
+            const id = `dx${new Guid()}`;
+            await appendElementTo('#container', 'div', id, {});
 
-        await setStyleAttribute(Selector(`#${id}`), `padding: 5px; transform: scale(${scale});`);
-
-        await createWidget('dxCheckBox', {
-          value,
-        }, `#${id}`);
-        await setClassAttribute(Selector(`#${id}`), state);
+            await createWidget('dxCheckBox', {
+              text,
+              value,
+              rtlEnabled,
+              iconSize,
+            }, `#${id}`);
+            await setClassAttribute(Selector(`#${id}`), state);
+          }
+        }
       }
-    }
-  }
-});
 
-test('Checkbox configuration, different Checkbox orientation and width', async (t) => {
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation and width.png', { element: '#container', shouldTestInCompact: true });
-
-  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different rtlOrientation and width.png', { element: '#container', theme: getDarkThemeName() });
-
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  for (const rtlEnabled of [false, true]) {
-    for (const width of [undefined, 45, 65]) {
-      for (const text of [undefined, 'label', 'one two three']) {
+      for (const rtlEnabled of [false, true]) {
         const id = `dx${new Guid()}`;
         await appendElementTo('#container', 'div', id, {});
 
         await createWidget('dxCheckBox', {
-          text,
-          width,
+          text: 'Label text',
+          width: 50,
           rtlEnabled,
         }, `#${id}`);
-        await setClassAttribute(Selector(`#${id}`), DEFAULT_STATE_CLASS);
+        await setClassAttribute(Selector(`#${id}`), state);
       }
     }
   }
