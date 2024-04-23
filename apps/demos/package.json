@@ -108,7 +108,6 @@
     },
     "scripts": {
         "test": "jest --coverage --runInBand",
-        "postinstall": "npm run prepare-js",
         "clean": "git clean -f -x -d",
         "add-demo": "node utils/interactive/add-demo.js",
         "link-repos": "node utils/interactive/link-repos.js",
