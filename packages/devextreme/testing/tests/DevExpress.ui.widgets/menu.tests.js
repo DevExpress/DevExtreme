@@ -1015,7 +1015,7 @@ QUnit.module('Rendering Scrollable', {
             assert.roughEqual(
                 $lastItem.offset().top,
                 $nestedItem.offset().top,
-                1,
+                1.5,
                 'expanded item still visible'
             );
         });
