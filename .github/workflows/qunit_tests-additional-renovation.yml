@@ -45,15 +45,14 @@ jobs:
           npm run build:systemjs
 
       - name: Zip artifacts
-        working-directory: ./packages/devextreme
         run: |
-          7z a -tzip -mx3 -mmt2 artifacts.zip artifacts scss/bundles testing/tests/Renovation/widgets.json
+          7z a -tzip -mx3 -mmt2 artifacts.zip packages/devextreme/artifacts packages/devextreme/scss/bundles e2e/qunit/tests/Renovation/widgets.json
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: devextreme-artifacts
-          path: packages/devextreme/artifacts.zip
+          path: artifacts.zip
           retention-days: 1
 
   qunit-tests-timezones:

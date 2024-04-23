@@ -95,13 +95,11 @@ runs:
       uses: actions/download-artifact@v3
       with:
         name: devextreme-artifacts
-        path: packages/devextreme
 
     - name: Unpack artifacts
-      working-directory: ./packages/devextreme
       shell: bash
       run: |
-        rm -rf artifacts/npm
+        rm -rf packages/devextreme/artifacts/npm
         7z x artifacts.zip
 
     - name: Build runner
