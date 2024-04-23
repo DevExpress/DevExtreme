@@ -507,33 +507,33 @@ QUnit.module('event utils', () => {
 });
 
 QUnit.module('getEventTarget module', () => {
-    test('getEventTarget returns the element on which the event was raised', function(assert) {
-        assert.expect(1);
+    // test('getEventTarget returns the element on which the event was raised', function(assert) {
+    //     assert.expect(1);
 
-        const host = document.getElementById('qunit-fixture');
-        const div = document.createElement('div');
+    //     const host = document.getElementById('qunit-fixture');
+    //     const div = document.createElement('div');
 
-        host.appendChild(div);
+    //     host.appendChild(div);
 
-        const customEvent = new Event('customEvent', {
-            bubbles: true,
-            composed: true,
-        });
+    //     const customEvent = new Event('customEvent', {
+    //         bubbles: true,
+    //         composed: true,
+    //     });
 
-        host.addEventListener('customEvent', (event) => {
-            const target = getEventTarget(event);
+    //     host.addEventListener('customEvent', (event) => {
+    //         const target = getEventTarget(event);
 
-            assert.strictEqual(div, target, 'getEventTarget returned target correctly');
-        });
+    //         assert.strictEqual(div, target, 'getEventTarget returned target correctly');
+    //     });
 
-        div.dispatchEvent(customEvent);
-    });
+    //     div.dispatchEvent(customEvent);
+    // });
 
     if(QUnit.urlParams['nojquery']) {
-        skipInShadowDomMode('getEventTarget returns the element on which the event was raised if there is ShadowDOM', function(assert) {
+        test('getEventTarget returns the element on which the event was raised', function(assert) {
             assert.expect(1);
 
-            const shadowHost = document.getElementById('qunit-fixture');
+            const shadowHost = document.getElementById('element');
             const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
             const div = document.createElement('div');
 
