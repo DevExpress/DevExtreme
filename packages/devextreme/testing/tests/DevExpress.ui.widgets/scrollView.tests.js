@@ -4,6 +4,7 @@ import { noop } from 'core/utils/common';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import devices from 'core/devices';
+import eventsEngine from 'events/core/events_engine';
 import messageLocalization from 'localization/message';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -34,6 +35,7 @@ const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text'
 const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator';
 
 const PULLDOWN_HEIGHT = 160;
+const SCROLL_INIT_EVENT = 'dxscrollinit';
 
 const getScrollOffset = function($scrollView) {
     const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -66,7 +68,6 @@ const moduleConfig = {
         animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
     }
 };
-
 
 QUnit.testStart(function() {
     const markup = '\
@@ -290,6 +291,51 @@ QUnit.module('onReachBottom', () => {
     });
 });
 
+if(QUnit.urlParams['nojquery']) {
+    QUnit.module('ShadowDom', moduleConfig, () => {
+        QUnit.skipInShadowDomMode('dxscrollinit handler should be fired after triggering of wheel event', function(assert) {
+            assert.expect(1);
+
+            const shadowHost = document.querySelector('#qunit-fixture');
+            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
+            const scrollView = document.createElement('div');
+            const scrollViewContent = document.createElement('div');
+
+            scrollView.setAttribute('style', 'height: 200px; width: 50px; position: absolute; top: 0; bottom: 300px; padding: 20px;');
+            scrollViewContent.setAttribute('style', 'height: 400px; width: 50px;');
+
+            scrollView.appendChild(scrollViewContent);
+            shadowRoot.appendChild(scrollView);
+
+            const $scrollView = $(scrollView).dxScrollView({
+                useNative: false,
+            });
+
+            const wrapper = $scrollView.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+            eventsEngine.on(wrapper, SCROLL_INIT_EVENT, () => {
+                assert.ok(true, 'dxscrollinit was fired');
+            });
+
+            const originalEvent = {
+                target: shadowHost,
+                composedPath: () => [
+                    scrollViewContent,
+                    scrollView,
+                    shadowRoot,
+                    shadowHost,
+                ],
+            };
+
+            pointerMock(scrollViewContent)
+                .start()
+                ._wheel({
+                    target: shadowHost,
+                    originalEvent: $.Event('wheel', originalEvent),
+                });
+        });
+    });
+}
 
 QUnit.module('actions', moduleConfig, () => {
     QUnit.test('onPullDown action', function(assert) {

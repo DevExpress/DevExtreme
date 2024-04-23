@@ -276,7 +276,7 @@ function getHandlersController(element, eventName) {
                 } else {
                     e.currentTarget = e.delegateTarget || e.target;
 
-                    const isTargetInShadowDOM = !!e.target?.shadowRoot;
+                    const isTargetInShadowDOM = Boolean(e.target?.shadowRoot);
 
                     if(isTargetInShadowDOM) {
                         const target = getEventTarget(e.originalEvent);

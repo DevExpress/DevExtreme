@@ -151,6 +151,13 @@
                 return this;
             },
 
+            _wheel: (config) => {
+                triggerEvent('wheel', config);
+
+                // eslint-disable-next-line spellcheck/spell-checker
+                inferno.rerender();
+            },
+
             scroll: function(x, y) {
                 _scrollLeft += x;
                 _scrollTop += y;
