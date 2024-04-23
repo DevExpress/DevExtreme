@@ -40,6 +40,7 @@
       <DxColumn type="buttons">
         <DxButton
           icon="add"
+          text="Add"
           @click="onAddButtonClick"
           :visible="isAddButtonVisible"
         />

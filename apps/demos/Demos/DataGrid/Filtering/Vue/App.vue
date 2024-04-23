@@ -124,7 +124,13 @@ const currentFilter = ref(applyFilterTypes[0].key);
 
 const dataGridRef = ref<DxDataGrid | null>(null);
 
-const saleAmountEditorOptions = { format: 'currency', showClearButton: true };
+const saleAmountEditorOptions = { 
+  format: 'currency', 
+  showClearButton: true, 
+  inputAttr: {
+    'aria-label': 'Filter cell',
+  }, 
+};
 const saleAmountHeaderFilter = [
   {
     text: 'Less than $3000',

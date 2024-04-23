@@ -63,7 +63,7 @@
     "eslint-plugin-vue": "7.20.0",
     "http-server": "14.1.1",
     "husky": "^8.0.3",
-    "jspdf-autotable": "3.8.1",
+    "jspdf-autotable": "3.8.2",
     "lint-staged": "14.0.1",
     "nx": "17.3.2",
     "nx-cloud": "16.5.2",

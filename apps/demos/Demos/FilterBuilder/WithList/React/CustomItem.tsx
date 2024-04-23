@@ -10,7 +10,10 @@ const currencyFormatter = new Intl.NumberFormat('en-US', {
 export default function CustomItem(item) {
   return (
     <div className="product">
-      <img src={item.ImageSrc} />
+      <img
+        src={item.ImageSrc}
+        alt={`Picture of ${item.Name}`}
+      />
       <div>{item.Name}</div>
       <div className="price">{currencyFormatter.format(item.Price)}</div>
     </div>

@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { PositionConfig } from 'devextreme/animation/position';
 import { DxFilterBuilderTypes } from 'devextreme-angular/ui/filter-builder';
 import { DxoHeaderFilterComponent } from 'devextreme-angular/ui/nested/header-filter';
-import { DxDataGridModule, DxDataGridTypes } from 'devextreme-angular/ui/data-grid';
+import { DxDataGridModule } from 'devextreme-angular/ui/data-grid';
 import { Order, Service } from './app.service';
 
 if (!/localhost/.test(document.location.host)) {
@@ -74,15 +74,6 @@ export class AppComponent {
 
   constructor(service: Service) {
     this.dataSource = service.getOrders();
-  }
-
-  onInitialized(e: DxDataGridTypes.InitializedEvent) {
-    e.component.columnOption('SaleAmount', {
-      editorOptions: {
-        format: 'currency',
-        showClearButton: true,
-      },
-    });
   }
 }
 

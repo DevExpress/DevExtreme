@@ -36,6 +36,7 @@
         <img
           :src="employee.data.Picture"
           class="employee-photo"
+          alt="Employee photo"
         >
         <p class="employee-notes">{{ employee.data.Notes }}</p>
       </div>
