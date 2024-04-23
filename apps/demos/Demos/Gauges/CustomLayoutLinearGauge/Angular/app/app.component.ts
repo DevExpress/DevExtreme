@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxLinearGaugeModule } from 'devextreme-angular';
 
@@ -18,7 +18,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxLinearGaugeModule,
   ],
   declarations: [AppComponent],

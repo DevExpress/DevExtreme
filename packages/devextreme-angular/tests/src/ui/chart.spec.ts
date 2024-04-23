@@ -1,11 +1,8 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ViewChild
 } from '@angular/core';
-
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
     TestBed
@@ -14,6 +11,7 @@ import {
 import {
     DxChartModule, DxChartComponent, DxScrollViewModule
 } from 'devextreme-angular';
+
 import dxChart from 'devextreme/viz/chart';
 
 @Component({
@@ -25,12 +23,12 @@ class TestContainerComponent {
         label: 'label1'
     }];
     @ViewChild(DxChartComponent) chart: DxChartComponent;
-    dataSource = [];
+    dataSource: any[] = [];
     disposed = false;
     commonSeriesSettings = {
         argumentField: undefined
     };
-    seriesAsArray = [];
+    seriesAsArray: any[] = [];
     seriesAsObject = {
         valueField: undefined
     };
@@ -46,7 +44,7 @@ describe('DxChart', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxChartModule, DxScrollViewModule, BrowserTransferStateModule]
+                imports: [DxChartModule, DxScrollViewModule]
             });
     });
 

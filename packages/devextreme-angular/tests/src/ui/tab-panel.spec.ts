@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ViewChild
@@ -8,8 +7,6 @@ import {
 import {
     TestBed
 } from '@angular/core/testing';
-
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
     DxTabPanelModule,
@@ -38,7 +35,7 @@ describe('DxTabPanel', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxTabPanelModule, BrowserTransferStateModule]
+                imports: [DxTabPanelModule]
             });
     });
 
