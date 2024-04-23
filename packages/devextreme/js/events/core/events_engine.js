@@ -1,6 +1,6 @@
 import registerEventCallbacks from './event_registrator_callbacks';
 import { extend } from '../../core/utils/extend';
-import { getEventTarget } from '../utils/event_target';
+import { getEventTarget } from '../utils/index';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
