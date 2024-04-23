@@ -748,12 +748,6 @@ QUnit.module('multi tag support', {
             }).toArray();
         };
         this.clock = sinon.useFakeTimers();
-        messageLocalization.load({
-            'en': {
-                'dxTagBox-selected': '{0} selected',
-                'dxTagBox-moreSelected': '{0} more'
-            }
-        });
     },
     afterEach: function() {
         this.clock.restore();
@@ -7778,10 +7772,10 @@ QUnit.module('accessibility', () => {
             'SuperHD Video Player',
             'SuperPlasma 50',
         ];
-        const productLabel = { 'aria-label': 'Product' };
+        const productLabel = 'Product';
         const $tagBox = $('#tagBox').dxTagBox({
             items: productsData,
-            inputAttr: productLabel,
+            inputAttr: { 'aria-label': 'Product' },
             value: productsData,
             maxDisplayedTags: 3,
             showMultiTagOnly: false
@@ -7789,7 +7783,7 @@ QUnit.module('accessibility', () => {
 
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual($input.attr('aria-label'), 'Product', 'input aria-label attribute is correct');
+        assert.strictEqual($input.attr('aria-label'), productLabel, 'input aria-label attribute is correct');
     });
 
     QUnit.test('input should not have aria-attribute by default', function(assert) {
@@ -7840,6 +7834,7 @@ QUnit.module('accessibility', () => {
             ID: 2,
             Name: 'Tag_2',
         }];
+        const productLabel = '2 selected';
         const $tagBox = $('#tagBox').dxTagBox({
             dataSource: productsData,
             valueExpr: 'ID',
@@ -7852,7 +7847,7 @@ QUnit.module('accessibility', () => {
         const $tag = $tagBox.find(`.${TAGBOX_TAG_CLASS}`);
 
         assert.strictEqual($tag.length, 1, 'only one tag is presented');
-        assert.strictEqual($tag.attr('aria-label'), '2 selected', 'aria-label is tagged correctly');
+        assert.strictEqual($tag.attr('aria-label'), productLabel, 'aria-label is tagged correctly');
     });
 
     QUnit.test('Tag aria-label attribute should have correct text value according displayExpr setting', function(assert) {
