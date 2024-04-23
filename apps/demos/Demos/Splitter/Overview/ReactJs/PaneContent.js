@@ -1,4 +1,5 @@
 import React from 'react';
+
 const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
 const getPaneState = (data) => {
   if (data.resizable !== false && !data.collapsible) {

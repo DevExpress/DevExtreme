@@ -1,6 +1,7 @@
 import React from 'react';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.js';
+
 const PaneContentWithTitleRender = (title, initialSize) => {
   const PaneContentRender = (data) => (
     <PaneContent
