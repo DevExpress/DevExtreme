@@ -175,8 +175,8 @@ function run_test_impl {
 }
 
 function start_runner_watchdog {
-    local last_suite_time_file="$PWD/testing/LastSuiteTime.txt"
-    local raw_log_file="$PWD/testing/RawLog.txt"
+    local last_suite_time_file="$PWD/LastSuiteTime.txt"
+    local raw_log_file="$PWD/RawLog.txt"
     local last_suite_time=unknown
 
     while true; do
