@@ -74,13 +74,60 @@ const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-class SplitterItem extends CollectionWidgetItem {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+class SplitterItem extends (CollectionWidgetItem as any) {
+  constructor($element, options, rawData) {
+    options._id = `dx_${new Guid()}`;
+
+    super($element, options, rawData);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  get owner(): Splitter {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._options.owner;
+  }
+
+  get resizeHandle(): ResizeHandle {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._options._resizeHandle;
+  }
+
+  get option(): SplitterItem {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this._rawData;
+  }
+
+  get index(): number {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return this.owner._getIndexByItemData(this.option);
+  }
+
+  _render(): void {
+    super._render();
+  }
+
+  _renderResizeHandle(): void {
+    if (this.option.visible !== false && !this.isLast()) {
+      this._setIdAttr();
+      const config = this.owner._getResizeHandleConfig(this._options._id);
+      this._options._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
+
+      this.resizeHandle.$element().insertAfter(this._$element);
+    }
+  }
+
+  _setIdAttr(): void {
+    this._$element.attr('id', this._options._id);
+  }
+
+  isLast(): boolean {
+    return this.owner._isLastVisibleItem(this.index);
+  }
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends (CollectionWidget as any) {
-  private _resizeHandles!: ResizeHandle[];
-
   private _renderQueue: RenderQueueItem[] = [];
 
   _getDefaultOptions(): Properties {
@@ -94,6 +141,7 @@ class Splitter extends (CollectionWidget as any) {
       allowKeyboardNavigation: true,
       separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
 
+      _itemAttributes: { role: 'group' },
       _renderQueue: undefined,
     }) as Properties;
   }
@@ -180,7 +228,6 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _renderItems(items: Item[]): void {
-    this._resizeHandles = [];
     super._renderItems(items);
 
     this._updateResizeHandlesResizableState();
@@ -249,35 +296,26 @@ class Splitter extends (CollectionWidget as any) {
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
-    const groupAriaAttributes: { role: string; id?: string } = {
-      role: 'group',
-    };
-
-    if (itemData.visible !== false && !this._isLastVisibleItem(index)) {
-      const itemId = `dx_${new Guid()}`;
-
-      groupAriaAttributes.id = itemId;
-
-      this._renderResizeHandle(itemId);
-    }
-
-    this.setAria(groupAriaAttributes, $itemFrame);
+    this._getItemInstance($itemFrame)._renderResizeHandle();
 
     return $itemFrame;
   }
 
-  _renderResizeHandle(paneId: string): void {
-    const $resizeHandle = $('<div>')
-      .appendTo(this.$element());
+  _getItemInstance($item: dxElementWrapper): SplitterItem {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
+    return Splitter.ItemClass.getInstance($item);
+  }
 
-    const config = this._getResizeHandleConfig(paneId);
-    const resizeHandle = this._createComponent($resizeHandle, ResizeHandle, config);
+  _renderResizeHandle($itemFrame: dxElementWrapper): void {
+    const { resizeHandle } = this._getItemInstance($itemFrame);
 
-    this._resizeHandles.push(resizeHandle);
+    if (resizeHandle) {
+      this.$element().append(resizeHandle.$element());
+    }
   }
 
   _updateResizeHandlesResizableState(): void {
-    this._resizeHandles.forEach((resizeHandle) => {
+    this._getResizeHandles().forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -296,7 +334,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _updateResizeHandlesCollapsibleState(): void {
-    this._resizeHandles.forEach((resizeHandle) => {
+    this._getResizeHandles().forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -333,7 +371,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _updateResizeHandlesOption(optionName: string, optionValue: unknown): void {
-    this._resizeHandles.forEach((resizeHandle) => {
+    this._getResizeHandles().forEach((resizeHandle) => {
       resizeHandle.option(optionName, optionValue);
     });
   }
@@ -628,7 +666,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getResizeHandlesSize(): number {
-    return this._resizeHandles.reduce(
+    return this._getResizeHandles().reduce(
       (size: number, resizeHandle: ResizeHandle) => size + resizeHandle.getSize(),
       0,
     );
@@ -693,6 +731,9 @@ class Splitter extends (CollectionWidget as any) {
         break;
       case 'collapsible':
         this._updateResizeHandlesCollapsibleState();
+        break;
+      case 'visible':
+        this._invalidate();
         break;
       default:
         super._itemOptionChanged(item, property, value);
@@ -816,6 +857,20 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _getResizeHandles(): ResizeHandle[] {
+    const handles: ResizeHandle[] = [];
+
+    this._iterateItems((index, itemElement) => {
+      const instance = this._getItemInstance($(itemElement));
+
+      if (instance.resizeHandle) {
+        handles.push(instance.resizeHandle);
+      }
+    });
+
+    return handles;
+  }
+
   _getResizeHandleItems(): dxElementWrapper {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.$element().children(`.${RESIZE_HANDLE_CLASS}`);
@@ -874,8 +929,10 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   registerKeyHandler(key: string, handler: () => void): void {
-    this._iterateResizeHandles((instance) => {
-      instance.registerKeyHandler(key, handler);
+    this.$element().find(`.${RESIZE_HANDLE_CLASS}`).each((index, element) => {
+      getComponentInstance($(element)).registerKeyHandler(key, handler);
+
+      return true;
     });
   }
 }
