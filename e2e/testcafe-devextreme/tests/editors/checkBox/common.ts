@@ -99,6 +99,45 @@ test('Checkbox configuration, different Checkbox icon sizes, states, value Modes
   }
 });
 
+test.only('Checkbox configuration, different Checkbox scaling sizes, states, value Modes', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different scaling sizes.png', { element: '#container', shouldTestInCompact: true });
+
+  await testScreenshot(t, takeScreenshot, 'CheckBox configurations different scaling sizes.png', { element: '#container', theme: getDarkThemeName() });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await setStyleAttribute(Selector('#container'), 'width: 600px; height: 200px;');
+
+  for (const scale of [0.90, 1.00, 1.25]) {
+    for (const state of [
+      READONLY_STATE_CLASS,
+      DEFAULT_STATE_CLASS,
+      ACTIVE_STATE_CLASS,
+      HOVER_STATE_CLASS,
+      FOCUSED_STATE_CLASS,
+      DISABLED_STATE_CLASS,
+      INVALID_STATE_CLASS,
+    ] as string[]
+    ) {
+      for (const value of valueModes) {
+        const id = `dx${new Guid()}`;
+        await appendElementTo('#container', 'div', id, {});
+
+        await setStyleAttribute(Selector(`#${id}`), `padding: 5px; transform: scale(${scale});`);
+
+        await createWidget('dxCheckBox', {
+          value,
+        }, `#${id}`);
+        await setClassAttribute(Selector(`#${id}`), state);
+      }
+    }
+  }
+});
+
 test('Checkbox configuration, different Checkbox orientation and width', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
