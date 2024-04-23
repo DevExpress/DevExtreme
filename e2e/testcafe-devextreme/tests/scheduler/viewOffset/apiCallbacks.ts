@@ -1,3 +1,4 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-nocheck
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/callbackTestHelper';
