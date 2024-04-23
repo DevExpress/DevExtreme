@@ -1280,6 +1280,20 @@ QUnit.module('Resizing', moduleConfig, () => {
                 this.assertLayout(expectedLayout);
             });
         });
+
+        QUnit.test(`non resizable panes shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
+            this.reinit({
+                width: 1018,
+                height: 1018,
+                dataSource: [{ }, { }, { }, { resizable: false, size: '300px' }],
+                orientation,
+            });
+
+            this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
+
+            this.checkItemSizes([0, 166.672, 215.328, 300]);
+            this.assertLayout([0, 24.4387, 31.573, 43.9883]);
+        });
     });
 
     [

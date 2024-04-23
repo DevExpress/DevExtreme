@@ -150,12 +150,6 @@ class Splitter extends (CollectionWidget as any) {
       ? getOuterWidth(element) : getOuterHeight(element);
   }
 
-  _shouldUpdateLayout(): boolean {
-    const size: number = this._getDimension(this.$element().get(0));
-
-    return size === 0;
-  }
-
   _render(): void {
     super._render();
   }
@@ -520,8 +514,6 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
-        this._currentLayout = this._layout;
-
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
         lock(this._feedbackDeferred);
@@ -538,9 +530,9 @@ class Splitter extends (CollectionWidget as any) {
           this._getResizeHandlesSize(),
         );
 
-        const { items } = this.option();
+        this._currentLayout = this._layout;
 
-        this._updateItemsRestrictions(items);
+        this._updateItemsRestrictions(this.option('items'));
       },
       onResize: (e: ResizeEvent): void => {
         const { element, event } = e;
@@ -837,10 +829,23 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
+  _dimensionChanged(): void {
+    this._layout = this._getDefaultLayoutBasedOnSize();
+
+    this._applyFlexGrowFromLayout(this._layout);
+    this._updateItemSizes();
+  }
+
   _optionChanged(args: Record<string, unknown>): void {
     const { name, value } = args;
 
     switch (name) {
+      case 'width':
+      case 'height':
+        super._optionChanged(args);
+
+        this._dimensionChanged();
+        break;
       case 'allowKeyboardNavigation':
         this._iterateResizeHandles((instance) => {
           instance.option('focusStateEnabled', value);
