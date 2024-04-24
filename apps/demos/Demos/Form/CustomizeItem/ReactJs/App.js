@@ -1,9 +1,11 @@
 import React, { useCallback } from 'react';
+import {
+  Form, Item, GroupItem, Label,
+} from 'devextreme-react/form';
 import 'devextreme-react/text-area';
-import Form, { Item, GroupItem, Label } from 'devextreme-react/form';
+import service from './data.js';
 import LabelTemplate from './LabelTemplate.js';
 import LabelNotesTemplate from './LabelNotesTemplate.js';
-import service from './data.js';
 
 const employee = service.getEmployee();
 const validationRules = {

@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react';
 import ScrollView from 'devextreme-react/scroll-view';
-import Sortable from 'devextreme-react/sortable';
-import SelectBox from 'devextreme-react/select-box';
-import CheckBox from 'devextreme-react/check-box';
-import NumberBox from 'devextreme-react/number-box';
+import { Sortable } from 'devextreme-react/sortable';
+import { SelectBox } from 'devextreme-react/select-box';
+import { CheckBox } from 'devextreme-react/check-box';
+import { NumberBox } from 'devextreme-react/number-box';
 import {
   tasks,
   scrollSensitivityLabel,

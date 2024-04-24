@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import DataGrid from 'devextreme-react/data-grid';
-import SelectBox from 'devextreme-react/select-box';
+import { SelectBox } from 'devextreme-react/select-box';
 import { orders } from './data.js';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
