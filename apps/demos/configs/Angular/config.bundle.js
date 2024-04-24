@@ -63,10 +63,9 @@ function useBundle() {
         delete window.config.map[pkg];
       }
     });
-    System.config(window.config);
   }
 }
 
 // useBundle();
-
+System.config(window.config);
 System.import('@angular/compiler').catch(console.error.bind(console));
