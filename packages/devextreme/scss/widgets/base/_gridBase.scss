@@ -463,7 +463,7 @@
         position: static;
       }
 
-      .dx-editor-cell {
+      .dx-editor-cell:not(.dx-#{$widget-name}-cell-expandable) {
         max-width: 0;
         padding: 0;
         vertical-align: middle;

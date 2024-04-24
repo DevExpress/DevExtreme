@@ -307,7 +307,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
           line-height: 0;
         }
 
-        &.dx-editor-cell:not(.dx-command-select) {
+        &.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-cell-expandable) {
           padding-right: 0;
           padding-left: 0;
         }

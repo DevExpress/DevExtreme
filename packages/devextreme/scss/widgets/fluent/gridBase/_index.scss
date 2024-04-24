@@ -329,7 +329,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
           line-height: 0;
         }
 
-        &.dx-editor-cell:not(.dx-command-select) {
+        &.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-cell-expandable) {
           padding-right: 0;
           padding-left: 0;
         }
