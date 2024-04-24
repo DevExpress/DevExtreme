@@ -37,7 +37,7 @@ test('Should not focus item when deleting when focusStateEnabled = false (T12260
     .ok(compareResults.errorMessages());
 }).before(async () => createList('none', true));
 
-test('Should focus item when deleting when focusStateEnabled = true', async (t) => {
+test('Should focus item when deleting when focusStateEnabled = true (T1226030)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const list = new List('#container');
   await list.option({
