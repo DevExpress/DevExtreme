@@ -17,8 +17,7 @@ const containerStyles = {
   width: '100%',
   height: 'auto',
   lineHeight: 'auto',
-  display: 'flex',
-  'justify-content': 'center',
+  display: 'block',
   'z-index': '2147483647',
   position: 'relative',
   top: '0px',
@@ -29,7 +28,7 @@ const containerStyles = {
   border: 'none',
   margin: 'auto',
   'box-sizing': 'border-box',
-  'white-space': 'pre',
+  'text-align': 'center',
 };
 const textStyles = {
   ...commonStyles,
