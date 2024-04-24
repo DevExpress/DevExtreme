@@ -7,12 +7,54 @@ import { createWidget } from '../../../helpers/createWidget';
 fixture`List`
   .page(url(__dirname, '../../container.html'));
 
+const LIST_ITEM_DELETE_BUTTON = 'dx-list-static-delete-button';
+
 const createList = (selectionMode, allowItemDeleting = false) => createWidget('dxList', {
   items: ['item1', 'item2', 'item3'],
   showSelectionControls: true,
   selectionMode,
   allowItemDeleting,
 });
+
+
+test('Should not focus item when deleting when focusStateEnabled = false (T1226030)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
+  await list.option({
+    focusStateEnabled: false,
+    itemDeleteMode: 'static',
+  });
+  const firstItem = list.getItem(0);
+  const $firstDeleteBtn = firstItem.element.find(`.${LIST_ITEM_DELETE_BUTTON}`);
+
+  await t
+    .click($firstDeleteBtn)
+    .expect(!firstItem.isFocused)
+    .notOk();
+  await testScreenshot(t, takeScreenshot, 'First item should not be focused when deleted.png', { element: '#container' });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createList('none', true));
+
+test('Should focus item when deleting when focusStateEnabled = true', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
+  await list.option({
+    itemDeleteMode: 'static',
+  });
+  const firstItem = list.getItem(0);
+  const $firstDeleteBtn = firstItem.element.find(`.${LIST_ITEM_DELETE_BUTTON}`);
+
+  await t
+    .click($firstDeleteBtn)
+    .expect(firstItem.isFocused)
+    .ok();
+  await testScreenshot(t, takeScreenshot, 'First item should be focused when deleted.png', { element: '#container' });
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createList('none', true));
 
 test('Should apply styles on selectAll checkbox after tab button press', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

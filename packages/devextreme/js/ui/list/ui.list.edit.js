@@ -357,6 +357,7 @@ const ListEdit = ListBase.inherit({
         const editStrategy = this._editStrategy;
         const deletingElementIndex = editStrategy.getNormalizedIndex(itemElement);
         const focusedElement = this.option('focusedElement');
+        const shouldBeFocused = this.option('focusStateEnabled');
         const focusedItemIndex = focusedElement ? editStrategy.getNormalizedIndex(focusedElement) : deletingElementIndex;
         const isLastIndexFocused = focusedItemIndex === this._getLastItemIndex();
         const nextFocusedItem = isLastIndexFocused || deletingElementIndex < focusedItemIndex
@@ -364,9 +365,13 @@ const ListEdit = ListBase.inherit({
             : focusedItemIndex;
         const promise = this.callBase(itemElement);
 
-        return promise.done(function() {
-            return this.focusListItem(nextFocusedItem);
-        });
+        if(shouldBeFocused) {
+            return promise.done(function() {
+                return this.focusListItem(nextFocusedItem);
+            });
+        } else {
+            return null;
+        }
     }
 });
 
