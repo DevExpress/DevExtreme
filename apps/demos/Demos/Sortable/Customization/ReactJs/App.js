@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import ScrollView from 'devextreme-react/scroll-view';
+import { ScrollView } from 'devextreme-react/scroll-view';
 import { Sortable } from 'devextreme-react/sortable';
 import { SelectBox } from 'devextreme-react/select-box';
 import { CheckBox } from 'devextreme-react/check-box';

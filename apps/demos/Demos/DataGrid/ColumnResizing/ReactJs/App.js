@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import DataGrid from 'devextreme-react/data-grid';
+import { DataGrid } from 'devextreme-react/data-grid';
 import { SelectBox } from 'devextreme-react/select-box';
 import { orders } from './data.js';
 

@@ -4,13 +4,13 @@ import { EditorStyle, LabelMode } from 'devextreme-react/common';
 
 import notify from 'devextreme/ui/notify';
 
-import SelectBox from 'devextreme-react/select-box';
-import TextBox from 'devextreme-react/text-box';
-import DateBox from 'devextreme-react/date-box';
-import DateRangeBox from 'devextreme-react/date-range-box';
-import TextArea from 'devextreme-react/text-area';
-import Button, { ButtonTypes } from 'devextreme-react/button';
-import Validator, { RequiredRule } from 'devextreme-react/validator';
+import { SelectBox } from 'devextreme-react/select-box';
+import { TextBox } from 'devextreme-react/text-box';
+import { DateBox } from 'devextreme-react/date-box';
+import { DateRangeBox } from 'devextreme-react/date-range-box';
+import { TextArea } from 'devextreme-react/text-area';
+import { Button, ButtonTypes } from 'devextreme-react/button';
+import { Validator, RequiredRule } from 'devextreme-react/validator';
 
 import {
   states,
