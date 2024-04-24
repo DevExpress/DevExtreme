@@ -8,7 +8,7 @@ export interface Version {
 
 export const VERSION_SPLITTER = '.';
 
-function stringifyVersion(version: Version): string {
+export function stringifyVersion(version: Version): string {
   const { major, minor, patch } = version;
 
   return [major, minor, patch].join(VERSION_SPLITTER);
@@ -24,9 +24,7 @@ export function parseVersion(version: string): Version {
   };
 }
 
-export function getPreviousMajorVersion(version: string): string {
-  const { major, minor, patch } = parseVersion(version);
-
+export function getPreviousMajorVersion({ major, minor, patch }: Version): Version {
   const previousMajorVersion = minor === 1
     ? {
       major: major - 1,
@@ -39,5 +37,5 @@ export function getPreviousMajorVersion(version: string): string {
       patch,
     };
 
-  return stringifyVersion(previousMajorVersion);
+  return previousMajorVersion;
 }
