@@ -31,6 +31,7 @@ $(() => {
     width: '100%',
     showBorders: true,
     columnChooser: {
+      height: "340px",
       enabled: true,
       mode: columnChooserModes[1].key,
       position: {
