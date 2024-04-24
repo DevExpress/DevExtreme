@@ -16,7 +16,6 @@ const createList = (selectionMode, allowItemDeleting = false) => createWidget('d
   allowItemDeleting,
 });
 
-
 test('Should not focus item when deleting when focusStateEnabled = false (T1226030)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const list = new List('#container');
@@ -29,7 +28,7 @@ test('Should not focus item when deleting when focusStateEnabled = false (T12260
 
   await t
     .click($firstDeleteBtn)
-    .expect(!firstItem.isFocused)
+    .expect(firstItem.isFocused)
     .notOk();
   await testScreenshot(t, takeScreenshot, 'First item should not be focused when deleted.png', { element: '#container' });
   await t
