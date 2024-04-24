@@ -42,6 +42,8 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: Build
+      env:
+        BUILD_TEST_INTERNAL_PACKAGE: true
       run: npx nx build devextreme-main
 
     - name: Zip artifacts

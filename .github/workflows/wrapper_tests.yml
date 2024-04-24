@@ -39,6 +39,8 @@ jobs:
 
       - name: Build devextreme package
         working-directory: ./packages/devextreme
+        env:
+          BUILD_TEST_INTERNAL_PACKAGE: true
         run: npm run build
 
       - name: Generate wrappers
