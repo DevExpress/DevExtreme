@@ -107,7 +107,7 @@ test('Checkbox appearance', async (t) => {
         for (const rtlEnabled of [false, true]) {
           for (const value of valueModes) {
             const id = `dx${new Guid()}`;
-            await appendElementTo('#container', 'div', id, {});
+            await appendElementTo('#container', 'div', id);
 
             await createWidget('dxCheckBox', {
               text,
@@ -122,7 +122,7 @@ test('Checkbox appearance', async (t) => {
 
       for (const rtlEnabled of [false, true]) {
         const id = `dx${new Guid()}`;
-        await appendElementTo('#container', 'div', id, {});
+        await appendElementTo('#container', 'div', id);
 
         await createWidget('dxCheckBox', {
           text: 'Label text',
