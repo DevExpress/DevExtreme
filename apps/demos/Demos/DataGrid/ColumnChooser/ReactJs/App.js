@@ -83,7 +83,7 @@ const App = () => {
         />
 
         <ColumnChooser
-          height='340px'
+          height="340px"
           enabled={true}
           mode={mode}
         >
