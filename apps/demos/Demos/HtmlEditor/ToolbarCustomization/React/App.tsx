@@ -51,7 +51,7 @@ export default function App() {
         </Toolbar>
       </HtmlEditor>
       <Popup showTitle={true} title="Markup" visible={popupVisible} onHiding={popupHiding} showCloseButton={true}>
-        {value}
+        <div>{value}</div>
       </Popup>
     </div>
   );

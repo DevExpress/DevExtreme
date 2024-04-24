@@ -67,7 +67,7 @@ export default function App() {
         onHiding={popupHiding}
         showCloseButton={true}
       >
-        {value}
+        <div>{value}</div>
       </Popup>
     </div>
   );
