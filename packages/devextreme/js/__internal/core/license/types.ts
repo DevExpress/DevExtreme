@@ -21,4 +21,10 @@ export type Token = {
   readonly internalUsageId: string;
 };
 
-export type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022';
+type LicenseVerifyResult = 'W0019' | 'W0020' | 'W0021' | 'W0022';
+
+export interface LicenseCheckParams {
+  preview: boolean;
+  internal?: true;
+  error: LicenseVerifyResult | undefined;
+}
