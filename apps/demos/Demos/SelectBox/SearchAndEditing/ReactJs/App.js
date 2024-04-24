@@ -1,13 +1,8 @@
 import React, { useCallback, useState } from 'react';
-
-import { SimplifiedSearchMode } from 'devextreme-react/common';
-
-import { SelectBox, SelectBoxTypes } from 'devextreme-react/select-box';
+import { SelectBox } from 'devextreme-react/select-box';
 import { NumberBox } from 'devextreme-react/number-box';
 import { CheckBox } from 'devextreme-react/check-box';
-
 import DataSource from 'devextreme/data/data_source';
-
 import {
   simpleProducts,
   products,
@@ -17,16 +12,16 @@ import {
   searchModeLabel,
   productLabel,
   simpleProductLabel,
-} from './data.ts';
+} from './data.js';
 
 const searchModeItems = ['contains', 'startswith'];
 const searchExprItems = [
   {
-    name: '\'Name\'',
+    name: "'Name'",
     value: 'Name',
   },
   {
-    name: '[\'Name\', \'Category\']',
+    name: "['Name', 'Category']",
     value: ['Name', 'Category'],
   },
 ];
@@ -37,20 +32,17 @@ const productsDataSource = new DataSource({
     key: 'ID',
   },
 });
-
-const customItemCreating = (args: SelectBoxTypes.CustomItemCreatingEvent) => {
+const customItemCreating = (args) => {
   if (!args.text) {
     args.customItem = null;
     return;
   }
-
   const productIds = simpleProducts.map((item) => item.ID);
   const incrementedId = Math.max.apply(null, productIds) + 1;
   const newItem = {
     Name: args.text,
     ID: incrementedId,
   };
-
   args.customItem = productsDataSource
     .store()
     .insert(newItem)
@@ -60,39 +52,31 @@ const customItemCreating = (args: SelectBoxTypes.CustomItemCreatingEvent) => {
       throw error;
     });
 };
-
 function App() {
   const [editBoxValue, setEditBoxValue] = useState(simpleProducts[0]);
-  const [searchModeOption, setSearchModeOption] = useState<SimplifiedSearchMode>('contains');
+  const [searchModeOption, setSearchModeOption] = useState('contains');
   const [searchExprOption, setSearchExprOption] = useState('Name');
   const [searchTimeoutOption, setSearchTimeoutOption] = useState(200);
   const [minSearchLengthOption, setMinSearchLengthOption] = useState(0);
   const [showDataBeforeSearchOption, setShowDataBeforeSearchOption] = useState(false);
-
   const editBoxValueChanged = useCallback(({ component }) => {
     setEditBoxValue(component.option('selectedItem'));
   }, []);
-
   const searchModeOptionChanged = useCallback(({ value }) => {
     setSearchModeOption(value);
   }, []);
-
   const searchExprOptionChanged = useCallback(({ value }) => {
     setSearchExprOption(value);
   }, []);
-
   const searchTimeoutOptionChanged = useCallback(({ value }) => {
     setSearchTimeoutOption(value);
   }, []);
-
   const minSearchLengthOptionChanged = useCallback(({ value }) => {
     setMinSearchLengthOption(value);
   }, []);
-
   const showDataBeforeSearchOptionChanged = useCallback(({ value }) => {
     setShowDataBeforeSearchOption(value);
   }, []);
-
   return (
     <div id="selectbox-demo">
       <div className="widget-container">
@@ -196,5 +180,4 @@ function App() {
     </div>
   );
 }
-
 export default App;
