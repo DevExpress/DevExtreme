@@ -33,6 +33,7 @@ export const createWidget = async<TWidgetName extends WidgetName>(
   widgetOptions: TWidgetName extends keyof WidgetOptions
     ? (
       WidgetOptions[TWidgetName] |
+      // NOTE: Promise is only for ClientFunction typing
       (() => (WidgetOptions[TWidgetName]) | Promise<WidgetOptions[TWidgetName]>)
     ) : unknown,
   selector = DEFAULT_SELECTOR,
