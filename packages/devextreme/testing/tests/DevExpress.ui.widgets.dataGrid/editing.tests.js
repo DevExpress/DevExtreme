@@ -21854,11 +21854,8 @@ QUnit.module('Editing - public arguments of the events/templates', {
             assert.strictEqual(args.rowType, editMode === 'form' ? 'detail' : 'data', 'rowType arg');
             assert.strictEqual(typeof args.setValue, 'function', 'setValue arg');
             assert.strictEqual(args.value, 'Alex', 'value arg');
-
-            if(editMode !== 'form' && editMode !== 'popup') {
-                assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
-                assert.strictEqual(args.text, 'Alex', 'text arg');
-            }
+            assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
+            assert.strictEqual(args.text, 'Alex', 'text arg');
         });
 
         // T1118182
