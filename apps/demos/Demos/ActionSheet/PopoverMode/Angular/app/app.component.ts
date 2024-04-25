@@ -46,7 +46,8 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxActionSheetModule,
+    BrowserModule,
+    DxActionSheetModule,
     DxListModule,
   ],
   declarations: [AppComponent],

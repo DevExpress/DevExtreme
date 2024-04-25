@@ -35,7 +35,8 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxButtonGroupModule,
+    BrowserModule,
+    DxButtonGroupModule,
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],

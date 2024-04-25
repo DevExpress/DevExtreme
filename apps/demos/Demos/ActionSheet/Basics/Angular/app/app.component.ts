@@ -29,7 +29,8 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxActionSheetModule,
+    BrowserModule,
+    DxActionSheetModule,
     DxButtonModule,
     DxSwitchModule,
   ],

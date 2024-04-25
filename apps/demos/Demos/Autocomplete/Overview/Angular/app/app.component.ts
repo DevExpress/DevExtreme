@@ -92,7 +92,8 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,    DxAutocompleteModule,
+    BrowserModule,
+    DxAutocompleteModule,
     DxTemplateModule,
     HttpClientModule,
   ],
