@@ -74,7 +74,6 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         e.preventDefault();
         e.stopPropagation();
 
-        // test at rlt, after chan ging rtl at runtime
         const {
           direction, showCollapsePrev, showCollapseNext, rtlEnabled,
         } = this.option();
