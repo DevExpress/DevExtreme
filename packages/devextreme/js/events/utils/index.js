@@ -4,7 +4,6 @@ import eventsEngine from '../core/events_engine';
 import { each } from '../../core/utils/iterator';
 import { extend } from '../../core/utils/extend';
 import { focused } from '../../ui/widget/selectors';
-import { getEventTarget as mappedGetEventTarget } from './event_target';
 
 const KEY_MAP = {
     'backspace': 'backspace',
@@ -197,7 +196,5 @@ export const normalizeKeyName = ({ key, which }) => {
 export const getChar = ({ key, which }) => key || String.fromCharCode(which);
 
 export const addNamespace = mappedAddNamespace;
-
-export const getEventTarget = mappedGetEventTarget;
 
 export const isCommandKeyPressed = ({ ctrlKey, metaKey }) => ctrlKey || metaKey;

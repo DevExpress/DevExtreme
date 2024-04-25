@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { compare } from 'core/utils/version';
+import { getEventTarget } from 'events/utils/event_target';
 import {
     eventData,
     eventDelta,
@@ -8,7 +9,6 @@ import {
     normalizeKeyName,
     getChar,
     isCommandKeyPressed,
-    getEventTarget,
 } from 'events/utils/index';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
