@@ -138,7 +138,7 @@ window.config = {
     },
     '@angular/forms': {
       'esModule': true,
-    }
+    },
   },
   paths: {
     'npm:': '../../../../../../node_modules/',
@@ -168,7 +168,7 @@ window.config = {
     'devexpress-diagram': 'npm:devexpress-diagram',
     'devexpress-gantt': 'npm:devexpress-gantt',
 
-     /* devextreme-angular umd maps */
+    /* devextreme-angular umd maps */
     'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
     'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
     ...componentNames.reduce((acc, name) => {
