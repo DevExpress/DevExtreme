@@ -347,7 +347,7 @@ class Splitter extends (CollectionWidget as any) {
         : leftItemData.collapsible === true && leftItemData.collapsed !== true;
 
       const showCollapseNext = leftItemData.collapsed === true
-        ? leftItemData.collapsible === true && rightItemData.collapsed !== true
+        ? leftItemData.collapsible === true // && rightItemData.collapsed !== true
         : rightItemData.collapsible === true && rightItemData.collapsed !== true;
 
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
@@ -440,18 +440,22 @@ class Splitter extends (CollectionWidget as any) {
 
         if (isRightItemCollapsed) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
-          const leftItemSize = this._getItemDimension($leftItem.get(0));
+
+          if (!isDefined(this._collapsedItemSize)) {
+            this._collapsedItemSize = this._layout[leftItemIndex] / 2;
+          }
+          // const leftItemSize = this._getItemDimension($leftItem.get(0));
 
           // todo: refactor
-          const minItemSize = parseFloat(rightItemData.minSize);
+          // const minItemSize = parseFloat(rightItemData.minSize);
 
-          if (!rightItemData.minSize || leftItemSize >= minItemSize) {
-            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > leftItemSize) {
-              this._collapsedItemSize = Math.max(leftItemSize / 2, minItemSize || -Infinity);
-            }
-          }
+          // if (!rightItemData.minSize || leftItemSize >= minItemSize) {
+          //   if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > leftItemSize) {
+          //     this._collapsedItemSize = Math.max(leftItemSize / 2, minItemSize || -Infinity);
+          //   }
+          // }
 
-          this._panesCacheSize[rightItemIndex] = undefined;
+          // this._panesCacheSize[rightItemIndex] = undefined;
           this._updateItemData('collapsed', rightItemIndex, false, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
@@ -464,8 +468,10 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
-        this._panesCacheSize[leftItemIndex] = this._getItemDimension($leftItem.get(0));
-        this._collapsedItemSize = this._getItemDimension($leftItem.get(0));
+        this._panesCacheSize[leftItemIndex] = this._layout[leftItemIndex];
+        // this._getItemDimension($leftItem.get(0));
+        this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
+        // this._getItemDimension($leftItem.get(0));
 
         this._updateItemData('collapsed', leftItemIndex, true, false);
 
@@ -495,18 +501,23 @@ class Splitter extends (CollectionWidget as any) {
 
         if (isLeftItemCollapsed) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
-          const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          // todo: refactor
-          const minItemSize = parseFloat(leftItemData.minSize);
-
-          if (!leftItemData.minSize || rightItemSize >= minItemSize) {
-            if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > rightItemSize) {
-              this._collapsedItemSize = Math.max(rightItemSize / 2, minItemSize || -Infinity);
-            }
+          if (!isDefined(this._collapsedItemSize)) {
+            // todo: next non collapsed?
+            this._collapsedItemSize = this._layout[rightItemIndex] / 2;
           }
+          // const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          this._panesCacheSize[leftItemIndex] = undefined;
+          // // todo: refactor
+          // const minItemSize = parseFloat(leftItemData.minSize);
+
+          // if (!leftItemData.minSize || rightItemSize >= minItemSize) {
+          //   if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > rightItemSize) {
+          //     this._collapsedItemSize = Math.max(rightItemSize / 2, minItemSize || -Infinity);
+          //   }
+          // }
+
+          // this._panesCacheSize[leftItemIndex] = undefined;
 
           this._updateItemData('collapsed', leftItemIndex, false, false);
 
@@ -520,8 +531,10 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
-        this._panesCacheSize[rightItemIndex] = this._getItemDimension($rightItem.get(0));
-        this._collapsedItemSize = this._getItemDimension($rightItem.get(0));
+        this._panesCacheSize[rightItemIndex] = this._layout[rightItemIndex];
+        // this._getItemDimension($rightItem.get(0));
+        this._collapsedItemSize = this._layout[rightItemIndex];
+        // this._getItemDimension($rightItem.get(0));
 
         this._updateItemData('collapsed', rightItemIndex, true, false);
 
@@ -718,6 +731,8 @@ class Splitter extends (CollectionWidget as any) {
       case 'size':
       case 'maxSize':
       case 'minSize':
+      case 'collapsedSize':
+        // todo test collapsedSize
         this._layout = this._getDefaultLayoutBasedOnSize();
 
         this._applyFlexGrowFromLayout(this._layout);
@@ -765,17 +780,19 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getCollapseDelta(item: Item): number {
-    const { orientation } = this.option();
-    const handlesSizeSum = this._getResizeHandlesSize();
-    const elementSize = getElementSize(this.$element(), orientation);
-    const collapsedSizeRatio = convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum);
-    const collapsedSize = ((elementSize - handlesSizeSum) / 100) * (collapsedSizeRatio ?? 0);
-    const itemSize = this._collapsedItemSize;
-    const offset = (itemSize - collapsedSize) * (this._collapseButton === 'prev' ? -1 : 1);
+    const itemIndex = this._getIndexByItem(item);
 
-    this._currentOnePxRatio = convertSizeToRatio(1, elementSize, handlesSizeSum);
+    const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
+    // const collapsedSize = this._itemRestrictions[itemIndex].collapsedSize ?? 0;
+    // const minSize = this._itemRestrictions[itemIndex].minSize ?? 0;
+    const itemSize = this._collapsedItemSize >= minSize
+      ? this._collapsedItemSize
+      : minSize;
 
-    return calculateDelta({ x: offset, y: offset }, orientation, false, this._currentOnePxRatio);
+    const deltaSign = this._collapseButton === 'prev' ? -1 : 1;
+    const delta = (itemSize - collapsedSize) * deltaSign;
+
+    return delta;
   }
 
   _getDefaultLayoutBasedOnSize(): number[] {
@@ -805,9 +822,7 @@ class Splitter extends (CollectionWidget as any) {
         maxSize: collapseStateRestrictions
           ? undefined
           : convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
-        minSize: collapseStateRestrictions
-          ? undefined
-          : convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
+        minSize: convertSizeToRatio(item.minSize, elementSize, handlesSizeSum),
       });
     });
   }
