@@ -3008,7 +3008,6 @@ QUnit.module('Keyboard support', moduleConfig, () => {
     [
         { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowDown', rtlEnabled: true },
         { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowUp', rtlEnabled: true },
-
         { key: 'ArrowRight', orientation: 'horizontal', wrongKey: 'ArrowDown' },
         { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowRight' }
     ].forEach(({ key, orientation, wrongKey, rtlEnabled }) => {
