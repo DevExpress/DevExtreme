@@ -1,9 +1,10 @@
-.form {
-  margin-left: 3px;
+html, body {
+  width: 100%;
+  height: 100%;
 }
 
-.form > div:first-child {
-  margin-right: 320px;
+.demo-container {
+  display: flex;
 }
 
 .label {
@@ -11,13 +12,18 @@
   padding-bottom: 24px;
 }
 
+.content {
+  flex-grow: 1;
+  width: 100%;
+  min-width: 500px;
+  overflow: clip;
+}
+
 .options {
+  display: flex;
+  flex-direction: column;
+  flex-shrink: 0;
   padding: 20px;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  width: 260px;
-  top: 0;
   background-color: rgba(191, 191, 191, 0.15);
 }
 
@@ -28,8 +34,4 @@
 
 .option {
   margin-top: 10px;
-}
-
-.hidden {
-  visibility: hidden;
 }

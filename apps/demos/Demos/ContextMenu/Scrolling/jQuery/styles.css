@@ -1,8 +1,9 @@
 .label {
-  color: #767676;
-  background-color: #CCC;
+  color: var(--dx-color-text);
+  background-color: var(--dx-color-border);
   height: 300px;
-  width: 600px;
+  max-width: 600px;
+  width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
