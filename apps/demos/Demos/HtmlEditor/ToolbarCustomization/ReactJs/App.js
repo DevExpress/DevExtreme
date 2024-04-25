@@ -17,7 +17,7 @@ export default function App() {
       stylingMode: 'text',
       onClick: customButtonClick,
     }),
-    [customButtonClick]
+    [customButtonClick],
   );
   const valueChanged = useCallback(
     (e) => {
