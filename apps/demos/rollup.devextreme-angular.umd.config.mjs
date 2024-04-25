@@ -1,25 +1,7 @@
 import { nodeResolve }  from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import alias from '@rollup/plugin-alias';
 import babel from '@rollup/plugin-babel';
 import fs from 'fs-extra';
-
-const common = {
-  plugins: [
-    replace({
-      preventAssignment: true,
-      'process.env.NODE_ENV': JSON.stringify( 'production' )
-    }),
-    nodeResolve({
-      preferBuiltins: false,
-      browser: true
-    }),
-      babel({
-          babelHelpers: 'bundled',
-          presets: ['@babel/preset-env'],
-      }),
-  ]
-}
 
 const baseDir = '../../node_modules/devextreme-angular/fesm2022/';
 const componentNames = fs.readdirSync(baseDir)
@@ -43,11 +25,11 @@ const getLibName =  (file) => file
 
 export default Object.entries(inputs).map(([module, file]) =>
     ({
-    input: file,
-    treeshake: {
-      moduleSideEffects: true
-    },
-    context: 'window',
+        input: file,
+        treeshake: {
+            moduleSideEffects: true
+        },
+        context: 'window',
         output: {
             file: `./bundles/devextreme-angular/${module}.umd.js`,
             name: `${getLibName(module)}`,
@@ -70,14 +52,27 @@ export default Object.entries(inputs).map(([module, file]) =>
                 }
             ]
         },
-    external: id => {
-      return /^@angular\//.test(id)
-          || /^zonejs/.test(id)
-          || /^devextreme\//.test(id)
-          || /^devextreme-angular\//.test(id)
-    },
+        external: id => {
+            return /^@angular\//.test(id)
+                || /^zonejs/.test(id)
+                || /^devextreme\//.test(id)
+                || /^devextreme-angular\//.test(id)
+        },
 
-    ...common,
-  })
+        plugins: [
+            replace({
+                preventAssignment: true,
+                'process.env.NODE_ENV': JSON.stringify( 'production' )
+            }),
+            nodeResolve({
+                preferBuiltins: false,
+                browser: true
+            }),
+            babel({
+                babelHelpers: 'bundled',
+                presets: ['@babel/preset-env'],
+            }),
+        ]
+    })
 )
 ;
