@@ -858,7 +858,7 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     const $row = this._findRowElementForTabIndex();
 
     const dataSource = this._dataController.dataSource();
-    const operationTypes = dataSource && dataSource.operationTypes();
+    const operationTypes = dataSource?.operationTypes();
     const isPaging = !operationTypes || operationTypes.paging;
 
     if (!isDefined(this._scrollToFocusOnResize)) {
