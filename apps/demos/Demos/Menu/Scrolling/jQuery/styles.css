@@ -11,31 +11,6 @@
   padding-bottom: 24px;
 }
 
-#product-details {
-  width: 400px;
-  height: 400px;
-  margin: 20px auto 0;
-}
-
-#product-details > img {
-  height: 300px;
-  width: 400px;
-}
-
-#product-details > .name {
-  text-align: center;
-  font-size: 20px;
-}
-
-#product-details > .price {
-  text-align: center;
-  font-size: 24px;
-}
-
-.dark #product-details > div {
-  color: #f0f0f0;
-}
-
 .options {
   padding: 20px;
   position: absolute;

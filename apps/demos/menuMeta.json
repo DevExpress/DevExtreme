@@ -3821,8 +3821,7 @@
             "Title": "Scrolling",
             "Name": "Scrolling",
             "Widget": "Menu",
-            "MvcAdditionalFiles": [
-            ],
+            "Badge": "New",
             "DemoType": "Web"
           }
         ]
@@ -5125,6 +5124,7 @@
             "Title": "Scrolling",
             "Name": "Scrolling",
             "Widget": "ContextMenu",
+            "Badge": "New",
             "DemoType": "Web"
           },
           {
