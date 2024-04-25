@@ -1,4 +1,5 @@
 const MAX_MINOR_VERSION = 2;
+const MIN_MINOR_VERSION = 1;
 
 export interface Version {
   major: number;
@@ -25,7 +26,7 @@ export function parseVersion(version: string): Version {
 }
 
 export function getPreviousMajorVersion({ major, minor, patch }: Version): Version {
-  const previousMajorVersion = minor === 1
+  const previousMajorVersion = minor === MIN_MINOR_VERSION
     ? {
       major: major - 1,
       minor: MAX_MINOR_VERSION,

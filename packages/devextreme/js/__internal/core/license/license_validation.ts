@@ -116,7 +116,7 @@ function isPreview(patch: number): boolean {
 
 function getLicenseCheckParams({
   licenseKey,
-  version: { major, minor, patch },
+  version,
 }: {
   licenseKey: string | undefined;
   version: Version;
@@ -124,7 +124,9 @@ function getLicenseCheckParams({
   let preview = false;
 
   try {
-    preview = isPreview(patch);
+    preview = isPreview(version.patch);
+
+    const { major, minor } = preview ? getPreviousMajorVersion(version) : version;
 
     if (!licenseKey) {
       return { preview, error: 'W0019' };
@@ -165,7 +167,7 @@ export function validateLicense(licenseKey: string, versionStr: string = package
 
   const { internal, error } = getLicenseCheckParams({
     licenseKey,
-    version: preview ? getPreviousMajorVersion(version) : version,
+    version,
   });
 
   if (error && !internal) {
