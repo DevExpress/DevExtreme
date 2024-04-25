@@ -520,7 +520,7 @@ QUnit.module('getEventTarget module', () => {
         const listener = (event) => {
             const target = getEventTarget(event);
 
-            assert.strictEqual($div.get(0), target, 'getEventTarget returned target correctly');
+            assert.strictEqual(target, $div.get(0), 'getEventTarget returned target correctly');
         };
 
         root.addEventListener('customEvent', listener);

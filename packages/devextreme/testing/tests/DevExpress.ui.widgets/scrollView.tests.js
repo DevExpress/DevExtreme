@@ -291,51 +291,45 @@ QUnit.module('onReachBottom', () => {
     });
 });
 
-if(QUnit.urlParams['nojquery']) {
-    QUnit.module('ShadowDom', moduleConfig, () => {
-        QUnit.skipInShadowDomMode('dxscrollinit handler should be fired after triggering of wheel event', function(assert) {
-            assert.expect(1);
+QUnit.test('dxscrollinit handler should be fired after triggering of wheel event', function(assert) {
+    assert.expect(1);
 
-            const shadowHost = document.querySelector('#qunit-fixture');
-            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
-            const scrollView = document.createElement('div');
-            const scrollViewContent = document.createElement('div');
+    const root = document.getElementById('qunit-fixture');
 
-            scrollView.setAttribute('style', 'height: 200px; width: 50px; position: absolute; top: 0; bottom: 300px; padding: 20px;');
-            scrollViewContent.setAttribute('style', 'height: 400px; width: 50px;');
+    const $scrollView = $('#scrollView').attr({ style: 'height: 50px; width: 50px; position: absolute; top: 0; bottom: 0;' });
+    const $scrollViewContent = $('.content1').attr({ style: 'height: 60px; width: 50px;' });
 
-            scrollView.appendChild(scrollViewContent);
-            shadowRoot.appendChild(scrollView);
-
-            const $scrollView = $(scrollView).dxScrollView({
-                useNative: false,
-            });
-
-            const wrapper = $scrollView.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
-
-            eventsEngine.on(wrapper, SCROLL_INIT_EVENT, () => {
-                assert.ok(true, 'dxscrollinit was fired');
-            });
-
-            const originalEvent = {
-                target: shadowHost,
-                composedPath: () => [
-                    scrollViewContent,
-                    scrollView,
-                    shadowRoot,
-                    shadowHost,
-                ],
-            };
-
-            pointerMock(scrollViewContent)
-                .start()
-                ._wheel({
-                    target: shadowHost,
-                    originalEvent: $.Event('wheel', originalEvent),
-                });
-        });
+    $scrollView.dxScrollView({
+        useNative: false,
     });
-}
+
+    const wrapper = $scrollView.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+    const listener = () => {
+        assert.ok(true, 'dxscrollinit was fired');
+    };
+
+    eventsEngine.on(wrapper, SCROLL_INIT_EVENT, listener);
+
+    const target = root.shadowRoot ? root : $scrollViewContent.get(0);
+    const originalEvent = $.Event('wheel', {
+        target,
+        composedPath: () => [
+            $scrollViewContent.get(0),
+            $scrollView.get(0),
+        ],
+    });
+    const wheelEvent = $.Event('wheel', {
+        target,
+        originalEvent,
+    });
+
+    try {
+        eventsEngine.trigger($scrollViewContent, wheelEvent);
+    } finally {
+        root.removeEventListener(SCROLL_INIT_EVENT, listener);
+    }
+});
 
 QUnit.module('actions', moduleConfig, () => {
     QUnit.test('onPullDown action', function(assert) {
