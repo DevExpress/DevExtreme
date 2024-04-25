@@ -13,7 +13,7 @@ import {
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
 
-const { test, testStart, testInActiveWindow, skipInShadowDomMode } = QUnit;
+const { test, testStart, testInActiveWindow } = QUnit;
 
 const W3CEventProps = [
     'bubbles',
@@ -510,49 +510,32 @@ QUnit.module('getEventTarget module', () => {
     test('getEventTarget returns the element on which the event was raised', function(assert) {
         assert.expect(1);
 
-        const host = document.getElementById('qunit-fixture');
-        const div = document.createElement('div');
+        const root = document.getElementById('qunit-fixture');
 
-        host.appendChild(div);
+        const $element = $('#element');
+        const $div = $('<div>');
+
+        $element.append($div);
+
+        const listener = (event) => {
+            const target = getEventTarget(event);
+
+            assert.strictEqual($div.get(0), target, 'getEventTarget returned target correctly');
+        };
+
+        root.addEventListener('customEvent', listener);
 
         const customEvent = new Event('customEvent', {
             bubbles: true,
             composed: true,
         });
 
-        host.addEventListener('customEvent', (event) => {
-            const target = getEventTarget(event);
-
-            assert.strictEqual(div, target, 'getEventTarget returned target correctly');
-        });
-
-        div.dispatchEvent(customEvent);
+        try {
+            $div.get(0).dispatchEvent(customEvent);
+        } finally {
+            root.removeEventListener('customEvent', listener);
+        }
     });
-
-    if(QUnit.urlParams['nojquery']) {
-        skipInShadowDomMode('getEventTarget returns the element on which the event was raised if there is ShadowDOM', function(assert) {
-            assert.expect(1);
-
-            const shadowHost = document.getElementById('qunit-fixture');
-            const shadowRoot = shadowHost.attachShadow({ mode: 'open' });
-            const div = document.createElement('div');
-
-            shadowRoot.appendChild(div);
-
-            shadowHost.addEventListener('customEvent', (event) => {
-                const target = getEventTarget(event);
-
-                assert.strictEqual(div, target, 'getEventTarget returned target correctly in ShadowDOM');
-            });
-
-            const customEvent = new Event('customEvent', {
-                bubbles: true,
-                composed: true,
-            });
-
-            div.dispatchEvent(customEvent);
-        });
-    }
 });
 
 QUnit.module('skip mousewheel event test', () => {
