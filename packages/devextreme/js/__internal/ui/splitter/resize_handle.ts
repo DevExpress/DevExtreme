@@ -48,13 +48,24 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         e.preventDefault();
         e.stopPropagation();
 
-        const { direction, showCollapseNext } = this.option();
+        const {
+          direction, showCollapseNext, showCollapsePrev, rtlEnabled,
+        } = this.option();
+
+        const forbidCollapseNext = rtlEnabled
+          ? showCollapsePrev === false
+          : showCollapseNext === false;
 
         if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.vertical || showCollapseNext === false) {
+          if (direction === RESIZE_DIRECTION.vertical || forbidCollapseNext) {
             return;
           }
-          this._collapseNextHandler(e);
+
+          if (rtlEnabled) {
+            this._collapsePrevHandler(e);
+          } else {
+            this._collapseNextHandler(e);
+          }
         } else {
           this._resizeBy(e, { x: KEYBOARD_DELTA });
         }
@@ -63,13 +74,23 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         e.preventDefault();
         e.stopPropagation();
 
-        const { direction, showCollapsePrev } = this.option();
+        const {
+          direction, showCollapsePrev, showCollapseNext, rtlEnabled,
+        } = this.option();
+
+        const forbidCollapsePrev = rtlEnabled
+          ? showCollapseNext === false
+          : showCollapsePrev === false;
 
         if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.vertical || showCollapsePrev === false) {
+          if (direction === RESIZE_DIRECTION.vertical || forbidCollapsePrev) {
             return;
           }
-          this._collapsePrevHandler(e);
+          if (rtlEnabled) {
+            this._collapseNextHandler(e);
+          } else {
+            this._collapsePrevHandler(e);
+          }
         } else {
           this._resizeBy(e, { x: -KEYBOARD_DELTA });
         }
