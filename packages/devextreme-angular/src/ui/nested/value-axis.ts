@@ -19,8 +19,7 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval } from 'devextreme/common/charts';
+import { AxisScaleType, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, TimeInterval, VisualRange } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { ValueAxisVisualRangeUpdateMode } from 'devextreme/viz/polar_chart';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
@@ -281,10 +280,10 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get visualRange(): DevExpress.common.charts.VisualRange | Array<number | string | Date> {
+    get visualRange(): VisualRange | Array<number | string | Date> {
         return this._getOption('visualRange');
     }
-    set visualRange(value: DevExpress.common.charts.VisualRange | Array<number | string | Date>) {
+    set visualRange(value: VisualRange | Array<number | string | Date>) {
         this._setOption('visualRange', value);
     }
 
@@ -297,10 +296,10 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
-    get wholeRange(): DevExpress.common.charts.VisualRange | undefined | Array<number | string | Date> {
+    get wholeRange(): VisualRange | undefined | Array<number | string | Date> {
         return this._getOption('wholeRange');
     }
-    set wholeRange(value: DevExpress.common.charts.VisualRange | undefined | Array<number | string | Date>) {
+    set wholeRange(value: VisualRange | undefined | Array<number | string | Date>) {
         this._setOption('wholeRange', value);
     }
 
@@ -334,7 +333,7 @@ export class DxoValueAxisComponent extends NestedOption implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visualRangeChange: EventEmitter<DevExpress.common.charts.VisualRange | Array<number | string | Date>>;
+    @Output() visualRangeChange: EventEmitter<VisualRange | Array<number | string | Date>>;
     protected get _optionPath() {
         return 'valueAxis';
     }

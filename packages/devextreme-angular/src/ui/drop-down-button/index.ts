@@ -23,11 +23,10 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ButtonClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
+import { ButtonClickEvent, ContentReadyEvent, DisposingEvent, dxDropDownButtonItem, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/drop_down_button';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import DxDropDownButton from 'devextreme/ui/drop_down_button';
@@ -110,10 +109,10 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxDropDownButtonItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxDropDownButtonItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxDropDownButtonItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxDropDownButtonItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -595,7 +594,7 @@ export class DxDropDownButtonComponent extends DxComponent implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxDropDownButtonItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxDropDownButtonItem | any>>;
 
     /**
     

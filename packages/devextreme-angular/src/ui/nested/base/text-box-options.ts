@@ -5,8 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 @Component({
@@ -27,10 +26,10 @@ export abstract class DxoTextBoxOptions extends NestedOption {
         this._setOption('activeStateEnabled', value);
     }
 
-    get buttons(): Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<TextBoxPredefinedButton | TextEditorButton | string> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<TextBoxPredefinedButton | TextEditorButton | string>) {
         this._setOption('buttons', value);
     }
 
