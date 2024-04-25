@@ -18,4 +18,5 @@ export function fireEvent(arg: { originalEvent: any; delegateTarget?: any; type?
 export function normalizeKeyName(arg: { key?: string; which?: string | number }): string | undefined;
 export function getChar(arg: { key?: string; which: string | number }): string;
 export function addNamespace(eventNames: Array<string> | string, namespace: string): string;
+export function getEventTarget(event: any): any;
 export function isCommandKeyPressed(arg: { ctrlKey: boolean; metaKey: boolean }): boolean;
