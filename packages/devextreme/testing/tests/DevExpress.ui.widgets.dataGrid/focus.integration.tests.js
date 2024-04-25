@@ -1138,7 +1138,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         const focusedRowElement = dataGrid.getView('rowsView').getRow(1);
         assert.ok(focusedRowElement.hasClass('dx-row-focused'), 'Focused row is row 1');
         assert.equal(focusedRowElement.attr('tabindex'), 0, 'Focused row has tabindex');
-        assert.ok(focusedRowElement.is(':focus'), 'Focused row has focus');
+        assert.ok(focusedRowElement.get(0) === document.activeElement, 'Focused row has focus');
     });
 
     QUnit.testInActiveWindow('DataGrid - Should change focusedRowKey at runtime', function(assert) {

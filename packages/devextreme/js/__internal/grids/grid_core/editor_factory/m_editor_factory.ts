@@ -114,7 +114,6 @@ export class EditorFactory extends ViewControllerWithMixin {
       'button:focus',
       'textarea:focus',
       'div[tabindex]:focus',
-      // 'a[href]:focus',
       '.dx-lookup-field:focus',
       '.dx-checkbox:focus',
       '.dx-switch:focus',
