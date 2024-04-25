@@ -506,10 +506,8 @@ QUnit.module('event utils', () => {
     });
 });
 
-QUnit.module('getEventTarget module', () => {
-    test('getEventTarget returns the element on which the event was raised', function(assert) {
-        assert.expect(1);
-
+QUnit.module('getEventTarget', () => {
+    test('should return composedPath first element if originalEvent.target is shadowRoot', function(assert) {
         const root = document.getElementById('qunit-fixture');
 
         const $element = $('#element');
@@ -517,24 +515,17 @@ QUnit.module('getEventTarget module', () => {
 
         $element.append($div);
 
-        const listener = (event) => {
-            const target = getEventTarget(event);
-
-            assert.strictEqual(target, $div.get(0), 'getEventTarget returned target correctly');
-        };
-
-        root.addEventListener('customEvent', listener);
-
-        const customEvent = new Event('customEvent', {
-            bubbles: true,
-            composed: true,
+        const customEvent = $.Event('customEvent', {
+            originalEvent: $.Event('customEvent', {
+                target: root,
+                composedPath: () => [$div.get(0)]
+            })
         });
 
-        try {
-            $div.get(0).dispatchEvent(customEvent);
-        } finally {
-            root.removeEventListener('customEvent', listener);
-        }
+        const target = getEventTarget(customEvent);
+
+        const expectedTarget = root.shadowRoot ? $div.get(0) : root;
+        assert.strictEqual(target, expectedTarget, 'target is correct');
     });
 });
 
