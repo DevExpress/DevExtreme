@@ -36,9 +36,7 @@ const BaseStrategy = Class.inherit({
             timeStamp: browser.mozilla ? (new Date()).getTime() : e.timeStamp
         };
 
-        const originalEvent = e.originalEvent;
-        const target = originalEvent ? getEventTarget(originalEvent) : e.target;
-
+        const target = getEventTarget(e);
         event.target = target;
 
         return this._fireEvent(event);

@@ -82,10 +82,7 @@ const ClickEmitter = Emitter.inherit({
         };
 
         const getTarget = function(e) {
-            const originalEvent = e.originalEvent;
-
-            const target = originalEvent ? getEventTarget(originalEvent) : e.target;
-
+            const target = getEventTarget(e);
             return $(target);
         };
 
