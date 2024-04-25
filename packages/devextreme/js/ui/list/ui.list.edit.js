@@ -365,13 +365,11 @@ const ListEdit = ListBase.inherit({
             : focusedItemIndex;
         const promise = this.callBase(itemElement);
 
-        if(shouldBeFocused) {
-            return promise.done(function() {
-                return this.focusListItem(nextFocusedItem);
-            });
-        } else {
-            return null;
-        }
+        return promise.done(function() {
+            if(shouldBeFocused) {
+                this.focusListItem(nextFocusedItem);
+            }
+        });
     }
 });
 
