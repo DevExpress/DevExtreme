@@ -1310,7 +1310,7 @@ export class KeyboardNavigationController extends modules.ViewController {
     const isHighlighted = this._isCellElement($(element));
 
     if (!element) {
-      activeElementSelector = '.dx-datagrid-rowsview .dx-row[tabindex]';
+      activeElementSelector = '.dx-datagrid-rowsview .dx-row-focused';
       if (!focusedRowEnabled) {
         activeElementSelector
           += ', .dx-datagrid-rowsview .dx-row > td[tabindex]';

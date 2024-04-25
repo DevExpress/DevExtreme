@@ -399,12 +399,16 @@ export class FocusController extends core.ViewController {
 
     $prevRowFocusedElement
       .removeClass(ROW_FOCUSED_CLASS)
-      .removeClass(CELL_FOCUS_DISABLED_CLASS)
-      .removeAttr('tabindex');
+      .removeClass(CELL_FOCUS_DISABLED_CLASS);
+
+    if ($prevRowFocusedElement.attr('aria-rowindex') !== '1') {
+      $prevRowFocusedElement.removeAttr('tabindex');
+    }
+
     $prevRowFocusedElement.children('td').removeAttr('tabindex');
     if (focusedRowIndex !== 0) {
       const $firstRow = $(this.getView('rowsView').getRowElement(0));
-      $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS).removeAttr('tabIndex');
+      $firstRow.removeClass(CELL_FOCUS_DISABLED_CLASS);
     }
   }
 
@@ -863,6 +867,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     }
 
     $row.attr('tabIndex', tabIndex);
+
+    const $firstRow = $(this.getView('rowsView').getRowElement(0));
+    $firstRow.attr('tabIndex', tabIndex);
 
     if (rowIndex >= 0 && !preventScroll) {
       if (columnIndex < 0) {
