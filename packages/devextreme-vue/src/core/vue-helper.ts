@@ -5,6 +5,8 @@ import {
   createApp,
   Slot,
   Slots,
+  toRaw,
+  unref,
   VNode,
   VNodeProps,
 } from 'vue';
@@ -34,6 +36,10 @@ export function getChildren(component: IBaseComponent): any {
   });
 }
 
+export function getRawValue<T>(value: T) {
+  return toRaw(unref(value));
+}
+
 export function getComponentInfo(component): IConfigurationComponent {
   return getConfigurationOptions(component);
 }
@@ -42,7 +48,7 @@ export function getNormalizedProps(props: VNodeProps): VNodeProps {
   const result = {};
   for (const propName in props) {
     if (props.hasOwnProperty(propName)) {
-      result[camelize(propName)] = props[propName];
+      result[camelize(propName)] = getRawValue(props[propName]);
     }
   }
   return result;
