@@ -1,7 +1,9 @@
 import $ from 'jquery';
 import devices from 'core/devices';
+import domAdapter from 'core/dom_adapter';
+import resizeCallbacks from 'core/utils/resize_callbacks';
 import support from 'core/utils/support';
-import { getWidth, getHeight } from 'core/utils/size';
+import { implementationsMap, getWidth, getHeight } from 'core/utils/size';
 import fx from 'animation/fx';
 import ContextMenu from 'ui/context_menu';
 import { addNamespace } from 'events/utils/index';
@@ -568,6 +570,133 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         $(item1).trigger('dxclick');
 
         assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
+    });
+
+    QUnit.module('On dimension changed', {
+        setWindowHeight: function(windowHeight) {
+            implementationsMap.getOuterHeight = (el, ...args) => {
+                if(el === window) {
+                    return windowHeight;
+                }
+                return this._originalGetOuterHeight(el, ...args);
+            };
+            implementationsMap.getHeight = (el, ...args) => {
+                if(el[0] === window) {
+                    return windowHeight;
+                }
+                return this._originalGetHeight(el, ...args);
+            };
+            domAdapter.getDocumentElement = function() {
+                return {
+                    clientWidth: 1200,
+                    clientHeight: windowHeight
+                };
+            };
+        },
+        beforeEach: function() {
+            this._originalGetOuterHeight = implementationsMap.getOuterHeight;
+            this._originalGetHeight = implementationsMap.getHeight;
+            this._originalGetDocumentElement = domAdapter.getDocumentElement;
+        },
+        afterEach: function() {
+            implementationsMap.getOuterHeight = this._originalGetOuterHeight;
+            implementationsMap.getHeight = this._originalGetHeight;
+            domAdapter.getDocumentElement = this._originalGetDocumentElement;
+        }
+    }, () => {
+        QUnit.test('Submenu height should be recalculated', function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+                focusStateEnabled: true,
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay: 0 }
+            });
+            const $itemsContainer = instance.itemsContainer();
+            const $item1 = $($itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0));
+
+            $item1.trigger('dxclick');
+
+            const windowHeight = 100;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            const $nestedSubmenu = $(`.${DX_SUBMENU_CLASS}`).eq(1);
+            const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
+
+            assert.strictEqual(
+                $nestedSubmenu.height(),
+                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+                'Nested submenu uses height is updated'
+            );
+        });
+
+        QUnit.test('Submenu flipping', function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                items: [
+                    { text: 1 },
+                    { text: 2 },
+                    { text: 3, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                    { text: 4 },
+                    { text: 5 },
+                ],
+                focusStateEnabled: true,
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay: 0 }
+            });
+            const $itemsContainer = instance.itemsContainer();
+            const $item = $($itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(2));
+
+            $item.trigger('dxclick');
+
+            const $nestedSubmenu = $item.find(`.${DX_SUBMENU_CLASS}`).eq(0);
+
+            assert.roughEqual($nestedSubmenu.offset().top, $item.offset().top, 1, 'submenu expanded to bottom');
+
+            const windowHeight = 100;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
+        });
+
+        QUnit.test('Submenu scrolling to an expanded item', function(assert) {
+            const instance = new ContextMenu(this.$element, {
+                items: [
+                    {
+                        text: 'root',
+                        items: [
+                            { text: 1 },
+                            { text: 2 },
+                            { text: 3 },
+                            { text: 4 },
+                            { text: 5, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                        ],
+                    },
+                ],
+                focusStateEnabled: true,
+                visible: true,
+                showSubmenuMode: { name: 'onHover', delay: 0 }
+            });
+            const $itemsContainer = instance.itemsContainer();
+            const $item = $($itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).first());
+
+            $item.trigger('dxclick');
+
+            const $nestedItem = $item.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+            $nestedItem.trigger('dxclick');
+
+            const windowHeight = 100;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual(
+                $nestedItem.offset().top,
+                windowHeight - SUBMENU_PADDING - $nestedItem.outerHeight(),
+                1,
+                'expanded item still visible'
+            );
+        });
     });
 });
 
