@@ -1,7 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies, no-console */
 const path = require('path');
 const fs = require('fs-extra');
-
 const Builder = require('systemjs-builder');
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
@@ -96,14 +95,14 @@ const prepareDevextremexAngularFiles = () => {
   console.log('Copy devextreme-angular files to node_modules/devextreme-angular/bundles completed!');
 }
 
-const prepareConfigs = async (framework) => {
-  let modulesMap = {};
+const prepareConfigs = (framework)=> {
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const currentPackage = require(`devextreme-${framework}/package.json`);
 
   let additionPackage = [];
   let packages = [];
   let additionPaths = {};
+  let modulesMap = {};
 
   let main = `devextreme-${framework}/index.js`;
   let minify = true;
@@ -138,11 +137,11 @@ const prepareConfigs = async (framework) => {
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
-               ...componentNames.reduce((items, item) => {
-                 // eslint-disable-next-line no-param-reassign
-                 items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
-                 return items;
-               }, {}),
+        ...componentNames.reduce((items, item) => {
+          // eslint-disable-next-line no-param-reassign
+          items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
+          return items;
+        }, {}),
       };
 
       modulesMap = {
@@ -151,7 +150,7 @@ const prepareConfigs = async (framework) => {
           items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
           return items;
         }, {}),
-      }
+      };
     }
   }
 
@@ -189,8 +188,8 @@ const prepareConfigs = async (framework) => {
   });
 
   packages.push(
-    'devextreme/bundles/dx.custom.config.js',
-    main,
+      'devextreme/bundles/dx.custom.config.js',
+      main,
   );
 
   return {
@@ -210,13 +209,12 @@ const build = async (framework) => {
 
   const {
     builderConfig, packages, bundlePath, bundleOpts,
-  } = await prepareConfigs(framework);
+  } = prepareConfigs(framework);
 
 
   builder.config(builderConfig);
 
   try {
-    console.log(`START systemjs-builder ${framework} bundling...`);
     await builder.bundle(packages, bundlePath, bundleOpts);
   } catch (err) {
     console.error(`Build ${framework} error `, err);
