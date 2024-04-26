@@ -9,8 +9,6 @@ import {
     TestBed
 } from '@angular/core/testing';
 
-import { BrowserTransferStateModule } from '@angular/platform-browser';
-
 import {
     DxTagBoxModule,
     DxTagBoxComponent
@@ -33,7 +31,7 @@ describe('DxTagBox', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxTagBoxModule, BrowserTransferStateModule]
+                imports: [DxTagBoxModule]
             });
     });
 

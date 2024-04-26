@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxFormModule } from 'devextreme-angular';
 
@@ -19,7 +19,7 @@ export class AppComponent {
   employee: Employee;
 
   groupCaptionTemplates: Object;
-  
+
   constructor(service: Service) {
     this.employee = service.getEmployee();
 
@@ -36,7 +36,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxFormModule,
   ],
   declarations: [AppComponent],

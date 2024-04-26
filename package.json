@@ -32,6 +32,7 @@
   "nx": {},
   "private": true,
   "devDependencies": {
+    "@angular/platform-server": "~16.2.12",
     "@nx/jest": "^16.10.0",
     "@nx/js": "^16.10.0",
     "@types/node": "^20.11.5",
@@ -67,6 +68,7 @@
     "lint-staged": "14.0.1",
     "nx": "17.3.2",
     "nx-cloud": "16.5.2",
+    "ng-packagr": "16.2.3",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
     "source-map": "0.7.4",

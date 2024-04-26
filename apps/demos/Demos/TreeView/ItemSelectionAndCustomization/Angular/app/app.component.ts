@@ -1,7 +1,7 @@
 import {
   NgModule, Component, Pipe, PipeTransform, enableProdMode, ViewChild,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxListModule, DxTemplateModule, DxCheckBoxModule } from 'devextreme-angular';
 import { DxTreeViewModule, DxTreeViewComponent, DxTreeViewTypes } from 'devextreme-angular/ui/tree-view';
@@ -90,7 +90,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxTreeViewModule,
     DxListModule,
     DxTemplateModule,

@@ -2,7 +2,7 @@ import {
   NgModule, Component, ViewChild, enableProdMode,
 } from '@angular/core';
 import { DecimalPipe, CurrencyPipe } from '@angular/common';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { HubConnectionBuilder, HttpTransportType } from '@aspnet/signalr';
 import CustomStore from 'devextreme/data/custom_store';
@@ -85,7 +85,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxChartModule,
   ],
   declarations: [AppComponent],

@@ -1,7 +1,7 @@
 import {
   NgModule, Component, Pipe, PipeTransform, enableProdMode,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxDataGridModule, DxButtonModule, DxSelectBoxModule } from 'devextreme-angular';
 import { Service, Employee } from './app.service';
@@ -64,7 +64,6 @@ export class StringifyEmployeesPipe implements PipeTransform {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxDataGridModule,
     DxButtonModule,
     DxSelectBoxModule,

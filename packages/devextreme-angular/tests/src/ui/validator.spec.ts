@@ -9,8 +9,6 @@ import {
     TestBed
 } from '@angular/core/testing';
 
-import { BrowserTransferStateModule } from '@angular/platform-browser';
-
 import {
     DxTextBoxModule,
     DxTextBoxComponent,
@@ -51,7 +49,7 @@ describe('DxValidator', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxTextBoxModule, DxValidatorModule, BrowserTransferStateModule]
+                imports: [DxTextBoxModule, DxValidatorModule]
             });
     });
 

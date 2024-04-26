@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSankeyModule, DxSankeyTypes } from 'devextreme-angular/ui/sankey';
 import { Service, DataItem } from './app.service';
@@ -30,7 +30,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxSankeyModule,
   ],
   declarations: [AppComponent],

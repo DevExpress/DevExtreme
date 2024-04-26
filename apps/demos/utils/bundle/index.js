@@ -40,7 +40,7 @@ const prepareModulesToNamedImport = () => {
   });
 };
 
-const getDefaultBuilderConfig = (framework, additionPaths) => ({
+const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   defaultExtension: false,
   defaultJSExtensions: 'js',
   packages: {
@@ -51,6 +51,7 @@ const getDefaultBuilderConfig = (framework, additionPaths) => ({
       main: 'index',
     },
   },
+  map,
   meta: {
     '*': {
       build: false,
@@ -78,13 +79,30 @@ const getDefaultBuilderConfig = (framework, additionPaths) => ({
   },
 });
 
-const prepareConfigs = (framework) => {
+const prepareDevextremexAngularFiles = () => {
+  const dxNgBaseDir = path.resolve('../../node_modules/devextreme-angular/bundles');
+
+  try {
+    fs.rmSync(dxNgBaseDir, { recursive: true });
+  } catch (e){}
+
+  try {
+    fs.mkdirSync('../../node_modules/devextreme-angular/bundles');
+    console.log(`Directory ${dxNgBaseDir} CLEANED successfully`);
+  } catch (e) {}
+
+  fs.copySync('./bundles/devextreme-angular', '../../node_modules/devextreme-angular/bundles');
+  console.log('Copy devextreme-angular files to node_modules/devextreme-angular/bundles completed!');
+}
+
+const prepareConfigs = (framework)=> {
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const currentPackage = require(`devextreme-${framework}/package.json`);
 
   let additionPackage = [];
   let packages = [];
   let additionPaths = {};
+  let modulesMap = {};
 
   let main = `devextreme-${framework}/index.js`;
   let minify = true;
@@ -104,18 +122,29 @@ const prepareConfigs = (framework) => {
     ];
 
     // eslint-disable-next-line spellcheck/spell-checker
-    if (currentPackage.fesm2015) {
+    if (currentPackage.module?.startsWith('fesm2022')) {
       main = `devextreme-${framework}`;
       minify = false;
+
+      prepareDevextremexAngularFiles();
+
       const bundlesRoot = '../../node_modules/devextreme-angular/bundles';
       const componentNames = fs.readdirSync(bundlesRoot)
-        .filter((fileName) => fileName.indexOf('umd.js.map') !== -1)
-        .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
-        .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js.map', ''));
+          .filter((fileName) => fileName.indexOf('umd.js') !== -1)
+          .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
+          .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
 
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
         'devextreme-angular/core': `${bundlesRoot}/devextreme-angular-core.umd.js`,
+        ...componentNames.reduce((items, item) => {
+          // eslint-disable-next-line no-param-reassign
+          items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
+          return items;
+        }, {}),
+      };
+
+      modulesMap = {
         ...componentNames.reduce((items, item) => {
           // eslint-disable-next-line no-param-reassign
           items[`devextreme-angular/ui/${item}`] = `${bundlesRoot}/devextreme-angular-ui-${item}.umd.js`;
@@ -151,7 +180,7 @@ const prepareConfigs = (framework) => {
     ];
   }
 
-  const builderConfig = getDefaultBuilderConfig(framework, additionPaths);
+  const builderConfig = getDefaultBuilderConfig(framework, additionPaths, modulesMap);
 
   additionPackage.forEach((p) => {
     builderConfig.meta[p.name] = p.metaValue;
@@ -159,8 +188,8 @@ const prepareConfigs = (framework) => {
   });
 
   packages.push(
-    'devextreme/bundles/dx.custom.config.js',
-    main,
+      'devextreme/bundles/dx.custom.config.js',
+      main,
   );
 
   return {
@@ -181,6 +210,7 @@ const build = async (framework) => {
   const {
     builderConfig, packages, bundlePath, bundleOpts,
   } = prepareConfigs(framework);
+
 
   builder.config(builderConfig);
 

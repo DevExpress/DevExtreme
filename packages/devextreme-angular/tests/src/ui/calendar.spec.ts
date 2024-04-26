@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 
 import { TestBed } from '@angular/core/testing';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
   DxCalendarModule,
@@ -28,7 +27,7 @@ describe('DxCalendar', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxCalendarModule, BrowserTransferStateModule]
+                imports: [DxCalendarModule]
             });
     });
 

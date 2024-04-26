@@ -1,7 +1,7 @@
 import {
   NgModule, Component, enableProdMode, ViewEncapsulation,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import {
   DxResizableModule,
@@ -48,7 +48,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxResizableModule,
     DxDataGridModule,
     DxCheckBoxModule,
