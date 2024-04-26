@@ -45,7 +45,7 @@ test('selectAll state should be correct after unselect item if refresh(true) is 
 }));
 
 // T1141405
-test.meta({ unstable: true })('The Select All checkbox should be visible when a column headerCellTemplate is specified (React)', async (t) => {
+test('The Select All checkbox should be visible when a column headerCellTemplate is specified (React)', async (t) => {
   // arrange, act
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
