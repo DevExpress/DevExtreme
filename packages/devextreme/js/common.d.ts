@@ -348,6 +348,10 @@ export type GlobalConfig = {
    */
   pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
   /**
+   * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+   */
+  timezones?: object[];
+  /**
    * @docid
    * @default false
    * @public

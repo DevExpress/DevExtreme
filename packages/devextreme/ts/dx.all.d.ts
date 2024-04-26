@@ -1517,6 +1517,10 @@ declare module DevExpress.common {
      */
     pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
     /**
+     * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+     */
+    timezones?: object[];
+    /**
      * [descr:GlobalConfig.rtlEnabled]
      */
     rtlEnabled?: boolean;

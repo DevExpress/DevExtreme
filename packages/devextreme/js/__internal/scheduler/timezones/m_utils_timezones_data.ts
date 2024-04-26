@@ -3,7 +3,7 @@ import errors from '@js/core/errors';
 import { sign } from '@js/core/utils/math';
 import query from '@js/data/query';
 
-import tzData from './timezones_data';
+import GlobalConfig from '../../../core/config';
 
 const getConvertedUntils = (value) => value.split('|').map((until) => {
   if (until === 'Infinity') {
@@ -52,10 +52,17 @@ const tzCache = new TimeZoneCache();
 
 const timeZoneDataUtils = {
   _tzCache: tzCache,
-  _timeZones: tzData.zones,
+  _timeZones: null,
+
+  getTimeZones() {
+    if (this._timeZones === null) {
+      this._timeZones = GlobalConfig().timezones ?? [];
+    }
+    return this._timeZones;
+  },
 
   getDisplayedTimeZones(timestamp) {
-    const timeZones = this._timeZones.map((timezone) => {
+    const timeZones = this.getTimeZones().map((timezone) => {
       const timeZoneInfo = parseTimezone(timezone);
       const offset = this.getUtcOffset(timeZoneInfo, timestamp);
 
@@ -91,7 +98,7 @@ const timeZoneDataUtils = {
       return undefined;
     }
 
-    const tzList = this._timeZones;
+    const tzList = this.getTimeZones();
 
     for (let i = 0; i < tzList.length; i++) {
       const currentId = tzList[i].id;

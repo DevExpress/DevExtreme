@@ -1,4 +1,5 @@
 /* globals Intl */
+import errors from '@js/core/errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import dateUtils from '../../core/utils/date';
@@ -58,11 +59,34 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
+const calculateTimezoneByValueCustom = (timezone: string, date = new Date()) => {
+  const customTimezones = timeZoneDataUtils.getTimeZones();
+  if (customTimezones.length === 0) {
+    return undefined;
+  }
+
+  const dateUtc = createUTCDate(date);
+  return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+};
+
 const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date()): number | undefined => {
   if (!timeZone) {
     return undefined;
   }
+  const isValidTimezone = timeZoneList.value.includes(timeZone);
+  if (!isValidTimezone) {
+    errors.log('W0009', timeZone);
+    return undefined;
+  }
 
+  let result = calculateTimezoneByValueCustom(timeZone, date);
+  if (result === undefined) {
+    result = calculateTimezoneByValueCore(timeZone, date);
+  }
+  return result;
+};
+
+const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): number | undefined => {
   let offset;
   try {
     offset = getStringOffset(timeZone, date);
