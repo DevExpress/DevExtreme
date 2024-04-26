@@ -35,7 +35,11 @@
           ></dxi-item>
 
           <ng-container *ngFor="let pane of paneContentTemplates">
-            <div *dxTemplate="let data of pane.name" class="pane-content">
+            <div
+              *dxTemplate="let data of pane.name"
+              class="pane-content"
+              tabindex="0"
+            >
               <ng-template
                 [ngTemplateOutlet]="customPaneTemplate"
                 [ngTemplateOutletContext]="{ data: data, title: pane.name }"
@@ -47,7 +51,11 @@
       </dxi-item>
 
       <ng-container *ngFor="let pane of paneContentTemplates">
-        <div *dxTemplate="let data of pane.name" class="pane-content">
+        <div
+          *dxTemplate="let data of pane.name"
+          class="pane-content"
+          tabindex="0"
+        >
           <ng-template
             [ngTemplateOutlet]="customPaneTemplate"
             [ngTemplateOutletContext]="{ data: data, title: pane.name }"
@@ -65,7 +73,7 @@
   ></dxi-item>
 
   <ng-container *ngFor="let pane of paneContentTemplates">
-    <div *dxTemplate="let data of pane.name" class="pane-content">
+    <div *dxTemplate="let data of pane.name" class="pane-content" tabindex="0">
       <ng-template
         [ngTemplateOutlet]="customPaneTemplate"
         [ngTemplateOutletContext]="{ data: data, title: pane.name }"

@@ -46,6 +46,7 @@
       />
 
       <DxColumnChooser
+        height="340px"
         :enabled="true"
         :mode="mode"
       >

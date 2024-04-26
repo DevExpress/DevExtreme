@@ -4,7 +4,7 @@ import {
   useImperativeHandle,
   forwardRef,
   useRef,
-  useEffect,
+  useLayoutEffect,
   useCallback,
   ReactElement,
 } from 'react';
@@ -26,7 +26,7 @@ const ExtensionComponent = forwardRef<ComponentBaseRef, any>(
       componentBaseRef.current?.createWidget(el);
     }, [componentBaseRef.current]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       const { onMounted } = props as any;
       if (onMounted) {
         onMounted(createWidget);

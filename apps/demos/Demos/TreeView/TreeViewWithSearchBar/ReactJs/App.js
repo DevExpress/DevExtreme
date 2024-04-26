@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import TreeView from 'devextreme-react/tree-view';
-import SelectBox from 'devextreme-react/select-box';
+import { TreeView } from 'devextreme-react/tree-view';
+import { SelectBox } from 'devextreme-react/select-box';
 import { products, searchModeLabel } from './data.js';
 
 const options = ['contains', 'startswith', 'equals'];

@@ -17,7 +17,7 @@ const getFilteredDimensionOptions = (data) => Object.entries(data)
   .map(([key, value]) => ({ key, value }));
 
 const PaneContent = (data) => (
-  <div className="pane-content">
+  <div className="pane-content" tabIndex={0}>
     <div className="pane-title">{data.title}</div>
     <div className="pane-state">{getPaneState(data)}</div>
     {getFilteredDimensionOptions(data).map((item, index) => (

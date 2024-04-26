@@ -210,10 +210,11 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
     let left = Math.round(appointmentSettings.left + offset);
     let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
+    let { columnIndex } = appointmentSettings;
 
     while (tailHeight > 0 && left < hMax) {
       tailHeight = Math.max(minHeight, tailHeight);
-      const columnIndex = appointmentSettings.columnIndex + cellsDiff;
+      columnIndex += cellsDiff;
       const height = Math.min(tailHeight, vMax);
 
       result.push({

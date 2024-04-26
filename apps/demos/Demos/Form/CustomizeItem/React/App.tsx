@@ -1,13 +1,18 @@
 import React, { useCallback } from 'react';
+
+import { ValidationRule } from 'devextreme-react/common';
+
+import {
+  Form,
+  Item, GroupItem, Label,
+  FormTypes,
+} from 'devextreme-react/form';
 import 'devextreme-react/text-area';
 
-import Form, {
-  Item, GroupItem, Label, FormTypes,
-} from 'devextreme-react/form';
-import { ValidationRule } from 'devextreme/common';
+import service from './data.ts';
+
 import LabelTemplate from './LabelTemplate.tsx';
 import LabelNotesTemplate from './LabelNotesTemplate.tsx';
-import service from './data.ts';
 
 const employee = service.getEmployee();
 

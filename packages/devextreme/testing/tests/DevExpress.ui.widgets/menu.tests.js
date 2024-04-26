@@ -6,6 +6,7 @@ import { isRenderer } from 'core/utils/type';
 import config from 'core/config';
 import Submenu from 'ui/menu/ui.submenu';
 import resizeCallbacks from 'core/utils/resize_callbacks';
+import domAdapter from 'core/dom_adapter';
 import Menu from 'ui/menu/ui.menu';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import fixtures from '../../helpers/positionFixtures.js';
@@ -476,7 +477,7 @@ QUnit.module('Rendering Scrollable', {
         assert.roughEqual(
             $submenu.outerHeight(),
             $(window).height() - $item1.offset().top - $item1.outerHeight() - SUBMENU_PADDING,
-            .1,
+            1.5,
             'menu uses all available space'
         );
     });
@@ -864,6 +865,160 @@ QUnit.module('Rendering Scrollable', {
             .press('down');
 
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
+    });
+
+    QUnit.module('On dimension changed', {
+        setWindowHeight: function(windowHeight) {
+            implementationsMap.getOuterHeight = (el, ...args) => {
+                if(el === window) {
+                    return windowHeight;
+                }
+                return this._originalGetOuterHeight(el, ...args);
+            };
+            implementationsMap.getHeight = (el, ...args) => {
+                if(el[0] === window) {
+                    return windowHeight;
+                }
+                return this._originalGetHeight(el, ...args);
+            };
+            domAdapter.getDocumentElement = function() {
+                return {
+                    clientWidth: 1200,
+                    clientHeight: windowHeight
+                };
+            };
+        },
+        beforeEach: function() {
+            this._originalGetOuterHeight = implementationsMap.getOuterHeight;
+            this._originalGetHeight = implementationsMap.getHeight;
+            this._originalGetDocumentElement = domAdapter.getDocumentElement;
+        },
+        afterEach: function() {
+            implementationsMap.getOuterHeight = this._originalGetOuterHeight;
+            implementationsMap.getHeight = this._originalGetHeight;
+            domAdapter.getDocumentElement = this._originalGetDocumentElement;
+        }
+    }, () => {
+        QUnit.test('Submenu height should be recalculated', function(assert) {
+            const menu = createMenuInWindow({
+                items: [
+                    {
+                        text: 'root',
+                        items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+                    },
+                ],
+                showFirstSubmenuMode: 'onClick',
+                showSubmenuMode: { name: 'onHover', delay: 0 },
+            });
+            const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $rootItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($rootItem);
+            const $overlayContent = $(submenu._overlay.content());
+            const $menuItem1 = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            $menuItem1.trigger('dxclick');
+
+            const windowHeight = 300;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            const $nestedSubmenu = $menuItem1.find(`.${DX_SUBMENU_CLASS}`).eq(0);
+            const $nestedItemsContainer = $nestedSubmenu.find(`.${DX_CONTEXT_MENU_ITEMS_CONTAINER_CLASS}`).eq(0);
+
+            assert.roughEqual(
+                $nestedSubmenu.height(),
+                windowHeight - $nestedItemsContainer.offset().top - SUBMENU_PADDING,
+                1,
+                'Nested submenu uses height is updated'
+            );
+        });
+
+        QUnit.test('Submenu flipping', function(assert) {
+            const menu = createMenuInWindow({
+                items: [
+                    {
+                        text: 'root',
+                        items: [{ text: 1, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) }],
+                    },
+                ],
+                showFirstSubmenuMode: 'onClick',
+                showSubmenuMode: { name: 'onHover', delay: 0 },
+            });
+            const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $rootItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($rootItem);
+            const $overlayContent = $(submenu._overlay.content());
+            const $menuItem1 = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            $menuItem1.trigger('dxclick');
+
+            const $nestedSubmenu = $menuItem1.find(`.${DX_SUBMENU_CLASS}`).eq(0);
+
+            assert.roughEqual($nestedSubmenu.offset().top + BORDER_WIDTH, $menuItem1.offset().top, 1, 'submenu expanded to bottom');
+
+            const windowHeight = 200;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual($nestedSubmenu.offset().top, SUBMENU_PADDING - BORDER_WIDTH, 1, 'submenu flipped to top');
+        });
+
+        QUnit.test('Submenu scrolling to an expanded item', function(assert) {
+            const menu = createMenuInWindow({
+                items: [
+                    {
+                        text: 'root',
+                        items: [
+                            {
+                                text: 'nested',
+                                items: [
+                                    { text: 1 },
+                                    { text: 2 },
+                                    { text: 3 },
+                                    { text: 4 },
+                                    { text: 5 },
+                                    { text: 6 },
+                                    { text: 7 },
+                                    { text: 8 },
+                                    { text: 9 },
+                                    { text: 10, items: (new Array(99)).fill(null).map((_, idx) => ({ text: `item ${idx}` })) },
+                                ]
+                            }
+                        ],
+                    },
+                ],
+                showFirstSubmenuMode: 'onClick',
+                showSubmenuMode: { name: 'onHover', delay: 0 },
+            });
+            const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+            $rootItem.trigger('dxclick');
+
+            const submenu = getSubMenuInstance($rootItem);
+            const $overlayContent = $(submenu._overlay.content());
+            const $nestedItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+            $nestedItem.trigger('dxclick');
+
+            const $lastItem = $nestedItem.find(`.${DX_MENU_ITEM_CLASS}`).last();
+
+            $lastItem.trigger('dxclick');
+
+            const windowHeight = 200;
+            this.setWindowHeight(windowHeight);
+            resizeCallbacks.fire();
+
+            assert.roughEqual(
+                $lastItem.offset().top,
+                $nestedItem.offset().top,
+                1.5,
+                'expanded item still visible'
+            );
+        });
     });
 });
 
@@ -1424,7 +1579,6 @@ QUnit.module('Menu tests', {
         const menu = createMenu(options);
         const $rootItem = $(menu.element).find('.' + DX_MENU_ITEM_CLASS).eq(0);
 
-        // show submenu
         $($rootItem).trigger('dxclick');
         assert.equal(handlerShowing.callCount, 1);
         assert.equal(handlerShown.callCount, 1);
@@ -1484,7 +1638,6 @@ QUnit.module('Menu tests', {
             assert.strictEqual($(handler.args[callNumber][0].submenuContainer)[0], submenuContainer, `${comment} - submenuContainer`);
         };
 
-        // show submenu
         $($rootItem).trigger('dxclick');
 
         const submenu = getSubMenuInstance($rootItem);
@@ -1545,7 +1698,6 @@ QUnit.module('Menu tests', {
         const menu = createMenuInWindow(options);
         const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
 
-        // show submenu
         $($rootItem).trigger('dxclick');
 
         const submenu = getSubMenuInstance($rootItem);

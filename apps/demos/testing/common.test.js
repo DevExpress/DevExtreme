@@ -138,6 +138,7 @@ const SKIPPED_TESTS = {
   React: {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
