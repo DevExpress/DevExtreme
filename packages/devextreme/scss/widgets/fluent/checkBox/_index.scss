@@ -150,7 +150,7 @@ $icon-position: relative;
 }
 
 .dx-checkbox-indeterminate {
-  @include indeterminate-checkbox($checkbox-foreground-color, $checkbox-accent-color, $checkbox-accent-color, $fluent-checkbox-indeterminate-font-size);
+  @include indeterminate-checkbox($checkbox-foreground-color, $checkbox-accent-color, .4em, $checkbox-accent-color, $fluent-checkbox-indeterminate-font-size);
 
   &.dx-invalid {
     .dx-checkbox-icon {
