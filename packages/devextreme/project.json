@@ -10,6 +10,7 @@
         "script": "build-npm-devextreme"
       },
       "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
         "{projectRoot}/build/**/*",
         "{projectRoot}/fonts/**/*",
         "{projectRoot}/icons/**/*",
