@@ -50,7 +50,7 @@
     "karma-jasmine": "^5.1.0",
     "karma-junit-reporter": "^2.0.1",
     "karma-webpack": "^5.0.0",
-    "ng-packagr": "~17.3.1",
+    "ng-packagr": "17.3.0",
     "puppeteer": "^19.11.1",
     "rxjs": "^6.6.7",
     "stream-browserify": "^3.0.0",
