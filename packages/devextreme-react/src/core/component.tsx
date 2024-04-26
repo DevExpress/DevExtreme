@@ -4,7 +4,7 @@ import {
   useImperativeHandle,
   forwardRef,
   useRef,
-  useEffect,
+  useLayoutEffect,
   useCallback,
   ReactElement,
 } from 'react';
@@ -75,7 +75,7 @@ const Component = forwardRef<ComponentRef, any>(
       props.clearExtensions,
     ]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       createWidget();
       createExtensions();
 

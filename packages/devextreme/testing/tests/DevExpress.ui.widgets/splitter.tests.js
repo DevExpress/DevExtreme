@@ -3033,12 +3033,40 @@ QUnit.module('Keyboard support', moduleConfig, () => {
     });
 
     [
-        { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowUp' },
-        { key: 'ArrowUp', orientation: 'vertical', wrongKey: 'ArrowLeft' }
-    ].forEach(({ key, orientation, wrongKey }) => {
-        QUnit.test(`Prev item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
+        { key: 'ArrowRight', wrongKey: 'ArrowLeft', initialRtlEnabled: false },
+        { key: 'ArrowLeft', wrongKey: 'ArrowRight', initialRtlEnabled: true },
+    ].forEach(({ key, wrongKey, initialRtlEnabled }) => {
+        QUnit.test(`Collapse direction should be changed when rtlEnabled changed from ${initialRtlEnabled} at runtime`, function(assert) {
+            this.reinit({
+                rtlEnabled: initialRtlEnabled,
+                items: [{ collapsible: true }, { }],
+            });
+
+            this.instance.option('rtlEnabled', !initialRtlEnabled);
+
+            const $resizeHandle = this.getResizeHandles();
+            const keyboard = keyboardMock($resizeHandle);
+
+            keyboard.keyDown(wrongKey, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
+
+            keyboard.keyDown(key, { ctrlKey: true });
+
+            assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'item is collapsed');
+        });
+    });
+
+    [
+        { key: 'ArrowRight', orientation: 'horizontal', wrongKey: 'ArrowUp', rtlEnabled: true },
+        { key: 'ArrowUp', orientation: 'vertical', wrongKey: 'ArrowDown', rtlEnabled: true },
+        { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowUp', rtlEnabled: false },
+        { key: 'ArrowUp', orientation: 'vertical', wrongKey: 'ArrowLeft', rtlEnabled: false }
+    ].forEach(({ key, orientation, wrongKey, rtlEnabled }) => {
+        QUnit.test(`Prev item should be collapsed on command+${key} (orientation=${orientation}, rtlEnabled=${rtlEnabled})`, function(assert) {
             this.reinit({
                 orientation,
+                rtlEnabled,
                 items: [{ collapsible: true }, { }],
             });
 
@@ -3050,9 +3078,10 @@ QUnit.module('Keyboard support', moduleConfig, () => {
             assert.strictEqual(this.instance.option('items[0].collapsed'), true, 'item is collapsed');
         });
 
-        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} (orientation=${orientation})`, function(assert) {
+        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} (orientation=${orientation}, rtlEnabled=${rtlEnabled})`, function(assert) {
             this.reinit({
                 orientation,
+                rtlEnabled,
                 items: [{ collapsible: true }, { }],
             });
 
@@ -3064,9 +3093,10 @@ QUnit.module('Keyboard support', moduleConfig, () => {
             assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
         });
 
-        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} if pane is not collapsible`, function(assert) {
+        QUnit.test(`Prev item should not be collapsed on command+${wrongKey} if pane is not collapsible (rtlEnabled=${rtlEnabled})`, function(assert) {
             this.reinit({
                 orientation,
+                rtlEnabled,
                 items: [{ }, { }],
             });
 
@@ -3078,10 +3108,11 @@ QUnit.module('Keyboard support', moduleConfig, () => {
             assert.strictEqual(this.instance.option('items[0].collapsed'), undefined, 'item is not collapsed');
         });
 
-        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
+        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation}, rtlEnabled=${rtlEnabled})`, function(assert) {
             const onItemCollapsed = sinon.stub();
             this.reinit({
                 orientation,
+                rtlEnabled,
                 onItemCollapsed,
                 items: [{ collapsible: true }, { }],
             });
@@ -3112,12 +3143,15 @@ QUnit.module('Keyboard support', moduleConfig, () => {
     });
 
     [
+        { key: 'ArrowLeft', orientation: 'horizontal', wrongKey: 'ArrowDown', rtlEnabled: true },
+        { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowUp', rtlEnabled: true },
         { key: 'ArrowRight', orientation: 'horizontal', wrongKey: 'ArrowDown' },
         { key: 'ArrowDown', orientation: 'vertical', wrongKey: 'ArrowRight' }
-    ].forEach(({ key, orientation, wrongKey }) => {
-        QUnit.test(`Next item should be collapsed on command+${key} (orientation=${orientation})`, function(assert) {
+    ].forEach(({ key, orientation, wrongKey, rtlEnabled }) => {
+        QUnit.test(`Next item should be collapsed on command+${key} (orientation=${orientation}, rtlEnabled=${rtlEnabled})`, function(assert) {
             this.reinit({
                 orientation,
+                rtlEnabled,
                 items: [{ }, { collapsible: true }],
             });
 
@@ -3143,10 +3177,11 @@ QUnit.module('Keyboard support', moduleConfig, () => {
             assert.strictEqual(this.instance.option('items[1].collapsed'), undefined, 'item is not collapsed');
         });
 
-        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation})`, function(assert) {
+        QUnit.test(`onItemCollapsed should be fired on command+${key} (orientation=${orientation}, rtlEnabled=${rtlEnabled})`, function(assert) {
             const onItemCollapsed = sinon.stub();
             this.reinit({
                 orientation,
+                rtlEnabled,
                 onItemCollapsed,
                 items: [{ }, { collapsible: true }],
             });
