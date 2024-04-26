@@ -867,6 +867,37 @@ QUnit.module('Rendering Scrollable', {
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
 
+    QUnit.test('Scrollable content should have min-height: auto to prevent bug on iOS', function(assert) {
+        const menu = createMenu({
+            items: [{
+                text: 'root',
+                items: [{
+                    text: 'item 11',
+                    items: [{
+                        text: 'item 111',
+                    }],
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $rootItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const $overlayContent = $(submenu._overlay.content());
+        const $nestedItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $nestedItem.get(0) }));
+        $nestedItem.trigger('dxpointermove');
+        this.clock.tick(0);
+
+        $overlayContent.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).each((_, scrollableContent) => {
+            assert.strictEqual(window.getComputedStyle(scrollableContent).minHeight, '0px', 'min-height = auto');
+        });
+    });
+
     QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
