@@ -347,7 +347,7 @@ class Splitter extends (CollectionWidget as any) {
         : leftItemData.collapsible === true && leftItemData.collapsed !== true;
 
       const showCollapseNext = leftItemData.collapsed === true
-        ? leftItemData.collapsible === true // && rightItemData.collapsed !== true
+        ? leftItemData.collapsible === true
         : rightItemData.collapsible === true && rightItemData.collapsed !== true;
 
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
@@ -441,21 +441,16 @@ class Splitter extends (CollectionWidget as any) {
         if (isRightItemCollapsed) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
 
-          if (!isDefined(this._collapsedItemSize)) {
-            this._collapsedItemSize = this._layout[leftItemIndex] / 2;
+          if (!this._collapsedItemSize) {
+            for (let i = leftItemIndex; i >= 0; i -= 1) {
+              // eslint-disable-next-line max-depth
+              if (this.option('items')[i].collapsed !== true) {
+                this._collapsedItemSize = this._layout[i] / 2;
+              }
+            }
           }
-          // const leftItemSize = this._getItemDimension($leftItem.get(0));
 
-          // todo: refactor
-          // const minItemSize = parseFloat(rightItemData.minSize);
-
-          // if (!rightItemData.minSize || leftItemSize >= minItemSize) {
-          //   if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > leftItemSize) {
-          //     this._collapsedItemSize = Math.max(leftItemSize / 2, minItemSize || -Infinity);
-          //   }
-          // }
-
-          // this._panesCacheSize[rightItemIndex] = undefined;
+          this._panesCacheSize[rightItemIndex] = undefined;
           this._updateItemData('collapsed', rightItemIndex, false, false);
 
           this._getAction(ITEM_EXPANDED_EVENT)({
@@ -469,9 +464,7 @@ class Splitter extends (CollectionWidget as any) {
         }
 
         this._panesCacheSize[leftItemIndex] = this._layout[leftItemIndex];
-        // this._getItemDimension($leftItem.get(0));
-        this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
-        // this._getItemDimension($leftItem.get(0));
+        this._collapsedItemSize = this._layout[leftItemIndex];
 
         this._updateItemData('collapsed', leftItemIndex, true, false);
 
@@ -492,7 +485,7 @@ class Splitter extends (CollectionWidget as any) {
         const leftItemIndex = this._getIndexByItem(leftItemData);
         const $rightItem = this._getResizeHandleRightItem($resizeHandle);
         const rightItemData = this._getItemData($rightItem);
-        const rightItemIndex = this._getIndexByItem(rightItemData);
+        const rightItemIndex = this._getIndexByItem(rightItemData) as number;
 
         const isLeftItemCollapsed = leftItemData.collapsed === true;
 
@@ -502,22 +495,16 @@ class Splitter extends (CollectionWidget as any) {
         if (isLeftItemCollapsed) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
 
-          if (!isDefined(this._collapsedItemSize)) {
-            // todo: next non collapsed?
-            this._collapsedItemSize = this._layout[rightItemIndex] / 2;
+          if (!this._collapsedItemSize) {
+            for (let i = rightItemIndex; i <= this.option('items').length - 1; i += 1) {
+              // eslint-disable-next-line max-depth
+              if (this.option('items')[i].collapsed !== true) {
+                this._collapsedItemSize = this._layout[i] / 2;
+              }
+            }
           }
-          // const rightItemSize = this._getItemDimension($rightItem.get(0));
 
-          // // todo: refactor
-          // const minItemSize = parseFloat(leftItemData.minSize);
-
-          // if (!leftItemData.minSize || rightItemSize >= minItemSize) {
-          //   if (!isDefined(this._collapsedItemSize) || this._collapsedItemSize > rightItemSize) {
-          //     this._collapsedItemSize = Math.max(rightItemSize / 2, minItemSize || -Infinity);
-          //   }
-          // }
-
-          // this._panesCacheSize[leftItemIndex] = undefined;
+          this._panesCacheSize[leftItemIndex] = undefined;
 
           this._updateItemData('collapsed', leftItemIndex, false, false);
 
@@ -532,9 +519,7 @@ class Splitter extends (CollectionWidget as any) {
         }
 
         this._panesCacheSize[rightItemIndex] = this._layout[rightItemIndex];
-        // this._getItemDimension($rightItem.get(0));
         this._collapsedItemSize = this._layout[rightItemIndex];
-        // this._getItemDimension($rightItem.get(0));
 
         this._updateItemData('collapsed', rightItemIndex, true, false);
 
@@ -732,7 +717,6 @@ class Splitter extends (CollectionWidget as any) {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        // todo test collapsedSize
         this._layout = this._getDefaultLayoutBasedOnSize();
 
         this._applyFlexGrowFromLayout(this._layout);
@@ -767,6 +751,7 @@ class Splitter extends (CollectionWidget as any) {
         this._getCollapseDelta(item),
         this._activeResizeHandleIndex,
         this._itemRestrictions,
+        true,
       );
     } else {
       this._layout = this._getDefaultLayoutBasedOnSize();
@@ -783,14 +768,13 @@ class Splitter extends (CollectionWidget as any) {
     const itemIndex = this._getIndexByItem(item);
 
     const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
-    // const collapsedSize = this._itemRestrictions[itemIndex].collapsedSize ?? 0;
-    // const minSize = this._itemRestrictions[itemIndex].minSize ?? 0;
-    const itemSize = this._collapsedItemSize >= minSize
+
+    const itemSize = this._collapsedItemSize !== undefined && this._collapsedItemSize >= minSize
       ? this._collapsedItemSize
       : minSize;
 
     const deltaSign = this._collapseButton === 'prev' ? -1 : 1;
-    const delta = (itemSize - collapsedSize) * deltaSign;
+    const delta = Math.abs(itemSize - collapsedSize) * deltaSign;
 
     return delta;
   }
@@ -813,7 +797,6 @@ class Splitter extends (CollectionWidget as any) {
 
     items.forEach((item) => {
       this._itemRestrictions.push({
-        // todo: test
         resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
