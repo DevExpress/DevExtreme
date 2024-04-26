@@ -1,7 +1,13 @@
 import errors from '@js/core/errors';
 import { version as packageVersion } from '@js/core/version';
 
-import { getPreviousMajorVersion, parseVersion, VERSION_SPLITTER } from '../../utils/version';
+import type { Version } from '../../utils/version';
+import {
+  getPreviousMajorVersion,
+  parseVersion,
+  stringifyVersion,
+  VERSION_SPLITTER,
+} from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
@@ -104,15 +110,23 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
   };
 }
 
-function getLicenseCheckParams({ licenseKey, version }: {
+function isPreview(patch: number): boolean {
+  return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+}
+
+function getLicenseCheckParams({
+  licenseKey,
+  version,
+}: {
   licenseKey: string | undefined;
-  version: string;
+  version: Version;
 }): LicenseCheckParams {
   let preview = false;
 
   try {
-    const { major, minor, patch } = parseVersion(version);
-    preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+    preview = isPreview(version.patch);
+
+    const { major, minor } = preview ? getPreviousMajorVersion(version) : version;
 
     if (!licenseKey) {
       return { preview, error: 'W0019' };
@@ -142,44 +156,23 @@ function getLicenseCheckParams({ licenseKey, version }: {
   }
 }
 
-function shouldShowTrialPanel(
-  { preview, internal, error }: LicenseCheckParams,
-  licenseKey: string,
-  version: string,
-): boolean {
-  if (!error || internal) {
-    return false;
-  }
-
-  if (preview) {
-    const previousMajor = getPreviousMajorVersion(version);
-
-    const { error: previousMajorError } = getLicenseCheckParams({
-      licenseKey,
-      version: previousMajor,
-    });
-
-    if (!previousMajorError) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-export function validateLicense(licenseKey: string, version: string = packageVersion): void {
+export function validateLicense(licenseKey: string, versionStr: string = packageVersion): void {
   if (validationPerformed) {
     return;
   }
   validationPerformed = true;
 
-  const checkParams = getLicenseCheckParams({ licenseKey, version });
+  const version = parseVersion(versionStr);
+  const preview = isPreview(version.patch);
 
-  if (shouldShowTrialPanel(checkParams, licenseKey, version)) {
-    showTrialPanel(BUY_NOW_LINK, version);
+  const { internal, error } = getLicenseCheckParams({
+    licenseKey,
+    version,
+  });
+
+  if (error && !internal) {
+    showTrialPanel(BUY_NOW_LINK, stringifyVersion(version));
   }
-
-  const { preview, internal, error } = checkParams;
 
   if (error) {
     errors.log(preview ? 'W0022' : error);
