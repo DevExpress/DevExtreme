@@ -61,7 +61,7 @@ $icon-position: relative;
 }
 
 .dx-checkbox-indeterminate {
-  @include indeterminate-checkbox($checkbox-bg, $checkbox-checked-color, $checkbox-checked-color, $generic-checkbox-indeterminate-font-size);
+  @include indeterminate-checkbox($checkbox-bg, $checkbox-checked-color, .4em, $checkbox-checked-color, $generic-checkbox-indeterminate-font-size);
 }
 
 .dx-state-disabled {
