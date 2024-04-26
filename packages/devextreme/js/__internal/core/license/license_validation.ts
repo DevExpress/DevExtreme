@@ -1,12 +1,18 @@
 import errors from '@js/core/errors';
 import { version as packageVersion } from '@js/core/version';
 
+import { getPreviousMajorVersion, parseVersion, VERSION_SPLITTER } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-import type { License, LicenseVerifyResult, Token } from './types';
+import { showTrialPanel } from './trial_panel';
+import type {
+  License,
+  LicenseCheckParams,
+  Token,
+} from './types';
 import { TokenKind } from './types';
 
 interface Payload extends Partial<License> {
@@ -14,9 +20,10 @@ interface Payload extends Partial<License> {
   readonly internalUsageId?: string;
 }
 
-const SPLITTER = '.';
 const FORMAT = 1;
 const RTM_MIN_PATCH_VERSION = 3;
+
+const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtreme.aspx';
 
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
@@ -44,7 +51,7 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
     return GENERAL_ERROR;
   }
 
-  const parts = encodedKey.split(SPLITTER);
+  const parts = encodedKey.split(VERSION_SPLITTER);
 
   if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
     return GENERAL_ERROR;
@@ -100,15 +107,11 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
 function getLicenseCheckParams({ licenseKey, version }: {
   licenseKey: string | undefined;
   version: string;
-}): {
-    preview: boolean;
-    internal?: true;
-    error: LicenseVerifyResult | undefined;
-  } {
+}): LicenseCheckParams {
   let preview = false;
 
   try {
-    const [major, minor, patch] = version.split('.').map(Number);
+    const { major, minor, patch } = parseVersion(version);
     preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 
     if (!licenseKey) {
@@ -139,13 +142,44 @@ function getLicenseCheckParams({ licenseKey, version }: {
   }
 }
 
+function shouldShowTrialPanel(
+  { preview, internal, error }: LicenseCheckParams,
+  licenseKey: string,
+  version: string,
+): boolean {
+  if (!error || internal) {
+    return false;
+  }
+
+  if (preview) {
+    const previousMajor = getPreviousMajorVersion(version);
+
+    const { error: previousMajorError } = getLicenseCheckParams({
+      licenseKey,
+      version: previousMajor,
+    });
+
+    if (!previousMajorError) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export function validateLicense(licenseKey: string, version: string = packageVersion): void {
   if (validationPerformed) {
     return;
   }
   validationPerformed = true;
 
-  const { preview, internal, error } = getLicenseCheckParams({ licenseKey, version });
+  const checkParams = getLicenseCheckParams({ licenseKey, version });
+
+  if (shouldShowTrialPanel(checkParams, licenseKey, version)) {
+    showTrialPanel(BUY_NOW_LINK, version);
+  }
+
+  const { preview, internal, error } = checkParams;
 
   if (error) {
     errors.log(preview ? 'W0022' : error);

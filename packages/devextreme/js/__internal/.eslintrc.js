@@ -12,7 +12,7 @@ module.exports = {
         // General TS rules.
         {
             files: [
-                '**/*.ts'
+                '**/*.ts?(x)'
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -65,12 +65,13 @@ module.exports = {
                 'no-param-reassign': ['error', { 'props': false }],
                 'no-underscore-dangle': 'off',
                 'no-console': ['error', { 'allow': ['warn', 'error'] }],
+                'class-methods-use-this': 'off',
             }
         },
         // Rules for a new TS files.
         {
             files: [
-                '**/*.ts',
+                '**/*.ts?(x)',
             ],
             excludedFiles: '**/m_*.ts',
             parser: '@typescript-eslint/parser',
@@ -133,9 +134,9 @@ module.exports = {
         // Rules for grid controls
         {
             files: [
-                '**/grid_core/**/**.ts',
-                '**/data_grid/**/**.ts',
-                '**/tree_list/**/**.ts',
+                '**/grid_core/**/**.ts?(x)',
+                '**/data_grid/**/**.ts?(x)',
+                '**/tree_list/**/**.ts?(x)',
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -176,7 +177,6 @@ module.exports = {
                         'selector': 'MethodDefinition[kind = "set"]',
                     }
                 ],
-                'class-methods-use-this': 'off',
                 '@typescript-eslint/lines-between-class-members': 'off',
             }
         },

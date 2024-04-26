@@ -1,12 +1,10 @@
+import { Item, Properties } from 'devextreme/ui/splitter';
 import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
 import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
-import { Item, Properties } from 'devextreme/ui/splitter';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 const items: Item[] = [
   {

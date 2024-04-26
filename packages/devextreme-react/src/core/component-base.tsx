@@ -6,7 +6,7 @@ import {
   useImperativeHandle,
   forwardRef,
   useRef,
-  useEffect,
+  useLayoutEffect,
   useCallback,
   useState,
   ReactElement,
@@ -327,7 +327,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       childElementsDetached.current,
     ]);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       onComponentMounted();
 
       return () => {
@@ -335,7 +335,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       };
     }, []);
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       onComponentUpdated();
     });
 

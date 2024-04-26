@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget, disposeWidget } from '../../../../helpers/createWidget';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { createWidget } from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Offset: Markup virtual scrolling`
   .page(url(__dirname, '../../../container.html'));
@@ -97,7 +97,6 @@ end: ${endDayHour},
       })
         .after(async () => {
           await removeStylesheetRulesFromPage();
-          await disposeWidget('dxScheduler');
         });
     });
   });
@@ -149,7 +148,6 @@ end: ${endDayHour},
 //       })
 //         .after(async () => {
 //           await removeStylesheetRulesFromPage();
-//           await disposeWidget('dxScheduler');
 //         });
 //     });
 //   });

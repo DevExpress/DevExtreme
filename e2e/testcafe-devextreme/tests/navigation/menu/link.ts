@@ -1,9 +1,9 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Menu from 'devextreme-testcafe-models/menu';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Menu from 'devextreme-testcafe-models/menu';
 import {
   setAttribute, appendElementTo,
 } from '../../../helpers/domUtils';
@@ -11,7 +11,7 @@ import {
 fixture.disablePageReloads`Link`
   .page(url(__dirname, '../../container.html'));
 
-test.skip('Items should have links if item.url is set', async (t) => {
+test('Items should have links if item.url is set', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const menu = new Menu();
 

@@ -1,8 +1,8 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import { setAttribute } from '../../../helpers/domUtils';
 

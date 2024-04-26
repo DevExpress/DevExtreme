@@ -1,8 +1,8 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget, disposeWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Appointment form: expressions`
   .page(url(__dirname, '../../container.html'));
@@ -509,7 +509,7 @@ const RECURRENCE_RULE_TEST_CASES = {
         cellDuration: 240,
         ...options,
       });
-    }).after(async () => disposeWidget('dxScheduler'));
+    });
   });
 });
 
@@ -550,7 +550,7 @@ const RECURRENCE_RULE_TEST_CASES = {
         cellDuration: 240,
         ...options,
       });
-    }).after(async () => disposeWidget('dxScheduler'));
+    });
   });
 });
 
@@ -593,4 +593,4 @@ test(
     recurrenceEditMode: 'series',
     recurrenceRuleExpr: 'nestedA.nestedB.nestedC.recurrenceRuleCustom',
   });
-}).after(async () => disposeWidget('dxScheduler'));
+});

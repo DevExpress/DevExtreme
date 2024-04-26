@@ -67,7 +67,7 @@ createTestCafe({
             .browsers(browsers)
             .reporter(reporter)
             .src([`./tests/${componentFolder}/${file}.ts`]);
-    
+
         runner.compilerOptions({
             'typescript': {
                 customCompilerModulePath: '../../node_modules/typescript',
@@ -89,6 +89,11 @@ createTestCafe({
         }
         if(testName) {
             filters.push(name => name === testName);
+        }
+        if(args.skipUnstable) {
+            filters.push((testName, fixtureName, fixturePath, testMeta) => {
+                return !testMeta.unstable;
+            });
         }
         if(filters.length) {
             runner.filter((...args) => {
@@ -176,6 +181,7 @@ function getArgs() {
             platform: '',
             theme: '',
             shadowDom: false,
+            skipUnstable: true,
         }
     });
 }

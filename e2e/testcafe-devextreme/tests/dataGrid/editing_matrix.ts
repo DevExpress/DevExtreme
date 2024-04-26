@@ -1,12 +1,12 @@
 /* eslint-disable max-len */
 import { Selector } from 'testcafe';
 import { CellEditor } from 'devextreme-testcafe-models/dataGrid/data/cellEditor';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import DataCell from 'devextreme-testcafe-models/dataGrid/data/cell';
 import EditForm from 'devextreme-testcafe-models/dataGrid/editForm';
 import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
+import { createWidget } from '../../helpers/createWidget';
+import url from '../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Editing`
   .page(url(__dirname, '../container.html'));
@@ -407,15 +407,7 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            const testCase = mode === 'cell'
-            && dataField === 'text'
-            && !repaintChangesOnly
-            && useKeyboard
-            && !useMask
-            && !isAdding
-              ? test.skip : test;
-
-            testCase(`Update cell value ${JSON.stringify({
+            test(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;

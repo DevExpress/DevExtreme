@@ -1,6 +1,6 @@
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Delete appointments`
   .page(url(__dirname, '../container.html'));
@@ -62,7 +62,7 @@ test('Recurrence appointments should be deleted by click on \'delete\' button', 
     .eql(0);
 }).before(async () => createScheduler(createRecurrenceData()));
 
-test.skip('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
+test('Recurrence appointments should be deleted by press \'delete\' key', async (t) => {
   const scheduler = new Scheduler('#container');
 
   await t

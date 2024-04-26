@@ -1,13 +1,11 @@
 import { Selector } from 'testcafe';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
-import { clearTestPage } from '../../../helpers/clearPage';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`DateRangeBox keyboard navigation`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 const initialValue = [new Date('2021/10/17'), new Date('2021/11/24')];
 

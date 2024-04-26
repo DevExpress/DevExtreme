@@ -3816,6 +3816,13 @@
               "/Models/SampleData/MenuData.cs"
             ],
             "DemoType": "Web"
+          },
+          {
+            "Title": "Scrolling",
+            "Name": "Scrolling",
+            "Widget": "Menu",
+            "Badge": "New",
+            "DemoType": "Web"
           }
         ]
       },
@@ -5111,6 +5118,13 @@
             "Name": "Basics",
             "DocUrl": "Guide/UI_Components/ContextMenu/Overview/",
             "Widget": "ContextMenu",
+            "DemoType": "Web"
+          },
+          {
+            "Title": "Scrolling",
+            "Name": "Scrolling",
+            "Widget": "ContextMenu",
+            "Badge": "New",
             "DemoType": "Web"
           },
           {

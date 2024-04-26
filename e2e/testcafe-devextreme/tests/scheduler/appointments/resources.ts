@@ -1,7 +1,7 @@
-import url from '../../../helpers/getPageUrl';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget } from '../../../helpers/createWidget';
 import TagBox from 'devextreme-testcafe-models/tagBox';
+import url from '../../../helpers/getPageUrl';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Appointment resources`
   .page(url(__dirname, '../../container.html'));

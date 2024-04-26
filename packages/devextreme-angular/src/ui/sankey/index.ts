@@ -79,7 +79,7 @@ import { DxoFormatModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxSankeyComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxSankey;
+    instance: DxSankey = null;
 
     /**
      * [descr:dxSankeyOptions.adaptiveLayout]

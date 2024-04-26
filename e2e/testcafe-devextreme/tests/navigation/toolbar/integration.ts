@@ -1,9 +1,9 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
+import type { Properties as DataGridProperties } from 'devextreme/ui/data_grid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
-import type { Properties as DataGridProperties } from 'devextreme/ui/data_grid';
 
 fixture.disablePageReloads`Toolbar_integration_with_DataGrid`
   .page(url(__dirname, '../../container.html'));

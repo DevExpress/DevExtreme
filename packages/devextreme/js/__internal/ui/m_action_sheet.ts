@@ -146,8 +146,7 @@ const ActionSheet = CollectionWidget.inherit({
       disabled: false,
       showTitle: true,
       title: this.option('title'),
-      // @ts-expect-error
-      deferRendering: !window.angular,
+      deferRendering: true,
       onContentReady: this._popupContentReadyAction.bind(this),
       onHidden: this.hide.bind(this),
     };

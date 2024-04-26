@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import { createWidget, disposeWidget } from '../../../helpers/createWidget';
-import url from '../../../helpers/getPageUrl';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { createWidget } from '../../../helpers/createWidget';
+import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Offset: Current time indicator`
   .page(url(__dirname, '../../container.html'));
@@ -110,5 +110,5 @@ endDayHour: ${endDayHour}
       startDayHour,
       endDayHour,
     });
-  }).after(async () => disposeWidget('dxScheduler'));
+  });
 });

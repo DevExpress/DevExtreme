@@ -2,7 +2,7 @@ import dateUtils from '@js/core/utils/date';
 import dateLocalization from '@js/localization/date';
 import {
   getToday, isFirstCellInMonthWithIntervalCount, monthUtils, setOptionHour,
-} from '@ts/scheduler/__migration/utils/index';
+} from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
 // eslint-disable-next-line import/no-cycle

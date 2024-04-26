@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../../../helpers/getPageUrl';
 import { createWidget } from '../../../../helpers/createWidget';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 
 fixture.disablePageReloads`Focused row`
   .page(url(__dirname, '../../../container.html'));
@@ -877,10 +877,14 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
   await clearLocalStorage();
 });
 
-test.skip('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
+test('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t.click(dataGrid.getDataRow(0).element);
+
+  await t
+    .expect(dataGrid.getDataRow(0).isFocusedRow)
+    .eql(true);
 
   await ClientFunction(() => {
     const grid = ($('#container') as any).dxDataGrid('instance');
@@ -889,6 +893,10 @@ test.skip('It is possible to focus row that was added via push method if previou
       data: { value: 2 },
     }]);
   })();
+
+  await t
+    .expect(dataGrid.getDataRow(0).element.textContent)
+    .eql('2');
 
   await t.click(dataGrid.getDataRow(0).element);
 

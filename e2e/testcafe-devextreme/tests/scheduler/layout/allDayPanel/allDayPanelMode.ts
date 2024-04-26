@@ -1,7 +1,7 @@
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import asyncForEach from '../../../../helpers/asyncForEach';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 
 fixture.disablePageReloads`Layout:AllDayPanelMode`
   .page(url(__dirname, '../../../container.html'));

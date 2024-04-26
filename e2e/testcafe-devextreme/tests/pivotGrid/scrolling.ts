@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
@@ -9,7 +10,6 @@ import { virtualData } from './virtualData.js';
 import { dataOptions } from './virtualDataOptions.js';
 // eslint-disable-next-line import/extensions
 import { sales } from './data.js';
-import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { generateOptionMatrix } from '../../helpers/generateOptionMatrix';
 
 const testFixture = () => {

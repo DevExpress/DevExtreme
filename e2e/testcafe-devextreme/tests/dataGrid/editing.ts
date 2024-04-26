@@ -2,12 +2,12 @@
 
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import url from '../../helpers/getPageUrl';
-import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
 import SelectBox from 'devextreme-testcafe-models/selectBox';
-import { changeTheme } from '../../helpers/changeTheme';
 import { Overlay } from 'devextreme-testcafe-models/dataGrid/overlay';
+import url from '../../helpers/getPageUrl';
+import { createWidget } from '../../helpers/createWidget';
+import { changeTheme } from '../../helpers/changeTheme';
 import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Editing`
@@ -2079,7 +2079,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   }));
 });
 
-test.skip('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act

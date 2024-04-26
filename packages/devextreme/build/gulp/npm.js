@@ -51,8 +51,6 @@ const distGlobsPattern = (jsFolder, exclude) => [
     '!artifacts/ts/cldr*',
     '!artifacts/css/dx-diagram.*',
     '!artifacts/css/dx-gantt.*',
-    `!${jsFolder}/angular**/*.*`,
-    `!${jsFolder}/angular*`,
     `!${jsFolder}/knockout*`,
     `!${jsFolder}/cldr/*.*`,
     `!${jsFolder}/cldr*`,
@@ -80,7 +78,7 @@ const jsonGlobs = ['js/**/*.json', '!js/viz/vector_map.utils/*.*'];
 const overwriteInternalPackageName = lazyPipe()
     .pipe(() => replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'));
 
-const licenseValidator = env.BUILD_INTERNAL_PACKAGE ?
+const licenseValidator = env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE ?
     lazyPipe()
         .pipe(() => gulpFilter(['**', '!**/license/license_validation.js']))
         .pipe(() => gulpRename(path => {

@@ -1,17 +1,17 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 fixture.disablePageReloads`Master detail`
   .page(url(__dirname, '../container.html'));
 
 ['material.blue.light', 'generic.light'].forEach((theme) => {
-  test.skip(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {
+  test(`Checkbox align right in masterdetail (T1045321) ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
     // assert
@@ -122,7 +122,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   }));
 
 // T1159578
-/* safeSizeTest */test.skip('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
+safeSizeTest('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -140,7 +140,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}/* , [800, 800] */)
+}, [800, 800])
   .before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',

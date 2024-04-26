@@ -1,14 +1,14 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
-import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import { sales } from './data';
 
 fixture.disablePageReloads`pivotGrid_headerFilter`
   .page(url(__dirname, '../container.html'));
 
-test.skip('Header filter popup', async (t) => {
+test('Header filter popup', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
 

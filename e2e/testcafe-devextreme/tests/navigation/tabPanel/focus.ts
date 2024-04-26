@@ -1,7 +1,7 @@
 import { Selector, t } from 'testcafe';
+import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import TabPanel from 'devextreme-testcafe-models/tabPanel';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`TabPanel`

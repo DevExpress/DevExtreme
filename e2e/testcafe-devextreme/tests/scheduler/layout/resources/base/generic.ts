@@ -1,7 +1,7 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createDataSetForScreenShotTests } from '../../utils';
 
 fixture.disablePageReloads`Scheduler: Generic theme layout`
@@ -49,8 +49,7 @@ const resources = [{
 
 [undefined, resources].forEach((resourcesValue) => {
   ['timelineDay', 'timelineWeek', 'timelineWorkWeek', 'timelineMonth'].forEach((view) => {
-    const testCase = resourcesValue != null && view === 'timelineWorkWeek' ? test.skip : test;
-    testCase(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
+    test(`Timeline views layout test in generic theme with resources(view='${view})', resource=${!!resourcesValue}`, async (t) => {
       const scheduler = new Scheduler('#container');
 
       await t.click(scheduler.getAppointment('1 appointment', 0).element);

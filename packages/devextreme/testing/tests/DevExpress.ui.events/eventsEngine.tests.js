@@ -640,6 +640,38 @@ QUnit.test('Hover events should be ignored if the target is a child of the curre
     assert.ok(handlerSpy.notCalled);
 });
 
+QUnit.test('event target should contain a real target instead of shadow root', function(assert) {
+    assert.expect(1);
+
+    const root = document.getElementById('qunit-fixture');
+
+    const $element = $('#element');
+    const $div = $('<div>');
+
+    $element.append($div);
+
+    const listener = (event) => {
+        const expectedTarget = root.shadowRoot ? $div.get(0) : root;
+        assert.strictEqual(event.target, expectedTarget, 'target is correct');
+    };
+
+    eventsEngine.on($div, 'customEvent', listener);
+
+    const customEvent = $.Event('customEvent', {
+        target: root,
+        originalEvent: $.Event('customEvent', {
+            target: root,
+            composedPath: () => { return [$div.get(0)]; }
+        })
+    });
+
+    try {
+        eventsEngine.trigger($div, customEvent);
+    } finally {
+        root.removeEventListener('customEvent', listener);
+    }
+});
+
 QUnit.test('There is no exception if element "A" was clicked while element has no parent (T1186521)', function(assert) {
     const el = document.createElement('a');
 

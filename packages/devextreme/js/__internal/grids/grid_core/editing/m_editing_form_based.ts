@@ -19,6 +19,7 @@ import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
 import type { ModuleType } from '../m_types';
+import gridCoreUtils from '../m_utils';
 import {
   BUTTON_CLASS,
   DATA_EDIT_DATA_INSERT_TYPE,
@@ -293,8 +294,11 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     const $container = $(container);
     const { column } = item;
     const editorType = getEditorType(item);
-    const rowData = detailCellOptions?.row.data;
+    const row = detailCellOptions?.row;
+    const rowData = row?.data;
     const form = formTemplateOptions.component;
+    const value = column.calculateCellValue(rowData);
+    const displayValue = gridCoreUtils.getDisplayValue(column, value, rowData, row?.rowType);
     const { label, labelMark, labelMode } = formTemplateOptions.editorOptions || {};
 
     const cellOptions = extend({}, detailCellOptions, {
@@ -315,7 +319,9 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
       },
     });
 
-    cellOptions.value = column.calculateCellValue(rowData);
+    cellOptions.value = value;
+    cellOptions.displayValue = displayValue;
+    cellOptions.text = !column.command ? gridCoreUtils.formatValue(displayValue, column) : '';
 
     const template = this._getFormEditItemTemplate.bind(this)(cellOptions, column);
     this._rowsView.renderTemplate($container, template, cellOptions, !!isElementInDom($container)).done(() => {

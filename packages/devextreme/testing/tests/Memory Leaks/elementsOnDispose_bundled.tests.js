@@ -26,6 +26,7 @@ $.each(DevExpress.ui, function(componentName) {
 
             try {
                 const originalDomElements = memoryLeaksHelper.getAllPossibleEventTargets();
+
                 const testNode = memoryLeaksHelper.createTestNode();
                 let ignorePatterns;
                 let errorMessage;
@@ -37,9 +38,15 @@ $.each(DevExpress.ui, function(componentName) {
                 if(newDomElements.length === originalDomElements.length) {
                     assert.ok(true, 'After a component is disposed, additional DOM elements must be removed');
                 } else {
-                    if(newDomElements.length - originalDomElements.length === 1) {
+                    if(newDomElements.length - originalDomElements.length <= 6) {
                         // viz widgets create extra style node that can not be deleted
-                        ignorePatterns = { 'style': /behavior:\surl\(#default#VML\)/gi };
+                        ignorePatterns = {
+                            'style': /behavior:\surl\(#default#VML\)/gi,
+                            'dx-license-trigger': /$/,
+                            'dx-license': /$/,
+                            'span': /For evaluation purposes only. Redistribution not authorized.|to continue use of DevExpress product libraries/,
+                            'a': /purchase a license/,
+                        };
                     }
                     errorMessage = memoryLeaksHelper.compareDomElements(originalDomElements, newDomElements, ignorePatterns);
                     assert.ok(!errorMessage, errorMessage || 'After a component is disposed, additional DOM elements must be removed');

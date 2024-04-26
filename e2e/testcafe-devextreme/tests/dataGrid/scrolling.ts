@@ -1,10 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import DataGrid from 'devextreme-testcafe-models/dataGrid';
-import { ClassNames as CLASS } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { salesApiMock } from './apiMocks/salesApiMock';
 
@@ -38,8 +38,7 @@ async function getTestLoadCount(): Promise<number> {
 }
 
 fixture`Scrolling`
-  .page(url(__dirname, '../container.html'))
-  .beforeEach(async (t) => { await t.maximizeWindow(); });
+  .page(url(__dirname, '../container.html'));
 
 safeSizeTest('DataGrid should set the scrollbar position to the left on resize (T934842)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -970,9 +969,8 @@ safeSizeTest('Rows are rendered properly when window content is scrolled (T10703
   });
 });
 
-// TODO: this test is unstable
 // T1129252
-test.skip('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
+test.meta({ unstable: true })('The data should display correctly after changing the dataSource and focusedRowIndex options when scroll position is at the end', async (t) => {
   // arrange
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -1141,13 +1139,9 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
 })());
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../containerAspNet.html'))
-  .beforeEach(async (t) => {
-    await t.maximizeWindow();
-  });
+  .page(url(__dirname, '../containerAspNet.html'));
 
-// TODO: this test is unstable
-test.skip('Scroll to the bottom after expand several group', async (t) => {
+test('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
@@ -1616,7 +1610,7 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
   });
 });
 
-test.skip('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 

@@ -1,16 +1,15 @@
 /* eslint-disable no-restricted-syntax */
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Lookup from 'devextreme-testcafe-models/lookup';
+import Guid from 'devextreme/core/guid';
 import { isMaterial, isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import Lookup from 'devextreme-testcafe-models/lookup';
 import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import {
   appendElementTo, insertStylesheetRulesToPage, setStyleAttribute,
 } from '../../../helpers/domUtils';
-import Guid from 'devextreme/core/guid';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 const LOOKUP_FIELD_CLASS = 'dx-lookup-field';
 
@@ -18,8 +17,7 @@ const stylingModes = ['outlined', 'underlined', 'filled'];
 const labelModes = ['static', 'floating', 'hidden', 'outside'];
 
 fixture.disablePageReloads`Lookup`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('Popup should not be closed if lookup is placed at the page bottom (T1018037)', async (t) => {
   const lookup = new Lookup('#container');

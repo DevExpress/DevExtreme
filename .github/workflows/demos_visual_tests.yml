@@ -84,6 +84,8 @@ jobs:
       run: npm install --no-audit --no-fund
 
     - name: DevExtreme - Build
+      env:
+        BUILD_TEST_INTERNAL_PACKAGE: true
       run: npx nx build devextreme-main
 
     - name: Run Web Server

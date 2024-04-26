@@ -729,7 +729,10 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _renderMultiTag($input) {
+    const tagId = `dx-${new Guid()}`;
+
     const $tag = $('<div>')
+      .attr('id', tagId)
       .addClass(TAGBOX_TAG_CLASS)
       .addClass(TAGBOX_MULTI_TAG_CLASS);
 
@@ -755,6 +758,11 @@ const TagBox = (SelectBox as any).inherit({
       container: getPublicElement($tag),
     });
 
+    // @ts-expect-error
+    const tagText = args.text;
+
+    this._setTagAria($tag, tagText);
+    this._updateElementAria(tagId);
     return $tag;
   },
 
@@ -1126,7 +1134,7 @@ const TagBox = (SelectBox as any).inherit({
 
       $tag = this._createTag(value, $input, tagId);
 
-      this._setTagAria($tag, value);
+      this._setTagAria($tag, isDefined(displayValue) ? displayValue : value);
 
       if (isDefined(item)) {
         this._applyTagTemplate(itemModel, $tag);

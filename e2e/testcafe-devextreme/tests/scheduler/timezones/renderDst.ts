@@ -1,4 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import Scheduler from 'devextreme-testcafe-models/scheduler';
 import {
   getTimezoneTest,
   MACHINE_TIMEZONES,
@@ -6,8 +7,7 @@ import {
 } from '../../../helpers/machineTimezones';
 import url from '../../../helpers/getPageUrl';
 import { generateOptionMatrix } from '../../../helpers/generateOptionMatrix';
-import { createWidget, disposeWidget } from '../../../helpers/createWidget';
-import Scheduler from 'devextreme-testcafe-models/scheduler';
+import { createWidget } from '../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Scheduler render during DST`
@@ -90,6 +90,5 @@ generateOptionMatrix({
     });
   }).after(async () => {
     await removeStylesheetRulesFromPage();
-    await disposeWidget('dxScheduler');
   });
 });

@@ -1,12 +1,10 @@
 import { ClientFunction, Selector } from 'testcafe';
+import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
-import DateRangeBox from 'devextreme-testcafe-models/dateRangeBox';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 fixture`DateRangeBox focus state`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 test('DateRangeBox & DateBoxes should have focus class if inputs are focused by tab', async (t) => {
   const dateRangeBox = new DateRangeBox('#container');

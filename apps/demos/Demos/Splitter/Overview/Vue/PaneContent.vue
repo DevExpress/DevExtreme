@@ -1,5 +1,8 @@
 <template>
-  <div class="pane-content">
+  <div
+    class="pane-content"
+    tabindex="0"
+  >
     <div class="pane-title">
       {{ data.text }}
     </div>

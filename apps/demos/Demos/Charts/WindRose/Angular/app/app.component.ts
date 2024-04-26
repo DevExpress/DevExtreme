@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxPolarChartModule, DxPolarChartTypes } from 'devextreme-angular/ui/polar-chart';
@@ -35,7 +35,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxPolarChartModule,
     DxSelectBoxModule,
   ],
