@@ -3,7 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 import getElementComputedStyle from '../../../utils/get_computed_style';
 import { hasWindow } from '../../../../core/utils/window';
-import { normalizeStyleProp } from '../../../../core/utils/style';
+
+// import { normalizeStyleProp } from '../../../../core/utils/style';
 import { isNumeric as isNumber } from '../../../../core/utils/type';
 import { getFontSizeByIconSize } from './utils';
 
@@ -40,10 +41,12 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   setIconFontSize(fontSize: number): void {
+    const { size } = this.props;
     const element = this.elementRef.current!;
 
-    element.style.fontSize = `${fontSize}px`;
+    element.style.fontSize = `${size}px`;
   }
 
   getIconSize(size: number | string): number {
@@ -67,11 +70,12 @@ export class CheckBoxIcon extends JSXComponent(CheckBoxIconProps) {
     return computedIconSize;
   }
 
+  // eslint-disable-next-line class-methods-use-this
   get cssStyles(): { [key: string]: string | number } {
-    const { size } = this.props;
-    const width = normalizeStyleProp('width', size);
-    const height = normalizeStyleProp('height', size);
+    // const { size } = this.props;
+    // const width = normalizeStyleProp('width', size);
+    // const height = normalizeStyleProp('height', size);
 
-    return { height, width };
+    return {}; // { height, width };
   }
 }
