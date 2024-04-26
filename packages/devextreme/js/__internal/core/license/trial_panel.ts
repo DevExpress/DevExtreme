@@ -1,4 +1,6 @@
 /* eslint-disable max-classes-per-file */
+import { base } from '../../../ui/overlay/z_index';
+
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const componentNames = {
   trigger: 'dx-license-trigger',
@@ -18,7 +20,7 @@ const containerStyles = {
   height: 'auto',
   lineHeight: 'auto',
   display: 'block',
-  'z-index': '2147483647',
+  'z-index': `${base()}`,
   position: 'relative',
   top: '0px',
   left: '0px',
