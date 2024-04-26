@@ -62,10 +62,10 @@ export abstract class DxoFileUploaderOptions extends NestedOption {
         this._setOption('chunkSize', value);
     }
 
-    get dialogTrigger(): string | UserDefinedElement | undefined {
+    get dialogTrigger(): UserDefinedElement | string | undefined {
         return this._getOption('dialogTrigger');
     }
-    set dialogTrigger(value: string | UserDefinedElement | undefined) {
+    set dialogTrigger(value: UserDefinedElement | string | undefined) {
         this._setOption('dialogTrigger', value);
     }
 
@@ -76,10 +76,10 @@ export abstract class DxoFileUploaderOptions extends NestedOption {
         this._setOption('disabled', value);
     }
 
-    get dropZone(): string | UserDefinedElement | undefined {
+    get dropZone(): UserDefinedElement | string | undefined {
         return this._getOption('dropZone');
     }
-    set dropZone(value: string | UserDefinedElement | undefined) {
+    set dropZone(value: UserDefinedElement | string | undefined) {
         this._setOption('dropZone', value);
     }
 

@@ -19,7 +19,7 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import DevExpress from 'devextreme/bundles/dx.all';
+import { PositionConfig } from 'devextreme/animation/position';
 import { PositionAlignment } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/load_panel';
@@ -100,10 +100,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get container(): string | UserDefinedElement | undefined {
+    get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
-    set container(value: string | UserDefinedElement | undefined) {
+    set container(value: UserDefinedElement | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -295,10 +295,10 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): PositionAlignment | DevExpress.PositionConfig | Function {
+    get position(): PositionAlignment | PositionConfig | Function {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | DevExpress.PositionConfig | Function) {
+    set position(value: PositionAlignment | PositionConfig | Function) {
         this._setOption('position', value);
     }
 
@@ -489,7 +489,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     
@@ -594,7 +594,7 @@ export class DxLoadPanelComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | DevExpress.PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
 
     /**
     

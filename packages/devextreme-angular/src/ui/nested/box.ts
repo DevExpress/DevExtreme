@@ -19,7 +19,7 @@ import {
 
 
 
-import { dxBoxOptions } from 'devextreme/ui/box';
+import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 
 import {
     NestedOptionHost,
