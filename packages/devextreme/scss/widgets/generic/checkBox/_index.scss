@@ -4,6 +4,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../../base/checkBox/mixins" as *;
 @use "../../base/checkBox";
 
 // adduse
@@ -57,21 +58,10 @@ $icon-position: relative;
 
     font-size: $generic-checkbox-arrow-font-size;
   }
+}
 
-  .dx-checkbox-indeterminate & {
-    color: $checkbox-indeterminate-bg;
-
-    @include dx-icon-font-centered-sizing($generic-checkbox-indeterminate-icon-size, $icon-position);
-
-    font-size: $generic-checkbox-indeterminate-font-size;
-
-    &::before {
-      content: '';
-      background-color: $checkbox-checked-color;
-      border-radius: 2px;
-      height: $generic-checkbox-indeterminate-icon-size;
-    }
-  }
+.dx-checkbox-indeterminate {
+  @include indeterminate-checkbox(white, $checkbox-checked-color, $checkbox-checked-color, $generic-checkbox-indeterminate-font-size);
 }
 
 .dx-state-disabled {
