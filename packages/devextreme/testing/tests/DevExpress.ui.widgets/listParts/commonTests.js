@@ -962,6 +962,7 @@ QUnit.module('options', moduleSetup, () => {
     });
 });
 
+
 QUnit.module('options changed', moduleSetup, () => {
     QUnit.test('dataSource', function(assert) {
         const element = this.element.dxList({
@@ -1711,6 +1712,40 @@ QUnit.module('options changed', moduleSetup, () => {
     });
 });
 
+QUnit.module('focusOnDeletion', () => {
+    const items = ['item 1', 'item 2', 'item 3'];
+    QUnit.module('focusStateEnabled', function(assert) {
+        QUnit.test('list item should not be focus when deleting when focusStateEnabled = false (T1226030)', function(assert) {
+            const $element = $('#list').dxList({
+                items,
+                focusStateEnabled: false,
+                allowItemDeleting: true,
+                itemDeleteMode: 'static',
+            });
+            let $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
+
+            $listItems.eq(0).find(`.${STATIC_DELETE_BUTTON_CLASS}`).trigger('dxclick');
+            $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
+
+            assert.notOk($listItems.eq(0).hasClass('dx-state-focused'), 'Next Item is not focused');
+        });
+
+        QUnit.test('list item should be focus when deleting when focusStateEnabled = true (T1226030)', function(assert) {
+            const $element = $('#list').dxList({
+                items,
+                allowItemDeleting: true,
+                itemDeleteMode: 'static',
+            });
+            let $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
+
+            $listItems.eq(0).find(`.${STATIC_DELETE_BUTTON_CLASS}`).trigger('dxclick');
+            $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
+
+            assert.ok($listItems.eq(0).hasClass('dx-state-focused'), 'Next Item is focused');
+        });
+    });
+});
+
 QUnit.module('selection', moduleSetup, () => {
     QUnit.test('should select item from invisible page', function(assert) {
         const done = assert.async();
@@ -1902,7 +1937,6 @@ QUnit.module('selectByClick', {
         });
     });
 });
-
 
 QUnit.module('events', moduleSetup, () => {
     QUnit.test('onItemClick should be fired when item is clicked in ungrouped list', function(assert) {
