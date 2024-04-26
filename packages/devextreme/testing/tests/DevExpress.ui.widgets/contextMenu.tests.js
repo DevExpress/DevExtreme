@@ -572,6 +572,24 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
     });
 
+    QUnit.test('Scrollable content should have min-height: auto to prevent invisible 3rd level submenus bug on iOS', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        $(`.${DX_SCROLLABLE_CONTENT_CLASS}`).each((_, scrollableContent) => {
+            assert.strictEqual(window.getComputedStyle(scrollableContent).minHeight, '0px', 'min-height = auto');
+        });
+    });
+
     QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
