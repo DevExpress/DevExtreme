@@ -9,6 +9,7 @@ import {
   unref,
   VNode,
   VNodeProps,
+  Ref,
 } from 'vue';
 import { camelize } from './helpers';
 
@@ -36,7 +37,7 @@ export function getChildren(component: IBaseComponent): any {
   });
 }
 
-export function getRawValue<T>(value: T) {
+export function getRawValue<T>(value: T | Ref<T>) {
   return toRaw(unref(value));
 }
 
