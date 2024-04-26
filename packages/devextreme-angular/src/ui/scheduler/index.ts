@@ -23,11 +23,10 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { FirstDayOfWeek, Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { AllDayPanelMode, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellAppointmentsLimit, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, dxSchedulerScrolling, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, ViewType } from 'devextreme/ui/scheduler';
+import { AllDayPanelMode, AppointmentAddedEvent, AppointmentAddingEvent, AppointmentClickEvent, AppointmentContextMenuEvent, AppointmentDblClickEvent, AppointmentDeletedEvent, AppointmentDeletingEvent, AppointmentFormOpeningEvent, AppointmentRenderedEvent, AppointmentTooltipShowingEvent, AppointmentUpdatedEvent, AppointmentUpdatingEvent, CellAppointmentsLimit, CellClickEvent, CellContextMenuEvent, ContentReadyEvent, DisposingEvent, dxSchedulerAppointment, dxSchedulerScrolling, InitializedEvent, OptionChangedEvent, RecurrenceEditMode, ViewType } from 'devextreme/ui/scheduler';
 
 import DxScheduler from 'devextreme/ui/scheduler';
 
@@ -68,7 +67,7 @@ import { DxiViewComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxScheduler;
+    instance: DxScheduler = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -257,10 +256,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxSchedulerAppointment> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxSchedulerAppointment> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxSchedulerAppointment>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxSchedulerAppointment>) {
         this._setOption('dataSource', value);
     }
 
@@ -623,10 +622,10 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get resources(): Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }> {
+    get resources(): Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }> {
         return this._getOption('resources');
     }
-    set resources(value: Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }>) {
+    set resources(value: Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }>) {
         this._setOption('resources', value);
     }
 
@@ -1098,7 +1097,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxSchedulerAppointment>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxSchedulerAppointment>>;
 
     /**
     
@@ -1294,7 +1293,7 @@ export class DxSchedulerComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() resourcesChange: EventEmitter<Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: DataSource | DataSourceOptions | Store | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }>>;
+    @Output() resourcesChange: EventEmitter<Array<any | { allowMultiple?: boolean, colorExpr?: string, dataSource?: Store | DataSource | DataSourceOptions | null | string | Array<any>, displayExpr?: Function | string, fieldExpr?: string, label?: string, useColorAsDefault?: boolean, valueExpr?: Function | string }>>;
 
     /**
     

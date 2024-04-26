@@ -1,10 +1,12 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS as DataGridClassNames } from 'devextreme-testcafe-models/dataGrid';
 import { ClassNames } from 'devextreme-testcafe-models/dataGrid/classNames';
 import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 const CLASS = { ...DataGridClassNames, ...ClassNames };
 
@@ -57,7 +59,7 @@ fixture.disablePageReloads`Row dragging`
   .page(url(__dirname, '../container.html'));
 
 // T903351
-test('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
+safeSizeTest('The placeholder should appear when a cross-component dragging rows after scrolling the window', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await scrollTo(0, 10000);
@@ -147,7 +149,7 @@ test('The placeholder should appear when a cross-component dragging rows after s
   ]);
 });
 
-test('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
+safeSizeTest('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveRow(0, 500, 0, true);
@@ -246,7 +248,7 @@ test('The cross-component drag and drop rows should work when there are fixed co
   ]);
 });
 
-test('The cross-component drag and drop rows should not block rows', async (t) => {
+safeSizeTest('The cross-component drag and drop rows should not block rows', async (t) => {
   const dataGrid = new DataGrid('#container');
   const otherDataGrid = new DataGrid('#otherContainer');
 
@@ -343,7 +345,7 @@ test('The cross-component drag and drop rows should not block rows', async (t) =
   ]);
 });
 
-test('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
+safeSizeTest('Virtual rendering during auto scrolling should not cause errors in onDragChange', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 100, { speed: 0.01 });
 
@@ -388,7 +390,7 @@ test('Virtual rendering during auto scrolling should not cause errors in onDragC
 });
 
 // T1078513
-test('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+safeSizeTest('Headers should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
 
@@ -444,7 +446,7 @@ test('Headers should not be hidden during auto scrolling when virtual scrollling
 });
 
 // T1078513
-test('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
+safeSizeTest('Footer should not be hidden during auto scrolling when virtual scrollling is specified', async (t) => {
   const dataGrid = new DataGrid('#container');
   await t.drag(dataGrid.getDataRow(0).getDragCommand(), 0, 90, { speed: 0.01 });
 
@@ -506,7 +508,7 @@ test('Footer should not be hidden during auto scrolling when virtual scrollling 
 });
 
 // T1082538
-test('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
+safeSizeTest('The draggable element should be displayed correctly after horizontal scrolling when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollTo(t, { x: 2500 });
@@ -546,7 +548,7 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
-test.skip('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.scrollBy({ top: 10000 });
@@ -560,7 +562,7 @@ test.skip('Dragging with scrolling should be prevented by e.cancel (T1179555)', 
   await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
 
   await MouseUpEvents.enable(MouseAction.dragToOffset);
-}).before(async (t) => {
+}).meta({ unstable: true }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
     dataSource: [...new Array(100)].map((_, i) => ({
@@ -587,7 +589,7 @@ test.skip('Dragging with scrolling should be prevented by e.cancel (T1179555)', 
 });
 
 // T1085143
-test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
+safeSizeTest('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveRow(0, 0, 50, true);
@@ -632,9 +634,8 @@ test('The placeholder should have correct position after dragging the row to the
   });
 });
 
-// TODO: this test is unstable
 // T1126013
-test.skip('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
+safeSizeTest('toIndex should not be corrected when source item gets removed from DOM', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -657,7 +658,7 @@ test.skip('toIndex should not be corrected when source item gets removed from DO
     .findIndex(({ key }, index: number, rows) => key > rows[index + 1]?.key))(dataGrid);
   await t.expect(draggedRowIndex)
     .eql(toIndex - 1);
-}).before(async (t) => {
+}).meta({ unstable: true }).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(50, 1);
   return createWidget('dxDataGrid', {
@@ -688,9 +689,8 @@ test.skip('toIndex should not be corrected when source item gets removed from DO
   });
 });
 
-// TODO: this test is unstable
 // T1139685
-test.skip('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
+safeSizeTest('Item should appear in a correct spot when dragging to a different page with scrolling.mode: "virtual"', async (t) => {
   const fromIndex = 2;
   const toIndex = 4;
 
@@ -714,7 +714,7 @@ test.skip('Item should appear in a correct spot when dragging to a different pag
 
   await t.expect(getDraggedRowIndexFunc)
     .eql(toIndex - 1);
-}).before(async (t) => {
+}).meta({ unstable: true }).before(async (t) => {
   await t.maximizeWindow();
   const items = generateData(20, 1);
   return createWidget('dxDataGrid', {
@@ -742,5 +742,42 @@ test.skip('Item should appear in a correct spot when dragging to a different pag
       }, { dependencies: { items } }),
     },
     showBorders: true,
+  });
+});
+
+// T1179218
+safeSizeTest('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // drag the row down
+  await dataGrid.moveRow(0, 30, 150, true);
+  await dataGrid.moveRow(0, 30, 350);
+
+  // waiting for autoscrolling
+  await t.wait(2000);
+
+  // drag the row up
+  await dataGrid.moveRow(0, 30, 75);
+
+  await t
+    .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 440,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    dataSource: [...new Array(100)].fill(null).map((_, index) => ({ id: index })),
+    columns: ['id'],
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+    },
   });
 });

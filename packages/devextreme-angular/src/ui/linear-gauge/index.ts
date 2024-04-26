@@ -21,11 +21,11 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, VerticalAlignment, VerticalEdge } from 'devextreme/common';
-import { AnimationEaseMode, DashStyle, Font, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
+import { AnimationEaseMode, ChartsColor, DashStyle, Font, LabelOverlap, Palette, PaletteExtensionMode, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Format } from 'devextreme/localization';
+import { GaugeIndicator } from 'devextreme/viz/gauges/base_gauge';
 import { DisposingEvent, DrawnEvent, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, TooltipHiddenEvent, TooltipShownEvent } from 'devextreme/viz/linear_gauge';
 
 import DxLinearGauge from 'devextreme/viz/linear_gauge';
@@ -86,7 +86,7 @@ import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxLinearGauge;
+    instance: DxLinearGauge = null;
 
     /**
      * [descr:BaseGaugeOptions.animation]
@@ -210,10 +210,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get rangeContainer(): { backgroundColor?: DevExpress.common.charts.ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: DevExpress.common.charts.ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } } {
+    get rangeContainer(): { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } } {
         return this._getOption('rangeContainer');
     }
-    set rangeContainer(value: { backgroundColor?: DevExpress.common.charts.ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: DevExpress.common.charts.ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }) {
+    set rangeContainer(value: { backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }) {
         this._setOption('rangeContainer', value);
     }
 
@@ -275,10 +275,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get subvalueIndicator(): any {
+    get subvalueIndicator(): GaugeIndicator {
         return this._getOption('subvalueIndicator');
     }
-    set subvalueIndicator(value: any) {
+    set subvalueIndicator(value: GaugeIndicator) {
         this._setOption('subvalueIndicator', value);
     }
 
@@ -327,10 +327,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -353,10 +353,10 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get valueIndicator(): any {
+    get valueIndicator(): GaugeIndicator {
         return this._getOption('valueIndicator');
     }
-    set valueIndicator(value: any) {
+    set valueIndicator(value: GaugeIndicator) {
         this._setOption('valueIndicator', value);
     }
 
@@ -508,7 +508,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() rangeContainerChange: EventEmitter<{ backgroundColor?: DevExpress.common.charts.ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: DevExpress.common.charts.ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }>;
+    @Output() rangeContainerChange: EventEmitter<{ backgroundColor?: ChartsColor | string, horizontalOrientation?: HorizontalAlignment, offset?: number, palette?: Palette | string | Array<string>, paletteExtensionMode?: PaletteExtensionMode, ranges?: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>, verticalOrientation?: VerticalAlignment, width?: number | { end?: number, start?: number } }>;
 
     /**
     
@@ -543,7 +543,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() subvalueIndicatorChange: EventEmitter<any>;
+    @Output() subvalueIndicatorChange: EventEmitter<GaugeIndicator>;
 
     /**
     
@@ -571,7 +571,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, interactive?: boolean, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     
@@ -585,7 +585,7 @@ export class DxLinearGaugeComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() valueIndicatorChange: EventEmitter<any>;
+    @Output() valueIndicatorChange: EventEmitter<GaugeIndicator>;
 
 
 

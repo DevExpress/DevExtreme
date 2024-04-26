@@ -50,29 +50,12 @@ const COMMON_SKIP_RULES = ['color-contrast'];
 const getTestSpecificSkipRules = (testName) => {
   switch (testName) {
     case 'Calendar-MultipleSelection':
-    case 'DataGrid-ExcelJSCellCustomization':
     case 'DataGrid-HorizontalVirtualScrolling':
-    case 'DataGrid-PDFCellCustomization':
       return ['empty-table-header'];
-    case 'DataGrid-Filtering':
-    case 'DataGrid-FilterPanel':
     case 'Localization-UsingGlobalize':
-    case 'Localization-UsingIntl':
       return ['label'];
-    case 'DataGrid-RowTemplate':
-    case 'DataGrid-Row3RdPartyEngineTemplate':
-      return ['aria-required-children', 'image-alt'];
-    case 'DataGrid-CustomNewRecordPosition':
-      return ['link-name'];
-    case 'DataGrid-Column3RdPartyEngineTemplate':
-    case 'DataGrid-ColumnTemplate':
-    case 'DataGrid-ExcelJSExportImages':
-    case 'DataGrid-FilteringAPI':
-    case 'DataGrid-MasterDetailAPI':
-    case 'DataGrid-PDFExportImages':
-    case 'DataGrid-RowSelection':
-    case 'FilterBuilder-WithList':
-      return ['image-alt'];
+    case 'DataGrid-InfiniteScrolling':
+      return ['aria-required-children'];
     case 'Splitter-Overview':
       return ['aria-allowed-attr'];
     case 'TagBox-Overview':
@@ -155,6 +138,7 @@ const SKIPPED_TESTS = {
   React: {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },

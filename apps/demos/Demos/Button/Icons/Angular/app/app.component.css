@@ -1,4 +1,4 @@
-::ng-deep #icon-back,
+#icon-back,
 #icon-disabled-back {
   margin-left: 4px;
 }
@@ -39,7 +39,7 @@
   font-size: 18px;
 }
 
-::ng-deep .fields-container {
+.fields-container {
   display: flex;
   align-items: baseline;
 }

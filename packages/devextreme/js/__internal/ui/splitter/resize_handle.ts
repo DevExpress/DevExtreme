@@ -48,13 +48,24 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         e.preventDefault();
         e.stopPropagation();
 
-        const { direction, showCollapseNext } = this.option();
+        const {
+          direction, showCollapseNext, showCollapsePrev, rtlEnabled,
+        } = this.option();
+
+        const forbidCollapseNext = rtlEnabled
+          ? showCollapsePrev === false
+          : showCollapseNext === false;
 
         if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.vertical || showCollapseNext === false) {
+          if (direction === RESIZE_DIRECTION.vertical || forbidCollapseNext) {
             return;
           }
-          this._collapseNextHandler(e);
+
+          if (rtlEnabled) {
+            this._collapsePrevHandler(e);
+          } else {
+            this._collapseNextHandler(e);
+          }
         } else {
           this._resizeBy(e, { x: KEYBOARD_DELTA });
         }
@@ -63,13 +74,23 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         e.preventDefault();
         e.stopPropagation();
 
-        const { direction, showCollapsePrev } = this.option();
+        const {
+          direction, showCollapsePrev, showCollapseNext, rtlEnabled,
+        } = this.option();
+
+        const forbidCollapsePrev = rtlEnabled
+          ? showCollapseNext === false
+          : showCollapsePrev === false;
 
         if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.vertical || showCollapsePrev === false) {
+          if (direction === RESIZE_DIRECTION.vertical || forbidCollapsePrev) {
             return;
           }
-          this._collapsePrevHandler(e);
+          if (rtlEnabled) {
+            this._collapseNextHandler(e);
+          } else {
+            this._collapsePrevHandler(e);
+          }
         } else {
           this._resizeBy(e, { x: -KEYBOARD_DELTA });
         }
@@ -162,18 +183,19 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
   _updateIconsClasses(): void {
     const isHorizontal = this._isHorizontalDirection();
+    const rtlEnabled = this.option('rtlEnabled');
 
     this._$collapsePrevButton
-      .removeClass(this._getCollapseIconClass(false, !isHorizontal))
-      .addClass(this._getCollapseIconClass(false, isHorizontal));
+      .removeClass(this._getCollapseIconClass(false, !isHorizontal, rtlEnabled))
+      .addClass(this._getCollapseIconClass(false, isHorizontal, rtlEnabled));
 
     this._$resizeHandle
       .removeClass(this._getResizeIconClass(!isHorizontal))
       .addClass(this._getResizeIconClass(isHorizontal));
 
     this._$collapseNextButton
-      .removeClass(this._getCollapseIconClass(true, !isHorizontal))
-      .addClass(this._getCollapseIconClass(true, isHorizontal));
+      .removeClass(this._getCollapseIconClass(true, !isHorizontal, rtlEnabled))
+      .addClass(this._getCollapseIconClass(true, isHorizontal, rtlEnabled));
   }
 
   _updateDimensions(): void {
@@ -196,12 +218,13 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
   _getIconClass(iconType: 'prev' | 'next' | 'icon'): string {
     const isHorizontal = this._isHorizontalDirection();
+    const rtlEnabled = this.option('rtlEnabled');
 
     switch (iconType) {
       case 'prev':
-        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false, isHorizontal)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false, isHorizontal, rtlEnabled)}`;
       case 'next':
-        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true, isHorizontal)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true, isHorizontal, rtlEnabled)}`;
       case 'icon':
         return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass(isHorizontal)}`;
       default:
@@ -215,12 +238,11 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   }
 
   // eslint-disable-next-line class-methods-use-this
-  _getCollapseIconClass(isNextButton: boolean, isHorizontal: boolean): string {
-    if (isNextButton) {
-      return `dx-icon-triangle${isHorizontal ? 'right' : 'down'}`;
-    }
+  _getCollapseIconClass(isNextButton: boolean, isHorizontal: boolean, rtlEnabled: boolean): string {
+    const horizontalDirection = isNextButton === rtlEnabled ? 'left' : 'right';
+    const verticalDirection = isNextButton ? 'down' : 'up';
 
-    return `dx-icon-triangle${isHorizontal ? 'left' : 'up'}`;
+    return `dx-icon-triangle${isHorizontal ? horizontalDirection : verticalDirection}`;
   }
 
   _setCollapseButtonsVisibility(): void {

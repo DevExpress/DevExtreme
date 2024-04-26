@@ -4,6 +4,7 @@ import { noop } from 'core/utils/common';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';
 import animationFrame from 'animation/frame';
 import devices from 'core/devices';
+import eventsEngine from 'events/core/events_engine';
 import messageLocalization from 'localization/message';
 import themes from 'ui/themes';
 import pointerMock from '../../helpers/pointerMock.js';
@@ -34,6 +35,7 @@ const SCROLLVIEW_REACHBOTTOM_TEXT_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-text'
 const SCROLLVIEW_REACHBOTTOM_INDICATOR_CLASS = SCROLLVIEW_REACHBOTTOM_CLASS + '-indicator';
 
 const PULLDOWN_HEIGHT = 160;
+const SCROLL_INIT_EVENT = 'dxscrollinit';
 
 const getScrollOffset = function($scrollView) {
     const $content = $scrollView.find(`.${SCROLLABLE_CONTENT_CLASS}`);
@@ -66,7 +68,6 @@ const moduleConfig = {
         animationFrame.requestAnimationFrame = this._originalRequestAnimationFrame;
     }
 };
-
 
 QUnit.testStart(function() {
     const markup = '\
@@ -290,6 +291,45 @@ QUnit.module('onReachBottom', () => {
     });
 });
 
+QUnit.test('dxscrollinit handler should be fired after triggering of wheel event', function(assert) {
+    assert.expect(1);
+
+    const root = document.getElementById('qunit-fixture');
+
+    const $scrollView = $('#scrollView').attr({ style: 'height: 50px; width: 50px; position: absolute; top: 0; bottom: 0;' });
+    const $scrollViewContent = $('.content1').attr({ style: 'height: 60px; width: 50px;' });
+
+    $scrollView.dxScrollView({
+        useNative: false,
+    });
+
+    const wrapper = $scrollView.find(`.${SCROLLABLE_WRAPPER_CLASS}`).get(0);
+
+    const listener = () => {
+        assert.ok(true, 'dxscrollinit was fired');
+    };
+
+    eventsEngine.on(wrapper, SCROLL_INIT_EVENT, listener);
+
+    const target = root.shadowRoot ? root : $scrollViewContent.get(0);
+    const originalEvent = $.Event('wheel', {
+        target,
+        composedPath: () => [
+            $scrollViewContent.get(0),
+            $scrollView.get(0),
+        ],
+    });
+    const wheelEvent = $.Event('wheel', {
+        target,
+        originalEvent,
+    });
+
+    try {
+        eventsEngine.trigger($scrollViewContent, wheelEvent);
+    } finally {
+        root.removeEventListener(SCROLL_INIT_EVENT, listener);
+    }
+});
 
 QUnit.module('actions', moduleConfig, () => {
     QUnit.test('onPullDown action', function(assert) {

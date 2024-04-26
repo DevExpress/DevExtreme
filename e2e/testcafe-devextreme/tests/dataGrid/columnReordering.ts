@@ -68,7 +68,7 @@ test('The column reordering should work correctly when there is a fixed column w
 }));
 
 // T1038094
-test.skip('The separator should display correctly when dragging column', async (t) => {
+test('The separator should display correctly when dragging column', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveHeader(0, 200, 5, true);
@@ -132,7 +132,7 @@ test.skip('The separator should display correctly when dragging column', async (
   allowColumnResizing: true,
 }));
 
-test.skip('column separator should work properly with expand columns', async (t) => {
+test.meta({ unstable: true })('column separator should work properly with expand columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);
@@ -175,7 +175,7 @@ test.skip('column separator should work properly with expand columns', async (t)
   allowColumnReordering: true,
 }));
 
-test.skip('HeaderRow should be highlighted when dragging column with allowColumnReordering=false', async (t) => {
+test('HeaderRow should be highlighted when dragging column with allowColumnReordering=false', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);

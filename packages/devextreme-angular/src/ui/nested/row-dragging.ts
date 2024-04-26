@@ -55,18 +55,18 @@ export class DxoRowDraggingComponent extends NestedOption implements OnDestroy, 
     }
 
     @Input()
-    get boundary(): string | UserDefinedElement | undefined {
+    get boundary(): UserDefinedElement | string | undefined {
         return this._getOption('boundary');
     }
-    set boundary(value: string | UserDefinedElement | undefined) {
+    set boundary(value: UserDefinedElement | string | undefined) {
         this._setOption('boundary', value);
     }
 
     @Input()
-    get container(): string | UserDefinedElement | undefined {
+    get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
-    set container(value: string | UserDefinedElement | undefined) {
+    set container(value: UserDefinedElement | string | undefined) {
         this._setOption('container', value);
     }
 

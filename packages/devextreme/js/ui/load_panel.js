@@ -6,7 +6,7 @@ import { extend } from '../core/utils/extend';
 import LoadIndicator from './load_indicator';
 import Overlay from './overlay/ui.overlay';
 import { Deferred } from '../core/utils/deferred';
-import { isMaterial, isMaterialBased, isFluent } from './themes';
+import { isMaterial, isFluent } from './themes';
 
 // STYLE loadPanel
 
@@ -118,22 +118,31 @@ const LoadPanel = Overlay.inherit({
 
         this.$element().addClass(LOADPANEL_CLASS);
         this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
-
-        this._setWrapperAria();
+        this._updateWrapperAria();
     },
 
-    _setWrapperAria() {
-        const { message } = this.option();
+    _updateWrapperAria() {
+        this.$wrapper()
+            .removeAttr('aria-label')
+            .removeAttr('role');
 
-        const defaultLabel = isMaterialBased() ? message : null;
-        const label = message ? defaultLabel : messageLocalization.format('Loading');
+        const showIndicator = this.option('showIndicator');
+        if(!showIndicator) {
+            const aria = this._getAriaAttributes();
+            this.$wrapper().attr(aria);
+        }
+    },
+
+    _getAriaAttributes() {
+        const { message } = this.option();
+        const label = message || messageLocalization.format('Loading');
 
         const aria = {
             role: 'alert',
-            label,
+            'aria-label': label,
         };
 
-        this.setAria(aria, this.$wrapper());
+        return aria;
     },
 
     _renderContentImpl: function() {
@@ -207,6 +216,7 @@ const LoadPanel = Overlay.inherit({
         }
 
         this._createComponent(this._$indicator, LoadIndicator, {
+            elementAttr: this._getAriaAttributes(),
             indicatorSrc: this.option('indicatorSrc')
         });
     },
@@ -230,7 +240,7 @@ const LoadPanel = Overlay.inherit({
                 this._cleanPreviousContent();
                 this._renderLoadIndicator();
                 this._renderMessage();
-                this._setWrapperAria();
+                this._updateWrapperAria();
                 break;
             case 'showPane':
                 this._togglePaneVisible();

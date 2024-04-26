@@ -1,6 +1,90 @@
 // In real applications, you should not transpile code in the browser.
 // You can see how to create your own application with Angular and DevExtreme here:
 // https://js.devexpress.com/Documentation/Guide/Angular_Components/Getting_Started/Create_a_DevExtreme_Application/
+
+const componentNames = [
+  'accordion',
+  'action-sheet',
+  'autocomplete',
+  'bar-gauge',
+  'box',
+  'bullet',
+  'button-group',
+  'button',
+  'calendar',
+  'chart',
+  'check-box',
+  'circular-gauge',
+  'color-box',
+  'context-menu',
+  'data-grid',
+  'date-box',
+  'date-range-box',
+  'defer-rendering',
+  'diagram',
+  'draggable',
+  'drawer',
+  'drop-down-box',
+  'drop-down-button',
+  'file-manager',
+  'file-uploader',
+  'filter-builder',
+  'form',
+  'funnel',
+  'gallery',
+  'gantt',
+  'html-editor',
+  'linear-gauge',
+  'list',
+  'load-indicator',
+  'load-panel',
+  'lookup',
+  'map',
+  'menu',
+  'multi-view',
+  'nested',
+  'number-box',
+  'pie-chart',
+  'pivot-grid-field-chooser',
+  'pivot-grid',
+  'polar-chart',
+  'popover',
+  'popup',
+  'progress-bar',
+  'radio-group',
+  'range-selector',
+  'range-slider',
+  'recurrence-editor',
+  'resizable',
+  'responsive-box',
+  'sankey',
+  'scheduler',
+  'scroll-view',
+  'select-box',
+  'slider',
+  'sortable',
+  'sparkline',
+  'speed-dial-action',
+  'splitter',
+  'switch',
+  'tab-panel',
+  'tabs',
+  'tag-box',
+  'text-area',
+  'text-box',
+  'tile-view',
+  'toast',
+  'toolbar',
+  'tooltip',
+  'tree-list',
+  'tree-map',
+  'tree-view',
+  'validation-group',
+  'validation-summary',
+  'validator',
+  'vector-map',
+];
+
 window.exports = window.exports || {};
 window.config = {
   transpiler: 'ts',
@@ -37,19 +121,61 @@ window.config = {
       'esModule': true,
     },
     /**/
+    '@angular/platform-browser-dynamic': {
+      'esModule': true,
+    },
+    '@angular/platform-browser': {
+      'esModule': true,
+    },
+    '@angular/core': {
+      'esModule': true,
+    },
+    '@angular/common': {
+      'esModule': true,
+    },
+    '@angular/animations': {
+      'esModule': true,
+    },
+    '@angular/forms': {
+      'esModule': true,
+    },
   },
   paths: {
     'npm:': '../../../../../../node_modules/',
+    'bundles:': '../../../../bundles/',
   },
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
-    '@angular/core': 'npm:@angular/core',
-    '@angular/platform-browser': 'npm:@angular/platform-browser',
-    '@angular/platform-browser-dynamic': 'npm:@angular/platform-browser-dynamic',
-    '@angular/forms': 'npm:@angular/forms',
-    '@angular/common': 'npm:@angular/common',
-    '@angular/compiler': 'npm:@angular/compiler',
+
+    /* @angular */
+    '@angular/compiler': 'bundles:@angular/compiler.umd.js',
+    '@angular/platform-browser-dynamic': 'bundles:@angular/platform-browser-dynamic.umd.js',
+    '@angular/core': 'bundles:@angular/core.umd.js',
+    '@angular/core/primitives/signals': 'bundles:@angular/core.primitives.signals.umd.js',
+    '@angular/common': 'bundles:@angular/common.umd.js',
+    '@angular/common/http': 'bundles:@angular/common-http.umd.js',
+    '@angular/platform-browser': 'bundles:@angular/platform-browser.umd.js',
+    '@angular/platform-browser/animations': 'bundles:@angular/platform-browser.umd.js',
+    '@angular/forms': 'bundles:@angular/forms.umd.js',
+
+    /* devextreme */
+    'devextreme': 'npm:devextreme/cjs',
+    '@devextreme/runtime': 'npm:@devextreme/runtime',
+    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
+    'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
+    'devexpress-diagram': 'npm:devexpress-diagram',
+    'devexpress-gantt': 'npm:devexpress-gantt',
+
+    /* devextreme-angular umd maps */
+    'devextreme-angular': 'bundles:devextreme-angular/devextreme-angular.umd.js',
+    'devextreme-angular/core': 'bundles:devextreme-angular/devextreme-angular-core.umd.js',
+    ...componentNames.reduce((acc, name) => {
+      acc[`devextreme-angular/ui/${name}`] = `bundles:devextreme-angular/devextreme-angular-ui-${name}.umd.js`;
+      return acc;
+    }, {}),
+
+    'jszip': 'npm:jszip/dist/jszip.min.js',
     'tslib': 'npm:tslib/tslib.js',
     'rxjs': 'npm:rxjs/dist/bundles/rxjs.umd.js',
     'rxjs/operators': 'npm:rxjs/dist/cjs/operators/index.js',
@@ -107,14 +233,6 @@ window.config = {
     'luxon': 'npm:luxon/build/global/luxon.min.js',
     'es6-object-assign': 'npm:es6-object-assign',
 
-    'devextreme': 'npm:devextreme/cjs',
-    'devextreme/bundles/dx.all': 'npm:devextreme/bundles/dx.all.js',
-    'jszip': 'npm:jszip/dist/jszip.min.js',
-    'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
-    'devexpress-diagram': 'npm:devexpress-diagram',
-    'devexpress-gantt': 'npm:devexpress-gantt',
-    'devextreme-angular': 'npm:devextreme-angular',
-    '@devextreme/runtime': 'npm:@devextreme/runtime',
     'inferno': 'npm:inferno/dist/inferno.min.js',
     'inferno-compat': 'npm:inferno-compat/dist/inferno-compat.min.js',
     'inferno-create-element': 'npm:inferno-create-element/dist/inferno-create-element.min.js',
@@ -164,13 +282,8 @@ window.config = {
   packageConfigPaths: [
     'npm:@devextreme/*/package.json',
     'npm:@devextreme/runtime/inferno/package.json',
-    'npm:@angular/*/package.json',
-    'npm:@angular/common/*/package.json',
     'npm:rxjs/package.json',
     'npm:rxjs/operators/package.json',
-    'npm:devextreme-angular/*/package.json',
-    'npm:devextreme-angular/ui/*/package.json',
-    'npm:devextreme-angular/package.json',
     'npm:devexpress-diagram/package.json',
     'npm:devexpress-gantt/package.json',
 
@@ -181,3 +294,4 @@ window.config = {
 };
 
 System.config(window.config);
+System.import('@angular/compiler').catch(console.error.bind(console));

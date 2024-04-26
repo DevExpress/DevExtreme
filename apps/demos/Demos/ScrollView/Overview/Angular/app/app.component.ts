@@ -1,7 +1,7 @@
 import {
   NgModule, Component, ViewChild, AfterViewInit, enableProdMode,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSelectBoxModule } from 'devextreme-angular';
 import { DxCheckBoxModule, DxCheckBoxTypes } from 'devextreme-angular/ui/check-box';
@@ -84,7 +84,6 @@ export class AppComponent implements AfterViewInit {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxScrollViewModule,
     DxCheckBoxModule,
     DxSelectBoxModule,

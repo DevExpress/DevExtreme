@@ -29,7 +29,7 @@
         data-type="date"
       />
       <template #cellTemplate="{ data }">
-        <img :src="data.value">
+        <img :src="data.value" :alt="`Picture of ${data.data.FirstName} ${data.data.LastName}`">
       </template>
     </DxDataGrid>
   </div>

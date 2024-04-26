@@ -25,10 +25,10 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, SelectAllMode, SimplifiedSearchMode, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, SelectAllMode, SimplifiedSearchMode, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
+import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 import { ChangeEvent, ClosedEvent, ContentReadyEvent, CustomItemCreatingEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, ItemClickEvent, KeyDownEvent, KeyUpEvent, MultiTagPreparingEvent, OpenedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, ValueChangedEvent } from 'devextreme/ui/tag_box';
@@ -94,7 +94,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxTagBoxComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxTagBox;
+    instance: DxTagBox = null;
 
     /**
      * [descr:dxSelectBoxOptions.acceptCustomValue]
@@ -153,10 +153,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -179,10 +179,10 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -1166,7 +1166,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
 
     /**
     
@@ -1180,7 +1180,7 @@ export class DxTagBoxComponent extends DxComponent implements OnDestroy, Control
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>>;
 
     /**
     

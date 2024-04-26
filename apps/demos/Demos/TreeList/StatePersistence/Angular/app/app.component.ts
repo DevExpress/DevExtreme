@@ -1,7 +1,7 @@
 import {
   NgModule, Component, enableProdMode, ViewChild,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTreeListModule, DxTreeListComponent } from 'devextreme-angular';
 import { Employee, Service } from './app.service';
@@ -37,7 +37,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxTreeListModule,
   ],
   declarations: [AppComponent],

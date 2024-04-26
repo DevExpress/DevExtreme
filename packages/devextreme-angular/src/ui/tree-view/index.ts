@@ -24,12 +24,11 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tree_view';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { DataStructure, ScrollDirection, SearchMode, SingleOrMultiple } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Properties as dxTextBoxOptions } from 'devextreme/ui/text_box';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode, TreeViewExpandEvent } from 'devextreme/ui/tree_view';
+import { ContentReadyEvent, DisposingEvent, dxTreeViewItem, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemHoldEvent, ItemRenderedEvent, ItemSelectionChangedEvent, OptionChangedEvent, SelectAllValueChangedEvent, SelectionChangedEvent, TreeViewCheckBoxMode, TreeViewExpandEvent } from 'devextreme/ui/tree_view';
 
 import DxTreeView from 'devextreme/ui/tree_view';
 
@@ -68,7 +67,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTreeView<TKey>;
+    instance: DxTreeView<TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -140,10 +139,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxTreeViewItem> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxTreeViewItem> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxTreeViewItem>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxTreeViewItem>) {
         this._setOption('dataSource', value);
     }
 
@@ -361,10 +360,10 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
     
      */
     @Input()
-    get items(): Array<DevExpress.ui.dxTreeViewItem> {
+    get items(): Array<dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxTreeViewItem>) {
+    set items(value: Array<dxTreeViewItem>) {
         this._setOption('items', value);
     }
 
@@ -837,7 +836,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxTreeViewItem>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxTreeViewItem>>;
 
     /**
     
@@ -956,7 +955,7 @@ export class DxTreeViewComponent<TKey = any> extends DxComponent implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<DevExpress.ui.dxTreeViewItem>>;
+    @Output() itemsChange: EventEmitter<Array<dxTreeViewItem>>;
 
     /**
     

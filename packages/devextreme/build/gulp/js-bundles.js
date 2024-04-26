@@ -29,7 +29,7 @@ const DEBUG_BUNDLES = BUNDLES.concat([ '/bundles/dx.custom.js' ]);
 
 const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPrefix + bundle);
 const muteWebPack = () => undefined;
-const getWebpackConfig = () => env.BUILD_INTERNAL_PACKAGE ?
+const getWebpackConfig = () => env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE ?
     Object.assign({
         plugins: [
             new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {

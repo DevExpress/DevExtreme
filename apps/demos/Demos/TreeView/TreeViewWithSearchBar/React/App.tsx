@@ -1,8 +1,9 @@
 import React, { useCallback, useState } from 'react';
 
-import TreeView from 'devextreme-react/tree-view';
-import SelectBox, { SelectBoxTypes } from 'devextreme-react/select-box';
-import { SearchMode } from 'devextreme/common';
+import { SearchMode } from 'devextreme-react/common';
+
+import { TreeView } from 'devextreme-react/tree-view';
+import { SelectBox,  SelectBoxTypes } from 'devextreme-react/select-box';
 
 import { products, searchModeLabel } from './data.ts';
 

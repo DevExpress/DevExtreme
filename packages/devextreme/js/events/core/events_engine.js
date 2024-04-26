@@ -1,5 +1,6 @@
 import registerEventCallbacks from './event_registrator_callbacks';
 import { extend } from '../../core/utils/extend';
+import { getEventTarget } from '../utils/event_target';
 import domAdapter from '../../core/dom_adapter';
 import { getWindow, hasWindow } from '../../core/utils/window';
 const window = getWindow();
@@ -274,6 +275,13 @@ function getHandlersController(element, eventName) {
                     }
                 } else {
                     e.currentTarget = e.delegateTarget || e.target;
+
+                    const isTargetInShadowDOM = Boolean(e.target?.shadowRoot);
+                    if(isTargetInShadowDOM) {
+                        const target = getEventTarget(e);
+                        e.target = target;
+                    }
+
                     callHandler(e, extraParameters);
                 }
             };

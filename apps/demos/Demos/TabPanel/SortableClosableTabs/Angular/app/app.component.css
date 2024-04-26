@@ -20,7 +20,7 @@
   padding: 10px 20px 10px 20px;
 }
 
-::ng-deep .caption {
+.caption {
   padding: 0 0 10px 30px;
   font-size: 14px;
   font-weight: bold;

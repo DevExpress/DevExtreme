@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget, disposeWidget } from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 import url from '../../../../helpers/getPageUrl';
 import { generateAppointments } from '../../helpers/generateAppointments';
@@ -126,7 +126,6 @@ end: ${endDayHour}
         })
         .after(async () => {
           await removeStylesheetRulesFromPage();
-          await disposeWidget('dxScheduler');
         });
     });
   });
@@ -211,5 +210,4 @@ test('Appointments are ordered correctly with both recurrent and usual appointme
   });
 }).after(async () => {
   await removeStylesheetRulesFromPage();
-  await disposeWidget('dxScheduler');
 });

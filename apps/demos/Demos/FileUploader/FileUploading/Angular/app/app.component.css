@@ -21,7 +21,7 @@
   display: none;
 }
 
-::ng-deep .options {
+.options {
   padding: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   position: absolute;
@@ -31,11 +31,11 @@
   width: 260px;
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }

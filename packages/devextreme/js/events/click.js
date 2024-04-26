@@ -6,6 +6,7 @@ import { resetActiveElement } from '../core/utils/dom';
 import { requestAnimationFrame, cancelAnimationFrame } from '../animation/frame';
 import { addNamespace, fireEvent } from './utils/index';
 import { subscribeNodesDisposing, unsubscribeNodesDisposing } from './utils/event_nodes_disposing';
+import { getEventTarget } from './utils/event_target';
 import pointerEvents from './pointer';
 import Emitter from './core/emitter';
 import registerEmitter from './core/emitter_registrator';
@@ -81,14 +82,8 @@ const ClickEmitter = Emitter.inherit({
         };
 
         const getTarget = function(e) {
-            const originalEvent = e.originalEvent;
-
-            if(originalEvent?.target?.shadowRoot) {
-                const path = originalEvent.path ?? originalEvent.composedPath?.();
-                return $(path[0]);
-            }
-
-            return $(e.target);
+            const target = getEventTarget(e);
+            return $(target);
         };
 
         const clickHandler = function(e) {

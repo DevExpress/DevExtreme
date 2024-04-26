@@ -84,6 +84,7 @@ const App = () => {
         <Column type="buttons">
           <Button
             icon="add"
+            text="Add"
             onClick={onAddButtonClick}
             visible={isAddButtonVisible}
           />

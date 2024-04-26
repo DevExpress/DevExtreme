@@ -50,7 +50,7 @@ $(() => {
         width: 90,
         cellTemplate(container, options) {
           $('<div>')
-            .append($('<img>', { src: options.value }))
+            .append($('<img>', { src: options.value, alt: 'Employee photo' }))
             .appendTo(container);
         },
       },

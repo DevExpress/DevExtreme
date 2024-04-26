@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
 
-export type ItemObject = DxDropDownButtonTypes.Item & { value: number | string, name: string };
+export type ItemObject = DxDropDownButtonTypes.Item & { value: number | string; name: string };
 
 const colors = [null, '#980000', '#ff0000', '#ff9900', '#ffff00', '#00ff00', '#00ffff', '#4a86e8', '#0000ff', '#9900ff', '#ff00ff', '#ff3466'];
 const profileSettings: ItemObject[] = [

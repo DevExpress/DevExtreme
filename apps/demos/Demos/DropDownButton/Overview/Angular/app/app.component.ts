@@ -1,12 +1,12 @@
 import { enableProdMode, Component, NgModule } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';
 import { DxToolbarModule } from 'devextreme-angular';
 import { DxDropDownButtonModule, DxDropDownButtonComponent, DxDropDownButtonTypes } from 'devextreme-angular/ui/drop-down-button';
 import { ItemObject, Service } from './app.service';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
@@ -50,31 +50,31 @@ export class AppComponent {
     this.lineHeights = service.getLineHeights();
   }
 
-  onAlignmentChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent) => {
+  onAlignmentChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
     this.alignment = e.item.value;
   };
 
-  onFontSizeChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent) => {
+  onFontSizeChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
     this.fontSize = e.item.value;
   };
 
-  onLineHeightChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent) => {
+  onLineHeightChanged = (e: DxDropDownButtonTypes.SelectionChangedEvent): void => {
     this.lineHeight = e.item.value;
   };
 
-  onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent) {
-    notify(`Go to ${e.element.querySelector(".button-title").textContent}'s profile`, 'success', 600);
+  onButtonClick(e: DxDropDownButtonTypes.ButtonClickEvent): void {
+    notify(`Go to ${e.element.querySelector('.button-title').textContent}'s profile`, 'success', 600);
   }
 
-  onItemClick(e: DxDropDownButtonTypes.ItemClickEvent) {
+  onItemClick(e: DxDropDownButtonTypes.ItemClickEvent): void {
     notify(e.itemData.name || e.itemData, 'success', 600);
   }
 
-  onColorPickerInit = (e: DxDropDownButtonTypes.InitializedEvent) => {
+  onColorPickerInit = (e: DxDropDownButtonTypes.InitializedEvent): void => {
     this.dropDownButton = e.component;
   };
 
-  onColorClick(color: Color) {
+  onColorClick(color: Color): void {
     const iconElement = this.dropDownButton.element().getElementsByClassName('dx-icon-square')[0] as HTMLElement;
 
     iconElement.style.color = color;
@@ -86,9 +86,7 @@ export class AppComponent {
 
 @NgModule({
   imports: [
-    BrowserModule,
-    BrowserTransferStateModule,
-    DxDropDownButtonModule,
+    BrowserModule,    DxDropDownButtonModule,
     DxToolbarModule,
   ],
   declarations: [AppComponent],

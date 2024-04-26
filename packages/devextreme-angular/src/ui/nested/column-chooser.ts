@@ -41,10 +41,10 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
     }
 
     @Input()
-    get container(): string | UserDefinedElement | undefined {
+    get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
-    set container(value: string | UserDefinedElement | undefined) {
+    set container(value: UserDefinedElement | string | undefined) {
         this._setOption('container', value);
     }
 

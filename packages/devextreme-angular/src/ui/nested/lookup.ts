@@ -47,10 +47,10 @@ export class DxoLookupComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get dataSource(): DataSourceOptions | Store | Function | null | undefined | Array<any> {
+    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSourceOptions | Store | Function | null | undefined | Array<any>) {
+    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
         this._setOption('dataSource', value);
     }
 

@@ -23,9 +23,8 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { ButtonStyle, SingleMultipleOrNone } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
+import { ContentReadyEvent, DisposingEvent, dxButtonGroupItem, InitializedEvent, ItemClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/button_group';
 
 import DxButtonGroup from 'devextreme/ui/button_group';
 
@@ -61,7 +60,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxButtonGroupComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxButtonGroup;
+    instance: DxButtonGroup = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -185,10 +184,10 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
     
      */
     @Input()
-    get items(): Array<DevExpress.ui.dxButtonGroupItem> {
+    get items(): Array<dxButtonGroupItem> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxButtonGroupItem>) {
+    set items(value: Array<dxButtonGroupItem>) {
         this._setOption('items', value);
     }
 
@@ -425,7 +424,7 @@ export class DxButtonGroupComponent extends DxComponent implements OnDestroy, On
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<DevExpress.ui.dxButtonGroupItem>>;
+    @Output() itemsChange: EventEmitter<Array<dxButtonGroupItem>>;
 
     /**
     

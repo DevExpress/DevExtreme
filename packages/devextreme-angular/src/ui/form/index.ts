@@ -23,9 +23,8 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Mode } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, FormLabelMode, InitializedEvent, LabelLocation, OptionChangedEvent } from 'devextreme/ui/form';
+import { ButtonItem, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, EmptyItem, FieldDataChangedEvent, FormLabelMode, GroupItem, InitializedEvent, LabelLocation, OptionChangedEvent, SimpleItem, TabbedItem } from 'devextreme/ui/form';
 
 import DxForm from 'devextreme/ui/form';
 
@@ -67,7 +66,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxForm;
+    instance: DxForm = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -269,10 +268,10 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
     
      */
     @Input()
-    get items(): Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem> {
+    get items(): Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem>) {
+    set items(value: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>) {
         this._setOption('items', value);
     }
 
@@ -668,7 +667,7 @@ export class DxFormComponent extends DxComponent implements OnDestroy, OnChanges
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem>>;
+    @Output() itemsChange: EventEmitter<Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>>;
 
     /**
     

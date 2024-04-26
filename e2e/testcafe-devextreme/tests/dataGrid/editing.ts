@@ -2079,7 +2079,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   }));
 });
 
-test.skip('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act

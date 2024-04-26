@@ -1,15 +1,13 @@
 import { Properties } from 'devextreme/ui/tag_box.d';
 import TagBox from 'devextreme-testcafe-models/tagBox';
 import url from '../../helpers/getPageUrl';
-import { clearTestPage } from '../../helpers/clearPage';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
 const TIME_TO_WAIT = 150;
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../container.html'));
 
 const items = [
   'HD Video Player',

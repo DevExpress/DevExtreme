@@ -19,7 +19,7 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
+import { PositionConfig } from 'devextreme/animation/position';
 import { PositionAlignment } from 'devextreme/common';
 
 import {
@@ -103,7 +103,7 @@ export class DxoDropDownOptionsComponent extends DxoPopupOptions implements OnDe
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | DevExpress.PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
 
     /**
     

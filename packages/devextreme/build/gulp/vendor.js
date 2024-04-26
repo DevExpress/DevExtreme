@@ -13,9 +13,6 @@ const DESTINATION_CSS_PATH = './artifacts/css';
 
 const JS_VENDORS = [
     {
-        path: 'angular/angular.js'
-    },
-    {
         path: 'exceljs/dist/exceljs.js'
     },
     {

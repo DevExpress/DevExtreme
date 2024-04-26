@@ -8,15 +8,13 @@ import { createWidget } from '../../../helpers/createWidget';
 import {
   appendElementTo, setStyleAttribute, removeStylesheetRulesFromPage, insertStylesheetRulesToPage,
 } from '../../../helpers/domUtils';
-import { clearTestPage } from '../../../helpers/clearPage';
 
 const DATEBOX_CLASS = 'dx-datebox';
 
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 fixture.disablePageReloads`DateBox_Label`
-  .page(url(__dirname, '../../container.html'))
-  .afterEach(async () => clearTestPage());
+  .page(url(__dirname, '../../container.html'));
 
 stylingModes.forEach((stylingMode) => {
   test(`Symbol parts in label should not be cropped with stylingMode=${stylingMode}`, async (t) => {

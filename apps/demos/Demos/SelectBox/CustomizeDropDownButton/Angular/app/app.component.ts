@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import {
@@ -54,7 +54,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxSelectBoxModule,
     DxLoadIndicatorModule,
     DxTemplateModule,

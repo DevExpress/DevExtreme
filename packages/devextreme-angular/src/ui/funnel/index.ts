@@ -81,7 +81,7 @@ import { DxoShadowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxFunnel;
+    instance: DxFunnel = null;
 
     /**
      * [descr:dxFunnelOptions.adaptiveLayout]
@@ -140,10 +140,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 
@@ -452,10 +452,10 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -601,7 +601,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<any>>;
 
     /**
     
@@ -769,7 +769,7 @@ export class DxFunnelComponent extends DxComponent implements OnDestroy, OnChang
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, format?: Format | string | undefined, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     

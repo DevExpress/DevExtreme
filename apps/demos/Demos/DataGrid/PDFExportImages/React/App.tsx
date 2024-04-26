@@ -40,7 +40,7 @@ const onExporting = ({ component }: DataGridTypes.ExportingEvent) => {
 
 const renderGridCell = (cellData: DataGridTypes.ColumnCellTemplateData) => (
   <div>
-    <img src={cellData.value}></img>
+    <img src={cellData.value} alt="Employee photo"></img>
   </div>
 );
 

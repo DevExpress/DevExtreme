@@ -51,17 +51,17 @@ import {
     ]
 })
 export class DxResizableComponent extends DxComponent implements OnDestroy {
-    instance: DxResizable;
+    instance: DxResizable = null;
 
     /**
      * [descr:dxResizableOptions.area]
     
      */
     @Input()
-    get area(): string | UserDefinedElement | undefined {
+    get area(): UserDefinedElement | string | undefined {
         return this._getOption('area');
     }
-    set area(value: string | UserDefinedElement | undefined) {
+    set area(value: UserDefinedElement | string | undefined) {
         this._setOption('area', value);
     }
 
@@ -248,7 +248,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() areaChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() areaChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     

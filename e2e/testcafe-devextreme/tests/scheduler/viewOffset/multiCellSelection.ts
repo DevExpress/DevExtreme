@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { createWidget, disposeWidget } from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Offset: Multi cell selection`
@@ -61,7 +61,7 @@ rtl: ${rtlEnabled},
           offset,
           rtlEnabled,
         });
-      }).after(async () => disposeWidget('dxScheduler'));
+      });
     });
 
     test(`Multi cell selection in the all-day panel should work (
@@ -91,6 +91,6 @@ rtl: ${rtlEnabled},
         currentView: 'week',
         offset,
       });
-    }).after(async () => disposeWidget('dxScheduler'));
+    });
   });
 });

@@ -24,11 +24,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tile_view';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, ScrollbarMode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
+import { ContentReadyEvent, DisposingEvent, dxTileViewItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/tile_view';
 
 import DxTileView from 'devextreme/ui/tile_view';
 
@@ -64,7 +63,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTileView<TItem, TKey>;
+    instance: DxTileView<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -123,10 +122,10 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTileViewItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxTileViewItem | string | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTileViewItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxTileViewItem | string | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -448,7 +447,7 @@ export class DxTileViewComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTileViewItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxTileViewItem | string | any>>;
 
     /**
     

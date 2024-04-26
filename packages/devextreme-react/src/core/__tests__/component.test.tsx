@@ -1,6 +1,7 @@
 import * as events from 'devextreme/events';
 import * as testingLib from '@testing-library/react';
 import * as React from 'react';
+import { useLayoutEffect } from 'react';
 import * as ReactDOM from 'react-dom';
 import {
   fireOptionChange,
@@ -9,6 +10,7 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
+
 
 jest.useFakeTimers();
 jest.mock('react-dom', () => ({
@@ -70,6 +72,51 @@ describe('rendering', () => {
     expect(content.tagName.toLowerCase()).toBe('div');
     expect(content.children.length).toBe(1);
     expect(content.children[0].tagName.toLowerCase()).toBe('div');
+  });
+
+  describe('accessing instance()', () => {
+    let componentRendered = false;
+
+    beforeEach(() => {
+      WidgetClass.mockImplementation(() => {
+        componentRendered = true;
+        return Widget;
+      })
+    });
+
+    afterEach(() => {
+      WidgetClass.mockImplementation(() => Widget);
+      componentRendered = false;
+    });
+
+    const MyComponent = () => {
+      useLayoutEffect(() => {
+        expect(componentRendered).toBeTruthy();
+      })
+
+      return (
+        <TestComponent />
+      );
+    };
+
+    it('renders a widget before ref callback', () => {
+      expect.assertions(2);
+
+      const ref = () => {
+        expect(componentRendered).toBeTruthy();
+      }
+      const { unmount } = testingLib.render(<TestComponent ref={ref} />);
+
+      // required to make the second call to ref callback (on unmount)
+      // happen sooner than the afterEach cleanup method
+      unmount();
+    });
+
+    it('renders a widget before useLayoutEffect', () => {
+      expect.assertions(1);
+
+      testingLib.render(<MyComponent />);
+    });
   });
 
   describe('nested full components', () => {

@@ -24,11 +24,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/tabs';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, SingleOrMultiple, TabsIconPosition, TabsStyle } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/tabs';
+import { ContentReadyEvent, DisposingEvent, dxTabsItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/tabs';
 
 import DxTabs from 'devextreme/ui/tabs';
 
@@ -64,7 +63,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxTabs<TItem, TKey>;
+    instance: DxTabs<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -84,10 +83,10 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabsItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxTabsItem | string | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabsItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxTabsItem | string | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -526,7 +525,7 @@ export class DxTabsComponent<TItem = any, TKey = any> extends DxComponent implem
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxTabsItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxTabsItem | string | any>>;
 
     /**
     

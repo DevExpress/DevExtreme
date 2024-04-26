@@ -24,10 +24,9 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/accordion';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
+import { ContentReadyEvent, DisposingEvent, dxAccordionItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, ItemTitleClickEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/accordion';
 
 import DxAccordion from 'devextreme/ui/accordion';
 
@@ -63,7 +62,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxAccordion<TItem, TKey>;
+    instance: DxAccordion<TItem, TKey> = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -122,10 +121,10 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxAccordionItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxAccordionItem | string | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxAccordionItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxAccordionItem | string | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -541,7 +540,7 @@ export class DxAccordionComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxAccordionItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxAccordionItem | string | any>>;
 
     /**
     
