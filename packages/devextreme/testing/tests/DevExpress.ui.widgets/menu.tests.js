@@ -867,7 +867,7 @@ QUnit.module('Rendering Scrollable', {
         assert.strictEqual($(menu.instance.option('focusedElement')).text(), submenuItemText, 'option is set');
     });
 
-    QUnit.test('Scrollable content should have min-height: auto to prevent bug on iOS', function(assert) {
+    QUnit.test('Scrollable content should have min-height: auto to prevent invisible 3rd level submenus bug on iOS', function(assert) {
         const menu = createMenu({
             items: [{
                 text: 'root',

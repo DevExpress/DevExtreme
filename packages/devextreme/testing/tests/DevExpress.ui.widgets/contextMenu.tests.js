@@ -572,7 +572,7 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
     });
 
-    QUnit.test('Scrollable content should have min-height: auto to prevent bug on iOS', function(assert) {
+    QUnit.test('Scrollable content should have min-height: auto to prevent invisible 3rd level submenus bug on iOS', function(assert) {
         const instance = new ContextMenu(this.$element, {
             items: [{ text: 1, items: [{ text: 11 }] }],
             visible: true,
