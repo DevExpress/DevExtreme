@@ -4,23 +4,23 @@ body {
   height: 100%;
 }
 
-::ng-deep .demo-container {
+.demo-container {
   display: flex;
 }
 
-::ng-deep .label {
+.label {
   font-size: 22px;
   padding-bottom: 24px;
 }
 
-::ng-deep .content {
+.content {
   flex-grow: 1;
   width: 100%;
   min-width: 500px;
   overflow: clip;
 }
 
-::ng-deep .options {
+.options {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -28,11 +28,11 @@ body {
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-::ng-deep .caption {
+.caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-::ng-deep .option {
+.option {
   margin-top: 10px;
 }
