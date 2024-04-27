@@ -62,6 +62,9 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
             fullScreen: true,
             showCloseButton: false,
             toolbarItems: [{ shortcut: 'cancel' }],
+            _ignorePreventScrollEventsDeprecation: true,
+            preventScrollEvents: false,
+            enableBodyScroll: false,
           },
         },
       ],
@@ -84,7 +87,8 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
   _createScrollable(content) {
     // @ts-expect-error
     const result = this._createComponent('<div>', Scrollable, {
-      direction: 'vertical',
+      height: 'auto',
+      direction: 'both',
     });
     result.$content().append(content);
 
