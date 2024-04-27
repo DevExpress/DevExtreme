@@ -60,6 +60,8 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
+const isValidDate = (date: Date) => date instanceof Date && !isNaN(date.valueOf());
+
 const calculateTimezoneByValueCustom = (timezone: string, date = new Date()) => {
   const customTimezones = timeZoneDataUtils.getTimeZones();
   if (customTimezones.length === 0) {
@@ -77,6 +79,10 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
   const isValidTimezone = timeZoneList.value.includes(timeZone);
   if (!isValidTimezone) {
     errors.log('W0009', timeZone);
+    return undefined;
+  }
+
+  if (!isValidDate(date)) {
     return undefined;
   }
 
@@ -127,6 +133,10 @@ const getOffsetNamePart = (offset: string): string => {
 };
 
 const getTimezoneTitle = (timeZone: string, date = new Date()): string => {
+  if (!isValidDate(date)) {
+    return '';
+  }
+
   const tzNamePart = timeZone.replace(/\//g, ' - ').replace(/_/g, ' ');
   const offset = getStringOffset(timeZone, date);
   const offsetNamePart = getOffsetNamePart(offset);
