@@ -10,6 +10,7 @@ import timeZoneList from './timezones/timezone_list';
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
+const MS_IN_HOUR = 3600000;
 const GMT = 'GMT';
 
 const createUTCDateWithLocalOffset = (date) => {
@@ -205,10 +206,19 @@ const hasDSTInLocalTimeZone = () => {
   return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
-const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
+  const customTimezones = timeZoneDataUtils.getTimeZones();
+  const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
+  if (targetTimezoneData.length === 1) {
+    return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);
+  }
+  return isEqualLocalTimeZoneByDeclarationCore(timeZoneName, date);
+};
+
+const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date): boolean => {
   const year = date.getFullYear();
   const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
-  const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - 3600000);
+  const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - MS_IN_HOUR);
 
   const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
   const [summerTime, winterTime] = configTuple;
@@ -244,6 +254,67 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
     return false;
   }
 
+  return true;
+};
+
+const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
+
+const isEqualLocalTimeZoneByDeclarationCore = (targetTimeZoneName: string, date: Date): boolean => {
+  const year = date.getFullYear();
+  const firstJanuary = new Date(year, 0, 1);
+  const firstJuly = new Date(year, 6, 1);
+
+  const localJanuaryOffset = getOffset(firstJanuary);
+  const localJulyOffset = getOffset(firstJuly);
+  const targetTimezoneJanuaryOffset = calculateTimezoneByValue(targetTimeZoneName, firstJanuary);
+  const targetTimezoneJulyOffset = calculateTimezoneByValue(targetTimeZoneName, firstJuly);
+
+  if (localJanuaryOffset !== targetTimezoneJanuaryOffset) {
+    return false;
+  }
+  if (localJulyOffset !== targetTimezoneJulyOffset) {
+    return false;
+  }
+
+  const hasLocalDST = localJanuaryOffset !== localJulyOffset;
+  const hasTargetTimezoneDST = targetTimezoneJanuaryOffset !== targetTimezoneJulyOffset;
+  if (hasLocalDST !== hasTargetTimezoneDST) {
+    return false;
+  }
+  if (!hasLocalDST && !hasTargetTimezoneDST) {
+    return true;
+  }
+
+  const firstMarch = new Date(`${year}-03-01T00:00:00Z`);
+  const firstOctober = new Date(`${year}-10-01T00:00:00Z`);
+
+  if (!arePossibleSummerDSTOffsetsEqual(targetTimeZoneName, firstMarch)) {
+    return false;
+  }
+  if (!arePossibleSummerDSTOffsetsEqual(targetTimeZoneName, firstOctober)) {
+    return false;
+  }
+
+  return true;
+};
+
+const arePossibleSummerDSTOffsetsEqual = (targetTimeZoneName: string, date: Date): boolean => {
+  const weekendNames = ['Saturday', 'Sunday'];
+
+  for (let i = 0; i < 61; i++) {
+    const possibleSummerDSTDay = new Date(date.getTime() + 24 * i * MS_IN_HOUR);
+    const dayName = possibleSummerDSTDay.toLocaleDateString('en-US', { weekday: 'long' });
+    if (weekendNames.includes(dayName)) {
+      for (let j = 0; j < 24; j++) {
+        const possibleSummerDSTTime = new Date(possibleSummerDSTDay.getTime() + j * MS_IN_HOUR);
+        const areOffsetsEqual = getOffset(possibleSummerDSTTime) === calculateTimezoneByValue(targetTimeZoneName, possibleSummerDSTTime);
+
+        if (!areOffsetsEqual) {
+          return false;
+        }
+      }
+    }
+  }
   return true;
 };
 

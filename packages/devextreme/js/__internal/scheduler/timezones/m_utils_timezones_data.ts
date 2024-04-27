@@ -1,5 +1,4 @@
 /* eslint-disable radix */
-import errors from '@js/core/errors';
 import { sign } from '@js/core/utils/math';
 import query from '@js/data/query';
 
@@ -107,7 +106,6 @@ const timeZoneDataUtils = {
       }
     }
 
-    errors.log('W0009', id);
     return undefined;
   },
 
