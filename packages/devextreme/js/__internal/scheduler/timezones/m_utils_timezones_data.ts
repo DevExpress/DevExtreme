@@ -1,6 +1,5 @@
 /* eslint-disable radix */
 import { sign } from '@js/core/utils/math';
-import query from '@js/data/query';
 
 import GlobalConfig from '../../../core/config';
 
@@ -58,23 +57,6 @@ const timeZoneDataUtils = {
       this._timeZones = GlobalConfig().timezones ?? [];
     }
     return this._timeZones;
-  },
-
-  getDisplayedTimeZones(timestamp) {
-    const timeZones = this.getTimeZones().map((timezone) => {
-      const timeZoneInfo = parseTimezone(timezone);
-      const offset = this.getUtcOffset(timeZoneInfo, timestamp);
-
-      const title = `(GMT ${this.formatOffset(offset)}) ${this.formatId(timezone.id)}`;
-
-      return {
-        offset,
-        title,
-        id: timezone.id,
-      };
-    });
-
-    return query(timeZones).sortBy('offset').toArray();
   },
 
   formatOffset(offset) {
