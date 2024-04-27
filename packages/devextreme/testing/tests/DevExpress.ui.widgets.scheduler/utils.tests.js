@@ -3,6 +3,7 @@ import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_
 import { utils } from '__internal/scheduler/m_utils';
 import { replaceWrongEndDate } from '__internal/scheduler/appointments/data_provider/m_utils';
 import { oldGetTimeZone } from './getTimeZone.old.list.js';
+import config from 'core/config';
 
 const { test, module } = QUnit;
 
@@ -27,7 +28,16 @@ module('Time zone data utils', {}, () => {
             assert.equal(cachedValue, declarationTupleCallArgument, 'Function call argument of `getTimeZoneDeclarationTupleCore` should be cached');
         };
 
+        const originalConfig = config();
         try {
+            config({
+                timezones: [
+                    { id: 'America/Los_Angeles', untils: 'Infinity', offsets: '0', offsetIndices: '0' },
+                    { id: 'Europe/Berlin', untils: 'Infinity', offsets: '0', offsetIndices: '0' },
+                    { id: 'Africa/Addis_Ababa', untils: 'Infinity', offsets: '0', offsetIndices: '0' },
+                ]
+            });
+
             assert.equal(timeZoneDataUtils._tzCache.map.size, 0, 'Timezone cache should be empty');
 
             checkCache('America/Los_Angeles', new Date(2021, 3, 3), 1);
@@ -44,6 +54,8 @@ module('Time zone data utils', {}, () => {
             spyGetTimeZoneDeclarationTupleCore.restore();
 
             assert.ok(false, 'test throw an error');
+        } finally {
+            config(originalConfig);
         }
     });
 });
