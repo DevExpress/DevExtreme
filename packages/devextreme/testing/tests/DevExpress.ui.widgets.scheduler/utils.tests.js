@@ -28,7 +28,6 @@ module('Time zone data utils', {}, () => {
             assert.equal(cachedValue, declarationTupleCallArgument, 'Function call argument of `getTimeZoneDeclarationTupleCore` should be cached');
         };
 
-        const originalConfig = config();
         try {
             config({
                 timezones: [
@@ -55,7 +54,7 @@ module('Time zone data utils', {}, () => {
 
             assert.ok(false, 'test throw an error');
         } finally {
-            config(originalConfig);
+            config({ timezones: [] });
         }
     });
 });
