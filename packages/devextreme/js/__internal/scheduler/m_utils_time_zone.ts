@@ -12,6 +12,7 @@ const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
 const MS_IN_HOUR = 3600000;
 const GMT = 'GMT';
+const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
 const createUTCDateWithLocalOffset = (date) => {
   if (!date) {
@@ -98,6 +99,7 @@ const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): numb
   try {
     offset = getStringOffset(timeZone, date);
   } catch (e) {
+    errors.log('W0009', timeZone);
     return undefined;
   }
 
@@ -120,9 +122,16 @@ const getStringOffset = (timeZone: string, date = new Date()): string => {
     timeZoneName: 'longOffset',
   } as any);
 
-  return dateTimeFormat.formatToParts(date)
+  const result = dateTimeFormat.formatToParts(date)
     .filter((part) => part.type === 'timeZoneName')
     .map((p) => p.value)[0];
+
+  const isSupportedFormat = offsetFormatRegexp.test(result);
+  if (!isSupportedFormat) {
+    errors.log('W0009', timeZone);
+  }
+
+  return result;
 };
 
 const getOffsetNamePart = (offset: string): string => {
