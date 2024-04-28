@@ -46,7 +46,6 @@ export class AppComponent {
   ],
   declarations: [AppComponent],
   bootstrap: [AppComponent],
-  providers: [Service],
 })
 export class AppModule { }
 
