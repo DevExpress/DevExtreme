@@ -34,6 +34,8 @@ const CUSTOM_CSS = `
 .dx-scheduler-cell-sizes-vertical {
   height: 25px;
 }`;
+// NOTE: half of an regular (1 hour) appointment size
+const DRAG_Y_OFFSET_PX = 12;
 
 const getAppointmentFromStartDate = (startDate: Date, offset: number): Appointment => {
   const minuteMs = 60000;
@@ -153,7 +155,7 @@ const OFFSET_TEST_CASES = generateOptionMatrix({
     await asyncForEach(cellIdxArray, async ([rowIdx, colIdx], idx) => {
       const cell = scheduler.getDateTableCell(rowIdx, colIdx);
 
-      await t.dragToElement(appointment.element, cell);
+      await t.dragToElement(appointment.element, cell, { offsetY: DRAG_Y_OFFSET_PX });
 
       const currentHeight = await appointment.size.height;
       const currentTop = await appointment.element().getBoundingClientRectProperty('top');

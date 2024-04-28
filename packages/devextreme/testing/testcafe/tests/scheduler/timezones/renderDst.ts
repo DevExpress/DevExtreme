@@ -33,12 +33,13 @@ const generateAppointments = (
   startDate: Date,
   durationMin: number,
   count: number,
-) => new Array(count).fill(null).map((item, idx) => {
+  textPrefix = '',
+) => new Array(count).fill(null).map((_, idx) => {
   const currentStartDate = new Date(startDate.getTime() + durationMin * MS_IN_MINUTE * idx);
   const currentEndDate = new Date(currentStartDate.getTime() + durationMin * MS_IN_MINUTE);
 
   return {
-    text: `${idx}`,
+    text: `${textPrefix}${idx}`,
     startDate: currentStartDate,
     endDate: currentEndDate,
   };
@@ -56,19 +57,19 @@ generateOptionMatrix({
 }).forEach(({
   currentView,
   offset,
-  location: [timezone, seasonType, currentDate, startDate],
+  location: [timezone, caseName, currentDate, startDate],
 }) => {
   const dataSource = generateAppointments(startDate, 60, 120);
 
   getTimezoneTest([timezone])(
-    `Should correctly render hourly appointments at DST (${timezone}, ${seasonType})`,
+    `Should correctly render hourly appointments at DST (${timezone}, ${caseName})`,
     async (t) => {
       const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
       const scheduler = new Scheduler(SCHEDULER_SELECTOR);
 
       const timezoneName = normalizeTimezoneName(timezone);
       await takeScreenshot(
-        `${currentView}_usual-appts-render-dts_t-${timezoneName}-${seasonType}_offset-${offset}.png`,
+        `${currentView}_usual-appts-render-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
         scheduler.workSpace,
       );
 
@@ -91,5 +92,58 @@ generateOptionMatrix({
   }).after(async () => {
     await removeStylesheetRulesFromPage();
     await disposeWidget('dxScheduler');
+  });
+});
+
+generateOptionMatrix({
+  currentView: ['day'],
+  offset: [-60, 0, 60],
+  location: [
+    [MACHINE_TIMEZONES.EuropeBerlin, 'summer', '2024-03-31', new Date('2024-03-30T23:00:00Z')],
+    [MACHINE_TIMEZONES.EuropeBerlin, 'winter', '2024-10-27', new Date('2024-10-26T22:00:00Z')],
+    [MACHINE_TIMEZONES.AmericaLosAngeles, 'summer', '2024-03-10', new Date('2024-03-10T08:00:00Z')],
+    [MACHINE_TIMEZONES.AmericaLosAngeles, 'winter', '2024-11-03', new Date('2024-11-03T07:00:00Z')],
+  ] as [MachineTimezonesType, string, string, Date][],
+}).forEach(({
+  currentView,
+  offset,
+  location: [timezone, caseName, currentDate, startDate],
+}) => {
+  const dataSource = [
+    ...generateAppointments(startDate, 60, 5, 'A_'),
+    ...generateAppointments(startDate, 30, 10, 'B_'),
+  ];
+
+  getTimezoneTest([timezone])(
+    `Should resolve appointment start cell correctly during DST (${timezone}, ${caseName})`,
+    async (t) => {
+      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+      const scheduler = new Scheduler(SCHEDULER_SELECTOR);
+
+      const timezoneName = normalizeTimezoneName(timezone);
+      await takeScreenshot(
+        `${currentView}_usual-appts-start-cell-dts_t-${timezoneName}-${caseName}_offset-${offset}.png`,
+        scheduler.workSpace,
+      );
+
+      await t.expect(compareResults.isValid())
+        .ok(compareResults.errorMessages());
+    },
+  ).before(async () => {
+    await insertStylesheetRulesToPage(CUSTOM_CSS);
+    await createWidget('dxScheduler', {
+      timeZone: timezone,
+      dataSource,
+      currentView,
+      currentDate,
+      offset,
+      showCurrentTimeIndicator: false,
+      maxAppointmentsPerCell: 'unlimited',
+      firstDayOfWeek: 4,
+      cellDuration: 30,
+      height: 800,
+    });
+  }).after(async () => {
+    await removeStylesheetRulesFromPage();
   });
 });
