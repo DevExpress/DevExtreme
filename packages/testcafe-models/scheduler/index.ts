@@ -27,6 +27,7 @@ export const CLASS = {
   droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
+  dateTableScrollableContainer: 'dx-scrollable-container',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
   workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
@@ -61,6 +62,8 @@ export default class Scheduler extends Widget {
   readonly dateTable: Selector;
 
   readonly dateTableScrollable: Selector;
+
+  readonly dateTableScrollableContainer: Selector;
 
   readonly headerPanel: HeaderPanel;
 
@@ -97,6 +100,7 @@ export default class Scheduler extends Widget {
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);
     this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
     this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);
+    this.dateTableScrollableContainer = this.dateTableScrollable.find(`.${CLASS.dateTableScrollableContainer}`);
     this.workspaceScrollable = this.dateTableScrollable.find(`.${CLASS.scrollableContainer}`);
 
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
