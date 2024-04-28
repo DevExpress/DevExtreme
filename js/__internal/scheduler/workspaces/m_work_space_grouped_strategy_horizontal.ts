@@ -1,4 +1,5 @@
 import { getBoundingRect } from '@js/core/utils/position';
+import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
 
@@ -55,7 +56,10 @@ class HorizontalGroupedStrategy {
   }
 
   getWorkSpaceMinWidth() {
-    return getBoundingRect(this._workSpace.$element().get(0)).width - this._workSpace.getTimePanelWidth();
+    const workSpaceElementWidth = getBoundingRect(this._workSpace.$element().get(0)).width;
+    return workSpaceElementWidth
+      - this._workSpace.getTimePanelWidth()
+      - 2 * WORK_SPACE_BORDER_PX;
   }
 
   getAllDayOffset() {
