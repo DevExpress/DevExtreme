@@ -234,9 +234,10 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): bo
   return isEqualLocalTimeZoneByDeclarationCore(timeZoneName, date);
 };
 
+const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
+
 const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date): boolean => {
   const year = date.getFullYear();
-  const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
   const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - MS_IN_HOUR);
 
   const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
@@ -275,8 +276,6 @@ const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date):
 
   return true;
 };
-
-const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
 
 const isEqualLocalTimeZoneByDeclarationCore = (targetTimeZoneName: string, date: Date): boolean => {
   const year = date.getFullYear();
