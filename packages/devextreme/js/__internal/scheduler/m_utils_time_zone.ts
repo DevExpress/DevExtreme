@@ -208,13 +208,14 @@ const getClientTimezoneOffset = (date = new Date()) => date.getTimezoneOffset() 
 
 const getDiffBetweenClientTimezoneOffsets = (firstDate = new Date(), secondDate = new Date()) => getClientTimezoneOffset(firstDate) - getClientTimezoneOffset(secondDate);
 
+// eslint-disable-next-line
 const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
-  if (Intl) {
-    const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (localTimeZoneName === timeZoneName) {
-      return true;
-    }
-  }
+  // if (Intl) {
+  //   const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+  //   if (localTimeZoneName === timeZoneName) {
+  //     return true;
+  //   }
+  // }
 
   return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
 };
