@@ -50,13 +50,9 @@ const tzCache = new TimeZoneCache();
 
 const timeZoneDataUtils = {
   _tzCache: tzCache,
-  _timeZones: null,
 
-  getTimeZonesOld() {
-    if (this._timeZones === null) {
-      this._timeZones = GlobalConfig().timezones ?? [];
-    }
-    return this._timeZones;
+  getTimeZonesOld(): any {
+    return GlobalConfig().timezones ?? [];
   },
 
   formatOffset(offset) {

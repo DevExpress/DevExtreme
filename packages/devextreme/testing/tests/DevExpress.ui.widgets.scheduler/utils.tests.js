@@ -8,7 +8,7 @@ import config from 'core/config';
 const { test, module } = QUnit;
 
 module('Time zone data utils', {}, () => {
-    test.skip('Untils should be pre-processed and cached', function(assert) {
+    test('Untils should be pre-processed and cached', function(assert) {
         const spyGetUtcOffset = sinon.spy(timeZoneDataUtils, 'getUtcOffset');
         const spyGetTimeZoneDeclarationTupleCore = sinon.spy(timeZoneDataUtils, 'getTimeZoneDeclarationTupleCore');
 
@@ -54,7 +54,7 @@ module('Time zone data utils', {}, () => {
 
             assert.ok(false, 'test throw an error');
         } finally {
-            config({ timezones: [] });
+            config({ timezones: null });
         }
     });
 });
