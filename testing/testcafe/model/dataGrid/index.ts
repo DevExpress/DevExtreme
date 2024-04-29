@@ -573,6 +573,18 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiPush(values: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).getDataSource().store().push(values),
+      {
+        dependencies: {
+          getInstance, values
+        },
+      },
+    )();
+  }
   moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
     const { getInstance } = this;
 
