@@ -1,5 +1,6 @@
 import type { DragDirection } from '@js/common';
 import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import { name as CLICK_EVENT } from '@js/events/click';
@@ -41,8 +42,15 @@ const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
+class ResizeHandle extends Widget<ResizeHandleOptions> {
+  private _$collapsePrevButton!: dxElementWrapper;
+
+  private _$resizeHandle!: dxElementWrapper;
+
+  private _$collapseNextButton!: dxElementWrapper;
+
   _supportedKeys(): Record<string, unknown> {
+    // @ts-expect-error badly typed base class
     return extend(super._supportedKeys(), {
       rightArrow(e: KeyboardEvent) {
         e.preventDefault();
@@ -129,6 +137,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   }
 
   _getDefaultOptions(): Record<string, unknown> {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return extend(super._getDefaultOptions(), {
       direction: RESIZE_DIRECTION.horizontal,
@@ -148,16 +157,23 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   }
 
   _init(): void {
+    // @ts-expect-error badly typed base class
     super._init();
     const namespace = `${RESIZE_HANDLER_MODULE_NAMESPACE}${new Guid()}`;
+    // @ts-expect-error todo
     this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
+    // @ts-expect-error todo
     this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
+    // @ts-expect-error todo
     this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
+    // @ts-expect-error todo
     this.CLICK_EVENT_NAME = addNamespace(CLICK_EVENT, namespace);
+    // @ts-expect-error todo
     this.DOUBLE_CLICK_EVENT_NAME = addNamespace(DOUBLE_CLICK_EVENT, namespace);
   }
 
   _initMarkup(): void {
+    // @ts-expect-error badly typed base class
     super._initMarkup();
 
     this._renderResizeHandleContent();
@@ -168,7 +184,9 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   _renderResizeHandleContent(): void {
     const { resizable } = this.option();
 
+    // @ts-expect-error badly typed DomComponent class
     this.$element().addClass(RESIZE_HANDLE_CLASS);
+    // @ts-expect-error badly typed DomComponent class
     this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
     this._updateDimensions();
@@ -186,16 +204,16 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     const rtlEnabled = this.option('rtlEnabled');
 
     this._$collapsePrevButton
-      .removeClass(this._getCollapseIconClass(false, !isHorizontal, rtlEnabled))
-      .addClass(this._getCollapseIconClass(false, isHorizontal, rtlEnabled));
+      .removeClass(this._getCollapseIconClass(false, !isHorizontal, !!rtlEnabled))
+      .addClass(this._getCollapseIconClass(false, isHorizontal, !!rtlEnabled));
 
     this._$resizeHandle
       .removeClass(this._getResizeIconClass(!isHorizontal))
       .addClass(this._getResizeIconClass(isHorizontal));
 
     this._$collapseNextButton
-      .removeClass(this._getCollapseIconClass(true, !isHorizontal, rtlEnabled))
-      .addClass(this._getCollapseIconClass(true, isHorizontal, rtlEnabled));
+      .removeClass(this._getCollapseIconClass(true, !isHorizontal, !!rtlEnabled))
+      .addClass(this._getCollapseIconClass(true, isHorizontal, !!rtlEnabled));
   }
 
   _updateDimensions(): void {
@@ -204,6 +222,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
+    // @ts-expect-error todo
     this.option(inverseDimension, null);
     this.option(dimension, this.getSize());
   }
@@ -222,9 +241,9 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
     switch (iconType) {
       case 'prev':
-        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false, isHorizontal, rtlEnabled)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(false, isHorizontal, !!rtlEnabled)}`;
       case 'next':
-        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true, isHorizontal, rtlEnabled)}`;
+        return `${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS} ${ICON_CLASS} ${this._getCollapseIconClass(true, isHorizontal, !!rtlEnabled)}`;
       case 'icon':
         return `${RESIZE_HANDLE_ICON_CLASS} ${ICON_CLASS} ${this._getResizeIconClass(isHorizontal)}`;
       default:
@@ -259,6 +278,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   }
 
   _setAriaAttributes(): void {
+    // @ts-expect-error todo: badly typed base class
     this.setAria({
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
@@ -268,11 +288,14 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   }
 
   _toggleDirectionClass(): void {
+    // @ts-expect-error badly typed DomComponent class
     this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
+    // @ts-expect-error badly typed DomComponent class
     this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
   }
 
   _render(): void {
+    // @ts-expect-error todo: badly typed base class
     super._render();
 
     this._attachEventHandlers();
@@ -327,6 +350,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
   _createEventAction(eventName: string): void {
     const actionName = getActionNameByEventName(eventName);
 
+    // @ts-expect-error todo: badly typed base class
     this[actionName] = this._createActionByOption(eventName, {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -359,6 +383,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
       eventsEngine.on(
         this.$element(),
+        // @ts-expect-error todo: todo
         this.RESIZE_START_EVENT_NAME,
         eventData,
         this._resizeStartHandler.bind(this),
@@ -366,6 +391,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
       eventsEngine.on(
         this.$element(),
+        // @ts-expect-error todo: todo
         this.RESIZE_EVENT_NAME,
         eventData,
         this._resizeHandler.bind(this),
@@ -373,6 +399,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
       eventsEngine.on(
         this.$element(),
+        // @ts-expect-error todo: todo
         this.RESIZE_END_EVENT_NAME,
         eventData,
         this._resizeEndHandler.bind(this),
@@ -389,6 +416,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     if (showCollapsePrev === true || showCollapseNext === true) {
       eventsEngine.on(
         this.$element(),
+        // @ts-expect-error todo: todo
         this.DOUBLE_CLICK_EVENT_NAME,
         this._doubleClickHandler.bind(this),
       );
@@ -396,7 +424,9 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
 
     if (showCollapsePrev === true) {
       eventsEngine.on(
+
         this._$collapsePrevButton,
+        // @ts-expect-error todo: todo
         this.CLICK_EVENT_NAME,
         this._collapsePrevHandler.bind(this),
       );
@@ -405,6 +435,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     if (showCollapseNext === true) {
       eventsEngine.on(
         this._$collapseNextButton,
+        // @ts-expect-error todo: todo
         this.CLICK_EVENT_NAME,
         this._collapseNextHandler.bind(this),
       );
@@ -452,6 +483,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
     this._detachResizeEventHandlers();
     this._detachPointerEventHandlers();
 
+    // @ts-expect-error badly typed base class
     super._clean();
   }
 
@@ -468,6 +500,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         break;
       case 'resizable':
         this._setResizeIconVisibility();
+        // @ts-expect-error badly typed DomComponent class
         this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachResizeEventHandlers();
         this._attachResizeEventHandlers();
@@ -492,6 +525,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
         this._createEventAction(name);
         break;
       default:
+        // @ts-expect-error badly typed base class
         super._optionChanged(args);
     }
   }
@@ -503,6 +537,7 @@ class ResizeHandle extends (Widget as any)<ResizeHandleOptions> {
       return INACTIVE_RESIZE_HANDLE_SIZE;
     }
 
+    // @ts-expect-error todo: todo
     return Number.isFinite(separatorSize) && separatorSize >= 0
       ? separatorSize as number
       : DEFAULT_RESIZE_HANDLE_SIZE;

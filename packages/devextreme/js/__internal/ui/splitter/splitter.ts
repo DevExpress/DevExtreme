@@ -75,7 +75,7 @@ const ORIENTATION: Record<string, Orientation> = {
 };
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class SplitterItem extends (CollectionWidgetItem as any) {
+class SplitterItem extends CollectionWidgetItem {
   constructor($element, options, rawData) {
     options._id = `dx_${new Guid()}`;
 
@@ -84,16 +84,19 @@ class SplitterItem extends (CollectionWidgetItem as any) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   get owner(): Splitter {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options.owner;
   }
 
   get resizeHandle(): ResizeHandle {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._options._resizeHandle;
   }
 
   get option(): SplitterItem {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._rawData;
   }
@@ -104,20 +107,26 @@ class SplitterItem extends (CollectionWidgetItem as any) {
   }
 
   _render(): void {
+    // @ts-expect-error badly typed base class
     super._render();
   }
 
   _renderResizeHandle(): void {
+    // @ts-expect-error badly typed base class
     if (this.option.visible !== false && !this.isLast()) {
       this._setIdAttr();
+      // @ts-expect-error badly typed Splitter class
       const config = this.owner._getResizeHandleConfig(this._options._id);
+      // @ts-expect-error badly typed base class
       this._options._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
 
+      // @ts-expect-error todo: badly typed Element
       this.resizeHandle.$element().insertAfter(this._$element);
     }
   }
 
   _setIdAttr(): void {
+    // @ts-expect-error badly typed DomComponent class
     this._$element.attr('id', this._options._id);
   }
 
@@ -318,7 +327,9 @@ class Splitter extends (CollectionWidget as any) {
     this._getResizeHandles().forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
 
+      // @ts-expect-error todo: todo
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+      // @ts-expect-error todo: todo
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
@@ -337,7 +348,9 @@ class Splitter extends (CollectionWidget as any) {
     this._getResizeHandles().forEach((resizeHandle) => {
       const $resizeHandle = resizeHandle.$element();
 
+      // @ts-expect-error todo: todo
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+      // @ts-expect-error todo: todo
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
@@ -901,6 +914,7 @@ class Splitter extends (CollectionWidget as any) {
         break;
       case 'allowKeyboardNavigation':
         this._iterateResizeHandles((instance) => {
+          // @ts-expect-error todo: todo
           instance.option('focusStateEnabled', value);
         });
         this._updateNestedSplitterOption(name, value);
