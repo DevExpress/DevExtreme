@@ -609,25 +609,11 @@ export default class DataGrid extends Widget {
       },
     )();
   }
-  moveRow(rowIndex: number, x: number, y: number, isStart = false): Promise<void> {
-    const { getInstance } = this;
-
-    return ClientFunction(
-      () => {
-        const gridInstance = getInstance() as any;
-        const $row = $(gridInstance.getRowElement(rowIndex));
-        let $dragElement = $row.children('.dx-command-drag');
-
-        $dragElement = $dragElement.length ? $dragElement : $row;
-
-        moveElement($dragElement, x, y, isStart);
-      },
-      {
-        dependencies: {
-          getInstance, rowIndex, x, y, isStart, moveElement,
-        },
-      },
-    )();
+  async moveRow(t: TestController, rowIndex: number, x: number, y: number): Promise<void> {
+    await t.drag(
+      this.getDataRow(rowIndex).getCommandCell(0).element,
+      x, y,
+    );
   }
 
   moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {

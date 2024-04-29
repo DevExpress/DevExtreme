@@ -63,8 +63,11 @@ safeSizeTest('The placeholder should appear when a cross-component dragging rows
   const dataGrid = new DataGrid('#container');
 
   await scrollTo(0, 10000);
-  await dataGrid.moveRow(6, 500, 0, true);
-  await dataGrid.moveRow(6, 550, 0);
+
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await dataGrid.moveRow(t, 6, 500, 0);
+  await dataGrid.moveRow(t, 6, 550, 0);
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   await t.expect(isPlaceholderVisible()).ok();
 }).before(async (t) => {
@@ -152,8 +155,10 @@ safeSizeTest('The placeholder should appear when a cross-component dragging rows
 safeSizeTest('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.moveRow(0, 500, 0, true);
-  await dataGrid.moveRow(0, 550, 0);
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await dataGrid.moveRow(t, 0, 500, 0);
+  await dataGrid.moveRow(t, 0, 550, 0);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await t
     .expect(isPlaceholderVisible())
@@ -517,8 +522,10 @@ safeSizeTest('The draggable element should be displayed correctly after horizont
     .expect(dataGrid.getScrollLeft())
     .eql(2500);
 
-  await dataGrid.moveRow(0, 0, 25, true);
-  await dataGrid.moveRow(0, 0, 50, false);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+  await dataGrid.moveRow(t, 0, 0, 25);
+  await dataGrid.moveRow(t, 0, 0, 50);
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   const rowsViewLeftOffset = await getRowsViewLeftOffset();
 
@@ -592,8 +599,10 @@ safeSizeTest('Dragging with scrolling should be prevented by e.cancel (T1179555)
 safeSizeTest('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
   const dataGrid = new DataGrid('#container');
 
-  await dataGrid.moveRow(0, 0, 50, true);
-  await dataGrid.moveRow(0, 0, 550);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  await dataGrid.moveRow(t, 0, 0, 50);
+  await dataGrid.moveRow(t, 0, 0, 550);
 
   const freeSpaceRowOffset = await getFreeSpaceRowOffset();
   const placeholderOffset = await getPlaceholderOffset();
@@ -607,6 +616,8 @@ safeSizeTest('The placeholder should have correct position after dragging the ro
 
   await t.expect(isPlaceholderVisible()).ok();
   await t.expect(placeholderOffset).eql(expectedPlaceholderOffset);
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
@@ -641,11 +652,14 @@ safeSizeTest('toIndex should not be corrected when source item gets removed from
 
   const dataGrid = new DataGrid('#container');
   await dataGrid.scrollTo(t, { y: 3000 });
-  await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, -20);
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await dataGrid.moveRow(t, fromIndex, 0, 50);
+  await dataGrid.moveRow(t, fromIndex, 0, -20);
   await t.wait(500);
-  await dataGrid.moveRow(toIndex, 0, 5);
+  await dataGrid.moveRow(t, toIndex, 0, 5);
   await t.wait(200);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await ClientFunction((grid) => {
     const instance = grid.getInstance();
@@ -695,12 +709,12 @@ safeSizeTest('Item should appear in a correct spot when dragging to a different 
   const toIndex = 4;
 
   const dataGrid = new DataGrid('#container');
-  await dataGrid.moveRow(fromIndex, 0, 50, true);
-  await dataGrid.moveRow(fromIndex, 0, 95);
-  await t.wait(500);
-  await dataGrid.moveRow(toIndex, 0, 5);
 
-  await t.wait(200);
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+  await dataGrid.moveRow(t, fromIndex, 0, 50);
+  await dataGrid.moveRow(t, fromIndex, 0, 95);
+  await dataGrid.moveRow(t, toIndex, 0, 5);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await ClientFunction((grid) => {
     const instance = grid.getInstance();
@@ -750,15 +764,15 @@ safeSizeTest('Rows should appear correctly during dragging when virtual scrollin
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  // drag the row down
-  await dataGrid.moveRow(0, 30, 150, true);
-  await dataGrid.moveRow(0, 30, 350);
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  // waiting for autoscrolling
-  await t.wait(2000);
+  // drag the row down
+  await dataGrid.moveRow(t, 0, 30, 150);
+  await dataGrid.moveRow(t, 0, 30, 350);
 
   // drag the row up
-  await dataGrid.moveRow(0, 30, 75);
+  await dataGrid.moveRow(t, 0, 30, 75);
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   await t
     .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
