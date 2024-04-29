@@ -1,4 +1,5 @@
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
@@ -33,3 +34,51 @@ test('Should remove dx-focused class on blur event from the cell', async (t) => 
   },
   onCellClick: (event) => event.component.focus(event.cellElement),
 }));
+
+[true, false].forEach((reshapeOnPush) => {
+  test(`focused row should have dx-focused class after removing previous focused row (reshapeOnPush=${reshapeOnPush})`, async (t) => {
+    const dataGrid = new DataGrid(GRID_SELECTOR);
+
+    await t
+      .expect(dataGrid.getDataRow(1).isFocusedRow)
+      .ok()
+      .expect(dataGrid.getDataRow(1).element.textContent)
+      .eql('Item 2');
+
+    await dataGrid.apiPush([{
+      type: 'remove',
+      key: 1,
+    }]);
+
+    await t
+      .expect(dataGrid.getDataRow(1).isFocusedRow)
+      .ok()
+      .expect(dataGrid.getDataRow(1).element.textContent)
+      .eql('Item 3');
+  }).before(async () => createWidget('dxDataGrid', ClientFunction(() => {
+    const { DevExpress } = (window as any);
+
+    const store = new DevExpress.data.ArrayStore({
+      data: [
+        { id: 0, name: 'Item 1 ' },
+        { id: 1, name: 'Item 2' },
+        { id: 2, name: 'Item 3' },
+        { id: 3, name: 'Item 4' },
+        { id: 4, name: 'Item 5' },
+      ],
+      key: 'id',
+    });
+
+    const dataSource = new DevExpress.data.DataSource({ store, reshapeOnPush });
+
+    return {
+      columns: ['name'],
+      dataSource,
+      keyExpr: 'value',
+      focusedRowEnabled: true,
+      focusedRowKey: 1,
+    };
+  }, {
+    dependencies: { reshapeOnPush },
+  })));
+});

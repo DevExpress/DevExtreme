@@ -31,8 +31,11 @@ const createWidgetCore = <TWidgetName extends WidgetName>(
 export const createWidget = async<TWidgetName extends WidgetName>(
   widgetName: TWidgetName,
   widgetOptions: TWidgetName extends keyof WidgetOptions
-    ? WidgetOptions[TWidgetName] | (() => WidgetOptions[TWidgetName])
-    : unknown,
+    ? (
+      WidgetOptions[TWidgetName] |
+      // NOTE: Promise is only for ClientFunction typing
+      (() => (WidgetOptions[TWidgetName]) | Promise<WidgetOptions[TWidgetName]>)
+    ) : unknown,
   selector = DEFAULT_SELECTOR,
   { disableFxAnimation } = DEFAULT_OPTIONS,
 ): Promise<void> => ClientFunction(

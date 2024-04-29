@@ -589,9 +589,20 @@ class BaseRenderingStrategy {
     return result;
   }
 
-  _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-    const daylightDiff = timeZoneUtils.getDaylightOffset(startDate, endDate);
-    return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
+  protected _adjustDurationByDaylightDiff(
+    duration: number,
+    startDate: Date,
+    endDate: Date,
+  ): number {
+    const { viewOffset } = this.options;
+    const originalStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
+    const originalEndDate = dateUtilsTs.addOffsets(endDate, [viewOffset]);
+    const daylightDiff = timeZoneUtils.getDaylightOffset(originalStartDate, originalEndDate);
+    const correctedDuration: number = this._needAdjustDuration(daylightDiff)
+      ? this._calculateDurationByDaylightDiff(duration, daylightDiff)
+      : duration;
+
+    return correctedDuration <= Math.abs(daylightDiff) ? duration : correctedDuration;
   }
 
   _needAdjustDuration(diff) {
