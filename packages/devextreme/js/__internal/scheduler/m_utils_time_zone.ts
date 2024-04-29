@@ -113,16 +113,13 @@ const getClientTimezoneOffset = (date = new Date()) => date.getTimezoneOffset() 
 
 const getDiffBetweenClientTimezoneOffsets = (firstDate = new Date(), secondDate = new Date()) => getClientTimezoneOffset(firstDate) - getClientTimezoneOffset(secondDate);
 
-const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => {
-  if (Intl) {
-    const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
-    if (localTimeZoneName === timeZoneName) {
-      return true;
-    }
-  }
-
-  return isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
-};
+const isEqualLocalTimeZone = (timeZoneName, date = new Date()) => isEqualLocalTimeZoneByDeclaration(timeZoneName, date);
+// if (Intl) {
+//   const localTimeZoneName = Intl.DateTimeFormat().resolvedOptions().timeZone;
+//   if (localTimeZoneName === timeZoneName) {
+//     return true;
+//   }
+// }
 
 // TODO: Not used anywhere, if it isn't use in the future, then it must be removed
 const hasDSTInLocalTimeZone = () => {
