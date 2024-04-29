@@ -63,8 +63,8 @@ const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDat
 
 const isValidDate = (date: Date) => date instanceof Date && !isNaN(date.valueOf());
 
-const calculateTimezoneByValueCustom = (timezone: string, date = new Date()) => {
-  const customTimezones = timeZoneDataUtils.getTimeZones();
+const calculateTimezoneByValueOld = (timezone: string, date = new Date()) => {
+  const customTimezones = timeZoneDataUtils.getTimeZonesOld();
   if (customTimezones.length === 0) {
     return undefined;
   }
@@ -108,7 +108,7 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
     return undefined;
   }
 
-  let result = calculateTimezoneByValueCustom(timeZone, date);
+  let result = calculateTimezoneByValueOld(timeZone, date);
   if (result === undefined) {
     result = calculateTimezoneByValueCore(timeZone, date);
   }
@@ -330,7 +330,7 @@ const isEqualLocalTimeZoneByDeclarationCore = (targetTimeZoneName: string, date:
 };
 
 const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
-  const customTimezones = timeZoneDataUtils.getTimeZones();
+  const customTimezones = timeZoneDataUtils.getTimeZonesOld();
   const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
   if (targetTimezoneData.length === 1) {
     return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);

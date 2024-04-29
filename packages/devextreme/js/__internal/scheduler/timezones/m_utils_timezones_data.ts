@@ -52,7 +52,7 @@ const timeZoneDataUtils = {
   _tzCache: tzCache,
   _timeZones: null,
 
-  getTimeZones() {
+  getTimeZonesOld() {
     if (this._timeZones === null) {
       this._timeZones = GlobalConfig().timezones ?? [];
     }
@@ -79,7 +79,7 @@ const timeZoneDataUtils = {
       return undefined;
     }
 
-    const tzList = this.getTimeZones();
+    const tzList = this.getTimeZonesOld();
 
     for (let i = 0; i < tzList.length; i++) {
       const currentId = tzList[i].id;
