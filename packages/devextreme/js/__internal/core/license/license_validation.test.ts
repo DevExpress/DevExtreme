@@ -1,5 +1,6 @@
 import errors from '@js/core/errors';
 
+import { base } from '../../../ui/overlay/z_index';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
@@ -231,6 +232,10 @@ describe('license check', () => {
     validateLicense('', '1.0');
 
     expect(errors.log).toHaveBeenCalledTimes(1);
+  });
+
+  test('Base z-index should match the corresponding setting in DevExtreme', () => {
+    expect(trialPanel.BASE_Z_INDEX).toEqual(base());
   });
 
   test('No messages should be logged if setLicenseCheckSkipCondition() used', () => {
