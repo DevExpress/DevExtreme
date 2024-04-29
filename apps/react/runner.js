@@ -9,7 +9,7 @@ createTestCafe('127.0.0.1')
         const runner = tsc.createRunner();
         return runner
             .src('test.js')
-            .browsers('chrome:headless --disable-gpu --window-size=1200,800')
+            .browsers('chrome --headless=new --disable-gpu --window-size=1200,800')
             .run();
     }).then(failedCount => {
         testCafe.close();
