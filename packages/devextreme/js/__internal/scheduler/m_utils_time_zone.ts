@@ -207,19 +207,6 @@ const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
     : newDate;
 };
 
-// NOTE:
-// GMT-N is "negative" timezone
-// GMT+N is "positive" timezone
-const isNegativeMachineTimezone = (): boolean => new Date().getTimezoneOffset() > 0;
-
-const isSummerToWinterDSTChange = (timezoneDiff: number): boolean => timezoneDiff < 0;
-
-const getSummerToWinterTimeDSTDiffMs = (firstDate: Date, secondDate: Date): number => {
-  const diffMinutes = getDaylightOffset(firstDate, secondDate);
-  const isSummerTimeChange = isSummerToWinterDSTChange(diffMinutes);
-  return isSummerTimeChange ? Math.abs(diffMinutes * toMs('minute')) : 0;
-};
-
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -245,9 +232,6 @@ const utils = {
 
   setOffsetsToDate,
   addOffsetsWithoutDST,
-  isNegativeMachineTimezone,
-  isSummerTimeDSTChange: isSummerToWinterDSTChange,
-  getSummerToWinterTimeDSTDiffMs,
 };
 
 export default utils;
