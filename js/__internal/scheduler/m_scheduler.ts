@@ -1,6 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
+import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
@@ -39,6 +41,7 @@ import {
   validateDayHours,
 } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
+import type { AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
 import { isMaterial } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -2405,8 +2408,8 @@ class Scheduler extends Widget<any> {
     };
   }
 
-  showAppointmentTooltipCore(target, data, options?: any) {
-    const arg = {
+  showAppointmentTooltipCore(target: dxElementWrapper, data, options?: any) {
+    const arg: Omit<AppointmentTooltipShowingEvent, 'component' | 'element'> = {
       cancel: false,
       appointments: data.map((item) => {
         const result = {
@@ -2424,7 +2427,7 @@ class Scheduler extends Widget<any> {
 
         return result;
       }),
-      targetElement: target,
+      targetElement: getPublicElement(target),
     };
 
     this._createActionByOption('onAppointmentTooltipShowing')(arg);
