@@ -307,26 +307,28 @@ const isEqualLocalTimeZoneByDeclarationCore = (targetTimeZoneName: string, date:
   const firstMarch = new Date(`${year}-03-01T00:00:00Z`);
   const firstOctober = new Date(`${year}-10-01T00:00:00Z`);
 
-  if (!arePossibleSummerDSTOffsetsEqual(targetTimeZoneName, firstMarch)) {
+  if (!arePossibleDSTOffsetsEqual(targetTimeZoneName, firstMarch)) {
     return false;
   }
-  if (!arePossibleSummerDSTOffsetsEqual(targetTimeZoneName, firstOctober)) {
+  if (!arePossibleDSTOffsetsEqual(targetTimeZoneName, firstOctober)) {
     return false;
   }
 
   return true;
 };
 
-const arePossibleSummerDSTOffsetsEqual = (targetTimeZoneName: string, date: Date): boolean => {
+const arePossibleDSTOffsetsEqual = (targetTimeZoneName: string, date: Date): boolean => {
+  const DST_PERIOD_IN_DAYS = 61;
+  const HOURS_IN_DAY = 24;
   const weekendNames = ['Saturday', 'Sunday'];
 
-  for (let i = 0; i < 61; i++) {
-    const possibleSummerDSTDay = new Date(date.getTime() + 24 * i * MS_IN_HOUR);
-    const dayName = possibleSummerDSTDay.toLocaleDateString('en-US', { weekday: 'long' });
+  for (let i = 0; i < DST_PERIOD_IN_DAYS; i++) {
+    const possibleDSTDay = new Date(date.getTime() + HOURS_IN_DAY * i * MS_IN_HOUR);
+    const dayName = possibleDSTDay.toLocaleDateString('en-US', { weekday: 'long' });
     if (weekendNames.includes(dayName)) {
-      for (let j = 0; j < 24; j++) {
-        const possibleSummerDSTTime = new Date(possibleSummerDSTDay.getTime() + j * MS_IN_HOUR);
-        const areOffsetsEqual = getOffset(possibleSummerDSTTime) === calculateTimezoneByValue(targetTimeZoneName, possibleSummerDSTTime);
+      for (let j = 0; j < HOURS_IN_DAY; j++) {
+        const possibleDSTTime = new Date(possibleDSTDay.getTime() + j * MS_IN_HOUR);
+        const areOffsetsEqual = getOffset(possibleDSTTime) === calculateTimezoneByValue(targetTimeZoneName, possibleDSTTime);
 
         if (!areOffsetsEqual) {
           return false;
