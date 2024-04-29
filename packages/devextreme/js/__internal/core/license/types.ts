@@ -28,13 +28,3 @@ export interface LicenseCheckParams {
   internal?: true;
   error: LicenseVerifyResult | undefined;
 }
-
-export interface StylesMap {
-  [key: string]: string;
-}
-
-export interface CustomTrialPanelStyles {
-  containerStyles?: StylesMap;
-  textStyles?: StylesMap;
-  linkStyles?: StylesMap;
-}
