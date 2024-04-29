@@ -72,18 +72,6 @@ module('Time zone utils', {}, () => {
 
         assert.equal(hasDST, startDate.getTimezoneOffset() !== endDate.getTimezoneOffset(), 'function should return valid result');
     });
-
-    test('isEqualLocalTimeZone', function(assert) {
-        const result = timeZoneUtils.isEqualLocalTimeZone('Brazil/Acre', new Date(2021, 6, 6));
-
-        assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
-    });
-
-    test('isEqualLocalTimeZoneByDeclaration', function(assert) {
-        const result = timeZoneUtils.isEqualLocalTimeZoneByDeclaration('Brazil/Acre', new Date(2021, 6, 6));
-
-        assert.notOk(result, 'local time zone shouldn\'t equal to \'Brazil/Acre\'');
-    });
 });
 
 module('Date utils', () => {
