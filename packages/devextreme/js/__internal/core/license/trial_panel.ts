@@ -1,6 +1,16 @@
 /* eslint-disable max-classes-per-file */
-import { base } from '../../../ui/overlay/z_index';
-import type { CustomTrialPanelStyles, StylesMap } from './types';
+/* eslint no-restricted-imports: ["error", { "patterns": ["*"] }] */
+export const BASE_Z_INDEX = 1500;
+
+export interface StylesMap {
+  [key: string]: string;
+}
+
+export interface CustomTrialPanelStyles {
+  containerStyles?: StylesMap;
+  textStyles?: StylesMap;
+  linkStyles?: StylesMap;
+}
 
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const componentNames = {
@@ -21,7 +31,7 @@ const containerStyles = {
   height: 'auto',
   lineHeight: 'auto',
   display: 'block',
-  'z-index': `${base()}`,
+  'z-index': `${BASE_Z_INDEX}`,
   position: 'relative',
   top: '0px',
   left: '0px',
