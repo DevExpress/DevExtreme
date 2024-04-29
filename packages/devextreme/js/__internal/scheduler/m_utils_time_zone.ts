@@ -73,27 +73,6 @@ const calculateTimezoneByValueCustom = (timezone: string, date = new Date()) => 
   return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
 };
 
-const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date()): number | undefined => {
-  if (!timeZone) {
-    return undefined;
-  }
-  const isValidTimezone = timeZoneList.value.includes(timeZone);
-  if (!isValidTimezone) {
-    errors.log('W0009', timeZone);
-    return undefined;
-  }
-
-  if (!isValidDate(date)) {
-    return undefined;
-  }
-
-  let result = calculateTimezoneByValueCustom(timeZone, date);
-  if (result === undefined) {
-    result = calculateTimezoneByValueCore(timeZone, date);
-  }
-  return result;
-};
-
 const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): number | undefined => {
   let offset;
   try {
@@ -113,6 +92,27 @@ const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): numb
 
   const result = parseInt(hours, 10) + parseInt(minutes, 10) / MINUTES_IN_HOUR;
   return isMinus ? -result : result;
+};
+
+const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date()): number | undefined => {
+  if (!timeZone) {
+    return undefined;
+  }
+  const isValidTimezone = timeZoneList.value.includes(timeZone);
+  if (!isValidTimezone) {
+    errors.log('W0009', timeZone);
+    return undefined;
+  }
+
+  if (!isValidDate(date)) {
+    return undefined;
+  }
+
+  let result = calculateTimezoneByValueCustom(timeZone, date);
+  if (result === undefined) {
+    result = calculateTimezoneByValueCore(timeZone, date);
+  }
+  return result;
 };
 
 // 'GMT±XX:YY' or 'GMT' format
@@ -225,15 +225,6 @@ const hasDSTInLocalTimeZone = () => {
   return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
-const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
-  const customTimezones = timeZoneDataUtils.getTimeZones();
-  const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
-  if (targetTimezoneData.length === 1) {
-    return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);
-  }
-  return isEqualLocalTimeZoneByDeclarationCore(timeZoneName, date);
-};
-
 const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
 
 const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date): boolean => {
@@ -277,6 +268,28 @@ const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date):
   return true;
 };
 
+const arePossibleDSTOffsetsEqual = (targetTimeZoneName: string, date: Date): boolean => {
+  const DST_PERIOD_IN_DAYS = 61;
+  const HOURS_IN_DAY = 24;
+  const weekendNames = ['Saturday', 'Sunday'];
+
+  for (let i = 0; i < DST_PERIOD_IN_DAYS; i++) {
+    const possibleDSTDay = new Date(date.getTime() + HOURS_IN_DAY * i * MS_IN_HOUR);
+    const dayName = possibleDSTDay.toLocaleDateString('en-US', { weekday: 'long' });
+    if (weekendNames.includes(dayName)) {
+      for (let j = 0; j < HOURS_IN_DAY; j++) {
+        const possibleDSTTime = new Date(possibleDSTDay.getTime() + j * MS_IN_HOUR);
+        const areOffsetsEqual = getOffset(possibleDSTTime) === calculateTimezoneByValue(targetTimeZoneName, possibleDSTTime);
+
+        if (!areOffsetsEqual) {
+          return false;
+        }
+      }
+    }
+  }
+  return true;
+};
+
 const isEqualLocalTimeZoneByDeclarationCore = (targetTimeZoneName: string, date: Date): boolean => {
   const year = date.getFullYear();
   const firstJanuary = new Date(year, 0, 1);
@@ -316,26 +329,13 @@ const isEqualLocalTimeZoneByDeclarationCore = (targetTimeZoneName: string, date:
   return true;
 };
 
-const arePossibleDSTOffsetsEqual = (targetTimeZoneName: string, date: Date): boolean => {
-  const DST_PERIOD_IN_DAYS = 61;
-  const HOURS_IN_DAY = 24;
-  const weekendNames = ['Saturday', 'Sunday'];
-
-  for (let i = 0; i < DST_PERIOD_IN_DAYS; i++) {
-    const possibleDSTDay = new Date(date.getTime() + HOURS_IN_DAY * i * MS_IN_HOUR);
-    const dayName = possibleDSTDay.toLocaleDateString('en-US', { weekday: 'long' });
-    if (weekendNames.includes(dayName)) {
-      for (let j = 0; j < HOURS_IN_DAY; j++) {
-        const possibleDSTTime = new Date(possibleDSTDay.getTime() + j * MS_IN_HOUR);
-        const areOffsetsEqual = getOffset(possibleDSTTime) === calculateTimezoneByValue(targetTimeZoneName, possibleDSTTime);
-
-        if (!areOffsetsEqual) {
-          return false;
-        }
-      }
-    }
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
+  const customTimezones = timeZoneDataUtils.getTimeZones();
+  const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
+  if (targetTimezoneData.length === 1) {
+    return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);
   }
-  return true;
+  return isEqualLocalTimeZoneByDeclarationCore(timeZoneName, date);
 };
 
 // TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
