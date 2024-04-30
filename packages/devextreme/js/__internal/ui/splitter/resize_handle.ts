@@ -222,7 +222,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    // @ts-expect-error todo
+    // @ts-expect-error badly typed base class
     this.option(inverseDimension, null);
     this.option(dimension, this.getSize());
   }
@@ -278,7 +278,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   }
 
   _setAriaAttributes(): void {
-    // @ts-expect-error todo: badly typed base class
+    // @ts-expect-error badly typed base class
     this.setAria({
       role: 'application',
       // eslint-disable-next-line spellcheck/spell-checker
@@ -537,9 +537,8 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
       return INACTIVE_RESIZE_HANDLE_SIZE;
     }
 
-    // @ts-expect-error todo: todo
-    return Number.isFinite(separatorSize) && separatorSize >= 0
-      ? separatorSize as number
+    return separatorSize !== undefined && Number.isFinite(separatorSize) && separatorSize >= 0
+      ? separatorSize
       : DEFAULT_RESIZE_HANDLE_SIZE;
   }
 

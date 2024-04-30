@@ -102,6 +102,7 @@ class SplitterItem extends CollectionWidgetItem {
   }
 
   get index(): number {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.owner._getIndexByItemData(this.option);
   }
@@ -115,7 +116,7 @@ class SplitterItem extends CollectionWidgetItem {
     // @ts-expect-error badly typed base class
     if (this.option.visible !== false && !this.isLast()) {
       this._setIdAttr();
-      // @ts-expect-error badly typed Splitter class
+      // @ts-expect-error badly typed base class
       const config = this.owner._getResizeHandleConfig(this._options._id);
       // @ts-expect-error badly typed base class
       this._options._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
@@ -136,7 +137,7 @@ class SplitterItem extends CollectionWidgetItem {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-class Splitter extends (CollectionWidget as any) {
+class Splitter extends CollectionWidget {
   private _renderQueue: RenderQueueItem[] = [];
 
   _getDefaultOptions(): Properties {
@@ -172,6 +173,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _initializeRenderQueue(): void {
+    // @ts-expect-error badly typed base class
     this._renderQueue = this.option('_renderQueue') || [];
   }
 
@@ -191,12 +193,14 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _initMarkup(): void {
+    // @ts-expect-error badly typed DomComponent class
     this.$element().addClass(SPLITTER_CLASS);
 
     this._toggleOrientationClass();
 
     super._initMarkup();
 
+    // @ts-expect-error todo:
     this._panesCacheSize = {};
     this._attachResizeObserverSubscription();
   }
@@ -213,6 +217,7 @@ class Splitter extends (CollectionWidget as any) {
 
   _attachResizeObserverSubscription(): void {
     if (hasWindow()) {
+      // @ts-expect-error badly typed DomComponent class
       const formRootElement = this.$element().get(0);
 
       resizeObserverSingleton.unobserve(formRootElement);
@@ -224,15 +229,17 @@ class Splitter extends (CollectionWidget as any) {
   _attachHoldEvent(): void {}
 
   _resizeHandler(): void {
+    // @ts-expect-error todo:
     if (!this._shouldRecalculateLayout) {
       return;
     }
-
+    // @ts-expect-error todo:
     this._layout = this._getDefaultLayoutBasedOnSize();
 
+    // @ts-expect-error todo:
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
-
+    // @ts-expect-error todo:
     this._shouldRecalculateLayout = false;
   }
 
@@ -242,12 +249,16 @@ class Splitter extends (CollectionWidget as any) {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
+    // @ts-expect-error badly typed DomComponent class
     if (isElementVisible(this.$element().get(0))) {
+      // @ts-expect-error todo:
       this._layout = this._getDefaultLayoutBasedOnSize();
+      // @ts-expect-error todo:
       this._applyFlexGrowFromLayout(this._layout);
 
       this._updateItemSizes();
     } else {
+      // @ts-expect-error todo:
       this._shouldRecalculateLayout = true;
     }
 
@@ -262,18 +273,31 @@ class Splitter extends (CollectionWidget as any) {
     const item = this._shiftItemFromQueue();
     if (!item) return;
 
+    // @ts-expect-error badly typed base class
     this._createComponent($(item.itemContent), Splitter, extend({
+      // @ts-expect-error badly typed base class
       itemTemplate: this.option('itemTemplate'),
+      // @ts-expect-error badly typed base class
       onResize: this.option('onResize'),
+      // @ts-expect-error badly typed base class
       onResizeStart: this.option('onResizeStart'),
+      // @ts-expect-error badly typed base class
       onResizeEnd: this.option('onResizeEnd'),
+      // @ts-expect-error badly typed base class
       onItemClick: this.option('onItemClick'),
+      // @ts-expect-error badly typed base class
       onItemContextMenu: this.option('onItemContextMenu'),
+      // @ts-expect-error badly typed base class
       onItemRendered: this.option('onItemRendered'),
+      // @ts-expect-error badly typed base class
       onItemExpanded: this.option('onItemExpanded'),
+      // @ts-expect-error badly typed base class
       onItemCollapsed: this.option('onItemCollapsed'),
+      // @ts-expect-error badly typed base class
       separatorSize: this.option('separatorSize'),
+      // @ts-expect-error badly typed base class
       allowKeyboardNavigation: this.option('allowKeyboardNavigation'),
+      // @ts-expect-error badly typed base class
       rtlEnabled: this.option('rtlEnabled'),
       _renderQueue: this._renderQueue,
     }, item.splitterConfig));
@@ -283,11 +307,13 @@ class Splitter extends (CollectionWidget as any) {
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   _itemElements(): any {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._itemContainer().children(this._itemSelector());
   }
 
   _isLastVisibleItem(index: number): boolean {
+    // @ts-expect-error badly typed base class
     return index === findLastIndexOfVisibleItem(this.option('items'));
   }
 
@@ -301,6 +327,7 @@ class Splitter extends (CollectionWidget as any) {
 
     const itemElement = $itemFrame.get(0);
 
+    // @ts-expect-error badly typed base class
     setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length);
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
@@ -311,6 +338,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getItemInstance($item: dxElementWrapper): SplitterItem {
+    // @ts-expect-error todo
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return Splitter.ItemClass.getInstance($item);
   }
@@ -319,19 +347,21 @@ class Splitter extends (CollectionWidget as any) {
     const { resizeHandle } = this._getItemInstance($itemFrame);
 
     if (resizeHandle) {
+      // @ts-expect-error badly typed DomComponent class
       this.$element().append(resizeHandle.$element());
     }
   }
 
   _updateResizeHandlesResizableState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = resizeHandle.$element();
+      const $resizeHandle = (resizeHandle.$element() as unknown) as dxElementWrapper;
 
-      // @ts-expect-error todo: todo
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-      // @ts-expect-error todo: todo
+
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+      // @ts-expect-error badly typed base class
       const leftItemData = this._getItemData($leftItem);
+      // @ts-expect-error badly typed base class
       const rightItemData = this._getItemData($rightItem);
       const resizable = leftItemData.resizable !== false
         && rightItemData.resizable !== false
@@ -346,13 +376,13 @@ class Splitter extends (CollectionWidget as any) {
 
   _updateResizeHandlesCollapsibleState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = resizeHandle.$element();
+      const $resizeHandle = (resizeHandle.$element() as unknown) as dxElementWrapper;
 
-      // @ts-expect-error todo: todo
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-      // @ts-expect-error todo: todo
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+      // @ts-expect-error badly typed base class
       const leftItemData = this._getItemData($leftItem);
+      // @ts-expect-error badly typed base class
       const rightItemData = this._getItemData($rightItem);
 
       const showCollapsePrev = rightItemData.collapsed === true
@@ -370,10 +400,12 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _updateNestedSplitterOption(optionName: string, optionValue: unknown): void {
+    // @ts-expect-error badly typed base class
     const { items } = this.option();
 
     items.forEach((item) => {
       if (item?.splitter) {
+        // @ts-expect-error badly typed base class
         const $nestedSplitter = this._findItemElementByItem(item).find(`.${SPLITTER_CLASS}`).eq(0);
 
         if ($nestedSplitter.length) {
@@ -390,11 +422,13 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getNextVisibleItemData(index: number): Item {
+    // @ts-expect-error badly typed base class
     const { items } = this.option();
     return this._getItemDataByIndex(findIndexOfNextVisibleItem(items, index));
   }
 
   _getItemDataByIndex(index: number): Item {
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this._editStrategy.getItemDataByIndex(index);
   }
@@ -402,6 +436,7 @@ class Splitter extends (CollectionWidget as any) {
   _createEventAction(eventName: string): void {
     const actionName = getActionNameByEventName(eventName);
 
+    // @ts-expect-error badly typed base class
     this[actionName] = this._createActionByOption(eventName, {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -424,6 +459,7 @@ class Splitter extends (CollectionWidget as any) {
       rtlEnabled,
       allowKeyboardNavigation,
       separatorSize,
+      // @ts-expect-error badly typed base class
     } = this.option();
 
     return {
@@ -440,29 +476,40 @@ class Splitter extends (CollectionWidget as any) {
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        // @ts-expect-error badly typed base class
         const leftItemData = this._getItemData($leftItem);
+        // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
         const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+        // @ts-expect-error badly typed base class
         const rightItemData = this._getItemData($rightItem);
+        // @ts-expect-error badly typed base class
         const rightItemIndex = this._getIndexByItem(rightItemData);
 
         const isRightItemCollapsed = rightItemData.collapsed === true;
 
+        // @ts-expect-error todo:
         this._activeResizeHandleIndex = leftItemIndex;
+        // @ts-expect-error todo:
         this._collapseButton = 'prev';
 
         if (isRightItemCollapsed) {
+          // @ts-expect-error todo:
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
 
+          // @ts-expect-error todo:
           if (!this._collapsedItemSize) {
             for (let i = leftItemIndex; i >= 0; i -= 1) {
+              // @ts-expect-error badly typed bas class
               // eslint-disable-next-line max-depth
               if (this.option('items')[i].collapsed !== true) {
+                // @ts-expect-error todo:
                 this._collapsedItemSize = this._layout[i] / 2;
               }
             }
           }
 
+          // @ts-expect-error todo:
           this._panesCacheSize[rightItemIndex] = undefined;
           this._updateItemData('collapsed', rightItemIndex, false, false);
 
@@ -476,7 +523,9 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
+        // @ts-expect-error todo:
         this._panesCacheSize[leftItemIndex] = this._layout[leftItemIndex];
+        // @ts-expect-error todo:
         this._collapsedItemSize = this._layout[leftItemIndex];
 
         this._updateItemData('collapsed', leftItemIndex, true, false);
@@ -494,29 +543,41 @@ class Splitter extends (CollectionWidget as any) {
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        // @ts-expect-error badly typed base class
         const leftItemData = this._getItemData($leftItem);
+        // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
         const $rightItem = this._getResizeHandleRightItem($resizeHandle);
+        // @ts-expect-error badly typed base class
         const rightItemData = this._getItemData($rightItem);
+        // @ts-expect-error badly typed base class
         const rightItemIndex = this._getIndexByItem(rightItemData) as number;
 
         const isLeftItemCollapsed = leftItemData.collapsed === true;
 
+        // @ts-expect-error todo:
         this._activeResizeHandleIndex = leftItemIndex;
+        // @ts-expect-error todo:
         this._collapseButton = 'next';
 
         if (isLeftItemCollapsed) {
+          // @ts-expect-error todo:
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
 
+          // @ts-expect-error todo:
           if (!this._collapsedItemSize) {
+            // @ts-expect-error badly typed base class
             for (let i = rightItemIndex; i <= this.option('items').length - 1; i += 1) {
+              // @ts-expect-error badly typed base class
               // eslint-disable-next-line max-depth
               if (this.option('items')[i].collapsed !== true) {
+                // @ts-expect-error todo:
                 this._collapsedItemSize = this._layout[i] / 2;
               }
             }
           }
 
+          // @ts-expect-error todo:
           this._panesCacheSize[leftItemIndex] = undefined;
 
           this._updateItemData('collapsed', leftItemIndex, false, false);
@@ -531,7 +592,9 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
+        // @ts-expect-error todo:
         this._panesCacheSize[rightItemIndex] = this._layout[rightItemIndex];
+        // @ts-expect-error todo:
         this._collapsedItemSize = this._layout[rightItemIndex];
 
         this._updateItemData('collapsed', rightItemIndex, true, false);
@@ -565,22 +628,30 @@ class Splitter extends (CollectionWidget as any) {
 
         // @ts-expect-error ts-error
         this._feedbackDeferred = new Deferred();
+        // @ts-expect-error todo:
         lock(this._feedbackDeferred);
+        // @ts-expect-error todo:
         this._toggleActiveState($resizeHandle, true);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
+        // @ts-expect-error badly typed base class
         const leftItemData = this._getItemData($leftItem);
+        // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
+        // @ts-expect-error todo:
         this._activeResizeHandleIndex = leftItemIndex;
-
+        // @ts-expect-error todo:
         this._currentOnePxRatio = convertSizeToRatio(
           1,
+          // @ts-expect-error badly typed base class
           getElementSize(this.$element(), orientation),
           this._getResizeHandlesSize(),
         );
 
+        // @ts-expect-error todo:
         this._currentLayout = this._layout;
 
+        // @ts-expect-error badly typed base class
         this._updateItemsRestrictions(this.option('items'));
       },
       onResize: (e: ResizeEvent): void => {
@@ -599,14 +670,19 @@ class Splitter extends (CollectionWidget as any) {
         }
 
         const newLayout = getNextLayout(
+          // @ts-expect-error todo:
           this._currentLayout,
+          // @ts-expect-error badly typed base class
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._currentOnePxRatio),
+          // @ts-expect-error todo:
           this._activeResizeHandleIndex,
+          // @ts-expect-error todo:
           this._itemRestrictions,
         );
 
         this._applyFlexGrowFromLayout(newLayout);
+        // @ts-expect-error todo:
         this._layout = newLayout;
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
@@ -629,7 +705,9 @@ class Splitter extends (CollectionWidget as any) {
           return;
         }
 
+        // @ts-expect-error todo:
         this._feedbackDeferred.resolve();
+        // @ts-expect-error todo:
         this._toggleActiveState($resizeHandle, false);
 
         this._updateItemSizes();
@@ -716,11 +794,14 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _isHorizontalOrientation(): boolean {
+    // @ts-expect-error badly typed base class
     return this.option('orientation') === ORIENTATION.horizontal;
   }
 
   _toggleOrientationClass(): void {
+    // @ts-expect-error badly typed DomComponent class
     this.$element().toggleClass(HORIZONTAL_ORIENTATION_CLASS, this._isHorizontalOrientation());
+    // @ts-expect-error badly typed DomComponent class
     this.$element().toggleClass(VERTICAL_ORIENTATION_CLASS, !this._isHorizontalOrientation());
   }
 
@@ -730,8 +811,10 @@ class Splitter extends (CollectionWidget as any) {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
+        // @ts-expect-error todo:
         this._layout = this._getDefaultLayoutBasedOnSize();
 
+        // @ts-expect-error todo:
         this._applyFlexGrowFromLayout(this._layout);
         this._updateItemSizes();
         break;
@@ -745,6 +828,7 @@ class Splitter extends (CollectionWidget as any) {
         this._updateResizeHandlesCollapsibleState();
         break;
       case 'visible':
+        // @ts-expect-error badly typed base class
         this._invalidate();
         break;
       default:
@@ -753,39 +837,51 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _itemCollapsedOptionChanged(item: Item): void {
+    // @ts-expect-error badly typed base class
     this._updateItemsRestrictions(this.option('items'), true);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
+    // @ts-expect-error todo:
     if (isDefined(this._collapsedItemSize)) {
+      // @ts-expect-error todo:
       this._layout = getNextLayout(
+        // @ts-expect-error todo:
         this._layout,
         this._getCollapseDelta(item),
+        // @ts-expect-error todo:
         this._activeResizeHandleIndex,
+        // @ts-expect-error todo:
         this._itemRestrictions,
         true,
       );
     } else {
+      // @ts-expect-error todo:
       this._layout = this._getDefaultLayoutBasedOnSize();
     }
 
+    // @ts-expect-error todo:
     this._collapseButton = undefined;
+    // @ts-expect-error todo:
     this._collapsedItemSize = undefined;
-
+    // @ts-expect-error todo:
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
   }
 
   _getCollapseDelta(item: Item): number {
+    // @ts-expect-error badly typed base class
     const itemIndex = this._getIndexByItem(item);
-
+    // @ts-expect-error todo:
     const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
-
+    // @ts-expect-error todo:
     const itemSize = this._collapsedItemSize !== undefined && this._collapsedItemSize >= minSize
+    // @ts-expect-error todo:
       ? this._collapsedItemSize
       : minSize;
 
+    // @ts-expect-error todo:
     const deltaSign = this._collapseButton === 'prev' ? -1 : 1;
     const delta = Math.abs(itemSize - collapsedSize) * deltaSign;
 
@@ -793,22 +889,28 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getDefaultLayoutBasedOnSize(): number[] {
+    // @ts-expect-error badly typed base class
     const { items } = this.option();
 
     this._updateItemsRestrictions(items);
 
+    // @ts-expect-error todo:
     return getDefaultLayout(this._itemRestrictions);
   }
 
   _updateItemsRestrictions(items: Item[], collapseStateRestrictions = false): void {
+    // @ts-expect-error badly typed base class
     const { orientation } = this.option();
 
     const handlesSizeSum = this._getResizeHandlesSize();
+    // @ts-expect-error badly typed base class
     const elementSize = getElementSize(this.$element(), orientation);
 
+    // @ts-expect-error todo:
     this._itemRestrictions = [];
 
     items.forEach((item) => {
+      // @ts-expect-error todo:
       this._itemRestrictions.push({
         resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
         visible: item.visible !== false,
@@ -842,6 +944,7 @@ class Splitter extends (CollectionWidget as any) {
     silent = true,
   ): void {
     const itemPath = `items[${itemIndex}]`;
+    // @ts-expect-error badly typed base class
     const itemData = this.option(itemPath);
 
     if (isObject(itemData)) {
@@ -856,8 +959,10 @@ class Splitter extends (CollectionWidget as any) {
 
   _updateItemOption(path: string, value: unknown, silent = false): void {
     if (silent) {
+      // @ts-expect-error badly typed base class
       this._options.silent(path, value);
     } else {
+      // @ts-expect-error badly typed base class
       this.option(path, value);
     }
   }
@@ -883,6 +988,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _getResizeHandleItems(): dxElementWrapper {
+    // @ts-expect-error badly typed DomComponent class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this.$element().children(`.${RESIZE_HANDLE_CLASS}`);
   }
@@ -896,8 +1002,10 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   _dimensionChanged(): void {
+    // @ts-expect-error todo:
     this._layout = this._getDefaultLayoutBasedOnSize();
 
+    // @ts-expect-error todo:
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
   }
@@ -914,8 +1022,7 @@ class Splitter extends (CollectionWidget as any) {
         break;
       case 'allowKeyboardNavigation':
         this._iterateResizeHandles((instance) => {
-          // @ts-expect-error todo: todo
-          instance.option('focusStateEnabled', value);
+          instance.option('focusStateEnabled', !!value);
         });
         this._updateNestedSplitterOption(name, value);
         break;
@@ -941,6 +1048,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 
   registerKeyHandler(key: string, handler: () => void): void {
+    // @ts-expect-error badly typed DomComponent class
     this.$element().find(`.${RESIZE_HANDLE_CLASS}`).each((index, element) => {
       getComponentInstance($(element)).registerKeyHandler(key, handler);
 
@@ -949,6 +1057,7 @@ class Splitter extends (CollectionWidget as any) {
   }
 }
 
+// @ts-expect-error todo:
 Splitter.ItemClass = SplitterItem;
 
 // @ts-expect-error // temp fix
