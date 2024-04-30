@@ -900,6 +900,28 @@ QUnit.module('Rendering Scrollable', {
         });
     });
 
+    QUnit.test('Scrollable instance should have useKeyboard: false to avoid accessibility issues', function(assert) {
+        const menu = createMenu({
+            items: [{
+                text: 'root',
+                items: [{
+                    text: 'item 11',
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $rootItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const overlayContent = submenu.getOverlayContent();
+        const scrollableInstance = overlayContent.find(`.${DX_SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+        assert.strictEqual(scrollableInstance.option('useKeyboard'), false, 'useKeyboard option = false');
+    });
+
     QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
@@ -3858,10 +3880,9 @@ QUnit.module('adaptivity: behavior', {
     });
 });
 
-let helper;
 QUnit.module('Aria accessibility', {
     beforeEach: function() {
-        helper = new ariaAccessibilityTestHelper({});
+        this.helper = new ariaAccessibilityTestHelper({});
         fx.off = true;
         this.clock = sinon.useFakeTimers();
     },
@@ -3893,14 +3914,15 @@ QUnit.module('Aria accessibility', {
         $item1.trigger('dxclick');
 
         const submenu = getSubMenuInstance($item1);
+        const $overlayContent = $(submenu.getOverlayContent());
 
-        const $menuItem = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).first();
+        const $menuItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
         $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
         $menuItem.trigger('dxpointermove');
         this.clock.tick(0);
-        const $submenu = $(submenu._overlay.content()).find(`.${DX_SUBMENU_CLASS}`).eq(1);
+        const $secondLevelSubmenu = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).eq(1);
 
-        helper.checkAttributes($submenu, { role: 'menu' });
+        this.helper.checkAttributes($secondLevelSubmenu, { role: 'menu' });
     });
 
     QUnit.test('Nested submenu items has not "dxPrivateComponent" text in alt', function(assert) {
@@ -3927,15 +3949,16 @@ QUnit.module('Aria accessibility', {
         $item1.trigger('dxclick');
 
         const submenu = getSubMenuInstance($item1);
+        const $overlayContent = $(submenu.getOverlayContent());
 
-        const $menuItem = $(submenu._overlay.content()).find(`.${DX_MENU_ITEM_CLASS}`).first();
+        const $menuItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
         $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
         $menuItem.trigger('dxpointermove');
         this.clock.tick(0);
 
-        const $icon = $(submenu._overlay.content()).find(`.${DX_ICON_CLASS}`).eq(0);
+        const $icon = $overlayContent.find(`.${DX_ICON_CLASS}`).eq(0);
 
-        helper.checkAttributes($icon, { src: 'icon.png', alt: 'item icon' });
+        this.helper.checkAttributes($icon, { src: 'icon.png', alt: 'item icon' });
     });
 });
 
