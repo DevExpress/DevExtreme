@@ -241,7 +241,9 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
 });
 
 // NOTE: Moved "as is" from the QUnit integration.resources.tests (see history)
-test('[T716993]: should has horizontal scrollbar with multiple resources and fixed height container', async (t) => {
+// Skipped because in the test environment something wrong with the layout styles
+// (#parentContainer in container.html)
+test.skip('[T716993]: should has horizontal scrollbar with multiple resources and fixed height container', async (t) => {
   const scheduler = new Scheduler('#container');
 
   const scrollableContainer = scheduler.dateTableScrollableContainer;
