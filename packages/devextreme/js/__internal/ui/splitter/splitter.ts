@@ -137,10 +137,6 @@ class SplitterItem extends CollectionWidgetItem {
 }
 
 class Splitter extends CollectionWidget {
-  static ItemClass: SplitterItem;
-
-  private readonly _renderQueue: RenderQueueItem[] = [];
-
   private _panesCacheSize!: Record<string, number | undefined>;
 
   private _shouldRecalculateLayout!: boolean;
@@ -158,6 +154,8 @@ class Splitter extends CollectionWidget {
   private _itemRestrictions!: PaneRestrictions[];
 
   private _currentOnePxRatio!: number | undefined;
+
+  private _renderQueue!: RenderQueueItem[];
 
   _getDefaultOptions(): Properties {
     return extend(super._getDefaultOptions(), {
