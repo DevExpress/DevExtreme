@@ -172,12 +172,20 @@ QUnit.test('deepExtendArraySafe utility does not throw an error with \'null\' de
 });
 
 QUnit.test('deepExtendArraySafe sets undefined', function(assert) {
-    const oldValue = { time: { duration: 50 } };
-    objectUtils.deepExtendArraySafe(oldValue, { time: { duration: undefined } }, true);
-    assert.equal(oldValue.time.duration, 50);
+    const objWithValue = { time: { duration: 50 } };
+    const objNoValue = {};
+    objectUtils.deepExtendArraySafe(objWithValue, { time: { duration: undefined } }, true);
+    objectUtils.deepExtendArraySafe(objNoValue, { time: { duration: undefined } }, true);
 
-    objectUtils.deepExtendArraySafe(oldValue, { time: { duration: undefined } }, true, false, true);
-    assert.equal(oldValue.time.duration, undefined);
+    assert.equal(objWithValue.time.duration, 50);
+    assert.notOk(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
+
+    objectUtils.deepExtendArraySafe(objWithValue, { time: { duration: undefined } }, true, false, true);
+    objectUtils.deepExtendArraySafe(objNoValue, { time: { duration: undefined } }, true, false, true);
+
+    assert.equal(objWithValue.time.duration, undefined);
+    assert.ok(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
+
 });
 
 
