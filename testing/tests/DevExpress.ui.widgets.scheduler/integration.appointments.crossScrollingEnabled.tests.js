@@ -130,11 +130,14 @@ module('crossScrollingEnabled = true', config, () => {
             crossScrollingEnabled: true
         });
 
-        const appointmentsInstance = scheduler.instance.getAppointmentsInstance();
-        const items = appointmentsInstance.option('items');
+        const $apptBeforeRepaint = scheduler.appointments.getAppointment();
+        $apptBeforeRepaint.attr('test', 'true');
 
         scheduler.option('crossScrollingEnabled', false);
-        assert.notDeepEqual(appointmentsInstance.option('items'), items, 'Appointments are repainted');
+
+        const $apptAfterRepaint = scheduler.appointments.getAppointment();
+        const customTestAttr = $apptAfterRepaint.attr('test');
+        assert.equal(customTestAttr, undefined, 'Appointments are repainted');
     });
 
     if(!isMobile) {
