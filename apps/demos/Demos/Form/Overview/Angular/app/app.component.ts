@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxCheckBoxModule, DxNumberBoxModule, DxSelectBoxModule } from 'devextreme-angular';
 import { DxFormModule, DxFormTypes } from 'devextreme-angular/ui/form';
@@ -46,7 +46,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxCheckBoxModule,
     DxSelectBoxModule,
     DxNumberBoxModule,

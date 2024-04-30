@@ -5,8 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { DiagramCommand } from 'devextreme/ui/diagram';
+import { DiagramCommand, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { ButtonItem, EmptyItem, GroupItem, SimpleItem, TabbedItem } from 'devextreme/ui/form';
 import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 @Component({
@@ -55,10 +55,10 @@ export abstract class DxiHtmlEditorImageUploadTabItem extends CollectionNestedOp
         this._setOption('icon', value);
     }
 
-    get items(): Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem> {
+    get items(): Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem>) {
+    set items(value: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>) {
         this._setOption('items', value);
     }
 
@@ -83,17 +83,17 @@ export abstract class DxiHtmlEditorImageUploadTabItem extends CollectionNestedOp
         this._setOption('title', value);
     }
 
-    get commands(): Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand> {
+    get commands(): Array<dxDiagramCustomCommand | DiagramCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>) {
+    set commands(value: Array<dxDiagramCustomCommand | DiagramCommand>) {
         this._setOption('commands', value);
     }
 
-    get groups(): Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }> {
+    get groups(): Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }> {
         return this._getOption('groups');
     }
-    set groups(value: Array<any | { commands?: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>, title?: string }>) {
+    set groups(value: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }>) {
         this._setOption('groups', value);
     }
 

@@ -2,7 +2,6 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule } from '@angular/forms';
 import { AppComponent } from './app.component';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 
 import { DevExtremeModule } from 'devextreme-angular';
@@ -15,7 +14,6 @@ import { DevExtremeModule } from 'devextreme-angular';
     BrowserModule,
     ReactiveFormsModule,
     DevExtremeModule,
-    BrowserTransferStateModule,
   ],
   providers: [],
   bootstrap: [AppComponent]

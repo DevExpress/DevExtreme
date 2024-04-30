@@ -4,6 +4,8 @@ import { isDateAndTimeView } from '@ts/scheduler/r1/utils/index';
 
 import timezoneUtils from '../../m_utils_time_zone';
 
+const toMs = dateUtils.dateToMilliseconds;
+
 export class GroupedDataMapProvider {
   groupedDataMap: any;
 
@@ -110,19 +112,20 @@ export class GroupedDataMapProvider {
 
       for (let columnIndex = 0; columnIndex < row.length; columnIndex += 1) {
         const cell = row[columnIndex];
+        const originCellData = cell.cellData;
         // NOTE: If this is appointment's render call
         // we should shift the real cellData dates by viewOffset
         // to find correct cell indexes.
         const cellData = isAppointmentRender
           ? {
-            ...cell.cellData,
+            ...originCellData,
             startDate: dateUtilsTs.addOffsets(cell.cellData.startDate, [-viewOffset]),
             endDate: dateUtilsTs.addOffsets(cell.cellData.endDate, [-viewOffset]),
           }
-          : cell.cellData;
+          : originCellData;
 
         if (this._isSameGroupIndexAndIndex(cellData, groupIndex, index)) {
-          if (this.isStartDateInCell(startDate, isAllDay, cellData)) {
+          if (this.isStartDateInCell(startDate, isAllDay, cellData, originCellData)) {
             return cell.position;
           }
         }
@@ -140,26 +143,29 @@ export class GroupedDataMapProvider {
       endDate: cellEndDate,
       allDay: cellAllDay,
     }: any,
+    {
+      startDate: originCellStartDate,
+      endDate: originCellEndDate,
+    }: any,
   ): boolean {
     const { viewType } = this._viewOptions;
 
-    const cellDatesSummerToWinterDiffMs = timezoneUtils
-      .getSummerToWinterTimeDSTDiffMs(cellStartDate, cellEndDate);
-    const summerToWinterDiffMs = timezoneUtils
-      .getSummerToWinterTimeDSTDiffMs(cellStartDate, startDate);
-    const isSummerToWinterDSTChangeEdgeCase = cellDatesSummerToWinterDiffMs === 0
-      && summerToWinterDiffMs > 0;
+    const cellSecondIntervalOffset = this.getCellSecondIntervalOffset(
+      originCellStartDate,
+      originCellEndDate,
+    );
+    const isCellCoversTwoIntervals = cellSecondIntervalOffset !== 0;
 
     switch (true) {
       case !isDateAndTimeView(viewType):
       case inAllDayRow && cellAllDay:
         return dateUtils.sameDate(startDate, cellStartDate);
-      case !inAllDayRow && !isSummerToWinterDSTChangeEdgeCase:
+      case !inAllDayRow && !isCellCoversTwoIntervals:
         return startDate >= cellStartDate && startDate < cellEndDate;
-      case !inAllDayRow && isSummerToWinterDSTChangeEdgeCase:
-        return this.handleSummerToWinterDSTEdgeCase(
+      case !inAllDayRow && isCellCoversTwoIntervals:
+        return this.isStartDateInTwoIntervalsCell(
           startDate,
-          summerToWinterDiffMs,
+          cellSecondIntervalOffset,
           cellStartDate,
           cellEndDate,
         );
@@ -168,21 +174,40 @@ export class GroupedDataMapProvider {
     }
   }
 
-  private handleSummerToWinterDSTEdgeCase(
+  private getCellSecondIntervalOffset(
+    cellStartDate: Date,
+    cellEndDate: Date,
+  ): number {
+    const nextHourCellStartDate = dateUtilsTs.addOffsets(cellStartDate, [toMs('hour')]);
+    const cellTimezoneDiff = timezoneUtils.getDaylightOffset(cellStartDate, cellEndDate);
+    const cellNextHourTimezoneDiff = timezoneUtils.getDaylightOffset(
+      cellStartDate,
+      nextHourCellStartDate,
+    );
+
+    const isDSTInsideCell = cellTimezoneDiff !== 0;
+    const isWinterTimezoneNextHour = cellNextHourTimezoneDiff < 0;
+
+    return !isDSTInsideCell && isWinterTimezoneNextHour
+      ? Math.abs(cellNextHourTimezoneDiff * toMs('minute'))
+      : 0;
+  }
+
+  private isStartDateInTwoIntervalsCell(
     startDate: Date,
-    summerTimeDSTDiffMs: number,
+    secondIntervalOffset: number,
     cellStartDate: Date,
     cellEndDate: Date,
   ): boolean {
-    const nextTimezoneCellStartDate = dateUtilsTs.addOffsets(cellStartDate, [summerTimeDSTDiffMs]);
-    const nextTimezoneCellEndDate = dateUtilsTs.addOffsets(cellEndDate, [summerTimeDSTDiffMs]);
+    const nextIntervalCellStartDate = dateUtilsTs.addOffsets(cellStartDate, [secondIntervalOffset]);
+    const nextIntervalCellEndDate = dateUtilsTs.addOffsets(cellEndDate, [secondIntervalOffset]);
 
-    const isInPreviousTimezoneCell = startDate >= cellStartDate
+    const isInOriginInterval = startDate >= cellStartDate
       && startDate < cellEndDate;
-    const isInNextTimezoneCell = startDate >= nextTimezoneCellStartDate
-      && startDate < nextTimezoneCellEndDate;
+    const isInSecondInterval = startDate >= nextIntervalCellStartDate
+      && startDate < nextIntervalCellEndDate;
 
-    return isInPreviousTimezoneCell || isInNextTimezoneCell;
+    return isInOriginInterval || isInSecondInterval;
   }
 
   _isSameGroupIndexAndIndex(cellData, groupIndex, index) {

@@ -25,8 +25,7 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import { ApplyValueMode, EditorStyle, LabelMode, Mode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ChangeEvent, ClosedEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OpenedEvent, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/color_box';
 import { DropDownPredefinedButton } from 'devextreme/ui/drop_down_editor/ui.drop_down_editor';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
@@ -162,10 +161,10 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
     
      */
     @Input()
-    get buttons(): Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton> {
+    get buttons(): Array<DropDownPredefinedButton | TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>) {
+    set buttons(value: Array<DropDownPredefinedButton | TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -818,7 +817,7 @@ export class DxColorBoxComponent extends DxComponent implements OnDestroy, Contr
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | DevExpress.common.TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<DropDownPredefinedButton | TextEditorButton>>;
 
     /**
     

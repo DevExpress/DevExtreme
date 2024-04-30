@@ -11,8 +11,6 @@ import {
     DevExtremeModule
 } from 'devextreme-angular';
 
-import { BrowserTransferStateModule } from '@angular/platform-browser';
-
 import { DxServerModule } from 'devextreme-angular/server';
 
 import {
@@ -34,7 +32,6 @@ describe('Universal', () => {
             imports: [
                 DxServerModule,
                 DevExtremeModule,
-                BrowserTransferStateModule
             ]
         });
     });

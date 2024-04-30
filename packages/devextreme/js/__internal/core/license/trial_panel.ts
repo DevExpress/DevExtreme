@@ -1,4 +1,17 @@
 /* eslint-disable max-classes-per-file */
+/* eslint no-restricted-imports: ["error", { "patterns": ["*"] }] */
+export const BASE_Z_INDEX = 1500;
+
+export interface StylesMap {
+  [key: string]: string;
+}
+
+export interface CustomTrialPanelStyles {
+  containerStyles?: StylesMap;
+  textStyles?: StylesMap;
+  linkStyles?: StylesMap;
+}
+
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const componentNames = {
   trigger: 'dx-license-trigger',
@@ -17,9 +30,8 @@ const containerStyles = {
   width: '100%',
   height: 'auto',
   lineHeight: 'auto',
-  display: 'flex',
-  'justify-content': 'center',
-  'z-index': '2147483647',
+  display: 'block',
+  'z-index': `${BASE_Z_INDEX}`,
   position: 'relative',
   top: '0px',
   left: '0px',
@@ -29,7 +41,7 @@ const containerStyles = {
   border: 'none',
   margin: 'auto',
   'box-sizing': 'border-box',
-  'white-space': 'pre',
+  'text-align': 'center',
 };
 const textStyles = {
   ...commonStyles,
@@ -43,6 +55,8 @@ const textStyles = {
   'font-wight': '600',
 };
 class DxLicense extends HTMLElement {
+  public static customStyles: CustomTrialPanelStyles | undefined = undefined;
+
   private _observer: MutationObserver | null = null;
 
   private _inReassign = false;
@@ -55,15 +69,21 @@ class DxLicense extends HTMLElement {
 
   constructor() {
     super();
-    this._spanStyles = this._createImportantStyles(textStyles);
-    this._linkStyles = this._createImportantStyles(textStyles);
-    this._containerStyles = this._createImportantStyles(containerStyles);
+
+    this._spanStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.textStyles);
+    this._linkStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.linkStyles);
+    this._containerStyles = this._createImportantStyles(
+      containerStyles,
+      DxLicense.customStyles?.containerStyles,
+    );
   }
 
-  private _createImportantStyles(stylesMap: { [key: string]: string }): string {
-    return Object.keys(stylesMap)
+  private _createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
+    const styles = customStyles ? { ...defaultStyles, ...customStyles } : defaultStyles;
+
+    return Object.keys(styles)
       .reduce(
-        (cssString, currentKey) => `${cssString}${[currentKey, `${stylesMap[currentKey]} !important;`].join(': ')}`,
+        (cssString, currentKey) => `${cssString}${[currentKey, `${styles[currentKey]} !important;`].join(': ')}`,
         '',
       );
   }
@@ -146,19 +166,24 @@ class DxLicenseTrigger extends HTMLElement {
   }
 }
 
-export function registerTrialPanelComponents(): void {
+export function registerTrialPanelComponents(customStyles?: CustomTrialPanelStyles): void {
   if (typeof customElements !== 'undefined' && !customElements.get(componentNames.trigger)) {
+    DxLicense.customStyles = customStyles;
     customElements.define(componentNames.trigger, DxLicenseTrigger);
     customElements.define(componentNames.panel, DxLicense);
   }
 }
 
-export function showTrialPanel(buyNowUrl: string, version: string): void {
+export function showTrialPanel(
+  buyNowUrl: string,
+  version: string,
+  customStyles?: CustomTrialPanelStyles,
+): void {
   if (typeof customElements === 'undefined') {
     return;
   }
 
-  registerTrialPanelComponents();
+  registerTrialPanelComponents(customStyles);
 
   const trialPanelTrigger = document.createElement(componentNames.trigger);
 

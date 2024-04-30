@@ -358,9 +358,9 @@ export class FocusController extends core.ViewController {
     return undefined;
   }
 
-  public updateFocusedRow({ focusedRowKey }) {
+  public updateFocusedRow(e: { focusedRowKey?: number; focusedRowIndex?: number; preventScroll?: boolean }) {
     const that = this;
-    const focusedRowIndex = that.getDataController().getRowIndexByKey(focusedRowKey);
+    const focusedRowIndex = e.focusedRowIndex ?? that.getDataController().getRowIndexByKey(e.focusedRowKey);
     const rowsView = that.getView('rowsView');
     let $tableElement;
 
@@ -383,8 +383,10 @@ export class FocusController extends core.ViewController {
       }
     });
 
-    // @ts-expect-error
-    $mainRow && rowsView.scrollToElementVertically($mainRow);
+    if (!e.preventScroll && $mainRow) {
+      // @ts-expect-error
+      rowsView.scrollToElementVertically($mainRow);
+    }
   }
 
   private _clearPreviousFocusedRow($tableElement, focusedRowIndex) {
@@ -855,6 +857,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     let columnIndex = this.option('focusedColumnIndex')!;
     const $row = this._findRowElementForTabIndex();
 
+    const dataSource = this._dataController.dataSource();
+    const operationTypes = dataSource?.operationTypes();
+    const isPaging = !operationTypes || operationTypes.paging;
+
     if (!isDefined(this._scrollToFocusOnResize)) {
       this._scrollToFocusOnResize = () => {
         this.scrollToElementVertically(this._findRowElementForTabIndex());
@@ -863,6 +869,14 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
     }
 
     $row.attr('tabIndex', tabIndex);
+    const rowIndexFromOption = this.option('focusedRowIndex')! - this._dataController.getRowIndexOffset(true);
+
+    if (!isPaging && rowIndex < 0 && rowIndexFromOption >= 0) {
+      this._focusController.updateFocusedRow({
+        focusedRowIndex: rowIndexFromOption,
+        preventScroll,
+      });
+    }
 
     if (rowIndex >= 0 && !preventScroll) {
       if (columnIndex < 0) {
@@ -874,10 +888,8 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewFocusController e
       this._keyboardNavigationController.setFocusedCellPosition(rowIndex, columnIndex);
 
       if (this._focusController.isAutoNavigateToFocusedRow()) {
-        const dataSource = this._dataController.dataSource();
-        const operationTypes = dataSource && dataSource.operationTypes();
         // @ts-expect-error
-        if (operationTypes && !operationTypes.paging && !this._dataController.isPagingByRendering()) {
+        if (!isPaging && !this._dataController.isPagingByRendering()) {
           this.resizeCompleted.remove(this._scrollToFocusOnResize);
           this.resizeCompleted.add(this._scrollToFocusOnResize);
         }

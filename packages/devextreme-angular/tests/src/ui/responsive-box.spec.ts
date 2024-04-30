@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ViewChild
@@ -8,8 +7,6 @@ import {
 import {
     TestBed
 } from '@angular/core/testing';
-
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
     DxResponsiveBoxModule,
@@ -33,7 +30,7 @@ describe('DxResponsiveBox', () => {
         TestBed.configureTestingModule(
             {
                 declarations: [TestContainerComponent],
-                imports: [DxResponsiveBoxModule, BrowserTransferStateModule]
+                imports: [DxResponsiveBoxModule]
             });
     });
 

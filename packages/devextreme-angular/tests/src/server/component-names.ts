@@ -57,6 +57,7 @@ export const componentNames = [
     'sortable',
     'sparkline',
     'speed-dial-action',
+    'splitter',
     'switch',
     'tab-panel',
     'tabs',

@@ -95,8 +95,10 @@
   &.dx-overlay-content .dx-scrollable {
     overflow: visible;
 
-    // NOTE: to prevent bug with simulated strategy on Windows and monitor scale 150% (nested submenus are not displayed in some cases)
     .dx-scrollable-content {
+      min-height: auto;
+
+      // NOTE: to prevent bug with simulated strategy on Windows and monitor scale 150% (nested submenus are not displayed in some cases)
       transform: none !important; // stylelint-disable-line declaration-no-important
     }
 

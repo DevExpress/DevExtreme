@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
   HttpRequest, HttpInterceptor, HTTP_INTERCEPTORS, HttpHandler,
@@ -64,7 +63,7 @@ describe('Ajax request using DxHttpModule', () => {
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [TestFileUploaderComponent],
-      imports: [HttpClientTestingModule, DxHttpModule, DxFileUploaderModule, BrowserTransferStateModule],
+      imports: [HttpClientTestingModule, DxHttpModule, DxFileUploaderModule],
       providers: [{ provide: HTTP_INTERCEPTORS, useClass: TestInterceptor, multi: true }],
     });
 
