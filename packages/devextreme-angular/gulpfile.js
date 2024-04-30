@@ -164,17 +164,10 @@ gulp.task('npm.pack', gulp.series(
     .pipe(gulp.dest('./node_modules/devextreme-angular')),
 ));
 
-gulp.task('copy.source', () => {
-  const npmConfig = buildConfig.npm;
-  return gulp.src(`${path.join(npmConfig.distPath, '/**/*.*')}`)
-    .pipe(gulp.dest('./node_modules/devextreme-angular'));
-});
-
 // ------------Main------------
 
 const buildTask = gulp.series(
-  'build.components',
-  'copy.source',
+  'build.components'
 );
 
 gulp.task('build', buildTask);
@@ -247,8 +240,6 @@ gulp.task('test.components.server.debug', (done) => {
 
   new karmaServer(config, done).start();
 });
-
-// gulp.task('run.tests', gulp.series('test.components.client'));
 
 gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
 
