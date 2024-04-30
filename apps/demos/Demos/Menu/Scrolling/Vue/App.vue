@@ -36,7 +36,7 @@ function itemClick(e: any) {
   }
 }
 
-function onSubmenuShowing({ submenuContainer }: any) {
+function onSubmenuShowing({ submenuContainer }: HTMLElement) {
   submenuContainer.style.maxHeight = limitSubmenuHeight.value ? `${SUBMENU_HEIGHT}px` : '';
 }
 </script>
