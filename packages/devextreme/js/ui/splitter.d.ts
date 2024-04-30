@@ -33,7 +33,7 @@ export interface ResizeInfo {
     readonly handleElement?: DxElement;
 }
 
-type ItemLike<TKey> = string | Item<TKey> | any;
+type ItemLike<TKey> = Item<TKey>;
 
 export {
     Mode,
@@ -147,7 +147,7 @@ export interface dxSplitterOptions<
 > extends CollectionWidgetOptions<dxSplitter<TItem, TKey>, TItem, TKey> {
     /**
      * @docid
-     * @type string | Array<string | dxSplitterItem | any> | Store | DataSource | DataSourceOptions | null
+     * @type string | Array<dxSplitterItem> | Store | DataSource | DataSourceOptions | null
      * @default null
      * @public
      */
@@ -160,7 +160,7 @@ export interface dxSplitterOptions<
     orientation?: Orientation;
     /**
      * @docid
-     * @type Array<string | dxSplitterItem | any>
+     * @type Array<dxSplitterItem>
      * @fires dxSplitterOptions.onOptionChanged
      * @public
      */
