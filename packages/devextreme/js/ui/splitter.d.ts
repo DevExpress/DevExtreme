@@ -33,6 +33,8 @@ export interface ResizeInfo {
     readonly handleElement?: DxElement;
 }
 
+type ItemLike<TKey> = Item<TKey>;
+
 export {
     Mode,
 };
@@ -43,7 +45,7 @@ export {
  * @type object
  * @inherits EventInfo
  */
-export type ContentReadyEvent<TItem extends Item<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>>;
+export type ContentReadyEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>>;
 
 /**
  * @docid _ui_splitter_DisposingEvent
@@ -51,7 +53,7 @@ export type ContentReadyEvent<TItem extends Item<TKey> = any, TKey = any> = Even
  * @type object
  * @inherits EventInfo
  */
-export type DisposingEvent<TItem extends Item<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>>;
+export type DisposingEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>>;
 
 /**
  * @docid _ui_splitter_InitializedEvent
@@ -59,7 +61,7 @@ export type DisposingEvent<TItem extends Item<TKey> = any, TKey = any> = EventIn
  * @type object
  * @inherits InitializedEventInfo
  */
-export type InitializedEvent<TItem extends Item<TKey> = any, TKey = any> = InitializedEventInfo<dxSplitter<TItem, TKey>>;
+export type InitializedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = InitializedEventInfo<dxSplitter<TItem, TKey>>;
 
 /**
  * @docid _ui_splitter_ItemClickEvent
@@ -67,7 +69,7 @@ export type InitializedEvent<TItem extends Item<TKey> = any, TKey = any> = Initi
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemClickEvent<TItem extends Item<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
+export type ItemClickEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TItem, TKey>, MouseEvent | PointerEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_splitter_ItemContextMenuEvent
@@ -75,7 +77,7 @@ export type ItemClickEvent<TItem extends Item<TKey> = any, TKey = any> = NativeE
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemContextMenuEvent<TItem extends Item<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
+export type ItemContextMenuEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TItem, TKey>, MouseEvent | PointerEvent | TouchEvent> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_splitter_ItemRenderedEvent
@@ -83,7 +85,7 @@ export type ItemContextMenuEvent<TItem extends Item<TKey> = any, TKey = any> = N
  * @type object
  * @inherits EventInfo,ItemInfo
  */
-export type ItemRenderedEvent<TItem extends Item<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>> & ItemInfo<TItem>;
+export type ItemRenderedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>> & ItemInfo<TItem>;
 
 /**
  * @docid _ui_splitter_OptionChangedEvent
@@ -91,7 +93,7 @@ export type ItemRenderedEvent<TItem extends Item<TKey> = any, TKey = any> = Even
  * @type object
  * @inherits EventInfo,ChangedOptionInfo
  */
-export type OptionChangedEvent<TItem extends Item<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>> & ChangedOptionInfo;
+export type OptionChangedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = EventInfo<dxSplitter<TItem, TKey>> & ChangedOptionInfo;
 
 /**
  * @docid _ui_splitter_ResizeEvent
@@ -99,7 +101,7 @@ export type OptionChangedEvent<TItem extends Item<TKey> = any, TKey = any> = Eve
  * @type object
  * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
  */
-export type ResizeEvent<TItem extends Item<TKey> = any, TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
+export type ResizeEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
  * @docid _ui_splitter_ResizeStartEvent
@@ -107,7 +109,7 @@ export type ResizeEvent<TItem extends Item<TKey> = any, TKey = any> = Cancelable
  * @type object
  * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
  */
-export type ResizeStartEvent<TItem extends Item<TKey> = any, TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
+export type ResizeStartEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
  * @docid _ui_splitter_ResizeEndEvent
@@ -115,7 +117,7 @@ export type ResizeStartEvent<TItem extends Item<TKey> = any, TKey = any> = Cance
  * @type object
  * @inherits Cancelable,NativeEventInfo,_ui_splitter_ResizeInfo
  */
-export type ResizeEndEvent<TItem extends Item<TKey> = any, TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
+export type ResizeEndEvent<TItem extends ItemLike<TKey> = any, TKey = any> = Cancelable & NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ResizeInfo;
 
 /**
  * @docid _ui_splitter_ItemCollapsedEvent
@@ -123,7 +125,7 @@ export type ResizeEndEvent<TItem extends Item<TKey> = any, TKey = any> = Cancela
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemCollapsedEvent<TItem extends Item<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
+export type ItemCollapsedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
  * @docid _ui_splitter_ItemExpandedEvent
@@ -131,7 +133,7 @@ export type ItemCollapsedEvent<TItem extends Item<TKey> = any, TKey = any> = Nat
  * @type object
  * @inherits NativeEventInfo,ItemInfo
  */
-export type ItemExpandedEvent<TItem extends Item<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
+export type ItemExpandedEvent<TItem extends ItemLike<TKey> = any, TKey = any> = NativeEventInfo<dxSplitter<TKey>, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & ItemInfo<TKey>;
 
 /**
  * @deprecated use Properties instead
@@ -140,7 +142,7 @@ export type ItemExpandedEvent<TItem extends Item<TKey> = any, TKey = any> = Nati
  * @docid
  */
 export interface dxSplitterOptions<
-    TItem extends Item<TKey> = any,
+    TItem extends ItemLike<TKey> = any,
     TKey = any,
 > extends CollectionWidgetOptions<dxSplitter<TItem, TKey>, TItem, TKey> {
     /**
@@ -229,7 +231,7 @@ export interface dxSplitterOptions<
  * @public
  */
 export default class dxSplitter<
-    TItem extends Item<TKey> = any,
+    TItem extends ItemLike<TKey> = any,
     TKey = any,
 > extends CollectionWidget<Properties<TItem, TKey>, TItem, TKey> { }
 
@@ -297,7 +299,7 @@ export interface dxSplitterItem<TKey = any> extends CollectionWidgetItem {
 
 /** @public */
 export type ExplicitTypes<
-    TItem extends Item<TKey>,
+    TItem extends ItemLike<TKey>,
     TKey,
 > = {
     Properties: Properties<TItem, TKey>;
@@ -312,7 +314,7 @@ export type ExplicitTypes<
 
 /** @public */
 export type Properties<
-    TItem extends Item<TKey> = any,
+    TItem extends ItemLike<TKey> = any,
     TKey = any,
 > = dxSplitterOptions<TItem, TKey>;
 

@@ -25677,7 +25677,7 @@ declare module DevExpress.ui {
    * [descr:dxSplitter]
    */
   export class dxSplitter<
-    TItem extends DevExpress.ui.dxSplitter.Item<TKey> = any,
+    TItem extends DevExpress.ui.dxSplitter.ItemLike<TKey> = any,
     TKey = any
   > extends CollectionWidget<
     DevExpress.ui.dxSplitter.Properties<TItem, TKey>,
@@ -25689,17 +25689,17 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_ContentReadyEvent]
      */
     export type ContentReadyEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxSplitter<TItem, TKey>>;
     /**
      * [descr:_ui_splitter_DisposingEvent]
      */
     export type DisposingEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxSplitter<TItem, TKey>>;
-    export type ExplicitTypes<TItem extends Item<TKey>, TKey> = {
+    export type ExplicitTypes<TItem extends ItemLike<TKey>, TKey> = {
       Properties: Properties<TItem, TKey>;
       ContentReadyEvent: ContentReadyEvent<TItem, TKey>;
       DisposingEvent: DisposingEvent<TItem, TKey>;
@@ -25713,14 +25713,14 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_InitializedEvent]
      */
     export type InitializedEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.InitializedEventInfo<dxSplitter<TItem, TKey>>;
     /**
      * [descr:_ui_splitter_ItemClickEvent]
      */
     export type ItemClickEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxSplitter<TItem, TKey>,
@@ -25731,7 +25731,7 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_ItemCollapsedEvent]
      */
     export type ItemCollapsedEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxSplitter<TKey>,
@@ -25742,7 +25742,7 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_ItemContextMenuEvent]
      */
     export type ItemContextMenuEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxSplitter<TItem, TKey>,
@@ -25753,7 +25753,7 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_ItemExpandedEvent]
      */
     export type ItemExpandedEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.NativeEventInfo<
       dxSplitter<TKey>,
@@ -25761,10 +25761,14 @@ declare module DevExpress.ui {
     > &
       DevExpress.events.ItemInfo<TKey>;
     /**
+     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     */
+    type ItemLike<TKey> = Item<TKey>;
+    /**
      * [descr:_ui_splitter_ItemRenderedEvent]
      */
     export type ItemRenderedEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxSplitter<TItem, TKey>> &
       DevExpress.events.ItemInfo<TItem>;
@@ -25772,19 +25776,19 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_OptionChangedEvent]
      */
     export type OptionChangedEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.EventInfo<dxSplitter<TItem, TKey>> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = dxSplitterOptions<TItem, TKey>;
     /**
      * [descr:_ui_splitter_ResizeEndEvent]
      */
     export type ResizeEndEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
@@ -25796,7 +25800,7 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_ResizeEvent]
      */
     export type ResizeEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
@@ -25818,7 +25822,7 @@ declare module DevExpress.ui {
      * [descr:_ui_splitter_ResizeStartEvent]
      */
     export type ResizeStartEvent<
-      TItem extends Item<TKey> = any,
+      TItem extends ItemLike<TKey> = any,
       TKey = any
     > = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
@@ -25870,7 +25874,7 @@ declare module DevExpress.ui {
    * @deprecated [depNote:dxSplitterOptions]
    */
   export interface dxSplitterOptions<
-    TItem extends DevExpress.ui.dxSplitter.Item<TKey> = any,
+    TItem extends DevExpress.ui.dxSplitter.ItemLike<TKey> = any,
     TKey = any
   > extends CollectionWidgetOptions<dxSplitter<TItem, TKey>, TItem, TKey> {
     /**
