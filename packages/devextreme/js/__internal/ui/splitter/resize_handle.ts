@@ -430,7 +430,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
 
     if (showCollapsePrev === true) {
       eventsEngine.on(
-
         this._$collapsePrevButton,
         this.CLICK_EVENT_NAME,
         this._collapsePrevHandler.bind(this),

@@ -137,6 +137,8 @@ class SplitterItem extends CollectionWidgetItem {
 }
 
 class Splitter extends CollectionWidget {
+  private _renderQueue: RenderQueueItem[] = [];
+
   private _panesCacheSize!: Record<string, number | undefined>;
 
   private _shouldRecalculateLayout!: boolean;
@@ -154,8 +156,6 @@ class Splitter extends CollectionWidget {
   private _itemRestrictions!: PaneRestrictions[];
 
   private _currentOnePxRatio!: number | undefined;
-
-  private _renderQueue!: RenderQueueItem[];
 
   _getDefaultOptions(): Properties {
     return extend(super._getDefaultOptions(), {
@@ -248,10 +248,12 @@ class Splitter extends CollectionWidget {
     if (!this._shouldRecalculateLayout) {
       return;
     }
+
     this._layout = this._getDefaultLayoutBasedOnSize();
 
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
+
     this._shouldRecalculateLayout = false;
   }
 
@@ -843,6 +845,7 @@ class Splitter extends CollectionWidget {
 
     this._collapseButton = undefined;
     this._collapsedItemSize = undefined;
+
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
   }
