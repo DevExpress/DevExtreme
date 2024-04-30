@@ -185,7 +185,19 @@ QUnit.test('deepExtendArraySafe sets undefined', function(assert) {
 
     assert.equal(objWithValue.time.duration, undefined);
     assert.ok(Object.prototype.hasOwnProperty.call(objNoValue.time, 'duration'));
-
 });
 
+
+QUnit.test('deepExtendArraySafe clones array inside object deeply', function(assert) {
+    const objWithValue = { time: undefined };
+    const complexTime = { complexTime: 2 };
+    const timeArray = [1, complexTime, 3];
+    objectUtils.deepExtendArraySafe(objWithValue, { time: timeArray }, true);
+
+    assert.deepEqual(objWithValue.time, timeArray);
+    assert.notStrictEqual(objWithValue.time, timeArray);
+    assert.notStrictEqual(objWithValue.time[1], complexTime);
+    timeArray[0] = 5;
+    assert.deepEqual(objWithValue.time, [1, complexTime, 3]);
+});
 
