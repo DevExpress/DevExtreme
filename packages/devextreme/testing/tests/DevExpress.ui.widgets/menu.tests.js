@@ -18,6 +18,7 @@ import * as checkStyleHelper from '../../helpers/checkStyleHelper.js';
 
 import 'generic_light.css!';
 import { implementationsMap, getHeight, getWidth, getOuterHeight } from 'core/utils/size';
+import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
 QUnit.testStart(function() {
     const markup =
@@ -42,6 +43,7 @@ const DX_MENU_ITEM_CLASS = DX_MENU_CLASS + '-item';
 const DX_MENU_ITEM_SELECTED_CLASS = 'dx-menu-item-selected';
 const DX_MENU_ITEM_EXPANDED_CLASS = 'dx-menu-item-expanded';
 const DX_MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
+const DX_ICON_CLASS = 'dx-icon';
 const DX_CONTEXT_MENU_CLASS = 'dx-context-menu';
 const DX_CONTEXT_MENU_DELIMETER_CLASS = 'dx-context-menu-content-delimiter';
 const DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS = 'dx-context-menu-container-border';
@@ -896,6 +898,28 @@ QUnit.module('Rendering Scrollable', {
         $overlayContent.find(`.${DX_SCROLLABLE_CONTENT_CLASS}`).each((_, scrollableContent) => {
             assert.strictEqual(window.getComputedStyle(scrollableContent).minHeight, '0px', 'min-height = auto');
         });
+    });
+
+    QUnit.test('Scrollable instance should have useKeyboard: false to avoid accessibility issues', function(assert) {
+        const menu = createMenu({
+            items: [{
+                text: 'root',
+                items: [{
+                    text: 'item 11',
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $rootItem = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $rootItem.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($rootItem);
+        const overlayContent = submenu.getOverlayContent();
+        const scrollableInstance = overlayContent.find(`.${DX_SCROLLABLE_CLASS}`).dxScrollable('instance');
+
+        assert.strictEqual(scrollableInstance.option('useKeyboard'), false, 'useKeyboard option = false');
     });
 
     QUnit.module('On dimension changed', {
@@ -3853,6 +3877,88 @@ QUnit.module('adaptivity: behavior', {
         $($button).trigger('dxclick');
 
         assert.ok($treeview.hasClass(DX_STATE_FOCUSED_CLASS), 'treeview is focused');
+    });
+});
+
+QUnit.module('Aria accessibility', {
+    beforeEach: function() {
+        this.helper = new ariaAccessibilityTestHelper({});
+        fx.off = true;
+        this.clock = sinon.useFakeTimers();
+    },
+    afterEach: function() {
+        fx.off = false;
+        this.clock.restore();
+    }
+}, () => {
+    QUnit.test('Nested submenu has the "menu" role', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenu({
+            items: [{
+                text: 'item 1',
+                items: [{
+                    text: 'item 11',
+                    items: [{
+                        text: 'item 111',
+                    }],
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $item1.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($item1);
+        const $overlayContent = $(submenu.getOverlayContent());
+
+        const $menuItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
+        $menuItem.trigger('dxpointermove');
+        this.clock.tick(0);
+        const $secondLevelSubmenu = $overlayContent.find(`.${DX_SUBMENU_CLASS}`).eq(1);
+
+        this.helper.checkAttributes($secondLevelSubmenu, { role: 'menu' });
+    });
+
+    QUnit.test('Nested submenu items has not "dxPrivateComponent" text in alt', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        const menu = createMenu({
+            items: [{
+                text: 'item 1',
+                items: [{
+                    text: 'item 11',
+                    items: [{
+                        text: 'item 111',
+                        icon: 'icon.png',
+                    }],
+                }],
+            }],
+            showFirstSubmenuMode: 'onClick',
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+        const $item1 = $(menu.element).find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $item1.trigger('dxclick');
+
+        const submenu = getSubMenuInstance($item1);
+        const $overlayContent = $(submenu.getOverlayContent());
+
+        const $menuItem = $overlayContent.find(`.${DX_MENU_ITEM_CLASS}`).first();
+        $(submenu.itemsContainer()).trigger($.Event('dxhoverstart', { target: $menuItem.get(0) }));
+        $menuItem.trigger('dxpointermove');
+        this.clock.tick(0);
+
+        const $icon = $overlayContent.find(`.${DX_ICON_CLASS}`).eq(0);
+
+        this.helper.checkAttributes($icon, { src: 'icon.png', alt: 'item icon' });
     });
 });
 
