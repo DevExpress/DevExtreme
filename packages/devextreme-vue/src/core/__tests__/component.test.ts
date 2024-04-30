@@ -767,10 +767,14 @@ describe('component rendering', () => {
 
     it('watches option changes', (done) => {
       const vm = defineComponent({
-        template:
-                    '<test-component>'
-                    + '  <nested-with-prop-ref :prop1="value" :sample-prop-ref="samplePropRef" />'
-                    + '</test-component>',
+        template: `
+          <test-component>
+            <nested-with-prop-ref :prop1="value" :sample-prop-ref="samplePropRef" />
+            <div id="item-container"></div>
+            <template #item="{ data }">
+              <span>template {{data.item.value.test}}</span>
+            </template>
+          </test-component>`,
         components: {
           TestComponent,
           NestedWithPropRef,
@@ -778,21 +782,28 @@ describe('component rendering', () => {
         props: ['value', 'samplePropRef']
       });
 
+      const testRef = ref({ test: 'default' });
       const wrapper = mount(vm, {
         props: {
           value: 123,
-          samplePropRef: { test: 'default' },
+          samplePropRef: testRef,
         },
       });
+      renderTemplate(
+        'item',
+        { item: testRef },
+        wrapper.get('#item-container').element
+      );
 
-      const testRef = ref({ test: 'ref' });
+      testRef.value = { test: 'ref' };
       wrapper.setProps({ value: 456 });
-      wrapper.setProps({ samplePropRef: testRef.value });
 
       nextTick(() => {
         expect(Widget.option).toHaveBeenCalledTimes(2);
 
         expect(isProxy(Widget.option.mock.calls[0][1])).toBeFalsy();
+        
+        expect(wrapper.get('#item-container').text()).toBe('template ref');
 
         expect(Widget.option).toHaveBeenCalledWith('nestedOption.prop1', 456);
         expect(Widget.option).toHaveBeenCalledWith('nestedOption.samplePropRef', { test: 'ref' });
