@@ -100,7 +100,7 @@ const products = [{
   ],
 },
 {
-  text: 'Cameras and camcorders ',
+  text: 'Cameras',
   items: [
     {
       text: 'Camcorders',
