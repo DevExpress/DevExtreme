@@ -27,7 +27,7 @@ export class AppComponent {
     this.products = service.getProducts();
   }
 
-  itemClick(e: any) {
+  itemClick(e: ItemClickEvent) {
     if (!e.itemData.items) {
       notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
     }

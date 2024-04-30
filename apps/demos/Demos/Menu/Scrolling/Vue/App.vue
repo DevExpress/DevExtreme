@@ -30,7 +30,7 @@ const SUBMENU_HEIGHT = 200;
 const products = ref(service.getProducts());
 const limitSubmenuHeight = ref(false);
 
-function itemClick(e: any) {
+function itemClick(e: ItemClickEvent) {
   if (!e.itemData.items) {
     notify(`The "${e.itemData.text}" item was clicked`, 'success', 1500);
   }
