@@ -67,7 +67,7 @@
     "devexpress"
   ],
   "dependencies": {
-    "@angular-devkit/schematics": "16.2.10",
+    "@angular-devkit/schematics": "16.2.14",
     "devextreme-schematics": "*",
     "inferno-server": "7.4.11"
   },
