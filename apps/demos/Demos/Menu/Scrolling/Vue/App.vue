@@ -41,12 +41,6 @@ function onSubmenuShowing({ submenuContainer }: any) {
 }
 </script>
 <style>
-html,
-body {
-  width: 100%;
-  height: 100%;
-}
-
 .demo-container {
   display: flex;
 }
