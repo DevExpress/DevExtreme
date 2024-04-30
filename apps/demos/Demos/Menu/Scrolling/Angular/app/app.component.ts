@@ -33,7 +33,7 @@ export class AppComponent {
     }
   }
 
-  onSubmenuShowing({ submenuContainer }: any) {
+  onSubmenuShowing({ submenuContainer }: HTMLElement) {
     submenuContainer.style.maxHeight = this.limitSubmenuHeight ? `${this.SUBMENU_HEIGHT}px` : '';
   }
 }
