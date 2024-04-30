@@ -38,7 +38,7 @@
     "@angular/compiler": "16.2.0",
     "@angular/compiler-cli": "16.2.0",
     "@angular/core": "16.2.0",
-    "@angular-devkit/schematics": "16.2.0",
+    "@angular-devkit/schematics": "16.2.13",
     "@angular-devkit/architect": "0.1602.14",
     "@angular/forms": "16.2.0",
     "@angular/platform-browser": "16.2.0",
