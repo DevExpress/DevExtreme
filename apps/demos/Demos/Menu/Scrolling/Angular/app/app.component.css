@@ -1,20 +1,20 @@
-.demo-container {
+::ng-deep .demo-container {
   display: flex;
 }
 
-.label {
+::ng-deep .label {
   font-size: 22px;
   padding-bottom: 24px;
 }
 
-.content {
+::ng-deep .content {
   flex-grow: 1;
   width: 100%;
   min-width: 500px;
   overflow: clip;
 }
 
-.options {
+::ng-deep .options {
   display: flex;
   flex-direction: column;
   flex-shrink: 0;
@@ -22,11 +22,11 @@
   background-color: rgba(191, 191, 191, 0.15);
 }
 
-.caption {
+::ng-deep .caption {
   font-size: 18px;
   font-weight: 500;
 }
 
-.option {
+::ng-deep .option {
   margin-top: 10px;
 }
