@@ -48,7 +48,8 @@ import {
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
 import type {
-  FlexProperty, InteractionEvent, RenderQueueItem, ResizeEvents, ResizeHandleOptions,
+  FlexProperty, InteractionEvent, PaneRestrictions, RenderQueueItem, ResizeEvents,
+  ResizeHandleOptions,
 } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -140,17 +141,23 @@ class Splitter extends CollectionWidget {
 
   private readonly _renderQueue: RenderQueueItem[] = [];
 
-  private _panesCacheSize!: Record<string, string | number | undefined>;
+  private _panesCacheSize!: Record<string, number | undefined>;
 
   private _shouldRecalculateLayout!: boolean;
 
   private _layout!: number[];
 
+  private _currentLayout!: number[];
+
   private _activeResizeHandleIndex!: number;
 
   private _collapseButton!: string | undefined;
 
-  private _collapsedItemSize!: string | number | undefined;
+  private _collapsedItemSize!: number | undefined;
+
+  private _itemRestrictions!: PaneRestrictions[];
+
+  private _currentOnePxRatio!: number | undefined;
 
   _getDefaultOptions(): Properties {
     return extend(super._getDefaultOptions(), {
@@ -628,7 +635,7 @@ class Splitter extends CollectionWidget {
         // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
         this._activeResizeHandleIndex = leftItemIndex;
-        // @ts-expect-error todo:
+
         this._currentOnePxRatio = convertSizeToRatio(
           1,
           // @ts-expect-error badly typed base class
@@ -636,7 +643,6 @@ class Splitter extends CollectionWidget {
           this._getResizeHandlesSize(),
         );
 
-        // @ts-expect-error todo:
         this._currentLayout = this._layout;
 
         // @ts-expect-error badly typed base class
@@ -658,13 +664,11 @@ class Splitter extends CollectionWidget {
         }
 
         const newLayout = getNextLayout(
-          // @ts-expect-error todo:
           this._currentLayout,
           // @ts-expect-error badly typed base class
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._currentOnePxRatio),
           this._activeResizeHandleIndex,
-          // @ts-expect-error todo:
           this._itemRestrictions,
         );
 
@@ -832,7 +836,6 @@ class Splitter extends CollectionWidget {
         this._layout,
         this._getCollapseDelta(item),
         this._activeResizeHandleIndex,
-        // @ts-expect-error todo:
         this._itemRestrictions,
         true,
       );
@@ -849,8 +852,9 @@ class Splitter extends CollectionWidget {
   _getCollapseDelta(item: Item): number {
     // @ts-expect-error badly typed base class
     const itemIndex = this._getIndexByItem(item);
-    // @ts-expect-error todo:
+
     const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
+
     const itemSize = this._collapsedItemSize !== undefined && this._collapsedItemSize >= minSize
       ? this._collapsedItemSize
       : minSize;
@@ -867,7 +871,6 @@ class Splitter extends CollectionWidget {
 
     this._updateItemsRestrictions(items);
 
-    // @ts-expect-error todo:
     return getDefaultLayout(this._itemRestrictions);
   }
 
@@ -879,11 +882,9 @@ class Splitter extends CollectionWidget {
     // @ts-expect-error badly typed base class
     const elementSize = getElementSize(this.$element(), orientation);
 
-    // @ts-expect-error todo:
     this._itemRestrictions = [];
 
     items.forEach((item) => {
-      // @ts-expect-error todo:
       this._itemRestrictions.push({
         resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
         visible: item.visible !== false,
