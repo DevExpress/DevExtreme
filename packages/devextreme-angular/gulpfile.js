@@ -8,6 +8,7 @@ const karmaServer = require('karma').Server;
 const karmaConfig = require('karma').config;
 const header = require('gulp-header');
 const ngPackagr = require('ng-packagr');
+const fs = require('fs');
 const { exec } = require('child_process');
 
 const { AngularMetadataGenerator } = require('devextreme-internal-tools');
@@ -192,6 +193,120 @@ gulp.task('clean.tests', () => {
   return del([outputFolderPath]);
 });
 
+gulp.task('add.package.json', (done) => {
+  const componentNames = [
+    'accordion',
+    'action-sheet',
+    'autocomplete',
+    'bar-gauge',
+    'box',
+    'bullet',
+    'button',
+    'calendar',
+    'chart',
+    'check-box',
+    'circular-gauge',
+    'color-box',
+    'context-menu',
+    'data-grid',
+    'date-box',
+    'date-range-box',
+    'defer-rendering',
+    'diagram',
+    'draggable',
+    'drawer',
+    'drop-down-box',
+    'file-uploader',
+    'file-manager',
+    'filter-builder',
+    'form',
+    'funnel',
+    'gallery',
+    'gantt',
+    'html-editor',
+    'linear-gauge',
+    'list',
+    'load-indicator',
+    'load-panel',
+    'lookup',
+    'map',
+    'menu',
+    'multi-view',
+    'number-box',
+    'pie-chart',
+    'pivot-grid',
+    'pivot-grid-field-chooser',
+    'polar-chart',
+    'popover',
+    'popup',
+    'progress-bar',
+    'radio-group',
+    'range-selector',
+    'range-slider',
+    'recurrence-editor',
+    'resizable',
+    'responsive-box',
+    'sankey',
+    'scheduler',
+    'scroll-view',
+    'select-box',
+    'slider',
+    'sortable',
+    'sparkline',
+    'speed-dial-action',
+    'splitter',
+    'switch',
+    'tab-panel',
+    'tabs',
+    'tag-box',
+    'text-area',
+    'text-box',
+    'tile-view',
+    'toast',
+    'toolbar',
+    'tooltip',
+    'tree-list',
+    'tree-map',
+    'tree-view',
+    'vector-map',
+    'validator',
+    'validation-summary',
+    'validation-group',
+    'drop-down-button',
+    'button-group',
+    'nested'
+
+  ];
+
+  componentNames.forEach((name) => {
+    const content = `{"module": "../../fesm2022/devextreme-angular-ui-${name}.mjs"}`;
+
+    fs.writeFileSync(path.join(path.resolve('./npm/dist/ui'), name, 'package.json'), content, (err) => {
+      if (err) {
+        console.error('Ошибка при записи в файл:', err);
+      } else {
+        console.log('Файл успешно создан и записан:', name);
+      }
+    });
+  });
+
+  [
+    'core',
+    'server',
+    'http'
+  ].forEach((name) => {
+    const content = `{"module": "../fesm2022/devextreme-angular-${name}.mjs"}`;
+
+    fs.writeFileSync(path.join(path.resolve('./npm/dist/'), name, 'package.json'), content, (err) => {
+      if (err) {
+        console.error('Ошибка при записи в файл:', err);
+      }
+    });
+  });
+
+  done();
+});
+
 gulp.task('generate-component-names', (done) => {
   const generator = new AngularComponentNamesGenerator(buildConfig.tools.componentNamesGenerator);
 
@@ -200,7 +315,7 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', () => {
+gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'add.package.json', () => {
   const config = buildConfig.components;
   const testConfig = buildConfig.tests;
 
