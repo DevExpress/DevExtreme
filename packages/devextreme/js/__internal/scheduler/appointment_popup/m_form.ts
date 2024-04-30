@@ -17,7 +17,7 @@ import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 import { Semaphore } from '@ts/scheduler/r1/semaphore/index';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
-import timeZoneDataUtils from '../timezones/m_utils_timezones_data';
+import timeZoneUtils from '../m_utils_time_zone';
 
 const SCREEN_SIZE_OF_SINGLE_COLUMN = 600;
 
@@ -173,7 +173,7 @@ export class AppointmentForm {
 
   createTimeZoneDataSource(date) {
     return new DataSource({
-      store: timeZoneDataUtils.getDisplayedTimeZones(date),
+      store: timeZoneUtils.getTimeZones(date),
       paginate: true,
       pageSize: 10,
     });
