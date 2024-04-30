@@ -113,7 +113,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */
@@ -141,7 +140,6 @@ export interface dxOverlayOptions<TComponent> extends WidgetOptions<TComponent> 
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */
