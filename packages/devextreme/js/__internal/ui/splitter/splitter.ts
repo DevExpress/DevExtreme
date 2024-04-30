@@ -74,7 +74,6 @@ const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class SplitterItem extends CollectionWidgetItem {
   constructor($element, options, rawData) {
     options._id = `dx_${new Guid()}`;
@@ -136,9 +135,22 @@ class SplitterItem extends CollectionWidgetItem {
   }
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class Splitter extends CollectionWidget {
-  private _renderQueue: RenderQueueItem[] = [];
+  static ItemClass: SplitterItem;
+
+  private readonly _renderQueue: RenderQueueItem[] = [];
+
+  private _panesCacheSize!: Record<string, string | number | undefined>;
+
+  private _shouldRecalculateLayout!: boolean;
+
+  private _layout!: number[];
+
+  private _activeResizeHandleIndex!: number;
+
+  private _collapseButton!: string | undefined;
+
+  private _collapsedItemSize!: string | number | undefined;
 
   _getDefaultOptions(): Properties {
     return extend(super._getDefaultOptions(), {
@@ -200,7 +212,6 @@ class Splitter extends CollectionWidget {
 
     super._initMarkup();
 
-    // @ts-expect-error todo:
     this._panesCacheSize = {};
     this._attachResizeObserverSubscription();
   }
@@ -229,17 +240,13 @@ class Splitter extends CollectionWidget {
   _attachHoldEvent(): void {}
 
   _resizeHandler(): void {
-    // @ts-expect-error todo:
     if (!this._shouldRecalculateLayout) {
       return;
     }
-    // @ts-expect-error todo:
     this._layout = this._getDefaultLayoutBasedOnSize();
 
-    // @ts-expect-error todo:
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
-    // @ts-expect-error todo:
     this._shouldRecalculateLayout = false;
   }
 
@@ -251,14 +258,11 @@ class Splitter extends CollectionWidget {
 
     // @ts-expect-error badly typed DomComponent class
     if (isElementVisible(this.$element().get(0))) {
-      // @ts-expect-error todo:
       this._layout = this._getDefaultLayoutBasedOnSize();
-      // @ts-expect-error todo:
       this._applyFlexGrowFromLayout(this._layout);
 
       this._updateItemSizes();
     } else {
-      // @ts-expect-error todo:
       this._shouldRecalculateLayout = true;
     }
 
@@ -338,7 +342,7 @@ class Splitter extends CollectionWidget {
   }
 
   _getItemInstance($item: dxElementWrapper): SplitterItem {
-    // @ts-expect-error todo
+    // @ts-expect-error badly typed base class
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return Splitter.ItemClass.getInstance($item);
   }
@@ -488,28 +492,22 @@ class Splitter extends CollectionWidget {
 
         const isRightItemCollapsed = rightItemData.collapsed === true;
 
-        // @ts-expect-error todo:
         this._activeResizeHandleIndex = leftItemIndex;
-        // @ts-expect-error todo:
         this._collapseButton = 'prev';
 
         if (isRightItemCollapsed) {
-          // @ts-expect-error todo:
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
 
-          // @ts-expect-error todo:
           if (!this._collapsedItemSize) {
             for (let i = leftItemIndex; i >= 0; i -= 1) {
               // @ts-expect-error badly typed bas class
               // eslint-disable-next-line max-depth
               if (this.option('items')[i].collapsed !== true) {
-                // @ts-expect-error todo:
                 this._collapsedItemSize = this._layout[i] / 2;
               }
             }
           }
 
-          // @ts-expect-error todo:
           this._panesCacheSize[rightItemIndex] = undefined;
           this._updateItemData('collapsed', rightItemIndex, false, false);
 
@@ -523,9 +521,7 @@ class Splitter extends CollectionWidget {
           return;
         }
 
-        // @ts-expect-error todo:
         this._panesCacheSize[leftItemIndex] = this._layout[leftItemIndex];
-        // @ts-expect-error todo:
         this._collapsedItemSize = this._layout[leftItemIndex];
 
         this._updateItemData('collapsed', leftItemIndex, true, false);
@@ -555,29 +551,24 @@ class Splitter extends CollectionWidget {
 
         const isLeftItemCollapsed = leftItemData.collapsed === true;
 
-        // @ts-expect-error todo:
         this._activeResizeHandleIndex = leftItemIndex;
-        // @ts-expect-error todo:
+
         this._collapseButton = 'next';
 
         if (isLeftItemCollapsed) {
-          // @ts-expect-error todo:
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
 
-          // @ts-expect-error todo:
           if (!this._collapsedItemSize) {
             // @ts-expect-error badly typed base class
             for (let i = rightItemIndex; i <= this.option('items').length - 1; i += 1) {
               // @ts-expect-error badly typed base class
               // eslint-disable-next-line max-depth
               if (this.option('items')[i].collapsed !== true) {
-                // @ts-expect-error todo:
                 this._collapsedItemSize = this._layout[i] / 2;
               }
             }
           }
 
-          // @ts-expect-error todo:
           this._panesCacheSize[leftItemIndex] = undefined;
 
           this._updateItemData('collapsed', leftItemIndex, false, false);
@@ -592,9 +583,7 @@ class Splitter extends CollectionWidget {
           return;
         }
 
-        // @ts-expect-error todo:
         this._panesCacheSize[rightItemIndex] = this._layout[rightItemIndex];
-        // @ts-expect-error todo:
         this._collapsedItemSize = this._layout[rightItemIndex];
 
         this._updateItemData('collapsed', rightItemIndex, true, false);
@@ -638,7 +627,6 @@ class Splitter extends CollectionWidget {
         const leftItemData = this._getItemData($leftItem);
         // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
-        // @ts-expect-error todo:
         this._activeResizeHandleIndex = leftItemIndex;
         // @ts-expect-error todo:
         this._currentOnePxRatio = convertSizeToRatio(
@@ -675,14 +663,12 @@ class Splitter extends CollectionWidget {
           // @ts-expect-error badly typed base class
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           calculateDelta((event as any).offset, this.option('orientation'), rtlEnabled, this._currentOnePxRatio),
-          // @ts-expect-error todo:
           this._activeResizeHandleIndex,
           // @ts-expect-error todo:
           this._itemRestrictions,
         );
 
         this._applyFlexGrowFromLayout(newLayout);
-        // @ts-expect-error todo:
         this._layout = newLayout;
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
@@ -811,10 +797,8 @@ class Splitter extends CollectionWidget {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        // @ts-expect-error todo:
         this._layout = this._getDefaultLayoutBasedOnSize();
 
-        // @ts-expect-error todo:
         this._applyFlexGrowFromLayout(this._layout);
         this._updateItemSizes();
         break;
@@ -843,29 +827,21 @@ class Splitter extends CollectionWidget {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    // @ts-expect-error todo:
     if (isDefined(this._collapsedItemSize)) {
-      // @ts-expect-error todo:
       this._layout = getNextLayout(
-        // @ts-expect-error todo:
         this._layout,
         this._getCollapseDelta(item),
-        // @ts-expect-error todo:
         this._activeResizeHandleIndex,
         // @ts-expect-error todo:
         this._itemRestrictions,
         true,
       );
     } else {
-      // @ts-expect-error todo:
       this._layout = this._getDefaultLayoutBasedOnSize();
     }
 
-    // @ts-expect-error todo:
     this._collapseButton = undefined;
-    // @ts-expect-error todo:
     this._collapsedItemSize = undefined;
-    // @ts-expect-error todo:
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
   }
@@ -875,13 +851,10 @@ class Splitter extends CollectionWidget {
     const itemIndex = this._getIndexByItem(item);
     // @ts-expect-error todo:
     const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
-    // @ts-expect-error todo:
     const itemSize = this._collapsedItemSize !== undefined && this._collapsedItemSize >= minSize
-    // @ts-expect-error todo:
       ? this._collapsedItemSize
       : minSize;
 
-    // @ts-expect-error todo:
     const deltaSign = this._collapseButton === 'prev' ? -1 : 1;
     const delta = Math.abs(itemSize - collapsedSize) * deltaSign;
 
@@ -1002,10 +975,7 @@ class Splitter extends CollectionWidget {
   }
 
   _dimensionChanged(): void {
-    // @ts-expect-error todo:
     this._layout = this._getDefaultLayoutBasedOnSize();
-
-    // @ts-expect-error todo:
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
   }

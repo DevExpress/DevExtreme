@@ -41,13 +41,22 @@ const KEYBOARD_DELTA = 5;
 const DEFAULT_RESIZE_HANDLE_SIZE = 8;
 const INACTIVE_RESIZE_HANDLE_SIZE = 2;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
 class ResizeHandle extends Widget<ResizeHandleOptions> {
   private _$collapsePrevButton!: dxElementWrapper;
 
   private _$resizeHandle!: dxElementWrapper;
 
   private _$collapseNextButton!: dxElementWrapper;
+
+  private RESIZE_START_EVENT_NAME!: string;
+
+  private RESIZE_EVENT_NAME!: string;
+
+  private RESIZE_END_EVENT_NAME!: string;
+
+  private CLICK_EVENT_NAME!: string;
+
+  private DOUBLE_CLICK_EVENT_NAME!: string;
 
   _supportedKeys(): Record<string, unknown> {
     // @ts-expect-error badly typed base class
@@ -159,16 +168,17 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   _init(): void {
     // @ts-expect-error badly typed base class
     super._init();
+
     const namespace = `${RESIZE_HANDLER_MODULE_NAMESPACE}${new Guid()}`;
-    // @ts-expect-error todo
+
     this.RESIZE_START_EVENT_NAME = addNamespace(dragEventStart, namespace);
-    // @ts-expect-error todo
+
     this.RESIZE_EVENT_NAME = addNamespace(dragEventMove, namespace);
-    // @ts-expect-error todo
+
     this.RESIZE_END_EVENT_NAME = addNamespace(dragEventEnd, namespace);
-    // @ts-expect-error todo
+
     this.CLICK_EVENT_NAME = addNamespace(CLICK_EVENT, namespace);
-    // @ts-expect-error todo
+
     this.DOUBLE_CLICK_EVENT_NAME = addNamespace(DOUBLE_CLICK_EVENT, namespace);
   }
 
@@ -350,7 +360,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   _createEventAction(eventName: string): void {
     const actionName = getActionNameByEventName(eventName);
 
-    // @ts-expect-error todo: badly typed base class
+    // @ts-expect-error badly typed base class
     this[actionName] = this._createActionByOption(eventName, {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -383,7 +393,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
 
       eventsEngine.on(
         this.$element(),
-        // @ts-expect-error todo: todo
         this.RESIZE_START_EVENT_NAME,
         eventData,
         this._resizeStartHandler.bind(this),
@@ -391,7 +400,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
 
       eventsEngine.on(
         this.$element(),
-        // @ts-expect-error todo: todo
         this.RESIZE_EVENT_NAME,
         eventData,
         this._resizeHandler.bind(this),
@@ -399,7 +407,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
 
       eventsEngine.on(
         this.$element(),
-        // @ts-expect-error todo: todo
         this.RESIZE_END_EVENT_NAME,
         eventData,
         this._resizeEndHandler.bind(this),
@@ -416,7 +423,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     if (showCollapsePrev === true || showCollapseNext === true) {
       eventsEngine.on(
         this.$element(),
-        // @ts-expect-error todo: todo
         this.DOUBLE_CLICK_EVENT_NAME,
         this._doubleClickHandler.bind(this),
       );
@@ -426,7 +432,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
       eventsEngine.on(
 
         this._$collapsePrevButton,
-        // @ts-expect-error todo: todo
         this.CLICK_EVENT_NAME,
         this._collapsePrevHandler.bind(this),
       );
@@ -435,7 +440,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     if (showCollapseNext === true) {
       eventsEngine.on(
         this._$collapseNextButton,
-        // @ts-expect-error todo: todo
         this.CLICK_EVENT_NAME,
         this._collapseNextHandler.bind(this),
       );
