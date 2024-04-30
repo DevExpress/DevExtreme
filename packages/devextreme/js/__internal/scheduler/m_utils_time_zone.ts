@@ -10,7 +10,6 @@ import timeZoneList from './timezones/timezone_list';
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
-const MS_IN_HOUR = 3600000;
 const GMT = 'GMT';
 const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
@@ -63,7 +62,7 @@ const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDat
 
 const isValidDate = (date: Date) => date instanceof Date && !isNaN(date.valueOf());
 
-const calculateTimezoneByValueOld = (timezone: string, date = new Date()) => {
+const calculateTimezoneByValueOld = (timezone: string, date = new Date()): number | undefined => {
   const customTimezones = timeZoneDataUtils.getTimeZonesOld();
   if (customTimezones.length === 0) {
     return undefined;
@@ -74,11 +73,9 @@ const calculateTimezoneByValueOld = (timezone: string, date = new Date()) => {
 };
 
 const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): number | undefined => {
-  let offset;
-  try {
-    offset = getStringOffset(timeZone, date);
-  } catch (e) {
-    errors.log('W0009', timeZone);
+  const offset = getStringOffset(timeZone, date);
+
+  if (offset === undefined) {
     return undefined;
   }
 
@@ -98,6 +95,7 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
   if (!timeZone) {
     return undefined;
   }
+
   const isValidTimezone = timeZoneList.value.includes(timeZone);
   if (!isValidTimezone) {
     errors.log('W0009', timeZone);
@@ -112,23 +110,31 @@ const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date(
   if (result === undefined) {
     result = calculateTimezoneByValueCore(timeZone, date);
   }
+
   return result;
 };
 
 // 'GMT±XX:YY' or 'GMT' format
-const getStringOffset = (timeZone: string, date = new Date()): string => {
-  const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
-    timeZone,
-    timeZoneName: 'longOffset',
-  } as any);
+const getStringOffset = (timeZone: string, date = new Date()): string | undefined => {
+  let result = '';
+  try {
+    const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      timeZoneName: 'longOffset',
+    } as any);
 
-  const result = dateTimeFormat.formatToParts(date)
-    .filter((part) => part.type === 'timeZoneName')
-    .map((p) => p.value)[0];
+    result = dateTimeFormat
+      .formatToParts(date)
+      .find(({ type }) => type === 'timeZoneName')?.value ?? '';
+  } catch (e) {
+    errors.log('W0009', timeZone);
+    return undefined;
+  }
 
   const isSupportedFormat = offsetFormatRegexp.test(result);
   if (!isSupportedFormat) {
     errors.log('W0009', timeZone);
+    return undefined;
   }
 
   return result;
@@ -138,16 +144,21 @@ const getOffsetNamePart = (offset: string): string => {
   if (offset === GMT) {
     return `${offset} +00:00`;
   }
+
   return offset.replace(GMT, `${GMT} `);
 };
 
-const getTimezoneTitle = (timeZone: string, date = new Date()): string => {
+const getTimezoneTitle = (timeZone: string, date = new Date()): string | undefined => {
   if (!isValidDate(date)) {
     return '';
   }
 
   const tzNamePart = timeZone.replace(/\//g, ' - ').replace(/_/g, ' ');
   const offset = getStringOffset(timeZone, date);
+  if (offset === undefined) {
+    return undefined;
+  }
+
   const offsetNamePart = getOffsetNamePart(offset);
   return `(${offsetNamePart}) ${tzNamePart}`;
 };
@@ -159,6 +170,7 @@ const _getDaylightOffsetByTimezone = (startDate: Date, endDate: Date, timeZone: 
   if (startDayOffset === undefined || endDayOffset === undefined) {
     return 0;
   }
+
   return startDayOffset - endDayOffset;
 };
 
@@ -227,9 +239,10 @@ const hasDSTInLocalTimeZone = () => {
 
 const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
 
+const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - toMs('hour'));
+
 const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date): boolean => {
   const year = date.getFullYear();
-  const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - MS_IN_HOUR);
 
   const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
   const [summerTime, winterTime] = configTuple;
@@ -271,9 +284,11 @@ const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date):
 const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
   const customTimezones = timeZoneDataUtils.getTimeZonesOld();
   const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
+
   if (targetTimezoneData.length === 1) {
     return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);
   }
+
   return false;
 };
 
