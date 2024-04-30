@@ -101,7 +101,7 @@ const menuData = [
     ],
   },
   {
-    text: 'Cameras and camcorders ',
+    text: 'Cameras',
     items: [
       {
         text: 'Camcorders',
