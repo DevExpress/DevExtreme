@@ -3,27 +3,24 @@
 
 // adduse
 
-$generic-checkbox-arrow-icon-size: null !default;
+$generic-checkbox-icon-font-size: null !default;
+
+$generic-checkbox-border-width: 1px !default;
+$generic-checkbox-border-radius: $checkbox-icon-border-radius !default;
+
+$generic-checkbox-arrow-icon-size: 1em !default;
 $generic-checkbox-arrow-font-size: null !default;
 $generic-checkbox-indeterminate-icon-size: null !default;
-$generic-checkbox-indeterminate-icon-margin: null !default;
-$generic-checkbox-indeterminate-font-size: null !default;
-$generic-checkbox-size: null !default;
+$generic-checkbox-indeterminate-icon-border-radius: 2px !default;
 
 @if $size == "default" {
-  $generic-checkbox-arrow-icon-size: 1em !default;
-  $generic-checkbox-arrow-font-size: 16px !default;
-  $generic-checkbox-indeterminate-icon-size: 1em !default;
-  $generic-checkbox-indeterminate-font-size: 12px;
-  $generic-checkbox-indeterminate-icon-margin: 0.33em !default;
-  $generic-checkbox-size: 22px !default;
+  $generic-checkbox-icon-font-size: 22px !default;
+  $generic-checkbox-arrow-font-size: 0.727272em !default;
+  $generic-checkbox-indeterminate-icon-size: 0.545454em !default;
 }
 
 @else if $size == "compact" {
-  $generic-checkbox-arrow-icon-size: 1em !default;
-  $generic-checkbox-arrow-font-size: 10px !default;
-  $generic-checkbox-indeterminate-icon-size: 1em !default;
-  $generic-checkbox-indeterminate-font-size: 8px;
-  $generic-checkbox-indeterminate-icon-margin: 0.375em !default;
-  $generic-checkbox-size: 16px !default;
+  $generic-checkbox-icon-font-size: 16px !default;
+  $generic-checkbox-arrow-font-size: 0.625em !default;
+  $generic-checkbox-indeterminate-icon-size: 0.5em !default;
 }

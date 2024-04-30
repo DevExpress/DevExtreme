@@ -6,6 +6,7 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../../base/checkBox";
+@use "../../base/checkBox/mixins" as *;
 
 // adduse
 
@@ -61,9 +62,12 @@ $icon-position: relative;
 }
 
 .dx-checkbox-icon {
-  width: $material-checkbox-size;
-  height: $material-checkbox-size;
-  border: 2px solid $checkbox-border-color;
+  width: $material-checkbox-arrow-icon-size;
+  height: $material-checkbox-arrow-icon-size;
+  font-size: $material-checkbox-icon-font-size;
+  border-width: $material-checkbox-border-width;
+  border-style: solid;
+  border-color: $checkbox-border-color;
   border-radius: $material-checkbox-border-radius;
 
   &::after {
@@ -92,26 +96,29 @@ $icon-position: relative;
     border: none;
 
     @include dx-icon(check);
-    @include dx-icon-font-centered-sizing($material-checkbox-arrow-icon-size, $icon-position);
 
-    font-size: $material-checkbox-arrow-font-size;
+    font-size: $material-checkbox-icon-font-size;
+
+    @include dx-checkbox-icon-centered($material-checkbox-arrow-icon-size, $material-checkbox-arrow-icon-size, $material-checkbox-arrow-font-size);
   }
 
   .dx-checkbox-indeterminate & {
     background-color: $checkbox-indeterminate-bg;
-    color: $checkbox-checked-color;
     border: none;
-
-    @include dx-font-icon("\f074");
-    @include dx-icon-font-centered-sizing($material-checkbox-indeterminate-icon-size, $icon-position);
-
-    font-size: $material-checkbox-indeterminate-font-size;
   }
 }
 
+@include dx-checkbox-icon-indeterminate(
+  $checkbox-indeterminate-bg,
+  $checkbox-checked-color,
+  $material-checkbox-indeterminate-icon-height,
+  $material-checkbox-indeterminate-icon-width,
+  $material-checkbox-indeterminate-icon-border-radius,
+);
+
 .dx-invalid {
   .dx-checkbox-icon {
-    border: 2px solid $checkbox-invalid-focused-border-color;
+    border-color: $checkbox-invalid-focused-border-color;
   }
 
   &.dx-state-focused {
