@@ -770,10 +770,6 @@ describe('component rendering', () => {
         template: `
           <test-component>
             <nested-with-prop-ref :prop1="value" :sample-prop-ref="samplePropRef" />
-            <div id="item-container"></div>
-            <template #item="{ data }">
-              <span>template {{data.item.value.test}}</span>
-            </template>
           </test-component>`,
         components: {
           TestComponent,
@@ -789,11 +785,6 @@ describe('component rendering', () => {
           samplePropRef: testRef,
         },
       });
-      renderTemplate(
-        'item',
-        { item: testRef },
-        wrapper.get('#item-container').element
-      );
 
       testRef.value = { test: 'ref' };
       wrapper.setProps({ value: 456 });
@@ -803,13 +794,39 @@ describe('component rendering', () => {
 
         expect(isProxy(Widget.option.mock.calls[0][1])).toBeFalsy();
         
-        expect(wrapper.get('#item-container').text()).toBe('template ref');
-
         expect(Widget.option).toHaveBeenCalledWith('nestedOption.prop1', 456);
         expect(Widget.option).toHaveBeenCalledWith('nestedOption.samplePropRef', { test: 'ref' });
         done();
       });
     });
+
+    it('preserves scoped data reactivity', async () => {
+      const vm = defineComponent({
+        template: `
+          <test-component>
+            <div id="item-container"></div>
+            <template #item="{ data }">
+              <span>template {{data.item.value.test}}</span>
+            </template>
+          </test-component>`,
+        components: {
+          TestComponent,
+        },
+      });
+
+      const wrapper = mount(vm);
+      const testRef = ref({ test: 'default' });
+      renderTemplate(
+        'item',
+        { item: testRef },
+        wrapper.get('#item-container').element
+      );
+
+      testRef.value = { test: 'ref' };
+
+      await nextTick();
+      expect(wrapper.get('#item-container').text()).toBe('template ref');
+    })
 
     it('add nested component by condition', (done) => {
       const vm = defineComponent({
