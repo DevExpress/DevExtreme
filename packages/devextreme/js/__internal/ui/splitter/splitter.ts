@@ -137,9 +137,13 @@ class SplitterItem extends CollectionWidgetItem {
 }
 
 class Splitter extends CollectionWidget {
+  static ItemClass: typeof SplitterItem;
+
   private _renderQueue: RenderQueueItem[] = [];
 
   private _panesCacheSize!: Record<string, number | undefined>;
+
+  private _collapsedItemSize!: number | undefined;
 
   private _shouldRecalculateLayout!: boolean;
 
@@ -150,8 +154,6 @@ class Splitter extends CollectionWidget {
   private _activeResizeHandleIndex!: number;
 
   private _collapseButton!: string | undefined;
-
-  private _collapsedItemSize!: number | undefined;
 
   private _itemRestrictions!: PaneRestrictions[];
 
@@ -1029,7 +1031,6 @@ class Splitter extends CollectionWidget {
   }
 }
 
-// @ts-expect-error todo:
 Splitter.ItemClass = SplitterItem;
 
 // @ts-expect-error // temp fix
