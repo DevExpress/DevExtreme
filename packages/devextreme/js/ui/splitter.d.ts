@@ -33,7 +33,7 @@ export interface ResizeInfo {
     readonly handleElement?: DxElement;
 }
 
-type ItemLike<TKey> = Item<TKey>;
+type ItemLike<TKey> = string | Item<TKey> | any;
 
 export {
     Mode,
