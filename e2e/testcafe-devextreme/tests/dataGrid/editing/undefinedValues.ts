@@ -15,6 +15,7 @@ test('Should properly set nested undefined values (T1226946)', async (t) => {
   await t.expect(secondCell.element().textContent).eql('undefined');
 
   await dataGrid.apiCellValue(0, 0, { data: undefined });
+  await dataGrid.apiSaveEditData();
 
   await t.expect(firstCell.element().textContent).eql('undefined');
   await t.expect(secondCell.element().textContent).eql('undefined');
