@@ -4,7 +4,7 @@ import { extendAttributes, getDisplayFileSize } from './ui.file_manager.common';
 import { isString, isFunction, isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
-import DataGrid from '../data_grid/ui.data_grid';
+import DataGrid from '../data_grid';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';

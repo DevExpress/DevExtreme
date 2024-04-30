@@ -22,7 +22,7 @@ import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import { GanttTreeList } from './ui.gantt.treelist';
 import { GanttView } from './ui.gantt.view';
 import { GanttDataChangesProcessingHelper } from './ui.gantt.data_changes_processing_helper';
-import gridCoreUtils from '../grid_core/ui.grid_core.utils';
+import gridCoreUtils from '../../__internal/grids/grid_core/m_utils';
 
 const window = getWindow();
 
