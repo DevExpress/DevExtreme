@@ -29,6 +29,7 @@ const ACCORDION_ITEM_TITLE_CAPTION_CLASS = 'dx-accordion-item-title-caption';
 
 const ACCORDION_ITEM_DATA_KEY = 'dxAccordionItemData';
 
+// @ts-expect-error ts-error
 const Accordion = CollectionWidget.inherit({
 
   _activeStateUnit: `.${ACCORDION_ITEM_CLASS}`,

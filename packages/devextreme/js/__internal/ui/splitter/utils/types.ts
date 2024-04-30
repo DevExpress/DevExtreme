@@ -25,6 +25,18 @@ export interface RenderQueueItem {
   splitterConfig: Properties;
 }
 
+export interface EventMap {
+  onResizeStart: ResizeStartEvent;
+  onResize: ResizeEvent;
+  onResizeEnd: ResizeEndEvent;
+  onItemExpanded: ItemExpandedEvent;
+  onItemCollapsed: ItemCollapsedEvent;
+}
+
+export type HandlerMap = {
+  [K in keyof EventMap]: (e: Partial<EventMap[K]>) => void;
+};
+
 export type InteractionEvent = KeyboardEvent | PointerEvent | MouseEvent | TouchEvent;
 export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
 export type CollapseEvents = 'onCollapsePrev' | 'onCollapseNext';

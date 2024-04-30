@@ -14,8 +14,6 @@ import type { Item } from '@js/ui/splitter';
 import { compareNumbersWithPrecision, PRECISION } from './number_comparison';
 import type { FlexProperty, PaneRestrictions, ResizeOffset } from './types';
 
-// const FLEX_PROPERTY_NAME = 'flexGrow';
-
 const ORIENTATION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
@@ -23,18 +21,6 @@ const ORIENTATION = {
 
 const PERCENT_UNIT = '%';
 const PIXEL_UNIT = 'px';
-
-// export function getCurrentLayout($items: dxElementWrapper): number[] {
-//   const itemsDistribution: number[] = [];
-//   $items.each((index, item) => {
-//     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-//     itemsDistribution.push(parseFloat(($(item) as any).css(FLEX_PROPERTY_NAME)));
-
-//     return true;
-//   });
-
-//   return itemsDistribution;
-// }
 
 export function findLastIndexOfVisibleItem(items: Item[]): number {
   for (let i = items.length - 1; i >= 0; i -= 1) {
@@ -232,8 +218,8 @@ export function getNextLayout(
 
 function normalizeOffset(
   offset: ResizeOffset,
-  orientation: Orientation,
-  rtlEnabled: boolean,
+  orientation: Orientation | undefined,
+  rtlEnabled: boolean | undefined,
 ): number {
   if (orientation === ORIENTATION.vertical) {
     return offset.y ?? 0;
@@ -242,15 +228,11 @@ function normalizeOffset(
   return (rtlEnabled ? -1 : 1) * (offset.x ?? 0);
 }
 
-// export function getDimensionByOrientation(orientation: string): string {
-//   return orientation === ORIENTATION.horizontal ? 'width' : 'height';
-// }
-
 export function calculateDelta(
   offset: ResizeOffset,
-  orientation: Orientation,
-  rtlEnabled: boolean,
-  ratio: number,
+  orientation: Orientation | undefined,
+  rtlEnabled: boolean | undefined,
+  ratio: number | undefined = 0,
 ): number {
   const delta = normalizeOffset(offset, orientation, rtlEnabled) * ratio;
   return delta;
@@ -348,18 +330,10 @@ export function getVisibleItemsCount(items: Item[]): number {
 
 export function getElementSize(
   $element: dxElementWrapper,
-  orientation: Orientation,
+  orientation: Orientation | undefined,
 ): number {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-return
   return orientation === ORIENTATION.horizontal
     ? getWidth($element)
     : getHeight($element);
-}
-
-export function isElementVisible(element: HTMLElement | undefined | null): boolean {
-  if (element) {
-    return !!(element.offsetWidth || element.offsetHeight || element.getClientRects?.().length);
-  }
-
-  return false;
 }
