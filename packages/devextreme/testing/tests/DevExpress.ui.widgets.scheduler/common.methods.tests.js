@@ -3,7 +3,7 @@ import fx from 'animation/fx';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
 
-import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
+import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
 QUnit.testStart(() => initTestMarkup());
@@ -80,7 +80,7 @@ QUnit.module('Methods', {
         const scheduler = createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
-            timeZone: 5
+            timeZone: 'Etc/GMT-5'
         });
 
         scheduler.instance.addAppointment({ startDate: new Date(2015, 1, 9, 16), endDate: new Date(2015, 1, 9, 17), text: 'first' });
@@ -196,7 +196,7 @@ QUnit.module('Methods', {
         const scheduler = createInstance({
             currentDate: new Date(2015, 1, 9),
             dataSource: data,
-            timeZone: 5
+            timeZone: 'Etc/GMT-5'
         });
 
         this.clock.tick(10);
@@ -561,8 +561,8 @@ QUnit.module('Methods', {
             { tz: 'Asia/Brunei', offset: 8, daylightOffset: 8, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) },
             { tz: 'Asia/Damascus', offset: 2, daylightOffset: 3, daylightDate: new Date(2016, 4, 10), date: new Date(2016, 10, 20) }
         ].forEach(function(item) {
-            const offset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.date);
-            const daylightOffset = timeZoneDataUtils.getTimeZoneOffsetById(item.tz, item.daylightDate);
+            const offset = timeZoneUtils.calculateTimezoneByValue(item.tz, item.date);
+            const daylightOffset = timeZoneUtils.calculateTimezoneByValue(item.tz, item.daylightDate);
 
             assert.equal(offset, item.offset, item.tz + ': Common offset is OK');
             assert.equal(daylightOffset, item.daylightOffset, item.tz + ': DST offset is OK');

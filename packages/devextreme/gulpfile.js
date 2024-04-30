@@ -36,11 +36,6 @@ require('./build/gulp/check_licenses');
 require('./build/gulp/qunit-in-docker');
 require('./build/gulp/systemjs');
 
-if(!env.TEST_CI) {
-    require('./build/gulp/create_timezones_data');
-    require('./build/gulp/test_timezones_data');
-}
-
 if(env.TEST_CI) {
     console.warn('Using test CI mode!');
 }
