@@ -69,28 +69,11 @@ export default [
         "@angular/core": "ng.core",
         rxjs: "rxjs",
         "rxjs/operators": "rxjs.operators",
-        "@angular/core/primitives/signals": "ng.core.primitives/signals"
       },
     },
-    external: ["rxjs", "rxjs/operators", "@angular/core/primitives/signals", "zone.js"],
+    external: ["rxjs", "rxjs/operators", "zone.js"],
   },
-  {
-    input: NG_BASE_DIR + "@angular/core/fesm2022/primitives/signals.mjs",
-    output: {
-      file: OUTPUT_DIR + `@angular/core.primitives.signals.umd.js`,
-      format: "umd",
-      exports: 'named',
-      name: "ng.core.primitives",
-      globals: {
-        "@angular/core": "ng.core",
-        "@angular/core/primitives": "ng.core.primitives",
-        rxjs: "rxjs",
-        "rxjs/operators": "rxjs.operators",
-        "@angular/core/primitives/signals": "ng.core.primitives/signals"
-      },
-    },
-    external: ["rxjs", "rxjs/operators", "zone.js", "@angular/core"],
-  },
+
   // forms
   {
     input: NG_BASE_DIR + "@angular/forms/fesm2022/forms.mjs",
