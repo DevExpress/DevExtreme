@@ -165,18 +165,9 @@ gulp.task('npm.pack', gulp.series(
     .pipe(gulp.dest('./node_modules/devextreme-angular')),
 ));
 
-gulp.task('copy.source', () => {
-  const npmConfig = buildConfig.npm;
-  return gulp.src(`${path.join(npmConfig.distPath, '/**/*.*')}`)
-    .pipe(gulp.dest('./node_modules/devextreme-angular'));
-});
-
 // ------------Main------------
 
-const buildTask = gulp.series(
-  'build.components',
-  'copy.source',
-);
+const buildTask = gulp.series('build.components');
 
 gulp.task('build', buildTask);
 gulp.task('default', buildTask);
@@ -194,112 +185,22 @@ gulp.task('clean.tests', () => {
 });
 
 gulp.task('add.package.json', (done) => {
-  const componentNames = [
-    'accordion',
-    'action-sheet',
-    'autocomplete',
-    'bar-gauge',
-    'box',
-    'bullet',
-    'button',
-    'calendar',
-    'chart',
-    'check-box',
-    'circular-gauge',
-    'color-box',
-    'context-menu',
-    'data-grid',
-    'date-box',
-    'date-range-box',
-    'defer-rendering',
-    'diagram',
-    'draggable',
-    'drawer',
-    'drop-down-box',
-    'file-uploader',
-    'file-manager',
-    'filter-builder',
-    'form',
-    'funnel',
-    'gallery',
-    'gantt',
-    'html-editor',
-    'linear-gauge',
-    'list',
-    'load-indicator',
-    'load-panel',
-    'lookup',
-    'map',
-    'menu',
-    'multi-view',
-    'number-box',
-    'pie-chart',
-    'pivot-grid',
-    'pivot-grid-field-chooser',
-    'polar-chart',
-    'popover',
-    'popup',
-    'progress-bar',
-    'radio-group',
-    'range-selector',
-    'range-slider',
-    'recurrence-editor',
-    'resizable',
-    'responsive-box',
-    'sankey',
-    'scheduler',
-    'scroll-view',
-    'select-box',
-    'slider',
-    'sortable',
-    'sparkline',
-    'speed-dial-action',
-    'splitter',
-    'switch',
-    'tab-panel',
-    'tabs',
-    'tag-box',
-    'text-area',
-    'text-box',
-    'tile-view',
-    'toast',
-    'toolbar',
-    'tooltip',
-    'tree-list',
-    'tree-map',
-    'tree-view',
-    'vector-map',
-    'validator',
-    'validation-summary',
-    'validation-group',
-    'drop-down-button',
-    'button-group',
-    'nested'
+  const pkgJson = require(path.resolve(path.join('.',buildConfig.npm.distPath,'package.json')));
 
-  ];
+  delete pkgJson.exports["."];
+  delete pkgJson.exports["./package.json"];
 
-  componentNames.forEach((name) => {
-    const content = `{"module": "../../fesm2022/devextreme-angular-ui-${name}.mjs"}`;
+  const paths = Object.keys(pkgJson.exports);
 
-    fs.writeFileSync(path.join(path.resolve('./npm/dist/ui'), name, 'package.json'), content, (err) => {
+  paths.forEach((modulePath) => {
+    const [name, folder] = modulePath.replace(/^\.\//,'').split('/').reverse();
+    const content = folder
+        ? `{"module": "../../fesm2022/devextreme-angular-ui-${name}.mjs"}`
+        : `{"module": "../fesm2022/devextreme-angular-${name}.mjs"}`;
+
+    fs.writeFileSync(path.join(path.resolve(`./npm/dist/${folder || ''}`), name, 'package.json'), content, (err) => {
       if (err) {
-        console.error('Ошибка при записи в файл:', err);
-      } else {
-        console.log('Файл успешно создан и записан:', name);
-      }
-    });
-  });
-
-  [
-    'core',
-    'server',
-    'http'
-  ].forEach((name) => {
-    const content = `{"module": "../fesm2022/devextreme-angular-${name}.mjs"}`;
-
-    fs.writeFileSync(path.join(path.resolve('./npm/dist/'), name, 'package.json'), content, (err) => {
-      if (err) {
-        console.error('Ошибка при записи в файл:', err);
+        console.error('Error while write to file:', err);
       }
     });
   });
@@ -362,8 +263,6 @@ gulp.task('test.components.server.debug', (done) => {
 
   new karmaServer(config, done).start();
 });
-
-// gulp.task('run.tests', gulp.series('test.components.client'));
 
 gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
 
