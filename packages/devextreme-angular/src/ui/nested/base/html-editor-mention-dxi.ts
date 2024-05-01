@@ -12,10 +12,10 @@ import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_s
     template: ''
 })
 export abstract class DxiHtmlEditorMention extends CollectionNestedOption {
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 

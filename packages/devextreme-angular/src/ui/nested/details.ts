@@ -17,7 +17,7 @@ import {
 
 
 
-import { dxFileManagerDetailsColumn } from 'devextreme/ui/file_manager';
+import DevExpress from 'devextreme/bundles/dx.all';
 
 import {
     NestedOptionHost,
@@ -34,10 +34,10 @@ import { DxiColumnComponent } from './column-dxi';
 })
 export class DxoDetailsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get columns(): Array<dxFileManagerDetailsColumn | string> {
+    get columns(): Array<DevExpress.ui.dxFileManagerDetailsColumn | string> {
         return this._getOption('columns');
     }
-    set columns(value: Array<dxFileManagerDetailsColumn | string>) {
+    set columns(value: Array<DevExpress.ui.dxFileManagerDetailsColumn | string>) {
         this._setOption('columns', value);
     }
 

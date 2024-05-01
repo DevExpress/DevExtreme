@@ -5,8 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { Mode } from 'devextreme/common';
-import { ButtonItem, ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, EmptyItem, FieldDataChangedEvent, FormLabelMode, GroupItem, InitializedEvent, LabelLocation, OptionChangedEvent, SimpleItem, TabbedItem } from 'devextreme/ui/form';
+import { ContentReadyEvent, DisposingEvent, EditorEnterKeyEvent, FieldDataChangedEvent, FormLabelMode, InitializedEvent, LabelLocation, OptionChangedEvent } from 'devextreme/ui/form';
 
 @Component({
     template: ''
@@ -117,10 +118,10 @@ export abstract class DxoFormOptions extends NestedOption {
         this._setOption('isDirty', value);
     }
 
-    get items(): Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem> {
+    get items(): Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem> {
         return this._getOption('items');
     }
-    set items(value: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>) {
+    set items(value: Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem>) {
         this._setOption('items', value);
     }
 

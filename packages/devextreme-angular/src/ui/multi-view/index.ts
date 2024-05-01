@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -24,9 +23,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/multi_view';
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxMultiViewItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/multi_view';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent } from 'devextreme/ui/multi_view';
 
 import DxMultiView from 'devextreme/ui/multi_view';
 
@@ -108,10 +108,10 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxMultiViewItem | string | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxMultiViewItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxMultiViewItem | string | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxMultiViewItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -460,7 +460,7 @@ export class DxMultiViewComponent<TItem = any, TKey = any> extends DxComponent i
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxMultiViewItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxMultiViewItem | any>>;
 
     /**
     

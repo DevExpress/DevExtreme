@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -24,7 +23,7 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
+import DevExpress from 'devextreme/bundles/dx.all';
 import { PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ToolbarLocation } from 'devextreme/ui/popup';
@@ -123,10 +122,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): string | UserDefinedElement | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: string | UserDefinedElement | undefined) {
         this._setOption('container', value);
     }
 
@@ -175,10 +174,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get dragAndResizeArea(): UserDefinedElement | string | undefined {
+    get dragAndResizeArea(): string | UserDefinedElement | undefined {
         return this._getOption('dragAndResizeArea');
     }
-    set dragAndResizeArea(value: UserDefinedElement | string | undefined) {
+    set dragAndResizeArea(value: string | UserDefinedElement | undefined) {
         this._setOption('dragAndResizeArea', value);
     }
 
@@ -370,10 +369,10 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
     
      */
     @Input()
-    get position(): PositionAlignment | PositionConfig | Function {
+    get position(): PositionAlignment | DevExpress.PositionConfig | Function {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | PositionConfig | Function) {
+    set position(value: PositionAlignment | DevExpress.PositionConfig | Function) {
         this._setOption('position', value);
     }
 
@@ -681,7 +680,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<string | UserDefinedElement | undefined>;
 
     /**
     
@@ -709,7 +708,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dragAndResizeAreaChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() dragAndResizeAreaChange: EventEmitter<string | UserDefinedElement | undefined>;
 
     /**
     
@@ -814,7 +813,7 @@ export class DxPopupComponent extends DxComponent implements OnDestroy, OnChange
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionAlignment | PositionConfig | Function>;
+    @Output() positionChange: EventEmitter<PositionAlignment | DevExpress.PositionConfig | Function>;
 
     /**
     

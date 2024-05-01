@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -25,7 +24,8 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 import DxFilterBuilder from 'devextreme/ui/filter_builder';
 
@@ -124,10 +124,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get customOperations(): Array<dxFilterBuilderCustomOperation> {
+    get customOperations(): Array<DevExpress.ui.dxFilterBuilderCustomOperation> {
         return this._getOption('customOperations');
     }
-    set customOperations(value: Array<dxFilterBuilderCustomOperation>) {
+    set customOperations(value: Array<DevExpress.ui.dxFilterBuilderCustomOperation>) {
         this._setOption('customOperations', value);
     }
 
@@ -163,10 +163,10 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
     
      */
     @Input()
-    get fields(): Array<dxFilterBuilderField> {
+    get fields(): Array<DevExpress.ui.dxFilterBuilderField> {
         return this._getOption('fields');
     }
-    set fields(value: Array<dxFilterBuilderField>) {
+    set fields(value: Array<DevExpress.ui.dxFilterBuilderField>) {
         this._setOption('fields', value);
     }
 
@@ -421,7 +421,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() customOperationsChange: EventEmitter<Array<dxFilterBuilderCustomOperation>>;
+    @Output() customOperationsChange: EventEmitter<Array<DevExpress.ui.dxFilterBuilderCustomOperation>>;
 
     /**
     
@@ -442,7 +442,7 @@ export class DxFilterBuilderComponent extends DxComponent implements OnDestroy, 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() fieldsChange: EventEmitter<Array<dxFilterBuilderField>>;
+    @Output() fieldsChange: EventEmitter<Array<DevExpress.ui.dxFilterBuilderField>>;
 
     /**
     

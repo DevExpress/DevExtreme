@@ -18,7 +18,6 @@ import {
 
 
 import { ChartsDataType, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
-import { ChartSeries } from 'devextreme/viz/common';
 import { ChartAxisScale } from 'devextreme/viz/range_selector';
 
 import {
@@ -116,10 +115,10 @@ export class DxoChartComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get series(): ChartSeries | any | undefined | Array<ChartSeries | any> {
+    get series(): any | undefined | Array<any> {
         return this._getOption('series');
     }
-    set series(value: ChartSeries | any | undefined | Array<ChartSeries | any>) {
+    set series(value: any | undefined | Array<any>) {
         this._setOption('series', value);
     }
 

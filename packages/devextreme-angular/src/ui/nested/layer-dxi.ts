@@ -88,10 +88,10 @@ export class DxiLayerComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | any | null | string | Array<any> {
+    get dataSource(): any | DataSource | DataSourceOptions | Store | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | any | null | string | Array<any>) {
+    set dataSource(value: any | DataSource | DataSourceOptions | Store | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 

@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -25,10 +24,10 @@ import {
 } from '@angular/core';
 
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { CollectionWidgetItem } from 'devextreme/ui/collection/ui.collection_widget.base';
 import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/radio_group';
 
 import DxRadioGroup from 'devextreme/ui/radio_group';
@@ -109,10 +108,10 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -500,7 +499,7 @@ export class DxRadioGroupComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<CollectionWidgetItem | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.CollectionWidgetItem | any>>;
 
     /**
     

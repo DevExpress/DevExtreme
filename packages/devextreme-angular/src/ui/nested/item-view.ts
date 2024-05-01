@@ -14,7 +14,8 @@ import {
 
 
 
-import { dxFileManagerDetailsColumn, FileManagerItemViewMode } from 'devextreme/ui/file_manager';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { FileManagerItemViewMode } from 'devextreme/ui/file_manager';
 
 import {
     NestedOptionHost,
@@ -30,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoItemViewComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get details(): { columns?: Array<dxFileManagerDetailsColumn | string> } {
+    get details(): { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> } {
         return this._getOption('details');
     }
-    set details(value: { columns?: Array<dxFileManagerDetailsColumn | string> }) {
+    set details(value: { columns?: Array<DevExpress.ui.dxFileManagerDetailsColumn | string> }) {
         this._setOption('details', value);
     }
 

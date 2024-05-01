@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -25,10 +24,11 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/menu';
 
 import { AnimationConfig } from 'devextreme/animation/fx';
+import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation, SingleOrNone, SubmenuShowMode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, dxMenuItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuDirection, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemRenderedEvent, OptionChangedEvent, SelectionChangedEvent, SubmenuDirection, SubmenuHiddenEvent, SubmenuHidingEvent, SubmenuShowingEvent, SubmenuShownEvent } from 'devextreme/ui/menu';
 
 import DxMenu from 'devextreme/ui/menu';
 
@@ -150,10 +150,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxMenuItem> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxMenuItem> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxMenuItem>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxMenuItem>) {
         this._setOption('dataSource', value);
     }
 
@@ -280,10 +280,10 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
     
      */
     @Input()
-    get items(): Array<dxMenuItem> {
+    get items(): Array<DevExpress.ui.dxMenuItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxMenuItem>) {
+    set items(value: Array<DevExpress.ui.dxMenuItem>) {
         this._setOption('items', value);
     }
 
@@ -605,7 +605,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxMenuItem>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<DevExpress.ui.dxMenuItem>>;
 
     /**
     
@@ -675,7 +675,7 @@ export class DxMenuComponent<TKey = any> extends DxComponent implements OnDestro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<dxMenuItem>>;
+    @Output() itemsChange: EventEmitter<Array<DevExpress.ui.dxMenuItem>>;
 
     /**
     

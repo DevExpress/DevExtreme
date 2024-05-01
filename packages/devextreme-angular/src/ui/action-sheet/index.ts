@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -24,11 +23,12 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/action_sheet';
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { ButtonStyle, ButtonType } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { CancelClickEvent, ContentReadyEvent, DisposingEvent, dxActionSheetItem, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/action_sheet';
+import { CancelClickEvent, ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/action_sheet';
 
 import DxActionSheet from 'devextreme/ui/action_sheet';
 
@@ -84,10 +84,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxActionSheetItem | string | any> {
+    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxActionSheetItem | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxActionSheetItem | string | any>) {
+    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxActionSheetItem | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -240,10 +240,10 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get target(): UserDefinedElement | string {
+    get target(): string | UserDefinedElement {
         return this._getOption('target');
     }
-    set target(value: UserDefinedElement | string) {
+    set target(value: string | UserDefinedElement) {
         this._setOption('target', value);
     }
 
@@ -383,7 +383,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxActionSheetItem | string | any>>;
+    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxActionSheetItem | any>>;
 
     /**
     
@@ -467,7 +467,7 @@ export class DxActionSheetComponent<TItem = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<UserDefinedElement | string>;
+    @Output() targetChange: EventEmitter<string | UserDefinedElement>;
 
     /**
     

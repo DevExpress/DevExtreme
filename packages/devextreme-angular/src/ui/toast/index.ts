@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -19,7 +18,7 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
+import DevExpress from 'devextreme/bundles/dx.all';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, ToastType } from 'devextreme/ui/toast';
 
 import DxToast from 'devextreme/ui/toast';
@@ -319,10 +318,10 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): PositionConfig | string {
+    get position(): DevExpress.PositionConfig | string {
         return this._getOption('position');
     }
-    set position(value: PositionConfig | string) {
+    set position(value: DevExpress.PositionConfig | string) {
         this._setOption('position', value);
     }
 
@@ -632,7 +631,7 @@ export class DxToastComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<PositionConfig | string>;
+    @Output() positionChange: EventEmitter<DevExpress.PositionConfig | string>;
 
     /**
     

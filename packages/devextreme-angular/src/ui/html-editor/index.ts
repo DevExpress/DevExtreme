@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -25,8 +24,9 @@ import {
 } from '@angular/core';
 
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { EditorStyle, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
-import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorMention, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, MarkupType, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
+import { ContentReadyEvent, DisposingEvent, dxHtmlEditorImageUpload, dxHtmlEditorMediaResizing, dxHtmlEditorTableContextMenu, dxHtmlEditorTableResizing, dxHtmlEditorToolbar, dxHtmlEditorVariables, FocusInEvent, FocusOutEvent, InitializedEvent, MarkupType, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/html_editor';
 
 import DxHtmlEditor from 'devextreme/ui/html_editor';
 
@@ -271,10 +271,10 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
     
      */
     @Input()
-    get mentions(): Array<dxHtmlEditorMention> {
+    get mentions(): Array<DevExpress.ui.dxHtmlEditorMention> {
         return this._getOption('mentions');
     }
-    set mentions(value: Array<dxHtmlEditorMention>) {
+    set mentions(value: Array<DevExpress.ui.dxHtmlEditorMention>) {
         this._setOption('mentions', value);
     }
 
@@ -684,7 +684,7 @@ export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, Con
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mentionsChange: EventEmitter<Array<dxHtmlEditorMention>>;
+    @Output() mentionsChange: EventEmitter<Array<DevExpress.ui.dxHtmlEditorMention>>;
 
     /**
     

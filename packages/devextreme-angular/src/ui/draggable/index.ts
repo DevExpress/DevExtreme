@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -73,10 +72,10 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get boundary(): UserDefinedElement | string | undefined {
+    get boundary(): string | UserDefinedElement | undefined {
         return this._getOption('boundary');
     }
-    set boundary(value: UserDefinedElement | string | undefined) {
+    set boundary(value: string | UserDefinedElement | undefined) {
         this._setOption('boundary', value);
     }
 
@@ -99,10 +98,10 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): string | UserDefinedElement | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: string | UserDefinedElement | undefined) {
         this._setOption('container', value);
     }
 
@@ -322,7 +321,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() boundaryChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() boundaryChange: EventEmitter<string | UserDefinedElement | undefined>;
 
     /**
     
@@ -336,7 +335,7 @@ export class DxDraggableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<string | UserDefinedElement | undefined>;
 
     /**
     

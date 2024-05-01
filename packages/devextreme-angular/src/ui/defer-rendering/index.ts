@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -185,10 +184,10 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
      */
     @Input()
-    get renderWhen(): DxPromise | boolean | undefined {
+    get renderWhen(): boolean | DxPromise | undefined {
         return this._getOption('renderWhen');
     }
-    set renderWhen(value: DxPromise | boolean | undefined) {
+    set renderWhen(value: boolean | DxPromise | undefined) {
         this._setOption('renderWhen', value);
     }
 
@@ -386,7 +385,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() renderWhenChange: EventEmitter<DxPromise | boolean | undefined>;
+    @Output() renderWhenChange: EventEmitter<boolean | DxPromise | undefined>;
 
     /**
     

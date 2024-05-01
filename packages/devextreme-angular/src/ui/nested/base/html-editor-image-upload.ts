@@ -5,8 +5,9 @@ import {
     Component,
 } from '@angular/core';
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { dxFileUploaderOptions } from 'devextreme/ui/file_uploader';
-import { dxHtmlEditorImageUploadTabItem, HtmlEditorImageUploadMode, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
+import { HtmlEditorImageUploadMode, HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
 @Component({
     template: ''
@@ -26,10 +27,10 @@ export abstract class DxoHtmlEditorImageUpload extends NestedOption {
         this._setOption('fileUploadMode', value);
     }
 
-    get tabs(): Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab> {
+    get tabs(): Array<HtmlEditorImageUploadTab | DevExpress.ui.dxHtmlEditorImageUploadTabItem> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<dxHtmlEditorImageUploadTabItem | HtmlEditorImageUploadTab>) {
+    set tabs(value: Array<HtmlEditorImageUploadTab | DevExpress.ui.dxHtmlEditorImageUploadTabItem>) {
         this._setOption('tabs', value);
     }
 

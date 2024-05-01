@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -25,7 +24,8 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { EditorStyle, LabelMode, MaskMode, Position, TextBoxPredefinedButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, OptionChangedEvent, PasteEvent, TextBoxType, ValueChangedEvent } from 'devextreme/ui/text_box';
 
 import DxTextBox from 'devextreme/ui/text_box';
@@ -107,10 +107,10 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
     
      */
     @Input()
-    get buttons(): Array<TextBoxPredefinedButton | TextEditorButton | string> {
+    get buttons(): Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<TextBoxPredefinedButton | TextEditorButton | string>) {
+    set buttons(value: Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -734,7 +734,7 @@ export class DxTextBoxComponent extends DxComponent implements OnDestroy, Contro
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<TextBoxPredefinedButton | TextEditorButton | string>>;
+    @Output() buttonsChange: EventEmitter<Array<TextBoxPredefinedButton | string | DevExpress.common.TextEditorButton>>;
 
     /**
     

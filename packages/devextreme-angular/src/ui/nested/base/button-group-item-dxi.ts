@@ -5,23 +5,21 @@ import {
     Component,
 } from '@angular/core';
 
-import { AsyncRule, ButtonStyle, ButtonType, CompareRule, CustomRule, EmailRule, HorizontalAlignment, NumericRule, PatternRule, RangeRule, RequiredRule, StringLengthRule, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
-import { Properties as dxBoxOptions } from 'devextreme/ui/box';
-import { Properties as dxButtonOptions } from 'devextreme/ui/button';
-import { dxContextMenuItem } from 'devextreme/ui/context_menu';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { ButtonStyle, ButtonType, HorizontalAlignment, ToolbarItemComponent, ToolbarItemLocation, VerticalAlignment } from 'devextreme/common';
+import { dxBoxOptions } from 'devextreme/ui/box';
+import { dxButtonOptions } from 'devextreme/ui/button';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
-import { DiagramCommand, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { DiagramCommand } from 'devextreme/ui/diagram';
 import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
-import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
-import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
+import { FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
 import { GanttPredefinedContextMenuItem, GanttPredefinedToolbarItem } from 'devextreme/ui/gantt';
 import { HtmlEditorPredefinedContextMenuItem, HtmlEditorPredefinedToolbarItem } from 'devextreme/ui/html_editor';
-import { dxMenuItem } from 'devextreme/ui/menu';
 import { Properties as dxSplitterOptions } from 'devextreme/ui/splitter';
-import { Properties as dxTabPanelOptions } from 'devextreme/ui/tab_panel';
+import { dxTabPanelOptions } from 'devextreme/ui/tab_panel';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 import { TreeListPredefinedToolbarItem } from 'devextreme/ui/tree_list';
-import { dxTreeViewItem } from 'devextreme/ui/tree_view';
 
 @Component({
     template: ''
@@ -160,10 +158,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('closeMenuOnClick', value);
     }
 
-    get items(): Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem> {
+    get items(): Array<DevExpress.ui.dxContextMenuItem | DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem | DevExpress.ui.dxDiagramCustomCommand | DevExpress.ui.dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | DevExpress.ui.dxMenuItem | DevExpress.ui.dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem>) {
+    set items(value: Array<DevExpress.ui.dxContextMenuItem | DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem | DevExpress.ui.dxDiagramCustomCommand | DevExpress.ui.dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | DevExpress.ui.dxMenuItem | DevExpress.ui.dxTreeViewItem>) {
         this._setOption('items', value);
     }
 
@@ -251,10 +249,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('name', value);
     }
 
-    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
+    get validationRules(): Array<DevExpress.common.RequiredRule | DevExpress.common.NumericRule | DevExpress.common.RangeRule | DevExpress.common.StringLengthRule | DevExpress.common.CustomRule | DevExpress.common.CompareRule | DevExpress.common.PatternRule | DevExpress.common.EmailRule | DevExpress.common.AsyncRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
+    set validationRules(value: Array<DevExpress.common.RequiredRule | DevExpress.common.NumericRule | DevExpress.common.RangeRule | DevExpress.common.StringLengthRule | DevExpress.common.CustomRule | DevExpress.common.CompareRule | DevExpress.common.PatternRule | DevExpress.common.EmailRule | DevExpress.common.AsyncRule>) {
         this._setOption('validationRules', value);
     }
 
@@ -307,10 +305,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('tabPanelOptions', value);
     }
 
-    get tabs(): Array<any | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, tabTemplate?: any | undefined, template?: any | undefined, title?: string | undefined }> {
+    get tabs(): Array<any | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem>, tabTemplate?: any | undefined, template?: any | undefined, title?: string | undefined }> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<any | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem>, tabTemplate?: any | undefined, template?: any | undefined, title?: string | undefined }>) {
+    set tabs(value: Array<any | { alignItemLabels?: boolean, badge?: string | undefined, colCount?: number, colCountByScreen?: { lg?: number | undefined, md?: number | undefined, sm?: number | undefined, xs?: number | undefined }, disabled?: boolean, icon?: string | undefined, items?: Array<DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem>, tabTemplate?: any | undefined, template?: any | undefined, title?: string | undefined }>) {
         this._setOption('tabs', value);
     }
 

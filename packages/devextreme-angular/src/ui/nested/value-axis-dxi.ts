@@ -17,8 +17,9 @@ import {
 
 
 
+import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, RelativePosition, ScaleBreak, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
+import { AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, RelativePosition, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
@@ -71,10 +72,10 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get breaks(): Array<ScaleBreak> {
+    get breaks(): Array<DevExpress.common.charts.ScaleBreak> {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<ScaleBreak>) {
+    set breaks(value: Array<DevExpress.common.charts.ScaleBreak>) {
         this._setOption('breaks', value);
     }
 
@@ -391,10 +392,10 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get visualRange(): VisualRange | Array<number | string | Date> {
+    get visualRange(): DevExpress.common.charts.VisualRange | Array<number | string | Date> {
         return this._getOption('visualRange');
     }
-    set visualRange(value: VisualRange | Array<number | string | Date>) {
+    set visualRange(value: DevExpress.common.charts.VisualRange | Array<number | string | Date>) {
         this._setOption('visualRange', value);
     }
 
@@ -407,10 +408,10 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get wholeRange(): VisualRange | undefined | Array<number | string | Date> {
+    get wholeRange(): DevExpress.common.charts.VisualRange | undefined | Array<number | string | Date> {
         return this._getOption('wholeRange');
     }
-    set wholeRange(value: VisualRange | undefined | Array<number | string | Date>) {
+    set wholeRange(value: DevExpress.common.charts.VisualRange | undefined | Array<number | string | Date>) {
         this._setOption('wholeRange', value);
     }
 
@@ -435,7 +436,7 @@ export class DxiValueAxisComponent extends CollectionNestedOption {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visualRangeChange: EventEmitter<VisualRange | Array<number | string | Date>>;
+    @Output() visualRangeChange: EventEmitter<DevExpress.common.charts.VisualRange | Array<number | string | Date>>;
     protected get _optionPath() {
         return 'valueAxis';
     }

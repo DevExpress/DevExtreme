@@ -58,10 +58,10 @@ export class DxoTooltipComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): string | UserDefinedElement | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: string | UserDefinedElement | undefined) {
         this._setOption('container', value);
     }
 

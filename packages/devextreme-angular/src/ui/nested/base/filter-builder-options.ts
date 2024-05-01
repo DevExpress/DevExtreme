@@ -5,7 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import { ContentReadyEvent, DisposingEvent, dxFilterBuilderCustomOperation, dxFilterBuilderField, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, GroupOperation, InitializedEvent, OptionChangedEvent, ValueChangedEvent } from 'devextreme/ui/filter_builder';
 
 @Component({
     template: ''
@@ -32,10 +33,10 @@ export abstract class DxoFilterBuilderOptions extends NestedOption {
         this._setOption('allowHierarchicalFields', value);
     }
 
-    get customOperations(): Array<dxFilterBuilderCustomOperation> {
+    get customOperations(): Array<DevExpress.ui.dxFilterBuilderCustomOperation> {
         return this._getOption('customOperations');
     }
-    set customOperations(value: Array<dxFilterBuilderCustomOperation>) {
+    set customOperations(value: Array<DevExpress.ui.dxFilterBuilderCustomOperation>) {
         this._setOption('customOperations', value);
     }
 
@@ -53,10 +54,10 @@ export abstract class DxoFilterBuilderOptions extends NestedOption {
         this._setOption('elementAttr', value);
     }
 
-    get fields(): Array<dxFilterBuilderField> {
+    get fields(): Array<DevExpress.ui.dxFilterBuilderField> {
         return this._getOption('fields');
     }
-    set fields(value: Array<dxFilterBuilderField>) {
+    set fields(value: Array<DevExpress.ui.dxFilterBuilderField>) {
         this._setOption('fields', value);
     }
 

@@ -14,7 +14,8 @@ import {
 
 
 
-import { ChartsColor, DashStyle } from 'devextreme/common/charts';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { DashStyle } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +31,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoCommonPaneSettingsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get backgroundColor(): ChartsColor | string {
+    get backgroundColor(): DevExpress.common.charts.ChartsColor | string {
         return this._getOption('backgroundColor');
     }
-    set backgroundColor(value: ChartsColor | string) {
+    set backgroundColor(value: DevExpress.common.charts.ChartsColor | string) {
         this._setOption('backgroundColor', value);
     }
 

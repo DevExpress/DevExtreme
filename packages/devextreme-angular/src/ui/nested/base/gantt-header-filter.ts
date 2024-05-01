@@ -29,10 +29,10 @@ export abstract class DxoGanttHeaderFilter extends NestedOption {
         this._setOption('allowSelectAll', value);
     }
 
-    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
+    get dataSource(): DataSourceOptions | Store | Function | null | undefined | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
+    set dataSource(value: DataSourceOptions | Store | Function | null | undefined | Array<any>) {
         this._setOption('dataSource', value);
     }
 

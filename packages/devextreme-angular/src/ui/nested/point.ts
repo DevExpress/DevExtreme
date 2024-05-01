@@ -14,7 +14,8 @@ import {
 
 
 
-import { ChartsColor, PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { PointInteractionMode, PointSymbol } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +39,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get color(): ChartsColor | string | undefined {
+    get color(): DevExpress.common.charts.ChartsColor | string | undefined {
         return this._getOption('color');
     }
-    set color(value: ChartsColor | string | undefined) {
+    set color(value: DevExpress.common.charts.ChartsColor | string | undefined) {
         this._setOption('color', value);
     }
 
@@ -54,10 +55,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
+    get hoverStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number } {
         return this._getOption('hoverStyle');
     }
-    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
+    set hoverStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }) {
         this._setOption('hoverStyle', value);
     }
 
@@ -78,10 +79,10 @@ export class DxoPointComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number } {
+    get selectionStyle(): { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number } {
         return this._getOption('selectionStyle');
     }
-    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: ChartsColor | string | undefined, size?: number }) {
+    set selectionStyle(value: { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number | undefined } | { border?: { color?: string | undefined, visible?: boolean, width?: number }, color?: DevExpress.common.charts.ChartsColor | string | undefined, size?: number }) {
         this._setOption('selectionStyle', value);
     }
 

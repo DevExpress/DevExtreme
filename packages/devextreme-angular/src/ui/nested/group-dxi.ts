@@ -15,7 +15,8 @@ import {
 
 
 
-import { DiagramCommand, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { DiagramCommand, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -32,10 +33,10 @@ import { DxiCommandComponent } from './command-dxi';
 })
 export class DxiGroupComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<dxDiagramCustomCommand | DiagramCommand> {
+    get commands(): Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<dxDiagramCustomCommand | DiagramCommand>) {
+    set commands(value: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>) {
         this._setOption('commands', value);
     }
 

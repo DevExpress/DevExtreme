@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -19,7 +18,7 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import { PositionConfig } from 'devextreme/animation/position';
+import DevExpress from 'devextreme/bundles/dx.all';
 import { Position } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent } from 'devextreme/ui/tooltip';
@@ -102,10 +101,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get container(): UserDefinedElement | string | undefined {
+    get container(): string | UserDefinedElement | undefined {
         return this._getOption('container');
     }
-    set container(value: UserDefinedElement | string | undefined) {
+    set container(value: string | UserDefinedElement | undefined) {
         this._setOption('container', value);
     }
 
@@ -284,10 +283,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get position(): Position | PositionConfig {
+    get position(): Position | DevExpress.PositionConfig {
         return this._getOption('position');
     }
-    set position(value: Position | PositionConfig) {
+    set position(value: Position | DevExpress.PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -349,10 +348,10 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get target(): UserDefinedElement | string | undefined {
+    get target(): string | UserDefinedElement | undefined {
         return this._getOption('target');
     }
-    set target(value: UserDefinedElement | string | undefined) {
+    set target(value: string | UserDefinedElement | undefined) {
         this._setOption('target', value);
     }
 
@@ -478,7 +477,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() containerChange: EventEmitter<string | UserDefinedElement | undefined>;
 
     /**
     
@@ -576,7 +575,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<Position | PositionConfig>;
+    @Output() positionChange: EventEmitter<Position | DevExpress.PositionConfig>;
 
     /**
     
@@ -611,7 +610,7 @@ export class DxTooltipComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<UserDefinedElement | string | undefined>;
+    @Output() targetChange: EventEmitter<string | UserDefinedElement | undefined>;
 
     /**
     

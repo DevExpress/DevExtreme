@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -25,7 +24,8 @@ import {
 } from '@angular/core';
 
 
-import { EditorStyle, LabelMode, Position, TextEditorButton, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { EditorStyle, LabelMode, Position, ValidationMessageMode, ValidationStatus } from 'devextreme/common';
 import { Format } from 'devextreme/localization';
 import { ChangeEvent, ContentReadyEvent, CopyEvent, CutEvent, DisposingEvent, EnterKeyEvent, FocusInEvent, FocusOutEvent, InitializedEvent, InputEvent, KeyDownEvent, KeyUpEvent, NumberBoxPredefinedButton, NumberBoxType, OptionChangedEvent, PasteEvent, ValueChangedEvent } from 'devextreme/ui/number_box';
 
@@ -109,10 +109,10 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
     
      */
     @Input()
-    get buttons(): Array<NumberBoxPredefinedButton | TextEditorButton> {
+    get buttons(): Array<NumberBoxPredefinedButton | DevExpress.common.TextEditorButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<NumberBoxPredefinedButton | TextEditorButton>) {
+    set buttons(value: Array<NumberBoxPredefinedButton | DevExpress.common.TextEditorButton>) {
         this._setOption('buttons', value);
     }
 
@@ -723,7 +723,7 @@ export class DxNumberBoxComponent extends DxComponent implements OnDestroy, Cont
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | TextEditorButton>>;
+    @Output() buttonsChange: EventEmitter<Array<NumberBoxPredefinedButton | DevExpress.common.TextEditorButton>>;
 
     /**
     

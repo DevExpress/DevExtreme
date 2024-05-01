@@ -14,7 +14,8 @@ import {
 
 
 
-import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
+import DevExpress from 'devextreme/bundles/dx.all';
+import { DashStyle, HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -38,10 +39,10 @@ export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, O
     }
 
     @Input()
-    get color(): ChartsColor | string | undefined {
+    get color(): DevExpress.common.charts.ChartsColor | string | undefined {
         return this._getOption('color');
     }
-    set color(value: ChartsColor | string | undefined) {
+    set color(value: DevExpress.common.charts.ChartsColor | string | undefined) {
         this._setOption('color', value);
     }
 
