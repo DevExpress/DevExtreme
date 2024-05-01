@@ -185,18 +185,18 @@ gulp.task('clean.tests', () => {
 });
 
 gulp.task('add.package.json', (done) => {
-  const pkgJson = require(path.resolve(path.join('.',buildConfig.npm.distPath,'package.json')));
+  const pkgJson = require(path.resolve(path.join('.', buildConfig.npm.distPath, 'package.json')));
 
-  delete pkgJson.exports["."];
-  delete pkgJson.exports["./package.json"];
+  delete pkgJson.exports['.'];
+  delete pkgJson.exports['./package.json'];
 
   const paths = Object.keys(pkgJson.exports);
 
   paths.forEach((modulePath) => {
-    const [name, folder] = modulePath.replace(/^\.\//,'').split('/').reverse();
+    const [name, folder] = modulePath.replace(/^\.\//, '').split('/').reverse();
     const content = folder
-        ? `{"module": "../../fesm2022/devextreme-angular-ui-${name}.mjs"}`
-        : `{"module": "../fesm2022/devextreme-angular-${name}.mjs"}`;
+      ? `{"module": "../../fesm2022/devextreme-angular-ui-${name}.mjs"}`
+      : `{"module": "../fesm2022/devextreme-angular-${name}.mjs"}`;
 
     fs.writeFileSync(path.join(path.resolve(`./npm/dist/${folder || ''}`), name, 'package.json'), content, (err) => {
       if (err) {
