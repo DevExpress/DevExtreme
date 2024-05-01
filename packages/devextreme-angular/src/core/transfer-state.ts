@@ -1,4 +1,10 @@
-import { PLATFORM_ID, Inject, NgModule, TransferState, makeStateKey } from '@angular/core';
+import {
+  PLATFORM_ID,
+  Inject,
+  NgModule,
+  TransferState,
+  makeStateKey,
+} from '@angular/core';
 import { isPlatformServer } from '@angular/common';
 import ajax from 'devextreme/core/utils/ajax';
 import { Deferred } from 'devextreme/core/utils/deferred';
