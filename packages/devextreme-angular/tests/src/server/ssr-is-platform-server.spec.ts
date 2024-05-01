@@ -2,12 +2,11 @@
 
 import {
     Component,
-    PLATFORM_ID
+    PLATFORM_ID,
+    TransferState,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
-
-import { TransferState } from '@angular/platform-browser';
 
 import { DxServerModule } from 'devextreme-angular/server';
 
