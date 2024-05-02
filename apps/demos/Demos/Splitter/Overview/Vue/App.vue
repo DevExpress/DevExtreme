@@ -16,7 +16,7 @@
           max-size="75%"
           text="Central Pane"
           template="paneContent"
-      tabindex="0"
+          tabindex="0"
         />
         <DxItem :collapsible="true">
           <DxSplitter>
@@ -27,13 +27,13 @@
               min-size="5%"
               text="Nested Left Pane"
               template="paneContent"
-      tabindex="0"
+              tabindex="0"
             />
             <DxItem
               :resizable="true"
               text="Nested Central Pane"
               template="paneContent"
-      tabindex="0"
+              tabindex="0"
             />
             <DxItem
               :resizable="true"
@@ -42,7 +42,7 @@
               min-size="5%"
               text="Nested Right Pane"
               template="paneContent"
-      tabindex="0"
+              tabindex="0"
             />
             <template #paneContent="{ data }">
               <PaneContent
