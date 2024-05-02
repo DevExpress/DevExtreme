@@ -610,10 +610,12 @@ export default class DataGrid extends Widget {
     )();
   }
   async moveRow(t: TestController, rowIndex: number, x: number, y: number): Promise<void> {
-    await t.drag(
-      this.getDataRow(rowIndex).getCommandCell(0).element,
-      x, y,
-    );
+    const hasDragIcons = await this.option('rowDragging.showDragIcons');
+    const dragElement = hasDragIcons ?
+      this.getDataRow(rowIndex).getCommandCell(0).element :
+      this.getDataRow(rowIndex).element;
+
+    await t.drag(dragElement, x, y);
   }
 
   moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
