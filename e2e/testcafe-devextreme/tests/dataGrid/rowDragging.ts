@@ -154,11 +154,10 @@ safeSizeTest('The placeholder should appear when a cross-component dragging rows
 
 safeSizeTest('The cross-component drag and drop rows should work when there are fixed columns', async (t) => {
   const dataGrid = new DataGrid('#container');
-
   await MouseUpEvents.enable(MouseAction.dragToOffset);
+
   await dataGrid.moveRow(t, 0, 500, 0);
   await dataGrid.moveRow(t, 0, 550, 0);
-  await MouseUpEvents.disable(MouseAction.dragToOffset);
 
   await t
     .expect(isPlaceholderVisible())
@@ -173,6 +172,8 @@ safeSizeTest('The cross-component drag and drop rows should work when there are 
     .ok()
     .expect(getPlaceholderOffset())
     .eql(dataRowOffset);
+  
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
   await ClientFunction(() => {
@@ -772,13 +773,14 @@ safeSizeTest('Rows should appear correctly during dragging when virtual scrollin
 
   // drag the row up
   await dataGrid.moveRow(t, 0, 30, 75);
-  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   await t
     .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
