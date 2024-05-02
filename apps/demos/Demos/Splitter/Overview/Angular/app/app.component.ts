@@ -31,7 +31,7 @@ export class AppComponent {
     { name: 'Nested Right Pane' },
   ];
 
-  itemRendered(e){
+  itemRendered(e: any){
     const item = e.itemElement.querySelectorAll('.dx-splitter-item-content')[0];
     item.setAttribute('tabIndex', '0');
   }

@@ -94,4 +94,19 @@ import PaneContent from './PaneContent.vue';
     border-radius: 8px;
     overflow: hidden;
   }
+
+  #splitter > .dx-splitter-item:first-child > .dx-splitter-item-content:focus {
+    border-top-left-radius: 8px;
+    border-bottom-left-radius: 8px;
+  }
+
+  #splitter > .dx-splitter-item:last-child > .dx-splitter-item-content:focus {
+      border-top-right-radius: 8px;
+      border-bottom-right-radius: 8px;
+  }
+
+  .dx-splitter-item-content:focus {
+      outline: none;
+      box-shadow: inset 0 0 0 1px var(--dx-color-primary);
+  }
 </style>
