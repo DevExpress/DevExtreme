@@ -572,6 +572,24 @@ QUnit.module('Rendering Scrollable', moduleConfig, () => {
         assert.roughEqual($scrollableContent.position().top, 0, 1, 'scroll position is reset');
     });
 
+    QUnit.test('Scrollable content should have min-height: auto to prevent invisible 3rd level submenus bug on iOS', function(assert) {
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 1, items: [{ text: 11 }] }],
+            visible: true,
+            showSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $itemsContainer = instance.itemsContainer();
+        const $rootItem = $itemsContainer.find(`.${DX_MENU_ITEM_CLASS}`).eq(0);
+
+        $($itemsContainer).trigger($.Event('dxhoverstart', { target: $rootItem.get(0) }));
+        this.clock.tick(0);
+
+        $(`.${DX_SCROLLABLE_CONTENT_CLASS}`).each((_, scrollableContent) => {
+            assert.strictEqual(window.getComputedStyle(scrollableContent).minHeight, '0px', 'min-height = auto');
+        });
+    });
+
     QUnit.module('On dimension changed', {
         setWindowHeight: function(windowHeight) {
             implementationsMap.getOuterHeight = (el, ...args) => {
@@ -2283,6 +2301,40 @@ QUnit.module('Aria accessibility', {
         helper.checkAttributes(helper.getItems().eq(1), { id: helper.focusedItemId, role: 'menuitem', tabindex: '-1' }, 'Items[0].items[0]');
         helper.checkAttributes(helper.getItems().eq(2), { role: 'menuitem', tabindex: '-1' }, 'Items[0],items[1]');
         helper.checkAttributes(helper.getItems().eq(3), { role: 'menuitem', tabindex: '-1' }, 'Items[1]');
+    });
+
+    QUnit.test('Nested submenu has the "menu" role', function() {
+        helper.createWidget({
+            focusStateEnabled: true,
+            items: [{ text: 'Item1_1', items: [{ text: 'Item2_1' }, { text: 'Item2_2' }] }, { text: 'item1_2' }]
+        });
+
+        helper.widget.show();
+
+        keyboardMock(helper.widget.itemsContainer())
+            .keyDown('down')
+            .keyDown('right');
+
+        const $submenu = helper.widget._overlay.$content().find(`.${DX_SUBMENU_CLASS}`).eq(1);
+
+        helper.checkAttributes($submenu, { role: 'menu' });
+    });
+
+    QUnit.test('Nested submenu items has not "dxPrivateComponent" text in alt', function() {
+        helper.createWidget({
+            focusStateEnabled: true,
+            items: [{ text: 'Item1_1', items: [{ text: 'Item2_1', icon: 'icon.png' }] }],
+        });
+
+        helper.widget.show();
+
+        keyboardMock(helper.widget.itemsContainer())
+            .keyDown('down')
+            .keyDown('right');
+
+        const $icon = helper.widget._overlay.$content().find(`.${DX_ICON_CLASS}`).eq(0);
+
+        helper.checkAttributes($icon, { src: 'icon.png', alt: 'dxContextMenu item icon' });
     });
 
     // T927422

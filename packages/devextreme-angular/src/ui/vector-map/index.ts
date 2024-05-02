@@ -23,14 +23,13 @@ import {
 } from '@angular/core';
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { ExportFormat, HorizontalAlignment, Orientation, Position, SingleMultipleOrNone, VerticalEdge } from 'devextreme/common';
 import { DashStyle, Font, Palette, TextOverflow, Theme, WordWrap } from 'devextreme/common/charts';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { CenterChangedEvent, ClickEvent, DisposingEvent, DrawnEvent, dxVectorMapCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, VectorMapLayerType, VectorMapMarkerShape, VectorMapMarkerType, ZoomFactorChangedEvent } from 'devextreme/viz/vector_map';
-import { VectorMapProjection } from 'devextreme/viz/vector_map/projection';
+import { CenterChangedEvent, ClickEvent, DisposingEvent, DrawnEvent, dxVectorMapAnnotationConfig, dxVectorMapCommonAnnotationConfig, ExportedEvent, ExportingEvent, FileSavingEvent, IncidentOccurredEvent, InitializedEvent, OptionChangedEvent, SelectionChangedEvent, TooltipHiddenEvent, TooltipShownEvent, VectorMapLayerType, VectorMapMarkerShape, VectorMapMarkerType, ZoomFactorChangedEvent } from 'devextreme/viz/vector_map';
+import { VectorMapProjection, VectorMapProjectionConfig } from 'devextreme/viz/vector_map/projection';
 
 import DxVectorMap from 'devextreme/viz/vector_map';
 
@@ -95,10 +94,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get annotations(): Array<DevExpress.viz.dxVectorMapAnnotationConfig | any> {
+    get annotations(): Array<dxVectorMapAnnotationConfig | any> {
         return this._getOption('annotations');
     }
-    set annotations(value: Array<DevExpress.viz.dxVectorMapAnnotationConfig | any>) {
+    set annotations(value: Array<dxVectorMapAnnotationConfig | any>) {
         this._setOption('annotations', value);
     }
 
@@ -225,10 +224,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get layers(): Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: any | DataSource | DataSourceOptions | Store | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }> {
+    get layers(): Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: Store | DataSource | DataSourceOptions | any | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }> {
         return this._getOption('layers');
     }
-    set layers(value: Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: any | DataSource | DataSourceOptions | Store | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }>) {
+    set layers(value: Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: Store | DataSource | DataSourceOptions | any | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }>) {
         this._setOption('layers', value);
     }
 
@@ -303,10 +302,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get projection(): VectorMapProjection | any | DevExpress.viz.VectorMapProjectionConfig | string {
+    get projection(): VectorMapProjection | VectorMapProjectionConfig | any | string {
         return this._getOption('projection');
     }
-    set projection(value: VectorMapProjection | any | DevExpress.viz.VectorMapProjectionConfig | string) {
+    set projection(value: VectorMapProjection | VectorMapProjectionConfig | any | string) {
         this._setOption('projection', value);
     }
 
@@ -381,10 +380,10 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
     
      */
     @Input()
-    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
+    get tooltip(): { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined } {
         return this._getOption('tooltip');
     }
-    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
+    set tooltip(value: { arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }) {
         this._setOption('tooltip', value);
     }
 
@@ -557,7 +556,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() annotationsChange: EventEmitter<Array<DevExpress.viz.dxVectorMapAnnotationConfig | any>>;
+    @Output() annotationsChange: EventEmitter<Array<dxVectorMapAnnotationConfig | any>>;
 
     /**
     
@@ -627,7 +626,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() layersChange: EventEmitter<Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: any | DataSource | DataSourceOptions | Store | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }>>;
+    @Output() layersChange: EventEmitter<Array<any | { borderColor?: string, borderWidth?: number, color?: string, colorGroupingField?: string | undefined, colorGroups?: Array<number>, customize?: Function, dataField?: string | undefined, dataSource?: Store | DataSource | DataSourceOptions | any | null | string | Array<any>, elementType?: VectorMapMarkerType, hoveredBorderColor?: string, hoveredBorderWidth?: number, hoveredColor?: string, hoverEnabled?: boolean, label?: { dataField?: string, enabled?: boolean, font?: Font }, maxSize?: number, minSize?: number, name?: string, opacity?: number, palette?: Palette | string | Array<string>, paletteIndex?: number, paletteSize?: number, selectedBorderColor?: string, selectedBorderWidth?: number, selectedColor?: string, selectionMode?: SingleMultipleOrNone, size?: number, sizeGroupingField?: string | undefined, sizeGroups?: Array<number>, type?: VectorMapLayerType }>>;
 
     /**
     
@@ -669,7 +668,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() projectionChange: EventEmitter<VectorMapProjection | any | DevExpress.viz.VectorMapProjectionConfig | string>;
+    @Output() projectionChange: EventEmitter<VectorMapProjection | VectorMapProjectionConfig | any | string>;
 
     /**
     
@@ -711,7 +710,7 @@ export class DxVectorMapComponent extends DxComponent implements OnDestroy, OnCh
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: string | UserDefinedElement | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
+    @Output() tooltipChange: EventEmitter<{ arrowLength?: number, border?: { color?: string, dashStyle?: DashStyle, opacity?: number | undefined, visible?: boolean, width?: number }, color?: string, container?: UserDefinedElement | string | undefined, contentTemplate?: any | undefined, cornerRadius?: number, customizeTooltip?: Function | undefined, enabled?: boolean, font?: Font, opacity?: number | undefined, paddingLeftRight?: number, paddingTopBottom?: number, shadow?: { blur?: number, color?: string, offsetX?: number, offsetY?: number, opacity?: number }, zIndex?: number | undefined }>;
 
     /**
     

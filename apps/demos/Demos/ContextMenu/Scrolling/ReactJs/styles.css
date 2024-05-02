@@ -1,0 +1,10 @@
+.target-area {
+  color: var(--dx-color-text);
+  background-color: var(--dx-color-border);
+  height: 300px;
+  max-width: 600px;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

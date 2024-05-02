@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import DevExpress from 'devextreme/bundles/dx.all';
+import { PositionConfig } from 'devextreme/animation/position';
 import { Position, PositionAlignment, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
@@ -38,10 +38,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('closeOnOutsideClick', value);
     }
 
-    get container(): string | UserDefinedElement | undefined {
+    get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
-    set container(value: string | UserDefinedElement | undefined) {
+    set container(value: UserDefinedElement | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -66,10 +66,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('disabled', value);
     }
 
-    get dragAndResizeArea(): string | UserDefinedElement | undefined {
+    get dragAndResizeArea(): UserDefinedElement | string | undefined {
         return this._getOption('dragAndResizeArea');
     }
-    set dragAndResizeArea(value: string | UserDefinedElement | undefined) {
+    set dragAndResizeArea(value: UserDefinedElement | string | undefined) {
         this._setOption('dragAndResizeArea', value);
     }
 
@@ -255,10 +255,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('onTitleRendered', value);
     }
 
-    get position(): PositionAlignment | DevExpress.PositionConfig | Function | Position {
+    get position(): PositionAlignment | PositionConfig | Function | Position {
         return this._getOption('position');
     }
-    set position(value: PositionAlignment | DevExpress.PositionConfig | Function | Position) {
+    set position(value: PositionAlignment | PositionConfig | Function | Position) {
         this._setOption('position', value);
     }
 
@@ -374,10 +374,10 @@ export abstract class DxoPopupOptions extends NestedOption {
         this._setOption('showEvent', value);
     }
 
-    get target(): string | UserDefinedElement | undefined {
+    get target(): UserDefinedElement | string | undefined {
         return this._getOption('target');
     }
-    set target(value: string | UserDefinedElement | undefined) {
+    set target(value: UserDefinedElement | string | undefined) {
         this._setOption('target', value);
     }
 }
