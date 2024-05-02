@@ -184,30 +184,6 @@ gulp.task('clean.tests', () => {
   return del([outputFolderPath]);
 });
 
-gulp.task('add.package.json', (done) => {
-  const pkgJson = require(path.resolve(path.join('.', buildConfig.npm.distPath, 'package.json')));
-
-  delete pkgJson.exports['.'];
-  delete pkgJson.exports['./package.json'];
-
-  const paths = Object.keys(pkgJson.exports);
-
-  paths.forEach((modulePath) => {
-    const [name, folder] = modulePath.replace(/^\.\//, '').split('/').reverse();
-    const content = folder
-      ? `{"module": "../../fesm2022/devextreme-angular-ui-${name}.mjs"}`
-      : `{"module": "../fesm2022/devextreme-angular-${name}.mjs"}`;
-
-    fs.writeFileSync(path.join(path.resolve(`./npm/dist/${folder || ''}`), name, 'package.json'), content, (err) => {
-      if (err) {
-        console.error('Error while write to file:', err);
-      }
-    });
-  });
-
-  done();
-});
-
 gulp.task('generate-component-names', (done) => {
   const generator = new AngularComponentNamesGenerator(buildConfig.tools.componentNamesGenerator);
 
@@ -216,7 +192,13 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'add.package.json', () => {
+gulp.task('copy.dist.dx-angular', () => {
+  return gulp
+    .src(`${buildConfig.npm.distPath}/**/*`)
+    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
+});
+
+gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
   const config = buildConfig.components;
   const testConfig = buildConfig.tests;
 

@@ -1,13 +1,8 @@
-var path = require('path');
-
 module.exports = {
     devtool: 'inline-source-map',
     mode: 'development',
     plugins: [],
     resolve: {
-        alias: {
-            'devextreme-angular': path.resolve(__dirname, 'npm/dist'),
-        },
         fallback: { "stream": require.resolve("stream-browserify")}
     },
     module: {
