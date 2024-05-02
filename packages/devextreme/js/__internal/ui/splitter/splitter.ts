@@ -53,6 +53,7 @@ import type {
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
@@ -238,6 +239,7 @@ class Splitter extends (CollectionWidget as any) {
       this._applyFlexGrowFromLayout(this._layout);
 
       this._updateItemSizes();
+      this._updateItemsVisibilityClass();
     } else {
       this._shouldRecalculateLayout = true;
     }
@@ -594,6 +596,7 @@ class Splitter extends (CollectionWidget as any) {
         );
 
         this._applyFlexGrowFromLayout(newLayout);
+        this._updateItemsVisibilityClass();
         this._layout = newLayout;
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
@@ -762,6 +765,7 @@ class Splitter extends (CollectionWidget as any) {
 
     this._applyFlexGrowFromLayout(this._layout);
     this._updateItemSizes();
+    this._updateItemsVisibilityClass();
   }
 
   _getCollapseDelta(item: Item): number {
@@ -819,6 +823,17 @@ class Splitter extends (CollectionWidget as any) {
   _updateItemSizes(): void {
     this._iterateItems((index, itemElement) => {
       this._updateItemData('size', index, this._getItemDimension(itemElement));
+    });
+  }
+
+  _updateItemsVisibilityClass(): void {
+    this._iterateItems((_, itemElement) => {
+      const $item = $(itemElement);
+      const itemSize = this._getItemDimension(itemElement);
+      const itemData = this._getItemData($item);
+      const shouldHideContent = itemSize === 0 && itemData.visible !== false;
+
+      $item.toggleClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS, shouldHideContent);
     });
   }
 

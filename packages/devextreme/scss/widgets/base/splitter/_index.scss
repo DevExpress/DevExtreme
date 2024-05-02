@@ -9,6 +9,10 @@
     display: flex;
     overflow: hidden;
     flex: 1 1 auto;
+
+    &.dx-splitter-item-hidden-content {
+      visibility: hidden;
+    }
   }
 
   .dx-splitter-item-content {
