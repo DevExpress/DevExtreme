@@ -2,10 +2,12 @@ import FocusableElement from '../internal/focusable';
 import Widget from '../internal/widget';
 
 const CLASS = {
-  commandEdit: 'dx-command-edit',
-  commandExpand: 'dx-command-expand',
-  commandSelect: 'dx-command-select',
-  commandAdaptive: 'dx-command-adaptive',
+  command: {
+    edit: 'dx-command-edit',
+    expand: 'dx-command-expand',
+    select: 'dx-command-select',
+    adaptive: 'dx-command-adaptive',
+  },
   hiddenColumn: 'hidden-column',
   focused: 'dx-focused',
   selectCheckBox: 'dx-select-checkbox',
@@ -19,7 +21,11 @@ export default class CommandCell extends FocusableElement {
 
   constructor(dataRow: Selector, index: number, widgetName: string) {
     const childrenSelector = `td[aria-colindex='${index + 1}']`;
-    const commandSelector = `${childrenSelector}.${CLASS.commandEdit}, ${childrenSelector}.${CLASS.commandSelect}, ${childrenSelector}.${CLASS.commandExpand}, ${childrenSelector}.${CLASS.commandAdaptive}`;
+
+    const commandSelector = Object.values(CLASS.command)
+      .map((commandClass) => `${childrenSelector}.${commandClass}`)
+      .join(',');
+
     super(dataRow.find(commandSelector));
     this.isFocused = this.element.hasClass(CLASS.focused);
     this.isHidden = this.element.hasClass(Widget.addClassPrefix(widgetName, CLASS.hiddenColumn));
