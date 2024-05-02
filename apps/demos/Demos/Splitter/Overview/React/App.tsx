@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.tsx';
 
@@ -6,10 +6,17 @@ const PaneContentWithTitleRender = (title, initialSize?: string) => {
   const PaneContentRender = (data) => (<PaneContent title={title} {...data} size={initialSize} />);
   return PaneContentRender;
 }
-const App = () => (
+const App = () =>{ 
+  const itemRendered = (e) => {
+    const item = e.itemElement.querySelectorAll('.dx-splitter-item-content')[0];
+    item.setAttribute('tabIndex', '0');
+  }
+
+  return(
   <React.Fragment>
     <Splitter
       id="splitter"
+      onItemRendered={itemRendered}
     >
       <Item
         resizable={true}
@@ -22,6 +29,7 @@ const App = () => (
       >
         <Splitter
           orientation="vertical"
+          onItemRendered={itemRendered}
         >
           <Item
             resizable={true}
@@ -33,7 +41,9 @@ const App = () => (
             resizable={true}
             collapsible={true}
           >
-            <Splitter>
+            <Splitter
+            onItemRendered={itemRendered}
+            >
               <Item
                 resizable={true}
                 collapsible={true}
@@ -64,6 +74,6 @@ const App = () => (
       />
     </Splitter>
   </React.Fragment>
-);
+)};
 
 export default App;
