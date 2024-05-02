@@ -815,8 +815,8 @@ class Splitter extends (CollectionWidget as any) {
     this._iterateItems((index, itemElement) => {
       setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, layout[index]);
 
-      const itemData = this._getItemData(itemElement);
-      const shouldHideContent = layout[index] === 0 && itemData.visible !== false;
+      const itemInstance = this._getItemInstance($(itemElement));
+      const shouldHideContent = layout[index] === 0 && itemInstance.option.visible !== false;
 
       $(itemElement).toggleClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS, shouldHideContent);
     });

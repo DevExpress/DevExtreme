@@ -2049,6 +2049,15 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
         });
+
+        QUnit.test('Pane with size=0 and visible=false should not have hidden content class', function(assert) {
+            this.reinit({
+                items: [{ size: 0, visible: false }, { }],
+            });
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+        });
     });
 });
 
