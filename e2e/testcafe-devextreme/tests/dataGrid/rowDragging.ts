@@ -525,7 +525,6 @@ safeSizeTest('The draggable element should be displayed correctly after horizont
   await MouseUpEvents.disable(MouseAction.dragToOffset);
   await dataGrid.moveRow(t, 0, 0, 25);
   await dataGrid.moveRow(t, 0, 0, 50);
-  await MouseUpEvents.enable(MouseAction.dragToOffset);
 
   const rowsViewLeftOffset = await getRowsViewLeftOffset();
 
@@ -537,6 +536,7 @@ safeSizeTest('The draggable element should be displayed correctly after horizont
       left: 2500,
       top: 0,
     });
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
 }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
@@ -633,7 +633,7 @@ safeSizeTest('The placeholder should have correct position after dragging the ro
     ],
     columns: ['name', 'age'],
     dataRowTemplate(_, { data }) {
-      return $(`<tr><td>${data.name}</td><td>${data.age}</td></tr>`);
+      return $(`<tr aria-rowindex=${data.id}><td>${data.name}</td><td>${data.age}</td></tr>`);
     },
     rowDragging: {
       allowReordering: true,
