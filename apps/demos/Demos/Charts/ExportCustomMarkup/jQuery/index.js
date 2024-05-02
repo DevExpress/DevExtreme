@@ -72,13 +72,11 @@ $(() => {
     svg.setAttribute('version', '1.1');
     svg.setAttribute('width', '820px');
     svg.setAttribute('height', '420px');
-
     svg.innerHTML = document.getElementById('custom_markup_container').innerHTML;
 
     const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     group.setAttribute('transform', 'translate(305,12)');
     group.innerHTML = chart.svg();
-
     svg.appendChild(group);
 
     return svg;
