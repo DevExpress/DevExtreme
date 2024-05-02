@@ -1,8 +1,9 @@
 /* tslint:disable:max-line-length */
 
 
+import { TransferState } from '@angular/platform-browser';
+
 import {
-    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -57,10 +58,10 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
     
      */
     @Input()
-    get area(): string | UserDefinedElement | undefined {
+    get area(): UserDefinedElement | string | undefined {
         return this._getOption('area');
     }
-    set area(value: string | UserDefinedElement | undefined) {
+    set area(value: UserDefinedElement | string | undefined) {
         this._setOption('area', value);
     }
 
@@ -247,7 +248,7 @@ export class DxResizableComponent extends DxComponent implements OnDestroy {
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() areaChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() areaChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     

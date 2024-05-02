@@ -1,8 +1,9 @@
 /* tslint:disable:max-line-length */
 
 
+import { TransferState } from '@angular/platform-browser';
+
 import {
-    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -167,10 +168,10 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dialogTrigger(): string | UserDefinedElement | undefined {
+    get dialogTrigger(): UserDefinedElement | string | undefined {
         return this._getOption('dialogTrigger');
     }
-    set dialogTrigger(value: string | UserDefinedElement | undefined) {
+    set dialogTrigger(value: UserDefinedElement | string | undefined) {
         this._setOption('dialogTrigger', value);
     }
 
@@ -193,10 +194,10 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
     
      */
     @Input()
-    get dropZone(): string | UserDefinedElement | undefined {
+    get dropZone(): UserDefinedElement | string | undefined {
         return this._getOption('dropZone');
     }
-    set dropZone(value: string | UserDefinedElement | undefined) {
+    set dropZone(value: UserDefinedElement | string | undefined) {
         this._setOption('dropZone', value);
     }
 
@@ -886,7 +887,7 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dialogTriggerChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() dialogTriggerChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     
@@ -900,7 +901,7 @@ export class DxFileUploaderComponent extends DxComponent implements OnDestroy, C
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dropZoneChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() dropZoneChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     

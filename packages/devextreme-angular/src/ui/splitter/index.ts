@@ -1,8 +1,9 @@
 /* tslint:disable:max-line-length */
 
 
+import { TransferState } from '@angular/platform-browser';
+
 import {
-    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -23,11 +24,10 @@ import {
 
 export { ExplicitTypes } from 'devextreme/ui/splitter';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
+import { ContentReadyEvent, DisposingEvent, dxSplitterItem, InitializedEvent, ItemClickEvent, ItemCollapsedEvent, ItemContextMenuEvent, ItemExpandedEvent, ItemRenderedEvent, OptionChangedEvent, Properties as dxSplitterOptions, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from 'devextreme/ui/splitter';
 
 import DxSplitter from 'devextreme/ui/splitter';
 
@@ -84,10 +84,10 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
     
      */
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<dxSplitterItem | string | any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<dxSplitterItem | string | any>) {
         this._setOption('dataSource', value);
     }
 
@@ -355,7 +355,7 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() dataSourceChange: EventEmitter<DataSource | DataSourceOptions | Store | null | string | Array<string | DevExpress.ui.dxSplitterItem | any>>;
+    @Output() dataSourceChange: EventEmitter<Store | DataSource | DataSourceOptions | null | string | Array<dxSplitterItem | string | any>>;
 
     /**
     

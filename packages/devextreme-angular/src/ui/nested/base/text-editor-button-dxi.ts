@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import { TextEditorButtonLocation } from 'devextreme/common';
-import { dxButtonOptions } from 'devextreme/ui/button';
+import { Properties as dxButtonOptions } from 'devextreme/ui/button';
 import { ColumnButtonClickEvent, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
 import { TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 

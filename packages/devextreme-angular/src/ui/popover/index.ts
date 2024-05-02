@@ -1,8 +1,9 @@
 /* tslint:disable:max-line-length */
 
 
+import { TransferState } from '@angular/platform-browser';
+
 import {
-    TransferState,
     Component,
     NgModule,
     ElementRef,
@@ -23,7 +24,7 @@ import {
 
 
 import { AnimationConfig } from 'devextreme/animation/fx';
-import DevExpress from 'devextreme/bundles/dx.all';
+import { PositionConfig } from 'devextreme/animation/position';
 import { Position, ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
 import { UserDefinedElement } from 'devextreme/core/element';
 import { ContentReadyEvent, DisposingEvent, HiddenEvent, HidingEvent, InitializedEvent, OptionChangedEvent, ShowingEvent, ShownEvent, TitleRenderedEvent } from 'devextreme/ui/popover';
@@ -112,10 +113,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get container(): string | UserDefinedElement | undefined {
+    get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
-    set container(value: string | UserDefinedElement | undefined) {
+    set container(value: UserDefinedElement | string | undefined) {
         this._setOption('container', value);
     }
 
@@ -307,10 +308,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get position(): Position | DevExpress.PositionConfig {
+    get position(): Position | PositionConfig {
         return this._getOption('position');
     }
-    set position(value: Position | DevExpress.PositionConfig) {
+    set position(value: Position | PositionConfig) {
         this._setOption('position', value);
     }
 
@@ -398,10 +399,10 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get target(): string | UserDefinedElement | undefined {
+    get target(): UserDefinedElement | string | undefined {
         return this._getOption('target');
     }
-    set target(value: string | UserDefinedElement | undefined) {
+    set target(value: UserDefinedElement | string | undefined) {
         this._setOption('target', value);
     }
 
@@ -574,7 +575,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() containerChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() containerChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     
@@ -679,7 +680,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() positionChange: EventEmitter<Position | DevExpress.PositionConfig>;
+    @Output() positionChange: EventEmitter<Position | PositionConfig>;
 
     /**
     
@@ -728,7 +729,7 @@ export class DxPopoverComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() targetChange: EventEmitter<string | UserDefinedElement | undefined>;
+    @Output() targetChange: EventEmitter<UserDefinedElement | string | undefined>;
 
     /**
     

@@ -12,7 +12,7 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
+import { ChartsColor } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -28,10 +28,10 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiRangeComponent extends CollectionNestedOption {
     @Input()
-    get color(): DevExpress.common.charts.ChartsColor | string {
+    get color(): ChartsColor | string {
         return this._getOption('color');
     }
-    set color(value: DevExpress.common.charts.ChartsColor | string) {
+    set color(value: ChartsColor | string) {
         this._setOption('color', value);
     }
 

@@ -19,9 +19,8 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { GridsEditMode, GridsEditRefreshMode, NewRowPosition, StartEditAction } from 'devextreme/common/grids';
-import { dxFormOptions } from 'devextreme/ui/form';
+import { DataChange, GridsEditMode, GridsEditRefreshMode, NewRowPosition, StartEditAction } from 'devextreme/common/grids';
+import { Properties as dxFormOptions } from 'devextreme/ui/form';
 import { Properties as dxPopupOptions } from 'devextreme/ui/popup';
 
 import {
@@ -63,10 +62,10 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get changes(): Array<DevExpress.common.grids.DataChange> {
+    get changes(): Array<DataChange> {
         return this._getOption('changes');
     }
-    set changes(value: Array<DevExpress.common.grids.DataChange>) {
+    set changes(value: Array<DataChange>) {
         this._setOption('changes', value);
     }
 
@@ -348,7 +347,7 @@ export class DxoEditingComponent extends NestedOption implements OnDestroy, OnIn
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() changesChange: EventEmitter<Array<DevExpress.common.grids.DataChange>>;
+    @Output() changesChange: EventEmitter<Array<DataChange>>;
 
     /**
     
