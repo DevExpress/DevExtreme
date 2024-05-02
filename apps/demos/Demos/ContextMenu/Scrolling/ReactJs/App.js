@@ -18,7 +18,7 @@ function App() {
         target=".target-area"
         onItemClick={itemClick}
       />
-    </React.Fragment>
+    </div>
   );
 }
 export default App;
