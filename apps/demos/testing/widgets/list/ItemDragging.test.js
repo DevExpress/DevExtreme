@@ -22,7 +22,7 @@ runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (te
 
     await t
       .click(itemToDrag)
-      .drag(dragHandle, 0, -(LIST_ITEM_HEIGHT * 2));
+      .drag(dragHandle, 0, -LIST_ITEM_HEIGHT);
 
     const thirdItemRightList = await $(`.${LIST_CLASS}`).nth(1).find(`.${LIST_ITEM_CLASS}`).nth(2);
 
@@ -34,10 +34,10 @@ runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (te
       .click(itemToDrag)
       .drag(dragHandle, -WINDOW_WIDTH, -LIST_ITEM_HEIGHT);
 
-    const thirdItemLeftList = await $(`.${LIST_CLASS}`).nth(0).find(`.${LIST_ITEM_CLASS}`).nth(2);
+    const secondItemLeftList = await $(`.${LIST_CLASS}`).nth(0).find(`.${LIST_ITEM_CLASS}`).nth(1);
 
     await t
-      .expect(thirdItemLeftList.textContent)
+      .expect(secondItemLeftList.textContent)
       .eql(LIST_ITEM_TEXT);
   });
 });
