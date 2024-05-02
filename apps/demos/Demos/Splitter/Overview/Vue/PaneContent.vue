@@ -1,7 +1,6 @@
 <template>
   <div
     class="pane-content"
-    tabindex="0"
   >
     <div class="pane-title">
       {{ data.text }}
