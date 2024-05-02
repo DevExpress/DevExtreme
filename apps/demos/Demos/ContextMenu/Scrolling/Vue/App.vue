@@ -23,14 +23,20 @@ function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
 }
 </script>
 <style>
+.demo-container {
+  height: 100%;
+}
+
 .target-area {
   color: var(--dx-color-text);
   background-color: var(--dx-color-border);
-  height: 300px;
-  max-width: 600px;
+  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
 }
 </style>
