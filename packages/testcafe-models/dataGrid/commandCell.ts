@@ -7,6 +7,7 @@ const CLASS = {
     expand: 'dx-command-expand',
     select: 'dx-command-select',
     adaptive: 'dx-command-adaptive',
+    drag: 'dx-command-drag',
   },
   hiddenColumn: 'hidden-column',
   focused: 'dx-focused',
