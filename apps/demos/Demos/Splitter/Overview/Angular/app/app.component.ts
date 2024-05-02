@@ -31,6 +31,11 @@ export class AppComponent {
     { name: 'Nested Right Pane' },
   ];
 
+  itemRendered(e){
+    const item = e.itemElement.querySelectorAll('.dx-splitter-item-content')[0];
+    item.setAttribute('tabIndex', '0');
+  }
+
   getPaneState(data: any): string {
     if (data.resizable !== false && !data.collapsible) {
       return 'Resizable only';

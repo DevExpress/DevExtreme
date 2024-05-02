@@ -1,4 +1,4 @@
-<dx-splitter id="splitter">
+<dx-splitter id="splitter" (onItemRendered)="itemRendered($event)">
   <dxi-item
     [resizable]="true"
     minSize="70px"
@@ -6,7 +6,7 @@
     template="Left Pane"
   ></dxi-item>
   <dxi-item [resizable]="true">
-    <dx-splitter orientation="vertical">
+    <dx-splitter orientation="vertical" (onItemRendered)="itemRendered($event)">
       <dxi-item
         [resizable]="true"
         [collapsible]="true"
@@ -14,7 +14,7 @@
         template="Central Pane"
       ></dxi-item>
       <dxi-item [resizable]="true" [collapsible]="true">
-        <dx-splitter>
+        <dx-splitter (onItemRendered)="itemRendered($event)">
           <dxi-item
             [resizable]="true"
             [collapsible]="true"
@@ -38,7 +38,6 @@
             <div
               *dxTemplate="let data of pane.name"
               class="pane-content"
-              tabindex="0"
             >
               <ng-template
                 [ngTemplateOutlet]="customPaneTemplate"
@@ -54,7 +53,6 @@
         <div
           *dxTemplate="let data of pane.name"
           class="pane-content"
-          tabindex="0"
         >
           <ng-template
             [ngTemplateOutlet]="customPaneTemplate"
@@ -73,7 +71,7 @@
   ></dxi-item>
 
   <ng-container *ngFor="let pane of paneContentTemplates">
-    <div *dxTemplate="let data of pane.name" class="pane-content" tabindex="0">
+    <div *dxTemplate="let data of pane.name" class="pane-content">
       <ng-template
         [ngTemplateOutlet]="customPaneTemplate"
         [ngTemplateOutletContext]="{ data: data, title: pane.name }"
