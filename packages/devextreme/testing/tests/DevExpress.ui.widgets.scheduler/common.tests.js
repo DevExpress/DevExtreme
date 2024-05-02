@@ -5,6 +5,7 @@ import dataUtils from 'core/element_data';
 import { isRenderer } from 'core/utils/type';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
+import timeZoneDataUtils from '__internal/scheduler/timezones/m_utils_timezones_data';
 
 import { triggerHidingEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
@@ -915,6 +916,35 @@ QUnit.module('Getting timezones', {}, () => {
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'id'), 'returned timeZone has an id');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'offset'), 'returned timeZone has an offset');
         assert.ok(Object.prototype.hasOwnProperty.call(firstTimeZone, 'title'), 'returned timeZone has a title');
+    });
+
+    QUnit.test('getTimeZones should take into account custom timezones', function(assert) {
+        try {
+            const timezone = 'America/Los_Angeles';
+            config({
+                timezones: [{
+                    id: timezone,
+                    untils: 'Infinity',
+                    offsets: '60000',
+                    offsetIndices: '0',
+                }]
+            });
+            const date = new Date(2020, 5, 1);
+            const timeZones = getTimeZones(date);
+            const targetTimezone = timeZones.filter(tz => tz.id === timezone)[0];
+
+            assert.ok(timeZones instanceof Array, 'method returns an array');
+            assert.ok(Object.prototype.hasOwnProperty.call(targetTimezone, 'id'), 'returned timeZone has an id');
+            assert.ok(Object.prototype.hasOwnProperty.call(targetTimezone, 'offset'), 'returned timeZone has an offset');
+            assert.ok(Object.prototype.hasOwnProperty.call(targetTimezone, 'title'), 'returned timeZone has a title');
+
+            assert.equal(targetTimezone.offset, -1000);
+
+            const nonConfigTimezone = timeZones.filter(tz => tz.id === 'Europe/Berlin')[0];
+            assert.equal(nonConfigTimezone.offset, 2);
+        } finally {
+            config({ timezones: null });
+        }
     });
 
     QUnit.test('getTimeZones method should work properly without date passing', function(assert) {
