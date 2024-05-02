@@ -1,6 +1,6 @@
 <template>
-  <div>
-    <div class="target-area"> 
+  <div class="demo-container">
+    <div class="target-area">
       Right click here to show the context menu
     </div>
     <DxContextMenu
@@ -24,6 +24,11 @@ function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
 </script>
 <style>
 .demo-container {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  right: 8px;
+  bottom: 8px;
   height: 100%;
 }
 

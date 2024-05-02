@@ -12,7 +12,7 @@ function itemClick(e){
 function App() {
 
   return (
-    <React.Fragment>
+    <div className="demo-container">
       <div className="target-area">
         Right click here to show the context menu
       </div>
@@ -22,7 +22,7 @@ function App() {
         target= ".target-area"
         onItemClick= {itemClick}
       />
-    </React.Fragment>
+    </div>
   );
 }
 

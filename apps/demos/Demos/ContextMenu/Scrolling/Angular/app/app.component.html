@@ -1,8 +1,10 @@
-<div class="target-area"> Right click here to show the context menu</div>
-<dx-context-menu
-  [dataSource]="items"
-  [width]="200"
-  target=".target-area"
-  (onItemClick)="itemClick($event)"
->
-</dx-context-menu>
+<div class="demo-container">
+  <div class="target-area"> Right click here to show the context menu</div>
+  <dx-context-menu
+    [dataSource]="items"
+    [width]="200"
+    target=".target-area"
+    (onItemClick)="itemClick($event)"
+  >
+  </dx-context-menu>
+</div>
