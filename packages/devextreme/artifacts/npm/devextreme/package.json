@@ -34,8 +34,8 @@
     "devexpress-gantt": "4.1.54",
     "devextreme-quill": "1.7.0",
     "showdown": "^2.1.0",
-    "inferno": "^7.4.9",
-    "inferno-hydrate": "^7.4.9",
+    "inferno": "^8.2.3",
+    "inferno-hydrate": "^8.2.3",
     "jszip": "^3.10.1",
     "rrule": "^2.7.1",
     "turndown": "~7.1.0"
