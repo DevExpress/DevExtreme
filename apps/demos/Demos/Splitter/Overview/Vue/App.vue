@@ -101,12 +101,12 @@ import PaneContent from './PaneContent.vue';
   }
 
   #splitter > .dx-splitter-item:last-child > .dx-splitter-item-content:focus {
-      border-top-right-radius: 8px;
-      border-bottom-right-radius: 8px;
+    border-top-right-radius: 8px;
+    border-bottom-right-radius: 8px;
   }
 
   .dx-splitter-item-content:focus {
-      outline: none;
-      box-shadow: inset 0 0 0 1px var(--dx-color-primary);
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--dx-color-primary);
   }
 </style>
