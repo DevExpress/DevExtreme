@@ -217,13 +217,17 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
         const instance = $element.dxList('instance');
 
-        $element.trigger('focusin');
 
         $headers.eq(1).trigger('dxclick');
         $headers.eq(1).trigger('dxclick');
+        $element.trigger('focusin');
+
+        const secondItemIsFocused = $items.eq(2).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
+        const firstItemIsFocused = $items.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
+
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.ok($items.eq(2).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item of the second group is focused');
-        assert.notOk($items.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item of the first group lost focus');
+        assert.ok(secondItemIsFocused, 'first item of the second group is focused');
+        assert.notOk(firstItemIsFocused, 'first item of the first group lost focus');
     });
 
     QUnit.test('focus class should not be added to any item when expanding group via api', function(assert) {
@@ -235,10 +239,11 @@ QUnit.module('collapsible groups', moduleSetup, () => {
         }).dxList('instance');
 
         const $items = this.element.find(toSelector(LIST_ITEM_CLASS));
+        const firstItemIsFocused = $items.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         element.expandGroup(0);
 
-        assert.notOk($items.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item has not focused class');
+        assert.notOk(firstItemIsFocused, 'first item has not focused class');
     });
 
     QUnit.test('focus class should not be added to first group item when focusStateEnabled is false', function(assert) {
@@ -251,12 +256,13 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
         const $headers = $element.find(toSelector(LIST_GROUP_HEADER_CLASS));
         const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const secondItemIsFocused = $items.eq(2).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         $element.trigger('focusin');
 
         $headers.eq(1).trigger('dxclick');
         $headers.eq(1).trigger('dxclick');
-        assert.notOk($items.eq(2).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item of the second group is focused');
+        assert.notOk(secondItemIsFocused, 'first item of the second group is focused');
     });
 
     QUnit.test('group body should be collapsed by click on header', function(assert) {
@@ -1715,7 +1721,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
 QUnit.module('focus on deleting', () => {
     const items = ['item 1', 'item 2', 'item 3'];
-    QUnit.test('first item should not be focus when deleting when focusStateEnabled = false (T1226030)', function(assert) {
+    QUnit.test('first item should not be focused after deleting when focusStateEnabled = false (T1226030)', function(assert) {
         const $element = $('#list').dxList({
             items,
             focusStateEnabled: false,
@@ -1723,11 +1729,12 @@ QUnit.module('focus on deleting', () => {
             itemDeleteMode: 'static',
         });
         let $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
+        const firstItemIsFocused = $listItems.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         $listItems.eq(0).find(`.${STATIC_DELETE_BUTTON_CLASS}`).trigger('dxclick');
         $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
 
-        assert.notOk($listItems.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'Next Item is not focused');
+        assert.notOk(firstItemIsFocused, 'Next Item is not focused');
     });
 
     QUnit.test('first item should be focus when deleting when focusStateEnabled = true (T1226030)', function(assert) {
@@ -1742,7 +1749,9 @@ QUnit.module('focus on deleting', () => {
         $listItems.eq(0).find(`.${STATIC_DELETE_BUTTON_CLASS}`).trigger('dxclick');
         $listItems = $element.find(toSelector(LIST_ITEM_CLASS));
 
-        assert.ok($listItems.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'Next Item is focused');
+        const firstItemIsFocused = $listItems.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
+
+        assert.ok(firstItemIsFocused, 'Next Item is focused');
     });
 });
 
@@ -3755,9 +3764,10 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('up');
         this.clock.tick(10);
+        const lastItemIsFocused = $lastItem.hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.ok(!$selectAllCheckBox.hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'selectAll checkbox isn\'t focused');
-        assert.ok($lastItem.hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'last item is focused');
+        assert.ok(lastItemIsFocused, 'last item is focused');
 
         keyboard.keyDown('down');
         this.clock.tick(10);
@@ -3765,8 +3775,10 @@ QUnit.module('keyboard navigation', {
 
         keyboard.keyDown('down');
         this.clock.tick(10);
+        const firstItemIsFocused = $firstItem.hasClass(`${LIST_FOCUS_STATE_CLASS}`);
+
         assert.ok(!$selectAllCheckBox.hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'selectAll checkbox isn\'t focused');
-        assert.ok($firstItem.hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item is focused');
+        assert.ok(firstItemIsFocused, 'first item is focused');
     });
 
     QUnit.test('Select all when disabled item is null (T832581)', function(assert) {
@@ -3849,20 +3861,23 @@ QUnit.module('keyboard navigation', {
         instance.option('height', itemHeight * 3);
 
         keyboard.keyDown('pageDown');
+        const secondItemIsFocused = $items.eq(2).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
-        assert.ok($items.eq(2).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'focused item change to last visible item on this page');
+        assert.ok(secondItemIsFocused, 'focused item change to last visible item on this page');
 
         keyboard.keyDown('pageDown');
+        const fourthItemIsFocused = $items.eq(4).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'list scrolled to next page');
-        assert.ok($items.eq(4).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'last item on new page obtained focus');
+        assert.ok(fourthItemIsFocused, 'last item on new page obtained focus');
 
         keyboard.keyDown('pageDown');
+        const fifthItemIsFocused = $items.eq(5).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to last page');
-        assert.ok($items.eq(5).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'last item on last page obtained focus');
+        assert.ok(fifthItemIsFocused, 'last item on last page obtained focus');
     });
 
     QUnit.test('list scroll to hidden focused item after press pageDown', function(assert) {
@@ -3887,9 +3902,10 @@ QUnit.module('keyboard navigation', {
         assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled');
 
         keyboard.keyDown('pageDown');
+        const fifthItemIsFocused = $items.eq(5).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to previous focusedItem');
-        assert.ok($items.eq(5).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'focused item change to last visible item on new page');
+        assert.ok(fifthItemIsFocused, 'focused item change to last visible item on new page');
     });
 
     QUnit.test('list scroll to focused item after press pageUp', function(assert) {
@@ -3912,19 +3928,22 @@ QUnit.module('keyboard navigation', {
         instance.scrollToItem($items.last());
 
         keyboard.keyDown('pageUp');
+        const fourthItemIsFocused = $items.eq(3).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list is not scrolled, when focusedItem is not first visible item on this page');
-        assert.ok($items.eq(3).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'focused item change to first visible item on this page');
+        assert.ok(fourthItemIsFocused, 'focused item change to first visible item on this page');
 
         keyboard.keyDown('pageUp');
+        const secondItemIsFocused = $items.eq(1).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to next page');
-        assert.ok($items.eq(1).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item on new page obtained focus');
+        assert.ok(secondItemIsFocused, 'first item on new page obtained focus');
 
         keyboard.keyDown('pageUp');
+        const firstItemIsFocused = $items.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list scrolled to first page');
-        assert.ok($items.eq(0).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'first item on first page obtained focus');
+        assert.ok(firstItemIsFocused, 'first item on first page obtained focus');
     });
 
     QUnit.test('list scroll to hidden focused item after press pageUp', function(assert) {
@@ -3949,9 +3968,10 @@ QUnit.module('keyboard navigation', {
         assert.roughEqual(instance.scrollTop(), itemHeight * 4, 1.0001, 'list is not scrolled');
 
         keyboard.keyDown('pageUp');
+        const secondItemIsFocused = $items.eq(1).hasClass(`${LIST_FOCUS_STATE_CLASS}`);
 
         assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to previous focusedItem');
-        assert.ok($items.eq(1).hasClass(`${LIST_FOCUS_STATE_CLASS}`), 'focused item change to last visible item on new page');
+        assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
     });
 
     QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget\'s onKeyboardHandled is defined', function(assert) {
