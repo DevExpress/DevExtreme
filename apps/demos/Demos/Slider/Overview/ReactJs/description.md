@@ -18,17 +18,17 @@ The Slider can display labels for the [min](/Documentation/ApiReference/UI_Compo
 
 To display a handle tooltip, you need to configure the [tooltip](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/) object:
 
-- Set the [enabled](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/#enabled) property to `true` to display a tooltip.
+- Set the [enabled](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/#enabled) property to `true` to display a tooltip. 
 
 - Specify the tooltip [position](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/#position): over or under the Slider.
 
 - Specify the [format](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/#format) property.
 
-- Assign _'onHover'_ or _'always'_ to the [showMode](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/#showMode) property to change how the component shows a tooltip.
+- Assign *'onHover'* or *'always'* to the [showMode](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/tooltip/#showMode) property to change how the component shows a tooltip.
 
 ### Range highlight
 
-Use the [showRange](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/#showRange) property to specify if the component should highlight the range between [min](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/#min) and [value](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/#value).
+Use the [showRange](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/#showRange) property to specify if the component should highlight the range between [min](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/#min) and [value](/Documentation/ApiReference/UI_Components/dxSlider/Configuration/#value). 
 
 ### Discrete step
 
