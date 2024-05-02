@@ -1,15 +1,13 @@
 <template>
-  <div class="demo-container">
-    <div class="target-area">
-      Right click here to show the context menu
-    </div>
-    <DxContextMenu
+  <div class="target-area">
+    Right click here to show the context menu
+  </div>
+  <DxContextMenu
       :data-source="items"
       :width="200"
       target=".target-area"
       @item-click="itemClick"
-    />
-  </div>
+  />
 </template>
 <script setup lang="ts">
 import DxContextMenu, { DxContextMenuTypes } from 'devextreme-vue/context-menu';
@@ -30,7 +28,7 @@ function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
 .target-area {
   color: var(--dx-color-text);
   background-color: var(--dx-color-border);
-  height: 100%;
+  height: 100vh;
   width: 100%;
   display: flex;
   justify-content: center;

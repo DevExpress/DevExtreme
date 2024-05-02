@@ -11,7 +11,7 @@ function itemClick(e) {
 
 function App() {
   return (
-    <div className="demo-container">
+    <React.Fragment>
       <div className="target-area">
         Right click here to show the context menu
       </div>
@@ -21,7 +21,7 @@ function App() {
         target= ".target-area"
         onItemClick= {itemClick}
       />
-    </div>
+    </React.Fragment>
   );
 }
 
