@@ -10,36 +10,48 @@ import Form from './Form.tsx';
 
 const barPadding = 0.3;
 
-function prepareMarkup(chartSvg, markup) {
-  return '<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px">'
-    + `${markup}<g transform="translate(305,12)">${chartSvg}</g></svg>`;
-}
+const prepareMarkup = (chartSVG, markup) => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+  svg.setAttribute('version', '1.1');
+  svg.setAttribute('width', '820px');
+  svg.setAttribute('height', '420px');
+  svg.innerHTML = markup;
+
+  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  group.setAttribute('transform', 'translate(305,12)');
+  group.innerHTML = chartSVG;
+  svg.appendChild(group);
+
+  return svg;
+};
 
 function App() {
   const childRef = useRef(null);
   const chartRef = useRef(null);
 
   const onClick = useCallback(() => {
-    exportFromMarkup(
-      prepareMarkup(chartRef.current.instance().svg(),
-        childRef.current.innerHTML), {
-        width: 820,
-        height: 420,
-        margin: 0,
-        format: 'png',
+    exportFromMarkup(prepareMarkup(
+      chartRef.current.instance().svg(),
+      childRef.current.innerHTML,
+    ), {
+      width: 820,
+      height: 420,
+      margin: 0,
+      format: 'png',
+      // eslint-disable-next-line no-unused-vars
+      svgToCanvas(svg: Node, canvas) {
         // eslint-disable-next-line no-unused-vars
-        svgToCanvas(svg: Node, canvas) {
-        // eslint-disable-next-line no-unused-vars
-          return new Promise((resolve) => {
-            // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
-            //   ignoreDimensions: true,
-            //   ignoreClear: true,
-            //   renderCallback: resolve,
-            // });
-          });
-        },
+        return new Promise((resolve) => {
+          // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
+          //   ignoreDimensions: true,
+          //   ignoreClear: true,
+          //   renderCallback: resolve,
+          // });
+        });
       },
-    );
+    });
   }, []);
 
   return (
