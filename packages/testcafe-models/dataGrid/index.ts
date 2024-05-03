@@ -610,10 +610,16 @@ export default class DataGrid extends Widget {
     )();
   }
   async moveRow(t: TestController, rowIndex: number, x: number, y: number): Promise<void> {
+    const { getInstance } = this;
     const hasDragIcons = await this.option('rowDragging.showDragIcons');
-    const dragElement = hasDragIcons ?
-      this.getDataRow(rowIndex).getCommandCell(0).element :
-      this.getDataRow(rowIndex).element;
+    const dragElement = Selector(() => {
+      const row = (getInstance() as any).getRowElement(rowIndex)!;
+      return hasDragIcons ?
+        row.find('.dx-command-drag').get(0) :
+        row.get(0);
+    }, {
+      dependencies: {getInstance, rowIndex, hasDragIcons}
+    })
 
     await t.drag(dragElement, x, y);
   }
