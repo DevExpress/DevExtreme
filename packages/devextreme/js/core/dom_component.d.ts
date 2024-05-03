@@ -54,7 +54,6 @@ export interface DOMComponentOptions<TComponent> extends ComponentOptions<
      * @docid
      * @action
      * @default null
-     * @type_function_param1 e:EventInfo
      * @public
      */
     onDisposing?: ((e: EventInfo<TComponent>) => void);

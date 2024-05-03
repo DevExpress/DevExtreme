@@ -1897,7 +1897,8 @@ module('Timezone Editors', moduleOptions, () => {
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        assert.equal(startDateTimezoneEditor.option('items').length, 46, 'Items are filtered');
+        const expectedItemCount = 45; // US/Pacific-New is excluded
+        assert.equal(startDateTimezoneEditor.option('items').length, expectedItemCount, 'Items are filtered');
 
     });
 

@@ -518,6 +518,7 @@ class ContextMenu extends MenuBase {
             submenuElement: getPublicElement($submenu)
         });
         this._initScrollable($submenu);
+        this.setAria({ role: 'menu' }, $submenu);
     }
 
     _getOverlayOptions() {
@@ -643,6 +644,7 @@ class ContextMenu extends MenuBase {
 
     _initScrollable($container) {
         this._createComponent($container, Scrollable, {
+            useKeyboard: false,
             _onVisibilityChanged: (scrollable) => {
                 scrollable.scrollTo(0);
             },
