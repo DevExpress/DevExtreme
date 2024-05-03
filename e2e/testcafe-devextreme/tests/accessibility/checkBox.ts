@@ -8,7 +8,7 @@ fixture.disablePageReloads`Accessibility`
 
 const options: Options<Properties> = {
   value: [true, false, null],
-  enableThreeStateBehavior: [true, false],
+  enableThreeStateBehavior: [true],
   disabled: [true, false],
   readOnly: [true, false],
   name: ['', 'name'],

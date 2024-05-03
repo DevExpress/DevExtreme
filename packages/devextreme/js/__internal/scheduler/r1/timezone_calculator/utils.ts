@@ -7,12 +7,12 @@ export const createTimeZoneCalculator = (
   getClientOffset: (date: Date): number => timeZoneUtils
     .getClientTimezoneOffset(date),
   tryGetCommonOffset: (date: Date): number | undefined => timeZoneUtils
-    .calculateTimezoneByValue(currentTimeZone, date) as (number | undefined),
+    .calculateTimezoneByValue(currentTimeZone, date),
   tryGetAppointmentOffset: (
     date: Date,
     appointmentTimezone?: string,
-  ): number => timeZoneUtils.calculateTimezoneByValue(
+  ): number | undefined => timeZoneUtils.calculateTimezoneByValue(
     appointmentTimezone,
     date,
-  ) as number,
+  ),
 });
