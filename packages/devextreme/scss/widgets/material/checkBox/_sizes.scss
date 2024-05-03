@@ -18,7 +18,7 @@ $material-checkbox-indeterminate-icon-width: null !default;
 
 @if $size == "default" {
   $material-checkbox-icon-font-size: 18px !default;
-  $material-checkbox-ripple-size: 2.5em !default;
+  $material-checkbox-ripple-size: 2.22em !default;
 
   $material-checkbox-border-radius: $base-border-radius - 2px !default;
 
@@ -29,7 +29,7 @@ $material-checkbox-indeterminate-icon-width: null !default;
 
 @else if $size == "compact" {
   $material-checkbox-icon-font-size: 16px !default;
-  $material-checkbox-ripple-size: 2.14em !default;
+  $material-checkbox-ripple-size: 2em !default;
 
   $material-checkbox-border-radius: $base-border-radius !default;
 
