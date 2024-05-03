@@ -24,7 +24,7 @@ runManualTest('DataGrid', 'ColumnCustomization', ['jQuery', 'React', 'Vue', 'Ang
     );
     await testScreenshot(t, takeScreenshot, 'datagrid_column_customization_3.png');
 
-    await t.click('.dx-closebutton');
+    await t.click('[aria-label="Cancel"]');
     await testScreenshot(t, takeScreenshot, 'datagrid_column_customization_4.png');
 
     await t
