@@ -169,130 +169,30 @@ export function shouldRunTestAtIndex(testIndex) {
 }
 
 const SKIPPED_TESTS = {
-  // jQuery: {
-  //   Charts: [
-  //     { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-  //     { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-  //   ],
-  //   DataGrid: [
-  //     { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-  //     { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
-  //     { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
-  //     { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  //   List: [
-  //     { demo: 'ItemDragging', themes: [THEME.fluent] },
-  //   ],
-  // },
-  // Angular: {
-  //   Charts: [
-  //     { demo: 'Overview', themes: [THEME.material] },
-  //     { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-  //     { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-  //   ],
-  //   VectorMap: [
-  //     { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-  //   ],
-  //   DataGrid: [
-  //     { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'BatchEditing', themes: [THEME.fluent] },
-  //     { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-  //     { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
-  //     { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  //   List: [
-  //     { demo: 'ItemDragging', themes: [THEME.fluent] },
-  //   ],
-  //   Form: [
-  //     'CustomizeItem',
-  //     { demo: 'Validation', themes: [THEME.material] },
-  //   ],
-  //   Scheduler: [
-  //     'CustomDragAndDrop',
-  //   ],
-  //   Toolbar: [
-  //     { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  // },
-  // Vue: {
-  //   Charts: [
-  //     { demo: 'Overview', themes: [THEME.material] },
-  //     { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-  //     { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
-  //     { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
-  //   ],
-  //   VectorMap: [
-  //     { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-  //   ],
-  //   DataGrid: [
-  //     { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'BatchEditing', themes: [THEME.fluent] },
-  //     { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-  //     { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
-  //     { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'FilteringAPI', themes: [THEME.material] },
-  //     'StatePersistence',
-  //   ],
-  //   Drawer: [
-  //     { demo: 'TopOrBottomPosition', themes: [THEME.material] },
-  //   ],
-  //   List: [
-  //     { demo: 'ItemDragging', themes: [THEME.fluent] },
-  //     { demo: 'ListSelection', themes: [THEME.material] },
-  //   ],
-  //   Tabs: [
-  //     { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  //   TabPanel: [
-  //     { demo: 'Overview', themes: [THEME.material] },
-  //   ],
-  //   Toolbar: [
-  //     { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  //   TreeView: [
-  //     { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-  //   ],
-  // },
-  // React: {
-  //   Charts: [
-  //     { demo: 'Overview', themes: [THEME.material] },
-  //     { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-  //   ],
-  //   DataGrid: [
-  //     { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'BatchEditing', themes: [THEME.fluent] },
-  //     { demo: 'ColumnCustomization', themes: [THEME.fluent] },
-  //     { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
-  //     { demo: 'CellEditingAndEditingAPI', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'MultipleRecordSelectionAPI', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'Filtering', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'RecordGrouping', themes: [THEME.material] },
-  //   ],
-  //   Scheduler: [
-  //     { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
-  //     { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  //   List: [
-  //     { demo: 'ItemDragging', themes: [THEME.fluent] },
-  //   ],
-  //   Toolbar: [
-  //     { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
-  //   ],
-  // },
+  jQuery: {
+    DataGrid: [
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+    ],
+  },
+  Angular: {
+    DataGrid: [
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+    ],
+  },
+  Vue: {
+    DataGrid: [
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+    ],
+  },
+  React: {
+    DataGrid: [
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
+    ],
+  },
 };
 
 export function shouldSkipDemo(framework, component, demoName, skippedTests) {
