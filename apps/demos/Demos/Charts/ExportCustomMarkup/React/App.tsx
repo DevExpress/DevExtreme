@@ -32,23 +32,22 @@ function App() {
   const chartRef = useRef(null);
 
   const onClick = useCallback(() => {
-    exportFromMarkup(prepareMarkup(
-      chartRef.current.instance().svg(),
-      childRef.current.innerHTML,
-    ), {
-      width: 820,
-      height: 420,
-      margin: 0,
-      format: 'png',
-      // eslint-disable-next-line no-unused-vars
-      svgToCanvas(svg: Node, canvas) {
+    exportFromMarkup(
+      prepareMarkup(chartRef.current.instance().svg(),
+        childRef.current.innerHTML,), {
+        width: 820,
+        height: 420,
+        margin: 0,
+        format: 'png',
         // eslint-disable-next-line no-unused-vars
-        return new Promise((resolve) => {
-          // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
-          //   ignoreDimensions: true,
-          //   ignoreClear: true,
-          //   renderCallback: resolve,
-          // });
+        svgToCanvas(svg: Node, canvas) {
+        // eslint-disable-next-line no-unused-vars
+          return new Promise((resolve) => {
+            // toCanvas(canvas, new XMLSerializer().serializeToString(svg), {
+            //   ignoreDimensions: true,
+            //   ignoreClear: true,
+            //   renderCallback: resolve,
+            // });
         });
       },
     });

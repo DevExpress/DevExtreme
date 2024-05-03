@@ -9,7 +9,7 @@ import { exportFromMarkup } from 'devextreme/viz/export';
 // import canvg from 'canvg';
 import { Service, OilProductionDataItem } from './app.service';
 
-if (!document.location.host.includes('localhost')) {
+if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
