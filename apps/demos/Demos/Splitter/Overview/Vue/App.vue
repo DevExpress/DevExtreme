@@ -99,7 +99,7 @@ import PaneContent from './PaneContent.vue';
     height: 100%;
   }
 
-  .splitter {
+  #splitter {
     border: 1px solid var(--dx-color-border);
     border-radius: 8px;
     overflow: hidden;
