@@ -107,7 +107,7 @@ runManualTest('DataGrid', 'EditStateManagement', ['jQuery', 'React', 'Vue', 'Ang
     await t.click(editLink);
     await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_remove_row_1_desktop.png');
 
-    await t.click($('.dx-dialog-button').withText('Yes').nth(0));
+    await t.click($('[aria-label="Yes"]').nth(0));
     await testScreenshot(t, takeScreenshot, 'datagrid_edit_state_management_remove_row_2_desktop.png');
 
     await t
