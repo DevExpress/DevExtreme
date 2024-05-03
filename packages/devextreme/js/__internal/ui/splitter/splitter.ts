@@ -910,6 +910,9 @@ class Splitter extends CollectionWidget<Properties> {
         this._updateResizeHandlesOption(name, value);
         this._updateNestedSplitterOption(name, value);
         break;
+      case '_renderQueue':
+        this._invalidate();
+        break;
       default:
         // @ts-expect-error badly typed Component class
         super._optionChanged(args);
