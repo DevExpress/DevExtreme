@@ -11,43 +11,43 @@ fixture('Splitter.Overview')
     ctx.initialWindowSize = [900, 800];
   });
 
-  runManualTest('Splitter', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
-    test('Correct Focus styles on every Item Panes', async (t) => {
-      const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+runManualTest('Splitter', 'Overview', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+  test('Correct Focus styles on every Item Panes', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    
+    await t
+      .click($(`.${PANE_CONTENT_CLASS}`).nth(0));
+    
+    await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Left_Pane.png');
       
-      await t
-        .click($(`.${PANE_CONTENT_CLASS}`).nth(0));
-      
-      await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Left_Pane.png');
-
-      await t
+    await t
       .pressKey('tab tab');
 
-      await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Central_Pane.png');
+    await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Central_Pane.png');
 
-      await t
+    await t
       .pressKey('tab tab');
       
-      await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Nested_Left_Pane.png');
+    await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Nested_Left_Pane.png');
 
-      await t
+    await t
       .pressKey('tab tab');
       
-      await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Nested_Central_Pane.png');
+    await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Nested_Central_Pane.png');
 
-      await t
+    await t
       .pressKey('tab tab');
       
-      await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Nested_Right_Pane.png');
+    await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Nested_Right_Pane.png');
 
-      await t
+    await t
       .pressKey('tab');
       
-      await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Right_Pane.png');
+    await testScreenshot(t, takeScreenshot, 'Splitter_Focused_Right_Pane.png');
 
-      await t
+    await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
-    });
   });
+});
   
