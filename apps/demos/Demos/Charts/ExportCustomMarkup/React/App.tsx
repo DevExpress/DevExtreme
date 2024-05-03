@@ -34,7 +34,7 @@ function App() {
   const onClick = useCallback(() => {
     exportFromMarkup(
       prepareMarkup(chartRef.current.instance().svg(),
-        childRef.current.innerHTML,), {
+        childRef.current.innerHTML), {
         width: 820,
         height: 420,
         margin: 0,
@@ -48,9 +48,10 @@ function App() {
             //   ignoreClear: true,
             //   renderCallback: resolve,
             // });
-        });
+          });
+        },
       },
-    });
+    );
   }, []);
 
   return (
