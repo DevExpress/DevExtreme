@@ -13,7 +13,6 @@ const generate = (data, element, title, initialSize) => {
     />,
     container,
   );
-  console.log(element);
   element.setAttribute('tabIndex', '0');
   return container;
 };

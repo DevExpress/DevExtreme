@@ -3,10 +3,9 @@ import ReactDOM from 'react-dom';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.tsx';
 
-const generate = (data,element,title, initialSize?: string) => {
+const generate = (data, element, title, initialSize?: string) => {
   const container = document.createElement('div');
   ReactDOM.render(<PaneContent title={title} {...data} size={initialSize} />, container);
-  console.log(element);
   
   element.setAttribute('tabIndex',"0");
 
