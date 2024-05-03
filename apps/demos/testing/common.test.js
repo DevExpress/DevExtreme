@@ -79,22 +79,22 @@ const SKIPPED_TESTS = {
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
     ],
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'Strips', themes: [THEME.material] },
-      { demo: 'Bubble', themes: [THEME.material] },
-      { demo: 'PointImage', themes: [THEME.material] },
-      { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
-      { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'MultiplePointSelection', themes: [THEME.material] },
-      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
-      { demo: 'Selection', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-      { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
-      { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
-      { demo: 'APISelectAPoint', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'Strips', themes: [THEME.material] },
+    //   { demo: 'Bubble', themes: [THEME.material] },
+    //   { demo: 'PointImage', themes: [THEME.material] },
+    //   { demo: 'BiDirectionalBarChart', themes: [THEME.material] },
+    //   { demo: 'CustomizePointsAndLabels', themes: [THEME.material] },
+    //   { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+    //   { demo: 'MultiplePointSelection', themes: [THEME.material] },
+    //   { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+    //   { demo: 'Selection', themes: [THEME.material] },
+    //   { demo: 'CustomMapData', themes: [THEME.material] },
+    //   { demo: 'MultipleSeriesSelection', themes: [THEME.material] },
+    //   { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
+    //   { demo: 'APISelectAPoint', themes: [THEME.material] },
+    // ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
     ],
@@ -126,20 +126,20 @@ const SKIPPED_TESTS = {
     Gantt: [
       { demo: 'ContextMenu', themes: [THEME.material] },
     ],
-    VectorMap: [
-      { demo: 'Palette', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-      { demo: 'CustomProjection', themes: [THEME.material] },
-      { demo: 'MultipleLayers', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-    ],
+    // VectorMap: [
+    //   { demo: 'Palette', themes: [THEME.material] },
+    //   { demo: 'CustomAnnotations', themes: [THEME.material] },
+    //   { demo: 'CustomProjection', themes: [THEME.material] },
+    //   { demo: 'MultipleLayers', themes: [THEME.material] },
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    //   { demo: 'CustomMapData', themes: [THEME.material] },
+    // ],
   },
   React: {
-    Charts: [
-      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
-      { demo: 'CustomAnnotations', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+    //   { demo: 'CustomAnnotations', themes: [THEME.material] },
+    // ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
@@ -166,43 +166,43 @@ const SKIPPED_TESTS = {
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
       { demo: 'ItemDragging', themes: [THEME.fluent, THEME.material] },
     ],
-    VectorMap: [
-      { demo: 'PieMarkers', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-      { demo: 'CustomProjection', themes: [THEME.material] },
-      { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
-      { demo: 'MultipleLayers', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ],
-    RangeSelector: [
-      { demo: 'DiscreteScale', themes: [THEME.material] },
-      { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
-      { demo: 'LayoutCustomization', themes: [THEME.material] },
-    ],
-    Gauges: [
-      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
-      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-    ],
+    // VectorMap: [
+    //   { demo: 'PieMarkers', themes: [THEME.material] },
+    //   { demo: 'CustomMapData', themes: [THEME.material] },
+    //   { demo: 'CustomProjection', themes: [THEME.material] },
+    //   { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
+    //   { demo: 'MultipleLayers', themes: [THEME.material] },
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    // ],
+    // RangeSelector: [
+    //   { demo: 'DiscreteScale', themes: [THEME.material] },
+    //   { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+    // ],
+    // PivotGrid: [
+    //   { demo: 'ExcelJSCellCustomization', themes: [THEME.material] },
+    //   { demo: 'LayoutCustomization', themes: [THEME.material] },
+    // ],
+    // Gauges: [
+    //   { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
+    //   { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+    // ],
   },
   Vue: {
-    Charts: [
-      { demo: 'TilingAlgorithms', themes: [THEME.material] },
-      { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
-      { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
-      { demo: 'Colorization', themes: [THEME.material] },
-      { demo: 'SignalRService', themes: [THEME.material] },
-      { demo: 'PointsAggregation', themes: [THEME.material] },
-      { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-      { demo: 'PiesWithEqualSize', themes: [THEME.material] },
-      { demo: 'Palette', themes: [THEME.material] },
-    ],
-    Drawer: [
-      { demo: 'TopOrBottomPosition', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'TilingAlgorithms', themes: [THEME.material] },
+    //   { demo: 'ExportAndPrintingAPI', themes: [THEME.material] },
+    //   { demo: 'DiscreteAxisZoomingAndScrolling', themes: [THEME.material] },
+    //   { demo: 'Colorization', themes: [THEME.material] },
+    //   { demo: 'SignalRService', themes: [THEME.material] },
+    //   { demo: 'PointsAggregation', themes: [THEME.material] },
+    //   { demo: 'AxisLabelsOverlapping', themes: [THEME.material] },
+    //   { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+    //   { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+    //   { demo: 'Palette', themes: [THEME.material] },
+    // ],
+    // Drawer: [
+    //   { demo: 'TopOrBottomPosition', themes: [THEME.material] },
+    // ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
@@ -218,47 +218,47 @@ const SKIPPED_TESTS = {
       { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
       { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
     ],
-    TileView: [
-      { demo: 'Directions', themes: [THEME.material] },
-    ],
+    // TileView: [
+    //   { demo: 'Directions', themes: [THEME.material] },
+    // ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
-    TreeList: [
-      { demo: 'Overview', themes: [THEME.material] },
-    ],
+    // TreeList: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    // ],
     Tabs: [
       { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
     ],
-    List: [
-      { demo: 'ListSelection', themes: [THEME.material] },
-      { demo: 'ListWithSearchBar', themes: [THEME.material] },
-    ],
-    Gauges: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
-      { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
-    ],
-    RangeSelector: [
-      { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
-      { demo: 'DiscreteScale', themes: [THEME.material] },
-    ],
-    PivotGrid: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'LayoutCustomization', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'PieMarkers', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-      { demo: 'MultipleLayers', themes: [THEME.material] },
-      { demo: 'CustomMapData', themes: [THEME.material] },
-      { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
-    ],
-    Gantt: [
-      { demo: 'Validation', themes: [THEME.material] },
-    ],
+    // List: [
+    //   { demo: 'ListSelection', themes: [THEME.material] },
+    //   { demo: 'ListWithSearchBar', themes: [THEME.material] },
+    // ],
+    // Gauges: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'ScaleLabelFormatting', themes: [THEME.material] },
+    //   { demo: 'DifferentValueIndicatorTypes', themes: [THEME.material] },
+    //   { demo: 'DifferentValueIndicatorTypesLinearGauge', themes: [THEME.material] },
+    // ],
+    // RangeSelector: [
+    //   { demo: 'UseRangeSelectionForCalculation', themes: [THEME.material] },
+    //   { demo: 'DiscreteScale', themes: [THEME.material] },
+    // ],
+    // PivotGrid: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'LayoutCustomization', themes: [THEME.material] },
+    // ],
+    // VectorMap: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'PieMarkers', themes: [THEME.material] },
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    //   { demo: 'MultipleLayers', themes: [THEME.material] },
+    //   { demo: 'CustomMapData', themes: [THEME.material] },
+    //   { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
+    // ],
+    // Gantt: [
+    //   { demo: 'Validation', themes: [THEME.material] },
+    // ],
   },
 };
 
