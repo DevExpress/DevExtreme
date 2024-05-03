@@ -12,6 +12,7 @@ import { name as CLICK_EVENT } from 'events/click';
 import 'generic_light.css!';
 
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
 const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
@@ -1918,6 +1919,144 @@ QUnit.module('Behavior', moduleConfig, () => {
 
             this.assertLayout(expectedLayout);
             this.checkItemSizes(expectedItemSizes);
+        });
+    });
+
+    QUnit.module('Visibility class of panes with no size', moduleConfig, () => {
+        QUnit.test('Pane with hidden content class should have visibility hidden style', function(assert) {
+            this.reinit({
+                items: [{ size: 0 }, { }],
+            });
+
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.css('visibility'), 'hidden', true);
+        });
+
+        QUnit.test('Pane without hidden content class should not have visibility hidden style', function(assert) {
+            this.reinit({
+                items: [{ }, { }],
+            });
+
+            const $pane = this.getPanes().first();
+
+            assert.notStrictEqual($pane.css('visibility'), 'hidden', true);
+        });
+
+        QUnit.test('Pane should have hidden content class when size=0 on init', function(assert) {
+            this.reinit({
+                items: [{ size: 0 }, { }],
+            });
+
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('Pane should have hidden content class when size=0 on runtime', function(assert) {
+            this.reinit({
+                items: [{ }, { }],
+            });
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+
+            this.instance.option('items[0].size', 0);
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('Pane should not have hidden content class when size != 0 on init', function(assert) {
+            this.reinit({
+                items: [{ }, { }],
+            });
+
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+        });
+
+        QUnit.test('Pane should not have hidden content class when size != 0 on runtime', function(assert) {
+            this.reinit({
+                items: [{ size: 0 }, { }],
+            });
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+
+            this.instance.option('items[0].size', 100);
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+        });
+
+        QUnit.test('Collapsed on init pane should have hidden content class', function(assert) {
+            this.reinit({
+                items: [{ collapsed: true }, { }],
+            });
+
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('Collapsed on runtime pane should have hidden content class', function(assert) {
+            this.reinit({
+                items: [{ }, { }],
+            });
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+
+            this.instance.option('items[0].collapsed', true);
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('Expanded on init pane should not have hidden content class', function(assert) {
+            this.reinit({
+                items: [{ }, { }],
+            });
+
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+        });
+
+        QUnit.test('Pane should have hidden content class after resize to 0', function(assert) {
+            this.reinit({
+                items: [{ }, { }],
+            });
+            const $pane = this.getPanes().first();
+            const pointer = pointerMock(this.getResizeHandles(false).eq(0));
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+
+            pointer.start().dragStart().drag(-10000).dragEnd();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('Pane should not have hidden content class after resize from 0', function(assert) {
+            this.reinit({
+                items: [{ size: 0 }, { }],
+            });
+            const $pane = this.getPanes().first();
+            const pointer = pointerMock(this.getResizeHandles(false).eq(0));
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+
+            pointer.start().dragStart().drag(10000).dragEnd();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
+        });
+
+        QUnit.test('Pane with size=0 and visible=false should not have hidden content class', function(assert) {
+            this.reinit({
+                items: [{ size: 0, visible: false }, { }],
+            });
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
         });
     });
 });

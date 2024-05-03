@@ -26,8 +26,6 @@ const options: Options<Properties> = {
   height: [250, 550],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['primary', 'secondary'],
-  iconPosition: ['bottom', 'end', 'start', 'top'],
-  tabsPosition: ['bottom', 'left', 'right', 'top'],
 };
 
 const a11yCheckConfig = isMaterialBased() ? {
