@@ -1,15 +1,5 @@
-html,
-body {
-  width: 100%;
-  height: 100%;
-}
-
 body {
   margin: 0;
-}
-
-.demo-container {
-  height: 100%;
 }
 
 .target-area {
