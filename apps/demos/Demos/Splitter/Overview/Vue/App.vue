@@ -1,22 +1,24 @@
 <template>
-  <DxSplitter class="splitter">
+  <DxSplitter
+    id="splitter"
+  >
     <DxItem
       :resizable="true"
       size="140px"
       min-size="70px"
       text="Left Pane"
       template="paneContent"
-      tabindex="0"
     />
     <DxItem>
-      <DxSplitter orientation="vertical">
+      <DxSplitter
+        orientation="vertical"
+      >
         <DxItem
           :resizable="true"
           :collapsible="true"
           max-size="75%"
           text="Central Pane"
           template="paneContent"
-          tabindex="0"
         />
         <DxItem :collapsible="true">
           <DxSplitter>
@@ -27,13 +29,11 @@
               min-size="5%"
               text="Nested Left Pane"
               template="paneContent"
-              tabindex="0"
             />
             <DxItem
               :resizable="true"
               text="Nested Central Pane"
               template="paneContent"
-              tabindex="0"
             />
             <DxItem
               :resizable="true"
@@ -42,19 +42,26 @@
               min-size="5%"
               text="Nested Right Pane"
               template="paneContent"
-              tabindex="0"
             />
             <template #paneContent="{ data }">
-              <PaneContent
-                :data="data"
-              />
+              <div
+                tabindex="0"
+              >
+                <PaneContent
+                  :data="data"
+                />
+              </div>
             </template>
           </DxSplitter>
         </DxItem>
         <template #paneContent="{ data }">
-          <PaneContent
-            :data="data"
-          />
+          <div
+            tabindex="0"
+          >
+            <PaneContent
+              :data="data"
+            />
+          </div>
         </template>
       </DxSplitter>
     </DxItem>
@@ -64,13 +71,16 @@
       size="140px"
       text="Right Pane"
       template="paneContent"
-      tabindex="0"
     />
 
     <template #paneContent="{ data }">
-      <PaneContent
-        :data="data"
-      />
+      <div
+        tabindex="0"
+      >
+        <PaneContent
+          :data="data"
+        />
+      </div>
     </template>
   </DxSplitter>
 </template>
