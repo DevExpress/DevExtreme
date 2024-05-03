@@ -117,6 +117,8 @@ $material-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 
 .dx-invalid {
   .dx-checkbox-icon {
+    border-width: $material-checkbox-border-width;
+    border-style: solid;
     border-color: $checkbox-invalid-focused-border-color;
   }
 
