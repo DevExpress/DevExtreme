@@ -21,8 +21,8 @@ function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
 }
 </script>
 <style>
-.demo-container {
-  height: 100%;
+body {
+  margin: 0;
 }
 
 .target-area {
