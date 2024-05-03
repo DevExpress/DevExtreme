@@ -206,7 +206,8 @@ class Splitter extends CollectionWidget<Properties> {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    if ($(this.element()).filter(':visible')) {
+    const isElementVisible = $(this.element()).filter(':visible').length !== 0;
+    if (isElementVisible) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyStylesFromLayout(this._layout);
 
