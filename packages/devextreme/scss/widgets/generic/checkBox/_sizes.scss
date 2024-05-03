@@ -16,8 +16,8 @@ $generic-checkbox-indeterminate-icon-border-radius: 2px !default;
 
 @if $size == "default" {
   $generic-checkbox-icon-font-size: 22px !default;
-  $generic-checkbox-arrow-font-size: 0.727272em !default;
-  $generic-checkbox-indeterminate-icon-size: 0.545454em !default;
+  $generic-checkbox-arrow-font-size: 0.727273em !default;
+  $generic-checkbox-indeterminate-icon-size: 0.545455em !default;
 }
 
 @else if $size == "compact" {

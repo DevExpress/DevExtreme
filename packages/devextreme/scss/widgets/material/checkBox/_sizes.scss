@@ -18,13 +18,13 @@ $material-checkbox-indeterminate-icon-width: null !default;
 
 @if $size == "default" {
   $material-checkbox-icon-font-size: 18px !default;
-  $material-checkbox-ripple-size: 2.222222em !default;
+  $material-checkbox-ripple-size: 2.222223em !default;
 
   $material-checkbox-border-radius: $base-border-radius - 2px !default;
 
-  $material-checkbox-arrow-font-size: 0.888888em !default;
-  $material-checkbox-indeterminate-icon-height: 0.1111em !default;
-  $material-checkbox-indeterminate-icon-width: 0.6666em !default;
+  $material-checkbox-arrow-font-size: 0.888889em !default;
+  $material-checkbox-indeterminate-icon-height: 0.111112em !default;
+  $material-checkbox-indeterminate-icon-width: 0.666667em !default;
 }
 
 @else if $size == "compact" {
