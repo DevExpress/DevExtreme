@@ -1,20 +1,27 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
+import React, { useRef, useLayoutEffect } from 'react';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.js';
 
-const generate = (data, element, title, initialSize) => {
-  const container = document.createElement('div');
-  ReactDOM.render(
-    <PaneContent
-      title={title}
-      {...data}
-      size={initialSize}
-    />,
-    container,
+const PaneContentWithTitleRender = (title, initialSize) => {
+  const paneContentRef = useRef(null);
+  const PaneContentRender = (data) => (
+    <div ref={paneContentRef}>
+      <PaneContent
+        title={title}
+        {...data}
+        size={initialSize}
+      />
+    </div>
   );
-  element.setAttribute('tabIndex', '0');
-  return container;
+  useLayoutEffect(() => {
+    Promise.resolve().then(() => {
+      if (paneContentRef.current) {
+        const element = paneContentRef.current.parentNode;
+        element.setAttribute('tabIndex', '0');
+      }
+    });
+  }, [paneContentRef]);
+  return PaneContentRender;
 };
 const App = () => (
   <React.Fragment>
@@ -23,7 +30,7 @@ const App = () => (
         resizable={true}
         size="140px"
         minSize="70px"
-        template={(data, index, element) => generate(data, element, 'Left Pane', '140px')}
+        render={PaneContentWithTitleRender('Left Pane', '140px')}
       />
       <Item resizable={true}>
         <Splitter orientation="vertical">
@@ -31,7 +38,7 @@ const App = () => (
             resizable={true}
             collapsible={true}
             maxSize="75%"
-            template={(data, index, element) => generate(data, element, 'Central Pane')}
+            render={PaneContentWithTitleRender('Central Pane')}
           />
           <Item
             resizable={true}
@@ -43,24 +50,18 @@ const App = () => (
                 collapsible={true}
                 size="30%"
                 minSize="5%"
-                template={(data, index, element) =>
-                  generate(data, element, 'Nested Left Pane', '30%')
-                }
+                render={PaneContentWithTitleRender('Nested Left Pane', '30%')}
               />
               <Item
                 resizable={true}
-                template={(data, index, element) =>
-                  generate(data, element, 'Nested Central Pane')
-                }
+                render={PaneContentWithTitleRender('Nested Central Pane')}
               />
               <Item
                 resizable={true}
                 collapsible={true}
                 size="30%"
                 minSize="5%"
-                template={(data, index, element) =>
-                  generate(data, element, 'Nested Right Pane', '30%')
-                }
+                render={PaneContentWithTitleRender('Nested Right Pane', '30%')}
               />
             </Splitter>
           </Item>
@@ -70,7 +71,7 @@ const App = () => (
         resizable={false}
         collapsible={false}
         size="140px"
-        template={(data, index, element) => generate(data, element, 'Right Pane', '140px')}
+        render={PaneContentWithTitleRender('Right Pane', '140px')}
       />
     </Splitter>
   </React.Fragment>
