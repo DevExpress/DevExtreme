@@ -14,7 +14,6 @@ import {
 import { isDefined, isObject } from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { lock } from '@js/events/core/emitter.feedback';
-import CollectionWidget from '@js/ui/collection/ui.collection_widget.live_update';
 import type {
   Item,
   ItemCollapsedEvent,
@@ -24,6 +23,7 @@ import type {
   ResizeEvent,
   ResizeStartEvent,
 } from '@js/ui/splitter';
+import CollectionWidget from '@ts/ui/collection/live_update';
 
 import type ResizeHandle from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
@@ -79,7 +79,7 @@ const ORIENTATION: Record<string, Orientation> = {
 };
 
 class Splitter extends CollectionWidget<Properties> {
-  static ItemClass: typeof SplitterItem;
+  static ItemClass = SplitterItem;
 
   private _renderQueue: RenderQueueItem[] = [];
 
@@ -99,25 +99,28 @@ class Splitter extends CollectionWidget<Properties> {
 
   private _itemRestrictions!: PaneRestrictions[];
 
-  private _currentOnePxRatio!: number | undefined;
+  private _currentOnePxRatio: number | undefined;
 
   private _feedbackDeferred!: DeferredObj<unknown>;
 
   _getDefaultOptions(): Properties {
-    // @ts-expect-error badly typed base class
-    return extend(super._getDefaultOptions(), {
-      orientation: ORIENTATION.horizontal,
-      onItemCollapsed: null,
-      onItemExpanded: null,
-      onResize: null,
-      onResizeEnd: null,
-      onResizeStart: null,
-      allowKeyboardNavigation: true,
-      separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
+    return {
+      // @ts-expect-error badly typed Component class
+      ...super._getDefaultOptions(),
+      ...{
+        orientation: ORIENTATION.horizontal,
+        onItemCollapsed: null,
+        onItemExpanded: null,
+        onResize: null,
+        onResizeEnd: null,
+        onResizeStart: null,
+        allowKeyboardNavigation: true,
+        separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
 
-      _itemAttributes: { role: 'group' },
-      _renderQueue: undefined,
-    }) as Properties;
+        _itemAttributes: { role: 'group' },
+        _renderQueue: undefined,
+      },
+    } as Properties;
   }
 
   _itemClass(): string {
@@ -129,7 +132,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _init(): void {
-    // @ts-expect-error badly typed base class
+    // @ts-expect-error badly typed Component class
     super._init();
 
     this._initializeRenderQueue();
@@ -159,7 +162,7 @@ class Splitter extends CollectionWidget<Properties> {
 
     this._toggleOrientationClass();
 
-    // @ts-expect-error badly typed base class
+    // @ts-expect-error badly typed DomComponent class
     super._initMarkup();
 
     this._panesCacheSize = {};
@@ -198,7 +201,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _renderItems(items: Item[]): void {
-    // @ts-expect-error badly typed base class
     super._renderItems(items);
 
     this._updateResizeHandlesResizableState();
@@ -223,7 +225,7 @@ class Splitter extends CollectionWidget<Properties> {
 
     const item = this._shiftItemFromQueue();
     if (!item) return;
-    // @ts-expect-error badly typed base class
+    // @ts-expect-error badly typed DomComponent class
     this._createComponent($(item.itemContent), Splitter, extend({
       itemTemplate: this.option('itemTemplate'),
       onResize: this.option('onResize'),
@@ -244,7 +246,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _itemElements(): dxElementWrapper {
-    // @ts-expect-error badly typed base class
     return $(this._itemContainer()).children(this._itemSelector());
   }
 
@@ -259,18 +260,22 @@ class Splitter extends CollectionWidget<Properties> {
     itemData: Item,
     $container: dxElementWrapper,
     $itemToReplace: dxElementWrapper,
-  ): unknown {
-    // @ts-expect-error badly typed base class
+  ): dxElementWrapper {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
     const itemElement = $itemFrame.get(0);
-
-    // setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length);
+    // todo: think
+    // @ts-expect-error badly typed base class
+    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length);
+    // @ts-expect-error badly typed base class
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
+    // @ts-expect-error badly typed base class
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
     this._getItemInstance($itemFrame)._renderResizeHandle();
 
+    // TODO: any type
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return $itemFrame;
   }
 
@@ -294,9 +299,7 @@ class Splitter extends CollectionWidget<Properties> {
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-      // @ts-expect-error badly typed base class
       const leftItemData = this._getItemData($leftItem);
-      // @ts-expect-error badly typed base class
       const rightItemData = this._getItemData($rightItem);
       const resizable = leftItemData.resizable !== false
         && rightItemData.resizable !== false
@@ -315,9 +318,7 @@ class Splitter extends CollectionWidget<Properties> {
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-      // @ts-expect-error badly typed base class
       const leftItemData = this._getItemData($leftItem);
-      // @ts-expect-error badly typed base class
       const rightItemData = this._getItemData($rightItem);
 
       const showCollapsePrev = rightItemData.collapsed === true
@@ -339,7 +340,6 @@ class Splitter extends CollectionWidget<Properties> {
 
     items.forEach((item) => {
       if (item?.splitter) {
-        // @ts-expect-error badly typed base class
         const $nestedSplitter = this._findItemElementByItem(item).find(`.${SPLITTER_CLASS}`).eq(0);
 
         if ($nestedSplitter.length) {
@@ -370,7 +370,7 @@ class Splitter extends CollectionWidget<Properties> {
   _createEventAction(eventName: string): void {
     const actionName = getActionNameByEventName(eventName);
 
-    // @ts-expect-error badly typed base class
+    // @ts-expect-error badly typed Component class
     this[actionName] = this._createActionByOption(eventName, {
       excludeValidators: ['disabled', 'readOnly'],
     });
@@ -385,6 +385,7 @@ class Splitter extends CollectionWidget<Properties> {
       this._createEventAction(eventName);
     }
 
+    // TODO: improve
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this[actionName];
   }
@@ -412,14 +413,10 @@ class Splitter extends CollectionWidget<Properties> {
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
 
-        // @ts-expect-error badly typed base class
         const leftItemData = this._getItemData($leftItem);
-        // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
         const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-        // @ts-expect-error badly typed base class
         const rightItemData = this._getItemData($rightItem);
-        // @ts-expect-error badly typed base class
         const rightItemIndex = this._getIndexByItem(rightItemData);
 
         const isRightItemCollapsed = rightItemData.collapsed === true;
@@ -471,15 +468,11 @@ class Splitter extends CollectionWidget<Properties> {
         const $resizeHandle = $(e.element);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-        // @ts-expect-error badly typed base class
         const leftItemData = this._getItemData($leftItem);
-        // @ts-expect-error badly typed base class
         const leftItemIndex = this._getIndexByItem(leftItemData);
         const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-        // @ts-expect-error badly typed base class
         const rightItemData = this._getItemData($rightItem);
-        // @ts-expect-error badly typed base class
-        const rightItemIndex = this._getIndexByItem(rightItemData) as number;
+        const rightItemIndex = this._getIndexByItem(rightItemData);
 
         const isLeftItemCollapsed = leftItemData.collapsed === true;
 
@@ -554,9 +547,7 @@ class Splitter extends CollectionWidget<Properties> {
         this._toggleActiveState($resizeHandle, true);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-        // @ts-expect-error badly typed Parent class
         const leftItemData = this._getItemData($leftItem);
-        // @ts-expect-error badly typed Parent class
         const leftItemIndex = this._getIndexByItem(leftItemData);
         this._activeResizeHandleIndex = leftItemIndex;
 
@@ -645,15 +636,13 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getResizeHandleRightItem($resizeHandle: dxElementWrapper): dxElementWrapper {
-    // @ts-expect-error renderer d.ts issue
-    let $rightItem = $resizeHandle.next();
+    return $resizeHandle.next(`.${SPLITTER_ITEM_CLASS}:not(.${INVISIBLE_STATE_CLASS})`);
 
-    while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
-      // @ts-expect-error renderer d.ts issue
-      $rightItem = $rightItem.next();
-    }
+    // while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
+    //   $rightItem = $rightItem.next();
+    // }
 
-    return $rightItem;
+    // return $rightItem;
   }
 
   _getResizeHandlesSize(): number {
@@ -759,7 +748,6 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getCollapseDelta(item: Item): number {
-    // @ts-expect-error badly typed base class
     const itemIndex = this._getIndexByItem(item);
 
     const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
@@ -805,10 +793,8 @@ class Splitter extends CollectionWidget<Properties> {
 
   _applyStylesFromLayout(layout: number[]): void {
     this._iterateItems((index, itemElement) => {
-      // @ts-expect-error
-      setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, layout[index]);
+      setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexGrow, layout[index]);
 
-      // @ts-expect-error badly typed base class
       const itemData = this._getItemData(itemElement);
       const shouldHideContent = layout[index] === 0 && itemData.visible !== false;
 
@@ -897,7 +883,7 @@ class Splitter extends CollectionWidget<Properties> {
     switch (name) {
       case 'width':
       case 'height':
-        // @ts-expect-error badly typed Parent classes
+        // @ts-expect-error badly typed Component class
         super._optionChanged(args);
 
         this._dimensionChanged();
@@ -925,7 +911,7 @@ class Splitter extends CollectionWidget<Properties> {
         this._updateNestedSplitterOption(name, value);
         break;
       default:
-        // @ts-expect-error badly typed Parent classes
+        // @ts-expect-error badly typed Component class
         super._optionChanged(args);
     }
   }
@@ -938,8 +924,6 @@ class Splitter extends CollectionWidget<Properties> {
     });
   }
 }
-
-Splitter.ItemClass = SplitterItem;
 
 // @ts-expect-error // temp fix
 registerComponent('dxSplitter', Splitter);

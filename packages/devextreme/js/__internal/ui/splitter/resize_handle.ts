@@ -2,7 +2,6 @@ import type { DragDirection } from '@js/common';
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { name as CLICK_EVENT } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { name as DOUBLE_CLICK_EVENT } from '@js/events/double_click';
@@ -59,110 +58,115 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   private DOUBLE_CLICK_EVENT_NAME!: string;
 
   _supportedKeys(): Record<string, unknown> {
-    // @ts-expect-error badly typed base class
-    return extend(super._supportedKeys(), {
-      rightArrow(e: KeyboardEvent) {
-        e.preventDefault();
-        e.stopPropagation();
+    return {
+      // @ts-expect-error _supportedKeys
+      ...super._supportedKeys(),
+      ...{
+        rightArrow(e: KeyboardEvent): void {
+          e.preventDefault();
+          e.stopPropagation();
 
-        const {
-          direction, showCollapseNext, showCollapsePrev, rtlEnabled,
-        } = this.option();
+          const {
+            direction, showCollapseNext, showCollapsePrev, rtlEnabled,
+          } = this.option();
 
-        const forbidCollapseNext = rtlEnabled
-          ? showCollapsePrev === false
-          : showCollapseNext === false;
+          const forbidCollapseNext = rtlEnabled
+            ? showCollapsePrev === false
+            : showCollapseNext === false;
 
-        if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.vertical || forbidCollapseNext) {
-            return;
+          if (isCommandKeyPressed(e)) {
+            if (direction === RESIZE_DIRECTION.vertical || forbidCollapseNext) {
+              return;
+            }
+
+            if (rtlEnabled) {
+              this._collapsePrevHandler(e);
+            } else {
+              this._collapseNextHandler(e);
+            }
+          } else {
+            this._resizeBy(e, { x: KEYBOARD_DELTA });
           }
+        },
+        leftArrow(e: KeyboardEvent): void {
+          e.preventDefault();
+          e.stopPropagation();
 
-          if (rtlEnabled) {
+          const {
+            direction, showCollapsePrev, showCollapseNext, rtlEnabled,
+          } = this.option();
+
+          const forbidCollapsePrev = rtlEnabled
+            ? showCollapseNext === false
+            : showCollapsePrev === false;
+
+          if (isCommandKeyPressed(e)) {
+            if (direction === RESIZE_DIRECTION.vertical || forbidCollapsePrev) {
+              return;
+            }
+            if (rtlEnabled) {
+              this._collapseNextHandler(e);
+            } else {
+              this._collapsePrevHandler(e);
+            }
+          } else {
+            this._resizeBy(e, { x: -KEYBOARD_DELTA });
+          }
+        },
+        upArrow(e: KeyboardEvent): void {
+          e.preventDefault();
+          e.stopPropagation();
+
+          const { direction, showCollapsePrev } = this.option();
+
+          if (isCommandKeyPressed(e)) {
+            if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
+              return;
+            }
             this._collapsePrevHandler(e);
           } else {
-            this._collapseNextHandler(e);
+            this._resizeBy(e, { y: -KEYBOARD_DELTA });
           }
-        } else {
-          this._resizeBy(e, { x: KEYBOARD_DELTA });
-        }
-      },
-      leftArrow(e: KeyboardEvent) {
-        e.preventDefault();
-        e.stopPropagation();
+        },
+        downArrow(e: KeyboardEvent): void {
+          e.preventDefault();
+          e.stopPropagation();
 
-        const {
-          direction, showCollapsePrev, showCollapseNext, rtlEnabled,
-        } = this.option();
+          const { direction, showCollapseNext } = this.option();
 
-        const forbidCollapsePrev = rtlEnabled
-          ? showCollapseNext === false
-          : showCollapsePrev === false;
-
-        if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.vertical || forbidCollapsePrev) {
-            return;
-          }
-          if (rtlEnabled) {
+          if (isCommandKeyPressed(e)) {
+            if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
+              return;
+            }
             this._collapseNextHandler(e);
           } else {
-            this._collapsePrevHandler(e);
+            this._resizeBy(e, { y: KEYBOARD_DELTA });
           }
-        } else {
-          this._resizeBy(e, { x: -KEYBOARD_DELTA });
-        }
+        },
       },
-      upArrow(e: KeyboardEvent) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const { direction, showCollapsePrev } = this.option();
-
-        if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.horizontal || showCollapsePrev === false) {
-            return;
-          }
-          this._collapsePrevHandler(e);
-        } else {
-          this._resizeBy(e, { y: -KEYBOARD_DELTA });
-        }
-      },
-      downArrow(e: KeyboardEvent) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const { direction, showCollapseNext } = this.option();
-
-        if (isCommandKeyPressed(e)) {
-          if (direction === RESIZE_DIRECTION.horizontal || showCollapseNext === false) {
-            return;
-          }
-          this._collapseNextHandler(e);
-        } else {
-          this._resizeBy(e, { y: KEYBOARD_DELTA });
-        }
-      },
-    }) as Record<string, unknown>;
+    } as Record<string, () => void>;
   }
 
-  _getDefaultOptions(): Record<string, unknown> {
-    // @ts-expect-error badly typed base class
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return extend(super._getDefaultOptions(), {
-      direction: RESIZE_DIRECTION.horizontal,
-      hoverStateEnabled: true,
-      focusStateEnabled: true,
-      activeStateEnabled: true,
-      onResize: null,
-      onResizeEnd: null,
-      onResizeStart: null,
-      resizable: true,
-      showCollapsePrev: true,
-      showCollapseNext: true,
-      onCollapsePrev: null,
-      onCollapseNext: null,
-      separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
-    });
+  _getDefaultOptions(): ResizeHandleOptions {
+    return {
+      // @ts-expect-error _getDefaultOptions
+      ...super._getDefaultOptions(),
+      ...{
+        direction: RESIZE_DIRECTION.horizontal,
+        hoverStateEnabled: true,
+        focusStateEnabled: true,
+        activeStateEnabled: true,
+        onResize: null,
+        onResizeEnd: null,
+        onResizeStart: null,
+        resizable: true,
+        showCollapsePrev: true,
+        showCollapseNext: true,
+        onCollapsePrev: null,
+        onCollapseNext: null,
+        separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
+      },
+    } as ResizeHandleOptions;
   }
 
   _init(): void {
@@ -194,10 +198,8 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   _renderResizeHandleContent(): void {
     const { resizable } = this.option();
 
-    // @ts-expect-error badly typed DomComponent class
-    this.$element().addClass(RESIZE_HANDLE_CLASS);
-    // @ts-expect-error badly typed DomComponent class
-    this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
+    $(this.element()).addClass(RESIZE_HANDLE_CLASS);
+    $(this.element()).toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, resizable);
     this._toggleDirectionClass();
     this._updateDimensions();
 
@@ -232,7 +234,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    // @ts-expect-error badly typed base class
+    // @ts-expect-error null is not assignable value
     this.option(inverseDimension, null);
     this.option(dimension, this.getSize());
   }
@@ -261,12 +263,10 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     }
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getResizeIconClass(isHorizontal: boolean): string {
     return `dx-icon-handle${isHorizontal ? 'vertical' : 'horizontal'}`;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   _getCollapseIconClass(isNextButton: boolean, isHorizontal: boolean, rtlEnabled: boolean): string {
     const horizontalDirection = isNextButton === rtlEnabled ? 'left' : 'right';
     const verticalDirection = isNextButton ? 'down' : 'up';
@@ -298,10 +298,8 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   }
 
   _toggleDirectionClass(): void {
-    // @ts-expect-error badly typed DomComponent class
-    this.$element().toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
-    // @ts-expect-error badly typed DomComponent class
-    this.$element().toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
+    $(this.element()).toggleClass(HORIZONTAL_DIRECTION_CLASS, this._isHorizontalDirection());
+    $(this.element()).toggleClass(VERTICAL_DIRECTION_CLASS, !this._isHorizontalDirection());
   }
 
   _render(): void {
@@ -503,8 +501,8 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
         break;
       case 'resizable':
         this._setResizeIconVisibility();
-        // @ts-expect-error badly typed DomComponent class
-        this.$element().toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
+        // @ts-expect-error unknown is not accessible value
+        $(this.element()).toggleClass(RESIZE_HANDLE_RESIZABLE_CLASS, value);
         this._detachResizeEventHandlers();
         this._attachResizeEventHandlers();
         this._updateDimensions();
@@ -528,7 +526,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
         this._createEventAction(name);
         break;
       default:
-        // @ts-expect-error badly typed base class
+        // @ts-expect-error badly typed DomComponent class
         super._optionChanged(args);
     }
   }
