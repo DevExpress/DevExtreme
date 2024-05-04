@@ -50,7 +50,7 @@ jobs:
       fail-fast: false
       matrix:
         STRATEGY: [screenshots, accessibility]
-        THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
+        THEME: ['material.blue.light', 'generic.light', 'fluent.blue.light']
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
     env:
       ACCESSIBILITY_TESTCAFE_REPORT_PATH: "accessibility_testcafe_report"
@@ -101,7 +101,7 @@ jobs:
       env:
         STRATEGY: ${{ matrix.STRATEGY }}
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-gpu --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
+        BROWSERS: chrome:headless --disable-gpu
         #DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true
