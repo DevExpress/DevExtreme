@@ -48,6 +48,10 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   }, 1000);
 }));
 
+export const waitFontLoading = ClientFunction(() => new Promise((resolve) => {
+  return window.DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400);
+}));
+
 function getInterestProcessArgs() {
   // eslint-disable-next-line spellcheck/spell-checker
   return process.argv.slice(2);

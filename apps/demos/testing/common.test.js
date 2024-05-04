@@ -4,6 +4,7 @@ import { join } from 'path';
 import { existsSync } from 'fs';
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
 import { axeCheck, createReport } from '@testcafe-community/axe';
+import { waitWebFont } from 'devextreme-main/js/ui/themes';
 import {
   getPortByIndex,
   runTestAtPage,
@@ -12,6 +13,7 @@ import {
   globalReadFrom,
   changeTheme,
   waitForAngularLoading,
+  waitFontLoading,
   shouldSkipDemo,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
@@ -349,6 +351,14 @@ const SKIPPED_TESTS = {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
+        // eslint-disable-next-line no-promise-executor-return
+        await ClientFunction(() => new Promise((resolve) => waitWebFont('test text', 400).then(() => {
+          console.log('Font waiting was resolved');
+          resolve();
+        }, () => {
+          console.log('Font waiting was rejected');
+          resolve();
+        })));
 
         if (testCodeSource) {
           await execCode(testCodeSource);
