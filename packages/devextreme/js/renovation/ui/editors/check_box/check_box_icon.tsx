@@ -3,6 +3,8 @@ import {
 } from '@devextreme-generator/declarations';
 import { normalizeStyleProp } from '../../../../core/utils/style';
 
+import '../../../../ui/themes';
+
 export const viewFunction = (viewModel: CheckBoxIcon): JSX.Element => {
   const { elementRef, cssStyles } = viewModel;
   return (
