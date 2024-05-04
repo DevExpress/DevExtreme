@@ -216,7 +216,9 @@ async function main() {
 
   const failedCount = await runner
     .reporter(reporters)
-    .browsers(process.env.BROWSERS || 'chrome --disable-gpu --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
+    .browsers(process.env.THEME === 'material.blue.light'
+      ? 'chrome:headless --disable-gpu'
+      : 'chrome --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
     .run({
       quarantineMode: process.env.TCQUARANTINE ? { successThreshold: 1, attemptLimit: 5 } : false,

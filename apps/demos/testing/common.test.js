@@ -13,7 +13,6 @@ import {
   globalReadFrom,
   changeTheme,
   waitForAngularLoading,
-  waitFontLoading,
   shouldSkipDemo,
 } from '../utils/visual-tests/matrix-test-helper';
 import {
@@ -68,11 +67,11 @@ const getTestSpecificSkipRules = (testName) => {
 };
 
 const SKIPPED_TESTS = {
-  jQuery: {
-    Charts: [
-      { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
-    ],
-  },
+  // jQuery: {
+  //   Charts: [
+  //     { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
+  //   ],
+  // },
   Angular: {
     DataGrid: [
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
@@ -351,14 +350,15 @@ const SKIPPED_TESTS = {
         if (approach === 'Angular') {
           await waitForAngularLoading();
         }
+
         // eslint-disable-next-line no-promise-executor-return
-        await ClientFunction(() => new Promise((resolve) => waitWebFont('test text', 400).then(() => {
-          console.log('Font waiting was resolved');
-          resolve();
-        }, () => {
-          console.log('Font waiting was rejected');
-          resolve();
-        })));
+        // await ClientFunction(() => new Promise((resolve) => waitWebFont('test text', 400).then(() => {
+        //   console.log('Font waiting was resolved');
+        //   resolve();
+        // }, () => {
+        //   console.log('Font waiting was rejected');
+        //   resolve();
+        // })));
 
         if (testCodeSource) {
           await execCode(testCodeSource);
@@ -397,7 +397,17 @@ const SKIPPED_TESTS = {
             return;
           }
 
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, {
+            looksSameComparisonOptions: {
+              strict: false,
+              tolerance: 10,
+              ignoreAntialiasing: true,
+              antialiasingTolerance: 10,
+              ignoreCaret: true,
+            },
+            // eslint-disable-next-line spellcheck/spell-checker
+            textDiffTreshold: 0.1,
+          });
 
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {

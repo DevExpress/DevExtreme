@@ -48,10 +48,6 @@ export const waitForAngularLoading = ClientFunction(() => new Promise((resolve) 
   }, 1000);
 }));
 
-export const waitFontLoading = ClientFunction(() => new Promise((resolve) => {
-  return window.DevExpress.ui.themes.waitWebFont('1234567890APM/:', 400);
-}));
-
 function getInterestProcessArgs() {
   // eslint-disable-next-line spellcheck/spell-checker
   return process.argv.slice(2);
@@ -174,10 +170,10 @@ export function shouldRunTestAtIndex(testIndex) {
 
 const SKIPPED_TESTS = {
   jQuery: {
-    Charts: [
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    // ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
@@ -192,14 +188,14 @@ const SKIPPED_TESTS = {
     ],
   },
   Angular: {
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    // ],
+    // VectorMap: [
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    // ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -226,15 +222,15 @@ const SKIPPED_TESTS = {
     ],
   },
   Vue: {
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-      { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
-      { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
-    ],
-    VectorMap: [
-      { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    //   { demo: 'ZoomingOnAreaSelection', themes: [THEME.material] },
+    //   { demo: 'DialogsAndNotificationsOverview', themes: [THEME.material] },
+    // ],
+    // VectorMap: [
+    //   { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
+    // ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
@@ -277,10 +273,10 @@ const SKIPPED_TESTS = {
     ],
   },
   React: {
-    Charts: [
-      { demo: 'Overview', themes: [THEME.material] },
-      { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
-    ],
+    // Charts: [
+    //   { demo: 'Overview', themes: [THEME.material] },
+    //   { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
+    // ],
     DataGrid: [
       { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
