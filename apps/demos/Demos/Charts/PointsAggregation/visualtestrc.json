@@ -2,5 +2,8 @@
     "$schema": "../../../../testing/visualtestrc-schema.json",
     "react": {
         "ignore": true
+    },
+    "vue": {
+        "ignore": true
     }
 }

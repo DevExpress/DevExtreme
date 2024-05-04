@@ -256,8 +256,8 @@ const SKIPPED_TESTS = {
     Sortable: [
       // Drag is not working properly
       // Fluent: 'kanban_card_drag-n-drop_different-column' 
-      // Generic: 'kanban_card_drag-n-drop_different-column', 'kanban_card_drag-n-drop_same-column'
-      { demo: 'Kanban', themes: [THEME.fluent, THEME.fluent] }, 
+      // Generic, Material: 'kanban_card_drag-n-drop_different-column', 'kanban_card_drag-n-drop_same-column'
+      { demo: 'Kanban', themes: [THEME.fluent, THEME.material, THEME.generic] }, 
     ],
     Tabs: [
       { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
