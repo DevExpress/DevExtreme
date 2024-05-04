@@ -387,7 +387,7 @@ const SKIPPED_TESTS = {
             return;
           }
 
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined /* comparisonOptions */);
+          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {

@@ -1,0 +1,13 @@
+{
+    "$schema": "../../../../testing/visualtestrc-schema.json",
+    "react": {
+        "ignore": true
+    },
+    "vue": {
+        "looksSameComparisonOptions": {
+            "tolerance": 10,
+            "antialiasingTolerance": 10
+        },
+        "textDiffTreshold": 0.1
+    }
+}
