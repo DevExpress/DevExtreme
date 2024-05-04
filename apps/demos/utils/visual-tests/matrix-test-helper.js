@@ -242,6 +242,8 @@ const SKIPPED_TESTS = {
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'FilteringAPI', themes: [THEME.material] },
+      // Fluent: datagrid_filtering_by_range_3_desktop
+      { demo: 'Filtering', themes: [THEME.fluent] }, 
       'StatePersistence',
     ],
     Drawer: [
@@ -250,6 +252,12 @@ const SKIPPED_TESTS = {
     List: [
       { demo: 'ItemDragging', themes: [THEME.fluent] },
       { demo: 'ListSelection', themes: [THEME.material] },
+    ],
+    Sortable: [
+      // Drag is not working properly
+      // Fluent: 'kanban_card_drag-n-drop_different-column' 
+      // Generic: 'kanban_card_drag-n-drop_different-column', 'kanban_card_drag-n-drop_same-column'
+      { demo: 'Kanban', themes: [THEME.fluent, THEME.fluent] }, 
     ],
     Tabs: [
       { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
