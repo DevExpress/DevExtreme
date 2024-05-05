@@ -1,20 +1,22 @@
 <template>
-  <div
-    class="pane-content"
-  >
-    <div class="pane-title">
-      {{ data.text }}
-    </div>
-    <div class="pane-state">
-      {{ getStateText() }}
-    </div>
-
+  <div tabindex="0">
     <div
-      class="pane-option"
-      v-for="(value, key) in filteredData"
-      :key="key"
+      class="pane-content"
     >
-      {{ `${key}: ${value}` }}
+      <div class="pane-title">
+        {{ data.text }}
+      </div>
+      <div class="pane-state">
+        {{ getStateText() }}
+      </div>
+
+      <div
+        class="pane-option"
+        v-for="(value, key) in filteredData"
+        :key="key"
+      >
+        {{ `${key}: ${value}` }}
+      </div>
     </div>
   </div>
 </template>

@@ -44,24 +44,16 @@
               template="paneContent"
             />
             <template #paneContent="{ data }">
-              <div
-                tabindex="0"
-              >
-                <PaneContent
-                  :data="data"
-                />
-              </div>
+              <PaneContent
+                :data="data"
+              />
             </template>
           </DxSplitter>
         </DxItem>
         <template #paneContent="{ data }">
-          <div
-            tabindex="0"
-          >
-            <PaneContent
-              :data="data"
-            />
-          </div>
+          <PaneContent
+            :data="data"
+          />
         </template>
       </DxSplitter>
     </DxItem>
@@ -74,13 +66,9 @@
     />
 
     <template #paneContent="{ data }">
-      <div
-        tabindex="0"
-      >
-        <PaneContent
-          :data="data"
-        />
-      </div>
+      <PaneContent
+        :data="data"
+      />
     </template>
   </DxSplitter>
 </template>
@@ -106,13 +94,13 @@ import PaneContent from './PaneContent.vue';
   }
 
   #splitter > .dx-splitter-item:first-child > .dx-splitter-item-content:focus {
-    border-top-left-radius: 8px;
-    border-bottom-left-radius: 8px;
+    border-start-start-radius: 8px;
+    border-end-start-radius: 8px;
   }
 
   #splitter > .dx-splitter-item:last-child > .dx-splitter-item-content:focus {
-    border-top-right-radius: 8px;
-    border-bottom-right-radius: 8px;
+    border-end-end-radius: 8px;
+    border-start-end-radius: 8px;
   }
 
   .dx-splitter-item-content:focus {
