@@ -1,28 +1,10 @@
-import React, { useRef, useLayoutEffect } from 'react';
+import React from 'react';
 import Splitter, { Item } from 'devextreme-react/splitter';
 import PaneContent from './PaneContent.tsx';
 
-const PaneContentWithTitleRender = (title, initialSize?: string) => {
-  const paneContentRef = useRef(null);
-  const PaneContentRender = (data) => (
-    <div ref={paneContentRef}>
-      <PaneContent title={title} {...data} size={initialSize} />
-    </div>
-  );
-  useLayoutEffect(() => {
-    Promise.resolve().then(()=>{
-      if (paneContentRef.current) {
-        const element = paneContentRef.current.parentNode;
-        element.setAttribute('tabIndex', '0');
-      }
-    });
-  }, [paneContentRef]);
+const PaneContentWithTitle = (title: string, initialSize?: string) => (data) => (<PaneContent title={title} {...data} size={initialSize} />);
 
-  return PaneContentRender;
-};
-
-const App = () => {
-  return(
+const App = () => (
   <React.Fragment>
     <Splitter
       id="splitter"
@@ -31,7 +13,7 @@ const App = () => {
         resizable={true}
         size="140px"
         minSize="70px"
-        render={PaneContentWithTitleRender('Left Pane', '140px')}
+        component={PaneContentWithTitle('Left Pane', '140px')}
       />
       <Item
         resizable={true}
@@ -43,7 +25,7 @@ const App = () => {
             resizable={true}
             collapsible={true}
             maxSize="75%"
-            render={PaneContentWithTitleRender('Central Pane')}
+            component={PaneContentWithTitle('Central Pane')}
           />
           <Item
             resizable={true}
@@ -55,18 +37,18 @@ const App = () => {
                 collapsible={true}
                 size="30%"
                 minSize="5%"
-                render={PaneContentWithTitleRender('Nested Left Pane', '30%')}
+                component={PaneContentWithTitle('Nested Left Pane', '30%')}
               />
               <Item
                 resizable={true}
-                render={PaneContentWithTitleRender('Nested Central Pane')}
+                component={PaneContentWithTitle('Nested Central Pane')}
               />
               <Item
                 resizable={true}
                 collapsible={true}
                 size="30%"
                 minSize="5%"
-                render={PaneContentWithTitleRender('Nested Right Pane', '30%')}
+                component={PaneContentWithTitle('Nested Right Pane', '30%')}
               />
             </Splitter>
           </Item>
@@ -76,10 +58,10 @@ const App = () => {
         resizable={false}
         collapsible={false}
         size="140px"
-        render={PaneContentWithTitleRender('Right Pane', '140px')}
+        component={PaneContentWithTitle('Right Pane', '140px')}
       />
     </Splitter>
   </React.Fragment>
-)};
+);
 
 export default App;
