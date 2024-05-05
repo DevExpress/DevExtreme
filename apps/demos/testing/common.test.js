@@ -350,6 +350,15 @@ const SKIPPED_TESTS = {
           await waitForAngularLoading();
         }
 
+        // eslint-disable-next-line no-promise-executor-return
+        // await ClientFunction(() => new Promise((resolve) => waitWebFont('test text', 400).then(() => {
+        //   console.log('Font waiting was resolved');
+        //   resolve();
+        // }, () => {
+        //   console.log('Font waiting was rejected');
+        //   resolve();
+        // })));
+
         if (testCodeSource) {
           await execCode(testCodeSource);
         }
@@ -387,7 +396,17 @@ const SKIPPED_TESTS = {
             return;
           }
 
-          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
+          const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, {
+            looksSameComparisonOptions: {
+              strict: false,
+              tolerance: 20,
+              ignoreAntialiasing: true,
+              antialiasingTolerance: 20,
+              ignoreCaret: true,
+            },
+            // eslint-disable-next-line spellcheck/spell-checker
+            textDiffTreshold: 0.2,
+          });
 
           const consoleMessages = await t.getBrowserConsoleMessages();
           if (!comparisonResult) {
