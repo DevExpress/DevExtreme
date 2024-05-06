@@ -13,7 +13,6 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   hint: [undefined, 'hint'],
   width: [undefined, '50%'],
-  showStatus: [true, false],
   elementAttr: [{ 'aria-label': 'Progress Bar' }],
 };
 
