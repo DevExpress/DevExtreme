@@ -7,8 +7,8 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<Properties> = {
-  start: [undefined, 10],
-  end: [undefined, 90],
+  start: [10, 40],
+  end: [80, 90],
 };
 
 const a11yCheckConfig = {
