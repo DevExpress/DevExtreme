@@ -8,7 +8,7 @@ import { deferUpdate } from 'core/utils/common';
 import devices from 'core/devices';
 import { version } from 'core/version';
 import errors from 'core/errors';
-import gridCore from 'ui/data_grid/ui.data_grid.core';
+import gridCore from '__internal/grids/data_grid/m_core';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
 import messageLocalization from 'localization/message';

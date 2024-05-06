@@ -3,7 +3,7 @@ import { extend } from '../../core/utils/extend';
 import messageLocalization from '../../localization/message';
 import { isDefined } from '../../core/utils/type';
 import LoadPanel from '../../ui/load_panel';
-import gridUtils from '../../ui/grid_core/ui.grid_core.utils';
+import gridUtils from '../../__internal/grids/grid_core/m_utils';
 
 
 const EXPORT_LOAD_PANEL_CLASS = 'dx-export-loadpanel';

@@ -6,7 +6,7 @@ import $ from 'jquery';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 
-import summaryModule from 'ui/data_grid/ui.data_grid.summary';
+import summaryModule from '__internal/grids/data_grid/summary/m_summary';
 
 QUnit.testStart(function() {
     const markup =

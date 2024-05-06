@@ -6,11 +6,10 @@ import CustomStore from 'data/custom_store';
 import ODataStore from 'data/odata/store';
 import dataQuery from 'data/query';
 import { queryByOptions } from 'data/store_helper';
-import gridCore from 'ui/data_grid/ui.data_grid.core';
+import gridCore, { createOffsetFilter } from '__internal/grids/data_grid/m_core';
 import { setupDataGridModules } from '../../helpers/dataGridMocks.js';
-import { loadTotalCount, GroupingHelper as ExpandedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.expanded';
-import { createOffsetFilter } from 'ui/data_grid/ui.data_grid.grouping.core';
-import { getContinuationGroupCount, GroupingHelper as CollapsedGroupingHelper } from 'ui/data_grid/ui.data_grid.grouping.collapsed';
+import { loadTotalCount, GroupingHelper as ExpandedGroupingHelper } from '__internal/grids/data_grid/grouping/m_grouping_expanded';
+import { getContinuationGroupCount, GroupingHelper as CollapsedGroupingHelper } from '__internal/grids/data_grid/grouping/m_grouping_collapsed';
 
 import 'ui/data_grid';
 
