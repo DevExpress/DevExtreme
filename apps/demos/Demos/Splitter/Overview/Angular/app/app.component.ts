@@ -20,7 +20,7 @@ interface PaneContentTemplate {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+  dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
   paneContentTemplates: PaneContentTemplate[] = [
     { name: 'Left Pane' },
