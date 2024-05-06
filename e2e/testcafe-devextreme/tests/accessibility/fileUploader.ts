@@ -12,10 +12,6 @@ const file: File[] = [{
   type: 'image/png',
   size: 1024,
   webkitRelativePath: '',
-  arrayBuffer: async () => new ArrayBuffer(1024),
-  slice: (start: number, end: number, contentType?: string) => new Blob(),
-  stream: () => new ReadableStream(),
-  text: async () => 'File text',
 }];
 
 const options: Options<Properties> = {
