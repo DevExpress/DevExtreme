@@ -676,6 +676,25 @@ describe('cfg-component option control', () => {
     expect(Widget.option.mock.calls[1]).toEqual(['nestedOption.b', 'const']);
   });
 
+  it('invokes option change guard handlers', () => {
+    const TestContainer = ({ value }: { value: number }) => {
+      return (
+        <ControlledComponent>
+          <NestedComponent a={value} />
+        </ControlledComponent>
+      );
+    };
+
+    const { rerender } = render(<TestContainer value={123} />);
+
+    fireOptionChange('nestedOption.a', 234);
+
+    rerender(<TestContainer value={123} />)
+    jest.runAllTimers();
+
+    expect(Widget.option).toHaveBeenCalledWith('nestedOption.a', 123);
+  });
+
   it('invokes option change guard handlers in strict mode', () => {
     const TestContainer = ({ value }: { value: number }) => {
       return (
