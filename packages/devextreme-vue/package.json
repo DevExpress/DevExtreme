@@ -11,7 +11,7 @@
   "types": "./cjs/index.d.ts",
   "scripts": {
     "clean": "gulp clean",
-    "regenerate": "npm run clean && gulp generate",
+    "regenerate": "pnpm run clean && gulp generate",
     "lint": "eslint --ignore-pattern src/core/__tests__/ src/core",
     "pack": "gulp npm.pack",
     "test": "jest"

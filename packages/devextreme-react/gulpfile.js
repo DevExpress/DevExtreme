@@ -163,7 +163,7 @@ gulp.task(NPM_BUILD_WITH_HEADERS, gulp.series(
 gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD_WITH_HEADERS,
     NPM_PREPARE_MODULES,
-    shell.task(['npm pack'], {cwd: config.npm.dist})
+    shell.task(['pnpm pack'], {cwd: config.npm.dist})
 ));
 
 

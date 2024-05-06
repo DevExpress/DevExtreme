@@ -8,12 +8,12 @@
   },
   "scripts": {
     "gulp": "npx --node-options='--max_old_space_size=8192' gulp",
-    "build": "npm run gulp -- build",
+    "build": "pnpm run gulp -- build",
     "regenerate": "gulp generate",
     "lint": "eslint src",
-    "test": "npm run gulp -- test",
-    "test:dev": "npm run gulp -- run.tests",
-    "pack": "npm run gulp -- npm.pack"
+    "test": "pnpm run gulp -- test",
+    "test:dev": "pnpm run gulp -- run.tests",
+    "pack": "pnpm run gulp -- npm.pack"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",

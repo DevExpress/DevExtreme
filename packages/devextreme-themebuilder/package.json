@@ -26,8 +26,8 @@
     "copy-resources": "ts-node --files=true src/tools/copy-resources.ts",
     "generate-metadata": "ts-node --files=true src/metadata/generate.ts",
     "build-ts": "tsc",
-    "build": "npm run generate-metadata && npm run build-ts && npm run copy-resources",
-    "pack": "cd dist && npm pack"
+    "build": "pnpm run generate-metadata && pnpm run build-ts && pnpm run copy-resources",
+    "pack": "cd dist && pnpm pack"
   },
   "devDependencies": {
     "@types/clean-css": "4.2.11",
