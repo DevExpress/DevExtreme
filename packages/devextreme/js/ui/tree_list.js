@@ -1,5 +1,6 @@
-// STYLE treeList
 import TreeList from '../__internal/grids/tree_list/m_widget';
+// NOTE: Import for the theme-builder deps check
+import './tree_list/ui.tree_list.base';
 
 /**
  * @name dxTreeListColumn

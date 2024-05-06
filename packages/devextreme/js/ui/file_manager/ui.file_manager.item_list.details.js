@@ -4,7 +4,8 @@ import { extendAttributes, getDisplayFileSize } from './ui.file_manager.common';
 import { isString, isFunction, isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 
-import DataGrid from '../../__internal/grids/data_grid/m_widget';
+// NOTE: Using the "public" export here for the theme-builder deps check
+import DataGrid from '../../ui/data_grid';
 
 import FileManagerItemListBase from './ui.file_manager.item_list';
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
