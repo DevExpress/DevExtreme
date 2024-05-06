@@ -48,11 +48,14 @@ sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
 sh.popd();
 
 // TODO: maybe we should add bootstrap to vendors
-const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'node_modules', 'packages', 'devextreme', 'bootstrap', 'dist');
+const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'packages', 'devextreme', 'node_modules', 'bootstrap', 'dist');
 sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], JS_ARTIFACTS);
 sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], CSS_ARTIFACTS);
 
-const { 'devextreme-main': devextremeVersion, devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('pnpm pkg get version -ws --json').stdout);
+const {
+    'devextreme-main': devextremeVersion,
+    devextreme: devextremeNpmVersion
+} = JSON.parse(sh.exec('pnpm m ls --json --depth=-1 | jq \'reduce .[] as $item ({}; .[$item.name] = $item.version)\'').stdout);
 
 // Update versions for non-semver builds (daily, alpha and beta)
 if (devextremeVersion !== devextremeNpmVersion) {

@@ -21,6 +21,9 @@ importers:
       '@angular/platform-server':
         specifier: ~16.2.12
         version: 16.2.12(@angular/animations@17.3.0(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0)))(@angular/common@17.3.0(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0))(rxjs@7.8.0))(@angular/compiler@17.3.0(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0)))(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0))(@angular/platform-browser@17.3.0(@angular/animations@17.3.0(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0)))(@angular/common@17.3.0(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0))(rxjs@7.8.0))(@angular/core@17.3.0(rxjs@7.8.0)(zone.js@0.14.0)))
+      '@nx/devkit':
+        specifier: ^18.3.4
+        version: 18.3.4(nx@17.3.2(@swc/core@1.4.17))
       '@nx/jest':
         specifier: ^16.10.0
         version: 16.10.0(@babel/traverse@7.24.5)(@swc/core@1.4.17)(@types/node@20.12.8)(babel-plugin-macros@2.8.0)(node-notifier@9.0.1)(nx@17.3.2(@swc/core@1.4.17))(ts-node@10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@5.4.5))(typescript@5.4.5)
@@ -1365,6 +1368,9 @@ importers:
       '@vue/compiler-sfc':
         specifier: ^3.0.0
         version: 3.3.4
+      '@vue/shared':
+        specifier: ^3.2.47
+        version: 3.4.26
       '@vue/test-utils':
         specifier: 2.0.0-beta.7
         version: 2.0.0-beta.7(vue@3.2.47)
@@ -3758,6 +3764,9 @@ packages:
   '@nrwl/devkit@16.10.0':
     resolution: {integrity: sha512-fRloARtsDQoQgQ7HKEy0RJiusg/HSygnmg4gX/0n/Z+SUS+4KoZzvHjXc6T5ZdEiSjvLypJ+HBM8dQzIcVACPQ==}
 
+  '@nrwl/devkit@18.3.4':
+    resolution: {integrity: sha512-Fty9Huqm12OYueU3uLJl3uvBUl5BvEyPfvw8+rLiNx9iftdEattM8C+268eAbIRRSLSOVXlWsJH4brlc6QZYYw==}
+
   '@nrwl/jest@16.10.0':
     resolution: {integrity: sha512-hZuIK3xXh4HaE6/Ny8hGidjkJ4aLZjnQtPDxKD/423gznQe2FdHx3avoSlbOEOx5Oc6sJ9QGGZLcvckKQ5uWww==}
 
@@ -3782,6 +3791,11 @@ packages:
     resolution: {integrity: sha512-IvKQqRJFDDiaj33SPfGd3ckNHhHi6ceEoqCbAP4UuMXOPPVOX6H0KVk+9tknkPb48B7jWIw6/AgOeWkBxPRO5w==}
     peerDependencies:
       nx: '>= 15 <= 17'
+
+  '@nx/devkit@18.3.4':
+    resolution: {integrity: sha512-M3htxl5WvlNKK5KNOndCAApbyBCZNTFFs+rtdwvudNZk5+84zAAPaWzSoX9C4XLAW78/f98LzF68/ch05aN12A==}
+    peerDependencies:
+      nx: '>= 16 <= 19'
 
   '@nx/jest@16.10.0':
     resolution: {integrity: sha512-QseeLjDrl4c9q9Dd/057SXYqd47JVLhD2VQlQDraYwjsHz3lWkzlGaaHy0ZrVu8LSzY7lUUhJMPyYO3qo8wT6A==}
@@ -20515,6 +20529,12 @@ snapshots:
     transitivePeerDependencies:
       - nx
 
+  '@nrwl/devkit@18.3.4(nx@17.3.2(@swc/core@1.4.17))':
+    dependencies:
+      '@nx/devkit': 18.3.4(nx@17.3.2(@swc/core@1.4.17))
+    transitivePeerDependencies:
+      - nx
+
   '@nrwl/jest@16.10.0(@babel/traverse@7.24.5)(@swc/core@1.4.17)(@types/node@20.12.8)(babel-plugin-macros@2.8.0)(node-notifier@9.0.1)(nx@17.3.2(@swc/core@1.4.17))(ts-node@10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@5.4.5))(typescript@5.4.5)':
     dependencies:
       '@nx/jest': 16.10.0(@babel/traverse@7.24.5)(@swc/core@1.4.17)(@types/node@20.12.8)(babel-plugin-macros@2.8.0)(node-notifier@9.0.1)(nx@17.3.2(@swc/core@1.4.17))(ts-node@10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@5.4.5))(typescript@5.4.5)
@@ -20601,6 +20621,18 @@ snapshots:
       semver: 7.5.3
       tmp: 0.2.3
       tslib: 2.6.2
+
+  '@nx/devkit@18.3.4(nx@17.3.2(@swc/core@1.4.17))':
+    dependencies:
+      '@nrwl/devkit': 18.3.4(nx@17.3.2(@swc/core@1.4.17))
+      ejs: 3.1.10
+      enquirer: 2.3.6
+      ignore: 5.3.1
+      nx: 17.3.2(@swc/core@1.4.17)
+      semver: 7.6.0
+      tmp: 0.2.3
+      tslib: 2.6.2
+      yargs-parser: 21.1.1
 
   '@nx/jest@16.10.0(@babel/traverse@7.24.5)(@swc/core@1.4.17)(@types/node@20.12.8)(babel-plugin-macros@2.8.0)(node-notifier@9.0.1)(nx@17.3.2(@swc/core@1.4.17))(ts-node@10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@5.4.5))(typescript@5.4.5)':
     dependencies:
