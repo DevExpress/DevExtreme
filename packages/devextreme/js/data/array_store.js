@@ -51,7 +51,7 @@ const ArrayStore = Store.inherit({
     },
 
     _updateImpl: function(key, values) {
-        return update(this, this._array, key, values);
+        return update(this, this._array, key, values, false, false, false, false);
     },
 
     _removeImpl: function(key) {

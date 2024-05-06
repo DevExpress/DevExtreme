@@ -814,6 +814,23 @@ QUnit.test('insert duplicate key (compound)', function(assert) {
     });
 });
 
+QUnit.test('should not merge data object fields', function(assert) {
+    const done = assert.async();
+
+    const store = new ArrayStore({
+        key: 'id',
+        data: [{ id: 0, nested: { a: 1, b: 2, c: 3 } }]
+    });
+
+    store.update(0, { nested: { a: 10, b: 20 } }).done((data, key) => {
+        assert.equal(key, 0);
+        const expectedData = { a: 10, b: 20 };
+
+        assert.deepEqual(data.nested, expectedData);
+        done();
+    });
+});
+
 QUnit.test('remove with key', function(assert) {
     const done = assert.async();
 

@@ -59,7 +59,7 @@ export const createColumn = function (that: ColumnsController, columnOptions, us
       result = deepExtendArraySafe(result, DEFAULT_COLUMN_OPTIONS);
       deepExtendArraySafe(result, commonColumnOptions);
       deepExtendArraySafe(result, calculatedColumnOptions);
-      deepExtendArraySafe(result, columnOptions);
+      deepExtendArraySafe(result, columnOptions, true);
       deepExtendArraySafe(result, { selector: null });
     }
     if (columnOptions.filterOperations === columnOptions.defaultFilterOperations) {

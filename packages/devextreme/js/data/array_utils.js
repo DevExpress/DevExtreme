@@ -157,9 +157,8 @@ function applyChanges(data, changes, options = {}) {
     });
 }
 
-function update(keyInfo, array, key, data, isBatch, immutable, logError) {
+function update(keyInfo, array, key, data, isBatch, immutable, logError, extendComplexObject = true) {
     let target;
-    const extendComplexObject = true;
     const keyExpr = keyInfo.key();
 
     if(keyExpr) {
