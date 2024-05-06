@@ -6,10 +6,16 @@ import { Options } from '../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
-const file = {
-  items: [{ type: 'image/png' }],
-  types: ['Files'],
-};
+const file: File[] = [{
+  lastModified: Date.now(),
+  name: 'Item_1.png',
+  type: 'image/png',
+  size: 1024,
+  arrayBuffer: async () => new ArrayBuffer(1024),
+  slice: (start: number, end: number, contentType?: string) => new Blob(),
+  stream: () => new ReadableStream(),
+  text: async () => 'File text',
+}];
 
 const options: Options<Properties> = {
   value: [undefined, file],
