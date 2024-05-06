@@ -34,13 +34,13 @@ sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
 
 sh.exec('pnpm run devextreme:inject-descriptions');
 
-sh.exec('npx nx build-dist devextreme-main', {
+sh.exec('pnpx nx build-dist devextreme-main', {
     env: {
         ...sh.env,
         BUILD_INTERNAL_PACKAGE: 'false'
     }
 });
-sh.exec('npx nx build devextreme-themebuilder');
+sh.exec('pnpx nx build devextreme-themebuilder');
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -77,16 +77,16 @@ sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
     packAndCopy(NPM_DIR);
 sh.popd();
 
-sh.exec('npx nx pack devextreme-react', { silent: true });
-sh.exec('npx nx pack devextreme-vue', { silent: true });
-sh.exec('npx nx pack devextreme-angular --with-descriptions', { silent: true });
+sh.exec('pnpx nx pack devextreme-react', { silent: true });
+sh.exec('pnpx nx pack devextreme-vue', { silent: true });
+sh.exec('pnpx nx pack devextreme-angular --with-descriptions', { silent: true });
 
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_DIR);
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_DIR);
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_DIR);
 
 if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('npx nx build-dist devextreme-main');
+    sh.exec('pnpx nx build-dist devextreme-main');
 
     sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
         sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);

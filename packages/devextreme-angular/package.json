@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "test": "pnpm run gulp -- test",
     "test:dev": "pnpm run gulp -- run.tests",
-    "pack": "pnpm run gulp -- npm.pack"
+    "pack": "pnpx gulp npm.pack"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",
@@ -26,9 +26,9 @@
   "devDependencies": {
     "@webcomponents/custom-elements": "^1.6.0",
     "@angular/animations": "^16.2.10",
+    "@angular/cli": "^16.2.10",
     "@angular/common": "^16.2.10",
     "@angular/compiler": "^16.2.10",
-    "@angular/cli": "^16.2.10",
     "@angular/compiler-cli": "^16.2.10",
     "@angular/core": "^16.2.10",
     "@angular/forms": "^16.2.10",
@@ -55,6 +55,7 @@
     "puppeteer": "^19.11.1",
     "rxjs": "^6.6.7",
     "stream-browserify": "^3.0.0",
+    "tslib": "^2.6.1",
     "typescript": "^4.9.3",
     "webpack": "^5.88.2",
     "yargs": "^17.7.2",
