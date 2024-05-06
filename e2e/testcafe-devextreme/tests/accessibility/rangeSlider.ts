@@ -7,7 +7,7 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<Properties> = {
-  value: [[0, 0], [40, 60]],
+  value: [[10, 90], [40, 60]],
   disabled: [true, false],
   readOnly: [true, false],
   hint: [undefined, 'hint'],
