@@ -11,6 +11,7 @@ const file: File[] = [{
   name: 'Item_1.png',
   type: 'image/png',
   size: 1024,
+  webkitRelativePath: '',
   arrayBuffer: async () => new ArrayBuffer(1024),
   slice: (start: number, end: number, contentType?: string) => new Blob(),
   stream: () => new ReadableStream(),
