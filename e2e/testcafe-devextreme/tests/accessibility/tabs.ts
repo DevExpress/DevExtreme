@@ -20,8 +20,6 @@ const items: Item[] = [
 
 const options: Options<Properties> = {
   dataSource: [items],
-  rtlEnabled: [true, false],
-  orientation: ['horizontal', 'vertical'],
   // @ts-expect-error private option
   selectOnFocus: [true, false],
   showNavButtons: [true, false],
