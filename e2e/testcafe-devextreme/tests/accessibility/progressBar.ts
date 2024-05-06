@@ -10,6 +10,7 @@ const options: Options<Properties> = {
   value: [undefined, 45],
   min: [0],
   max: [100],
+  disabled: [true, false],
   hint: [undefined, 'hint'],
   width: [undefined, '50%'],
   showStatus: [true, false],
