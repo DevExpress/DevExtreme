@@ -20,6 +20,7 @@ import AdaptiveDetailRow from './adaptiveDetailRow';
 import ColumnChooser from './columnChooser';
 import TextBox from '../textBox';
 import { GroupPanel } from './groupPanel';
+import { MouseAction, MouseUpEvents } from '../../../e2e/testcafe-devextreme/helpers/mouseUpEvents';
 
 export const CLASS = {
   dataGrid: 'dx-datagrid',
@@ -609,7 +610,7 @@ export default class DataGrid extends Widget {
       },
     )();
   }
-  async moveRow(t: TestController, rowIndex: number, x: number, y: number): Promise<void> {
+  async moveRow(t: TestController, rowIndex: number, x: number, y: number, drop = true): Promise<void> {
     const { getInstance } = this;
     const hasDragIcons = await this.option('rowDragging.showDragIcons');
     const dragElement = Selector(() => {
@@ -621,7 +622,15 @@ export default class DataGrid extends Widget {
       dependencies: {getInstance, rowIndex, hasDragIcons}
     })
 
+    if (!drop) {
+      await MouseUpEvents.disable(MouseAction.dragToOffset);
+    }
+
     await t.drag(dragElement, x, y);
+
+    if (!drop) {
+      await MouseUpEvents.enable(MouseAction.dragToOffset);
+    }
   }
 
   moveHeader(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
