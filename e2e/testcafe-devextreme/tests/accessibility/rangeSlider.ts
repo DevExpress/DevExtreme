@@ -14,8 +14,6 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   height: [undefined, 250],
   width: [undefined, '50%'],
-  min: [undefined, 10],
-  max: [undefined, 90],
   focusStateEnabled: [true],
 };
 
