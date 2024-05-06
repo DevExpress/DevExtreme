@@ -14,7 +14,7 @@ import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.j
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 const dateFormat = 'monthandday';
 const timeFormat = 'shorttime';

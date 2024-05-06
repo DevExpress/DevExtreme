@@ -3,7 +3,7 @@ import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 import 'generic_light.css!';
 import devices from 'core/devices';

@@ -1,5 +1,5 @@
 import fx from 'animation/fx';
-import dxScheduler from 'ui/scheduler/ui.scheduler';
+import dxScheduler from '__internal/scheduler/m_scheduler';
 import { DataSource } from 'data/data_source/data_source';
 import dateUtils from 'core/utils/date';
 import { AppointmentDataProvider } from '__internal/scheduler/appointments/data_provider/m_appointment_data_provider';

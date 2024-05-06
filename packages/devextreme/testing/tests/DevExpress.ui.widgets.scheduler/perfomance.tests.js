@@ -1,5 +1,5 @@
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 import $ from 'jquery';
 import pointerMock from '../../helpers/pointerMock.js';
