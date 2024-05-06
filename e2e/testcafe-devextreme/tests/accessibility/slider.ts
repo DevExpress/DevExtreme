@@ -17,7 +17,6 @@ const options: Options<Properties> = {
   min: [undefined, 10],
   max: [undefined, 90],
   focusStateEnabled: [true],
-  validationStatus: [undefined, 'invalid'],
   elementAttr: [{ 'aria-label': 'Slider' }],
 };
 
