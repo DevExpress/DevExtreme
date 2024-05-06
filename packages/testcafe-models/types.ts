@@ -52,6 +52,7 @@ export type WidgetName =
   | 'dxNumberBox'
   | 'dxValidator'
   | 'dxFileUploader'
+  | 'dxRangeSlider'
   | 'dxSlider'
   | 'dxDropDownBox'
   | 'dxFileManager'
