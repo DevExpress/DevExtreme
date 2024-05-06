@@ -29,7 +29,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxCheckBox',
+  component: 'dxRangeSlider',
   a11yCheckConfig,
   options,
 };
