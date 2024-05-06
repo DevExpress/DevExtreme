@@ -24,7 +24,7 @@ runManualTest('DataGrid', 'MultipleRecordSelectionAPI', ['jQuery', 'React', 'Vue
     await testScreenshot(t, takeScreenshot, 'datagrid_multiple_record_selection_and_API_2_desktop.png');
 
     await t
-      .click($('.dx-button-text').withText('Clear Selection'));
+      .click($('[aria-label="Clear Selection"]'));
 
     await testScreenshot(t, takeScreenshot, 'datagrid_multiple_record_selection_and_API_3_desktop.png');
 

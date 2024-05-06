@@ -21,8 +21,7 @@ runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (te
     const dragHandle = await itemToDrag.find(`.${REORDER_HANDLE_CLASS}`);
 
     await t
-      .click(itemToDrag)
-      .drag(dragHandle, 0, -(LIST_ITEM_HEIGHT * 2));
+      .drag(dragHandle, 0, -LIST_ITEM_HEIGHT - 10);
 
     const thirdItemRightList = await $(`.${LIST_CLASS}`).nth(1).find(`.${LIST_ITEM_CLASS}`).nth(2);
 
@@ -31,13 +30,12 @@ runManualTest('List', 'ItemDragging', ['jQuery', 'React', 'Vue', 'Angular'], (te
       .eql(LIST_ITEM_TEXT);
 
     await t
-      .click(itemToDrag)
-      .drag(dragHandle, -WINDOW_WIDTH, -LIST_ITEM_HEIGHT);
+      .drag(dragHandle, -WINDOW_WIDTH, -LIST_ITEM_HEIGHT - 10);
 
-    const thirdItemLeftList = await $(`.${LIST_CLASS}`).nth(0).find(`.${LIST_ITEM_CLASS}`).nth(2);
+    const secondItemLeftList = await $(`.${LIST_CLASS}`).nth(0).find(`.${LIST_ITEM_CLASS}`).nth(1);
 
     await t
-      .expect(thirdItemLeftList.textContent)
+      .expect(secondItemLeftList.textContent)
       .eql(LIST_ITEM_TEXT);
   });
 });
