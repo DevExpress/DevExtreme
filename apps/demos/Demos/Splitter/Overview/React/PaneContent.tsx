@@ -16,7 +16,7 @@ const getFilteredDimensionOptions = (data) => Object.entries(data)
   .filter(([key, value]) => dimensionOptions.has(key) && value)
   .map(([key, value]) => ({ key, value }));
 
-const PaneContent = (data) => {
+const PaneContent = (data: any) => {
   const paneContentRef = useRef(null);
 
   useEffect(() => {
