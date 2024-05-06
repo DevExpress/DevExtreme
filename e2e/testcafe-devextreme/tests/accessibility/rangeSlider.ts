@@ -11,8 +11,6 @@ const options: Options<Properties> = {
   disabled: [true, false],
   readOnly: [true, false],
   hint: [undefined, 'hint'],
-  startName: ['', 'startName'],
-  endName: ['', 'endName'],
   height: [undefined, 250],
   width: [450, 'auto', '100%'],
   min: [undefined, 10],
