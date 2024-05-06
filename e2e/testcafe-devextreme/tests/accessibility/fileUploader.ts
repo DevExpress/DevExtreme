@@ -12,10 +12,10 @@ const file: File[] = [{
   type: 'image/png',
   size: 1024,
   webkitRelativePath: '',
-  arrayBuffer: async () => await new ArrayBuffer(1024),
   slice: () => new Blob(),
   stream: () => new ReadableStream(),
-  text: async () => Promise.resolve('File text'),
+  text: () => Promise.resolve('File text'),
+  arrayBuffer: () => Promise.resolve(new ArrayBuffer(1024)),
 }];
 
 const options: Options<Properties> = {
