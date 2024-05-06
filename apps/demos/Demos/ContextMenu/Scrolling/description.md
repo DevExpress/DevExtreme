@@ -1,1 +1,1 @@
-## ContextMenu scrolling
+The ContextMenu component supports submenu item scrolling. If the combined item length exceeds the screen size, a scrollbar appears, and the submenu height is restricted.
