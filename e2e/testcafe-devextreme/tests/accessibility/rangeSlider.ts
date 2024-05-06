@@ -19,7 +19,7 @@ const options: Options<Properties> = {
   max: [undefined, 90],
   focusStateEnabled: [true],
   validationStatus: [undefined, 'invalid'],
-  elementAttr: [{ 'aria-label': 'Start Value' }, { 'aria-label': 'End Value' }],
+  elementAttr: [{ 'aria-label': 'From' }, { 'aria-label': 'Till' }],
 };
 
 const a11yCheckConfig = {
