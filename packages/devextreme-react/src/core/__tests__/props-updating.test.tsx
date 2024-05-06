@@ -730,7 +730,7 @@ describe('cfg-component option control', () => {
 
     fireOptionChange('nestedOption.a', 234);
 
-    rerender(<TestContainer value={123} />)
+    rerender(<TestContainer value={123} />);
     jest.runAllTimers();
 
     expect(Widget.option).toHaveBeenCalledWith('nestedOption.a', 123);
@@ -751,7 +751,7 @@ describe('cfg-component option control', () => {
 
     fireOptionChange('nestedOption.a', 234);
 
-    rerender(<TestContainer value={123} />)
+    rerender(<TestContainer value={123} />);
     jest.runAllTimers();
 
     expect(Widget.option).toHaveBeenCalledWith('nestedOption.a', 123);
