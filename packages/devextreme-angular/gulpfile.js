@@ -19,7 +19,6 @@ const { AngularCommonReexportsGenerator } = require('devextreme-internal-tools')
 const { AngularComponentNamesGenerator } = require('devextreme-internal-tools');
 
 const argv = require('yargs')
-  .strict()
   .option('with-descriptions', { type: 'boolean', default: false })
   .parseSync();
 

@@ -3,7 +3,6 @@
 // See tests in version-spec.js
 
 const argv = require('yargs')
-    .strict()
     .option('uglify', { type: 'boolean', default: false })
     .parseSync();
 
