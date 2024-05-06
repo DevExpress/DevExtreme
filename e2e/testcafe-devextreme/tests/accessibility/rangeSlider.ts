@@ -18,7 +18,6 @@ const options: Options<Properties> = {
   min: [undefined, 10],
   max: [undefined, 90],
   focusStateEnabled: [true],
-  validationMessageMode: [undefined, 'always'],
   validationStatus: [undefined, 'invalid'],
   elementAttr: [{ 'aria-label': 'Start Value' }, { 'aria-label': 'End Value' }],
 };
