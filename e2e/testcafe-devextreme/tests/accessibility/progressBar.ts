@@ -7,12 +7,12 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<Properties> = {
+  value: [undefined, 45],
   min: [0],
   max: [100],
-  disabled: [true, false],
-  readOnly: [true, false],
   hint: [undefined, 'hint'],
   width: [undefined, '50%'],
+  showStatus: [true, false],
   elementAttr: [{ 'aria-label': 'Progress Bar' }],
 };
 
