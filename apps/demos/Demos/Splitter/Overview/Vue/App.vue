@@ -12,6 +12,7 @@
         <DxItem
           :resizable="true"
           :collapsible="true"
+          collapsedSize="8%"
           max-size="75%"
           text="Central Pane"
           template="paneContent"

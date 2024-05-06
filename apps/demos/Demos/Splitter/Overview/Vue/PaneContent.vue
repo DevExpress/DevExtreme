@@ -29,7 +29,7 @@ const props = defineProps<{
 
 const { data } = props;
 
-const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+const dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
 const getStateText = function() {
   if (data.resizable !== false && !data.collapsible) {
@@ -40,10 +40,16 @@ const getStateText = function() {
 
   return `${resizableText} and ${collapsibleText}`;
 };
-const filteredData = computed(() => Object.fromEntries(
-  Object.entries(data)
-    .filter(([key]) => dimensionOptions.has(key)),
-));
+const filteredData = computed(() => {
+  const entries = Object.entries(data)
+    .filter(([key]) => dimensionOptions.has(key));
+
+  if (data.collapsedSize) {
+    return Object.fromEntries(entries.reverse());
+  }
+
+  return Object.fromEntries(entries);
+});
 </script>
 
 <style scoped>
