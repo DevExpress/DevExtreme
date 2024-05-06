@@ -1,7 +1,3 @@
-body {
-  margin: 0;
-}
-
 .target-area {
   color: var(--dx-color-text);
   background-color: var(--dx-color-border);
