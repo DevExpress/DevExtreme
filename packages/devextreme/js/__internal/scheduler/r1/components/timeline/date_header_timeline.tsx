@@ -61,6 +61,7 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
             }
 
             return (
+              // @ts-expect-error TS2786
               <Row
                 key={rowIndex.toString()}
                 className="dx-scheduler-header-row"
@@ -85,6 +86,7 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                     text,
                     today,
                   }) => (
+                    // @ts-expect-error TS2786
                     <DateHeaderCell
                       key={key}
                       startDate={startDate}

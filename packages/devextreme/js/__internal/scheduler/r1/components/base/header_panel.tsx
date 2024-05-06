@@ -54,6 +54,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       <thead>
       {
         isHorizontalGrouping && !groupByDate && (
+          // @ts-expect-error TS2786
           <GroupPanel
             groupPanelData={groupPanelData}
             groups={groups}
@@ -75,6 +76,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       }
       {
         groupByDate && (
+          // @ts-expect-error TS2786
           <GroupPanel
             groupPanelData={groupPanelData}
             groups={groups}

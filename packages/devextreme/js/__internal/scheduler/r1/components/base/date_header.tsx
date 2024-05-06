@@ -51,6 +51,7 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
       <>
         {
           dataMap.map((dateHeaderRow, rowIndex) => (
+            // @ts-expect-error TS2786
             <Row
               key={rowIndex.toString()}
               className="dx-scheduler-header-row"
@@ -74,6 +75,7 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
                   text,
                   today,
                 }) => (
+                  // @ts-expect-error TS2786
                   <DateHeaderCell
                     key={key}
                     startDate={startDate}

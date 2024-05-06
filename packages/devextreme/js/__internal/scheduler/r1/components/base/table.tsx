@@ -66,6 +66,7 @@ export class Table extends BaseInfernoComponent<TableProps> {
         <tbody>
         {
           hasTopVirtualRow && (
+            // @ts-expect-error TS2786
             <VirtualRow
               height={topVirtualRowHeight}
               cellsCount={virtualCellsCount ?? VirtualRowDefaultProps.cellsCount}
@@ -81,6 +82,7 @@ export class Table extends BaseInfernoComponent<TableProps> {
         {children}
         {
           hasBottomVirtualRow && (
+            // @ts-expect-error TS2786
             <VirtualRow
               height={bottomVirtualRowHeight}
               cellsCount={virtualCellsCount ?? VirtualRowDefaultProps.cellsCount}

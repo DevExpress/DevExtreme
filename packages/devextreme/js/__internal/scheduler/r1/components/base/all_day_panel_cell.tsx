@@ -23,6 +23,7 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
+      // @ts-expect-error TS2786
       <DateTableCellBase
         className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
         startDate={startDate}

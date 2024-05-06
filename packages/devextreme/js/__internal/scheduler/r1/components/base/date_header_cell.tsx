@@ -87,6 +87,7 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
         </>
     )
       : (
+        // @ts-expect-error TS2786
         <DateHeaderText
           splitText={splitText}
           text={text}

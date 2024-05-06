@@ -48,6 +48,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
     const Layout = isVerticalLayout ? GroupPanelVertical : GroupPanelHorizontal;
 
     return (
+    // @ts-expect-error TS2786
      <Layout
        height={height}
        resourceCellTemplate={ResourceCellTemplateComponent}

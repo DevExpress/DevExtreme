@@ -46,6 +46,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
+      // @ts-expect-error TS2786
       <Row
         leftVirtualCellWidth={leftVirtualCellWidth}
         rightVirtualCellWidth={rightVirtualCellWidth}
@@ -66,6 +67,7 @@ export class AllDayPanelTableBody extends BaseInfernoComponent<AllDayPanelTableB
             key,
             startDate,
           }) => (
+            // @ts-expect-error TS2786
             <AllDayPanelCell
               key={key}
               isFirstGroupCell={!isVerticalGroupOrientation && isFirstGroupCell}

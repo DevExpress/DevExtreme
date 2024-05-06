@@ -62,6 +62,7 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
+      // @ts-expect-error TS2786
       <DateTableCellBase
         className={classes}
         dataCellTemplate={DataCellTemplateComponent}

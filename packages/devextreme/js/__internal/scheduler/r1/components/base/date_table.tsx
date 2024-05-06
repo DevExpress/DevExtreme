@@ -48,6 +48,7 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
+      // @ts-expect-error TS2786
       <Table
         {...restProps}
         tableRef={tableRef}
@@ -61,6 +62,7 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
         className={classes}
         width={width}
       >
+         {/* @ts-expect-error TS2786 */}
         <DateTableBody
           cellTemplate={CellTemplateComponent}
           viewData={viewData}

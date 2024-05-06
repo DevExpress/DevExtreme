@@ -26,6 +26,7 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
+      // @ts-expect-error TS2786
       <DateTable
         {...restProps}
       viewData={viewData}
