@@ -8,6 +8,7 @@ const karmaServer = require('karma').Server;
 const karmaConfig = require('karma').config;
 const header = require('gulp-header');
 const ngPackagr = require('ng-packagr');
+const fs = require('fs');
 const { exec } = require('child_process');
 
 const { AngularMetadataGenerator } = require('devextreme-internal-tools');
@@ -164,18 +165,9 @@ gulp.task('npm.pack', gulp.series(
     .pipe(gulp.dest('./node_modules/devextreme-angular')),
 ));
 
-gulp.task('copy.source', () => {
-  const npmConfig = buildConfig.npm;
-  return gulp.src(`${path.join(npmConfig.distPath, '/**/*.*')}`)
-    .pipe(gulp.dest('./node_modules/devextreme-angular'));
-});
-
 // ------------Main------------
 
-const buildTask = gulp.series(
-  'build.components',
-  'copy.source',
-);
+const buildTask = gulp.series('build.components');
 
 gulp.task('build', buildTask);
 gulp.task('default', buildTask);
@@ -200,7 +192,13 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', () => {
+gulp.task('copy.dist.dx-angular', () => {
+  return gulp
+    .src(`${buildConfig.npm.distPath}/**/*`)
+    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
+});
+
+gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
   const config = buildConfig.components;
   const testConfig = buildConfig.tests;
 
@@ -247,8 +245,6 @@ gulp.task('test.components.server.debug', (done) => {
 
   new karmaServer(config, done).start();
 });
-
-// gulp.task('run.tests', gulp.series('test.components.client'));
 
 gulp.task('run.tests', gulp.series('test.components.client', 'test.components.server'));
 

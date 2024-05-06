@@ -9,10 +9,9 @@ import {
     Output,
     OnDestroy,
     PLATFORM_ID,
-    Inject
+    Inject,
+    TransferState,
 } from '@angular/core';
-
-import { TransferState } from '@angular/platform-browser';
 
 import {
     TestBed,
