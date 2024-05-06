@@ -1,7 +1,6 @@
 import type { dxElementWrapper } from '@js/core/renderer';
 import type { CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.base';
-import type { Item } from '@js/ui/splitter';
 
 declare class Base<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -14,15 +13,22 @@ declare class Base<
   _renderItems(items: unknown): void;
   _renderItem(
     index: number,
-    itemData: Item,
+    itemData: TItem,
     $container: dxElementWrapper,
     $itemToReplace: dxElementWrapper,
   ): dxElementWrapper;
+  _renderItemContent(args: {
+    index: number;
+    itemData: TItem;
+    container: dxElementWrapper;
+    contentClass: string;
+    defaultTemplateName: string;
+  }): dxElementWrapper;
   _itemSelector(): string;
   _itemContainer(): dxElementWrapper;
 
-  _getItemData(item: Element | HTMLElement | dxElementWrapper): Item;
-  _getIndexByItem(item: Item): number;
+  _getItemData(item: Element | HTMLElement | dxElementWrapper): TItem;
+  _getIndexByItem(item: TItem): number;
   _findItemElementByItem(item: HTMLElement);
 }
 

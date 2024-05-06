@@ -78,7 +78,7 @@ const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-class Splitter extends CollectionWidget<Properties> {
+class Splitter extends CollectionWidget<Properties, Item> {
   static ItemClass = SplitterItem;
 
   private _renderQueue: RenderQueueItem[] = [];
@@ -637,13 +637,13 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getResizeHandleRightItem($resizeHandle: dxElementWrapper): dxElementWrapper {
-    return $resizeHandle.next(`.${SPLITTER_ITEM_CLASS}:not(.${INVISIBLE_STATE_CLASS})`);
+    let $rightItem = $resizeHandle.next();
 
-    // while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
-    //   $rightItem = $rightItem.next();
-    // }
+    while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
+      $rightItem = $rightItem.next();
+    }
 
-    // return $rightItem;
+    return $rightItem;
   }
 
   _getResizeHandlesSize(): number {
@@ -651,11 +651,6 @@ class Splitter extends CollectionWidget<Properties> {
       (size: number, resizeHandle: ResizeHandle) => size + resizeHandle.getSize(),
       0,
     );
-  }
-
-  _renderItemContent(args: unknown): unknown {
-    // @ts-expect-error badly typed Parent classes
-    return super._renderItemContent(args);
   }
 
   _createItemByTemplate(
