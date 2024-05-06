@@ -40,16 +40,10 @@ const getStateText = function() {
 
   return `${resizableText} and ${collapsibleText}`;
 };
-const filteredData = computed(() => {
-  const entries = Object.entries(data)
-    .filter(([key]) => dimensionOptions.has(key));
-
-  if (data.collapsedSize) {
-    return Object.fromEntries(entries.reverse());
-  }
-
-  return Object.fromEntries(entries);
-});
+const filteredData = computed(() => Object.fromEntries(
+  Object.entries(data)
+    .filter(([key]) => dimensionOptions.has(key)),
+));
 </script>
 
 <style scoped>
