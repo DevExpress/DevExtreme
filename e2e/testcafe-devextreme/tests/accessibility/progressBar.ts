@@ -16,7 +16,6 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   width: [undefined, '50%'],
   showStatus: [true, false],
-  elementAttr: [{ 'aria-label': 'Progress Bar' }],
 };
 
 const a11yCheckConfig = {
