@@ -40,6 +40,7 @@
     "codelyzer": "6.0.2",
     "core-js": "^2.6.12",
     "del": "^2.2.2",
+    "eslint": "8.56.0",
     "gulp": "^4.0.2",
     "gulp-header": "^2.0.0",
     "gulp-replace": "^0.6.1",
