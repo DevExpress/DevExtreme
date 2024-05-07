@@ -4,9 +4,9 @@ import { testAccessibility, Configuration } from '../../helpers/accessibility/te
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../container.html'));
+  .page(url(__dirname, '../containerQuill.html'));
 
-const markup = `<p>He<em>llo</em></p>`;
+const markup = '<p>He<em>llo</em></p>';
 
 const options: Options<Properties> = {
   value: [undefined, markup],
@@ -56,7 +56,7 @@ const options: Options<Properties> = {
         'insertColumnLeft', 'insertColumnRight', 'deleteColumn',
       ],
     },
-  ]
+  ],
 };
 
 const a11yCheckConfig = {
