@@ -53,6 +53,7 @@ import type {
 
 const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
+const SPLITTER_ITEM_HIDDEN_CONTENT_CLASS = 'dx-splitter-item-hidden-content';
 const SPLITTER_ITEM_DATA_KEY = 'dxSplitterItemData';
 const HORIZONTAL_ORIENTATION_CLASS = 'dx-splitter-horizontal';
 const VERTICAL_ORIENTATION_CLASS = 'dx-splitter-vertical';
@@ -221,7 +222,7 @@ class Splitter extends (CollectionWidget as any) {
 
     this._layout = this._getDefaultLayoutBasedOnSize();
 
-    this._applyFlexGrowFromLayout(this._layout);
+    this._applyStylesFromLayout(this._layout);
     this._updateItemSizes();
 
     this._shouldRecalculateLayout = false;
@@ -235,7 +236,7 @@ class Splitter extends (CollectionWidget as any) {
 
     if (isElementVisible(this.$element().get(0))) {
       this._layout = this._getDefaultLayoutBasedOnSize();
-      this._applyFlexGrowFromLayout(this._layout);
+      this._applyStylesFromLayout(this._layout);
 
       this._updateItemSizes();
     } else {
@@ -593,7 +594,7 @@ class Splitter extends (CollectionWidget as any) {
           this._itemRestrictions,
         );
 
-        this._applyFlexGrowFromLayout(newLayout);
+        this._applyStylesFromLayout(newLayout);
         this._layout = newLayout;
       },
       onResizeEnd: (e: ResizeEndEvent): void => {
@@ -719,7 +720,7 @@ class Splitter extends (CollectionWidget as any) {
       case 'collapsedSize':
         this._layout = this._getDefaultLayoutBasedOnSize();
 
-        this._applyFlexGrowFromLayout(this._layout);
+        this._applyStylesFromLayout(this._layout);
         this._updateItemSizes();
         break;
       case 'collapsed':
@@ -760,7 +761,7 @@ class Splitter extends (CollectionWidget as any) {
     this._collapseButton = undefined;
     this._collapsedItemSize = undefined;
 
-    this._applyFlexGrowFromLayout(this._layout);
+    this._applyStylesFromLayout(this._layout);
     this._updateItemSizes();
   }
 
@@ -810,9 +811,14 @@ class Splitter extends (CollectionWidget as any) {
     });
   }
 
-  _applyFlexGrowFromLayout(layout: number[]): void {
+  _applyStylesFromLayout(layout: number[]): void {
     this._iterateItems((index, itemElement) => {
       setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, layout[index]);
+
+      const itemData = this._getItemData(itemElement);
+      const shouldHideContent = layout[index] === 0 && itemData.visible !== false;
+
+      $(itemElement).toggleClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS, shouldHideContent);
     });
   }
 
@@ -885,7 +891,7 @@ class Splitter extends (CollectionWidget as any) {
   _dimensionChanged(): void {
     this._layout = this._getDefaultLayoutBasedOnSize();
 
-    this._applyFlexGrowFromLayout(this._layout);
+    this._applyStylesFromLayout(this._layout);
     this._updateItemSizes();
   }
 

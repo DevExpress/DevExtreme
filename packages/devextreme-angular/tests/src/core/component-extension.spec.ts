@@ -6,9 +6,8 @@ import {
   NgZone,
   PLATFORM_ID,
   Inject,
+  TransferState,
 } from '@angular/core';
-
-import { TransferState } from '@angular/platform-browser';
 
 import {
   TestBed,

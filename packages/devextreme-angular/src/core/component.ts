@@ -1,4 +1,6 @@
 import {
+  TransferState,
+  makeStateKey,
   Component,
   ElementRef,
   NgZone,
@@ -17,7 +19,6 @@ import {
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
-import { TransferState, makeStateKey } from '@angular/platform-browser';
 
 import domAdapter from 'devextreme/core/dom_adapter';
 import { triggerHandler } from 'devextreme/events';
