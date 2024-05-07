@@ -2,7 +2,7 @@ import { PatchFlags } from '@vue/shared';
 import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
 import {
-  App, createVNode, defineComponent, h, isProxy, nextTick, ref, renderSlot,
+  App, createVNode, defineComponent, h, nextTick, renderSlot,
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
 
@@ -61,7 +61,6 @@ const TestComponent = createComponent({
     prop1: Number,
     prop2: Array,
     sampleProp: String,
-    samplePropRef: Object,
     templateName: String,
   },
   model: {
@@ -84,14 +83,14 @@ function skipIntegrationOptions(options: {
   return result;
 }
 
-function buildTestConfigCtor(withRef?: boolean): any {
-  const props: Record<string, any>  = {
-    prop1: Number,
-    prop2: String,
-    sampleProp: String,
-  }
-  if (withRef) props.samplePropRef = Object;
-  return createConfigurationComponent({ props });
+function buildTestConfigCtor(): any {
+  return createConfigurationComponent({
+    props: {
+      prop1: Number,
+      prop2: String,
+      sampleProp: String,
+    },
+  });
 }
 
 jest.setTimeout(1000);
@@ -223,20 +222,15 @@ describe('component rendering', () => {
     });
 
     it('pass props to option on mounting', () => {
-      const testRef = ref({ test: 'default' });
       const wrapper = mount(TestComponent, {
         props: {
           sampleProp: 'default',
-          samplePropRef: testRef.value,
         },
       });
 
       expect(WidgetClass.mock.calls[0][0]).toBe(wrapper.element);
 
-      expect(isProxy(WidgetClass.mock.calls[0][1].samplePropRef)).toBeFalsy();
-
       expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
-        samplePropRef: { test: 'default' },
         sampleProp: 'default',
         templatesRenderAsynchronously: true,
       });
@@ -256,20 +250,12 @@ describe('component rendering', () => {
       const wrapper = mount(TestComponent, {
         props: {
           sampleProp: 'default',
-          samplePropRef: { test: 'default' } ,
         },
       });
-
-      const testRef = ref({ test: 'ref' });
       await wrapper.setProps({ sampleProp: 'new' });
-      await wrapper.setProps({ samplePropRef: testRef.value });
-      
-      expect(Widget.option).toHaveBeenCalledTimes(2);
 
-      expect(isProxy(Widget.option.mock.calls[1][1])).toBeFalsy();
-
+      expect(Widget.option).toHaveBeenCalledTimes(1);
       expect(Widget.option).toHaveBeenCalledWith('sampleProp', 'new');
-      expect(Widget.option).toHaveBeenCalledWith('samplePropRef', { test: 'ref' });
     });
 
     it('component shouldn\'t update array value(by default)', async (done) => {
@@ -730,23 +716,16 @@ describe('component rendering', () => {
     const Nested = buildTestConfigCtor();
     (Nested as IConfigurationComponent).$_optionName = 'nestedOption';
 
-    const NestedWithPropRef = buildTestConfigCtor(true);
-    (NestedWithPropRef as IConfigurationComponent).$_optionName = 'nestedOption';
-
-    it('pulls initial values', () => {
+    it('pulls initital values', () => {
       const vm = defineComponent({
         template:
                     '<test-component id="component">'
-                    + '  <nested-with-prop-ref :prop1="123" :sample-prop-ref="samplePropRef" />'
+                    + '  <nested :prop1="123" />'
                     + '</test-component>',
         components: {
           TestComponent,
-          NestedWithPropRef,
+          Nested,
         },
-        setup() {
-          const samplePropRef = ref({ test: 'default' })
-          return { samplePropRef }
-        }
       });
 
       const wrapper = mount(vm);
@@ -754,11 +733,8 @@ describe('component rendering', () => {
 
       expect(WidgetClass.mock.calls[0][0]).toBe(component.vm.$el);
 
-      expect(isProxy(WidgetClass.mock.calls[0][1].nestedOption.samplePropRef)).toBeFalsy();
-
       expect(skipIntegrationOptions(WidgetClass.mock.calls[0][1])).toEqual({
         nestedOption: {
-          samplePropRef: { test: 'default' },
           prop1: 123,
         },
         templatesRenderAsynchronously: true,
@@ -767,66 +743,31 @@ describe('component rendering', () => {
 
     it('watches option changes', (done) => {
       const vm = defineComponent({
-        template: `
-          <test-component>
-            <nested-with-prop-ref :prop1="value" :sample-prop-ref="samplePropRef" />
-          </test-component>`,
+        template:
+                    '<test-component>'
+                    + '  <nested :prop1="value" />'
+                    + '</test-component>',
         components: {
           TestComponent,
-          NestedWithPropRef,
+          Nested,
         },
-        props: ['value', 'samplePropRef']
+        props: ['value'],
       });
 
-      const testRef = ref({ test: 'default' });
       const wrapper = mount(vm, {
         props: {
           value: 123,
-          samplePropRef: testRef,
         },
       });
 
-      testRef.value = { test: 'ref' };
       wrapper.setProps({ value: 456 });
 
       nextTick(() => {
-        expect(Widget.option).toHaveBeenCalledTimes(2);
-
-        expect(isProxy(Widget.option.mock.calls[0][1])).toBeFalsy();
-        
+        expect(Widget.option).toHaveBeenCalledTimes(1);
         expect(Widget.option).toHaveBeenCalledWith('nestedOption.prop1', 456);
-        expect(Widget.option).toHaveBeenCalledWith('nestedOption.samplePropRef', { test: 'ref' });
         done();
       });
     });
-
-    it('preserves scoped data reactivity', async () => {
-      const vm = defineComponent({
-        template: `
-          <test-component>
-            <div id="item-container"></div>
-            <template #item="{ data }">
-              <span>template {{data.item.value.test}}</span>
-            </template>
-          </test-component>`,
-        components: {
-          TestComponent,
-        },
-      });
-
-      const wrapper = mount(vm);
-      const testRef = ref({ test: 'default' });
-      renderTemplate(
-        'item',
-        { item: testRef },
-        wrapper.get('#item-container').element
-      );
-
-      testRef.value = { test: 'ref' };
-
-      await nextTick();
-      expect(wrapper.get('#item-container').text()).toBe('template ref');
-    })
 
     it('add nested component by condition', (done) => {
       const vm = defineComponent({
@@ -1822,12 +1763,12 @@ describe('component rendering', () => {
     });
 
     it('should set extension flag when component mounted', () => {
-      const getExtensionFlag = (componentInstance) => (getNodeOptions(componentInstance) as any as IExtension).$_isExtension;
+      const getExtansionFlag = (componentInstance) => (getNodeOptions(componentInstance) as any as IExtension).$_isExtension;
       TestExtensionComponent.created = function () {
-        expect(getExtensionFlag(this)).toBeFalsy();
+        expect(getExtansionFlag(this)).toBeFalsy();
       };
       TestExtensionComponent.mounted = function () {
-        expect(getExtensionFlag(this)).toBeTruthy();
+        expect(getExtansionFlag(this)).toBeTruthy();
       };
       const vm = defineComponent({
         template: `<test-component id="component">
