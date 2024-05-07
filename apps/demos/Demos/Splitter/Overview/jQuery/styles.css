@@ -26,3 +26,18 @@
   color: var(--dx-texteditor-color-label);
   font-size: 10px;
 }
+
+#splitter > .dx-splitter-item:first-child > .dx-splitter-item-content:focus {
+  border-start-start-radius: 8px;
+  border-end-start-radius: 8px;
+}
+
+#splitter > .dx-splitter-item:last-child > .dx-splitter-item-content:focus {
+  border-end-end-radius: 8px;
+  border-start-end-radius: 8px;
+}
+
+.dx-splitter-item-content:focus {
+  outline: none;
+  box-shadow: inset 0 0 0 1px var(--dx-color-primary);
+}

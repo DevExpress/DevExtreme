@@ -36,11 +36,7 @@
           ></dxi-item>
 
           <ng-container *ngFor="let pane of paneContentTemplates">
-            <div
-              *dxTemplate="let data of pane.name"
-              class="pane-content"
-              tabindex="0"
-            >
+            <div *dxTemplate="let data of pane.name" tabindex="0">
               <ng-template
                 [ngTemplateOutlet]="customPaneTemplate"
                 [ngTemplateOutletContext]="{ data: data, title: pane.name }"
@@ -52,11 +48,7 @@
       </dxi-item>
 
       <ng-container *ngFor="let pane of paneContentTemplates">
-        <div
-          *dxTemplate="let data of pane.name"
-          class="pane-content"
-          tabindex="0"
-        >
+        <div *dxTemplate="let data of pane.name" tabindex="0">
           <ng-template
             [ngTemplateOutlet]="customPaneTemplate"
             [ngTemplateOutletContext]="{ data: data, title: pane.name }"
@@ -74,7 +66,7 @@
   ></dxi-item>
 
   <ng-container *ngFor="let pane of paneContentTemplates">
-    <div *dxTemplate="let data of pane.name" class="pane-content" tabindex="0">
+    <div *dxTemplate="let data of pane.name" tabindex="0">
       <ng-template
         [ngTemplateOutlet]="customPaneTemplate"
         [ngTemplateOutletContext]="{ data: data, title: pane.name }"
@@ -85,9 +77,11 @@
 </dx-splitter>
 
 <ng-template #customPaneTemplate let-data="data" let-title="title">
-  <div class="pane-title">{{ title }}</div>
-  <div class="pane-state">{{ getPaneState(data) }}</div>
-  <ng-container *ngFor="let item of filterDimensionOptions(data)">
-    <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
-  </ng-container>
+  <div class="pane-content">
+    <div class="pane-title">{{ title }}</div>
+    <div class="pane-state">{{ getPaneState(data) }}</div>
+    <ng-container *ngFor="let item of filterDimensionOptions(data)">
+      <div class="pane-option">{{ item.key }}: {{ item.value }}</div>
+    </ng-container>
+  </div>
 </ng-template>

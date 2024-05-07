@@ -1,5 +1,7 @@
 <template>
-  <DxSplitter class="splitter">
+  <DxSplitter
+    id="splitter"
+  >
     <DxItem
       :resizable="true"
       size="140px"
@@ -8,7 +10,9 @@
       template="paneContent"
     />
     <DxItem>
-      <DxSplitter orientation="vertical">
+      <DxSplitter
+        orientation="vertical"
+      >
         <DxItem
           :resizable="true"
           :collapsible="true"
@@ -84,9 +88,24 @@ import PaneContent from './PaneContent.vue';
     height: 100%;
   }
 
-  .splitter {
+  #splitter {
     border: 1px solid var(--dx-color-border);
     border-radius: 8px;
     overflow: hidden;
+  }
+
+  #splitter > .dx-splitter-item:first-child > .dx-splitter-item-content:focus {
+    border-start-start-radius: 8px;
+    border-end-start-radius: 8px;
+  }
+
+  #splitter > .dx-splitter-item:last-child > .dx-splitter-item-content:focus {
+    border-end-end-radius: 8px;
+    border-start-end-radius: 8px;
+  }
+
+  .dx-splitter-item-content:focus {
+    outline: none;
+    box-shadow: inset 0 0 0 1px var(--dx-color-primary);
   }
 </style>

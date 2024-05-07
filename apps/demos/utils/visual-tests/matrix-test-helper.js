@@ -175,16 +175,16 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
-      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      // It looks like we don't have a "close" button in the Fluent theme.
+      // Need need to update the behavior in Fluent or find another common way for all topics.
+      { demo: 'ColumnCustomization', themes: [THEME.fluent] },
+      // This test works only in simulated scrolling strategy!
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      // Scroll to const value. Not enough for other themes, because the height of elements is different.
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
-    ],
-    List: [
-      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
   },
   Angular: {
@@ -197,7 +197,6 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
@@ -206,9 +205,6 @@ const SKIPPED_TESTS = {
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
       { demo: 'EditStateManagement', themes: [THEME.fluent, THEME.material] },
-    ],
-    List: [
-      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
     Form: [
       'CustomizeItem',
@@ -232,7 +228,6 @@ const SKIPPED_TESTS = {
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
@@ -248,7 +243,6 @@ const SKIPPED_TESTS = {
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
     List: [
-      { demo: 'ItemDragging', themes: [THEME.fluent] },
       { demo: 'ListSelection', themes: [THEME.material] },
     ],
     Tabs: [
@@ -270,7 +264,6 @@ const SKIPPED_TESTS = {
       { demo: 'ZoomingAndScrollingAPI', themes: [THEME.material] },
     ],
     DataGrid: [
-      { demo: 'BatchUpdateRequest', themes: [THEME.fluent, THEME.material] },
       { demo: 'BatchEditing', themes: [THEME.fluent] },
       { demo: 'ColumnCustomization', themes: [THEME.fluent] },
       { demo: 'CustomNewRecordPosition', themes: [THEME.fluent] },
@@ -285,9 +278,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
-    ],
-    List: [
-      { demo: 'ItemDragging', themes: [THEME.fluent] },
     ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },

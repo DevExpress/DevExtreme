@@ -13,10 +13,10 @@ $(() => {
     return `${resizableText} and ${collapsibleText}`;
   };
 
-  const paneContentTemplate = function (data, paneName) {
-    const $content = createElementWithClass('', 'pane-content');
+  const paneContentTemplate = function (data, element, paneName) {
+    $(element).attr({ tabIndex: 0 });
 
-    $content.attr('tabindex', '0');
+    const $content = createElementWithClass('', 'pane-content');
 
     $content.append(createElementWithClass(paneName, 'pane-title'));
 
@@ -39,8 +39,8 @@ $(() => {
         resizable: true,
         size: '140px',
         minSize: '70px',
-        template(data) {
-          return paneContentTemplate(data, 'Left Pane');
+        template(data, index, element) {
+          return paneContentTemplate(data, element, 'Left Pane');
         },
       },
       {
@@ -52,8 +52,8 @@ $(() => {
               collapsible: true,
               maxSize: '75%',
               collapsedSize: '8%',
-              template(data) {
-                return paneContentTemplate(data, 'Central Pane');
+              template(data, index, element) {
+                return paneContentTemplate(data, element, 'Central Pane');
               },
             },
             {
@@ -66,14 +66,14 @@ $(() => {
                     collapsible: true,
                     size: '30%',
                     minSize: '5%',
-                    template(data) {
-                      return paneContentTemplate(data, 'Nested Left Pane');
+                    template(data, index, element) {
+                      return paneContentTemplate(data, element, 'Nested Left Pane');
                     },
                   },
                   {
                     collapsible: false,
-                    template(data) {
-                      return paneContentTemplate(data, 'Nested Central Pane');
+                    template(data, index, element) {
+                      return paneContentTemplate(data, element, 'Nested Central Pane');
                     },
                   },
                   {
@@ -81,8 +81,8 @@ $(() => {
                     collapsible: true,
                     size: '30%',
                     minSize: '5%',
-                    template(data) {
-                      return paneContentTemplate(data, 'Nested Right Pane');
+                    template(data, index, element) {
+                      return paneContentTemplate(data, element, 'Nested Right Pane');
                     },
                   },
                 ],
@@ -95,8 +95,8 @@ $(() => {
         size: '140px',
         resizable: false,
         collapsible: false,
-        template(data) {
-          return paneContentTemplate(data, 'Right Pane');
+        template(data, index, element) {
+          return paneContentTemplate(data, element, 'Right Pane');
         },
       },
     ],
