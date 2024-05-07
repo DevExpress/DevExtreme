@@ -398,35 +398,15 @@ QUnit.module('Checkbox', function() {
                     assert.strictEqual(this.$element.find(ICON_SELECTOR).outerHeight(), iconSize, 'icon height is resized');
                 });
 
-                QUnit.test('checkbox icon\'s font-size should be Math.ceil(iconSize * 16 / 22)', function(assert) {
-                    const iconSize = 50;
+                QUnit.test('checkbox icon\'s font-size should be equal to the checkbox\'s iconSize', function(assert) {
+                    const iconSize = 25;
 
                     this.instance.option({ iconSize, value: true });
 
-                    const newFontSize = this.$element.find(ICON_SELECTOR).css('font-size');
-                    const iconFontSizeRatio = 16 / 22;
-                    const expectedFontSize = `${Math.ceil(iconSize * iconFontSizeRatio)}px`;
-
-                    assert.strictEqual(newFontSize, expectedFontSize, 'font-size has correct value');
+                    assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), `${iconSize}px`, 'font-size equals iconSize');
                 });
 
-                QUnit.test('checkbox icon\'s font-size should decrease if "iconSize" option decrease', function(assert) {
-                    const iconSize = 10;
-
-                    this.instance.option({ iconSize, value: true });
-
-                    assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), '8px', 'font-size was decreased');
-                });
-
-                QUnit.test('checkbox icon\'s font-size should increase if "iconSize" option increase', function(assert) {
-                    const iconSize = 30;
-
-                    this.instance.option({ iconSize, value: true });
-
-                    assert.strictEqual(this.$element.find(ICON_SELECTOR).css('font-size'), '22px', 'font-size was increased');
-                });
-
-                QUnit.test('checkbox root element size should adjust to "iconSize" options if "widht"/"height" options are not specified', function(assert) {
+                QUnit.test('checkbox root element size should adjust to "iconSize" options if "width"/"height" options are not specified', function(assert) {
                     const iconSize = 45;
                     this.instance.option({ iconSize });
 
@@ -445,10 +425,12 @@ QUnit.module('Checkbox', function() {
                     assert.strictEqual(this.$element.css('height'), `${height}px`, 'root element height not equals icon height');
                 });
 
-                [14, '14', '14px', '50%'].forEach((value) => {
-                    QUnit.test(`checkbox "iconSize" option should correctly apply value in format ${value}`, function(assert) {
-                        this.instance.option({ width: 28, height: 28, iconSize: value });
-                        assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${value} option value`);
+                [true, false, null].forEach((value) => {
+                    [14, '14', '14px', '100%'].forEach((iconSize) => {
+                        QUnit.test(`checkbox "iconSize" option should correctly apply ${iconSize} as iconSize with ${value} value`, function(assert) {
+                            this.instance.option({ width: 28, height: 28, iconSize: iconSize, value: value });
+                            assert.strictEqual(this.$element.find(ICON_SELECTOR).outerWidth(), 14, `icon got expected width from ${iconSize} option value`);
+                        });
                     });
                 });
             });

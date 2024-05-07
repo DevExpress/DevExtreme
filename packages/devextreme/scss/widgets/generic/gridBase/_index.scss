@@ -5,6 +5,7 @@
 @use "sizes" as *;
 @use "../sizes" as *;
 @use "../../base/icons" as *;
+@use "../../base/checkBox/mixins" as *;
 @use "../dropDownEditor" as *;
 @use "../textEditor" as *;
 @use "../common/mixins" as *;
@@ -285,18 +286,22 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
   .dx-#{$widget-name}-checkbox-size {
     padding-bottom: $generic-grid-base-checkbox-padding-bottom;
 
-    &.dx-checkbox-checked .dx-checkbox-icon {
-      font-size: $generic-grid-base-checkbox-fontsize;
+    .dx-checkbox-icon {
+      font-size: $generic-grid-base-checkbox-icon-size;
     }
 
-    .dx-checkbox-icon {
-      height: $generic-grid-base-checkbox-icon-size;
-      width: $generic-grid-base-checkbox-icon-size;
+    &.dx-checkbox-checked {
+      .dx-checkbox-icon {
+        &::before {
+          font-size: $generic-grid-base-checkbox-fontsize;
+        }
+      }
+
     }
 
     &.dx-checkbox-indeterminate {
       .dx-checkbox-icon {
-        font-size: $generic-grid-base-checkbox-indeterminate-icon-size;
+        @include dx-checkbox-icon-centered($generic-grid-base-checkbox-indeterminate-icon-size, $generic-grid-base-checkbox-indeterminate-icon-size);
 
         &::before {
           border-radius: 0;
