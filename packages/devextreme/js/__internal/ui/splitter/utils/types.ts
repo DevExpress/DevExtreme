@@ -31,6 +31,8 @@ export interface EventMap {
   onResizeEnd: ResizeEndEvent;
   onItemExpanded: ItemExpandedEvent;
   onItemCollapsed: ItemCollapsedEvent;
+  onCollapsePrev: ItemExpandedEvent;
+  onCollapseNext: ItemCollapsedEvent;
 }
 
 export type HandlerMap = {

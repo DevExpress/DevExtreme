@@ -78,30 +78,34 @@ const ORIENTATION: Record<string, Orientation> = {
   vertical: 'vertical',
 };
 
-class Splitter extends CollectionWidget<Properties, Item> {
+class Splitter extends CollectionWidget<Properties> {
   static ItemClass = SplitterItem;
 
   private _renderQueue: RenderQueueItem[] = [];
 
-  private _panesCacheSize!: Record<string, number | undefined>;
+  private _panesCacheSize: Record<string, number | undefined> = {};
 
-  private _collapsedItemSize!: number | undefined;
+  private _collapsedItemSize?: number;
 
-  private _shouldRecalculateLayout!: boolean;
+  private _shouldRecalculateLayout = false;
 
-  private _layout!: number[];
+  private _layout?: number[];
 
-  private _currentLayout!: number[];
+  private _currentLayout?: number[];
 
-  private _activeResizeHandleIndex!: number;
+  private _activeResizeHandleIndex = -1;
 
-  private _collapseButton!: string | undefined;
+  private _collapseButton?: string;
 
-  private _itemRestrictions!: PaneRestrictions[];
+  private _itemRestrictions: PaneRestrictions[] = [];
 
-  private _currentOnePxRatio: number | undefined;
+  private _currentOnePxRatio?: number;
 
-  private _feedbackDeferred!: DeferredObj<unknown>;
+  private _feedbackDeferred?: DeferredObj<unknown>;
+
+  get layout(): number[] {
+    return this._layout ?? [];
+  }
 
   _getDefaultOptions(): Properties {
     return {
@@ -368,7 +372,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
     return this._editStrategy.getItemDataByIndex(index);
   }
 
-  _createEventAction(eventName: string): void {
+  _createEventAction(eventName: keyof HandlerMap): void {
     const actionName = getActionNameByEventName(eventName);
 
     // @ts-expect-error badly typed Component class
@@ -386,7 +390,6 @@ class Splitter extends CollectionWidget<Properties, Item> {
       this._createEventAction(eventName);
     }
 
-    // TODO: improve
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return this[actionName];
   }
@@ -433,7 +436,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
               // @ts-expect-error badly typed base class
               // eslint-disable-next-line max-depth
               if (this.option('items')[i].collapsed !== true) {
-                this._collapsedItemSize = this._layout[i] / 2;
+                this._collapsedItemSize = this.layout[i] / 2;
               }
             }
           }
@@ -451,8 +454,8 @@ class Splitter extends CollectionWidget<Properties, Item> {
           return;
         }
 
-        this._panesCacheSize[leftItemIndex] = this._layout[leftItemIndex];
-        this._collapsedItemSize = this._layout[leftItemIndex];
+        this._panesCacheSize[leftItemIndex] = this.layout[leftItemIndex];
+        this._collapsedItemSize = this.layout[leftItemIndex];
 
         this._updateItemData('collapsed', leftItemIndex, true, false);
 
@@ -490,7 +493,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
               // @ts-expect-error badly typed base class
               // eslint-disable-next-line max-depth
               if (this.option('items')[i].collapsed !== true) {
-                this._collapsedItemSize = this._layout[i] / 2;
+                this._collapsedItemSize = this.layout[i] / 2;
               }
             }
           }
@@ -509,8 +512,8 @@ class Splitter extends CollectionWidget<Properties, Item> {
           return;
         }
 
-        this._panesCacheSize[rightItemIndex] = this._layout[rightItemIndex];
-        this._collapsedItemSize = this._layout[rightItemIndex];
+        this._panesCacheSize[rightItemIndex] = this.layout[rightItemIndex];
+        this._collapsedItemSize = this.layout[rightItemIndex];
 
         this._updateItemData('collapsed', rightItemIndex, true, false);
 
@@ -558,7 +561,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
           this._getResizeHandlesSize(),
         );
 
-        this._currentLayout = this._layout;
+        this._currentLayout = this.layout;
 
         this._updateItemsRestrictions();
       },
@@ -581,7 +584,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
         }
 
         const newLayout = getNextLayout(
-          this._currentLayout,
+          this._currentLayout ?? [],
           calculateDelta(
             // @ts-expect-error ts-error
             event.offset,
@@ -617,7 +620,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
         }
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
-        this._feedbackDeferred.resolve();
+        this._feedbackDeferred?.resolve();
         // @ts-expect-error badly typed Parent classes
         this._toggleActiveState($resizeHandle, false);
 
@@ -697,7 +700,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
       case 'collapsedSize':
         this._layout = this._getDefaultLayoutBasedOnSize();
 
-        this._applyStylesFromLayout(this._layout);
+        this._applyStylesFromLayout(this.layout);
         this._updateItemSizes();
         break;
       case 'collapsed':
@@ -726,7 +729,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
 
     if (isDefined(this._collapsedItemSize)) {
       this._layout = getNextLayout(
-        this._layout,
+        this.layout,
         this._getCollapseDelta(item),
         this._activeResizeHandleIndex,
         this._itemRestrictions,
@@ -739,7 +742,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
     this._collapseButton = undefined;
     this._collapsedItemSize = undefined;
 
-    this._applyStylesFromLayout(this._layout);
+    this._applyStylesFromLayout(this.layout);
     this._updateItemSizes();
   }
 
@@ -869,7 +872,7 @@ class Splitter extends CollectionWidget<Properties, Item> {
   _dimensionChanged(): void {
     this._layout = this._getDefaultLayoutBasedOnSize();
 
-    this._applyStylesFromLayout(this._layout);
+    this._applyStylesFromLayout(this.layout);
     this._updateItemSizes();
   }
 

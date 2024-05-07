@@ -29,7 +29,7 @@ declare class Base<
 
   _getItemData(item: Element | HTMLElement | dxElementWrapper): TItem;
   _getIndexByItem(item: TItem): number;
-  _findItemElementByItem(item: HTMLElement);
+  _findItemElementByItem(item: TItem): dxElementWrapper;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
