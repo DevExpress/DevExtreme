@@ -384,7 +384,7 @@ QUnit.module('setter', () => {
         );
 
         assert.equal(obj1.sub.person.firstName, 'Doe');
-        assert.equal(obj1.sub.person.lastName, undefined);
+        assert.equal(obj1.sub.person.lastName, 'Smith');
     });
 
     test('plain objects are cloned if previous value is null (T521407)', function(assert) {

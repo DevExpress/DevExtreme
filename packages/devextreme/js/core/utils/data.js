@@ -164,7 +164,7 @@ export const compileSetter = function(expr) {
             if(levelIndex === lastLevelIndex) {
                 if(options.merge && isPlainObject(value) && (!isDefined(propertyValue) || isPlainObject(propertyValue))) {
                     propertyValue = ensurePropValueDefined(currentValue, propertyName, propertyValue, options);
-                    deepExtendArraySafe(propertyValue, value, false, true);
+                    deepExtendArraySafe(propertyValue, value, true, true);
                 } else if(isPropertyFunc) {
                     currentValue[propertyName](value);
                 } else {
