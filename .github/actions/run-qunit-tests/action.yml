@@ -80,6 +80,19 @@ runs:
       with:
         node-version: '20'
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      shell: bash
+      run: |
+        rm -rf artifacts/npm
+        7z x artifacts.zip
+
     - uses: pnpm/action-setup@v3
       with:
         version: 9
@@ -101,19 +114,6 @@ runs:
     - name: Install dependencies
       shell: bash
       run: pnpm install
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      shell: bash
-      run: |
-        rm -rf artifacts/npm
-        7z x artifacts.zip
 
     - name: Build dotnet
       working-directory: ./packages/devextreme
