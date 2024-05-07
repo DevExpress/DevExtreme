@@ -9,6 +9,7 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   value: [45],
   disabled: [true, false],
+  readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: ['', 'name'],
   height: [undefined, 250],
@@ -26,17 +27,6 @@ const options: Options<Properties> = {
         return `${value}%`;
       },
       position: 'top',
-    },
-  ],
-  tooltip: [
-    undefined,
-    {
-      enabled: true,
-      format(value) {
-        return `${value}%`;
-      },
-      showMode: 'always',
-      position: 'bottom',
     },
   ],
 };
