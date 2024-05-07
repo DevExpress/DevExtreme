@@ -701,9 +701,30 @@ importers:
 
   e2e/testcafe-devextreme:
     devDependencies:
+      '@testcafe-community/axe':
+        specifier: 3.5.0
+        version: 3.5.0(axe-core@4.9.0)(testcafe@2.5.0(encoding@0.1.13))
+      '@types/jquery':
+        specifier: 3.5.29
+        version: 3.5.29
+      axe-core:
+        specifier: 4.9.0
+        version: 4.9.0
       devextreme:
         specifier: 24.1.1
         version: link:../../packages/devextreme/artifacts/npm/devextreme
+      devextreme-screenshot-comparer:
+        specifier: 2.0.17
+        version: 2.0.17(testcafe@2.5.0(encoding@0.1.13))
+      devextreme-testcafe-models:
+        specifier: '*'
+        version: link:../../packages/testcafe-models
+      minimist:
+        specifier: 1.2.8
+        version: 1.2.8
+      nconf:
+        specifier: 0.12.1
+        version: 0.12.1
       testcafe:
         specifier: 2.5.0
         version: 2.5.0(encoding@0.1.13)

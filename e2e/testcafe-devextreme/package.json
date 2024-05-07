@@ -7,7 +7,14 @@
     "update-failed-etalons": "node update_failed_etalons.mjs"
   },
   "devDependencies": {
+    "@testcafe-community/axe": "3.5.0",
+    "@types/jquery": "3.5.29",
+    "axe-core": "4.9.0",
     "devextreme": "24.1.1",
+    "devextreme-screenshot-comparer": "2.0.17",
+    "devextreme-testcafe-models": "*",
+    "minimist": "1.2.8",
+    "nconf": "0.12.1",
     "testcafe": "2.5.0"
   }
 }
