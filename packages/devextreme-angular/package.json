@@ -24,7 +24,6 @@
     "devextreme": "~24.1.1"
   },
   "devDependencies": {
-    "@webcomponents/custom-elements": "^1.6.0",
     "@angular/animations": "^16.2.10",
     "@angular/cli": "^16.2.10",
     "@angular/common": "^16.2.10",
@@ -37,6 +36,7 @@
     "@angular/platform-server": "^16.2.12",
     "@types/jasmine": "2.8.23",
     "@types/node": "~20.11.0",
+    "@webcomponents/custom-elements": "^1.6.0",
     "codelyzer": "6.0.2",
     "core-js": "^2.6.12",
     "del": "^2.2.2",
@@ -53,6 +53,7 @@
     "karma-webpack": "^5.0.0",
     "ng-packagr": "16.2.0",
     "puppeteer": "^19.11.1",
+    "reflect-metadata": "0.1.13",
     "rxjs": "^6.6.7",
     "stream-browserify": "^3.0.0",
     "tslib": "^2.6.1",
