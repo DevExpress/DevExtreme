@@ -53,8 +53,6 @@
     "@types/yargs": "^17.0.32",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
-    "devextreme": "~24.1.1",
-    "devextreme-dist": "~24.1.1",
     "devextreme-internal-tools": "14.0.0-beta.1",
     "http-server": "14.1.1",
     "husky": "^8.0.3",

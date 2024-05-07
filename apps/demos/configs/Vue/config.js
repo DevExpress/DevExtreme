@@ -37,14 +37,15 @@ window.config = {
     /**/
   },
   paths: {
-    'root:': '../../../../',
-    'npm:': '../../../../../../node_modules/',
+    'project:': '../../../../',
+    'npm:': '../../../../node_modules/',
+    'root:': '../../../../../../node_modules/',
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
-    'demo-ts-loader': 'root:utils/demo-ts-loader.js',
-    'svg-loader': 'root:utils/svg-loader.js',
+    'demo-ts-loader': 'project:utils/demo-ts-loader.js',
+    'svg-loader': 'project:utils/svg-loader.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs',
@@ -117,7 +118,7 @@ window.config = {
     'es6-object-assign': 'npm:es6-object-assign',
 
     'devextreme': 'npm:devextreme/cjs',
-    'devextreme-vue': 'npm:devextreme-vue/cjs',
+    'devextreme-vue': 'root:devextreme-vue/cjs',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
