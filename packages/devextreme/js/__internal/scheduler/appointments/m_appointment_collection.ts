@@ -21,7 +21,6 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import { addNamespace, isFakeClickEvent } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
-import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
@@ -29,6 +28,7 @@ import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT
 import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import { ExpressionUtils } from '../m_expression_utils';
 import { getRecurrenceProcessor } from '../m_recurrence';
+import timeZoneUtils from '../m_utils_time_zone';
 import { getAppointmentTakesSeveralDays, sortAppointmentsByStartDate } from './data_provider/m_utils';
 import { AgendaAppointment, Appointment } from './m_appointment';
 import { createAgendaAppointmentLayout, createAppointmentLayout } from './m_appointment_layout';

@@ -9,6 +9,7 @@ import { name as DOUBLE_CLICK_EVENT } from '@js/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
+import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
 import {
@@ -17,8 +18,9 @@ import {
   RESIZE_EVENT,
 } from './utils/event';
 import type {
-  HandlerMap, InteractionEvent, ResizeHandleOptions, ResizeOffset,
+  HandlerMap, InteractionEvent, ResizeOffset,
 } from './utils/types';
+import { ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/splitter';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_RESIZABLE_CLASS = 'dx-resize-handle-resizable';
@@ -32,14 +34,26 @@ const STATE_INVISIBLE_CLASS = 'dx-state-invisible';
 
 const RESIZE_HANDLER_MODULE_NAMESPACE = 'dxResizeHandle';
 
+const KEYBOARD_DELTA = 5;
+const DEFAULT_RESIZE_HANDLE_SIZE = 8;
+const INACTIVE_RESIZE_HANDLE_SIZE = 2;
+
 const RESIZE_DIRECTION: Record<string, DragDirection> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
-
-const KEYBOARD_DELTA = 5;
-const DEFAULT_RESIZE_HANDLE_SIZE = 8;
-const INACTIVE_RESIZE_HANDLE_SIZE = 2;
+export interface ResizeHandleOptions extends WidgetOptions<ResizeHandle> {
+  direction?: DragDirection;
+  onResize?: ((e: ResizeEvent) => void);
+  onResizeEnd?: ((e: ResizeEndEvent) => void);
+  onResizeStart?: ((e: ResizeStartEvent) => void);
+  resizable?: boolean;
+  showCollapsePrev?: boolean;
+  showCollapseNext?: boolean;
+  onCollapsePrev?: ((e: ItemCollapsedEvent) => void);
+  onCollapseNext?: ((e: ItemExpandedEvent) => void);
+  separatorSize?: number;
+}
 
 class ResizeHandle extends Widget<ResizeHandleOptions> {
   private _$collapsePrevButton?: dxElementWrapper;
@@ -231,7 +245,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    // @ts-expect-error null is not assignable value
+    // @ts-expect-error
     this.option(inverseDimension, null);
     this.option(dimension, this.getSize());
   }

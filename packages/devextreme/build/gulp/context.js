@@ -3,8 +3,8 @@
 // See tests in version-spec.js
 
 const argv = require('yargs')
-    .default('uglify', false)
-    .argv;
+    .option('uglify', { type: 'boolean', default: false })
+    .parseSync();
 
 const version = require('../../package.json').version;
 

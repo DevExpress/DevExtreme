@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { dxElementWrapper } from '@js/core/renderer';
 import Widget from '@js/ui/widget/ui.widget';
 
 interface AriaOptions {
@@ -20,6 +21,8 @@ declare class TWidget<TProperties> extends Widget<TProperties> {
 
   _getDefaultOptions(): TProperties;
   _optionChanged(args: Record<string, unknown>): void;
+
+  _toggleActiveState($element: dxElementWrapper, value: boolean): void;
 
   // component
   _init(): void;

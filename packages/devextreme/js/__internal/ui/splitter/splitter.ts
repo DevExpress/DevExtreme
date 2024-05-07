@@ -18,14 +18,16 @@ import type {
   Item,
   ItemCollapsedEvent,
   ItemExpandedEvent,
-  Properties,
+  Properties as PublicProperties,
   ResizeEndEvent,
   ResizeEvent,
   ResizeStartEvent,
 } from '@js/ui/splitter';
 import CollectionWidget from '@ts/ui/collection/live_update';
 
+import type { TypedCollectionWidgetOptions } from '../collection/base';
 import type ResizeHandle from './resize_handle';
+import type { ResizeHandleOptions } from './resize_handle';
 import { RESIZE_HANDLE_CLASS } from './resize_handle';
 import SplitterItem from './splitter_item';
 import { getComponentInstance } from './utils/component';
@@ -52,7 +54,6 @@ import type {
   HandlerMap,
   PaneRestrictions,
   RenderQueueItem,
-  ResizeHandleOptions,
 } from './utils/types';
 
 const SPLITTER_CLASS = 'dx-splitter';
@@ -78,6 +79,22 @@ const ORIENTATION: Record<string, Orientation> = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 };
+
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type ItemLike<TKey> = string | Item<TKey> | any;
+
+export interface Properties<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TItem extends ItemLike<TKey> = any,
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  TKey = any,
+> extends PublicProperties<TItem, TKey>,
+  Omit<
+  TypedCollectionWidgetOptions<Splitter, TItem, TKey>,
+  keyof PublicProperties<TItem, TKey> & keyof TypedCollectionWidgetOptions<Splitter, TItem, TKey>
+  > {
+  _renderQueue?: RenderQueueItem[];
+}
 
 class Splitter extends CollectionWidget<Properties> {
   static ItemClass = SplitterItem;
@@ -109,23 +126,25 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _getDefaultOptions(): Properties {
-    return {
-      // @ts-expect-error badly typed Component class
-      ...super._getDefaultOptions(),
-      ...{
-        orientation: ORIENTATION.horizontal,
-        onItemCollapsed: null,
-        onItemExpanded: null,
-        onResize: null,
-        onResizeEnd: null,
-        onResizeStart: null,
-        allowKeyboardNavigation: true,
-        separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
+    const defaultOptions = super._getDefaultOptions();
 
-        _itemAttributes: { role: 'group' },
-        _renderQueue: undefined,
+    return {
+      ...defaultOptions,
+      orientation: ORIENTATION.horizontal,
+      onItemCollapsed: undefined,
+      onItemExpanded: undefined,
+      onResize: undefined,
+      onResizeEnd: undefined,
+      onResizeStart: undefined,
+      allowKeyboardNavigation: true,
+      separatorSize: DEFAULT_RESIZE_HANDLE_SIZE,
+
+      _itemAttributes: {
+        ...defaultOptions._itemAttributes,
+        role: 'group',
       },
-    } as Properties;
+      _renderQueue: undefined,
+    };
   }
 
   _itemClass(): string {
@@ -137,14 +156,13 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _init(): void {
-    // @ts-expect-error badly typed Component class
     super._init();
 
     this._initializeRenderQueue();
   }
 
   _initializeRenderQueue(): void {
-    this._renderQueue = this.option('_renderQueue') as RenderQueueItem[] ?? [];
+    this._renderQueue = this.option('_renderQueue') ?? [];
   }
 
   _isRenderQueueEmpty(): boolean {
@@ -167,7 +185,6 @@ class Splitter extends CollectionWidget<Properties> {
 
     this._toggleOrientationClass();
 
-    // @ts-expect-error badly typed DomComponent class
     super._initMarkup();
 
     this._panesCacheSize = {};
@@ -538,10 +555,8 @@ class Splitter extends CollectionWidget<Properties> {
           return;
         }
 
-        // @ts-expect-error ts-error
-        this._feedbackDeferred = new Deferred();
+        this._feedbackDeferred = Deferred();
         lock(this._feedbackDeferred);
-        // @ts-expect-error badly typed Widget class
         this._toggleActiveState($resizeHandle, true);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
@@ -615,7 +630,6 @@ class Splitter extends CollectionWidget<Properties> {
 
         // eslint-disable-next-line @typescript-eslint/no-floating-promises
         this._feedbackDeferred?.resolve();
-        // @ts-expect-error badly typed Parent classes
         this._toggleActiveState($resizeHandle, false);
 
         this._updateItemSizes();
@@ -876,7 +890,6 @@ class Splitter extends CollectionWidget<Properties> {
     switch (name) {
       case 'width':
       case 'height':
-        // @ts-expect-error badly typed Component class
         super._optionChanged(args);
 
         this._dimensionChanged();
@@ -907,7 +920,6 @@ class Splitter extends CollectionWidget<Properties> {
         this._invalidate();
         break;
       default:
-        // @ts-expect-error badly typed Component class
         super._optionChanged(args);
     }
   }
@@ -921,7 +933,7 @@ class Splitter extends CollectionWidget<Properties> {
   }
 }
 
-// @ts-expect-error // temp fix
+// @ts-expect-error ts-error
 registerComponent('dxSplitter', Splitter);
 
 export default Splitter;

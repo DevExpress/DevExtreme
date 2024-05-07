@@ -6,7 +6,7 @@ import { errors as dataErrors } from 'data/errors';
 import typeUtils from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import { setupDataGridModules, MockGridDataSource } from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';

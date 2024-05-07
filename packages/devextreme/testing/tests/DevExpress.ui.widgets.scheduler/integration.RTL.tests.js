@@ -2,7 +2,7 @@ import fx from 'animation/fx';
 import { createWrapper, initTestMarkup, isDesktopEnvironment } from '../../helpers/scheduler/helpers.js';
 import translator from 'animation/translator';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
 
 const { test, module, testStart } = QUnit;

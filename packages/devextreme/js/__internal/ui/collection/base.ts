@@ -1,15 +1,31 @@
 import type { dxElementWrapper } from '@js/core/renderer';
+import type DataSource from '@js/data/data_source';
 import type { CollectionWidgetOptions, ItemLike } from '@js/ui/collection/ui.collection_widget.base';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.base';
 
-declare class Base<
+import Widget from '../widget';
+
+export interface TypedCollectionWidgetOptions<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    TProperties extends CollectionWidgetOptions<any, TItem, TKey>,
+    TComponent extends CollectionWidget<any, TItem, TKey> | any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TItem extends ItemLike = any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey = any,
-> extends CollectionWidget<TProperties> {
+> extends CollectionWidgetOptions<TComponent, TItem, TKey> {
+  _itemAttributes?: Record<string, string>;
+}
+
+declare class Base<
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TProperties extends TypedCollectionWidgetOptions<any, TItem, TKey>,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TItem extends ItemLike = any,
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    TKey = any,
+> extends Widget<TProperties> {
+  getDataSource(): DataSource<TItem, TKey>;
+
   _renderItems(items: unknown): void;
   _renderItem(
     index: number,

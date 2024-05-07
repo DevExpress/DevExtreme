@@ -6,7 +6,7 @@ const keyboardMock = require('../../helpers/keyboardMock.js');
 const dataUtils = require('core/element_data');
 
 require('generic_light.css!');
-require('ui/scheduler/ui.scheduler');
+require('__internal/scheduler/m_scheduler');
 require('ui/drop_down_button');
 
 QUnit.testStart(function() {

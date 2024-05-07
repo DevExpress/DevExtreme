@@ -14,10 +14,9 @@ import {
     Host,
     SkipSelf,
     AfterViewInit,
-    PLATFORM_ID
+    PLATFORM_ID,
+    TransferState,
 } from '@angular/core';
-
-import { TransferState } from '@angular/platform-browser';
 
 import { DOCUMENT } from '@angular/common';
 
