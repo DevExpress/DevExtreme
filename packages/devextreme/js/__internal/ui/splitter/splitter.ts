@@ -87,7 +87,7 @@ class Splitter extends CollectionWidget<Properties> {
 
   private _collapsedItemSize?: number;
 
-  private _shouldRecalculateLayout = false;
+  private _shouldRecalculateLayout?: boolean;
 
   private _layout?: number[];
 
@@ -268,19 +268,13 @@ class Splitter extends CollectionWidget<Properties> {
   ): dxElementWrapper {
     const $itemFrame = super._renderItem(index, itemData, $container, $itemToReplace);
 
-    const itemElement = $itemFrame.get(0);
-    // todo: think
-    // @ts-expect-error badly typed base class
-    setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 100 / this.option('items').length);
-    // @ts-expect-error badly typed base class
+    const itemElement = $itemFrame.get(0) as HTMLElement;
+
     setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
-    // @ts-expect-error badly typed base class
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
     this._getItemInstance($itemFrame)._renderResizeHandle();
 
-    // TODO: any type
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return $itemFrame;
   }
 

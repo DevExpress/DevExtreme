@@ -10,20 +10,18 @@ import type Splitter from './splitter';
 class SplitterItem extends CollectionWidgetItem {
   private readonly _$element?: dxElementWrapper;
 
-  _options!: {
-    owner: Splitter;
-    _resizeHandle: ResizeHandle;
-    _id: string;
-  };
+  _owner: Splitter;
 
   _rawData?: Item;
 
+  _resizeHandle?: ResizeHandle;
+
   get owner(): Splitter {
-    return this._options.owner;
+    return this._owner;
   }
 
-  get resizeHandle(): ResizeHandle {
-    return this._options._resizeHandle;
+  get resizeHandle(): ResizeHandle | undefined {
+    return this._resizeHandle;
   }
 
   get option(): Item | undefined {
@@ -36,18 +34,29 @@ class SplitterItem extends CollectionWidgetItem {
     return this.owner._getIndexByItemData(this.option);
   }
 
+  constructor(
+    $element: dxElementWrapper,
+    options: {
+      owner: Splitter;
+    },
+    rawData: Item,
+  ) {
+    super($element, options, rawData);
+
+    this._owner = options.owner;
+  }
+
   _renderResizeHandle(): void {
     if (this.option?.visible !== false && !this.isLast()) {
       const id = `dx_${new Guid()}`;
-      this._options._id = id;
 
       this._setIdAttr(id);
 
-      const config = this.owner._getResizeHandleConfig(this._options._id);
+      const config = this.owner._getResizeHandleConfig(id);
       // @ts-expect-error badly typed base class
-      this._options._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
+      this._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
 
-      if (this._$element) {
+      if (this.resizeHandle && this._$element) {
         $(this.resizeHandle.element()).insertAfter(this._$element);
       }
     }
