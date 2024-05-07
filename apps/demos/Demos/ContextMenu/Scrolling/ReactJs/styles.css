@@ -8,10 +8,7 @@ body {
   margin: 0;
 }
 
-#app {
-  height: 100%;
-}
-
+#app,
 .demo-container {
   height: 100%;
 }

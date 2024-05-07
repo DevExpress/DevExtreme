@@ -22,13 +22,16 @@ function itemClick({ itemData }: DxContextMenuTypes.ItemClickEvent) {
 </script>
 <style>
 html,
-body,
-#app {
+body {
   width: 100%;
   height: 100%;
+}
+
+body {
   margin: 0;
 }
 
+#app ,
 .demo-container {
   height: 100%;
 }
