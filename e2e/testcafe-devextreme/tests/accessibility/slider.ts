@@ -9,7 +9,6 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   value: [45],
   disabled: [true, false],
-  readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: ['', 'name'],
   height: [undefined, 250],
@@ -47,19 +46,10 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
-const created = async (t: TestController, optionConfiguration): Promise<void> => {
-  const { disabled, readOnly } = optionConfiguration;
-
-  if (disabled || readOnly) {
-    return;
-  }
-};
-
 const configuration: Configuration = {
   component: 'dxSlider',
   a11yCheckConfig,
   options,
-  created,
 };
 
 testAccessibility(configuration);
