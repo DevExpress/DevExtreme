@@ -51,7 +51,7 @@ jobs:
 
     - name: Run targets
       run: >
-        npx nx run-many
+        pnpx nx run-many
         -t test
         --exclude
         devextreme

@@ -185,7 +185,7 @@ jobs:
       matrix:
         include:
           - name: Lint code base (excluding demos)
-            command: npm run lint-non-demos
+            command: pnpm run lint-non-demos
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos

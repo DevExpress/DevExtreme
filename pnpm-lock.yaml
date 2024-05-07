@@ -1514,6 +1514,10 @@ importers:
       testcafe:
         specifier: '*'
         version: 2.5.0(encoding@0.1.13)
+    devDependencies:
+      devextreme:
+        specifier: 24.1.1
+        version: link:../devextreme/artifacts/npm/devextreme
 
 packages:
 
@@ -22018,7 +22022,7 @@ snapshots:
   '@types/glob@7.2.0':
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 20.11.17
+      '@types/node': 20.12.8
 
   '@types/graceful-fs@4.1.9':
     dependencies:

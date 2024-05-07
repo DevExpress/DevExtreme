@@ -251,8 +251,8 @@ const transpileJsVendors = async() => {
 
 
     [].concat(
-        getFileList(path.join(root, '../..', 'node_modules/devextreme-cldr-data')),
-        getFileList(path.join(root, '../..', 'node_modules/cldr-core/supplemental'))
+        getFileList(path.join(root, 'node_modules/devextreme-cldr-data')),
+        getFileList(path.join(root, 'node_modules/cldr-core/supplemental'))
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {

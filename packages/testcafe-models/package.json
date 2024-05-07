@@ -2,5 +2,8 @@
   "name": "devextreme-testcafe-models",
   "peerDependencies": {
     "testcafe": "*"
+  },
+  "devDependencies": {
+    "devextreme": "24.1.1"
   }
 }
