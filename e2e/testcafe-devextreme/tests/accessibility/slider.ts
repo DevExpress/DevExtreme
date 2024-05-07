@@ -47,10 +47,19 @@ const a11yCheckConfig = {
   rules: { 'color-contrast': { enabled: false } },
 };
 
+const created = async (t: TestController, optionConfiguration): Promise<void> => {
+  const { disabled, readOnly } = optionConfiguration;
+
+  if (disabled || readOnly) {
+    return;
+  }
+};
+
 const configuration: Configuration = {
   component: 'dxSlider',
   a11yCheckConfig,
   options,
+  created,
 };
 
 testAccessibility(configuration);
