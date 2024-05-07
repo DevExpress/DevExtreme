@@ -45,10 +45,6 @@ const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
-const toSelector = cssClass => {
-    return '.' + cssClass;
-};
-
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
         assert.ok(true, 'skip this test on mobile devices');
