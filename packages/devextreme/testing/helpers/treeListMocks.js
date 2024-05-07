@@ -7,7 +7,7 @@ if(typeof define === 'function' && define.amd) {
 
         window.treeListMocks = module.exports = gridBaseMock(
             require('jquery'),
-            require('__internal/grids/tree_list/m_core'),
+            require('__internal/grids/tree_list/m_core').default,
             null,
             require('core/utils/dom'),
             require('core/utils/common'),
