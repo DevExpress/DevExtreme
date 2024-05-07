@@ -1,4 +1,4 @@
-
+// STYLE dataGrid
 import DataGrid from '../__internal/grids/data_grid/m_widget';
 // NOTE: This redundant import allows to build
 // dependencies between components correctly by theme-builder

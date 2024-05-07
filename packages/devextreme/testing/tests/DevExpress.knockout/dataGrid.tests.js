@@ -3,7 +3,7 @@ import ko from 'knockout';
 import { DataSource } from 'data/data_source/data_source';
 import { logger } from 'core/utils/console';
 import fx from 'animation/fx';
-import dataSourceAdapter from 'ui/data_grid/ui.data_grid.data_source_adapter';
+import dataSourceAdapter from '__internal/grids/data_grid/m_data_source_adapter';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
 import 'ui/data_grid';

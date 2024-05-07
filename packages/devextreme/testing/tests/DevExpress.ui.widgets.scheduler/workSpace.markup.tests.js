@@ -4,7 +4,7 @@ import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspace
 import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_vertical';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 import 'generic_light.css!';
 

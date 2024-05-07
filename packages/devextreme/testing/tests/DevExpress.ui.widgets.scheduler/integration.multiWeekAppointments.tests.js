@@ -6,7 +6,7 @@ import Color from 'color';
 import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
 
 const { testStart } = QUnit;
