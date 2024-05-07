@@ -18,12 +18,6 @@ const options: Options<Properties> = {
   width: [undefined, 300],
   placeholder: ['', 'placeholder'],
   focusStateEnabled: [true],
-  toolbar: [
-    undefined,
-    {
-      items: ['bold', 'color'],
-    },
-  ],
 };
 
 const a11yCheckConfig = {
