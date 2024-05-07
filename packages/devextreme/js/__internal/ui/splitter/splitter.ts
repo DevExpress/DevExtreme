@@ -42,6 +42,7 @@ import {
   findLastIndexOfVisibleItem,
   getElementSize,
   getNextLayout,
+  isElementVisible,
   setFlexProp,
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
@@ -210,8 +211,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    const isElementVisible = $(this.element()).filter(':visible').length !== 0;
-    if (isElementVisible) {
+    if (isElementVisible(this.element())) {
       this._layout = this._getDefaultLayoutBasedOnSize();
       this._applyStylesFromLayout(this._layout);
 
