@@ -9,6 +9,9 @@ import { name as DOUBLE_CLICK_EVENT } from '@js/events/double_click';
 import { end as dragEventEnd, move as dragEventMove, start as dragEventStart } from '@js/events/drag';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
+import type {
+  ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent,
+} from '@js/ui/splitter';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
@@ -20,7 +23,6 @@ import {
 import type {
   HandlerMap, InteractionEvent, ResizeOffset,
 } from './utils/types';
-import { ItemCollapsedEvent, ItemExpandedEvent, ResizeEndEvent, ResizeEvent, ResizeStartEvent } from '@js/ui/splitter';
 
 export const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 const RESIZE_HANDLE_RESIZABLE_CLASS = 'dx-resize-handle-resizable';
@@ -245,7 +247,7 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
     const dimension = isHorizontal ? 'width' : 'height';
     const inverseDimension = isHorizontal ? 'height' : 'width';
 
-    // @ts-expect-error
+    // @ts-expect-error ts-error
     this.option(inverseDimension, null);
     this.option(dimension, this.getSize());
   }
@@ -367,7 +369,6 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   _createEventAction(eventName: keyof HandlerMap): void {
     const actionName = getActionNameByEventName(eventName);
 
-    // @ts-expect-error badly typed base class
     this[actionName] = this._createActionByOption(eventName, {
       excludeValidators: ['disabled', 'readOnly'],
     });

@@ -43,9 +43,16 @@ declare class Base<
   _itemSelector(): string;
   _itemContainer(): dxElementWrapper;
 
+  _createItemByTemplate(
+    itemTemplate: { source: () => unknown },
+    args: { itemData: unknown }): void;
+
   _getItemData(item: Element | HTMLElement | dxElementWrapper): TItem;
   _getIndexByItem(item: TItem): number;
+  _getIndexByItemData(item: TItem): number;
   _findItemElementByItem(item: TItem): dxElementWrapper;
+
+  _itemOptionChanged(item: TItem, property: string, value: unknown): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

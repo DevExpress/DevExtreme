@@ -16,24 +16,6 @@ class SplitterItem extends CollectionWidgetItem {
 
   _resizeHandle?: ResizeHandle;
 
-  get owner(): Splitter {
-    return this._owner;
-  }
-
-  get resizeHandle(): ResizeHandle | undefined {
-    return this._resizeHandle;
-  }
-
-  get option(): Item | undefined {
-    return this._rawData;
-  }
-
-  get index(): number {
-    // @ts-expect-error badly typed class
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
-    return this.owner._getIndexByItemData(this.option);
-  }
-
   constructor(
     $element: dxElementWrapper,
     options: {
@@ -47,17 +29,18 @@ class SplitterItem extends CollectionWidgetItem {
   }
 
   _renderResizeHandle(): void {
-    if (this.option?.visible !== false && !this.isLast()) {
+    if (this._rawData?.visible !== false && !this.isLast()) {
       const id = `dx_${new Guid()}`;
 
       this._setIdAttr(id);
 
-      const config = this.owner._getResizeHandleConfig(id);
-      // @ts-expect-error badly typed base class
-      this._resizeHandle = this.owner._createComponent($('<div>'), ResizeHandle, config);
+      const config = this._owner._getResizeHandleConfig(id);
 
-      if (this.resizeHandle && this._$element) {
-        $(this.resizeHandle.element()).insertAfter(this._$element);
+      // @ts-expect-error ts-error
+      this._resizeHandle = this._owner._createComponent($('<div>'), ResizeHandle, config);
+
+      if (this._resizeHandle && this._$element) {
+        $(this._resizeHandle.element()).insertAfter(this._$element);
       }
     }
   }
@@ -66,8 +49,16 @@ class SplitterItem extends CollectionWidgetItem {
     this._$element?.attr('id', id);
   }
 
+  getIndex(): number {
+    return this._owner._getIndexByItemData(this._rawData);
+  }
+
+  getResizeHandle(): ResizeHandle | undefined {
+    return this._resizeHandle;
+  }
+
   isLast(): boolean {
-    return this.owner._isLastVisibleItem(this.index);
+    return this._owner._isLastVisibleItem(this.getIndex());
   }
 }
 

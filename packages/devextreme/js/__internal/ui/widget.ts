@@ -1,5 +1,4 @@
-/* eslint-disable max-classes-per-file */
-import { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
 import Widget from '@js/ui/widget/ui.widget';
 
 interface AriaOptions {
@@ -9,7 +8,7 @@ interface AriaOptions {
   label: string;
 }
 
-declare class TWidget<TProperties> extends Widget<TProperties> {
+declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   setAria(ariaOptions: AriaOptions): void;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => void>;
@@ -24,11 +23,18 @@ declare class TWidget<TProperties> extends Widget<TProperties> {
 
   _toggleActiveState($element: dxElementWrapper, value: boolean): void;
 
+  _createComponent(
+    element: string | HTMLElement | dxElementWrapper,
+    component: unknown,
+    config: TProperties,
+  ): void;
+
   // component
   _init(): void;
+  _createActionByOption(optionName: string, config: Record<string, unknown>);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const TypedWidget: typeof TWidget = Widget as any;
+const TypedWidget: typeof ExtendedWidget = Widget as any;
 
 export default TypedWidget;
