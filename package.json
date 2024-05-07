@@ -98,5 +98,5 @@
     "devextreme-aspnet-data-nojquery": "3.0.0",
     "rxjs": "7.8.0"
   },
-  "packageManager": "pnpm@9.0.6"
+  "packageManager": "pnpm@9.1.0"
 }

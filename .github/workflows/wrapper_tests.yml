@@ -23,28 +23,35 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Get npm cache directory
-        id: npm-cache-dir
-        shell: bash
-        run: echo "dir=$(npm config get cache)" >> ${GITHUB_OUTPUT}
-
-      - name: Restore npm cache
-        uses: actions/cache@v4
+      - uses: pnpm/action-setup@v3
         with:
-          path: ${{ steps.npm-cache-dir.outputs.dir }}
-          key: ${{ runner.os }}-node-${{ github.workflow }}-${{ hashFiles('**/package-lock.json') }}
+          version: 9
+          run_install: false
 
-      - name: Install npm packages
-        run: npm i --no-audit --no-fund
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: Build devextreme package
         working-directory: ./packages/devextreme
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: npm run build
+        run: pnpm run build
 
       - name: Generate wrappers
-        run: npm run regenerate-all
+        run: pnpm run regenerate-all
 
       - name: Check generated code
         shell: bash
@@ -54,34 +61,34 @@ jobs:
           if [ -n "$changes" ]; then
             echo "Generated code is outdated. The following files have uncommitted changes:"
             echo "$changes";
-            echo "To update generated code, use "npm run regenerate-all" and commit changes."
+            echo "To update generated code, use "pnpm run regenerate-all" and commit changes."
             exit 1
           fi
 
       - name: Angular - Build
         working-directory: ./packages/devextreme-angular
-        run: npm run build
+        run: pnpm run build
 
       - name: Angular - Run tests
         working-directory: ./packages/devextreme-angular
-        run: npm run test:dev
+        run: pnpm run test:dev
 
       - name: Angular - Check packing
         working-directory: ./packages/devextreme-angular
-        run: npm run pack
+        run: pnpm run pack
 
       - name: React - Run tests
-        run: npx nx test devextreme-react
+        run: pnpx nx test devextreme-react
 
       - name: React - Check packing
-        run: npx nx pack devextreme-react
+        run: pnpx nx pack devextreme-react
 
       - name: Vue - Run tests
         working-directory: packages/devextreme-vue
-        run: npm run test
+        run: pnpm run test
 
       - name: Vue - Check packing
-        run: npx nx run-many -t pack -p devextreme-vue
+        run: pnpx nx run-many -t pack -p devextreme-vue
 
       - name: Archive internal-tools artifacts
         uses: actions/upload-artifact@v3

@@ -24,15 +24,26 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
@@ -40,7 +51,7 @@ jobs:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: BUILD_INPROGRESS_RENOVATION=true npm run build:dev
+      run: BUILD_INPROGRESS_RENOVATION=true pnpm run build:dev
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

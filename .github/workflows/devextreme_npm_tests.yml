@@ -26,26 +26,37 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Install packages in devextreme repo
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
 
     - name: Build devextreme repo
-      run: npx nx build devextreme-main
+      run: pnpx nx build devextreme-main
 
     - name: Pack devextreme package
       working-directory: ./packages/devextreme/artifacts/npm/devextreme
-      run: npm pack
+      run: pnpm pack
 
     - name: Pack devextreme-dist package
       working-directory: ./packages/devextreme/artifacts/npm/devextreme-dist
-      run: npm pack
+      run: pnpm pack
 
     - name: Copy packages
       run: |
@@ -82,41 +93,59 @@ jobs:
         name: devextreme-npm
         path: ./packages/devextreme/testing/bundlers
 
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
     - name: Install bundlers
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm install --no-audit --no-fund
+      run: pnpm install
 
     - name: Install DevExtreme package
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm install --save-dev devextreme-installer.tgz
+      run: pnpm install --save-dev devextreme-installer.tgz
 
     - name: Generate entry files
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run generate-entry-files
+      run: pnpm run generate-entry-files
 
     - name: Build webpack cjs
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:webpack-cjs
+      run: pnpm run build:webpack-cjs
 
     - name: Build browserify cjs
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:browserify-cjs
+      run: pnpm run build:browserify-cjs
 
     - name: Build webpack
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:webpack
+      run: pnpm run build:webpack
 
     - name: Build rollup
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:rollup
+      run: pnpm run build:rollup
 
     - name: Build parcel
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:parcel
+      run: pnpm run build:parcel
 
     - name: Build vite
       working-directory: ./packages/devextreme/testing/bundlers
-      run: npm run build:vite
+      run: pnpm run build:vite
 
   notify:
     runs-on: devextreme-shr2

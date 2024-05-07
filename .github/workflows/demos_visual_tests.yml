@@ -30,18 +30,29 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Restore npm cache
-        uses: actions/cache@v4
+      - uses: pnpm/action-setup@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-modules
+          version: 9
+          run_install: false
 
-      - name: DevExtreme - Install packages
-        run: npm install --no-audit --no-fund
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: DevExtreme - Build
-        run: npx nx build devextreme-main
+        run: pnpx nx build devextreme-main
 
   testcafe:
     needs:
@@ -73,20 +84,31 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: DevExtreme - Install packages
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
 
     - name: DevExtreme - Build
       env:
         BUILD_TEST_INTERNAL_PACKAGE: true
-      run: npx nx build devextreme-main
+      run: pnpx nx build devextreme-main
 
     - name: Run Web Server
       run: |
@@ -111,7 +133,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: npm run test-testcafe
+      run: pnpm run test-testcafe
 
     - name: Show accessibility warnings
       if: matrix.STRATEGY == 'accessibility'

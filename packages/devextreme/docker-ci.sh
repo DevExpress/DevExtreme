@@ -192,7 +192,7 @@ function start_runner_watchdog {
     done &
 }
 
-echo "node $(node -v), npm $(pnpm -v), dotnet $(dotnet --version)"
+echo "node $(node -v), pnpm $(pnpm -v), dotnet $(dotnet --version)"
 
 TARGET_FUNC="run_$TARGET"
 

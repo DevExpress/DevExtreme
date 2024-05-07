@@ -26,20 +26,31 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Restore npm cache
-        uses: actions/cache@v4
+      - uses: pnpm/action-setup@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-modules
+          version: 9
+          run_install: false
 
-      - name: DevExtreme - Install packages
-        run: npm install --no-audit --no-fund
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: pnpm install
 
       - name: DevExtreme - Build-all
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: npm run all:build
+        run: pnpm run all:build
 
       - name: Move packages
         run: |
@@ -82,12 +93,26 @@ jobs:
       with:
         name: devextreme-sources
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
 
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
@@ -107,7 +132,7 @@ jobs:
 
     - name: Prepare bundles
       working-directory: apps/demos
-      run: npm run prepare-bundles
+      run: pnpm run prepare-bundles
 
     - name: Demos - Run tsc
       working-directory: apps/demos
@@ -187,8 +212,31 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
     - name: Install packages
-      run: npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
+      run: pnpm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -217,34 +265,50 @@ jobs:
       matrix:
         include:
           - name: Check generated demos (1/5)
-            command: CONSTEL=1/5 npm run convert-to-js
+            command: CONSTEL=1/5 pnpm run convert-to-js
           - name: Check generated demos (2/5)
-            command: CONSTEL=2/5 npm run convert-to-js
+            command: CONSTEL=2/5 pnpm run convert-to-js
           - name: Check generated demos (3/5)
-            command: CONSTEL=3/5 npm run convert-to-js
+            command: CONSTEL=3/5 pnpm run convert-to-js
           - name: Check generated demos (4/5)
-            command: CONSTEL=4/5 npm run convert-to-js
+            command: CONSTEL=4/5 pnpm run convert-to-js
           - name: Check generated demos (5/5)
-            command: CONSTEL=5/5 npm run convert-to-js
+            command: CONSTEL=5/5 pnpm run convert-to-js
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
 
-    - name: Install packages
-      run: npm install --no-audit --no-fund
+    - name: Install dependencies
+      run: pnpm install
 
       # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
@@ -264,7 +328,7 @@ jobs:
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: npm run prepare-js
+      run: pnpm run prepare-js
 
     - name: Check generated JS demos
       working-directory: apps/demos
@@ -276,7 +340,7 @@ jobs:
         if git diff --exit-code . ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
-            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js split' and commit changes."
+            echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
             echo "If you see another diff, ensure that extra listed files have LF endings."
             exit 1
         fi
@@ -302,20 +366,31 @@ jobs:
       with:
         chrome-version: '121.0.6167.160'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        node-version: '20'
 
-    - name: Download devextreme sources
-      uses: actions/download-artifact@v4
+    - uses: pnpm/action-setup@v3
       with:
-        name: devextreme-sources
+        version: 9
+        run_install: false
 
-    - name: Install packages
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
 
     # NOTE: workaround due to wrappers are incorrect NPM packages now
     - name: Install wrappers packages
@@ -335,11 +410,11 @@ jobs:
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: npm run prepare-js
+      run: pnpm run prepare-js
 
     - name: Update bundles config
       working-directory: apps/demos
-      run: npx gulp update-config
+      run: pnpx gulp update-config
 
     - name: Run Web Server
       run: |
@@ -378,7 +453,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: npm run test-testcafe
+      run: pnpm run test-testcafe
 
     - name: Get screenshots artifacts name
       if: ${{ failure() }}
