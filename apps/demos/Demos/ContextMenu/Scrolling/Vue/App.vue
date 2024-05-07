@@ -31,7 +31,7 @@ body {
   margin: 0;
 }
 
-#app ,
+#app,
 .demo-container {
   height: 100%;
 }
