@@ -18,11 +18,10 @@ const options: Options<Properties> = {
   width: [undefined, 300],
   placeholder: ['', 'placeholder'],
   focusStateEnabled: [true],
-  imageUpload: [
+  toolbar: [
     undefined,
     {
-      tabs: ['file', 'url'],
-      fileUploadMode: 'base64',
+      items: ['bold', 'color'],
     },
   ],
 };
