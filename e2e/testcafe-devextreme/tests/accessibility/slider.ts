@@ -16,8 +16,30 @@ const options: Options<Properties> = {
   width: [undefined, '50%'],
   min: [undefined, 10],
   max: [undefined, 90],
+  showRange: [true, false],
   focusStateEnabled: [true],
   elementAttr: [{ 'aria-label': 'Slider' }],
+  label: [
+    undefined,
+    {
+      visible: true,
+      format(value) {
+        return `${value}%`;
+      },
+      position: 'top',
+    },
+  ],
+  tooltip: [
+    undefined,
+    {
+      enabled: true,
+      format(value) {
+        return `${value}%`;
+      },
+      showMode: 'always',
+      position: 'bottom',
+    },
+  ],
 };
 
 const a11yCheckConfig = {

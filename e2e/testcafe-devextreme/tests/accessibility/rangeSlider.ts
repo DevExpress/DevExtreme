@@ -15,6 +15,27 @@ const options: Options<Properties> = {
   height: [undefined, 250],
   width: [undefined, '50%'],
   focusStateEnabled: [true],
+  label: [
+    undefined,
+    {
+      visible: true,
+      format(value) {
+        return `${value}%`;
+      },
+      position: 'top',
+    },
+  ],
+  tooltip: [
+    undefined,
+    {
+      enabled: true,
+      format(value) {
+        return `${value}%`;
+      },
+      showMode: 'always',
+      position: 'bottom',
+    },
+  ],
 };
 
 const a11yCheckConfig = {

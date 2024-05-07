@@ -12,20 +12,19 @@ const options: Options<Properties> = {
   max: [100],
   disabled: [true, false],
   hint: [undefined, 'hint'],
-  width: [undefined, '50%'],
   showStatus: [true, false],
   elementAttr: [{ 'aria-label': 'Progress Bar' }],
 };
 
 const a11yCheckConfig = {
-    // NOTE: color-contrast issues
-    rules: { 'color-contrast': { enabled: false } },
+  // NOTE: color-contrast issues
+  rules: { 'color-contrast': { enabled: false } },
 };
 
 const configuration: Configuration = {
-    component: 'dxProgressBar',
-    a11yCheckConfig,
-    options,
+  component: 'dxProgressBar',
+  a11yCheckConfig,
+  options,
 };
 
 testAccessibility(configuration);

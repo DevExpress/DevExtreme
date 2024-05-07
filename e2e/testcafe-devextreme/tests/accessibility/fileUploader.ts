@@ -20,14 +20,11 @@ const file: File[] = [{
 
 const options: Options<Properties> = {
   value: [undefined, file],
-  visible: [true, false],
   multiple: [true, false],
   disabled: [true, false],
   readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: ['', 'name'],
-  height: [undefined, 250],
-  width: [undefined, 250],
   focusStateEnabled: [true],
   inputAttr: [{ 'aria-label': 'aria-label' }],
 };
