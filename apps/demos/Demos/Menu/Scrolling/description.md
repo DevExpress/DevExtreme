@@ -1,4 +1,4 @@
-The Menu component supports submenu item scrolling. If the combined item length exceeds the screen size, a scrollbar appears, and the submenu height is restricted.
+The Menu component supports submenu item scrolling. If the combined item height exceeds the screen size or a pre-defined height limit, a scrollbar appears.
 
 You can use one of the following event handlers to configure submenus:
 
@@ -10,6 +10,6 @@ You can use one of the following event handlers to configure submenus:
 
 - [onSubmenuHidden](/Documentation/ApiReference/UI_Components/dxMenu/Configuration/#onSubmenuHidden)
 
-These handlers access `submenuContainer`, the root submenu element, and `itemData`, which contains root item and submenu item data.
+These handlers can access the root submenu element (`submenuContainer`), as well as data from root and submenu items (`itemData`).
 
 In this demo, the **onSubmenuShowing** function limits the submenu height to 200px.
