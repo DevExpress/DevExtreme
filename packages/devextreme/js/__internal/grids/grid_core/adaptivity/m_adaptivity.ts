@@ -937,7 +937,6 @@ const rowsView = (
   private getContextMenuItems(options) {
     if (options.row && options.row.rowType === 'detailAdaptive') {
       const view = this._columnHeadersView;
-      // @ts-expect-error
       const formItem = $(options.targetElement).closest('.dx-field-item-label').next().data('dx-form-item');
       // @ts-expect-error
       options.column = formItem ? formItem.column : options.column;
