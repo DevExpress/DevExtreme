@@ -10,3 +10,13 @@ export const ColumnsResizerViewController = columnsResizingReorderingModule.cont
 export const TrackerView = columnsResizingReorderingModule.views.trackerView;
 
 gridCore.registerModule('columnsResizingReordering', columnsResizingReorderingModule);
+
+// NOTE: default export for QUnit tests
+export default {
+  DraggingHeaderView,
+  DraggingHeaderViewController,
+  ColumnsSeparatorView,
+  TablePositionViewController,
+  ColumnsResizerViewController,
+  TrackerView,
+};

@@ -39,7 +39,7 @@ import Tooltip from 'ui/tooltip';
 import RadioGroup from 'ui/radio_group';
 import Resizable from 'ui/resizable';
 import ResizeHandle from '__internal/ui/splitter/resize_handle';
-import Scheduler from 'ui/scheduler/ui.scheduler';
+import Scheduler from '__internal/scheduler/m_scheduler';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';

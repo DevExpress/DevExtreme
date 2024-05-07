@@ -15,7 +15,7 @@ QUnit.testStart(function() {
 });
 
 import 'generic_light.css!';
-import 'ui/tree_list/ui.tree_list';
+import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
 import fx from 'animation/fx';
 import ArrayStore from 'data/array_store';

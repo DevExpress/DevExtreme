@@ -3,7 +3,7 @@ import devices from 'core/devices';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 QUnit.testStart(function() {
     $('#qunit-fixture').html('<div class="dx-scheduler"><div id="scheduler-work-space"></div></div>');

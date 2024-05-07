@@ -13,7 +13,7 @@ require('ui/drop_down_button');
 const noop = require('core/utils/common').noop;
 const DataSource = require('data/data_source/data_source').DataSource;
 
-require('ui/scheduler/ui.scheduler');
+require('__internal/scheduler/m_scheduler');
 
 QUnit.module('Integration: View switcher', {
     beforeEach: function() {

@@ -1,4 +1,4 @@
-import modules from 'ui/grid_core/ui.grid_core.modules';
+import modules from '__internal/grids/grid_core/m_modules';
 
 QUnit.module('Modules used class', {}, () => {
     /* const RootController = modules.Controller.inherit(
