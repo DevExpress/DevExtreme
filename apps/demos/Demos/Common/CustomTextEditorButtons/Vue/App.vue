@@ -147,4 +147,7 @@ const nextDateButton = {
   padding-right: 5px;
 }
 
+.dx-button.currency .dx-button-text {
+  line-height: 1.191;
+}
 </style>
