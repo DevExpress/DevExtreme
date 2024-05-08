@@ -528,7 +528,7 @@ QUnit.module('getEventTarget', () => {
         assert.strictEqual(target, expectedTarget, 'target is correct');
     });
 
-    test('should return undefined if originalEvent path is undefined in shadowRoot', function(assert) {
+    test('should return event.target if originalEvent path is undefined in shadowRoot', function(assert) {
         const root = document.getElementById('qunit-fixture');
 
         const $element = $('#element');
@@ -544,9 +544,8 @@ QUnit.module('getEventTarget', () => {
         });
 
         const target = getEventTarget(customEvent);
-        const expectedTarget = root.shadowRoot ? undefined : root;
 
-        assert.strictEqual(target, expectedTarget, 'target is undefined');
+        assert.strictEqual(target, root, 'target is correct');
     });
 });
 

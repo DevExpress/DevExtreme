@@ -12,7 +12,7 @@ export const getEventTarget = (event) => {
     }
 
     const path = originalEvent.path ?? originalEvent.composedPath?.();
-    const target = path?.[0];
+    const target = path?.[0] ?? event.target;
 
     return target;
 };
