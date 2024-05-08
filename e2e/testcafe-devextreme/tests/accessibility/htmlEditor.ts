@@ -1,8 +1,7 @@
-import { ClientFunction } from 'testcafe';
+import { Selector } from 'testcafe';
 import { Properties } from 'devextreme/ui/html_editor.d';
-import HtmlEditor from 'devextreme-testcafe-models/htmlEditor';
 import url from '../../helpers/getPageUrl';
-import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
@@ -36,13 +35,7 @@ const options: Options<Properties> = {
 };
 
 const created = async (t: TestController): Promise<void> => {
-  const htmlEditor = new HtmlEditor(defaultSelector);
-
-  await ClientFunction(() => {
-    htmlEditor.getInstance();
-  }, {
-    dependencies: { htmlEditor },
-  })();
+  await t.click(Selector('#container'));
 };
 
 const a11yCheckConfig = {
