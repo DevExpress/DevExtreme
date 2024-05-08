@@ -18,7 +18,6 @@ const options: Options<Properties> = {
   max: [undefined, 90],
   showRange: [true, false],
   focusStateEnabled: [true],
-  elementAttr: [{ 'aria-label': 'Slider' }],
   label: [
     undefined,
     {
@@ -27,6 +26,17 @@ const options: Options<Properties> = {
         return `${value}%`;
       },
       position: 'top',
+    },
+  ],
+  tooltip: [
+    undefined,
+    {
+      enabled: true,
+      format(value) {
+        return `${value}%`;
+      },
+      showMode: 'always',
+      position: 'bottom',
     },
   ],
 };
