@@ -33,11 +33,14 @@
 <script setup lang="ts">
 import { DxLookup, DxDropDownOptions } from 'devextreme-vue/lookup';
 import DataSource from 'devextreme/data/data_source';
+import ArrayStore from 'devextreme/data/array_store';
 import { employeesList, employeesTasks } from './data.ts';
 
 const dataSource = new DataSource({
-  store: employeesTasks,
-  key: 'ID',
+  store: new ArrayStore({
+    data: employeesTasks,
+    key: 'ID'
+  }),
   group: 'Assigned',
 });
 </script>
