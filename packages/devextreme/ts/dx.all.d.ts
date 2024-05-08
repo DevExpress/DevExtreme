@@ -18412,11 +18412,6 @@ declare module DevExpress.ui {
    */
   export interface dxGanttHeaderFilter {
     /**
-     * [descr:dxGanttHeaderFilter.allowSearch]
-     * @deprecated [depNote:dxGanttHeaderFilter.allowSearch]
-     */
-    allowSearch?: boolean;
-    /**
      * [descr:dxGanttHeaderFilter.allowSelectAll]
      */
     allowSelectAll?: boolean;

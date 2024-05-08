@@ -541,7 +541,6 @@ const DxGanttHeaderFilter = createConfigurationComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
@@ -550,7 +549,6 @@ const DxGanttHeaderFilter = createConfigurationComponent({
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     height: Number,
     search: Object,
@@ -586,7 +584,6 @@ const DxHeaderFilter = createConfigurationComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
@@ -597,7 +594,6 @@ const DxHeaderFilter = createConfigurationComponent({
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],

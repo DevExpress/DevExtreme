@@ -425,7 +425,6 @@ const Format: typeof _componentFormat & IElementDescriptor = Object.assign(_comp
 // owners:
 // Gantt
 type IGanttHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
@@ -476,7 +475,6 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   width?: number | string;
-  allowSearch?: boolean;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
 }>
