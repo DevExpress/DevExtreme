@@ -31,14 +31,14 @@ const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 QUnit.module('common', {}, () => {
-    QUnit.test('should not generate any aria-label error if inputAttr = undefined', function(assert) {
+    QUnit.test('should not generate any error if inputAttr is undefined', function(assert) {
         try {
             $('#textbox').dxTextBox({
                 inputAttr: undefined
             });
             assert.ok(true, 'Encountered no errors');
         } catch(e) {
-            assert.ok(false, `the error is thrown: ${e.message}`);
+            assert.ok(false, `The error is thrown: ${e.message}`);
         }
     });
 

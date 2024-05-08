@@ -493,8 +493,8 @@ const TextEditorBase = Editor.inherit({
     },
 
     _setFieldAria(force) {
-        const inputAttributeOption = this.option('inputAttr');
-        const ariaLabel = inputAttributeOption && inputAttributeOption['aria-label'];
+        const inputAttr = this.option('inputAttr');
+        const ariaLabel = inputAttr?.['aria-label'];
         const labelId = this._label.getId();
 
         const value = ariaLabel ? undefined : labelId;
