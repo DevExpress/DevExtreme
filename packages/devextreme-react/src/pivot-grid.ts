@@ -190,7 +190,6 @@ const FieldPanelTexts: typeof _componentFieldPanelTexts & IElementDescriptor = O
 // owners:
 // PivotGrid
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
