@@ -72,10 +72,10 @@ module.exports = {
       }
     ]
   },
-  ignoreWarnings: [{
-    message: /source-map-loader/,
-    module: /node_modules\/rrule/,
-  }],
+  // ignoreWarnings: [{
+  //   message: /source-map-loader/,
+  //   module: /node_modules\/rrule/,
+  // }],
   plugins: [
     new VueLoaderPlugin()
   ]

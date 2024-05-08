@@ -47,10 +47,9 @@ jobs:
         run: pnpm install
 
       - name: Build devextreme package
-        working-directory: ./packages/devextreme
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: pnpm run build
+        run: pnpx nx build devextreme-main
 
       - name: Generate wrappers
         run: pnpm run regenerate-all

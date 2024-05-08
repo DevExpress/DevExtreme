@@ -32,14 +32,14 @@
   "nx": {},
   "private": true,
   "devDependencies": {
+    "@angular-devkit/architect": "0.1602.14",
+    "@angular-devkit/schematics": "16.2.13",
     "@angular/animations": "16.2.0",
-    "@angular/common": "16.2.0",
     "@angular/cli": "16.2.0",
+    "@angular/common": "16.2.0",
     "@angular/compiler": "16.2.0",
     "@angular/compiler-cli": "16.2.0",
     "@angular/core": "16.2.0",
-    "@angular-devkit/schematics": "16.2.13",
-    "@angular-devkit/architect": "0.1602.14",
     "@angular/forms": "16.2.0",
     "@angular/platform-browser": "16.2.0",
     "@angular/platform-browser-dynamic": "16.2.0",
@@ -51,6 +51,7 @@
     "@types/shelljs": "0.8.15",
     "@types/tar-fs": "^2.0.4",
     "@types/yargs": "^17.0.32",
+    "@vue/shared": "^3.2.47",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
     "devextreme-internal-tools": "14.0.0-beta.1",
@@ -67,6 +68,7 @@
     "tar-fs": "^3.0.4",
     "testcafe": "2.5.0",
     "ts-node": "^10.9.1",
+    "vue": "^3.4.27",
     "yargs": "^17.7.2"
   },
   "pre-commit": [
