@@ -14,6 +14,7 @@ const options: Options<Properties> = {
   hideOnOutsideClick: [true, false],
   hideOnParentScroll: [true, false],
   deferRendering: [true, false],
+  wrapperAttr: [{ 'aria-label': 'Tooltip' }],
   animation: [
     undefined,
     {

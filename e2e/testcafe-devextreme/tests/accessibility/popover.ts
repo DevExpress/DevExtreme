@@ -36,6 +36,7 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   enableBodyScroll: [true, false],
   deferRendering: [true, false],
+  wrapperAttr: [{ 'aria-label': 'Popover' }],
   toolbarItems: [undefined, toolbarItems],
   animation: [
     undefined,
