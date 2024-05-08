@@ -178,7 +178,7 @@ export class HeaderFilterView extends Modules.View {
     const { useDefaultSearchExpr } = options;
 
     const headerFilterDataSource = headerFilterOptions.dataSource;
-    const filterSearchExpr = headerFilterOptions.search.searchExpr;
+    const filterSearchExpr = headerFilterOptions.search?.searchExpr;
 
     if (filterSearchExpr) {
       return filterSearchExpr;
@@ -280,10 +280,10 @@ export class HeaderFilterView extends Modules.View {
     const $content = that._popupContainer.$content();
     const needShowSelectAllCheckbox = !options.isFilterBuilder && headerFilterOptions.allowSelectAll;
     const widgetOptions = {
-      searchEnabled: headerFilterOptions.search.enabled,
-      searchTimeout: headerFilterOptions.search.timeout,
-      searchEditorOptions: headerFilterOptions.search.editorOptions,
-      searchMode: headerFilterOptions.search.mode || '',
+      searchEnabled: headerFilterOptions?.search?.enabled,
+      searchTimeout: headerFilterOptions?.search?.timeout,
+      searchEditorOptions: headerFilterOptions?.search?.editorOptions,
+      searchMode: headerFilterOptions?.search?.mode || '',
       dataSource: options.dataSource,
       onContentReady() {
         that.renderCompleted.fire();
