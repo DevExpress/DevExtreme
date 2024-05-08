@@ -121,7 +121,7 @@ jobs:
 
     - name: Install DevExtreme package
       working-directory: ./packages/devextreme/testing/bundlers
-      run: pnpm install --save-dev devextreme-installer.tgz
+      run: pnpm add --save-dev ./devextreme-installer.tgz
 
     - name: Generate entry files
       working-directory: ./packages/devextreme/testing/bundlers
