@@ -31,7 +31,7 @@ module.exports = {
 
     esm: Object.assign({}, common, {
         // eslint-disable-next-line spellcheck/spell-checker
-        presets: [['@babel/preset-env', { modules: false, targets: { ...targets, esmodules: true } }]],
+        presets: [['@babel/preset-env', { targets, modules: false }]],
         plugins: common.plugins.concat(
             [['@babel/plugin-transform-runtime', {
                 useESModules: true,
