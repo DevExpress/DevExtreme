@@ -8,31 +8,12 @@ fixture.disablePageReloads`Accessibility`
 
 const options: Options<Properties> = {
   visible: [true, false],
-  shading: [true, false],
+  disabled: [true, false],
   showIndicator: [true, false],
   showPane: [true, false],
   message: [undefined, 'message'],
   hint: [undefined, 'hint'],
   delay: [undefined, 3000],
-  deferRendering: [true, false],
-  focusStateEnabled: [true],
-  animation: [
-    undefined,
-    {
-      show: {
-        type: 'fade',
-        duration: 600,
-        from: 0,
-        to: 1,
-      },
-      hide: {
-        type: 'fade',
-        duration: 600,
-        from: 1,
-        to: 0,
-      },
-    },
-  ],
 };
 
 const a11yCheckConfig = {

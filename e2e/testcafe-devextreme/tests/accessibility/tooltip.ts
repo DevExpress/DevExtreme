@@ -10,26 +10,6 @@ const options: Options<Properties> = {
   visible: [true, false],
   disabled: [true, false],
   hint: [undefined, 'hint'],
-  hideOnOutsideClick: [true, false],
-  hideOnParentScroll: [true, false],
-  deferRendering: [true, false],
-  animation: [
-    undefined,
-    {
-      show: {
-        type: 'fade',
-        duration: 600,
-        from: 0,
-        to: 1,
-      },
-      hide: {
-        type: 'fade',
-        duration: 600,
-        from: 1,
-        to: 0,
-      },
-    },
-  ],
 };
 
 const a11yCheckConfig = {

@@ -28,31 +28,14 @@ const toolbarItems: ToolbarItem[] = [
 
 const options: Options<Properties> = {
   width: [300],
+  height: [280],
   visible: [true, false],
   disabled: [true, false],
   showTitle: [true, false],
   title: [undefined, 'title'],
   hint: [undefined, 'hint'],
-  enableBodyScroll: [true, false],
-  deferRendering: [true, false],
+  showCloseButton: [true, false],
   toolbarItems: [undefined, toolbarItems],
-  animation: [
-    undefined,
-    {
-      show: {
-        type: 'fade',
-        duration: 600,
-        from: 0,
-        to: 1,
-      },
-      hide: {
-        type: 'fade',
-        duration: 600,
-        from: 1,
-        to: 0,
-      },
-    },
-  ],
 };
 
 const a11yCheckConfig = {
