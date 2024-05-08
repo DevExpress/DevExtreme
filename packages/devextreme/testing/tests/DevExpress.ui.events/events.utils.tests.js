@@ -527,6 +527,27 @@ QUnit.module('getEventTarget', () => {
         const expectedTarget = root.shadowRoot ? $div.get(0) : root;
         assert.strictEqual(target, expectedTarget, 'target is correct');
     });
+
+    test('should return undefined if originalEvent path is undefined in shadowRoot', function(assert) {
+        const root = document.getElementById('qunit-fixture');
+
+        const $element = $('#element');
+        const $div = $('<div>');
+
+        $element.append($div);
+
+        const customEvent = $.Event('customEvent', {
+            originalEvent: $.Event('customEvent', {
+                target: root,
+                composedPath: () => null,
+            })
+        });
+
+        const target = getEventTarget(customEvent);
+        const expectedTarget = root.shadowRoot ? undefined : root;
+
+        assert.strictEqual(target, expectedTarget, 'target is undefined');
+    });
 });
 
 QUnit.module('skip mousewheel event test', () => {
