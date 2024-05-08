@@ -44,6 +44,9 @@ $.each(DevExpress.ui, function(componentName) {
                             'style': /behavior:\surl\(#default#VML\)/gi,
                             'dx-license-trigger': /$/,
                             'dx-license': /$/,
+                            'svg': /13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7/,
+                            'polygon': /13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7/,
+                            'div': /For evaluation purposes only. Redistribution not authorized.|to continue use of DevExpress product libraries/,
                             'span': /For evaluation purposes only. Redistribution not authorized.|to continue use of DevExpress product libraries/,
                             'a': /purchase a license/,
                         };
