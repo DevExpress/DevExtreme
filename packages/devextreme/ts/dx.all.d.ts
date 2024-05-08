@@ -21956,11 +21956,6 @@ declare module DevExpress.ui {
      */
     headerFilter?: {
       /**
-       * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
-       * @deprecated [depNote:dxPivotGridFieldChooserOptions.headerFilter.allowSearch]
-       */
-      allowSearch?: boolean;
-      /**
        * [descr:dxPivotGridFieldChooserOptions.headerFilter.allowSelectAll]
        */
       allowSelectAll?: boolean;
