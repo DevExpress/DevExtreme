@@ -55,7 +55,10 @@ export type WidgetName =
   | 'dxSlider'
   | 'dxDropDownBox'
   | 'dxFileManager'
-  | 'dxSwitch';
+  | 'dxSwitch'
+  | 'dxToast'
+  | 'dxLoadPanel'
+  | 'dxTooltip';
 
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
