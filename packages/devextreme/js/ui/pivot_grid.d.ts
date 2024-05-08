@@ -401,12 +401,6 @@ export interface dxPivotGridOptions extends WidgetOptions<dxPivotGrid> {
     headerFilter?: {
       /**
        * @docid
-       * @default false
-       * @deprecated
-       */
-      allowSearch?: boolean;
-      /**
-       * @docid
        * @default true
        */
       allowSelectAll?: boolean;
