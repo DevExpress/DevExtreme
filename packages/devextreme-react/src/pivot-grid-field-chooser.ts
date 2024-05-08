@@ -70,7 +70,6 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   showRelevantValues?: boolean;
   texts?: Record<string, any> | {
     cancel?: string;

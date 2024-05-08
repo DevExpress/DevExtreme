@@ -33,14 +33,6 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoColumnChooserComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get allowSearch(): boolean {
-        return this._getOption('allowSearch');
-    }
-    set allowSearch(value: boolean) {
-        this._setOption('allowSearch', value);
-    }
-
-    @Input()
     get container(): UserDefinedElement | string | undefined {
         return this._getOption('container');
     }
@@ -94,14 +86,6 @@ export class DxoColumnChooserComponent extends NestedOption implements OnDestroy
     }
     set search(value: ColumnChooserSearchConfig) {
         this._setOption('search', value);
-    }
-
-    @Input()
-    get searchTimeout(): number {
-        return this._getOption('searchTimeout');
-    }
-    set searchTimeout(value: number) {
-        this._setOption('searchTimeout', value);
     }
 
     @Input()

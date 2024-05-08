@@ -353,23 +353,19 @@ const DxColumnHeaderFilter = createConfigurationComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
-    "update:allowSearch": null,
     "update:allowSelectAll": null,
     "update:dataSource": null,
     "update:groupInterval": null,
     "update:height": null,
     "update:search": null,
-    "update:searchMode": null,
     "update:width": null,
   },
   props: {
-    allowSearch: Boolean,
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
     height: [Number, String],
     search: Object,
-    searchMode: String,
     width: [Number, String]
   }
 });
@@ -549,7 +545,6 @@ const DxGanttHeaderFilter = createConfigurationComponent({
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
     "update:width": null,
@@ -559,7 +554,6 @@ const DxGanttHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     height: Number,
     search: Object,
-    searchTimeout: Number,
     texts: Object,
     visible: Boolean,
     width: Number
@@ -598,8 +592,6 @@ const DxHeaderFilter = createConfigurationComponent({
     "update:groupInterval": null,
     "update:height": null,
     "update:search": null,
-    "update:searchMode": null,
-    "update:searchTimeout": null,
     "update:texts": null,
     "update:visible": null,
     "update:width": null,
@@ -611,8 +603,6 @@ const DxHeaderFilter = createConfigurationComponent({
     groupInterval: [Number, String],
     height: [Number, String],
     search: Object,
-    searchMode: String,
-    searchTimeout: Number,
     texts: Object,
     visible: Boolean,
     width: [Number, String]

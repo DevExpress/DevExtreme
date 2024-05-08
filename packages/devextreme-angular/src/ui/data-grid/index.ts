@@ -245,10 +245,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get columnChooser(): { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
+    get columnChooser(): { container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string } {
         return this._getOption('columnChooser');
     }
-    set columnChooser(value: { allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
+    set columnChooser(value: { container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }) {
         this._setOption('columnChooser', value);
     }
 
@@ -609,10 +609,10 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
     
      */
     @Input()
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
+    get headerFilter(): { allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }) {
+    set headerFilter(value: { allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }) {
         this._setOption('headerFilter', value);
     }
 
@@ -1501,7 +1501,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() columnChooserChange: EventEmitter<{ allowSearch?: boolean, container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, searchTimeout?: number, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
+    @Output() columnChooserChange: EventEmitter<{ container?: UserDefinedElement | string | undefined, emptyPanelText?: string, enabled?: boolean, height?: number | string, mode?: ColumnChooserMode, position?: PositionConfig | undefined, search?: ColumnChooserSearchConfig, selection?: ColumnChooserSelectionConfig, sortOrder?: SortOrder | undefined, title?: string, width?: number | string }>;
 
     /**
     
@@ -1697,7 +1697,7 @@ export class DxDataGridComponent<TRowData = any, TKey = any> extends DxComponent
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() headerFilterChange: EventEmitter<{ allowSearch?: boolean, allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, searchTimeout?: number, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
+    @Output() headerFilterChange: EventEmitter<{ allowSelectAll?: boolean, height?: number | string, search?: HeaderFilterSearchConfig, texts?: { cancel?: string, emptyValue?: string, ok?: string }, visible?: boolean, width?: number | string }>;
 
     /**
     

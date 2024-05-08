@@ -27,17 +27,15 @@ import { DxoGanttHeaderFilter } from './base/gantt-header-filter';
     styles: [''],
     providers: [NestedOptionHost],
     inputs: [
-        'allowSearch',
         'allowSelectAll',
         'dataSource',
         'groupInterval',
         'height',
         'search',
-        'searchMode',
         'width',
-        'searchTimeout',
         'texts',
         'visible',
+        'allowSearch',
         'showRelevantValues'
     ]
 })

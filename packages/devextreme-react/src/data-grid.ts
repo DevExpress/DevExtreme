@@ -412,13 +412,11 @@ type IColumnProps = React.PropsWithChildren<{
   groupIndex?: number;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxDataGridColumn, columnIndex: number, component: dxDataGrid }) => any) | template;
   headerFilter?: Record<string, any> | {
-    allowSearch?: boolean;
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
     height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: "contains" | "startswith" | "equals";
     width?: number | string;
   };
   hidingPriority?: number;
@@ -533,7 +531,6 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
 // owners:
 // DataGrid
 type IColumnChooserProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   container?: any | string;
   emptyPanelText?: string;
   enabled?: boolean;
@@ -541,7 +538,6 @@ type IColumnChooserProps = React.PropsWithChildren<{
   mode?: "dragAndDrop" | "select";
   position?: PositionConfig;
   search?: ColumnChooserSearchConfig;
-  searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: "asc" | "desc";
   title?: string;
@@ -644,13 +640,11 @@ const ColumnFixingTexts: typeof _componentColumnFixingTexts & IElementDescriptor
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
 }>
 const _componentColumnHeaderFilter = memo(
@@ -802,11 +796,9 @@ const CustomRule: typeof _componentCustomRule & IElementDescriptor = Object.assi
 // owners:
 // DataGrid
 type IDataGridHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number | string;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
     emptyValue?: string;
@@ -1663,15 +1655,12 @@ const GroupPanel: typeof _componentGroupPanel & IElementDescriptor = Object.assi
 // Column
 // DataGrid
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
-  searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
     emptyValue?: string;

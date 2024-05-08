@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, HorizontalEdge, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
+import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, HorizontalEdge, NumericRule, PatternRule, RangeRule, RequiredRule, SortOrder, StringLengthRule } from 'devextreme/common';
 import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
@@ -305,10 +305,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('headerCellTemplate', value);
     }
 
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): { allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, width?: number | string | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: { allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, width?: number | string | undefined }) {
         this._setOption('headerFilter', value);
     }
 

@@ -124,7 +124,6 @@ const DxHeaderFilter = createConfigurationComponent({
     "update:allowSelectAll": null,
     "update:height": null,
     "update:search": null,
-    "update:searchTimeout": null,
     "update:showRelevantValues": null,
     "update:texts": null,
     "update:width": null,
@@ -134,7 +133,6 @@ const DxHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     height: Number,
     search: Object,
-    searchTimeout: Number,
     showRelevantValues: Boolean,
     texts: Object,
     width: Number

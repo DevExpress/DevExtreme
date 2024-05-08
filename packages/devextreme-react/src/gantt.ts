@@ -170,13 +170,11 @@ type IColumnProps = React.PropsWithChildren<{
   format?: LocalizationTypes.Format;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template;
   headerFilter?: Record<string, any> | {
-    allowSearch?: boolean;
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
     height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: "contains" | "startswith" | "equals";
     width?: number | string;
   };
   minWidth?: number;
@@ -244,13 +242,11 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
 }>
 const _componentColumnHeaderFilter = memo(
@@ -433,7 +429,6 @@ type IGanttHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   height?: number;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
   width?: number;
@@ -475,15 +470,13 @@ const GanttHeaderFilterSearch: typeof _componentGanttHeaderFilterSearch & IEleme
 // Column
 // Gantt
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
-  searchTimeout?: number;
+  allowSearch?: boolean;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
 }>

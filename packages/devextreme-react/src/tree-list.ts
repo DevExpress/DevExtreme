@@ -378,13 +378,11 @@ type IColumnProps = React.PropsWithChildren<{
   formItem?: dxFormSimpleItem;
   headerCellTemplate?: ((columnHeader: any, headerInfo: { column: dxTreeListColumn, columnIndex: number, component: dxTreeList }) => any) | template;
   headerFilter?: Record<string, any> | {
-    allowSearch?: boolean;
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
     height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
-    searchMode?: "contains" | "startswith" | "equals";
     width?: number | string;
   };
   hidingPriority?: number;
@@ -489,7 +487,6 @@ const Column: typeof _componentColumn & IElementDescriptor = Object.assign(_comp
 // owners:
 // TreeList
 type IColumnChooserProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   container?: any | string;
   emptyPanelText?: string;
   enabled?: boolean;
@@ -497,7 +494,6 @@ type IColumnChooserProps = React.PropsWithChildren<{
   mode?: "dragAndDrop" | "select";
   position?: PositionConfig;
   search?: ColumnChooserSearchConfig;
-  searchTimeout?: number;
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: "asc" | "desc";
   title?: string;
@@ -600,13 +596,11 @@ const ColumnFixingTexts: typeof _componentColumnFixingTexts & IElementDescriptor
 // owners:
 // Column
 type IColumnHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
 }>
 const _componentColumnHeaderFilter = memo(
@@ -1393,15 +1387,12 @@ const GroupOperationDescriptions: typeof _componentGroupOperationDescriptions & 
 // Column
 // TreeList
 type IHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
   height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
-  searchMode?: "contains" | "startswith" | "equals";
   width?: number | string;
-  searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
     emptyValue?: string;
@@ -2275,11 +2266,9 @@ const ToolbarItem: typeof _componentToolbarItem & IElementDescriptor = Object.as
 // owners:
 // TreeList
 type ITreeListHeaderFilterProps = React.PropsWithChildren<{
-  allowSearch?: boolean;
   allowSelectAll?: boolean;
   height?: number | string;
   search?: HeaderFilterSearchConfig;
-  searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
     emptyValue?: string;
