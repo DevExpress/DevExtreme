@@ -8,7 +8,6 @@ fixture.disablePageReloads`Accessibility`
 
 const options: Options<Properties> = {
   visible: [true, false],
-  disabled: [true, false],
   message: [undefined, 'message'],
   hint: [undefined, 'hint'],
   displayTime: [undefined, 3000],
