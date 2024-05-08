@@ -35,7 +35,9 @@ test('Header filter popup', async (t) => {
       visible: true,
     },
     headerFilter: {
-      allowSearch: true,
+      search: {
+        enabled: true
+      },
     },
     dataSource: {
       fields: [{
