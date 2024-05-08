@@ -13,6 +13,7 @@ const options: Options<Properties> = {
   title: [undefined, 'title'],
   hint: [undefined, 'hint'],
   showCloseButton: [true, false],
+  wrapperAttr: [{ 'aria-label': 'Tooltip' }],
 };
 
 const a11yCheckConfig = {
