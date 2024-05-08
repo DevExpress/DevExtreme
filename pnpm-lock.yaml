@@ -1083,6 +1083,9 @@ importers:
       jspdf:
         specifier: 2.5.1
         version: 2.5.1
+      jspdf-autotable:
+        specifier: 3.8.2
+        version: 3.8.2(jspdf@2.5.1)
       knockout:
         specifier: 3.5.1
         version: 3.5.1
