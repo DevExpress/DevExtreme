@@ -4,7 +4,7 @@ import 'generic_light.css!';
 
 import 'ui/data_grid';
 
-import { keyboardNavigationModule } from 'ui/grid_core/ui.grid_core.keyboard_navigation.js';
+import { keyboardNavigationModule } from '__internal/grids/grid_core/keyboard_navigation/m_keyboard_navigation';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
 import publicComponentUtils from 'core/utils/public_component';

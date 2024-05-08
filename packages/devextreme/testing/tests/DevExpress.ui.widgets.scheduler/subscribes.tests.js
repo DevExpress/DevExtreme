@@ -1,6 +1,6 @@
 import 'generic_light.css!';
 import '__internal/scheduler/m_subscribes';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import {
     DateGeneratorBaseStrategy,
     DateGeneratorVirtualStrategy

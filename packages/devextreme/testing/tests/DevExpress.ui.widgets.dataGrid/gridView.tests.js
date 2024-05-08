@@ -3,7 +3,7 @@ import visibilityChange from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/data_grid';
-import gridCore from 'ui/data_grid/ui.data_grid.core';
+import gridCore from '__internal/grids/data_grid/m_core';
 import { getCells, MockColumnsController, MockDataController, setupDataGridModules } from '../../helpers/dataGridMocks.js';
 import { getHeight, getOuterWidth, getWidth } from 'core/utils/size';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';

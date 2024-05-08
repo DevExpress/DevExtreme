@@ -38,7 +38,7 @@ runManualTest('DataGrid', 'CellEditingAndEditingAPI', ['jQuery', 'React', 'Vue',
       .click($('.dx-checkbox-icon').nth(5));
     await testScreenshot(t, takeScreenshot, 'datagrid_cell_editing_4_desktop.png');
 
-    await t.click($('.dx-button').withText('Delete Selected Records'));
+    await t.click($('[aria-label="Delete Selected Records"]'));
     await testScreenshot(t, takeScreenshot, 'datagrid_cell_editing_5_desktop.png');
 
     await t

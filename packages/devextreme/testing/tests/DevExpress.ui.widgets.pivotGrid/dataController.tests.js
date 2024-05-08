@@ -2,7 +2,7 @@ import $ from 'jquery';
 import Class from 'core/class';
 import { DataController } from '__internal/grids/pivot_grid/data_controller/m_data_controller';
 import virtualScrolling from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
-import stateStoring from 'ui/grid_core/ui.grid_core.state_storing_core';
+import stateStoring from '__internal/grids/grid_core/state_storing/m_state_storing_core';
 import pivotGridUtils from '__internal/grids/pivot_grid/m_widget_utils';
 import { PivotGridDataSource } from '__internal/grids/pivot_grid/data_source/m_data_source';
 

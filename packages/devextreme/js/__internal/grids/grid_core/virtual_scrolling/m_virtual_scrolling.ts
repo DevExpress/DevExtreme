@@ -1478,7 +1478,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     rowElements.map((rowElement) => {
       const $rowElement = $(rowElement);
       this._errorHandlingController && this._errorHandlingController.removeErrorRow(
-        // @ts-expect-error
         $rowElement.next(),
       );
       // @ts-expect-error

@@ -18,8 +18,10 @@ const { AngularModuleFacadeGenerator } = require('devextreme-internal-tools');
 const { AngularCommonReexportsGenerator } = require('devextreme-internal-tools');
 const { AngularComponentNamesGenerator } = require('devextreme-internal-tools');
 
-const { argv } = require('yargs')
-  .default('with-descriptions', false);
+const argv = require('yargs')
+  .option('with-descriptions', { type: 'boolean', default: false })
+  .parseSync();
+
 const buildConfig = require('./build.config');
 
 // ------------Components------------

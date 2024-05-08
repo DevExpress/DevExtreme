@@ -17,7 +17,7 @@ import dateUtils from 'core/utils/date';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 const { module, test } = QUnit;
 const toMs = dateUtils.dateToMilliseconds;

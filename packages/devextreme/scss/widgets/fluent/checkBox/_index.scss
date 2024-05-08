@@ -6,19 +6,19 @@
 @use "../sizes" as *;
 @use "../../base/icons" as *;
 @use "../../base/checkBox";
+@use "../../base/checkBox/mixins" as *;
 
 // adduse
 
-$icon-position: relative;
-
 .dx-checkbox-icon {
-  width: $fluent-checkbox-size;
-  height: $fluent-checkbox-size;
+  width: $fluent-checkbox-arrow-icon-size;
+  height: $fluent-checkbox-arrow-icon-size;
   border-width: $fluent-checkbox-border-width;
   border-style: solid;
   border-color: $checkbox-border-color;
-  border-radius: $fluent-checkbox-border-radius;
+  border-radius: $fluent-checkbox-icon-border-radius;
   background-color: $checkbox-foreground-color;
+  font-size: $fluent-checkbox-icon-font-size;
 
   &::before {
     z-index: 2;
@@ -93,13 +93,14 @@ $icon-position: relative;
 .dx-checkbox-checked {
   .dx-checkbox-icon {
     color: $checkbox-foreground-color;
-    border: 1px solid $checkbox-accent-color;
+    border-color: $checkbox-accent-color;
     background-color: $checkbox-accent-color;
 
     @include dx-icon(check);
-    @include dx-icon-font-centered-sizing($fluent-checkbox-arrow-icon-size, $icon-position);
 
-    font-size: $fluent-checkbox-arrow-font-size;
+    font-size: $fluent-checkbox-icon-font-size;
+
+    @include dx-checkbox-icon-centered($fluent-checkbox-arrow-icon-size, $fluent-checkbox-arrow-icon-size, $fluent-checkbox-arrow-font-size);
   }
 
   &.dx-state-hover {
@@ -148,22 +149,17 @@ $icon-position: relative;
   }
 }
 
+@include dx-checkbox-icon-indeterminate(
+  $checkbox-foreground-color,
+  $checkbox-accent-color,
+  $fluent-checkbox-indeterminate-icon-height,
+  $fluent-checkbox-indeterminate-icon-width,
+  $fluent-checkbox-indeterminate-icon-border-radius,
+);
+
 .dx-checkbox-indeterminate {
   .dx-checkbox-icon {
-    background-color: $checkbox-foreground-color;
-    border: 1px solid $checkbox-accent-color;
-
-    &::before {
-      content: '';
-      display: block;
-      width: 100%;
-      height: 100%;
-      border-radius: 4px;
-      background-color: $checkbox-accent-color;
-      border: 3px solid $base-element-bg;
-    }
-
-    font-size: $fluent-checkbox-indeterminate-font-size;
+    border-color: $checkbox-accent-color;
   }
 
   &.dx-invalid {

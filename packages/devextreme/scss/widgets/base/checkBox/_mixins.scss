@@ -1,0 +1,42 @@
+@use "sass:math";
+@use "../icons" as *;
+
+@mixin dx-checkbox-icon-centered(
+  $icon-height,
+  $icon-width,
+  $font-size: inherit,
+) {
+  &::before {
+    position: relative;
+    display: block;
+    width: $icon-width;
+    height: $icon-height;
+    top: 50%;
+    margin-top: math.div(-$icon-height, 2);
+    inset-inline-start: 50%;
+    margin-inline-start: math.div(-$icon-width, 2);
+    font-size: $font-size,
+  }
+}
+
+@mixin dx-checkbox-icon-indeterminate(
+  $color,
+  $color-bg,
+  $icon-height,
+  $icon-width,
+  $icon-border-radius,
+) {
+  .dx-checkbox-icon {
+    .dx-checkbox-indeterminate & {
+      color: $color;
+    
+      @include dx-checkbox-icon-centered($icon-height, $icon-width);
+
+      &::before {
+        content: '';
+        background-color: $color-bg;
+        border-radius: $icon-border-radius;
+      }
+    }
+  }
+}

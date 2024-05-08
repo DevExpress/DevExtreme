@@ -1,4 +1,4 @@
-import gridCore from 'ui/data_grid/ui.data_grid.core';
+import gridCore from '__internal/grids/data_grid/m_core';
 import ArrayStore from 'data/array_store';
 import { DataSource } from 'data/data_source/data_source';
 import commonUtils from 'core/utils/common';

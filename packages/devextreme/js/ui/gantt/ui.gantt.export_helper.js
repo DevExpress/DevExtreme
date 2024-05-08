@@ -1,5 +1,5 @@
 import { getWindow } from '../../core/utils/window';
-import gridCoreUtils from '../grid_core/ui.grid_core.utils';
+import gridCoreUtils from '../../__internal/grids/grid_core/m_utils';
 import { isDate, isDefined, isNumeric } from '../../core/utils/type';
 import dateLocalization from '../../localization/date';
 import numberLocalization from '../../localization/number';
