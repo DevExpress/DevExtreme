@@ -186,7 +186,7 @@ function update(keyInfo, array, key, data, isBatch, immutable, logError) {
         target = key;
     }
 
-    deepExtendArraySafe(target, data, extendComplexObject);
+    deepExtendArraySafe(target, data, extendComplexObject, false, true);
     if(!isBatch) {
         if(config().useLegacyStoreResult) {
             return trivialPromise(key, data);
