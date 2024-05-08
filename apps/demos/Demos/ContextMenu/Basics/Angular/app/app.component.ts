@@ -4,7 +4,7 @@ import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import notify from 'devextreme/ui/notify';
 import { DxContextMenuModule, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 

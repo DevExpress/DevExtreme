@@ -115,82 +115,82 @@ const contextMenuItems: ContextMenuItems[] = [
         text: 'Camcorders',
         items: [
           {
-            text: "Fabrikam Budget Movie-Maker 1'' 25mm E400",
+            text: 'Fabrikam Budget Movie-Maker 1\'\' 25mm E400',
           },
           {
-            text: "Fabrikam Budget Movie-Maker 1/2'' 3mm E300",
+            text: 'Fabrikam Budget Movie-Maker 1/2\'\' 3mm E300',
           },
           {
-            text: "Fabrikam Budget Movie-Maker 1/3'' 8.5mm E200",
+            text: 'Fabrikam Budget Movie-Maker 1/3\'\' 8.5mm E200',
           },
           {
-            text: "Fabrikam Budget Moviemaker 1/3'' 8.5mm E200",
+            text: 'Fabrikam Budget Moviemaker 1/3\'\' 8.5mm E200',
           },
           {
-            text: "Fabrikam Budget Movie-Maker 2/3'' 17mm E100",
+            text: 'Fabrikam Budget Movie-Maker 2/3\'\' 17mm E100',
           },
           {
-            text: "Fabrikam Budget Moviemaker 2/3'' 17mm E100",
+            text: 'Fabrikam Budget Moviemaker 2/3\'\' 17mm E100',
           },
           {
-            text: "Fabrikam Business Videographer 1'' 25mm M600",
+            text: 'Fabrikam Business Videographer 1\'\' 25mm M600',
           },
           {
-            text: "Fabrikam Business Videographer 1/2'' 3mm M500",
+            text: 'Fabrikam Business Videographer 1/2\'\' 3mm M500',
           },
           {
-            text: "Fabrikam Business Videographer 1/3'' 8.5mm M380",
+            text: 'Fabrikam Business Videographer 1/3\'\' 8.5mm M380',
           },
           {
-            text: "Fabrikam Business Videographer 2/3'' 17mm M280",
+            text: 'Fabrikam Business Videographer 2/3\'\' 17mm M280',
           },
           {
-            text: "Fabrikam Home and Vacation Moviemaker 1'' 25mm M400",
+            text: 'Fabrikam Home and Vacation Moviemaker 1\'\' 25mm M400',
           },
           {
-            text: "Fabrikam Home and Vacation Moviemaker 1/2'' 3mm M300",
+            text: 'Fabrikam Home and Vacation Moviemaker 1/2\'\' 3mm M300',
           },
           {
-            text: "Fabrikam Home and Vacation Moviemaker 1/3'' 8.5mm M200",
+            text: 'Fabrikam Home and Vacation Moviemaker 1/3\'\' 8.5mm M200',
           },
           {
-            text: "Fabrikam Home and vacation moviemaker 2/3'' 17mm M103",
+            text: 'Fabrikam Home and vacation moviemaker 2/3\'\' 17mm M103',
           },
           {
-            text: "Fabrikam Independent Filmmaker 1'' 25mm X400",
+            text: 'Fabrikam Independent Filmmaker 1\'\' 25mm X400',
           },
           {
-            text: "Fabrikam Independent Filmmaker 1/2'' 3mm X300",
+            text: 'Fabrikam Independent Filmmaker 1/2\'\' 3mm X300',
           },
           {
-            text: "Fabrikam Independent Filmmaker 1/3'' 8.5mm X200",
+            text: 'Fabrikam Independent Filmmaker 1/3\'\' 8.5mm X200',
           },
           {
-            text: "Fabrikam Independent Filmmaker 2/3'' 17mm X100",
+            text: 'Fabrikam Independent Filmmaker 2/3\'\' 17mm X100',
           },
           {
-            text: "Fabrikam Social videographer 1'' 25mm E400",
+            text: 'Fabrikam Social videographer 1\'\' 25mm E400',
           },
           {
-            text: "Fabrikam Social Videographer 1/2'' 3mm E300",
+            text: 'Fabrikam Social Videographer 1/2\'\' 3mm E300',
           },
           {
-            text: "Fabrikam Social Videographer 1/3'' 8.5mm E200",
+            text: 'Fabrikam Social Videographer 1/3\'\' 8.5mm E200',
           },
           {
-            text: "Fabrikam Social Videographer 2/3'' 17mm E100",
+            text: 'Fabrikam Social Videographer 2/3\'\' 17mm E100',
           },
           {
-            text: "Fabrikam Trendsetter 1'' 25mm X400",
+            text: 'Fabrikam Trendsetter 1\'\' 25mm X400',
           },
           {
-            text: "Fabrikam Trendsetter 1/2'' 3mm X300",
+            text: 'Fabrikam Trendsetter 1/2\'\' 3mm X300',
           },
           {
-            text: "Fabrikam Trendsetter 1/3'' 8.5mm X200",
+            text: 'Fabrikam Trendsetter 1/3\'\' 8.5mm X200',
           },
           {
-            text: "Fabrikam Trendsetter 2/3'' 17mm X100",
+            text: 'Fabrikam Trendsetter 2/3\'\' 17mm X100',
           },
         ],
       },
@@ -275,7 +275,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'A. Datum Interchangeable lens Non-SLR Digital Camera X250',
           },
           {
-            text: "A. Datum Point n' Shoot Digital Camera M500 Grey",
+            text: 'A. Datum Point n\' Shoot Digital Camera M500 Grey',
           },
           {
             text: 'A. Datum Point Shoot Digital Camera M500',
@@ -1242,10 +1242,9 @@ const contextMenuItems: ContextMenuItems[] = [
   },
 ];
 
-
 @Injectable()
 export class Service {
-  getMenuItems() : ContextMenuItems[] {
+  getMenuItems(): ContextMenuItems[] {
     return contextMenuItems;
   }
 }

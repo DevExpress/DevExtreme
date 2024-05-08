@@ -5,7 +5,7 @@ import notify from 'devextreme/ui/notify'; // Import notify correctly
 import { DxContextMenuModule, DxContextMenuTypes } from 'devextreme-angular/ui/context-menu';
 import { ContextMenuItems, Service } from './app.service';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
