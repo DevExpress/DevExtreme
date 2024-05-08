@@ -75,5 +75,9 @@
     "devextreme-schematics": "*",
     "inferno-server": "7.4.11"
   },
-  "schematics": "./schematics/collection.json"
+  "schematics": "./schematics/collection.json",
+  "publishConfig": {
+    "directory": "npm/dist",
+    "linkDirectory": true
+  }
 }

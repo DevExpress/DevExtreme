@@ -170,7 +170,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-angular
+        version: link:../../packages/devextreme-angular/npm/dist
       rxjs:
         specifier: ^6.6.7
         version: 6.6.7
@@ -276,7 +276,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-angular
+        version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
         specifier: 3.0.0
         version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
@@ -294,10 +294,10 @@ importers:
         version: 1.7.1
       devextreme-react:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-react
+        version: link:../../packages/devextreme-react/npm
       devextreme-vue:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-vue
+        version: link:../../packages/devextreme-vue/npm
       dx-systemjs-vue-browser:
         specifier: 1.1.1
         version: 1.1.1
@@ -553,7 +553,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-react
+        version: link:../../packages/devextreme-react/npm
       react:
         specifier: ~18.0.0
         version: 18.0.0
@@ -599,7 +599,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-react
+        version: link:../../packages/devextreme-react/npm
     devDependencies:
       '@storybook/addon-essentials':
         specifier: ^7.6.9
@@ -645,7 +645,7 @@ importers:
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-vue:
         specifier: ~24.1.1
-        version: link:../../packages/devextreme-vue
+        version: link:../../packages/devextreme-vue/npm
       vue:
         specifier: 3.2.47
         version: 3.2.47
@@ -1360,6 +1360,7 @@ importers:
       zone.js:
         specifier: 0.13.3
         version: 0.13.3
+    publishDirectory: npm/dist
 
   packages/devextreme-monorepo-tools:
     devDependencies:
@@ -1436,6 +1437,7 @@ importers:
       typescript:
         specifier: ~4.7.4
         version: 4.7.4
+    publishDirectory: npm
 
   packages/devextreme-themebuilder:
     dependencies:
@@ -1588,6 +1590,7 @@ importers:
       vue-router:
         specifier: ^4.0.16
         version: 4.2.5(vue@3.2.47)
+    publishDirectory: npm
 
   packages/devextreme/artifacts/npm/devextreme:
     dependencies:
