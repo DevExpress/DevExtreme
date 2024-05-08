@@ -18,6 +18,19 @@ const options: Options<Properties> = {
   width: [undefined, 300],
   placeholder: ['', 'placeholder'],
   focusStateEnabled: [true],
+  imageUpload: [
+    undefined,
+    {
+      tabs: ['file', 'url'],
+      fileUploadMode: 'base64',
+    },
+  ],
+  toolbar: [
+    undefined,
+    {
+      items: ['bold', 'color'],
+    },
+  ],
 };
 
 const a11yCheckConfig = {
