@@ -30,7 +30,7 @@ const props = defineProps<{
 
 const { data } = props;
 
-const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+const dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
 const getStateText = function() {
   if (data.resizable !== false && !data.collapsible) {

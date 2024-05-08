@@ -17,6 +17,7 @@
           :resizable="true"
           :collapsible="true"
           max-size="75%"
+          collapsed-size="8%"
           text="Central Pane"
           template="paneContent"
         />

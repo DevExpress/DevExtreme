@@ -22,7 +22,7 @@ $(() => {
 
     $content.append(createElementWithClass(getStateText(data), 'pane-state'));
 
-    const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+    const dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
     Object.entries(data)
       .filter(([key]) => dimensionOptions.has(key))
@@ -51,6 +51,7 @@ $(() => {
               resizable: true,
               collapsible: true,
               maxSize: '75%',
+              collapsedSize: '8%',
               template(data, index, element) {
                 return paneContentTemplate(data, element, 'Central Pane');
               },
