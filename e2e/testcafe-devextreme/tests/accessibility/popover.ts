@@ -29,14 +29,12 @@ const toolbarItems: ToolbarItem[] = [
 const options: Options<Properties> = {
   width: [300],
   visible: [true, false],
-  shading: [true, false],
   disabled: [true, false],
   showTitle: [true, false],
   title: [undefined, 'title'],
   hint: [undefined, 'hint'],
   enableBodyScroll: [true, false],
   deferRendering: [true, false],
-  elementAttr: [{ 'aria-label': 'aria-label' }],
   toolbarItems: [undefined, toolbarItems],
   animation: [
     undefined,

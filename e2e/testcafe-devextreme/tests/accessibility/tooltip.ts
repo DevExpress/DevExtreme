@@ -9,12 +9,10 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   visible: [true, false],
   disabled: [true, false],
-  shading: [true, false],
   hint: [undefined, 'hint'],
   hideOnOutsideClick: [true, false],
   hideOnParentScroll: [true, false],
   deferRendering: [true, false],
-  elementAttr: [{ 'aria-label': 'aria-label' }],
   animation: [
     undefined,
     {
