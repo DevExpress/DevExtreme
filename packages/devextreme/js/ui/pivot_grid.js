@@ -53,9 +53,4 @@ export default PivotGrid;
  * @type number
  * @default undefined
  */
-/**
- * @name PivotGridDataSourceOptions.fields.headerFilter.allowSearch
- * @type boolean
- * @default undefined
- * @deprecated
- */
+
