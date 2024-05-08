@@ -242,7 +242,7 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install packages
-      run: pnpm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
+      run: pnpm add ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
     - uses: actions/setup-dotnet@v3
       with:

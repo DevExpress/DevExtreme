@@ -256,7 +256,7 @@ const transpileJsVendors = async() => {
     )
         .filter(filePath => filePath.endsWith('.json'))
         .forEach((filePath) => {
-            transpileFile(filePath, filePath.replace(path.normalize('/node_modules'), path.normalize('/packages/devextreme/artifacts/js-systemjs')));
+            transpileFile(filePath, filePath.replace(path.normalize('/node_modules'), path.normalize('/artifacts/js-systemjs')));
         });
 };
 
