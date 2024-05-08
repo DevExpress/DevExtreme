@@ -92,7 +92,6 @@ runs:
       run: |
         rm -rf artifacts/npm
         7z x artifacts.zip
-        ls artifacts/npm/devextreme/
 
     - uses: pnpm/action-setup@v3
       with:

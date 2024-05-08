@@ -56,8 +56,8 @@
         />
     }
     <title>@Model.Title - QUnit test page</title>
-    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.css")" />
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/qunit/qunit/qunit.js")"></script>
+    <link rel="stylesheet" href="@Url.ContentWithCacheBuster("~/packages/devextreme/node_modules/qunit/qunit/qunit.css")" />
+    <script src="@Url.ContentWithCacheBuster("~/packages/devextreme/node_modules/qunit/qunit/qunit.js")"></script>
 
     <script nonce="M5H5tE">
         window.ROOT_URL = "@Url.Content("~/")";
@@ -157,14 +157,14 @@
         })();
     </script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/jquery/dist/jquery.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/packages/devextreme/node_modules/jquery/dist/jquery.js")"></script>
 
-    <script src="@Url.ContentWithCacheBuster("~/node_modules/sinon/pkg/sinon.js")"></script>
+    <script src="@Url.ContentWithCacheBuster("~/packages/devextreme/node_modules/sinon/pkg/sinon.js")"></script>
 
     @if (Model.NoCsp) {
-        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system.js")"></script>
+        <script src="@Url.ContentWithCacheBuster("~/packages/devextreme/node_modules/systemjs/dist/system.js")"></script>
     } else {
-        <script src="@Url.ContentWithCacheBuster("~/node_modules/systemjs/dist/system-csp-production.js")"></script>
+        <script src="@Url.ContentWithCacheBuster("~/packages/devextreme/node_modules/systemjs/dist/system-csp-production.js")"></script>
     }
 
     <script nonce="IpCks6">
@@ -183,7 +183,7 @@
 
             const cspMap = '@Model.NoCsp' !== 'True'
                 ? {
-                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/inferno-create-element.js")',
+                    'inferno-create-element': '@Url.Content("~/packages/devextreme/node_modules/inferno-create-element/dist/inferno-create-element.js")',
                     'intl': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/intl/index.js")',
                     'knockout': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/knockout.js")',
 
@@ -194,14 +194,11 @@
                     'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/devextreme-cldr-data")',
                     'cldr-core': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/cldr-core")',
 
-                    'json': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/json.js")',
-                    'hogan.js': '@Url.Content("~/node_modules/hogan.js/dist/hogan-3.0.2.amd.js")'
+                    'json': '@Url.Content("~/packages/devextreme/artifacts/js-systemjs/json.js")'
                 }
                 : {
-                    'devextreme-cldr-data': '@Url.Content("~/node_modules/devextreme-cldr-data")',
-                    'cldr-core': '@Url.Content("~/node_modules/cldr-core")',
-
-                    'hogan.js': '@Url.Content("~/node_modules/hogan.js/dist/hogan-3.0.2.js")'
+                    'devextreme-cldr-data': '@Url.Content("~/packages/devextreme/node_modules/devextreme-cldr-data")',
+                    'cldr-core': '@Url.Content("~/packages/devextreme/node_modules/cldr-core")'
                 };
 
             const cspPackages = '@Model.NoCsp' !== 'True' ? {
@@ -217,49 +214,49 @@
                 map: {
                     // Deps
                     'globalize': '@Url.Content("~/packages/devextreme/artifacts/js/globalize")',
-                    'intl': '@Url.Content("~/node_modules/intl/index.js")',
+                    'intl': '@Url.Content("~/packages/devextreme/node_modules/intl/index.js")',
                     'cldr': '@Url.Content("~/packages/devextreme/artifacts/js/cldr")',
                     'jquery': '@GetJQueryUrl()',
-                    'knockout': '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")',
+                    'knockout': '@Url.Content("~/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js")',
                     'jszip': '@Url.Content("~/packages/devextreme/artifacts/js/jszip.js")',
-                    'underscore': '@Url.Content("~/node_modules/underscore/underscore-min.js")',
-                    '@@devextreme/vdom': '@Url.Content("~/node_modules/@devextreme/vdom")',
-                    '@@devextreme/runtime/common': '@Url.Content("~/node_modules/@devextreme/runtime/common")',
-                    '@@devextreme/runtime/inferno': '@Url.Content("~/node_modules/@devextreme/runtime/inferno")',
-                    '@@devextreme/runtime/declarations': '@Url.Content("~/node_modules/@devextreme/runtime/declarations")',
-                    '@@devextreme/runtime/angular': '@Url.Content("~/node_modules/@devextreme/runtime/angular")',
-                    '@@devextreme/runtime/vue': '@Url.Content("~/node_modules/@devextreme/runtime/vue")',
-                    '@@devextreme/runtime/react': '@Url.Content("~/node_modules/@devextreme/runtime/react")',
-                    'devextreme-quill': '@Url.Content("~/node_modules/devextreme-quill/dist/dx-quill.js")',
+                    'underscore': '@Url.Content("~/packages/devextreme/node_modules/underscore/underscore-min.js")',
+                    '@@devextreme/vdom': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/vdom")',
+                    '@@devextreme/runtime/common': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/common")',
+                    '@@devextreme/runtime/inferno': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/inferno")',
+                    '@@devextreme/runtime/declarations': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/declarations")',
+                    '@@devextreme/runtime/angular': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/angular")',
+                    '@@devextreme/runtime/vue': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/vue")',
+                    '@@devextreme/runtime/react': '@Url.Content("~/packages/devextreme/node_modules/@devextreme/runtime/react")',
+                    'devextreme-quill': '@Url.Content("~/packages/devextreme/node_modules/devextreme-quill/dist/dx-quill.js")',
                     'devexpress-diagram': '@Url.Content("~/packages/devextreme/artifacts/js/dx-diagram.js")',
                     'devexpress-gantt': '@Url.Content("~/packages/devextreme/artifacts/js/dx-gantt.js")',
-                    'exceljs': '@Url.Content("~/node_modules/exceljs/dist/exceljs.js")',
-                    'fflate': '@Url.Content("~/node_modules/fflate/esm/browser.js")',
-                    'jspdf': '@Url.Content("~/node_modules/jspdf/dist/jspdf.umd.js")',
-                    'jspdf-autotable': '@Url.Content("~/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
-                    'turndown': '@Url.Content("~/node_modules/turndown/lib/turndown.browser.umd.js")',
-                    'showdown': '@Url.Content("~/node_modules/showdown/dist/showdown.js")',
-                    'rrule': '@Url.Content("~/node_modules/rrule/dist/es5/rrule.js")',
+                    'exceljs': '@Url.Content("~/packages/devextreme/node_modules/exceljs/dist/exceljs.js")',
+                    'fflate': '@Url.Content("~/packages/devextreme/node_modules/fflate/esm/browser.js")',
+                    'jspdf': '@Url.Content("~/packages/devextreme/node_modules/jspdf/dist/jspdf.umd.js")',
+                    'jspdf-autotable': '@Url.Content("~/packages/devextreme/node_modules/jspdf-autotable/dist/jspdf.plugin.autotable.js")',
+                    'turndown': '@Url.Content("~/packages/devextreme/node_modules/turndown/lib/turndown.browser.umd.js")',
+                    'showdown': '@Url.Content("~/packages/devextreme/node_modules/showdown/dist/showdown.js")',
+                    'rrule': '@Url.Content("~/packages/devextreme/node_modules/rrule/dist/es5/rrule.js")',
 
                     // Inferno
-                    'inferno': '@Url.Content("~/node_modules/inferno/dist/inferno.js")',
-                    'inferno-hydrate': '@Url.Content("~/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
-                    'inferno-compat': '@Url.Content("~/node_modules/inferno-compat/dist/inferno-compat.js")',
-                    'inferno-clone-vnode': '@Url.Content("~/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
-                    'inferno-create-element': '@Url.Content("~/node_modules/inferno-create-element/dist/index.cjs.js")',
-                    'inferno-create-class': '@Url.Content("~/node_modules/inferno-create-class/dist/index.cjs.js")',
-                    'inferno-extras': '@Url.Content("~/node_modules/inferno-extras/dist/index.cjs.js")',
+                    'inferno': '@Url.Content("~/packages/devextreme/node_modules/inferno/dist/inferno.js")',
+                    'inferno-hydrate': '@Url.Content("~/packages/devextreme/node_modules/inferno-hydrate/dist/inferno-hydrate.js")',
+                    'inferno-compat': '@Url.Content("~/packages/devextreme/node_modules/inferno-compat/dist/inferno-compat.js")',
+                    'inferno-clone-vnode': '@Url.Content("~/packages/devextreme/node_modules/inferno-clone-vnode/dist/index.cjs.js")',
+                    'inferno-create-element': '@Url.Content("~/packages/devextreme/node_modules/inferno-create-element/dist/index.cjs.js")',
+                    'inferno-create-class': '@Url.Content("~/packages/devextreme/node_modules/inferno-create-class/dist/index.cjs.js")',
+                    'inferno-extras': '@Url.Content("~/packages/devextreme/node_modules/inferno-extras/dist/index.cjs.js")',
 
                     // Global CSS
                     'generic_light.css': '@Url.Content("~/packages/devextreme/artifacts/css/dx.light.css")',
                     'material_blue_light.css': '@Url.Content("~/packages/devextreme/artifacts/css/dx.material.blue.light.css")',
 
                     // SystemJS plugins
-                    'css': '@Url.Content("~/node_modules/systemjs-plugin-css/css.js")',
-                    'text': '@Url.Content("~/node_modules/systemjs-plugin-text/text.js")',
-                    'json': '@Url.Content("~/node_modules/systemjs-plugin-json/json.js")',
-                    'plugin-babel': '@Url.Content("~/node_modules/systemjs-plugin-babel/plugin-babel.js")',
-                    'systemjs-babel-build': '@Url.Content("~/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")',
+                    'css': '@Url.Content("~/packages/devextreme/node_modules/systemjs-plugin-css/css.js")',
+                    'text': '@Url.Content("~/packages/devextreme/node_modules/systemjs-plugin-text/text.js")',
+                    'json': '@Url.Content("~/packages/devextreme/node_modules/systemjs-plugin-json/json.js")',
+                    'plugin-babel': '@Url.Content("~/packages/devextreme/node_modules/systemjs-plugin-babel/plugin-babel.js")',
+                    'systemjs-babel-build': '@Url.Content("~/packages/devextreme/node_modules/systemjs-plugin-babel/systemjs-babel-browser.js")',
 
                     ...cspMap,
                 },
@@ -320,7 +317,7 @@
                     "@@devextreme/*/package.json",
                 ],
                 meta: {
-                    '@Url.Content("~/node_modules/knockout/build/output/knockout-latest.debug.js")': {
+                    '@Url.Content("~/packages/devextreme/node_modules/knockout/build/output/knockout-latest.debug.js")': {
                         format: 'global',
                         deps: ['jquery'],
                         exports: 'ko'
