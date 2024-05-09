@@ -4798,10 +4798,11 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
 });
 
 QUnit.module('the \'deferRendering\' option', () => {
-    [true, false].forEach(value => {
-        QUnit.test(`if ${value} should not display any errors [T1230995]`, function(assert) {
+    [true, false].forEach(deferRendering => {
+        QUnit.test(`if ${deferRendering} should not display any errors [T1230995]`, function(assert) {
             try {
                 const $element = $('#tagBox').dxTagBox({
+                    applyValueMode: 'useButtons',
                     acceptCustomValue: true,
                     onCustomItemCreating(args) {
                         const newValue = args.text;
@@ -4814,7 +4815,7 @@ QUnit.module('the \'deferRendering\' option', () => {
                         }
                         args.customItem = newValue;
                     },
-                    deferRendering: value
+                    deferRendering
                 });
                 const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
                 const keyboard = keyboardMock($input, true);
@@ -4829,9 +4830,10 @@ QUnit.module('the \'deferRendering\' option', () => {
             }
         });
 
-        QUnit.test(`if ${value} should display right selected items [T1230995]`, function(assert) {
+        QUnit.test(`if ${deferRendering} should display right selected items [T1230995]`, function(assert) {
             const customValue = 'test 1';
             const $element = $('#tagBox').dxTagBox({
+                applyValueMode: 'useButtons',
                 items: ['Item 1', 'Item 2', 'Item 3'],
                 acceptCustomValue: true,
                 onCustomItemCreating(args) {
@@ -4845,8 +4847,9 @@ QUnit.module('the \'deferRendering\' option', () => {
                     }
                     args.customItem = newValue;
                 },
-                deferRendering: value
+                deferRendering
             });
+            const selectedOption = (deferRendering) ? 'selectedItems' : 'selectedItem';
             const instance = $element.dxTagBox('instance');
             const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const keyboard = keyboardMock($input, true);
@@ -4855,14 +4858,15 @@ QUnit.module('the \'deferRendering\' option', () => {
                 .type(customValue)
                 .press('enter');
 
-            const isValueExist = instance.option('selectedItems').includes(customValue);
 
+            const isValueExist = instance.option(selectedOption).includes(customValue);
             assert.ok(isValueExist, 'Custom Value is properly selected');
         });
 
-        QUnit.test(`if ${value} should include customValue in list of items [T1230995]`, function(assert) {
+        QUnit.test(`if ${deferRendering} should include customValue in list of items [T1230995]`, function(assert) {
             const customValue = 'test 1';
             const $element = $('#tagBox').dxTagBox({
+                applyValueMode: 'useButtons',
                 items: ['Item 1', 'Item 2', 'Item 3'],
                 acceptCustomValue: true,
                 onCustomItemCreating(args) {
@@ -4876,7 +4880,7 @@ QUnit.module('the \'deferRendering\' option', () => {
                     }
                     args.customItem = newValue;
                 },
-                deferRendering: value
+                deferRendering
             });
             const instance = $element.dxTagBox('instance');
             const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
