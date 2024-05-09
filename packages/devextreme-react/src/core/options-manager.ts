@@ -37,8 +37,6 @@ class OptionsManager {
   private independentEvents: Set<string>;
 
   constructor() {
-    optionsManagers.add(this);
-
     this.onOptionChanged = this.onOptionChanged.bind(this);
     this.wrapOptionValue = this.wrapOptionValue.bind(this);
   }
@@ -53,6 +51,7 @@ class OptionsManager {
     this.currentConfig = config;
     this.subscribableOptions = new Set(subscribableOptions);
     this.independentEvents = new Set(independentEvents);
+    optionsManagers.add(this);
   }
 
   public getInitialOptions(rootNode: IConfigNode): Record<string, unknown> {
