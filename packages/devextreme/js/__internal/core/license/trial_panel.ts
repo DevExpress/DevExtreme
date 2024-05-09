@@ -24,52 +24,52 @@ const attributeNames = {
   version: 'version',
 };
 const commonStyles = {
-  opacity: "1",
-  visibility: "visible",
-  "clip-path": "none",
-  "filter": "none"
+  opacity: '1',
+  visibility: 'visible',
+  'clip-path': 'none',
+  filter: 'none',
 };
 const contentStyles = {
   ...commonStyles,
-  width: "100%",
-  height: "auto",
-  lineHeight: "auto",
-  display: "block",
-  "z-index": `${BASE_Z_INDEX}`,
-  position: "static",
-  transform: "translate(0px, 0px)",
-  "background-color": "#FF7200",
-  border: "none",
-  margin: "auto",
-  "box-sizing": "border-box",
-  "text-align": "center"
+  width: '100%',
+  height: 'auto',
+  'line-height': 'auto',
+  display: 'block',
+  'z-index': `${BASE_Z_INDEX}`,
+  position: 'static',
+  transform: 'translate(0px, 0px)',
+  'background-color': '#FF7200',
+  border: 'none',
+  margin: 'auto',
+  'box-sizing': 'border-box',
+  'text-align': 'center',
 };
 const containerStyles = {
   ...contentStyles,
-  display: "flex",
-  "align-items": "center",
-  "flex-direction": "row",
-  position: "relative",
-  top: "0px",
-  left: "0px",
-  padding: "0.5rem",
+  display: 'flex',
+  'align-items': 'center',
+  'flex-direction': 'row',
+  position: 'relative',
+  top: '0px',
+  left: '0px',
+  padding: '0.5rem',
 };
 const buttonStyles = {
-  width: "1rem",
-  cursor: "pointer",
-  height: "1rem"
+  width: '1rem',
+  cursor: 'pointer',
+  height: '1rem',
 };
 
 const textStyles = {
   ...commonStyles,
-  display: "inline",
-  position: "static",
-  padding: "0px",
-  margin: "0px",
-  color: "white",
-  "font-family": "'Segoe UI','Open Sans Condensed',-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif",
-  "font-size": "0.875rem",
-  "font-wight": "600",
+  display: 'inline',
+  position: 'static',
+  padding: '0px',
+  margin: '0px',
+  color: 'white',
+  'font-family': '\'Segoe UI\',\'Open Sans Condensed\',-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif',
+  'font-size': '0.875rem',
+  'font-wight': '600',
 };
 
 class DxLicense extends HTMLElement {
@@ -96,12 +96,21 @@ class DxLicense extends HTMLElement {
 
     this._spanStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.textStyles);
     this._linkStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.linkStyles);
+
     this._containerStyles = this._createImportantStyles(
       containerStyles,
       DxLicense.customStyles?.containerStyles,
     );
-    this._contentStyles = this._createImportantStyles(contentStyles, DxLicense.customStyles?.contentStyles);
-    this._buttonStyles = this._createImportantStyles(buttonStyles, DxLicense.customStyles?.contentStyles);
+
+    this._contentStyles = this._createImportantStyles(
+      contentStyles,
+      DxLicense.customStyles?.contentStyles,
+    );
+
+    this._buttonStyles = this._createImportantStyles(
+      buttonStyles,
+      DxLicense.customStyles?.contentStyles,
+    );
   }
 
   private _createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
@@ -155,7 +164,7 @@ class DxLicense extends HTMLElement {
   }
 
   private _createContentContainer(): HTMLElement {
-    const contentContainer = document.createElement("div");
+    const contentContainer = document.createElement('div');
     contentContainer.style.cssText = this._contentStyles;
     contentContainer.append(
       this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
@@ -170,7 +179,7 @@ class DxLicense extends HTMLElement {
     this.style.cssText = this._containerStyles;
     this.append(
       this._createContentContainer(),
-      this._createButton()
+      this._createButton(),
     );
   }
 
