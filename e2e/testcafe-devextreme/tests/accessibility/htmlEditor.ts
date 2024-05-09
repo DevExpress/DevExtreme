@@ -14,6 +14,9 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   name: ['', 'name'],
   height: [undefined, 300],
+  width: [undefined, 300],
+  placeholder: ['', 'placeholder'],
+  focusStateEnabled: [true],
   toolbar: [
     undefined,
     {
