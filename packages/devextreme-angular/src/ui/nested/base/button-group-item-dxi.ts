@@ -160,10 +160,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('closeMenuOnClick', value);
     }
 
-    get items(): Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem> {
+    get items(): Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | DiagramCommand | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem>) {
+    set items(value: Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | DiagramCommand | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem>) {
         this._setOption('items', value);
     }
 

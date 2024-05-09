@@ -13025,7 +13025,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramCustomCommand.name]
      */
-    name?: string;
+    name?: string | DevExpress.ui.dxDiagram.DiagramCommand;
     /**
      * [descr:dxDiagramCustomCommand.text]
      */
@@ -13037,7 +13037,9 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramCustomCommand.items]
      */
-    items?: Array<dxDiagramCustomCommand>;
+    items?: Array<
+      dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+    >;
     /**
      * [descr:dxDiagramCustomCommand.location]
      */
@@ -13727,7 +13729,9 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.commands]
          */
-        commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+        commands?: Array<
+          dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+        >;
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.groups]
          */
@@ -13735,7 +13739,9 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.commands]
            */
-          commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+          commands?: Array<
+            dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+          >;
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.title]
            */
@@ -13793,7 +13799,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+      >;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
        */
@@ -13806,7 +13814,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+      >;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
        */

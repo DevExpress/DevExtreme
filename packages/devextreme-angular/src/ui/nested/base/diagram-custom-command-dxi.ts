@@ -19,10 +19,10 @@ export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get items(): Array<dxDiagramCustomCommand> {
+    get items(): Array<dxDiagramCustomCommand | DiagramCommand> {
         return this._getOption('items');
     }
-    set items(value: Array<dxDiagramCustomCommand>) {
+    set items(value: Array<dxDiagramCustomCommand | DiagramCommand>) {
         this._setOption('items', value);
     }
 

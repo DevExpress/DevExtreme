@@ -943,18 +943,16 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       tabs?: Array<{
         /**
          * @docid
-         * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
          */
-        commands?: Array<DiagramCommand>;
+        commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
         /**
          * @docid
          */
         groups?: Array<{
           /**
            * @docid
-           * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
            */
-          commands?: Array<DiagramCommand>;
+          commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
           /**
            * @docid
            */
@@ -1027,10 +1025,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     historyToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | DiagramCommand>
       /**
        * @docid
        * @default true
@@ -1045,10 +1042,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     viewToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | DiagramCommand>
       /**
        * @docid
        * @default true
@@ -1407,10 +1403,9 @@ export interface dxDiagramShape extends Item {
 export interface dxDiagramCustomCommand {
     /**
      * @docid
-     * @type String|Enums.DiagramCommand
      * @public
      */
-    name?: string;
+    name?: string | DiagramCommand;
     /**
      * @docid
      * @public
@@ -1425,7 +1420,7 @@ export interface dxDiagramCustomCommand {
      * @docid
      * @public
      */
-    items?: Array<dxDiagramCustomCommand>;
+    items?: Array<dxDiagramCustomCommand | DiagramCommand>;
     /**
      * @docid
      * @default "before"
