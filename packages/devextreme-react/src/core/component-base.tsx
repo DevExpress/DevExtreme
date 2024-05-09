@@ -76,6 +76,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const useDeferUpdateForTemplates = useRef(false);
     const guardsUpdateScheduled = useRef(false);
     const childElementsDetached = useRef(false);
+    const isFocused = useRef(false);
     const optionsManager = useRef<OptionsManager>(new OptionsManager());
     const childNodes = useRef<Node[]>();
 
@@ -230,6 +231,10 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       instance.current = new WidgetClass(el, options);
 
+      if (isFocused.current && instance.current.focus) {
+        instance.current.focus();
+      }
+
       if (!useRequestAnimationFrameFlag) {
         useDeferUpdateForTemplates.current = instance.current.option(
           'integrationOptions.useDeferUpdateForTemplates',
@@ -312,11 +317,16 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       if (instance.current) {
         const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
 
+        isFocused.current = !!element.current?.contains(document.activeElement);
         childNodes.current?.forEach((child) => child.parentNode?.removeChild(child));
         childElementsDetached.current = true;
 
         if (element.current) {
+          const preventFocusOut = (e: FocusEvent) => e.stopPropagation();
+
+          events.on(element.current, 'focusout', preventFocusOut);
           events.triggerHandler(element.current, DX_REMOVE_EVENT, dxRemoveArgs);
+          events.off(element.current, 'focusout', preventFocusOut);
         }
 
         instance.current.dispose();
@@ -331,6 +341,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
       element.current,
       optionsManager.current,
       childElementsDetached.current,
+      isFocused.current,
     ]);
 
     useLayoutEffect(() => {
