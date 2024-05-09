@@ -22,6 +22,7 @@ const options: Options<Properties> = {
   value: [undefined, file],
   multiple: [true, false],
   disabled: [true, false],
+  readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: ['', 'name'],
   focusStateEnabled: [true],
