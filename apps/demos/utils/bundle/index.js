@@ -251,6 +251,7 @@ const build = async (framework) => {
     await builder.bundle(packages, bundlePath, bundleOpts);
   } catch (err) {
     console.error(`Build ${framework} error `, err);
+    process.exit(err);
   }
 };
 
