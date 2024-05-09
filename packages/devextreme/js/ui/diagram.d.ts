@@ -24,20 +24,80 @@ import {
     ToolbarItemLocation,
 } from '../common';
 
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramConnectorLineType = 'straight' | 'orthogonal';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramConnectorPosition = 'start' | 'end';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramItemType = 'shape' | 'connector';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramPanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramToolboxDisplayMode = 'icons' | 'texts';
+/**
+ * @public
+ * @namespace DevExpress.ui.dxDiagram
+ */
 export type DiagramUnits = 'in' | 'cm' | 'px';
 
 /**

@@ -12722,173 +12722,6 @@ declare module DevExpress.ui {
       readonly item: dxDiagramShape;
     };
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramCommand =
-      | 'separator'
-      | 'exportSvg'
-      | 'exportPng'
-      | 'exportJpg'
-      | 'undo'
-      | 'redo'
-      | 'cut'
-      | 'copy'
-      | 'paste'
-      | 'selectAll'
-      | 'delete'
-      | 'fontName'
-      | 'fontSize'
-      | 'bold'
-      | 'italic'
-      | 'underline'
-      | 'fontColor'
-      | 'lineStyle'
-      | 'lineWidth'
-      | 'lineColor'
-      | 'fillColor'
-      | 'textAlignLeft'
-      | 'textAlignCenter'
-      | 'textAlignRight'
-      | 'lock'
-      | 'unlock'
-      | 'sendToBack'
-      | 'bringToFront'
-      | 'insertShapeImage'
-      | 'editShapeImage'
-      | 'deleteShapeImage'
-      | 'connectorLineType'
-      | 'connectorLineStart'
-      | 'connectorLineEnd'
-      | 'layoutTreeTopToBottom'
-      | 'layoutTreeBottomToTop'
-      | 'layoutTreeLeftToRight'
-      | 'layoutTreeRightToLeft'
-      | 'layoutLayeredTopToBottom'
-      | 'layoutLayeredBottomToTop'
-      | 'layoutLayeredLeftToRight'
-      | 'layoutLayeredRightToLeft'
-      | 'fullScreen'
-      | 'zoomLevel'
-      | 'showGrid'
-      | 'snapToGrid'
-      | 'gridSize'
-      | 'units'
-      | 'pageSize'
-      | 'pageOrientation'
-      | 'pageColor'
-      | 'simpleView'
-      | 'toolbox';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramConnectorLineEnd =
-      | 'none'
-      | 'arrow'
-      | 'outlinedTriangle'
-      | 'filledTriangle';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramConnectorLineType = 'straight' | 'orthogonal';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramConnectorPosition = 'start' | 'end';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramItemType = 'shape' | 'connector';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramPanelVisibility =
-      | 'auto'
-      | 'visible'
-      | 'collapsed'
-      | 'disabled';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramRequestEditOperationReason =
-      | 'checkUIElementAvailability'
-      | 'modelModification';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramShapeCategory =
-      | 'general'
-      | 'flowchart'
-      | 'orgChart'
-      | 'containers'
-      | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramShapeType =
-      | 'text'
-      | 'rectangle'
-      | 'ellipse'
-      | 'cross'
-      | 'triangle'
-      | 'diamond'
-      | 'heart'
-      | 'pentagon'
-      | 'hexagon'
-      | 'octagon'
-      | 'star'
-      | 'arrowLeft'
-      | 'arrowTop'
-      | 'arrowRight'
-      | 'arrowBottom'
-      | 'arrowNorthSouth'
-      | 'arrowEastWest'
-      | 'process'
-      | 'decision'
-      | 'terminator'
-      | 'predefinedProcess'
-      | 'document'
-      | 'multipleDocuments'
-      | 'manualInput'
-      | 'preparation'
-      | 'data'
-      | 'database'
-      | 'hardDisk'
-      | 'internalStorage'
-      | 'paperTape'
-      | 'manualOperation'
-      | 'delay'
-      | 'storedData'
-      | 'display'
-      | 'merge'
-      | 'connector'
-      | 'or'
-      | 'summingJunction'
-      | 'verticalContainer'
-      | 'horizontalContainer'
-      | 'cardWithImageOnLeft'
-      | 'cardWithImageOnTop'
-      | 'cardWithImageOnRight';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramToolboxDisplayMode = 'icons' | 'texts';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramUnits = 'in' | 'cm' | 'px';
-    /**
      * [descr:_ui_diagram_DisposingEvent]
      */
     export type DisposingEvent = DevExpress.events.EventInfo<dxDiagram>;
@@ -30641,6 +30474,144 @@ declare module DevExpress.ui.dxDataGrid {
   };
 }
 declare module DevExpress.ui.dxDiagram {
+  export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+  export type DiagramCommand =
+    | 'separator'
+    | 'exportSvg'
+    | 'exportPng'
+    | 'exportJpg'
+    | 'undo'
+    | 'redo'
+    | 'cut'
+    | 'copy'
+    | 'paste'
+    | 'selectAll'
+    | 'delete'
+    | 'fontName'
+    | 'fontSize'
+    | 'bold'
+    | 'italic'
+    | 'underline'
+    | 'fontColor'
+    | 'lineStyle'
+    | 'lineWidth'
+    | 'lineColor'
+    | 'fillColor'
+    | 'textAlignLeft'
+    | 'textAlignCenter'
+    | 'textAlignRight'
+    | 'lock'
+    | 'unlock'
+    | 'sendToBack'
+    | 'bringToFront'
+    | 'insertShapeImage'
+    | 'editShapeImage'
+    | 'deleteShapeImage'
+    | 'connectorLineType'
+    | 'connectorLineStart'
+    | 'connectorLineEnd'
+    | 'layoutTreeTopToBottom'
+    | 'layoutTreeBottomToTop'
+    | 'layoutTreeLeftToRight'
+    | 'layoutTreeRightToLeft'
+    | 'layoutLayeredTopToBottom'
+    | 'layoutLayeredBottomToTop'
+    | 'layoutLayeredLeftToRight'
+    | 'layoutLayeredRightToLeft'
+    | 'fullScreen'
+    | 'zoomLevel'
+    | 'showGrid'
+    | 'snapToGrid'
+    | 'gridSize'
+    | 'units'
+    | 'pageSize'
+    | 'pageOrientation'
+    | 'pageColor'
+    | 'simpleView'
+    | 'toolbox';
+  export type DiagramConnectorLineEnd =
+    | 'none'
+    | 'arrow'
+    | 'outlinedTriangle'
+    | 'filledTriangle';
+  export type DiagramConnectorLineType = 'straight' | 'orthogonal';
+  export type DiagramConnectorPosition = 'start' | 'end';
+  export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+  export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
+  export type DiagramItemType = 'shape' | 'connector';
+  export type DiagramModelOperation =
+    | 'addShape'
+    | 'addShapeFromToolbox'
+    | 'deleteShape'
+    | 'deleteConnector'
+    | 'changeConnection'
+    | 'changeConnectorPoints'
+    | 'beforeChangeShapeText'
+    | 'changeShapeText'
+    | 'beforeChangeConnectorText'
+    | 'changeConnectorText'
+    | 'resizeShape'
+    | 'moveShape';
+  export type DiagramPanelVisibility =
+    | 'auto'
+    | 'visible'
+    | 'collapsed'
+    | 'disabled';
+  export type DiagramRequestEditOperationReason =
+    | 'checkUIElementAvailability'
+    | 'modelModification';
+  export type DiagramShapeCategory =
+    | 'general'
+    | 'flowchart'
+    | 'orgChart'
+    | 'containers'
+    | 'custom';
+  export type DiagramShapeType =
+    | 'text'
+    | 'rectangle'
+    | 'ellipse'
+    | 'cross'
+    | 'triangle'
+    | 'diamond'
+    | 'heart'
+    | 'pentagon'
+    | 'hexagon'
+    | 'octagon'
+    | 'star'
+    | 'arrowLeft'
+    | 'arrowTop'
+    | 'arrowRight'
+    | 'arrowBottom'
+    | 'arrowNorthSouth'
+    | 'arrowEastWest'
+    | 'process'
+    | 'decision'
+    | 'terminator'
+    | 'predefinedProcess'
+    | 'document'
+    | 'multipleDocuments'
+    | 'manualInput'
+    | 'preparation'
+    | 'data'
+    | 'database'
+    | 'hardDisk'
+    | 'internalStorage'
+    | 'paperTape'
+    | 'manualOperation'
+    | 'delay'
+    | 'storedData'
+    | 'display'
+    | 'merge'
+    | 'connector'
+    | 'or'
+    | 'summingJunction'
+    | 'verticalContainer'
+    | 'horizontalContainer'
+    | 'cardWithImageOnLeft'
+    | 'cardWithImageOnTop'
+    | 'cardWithImageOnRight';
+  export type DiagramToolboxDisplayMode = 'icons' | 'texts';
+  export type DiagramUnits = 'in' | 'cm' | 'px';
   /**
    * [descr:dxDiagramItem]
    */
