@@ -11,7 +11,9 @@ const markup = '<p>He<em>llo</em></p>';
 
 const options: Options<Properties> = {
   value: [undefined, markup],
-  disabled: [true, false],
+  hint: [undefined, 'hint'],
+  name: ['', 'name'],
+  height: [undefined, 300],
   toolbar: [
     undefined,
     {
