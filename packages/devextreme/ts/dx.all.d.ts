@@ -13138,7 +13138,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextMenu.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+      >;
       /**
        * [descr:dxDiagramOptions.contextMenu.enabled]
        */
