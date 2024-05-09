@@ -4831,7 +4831,8 @@ QUnit.module('the \'deferRendering\' option', () => {
         });
 
         QUnit.test(`if ${deferRendering} should display right selected items [T1230995]`, function(assert) {
-            const customValue = 'test 1';
+            const firstCustomValue = 'test 1';
+            const secondCustomValue = 'test 2';
             const $element = $('#tagBox').dxTagBox({
                 applyValueMode: 'useButtons',
                 items: ['Item 1', 'Item 2', 'Item 3'],
@@ -4855,12 +4856,21 @@ QUnit.module('the \'deferRendering\' option', () => {
             const keyboard = keyboardMock($input, true);
             keyboard
                 .focus()
-                .type(customValue)
+                .type(firstCustomValue)
+                .press('enter')
+                .type(secondCustomValue)
                 .press('enter');
 
 
-            const isValueExist = instance.option(selectedOption).includes(customValue);
-            assert.ok(isValueExist, 'Custom Value is properly selected');
+            if(deferRendering) {
+                const isValueExist = [firstCustomValue, secondCustomValue].every(value =>
+                    instance.option('selectedItems').includes(value)
+                );
+                assert.ok(isValueExist, 'Custom Value is properly selected');
+            } else {
+                const isValueExist = instance.option('selectedItem').includes(secondCustomValue);
+                assert.ok(isValueExist, 'All custom values is properly selected');
+            }
         });
 
         QUnit.test(`if ${deferRendering} should include customValue in list of items [T1230995]`, function(assert) {
