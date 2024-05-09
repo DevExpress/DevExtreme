@@ -13778,7 +13778,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.DiagramCommand
+      >;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
        */

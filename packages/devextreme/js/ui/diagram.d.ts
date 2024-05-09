@@ -1010,10 +1010,9 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
     mainToolbar?: {
       /**
        * @docid
-       * @type Array<dxDiagramCustomCommand>|Array<Enums.DiagramCommand>
        * @default undefined
        */
-      commands?: Array<DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
       /**
        * @docid
        * @default false
