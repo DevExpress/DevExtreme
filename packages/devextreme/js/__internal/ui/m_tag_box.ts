@@ -1300,9 +1300,10 @@ const TagBox = (SelectBox as any).inherit({
       return;
     }
 
+    const isListRendered = !this.option('deferRendering');
     const useButtons = this.option('applyValueMode') === 'useButtons';
     const valueIndex = this._valueIndex(value);
-    const values = (useButtons ? this._list.option('selectedItemKeys') : this._getValue()).slice();
+    const values = (useButtons && isListRendered ? this._list.option('selectedItemKeys') : this._getValue()).slice();
 
     if (valueIndex >= 0) {
       values.splice(valueIndex, 1);
@@ -1310,7 +1311,7 @@ const TagBox = (SelectBox as any).inherit({
       values.push(value);
     }
 
-    if (this.option('applyValueMode') === 'useButtons') {
+    if (this.option('applyValueMode') === 'useButtons' && isListRendered) {
       this._list.option('selectedItemKeys', values);
     } else {
       this.option('value', values);
