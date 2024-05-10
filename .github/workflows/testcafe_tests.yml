@@ -4,10 +4,10 @@ concurrency:
   group: wf-${{github.event.pull_request.number || github.sha}}-${{github.workflow}}
   cancel-in-progress: true
 
-#on:
-#  pull_request:
-#  push:
-#    branches: [24_1]
+on:
+  pull_request:
+  push:
+    branches: [24_1]
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
@@ -150,6 +150,16 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
+    - name: Download artifacts
+      uses: actions/download-artifact@v3
+      with:
+        name: devextreme-artifacts
+        path: ./packages/devextreme
+
+    - name: Unpack artifacts
+      working-directory: ./packages/devextreme
+      run: 7z x artifacts.zip -aoa
+
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
@@ -182,16 +192,6 @@ jobs:
 
     - name: Install dependencies
       run: pnpm install
-
-    - name: Download artifacts
-      uses: actions/download-artifact@v3
-      with:
-        name: devextreme-artifacts
-        path: ./packages/devextreme
-
-    - name: Unpack artifacts
-      working-directory: ./packages/devextreme
-      run: 7z x artifacts.zip -aoa
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme

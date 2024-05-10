@@ -64,6 +64,10 @@ if (devextremeVersion !== devextremeNpmVersion) {
 
 sh.exec('pnpm run all:pack-and-copy');
 
+sh.exec('pnpx nx pack devextreme-react', { silent: true });
+sh.exec('pnpx nx pack devextreme-vue', { silent: true });
+sh.exec('pnpx nx pack devextreme-angular --with-descriptions', { silent: true });
+
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);
 sh.popd();
@@ -76,10 +80,6 @@ sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
     sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
     packAndCopy(NPM_DIR);
 sh.popd();
-
-sh.exec('pnpx nx pack devextreme-react', { silent: true });
-sh.exec('pnpx nx pack devextreme-vue', { silent: true });
-sh.exec('pnpx nx pack devextreme-angular --with-descriptions', { silent: true });
 
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_DIR);
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_DIR);
