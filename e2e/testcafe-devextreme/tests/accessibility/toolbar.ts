@@ -7,18 +7,10 @@ import { Options } from '../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
-const generateItems = (count) => {
-  const items: { text: string; locateInMenu: string }[] = [];
-
-  for (let i = 0; i <= count; i += 1) {
-    items.push({ text: `item${i}`, locateInMenu: 'always' });
-  }
-
-  return items;
-};
+const items = ['Item_1', 'Item_2', 'Item_3'];
 
 const options: Options<Properties> = {
-  items: [generateItems(10)],
+  items: [items],
   disabled: [true, false],
   width: [undefined, 50],
   hint: [undefined, 'hint'],

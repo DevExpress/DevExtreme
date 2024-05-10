@@ -6,27 +6,7 @@ import { Options } from '../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
-const items = [{
-  ID: 1,
-  CompanyName: 'Super Mart of the West',
-  Address: '702 SW 8th Street',
-  City: 'Bentonville',
-}, {
-  ID: 2,
-  CompanyName: 'Electronics Depot',
-  Address: '2455 Paces Ferry Road NW',
-  City: 'Atlanta',
-}, {
-  ID: 3,
-  CompanyName: 'K&S Music',
-  Address: '1000 Nicllet Mall',
-  City: 'Minneapolis',
-}, {
-  ID: 4,
-  CompanyName: 'Tom\'s Club',
-  Address: '999 Lake Drive',
-  City: 'Issaquah',
-}];
+const items = ['Item_1', 'Item_2', 'Item_3'];
 
 const options: Options<Properties> = {
   dataSource: [items],
