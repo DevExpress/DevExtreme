@@ -1,6 +1,16 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Diagram, {
-  CustomShape, ContextToolbox, PropertiesPanel, Group, Tab, Toolbox, Nodes, AutoLayout, DiagramTypes, DiagramRef,
+import {
+  Diagram,
+  AutoLayout,
+  ContextToolbox,
+  CustomShape,
+  DiagramRef,
+  Group,
+  Nodes,
+  PropertiesPanel,
+  Tab,
+  Toolbox,
+  DiagramTypes,
 } from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';
@@ -10,7 +20,7 @@ import CustomShapeTemplate from './CustomShapeTemplate.tsx';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.tsx';
 import service, { Employee } from './data.ts';
 
-const pageCommands = ['pageSize', 'pageOrientation', 'pageColor'];
+const pageCommands: DiagramTypes.DiagramCommand[] = ['pageSize', 'pageOrientation', 'pageColor'];
 
 const nameLabel = { 'aria-label': 'Name' };
 const emailLabel = { 'aria-label': 'Email' };
@@ -217,7 +227,7 @@ export default function App() {
         </Toolbox>
         <PropertiesPanel>
           <Tab>
-            <Group title="Page Properties" commands={pageCommands as any} />
+            <Group title="Page Properties" commands={pageCommands} />
           </Tab>
         </PropertiesPanel>
       </Diagram>
