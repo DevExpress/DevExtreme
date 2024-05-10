@@ -1,235 +1,283 @@
-import CalendarStrategy from '../../date_box/ui.date_box.strategy.calendar';
-import eventsEngine from '../../../events/core/events_engine';
-import { extend } from '../../../core/utils/extend';
-import { isSameDateArrays, getDeserializedDate, isSameDates } from '../ui.date_range.utils';
-import { isFunction } from '../../../core/utils/type';
+import { extend } from '@js/core/utils/extend';
+import { isFunction } from '@js/core/utils/type';
+import eventsEngine from '@js/events/core/events_engine';
+import type Calendar from '@js/ui/calendar';
+import type DateBox from '@js/ui/date_box';
+import CalendarStrategy from '@js/ui/date_box/ui.date_box.strategy.calendar';
+
+import { getDeserializedDate, isSameDateArrays, isSameDates } from '../m_date_range.utils';
+import type DateRangeBox from '../m_date_range_box';
+import type MultiselectDateBox from '../m_multiselect_date_box';
 
 class RangeCalendarStrategy extends CalendarStrategy {
-    constructor(dateBox) {
-        super();
-        this.dateBox = dateBox;
-        this.dateRangeBox = dateBox.option('_dateRangeBoxInstance');
+  private dateBox: DateBox;
+
+  private readonly dateRangeBox: DateRangeBox;
+
+  private _shouldPreventFocusChange?: boolean;
+
+  private _dateSelectedCounter = 0;
+
+  public _widget!: Calendar;
+
+  constructor(dateBox: MultiselectDateBox) {
+    super();
+    this.dateBox = dateBox;
+    this.dateRangeBox = dateBox.option('_dateRangeBoxInstance');
+  }
+
+  popupConfig(popupConfig) {
+    // @ts-expect-error
+    return extend(true, super.popupConfig(popupConfig), {
+      position: { of: this.getDateRangeBox().$element() },
+    });
+  }
+
+  popupShowingHandler(): void {
+    // @ts-expect-error
+    this.getWidget()._restoreViewsMinMaxOptions();
+    this._dateSelectedCounter = 0;
+  }
+
+  _getPopup() {
+    // @ts-expect-error
+    return super._getPopup() || this.getDateRangeBox().getStartDateBox()._popup;
+  }
+
+  supportedKeys() {
+    const dateRangeBox = this.getDateRangeBox();
+
+    return {
+      // @ts-expect-error
+      ...super.supportedKeys(),
+      rightArrow: () => {
+        if (dateRangeBox.option('opened')) {
+          return true;
+        }
+
+        return undefined;
+      },
+      leftArrow: () => {
+        if (dateRangeBox.option('opened')) {
+          return true;
+        }
+
+        return undefined;
+      },
+      enter: (e) => {
+        if (dateRangeBox.option('opened')) {
+          // @ts-expect-error
+          const dateBoxValue = this.dateBox.dateOption('value');
+          // @ts-expect-error
+          this.dateBox._valueChangeEventHandler(e);
+          // @ts-expect-error
+          const newDateBoxValue = this.dateBox.dateOption('value');
+          const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
+
+          if (dateBoxValueChanged) {
+            dateRangeBox.getStartDateBox().getStrategy().getWidget().option('value', dateRangeBox.option('value'));
+          } else {
+            // @ts-expect-error
+            dateRangeBox.getStartDateBox().getStrategy().getWidget()._enterKeyHandler(e);
+          }
+
+          return false;
+        }
+
+        return undefined;
+      },
+      tab: (e) => {
+        if (!dateRangeBox.option('opened')) {
+          return;
+        }
+
+        if (!this._getPopup().getFocusableElements().length) {
+          if ((!e.shiftKey && dateRangeBox._isEndDateActiveElement())
+            || (e.shiftKey && dateRangeBox._isStartDateActiveElement())) {
+            dateRangeBox.close();
+          }
+          return;
+        }
+
+        if ((!e.shiftKey && dateRangeBox._isStartDateActiveElement())
+          || (e.shiftKey && dateRangeBox._isEndDateActiveElement())) {
+          return;
+        }
+
+        const $focusableElement = e.shiftKey
+        // @ts-expect-error
+          ? dateRangeBox.getStartDateBox()._getLastPopupElement()
+        // @ts-expect-error
+          : dateRangeBox.getStartDateBox()._getFirstPopupElement();
+
+        if ($focusableElement) {
+          // @ts-expect-error
+          eventsEngine.trigger($focusableElement, 'focus');
+          $focusableElement.select();
+        }
+
+        e.preventDefault();
+      },
+    };
+  }
+
+  _getWidgetOptions() {
+    // @ts-expect-error
+    const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
+
+    const disabledDates = isFunction(disabledDatesValue)
+      ? this._injectComponent(disabledDatesValue)
+      : disabledDatesValue ?? undefined;
+
+    // @ts-expect-error
+    return extend(super._getWidgetOptions(), {
+      disabledDates,
+      value,
+      selectionMode: 'range',
+      viewsCount: multiView ? 2 : 1,
+      _allowChangeSelectionOrder: true,
+      _currentSelection: this.getCurrentSelection(),
+    });
+  }
+
+  _refreshActiveDescendant(e): void {
+    // @ts-expect-error
+    this.getDateRangeBox().setAria('activedescendant', e.actionValue);
+  }
+
+  _injectComponent(func) {
+    return (params) => func(extend(params, { component: this.getDateRangeBox() }));
+  }
+
+  getKeyboardListener(): Calendar {
+    const dateRangeBox = this.getDateRangeBox();
+
+    return dateRangeBox.getStartDateBox()
+      ? dateRangeBox.getStartDateBox().getStrategy().getWidget()
+      : this.getWidget();
+  }
+
+  getValue() {
+    return this.getWidget().option('value');
+  }
+
+  _updateValue(): void {
+    const { value } = this.getDateRangeBox().option();
+
+    if (!this.getWidget()) {
+      return;
     }
 
-    popupConfig(popupConfig) {
-        return extend(true, super.popupConfig(popupConfig), {
-            position: { of: this.dateRangeBox.$element() },
-        });
+    this._shouldPreventFocusChange = true;
+    this.getWidget().option('value', value);
+  }
+
+  _isInstantlyMode(): boolean {
+    return this.getDateRangeBox().option('applyValueMode') === 'instantly';
+  }
+
+  _valueChangedHandler({ value, previousValue, event }) {
+    // @ts-expect-error
+    if (isSameDateArrays(value, previousValue) && !this.getWidget()._valueSelected) {
+      this._shouldPreventFocusChange = false;
+      return;
     }
 
-    popupShowingHandler() {
-        this._widget?._restoreViewsMinMaxOptions();
-        this._dateSelectedCounter = 0;
-    }
+    // @ts-expect-error
+    this.getWidget()._valueSelected = false;
 
-    _getPopup() {
-        return super._getPopup() || this.dateRangeBox.getStartDateBox()._popup;
-    }
+    const dateRangeBox = this.getDateRangeBox();
 
-    supportedKeys() {
-        return {
-            ...super.supportedKeys(),
-            rightArrow: () => {
-                if(this.dateRangeBox.option('opened')) {
-                    return true;
-                }
-            },
-            leftArrow: () => {
-                if(this.dateRangeBox.option('opened')) {
-                    return true;
-                }
-            },
-            enter: (e) => {
-                if(this.dateRangeBox.option('opened')) {
-                    const dateBoxValue = this.dateBox.dateOption('value');
-                    this.dateBox._valueChangeEventHandler(e);
-                    const newDateBoxValue = this.dateBox.dateOption('value');
-                    const dateBoxValueChanged = !isSameDates(dateBoxValue, newDateBoxValue);
+    if (this._isInstantlyMode()) {
+      if (!dateRangeBox.option('disableOutOfRangeSelection')) {
+        if (this._getCalendarCurrentSelection() === 'startDate') {
+          this._dateSelectedCounter = 0;
+        } else {
+          this._dateSelectedCounter = 1;
 
-                    if(dateBoxValueChanged) {
-                        this.dateRangeBox.getStartDateBox()._strategy._widget.option('value', this.dateRangeBox.option('value'));
-                    } else {
-                        this.dateRangeBox.getStartDateBox()._strategy._widget._enterKeyHandler(e);
-                    }
-
-                    return false;
-                }
-            },
-            tab: (e) => {
-                if(!this.getDateRangeBox().option('opened')) {
-                    return;
-                }
-
-                if(!this._getPopup().getFocusableElements().length) {
-                    if((!e.shiftKey && this.getDateRangeBox()._isEndDateActiveElement())
-                        || (e.shiftKey && this.getDateRangeBox()._isStartDateActiveElement())) {
-                        this.dateRangeBox.close();
-                    }
-                    return;
-                }
-
-                if(((!e.shiftKey && this.getDateRangeBox()._isStartDateActiveElement())
-                    || (e.shiftKey && this.getDateRangeBox()._isEndDateActiveElement()))) {
-                    return;
-                }
-
-                const $focusableElement = e.shiftKey
-                    ? this.getDateRangeBox().getStartDateBox()._getLastPopupElement()
-                    : this.getDateRangeBox().getStartDateBox()._getFirstPopupElement();
-
-                if($focusableElement) {
-                    eventsEngine.trigger($focusableElement, 'focus');
-                    $focusableElement.select();
-                }
-
-                e.preventDefault();
-            }
-        };
-    }
-
-    _getWidgetOptions() {
-        const { disabledDates: disabledDatesValue, value, multiView } = this.dateRangeBox.option();
-
-        const disabledDates = isFunction(disabledDatesValue)
-            ? this._injectComponent(disabledDatesValue)
-            : (disabledDatesValue ?? undefined);
-
-        return extend(super._getWidgetOptions(), {
-            disabledDates,
-            value,
-            selectionMode: 'range',
-            viewsCount: multiView ? 2 : 1,
-            _allowChangeSelectionOrder: true,
-            _currentSelection: this.getCurrentSelection(),
-        });
-    }
-
-    _refreshActiveDescendant(e) {
-        this.dateRangeBox.setAria('activedescendant', e.actionValue);
-    }
-
-    _injectComponent(func) {
-        return (params) => func(extend(params, { component: this.dateRangeBox }));
-    }
-
-    getKeyboardListener() {
-        return this.dateRangeBox.getStartDateBox()
-            ? this.dateRangeBox.getStartDateBox()._strategy._widget
-            : this._widget;
-    }
-
-    getValue() {
-        return this._widget.option('value');
-    }
-
-    _updateValue() {
-        const { value } = this.dateRangeBox.option();
-
-        if(!this._widget) {
+          if (!value[0]) {
+            this._dateSelectedCounter = -1;
+          } else if (getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+            dateRangeBox.updateValue([value[0], null], event);
             return;
+          }
         }
+      }
 
-        this._shouldPreventFocusChange = true;
-        this._widget.option('value', value);
+      dateRangeBox.updateValue(value, event);
+      this._dateSelectedCounter += 1;
+
+      if (this._dateSelectedCounter === 2) {
+        dateRangeBox.close();
+
+        return;
+      }
+    } else if (this._getCalendarCurrentSelection() === 'endDate') {
+      if (value[0] && getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
+        return;
+      }
     }
 
-    _isInstantlyMode() {
-        return this.dateRangeBox.option('applyValueMode') === 'instantly';
+    if (!this._shouldPreventFocusChange) {
+      this._moveFocusToNextInput();
     }
 
-    _valueChangedHandler({ value, previousValue, event }) {
-        if(isSameDateArrays(value, previousValue) && !this._widget._valueSelected) {
-            this._shouldPreventFocusChange = false;
-            return;
-        }
+    this._shouldPreventFocusChange = false;
+  }
 
-        this._widget._valueSelected = false;
+  _moveFocusToNextInput(): void {
+    const targetDateBox = this._getCalendarCurrentSelection() === 'startDate'
+      ? this.getDateRangeBox().getEndDateBox()
+      : this.getDateRangeBox().getStartDateBox();
 
-        if(this._isInstantlyMode()) {
-            if(!this.dateRangeBox.option('disableOutOfRangeSelection')) {
-                if(this._getCalendarCurrentSelection() === 'startDate') {
-                    this._dateSelectedCounter = 0;
-                } else {
-                    this._dateSelectedCounter = 1;
+    targetDateBox.focus();
+    // @ts-expect-error
+    eventsEngine.trigger(targetDateBox.field(), 'dxclick');
+  }
 
-                    if(!value[0]) {
-                        this._dateSelectedCounter = -1;
-                    } else if(getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
-                        this.dateRangeBox.updateValue([value[0], null], event);
-                        return;
-                    }
-                }
-            }
+  getCurrentSelection() {
+    return this.getDateRangeBox().option('_currentSelection');
+  }
 
-            this.dateRangeBox.updateValue(value, event);
-            this._dateSelectedCounter += 1;
+  _getCalendarCurrentSelection() {
+    return this.getWidget().option('_currentSelection');
+  }
 
-            if(this._dateSelectedCounter === 2) {
-                this.getDateRangeBox().close();
-
-                return;
-            }
-        } else {
-            if(this._getCalendarCurrentSelection() === 'endDate') {
-                if(value[0] && getDeserializedDate(value[0]) > getDeserializedDate(value[1])) {
-                    return;
-                }
-            }
-        }
-
-        if(!this._shouldPreventFocusChange) {
-            this._moveFocusToNextInput();
-        }
-
-        this._shouldPreventFocusChange = false;
+  _closeDropDownByEnter(): boolean {
+    if (this._getCalendarCurrentSelection() === 'startDate') {
+      return false;
     }
+    return true;
+  }
 
-    _moveFocusToNextInput() {
-        const targetDateBox = this._getCalendarCurrentSelection() === 'startDate'
-            ? this.getDateRangeBox().getEndDateBox()
-            : this.getDateRangeBox().getStartDateBox();
+  dateBoxValue() {
+    const { dateBox } = this;
 
-        targetDateBox.focus();
-        eventsEngine.trigger(targetDateBox.field(), 'dxclick');
+    if (arguments.length) {
+      // @ts-expect-error
+      return dateBox.dateValue.apply(dateBox, arguments);
     }
+    // @ts-expect-error
+    return dateBox.dateOption.apply(dateBox, ['value']);
+  }
 
-    getCurrentSelection() {
-        return this.dateRangeBox.option('_currentSelection');
-    }
+  _cellClickHandler(): void { }
 
-    _getCalendarCurrentSelection() {
-        return this._widget.option('_currentSelection');
-    }
+  setActiveStartDateBox(): void {
+    this.dateBox = this.getDateRangeBox().getStartDateBox();
+  }
 
-    _closeDropDownByEnter() {
-        if(this._getCalendarCurrentSelection() === 'startDate') {
-            return false;
-        } else {
-            return true;
-        }
-    }
+  setActiveEndDateBox(): void {
+    this.dateBox = this.getDateRangeBox().getEndDateBox();
+  }
 
-    dateBoxValue() {
-        if(arguments.length) {
-            return this.dateBox.dateValue.apply(this.dateBox, arguments);
-        } else {
-            return this.dateBox.dateOption.apply(this.dateBox, ['value']);
-        }
-    }
+  getDateRangeBox(): DateRangeBox {
+    return this.dateRangeBox;
+  }
 
-    _cellClickHandler() { }
-
-    setActiveStartDateBox() {
-        this.dateBox = this.dateRangeBox.getStartDateBox();
-    }
-
-    setActiveEndDateBox() {
-        this.dateBox = this.dateRangeBox.getEndDateBox();
-    }
-
-    getDateRangeBox() {
-        return this.dateRangeBox;
-    }
+  getWidget(): Calendar {
+    return this._widget;
+  }
 }
 
 export default RangeCalendarStrategy;

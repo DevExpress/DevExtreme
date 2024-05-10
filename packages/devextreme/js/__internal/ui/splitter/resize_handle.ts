@@ -461,15 +461,15 @@ class ResizeHandle extends Widget<ResizeHandleOptions> {
   }
 
   _detachResizeEventHandlers(): void {
-    eventsEngine.off(this.$element(), this.RESIZE_START_EVENT_NAME, undefined);
-    eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME, undefined);
-    eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME, undefined);
+    eventsEngine.off(this.$element(), this.RESIZE_START_EVENT_NAME);
+    eventsEngine.off(this.$element(), this.RESIZE_EVENT_NAME);
+    eventsEngine.off(this.$element(), this.RESIZE_END_EVENT_NAME);
   }
 
   _detachPointerEventHandlers(): void {
-    eventsEngine.off(this.$element(), this.DOUBLE_CLICK_EVENT_NAME, undefined);
-    eventsEngine.off(this._$collapsePrevButton, this.CLICK_EVENT_NAME, undefined);
-    eventsEngine.off(this._$collapseNextButton, this.CLICK_EVENT_NAME, undefined);
+    eventsEngine.off(this.$element(), this.DOUBLE_CLICK_EVENT_NAME);
+    eventsEngine.off(this._$collapsePrevButton, this.CLICK_EVENT_NAME);
+    eventsEngine.off(this._$collapseNextButton, this.CLICK_EVENT_NAME);
   }
 
   _doubleClickHandler(e: DxEvent<PointerEvent | MouseEvent | TouchEvent>): void {
