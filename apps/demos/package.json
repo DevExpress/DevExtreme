@@ -124,7 +124,7 @@
         "stylelint": "13.13.1",
         "stylelint-config-standard": "22.0.0",
         "systemjs-builder": "0.16.15",
-        "testcafe": "3.6.0",
+        "testcafe": "2.5.0",
         "ts-node": "10.9.2"
     },
     "scripts": {
