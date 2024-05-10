@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build-npm-devextreme"
+        "script": "build"
       },
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
@@ -27,6 +27,31 @@
         "{projectRoot}/artifacts",
         "{projectRoot}/scss/bundles"
       ]
+    },
+    "build-dist": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build-dist"
+      },
+      "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/js/**/*",
+        "{projectRoot}/scss/widgets/**/*",
+        "{projectRoot}/testing/**/*",
+        "!{projectRoot}/testing/*.txt",
+        "!{projectRoot}/testing/*.xml",
+        "{projectRoot}/ts/**/*",
+        "{projectRoot}/*.js"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts",
+        "{projectRoot}/scss/bundles"
+      ],
+      "cache": true
     }
   },
   "tags": []

@@ -9,6 +9,10 @@ on:
   push:
     branches: [24_1]
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   build:
     name: build
@@ -50,9 +54,8 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Build
-      working-directory: ./packages/devextreme
-      run: pnpm run build
+    - name: Build DevExtreme
+      run: pnpx nx build devextreme-main
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -128,11 +131,11 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}
-      run: pnpm run pack
+      run: pnpx nx pack
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: pnpm run build
+      run: pnpx nx build
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}

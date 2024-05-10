@@ -34,7 +34,7 @@ sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
 
 sh.exec('pnpm run devextreme:inject-descriptions');
 
-sh.exec('pnpx nx build-dist devextreme-main', {
+sh.exec('pnpx nx build devextreme-main', {
     env: {
         ...sh.env,
         BUILD_INTERNAL_PACKAGE: 'false'

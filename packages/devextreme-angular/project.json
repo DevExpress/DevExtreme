@@ -23,7 +23,7 @@
         "{projectRoot}/npm"
       ],
       "dependsOn": [
-        "^build"
+        "devextreme-main:build"
       ],
       "cache": true
     }
