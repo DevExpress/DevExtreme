@@ -1,7 +1,7 @@
 import { Properties } from 'devextreme/ui/toolbar.d';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import url from '../../helpers/getPageUrl';
-import { testAccessibility, Configuration } from '../../helpers/accessibility/test';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
@@ -19,12 +19,19 @@ const generateItems = (count) => {
 
 const options: Options<Properties> = {
   items: [generateItems(10)],
+  disabled: [true, false],
   width: [undefined, 50],
   hint: [undefined, 'hint'],
 };
 
-const created = async (t: TestController): Promise<void> => {
-  const toolbar = new Toolbar('#container');
+const created = async (t: TestController, optionConfiguration): Promise<void> => {
+  const { disabled } = optionConfiguration;
+
+  if (disabled) {
+    return;
+  }
+
+  const toolbar = new Toolbar(defaultSelector);
   const overflowMenu = toolbar.getOverflowMenu();
 
   await t
