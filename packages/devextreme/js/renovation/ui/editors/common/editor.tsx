@@ -28,7 +28,7 @@ const getCssClasses = (model: EditorPropsType): string => {
   const classesMap = {
     'dx-state-readonly': !!readOnly,
     'dx-invalid': !isValid,
-    [`${classes}`]: !!classes,
+    [String(classes)]: !!classes,
   };
   return combineClasses(classesMap);
 };
