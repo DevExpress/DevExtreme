@@ -20,7 +20,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import { TreeListWrapper } from '../../helpers/wrappers/dataGridWrappers.js';
 import ArrayStore from 'data/array_store';
-import TreeList from 'ui/tree_list/ui.tree_list';
+import TreeList from '__internal/grids/tree_list/m_widget';
 import pointerMock from '../../helpers/pointerMock.js';
 import { CLICK_EVENT } from '../../helpers/grid/keyboardNavigationHelper.js';
 import { createEvent } from 'events/utils/index';

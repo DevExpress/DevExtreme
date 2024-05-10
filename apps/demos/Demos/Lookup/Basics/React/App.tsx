@@ -1,14 +1,17 @@
 import React from 'react';
 import { Lookup, DropDownOptions } from 'devextreme-react/lookup';
 import DataSource from 'devextreme/data/data_source';
+import ArrayStore from 'devextreme/data/array_store';
 import { employeesList, employeesTasks } from './data.ts';
 
 const simpleLookupLabel = { 'aria-label': 'Simple lookup' };
 const groupedLookupLabel = { 'aria-label': 'Grouped lookup' };
 
 const groupedData = new DataSource({
-  store: employeesTasks,
-  key: 'ID',
+  store: new ArrayStore({
+    data: employeesTasks,
+    key: 'ID'
+  }),
   group: 'Assigned',
 });
 

@@ -79,7 +79,7 @@
       }
     }
 
-    @include dx-field-value-widget-position(dx-checkbox, $material-checkbox-size);
+    @include dx-field-value-widget-position(dx-checkbox, $material-checkbox-icon-font-size);
     @include dx-field-value-widget-position(dx-switch, $material-switch-height);
     @include dx-field-value-widget-position(dx-slider, $material-slider-height);
     @include dx-field-value-widget-position(dx-radiogroup, $material-radiogroup-min-height);

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
 
 const FIXTURE_SELECTOR = '#qunit-fixture';

@@ -6,7 +6,7 @@ import 'generic_light.css!';
 import 'ui/data_grid';
 
 import browser from 'core/utils/browser';
-import columnsView from 'ui/grid_core/ui.grid_core.columns_view';
+import { ColumnsView } from '__internal/grids/grid_core/views/m_columns_view';
 import fx from 'animation/fx';
 import dataGridMocks from '../../helpers/dataGridMocks.js';
 
@@ -37,7 +37,7 @@ QUnit.module('API methods', {
                 columns: new MockColumnsController(that.columns)
             },
             views: {
-                columnsView: new columnsView.ColumnsView(that)
+                columnsView: new ColumnsView(that)
             }
         });
 

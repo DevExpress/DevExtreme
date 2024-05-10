@@ -25,6 +25,7 @@ const App = () => (
             resizable={true}
             collapsible={true}
             maxSize="75%"
+            collapsedSize="8%"
             render={PaneContentWithTitle('Central Pane')}
           />
           <Item

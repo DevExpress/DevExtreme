@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import HtmlEditor, { Toolbar, Item, HtmlEditorTypes } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
 import { markup } from './data.ts';
@@ -14,7 +14,7 @@ export default function App() {
     setPopupVisible(true);
   }, [setPopupVisible]);
 
-  const getToolbarButtonOptions = useCallback(() => ({
+  const getToolbarButtonOptions = useMemo(() => ({
     text: 'Show markup',
     stylingMode: 'text',
     onClick: customButtonClick,
@@ -47,11 +47,11 @@ export default function App() {
           <Item name="alignRight" />
           <Item name="alignJustify" />
           <Item name="separator" />
-          <Item widget="dxButton" options={getToolbarButtonOptions()} />
+          <Item widget="dxButton" options={getToolbarButtonOptions} />
         </Toolbar>
       </HtmlEditor>
       <Popup showTitle={true} title="Markup" visible={popupVisible} onHiding={popupHiding} showCloseButton={true}>
-        {value}
+        <div>{value}</div>
       </Popup>
     </div>
   );

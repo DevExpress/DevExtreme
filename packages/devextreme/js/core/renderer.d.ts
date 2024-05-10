@@ -65,7 +65,7 @@ export interface dxElementWrapper {
 
   last(): this;
 
-  next(selector: string): this;
+  next(selector?: string): this;
 
   not(selector: string): this;
 

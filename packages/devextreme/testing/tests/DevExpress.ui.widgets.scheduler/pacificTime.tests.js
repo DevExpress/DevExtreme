@@ -4,7 +4,7 @@ import fx from 'animation/fx';
 import timeZoneUtils from '__internal/scheduler/m_utils_time_zone';
 import { getRecurrenceProcessor } from '__internal/scheduler/m_recurrence';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'generic_light.css!';
 
 const { testStart, module, test, skip } = QUnit;

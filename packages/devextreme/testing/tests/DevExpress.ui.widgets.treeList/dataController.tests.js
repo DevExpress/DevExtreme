@@ -1,4 +1,4 @@
-import 'ui/tree_list/ui.tree_list';
+import '__internal/grids/tree_list/m_widget';
 import $ from 'jquery';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';

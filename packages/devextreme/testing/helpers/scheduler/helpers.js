@@ -6,7 +6,7 @@ import dataUtils from 'core/element_data';
 import Color from 'color';
 
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'ui/drop_down_button';
 
 export const TOOLBAR_TOP_LOCATION = 'top';
