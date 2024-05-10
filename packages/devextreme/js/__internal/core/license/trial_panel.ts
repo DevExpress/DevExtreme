@@ -10,6 +10,8 @@ export interface CustomTrialPanelStyles {
   containerStyles?: StylesMap;
   textStyles?: StylesMap;
   linkStyles?: StylesMap;
+  contentStyles?: StylesMap;
+  buttonStyles?: StylesMap;
 }
 
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
@@ -24,25 +26,40 @@ const attributeNames = {
 const commonStyles = {
   opacity: '1',
   visibility: 'visible',
+  'clip-path': 'none',
+  filter: 'none',
 };
-const containerStyles = {
+const contentStyles = {
   ...commonStyles,
   width: '100%',
   height: 'auto',
-  lineHeight: 'auto',
+  'line-height': 'auto',
   display: 'block',
   'z-index': `${BASE_Z_INDEX}`,
-  position: 'relative',
-  top: '0px',
-  left: '0px',
+  position: 'static',
   transform: 'translate(0px, 0px)',
-  padding: '8px',
   'background-color': '#FF7200',
   border: 'none',
   margin: 'auto',
   'box-sizing': 'border-box',
   'text-align': 'center',
 };
+const containerStyles = {
+  ...contentStyles,
+  display: 'flex',
+  'align-items': 'center',
+  'flex-direction': 'row',
+  position: 'relative',
+  top: '0px',
+  left: '0px',
+  padding: '0.5rem',
+};
+const buttonStyles = {
+  width: '1rem',
+  cursor: 'pointer',
+  height: '1rem',
+};
+
 const textStyles = {
   ...commonStyles,
   display: 'inline',
@@ -50,10 +67,11 @@ const textStyles = {
   padding: '0px',
   margin: '0px',
   color: 'white',
-  'font-family': '"Segoe UI","Open Sans Condensed",-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif',
-  'font-size': '14px',
+  'font-family': '\'Segoe UI\',\'Open Sans Condensed\',-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica neue,helvetica,Cantarell,Ubuntu,roboto,noto,arial,sans-serif',
+  'font-size': '0.875rem',
   'font-wight': '600',
 };
+
 class DxLicense extends HTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
 
@@ -61,20 +79,37 @@ class DxLicense extends HTMLElement {
 
   private _inReassign = false;
 
+  private _hidden = false;
+
   private readonly _spanStyles: string;
 
   private readonly _linkStyles: string;
 
   private readonly _containerStyles: string;
 
+  private readonly _contentStyles: string;
+
+  private readonly _buttonStyles: string;
+
   constructor() {
     super();
 
     this._spanStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.textStyles);
     this._linkStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.linkStyles);
+
     this._containerStyles = this._createImportantStyles(
       containerStyles,
       DxLicense.customStyles?.containerStyles,
+    );
+
+    this._contentStyles = this._createImportantStyles(
+      contentStyles,
+      DxLicense.customStyles?.contentStyles,
+    );
+
+    this._buttonStyles = this._createImportantStyles(
+      buttonStyles,
+      DxLicense.customStyles?.contentStyles,
     );
   }
 
@@ -104,13 +139,47 @@ class DxLicense extends HTMLElement {
     return link;
   }
 
+  private _createButton(): HTMLDivElement {
+    const button = document.createElement('div');
+    button.style.cssText = this._buttonStyles;
+    button.innerHTML = `<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 16 16">
+  <polygon points="13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7"/>
+</svg>`;
+    const polygon = button.querySelector('polygon');
+    const svg = button.querySelector('svg');
+    if (svg) {
+      svg.style.verticalAlign = 'baseline';
+    }
+    if (polygon) {
+      polygon.style.fill = '#fff';
+      polygon.style.opacity = '.5';
+      polygon.style.strokeWidth = '0px';
+    }
+    button.onclick = (): void => {
+      this._hidden = true;
+      this.style.display = 'none';
+    };
+    return button;
+  }
+
+  private _createContentContainer(): HTMLElement {
+    const contentContainer = document.createElement('div');
+    contentContainer.style.cssText = this._contentStyles;
+    contentContainer.append(
+      this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
+      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
+      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
+    );
+    return contentContainer;
+  }
+
   private _reassignComponent(): void {
     this.innerHTML = '';
     this.style.cssText = this._containerStyles;
     this.append(
-      this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
-      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
-      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
+      this._createContentContainer(),
+      this._createButton(),
     );
   }
 
@@ -118,6 +187,10 @@ class DxLicense extends HTMLElement {
     this._reassignComponent();
     if (!this._observer) {
       this._observer = new MutationObserver(() => {
+        if (this._hidden) {
+          this._observer?.disconnect();
+          return;
+        }
         if (this._inReassign) {
           this._inReassign = false;
         } else {
