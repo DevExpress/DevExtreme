@@ -93,9 +93,11 @@ export default class BootstrapExtractor {
   async sassProcessor(): Promise<string> {
     const functions = await this.readSassFile('_functions.scss');
     const variables = await this.readSassFile('_variables.scss');
+    const variablesDark = this.version === 5 ? await this.readSassFile('_variables-dark.scss') : ''; // TODO: can be removed safely in bootstrap@6
 
     const result = `${functions}
-${variables}
+${variables.replace('@import "variables-dark";', '')}
+${variablesDark}
 ${this.input}
 ${this.getSetterServiceCode('!default')}
 ${this.getCollectorServiceCode()}`;
