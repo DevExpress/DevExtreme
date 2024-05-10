@@ -58,10 +58,10 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   meta: {
     '*': {
       build: false,
+      transpile: true,
     },
     'devextreme/*': {
       build: true,
-      transpile: true,
     },
     'devexpress-gantt': {
       build: true,
