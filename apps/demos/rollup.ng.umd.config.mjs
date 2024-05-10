@@ -1,4 +1,4 @@
-const NG_BASE_DIR = '../../packages/devextreme-angular/node_modules/';
+const NG_BASE_DIR = './packages/devextreme-angular/node_modules/';
 const OUTPUT_DIR = './bundles/';
 
 export default [

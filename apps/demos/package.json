@@ -97,6 +97,7 @@
         "consola": "3.2.3",
         "cookie-parser": "1.4.6",
         "cross-env": "7.0.3",
+        "devextreme-angular": "~24.1.2",
         "devextreme-screenshot-comparer": "2.0.17",
         "eslint": "8.56.0",
         "eslint-plugin-deprecation": "2.0.0",

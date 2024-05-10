@@ -123,6 +123,9 @@ jobs:
         pnpx nx pack devextreme-vue
         pnpx nx pack devextreme-angular --with-descriptions
 
+    - name: Link wrappers packages
+      run: pnpm install
+
     - name: Prepare bundles
       working-directory: apps/demos
       run: pnpm run prepare-bundles

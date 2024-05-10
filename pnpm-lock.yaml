@@ -274,9 +274,6 @@ importers:
       devextreme:
         specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
-      devextreme-angular:
-        specifier: ~24.1.2
-        version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
         specifier: 3.0.0
         version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
@@ -467,6 +464,9 @@ importers:
       cross-env:
         specifier: 7.0.3
         version: 7.0.3
+      devextreme-angular:
+        specifier: ~24.1.2
+        version: link:../../packages/devextreme-angular/npm/dist
       devextreme-screenshot-comparer:
         specifier: 2.0.17
         version: 2.0.17(testcafe@2.5.0(encoding@0.1.13))
