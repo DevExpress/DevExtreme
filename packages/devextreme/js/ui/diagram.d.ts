@@ -1027,7 +1027,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<dxDiagramCustomCommand | DiagramCommand>
+      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
       /**
        * @docid
        * @default true
@@ -1044,7 +1044,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<dxDiagramCustomCommand | DiagramCommand>
+      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
       /**
        * @docid
        * @default true
