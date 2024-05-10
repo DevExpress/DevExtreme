@@ -25,11 +25,8 @@ const options: Options<Properties> = {
   height: [undefined, 400],
   width: [undefined, '50%'],
   hint: [undefined, 'hint'],
-  autoAdjust: [true],
   controls: [true, false],
   zoom: [undefined, 10],
-  focusStateEnabled: [true],
-  center: [undefined, [40.755833, -73.986389]],
   markers: [undefined, markersData],
 };
 
