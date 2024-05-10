@@ -56,7 +56,8 @@ export type WidgetName =
   | 'dxDropDownBox'
   | 'dxFileManager'
   | 'dxSwitch'
-  | 'dxLoadIndicator';
+  | 'dxLoadIndicator'
+  | 'dxMap'  ;
 
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
