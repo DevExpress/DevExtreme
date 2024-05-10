@@ -1,4 +1,5 @@
 You can use Splitter widgets to create resizable panes on a page.
+// _split_
 
 [note] To get started with DevExtreme Splitter, refer to the following tutorial for step-by-step instructions: [Getting Started with Splitter](/Documentation/Guide/UI_Components/Splitter/Getting_Started_with_Splitter/).
 

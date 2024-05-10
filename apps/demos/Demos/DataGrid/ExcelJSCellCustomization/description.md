@@ -1,4 +1,5 @@
 The [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExportDataGridProps/#customizeCell) function allows you to modify cell data and value formatting in exported worksheets. You can access and change the following attributes:
+// _split_
 
 - <a href="https://github.com/exceljs/exceljs#fonts" target="_blank">Font</a> properties    
 - <a href="https://github.com/exceljs/exceljs#fills" target="_blank">Cell background</a>     

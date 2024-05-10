@@ -1,4 +1,5 @@
 This demo shows the _side-by-side full-stacked bar_ series that visualizes data as bars stacked by groups. This series type is useful when you compare point values as a part of the total group value.
+// _split_
 
 The value axis is continuous and displays a range between 0 and 100%. The component converts point values to a percentage, and the height of the resulting column is equal to 100%.
 

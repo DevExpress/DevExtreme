@@ -1,4 +1,5 @@
 You can use a default or custom item template to customize list items.
+// _split_
 
 A default template consists of a set of data source fields that the List automatically recognizes. These fields are listed in the [items](/Documentation/ApiReference/UI_Components/dxList/Configuration/items/) section. To use a default template for customization, add or remove the fields from data objects. Refer to the [Default Templates](/Documentation/Guide/UI_Components/Common/Templates/#Default_Templates) article for more information.
 

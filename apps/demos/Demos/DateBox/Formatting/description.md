@@ -1,4 +1,5 @@
 Use the [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#displayFormat) property to change how DateBox displays date values. This demo illustrates the following:
+// _split_
 
 - **Locale-dependent format**
 The DateBox formats values based upon a user's locale. This is the default format. As such, you do not need to define the **displayFormat** property. Refer to the following help topic for more information: [Localize Dates, Numbers, and Currencies](/Documentation/Guide/Common/Localization/#Localize_Dates_Numbers_and_Currencies)

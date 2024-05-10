@@ -1,4 +1,5 @@
  DevExtreme Editors include the following appearance customization properties.
+// _split_
 
 - [stylingMode](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/#stylingMode): *"filled"* | *"outlined"* | *"underlined"*       
 Specifies the style used for text fields.

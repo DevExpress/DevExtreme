@@ -1,4 +1,5 @@
 Summary display modes are post-processing functions that allow you to perform additional calculations on each summary value and take into account neighboring summary values. You can use summary display modes to present pivot data from different angles.
+// _split_
 
 ## Apply a Summary Display Mode
 DevExtreme PivotGrid supports predefined summary display modes decribed below. To apply one of them, set the [summaryDisplayMode](/Documentation/ApiReference/Data_Layer/PivotGridDataSource/Configuration/fields/#summaryDisplayMode) property. 

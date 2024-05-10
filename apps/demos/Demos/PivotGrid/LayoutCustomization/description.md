@@ -1,4 +1,5 @@
 PivotGrid allows you to customize its layout. This demo illustrates the following properties:
+// _split_
 
 - [rowHeaderLayout](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/#rowHeaderLayout)            
 Allows you to specify the layout type for row header items. The *"standard"* layout displays child items to the right of the parent items. Assign "*tree*" to this property to display items more densely as a hierarchical structure. 

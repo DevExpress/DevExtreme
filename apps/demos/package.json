@@ -131,7 +131,8 @@
         "prepare-bundles": "npm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles"
+        "make-demos-bundle": "ts-node ./utils/create-bundles",
+        "split-doc-paragraph": "ts-node ./utils/internal/split-paragraph"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

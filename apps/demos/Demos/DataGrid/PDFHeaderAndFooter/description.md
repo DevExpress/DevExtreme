@@ -1,4 +1,5 @@
 The DataGrid allows you to customize a header and a footer in the exported PDF file. Follow the steps below to configure a header/footer:
+// _split_
 
 1. Call the [exportDataGrid(options)](/Documentation/ApiReference/Common/Utils/pdfExporter/#exportDataGridoptions) method.
 

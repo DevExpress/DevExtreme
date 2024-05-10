@@ -1,4 +1,5 @@
 When you add a Calendar to an application, you need to specify its [value](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#value) in one of the following formats: 
+// _split_
 
 - Date    
 Specifies the date directly.

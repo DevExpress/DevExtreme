@@ -1,4 +1,5 @@
 When you add the CheckBox component to an application, specify its [value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) property to set its state. The CheckBox can have one of the following states:  
+// _split_
 
 - Checked ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `true`).
 - Unchecked ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `false`).

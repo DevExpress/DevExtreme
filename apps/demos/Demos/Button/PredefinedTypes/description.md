@@ -1,4 +1,5 @@
 The Button component supports several predefined color schemes. To apply a scheme, set the [type](/Documentation/ApiReference/UI_Components/dxButton/Configuration/#type) property to one of the following values:     
+// _split_
 
 - *"normal"*    
 - *"success"*

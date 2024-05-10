@@ -1,4 +1,5 @@
 In this demo, argument axis labels overlap due to their length. To specify the overlapping behavior, you can use one of the following [label](/Documentation/ApiReference/UI_Components/dxChart/Configuration/argumentAxis/label/).[overlappingBehavior](/Documentation/ApiReference/UI_Components/dxChart/Configuration/argumentAxis/label/#overlappingBehavior) modes:
+// _split_
 
 - `none`    
 Leaves axis labels overlapped.

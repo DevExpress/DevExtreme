@@ -1,4 +1,5 @@
 Use the [dropDownButtonTemplate](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#dropDownButtonTemplate) to customize the drop-down button. This demo illustrates three customization cases:
+// _split_
 
 - **Custom image**  
 Declare an `img` element in the template.

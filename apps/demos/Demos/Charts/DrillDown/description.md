@@ -1,4 +1,5 @@
 If you bind a TreeMap to a data source with a hierarchical structure, you can enable drill-down and drill-up functionality:  
+// _split_
 
 - *"Drill down"* means navigate to a more detailed view. 
 - *"Drill up"* means navigate back up a level.

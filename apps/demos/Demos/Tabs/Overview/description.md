@@ -1,4 +1,5 @@
 The Tabs component allows you to create a tabbed UI to navigate between pages or views. You can create tab items in the [items](/Documentation/ApiReference/UI_Components/dxTabs/Configuration/items/) array, or populate tab items from a [dataSource](/Documentation/ApiReference/UI_Components/dxTabs/Configuration/#dataSource).
+// _split_
 
 ## Customize Tab Contents and Appearance
 

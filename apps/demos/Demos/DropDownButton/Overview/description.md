@@ -1,4 +1,5 @@
 DropDownButton is a button that opens a drop-down menu. The button displays a [text](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#text) and an [icon](/Documentation/ApiReference/UI_Components/dxDropDownButton/Configuration/#icon).
+// _split_
 
 [note] To get started with the DevExtreme DropDownButton component, refer to the following tutorial for step-by-step instructions: [Getting Started with DropDownButton](/Documentation/Guide/UI_Components/DropDownButton/Getting_Started_with_DropDownButton/).
 

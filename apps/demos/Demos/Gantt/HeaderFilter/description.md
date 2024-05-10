@@ -1,4 +1,5 @@
 The DevExtreme JavaScript **Gantt** component allows users to filter a particular column by values listed in a pop-up menu. To open this menu, click the filter icon in the column header.
+// _split_
 ## Display Header Filter Icons
 
 Set the **headerFilter**.[visible](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/headerFilter/#visible) property to **true** to display filter icons for all columns. To hide the filter icon for a specific column, disable that column’s [allowHeaderFilter](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#allowHeaderFiltering) property.

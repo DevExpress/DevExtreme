@@ -1,4 +1,5 @@
 The DevExtreme DataGrid API includes a [newRowPosition](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#newRowPosition) property. With this property, you can specify the desired "new record" position as follows:
+// _split_
 
 - *"viewportTop"* (default)           
 Insert a new row at the top of the viewport.

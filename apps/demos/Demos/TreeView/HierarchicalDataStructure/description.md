@@ -1,4 +1,5 @@
 Use the following properties to bind the TreeView to hierarchical data:
+// _split_
 
 * [items[]](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/items/)        
 Assigns a local array as done in this demo.

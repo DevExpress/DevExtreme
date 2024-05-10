@@ -1,4 +1,5 @@
 This demo shows the _full-stacked bar_ series that allows you to visualize data as columns stacked over each other. This series type is useful when you compare an individual series' values with total values an argument aggregates. The height of each bar is the full height of the chart diagram. The series values are displayed as percentages of each bar.
+// _split_
 
 ## Bind to Data
 

@@ -1,4 +1,5 @@
 Filter and search results depend on the [filterMode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#filterMode) property. The TreeList supports the following modes:
+// _split_
  
 - *"matchOnly"*    
   The results include only rows that meet the filter condition.

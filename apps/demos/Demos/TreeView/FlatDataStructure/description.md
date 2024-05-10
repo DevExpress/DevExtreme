@@ -1,4 +1,5 @@
 The TreeView's plain (one-dimensional) array contains items each of which references its parent item. Use either of the following properties to bind the component to plain data:
+// _split_
 
 * [items[]](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/items/)        
 Assigns a local array as shown in this demo.

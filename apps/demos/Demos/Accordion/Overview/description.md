@@ -1,4 +1,5 @@
 The Accordion component contains several panels displayed one under another. Users can expand or collapse these panels, which makes this component useful to present information in a limited amount of space.
+// _split_
 
 ## Bind Accordion to Data
 

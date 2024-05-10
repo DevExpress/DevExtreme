@@ -1,4 +1,5 @@
 This example demonstrates the PieChart component that visualizes data as a circle divided into points (slices) to illustrate data proportions.
+// _split_
 
 To get started with the DevExtreme PieChart component, refer to the following tutorial for step-by-step instructions: [Getting Started with PieChart](/Documentation/Guide/UI_Components/PieChart/Getting_Started_with_PieChart/).
 

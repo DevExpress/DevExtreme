@@ -1,4 +1,5 @@
 The [TagBox](/Documentation/ApiReference/UI_Components/dxTagBox/) component allows users to select multiple items from a drop-down list. This demo illustrates the following TagBox properties:
+// _split_
 
 - [items](/Documentation/ApiReference/UI_Components/dxTagBox/Configuration/items/)  
   An array of items to display in the drop-down list. Do not use the **items** property and the **dataSource** property in the same configuration.

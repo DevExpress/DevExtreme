@@ -1,4 +1,5 @@
 The following properties allow you to customize the Diagram component's UI elements:
+// _split_
 
 * [contextMenu](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/contextMenu/)
 * [contextToolbox](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/contextToolbox/)

@@ -1,4 +1,5 @@
 The Tooltip component can display a tooltip for an element on the page. To bind the Tooltip to an element, use the [target](/Documentation/ApiReference/UI_Components/dxTooltip/Configuration/#target) property. 
+// _split_
 
 ## Show and Hide the Tooltip
 

@@ -1,4 +1,5 @@
 This example demonstrates the following properties:
+// _split_
 
 * [showBorders](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#showBorders)      
 Specifies whether the outer borders of the DataGrid are visible.
