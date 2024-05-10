@@ -14,6 +14,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: [undefined, 'name'],
+  layout: ['horizontal', 'vertical'],
   focusStateEnabled: [true],
 };
 
@@ -23,7 +24,7 @@ const a11yCheckConfig = {
 };
 
 const configuration: Configuration = {
-  component: 'dxAccordion',
+  component: 'dxRadioGroup',
   a11yCheckConfig,
   options,
 };
