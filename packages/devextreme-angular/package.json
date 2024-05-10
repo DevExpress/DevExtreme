@@ -13,7 +13,7 @@
     "lint": "eslint src",
     "test": "pnpm run gulp -- test",
     "test:dev": "pnpm run gulp -- run.tests",
-    "pack": "pnpx gulp npm.pack"
+    "pack": "gulp npm.pack"
   },
   "author": "Developer Express Inc.",
   "license": "MIT",

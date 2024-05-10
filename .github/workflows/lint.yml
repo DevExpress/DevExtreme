@@ -37,7 +37,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -82,7 +82,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -146,7 +146,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -191,7 +191,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -230,7 +230,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -269,7 +269,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -317,7 +317,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -367,7 +367,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-

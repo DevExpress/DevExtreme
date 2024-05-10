@@ -10,6 +10,22 @@
         "script": "regenerate"
       },
       "dependsOn": ["devextreme-monorepo:\"angular:copy-metadata\""]
+    },
+    "pack": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "pack"
+      },
+      "inputs": [
+        "{projectRoot}/src/**/*"
+      ],
+      "outputs": [
+        "{projectRoot}/npm"
+      ],
+      "dependsOn": [
+        "^build"
+      ],
+      "cache": true
     }
   },
   "tags": []

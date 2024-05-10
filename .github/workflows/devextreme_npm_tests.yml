@@ -41,7 +41,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -110,7 +110,7 @@ jobs:
       with:
         path: |
           ${{ env.STORE_PATH }}
-          node_modules/.cache
+          .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
           ${{ runner.os }}-pnpm-store-
@@ -121,7 +121,7 @@ jobs:
 
     - name: Install DevExtreme package
       working-directory: ./packages/devextreme/testing/bundlers
-      run: pnpm add --save-dev ./devextreme-installer.tgz
+      run: npm install --save-dev devextreme-installer.tgz
 
     - name: Generate entry files
       working-directory: ./packages/devextreme/testing/bundlers

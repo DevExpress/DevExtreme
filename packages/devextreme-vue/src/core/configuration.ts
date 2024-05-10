@@ -4,7 +4,7 @@ import {
 import { getOption } from './config';
 import { IComponentInfo } from './configuration-component';
 import { getOptionInfo, isEqual } from './helpers';
-import { VMODEL_NAME, getRawValue } from './vue-helper';
+import { VMODEL_NAME } from './vue-helper';
 
 type UpdateFunc = (name: string, value: any) => void;
 type EmitOptionChangedFunc = (name: string, value: any) => void;
@@ -276,10 +276,10 @@ function bindOptionWatchers(
   if (targets) {
     targets.forEach((optionName: string) => {
       vueInstance.$watch(optionName, (value) => {
-        const rawValue = getRawValue(value);
+        const rawValue = toRaw(value);
         if (!innerChanges.hasOwnProperty(optionName)
                 || innerChanges[optionName] !== rawValue) {
-          config.updateValue(optionName, rawValue);
+          config.updateValue(optionName, value);
         }
         delete innerChanges[optionName];
       }, { deep: getOption('deepWatch') });
