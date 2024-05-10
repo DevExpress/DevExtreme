@@ -542,6 +542,9 @@ importers:
       systemjs-builder:
         specifier: 0.16.15
         version: 0.16.15
+      testcafe:
+        specifier: 3.6.0
+        version: 3.6.0
       ts-node:
         specifier: 10.9.2
         version: 10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@4.9.5)
