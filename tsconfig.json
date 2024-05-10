@@ -26,7 +26,7 @@
     },
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "target": "es2020",
+    "target": "es5",
     "module": "commonjs",
     "jsx": "react",
     "noEmitOnError": true,
@@ -40,6 +40,9 @@
     "noUnusedParameters": true,
     "strictNullChecks": true,
     "lib": [
+      "esnext",
+      "es2015",
+      "es2015.iterable",
       "dom"
     ]
   },
