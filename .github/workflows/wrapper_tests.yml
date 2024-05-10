@@ -67,8 +67,7 @@ jobs:
           fi
 
       - name: Angular - Build
-        working-directory: ./packages/devextreme-angular
-        run: pnpx nx build
+        run: pnpx nx build devextreme-angular
 
 #      - name: Angular - Run tests
 #        run: pnpx nx test:dev devextreme-angular
