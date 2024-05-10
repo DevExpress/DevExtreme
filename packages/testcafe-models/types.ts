@@ -57,7 +57,8 @@ export type WidgetName =
   | 'dxFileManager'
   | 'dxSwitch'
   | 'dxLoadIndicator'
-  | 'dxMap'  ;
+  | 'dxMap'
+  | 'dxDrawer';
 
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
