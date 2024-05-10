@@ -4850,7 +4850,6 @@ QUnit.module('the \'deferRendering\' option', () => {
                 },
                 deferRendering
             });
-            const selectedOption = (deferRendering) ? 'selectedItems' : 'selectedItem';
             const instance = $element.dxTagBox('instance');
             const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
             const keyboard = keyboardMock($input, true);
