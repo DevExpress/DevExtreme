@@ -166,10 +166,10 @@ importers:
         specifier: ^2.6.12
         version: 2.6.12
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-angular/npm/dist
       rxjs:
         specifier: ^6.6.7
@@ -272,10 +272,10 @@ importers:
         specifier: 4.1.54
         version: 4.1.54
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-angular/npm/dist
       devextreme-aspnet-data:
         specifier: 3.0.0
@@ -287,16 +287,16 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-dist:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 1.7.1
         version: 1.7.1
       devextreme-react:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-react/npm
       devextreme-vue:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-vue/npm
       dx-systemjs-vue-browser:
         specifier: 1.1.1
@@ -549,10 +549,10 @@ importers:
   apps/react:
     dependencies:
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-react/npm
       react:
         specifier: ~18.0.0
@@ -595,10 +595,10 @@ importers:
   apps/react-storybook:
     dependencies:
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-react/npm
     devDependencies:
       '@storybook/addon-essentials':
@@ -641,10 +641,10 @@ importers:
   apps/vue:
     dependencies:
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-vue:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme-vue/npm
       vue:
         specifier: 3.2.47
@@ -717,7 +717,7 @@ importers:
         specifier: 4.9.0
         version: 4.9.0
       devextreme:
-        specifier: 24.1.1
+        specifier: ~24.1.2
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
@@ -1210,7 +1210,7 @@ importers:
         specifier: 16.2.14
         version: 16.2.14(chokidar@3.6.0)
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../devextreme/artifacts/npm/devextreme
       devextreme-schematics:
         specifier: '*'
@@ -1350,7 +1350,7 @@ importers:
   packages/devextreme-react:
     dependencies:
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../devextreme/artifacts/npm/devextreme
       prop-types:
         specifier: ^15.8.1
@@ -1506,7 +1506,7 @@ importers:
   packages/devextreme-vue:
     dependencies:
       devextreme:
-        specifier: ~24.1.1
+        specifier: ~24.1.2
         version: link:../devextreme/artifacts/npm/devextreme
     devDependencies:
       '@types/jest':
@@ -1613,7 +1613,7 @@ importers:
         version: 2.5.0(encoding@0.1.13)
     devDependencies:
       devextreme:
-        specifier: 24.1.1
+        specifier: ~24.1.2
         version: link:../devextreme/artifacts/npm/devextreme
 
 packages:
