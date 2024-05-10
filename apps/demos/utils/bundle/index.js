@@ -256,7 +256,7 @@ const build = async (framework) => {
 };
 
 const copyBundlesFolder = () => {
-  const dxPath = path.join(process.cwd(), '..', '..', 'node_modules', 'devextreme');
+  const dxPath = path.join(process.cwd(), 'node_modules', 'devextreme');
   const dxBundlesPath = path.join(dxPath, 'bundles');
   const dxCjsBundlesPath = path.join(dxPath, 'cjs', 'bundles');
 
