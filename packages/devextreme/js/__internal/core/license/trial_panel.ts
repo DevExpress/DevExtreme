@@ -33,7 +33,7 @@ const contentStyles = {
   ...commonStyles,
   width: '100%',
   height: 'auto',
-  'line-height': 'auto',
+  'line-height': 'normal',
   display: 'block',
   'z-index': `${BASE_Z_INDEX}`,
   position: 'static',
@@ -142,23 +142,38 @@ class DxLicense extends HTMLElement {
   private _createButton(): HTMLDivElement {
     const button = document.createElement('div');
     button.style.cssText = this._buttonStyles;
-    button.innerHTML = `<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_1" data-name="Layer 1" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 16 16">
-  <polygon points="13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7"/>
-</svg>`;
-    const polygon = button.querySelector('polygon');
-    const svg = button.querySelector('svg');
-    if (svg) {
-      svg.style.verticalAlign = 'baseline';
-    }
-    if (polygon) {
-      polygon.style.fill = '#fff';
-      polygon.style.opacity = '.5';
-      polygon.style.strokeWidth = '0px';
-    }
+
+    const polygon = document.createElement('polygon');
+    const svg = document.createElement('svg');
+
+    const svgStyles = this._createImportantStyles({
+      'vertical-align': 'baseline',
+    });
+
+    const polygonStyles = this._createImportantStyles({
+      fill: '#fff',
+      opacity: '.5',
+      'stroke-width': '0px',
+    });
+
+    polygon.setAttribute('points', '13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7');
+    polygon.style.cssText = polygonStyles;
+
+    svg.setAttribute('id', 'Layer_1');
+    svg.setAttribute('data-name', 'Layer 1');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('version', '1.1');
+    svg.setAttribute('viewBox', '0 0 16 16');
+    svg.style.cssText = svgStyles;
+
+    svg.appendChild(polygon);
+    button.appendChild(svg);
+
     button.onclick = (): void => {
       this._hidden = true;
-      this.style.display = 'none';
+      this.style.cssText = this._createImportantStyles({
+        display: 'none',
+      });
     };
     return button;
   }
