@@ -7,11 +7,16 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<Properties> = {
+  height: [400],
   disabled: [true, false],
   hint: [undefined, 'hint'],
   revealMode: ['slide', 'expand'],
   opened: [true, false],
   position: ['top', 'bottom', 'left', 'right'],
+  template: [() => {
+    const $drawerContent = $('<div>').width(200).css('background-color', 'aqua').css('height', '100%');
+    return $drawerContent;
+  }],
 };
 
 const a11yCheckConfig = {
@@ -25,4 +30,4 @@ const configuration: Configuration = {
   options,
 };
 
-// testAccessibility(configuration);
+testAccessibility(configuration);
