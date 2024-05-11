@@ -59,7 +59,8 @@ export type WidgetName =
   | 'dxLoadIndicator'
   | 'dxMap'
   | 'dxDrawer'
-  | 'dxValidationSummary';
+  | 'dxValidationSummary'
+  | 'dxActionSheet';
 
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
