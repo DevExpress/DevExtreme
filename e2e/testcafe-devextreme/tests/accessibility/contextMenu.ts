@@ -15,7 +15,6 @@ const items: Item[] = [
 
 const options: Options<Properties> = {
   target: [defaultSelector],
-  cssClass: ['custom-class'],
   position: [{ offset: '10 10' }],
   items: [items],
   disabled: [true, false],
@@ -44,4 +43,4 @@ const configuration: Configuration = {
   created,
 };
 
-// testAccessibility(configuration);
+testAccessibility(configuration);
