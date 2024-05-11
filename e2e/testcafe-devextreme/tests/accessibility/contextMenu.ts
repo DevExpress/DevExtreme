@@ -17,7 +17,7 @@ const options: Options<Properties> = {
   target: [defaultSelector],
   cssClass: ['custom-class'],
   position: [{ offset: '10 10' }],
-  dataSource: [items],
+  items: [items],
   disabled: [true, false],
   hint: [undefined, 'hint'],
   selectionMode: ['single', 'none'],
