@@ -1,7 +1,7 @@
 import { Item, Properties } from 'devextreme/ui/context_menu.d';
 import ContextMenu from 'devextreme-testcafe-models/contextMenu';
 import url from '../../helpers/getPageUrl';
-import { testAccessibility, Configuration, defaultSelector } from '../../helpers/accessibility/test';
+import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
