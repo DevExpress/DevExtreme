@@ -82,7 +82,8 @@ const moduleConfig = {
 
         this.assertLayout = (expectedLayout) => {
             this.getPanes().toArray().forEach((item, index) => {
-                QUnit.assert.roughEqual(item.style.flexGrow, expectedLayout[index], 0.05, `$item[${index}].flexGrow`);
+                QUnit.assert.roughEqual(this.instance.getLayout()[index], expectedLayout[index], 0.05, `$item[${index}] ratio`);
+                // QUnit.assert.roughEqual(item.style.flexBasis, expectedLayout[index], 0.05, `$item[${index}] ratio`);
             });
         };
 
@@ -1327,18 +1328,28 @@ QUnit.module('Resizing', moduleConfig, () => {
             });
         });
 
-        QUnit.test(`non resizable panes shouldn't change their sizes after update splitter dimension, ${orientation} orientation`, function(assert) {
-            this.reinit({
-                width: 1018,
-                height: 1018,
-                dataSource: [{ }, { }, { }, { resizable: false, size: '300px' }],
-                orientation,
+        [{
+            dataSource: [{ }, { }, { }, { resizable: false, size: '300px' }],
+            expectedLayout: [18.6697947215, 18.6697947215, 18.6709677419, 43.9883],
+            expectedItemSizes: [127.32, 127.32, 127.32, 300],
+        }, {
+            dataSource: [{ minSize: '200px' }, { }, { }, { resizable: false, size: '300px' }],
+            expectedLayout: [29.3255131965, 8.0152492669, 18.6709677419, 43.9883],
+            expectedItemSizes: [200, 54.6562, 127.336, 300],
+        }].forEach(({ dataSource, expectedItemSizes, expectedLayout }) => {
+            QUnit.test(`non resizable panes shouldn't change their sizes after update splitter dimension, dataSource: ${JSON.stringify(dataSource)}, ${orientation} orientation`, function(assert) {
+                this.reinit({
+                    width: 1018,
+                    height: 1018,
+                    dataSource,
+                    orientation,
+                });
+
+                this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
+
+                this.checkItemSizes(expectedItemSizes);
+                this.assertLayout(expectedLayout);
             });
-
-            this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
-
-            this.checkItemSizes([0, 166.672, 215.328, 300]);
-            this.assertLayout([0, 24.4387, 31.573, 43.9883]);
         });
     });
 

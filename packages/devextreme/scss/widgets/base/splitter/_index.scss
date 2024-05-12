@@ -11,8 +11,22 @@
     flex: 1 1 auto;
   }
 
+  .dx-splitter {
+    .dx-splitter-item {
+      flex-grow: 1 !important; // stylelint-disable-line declaration-no-important
+      flex-shrink: 1 !important; // stylelint-disable-line declaration-no-important
+    }
+
+    .dx-splitter-item-hidden-content {
+      flex-grow: 0 !important; // stylelint-disable-line declaration-no-important
+      flex-shrink: 0 !important; // stylelint-disable-line declaration-no-important
+    }
+  }
+
   .dx-splitter-item-hidden-content {
     visibility: hidden;
+    flex-grow: 0 !important; // stylelint-disable-line declaration-no-important
+    flex-shrink: 0 !important; // stylelint-disable-line declaration-no-important
   }
 
   .dx-splitter-item-content {

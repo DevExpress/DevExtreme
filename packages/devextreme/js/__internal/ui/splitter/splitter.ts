@@ -11,7 +11,9 @@ import {
   getOuterHeight,
   getOuterWidth,
 } from '@js/core/utils/size';
-import { isDefined, isObject } from '@js/core/utils/type';
+import {
+  isDefined, isNumeric, isObject, isString,
+} from '@js/core/utils/type';
 import { hasWindow } from '@js/core/utils/window';
 import { lock } from '@js/events/core/emitter.feedback';
 import type {
@@ -45,7 +47,10 @@ import {
   getElementSize,
   getNextLayout,
   isElementVisible,
+  isPercentWidth,
+  isPixelWidth,
   setFlexProp,
+  tryConvertToNumber,
 } from './utils/layout';
 import { getDefaultLayout } from './utils/layout_default';
 import type {
@@ -286,8 +291,29 @@ class Splitter extends CollectionWidget<Properties> {
 
     const itemElement = $itemFrame.get(0) as HTMLElement;
 
-    setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, DEFAULT_FLEX_SHRINK_PROP);
-    setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
+    let validSizeValue = false;
+
+    if (isDefined(itemData.size)) {
+      if (isNumeric(itemData.size) && itemData.size >= 0) {
+        validSizeValue = true;
+      }
+
+      if (isString(itemData.size)) {
+        if (isPercentWidth(itemData.size) || isPixelWidth(itemData.size)) {
+          validSizeValue = true;
+        }
+      }
+    }
+
+    if (isDefined(itemData.size) && validSizeValue) {
+      setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 0);
+      setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, 0);
+      setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, itemData.size);
+    } else {
+      setFlexProp(itemElement, FLEX_PROPERTY.flexGrow, 1);
+      setFlexProp(itemElement, FLEX_PROPERTY.flexShrink, 1);
+      setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, 'auto');
+    }
 
     this._getItemInstance($itemFrame)._renderResizeHandle();
 
@@ -560,7 +586,25 @@ class Splitter extends CollectionWidget<Properties> {
           this._getResizeHandlesSize(),
         );
 
-        this._currentLayout = this.getLayout();
+        // this._currentLayout = this.getLayout();
+
+        // this._updateItemSizes();
+
+        this._iterateItems((index, itemElement) => {
+          const itemRatio = convertSizeToRatio(
+            this._getItemDimension(itemElement),
+            getElementSize($(this.element()), orientation),
+            this._getResizeHandlesSize(),
+          );
+
+          if (itemRatio) {
+            // @ts-expect-error daf
+            this._layout[index] = itemRatio;
+          }
+
+          // this._updateItemData('size', index, this._getItemDimension(itemElement));
+        });
+        this._currentLayout = this._layout;
 
         this._updateItemsRestrictions();
       },
@@ -594,6 +638,7 @@ class Splitter extends CollectionWidget<Properties> {
           this._activeResizeHandleIndex,
           this._itemRestrictions,
         );
+        // console.log(newLayout);
 
         this._applyStylesFromLayout(newLayout);
         this._layout = newLayout;
@@ -771,13 +816,32 @@ class Splitter extends CollectionWidget<Properties> {
 
     this._itemRestrictions = [];
 
-    items.forEach((item) => {
+    items.forEach((item, index) => {
+      let paneSize = item.size;
+      // @ts-expect-error
+      const currentFlexBasis = this._itemElements().eq(index).get(0).style.flexBasis;
+
+      // if (currentFlexBasis !== 'auto') {
+      //   paneSize = this._getItemDimension(this._itemElements().eq(index).get(0));
+      // }
+
+      // // @ts-expect-error dsaf
+      // if (this._itemElements().eq(index).get(0).style.flexBasis !== 'auto') {
+      //   paneSize = this._getItemDimension(this._itemElements().eq(index).get(0));
+      // }
+
+      // const paneResizable = collapseStateRestrictions ? undefined : item.resizable !== false;
+
+      if (item.resizable === false && !collapseStateRestrictions) {
+        paneSize = this._getItemDimension(this._itemElements().eq(index).get(0));
+      }
+
       this._itemRestrictions.push({
         resizable: collapseStateRestrictions ? undefined : item.resizable !== false,
         visible: item.visible !== false,
         collapsed: item.collapsed === true,
         collapsedSize: convertSizeToRatio(item.collapsedSize, elementSize, handlesSizeSum),
-        size: convertSizeToRatio(item.size, elementSize, handlesSizeSum),
+        size: convertSizeToRatio(paneSize, elementSize, handlesSizeSum),
         maxSize: collapseStateRestrictions
           ? undefined
           : convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum),
@@ -788,12 +852,53 @@ class Splitter extends CollectionWidget<Properties> {
 
   _applyStylesFromLayout(layout: number[]): void {
     this._iterateItems((index, itemElement) => {
-      setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexGrow, layout[index]);
+      // @ts-expect-error dasf
+      const currentFlexBasis = $(itemElement).get(0).style.flexBasis;
+
+      // if (!this._currentOnePxRatio) {
+      this._currentOnePxRatio = convertSizeToRatio(
+        1,
+        getElementSize($(this.element()), this.option('orientation')),
+        this._getResizeHandlesSize(),
+      );
+      // }
+
+      console.log(layout);
+      if (currentFlexBasis !== 'auto') {
+        let newValue = '';
+        if (isPercentWidth(currentFlexBasis)) {
+          newValue = `${((layout[index] / this._currentOnePxRatio!) / getElementSize($(this.element()), this.option('orientation'))) * 100}%`;
+          // setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexShrink, 1);
+        } else {
+          newValue = `${layout[index] / this._currentOnePxRatio!}px`;
+        }
+        // const sizeInPx = layout[index] / this._currentOnePxRatio!;
+
+        // setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexGrow, 1);
+        // setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexShrink, 0);
+        //
+        setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexBasis, newValue); // layout[index]);
+      } else {
+        debugger;
+        const newValue = `${((layout[index] / this._currentOnePxRatio!) / getElementSize($(this.element()), this.option('orientation'))) * 100}%`;
+
+        // setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexGrow, 1);
+        // setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexShrink, 1);
+        setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexBasis, newValue); // layout[index]);
+      }
 
       const itemData = this._getItemData(itemElement);
       const shouldHideContent = layout[index] === 0 && itemData.visible !== false;
 
       $(itemElement).toggleClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS, shouldHideContent);
+
+      // if (shouldHideContent) {
+      //   setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexGrow, 0);
+      //   setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexShrink, 1);
+      // } else {
+      //   setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexGrow, 1);
+      //   // setFlexProp($(itemElement)[0], FLEX_PROPERTY.flexShrink, 0);
+      // }
     });
   }
 
@@ -867,10 +972,8 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _dimensionChanged(): void {
-    this._layout = this._getDefaultLayoutBasedOnSize();
-
-    this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
+    this._layout = this._getDefaultLayoutBasedOnSize();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
@@ -881,7 +984,12 @@ class Splitter extends CollectionWidget<Properties> {
       case 'height':
         super._optionChanged(args);
 
-        this._dimensionChanged();
+        this._updateItemSizes();
+
+        this._layout = this._getDefaultLayoutBasedOnSize();
+
+        this._applyStylesFromLayout(this.getLayout());
+        this._updateItemSizes();
         break;
       case 'allowKeyboardNavigation':
         this._iterateResizeHandles((instance) => {
