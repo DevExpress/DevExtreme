@@ -6,7 +6,7 @@ import BaseModule from './base';
 
 import Toolbar from '../../toolbar';
 import '../../select_box';
-import '../../color_box/color_view';
+import '../../../__internal/ui/color_box/m_color_view';
 import '../../number_box';
 import errors from '../../widget/ui.errors';
 

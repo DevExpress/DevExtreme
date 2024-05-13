@@ -3,7 +3,7 @@ import $ from 'jquery';
 import 'generic_light.css!';
 
 import 'ui/select_box';
-import 'ui/color_box/color_view';
+import '__internal/ui/color_box/m_color_view';
 
 import Toolbar from 'ui/html_editor/modules/toolbar';
 import FormDialog from 'ui/html_editor/ui/formDialog';
