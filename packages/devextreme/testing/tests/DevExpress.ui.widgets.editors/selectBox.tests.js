@@ -6040,6 +6040,18 @@ if(devices.real().deviceType === 'desktop') {
                 helper.checkAttributes($listItemContainer, {});
             });
         });
+
+        QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is used', function(assert) {
+            helper.createWidget({
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox();
+                },
+            });
+
+            assert.ok(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), true);
+
+            assert.ok(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), true);
+        });
     });
 }
 
