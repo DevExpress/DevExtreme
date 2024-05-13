@@ -160,7 +160,7 @@ gulp.task('npm.content', gulp.series(
 gulp.task('npm.pack', gulp.series(
   'npm.content',
   (cb) => {
-    argv.withDescriptions ? exec('pnpx nx angular:inject-descriptions devextreme-monorepo', (err) => cb(err)) : cb();
+    argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
   },
   (cb) => { exec('pnpm pack', { }, (err) => cb(err)); },
   () => gulp.src(buildConfig.npm.distPath)

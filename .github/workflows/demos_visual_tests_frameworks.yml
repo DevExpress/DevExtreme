@@ -117,11 +117,14 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Build wrappers
-      run: |
-        pnpx nx pack devextreme-react
-        pnpx nx pack devextreme-vue
-        pnpx nx pack devextreme-angular --with-descriptions
+    - name: Build Angular wrapper
+      run: pnpx nx pack devextreme-angular --with-descriptions
+
+    - name: Build React wrapper
+      run: pnpx nx pack devextreme-react
+
+    - name: Build Vue wrapper
+      run: pnpx nx pack devextreme-vue
 
     - name: Link wrappers packages
       run: pnpm install
