@@ -11,7 +11,6 @@ const options: Options<Properties> = {
   target: [defaultSelector],
   width: [300],
   height: [280],
-  visible: [true, false],
   showTitle: [true, false],
   title: [undefined, 'title'],
   showCloseButton: [true, false],
