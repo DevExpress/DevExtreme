@@ -8,12 +8,6 @@
 @use "../../base/button/mixins" as *;
 
 
-@mixin dx-button-border($border-color) {
-  border-width: $fluent-base-border-width;
-  border-style: solid;
-  border-color: $border-color;
-}
-
 @mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
   min-width: $fluent-button-height;
 
@@ -187,6 +181,10 @@
   $selected-bg,
   $selected-color: $button-color-active,
 ) {
+  border-width: 1px;
+  border-style: solid;
+  border-color: $border-color;
+
   @include dx-button-styling-variant(
     transparent,
     $button-color,

@@ -38,14 +38,13 @@
 // NOTE: Button styles
 
 .dx-button-mode-contained {
-  @include dx-button-border(transparent);
-
   &.dx-button-normal {
     box-shadow: $fluent-button-box-shadow-size $button-shadow-color;
   }
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
+  height: $fluent-button-height;
   position: relative;
 
   .dx-button-content {
@@ -104,7 +103,6 @@
 }
 
 .dx-button-mode-text {
-  @include dx-button-border(transparent);
   @include dx-button-flat-color-styling(
     $button-normal-color,
     $button-normal-color,
@@ -157,7 +155,6 @@
 }
 
 .dx-button-mode-outlined {
-  @include dx-button-border($base-border-color);
   @include dx-button-outlined-color-styling(
     $button-normal-color,
     $button-normal-color,
