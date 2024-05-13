@@ -187,7 +187,6 @@
   $selected-bg,
   $selected-color: $button-color-active,
 ) {
-  @include dx-button-border($border-color);
   @include dx-button-styling-variant(
     transparent,
     $button-color,

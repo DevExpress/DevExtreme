@@ -157,6 +157,7 @@
 }
 
 .dx-button-mode-outlined {
+  @include dx-button-border($base-border-color);
   @include dx-button-outlined-color-styling(
     $button-normal-color,
     $button-normal-color,
