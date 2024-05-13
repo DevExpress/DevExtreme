@@ -12155,7 +12155,9 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateBox]
    */
-  export class dxDateBox extends DateBoxBase<DevExpress.ui.dxDateBox.Properties> {
+  export class dxDateBox<
+    TProperties = DevExpress.ui.dxDateBox.Properties
+  > extends DateBoxBase<TProperties> {
     /**
      * [descr:dxDateBox.reset(value)]
      */
