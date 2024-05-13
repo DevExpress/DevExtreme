@@ -51,10 +51,12 @@
         <br />
         <div id="button"></div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            $(() => {
+                $('#button').dxDropDownButton({
+                    stylingMode: 'contained',
+                    text: 'Download Trial',
+                    icon: 'save',
+                    showArrowIcon: false,
                 });
             });
         </script>
