@@ -221,6 +221,7 @@ $diagram-toolbox-title-size: 18px;
     .dx-button-content {
       width: $diagram-toolbox-title-size;
       height: $diagram-toolbox-title-size;
+      min-height: unset;
     }
   }
 

@@ -424,6 +424,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     border-radius: $fluent-scheduler-compact-appointment-button-border-radius;
     height: $fluent-scheduler-dropdown-button-height;
     min-width: auto;
+    min-height: auto;
     width: auto;
 
     &::before {
@@ -433,6 +434,7 @@ $fluent-scheduler-agenda-time-panel-cell-padding: 8px;
     .dx-button-content {
       padding: $fluent-scheduler-dropdown-button-padding 0;
       font-size: 12px;
+      height: 100%;
     }
   }
 }
