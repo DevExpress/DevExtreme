@@ -9,7 +9,7 @@ fixture.disablePageReloads`Accessibility`
 const items = ['Item_1', 'Item_2', 'Item_3'];
 
 const options: Options<Properties> = {
-  items: [items],
+  dataSource: [[], items],
   height: [300],
   loop: [true, false],
   hint: [undefined, 'hint'],

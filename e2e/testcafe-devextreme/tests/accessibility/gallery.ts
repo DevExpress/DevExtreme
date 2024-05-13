@@ -24,7 +24,7 @@ const gallery = [
 const options: Options<Properties> = {
   height: [300],
   width: [300],
-  dataSource: [[], gallery],
+  dataSource: [gallery],
   loop: [true, false],
   swipeEnabled: [true, false],
   stretchImages: [true, false],
