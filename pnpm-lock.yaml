@@ -78,6 +78,9 @@ importers:
       '@vue/shared':
         specifier: ^3.2.47
         version: 3.4.27
+      axe-core:
+        specifier: 4.9.0
+        version: 4.9.0
       cheerio:
         specifier: 1.0.0-rc.10
         version: 1.0.0-rc.10

@@ -52,6 +52,7 @@
     "@types/tar-fs": "^2.0.4",
     "@types/yargs": "^17.0.32",
     "@vue/shared": "^3.2.47",
+    "axe-core": "4.9.0",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
     "devextreme-internal-tools": "14.0.0-beta.1",
@@ -80,5 +81,5 @@
     "devextreme-aspnet-data-nojquery": "3.0.0",
     "rxjs": "7.8.0"
   },
-  "packageManager": "pnpm@9.1.0"
+  "packageManager": "pnpm@9.1.1"
 }
