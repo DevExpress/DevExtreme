@@ -1337,8 +1337,8 @@ QUnit.module('Resizing', moduleConfig, () => {
 
             this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
 
-            this.checkItemSizes([0, 166.672, 215.328, 300]);
-            this.assertLayout([0, 24.4387, 31.573, 43.9883]);
+            this.checkItemSizes([159.133, 159.133, 159.133, 204.602]);
+            this.assertLayout([23.3333, 23.3333, 23.3333, 30]);
         });
     });
 
