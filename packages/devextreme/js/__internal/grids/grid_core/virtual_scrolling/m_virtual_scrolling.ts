@@ -1480,7 +1480,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       this._errorHandlingController && this._errorHandlingController.removeErrorRow(
         $rowElement.next(),
       );
-      // @ts-expect-error
       $rowElement.remove();
     });
   }

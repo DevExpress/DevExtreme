@@ -530,9 +530,7 @@ const Draggable = (DOMComponent as any).inherit({
   },
 
   _detachEventHandlers() {
-    // @ts-expect-error
     eventsEngine.off(this._$content(), `.${DRAGGABLE}`);
-    // @ts-expect-error
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
   },
 
