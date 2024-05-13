@@ -6102,7 +6102,7 @@ if(devices.real().deviceType === 'desktop') {
             assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'list');
         });
 
-        QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is used', function(assert) {
+        QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is rendered (T1230696)', function(assert) {
             helper.createWidget({
                 fieldTemplate: () => {
                     return $('<div>').dxTextBox();
