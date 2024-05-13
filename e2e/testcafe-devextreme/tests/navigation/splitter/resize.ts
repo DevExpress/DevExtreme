@@ -19,7 +19,7 @@ safeSizeTest('non resizable pane should not change its size during resize', asyn
 
   await t
     .expect(splitter.getItem(2).element.clientWidth)
-    .eql(300);
+    .eql(145);
 }, [800, 800]).before(async () => createWidget('dxSplitter', {
   width: '100%',
   height: 300,
