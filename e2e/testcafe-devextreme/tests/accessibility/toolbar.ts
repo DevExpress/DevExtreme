@@ -1,4 +1,5 @@
 import { Properties } from 'devextreme/ui/toolbar.d';
+import { Selector } from 'testcafe';
 import Toolbar from 'devextreme-testcafe-models/toolbar/toolbar';
 import url from '../../helpers/getPageUrl';
 import { defaultSelector, testAccessibility, Configuration } from '../../helpers/accessibility/test';
@@ -27,7 +28,7 @@ const created = async (t: TestController, optionConfiguration): Promise<void> =>
   const overflowMenu = toolbar.getOverflowMenu();
 
   await t
-    .click(overflowMenu.element);
+    .click(Selector(overflowMenu.element));
 };
 
 const a11yCheckConfig = {
