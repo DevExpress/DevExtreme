@@ -49,7 +49,7 @@
     }
   }
 
-  .dx-button-content {
+  &.dx-button-has-icon .dx-button-content {
     flex: unset;
     padding: $fluent-tab-nav-button-content-padding;
   }
