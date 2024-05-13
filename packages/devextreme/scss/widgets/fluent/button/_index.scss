@@ -25,6 +25,11 @@
 
 .dx-button-has-icon {
   @include dx-button-onlyicon-sizing();
+
+  &:not(.dx-button-mode-outlined) .dx-button-content {
+    padding-block-start: $fluent-button-vertical-padding;
+    padding-block-end: $fluent-button-vertical-padding;
+  }
 }
 
 .dx-button-has-text {
@@ -44,7 +49,6 @@
 }
 
 .dx-button { // stylelint-disable-line no-duplicate-selectors
-  height: $fluent-button-height;
   position: relative;
 
   .dx-button-content {
@@ -166,6 +170,12 @@
     $button-normal-outlined-selected-bg,
     $button-normal-selected-color,
   );
+
+  .dx-button-content,
+  .dx-button-has-icon.dx-button-has-text .dx-button-content {
+    padding-block-start: $fluent-button-vertical-padding - 1px;
+    padding-block-end: $fluent-button-vertical-padding - 1px;
+  }
 
   &.dx-button-default {
     @include dx-button-outlined-color-styling(

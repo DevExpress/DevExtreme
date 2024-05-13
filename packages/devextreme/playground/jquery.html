@@ -31,17 +31,38 @@
     <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
 
-    
+
     <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
-   
+
 
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        /* .dx-button {
+            height: unset !important;
+        } */
+
+        /* .dx-button-text {
+            line-height: 1.428572;
+        } */
+
+        .dx-button-mode-outlined .dx-button-content,
+        .dx-button-mode-outlined.dx-button-has-icon.dx-button-has-text .dx-button-content {
+            padding-block-start: 5px;
+            padding-block-end: 5px;
+        }
+
+        .dx-button-has-icon:not(.dx-button-mode-outlined) .dx-button-content {
+            padding-block-start: 6px;
+            padding-block-end: 6px;
+        }
+    </style>
 </head>
 
 <body class="dx-surface">
@@ -56,13 +77,16 @@
 
         <script>
             $(() => {
-                $('#single-selection').dxButtonGroup({
+                $('#single-selection').dxDropDownButton({
                     stylingMode: 'contained',
-                    items: [{ text: 'Html' }, { text: 'Markdown' }],
-                    selectedItemKeys: ['Html'],
+                    text: 'Download Trial',
+                    // icon: 'save',
+                    showArrowIcon: false,
                 });
             });
+
         </script>
     </div>
 </body>
+
 </html>
