@@ -6040,7 +6040,7 @@ if(devices.real().deviceType === 'desktop') {
             });
         });
 
-        QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is used', function(assert) {
+        QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is rendered (T1230696)', function(assert) {
             helper.createWidget({
                 fieldTemplate: () => {
                     return $('<div>').dxTextBox();
