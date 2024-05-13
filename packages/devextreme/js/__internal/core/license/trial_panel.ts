@@ -146,24 +146,20 @@ class DxLicense extends HTMLElement {
     const polygon = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
-    const svgStyles = this._createImportantStyles({
-      'vertical-align': 'baseline',
-    });
-
-    const polygonStyles = this._createImportantStyles({
+    polygon.setAttribute('points', '13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7');
+    polygon.style.cssText = this._createImportantStyles({
       fill: '#fff',
       opacity: '.5',
       'stroke-width': '0px',
     });
 
-    polygon.setAttribute('points', '13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7');
-    polygon.style.cssText = polygonStyles;
-
     svg.setAttribute('id', 'Layer_1');
     svg.setAttribute('data-name', 'Layer 1');
     svg.setAttribute('version', '1.1');
     svg.setAttribute('viewBox', '0 0 16 16');
-    svg.style.cssText = svgStyles;
+    svg.style.cssText = this._createImportantStyles({
+      'vertical-align': 'baseline',
+    });
 
     svg.appendChild(polygon);
     button.appendChild(svg);
