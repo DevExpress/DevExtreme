@@ -401,6 +401,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshValueChangeEvent();
         this._refreshEvents();
         this._refreshEmptinessEvent();
+        this._setDefaultAria();
     },
 
     _refreshEmptinessEvent: function() {
