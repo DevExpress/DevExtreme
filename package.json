@@ -99,8 +99,6 @@
     "packages/devextreme/artifacts/npm/*"
   ],
   "dependencies": {
-    "devextreme-aspnet-data": "3.0.0",
-    "devextreme-aspnet-data-nojquery": "3.0.0",
     "rxjs": "7.8.0"
   }
 }
