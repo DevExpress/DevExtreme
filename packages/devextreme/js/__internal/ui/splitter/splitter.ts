@@ -443,12 +443,7 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
 
           if (!this._collapsedItemSize) {
-            for (let i = leftItemIndex; i >= 0; i -= 1) {
-              // eslint-disable-next-line max-depth
-              if (this.option('items')[i].collapsed !== true) {
-                this._collapsedItemSize = this._layout[i] / 2;
-              }
-            }
+            this._calculateExpandToLeftSize(leftItemIndex);
           }
 
           this._panesCacheSize[rightItemIndex] = undefined;
@@ -497,12 +492,7 @@ class Splitter extends (CollectionWidget as any) {
           this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
 
           if (!this._collapsedItemSize) {
-            for (let i = rightItemIndex; i <= this.option('items').length - 1; i += 1) {
-              // eslint-disable-next-line max-depth
-              if (this.option('items')[i].collapsed !== true) {
-                this._collapsedItemSize = this._layout[i] / 2;
-              }
-            }
+            this._calculateExpandToRightSize(rightItemIndex);
           }
 
           this._panesCacheSize[leftItemIndex] = undefined;
@@ -724,7 +714,7 @@ class Splitter extends (CollectionWidget as any) {
         this._updateItemSizes();
         break;
       case 'collapsed':
-        this._itemCollapsedOptionChanged(item);
+        this._itemCollapsedOptionChanged(item, value);
         break;
       case 'resizable':
         this._updateResizeHandlesResizableState();
@@ -740,29 +730,81 @@ class Splitter extends (CollectionWidget as any) {
     }
   }
 
-  _itemCollapsedOptionChanged(item: Item): void {
+  _itemCollapsedOptionChanged(item: Item, value: unknown): void {
     this._updateItemsRestrictions(this.option('items'), true);
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    if (isDefined(this._collapsedItemSize)) {
-      this._layout = getNextLayout(
-        this._layout,
-        this._getCollapseDelta(item),
-        this._activeResizeHandleIndex,
-        this._itemRestrictions,
-        true,
-      );
-    } else {
-      this._layout = this._getDefaultLayoutBasedOnSize();
+    if (!isDefined(this._collapseButton)) {
+      const itemIndex = this._getIndexByItem(item);
+
+      if (value === true) {
+        this._panesCacheSize[itemIndex] = this._layout[itemIndex];
+
+        this._layout = this._getDefaultLayoutBasedOnSize();
+        this._applyStylesFromLayout(this._layout);
+        this._updateItemSizes();
+
+        return;
+      }
+
+      const rightResizeHandle = this._getResizeHandles()[itemIndex];
+      const expandToRight = rightResizeHandle?.option('showCollapseNext');
+
+      this._collapsedItemSize = this._panesCacheSize[itemIndex];
+      this._activeResizeHandleIndex = expandToRight ? itemIndex : itemIndex - 1;
+      this._collapseButton = expandToRight ? 'next' : 'prev';
+
+      if (!this._collapsedItemSize) {
+        if (expandToRight) {
+          this._calculateExpandToRightSize(itemIndex);
+        } else {
+          this._calculateExpandToLeftSize(itemIndex);
+        }
+      }
     }
+
+    this._layout = getNextLayout(
+      this._layout,
+      this._getCollapseDelta(item),
+      this._activeResizeHandleIndex,
+      this._itemRestrictions,
+      true,
+    );
 
     this._collapseButton = undefined;
     this._collapsedItemSize = undefined;
+    this._activeResizeHandleIndex = undefined;
 
     this._applyStylesFromLayout(this._layout);
     this._updateItemSizes();
+  }
+
+  _calculateExpandToRightSize(rightItemIndex: number): void {
+    const { items } = this.option();
+
+    for (let i = rightItemIndex; i <= this.option('items').length - 1; i += 1) {
+      if (items[i].collapsed !== true) {
+        this._collapsedItemSize = this._layout[i] / 2;
+        return;
+      }
+    }
+
+    this._collapsedItemSize = 0;
+  }
+
+  _calculateExpandToLeftSize(leftItemIndex: number): void {
+    const { items } = this.option();
+
+    for (let i = leftItemIndex; i >= 0; i -= 1) {
+      if (items[i].collapsed !== true) {
+        this._collapsedItemSize = this._layout[i] / 2;
+        return;
+      }
+    }
+
+    this._collapsedItemSize = 0;
   }
 
   _getCollapseDelta(item: Item): number {
