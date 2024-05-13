@@ -18,6 +18,8 @@
     </script>
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <script src="../../../node_modules/devexpress-diagram/dist/dx-diagram.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../../node_modules/devexpress-diagram/dist/dx-diagram.min.css" />
     <!-- HtmlEditor -->
     <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
 
@@ -42,6 +44,13 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        .demo-container,
+        #diagram {
+            height: 100%;
+        }
+    </style>
 </head>
 
 <body class="dx-surface">
@@ -51,34 +60,28 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="container"></div>
+
+        <div class="dx-viewport">
+            <div class="demo-container">
+                <div id="diagram"> </div>
+            </div>
+        </div>
         <script>
-            $(function () {
-                const stylingModes = ['text', 'outlined', 'contained'];
-                const types = ['danger', 'default', 'normal', 'success'];
+            $(() => {
+                const diagram = $('#diagram').dxDiagram({
+                    autoZoomMode: 'fitWidth',
+                }).dxDiagram('instance');
 
-                for (const stylingMode of stylingModes) {
-                    for (const type of types) {
-                        for (const text of ['Button Text', '']) {
-                            for (const icon of ['home', undefined]) {
-                                for (const rtlEnabled of [true, false]) {
-                                    const id = `${Math.random()}`;
-
-                                    const el = $('<div>').attr({ id, style: 'margin: 5px;' }).appendTo($('#container'));
-
-                                    el.dxButton({
-                                        stylingMode,
-                                        text,
-                                        type,
-                                        rtlEnabled,
-                                        icon,
-                                    });
-                                }
-                            }
-                        }
-                    }
-                }
+                $.ajax({
+                    url: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/data/diagram-flow.json',
+                    dataType: 'text',
+                    success(data) {
+                        diagram.import(data);
+                    },
+                });
             });
+
+
         </script>
     </div>
 </body>
