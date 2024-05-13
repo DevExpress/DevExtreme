@@ -4,7 +4,7 @@ import { getWidth } from '@js/core/utils/size';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils';
 import type { Properties } from '@js/ui/date_box';
-import { DateBoxBase } from '@js/ui/date_box';
+import DateBox, { DateBoxBase } from '@js/ui/date_box';
 import type Popup from '@js/ui/popup';
 
 import { getDeserializedDate, monthDifference } from './m_date_range.utils';
@@ -18,11 +18,13 @@ export interface MultiselectDateBoxProperties extends Properties {
   _showValidationMessage?: boolean;
 }
 
-declare class DateBox<TProperties = MultiselectDateBoxProperties> extends DateBoxBase<TProperties> {
+declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
   reset(value?: Date | number | string | null): void;
 }
 
-class MultiselectDateBox extends DateBox {
+const TypedDateBox: typeof ExtendedDateBox = DateBox as any;
+
+class MultiselectDateBox extends TypedDateBox {
   // Temporary solution. Move to component level
   public NAME!: string;
 
