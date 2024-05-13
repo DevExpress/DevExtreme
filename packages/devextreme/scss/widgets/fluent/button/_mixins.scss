@@ -7,7 +7,6 @@
 @use "../../base/icons" as *;
 @use "../../base/button/mixins" as *;
 
-
 @mixin dx-button-onlyicon-sizing($icon-size: $fluent-button-icon-size) {
   min-width: $fluent-button-height;
 
@@ -146,16 +145,7 @@
   }
 }
 
-@mixin dx-button-flat-color-styling(
-  $button-color,
-  $button-color-hover,
-  $button-color-active,
-  $hover-bg,
-  $focused-bg,
-  $active-bg,
-  $selected-bg: $active-bg,
-  $selected-color: $button-color
-) {
+@mixin dx-button-flat-color-styling($button-color, $button-color-hover, $button-color-active, $hover-bg, $focused-bg, $active-bg, $selected-bg: $active-bg, $selected-color: $button-color) {
   @include dx-button-styling-variant(
     transparent,
     $button-color,
