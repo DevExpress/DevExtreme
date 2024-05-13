@@ -39,10 +39,10 @@ window.config = {
   paths: {
     'project:': '../../../../',
     'npm:': '../../../../node_modules/',
-    'root:': '../../../../../../node_modules/',
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
+    '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
     'demo-ts-loader': 'project:utils/demo-ts-loader.js',
     'svg-loader': 'project:utils/svg-loader.js',
@@ -118,7 +118,7 @@ window.config = {
     'es6-object-assign': 'npm:es6-object-assign',
 
     'devextreme': 'npm:devextreme/cjs',
-    'devextreme-vue': 'root:devextreme-vue/cjs',
+    'devextreme-vue': 'npm:devextreme-vue/cjs',
     'jszip': 'npm:jszip/dist/jszip.min.js',
     'devextreme-quill': 'npm:devextreme-quill/dist/dx-quill.min.js',
     'devexpress-diagram': 'npm:devexpress-diagram/dist/dx-diagram.js',
