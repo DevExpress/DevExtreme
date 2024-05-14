@@ -12,9 +12,8 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   revealMode: ['slide', 'expand'],
   opened: [true, false],
-  position: ['top', 'bottom', 'left', 'right'],
   template: [() => {
-    const $drawerContent = $('<div>').width(200).css('background-color', 'aqua').css('height', '100%');
+    const $drawerContent = $('<div>').width(200).css('height', '100%');
     return $drawerContent;
   }],
 };
