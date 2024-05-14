@@ -35,16 +35,16 @@ const bundleConfig = {
     'devextreme.react.systemjs.js': '../../../../bundles/devextreme.react.systemjs.js',
     'devextreme/localization/messages': 'npm:devextreme/localization/messages',
   },
-  // packages: {
-  //   'react': {
-  //     defaultExtension: 'js',
-  //     main: '../../../../../node_modules/react/umd/react.development.js',
-  //   },
-  //   'react-dom': {
-  //     defaultExtension: 'js',
-  //     main: '../../../../../node_modules/react-dom/umd/react-dom.development.js',
-  //   },
-  // },
+  packages: {
+    'react': {
+      defaultExtension: 'js',
+      main: '../../../../../node_modules/react/umd/react.development.js',
+    },
+    'react-dom': {
+      defaultExtension: 'js',
+      main: '../../../../../node_modules/react-dom/umd/react-dom.development.js',
+    },
+  },
 };
 
 System.config(bundleConfig);
@@ -55,8 +55,8 @@ if (window.config) {
     'devextreme-react',
     'devexpress-gantt',
     'devexpress-diagram',
-    // 'react',
-    // 'react-dom',
+    'react',
+    'react-dom',
   ].forEach((pkg) => delete window.config.map[pkg]);
 
   System.config(window.config);

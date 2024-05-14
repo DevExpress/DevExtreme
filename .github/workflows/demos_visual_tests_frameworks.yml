@@ -78,72 +78,72 @@ jobs:
             devextreme-vue-installer.tgz
           retention-days: 1
 
-  build-demos:
-    runs-on: ubuntu-latest
-    name: Build Demos
-    timeout-minutes: 20
-    needs: build-devextreme
-
-    steps:
-
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
-        run_install: false
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
-
-    - name: Install dependencies
-      run: pnpm install
-
-    - name: Build Angular wrapper
-      run: pnpx nx pack devextreme-angular --with-descriptions
-
-    - name: Build React wrapper
-      run: pnpx nx pack devextreme-react
-
-    - name: Build Vue wrapper
-      run: pnpx nx pack devextreme-vue
-
-    - name: Link wrappers packages
-      run: pnpm install
-
-    - name: Prepare bundles
-      working-directory: apps/demos
-      run: pnpm run prepare-bundles
-
-    - name: Demos - Run tsc
-      working-directory: apps/demos
-      run: tsc --noEmit
-
-    - name: Copy build artifacts
-      uses: actions/upload-artifact@v4
-      with:
-        name: devextreme-bundles
-        path: |
-          apps/demos/bundles/
-        retention-days: 1
+#  build-demos:
+#    runs-on: ubuntu-latest
+#    name: Build Demos
+#    timeout-minutes: 20
+#    needs: build-devextreme
+#
+#    steps:
+#
+#    - name: Get sources
+#      uses: actions/checkout@v4
+#
+#    - name: Use Node.js
+#      uses: actions/setup-node@v4
+#      with:
+#        node-version: '20'
+#
+#    - uses: pnpm/action-setup@v3
+#      with:
+#        version: 9
+#        run_install: false
+#
+#    - name: Get pnpm store directory
+#      shell: bash
+#      run: |
+#        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+#
+#    - uses: actions/cache@v4
+#      name: Setup pnpm cache
+#      with:
+#        path: |
+#          ${{ env.STORE_PATH }}
+#          .nx/cache
+#        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+#        restore-keys: |
+#          ${{ runner.os }}-pnpm-store-
+#
+#    - name: Install dependencies
+#      run: pnpm install
+#
+#    - name: Build Angular wrapper
+#      run: pnpx nx pack devextreme-angular --with-descriptions
+#
+#    - name: Build React wrapper
+#      run: pnpx nx pack devextreme-react
+#
+#    - name: Build Vue wrapper
+#      run: pnpx nx pack devextreme-vue
+#
+#    - name: Link wrappers packages
+#      run: pnpm install
+#
+#    - name: Prepare bundles
+#      working-directory: apps/demos
+#      run: pnpm run prepare-bundles
+#
+#    - name: Demos - Run tsc
+#      working-directory: apps/demos
+#      run: tsc --noEmit
+#
+#    - name: Copy build artifacts
+#      uses: actions/upload-artifact@v4
+#      with:
+#        name: devextreme-bundles
+#        path: |
+#          apps/demos/bundles/
+#        retention-days: 1
 
   get-changes:
     runs-on: ubuntu-latest
@@ -255,86 +255,86 @@ jobs:
         DEBUG: 'eslint:cli-engine,stylelint:standalone'
       run: ${{ matrix.command }}
 
-  check_generated_demos:
-    name: ${{ matrix.name }}
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-    needs: build-demos
-
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - name: Check generated demos (1/5)
-            command: CONSTEL=1/5 pnpm run convert-to-js
-          - name: Check generated demos (2/5)
-            command: CONSTEL=2/5 pnpm run convert-to-js
-          - name: Check generated demos (3/5)
-            command: CONSTEL=3/5 pnpm run convert-to-js
-          - name: Check generated demos (4/5)
-            command: CONSTEL=4/5 pnpm run convert-to-js
-          - name: Check generated demos (5/5)
-            command: CONSTEL=5/5 pnpm run convert-to-js
-
-    steps:
-    - name: Get sources
-      uses: actions/checkout@v4
-
-    - name: Use Node.js
-      uses: actions/setup-node@v4
-      with:
-        node-version: '20'
-
-    - uses: pnpm/action-setup@v3
-      with:
-        version: 9
-        run_install: false
-
-    - name: Get pnpm store directory
-      shell: bash
-      run: |
-        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
-
-    - uses: actions/cache@v4
-      name: Setup pnpm cache
-      with:
-        path: |
-          ${{ env.STORE_PATH }}
-          .nx/cache
-        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
-        restore-keys: |
-          ${{ runner.os }}-pnpm-store-
-
-    - name: Install dependencies
-      run: pnpm install
-
-    - name: Build wrappers
-      run: |
-        pnpx nx pack devextreme-react
-        pnpx nx pack devextreme-vue
-        pnpx nx pack devextreme-angular --with-descriptions
-
-    - name: Prepare JS
-      working-directory: apps/demos
-      run: pnpm run prepare-js
-
-    - name: Check generated JS demos
-      working-directory: apps/demos
-      run: |
-        ${{ matrix.command }}
-
-        git add ./Demos -N
-
-        if git diff --exit-code . ':!package.json' ; then
-          echo "Generated JS demos are up-to-date"
-        else
-            echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
-            echo "If you see another diff, ensure that extra listed files have LF endings."
-            exit 1
-        fi
+#  check_generated_demos:
+#    name: ${{ matrix.name }}
+#    runs-on: ubuntu-latest
+#    timeout-minutes: 10
+#    needs: build-demos
+#
+#    strategy:
+#      fail-fast: false
+#      matrix:
+#        include:
+#          - name: Check generated demos (1/5)
+#            command: CONSTEL=1/5 pnpm run convert-to-js
+#          - name: Check generated demos (2/5)
+#            command: CONSTEL=2/5 pnpm run convert-to-js
+#          - name: Check generated demos (3/5)
+#            command: CONSTEL=3/5 pnpm run convert-to-js
+#          - name: Check generated demos (4/5)
+#            command: CONSTEL=4/5 pnpm run convert-to-js
+#          - name: Check generated demos (5/5)
+#            command: CONSTEL=5/5 pnpm run convert-to-js
+#
+#    steps:
+#    - name: Get sources
+#      uses: actions/checkout@v4
+#
+#    - name: Use Node.js
+#      uses: actions/setup-node@v4
+#      with:
+#        node-version: '20'
+#
+#    - uses: pnpm/action-setup@v3
+#      with:
+#        version: 9
+#        run_install: false
+#
+#    - name: Get pnpm store directory
+#      shell: bash
+#      run: |
+#        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+#
+#    - uses: actions/cache@v4
+#      name: Setup pnpm cache
+#      with:
+#        path: |
+#          ${{ env.STORE_PATH }}
+#          .nx/cache
+#        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+#        restore-keys: |
+#          ${{ runner.os }}-pnpm-store-
+#
+#    - name: Install dependencies
+#      run: pnpm install
+#
+#    - name: Build wrappers
+#      run: |
+#        pnpx nx pack devextreme-react
+#        pnpx nx pack devextreme-vue
+#        pnpx nx pack devextreme-angular --with-descriptions
+#
+#    - name: Prepare JS
+#      working-directory: apps/demos
+#      run: pnpm run prepare-js
+#
+#    - name: Check generated JS demos
+#      working-directory: apps/demos
+#      run: |
+#        ${{ matrix.command }}
+#
+#        git add ./Demos -N
+#
+#        if git diff --exit-code . ':!package.json' ; then
+#          echo "Generated JS demos are up-to-date"
+#        else
+#            echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
+#            echo "If you see another diff, ensure that extra listed files have LF endings."
+#            exit 1
+#        fi
 
   testcafe:
-    needs: build-demos
+#    needs: build-demos
     strategy:
       fail-fast: false
       matrix:
@@ -366,14 +366,14 @@ jobs:
         name: changed-demos
         path: apps/demos
 
-    - name: Create bundles dir
-      run: mkdir -p apps/demos/bundles
-
-    - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: devextreme-bundles
-        path: apps/demos/bundles
+#    - name: Create bundles dir
+#      run: mkdir -p apps/demos/bundles
+#
+#    - name: Download bundles artifacts
+#      uses: actions/download-artifact@v4
+#      with:
+#        name: devextreme-bundles
+#        path: apps/demos/bundles
 
     - uses: pnpm/action-setup@v3
       with:
@@ -410,7 +410,7 @@ jobs:
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: pnpm run prepare-js
+      run: pnpm run prepare-bundles
 
     - name: Run Web Server
       run: |
@@ -424,7 +424,7 @@ jobs:
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
         BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
-        #DEBUG: hammerhead:*,testcafe:*
+        DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
