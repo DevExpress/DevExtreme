@@ -5,6 +5,7 @@ export type WidgetName =
   'dxAccordion'
   | 'dxAutocomplete'
   | 'dxGallery'
+  | 'dxActionSheet'
   | 'dxButtonGroup'
   | 'dxCalendar'
   | 'dxCalendarView'
@@ -58,7 +59,9 @@ export type WidgetName =
   | 'dxDropDownBox'
   | 'dxFileManager'
   | 'dxSwitch'
-  | 'dxActionSheet';
+  | 'dxToast'
+  | 'dxLoadPanel'
+  | 'dxTooltip';
 
 export interface WidgetOptions {
   dxDataGrid: DataGridProperties;
