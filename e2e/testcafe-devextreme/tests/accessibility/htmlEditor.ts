@@ -5,7 +5,7 @@ import { defaultSelector, testAccessibility, Configuration } from '../../helpers
 import { Options } from '../../helpers/generateOptionMatrix';
 
 fixture.disablePageReloads`Accessibility`
-  .page(url(__dirname, '../containerQuill.html'));
+  .page(url(__dirname, '../container.html'));
 
 const markup = '<p>He<em>llo</em></p>';
 

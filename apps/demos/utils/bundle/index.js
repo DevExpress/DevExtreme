@@ -2,6 +2,9 @@
 const path = require('path');
 const fs = require('fs-extra');
 const Builder = require('systemjs-builder');
+const babel = require('@babel/core');
+const url = require('url');
+
 
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
@@ -58,6 +61,7 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
     },
     'devextreme/*': {
       build: true,
+      transpile: true,
     },
     'devexpress-gantt': {
       build: true,
@@ -72,6 +76,7 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   },
   paths: {
     'devextreme/*': '../../node_modules/devextreme/cjs/*',
+    "devextreme/bundles/dx.custom.config.js": "../../node_modules/devextreme/bundles/dx.custom.config.js",
     'devexpress-gantt': '../../node_modules/devexpress-gantt/dist/dx-gantt.min.js',
     'devexpress-diagram': '../../node_modules/devexpress-diagram/dist/dx-diagram.min.js',
     [`devextreme-${framework}/*`]: `../../node_modules/devextreme-${framework}/${['react', 'vue'].includes(framework) ? 'cjs/*' : '*'}`,
@@ -199,6 +204,34 @@ const prepareConfigs = (framework)=> {
     bundleOpts: {
       minify,
       uglify: { mangle: true },
+      async fetch(load, fetch) {
+        if(load?.metadata?.transpile) {
+          // access to path-specific meta if required: load?.metadata?.babelOptions
+          const babelOptions = {
+            plugins: [
+              '@babel/plugin-transform-nullish-coalescing-operator',
+              '@babel/plugin-transform-object-rest-spread',
+              '@babel/plugin-transform-optional-catch-binding',
+              '@babel/plugin-transform-optional-chaining',
+            ]
+          };
+  
+          const result = new Promise((resolve) => {
+            // systemjs-builder uses babel 6, so we use babel 7 here for transpiling ES2020
+            babel.transformFile(url.fileURLToPath(load.name), babelOptions, (err, result) => {
+                if(err) {
+                  fetch(load).then(r => resolve(r));
+                  console.log('Unexpected transipling error (babel 7): ' + err);
+                } else {
+                  resolve(result.code);
+                }
+            });
+          })
+          return result;
+        } else {
+          return fetch(load);
+        }
+      },
     },
   };
 };
@@ -218,6 +251,7 @@ const build = async (framework) => {
     await builder.bundle(packages, bundlePath, bundleOpts);
   } catch (err) {
     console.error(`Build ${framework} error `, err);
+    process.exit(err);
   }
 };
 

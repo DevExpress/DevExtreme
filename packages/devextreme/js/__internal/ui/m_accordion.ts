@@ -235,7 +235,6 @@ const Accordion = CollectionWidget.inherit({
   _attachItemTitleClickAction(itemTitle) {
     const eventName = addNamespace(clickEventName, this.NAME);
 
-    // @ts-expect-error
     eventsEngine.off(itemTitle, eventName);
     eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
   },

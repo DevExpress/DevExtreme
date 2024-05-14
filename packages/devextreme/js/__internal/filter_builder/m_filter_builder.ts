@@ -292,7 +292,6 @@ class FilterBuilder extends Widget<any> {
     if (parent != null) {
       this._createRemoveButton(() => {
         removeItem(parent, criteria);
-        // @ts-expect-error dxElementWrapper remove method is badly typed
         $group.remove();
         this._updateFilter();
       }).appendTo($groupItem);
@@ -449,12 +448,10 @@ class FilterBuilder extends Widget<any> {
             const $valueButton = $operationButton.siblings().filter(`.${FILTER_BUILDER_ITEM_VALUE_CLASS}`);
             if (that._hasValueButton(condition)) {
               if ($valueButton.length !== 0) {
-                // @ts-expect-error
                 $valueButton.remove();
               }
               that._createValueButton(condition, field).appendTo($operationButton.parent());
             } else {
-              // @ts-expect-error
               $valueButton.remove();
             }
             $operationButton.text(currentOperation.text);
@@ -503,7 +500,6 @@ class FilterBuilder extends Widget<any> {
             condition[0] = item.name || item.dataField;
             condition[2] = item.dataType === 'object' ? null : '';
             updateConditionByOperation(condition, getDefaultOperation(item), that._customOperations);
-            // @ts-expect-error
             $fieldButton.siblings().filter(`.${FILTER_BUILDER_ITEM_TEXT_CLASS}`).remove();
             that._createOperationAndValueButtons(condition, item, $fieldButton.parent());
 
@@ -533,10 +529,8 @@ class FilterBuilder extends Widget<any> {
       removeItem(parent, condition);
       const isSingleChild = $item.parent().children().length === 1;
       if (isSingleChild) {
-        // @ts-expect-error dxElementWrapper remove method is badly typed
         $item.parent().remove();
       } else {
-        // @ts-expect-error dxElementWrapper remove method is badly typed
         $item.remove();
       }
       this._updateFilter();

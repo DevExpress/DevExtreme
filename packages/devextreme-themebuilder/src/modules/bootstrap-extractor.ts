@@ -1,6 +1,6 @@
 import * as sass from 'sass-embedded';
 import less from 'less';
-import { promises as fs } from 'fs';
+import { promises as fs, existsSync } from 'fs';
 import bootstrap3meta from '../data/bootstrap-metadata/bootstrap3-metadata';
 import bootstrap4meta from '../data/bootstrap-metadata/bootstrap4-metadata';
 import bootstrap5meta from '../data/bootstrap-metadata/bootstrap5-metadata';
@@ -86,16 +86,20 @@ export default class BootstrapExtractor {
   }
 
   async readSassFile(fileName: string): Promise<string> {
-    const path = require.resolve(`bootstrap${this.version}/scss/${fileName}`);
+    const path = this.getFilePath(fileName);
     return fs.readFile(path, 'utf8');
   }
 
   async sassProcessor(): Promise<string> {
     const functions = await this.readSassFile('_functions.scss');
     const variables = await this.readSassFile('_variables.scss');
+    
+    const variablesDarkFile = '_variables-dark.scss';
+    const variablesDark = this.version === 5 && existsSync(this.getFilePath(variablesDarkFile)) ? await this.readSassFile(variablesDarkFile) : ''; // TODO: can be removed safely in bootstrap@6
 
     const result = `${functions}
-${variables}
+${variables.replace('@import "variables-dark";', '')}
+${variablesDark}
 ${this.input}
 ${this.getSetterServiceCode('!default')}
 ${this.getCollectorServiceCode()}`;
@@ -109,6 +113,10 @@ ${this.getCollectorServiceCode()}`;
       + this.input
       + this.getCollectorServiceCode(),
     );
+  }
+
+  getFilePath(fileName: string): string {
+    return require.resolve(`bootstrap${this.version}/scss/${fileName}`);
   }
 
   getSetterServiceCode(postfix = ''): string {
