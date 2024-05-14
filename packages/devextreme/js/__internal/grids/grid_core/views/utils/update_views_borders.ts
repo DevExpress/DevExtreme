@@ -86,12 +86,10 @@ export const updateViewsBorders = (
   const $newFirst = getFirstVisibleViewElement(viewsWithBorder);
   const $newLast = getLastVisibleViewElement(viewsWithBorder);
 
-  // @ts-expect-error The dxElementWrapper's "is" method is badly typed.
   if ($oldFirst && !$oldFirst.is($newFirst)) {
     $oldFirst.removeClass(CLASSES.borderedTop);
   }
 
-  // @ts-expect-error The dxElementWrapper's "is" method is badly typed.
   if ($oldLast && !$oldLast.is($newLast)) {
     $oldLast.removeClass(CLASSES.borderedBottom);
   }

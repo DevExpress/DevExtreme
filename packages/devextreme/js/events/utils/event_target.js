@@ -6,12 +6,13 @@ export const getEventTarget = (event) => {
     }
 
     const isShadowDOMUsed = Boolean(originalEvent.target?.shadowRoot);
+
     if(!isShadowDOMUsed) {
         return originalEvent.target;
     }
 
     const path = originalEvent.path ?? originalEvent.composedPath?.();
-    const target = path[0];
+    const target = path?.[0] ?? event.target;
 
     return target;
 };

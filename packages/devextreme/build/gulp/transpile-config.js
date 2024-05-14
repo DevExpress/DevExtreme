@@ -2,19 +2,16 @@
 
 const common = {
     plugins: [
-        '@babel/plugin-proposal-nullish-coalescing-operator',
-        '@babel/plugin-proposal-optional-chaining',
         ['babel-plugin-inferno', { 'imports': true }],
-        'transform-object-assign',
-        ['@babel/plugin-proposal-object-rest-spread', { loose: true }],
+        ['@babel/plugin-transform-object-rest-spread', { loose: true }],
     ],
     ignore: ['**/*.json'],
 };
 
 const targets = {
-    ios: 11,
-    android: 52,
-    samsung: 6,
+    ios: 15,
+    android: 95,
+    samsung: 13,
 };
 
 module.exports = {
@@ -22,24 +19,20 @@ module.exports = {
         presets: [['@babel/preset-env', { targets }]],
         plugins: common.plugins.concat([
             ['add-module-exports', { addDefaultProperty: true }],
-            ['@babel/plugin-transform-modules-commonjs', { strict: true }],
-            ['@babel/plugin-transform-classes', { loose: true }],
-            '@babel/plugin-transform-property-mutators'
+            ['@babel/plugin-transform-modules-commonjs', { strict: true }]
         ])
     }),
 
     tsCjs: Object.assign({}, common, {
         presets: [['@babel/preset-env', { targets }]],
         plugins: common.plugins.concat([
-            ['@babel/plugin-transform-modules-commonjs'],
-            ['@babel/plugin-transform-classes', { loose: true }],
-            '@babel/plugin-transform-property-mutators'
+            ['@babel/plugin-transform-modules-commonjs']
         ])
     }),
 
     esm: Object.assign({}, common, {
         // eslint-disable-next-line spellcheck/spell-checker
-        presets: [['@babel/preset-env', { modules: false, targets: { ...targets, esmodules: true } }]],
+        presets: [['@babel/preset-env', { targets, modules: false }]],
         plugins: common.plugins.concat(
             [['@babel/plugin-transform-runtime', {
                 useESModules: true,
