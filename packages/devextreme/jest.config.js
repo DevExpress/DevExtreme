@@ -48,6 +48,9 @@ module.exports = {
         '@js/(.*)': '<rootDir>/js/$1',
         '@ts/(.*)': '<rootDir>/js/__internal/$1',
     },
+    modulePathIgnorePatterns: [
+        'node_modules'
+    ],
     preset: 'ts-jest',
     setupFiles: [
         path.join(path.resolve('.'), './js/renovation/test_utils/setup_enzyme.ts'),

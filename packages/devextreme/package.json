@@ -209,11 +209,6 @@
     "test-typescript": "gulp test-ts",
     "tcd-update": "tcd-update"
   },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "node_modules"
-    ]
-  },
   "browserslist": [
     "last 2 versions",
     "ios > 9",
