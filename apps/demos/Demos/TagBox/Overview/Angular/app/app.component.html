@@ -115,7 +115,10 @@
         >
           <div *dxTemplate="let product of 'customItem'">
             <div class="custom-item">
-              <img [src]="product.ImageSrc" [alt]="getAltText(product.Name)" />
+              <img
+                [src]="product.ImageSrc"
+                [alt]="getAltText(product.Name)"
+              />
               <div class="product-name">
                 {{ product.Name }}
               </div>
@@ -131,7 +134,11 @@
               (mouseenter)="onMouseEnter($event, product)"
               (mouseleave)="onMouseLeave()"
             >
-              <img [src]="product.ImageSrc" [alt]="getAltText(product.Name)" class="tag-img" />
+              <img
+                [src]="product.ImageSrc"
+                [alt]="getAltText(product.Name)"
+                class="tag-img"
+              />
               <span>{{ product.Name }}</span>
               <div
                 *ngIf="!isDisabled(product)"
