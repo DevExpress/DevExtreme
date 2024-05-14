@@ -40,8 +40,8 @@ module.exports = {
       {
         test: /\.js$/,
         loader: "source-map-loader",
+        enforce: "pre",
         options: {
-          enforce: "pre",
           filterSourceMappingUrl: (url, resourcePath) => {
             return true;
           },
