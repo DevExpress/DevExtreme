@@ -70,7 +70,7 @@ jobs:
         run: pnpx nx build devextreme-angular
 
       - name: Angular - Run tests
-        run: pnpx nx test:dev devextreme-angular
+        run: pnpm run --filter devextreme-angular test:dev
 
       - name: Angular - Check packing
         run: pnpx nx pack devextreme-angular
