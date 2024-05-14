@@ -9,6 +9,7 @@ fixture('ContextMenu.Scrolling')
   });
 
 const TARGET_AREA = 'target-area';
+const MENU_ITEM_TEXT_CLASS = 'dx-menu-item-text';
 
 runManualTest('ContextMenu', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
   test('Custom Template Appearance', async (t) => {
@@ -21,5 +22,21 @@ runManualTest('ContextMenu', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'],
     await t
       .expect(compareResults.isValid())
       .ok(compareResults.errorMessages());
+  });
+
+  test('Custom Template SubMenu Appearance', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+    await t.rightClick(`.${TARGET_AREA}`);
+
+    await t.click($(`.${MENU_ITEM_TEXT_CLASS}`).withText('Electronics'));
+
+    await t.click($(`.${MENU_ITEM_TEXT_CLASS}`).withText('Computers'));
+
+    await t.click($(`.${MENU_ITEM_TEXT_CLASS}`).withText('Desktops'));
+
+    await testScreenshot(t, takeScreenshot, 'context_menu_templates_submenus_visible.png');
+
+    await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
   });
 });
