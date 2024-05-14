@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { renderDateParts, getDatePartIndexByPosition } from 'ui/date_box/ui.date_box.mask.parts';
+import { renderDateParts, getDatePartIndexByPosition } from '__internal/ui/date_box/m_date_box.mask.parts';
 import dateParser from 'localization/ldml/date.parser';
 import dateLocalization from 'localization/date';
 import { noop } from 'core/utils/common';
