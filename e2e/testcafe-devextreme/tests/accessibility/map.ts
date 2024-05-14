@@ -6,15 +6,11 @@ import { Options } from '../../helpers/generateOptionMatrix';
 fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
-const markersData = [{
-  location: '40.7825, -73.966111',
-}, {
-  location: [40.755833, -73.986389],
-}, {
-  location: { lat: 40.753889, lng: -73.981389 },
-}, {
-  location: 'Brooklyn Bridge,New York,NY',
-},
+const markersData = [
+  { location: '40.7825, -73.966111' },
+  { location: [40.755833, -73.986389] },
+  { location: { lat: 40.753889, lng: -73.981389 } },
+  { location: 'Brooklyn Bridge,New York,NY' },
 ];
 
 const options: Options<Properties> = {
@@ -22,8 +18,6 @@ const options: Options<Properties> = {
   apiKey: [{
     bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
   }],
-  height: [undefined, 400],
-  width: [undefined, '50%'],
   hint: [undefined, 'hint'],
   controls: [true, false],
   zoom: [undefined, 10],
@@ -41,4 +35,4 @@ const configuration: Configuration = {
   options,
 };
 
-// testAccessibility(configuration);
+testAccessibility(configuration);
