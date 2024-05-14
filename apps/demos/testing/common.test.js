@@ -56,8 +56,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['label'];
     case 'DataGrid-InfiniteScrolling':
       return ['aria-required-children'];
-    case 'Splitter-Overview':
-      return ['aria-allowed-attr'];
     case 'TagBox-Overview':
       return ['image-alt', 'image-redundant-alt'];
     default:
