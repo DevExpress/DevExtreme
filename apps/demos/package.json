@@ -15,14 +15,14 @@
         "devextreme-vue": "~24.1.2"
     },
     "dependencies": {
-        "@angular/cli": "~16.2.12",
-        "@angular/common": "~16.2.12",
-        "@angular/compiler": "~16.2.12",
-        "@angular/compiler-cli": "~16.2.12",
-        "@angular/core": "~16.2.12",
-        "@angular/forms": "~16.2.12",
-        "@angular/platform-browser": "~16.2.12",
-        "@angular/platform-browser-dynamic": "~16.2.12",
+        "@angular/cli": "16.2.0",
+        "@angular/common": "16.2.0",
+        "@angular/compiler": "16.2.0",
+        "@angular/compiler-cli": "16.2.0",
+        "@angular/core": "16.2.0",
+        "@angular/forms": "16.2.0",
+        "@angular/platform-browser": "16.2.0",
+        "@angular/platform-browser-dynamic": "16.2.0",
         "@aspnet/signalr": "1.0.27",
         "@devextreme/runtime": "3.0.12",
         "@vue/compiler-sfc": "3.4.27",
@@ -74,10 +74,10 @@
         "vuex": "4.0.0-beta.4",
         "whatwg-fetch": "2.0.4",
         "yargs": "17.7.2",
-        "zone.js": "0.13.0"
+        "zone.js": "0.13.3"
     },
     "devDependencies": {
-        "@angular/platform-server": "~16.2.12",
+        "@angular/platform-server": "16.2.0",
         "@babel/core": "7.20.12",
         "@babel/eslint-parser": "7.23.10",
         "@babel/preset-env": "7.20.2",

@@ -32,18 +32,6 @@
   "nx": {},
   "private": true,
   "devDependencies": {
-    "@angular-devkit/architect": "0.1602.14",
-    "@angular-devkit/schematics": "16.2.13",
-    "@angular/animations": "16.2.0",
-    "@angular/cli": "16.2.0",
-    "@angular/common": "16.2.0",
-    "@angular/compiler": "16.2.0",
-    "@angular/compiler-cli": "16.2.0",
-    "@angular/core": "16.2.0",
-    "@angular/forms": "16.2.0",
-    "@angular/platform-browser": "16.2.0",
-    "@angular/platform-browser-dynamic": "16.2.0",
-    "@angular/platform-server": "16.2.0",
     "@nx/devkit": "^18.3.4",
     "@nx/jest": "^16.10.0",
     "@nx/js": "^16.10.0",
@@ -79,7 +67,7 @@
   "dependencies": {
     "devextreme-aspnet-data": "3.0.0",
     "devextreme-aspnet-data-nojquery": "3.0.0",
-    "rxjs": "7.8.0"
+    "rxjs": "7.8.1"
   },
   "packageManager": "pnpm@9.1.1"
 }
