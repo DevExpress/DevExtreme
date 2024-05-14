@@ -49,7 +49,6 @@ const COMMON_SKIP_RULES = ['color-contrast'];
 const getTestSpecificSkipRules = (testName) => {
   switch (testName) {
     case 'Calendar-MultipleSelection':
-    case 'DataGrid-HorizontalVirtualScrolling':
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
