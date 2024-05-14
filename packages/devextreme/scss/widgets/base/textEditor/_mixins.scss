@@ -798,6 +798,10 @@
 
     &.dx-texteditor-with-before-buttons {
       .dx-texteditor-buttons-container {
+        > .dx-button {
+          min-height: auto;
+        }
+
         > .dx-button.dx-button-mode-text {
           height: $material-underlined-editor-button-height;
           margin-top: 1px;
