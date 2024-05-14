@@ -52,8 +52,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-    case 'TagBox-Overview':
-      return ['image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
