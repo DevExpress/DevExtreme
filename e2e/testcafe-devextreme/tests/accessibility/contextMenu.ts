@@ -20,7 +20,6 @@ const options: Options<Properties> = {
   disabled: [true, false],
   hint: [undefined, 'hint'],
   selectionMode: ['single', 'none'],
-  submenuDirection: ['auto', 'left', 'right'],
 };
 
 const created = async (t: TestController): Promise<void> => {

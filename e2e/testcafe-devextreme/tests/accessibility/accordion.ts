@@ -10,7 +10,6 @@ const items = ['Item_1', 'Item_2', 'Item_3'];
 
 const options: Options<Properties> = {
   dataSource: [items],
-  collapsible: [true, false],
   disabled: [true, false],
   deferRendering: [true, false],
   hint: [undefined, 'hint'],

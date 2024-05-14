@@ -27,7 +27,6 @@ const options: Options<Properties> = {
   dataSource: [gallery],
   loop: [true, false],
   swipeEnabled: [true, false],
-  stretchImages: [true, false],
   showIndicator: [true, false],
   showNavButtons: [true, false],
 };

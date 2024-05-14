@@ -14,7 +14,6 @@ const options: Options<Properties> = {
   loop: [true, false],
   hint: [undefined, 'hint'],
   noDataText: [undefined, 'no data text'],
-  swipeEnabled: [true, false],
   focusStateEnabled: [true],
 };
 
