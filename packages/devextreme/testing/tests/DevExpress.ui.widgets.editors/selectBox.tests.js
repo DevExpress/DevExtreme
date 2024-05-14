@@ -15,6 +15,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'generic_light.css!';
+import 'ui/validator';
 
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
@@ -3290,6 +3291,50 @@ QUnit.module('search', moduleSetup, () => {
         listItem.trigger('dxclick');
 
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
+    });
+
+    QUnit.testInActiveWindow('widget with fieldTemplate should not lose aria-required attribute after search and selection (T1230696)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: {
+                store: new CustomStore({
+                    byKey: noop,
+                    load: (options) => {
+                        return [{
+                            Id: '1',
+                            Name: 'Name 1'
+                        }, {
+                            Id: '2',
+                            Name: 'Name 2'
+                        }];
+                    },
+                    key: 'Id'
+                })
+            },
+            valueExpr: 'Id',
+            displayValue: 'Name',
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({
+                    value: (data !== null) ? data.Name : ''
+                });
+            },
+            searchEnabled: true,
+            itemTemplate: (data) => {
+                return '<div><span>' + data.Name + '</span></div>';
+            }
+        }).dxValidator({
+            validationRules: [ { type: 'required' } ]
+        });
+        assert.ok($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).attr('aria-required'), true, 'initial render should have aria-required attribute');
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)));
+
+        keyboard.type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        assert.ok($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).attr('aria-required'), true, 'aria-required should exist after search and selection');
     });
 
     [0, 1].forEach((value) => {
