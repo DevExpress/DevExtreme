@@ -2,7 +2,6 @@ import { Injectable } from '@angular/core';
 
 export class Product {
   text: string;
-  
   items?: Product[];
 }
 
