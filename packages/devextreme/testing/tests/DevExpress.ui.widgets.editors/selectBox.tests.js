@@ -3294,32 +3294,15 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('widget with fieldTemplate should not lose aria-required attribute after search and selection (T1230696)', function(assert) {
+        const dataSource = new DataSource(['one', 'two', 'three']);
         const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: {
-                store: new CustomStore({
-                    byKey: noop,
-                    load: (options) => {
-                        return [{
-                            Id: '1',
-                            Name: 'Name 1'
-                        }, {
-                            Id: '2',
-                            Name: 'Name 2'
-                        }];
-                    },
-                    key: 'Id'
-                })
-            },
-            valueExpr: 'Id',
-            displayValue: 'Name',
-            fieldTemplate: (data) => {
-                return $('<div>').dxTextBox({
-                    value: (data !== null) ? data.Name : ''
-                });
+            dataSource: dataSource,
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
             },
             searchEnabled: true,
-            itemTemplate: (data) => {
-                return '<div><span>' + data.Name + '</span></div>';
+            itemTemplate: () => {
+                return '<div><span></span></div>';
             }
         }).dxValidator({
             validationRules: [ { type: 'required' } ]
