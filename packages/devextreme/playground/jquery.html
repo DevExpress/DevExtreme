@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -42,19 +41,7 @@
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
-
-    <style>
-        .photo-popup-content {
-            text-align: center;
-        }
-
-        .photo-popup-content .photo-popup-image {
-            height: 100%;
-            max-width: 100%;
-        }
-    </style>
 </head>
-
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -62,56 +49,15 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-
-        <div class="dx-viewport">
-            <div class="demo-container">
-                <div id="file-manager"></div>
-                <div id="photo-popup"></div>
-            </div>
-        </div>
-
+        <div id="button"></div>
         <script>
-            $(() => {
-                const provider = new DevExpress.fileManagement.RemoteFileSystemProvider({
-                    endpointUrl: 'https://js.devexpress.com/Demos/Mvc/api/file-manager-file-system-images',
-                });
-
-                $('#file-manager').dxFileManager({
-                    name: 'fileManager',
-                    fileSystemProvider: provider,
-                    currentPath: 'Widescreen',
-                    permissions: {
-                        create: true,
-                        copy: true,
-                        move: true,
-                        delete: true,
-                        rename: true,
-                        upload: true,
-                        download: true,
-                    },
-                    onSelectedFileOpened(e) {
-                        const popup = $('#photo-popup').dxPopup('instance');
-                        popup.option({
-                            title: e.file.name,
-                            contentTemplate: `<img src="${e.file.dataItem.url}" class="photo-popup-image" />`,
-                        });
-                        popup.show();
-                    },
-                });
-
-                $('#photo-popup').dxPopup({
-                    maxHeight: 600,
-                    hideOnOutsideClick: true,
-                    showCloseButton: true,
-                    onContentReady(e) {
-                        const $contentElement = e.component.content();
-                        $contentElement.addClass('photo-popup-content');
-                    },
+            $(function() {
+                $("#button").dxButton({
+                    text: 'Click me!',
+                    onClick: function() { alert("clicked"); }
                 });
             });
-
         </script>
     </div>
 </body>
-
 </html>

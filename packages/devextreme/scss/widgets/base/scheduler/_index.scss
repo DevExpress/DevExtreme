@@ -504,6 +504,14 @@ $scheduler-appointment-form-label-padding: 20px;
     background-color: $scheduler-appointment-base-color;
     color: $scheduler-appointment-text-color;
 
+    &.dx-button {
+      min-height: auto;
+
+      .dx-button-content {
+        height: 100%;
+      }
+    }
+
     &.dx-button,
     &.dx-button.dx-state-hover,
     &.dx-button.dx-state-active,

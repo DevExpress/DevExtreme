@@ -244,8 +244,9 @@
 
 .dx-filemanager-file-actions-button {
   .dx-button {
-    min-width: $filemanager-file-actions-button-size;
     height: $filemanager-file-actions-button-size;
+    min-width: $filemanager-file-actions-button-size;
+    min-height: auto;
 
     .dx-button-content {
       padding: $filemanager-file-actions-button-top-bottom-padding 6px;
