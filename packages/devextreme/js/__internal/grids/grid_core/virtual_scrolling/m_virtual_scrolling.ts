@@ -1695,7 +1695,10 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         $('<div>')
           .addClass(that.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
           .append(that._createComponent($('<div>'), LoadIndicator, {
-            elementAttr: { role: null },
+            elementAttr: {
+              role: null,
+              'aria-label': null,
+            },
           }).$element())
           .appendTo($contentElement);
       }
