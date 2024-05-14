@@ -359,6 +359,22 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Download artifacts
+      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
+      uses: actions/download-artifact@v4
+      with:
+        name: changed-demos
+        path: apps/demos
+
+    - name: Create bundles dir
+      run: mkdir -p apps/demos/bundles
+
+    - name: Download bundles artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-bundles
+        path: apps/demos/bundles
+
     - uses: pnpm/action-setup@v3
       with:
         version: 9
@@ -402,22 +418,6 @@ jobs:
         python -m http.server 8081 &
         python -m http.server 8082 &
         python -m http.server 8083 &
-
-    - name: Download artifacts
-      if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
-      uses: actions/download-artifact@v4
-      with:
-        name: changed-demos
-        path: apps/demos
-
-    - name: Create bundles dir
-      run: mkdir -p apps/demos/bundles
-
-    - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: devextreme-bundles
-        path: apps/demos/bundles
 
     - name: Run TestCafe tests
       working-directory: apps/demos
