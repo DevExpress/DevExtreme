@@ -45,7 +45,6 @@ const execTestCafeCode = (t, code) => {
   return testCafeFunction(t);
 };
 
-const SKIP_ACCESSIBILITY_TESTS = ['TabPanel-Overview'];
 const COMMON_SKIP_RULES = ['color-contrast'];
 const getTestSpecificSkipRules = (testName) => {
   switch (testName) {
@@ -357,10 +356,6 @@ const SKIPPED_TESTS = {
         }
 
         if (process.env.STRATEGY === 'accessibility') {
-          if (SKIP_ACCESSIBILITY_TESTS.indexOf(testName) > -1) {
-            return;
-          }
-
           const specificSkipRules = getTestSpecificSkipRules(testName);
           const options = { rules: { } };
 
