@@ -49,7 +49,7 @@ jobs:
       - name: Build devextreme package
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: pnpx nx build devextreme-main
+        run: pnpm exec nx build devextreme-main
 
       - name: Generate wrappers
         run: pnpm run regenerate-all
@@ -67,25 +67,25 @@ jobs:
           fi
 
       - name: Angular - Build
-        run: pnpx nx build devextreme-angular
+        run: pnpm exec nx build devextreme-angular
 
       - name: Angular - Run tests
         run: pnpm run --filter devextreme-angular test:dev
 
       - name: Angular - Check packing
-        run: pnpx nx pack devextreme-angular
+        run: pnpm exec nx pack devextreme-angular
 
       - name: React - Run tests
-        run: pnpx nx test devextreme-react
+        run: pnpm exec nx test devextreme-react
 
       - name: React - Check packing
-        run: pnpx nx pack devextreme-react
+        run: pnpm exec nx pack devextreme-react
 
       - name: Vue - Run tests
-        run: pnpx nx test devextreme-vue
+        run: pnpm exec nx test devextreme-vue
 
       - name: Vue - Check packing
-        run: pnpx nx pack devextreme-vue
+        run: pnpm exec nx pack devextreme-vue
 
       - name: Archive internal-tools artifacts
         uses: actions/upload-artifact@v3
