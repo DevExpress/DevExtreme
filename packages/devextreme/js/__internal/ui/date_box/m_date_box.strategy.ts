@@ -1,132 +1,133 @@
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import { noop } from '../../core/utils/common';
-import Class from '../../core/class';
-import dateLocalization from '../../localization/date';
+import Class from '@js/core/class';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import eventsEngine from '@js/events/core/events_engine';
+import dateLocalization from '@js/localization/date';
 
-const abstract = Class.abstract;
+const { abstract } = Class;
 
 const DateBoxStrategy = Class.inherit({
-    ctor: function(dateBox) {
-        this.dateBox = dateBox;
-    },
+  ctor(dateBox) {
+    this.dateBox = dateBox;
+  },
 
-    widgetOption: function() {
-        return this._widget && this._widget.option.apply(this._widget, arguments);
-    },
+  widgetOption() {
+    return this._widget && this._widget.option.apply(this._widget, arguments);
+  },
 
-    _renderWidget: function(element) {
-        element = element || $('<div>');
-        this._widget = this._createWidget(element);
-        this._widget.$element().appendTo(this._getWidgetContainer());
-    },
+  _renderWidget(element) {
+    element = element || $('<div>');
+    this._widget = this._createWidget(element);
+    this._widget.$element().appendTo(this._getWidgetContainer());
+  },
 
-    _createWidget: function(element) {
-        const widgetName = this._getWidgetName();
-        const widgetOptions = this._getWidgetOptions();
+  _createWidget(element) {
+    const widgetName = this._getWidgetName();
+    const widgetOptions = this._getWidgetOptions();
 
-        return this.dateBox._createComponent(element, widgetName, widgetOptions);
-    },
+    return this.dateBox._createComponent(element, widgetName, widgetOptions);
+  },
 
-    _getWidgetOptions: abstract,
+  _getWidgetOptions: abstract,
 
-    _getWidgetName: abstract,
+  _getWidgetName: abstract,
 
-    getDefaultOptions: function() {
-        return { mode: 'text' };
-    },
+  getDefaultOptions() {
+    return { mode: 'text' };
+  },
 
-    getDisplayFormat: abstract,
+  getDisplayFormat: abstract,
 
-    supportedKeys: noop,
+  supportedKeys: noop,
 
-    getKeyboardListener: noop,
+  getKeyboardListener: noop,
 
-    customizeButtons: noop,
+  customizeButtons: noop,
 
-    getParsedText: function(text, format) {
-        const value = dateLocalization.parse(text, format);
-        return value ? value : dateLocalization.parse(text);
-    },
+  getParsedText(text, format) {
+    // @ts-expect-error
+    const value = dateLocalization.parse(text, format);
+    // @ts-expect-error
+    return value || dateLocalization.parse(text);
+  },
 
-    renderInputMinMax: noop,
+  renderInputMinMax: noop,
 
-    renderOpenedState: function() {
-        this._updateValue();
-    },
+  renderOpenedState() {
+    this._updateValue();
+  },
 
-    popupConfig: abstract,
+  popupConfig: abstract,
 
-    _dimensionChanged: function() {
-        this._getPopup()?.repaint();
-    },
+  _dimensionChanged() {
+    this._getPopup()?.repaint();
+  },
 
-    renderPopupContent: function() {
-        const popup = this._getPopup();
-        this._renderWidget();
+  renderPopupContent() {
+    const popup = this._getPopup();
+    this._renderWidget();
 
-        const $popupContent = popup.$content().parent();
-        eventsEngine.off($popupContent, 'mousedown');
-        eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
-    },
+    const $popupContent = popup.$content().parent();
+    eventsEngine.off($popupContent, 'mousedown');
+    eventsEngine.on($popupContent, 'mousedown', this._preventFocusOnPopup.bind(this));
+  },
 
-    _preventFocusOnPopup: function(e) {
-        e.preventDefault();
-    },
+  _preventFocusOnPopup(e) {
+    e.preventDefault();
+  },
 
-    _getWidgetContainer: function() {
-        return this._getPopup().$content();
-    },
+  _getWidgetContainer() {
+    return this._getPopup().$content();
+  },
 
-    _getPopup: function() {
-        return this.dateBox._popup;
-    },
+  _getPopup() {
+    return this.dateBox._popup;
+  },
 
-    popupShowingHandler: noop,
+  popupShowingHandler: noop,
 
-    popupHiddenHandler: noop,
+  popupHiddenHandler: noop,
 
-    _updateValue: function() {
-        this._widget && this._widget.option('value', this.dateBoxValue());
-    },
+  _updateValue() {
+    this._widget && this._widget.option('value', this.dateBoxValue());
+  },
 
-    useCurrentDateByDefault: noop,
+  useCurrentDateByDefault: noop,
 
-    getDefaultDate: function() {
-        return new Date();
-    },
+  getDefaultDate() {
+    return new Date();
+  },
 
-    textChangedHandler: noop,
+  textChangedHandler: noop,
 
-    renderValue: function() {
-        if(this.dateBox.option('opened')) {
-            this._updateValue();
-        }
-    },
-
-    getValue: function() {
-        return this._widget.option('value');
-    },
-
-    isAdaptivityChanged: function() {
-        return false;
-    },
-
-    dispose: function() {
-        const popup = this._getPopup();
-
-        if(popup) {
-            popup.$content().empty();
-        }
-    },
-
-    dateBoxValue: function() {
-        if(arguments.length) {
-            return this.dateBox.dateValue.apply(this.dateBox, arguments);
-        } else {
-            return this.dateBox.dateOption.apply(this.dateBox, ['value']);
-        }
+  renderValue() {
+    if (this.dateBox.option('opened')) {
+      this._updateValue();
     }
+  },
+
+  getValue() {
+    return this._widget.option('value');
+  },
+
+  isAdaptivityChanged() {
+    return false;
+  },
+
+  dispose() {
+    const popup = this._getPopup();
+
+    if (popup) {
+      popup.$content().empty();
+    }
+  },
+
+  dateBoxValue() {
+    if (arguments.length) {
+      return this.dateBox.dateValue.apply(this.dateBox, arguments);
+    }
+    return this.dateBox.dateOption.apply(this.dateBox, ['value']);
+  },
 });
 
 export default DateBoxStrategy;
