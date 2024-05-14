@@ -1,5 +1,7 @@
-Use our DateRangeBox [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateRangeBox/Configuration/#displayFormat) property to change date display format as requirements dictate. This demo illustrates the following:
+Use our DateRangeBox [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateRangeBox/Configuration/#displayFormat) property to change date display format as requirements dictate.
 // _split_
+
+This demo illustrates the following:
 
 - **Locale-dependent format**     
 DateRangeBox formats date range values based upon the specified locale. You do not need to define a format with the **displayFormat** property. For more information, refer to the following help topic: [Localize Dates, Numbers, and Currencies](/Documentation/Guide/Common/Localization/#Localize_Dates_Numbers_and_Currencies).

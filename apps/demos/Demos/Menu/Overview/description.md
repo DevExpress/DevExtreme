@@ -1,7 +1,7 @@
 ## Populate Menu with Data and Configure the Access to It
-// _split_
 
 You can display Menu items from the [items](/Documentation/ApiReference/UI_Components/dxMenu/Configuration/items/) array or a [dataSource](/Documentation/ApiReference/UI_Components/dxMenu/Configuration/#dataSource). This demo contains an example of a data structure. If you use a **dataSource**, specify the [displayExpr](/Documentation/ApiReference/UI_Components/dxMenu/Configuration/#displayExpr) property.
+// _split_
 
 To access the clicked item, use the [onItemClick](/Documentation/ApiReference/UI_Components/dxMenu/Configuration/#onItemClick) event handler function.
 

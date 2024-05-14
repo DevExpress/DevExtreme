@@ -1,4 +1,4 @@
-To add an icon to a Button, set the **icon** property. This demo shows how you can use this property:   
+To add an icon to a Button, set the **icon** property. This demo shows how you can use this property.   
 // _split_
 
 - **Built-in icons**    
