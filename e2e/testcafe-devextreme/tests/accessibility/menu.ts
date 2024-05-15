@@ -44,7 +44,6 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   orientation: ['horizontal', 'vertical'],
   selectionMode: ['single', 'none'],
-  submenuDirection: ['auto', 'leftOrTop', 'rightOrBottom'],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
