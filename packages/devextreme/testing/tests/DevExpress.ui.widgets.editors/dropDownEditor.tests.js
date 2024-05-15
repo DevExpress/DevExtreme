@@ -2115,7 +2115,7 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'fieldTemplate should have aria-haspopup attribute set to true');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'fieldTemplate should have aria-haspopup attribute set to none');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'fieldTemplate should have aria-haspopup attribute set to list');
     });
     
     QUnit.module('aria-controls', {}, () => {
