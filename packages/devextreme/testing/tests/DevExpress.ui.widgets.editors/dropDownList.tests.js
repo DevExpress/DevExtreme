@@ -823,7 +823,7 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
         assert.strictEqual($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS).attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
     });
-    
+
     QUnit.test('dropDownList should search in grouped DataSource', function(assert) {
         const $element = $('#dropDownList').dxDropDownList({
             grouped: true,
