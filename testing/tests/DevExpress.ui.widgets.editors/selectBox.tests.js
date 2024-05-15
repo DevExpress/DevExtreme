@@ -6047,6 +6047,18 @@ if(devices.real().deviceType === 'desktop') {
                 },
             });
 
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), 'listbox', 'fieldTemplate should have aria-haspopup attribute set to listbox');
+
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'none', 'fieldTemplate should have aria-autocomplete attribute set to none');
+        });
+
+        QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is rendered (T1230696)', function(assert) {
+            helper.createWidget({
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox();
+                },
+            });
+
             assert.ok(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), true);
 
             assert.ok(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), true);

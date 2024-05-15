@@ -2082,6 +2082,19 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 
+    QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is rendered (T1230696)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+            fieldTemplate() {
+                return $('<div>').dxTextBox();
+            }
+        });
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'fieldTemplate should have aria-haspopup attribute set to true');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'fieldTemplate should have aria-haspopup attribute set to none');
+    });
+    
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];
