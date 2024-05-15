@@ -1,4 +1,4 @@
-This demo illustrates the DevExtreme JavaScript Gantt component's appearance settings:
+This demo illustrates the DevExtreme JavaScript Gantt component's appearance settings.
 // _split_
 
 * [scaleType](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/#scaleType) - Specifies views to display tasks: hours, days, weeks, months, etc.

@@ -1,4 +1,4 @@
-To display appointments from Google Calendar in the Scheduler, follow the steps below:
+To display appointments from Google Calendar in the Scheduler, follow the steps below.
 // _split_
 
 1. **Get Google API key**   
