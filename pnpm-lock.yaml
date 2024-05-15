@@ -87,9 +87,6 @@ importers:
       tar-fs:
         specifier: ^3.0.4
         version: 3.0.6
-      testcafe:
-        specifier: 2.5.0
-        version: 2.5.0(encoding@0.1.13)
       ts-node:
         specifier: ^10.9.1
         version: 10.9.2(@swc/core@1.4.17)(@types/node@20.12.8)(typescript@5.4.5)

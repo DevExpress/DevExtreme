@@ -390,10 +390,6 @@ const SKIPPED_TESTS = {
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
-          if (!comparisonResult) {
-            // eslint-disable-next-line no-console
-            console.log(consoleMessages);
-          }
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));

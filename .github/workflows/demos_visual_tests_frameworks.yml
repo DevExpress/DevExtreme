@@ -14,6 +14,7 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  BUILD_TEST_INTERNAL_PACKAGE: true
 
 jobs:
   build-devextreme:
@@ -410,7 +411,9 @@ jobs:
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: pnpm run prepare-bundles
+      run: |
+        pnpm run prepare-bundles
+        pnpm run prepare-js
 
     - name: Run Web Server
       run: |
@@ -423,8 +426,8 @@ jobs:
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
-        DEBUG: hammerhead:*,testcafe:*
+        BROWSERS: chrome:headless --disable-gpu --window-size=1200,800 --js-flags=--random-seed=2147483647
+        DEBUG: testcafe:* # hammerhead:*,
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
