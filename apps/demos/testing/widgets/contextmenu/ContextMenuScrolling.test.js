@@ -34,8 +34,6 @@ runManualTest('ContextMenu', 'Scrolling', ['jQuery', 'React', 'Vue', 'Angular'],
 
     await t.click($(`.${MENU_ITEM_TEXT_CLASS}`).withText('Computers'));
 
-    await t.click($(`.${MENU_ITEM_TEXT_CLASS}`).withText('Desktops'));
-
     await testScreenshot(t, takeScreenshot, 'context_menu_templates_submenus_visible.png');
 
     await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
