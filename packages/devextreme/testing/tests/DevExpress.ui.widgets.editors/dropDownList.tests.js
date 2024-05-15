@@ -810,17 +810,17 @@ QUnit.module('items & dataSource', moduleConfig, () => {
             }).dxValidator({
                 validationRules: [ { type: 'required' } ]
             });
-            assert.strictEqual($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS).attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+            assert.strictEqual($dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
 
             const dropDownList = $dropDownList.dxDropDownList('instance');
-            const keyboard = keyboardMock($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS));
+            const keyboard = keyboardMock($dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`));
 
             keyboard.type('a');
 
-            const listItem = $(dropDownList.content()).find('.' + TEXTEDITOR_INPUT_CLASS).eq(1);
+            const listItem = $(dropDownList.content()).find(`.${TEXTEDITOR_INPUT_CLASS}`).eq(1);
             listItem.trigger('dxclick');
 
-            assert.strictEqual($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS).attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
+            assert.strictEqual($dropDownList.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
         });
     });
 
