@@ -1,4 +1,4 @@
-DataGrid has the following API for multiple record selection:
+DataGrid has the following API for multiple record selection.
 // _split_
 
 * [selectAll()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#selectAll) / [deselectAll()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#deselectAll)       

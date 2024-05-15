@@ -1,4 +1,4 @@
-This example demonstrates the following properties:
+This example demonstrates the following properties.
 // _split_
 
 * [showBorders](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#showBorders)      

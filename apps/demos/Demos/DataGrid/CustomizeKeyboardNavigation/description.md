@@ -1,4 +1,4 @@
-The following properties customize keyboard navigation:
+The following properties customize keyboard navigation.
 // _split_
  
 - [enterKeyAction](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/keyboardNavigation/#enterKeyAction)    

@@ -1,4 +1,4 @@
-The TreeList sets the same width for all columns, but you can change column widths as described below:
+The TreeList sets the same width for all columns, but you can change column widths as described below.
 // _split_
 
 ### Specify Custom Column Widths

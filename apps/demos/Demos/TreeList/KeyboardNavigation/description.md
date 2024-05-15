@@ -1,4 +1,4 @@
-In this demo, you can use the following keys and key combinations to interact with the TreeList:
+In this demo, you can use the following keys and key combinations to interact with the TreeList.
 // _split_
 
 - **Enter**             

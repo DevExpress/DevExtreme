@@ -1,4 +1,4 @@
-The DataGrid component can sort values by a single or multiple columns. Use the **sorting**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/sorting/#mode) property to specify the sort mode:
+The DataGrid component can sort values by a single or multiple columns. Use the **sorting**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/sorting/#mode) property to specify the sort mode.
 // _split_
 
 - **Single sort mode**       
