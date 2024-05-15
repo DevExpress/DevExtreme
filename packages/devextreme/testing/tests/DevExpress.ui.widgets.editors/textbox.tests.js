@@ -33,6 +33,17 @@ const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 QUnit.module('common', {}, () => {
+    QUnit.test('should not generate any error if inputAttr is undefined', function(assert) {
+        try {
+            $('#textbox').dxTextBox({
+                inputAttr: undefined
+            });
+            assert.ok(true, 'Encountered no errors');
+        } catch(e) {
+            assert.ok(false, `The error is thrown: ${e.message}`);
+        }
+    });
+
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
         assert.expect(1);
 
