@@ -15,6 +15,7 @@ import ajaxMock from '../../helpers/ajaxMock.js';
 import 'ui/drop_down_editor/ui.drop_down_list';
 
 import 'generic_light.css!';
+import 'ui/validator';
 
 QUnit.testStart(() => {
     const markup =
@@ -795,6 +796,32 @@ QUnit.module('items & dataSource', moduleConfig, () => {
 
             assert.strictEqual(this.getListItemsCount(), 0, 'was search');
         });
+    });
+
+    QUnit.testInActiveWindow('widget with fieldTemplate should not lose aria-required attribute after search and selection (T1230696)', function(assert) {
+        const $dropDownList = $('#dropDownList').dxDropDownList({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+            itemTemplate: () => {
+                return '<div><span></span></div>';
+            }
+        }).dxValidator({
+            validationRules: [ { type: 'required' } ]
+        });
+        assert.strictEqual($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS).attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+
+        const dropDownList = $dropDownList.dxDropDownList('instance');
+        const keyboard = keyboardMock($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS));
+
+        keyboard.type('a');
+
+        const listItem = $(dropDownList.content()).find('.' + TEXTEDITOR_INPUT_CLASS).eq(1);
+        listItem.trigger('dxclick');
+
+        assert.strictEqual($dropDownList.find('.' + TEXTEDITOR_INPUT_CLASS).attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
     });
 
     QUnit.test('dropDownList should search in grouped DataSource', function(assert) {

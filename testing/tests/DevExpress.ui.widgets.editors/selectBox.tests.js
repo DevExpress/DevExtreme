@@ -3293,9 +3293,8 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     QUnit.testInActiveWindow('widget with fieldTemplate should not lose aria-required attribute after search and selection (T1230696)', function(assert) {
-        const dataSource = new DataSource(['one', 'two', 'three']);
         const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: dataSource,
+            dataSource: ['one', 'two', 'three'],
             fieldTemplate: () => {
                 return $('<div>').dxTextBox({});
             },
@@ -3306,7 +3305,7 @@ QUnit.module('search', moduleSetup, () => {
         }).dxValidator({
             validationRules: [ { type: 'required' } ]
         });
-        assert.ok($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).attr('aria-required'), true, 'initial render should have aria-required attribute');
+        assert.strictEqual($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
 
         const selectBox = $selectBox.dxSelectBox('instance');
         const keyboard = keyboardMock($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)));
@@ -3316,7 +3315,7 @@ QUnit.module('search', moduleSetup, () => {
         const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
         listItem.trigger('dxclick');
 
-        assert.ok($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).attr('aria-required'), true, 'aria-required should exist after search and selection');
+        assert.strictEqual($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
     });
 
     [0, 1].forEach((value) => {
