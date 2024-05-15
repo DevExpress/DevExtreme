@@ -59,6 +59,10 @@ export type WidgetName =
   | 'dxDropDownBox'
   | 'dxFileManager'
   | 'dxSwitch'
+  | 'dxLoadIndicator'
+  | 'dxMap'
+  | 'dxDrawer'
+  | 'dxValidationSummary'
   | 'dxToast'
   | 'dxLoadPanel'
   | 'dxTooltip';
