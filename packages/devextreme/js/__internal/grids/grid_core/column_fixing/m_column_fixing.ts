@@ -21,6 +21,7 @@ import type {
   ColumnsResizerViewController,
   DraggingHeaderViewController,
 } from '../columns_resizing_reordering/m_columns_resizing_reordering';
+import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
 import type { ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { ColumnsView } from '../views/m_columns_view';
@@ -1148,6 +1149,18 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnF
   }
 };
 
+const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationExtender extends Base {
+  protected _toggleInertAttr(value = false): void {
+    const $fixedContent = this._rowsView?.element()?.children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
+
+    if (value) {
+      $fixedContent?.attr('inert', true);
+    } else {
+      $fixedContent?.removeAttr('inert');
+    }
+  }
+};
+
 export const columnFixingModule = {
   defaultOptions() {
     return {
@@ -1172,6 +1185,7 @@ export const columnFixingModule = {
       draggingHeader,
       columnsResizer,
       resizing,
+      keyboardNavigation,
     },
   },
 };

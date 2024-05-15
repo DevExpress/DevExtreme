@@ -103,6 +103,8 @@ export class KeyboardNavigationController extends modules.ViewController {
 
   private rowsViewFocusHandlerContext!: (event: any) => void;
 
+  private rowsViewFocusOutHandlerContext!: (event: Event) => void;
+
   public _isNeedScroll: any;
 
   private _focusedView?: RowsView | null;
@@ -160,6 +162,8 @@ export class KeyboardNavigationController extends modules.ViewController {
     this.focusedHandlerWithContext = this.focusedHandlerWithContext || this.focusedHandler.bind(this);
     this.renderCompletedWithContext = this.renderCompletedWithContext || this.renderCompleted.bind(this);
     this.rowsViewFocusHandlerContext = this.rowsViewFocusHandlerContext || this.rowsViewFocusHandler.bind(this);
+    // eslint-disable-next-line max-len
+    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext ?? this.rowsViewFocusOutHandler.bind(this);
 
     this._updateFocusTimeout = null;
     this._fastEditingStarted = false;
@@ -240,16 +244,22 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  protected rowsViewFocusOutHandler(): void {
+    this._toggleInertAttr(false);
+  }
+
   protected subscribeToRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
     eventsEngine.on($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
+    eventsEngine.on($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
   protected unsubscribeFromRowsViewFocusEvent(): void {
     const $rowsView = this._rowsView?.element();
 
     eventsEngine.off($rowsView, 'focusin', this.rowsViewFocusHandlerContext);
+    eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
   }
 
   protected renderCompleted(e: any): void {
@@ -688,14 +698,18 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _toggleInertAttr(value = false): void {}
+
   protected _tabKeyHandler(eventArgs, isEditing) {
     const editingOptions = this.option('editing');
     const direction = eventArgs.shift ? 'previous' : 'next';
     const isCellPositionDefined = isDefined(this._focusedCellPosition)
       && !isEmptyObject(this._focusedCellPosition);
+    const isLastValidCell = !eventArgs.shift && this._isLastValidCell(this._focusedCellPosition);
 
     let isOriginalHandlerRequired = !isCellPositionDefined
-      || (!eventArgs.shift && this._isLastValidCell(this._focusedCellPosition))
+      || isLastValidCell
       || (eventArgs.shift && this._isFirstValidCell(this._focusedCellPosition));
 
     const eventTarget = eventArgs.originalEvent.target;
@@ -726,6 +740,9 @@ export class KeyboardNavigationController extends modules.ViewController {
     }
 
     if (isOriginalHandlerRequired) {
+      if (isLastValidCell) {
+        this._toggleInertAttr(true);
+      }
       this._editorFactory.loseFocus();
 
       if (this._editingController.isEditing() && !this._isRowEditMode()) {
