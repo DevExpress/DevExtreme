@@ -1298,7 +1298,7 @@ QUnit.module('Templates', () => {
             _onMarkupRendered: markupRenderedStub
         });
 
-        assert.strictEqual(markupRenderedStub.callCount, 2, 'initial render should have aria-required call _onMarkupRendered twice');
+        assert.strictEqual(markupRenderedStub.callCount, 2, 'initial render should call _onMarkupRendered twice');
         markupRenderedStub.reset();
 
         keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
