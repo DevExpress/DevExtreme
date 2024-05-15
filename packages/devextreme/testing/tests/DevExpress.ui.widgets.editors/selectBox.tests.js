@@ -6109,9 +6109,9 @@ if(devices.real().deviceType === 'desktop') {
                 },
             });
 
-            assert.ok(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), true);
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), 'listbox');
 
-            assert.ok(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), true);
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'none');
         });
     });
 }
