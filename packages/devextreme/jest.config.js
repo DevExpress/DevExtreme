@@ -7,6 +7,10 @@ const full = { functions: 100, statements: 100, lines: 100, branches: 100 };
 const nearlyFull = { functions: 96, statements: 98, lines: 98, branches: 92 };
 
 module.exports = {
+    testEnvironment: 'jsdom',
+    testEnvironmentOptions: {
+        url: 'http://localhost/',
+    },
     'globals': {
         'ts-jest': {
             tsConfig: './jest.tsconfig.json',
