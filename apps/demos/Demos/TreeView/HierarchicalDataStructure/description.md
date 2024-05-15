@@ -1,11 +1,11 @@
 Use the following properties to bind the TreeView to hierarchical data:
-// _split_
 
 * [items[]](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/items/)        
 Assigns a local array as done in this demo.
 
 * [dataSource](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#dataSource)            
 Assigns a DataSource object that allows you to perform data shaping operations and use a remote source. 
+// _split_
 
 Each object in the TreeView's hierarchical data structure should include the following fields:
 
