@@ -40,11 +40,6 @@
     "rrule": "^2.7.1",
     "turndown": "~7.1.0"
   },
-  "jest": {
-    "modulePathIgnorePatterns": [
-      "node_modules"
-    ]
-  },
   "browserslist": [
     "last 2 versions",
     "ios > 9",
