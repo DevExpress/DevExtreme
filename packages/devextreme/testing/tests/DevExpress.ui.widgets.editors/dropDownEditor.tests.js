@@ -2105,9 +2105,9 @@ QUnit.module('aria accessibility', () => {
         });
         const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'true');
+        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'fieldTemplate should have aria-haspopup attribute set to true');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'fieldTemplate should have aria-haspopup attribute set to none');
     });
 
     QUnit.module('aria-controls', {}, () => {

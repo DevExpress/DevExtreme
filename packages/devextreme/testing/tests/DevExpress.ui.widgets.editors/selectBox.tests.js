@@ -6109,9 +6109,9 @@ if(devices.real().deviceType === 'desktop') {
                 },
             });
 
-            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), 'listbox');
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-haspopup'), 'listbox', 'fieldTemplate should have aria-haspopup attribute set to listbox');
 
-            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'none');
+            assert.strictEqual(helper.$widget.find(`.${TEXTEDITOR_INPUT_CLASS}`).attr('aria-autocomplete'), 'none', 'fieldTemplate should have aria-autocomplete attribute set to none');
         });
     });
 }
