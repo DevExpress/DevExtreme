@@ -1,4 +1,4 @@
-To [aggregate](/Documentation/Guide/UI_Components/Chart/Data_Aggregation/) points on discrete axes, follow the steps below:
+To [aggregate](/Documentation/Guide/UI_Components/Chart/Data_Aggregation/) points on discrete axes, follow the steps below.
 // _split_
 
 1. Enable aggregation.    

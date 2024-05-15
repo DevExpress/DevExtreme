@@ -1,4 +1,4 @@
-This demo shows the standard bar series type that visualizes data as a collection of bars. Follow the steps below to create and configure the Bar chart:
+This demo shows the standard bar series type that visualizes data as a collection of bars. Follow the steps below to create and configure the Bar chart.
 // _split_
 
 ## Bind to Data
