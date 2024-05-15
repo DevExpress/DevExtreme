@@ -1558,6 +1558,77 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
     });
+
+    [true, false].forEach((deferRendering) => {
+        QUnit.test(`No errors should be encountored when new item is added, items option is empty, deferRendering is ${deferRendering} [T1230995]`, function(assert) {
+            try {
+                const $element = $('#tagBox').dxTagBox({
+                    applyValueMode: 'useButtons',
+                    acceptCustomValue: true,
+                    onCustomItemCreating(args) {
+                        const newValue = args.text;
+                        const { component } = args;
+                        const currentItems = component.option('items');
+                        const isItemInDataSource = currentItems.some((item) => item === newValue);
+                        if(!isItemInDataSource) {
+                            currentItems.unshift(newValue);
+                            component.option('items', currentItems);
+                        }
+                        args.customItem = newValue;
+                    },
+                    deferRendering
+                });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                keyboardMock($input, true)
+                    .focus()
+                    .type('test 1')
+                    .press('enter');
+
+                const instance = $element.dxTagBox('instance');
+
+                assert.deepEqual(instance.option('selectedItems'), []);
+                assert.deepEqual(instance.option('items'), ['test 1']);
+            } catch(error) {
+                assert.ok(false, `Error encountered is: ${error.message}`);
+            }
+        });
+
+        QUnit.test(`No errors should be encountored when new item is added, deferRendering is ${deferRendering} [T1230995]`, function(assert) {
+            try {
+                const $element = $('#tagBox').dxTagBox({
+                    items: ['Item_1', 'Item_2', 'Item_3'],
+                    applyValueMode: 'useButtons',
+                    acceptCustomValue: true,
+                    onCustomItemCreating(args) {
+                        const newValue = args.text;
+                        const { component } = args;
+                        const currentItems = component.option('items');
+                        const isItemInDataSource = currentItems.some((item) => item === newValue);
+                        if(!isItemInDataSource) {
+                            currentItems.unshift(newValue);
+                            component.option('items', currentItems);
+                        }
+                        args.customItem = newValue;
+                    },
+                    deferRendering
+                });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                keyboardMock($input, true)
+                    .focus()
+                    .type('test 1')
+                    .press('enter');
+
+                const instance = $element.dxTagBox('instance');
+
+                assert.deepEqual(instance.option('selectedItems'), []);
+                assert.deepEqual(instance.option('items'), ['test 1', 'Item_1', 'Item_2', 'Item_3']);
+            } catch(error) {
+                assert.ok(false, `Error encountered is: ${error.message}`);
+            }
+        });
+    });
 });
 
 QUnit.module('placeholder', () => {
@@ -4794,115 +4865,6 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
         $input.trigger('change');
 
         assert.deepEqual(tagBoxInstance.option('value'), ['1']);
-    });
-});
-
-QUnit.module('the \'deferRendering\' option', () => {
-    [true, false].forEach(deferRendering => {
-        QUnit.test(`if ${deferRendering} should not display any errors [T1230995]`, function(assert) {
-            try {
-                const $element = $('#tagBox').dxTagBox({
-                    applyValueMode: 'useButtons',
-                    acceptCustomValue: true,
-                    onCustomItemCreating(args) {
-                        const newValue = args.text;
-                        const { component } = args;
-                        const currentItems = component.option('items');
-                        const isItemInDataSource = currentItems.some((item) => item === newValue);
-                        if(!isItemInDataSource) {
-                            currentItems.unshift(newValue);
-                            component.option('items', currentItems);
-                        }
-                        args.customItem = newValue;
-                    },
-                    deferRendering
-                });
-                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-                const keyboard = keyboardMock($input, true);
-                keyboard
-                    .focus()
-                    .type('test 1')
-                    .press('enter');
-
-                assert.ok(true, 'Error not encountered');
-            } catch(error) {
-                assert.ok(false, `Error encountered is: ${error.message}`);
-            }
-        });
-
-        QUnit.test(`if ${deferRendering} should display right selected items [T1230995]`, function(assert) {
-            const firstCustomValue = 'test 1';
-            const secondCustomValue = 'test 2';
-            const $element = $('#tagBox').dxTagBox({
-                applyValueMode: 'useButtons',
-                items: ['Item 1', 'Item 2', 'Item 3'],
-                acceptCustomValue: true,
-                onCustomItemCreating(args) {
-                    const newValue = args.text;
-                    const { component } = args;
-                    const currentItems = component.option('items');
-                    const isItemInDataSource = currentItems.some((item) => item === newValue);
-                    if(!isItemInDataSource) {
-                        currentItems.unshift(newValue);
-                        component.option('items', currentItems);
-                    }
-                    args.customItem = newValue;
-                },
-                deferRendering
-            });
-            const instance = $element.dxTagBox('instance');
-            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const keyboard = keyboardMock($input, true);
-            keyboard
-                .focus()
-                .type(firstCustomValue)
-                .press('enter')
-                .type(secondCustomValue)
-                .press('enter');
-
-
-            if(deferRendering) {
-                const isValueExist = [firstCustomValue, secondCustomValue].every(value =>
-                    instance.option('selectedItems').includes(value)
-                );
-                assert.ok(isValueExist, 'Custom Value is properly selected');
-            } else {
-                const isValueExist = instance.option('selectedItem').includes(secondCustomValue);
-                assert.ok(isValueExist, 'All custom values is properly selected');
-            }
-        });
-
-        QUnit.test(`if ${deferRendering} should include customValue in list of items [T1230995]`, function(assert) {
-            const customValue = 'test 1';
-            const $element = $('#tagBox').dxTagBox({
-                applyValueMode: 'useButtons',
-                items: ['Item 1', 'Item 2', 'Item 3'],
-                acceptCustomValue: true,
-                onCustomItemCreating(args) {
-                    const newValue = args.text;
-                    const { component } = args;
-                    const currentItems = component.option('items');
-                    const isItemInDataSource = currentItems.some((item) => item === newValue);
-                    if(!isItemInDataSource) {
-                        currentItems.unshift(newValue);
-                        component.option('items', currentItems);
-                    }
-                    args.customItem = newValue;
-                },
-                deferRendering
-            });
-            const instance = $element.dxTagBox('instance');
-            const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const keyboard = keyboardMock($input, true);
-            keyboard
-                .focus()
-                .type(customValue)
-                .press('enter');
-
-            const isValueExist = instance.option('items').includes(customValue);
-
-            assert.ok(isValueExist, 'Custom Value is included in tagbox items');
-        });
     });
 });
 
