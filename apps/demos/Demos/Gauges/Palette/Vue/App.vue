@@ -2,14 +2,14 @@
   <div>
     <DxBarGauge
       id="gauge"
-      :start-value="startValue"
-      :end-value="50"
+      :start-value="-5"
+      :end-value="5"
       :base-value="0"
       :values="values"
       palette="Ocean"
     >
       <DxLabel
-        :customize-text="customizeText"
+        format="##.## mm;-##.## mm"
       />
       <DxExport
         :enabled="true"
@@ -29,9 +29,7 @@ import {
   DxBarGauge, DxLabel, DxExport, DxTitle, DxFont,
 } from 'devextreme-vue/bar-gauge';
 
-const startValue = -50;
-const values = [-21.3, 14.8, -30.9, 45.2];
-const customizeText = ({ valueText }) => `${valueText} mm`;
+const values = [-2.13, 1.48, -3.09, 4.52, 4.9, 3.9];
 </script>
 <style scoped>
 #gauge {
