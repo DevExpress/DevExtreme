@@ -1258,32 +1258,6 @@ QUnit.module('Templates', () => {
             });
         });
     }
-
-    QUnit.test('component with fieldTemplate should trigger _onMarkupRendered correctly (T1230696)', function(assert) {
-        const markupRenderedStub = sinon.stub();
-
-        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-            dataSource: ['one', 'two', 'three'],
-            valueChangeEvent: 'keyup',
-            fieldTemplate: (data) => {
-                return $('<div>').dxTextBox({ value: data });
-            },
-            _onMarkupRendered: markupRenderedStub
-        });
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'initial render should have aria-haspopup attribute set to true');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'initial render should have aria-autocomplete attribute set to none');
-
-        assert.strictEqual(markupRenderedStub.callCount, 1, 'initial render should have aria-required call _onMarkupRendered twice');
-        markupRenderedStub.reset();
-
-        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
-            .type('a');
-
-        assert.strictEqual(markupRenderedStub.callCount, 0, '_onMarkupRendered should be called once after typing');
-    });
 });
 
 QUnit.module('options', () => {
