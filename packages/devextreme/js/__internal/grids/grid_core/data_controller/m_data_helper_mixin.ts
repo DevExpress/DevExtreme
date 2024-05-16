@@ -47,7 +47,10 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
   }
 
   protected _initDataSource() {
-    let dataSourceOptions = SPECIFIC_DATA_SOURCE_OPTION in this ? this[SPECIFIC_DATA_SOURCE_OPTION]() : this.option('dataSource');
+    let dataSourceOptions = SPECIFIC_DATA_SOURCE_OPTION in this
+      ? (this[SPECIFIC_DATA_SOURCE_OPTION] as any)()
+      : this.option('dataSource');
+
     let widgetDataSourceOptions;
     let dataSourceType;
 
@@ -58,11 +61,14 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
         this._isSharedDataSource = true;
         this._dataSource = dataSourceOptions;
       } else {
-        widgetDataSourceOptions = DATA_SOURCE_OPTIONS_METHOD in this ? this[DATA_SOURCE_OPTIONS_METHOD]() : {};
+        widgetDataSourceOptions = DATA_SOURCE_OPTIONS_METHOD in this
+          ? (this[DATA_SOURCE_OPTIONS_METHOD] as any)()
+          : {};
+
         dataSourceType = this._dataSourceType ? this._dataSourceType() : DataSource;
 
         dataSourceOptions = normalizeDataSourceOptions(dataSourceOptions, {
-          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD](),
+          fromUrlLoadMode: (DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD in this) && (this[DATA_SOURCE_FROM_URL_LOAD_MODE_METHOD] as any)(),
         });
 
         // eslint-disable-next-line new-cap
@@ -70,7 +76,7 @@ export const DataHelperMixin = <T extends ModuleType<Controller>>(Base: T) => cl
       }
 
       if (NORMALIZE_DATA_SOURCE in this) {
-        this._dataSource = this[NORMALIZE_DATA_SOURCE](this._dataSource);
+        this._dataSource = (this[NORMALIZE_DATA_SOURCE] as any)(this._dataSource);
       }
 
       this._addDataSourceHandlers();
