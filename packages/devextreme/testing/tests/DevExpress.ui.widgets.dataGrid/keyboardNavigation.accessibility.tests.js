@@ -76,7 +76,7 @@ QUnit.module('Keyboard navigation accessibility', {
         }, this.options);
 
         setupDataGridModules(this,
-            ['data', 'columns', 'columnHeaders', 'sorting', 'grouping', 'groupPanel', 'headerPanel', 'pager', 'headerFilter', 'filterSync', 'filterPanel', 'filterRow',
+            ['data', 'columns', 'columnHeaders', 'sorting', 'columnFixing', 'grouping', 'groupPanel', 'headerPanel', 'pager', 'headerFilter', 'filterSync', 'filterPanel', 'filterRow',
                 'rows', 'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'selection', 'focus', 'keyboardNavigation', 'validating', 'masterDetail'],
             { initViews: true }
         );
@@ -905,5 +905,75 @@ QUnit.module('Keyboard navigation accessibility', {
         // assert
         assert.ok($headerItem.is(':focus'), 'Header cell has focus');
         assert.notOk($headersElement.hasClass('dx-state-focused'), 'Headers main element has no dx-state-focused class');
+    });
+
+    // T1216832
+    testInDesktop('Navigation should not get stuck in the grid when the first cell is fixed and a template with links is specified for it', function(assert) {
+        // arrange
+        const getFocusElement = (rowIndex, columnIndex) => {
+            const $cellElement = $(this.getCellElement(rowIndex, columnIndex));
+            const $link = $cellElement.find('a');
+
+            return $link.length ? $link : $cellElement;
+        };
+
+        const checkNavigationOfAllCells = (rowCount, columnCount) => {
+            for(let i = 0; i < rowCount; i++) {
+                for(let j = 0; j < columnCount; j++) {
+                    const $focusElement = getFocusElement(i, j);
+                    const $nextFocusElement = j === columnCount - 1 ? getFocusElement(i + 1, 0) : getFocusElement(i, j + 1);
+
+                    this.triggerKeyDown('tab', false, false, $focusElement);
+                    this.clock.tick(10);
+
+                    if(i !== (rowCount - 1) || j !== (columnCount - 1)) {
+                        assert.ok($nextFocusElement.is(':focus'), 'element is focused');
+                    }
+                }
+            }
+        };
+
+        this.columns = [
+            'name',
+            {
+                fixed: true,
+                fixedPosition: 'left',
+                cellTemplate: (cellElement) => $(cellElement).append('<a href=\'#\'>Link</a>'),
+            },
+            'phone'
+        ];
+
+        this.data = [
+            { name: 'Alex', phone: 555555 },
+            { name: 'Dan1', phone: 666666 },
+        ];
+
+        this.options = {
+            editing: {
+                allowUpdating: false,
+                allowAdding: false,
+                allowDeleting: false
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($('#container'));
+        this.clock.tick(10);
+
+        this.focusCell(0, 0);
+        this.clock.tick(10);
+
+        // act
+        checkNavigationOfAllCells(2, 3);
+
+        // assert
+        const $fixedContent = this.gridView.element().find('.dx-datagrid-rowsview .dx-datagrid-content-fixed');
+        assert.ok($fixedContent.attr('inert'), 'fixed content has inert attribute');
+
+        // act
+        $(this.getCellElement(1, 2)).trigger('focusout');
+
+        // assert
+        assert.notOk($fixedContent.attr('inert'), 'fixed content hasn\'t inert attribute');
     });
 });
