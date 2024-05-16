@@ -15,6 +15,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'generic_light.css!';
+import 'ui/validator';
 
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
@@ -3290,7 +3291,7 @@ QUnit.module('search', moduleSetup, () => {
 
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
-
+  
     QUnit.test('component with fieldTemplate should retain aria attributes after search and selection (T1230696, T1230971)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],

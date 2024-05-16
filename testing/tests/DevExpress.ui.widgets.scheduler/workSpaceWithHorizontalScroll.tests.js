@@ -168,7 +168,8 @@ QUnit.module('Vertical Workspace with horizontal scrollbar', {
         const headerPanelWidth = getOuterWidth($element.find('.dx-scheduler-header-panel'));
         const allDayTableWidth = getOuterWidth($element.find('.dx-scheduler-all-day-table'));
         const dateTableWidth = getOuterWidth($element.find('.dx-scheduler-date-table'));
-        const expectedWidth = 1000 - this.instance.getTimePanelWidth();
+        const workspaceBordersWidth = 2;
+        const expectedWidth = 1000 - this.instance.getTimePanelWidth() - workspaceBordersWidth;
 
         assert.equal(headerPanelWidth, expectedWidth, 'Width is OK');
         assert.equal(allDayTableWidth, expectedWidth, 'Width is OK');

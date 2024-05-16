@@ -16,6 +16,8 @@ import dxButton from 'ui/button';
 import domAdapter from 'core/dom_adapter';
 
 import 'generic_light.css!';
+import 'ui/validator';
+
 QUnit.testStart(function() {
     const markup =
         `<div id="dropDownEditorLazy"></div>
@@ -1233,6 +1235,34 @@ QUnit.module('Templates', () => {
             });
         });
     }
+
+    QUnit.test('component with fieldTemplate should trigger _onMarkupRendered correctly (T1230696)', function(assert) {
+        const markupRenderedStub = sinon.stub();
+
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            valueChangeEvent: 'keyup',
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            _onMarkupRendered: markupRenderedStub
+        });
+
+        assert.strictEqual(markupRenderedStub.callCount, 2, 'initial render should call _onMarkupRendered twice');
+        markupRenderedStub.reset();
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .type('a');
+
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after typing');
+        markupRenderedStub.reset();
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after deleting');
+    });
 });
 
 QUnit.module('options', () => {
@@ -2080,8 +2110,8 @@ QUnit.module('aria accessibility', () => {
         instance.close();
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
-    });
-
+    })
+    
     QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
@@ -2123,8 +2153,8 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after deleting');
     });
-
-
+  
+  
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];
