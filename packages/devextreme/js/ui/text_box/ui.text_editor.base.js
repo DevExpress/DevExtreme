@@ -689,6 +689,7 @@ const TextEditorBase = Editor.inherit({
             return true;
         }
 
+        // let shouldPrevent = this._isNestedTarget(event.relatedTarget ?? event.target);
         let shouldPrevent = this._isNestedTarget(event.relatedTarget);
 
         if(event.type === 'focusin') {
