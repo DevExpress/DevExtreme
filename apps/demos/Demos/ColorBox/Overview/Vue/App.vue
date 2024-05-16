@@ -123,27 +123,27 @@ const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 }
 
 .superhero {
-  background-image: url(../../../../images/hero_white.png);
+  background-image: url("../../../../images/hero_white.png");
 }
 
 .dx-color-scheme-dark .superhero {
-  background-image: url(../../../../images/hero_black.png);
+  background-image: url("../../../../images/hero_black.png");
 }
 
 .dx-color-scheme-darkmoon .superhero {
-  background-image: url(../../../../images/hero_darkmoon.png);
+  background-image: url("../../../../images/hero_darkmoon.png");
 }
 
 .dx-color-scheme-darkviolet .superhero {
-  background-image: url(../../../../images/hero_darkviolet.png);
+  background-image: url("../../../../images/hero_darkviolet.png");
 }
 
 .dx-color-scheme-greenmist .superhero {
-  background-image: url(../../../../images/hero_greenmist.png);
+  background-image: url("../../../../images/hero_greenmist.png");
 }
 
 .dx-color-scheme-contrast .superhero {
-  background-image: url(../../../../images/hero_contrast.png);
+  background-image: url("../../../../images/hero_contrast.png");
 }
 
 .dx-color-scheme-blue-dark .superhero,
@@ -151,6 +151,6 @@ const eventHandlingLabel = { 'aria-label': 'Event Handling' };
 .dx-color-scheme-teal-dark .superhero,
 .dx-color-scheme-lime-dark .superhero,
 .dx-color-scheme-purple-dark .superhero {
-  background-image: url(../../../../images/hero_material_dark.png);
+  background-image: url("../../../../images/hero_material_dark.png");
 }
 </style>
