@@ -2136,7 +2136,7 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'aria-required attribute should remain true after deleting');
     });
-    
+
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];
