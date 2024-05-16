@@ -1,5 +1,7 @@
 import type { Properties } from 'csstype';
 
+import type { ViewType } from '../types';
+
 type CSSAttributes = Properties<string | number>;
 
 export const addToStyles = (
@@ -35,10 +37,11 @@ export const addHeightToStyle = (
   return addToStyles([{ attr: 'height', value: height }], style);
 };
 
+// TODO Vinogradov: move up this util function (core/r1).
 export const combineClasses = (
   classesMap: { [key: string]: boolean },
 ): string => Object.keys(classesMap)
-  .filter((p) => classesMap[p])
+  .filter((cssClass) => !!cssClass && classesMap[cssClass])
   .join(' ');
 
 export const getGroupCellClasses = (
@@ -50,3 +53,36 @@ export const getGroupCellClasses = (
   'dx-scheduler-last-group-cell': isLastGroupCell,
   [className]: true,
 });
+
+export const getCellSizeHorizontalClass = (
+  viewType: ViewType,
+  crossScrollingEnabled: boolean,
+): string => {
+  const sizeClassName = 'dx-scheduler-cell-sizes-horizontal';
+
+  switch (viewType) {
+    case 'day':
+    case 'week':
+    case 'workWeek':
+    case 'month':
+      return crossScrollingEnabled ? sizeClassName : '';
+    case 'agenda':
+      return '';
+    default:
+      return sizeClassName;
+  }
+};
+
+export const getCellSizeVerticalClass = (
+  viewType: ViewType,
+  isAllDayCell: boolean,
+): string => {
+  const sizeClassName = 'dx-scheduler-cell-sizes-vertical';
+
+  switch (viewType) {
+    case 'agenda':
+      return '';
+    default:
+      return !isAllDayCell ? sizeClassName : '';
+  }
+};

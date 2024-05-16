@@ -40,9 +40,10 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
 
   render(): JSX.Element {
     const {
+      viewData,
+      viewContext,
       width,
       tableRef,
-      viewData,
       dataCellTemplate,
     } = this.props;
     const allDayPanelData = this.getAllDayPanelData();
@@ -57,6 +58,7 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
       >
         <AllDayPanelTableBody
           viewData={allDayPanelData ?? AllDayPanelTableBodyDefaultProps.viewData}
+          viewContext={viewContext}
           leftVirtualCellWidth={viewData.leftVirtualCellWidth
             ?? AllDayPanelTableBodyDefaultProps.leftVirtualCellWidth}
           rightVirtualCellWidth={viewData.rightVirtualCellWidth

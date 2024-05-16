@@ -23,7 +23,16 @@ export class GroupPanelComponent extends ComponentWrapper {
       allowNull: [],
       elements: [],
       templates: ['resourceCellTemplate'],
-      props: ['groups', 'groupOrientation', 'groupPanelData', 'groupByDate', 'height', 'className', 'resourceCellTemplate'],
+      props: [
+        'viewContext',
+        'groups',
+        'groupOrientation',
+        'groupPanelData',
+        'groupByDate',
+        'height',
+        'className',
+        'resourceCellTemplate',
+      ],
     };
   }
 
