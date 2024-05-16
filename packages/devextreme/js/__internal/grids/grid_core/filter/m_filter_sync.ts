@@ -242,6 +242,7 @@ export class FilterSyncController extends modules.Controller {
     this.option('filterValue', this._getSyncHeaderFilter(this.option('filterValue'), column));
   }
 
+  // Override in the private API WA [T1232532]
   public getCustomFilterOperations() {
     const filterBuilderCustomOperations = this.option('filterBuilder.customOperations') ?? [];
     return [anyOf(this.component), noneOf(this.component)].concat(filterBuilderCustomOperations);
