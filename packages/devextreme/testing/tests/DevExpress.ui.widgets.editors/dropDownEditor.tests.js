@@ -2175,7 +2175,6 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($input.attr('aria-invalid'), 'true', 'aria-invalid attribute should be set to true after deleting');
     });
 
-
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];
