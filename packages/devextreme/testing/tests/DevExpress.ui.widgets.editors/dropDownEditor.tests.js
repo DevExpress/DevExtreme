@@ -2137,9 +2137,7 @@ QUnit.module('aria accessibility', () => {
         }).dxValidator({
             validationRules: [ { type: 'required' } ]
         });
-        let $input;
-
-        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
 
