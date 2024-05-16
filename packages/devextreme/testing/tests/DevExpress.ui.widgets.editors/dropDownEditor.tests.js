@@ -2134,7 +2134,7 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
-  
+
     QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
@@ -2176,7 +2176,8 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after deleting');
     });
-  
+
+
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];
