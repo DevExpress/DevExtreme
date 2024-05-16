@@ -53,8 +53,6 @@ const getTestSpecificSkipRules = (testName) => {
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-    case 'DataGrid-InfiniteScrolling':
-      return ['aria-required-children'];
     case 'TagBox-Overview':
       return ['image-alt', 'image-redundant-alt'];
     default:
