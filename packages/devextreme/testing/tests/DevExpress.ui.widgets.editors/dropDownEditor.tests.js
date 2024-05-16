@@ -16,6 +16,8 @@ import dxButton from 'ui/button';
 import domAdapter from 'core/dom_adapter';
 
 import 'generic_light.css!';
+import 'ui/validator';
+
 QUnit.testStart(function() {
     const markup =
         `<div id="dropDownEditorLazy"></div>
@@ -1258,6 +1260,34 @@ QUnit.module('Templates', () => {
             });
         });
     }
+
+    QUnit.test('component with fieldTemplate should trigger _onMarkupRendered correctly (T1230696)', function(assert) {
+        const markupRenderedStub = sinon.stub();
+
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            valueChangeEvent: 'keyup',
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            _onMarkupRendered: markupRenderedStub
+        });
+
+        assert.strictEqual(markupRenderedStub.callCount, 2, 'initial render should call _onMarkupRendered twice');
+        markupRenderedStub.reset();
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .type('a');
+
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after typing');
+        markupRenderedStub.reset();
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after deleting');
+    });
 });
 
 QUnit.module('options', () => {
@@ -2095,6 +2125,31 @@ QUnit.module('aria accessibility', () => {
 
         instance.option('opened', false);
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
+    });
+
+    QUnit.test('component with fieldTemplate should retain aria-required attribute after interaction (T1230696)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            valueChangeEvent: 'keyup',
+        }).dxValidator({
+            validationRules: [ { type: 'required' } ]
+        });
+
+        assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .type('a');
+
+        assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'aria-required attribute should remain true after typing');
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'aria-required attribute should remain true after deleting');
     });
 
     QUnit.module('aria-controls', {}, () => {

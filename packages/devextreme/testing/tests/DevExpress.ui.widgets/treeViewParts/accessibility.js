@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import TreeView from 'ui/tree_view/ui.tree_view.search';
+import TreeView from 'ui/tree_view';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from 'events/core/events_engine';
 
