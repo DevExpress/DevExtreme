@@ -2127,7 +2127,7 @@ QUnit.module('aria accessibility', () => {
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 
-    QUnit.test('component with fieldTemplate should retain aria-required attribute after interaction (T1230696)', function(assert) {
+    QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: (data) => {
@@ -2137,19 +2137,32 @@ QUnit.module('aria accessibility', () => {
         }).dxValidator({
             validationRules: [ { type: 'required' } ]
         });
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+        assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
 
-        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'initial render should have aria-haspopup attribute set to true');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'initial render should have aria-autocomplete attribute set to none');
+
+        keyboardMock($input)
             .type('a');
 
-        assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'aria-required attribute should remain true after typing');
+        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required attribute should remain true after typing');
 
-        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after typing');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after typing');
+
+        keyboardMock($input)
             .caret(1)
             .press('backspace');
 
-        assert.strictEqual($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`).attr('aria-required'), 'true', 'aria-required attribute should remain true after deleting');
+        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required attribute should remain true after deleting');
+
+        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after deleting');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after deleting');
     });
 
     QUnit.module('aria-controls', {}, () => {
