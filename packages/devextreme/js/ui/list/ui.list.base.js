@@ -21,7 +21,7 @@ import { addNamespace } from '../../events/utils/index';
 import { current, isMaterial, isMaterialBased } from '../themes';
 import { hasWindow } from '../../core/utils/window';
 import ScrollView from '../scroll_view';
-import { deviceDependentOptions } from '../scroll_view/ui.scrollable.device';
+import { deviceDependentOptions } from '../../__internal/ui/scroll_view/m_scrollable.device';
 import CollectionWidget from '../collection/ui.collection_widget.live_update';
 import { BindableTemplate } from '../../core/templates/bindable_template';
 import { Deferred } from '../../core/utils/deferred';
