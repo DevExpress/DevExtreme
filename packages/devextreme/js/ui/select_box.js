@@ -5,8 +5,8 @@ export default SelectBox;
 // STYLE selectBox
 
 /**
- * @name dxSelectBoxOptions.allowClearing
- * @type boolean
- * @default true
- * @hidden
- */
+  * @name dxSelectBoxOptions.allowClearing
+  * @type boolean
+  * @default true
+  * @hidden
+  */
