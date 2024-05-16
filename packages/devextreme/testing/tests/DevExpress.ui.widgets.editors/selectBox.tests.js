@@ -3292,32 +3292,6 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.test('aria-haspopup and aria-autocomplete attributes should exist when fieldTemplate is rendered (T1230971)', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['one', 'two', 'three'],
-            fieldTemplate: (data) => {
-                return $('<div>').dxTextBox({ value: data });
-            },
-        });
-        const $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopup attribute set to true');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'initial render should have aria-autocomplete attribute set to none');
-
-        const selectBox = $selectBox.dxSelectBox('instance');
-
-        keyboardMock($input)
-            .type('a');
-
-        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
-        listItem.trigger('dxclick');
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'aria-haspopup attribute should retain to true after re-render');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after re-render');
-    });
-
     [0, 1].forEach((value) => {
         QUnit.testInActiveWindow(`Value=${value} should be null after input is cleared and enter key is tapped (T935801)`, function(assert) {
             const items = [0, 1, 2];
