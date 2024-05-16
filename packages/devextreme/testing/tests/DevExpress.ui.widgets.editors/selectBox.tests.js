@@ -3328,9 +3328,9 @@ QUnit.module('search', moduleSetup, () => {
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopuphaspopup attribute set to listbox');
+        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'aria-haspopup attribute value should stay to listbox after search and selection');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute value should stay to list after search and selection');
 
         assert.strictEqual($input.attr('aria-invalid'), 'false', 'aria-invalid attribute should be set to false if the value is not empty');
     });
