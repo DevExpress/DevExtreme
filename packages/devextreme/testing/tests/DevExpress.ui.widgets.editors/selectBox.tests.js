@@ -3293,7 +3293,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.test('component with fieldTemplate should retain aria-required attribute after search and selection (T1230696, T1230971)', function(assert) {
+    QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: () => {
