@@ -2137,9 +2137,9 @@ QUnit.module('aria accessibility', () => {
         }).dxValidator({
             validationRules: [ { type: 'required' } ]
         });
-        const getInput = () => $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        let $input;
 
-        let $input = getInput();
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
 
@@ -2150,7 +2150,7 @@ QUnit.module('aria accessibility', () => {
         keyboardMock($input)
             .type('a');
 
-        $input = getInput();
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required attribute should remain true after typing');
 
@@ -2162,7 +2162,7 @@ QUnit.module('aria accessibility', () => {
             .caret(1)
             .press('backspace');
 
-        $input = getInput();
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required attribute should remain true after deleting');
 

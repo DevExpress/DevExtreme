@@ -3306,9 +3306,7 @@ QUnit.module('search', moduleSetup, () => {
         }).dxValidator({
             validationRules: [ { type: 'required' } ]
         });
-        const getInput = () => $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-        let $input = getInput();
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
 
@@ -3324,7 +3322,7 @@ QUnit.module('search', moduleSetup, () => {
         const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
         listItem.trigger('dxclick');
 
-        $input = getInput();
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
 
