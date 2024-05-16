@@ -2127,7 +2127,7 @@ QUnit.module('aria accessibility', () => {
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 
-    QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
+    QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971, T1230635)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: (data) => {
