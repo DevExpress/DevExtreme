@@ -543,12 +543,6 @@ const Drawer = (Widget as any).inherit({
     return getPublicElement(this._$panelContentWrapper);
   },
 
-  /**
-  * @name dxDrawer.viewContent
-  * @publicName viewContent()
-  * @return DxElement
-  * @hidden
-  */
   viewContent() {
     return getPublicElement(this._$viewContentWrapper);
   },
@@ -569,18 +563,6 @@ const Drawer = (Widget as any).inherit({
 
     return this._whenAnimationCompleted.promise();
   },
-
-  /**
-  * @name dxDrawer.registerKeyHandler
-  * @publicName registerKeyHandler(key, handler)
-  * @hidden
-  */
-
-  /**
-  * @name dxDrawer.focus
-  * @publicName focus()
-  * @hidden
-  */
 });
 
 registerComponent('dxDrawer', Drawer);
