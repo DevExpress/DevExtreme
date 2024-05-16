@@ -2128,7 +2128,7 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'initial render should have aria-haspopup attribute set to true');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'initial render should have aria-autocomplete attribute set to none');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
 
         keyboardMock($input)
             .type('a');
@@ -2139,7 +2139,7 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after typing');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after typing');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after typing');
 
         keyboardMock($input)
             .caret(1)
@@ -2151,7 +2151,7 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after deleting');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after deleting');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after deleting');
     });
 
 
