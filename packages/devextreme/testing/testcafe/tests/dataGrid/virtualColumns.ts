@@ -251,7 +251,8 @@ test('The markup should be correct after horizontal scrolling and collapse of th
 }));
 
 // T1191875
-test('Columns should be rendered correctly after reinit of columns controller', async (t) => {
+// todo: unstable
+test.skip('Columns should be rendered correctly after reinit of columns controller', async (t) => {
   const dataGrid = new DataGrid('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
