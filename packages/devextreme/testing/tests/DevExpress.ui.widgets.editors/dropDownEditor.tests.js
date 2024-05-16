@@ -1311,7 +1311,7 @@ QUnit.module('Templates', () => {
             .caret(1)
             .press('backspace');
 
-        assert.strictEqual(markupRenderedStub.callCount,1, '_onMarkupRendered should be called once after deleting');
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after deleting');
     });
 });
 
