@@ -2145,6 +2145,10 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'initial render should have aria-autocomplete attribute set to none');
 
+        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
+
+        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'initial render should have aria-labelledby attribute set to Field Template');
+
         keyboardMock($input)
             .type('a');
 
@@ -2155,6 +2159,10 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after typing');
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after typing');
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should retain to combobox after typing');
+
+        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'aria-labelledby should retain to Field Template after typing');
 
         keyboardMock($input)
             .caret(1)
@@ -2167,8 +2175,11 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after deleting');
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'none', 'aria-autocomplete attribute should retain to none after deleting');
-    });
 
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should retain to combobox after deleting');
+
+        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'aria-labelledby should retain to Field Template after deleting');
+    });
 
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';

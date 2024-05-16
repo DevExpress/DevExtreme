@@ -3314,6 +3314,10 @@ QUnit.module('search', moduleSetup, () => {
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
 
+        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
+
+        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'initial render should have aria-labelledby attribute set to Field Template');
+
         const selectBox = $selectBox.dxSelectBox('instance');
         const keyboard = keyboardMock($input);
 
@@ -3329,6 +3333,10 @@ QUnit.module('search', moduleSetup, () => {
         assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopuphaspopup attribute set to listbox');
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute value should stay as combobox after search and selection');
+
+        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'aria-labelledby attribute value should stay as set to Field Template');
     });
 
     [0, 1].forEach((value) => {
