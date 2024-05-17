@@ -62,7 +62,7 @@
     "eslint-plugin-deprecation": "2.0.0",
     "eslint-plugin-i18n": "2.3.0",
     "eslint-plugin-import": "2.29.0",
-    "eslint-plugin-jest": "27.9.0",
+    "eslint-plugin-jest": "27.6.0",
     "eslint-plugin-jest-formatting": "3.1.0",
     "eslint-plugin-jsx-a11y": "6.8.0",
     "eslint-plugin-no-only-tests": "3.1.0",
