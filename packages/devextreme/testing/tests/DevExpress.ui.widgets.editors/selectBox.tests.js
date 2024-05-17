@@ -3295,8 +3295,8 @@ QUnit.module('search', moduleSetup, () => {
 
     [
         { attribute: 'aria-required', value: 'true' },
-        { attribute: 'aria-haspopup', value: 'listbox' },
-        { attribute: 'aria-autocomplete', value: 'list' },
+        { attribute: 'aria-haspopup', value: 'true' },
+        { attribute: 'aria-autocomplete', value: 'none' },
         { attribute: 'role', value: 'combobox' },
         { attribute: 'aria-labelledby', value: 'Field Template' },
     ].forEach(({ attribute, value }) => {
