@@ -23,3 +23,22 @@ test('Infinite scrolling', async (t) => {
     mode: 'infinite',
   },
 }));
+
+test('Horizontal Virtual Scrolling', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  await a11yCheck(t);
+}).before(() => createWidget('dxDataGrid', {
+  dataSource: getData(20, 100),
+  columnWidth: 100,
+  height: 400,
+  width: 900,
+  showBorders: true,
+  scrolling: {
+    columnRenderingMode: 'virtual',
+  },
+}));
