@@ -3293,50 +3293,42 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.test('component with fieldTemplate should retain aria attributes after search and selection (T1230696, T1230971, T1230635)', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['one', 'two', 'three'],
-            fieldTemplate: () => {
-                return $('<div>').dxTextBox({});
-            },
-            searchEnabled: true,
-            itemTemplate: () => {
-                return '<div><span></span></div>';
-            }
-        }).dxValidator({
-            validationRules: [ { type: 'required' } ]
+    [
+        { attribute: 'aria-required', value: 'true' },
+        { attribute: 'aria-haspopup', value: 'listbox' },
+        { attribute: 'aria-autocomplete', value: 'list' },
+        { attribute: 'role', value: 'combobox' },
+        { attribute: 'aria-labelledby', value: 'Field Template' },
+    ].forEach(({ attribute, value }) => {
+        QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971, T1230635)`, function(assert) {
+            const $selectBox = $('#selectBox').dxSelectBox({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox({});
+                },
+                searchEnabled: true,
+                itemTemplate: () => {
+                    return '<div><span></span></div>';
+                }
+            }).dxValidator({
+                validationRules: [ { type: 'required' } ]
+            });
+            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
+
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const keyboard = keyboardMock($input);
+
+            keyboard.type('a');
+
+            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            listItem.trigger('dxclick');
+
+            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+            assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
         });
-        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-        assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopup attribute set to listbox');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
-
-        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'initial render should have aria-labelledby attribute set to Field Template');
-
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('a');
-
-        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
-        listItem.trigger('dxclick');
-
-        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopuphaspopup attribute set to listbox');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
-
-        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute value should stay as combobox after search and selection');
-
-        assert.strictEqual($input.attr('aria-labelledby'), 'Field Template', 'aria-labelledby attribute value should stay as set to Field Template');
     });
 
     [0, 1].forEach((value) => {
