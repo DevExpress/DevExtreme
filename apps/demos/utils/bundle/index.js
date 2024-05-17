@@ -58,10 +58,10 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   meta: {
     '*': {
       build: false,
+      transpile: true,
     },
     'devextreme/*': {
       build: true,
-      transpile: true,
     },
     'devexpress-gantt': {
       build: true,
@@ -76,7 +76,6 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
   },
   paths: {
     'devextreme/*': 'node_modules/devextreme/cjs/*',
-    "devextreme/bundles/dx.custom.config.js": "../../node_modules/devextreme/bundles/dx.custom.config.js",
     'devexpress-gantt': 'node_modules/devexpress-gantt/dist/dx-gantt.min.js',
     'devexpress-diagram': 'node_modules/devexpress-diagram/dist/dx-diagram.min.js',
     [`devextreme-${framework}/*`]: `node_modules/devextreme-${framework}/${['react', 'vue'].includes(framework) ? 'cjs/*' : '*'}`,

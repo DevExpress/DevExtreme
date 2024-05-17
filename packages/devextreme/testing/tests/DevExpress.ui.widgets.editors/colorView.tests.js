@@ -6,6 +6,9 @@ import keyboardMock from '../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
 import { normalizeKeyName } from 'events/utils/index';
 
+import 'generic_light.css!';
+import '__internal/ui/color_box/m_color_view';
+
 const TEXTEDITOR_INPUT_SELECTOR = '.dx-texteditor-input';
 const COLORVIEW_PALETTE_SELECTOR = '.dx-colorview-palette';
 const COLORVIEW_HUE_SCALE_SELECTOR = '.dx-colorview-hue-scale';
@@ -13,9 +16,6 @@ const COLORVIEW_ALPHA_CHANNEL_SCALE_SELECTOR = '.dx-colorview-alpha-channel-scal
 const COLORVIEW_PALETTE_HANDLE_SELECTOR = '.dx-colorview-palette-handle';
 const COLORVIEW_LABEL_HEX_SELECTOR = '.dx-colorview-label-hex';
 const TEXTBOX_SELECTOR = '.dx-textbox';
-
-import 'generic_light.css!';
-import 'ui/color_box/color_view';
 
 QUnit.testStart(function() {
     const markup =

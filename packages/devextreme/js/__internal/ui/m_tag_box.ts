@@ -1297,7 +1297,7 @@ const TagBox = (SelectBox as any).inherit({
 
     const useButtons = this.option('applyValueMode') === 'useButtons';
     const valueIndex = this._valueIndex(value);
-    const values = (useButtons ? this._list.option('selectedItemKeys') : this._getValue()).slice();
+    const values = (useButtons ? this._list?.option('selectedItemKeys') || [] : this._getValue()).slice();
 
     if (valueIndex >= 0) {
       values.splice(valueIndex, 1);
@@ -1305,8 +1305,8 @@ const TagBox = (SelectBox as any).inherit({
       values.push(value);
     }
 
-    if (this.option('applyValueMode') === 'useButtons') {
-      this._list.option('selectedItemKeys', values);
+    if (useButtons) {
+      this._list?.option('selectedItemKeys', values);
     } else {
       this.option('value', values);
     }

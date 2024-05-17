@@ -377,7 +377,7 @@ export class DateBoxBase<TProperties = Properties> extends dxDropDownEditor<TPro
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxDateBox<TProperties = Properties> extends DateBoxBase<TProperties> {
+export default class dxDateBox extends DateBoxBase<Properties> {
     /**
      * @docid
      * @publicName reset(value)
