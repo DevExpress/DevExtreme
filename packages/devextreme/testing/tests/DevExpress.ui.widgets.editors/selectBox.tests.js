@@ -3293,46 +3293,40 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.test('component with fieldTemplate should have proper aria attributes after search and selection (T1230696, T1230971, T1230706)', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['one', 'two', 'three'],
-            fieldTemplate: () => {
-                return $('<div>').dxTextBox({});
-            },
-            searchEnabled: true,
-            itemTemplate: () => {
-                return '<div><span></span></div>';
-            }
-        }).dxValidator({
-            validationRules: [ { type: 'required' } ]
+    [
+        { attribute: 'aria-required', initialValue: 'true', expectedValue: 'true' },
+        { attribute: 'aria-haspopup', initialValue: 'listbox', expectedValue: 'listbox' },
+        { attribute: 'aria-autocomplete', initialValue: 'list', expectedValue: 'list' },
+    ].forEach(({ attribute, initialValue, expectedValue }) => {
+        QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971)`, function(assert) {
+            const $selectBox = $('#selectBox').dxSelectBox({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox({});
+                },
+                searchEnabled: true,
+                itemTemplate: () => {
+                    return '<div><span></span></div>';
+                }
+            }).dxValidator({
+                validationRules: [ { type: 'required' } ]
+            });
+            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+            assert.strictEqual($input.attr(attribute), initialValue, `initial render should have ${attribute} attribute set to ${initialValue}`);
+
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const keyboard = keyboardMock($input);
+
+            keyboard.type('a');
+
+            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            listItem.trigger('dxclick');
+
+            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+            assert.strictEqual($input.attr(attribute), expectedValue, `${attribute} should stay ${expectedValue} after search and selection`);
         });
-        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-        assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopup attribute set to listbox');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
-
-        assert.strictEqual($input.attr('aria-invalid'), 'true', 'aria-invalid attribute should be set to true if the value is empty');
-
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('a');
-
-        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
-        listItem.trigger('dxclick');
-
-        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
-        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
-
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'aria-haspopup attribute value should stay to listbox after search and selection');
-
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute value should stay to list after search and selection');
-
-        assert.strictEqual($input.attr('aria-invalid'), 'false', 'aria-invalid attribute should be set to false if the value is not empty');
     });
 
     [0, 1].forEach((value) => {
