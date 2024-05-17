@@ -3329,6 +3329,57 @@ QUnit.module('search', moduleSetup, () => {
         });
     });
 
+    QUnit.module('aria-invalid', {}, () => {
+        const setupSelectBox = (valueRequired) => {
+            const options = {
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox({});
+                },
+                searchEnabled: true,
+                itemTemplate: () => {
+                    return '<div><span></span></div>';
+                }
+            };
+
+            if(valueRequired) {
+                return $('#selectBox').dxSelectBox(options).dxValidator({
+                    validationRules: [{ type: 'required' }]
+                });
+            }
+
+            return $('#selectBox').dxSelectBox(options);
+        };
+
+        [
+            { valueRequired: true, initialInputAria: 'true', emptyInputAria: undefined },
+            { valueRequired: false, initialInputAria: undefined, emptyInputAria: undefined }
+        ].forEach(({ valueRequired, initialInputAria, emptyInputAria }) => {
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
+                const $selectBox = setupSelectBox(valueRequired);
+                let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+                assert.strictEqual($input.attr('aria-invalid'), initialInputAria, `initial render should set aria-invalid to ${initialInputAria}`);
+
+                const selectBox = $selectBox.dxSelectBox('instance');
+                const keyboard = keyboardMock($input);
+
+                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+                assert.strictEqual($input.attr('aria-invalid'), initialInputAria, `empty input value set aria-invalid to ${initialInputAria}`);
+
+                keyboard.type('a');
+
+                const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+                listItem.trigger('dxclick');
+
+                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+                assert.strictEqual($input.attr('aria-invalid'), emptyInputAria, `empty input value set aria-invalid to ${emptyInputAria}`);
+            });
+        });
+    });
+
     [0, 1].forEach((value) => {
         QUnit.testInActiveWindow(`Value=${value} should be null after input is cleared and enter key is tapped (T935801)`, function(assert) {
             const items = [0, 1, 2];

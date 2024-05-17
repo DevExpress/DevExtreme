@@ -2163,6 +2163,46 @@ QUnit.module('aria accessibility', () => {
         });
     });
 
+    QUnit.module('aria-invalid', {}, () => {
+        const setupDropDownEditor = (valueRequired) => {
+            const options = {
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: (data) => {
+                    return $('<div>').dxTextBox({ value: data });
+                },
+                valueChangeEvent: 'keyup',
+            };
+
+            if(valueRequired) {
+                return $('#dropDownEditorSecond').dxDropDownEditor(options).dxValidator({
+                    validationRules: [{ type: 'required' }]
+                });
+            }
+
+            return $('#dropDownEditorSecond').dxDropDownEditor(options);
+        };
+
+        [
+            { valueRequired: true, initialInputAria: 'true', emptyInputAria: undefined },
+            { valueRequired: false, initialInputAria: undefined, emptyInputAria: undefined }
+        ].forEach(({ valueRequired, initialInputAria, emptyInputAria }) => {
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
+                const $dropDownEditor = setupDropDownEditor(valueRequired);
+                let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-invalid'), initialInputAria, `initial render should set aria-invalid to ${initialInputAria}`);
+
+                keyboardMock($input).type('a');
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.strictEqual($input.attr('aria-invalid'), emptyInputAria, `input should set 'aria-invalid' to ${emptyInputAria} after typing`);
+
+                keyboardMock($input).caret(1).press('backspace');
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.strictEqual($input.attr('aria-invalid'), initialInputAria, `input should set 'aria-invalid' to ${initialInputAria} after deleting`);
+            });
+        });
+    });
+
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];

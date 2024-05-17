@@ -482,6 +482,7 @@ QUnit.module('Editors Standard Adapter', {
 
         validator.option('validationRules', [{ type: 'required' }]);
         assert.ok(Boolean($input.attr('aria-required')), 'input have an "aria-required" attribute');
+        assert.ok(Boolean($input.attr('aria-invalid')), 'input have an "aria-invalid" attribute');
     });
 
     QUnit.test('Editor should not toggle an "aria-required" attribute if the "required" rule is added, but editor is not initialized yet', function(assert) {
@@ -497,6 +498,7 @@ QUnit.module('Editors Standard Adapter', {
         const $input = this.fixture.$element.find('.dx-texteditor-input');
         validator.option('validationRules', [{ type: 'required' }]);
         assert.notOk(Boolean($input.attr('aria-required')), 'input still does not have an "aria-required" attribute');
+        assert.notOk(Boolean($input.attr('aria-invalid')), 'input still does not have an "aria-invalid" attribute');
     });
 
     QUnit.test('Editor should toggle an "aria-required" attribute on markup render if the "required" rule is added', function(assert) {
