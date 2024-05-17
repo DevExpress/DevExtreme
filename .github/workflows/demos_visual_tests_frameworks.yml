@@ -121,13 +121,14 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
 
-    - name: Link wrappers packages
-      run: pnpm install
+#    - name: Link wrappers packages
+#      run: pnpm install
 
     - name: Prepare bundles
       working-directory: apps/demos
@@ -397,7 +398,8 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue

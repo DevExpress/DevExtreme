@@ -1,8 +1,34 @@
 import sh from 'shelljs';
 import path from 'node:path';
+import yargs from 'yargs';
 import { ARTIFACTS_DIR, INTERNAL_TOOLS_ARTIFACTS, ROOT_DIR, NPM_DIR, JS_ARTIFACTS, CSS_ARTIFACTS } from './common/paths';
 
+const argv = yargs
+    .option('dev', { type: 'boolean', default: false })
+    .parseSync();
+
+const devMode = argv.dev;
+
+console.log(`Dev mode: ${devMode}`);
+
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
+
+const injectDescriptions = () => {
+    sh.pushd(ROOT_DIR);
+    // Inject descriptions
+    const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
+    sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
+
+    sh.pushd(DOCUMENTATION_TEMP_DIR);
+    sh.exec('pnpm i');
+    sh.exec(`pnpm run update-topics --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
+    sh.popd();
+
+    sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
+
+    sh.exec('pnpm run devextreme:inject-descriptions');
+    sh.popd();
+}
 
 sh.set('-e');
 
@@ -21,26 +47,22 @@ sh.cd(ROOT_DIR);
 sh.exec('pnpm run tools:discover-declarations');
 sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
 
-// Inject descriptions
-const DOCUMENTATION_TEMP_DIR = path.join(ARTIFACTS_DIR, 'doc_tmp');
-sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
+if (!devMode) {
+    injectDescriptions();
+}
 
-sh.pushd(DOCUMENTATION_TEMP_DIR);
-    sh.exec('pnpm i');
-    sh.exec(`pnpm run update-topics --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
-sh.popd();
+if (devMode) {
+    sh.exec('pnpx nx build devextreme-main');
+} else {
+    sh.exec('pnpx nx build-dist devextreme-main --skipNxCache', {
+        env: {
+            ...sh.env,
+            BUILD_INTERNAL_PACKAGE: 'false'
+        }
+    });
+}
 
-sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
-
-sh.exec('pnpm run devextreme:inject-descriptions');
-
-sh.exec('pnpx nx build devextreme-main', {
-    env: {
-        ...sh.env,
-        BUILD_INTERNAL_PACKAGE: 'false'
-    }
-});
-sh.exec('pnpx nx build devextreme-themebuilder');
+sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -53,20 +75,14 @@ sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 
 sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], CSS_ARTIFACTS);
 
 const {
-    'devextreme-main': devextremeVersion,
     devextreme: devextremeNpmVersion
 } = JSON.parse(sh.exec('pnpm m ls --json --depth=-1 | jq \'reduce .[] as $item ({}; .[$item.name] = $item.version)\'').stdout);
-
-// Update versions for non-semver builds (daily, alpha and beta)
-if (devextremeVersion !== devextremeNpmVersion) {
-    sh.exec(`pnpm run all:update-version ${devextremeNpmVersion}`);
-}
 
 sh.exec('pnpm run all:pack-and-copy');
 
 sh.exec('pnpx nx pack devextreme-react', { silent: true });
 sh.exec('pnpx nx pack devextreme-vue', { silent: true });
-sh.exec('pnpx nx pack devextreme-angular --with-descriptions', { silent: true });
+sh.exec(`pnpx nx pack devextreme-angular${devMode ? '' : ' --with-descriptions'}`, { silent: true });
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);
