@@ -3295,8 +3295,8 @@ QUnit.module('search', moduleSetup, () => {
 
     [
         { attribute: 'aria-required', value: 'true' },
-        { attribute: 'aria-haspopup', value: 'true' },
-        { attribute: 'aria-autocomplete', value: 'none' },
+        { attribute: 'aria-haspopup', value: 'listbox' },
+        { attribute: 'aria-autocomplete', value: 'list' },
     ].forEach(({ attribute, value }) => {
         QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971)`, function(assert) {
             const $selectBox = $('#selectBox').dxSelectBox({

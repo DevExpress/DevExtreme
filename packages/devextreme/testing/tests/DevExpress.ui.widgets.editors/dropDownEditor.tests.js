@@ -2129,8 +2129,8 @@ QUnit.module('aria accessibility', () => {
 
     [
         { attribute: 'aria-required', value: 'true' },
-        { attribute: 'aria-haspopup', value: 'listbox' },
-        { attribute: 'aria-autocomplete', value: 'list' },
+        { attribute: 'aria-haspopup', value: 'true' },
+        { attribute: 'aria-autocomplete', value: 'none' },
     ].forEach(({ attribute, value }) => {
         QUnit.test(`component with fieldTemplate should have proper ${attribute} attribute after interaction (T1230696, T1230971)`, function(assert) {
             const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
