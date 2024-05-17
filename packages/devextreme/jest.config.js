@@ -1,20 +1,12 @@
 // For a detailed explanation regarding each configuration property, visit:
 // https://jestjs.io/docs/en/configuration.html
 const path = require('path');
-const resolve = require('resolve');
 
 const full = { functions: 100, statements: 100, lines: 100, branches: 100 };
 const nearlyFull = { functions: 96, statements: 98, lines: 98, branches: 92 };
 
 module.exports = {
     testEnvironment: 'jsdom',
-    'globals': {
-        'ts-jest': {
-            tsConfig: './jest.tsconfig.json',
-            diagnostics: false, // set to true to enable type checking
-            isolatedModules: true, // performance optimization https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
-        }
-    },
     collectCoverageFrom: [
         './js/renovation/(ui|utils|common)/**/*.ts?(x)',
         './js/renovation/component_wrapper/common/component.ts',
@@ -62,7 +54,12 @@ module.exports = {
     ],
     transform: {
         'test_components.+\\.tsx$': path.resolve('./js/renovation/test_utils/transformers/declaration.js'),
-        '\\.(js|jsx|ts)$': resolve.sync('ts-jest'),
+        '\\.(js|jsx|ts)$': ['ts-jest', {
+            // eslint-disable-next-line spellcheck/spell-checker
+            tsconfig: './jest.tsconfig.json',
+            diagnostics: false, // set to true to enable type checking
+            isolatedModules: true, // performance optimization https://kulshekhar.github.io/ts-jest/user/config/isolatedModules
+        }],
         '\\.(tsx)$': path.resolve('./js/renovation/test_utils/transformers/tsx.js')
     }
 };
