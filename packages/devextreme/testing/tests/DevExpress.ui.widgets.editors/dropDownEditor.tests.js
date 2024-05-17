@@ -2128,10 +2128,10 @@ QUnit.module('aria accessibility', () => {
     });
 
     [
-        { attribute: 'aria-required', initialValue: 'true', expectedValue: 'true' },
-        { attribute: 'aria-haspopup', initialValue: 'true', expectedValue: 'true' },
-        { attribute: 'aria-autocomplete', initialValue: 'none', expectedValue: 'none' },
-    ].forEach(({ attribute, initialValue, expectedValue }) => {
+        { attribute: 'aria-required', value: 'true' },
+        { attribute: 'aria-haspopup', value: 'listbox' },
+        { attribute: 'aria-autocomplete', value: 'list' },
+    ].forEach(({ attribute, value }) => {
         QUnit.test(`component with fieldTemplate should have proper ${attribute} attribute after interaction (T1230696, T1230971)`, function(assert) {
             const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
                 dataSource: ['one', 'two', 'three'],
@@ -2144,14 +2144,14 @@ QUnit.module('aria accessibility', () => {
             });
             let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($input.attr(attribute), initialValue, `initial render should have ${attribute} attribute set to ${expectedValue}`);
+            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
 
             keyboardMock($input)
                 .type('a');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($input.attr(attribute), expectedValue, `${attribute} attribute should remain ${expectedValue} after typing`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after typing`);
 
             keyboardMock($input)
                 .caret(1)
@@ -2159,7 +2159,7 @@ QUnit.module('aria accessibility', () => {
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($input.attr(attribute), expectedValue, `${attribute} attribute should remain ${expectedValue} after deleting`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after deleting`);
         });
     });
 

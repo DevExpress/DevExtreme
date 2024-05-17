@@ -3294,10 +3294,10 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     [
-        { attribute: 'aria-required', initialValue: 'true', expectedValue: 'true' },
-        { attribute: 'aria-haspopup', initialValue: 'listbox', expectedValue: 'listbox' },
-        { attribute: 'aria-autocomplete', initialValue: 'list', expectedValue: 'list' },
-    ].forEach(({ attribute, initialValue, expectedValue }) => {
+        { attribute: 'aria-required', value: 'true' },
+        { attribute: 'aria-haspopup', value: 'listbox' },
+        { attribute: 'aria-autocomplete', value: 'list' },
+    ].forEach(({ attribute, value }) => {
         QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971)`, function(assert) {
             const $selectBox = $('#selectBox').dxSelectBox({
                 dataSource: ['one', 'two', 'three'],
@@ -3313,7 +3313,7 @@ QUnit.module('search', moduleSetup, () => {
             });
             let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-            assert.strictEqual($input.attr(attribute), initialValue, `initial render should have ${attribute} attribute set to ${initialValue}`);
+            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
 
             const selectBox = $selectBox.dxSelectBox('instance');
             const keyboard = keyboardMock($input);
@@ -3325,7 +3325,7 @@ QUnit.module('search', moduleSetup, () => {
 
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-            assert.strictEqual($input.attr(attribute), expectedValue, `${attribute} should stay ${expectedValue} after search and selection`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
         });
     });
 
