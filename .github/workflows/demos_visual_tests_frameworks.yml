@@ -95,6 +95,11 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
     - uses: pnpm/action-setup@v3
       with:
         version: 9
@@ -116,16 +121,10 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-    - name: Build Angular wrapper
-      run: pnpx nx pack devextreme-angular --with-descriptions
-
-    - name: Build React wrapper
-      run: pnpx nx pack devextreme-react
-
-    - name: Build Vue wrapper
-      run: pnpx nx pack devextreme-vue
+#    - name: Build wrappers
+#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
 
     - name: Link wrappers packages
       run: pnpm install
@@ -309,10 +308,7 @@ jobs:
       run: pnpm install
 
     - name: Build wrappers
-      run: |
-        pnpx nx pack devextreme-react
-        pnpx nx pack devextreme-vue
-        pnpx nx pack devextreme-angular --with-descriptions
+      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
 
     - name: Prepare JS
       working-directory: apps/demos
@@ -359,6 +355,11 @@ jobs:
       with:
         node-version: '20'
 
+    - name: Download devextreme sources
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-sources
+
     - name: Download artifacts
       if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
       uses: actions/download-artifact@v4
@@ -396,21 +397,18 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
-    - name: Build wrappers
-      run: |
-        pnpx nx pack devextreme-react
-        pnpx nx pack devextreme-vue
-        pnpx nx pack devextreme-angular --with-descriptions
-
-    - name: Update bundles config
-      working-directory: apps/demos
-      run: pnpx gulp update-config
+#    - name: Build wrappers
+#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
 
     - name: Prepare JS
       working-directory: apps/demos
       run: pnpm run prepare-js
+
+    - name: Update bundles config
+      working-directory: apps/demos
+      run: pnpx gulp update-config
 
     - name: Run Web Server
       run: |
