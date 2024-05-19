@@ -2152,7 +2152,6 @@ QUnit.module('aria accessibility', () => {
                 .type('a');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
             assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after typing`);
 
             keyboardMock($input)
@@ -2160,7 +2159,6 @@ QUnit.module('aria accessibility', () => {
                 .press('backspace');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
             assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after deleting`);
         });
     });
