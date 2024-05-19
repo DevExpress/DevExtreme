@@ -3330,7 +3330,7 @@ QUnit.module('search', moduleSetup, () => {
     QUnit.module('aria-invalid', {}, () => {
         const setupSelectBox = (valueRequired) => {
             const options = {
-                dataSource: ['one', 'two', 'three'],
+                dataSource: ['one', ''],
                 fieldTemplate: () => {
                     return $('<div>').dxTextBox({});
                 },
@@ -3359,17 +3359,24 @@ QUnit.module('search', moduleSetup, () => {
                 let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
                 assert.equal($input.val(), '', 'input value is empty');
-                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value should set aria-invalid to ${emptyValue}`);
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `initial render should set aria-invalid to ${emptyValue}`);
 
                 keyboardMock($input)
                     .type('a');
 
-                const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+                let listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
                 listItem.trigger('dxclick');
 
-                assert.equal($input.val(), 'two', 'input value is not empty');
+                assert.equal($input.val(), 'one', 'input value is not empty');
                 $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
                 assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
+
+                listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+                listItem.trigger('dxclick');
+
+                assert.equal($input.val(), '', 'input value is empty');
+                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value set aria-invalid to ${emptyValue}`);
             });
         });
     });
