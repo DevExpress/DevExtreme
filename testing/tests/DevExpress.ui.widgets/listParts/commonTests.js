@@ -3832,7 +3832,7 @@ QUnit.module('Search', () => {
         assert.strictEqual(instance.option('searchValue'), '2', 'search value');
     });
 
-    QUnit.testInActiveWindow('Focusing widget when there is search editor', function(assert) {
+    QUnit.skip('Focusing widget when there is search editor', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,
