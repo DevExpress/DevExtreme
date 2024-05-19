@@ -140,11 +140,11 @@ const Validator = DOMComponent.inherit({
                 });
             }
             dxStandardEditor.option('_onMarkupRendered', (data) => {
-                const isInvalid = data === undefined;
+                const isInvalid = data === '';
 
                 dxStandardEditor.setAria({
                     'required': isRequired,
-                    'invalid': isInvalid.toString(),
+                    'invalid': isInvalid,
                 });
             });
         }
