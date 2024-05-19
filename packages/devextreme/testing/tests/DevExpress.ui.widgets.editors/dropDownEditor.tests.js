@@ -2183,22 +2183,25 @@ QUnit.module('aria accessibility', () => {
         };
 
         [
-            { valueRequired: true, initialInputAria: 'true', emptyInputAria: undefined },
-            { valueRequired: false, initialInputAria: undefined, emptyInputAria: undefined }
-        ].forEach(({ valueRequired, initialInputAria, emptyInputAria }) => {
+            { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
+            { valueRequired: false, emptyValue: 'false', nonEmptyValue: 'false' }
+        ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
             QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
                 const $dropDownEditor = setupDropDownEditor(valueRequired);
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-                assert.strictEqual($input.attr('aria-invalid'), initialInputAria, `initial render should set aria-invalid to ${initialInputAria}`);
+                assert.equal($input.val(), '', 'input value is empty');
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `initial render should set aria-invalid to ${emptyValue}`);
 
                 keyboardMock($input).type('a');
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-                assert.strictEqual($input.attr('aria-invalid'), emptyInputAria, `input should set 'aria-invalid' to ${emptyInputAria} after typing`);
+                assert.equal($input.val(), 'a', 'input value is not empty');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `input should set 'aria-invalid' to ${nonEmptyValue} after typing`);
 
                 keyboardMock($input).caret(1).press('backspace');
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-                assert.strictEqual($input.attr('aria-invalid'), initialInputAria, `input should set 'aria-invalid' to ${initialInputAria} after deleting`);
+                assert.equal($input.val(), '', 'input value is empty');
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
             });
         });
     });
