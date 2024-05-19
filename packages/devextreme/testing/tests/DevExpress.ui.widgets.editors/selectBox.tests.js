@@ -3359,11 +3359,10 @@ QUnit.module('search', moduleSetup, () => {
                 let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
                 assert.equal($input.val(), '', 'input value is empty');
-                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `initial render should set aria-invalid to ${emptyValue}`);
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value should set aria-invalid to ${emptyValue}`);
 
-                assert.equal($input.val(), '', 'input value is empty');
-                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value set aria-invalid to ${emptyValue}`);
+                keyboardMock($input)
+                    .type('a');
 
                 const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
                 listItem.trigger('dxclick');
