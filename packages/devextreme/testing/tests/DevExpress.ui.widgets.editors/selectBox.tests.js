@@ -3311,20 +3311,18 @@ QUnit.module('search', moduleSetup, () => {
             }).dxValidator({
                 validationRules: [ { type: 'required' } ]
             });
+            const selectBox = $selectBox.dxSelectBox('instance');
             let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
             assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
 
-            const selectBox = $selectBox.dxSelectBox('instance');
-            const keyboard = keyboardMock($input);
-
-            keyboard.type('a');
+            keyboardMock($input)
+                .type('a');
 
             const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
             listItem.trigger('dxclick');
 
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-
             assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
         });
     });
@@ -3372,7 +3370,7 @@ QUnit.module('search', moduleSetup, () => {
 
                 assert.equal($input.val(), 'two', 'input value is not empty');
                 $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `empty input value set aria-invalid to ${nonEmptyValue}`);
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
             });
         });
     });

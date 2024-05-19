@@ -2150,7 +2150,6 @@ QUnit.module('aria accessibility', () => {
                 .type('a');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
             assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after typing`);
 
             keyboardMock($input)
@@ -2158,7 +2157,6 @@ QUnit.module('aria accessibility', () => {
                 .press('backspace');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
             assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after deleting`);
         });
     });
@@ -2193,12 +2191,17 @@ QUnit.module('aria accessibility', () => {
                 assert.equal($input.val(), '', 'input value is empty');
                 assert.strictEqual($input.attr('aria-invalid'), emptyValue, `initial render should set aria-invalid to ${emptyValue}`);
 
-                keyboardMock($input).type('a');
+                keyboardMock($input)
+                    .type('a');
+
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 assert.equal($input.val(), 'a', 'input value is not empty');
                 assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `input should set 'aria-invalid' to ${nonEmptyValue} after typing`);
 
-                keyboardMock($input).caret(1).press('backspace');
+                keyboardMock($input)
+                    .caret(1)
+                    .press('backspace');
+
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 assert.equal($input.val(), '', 'input value is empty');
                 assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
