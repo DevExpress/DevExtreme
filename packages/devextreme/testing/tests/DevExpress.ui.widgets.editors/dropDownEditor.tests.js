@@ -2182,9 +2182,9 @@ QUnit.module('aria accessibility', () => {
 
         [
             { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
-            { valueRequired: false, emptyValue: 'false', nonEmptyValue: 'false' }
+            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
-            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
+            QUnit.test(`component with fieldTemplate should ${!valueRequired ? 'not' : ''} have aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
                 const $dropDownEditor = setupDropDownEditor(valueRequired);
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 

@@ -3351,9 +3351,9 @@ QUnit.module('search', moduleSetup, () => {
 
         [
             { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
-            { valueRequired: false, emptyValue: 'false', nonEmptyValue: 'false' }
+            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
-            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
+            QUnit.test(`component with fieldTemplate should ${!valueRequired ? 'not' : ''} have aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
                 const $selectBox = setupSelectBox(valueRequired);
                 const selectBox = $selectBox.dxSelectBox('instance');
                 let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));

@@ -139,8 +139,13 @@ const Validator = DOMComponent.inherit({
                     'invalid': isRequired,
                 });
             }
-            dxStandardEditor.option('_onMarkupRendered', () => {
-                dxStandardEditor.setAria('required', isRequired);
+            dxStandardEditor.option('_onMarkupRendered', (data) => {
+                const isInvalid = data === undefined;
+
+                dxStandardEditor.setAria({
+                    'required': isRequired,
+                    'invalid': isInvalid.toString(),
+                });
             });
         }
     },
