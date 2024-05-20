@@ -17,7 +17,7 @@ import {
 
 
 
-import { DiagramCommand, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { Command, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -34,10 +34,10 @@ import { DxiCommandComponent } from './command-dxi';
 })
 export class DxoHistoryToolbarComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get commands(): Array<dxDiagramCustomCommand | DiagramCommand> {
+    get commands(): Array<dxDiagramCustomCommand | Command> {
         return this._getOption('commands');
     }
-    set commands(value: Array<dxDiagramCustomCommand | DiagramCommand>) {
+    set commands(value: Array<dxDiagramCustomCommand | Command>) {
         this._setOption('commands', value);
     }
 

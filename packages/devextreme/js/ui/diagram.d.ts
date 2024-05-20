@@ -28,32 +28,32 @@ import {
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+export type AutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramCommand = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
+export type Command = 'separator' | 'exportSvg' | 'exportPng' | 'exportJpg' | 'undo' | 'redo' | 'cut' | 'copy' | 'paste' | 'selectAll' | 'delete' | 'fontName' | 'fontSize' | 'bold' | 'italic' | 'underline' | 'fontColor' | 'lineStyle' | 'lineWidth' | 'lineColor' | 'fillColor' | 'textAlignLeft' | 'textAlignCenter' | 'textAlignRight' | 'lock' | 'unlock' | 'sendToBack' | 'bringToFront' | 'insertShapeImage' | 'editShapeImage' | 'deleteShapeImage' | 'connectorLineType' | 'connectorLineStart' | 'connectorLineEnd' | 'layoutTreeTopToBottom' | 'layoutTreeBottomToTop' | 'layoutTreeLeftToRight' | 'layoutTreeRightToLeft' | 'layoutLayeredTopToBottom' | 'layoutLayeredBottomToTop' | 'layoutLayeredLeftToRight' | 'layoutLayeredRightToLeft' | 'fullScreen' | 'zoomLevel' | 'showGrid' | 'snapToGrid' | 'gridSize' | 'units' | 'pageSize' | 'pageOrientation' | 'pageColor' | 'simpleView' | 'toolbox';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
+export type ConnectorLineEnd = 'none' | 'arrow' | 'outlinedTriangle' | 'filledTriangle';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramConnectorLineType = 'straight' | 'orthogonal';
+export type ConnectorLineType = 'straight' | 'orthogonal';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramConnectorPosition = 'start' | 'end';
+export type ConnectorPosition = 'start' | 'end';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+export type DataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
@@ -63,42 +63,42 @@ export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramItemType = 'shape' | 'connector';
+export type ItemType = 'shape' | 'connector';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
+export type ModelOperation = 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints' | 'beforeChangeShapeText' | 'changeShapeText' | 'beforeChangeConnectorText' | 'changeConnectorText' | 'resizeShape' | 'moveShape';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramPanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
+export type PanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramRequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
+export type RequestEditOperationReason = 'checkUIElementAvailability' | 'modelModification';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
+export type ShapeCategory = 'general' | 'flowchart' | 'orgChart' | 'containers' | 'custom';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight';
+export type ShapeType = 'text' | 'rectangle' | 'ellipse' | 'cross' | 'triangle' | 'diamond' | 'heart' | 'pentagon' | 'hexagon' | 'octagon' | 'star' | 'arrowLeft' | 'arrowTop' | 'arrowRight' | 'arrowBottom' | 'arrowNorthSouth' | 'arrowEastWest' | 'process' | 'decision' | 'terminator' | 'predefinedProcess' | 'document' | 'multipleDocuments' | 'manualInput' | 'preparation' | 'data' | 'database' | 'hardDisk' | 'internalStorage' | 'paperTape' | 'manualOperation' | 'delay' | 'storedData' | 'display' | 'merge' | 'connector' | 'or' | 'summingJunction' | 'verticalContainer' | 'horizontalContainer' | 'cardWithImageOnLeft' | 'cardWithImageOnTop' | 'cardWithImageOnRight';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramToolboxDisplayMode = 'icons' | 'texts';
+export type ToolboxDisplayMode = 'icons' | 'texts';
 /**
  * @public
  * @namespace DevExpress.ui.dxDiagram
  */
-export type DiagramUnits = 'in' | 'cm' | 'px';
+export type Units = 'in' | 'cm' | 'px';
 
 /**
  * @docid _ui_diagram_ContentReadyEvent
@@ -184,18 +184,12 @@ export type OptionChangedEvent = EventInfo<dxDiagram> & ChangedOptionInfo;
  * @inherits EventInfo
  */
 export type RequestEditOperationEvent = EventInfo<dxDiagram> & {
-    /**
-     * @docid _ui_diagram_RequestEditOperationEvent.operation
-     * @type Enums.DiagramModelOperation
-     */
+    /** @docid _ui_diagram_RequestEditOperationEvent.operation */
     readonly operation: 'addShape' | 'addShapeFromToolbox' | 'deleteShape' | 'deleteConnector' | 'changeConnection' | 'changeConnectorPoints';
     /** @docid _ui_diagram_RequestEditOperationEvent.args */
     readonly args: dxDiagramAddShapeArgs | dxDiagramAddShapeFromToolboxArgs | dxDiagramDeleteShapeArgs | dxDiagramDeleteConnectorArgs | dxDiagramChangeConnectionArgs | dxDiagramChangeConnectorPointsArgs | dxDiagramBeforeChangeShapeTextArgs | dxDiagramChangeShapeTextArgs | dxDiagramBeforeChangeConnectorTextArgs | dxDiagramChangeConnectorTextArgs | dxDiagramResizeShapeArgs | dxDiagramMoveShapeArgs;
-    /**
-     * @docid _ui_diagram_RequestEditOperationEvent.reason
-     * @type Enums.DiagramRequestEditOperationReason
-     */
-    readonly reason: DiagramRequestEditOperationReason;
+    /** @docid _ui_diagram_RequestEditOperationEvent.reason */
+    readonly reason: RequestEditOperationReason;
     /** @docid _ui_diagram_RequestEditOperationEvent.allowed */
     allowed?: boolean;
 };
@@ -251,7 +245,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default "disabled"
      * @public
      */
-    autoZoomMode?: DiagramAutoZoomMode;
+    autoZoomMode?: AutoZoomMode;
     /**
      * @docid
      * @default {}
@@ -262,7 +256,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -278,11 +272,11 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      category?: DiagramShapeCategory | string;
+      category?: ShapeCategory | string;
       /**
        * @docid
        */
-      displayMode?: DiagramToolboxDisplayMode;
+      displayMode?: ToolboxDisplayMode;
       /**
        * @docid
        * @default true
@@ -296,7 +290,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      shapes?: Array<DiagramShapeType> | Array<string>;
+      shapes?: Array<ShapeType> | Array<string>;
       /**
        * @docid
        * @default 152
@@ -371,7 +365,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
       /**
        * @docid
        */
-      baseType?: DiagramShapeType | string;
+      baseType?: ShapeType | string;
       /**
        * @docid
        */
@@ -518,17 +512,17 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default 'orthogonal'
        */
-      connectorLineType?: DiagramConnectorLineType;
+      connectorLineType?: ConnectorLineType;
       /**
        * @docid
        * @default 'none'
        */
-      connectorLineStart?: DiagramConnectorLineEnd;
+      connectorLineStart?: ConnectorLineEnd;
       /**
        * @docid
        * @default 'arrow'
        */
-      connectorLineEnd?: DiagramConnectorLineEnd;
+      connectorLineEnd?: ConnectorLineEnd;
       /**
        * @docid
        * @default undefined
@@ -732,7 +726,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default "auto"
        */
-      autoLayout?: DiagramDataLayoutType | {
+      autoLayout?: DataLayoutType | {
         /**
          * @docid
          */
@@ -740,7 +734,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        type?: DiagramDataLayoutType;
+        type?: DataLayoutType;
       };
       /**
        * @docid
@@ -944,7 +938,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
+        commands?: Array<dxDiagramCustomCommand | Command>;
         /**
          * @docid
          */
@@ -952,7 +946,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
           /**
            * @docid
            */
-          commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
+          commands?: Array<dxDiagramCustomCommand | Command>;
           /**
            * @docid
            */
@@ -967,7 +961,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default 'auto'
        */
-      visibility?: DiagramPanelVisibility;
+      visibility?: PanelVisibility;
     };
     /**
      * @docid
@@ -1010,7 +1004,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default false
@@ -1027,7 +1021,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1044,7 +1038,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<dxDiagramCustomCommand | DiagramCommand>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1065,11 +1059,11 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        category?: DiagramShapeCategory | string;
+        category?: ShapeCategory | string;
         /**
          * @docid
          */
-        displayMode?: DiagramToolboxDisplayMode;
+        displayMode?: ToolboxDisplayMode;
         /**
          * @docid
          */
@@ -1077,12 +1071,12 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        shapes?: Array<DiagramShapeType> | Array<string>;
+        shapes?: Array<ShapeType> | Array<string>;
         /**
          * @docid
          */
         title?: string;
-      }> | Array<DiagramShapeCategory>;
+      }> | Array<ShapeCategory>;
       /**
        * @docid
        * @default 3
@@ -1097,7 +1091,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default 'auto'
        */
-      visibility?: DiagramPanelVisibility;
+      visibility?: PanelVisibility;
       /**
        * @docid
        * @default undefined
@@ -1109,13 +1103,13 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
      * @default "in"
      * @public
      */
-    units?: DiagramUnits;
+    units?: Units;
     /**
      * @docid
      * @default "in"
      * @public
      */
-    viewUnits?: DiagramUnits;
+    viewUnits?: Units;
     /**
      * @docid
      * @default 1
@@ -1325,7 +1319,7 @@ export interface dxDiagramItem {
      * @docid
      * @public
      */
-    itemType?: DiagramItemType;
+    itemType?: ItemType;
 }
 
 /**
@@ -1343,7 +1337,7 @@ export interface dxDiagramShape extends Item {
      * @docid
      * @public
      */
-    type?: DiagramShapeType | string;
+    type?: ShapeType | string;
     /**
      * @docid
      * @public
@@ -1405,7 +1399,7 @@ export type dxDiagramCustomCommand = {
      * @docid
      * @public
      */
-    name?: string | DiagramCommand;
+    name?: string | Command;
     /**
      * @docid
      * @public
@@ -1420,14 +1414,14 @@ export type dxDiagramCustomCommand = {
      * @docid
      * @public
      */
-    items?: Array<dxDiagramCustomCommand | DiagramCommand>;
+    items?: Array<dxDiagramCustomCommand | Command>;
     /**
      * @docid
      * @default "before"
      * @public
      */
     location?: ToolbarItemLocation;
-}
+};
 
 /**
  * @docid
@@ -1463,7 +1457,7 @@ export interface dxDiagramAddShapeFromToolboxArgs {
    * @docid
    * @public
    */
-  shapeType?: DiagramShapeType | string;
+  shapeType?: ShapeType | string;
 }
 
 /**
@@ -1519,7 +1513,7 @@ export interface dxDiagramChangeConnectionArgs {
    * @docid
    * @public
    */
-  connectorPosition?: DiagramConnectorPosition;
+  connectorPosition?: ConnectorPosition;
 }
 
 /**
@@ -1709,6 +1703,56 @@ export type Properties = dxDiagramOptions;
 
 /** @deprecated use Properties instead */
 export type Options = dxDiagramOptions;
+
+// #region deprecated in v24.1
+
+/** @deprecated Use AutoZoomMode instead */
+export type DiagramAutoZoomMode = AutoZoomMode;
+
+/** @deprecated Use Command instead */
+export type DiagramCommand = Command;
+
+/** @deprecated Use ConnectorLineEnd instead */
+export type DiagramConnectorLineEnd = ConnectorLineEnd;
+
+/** @deprecated Use ConnectorLineType instead */
+export type DiagramConnectorLineType = ConnectorLineType;
+
+/** @deprecated Use ConnectorPosition instead */
+export type DiagramConnectorPosition = ConnectorPosition;
+
+/** @deprecated Use DataLayoutType instead */
+export type DiagramDataLayoutType = DataLayoutType;
+
+// /** @deprecated Use ExportFormat instead */
+// export type DiagramExportFormat = ExportFormat;
+// conflics with viz ExportFormat
+
+/** @deprecated Use ItemType instead */
+export type DiagramItemType = ItemType;
+
+/** @deprecated Use ModelOperation instead */
+export type DiagramModelOperation = ModelOperation;
+
+/** @deprecated Use PanelVisibility instead */
+export type DiagramPanelVisibility = PanelVisibility;
+
+/** @deprecated Use RequestEditOperationReason instead */
+export type DiagramRequestEditOperationReason = RequestEditOperationReason;
+
+/** @deprecated Use ShapeCategory instead */
+export type DiagramShapeCategory = ShapeCategory;
+
+/** @deprecated Use ShapeType instead */
+export type DiagramShapeType = ShapeType;
+
+/** @deprecated Use ToolboxDisplayMode instead */
+export type DiagramToolboxDisplayMode = ToolboxDisplayMode;
+
+/** @deprecated Use Units instead */
+export type DiagramUnits = Units;
+
+// #endregion
 
 ///#DEBUG
 // eslint-disable-next-line import/first

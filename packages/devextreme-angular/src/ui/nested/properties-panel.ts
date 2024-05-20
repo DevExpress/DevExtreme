@@ -17,7 +17,7 @@ import {
 
 
 
-import { DiagramCommand, DiagramPanelVisibility, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { Command, dxDiagramCustomCommand, PanelVisibility } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -34,18 +34,18 @@ import { DxiTabComponent } from './tab-dxi';
 })
 export class DxoPropertiesPanelComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get tabs(): Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }>, title?: string }> {
+    get tabs(): Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }>, title?: string }> {
         return this._getOption('tabs');
     }
-    set tabs(value: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | DiagramCommand>, title?: string }>, title?: string }>) {
+    set tabs(value: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }>, title?: string }>) {
         this._setOption('tabs', value);
     }
 
     @Input()
-    get visibility(): DiagramPanelVisibility {
+    get visibility(): PanelVisibility {
         return this._getOption('visibility');
     }
-    set visibility(value: DiagramPanelVisibility) {
+    set visibility(value: PanelVisibility) {
         this._setOption('visibility', value);
     }
 
