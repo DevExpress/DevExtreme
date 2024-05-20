@@ -96,12 +96,17 @@ export interface Properties<
   _renderQueue?: RenderQueueItem[];
 }
 
+interface PaneCache {
+  size: number;
+  direction: 'prev' | 'next';
+}
+
 class Splitter extends CollectionWidget<Properties> {
   static ItemClass = SplitterItem;
 
   private _renderQueue: RenderQueueItem[] = [];
 
-  private _panesCacheSize: Record<string, number | undefined> = {};
+  private _panesCacheSize: PaneCache[] = [];
 
   private _collapsedItemSize?: number;
 
@@ -111,9 +116,9 @@ class Splitter extends CollectionWidget<Properties> {
 
   private _currentLayout?: number[];
 
-  private _activeResizeHandleIndex = -1;
+  private _activeResizeHandleIndex?: number;
 
-  private _collapseButton?: string;
+  private _collapseDirection?: string;
 
   private _itemRestrictions: PaneRestrictions[] = [];
 
@@ -183,7 +188,7 @@ class Splitter extends CollectionWidget<Properties> {
 
     super._initMarkup();
 
-    this._panesCacheSize = {};
+    this._panesCacheSize = [];
     this._attachResizeObserverSubscription();
   }
 
@@ -321,7 +326,7 @@ class Splitter extends CollectionWidget<Properties> {
 
   _updateResizeHandlesCollapsibleState(): void {
     this._getResizeHandles().forEach((resizeHandle) => {
-      const $resizeHandle = (resizeHandle.$element() as unknown) as dxElementWrapper;
+      const $resizeHandle = $(resizeHandle.element());
 
       const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
@@ -414,116 +419,16 @@ class Splitter extends CollectionWidget<Properties> {
       onCollapsePrev: (e: ItemCollapsedEvent | ItemExpandedEvent): void => {
         e.event?.stopPropagation();
 
-        const $resizeHandle = $(e.element);
-
-        const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-
-        const leftItemData = this._getItemData($leftItem);
-        const leftItemIndex = this._getIndexByItem(leftItemData);
-        const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-        const rightItemData = this._getItemData($rightItem);
-        const rightItemIndex = this._getIndexByItem(rightItemData);
-
-        const isRightItemCollapsed = rightItemData.collapsed === true;
-
-        this._activeResizeHandleIndex = leftItemIndex;
-        this._collapseButton = 'prev';
-
-        if (isRightItemCollapsed) {
-          this._collapsedItemSize = this._panesCacheSize[rightItemIndex];
-
-          if (!this._collapsedItemSize) {
-            for (let i = leftItemIndex; i >= 0; i -= 1) {
-              // @ts-expect-error badly typed base class
-              // eslint-disable-next-line max-depth
-              if (this.option('items')[i].collapsed !== true) {
-                this._collapsedItemSize = this.getLayout()[i] / 2;
-              }
-            }
-          }
-
-          this._panesCacheSize[rightItemIndex] = undefined;
-          this._updateItemData('collapsed', rightItemIndex, false, false);
-
-          this._getAction(ITEM_EXPANDED_EVENT)({
-            event: e.event,
-            itemData: rightItemData,
-            itemElement: getPublicElement<HTMLElement>($rightItem),
-            itemIndex: rightItemIndex,
-          });
-
-          return;
-        }
-
-        this._panesCacheSize[leftItemIndex] = this.getLayout()[leftItemIndex];
-        this._collapsedItemSize = this.getLayout()[leftItemIndex];
-
-        this._updateItemData('collapsed', leftItemIndex, true, false);
-
-        this._getAction(ITEM_COLLAPSED_EVENT)({
-          event: e.event,
-          itemData: leftItemData,
-          itemElement: getPublicElement<HTMLElement>($leftItem),
-          itemIndex: leftItemIndex,
-        });
+        // @ts-expect-error
+        this._savedCollapsingEvent = e.event;
+        this.handleCollapseEvent(this._getResizeHandleLeftItem($(e.element)), 'prev');
       },
       onCollapseNext: (e: ItemCollapsedEvent | ItemExpandedEvent): void => {
         e.event?.stopPropagation();
 
-        const $resizeHandle = $(e.element);
-
-        const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-        const leftItemData = this._getItemData($leftItem);
-        const leftItemIndex = this._getIndexByItem(leftItemData);
-        const $rightItem = this._getResizeHandleRightItem($resizeHandle);
-        const rightItemData = this._getItemData($rightItem);
-        const rightItemIndex = this._getIndexByItem(rightItemData);
-
-        const isLeftItemCollapsed = leftItemData.collapsed === true;
-
-        this._activeResizeHandleIndex = leftItemIndex;
-
-        this._collapseButton = 'next';
-
-        if (isLeftItemCollapsed) {
-          this._collapsedItemSize = this._panesCacheSize[leftItemIndex];
-
-          if (!this._collapsedItemSize) {
-            // @ts-expect-error badly typed base class
-            for (let i = rightItemIndex; i <= this.option('items').length - 1; i += 1) {
-              // @ts-expect-error badly typed base class
-              // eslint-disable-next-line max-depth
-              if (this.option('items')[i].collapsed !== true) {
-                this._collapsedItemSize = this.getLayout()[i] / 2;
-              }
-            }
-          }
-
-          this._panesCacheSize[leftItemIndex] = undefined;
-
-          this._updateItemData('collapsed', leftItemIndex, false, false);
-
-          this._getAction(ITEM_EXPANDED_EVENT)({
-            event: e.event,
-            itemData: leftItemData,
-            itemElement: getPublicElement<HTMLElement>($leftItem),
-            itemIndex: leftItemIndex,
-          });
-
-          return;
-        }
-
-        this._panesCacheSize[rightItemIndex] = this.getLayout()[rightItemIndex];
-        this._collapsedItemSize = this.getLayout()[rightItemIndex];
-
-        this._updateItemData('collapsed', rightItemIndex, true, false);
-
-        this._getAction(ITEM_COLLAPSED_EVENT)({
-          event: e.event,
-          itemData: rightItemData,
-          itemElement: getPublicElement<HTMLElement>($rightItem),
-          itemIndex: rightItemIndex,
-        });
+        // @ts-expect-error
+        this._savedCollapsingEvent = e.event;
+        this.handleCollapseEvent(this._getResizeHandleLeftItem($(e.element)), 'next');
       },
       onResizeStart: (e: ResizeStartEvent): void => {
         const { element, event } = e;
@@ -601,6 +506,8 @@ class Splitter extends CollectionWidget<Properties> {
       onResizeEnd: (e: ResizeEndEvent): void => {
         const { element, event } = e;
 
+        this._activeResizeHandleIndex = undefined;
+
         if (!event) { return; }
 
         const $resizeHandle = $(element);
@@ -627,20 +534,78 @@ class Splitter extends CollectionWidget<Properties> {
     };
   }
 
-  _getResizeHandleLeftItem($resizeHandle: dxElementWrapper): dxElementWrapper {
-    let $leftItem = $resizeHandle.prev();
+  handleCollapseEvent(
+    $resizeHandle: dxElementWrapper,
+    direction: 'prev' | 'next',
+    shouldUpdateItemCollapsedState = true,
+    isItemCollapsed?: boolean,
+  ): void {
+    const $leftItem = $resizeHandle;
+    const leftItemData = this._getItemData($leftItem);
+    const leftItemIndex = this._getIndexByItem(leftItemData);
+    const $rightItem = this._getResizeHandleRightItem($leftItem);
+    const rightItemData = this._getItemData($rightItem);
+    const rightItemIndex = this._getIndexByItem(rightItemData);
 
-    while ($leftItem.hasClass(INVISIBLE_STATE_CLASS)) {
+    const isCollapsed = direction === 'prev' ? isItemCollapsed ?? rightItemData.collapsed : isItemCollapsed ?? leftItemData.collapsed;
+
+    this._activeResizeHandleIndex = leftItemIndex;
+    this._collapseDirection = direction;
+
+    if (isCollapsed) {
+      const paneCache = this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex];
+
+      this._collapsedItemSize = paneCache?.direction === direction ? paneCache.size : undefined;
+      // this._collapsedItemSize = this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex];
+
+      if (!this._collapsedItemSize) {
+        direction === 'prev'
+          ? this._calculateExpandToLeftSize(leftItemIndex)
+          : this._calculateExpandToRightSize(rightItemIndex);
+      }
+
+      // @ts-expect-error
+      this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex] = undefined;
+      // this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex] = undefined;
+      // @ts-expect-error
+      this._collapsingPane = direction === 'prev' ? $rightItem : $leftItem;
+
+      if (shouldUpdateItemCollapsedState) {
+        this._updateItemData('collapsed', direction === 'prev' ? rightItemIndex : leftItemIndex, false, false);
+      }
+
+      return;
+    }
+
+    const indexToCollapse = direction === 'prev' ? leftItemIndex : rightItemIndex;
+    this._panesCacheSize[indexToCollapse] = {
+      size: this.getLayout()[indexToCollapse],
+      direction: direction === 'prev' ? 'next' : 'prev',
+    };
+    // this._panesCacheSize[indexToCollapse] = this.getLayout()[indexToCollapse];
+    this._collapsedItemSize = this.getLayout()[indexToCollapse];
+    // @ts-expect-error
+    this._collapsingPane = direction === 'prev' ? $leftItem : $rightItem;
+
+    if (shouldUpdateItemCollapsedState) {
+      this._updateItemData('collapsed', indexToCollapse, true, false);
+    }
+  }
+
+  _getResizeHandleLeftItem($element: dxElementWrapper): dxElementWrapper {
+    let $leftItem = $element.prev();
+
+    while ($leftItem.hasClass(INVISIBLE_STATE_CLASS) || $leftItem.hasClass(RESIZE_HANDLE_CLASS)) {
       $leftItem = $leftItem.prev();
     }
 
     return $leftItem;
   }
 
-  _getResizeHandleRightItem($resizeHandle: dxElementWrapper): dxElementWrapper {
-    let $rightItem = $resizeHandle.next();
+  _getResizeHandleRightItem($element: dxElementWrapper): dxElementWrapper {
+    let $rightItem = $element.next();
 
-    while ($rightItem.hasClass(INVISIBLE_STATE_CLASS)) {
+    while ($rightItem.hasClass(INVISIBLE_STATE_CLASS) || $rightItem.hasClass(RESIZE_HANDLE_CLASS)) {
       $rightItem = $rightItem.next();
     }
 
@@ -689,7 +654,7 @@ class Splitter extends CollectionWidget<Properties> {
       .toggleClass(VERTICAL_ORIENTATION_CLASS, !this._isHorizontalOrientation());
   }
 
-  _itemOptionChanged(item: Item, property: string, value: unknown): void {
+  _itemOptionChanged(item: Item, property: string, value: unknown, prevValue: unknown): void {
     switch (property) {
       case 'size':
       case 'maxSize':
@@ -701,7 +666,11 @@ class Splitter extends CollectionWidget<Properties> {
         this._updateItemSizes();
         break;
       case 'collapsed':
-        this._itemCollapsedOptionChanged(item);
+        // @ts-expect-error
+        this._prevLayout = this.getLayout();
+        // @ts-expect-error
+        console.log(this._prevLayout);
+        this._itemCollapsedOptionChanged(item, value as boolean, prevValue as boolean);
         break;
       case 'resizable':
         this._updateResizeHandlesResizableState();
@@ -713,33 +682,78 @@ class Splitter extends CollectionWidget<Properties> {
         this._invalidate();
         break;
       default:
-        super._itemOptionChanged(item, property, value);
+        super._itemOptionChanged(item, property, value, prevValue);
     }
   }
 
-  _itemCollapsedOptionChanged(item: Item): void {
+  _itemCollapsedOptionChanged(item: Item, value: boolean, prevValue: boolean): void {
+    if (Boolean(value) === Boolean(prevValue)) {
+      return;
+    }
+
     this._updateItemsRestrictions(true);
+
+    if (!isDefined(this._activeResizeHandleIndex)) {
+      const $prevItem = $(this._itemElements()[this._getIndexByItem(item)]);
+
+      if (value) {
+        if (this._isLastVisibleItem(this._getIndexByItem(item))) {
+          this.handleCollapseEvent(this._getResizeHandleLeftItem($prevItem), 'next', false);
+        } else {
+          this.handleCollapseEvent($prevItem, 'prev', false, !!prevValue);
+        }
+      } else if (this._isLastVisibleItem(this._getIndexByItem(item))) {
+        this.handleCollapseEvent(this._getResizeHandleLeftItem($prevItem), 'prev', false, !!prevValue);
+      } else {
+        this.handleCollapseEvent($prevItem, 'next', false, !!prevValue);
+      }
+    }
+
+    const collapsedDelta = this._getCollapseDelta(item);
+
+    this._layout = getNextLayout(
+      this.getLayout(),
+      collapsedDelta,
+      this._activeResizeHandleIndex,
+      this._itemRestrictions,
+      true,
+    );
+
+    this._applyStylesFromLayout(this.getLayout());
+    this._updateItemSizes();
 
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
-    if (isDefined(this._collapsedItemSize)) {
-      this._layout = getNextLayout(
-        this.getLayout(),
-        this._getCollapseDelta(item),
-        this._activeResizeHandleIndex,
-        this._itemRestrictions,
-        true,
-      );
-    } else {
-      this._layout = this._getDefaultLayoutBasedOnSize();
-    }
+    // @ts-expect-error
+    this._fireCollapsedStateChanged(!value, this._collapsingPane, this._savedCollapsingEvent);
 
-    this._collapseButton = undefined;
+    // @ts-expect-error
+    this._savedCollapsingEvent = undefined;
+    // @ts-expect-error
+    this._collapsingPane = undefined;
+    this._collapseDirection = undefined;
     this._collapsedItemSize = undefined;
+    this._activeResizeHandleIndex = undefined;
+  }
 
-    this._applyStylesFromLayout(this.getLayout());
-    this._updateItemSizes();
+  _calculateExpandToLeftSize(leftItemIndex: number) {
+    const { items = [] } = this.option();
+
+    for (let i = leftItemIndex; i >= 0; i -= 1) {
+      if (items[i].collapsed !== true) {
+        this._collapsedItemSize = this.getLayout()[i] / 2;
+      }
+    }
+  }
+
+  _calculateExpandToRightSize(rightItemIndex: number): void {
+    const { items = [] } = this.option();
+    for (let i = rightItemIndex; i <= items.length - 1; i += 1) {
+      if (items[i].collapsed !== true) {
+        this._collapsedItemSize = this.getLayout()[i] / 2;
+      }
+    }
   }
 
   _getCollapseDelta(item: Item): number {
@@ -751,10 +765,21 @@ class Splitter extends CollectionWidget<Properties> {
       ? this._collapsedItemSize
       : minSize;
 
-    const deltaSign = this._collapseButton === 'prev' ? -1 : 1;
+    const deltaSign = this._collapseDirection === 'prev' ? -1 : 1;
     const delta = Math.abs(itemSize - collapsedSize) * deltaSign;
 
     return delta;
+  }
+
+  _fireCollapsedStateChanged(
+    isExpanded: boolean,
+    $item: dxElementWrapper,
+    e?: ItemCollapsedEvent | ItemExpandedEvent,
+  ) {
+    const eventName = isExpanded ? ITEM_EXPANDED_EVENT : ITEM_COLLAPSED_EVENT;
+
+    // @ts-expect-error
+    this._itemEventHandler($item, eventName, { event: e });
   }
 
   _getDefaultLayoutBasedOnSize(): number[] {

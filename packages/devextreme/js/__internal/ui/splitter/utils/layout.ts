@@ -111,10 +111,14 @@ function findMaxAvailableDelta(
 export function getNextLayout(
   currentLayout: number[],
   delta: number,
-  prevPaneIndex: number,
+  prevPaneIndex: number | undefined,
   paneRestrictions: PaneRestrictions[],
   collapseMode = false,
 ): number[] {
+  if (!isDefined(prevPaneIndex)) {
+    return currentLayout;
+  }
+
   const nextLayout = [...currentLayout];
   const nextPaneIndex = prevPaneIndex + 1;
 
