@@ -10,7 +10,7 @@ import { Properties as dxBoxOptions } from 'devextreme/ui/box';
 import { Properties as dxButtonOptions } from 'devextreme/ui/button';
 import { dxContextMenuItem } from 'devextreme/ui/context_menu';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
-import { Command, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { ButtonItem, EmptyItem, FormItemComponent, FormItemType, GroupItem, LabelLocation, SimpleItem, TabbedItem } from 'devextreme/ui/form';
@@ -160,10 +160,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('closeMenuOnClick', value);
     }
 
-    get items(): Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | Command | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem> {
+    get items(): Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | CustomCommand | Command | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | dxDiagramCustomCommand | Command | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem>) {
+    set items(value: Array<dxContextMenuItem | SimpleItem | GroupItem | TabbedItem | EmptyItem | ButtonItem | CustomCommand | Command | dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | dxMenuItem | dxTreeViewItem>) {
         this._setOption('items', value);
     }
 

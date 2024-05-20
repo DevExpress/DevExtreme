@@ -26,7 +26,7 @@ import {
 import { Orientation, PageOrientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { AutoZoomMode, Command, ConnectorLineEnd, ConnectorLineType, ContentReadyEvent, CustomCommandEvent, DataLayoutType, DisposingEvent, dxDiagramCustomCommand, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, PanelVisibility, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, ShapeCategory, ShapeType, ToolboxDisplayMode, Units } from 'devextreme/ui/diagram';
+import { AutoZoomMode, Command, ConnectorLineEnd, ConnectorLineType, ContentReadyEvent, CustomCommand, CustomCommandEvent, DataLayoutType, DisposingEvent, InitializedEvent, ItemClickEvent, ItemDblClickEvent, OptionChangedEvent, PanelVisibility, RequestEditOperationEvent, RequestLayoutUpdateEvent, SelectionChangedEvent, ShapeCategory, ShapeType, ToolboxDisplayMode, Units } from 'devextreme/ui/diagram';
 
 import DxDiagram from 'devextreme/ui/diagram';
 
@@ -103,10 +103,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get contextMenu(): { commands?: Array<dxDiagramCustomCommand | Command>, enabled?: boolean } {
+    get contextMenu(): { commands?: Array<CustomCommand | Command>, enabled?: boolean } {
         return this._getOption('contextMenu');
     }
-    set contextMenu(value: { commands?: Array<dxDiagramCustomCommand | Command>, enabled?: boolean }) {
+    set contextMenu(value: { commands?: Array<CustomCommand | Command>, enabled?: boolean }) {
         this._setOption('contextMenu', value);
     }
 
@@ -298,10 +298,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get historyToolbar(): { commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean } {
+    get historyToolbar(): { commands?: Array<CustomCommand | Command>, visible?: boolean } {
         return this._getOption('historyToolbar');
     }
-    set historyToolbar(value: { commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean }) {
+    set historyToolbar(value: { commands?: Array<CustomCommand | Command>, visible?: boolean }) {
         this._setOption('historyToolbar', value);
     }
 
@@ -311,10 +311,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get mainToolbar(): { commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean } {
+    get mainToolbar(): { commands?: Array<CustomCommand | Command>, visible?: boolean } {
         return this._getOption('mainToolbar');
     }
-    set mainToolbar(value: { commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean }) {
+    set mainToolbar(value: { commands?: Array<CustomCommand | Command>, visible?: boolean }) {
         this._setOption('mainToolbar', value);
     }
 
@@ -376,10 +376,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get propertiesPanel(): { tabs?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility } {
+    get propertiesPanel(): { tabs?: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility } {
         return this._getOption('propertiesPanel');
     }
-    set propertiesPanel(value: { tabs?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility }) {
+    set propertiesPanel(value: { tabs?: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility }) {
         this._setOption('propertiesPanel', value);
     }
 
@@ -493,10 +493,10 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
     
      */
     @Input()
-    get viewToolbar(): { commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean } {
+    get viewToolbar(): { commands?: Array<CustomCommand | Command>, visible?: boolean } {
         return this._getOption('viewToolbar');
     }
-    set viewToolbar(value: { commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean }) {
+    set viewToolbar(value: { commands?: Array<CustomCommand | Command>, visible?: boolean }) {
         this._setOption('viewToolbar', value);
     }
 
@@ -644,7 +644,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() contextMenuChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | Command>, enabled?: boolean }>;
+    @Output() contextMenuChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, enabled?: boolean }>;
 
     /**
     
@@ -749,14 +749,14 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() historyToolbarChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean }>;
+    @Output() historyToolbarChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, visible?: boolean }>;
 
     /**
     
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() mainToolbarChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean }>;
+    @Output() mainToolbarChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, visible?: boolean }>;
 
     /**
     
@@ -791,7 +791,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() propertiesPanelChange: EventEmitter<{ tabs?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, groups?: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility }>;
+    @Output() propertiesPanelChange: EventEmitter<{ tabs?: Array<any | { commands?: Array<CustomCommand | Command>, groups?: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>, title?: string }>, visibility?: PanelVisibility }>;
 
     /**
     
@@ -854,7 +854,7 @@ export class DxDiagramComponent extends DxComponent implements OnDestroy, OnChan
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() viewToolbarChange: EventEmitter<{ commands?: Array<dxDiagramCustomCommand | Command>, visible?: boolean }>;
+    @Output() viewToolbarChange: EventEmitter<{ commands?: Array<CustomCommand | Command>, visible?: boolean }>;
 
     /**
     

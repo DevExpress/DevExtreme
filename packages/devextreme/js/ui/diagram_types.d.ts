@@ -27,6 +27,6 @@ export {
   CustomShapeTemplateData,
   CustomShapeToolboxTemplateData,
   Item,
-  dxDiagramCustomCommand,
+  CustomCommand,
   Properties,
 } from './diagram';

@@ -5,7 +5,7 @@ import {
     Component,
 } from '@angular/core';
 
-import { Command, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { Command, CustomCommand } from 'devextreme/ui/diagram';
 import { ButtonItem, EmptyItem, GroupItem, SimpleItem, TabbedItem } from 'devextreme/ui/form';
 import { HtmlEditorImageUploadTab } from 'devextreme/ui/html_editor';
 
@@ -83,17 +83,17 @@ export abstract class DxiHtmlEditorImageUploadTabItem extends CollectionNestedOp
         this._setOption('title', value);
     }
 
-    get commands(): Array<dxDiagramCustomCommand | Command> {
+    get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
     }
-    set commands(value: Array<dxDiagramCustomCommand | Command>) {
+    set commands(value: Array<CustomCommand | Command>) {
         this._setOption('commands', value);
     }
 
-    get groups(): Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }> {
+    get groups(): Array<any | { commands?: Array<CustomCommand | Command>, title?: string }> {
         return this._getOption('groups');
     }
-    set groups(value: Array<any | { commands?: Array<dxDiagramCustomCommand | Command>, title?: string }>) {
+    set groups(value: Array<any | { commands?: Array<CustomCommand | Command>, title?: string }>) {
         this._setOption('groups', value);
     }
 

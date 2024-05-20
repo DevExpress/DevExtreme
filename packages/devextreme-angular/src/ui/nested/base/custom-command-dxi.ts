@@ -6,12 +6,12 @@ import {
 } from '@angular/core';
 
 import { ToolbarItemLocation } from 'devextreme/common';
-import { Command, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { Command, CustomCommand } from 'devextreme/ui/diagram';
 
 @Component({
     template: ''
 })
-export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
+export abstract class DxiCustomCommand extends CollectionNestedOption {
     get icon(): string {
         return this._getOption('icon');
     }
@@ -19,10 +19,10 @@ export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get items(): Array<dxDiagramCustomCommand | Command> {
+    get items(): Array<CustomCommand | Command> {
         return this._getOption('items');
     }
-    set items(value: Array<dxDiagramCustomCommand | Command>) {
+    set items(value: Array<CustomCommand | Command>) {
         this._setOption('items', value);
     }
 
