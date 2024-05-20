@@ -59,7 +59,7 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if drawer is closed', function(assert) {
-        const $element = $('#drawer').dxDrawer({ opened: false });
+        const $element = $('#drawer').dxDrawer();
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
         assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
@@ -73,14 +73,14 @@ QUnit.module('rendering', () => {
     });
 
     QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if minSize is set', function(assert) {
-        const $element = $('#drawer').dxDrawer({ opened: false, minSize: 1 });
+        const $element = $('#drawer').dxDrawer({ minSize: 1 });
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
         assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
     });
 
     QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if minSize was changed in runtime', function(assert) {
-        const $element = $('#drawer').dxDrawer({ opened: false, minSize: 1 });
+        const $element = $('#drawer').dxDrawer({ minSize: 1 });
         const instance = $element.dxDrawer('instance');
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
@@ -98,11 +98,14 @@ QUnit.module('rendering', () => {
     QUnit.test('drawer panel should have dx-drawer-panel-content-hidden class if it was shown', function(assert) {
         const done = assert.async();
 
-        const $element = $('#drawer').dxDrawer({ opened: false });
+        const $element = $('#drawer').dxDrawer({
+            animationEnabled: true,
+            animationDuration: 0,
+        });
         const instance = $element.dxDrawer('instance');
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
-        instance.toggle(true).then(() => {
+        instance.toggle().then(() => {
             assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
             done();
         });
