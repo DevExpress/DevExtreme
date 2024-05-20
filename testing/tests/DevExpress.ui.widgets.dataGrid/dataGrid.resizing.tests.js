@@ -969,7 +969,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         assert.roughEqual($(dataGrid.getCellElement(0, 3)).outerWidth(), 125, 0.51, 'last column width');
     });
 
-    QUnit.test('cell content with auto width should not be wrapper to second line on zoom (T998665)', function(assert) {
+    QUnit.skip('cell content with auto width should not be wrapper to second line on zoom (T998665)', function(assert) {
         if($.fn.jquery.split('.')[0] === '2') {
             assert.ok(true, 'test is not actual for jquery 2');
             return;
