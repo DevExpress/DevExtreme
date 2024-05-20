@@ -6,8 +6,6 @@ import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
-// eslint-disable-next-line spellcheck/spell-checker
-import { rerender } from 'inferno';
 import registerKeyHandlerTestHelper from '../../helpers/registerKeyHandlerTestHelper.js';
 
 import 'generic_light.css!';
