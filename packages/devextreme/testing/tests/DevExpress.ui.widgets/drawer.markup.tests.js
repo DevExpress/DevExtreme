@@ -7,7 +7,7 @@ import 'ui/drawer';
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
-const DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS = 'dx-drawer-panel-content-has-min-size';
+const DRAWER_PANEL_CONTENT_HIDDEN_CLASS = 'dx-drawer-panel-content-hidden';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const OPENED_STATE_CLASS = 'dx-drawer-opened';
@@ -58,23 +58,56 @@ QUnit.module('rendering', () => {
         assert.ok($element.hasClass(DRAWER_CLASS + '-slide'), 'drawer class is correct');
     });
 
-    QUnit.test('drawer panel should have dx-drawer-panel-content-has-min-size class if minSize set', function(assert) {
-        const $element = $('#drawer').dxDrawer({ minSize: 1 });
+    QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if drawer is closed', function(assert) {
+        const $element = $('#drawer').dxDrawer({ opened: false });
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
+    });
+
+    QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if drawer is opened', function(assert) {
+        const $element = $('#drawer').dxDrawer({ opened: true });
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
+    });
+
+    QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if minSize is set', function(assert) {
+        const $element = $('#drawer').dxDrawer({ opened: false, minSize: 1 });
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
+    });
+
+    QUnit.test('drawer panel should not have dx-drawer-panel-content-hidden class if minSize was changed in runtime', function(assert) {
+        const $element = $('#drawer').dxDrawer({ opened: false, minSize: 1 });
         const instance = $element.dxDrawer('instance');
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
-        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), true, 'dx-drawer-panel-content-has-min-size is set');
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
 
         instance.option({ minSize: null });
 
-        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), false, 'dx-drawer-panel-content-has-min-size is not set');
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
+
+        instance.option({ minSize: 1 });
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
     });
 
-    QUnit.test('drawer panel should not have dx-drawer-panel-content-has-min-size class if minSize is not set on init', function(assert) {
-        const $element = $('#drawer').dxDrawer({ minSize: null });
+    QUnit.test('drawer panel should have dx-drawer-panel-content-hidden class if it was shown', function(assert) {
+        const done = assert.async();
+
+        const $element = $('#drawer').dxDrawer({ opened: false });
+        const instance = $element.dxDrawer('instance');
         const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
 
-        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS), false, 'dx-drawer-panel-content-has-min-size is not set');
+        instance.toggle(true).then(() => {
+            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
+            done();
+        });
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
     });
 
     QUnit.test('drawer panel should have visibility: hidden if drawer is closed', function(assert) {

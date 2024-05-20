@@ -528,6 +528,7 @@ const Drawer = (Widget as any).inherit({
       case 'minSize':
         this._initMinMaxSize();
         this._renderPosition(this.option('opened'), true);
+        this._togglePanelContentHiddenClass();
         break;
       case 'maxSize':
         this._initMinMaxSize();
