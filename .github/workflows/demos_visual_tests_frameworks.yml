@@ -398,8 +398,14 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
+      run: pnpm install
+
+    - name: DevExtreme - Build
+      run: pnpx nx build devextreme-main
+
+    - name: Install dependencies
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
