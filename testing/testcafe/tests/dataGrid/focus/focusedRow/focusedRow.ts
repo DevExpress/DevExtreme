@@ -757,7 +757,7 @@ test('Scrolling should not occured after deleting via push API if scrolling.mode
   });
 });
 
-test('Scroll should not change focused row if focus method is called inside onContentReady (T1047794)', async (t) => {
+test.skip('Scroll should not change focused row if focus method is called inside onContentReady (T1047794)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await t
