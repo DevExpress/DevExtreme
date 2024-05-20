@@ -349,7 +349,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 
   const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
 
-  test.before?.(async (t) => {
+  test.before(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
 
     await t.resizeWindow(width, height);
@@ -357,6 +357,8 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     if (framework === 'Angular') {
       await waitForAngularLoading();
     }
+
+    await t.wait(1000);
   });
 
   if (settings.explicitTests) {
