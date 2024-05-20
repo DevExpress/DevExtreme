@@ -1400,7 +1400,7 @@ export interface dxDiagramShape extends Item {
  * @public
  * @namespace DevExpress.ui
  */
-export interface dxDiagramCustomCommand {
+export type dxDiagramCustomCommand = {
     /**
      * @docid
      * @public
