@@ -60,10 +60,9 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
       text,
       timeCellTemplate,
     } = this.props;
-    const { view: { type: viewType } } = viewContext;
 
     const cellSizeVerticalClass = renderUtils
-      .getCellSizeVerticalClass(viewType, false);
+      .getCellSizeVerticalClass(false);
     const classes = renderUtils.combineClasses({
       'dx-scheduler-time-panel-cell': true,
       [cellSizeVerticalClass]: true,

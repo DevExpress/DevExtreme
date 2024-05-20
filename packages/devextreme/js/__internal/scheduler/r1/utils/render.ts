@@ -66,23 +66,14 @@ export const getCellSizeHorizontalClass = (
     case 'workWeek':
     case 'month':
       return crossScrollingEnabled ? sizeClassName : '';
-    case 'agenda':
-      return '';
     default:
       return sizeClassName;
   }
 };
 
 export const getCellSizeVerticalClass = (
-  viewType: ViewType,
   isAllDayCell: boolean,
 ): string => {
   const sizeClassName = 'dx-scheduler-cell-sizes-vertical';
-
-  switch (viewType) {
-    case 'agenda':
-      return '';
-    default:
-      return !isAllDayCell ? sizeClassName : '';
-  }
+  return !isAllDayCell ? sizeClassName : '';
 };

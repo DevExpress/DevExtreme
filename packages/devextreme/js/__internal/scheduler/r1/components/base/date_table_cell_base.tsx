@@ -91,7 +91,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     const cellSizeHorizontalClass = renderUtils
       .getCellSizeHorizontalClass(viewType, crossScrollingEnabled);
     const cellSizeVerticalClass = renderUtils
-      .getCellSizeVerticalClass(viewType, !!allDay);
+      .getCellSizeVerticalClass(!!allDay);
 
     const classes = renderUtils.combineClasses({
       [cellSizeHorizontalClass]: true,
