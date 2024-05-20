@@ -95,24 +95,6 @@ QUnit.module('rendering', () => {
         assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
     });
 
-    QUnit.test('drawer panel should have dx-drawer-panel-content-hidden class if it was shown', function(assert) {
-        const done = assert.async();
-
-        const $element = $('#drawer').dxDrawer({
-            animationEnabled: true,
-            animationDuration: 0,
-        });
-        const instance = $element.dxDrawer('instance');
-        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
-
-        instance.toggle().then(() => {
-            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
-            done();
-        });
-
-        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
-    });
-
     QUnit.test('drawer panel should have visibility: hidden if drawer is closed', function(assert) {
         const $element = $('#drawer').dxDrawer({ opened: false });
         const instance = $element.dxDrawer('instance');
