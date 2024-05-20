@@ -15,7 +15,7 @@ If true, an arrow appears on the handle. Click the arrow to close the pane.
 - [collapsed](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#collapsed) (default: `false`)    
 Specifies whether the pane is initially collapsed.
 
-To configure the layout of the Splitter component, you can specify its [orientation](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#orientation) as *'vertical'* or *'horizontal'* (default). All Splitter "size" properties depend on the orientation. If it is *'horizontal'*, "size" is the width. Otherwise, it is height. The following "size" properties can be specified:
+To configure the layout of the Splitter component, you can specify its [orientation](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#orientation) as *'vertical'* or *'horizontal'* (default). All Splitter "size" properties depend on the orientation. If it is *'horizontal'*, "size" is the width. Otherwise, it is height. The following pane "size" properties can be specified:
 
 - [size](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#size)    
 Initial pane width/height.
@@ -26,7 +26,10 @@ The minimum width/height for a resizable pane.
 - [maxSize](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#maxSize)    
 The maximum width/height for a resizable pane.
 
-You can also place one Splitter inside another to create nested layouts. For this, use the [splitter](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#splitter) property.
+- [collapsedSize](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#collapsedSize)    
+The width/height of a collapsible pane when collapsed.
+
+You can also place one Splitter inside another to create nested layouts. For this, use the pane's [splitter](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/items/#splitter) property.
 
 Splitter panes can contain content of different types, from simple HTML markup to components. You can declare HTML markup inside the item tag or use the following properties to populate panes with content:
 
