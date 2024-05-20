@@ -4,7 +4,7 @@ import { getImageContainer } from '../../core/utils/icon';
 import { noop } from '../../core/utils/common';
 
 import Widget from '../widget/ui.widget';
-import TreeViewSearch from '../tree_view/ui.tree_view.search';
+import TreeViewSearch from '../tree_view';
 
 import FileManagerFileActionsButton from './ui.file_manager.file_actions_button';
 import { Deferred } from '../../core/utils/deferred';
