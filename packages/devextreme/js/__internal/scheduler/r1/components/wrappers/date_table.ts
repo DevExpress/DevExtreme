@@ -28,7 +28,6 @@ export class DateTableComponent extends ComponentWrapper {
         'viewData',
         'viewContext',
         'cellTemplate',
-        'viewContext',
         'groupOrientation',
         'leftVirtualCellWidth',
         'rightVirtualCellWidth',
