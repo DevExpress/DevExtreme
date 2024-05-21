@@ -356,7 +356,7 @@ jobs:
         path: apps/demos
 
     - name: Create bundles dir
-      run: mkdir apps/demos/bundles
+      run: mkdir -p apps/demos/bundles
 
     - name: Download bundles artifacts
       uses: actions/download-artifact@v4

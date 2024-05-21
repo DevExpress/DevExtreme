@@ -6,8 +6,8 @@
   height: 100%;
   width: 100%;
 
-  &:not(.dx-drawer-opened) > {
-    .dx-drawer-wrapper > .dx-drawer-panel-content:not(.dx-drawer-panel-content-has-min-size) {
+  .dx-drawer-wrapper > .dx-drawer-panel-content {
+    &.dx-drawer-panel-content-hidden {
       visibility: hidden;
     }
   }

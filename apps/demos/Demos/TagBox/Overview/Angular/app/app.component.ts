@@ -1,12 +1,12 @@
 import { Component, NgModule, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxTagBoxModule, DxPopoverModule, DxTemplateModule } from 'devextreme-angular';
 import ArrayStore from 'devextreme/data/array_store';
 import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { Service, Product } from './app.service';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
@@ -65,12 +65,15 @@ export class AppComponent {
   isDisabled(product: Product) {
     return product.Name === 'SuperHD Video Player';
   }
+
+  getAltText(text: String) {
+    return `${text}. Picture`;
+  }
 }
 
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxTemplateModule,
     DxTagBoxModule,
     DxPopoverModule,

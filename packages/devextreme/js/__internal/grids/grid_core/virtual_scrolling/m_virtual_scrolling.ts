@@ -1478,10 +1478,8 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
     rowElements.map((rowElement) => {
       const $rowElement = $(rowElement);
       this._errorHandlingController && this._errorHandlingController.removeErrorRow(
-        // @ts-expect-error
         $rowElement.next(),
       );
-      // @ts-expect-error
       $rowElement.remove();
     });
   }
@@ -1694,7 +1692,12 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
       if (!bottomLoadPanelElement) {
         $('<div>')
           .addClass(that.addWidgetPrefix(BOTTOM_LOAD_PANEL_CLASS))
-          .append(that._createComponent($('<div>'), LoadIndicator).$element())
+          .append(that._createComponent($('<div>'), LoadIndicator, {
+            elementAttr: {
+              role: null,
+              'aria-label': null,
+            },
+          }).$element())
           .appendTo($contentElement);
       }
     } else if (bottomLoadPanelElement) {

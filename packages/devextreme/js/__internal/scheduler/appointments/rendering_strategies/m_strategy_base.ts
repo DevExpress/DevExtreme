@@ -1,13 +1,13 @@
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { isNumeric, isObject } from '@js/core/utils/type';
-import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { current as currentTheme } from '@js/ui/themes';
 import { dateUtilsTs } from '@ts/core/utils/date';
 import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 import { getAppointmentTakesAllDay } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
+import timeZoneUtils from '../../m_utils_time_zone';
 import { AppointmentSettingsGenerator } from '../m_settings_generator';
 import AdaptivePositioningStrategy from './m_appointments_positioning_strategy_adaptive';
 import AppointmentPositioningStrategy from './m_appointments_positioning_strategy_base';
@@ -589,9 +589,20 @@ class BaseRenderingStrategy {
     return result;
   }
 
-  _adjustDurationByDaylightDiff(duration, startDate, endDate) {
-    const daylightDiff = timeZoneUtils.getDaylightOffset(startDate, endDate);
-    return this._needAdjustDuration(daylightDiff) ? this._calculateDurationByDaylightDiff(duration, daylightDiff) : duration;
+  protected _adjustDurationByDaylightDiff(
+    duration: number,
+    startDate: Date,
+    endDate: Date,
+  ): number {
+    const { viewOffset } = this.options;
+    const originalStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
+    const originalEndDate = dateUtilsTs.addOffsets(endDate, [viewOffset]);
+    const daylightDiff = timeZoneUtils.getDaylightOffset(originalStartDate, originalEndDate);
+    const correctedDuration: number = this._needAdjustDuration(daylightDiff)
+      ? this._calculateDurationByDaylightDiff(duration, daylightDiff)
+      : duration;
+
+    return correctedDuration <= Math.abs(daylightDiff) ? duration : correctedDuration;
   }
 
   _needAdjustDuration(diff) {

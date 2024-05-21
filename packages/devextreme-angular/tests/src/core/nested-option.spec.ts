@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ElementRef,
@@ -15,11 +14,9 @@ import {
     Host,
     SkipSelf,
     AfterViewInit,
-    PLATFORM_ID
+    PLATFORM_ID,
+    TransferState,
 } from '@angular/core';
-
-import { TransferState } from '@angular/platform-browser';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import { DOCUMENT } from '@angular/common';
 
@@ -242,7 +239,7 @@ describe('DevExtreme Angular widget', () => {
     beforeEach(() => {
         TestBed.configureTestingModule(
             {
-                imports: [BrowserTransferStateModule],
+                imports: [],
                 declarations: [
                     TestContainerComponent,
                     DxTestWidgetComponent,

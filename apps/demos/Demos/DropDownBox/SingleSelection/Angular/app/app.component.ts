@@ -2,7 +2,7 @@ import {
   enableProdMode, ChangeDetectionStrategy, ChangeDetectorRef, Component, NgModule, ViewChild,
 } from '@angular/core';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { lastValueFrom } from 'rxjs';
 import CustomStore from 'devextreme/data/custom_store';
@@ -86,7 +86,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxTreeViewModule,
     DxDropDownBoxModule,
     HttpClientModule,

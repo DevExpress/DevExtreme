@@ -5,9 +5,8 @@ import {
     Component,
 } from '@angular/core';
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalEdge, VerticalEdge } from 'devextreme/common';
-import { Font, Palette } from 'devextreme/common/charts';
+import { ChartsColor, Font, Palette } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 
 @Component({
@@ -42,10 +41,10 @@ export abstract class DxoGaugeIndicator extends NestedOption {
         this._setOption('beginAdaptingAtRadius', value);
     }
 
-    get color(): DevExpress.common.charts.ChartsColor | string {
+    get color(): ChartsColor | string {
         return this._getOption('color');
     }
-    set color(value: DevExpress.common.charts.ChartsColor | string) {
+    set color(value: ChartsColor | string) {
         this._setOption('color', value);
     }
 

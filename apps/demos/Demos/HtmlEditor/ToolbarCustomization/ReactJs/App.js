@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useMemo } from 'react';
 import HtmlEditor, { Toolbar, Item } from 'devextreme-react/html-editor';
 import Popup from 'devextreme-react/popup';
 import { markup } from './data.js';
@@ -11,7 +11,7 @@ export default function App() {
   const customButtonClick = useCallback(() => {
     setPopupVisible(true);
   }, [setPopupVisible]);
-  const getToolbarButtonOptions = useCallback(
+  const getToolbarButtonOptions = useMemo(
     () => ({
       text: 'Show markup',
       stylingMode: 'text',
@@ -56,7 +56,7 @@ export default function App() {
           <Item name="separator" />
           <Item
             widget="dxButton"
-            options={getToolbarButtonOptions()}
+            options={getToolbarButtonOptions}
           />
         </Toolbar>
       </HtmlEditor>
@@ -67,7 +67,7 @@ export default function App() {
         onHiding={popupHiding}
         showCloseButton={true}
       >
-        {value}
+        <div>{value}</div>
       </Popup>
     </div>
   );

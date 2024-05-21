@@ -2,11 +2,11 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
-import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { ExpressionUtils } from '../../m_expression_utils';
+import timeZoneUtils from '../../m_utils_time_zone';
 import BaseAppointmentsStrategy from './m_strategy_base';
 
 const ALLDAY_APPOINTMENT_MIN_VERTICAL_OFFSET = 5;
@@ -210,10 +210,11 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
     let left = Math.round(appointmentSettings.left + offset);
     let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
+    let { columnIndex } = appointmentSettings;
 
     while (tailHeight > 0 && left < hMax) {
       tailHeight = Math.max(minHeight, tailHeight);
-      const columnIndex = appointmentSettings.columnIndex + cellsDiff;
+      columnIndex += cellsDiff;
       const height = Math.min(tailHeight, vMax);
 
       result.push({
@@ -442,10 +443,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     }
 
     return super.getPositionShift(timeShift, isAllDay);
-  }
-
-  _needAdjustDuration() {
-    return false;
   }
 }
 

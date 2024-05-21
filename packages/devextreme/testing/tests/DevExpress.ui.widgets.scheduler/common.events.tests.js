@@ -7,7 +7,7 @@ import { isRenderer } from 'core/utils/type';
 import { DataSource } from 'data/data_source/data_source';
 
 import $ from 'jquery';
-import dxScheduler from 'ui/scheduler/ui.scheduler';
+import dxScheduler from '__internal/scheduler/m_scheduler';
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 import { Deferred } from 'core/utils/deferred';
 

@@ -4,6 +4,10 @@
         "baseUrl": ".",
         "lib": [
             "es2019"
+        ],
+        "types": [
+            "node",
+            "jest"
         ]
     },
     "include": [

@@ -35,8 +35,8 @@ type ISplitterOptions<TItem = any, TKey = any> = React.PropsWithChildren<Replace
   dataSource?: Properties<TItem, TKey>["dataSource"];
   itemRender?: (...params: any) => React.ReactNode;
   itemComponent?: React.ComponentType<any>;
-  defaultItems?: Array<any | dxSplitterItem | string>;
-  onItemsChange?: (value: Array<any | dxSplitterItem | string>) => void;
+  defaultItems?: Array<dxSplitterItem>;
+  onItemsChange?: (value: Array<dxSplitterItem>) => void;
 }>
 
 interface SplitterRef<TItem = any, TKey = any> {

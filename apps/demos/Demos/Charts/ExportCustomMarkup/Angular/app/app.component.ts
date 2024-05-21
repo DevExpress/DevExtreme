@@ -1,7 +1,7 @@
 import {
   NgModule, Component, ViewChild, enableProdMode,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxChartModule, DxChartComponent, DxButtonModule } from 'devextreme-angular';
 
@@ -47,19 +47,26 @@ export class AppComponent {
   }
 
   prepareMarkup() {
-    return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px">${
-      document.getElementById('custom_markup_container').innerHTML
-    }<g transform="translate(305,12)">${
-      this.chart.instance.svg()
-    }</g>`
-            + '</svg>';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+    svg.setAttribute('version', '1.1');
+    svg.setAttribute('width', '820px');
+    svg.setAttribute('height', '420px');
+    svg.innerHTML = document.getElementById('custom_markup_container').innerHTML;
+
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('transform', 'translate(305,12)');
+    group.innerHTML = this.chart.instance.svg();
+    svg.appendChild(group);
+
+    return svg;
   }
 }
 
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxChartModule,
     DxButtonModule,
   ],

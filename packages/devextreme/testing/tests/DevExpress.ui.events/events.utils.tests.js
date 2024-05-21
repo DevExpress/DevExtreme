@@ -1,5 +1,6 @@
 import $ from 'jquery';
 import { compare } from 'core/utils/version';
+import { getEventTarget } from 'events/utils/event_target';
 import {
     eventData,
     eventDelta,
@@ -7,7 +8,7 @@ import {
     addNamespace,
     normalizeKeyName,
     getChar,
-    isCommandKeyPressed
+    isCommandKeyPressed,
 } from 'events/utils/index';
 import pointerMock from '../../helpers/pointerMock.js';
 import nativePointerMock from '../../helpers/nativePointerMock.js';
@@ -502,6 +503,49 @@ QUnit.module('event utils', () => {
                 assert.strictEqual(isCommandKeyPressed(event), expectedResult, `command key is ${expectedResult ? '' : 'not'} pressed (metaKey=${metaKey}, ctrlKey=${ctrlKey})`);
             });
         });
+    });
+});
+
+QUnit.module('getEventTarget', () => {
+    test('should return composedPath first element if originalEvent.target is shadowRoot', function(assert) {
+        const root = document.getElementById('qunit-fixture');
+
+        const $element = $('#element');
+        const $div = $('<div>');
+
+        $element.append($div);
+
+        const customEvent = $.Event('customEvent', {
+            originalEvent: $.Event('customEvent', {
+                target: root,
+                composedPath: () => [$div.get(0)]
+            })
+        });
+
+        const target = getEventTarget(customEvent);
+
+        const expectedTarget = root.shadowRoot ? $div.get(0) : root;
+        assert.strictEqual(target, expectedTarget, 'target is correct');
+    });
+
+    test('should return event.target if originalEvent path is undefined in shadowRoot', function(assert) {
+        const root = document.getElementById('qunit-fixture');
+
+        const $element = $('#element');
+        const $div = $('<div>');
+
+        $element.append($div);
+
+        const customEvent = $.Event('customEvent', {
+            originalEvent: $.Event('customEvent', {
+                target: root,
+                composedPath: () => null,
+            })
+        });
+
+        const target = getEventTarget(customEvent);
+
+        assert.strictEqual(target, root, 'target is correct');
     });
 });
 

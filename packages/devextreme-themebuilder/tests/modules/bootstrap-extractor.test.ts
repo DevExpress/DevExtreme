@@ -55,6 +55,7 @@ describe('BootstrapExtractor', () => {
     expect(await extractor.sassProcessor())
       .toBe(`${functions.toString()}
 ${variables.toString()}
+
 ${testSassString}
 ${setterServiceCode}
 ${collectorServiceCode}`);
@@ -67,14 +68,17 @@ ${collectorServiceCode}`);
     const extractor = new BootstrapExtractor(testSassString, 5);
     const functionsPath = require.resolve('bootstrap5/scss/_functions.scss');
     const variablesPath = require.resolve('bootstrap5/scss/_variables.scss');
+    const variablesDarkPath = require.resolve('bootstrap5/scss/_variables-dark.scss');
     const functions = readFileSync(functionsPath);
     const variables = readFileSync(variablesPath);
+    const variablesDark = readFileSync(variablesDarkPath);
     extractor.getSetterServiceCode = (): string => setterServiceCode;
     extractor.getCollectorServiceCode = (): string => collectorServiceCode;
 
     expect(await extractor.sassProcessor())
       .toBe(`${functions.toString()}
 ${variables.toString()}
+${variablesDark.toString()}
 ${testSassString}
 ${setterServiceCode}
 ${collectorServiceCode}`);

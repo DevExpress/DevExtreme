@@ -14,7 +14,7 @@ import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.j
 import { getSimpleDataArray } from '../../helpers/scheduler/data.js';
 
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 const dateFormat = 'monthandday';
 const timeFormat = 'shorttime';
@@ -419,7 +419,7 @@ module('Integration: Appointment tooltip', moduleConfig, () => {
         });
 
         const deltaTz = getDeltaTz(5, startDate);
-        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 5 }, this.clock);
+        const scheduler = createScheduler({ currentDate: new Date(2015, 1, 9), dataSource: data, currentView: 'week', timeZone: 'Etc/GMT-5' }, this.clock);
 
         scheduler.appointments.click();
 

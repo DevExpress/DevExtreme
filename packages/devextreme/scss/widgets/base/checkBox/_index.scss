@@ -1,0 +1,52 @@
+@use "../mixins" as *;
+@use "./mixins" as *;
+
+// adduse
+
+
+.dx-checkbox {
+  display: inline-block;
+  cursor: pointer;
+  line-height: 0;
+  -webkit-user-drag: none;
+
+  @include user-select(none);
+
+  &.dx-state-readonly {
+    cursor: default;
+  }
+}
+
+.dx-checkbox-icon {
+  flex-shrink: 0;
+  position: relative;
+  background-position: 0 0;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.dx-checkbox-container {
+  @include dx-overflow();
+
+  height: 100%;
+  width: 100%;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  text-overflow: clip;
+}
+
+.dx-checkbox-text {
+  text-align: start;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  line-height: normal;
+  padding-inline-start: 5px;
+}
+
+.dx-state-disabled {
+  &.dx-checkbox,
+  .dx-checkbox {
+    cursor: default;
+  }
+}

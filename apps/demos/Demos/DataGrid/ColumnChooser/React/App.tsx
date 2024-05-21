@@ -75,6 +75,7 @@ const App = () => {
         <Column dataField="HireDate" dataType="date" />
 
         <ColumnChooser
+          height='340px'
           enabled={true}
           mode={mode}
         >

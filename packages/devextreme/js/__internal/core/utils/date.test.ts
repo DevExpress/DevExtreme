@@ -9,7 +9,8 @@ const DAY_MS = 24 * HOUR_MS;
 
 describe('Date utils', () => {
   describe('addOffsets function', () => {
-    each`offsets | expectedResult
+    each`
+         offsets | expectedResult
          ${[0]} | ${new Date('2023-09-05T00:00:00Z')}
          ${[SECOND_MS]} | ${new Date('2023-09-05T00:00:01Z')}
          ${[-HOUR_MS]} | ${new Date('2023-09-04T23:00:00Z')}

@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import animationFrame from 'animation/frame';
 import devices from 'core/devices';
-import Scrollbar from 'ui/scroll_view/ui.scrollbar';
+import Scrollbar from '__internal/ui/scroll_view/m_scrollbar';
 import pointerMock from '../../../helpers/pointerMock.js';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import { getTranslateValues } from 'renovation/ui/scroll_view/utils/get_translate_values';

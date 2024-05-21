@@ -3,6 +3,7 @@ import browser from '../../core/utils/browser';
 import domAdapter from '../../core/dom_adapter';
 import Class from '../../core/class';
 import { addNamespace, eventSource, fireEvent } from '../utils/index';
+import { getEventTarget } from '../utils/event_target';
 
 const POINTER_EVENTS_NAMESPACE = 'dxPointerEvents';
 
@@ -35,11 +36,8 @@ const BaseStrategy = Class.inherit({
             timeStamp: browser.mozilla ? (new Date()).getTime() : e.timeStamp
         };
 
-        const originalEvent = e.originalEvent;
-        if(originalEvent?.target?.shadowRoot) {
-            const path = originalEvent.path ?? originalEvent.composedPath?.();
-            event.target = path[0];
-        }
+        const target = getEventTarget(e);
+        event.target = target;
 
         return this._fireEvent(event);
     },

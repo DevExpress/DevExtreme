@@ -76,7 +76,7 @@ $generic-fieldset-attention-icon-offset: $generic-base-inline-horizontal-padding
       }
     }
 
-    @include dx-field-value-widget-position(dx-checkbox, $generic-checkbox-size);
+    @include dx-field-value-widget-position(dx-checkbox, $generic-checkbox-icon-font-size);
     @include dx-field-value-widget-position(dx-switch, $generic-switch-height);
     @include dx-field-value-widget-position(dx-slider, $generic-slider-height);
     @include dx-field-value-widget-position(dx-radiogroup, $generic-radiogroup-min-height);

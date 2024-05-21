@@ -10,7 +10,7 @@ import CustomStore from 'data/custom_store';
 import Color from 'color';
 import translator from 'animation/translator';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 import { createWrapper, initTestMarkup } from '../../helpers/scheduler/helpers.js';
 
@@ -609,43 +609,4 @@ if(devices.real().deviceType === 'desktop') {
             $('#qunit-fixture').css({ top: '-10000px', left: '-10000px' });
         }
     };
-
-    QUnit.module('Integration: Multiple resources', desktopModuleConfig, () => {
-        const SCHEDULER_HORIZONTAL_SCROLLBAR = '.dx-scheduler-date-table-scrollable .dx-scrollbar-horizontal';
-
-        QUnit.test('Scheduler with multiple resources and fixed height container has visible horizontal scrollbar (T716993)', function(assert) {
-            const getData = function(count) {
-                const result = [];
-                for(let i = 0; i < count; i++) {
-                    result.push({
-                        facilityId: i,
-                        facilityName: i.toString(),
-                    });
-                }
-                return result;
-            };
-
-            const scheduler = createWrapper({
-                groups: ['facilityId'],
-                crossScrollingEnabled: true,
-                dataSource: [],
-                resources: [{
-                    dataSource: getData(10),
-                    displayExpr: 'facilityName',
-                    valueExpr: 'facilityId',
-                    fieldExpr: 'facilityId',
-                    allowMultiple: false,
-                }]
-            });
-
-            const scrollbar = $(scheduler.instance.$element()).find(SCHEDULER_HORIZONTAL_SCROLLBAR);
-
-            assert.roughEqual(
-                scrollbar.offset().top + scrollbar.outerHeight(),
-                getOuterHeight(scheduler.instance.$element()) - 1,
-                1,
-                'Horizontal scrollbar has visible top coordinate',
-            );
-        });
-    });
 }

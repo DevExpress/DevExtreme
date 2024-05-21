@@ -12,8 +12,10 @@ $(() => {
 
   $('#lookup-grouped').dxLookup({
     dataSource: new DevExpress.data.DataSource({
-      store: employeesTasks,
-      key: 'ID',
+      store: new DevExpress.data.ArrayStore({
+        data: employeesTasks,
+        key: 'ID'
+      }),
       group: 'Assigned',
     }),
     dropDownOptions: {

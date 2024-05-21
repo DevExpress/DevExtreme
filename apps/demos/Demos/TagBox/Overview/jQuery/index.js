@@ -89,16 +89,19 @@ $(() => {
     valueExpr: 'ID',
     inputAttr: productLabel,
     itemTemplate(data) {
-      return `<div class='custom-item'><img src='${
-        data.ImageSrc}' /><div class='product-name'>${
-        data.Name}</div></div>`;
+      return `
+        <div class='custom-item'>
+          <img src='${data.ImageSrc}' alt='${data.Name}. Picture' />
+          <div class='product-name'>${data.Name}</div>
+        </div>
+      `;
     },
     tagTemplate(data) {
       const isDisabled = data.Name === 'SuperHD Video Player';
 
       const tagImg = $('<img>', { class: 'tag-img' }).attr({
         src: data.ImageSrc,
-        alt: data.Name,
+        alt: `${data.Name}. Picture`,
       });
 
       const tag = $('<div>')

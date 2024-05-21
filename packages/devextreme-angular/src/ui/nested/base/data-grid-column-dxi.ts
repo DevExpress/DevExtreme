@@ -5,15 +5,14 @@ import {
     Component,
 } from '@angular/core';
 
-import DevExpress from 'devextreme/bundles/dx.all';
-import { DataType, HorizontalAlignment, HorizontalEdge, SearchMode, SortOrder } from 'devextreme/common';
+import { AsyncRule, CompareRule, CustomRule, DataType, EmailRule, HorizontalAlignment, HorizontalEdge, NumericRule, PatternRule, RangeRule, RequiredRule, SearchMode, SortOrder, StringLengthRule } from 'devextreme/common';
 import { ColumnHeaderFilterSearchConfig, FilterOperation, FilterType, HeaderFilterGroupInterval, SelectedFilterOperation } from 'devextreme/common/grids';
 import { Store } from 'devextreme/data';
 import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { Format } from 'devextreme/localization';
-import { DataGridCommandColumnType, DataGridPredefinedColumnButton } from 'devextreme/ui/data_grid';
-import { dxFormSimpleItem } from 'devextreme/ui/form';
-import { TreeListCommandColumnType, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
+import { DataGridCommandColumnType, DataGridPredefinedColumnButton, dxDataGridColumn, dxDataGridColumnButton } from 'devextreme/ui/data_grid';
+import { SimpleItem } from 'devextreme/ui/form';
+import { dxTreeListColumn, dxTreeListColumnButton, TreeListCommandColumnType, TreeListPredefinedColumnButton } from 'devextreme/ui/tree_list';
 
 @Component({
     template: ''
@@ -110,10 +109,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('autoExpandGroup', value);
     }
 
-    get buttons(): Array<DataGridPredefinedColumnButton | DevExpress.ui.dxDataGridColumnButton | TreeListPredefinedColumnButton | DevExpress.ui.dxTreeListColumnButton> {
+    get buttons(): Array<DataGridPredefinedColumnButton | dxDataGridColumnButton | TreeListPredefinedColumnButton | dxTreeListColumnButton> {
         return this._getOption('buttons');
     }
-    set buttons(value: Array<DataGridPredefinedColumnButton | DevExpress.ui.dxDataGridColumnButton | TreeListPredefinedColumnButton | DevExpress.ui.dxTreeListColumnButton>) {
+    set buttons(value: Array<DataGridPredefinedColumnButton | dxDataGridColumnButton | TreeListPredefinedColumnButton | dxTreeListColumnButton>) {
         this._setOption('buttons', value);
     }
 
@@ -166,10 +165,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('cellTemplate', value);
     }
 
-    get columns(): Array<DevExpress.ui.dxDataGridColumn | string | DevExpress.ui.dxTreeListColumn> {
+    get columns(): Array<dxDataGridColumn | string | dxTreeListColumn> {
         return this._getOption('columns');
     }
-    set columns(value: Array<DevExpress.ui.dxDataGridColumn | string | DevExpress.ui.dxTreeListColumn>) {
+    set columns(value: Array<dxDataGridColumn | string | dxTreeListColumn>) {
         this._setOption('columns', value);
     }
 
@@ -278,10 +277,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('format', value);
     }
 
-    get formItem(): dxFormSimpleItem {
+    get formItem(): SimpleItem {
         return this._getOption('formItem');
     }
-    set formItem(value: dxFormSimpleItem) {
+    set formItem(value: SimpleItem) {
         this._setOption('formItem', value);
     }
 
@@ -306,10 +305,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('headerCellTemplate', value);
     }
 
-    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
+    get headerFilter(): { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined } {
         return this._getOption('headerFilter');
     }
-    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
+    set headerFilter(value: { allowSearch?: boolean, allowSelectAll?: boolean, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, groupInterval?: HeaderFilterGroupInterval | number | undefined, height?: number | string | undefined, search?: ColumnHeaderFilterSearchConfig, searchMode?: SearchMode, width?: number | string | undefined }) {
         this._setOption('headerFilter', value);
     }
 
@@ -327,10 +326,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('isBand', value);
     }
 
-    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined } {
+    get lookup(): { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined } {
         return this._getOption('lookup');
     }
-    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: DataSourceOptions | Store | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined }) {
+    set lookup(value: { allowClearing?: boolean, calculateCellValue?: Function, dataSource?: Store | DataSourceOptions | Function | null | undefined | Array<any>, displayExpr?: Function | string | undefined, valueExpr?: string | undefined }) {
         this._setOption('lookup', value);
     }
 
@@ -432,10 +431,10 @@ export abstract class DxiDataGridColumn extends CollectionNestedOption {
         this._setOption('type', value);
     }
 
-    get validationRules(): Array<DevExpress.common.RequiredRule | DevExpress.common.NumericRule | DevExpress.common.RangeRule | DevExpress.common.StringLengthRule | DevExpress.common.CustomRule | DevExpress.common.CompareRule | DevExpress.common.PatternRule | DevExpress.common.EmailRule | DevExpress.common.AsyncRule> {
+    get validationRules(): Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule> {
         return this._getOption('validationRules');
     }
-    set validationRules(value: Array<DevExpress.common.RequiredRule | DevExpress.common.NumericRule | DevExpress.common.RangeRule | DevExpress.common.StringLengthRule | DevExpress.common.CustomRule | DevExpress.common.CompareRule | DevExpress.common.PatternRule | DevExpress.common.EmailRule | DevExpress.common.AsyncRule>) {
+    set validationRules(value: Array<RequiredRule | NumericRule | RangeRule | StringLengthRule | CustomRule | CompareRule | PatternRule | EmailRule | AsyncRule>) {
         this._setOption('validationRules', value);
     }
 

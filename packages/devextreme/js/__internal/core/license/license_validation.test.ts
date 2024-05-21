@@ -1,10 +1,12 @@
 import errors from '@js/core/errors';
 
+import { base } from '../../../ui/overlay/z_index';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
+import * as trialPanel from './trial_panel';
 
 jest.mock('./key', () => ({
   PUBLIC_KEY: {
@@ -143,11 +145,11 @@ describe('license check', () => {
   const TOKEN_MISSING_FIELD_3 = 'ewogICJmb3JtYXQiOiAxLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIKfQ==.resgTqmazrorRNw7mmtV31XQnmTSw0uLEArsmpzCjWMQJLocBfAjpFvKBf+SAG9q+1iOSFySj64Uv2xBVqHnyeNVBRbouOKOnAB8RpkKvN4sc5SDc8JAG5TkwPVSzK/VLBpQxpqbxlcrRfHwz9gXqQoPt4/ZVATn285iw3DW0CU=';
   const TOKEN_UNSUPPORTED_VERSION = 'ewogICJmb3JtYXQiOiAyLAogICJjdXN0b21lcklkIjogImIxMTQwYjQ2LWZkZTEtNDFiZC1hMjgwLTRkYjlmOGU3ZDliZCIsCiAgIm1heFZlcnNpb25BbGxvd2VkIjogMjMxCn0=.tTBymZMROsYyMiP6ldXFqGurbzqjhSQIu/pjyEUJA3v/57VgToomYl7FVzBj1asgHpadvysyTUiX3nFvPxbp166L3+LB3Jybw9ueMnwePu5vQOO0krqKLBqRq+TqHKn7k76uYRbkCIo5UajNfzetHhlkin3dJf3x2K/fcwbPW5A=';
 
-  let appendChildSpy: jest.SpyInstance<unknown> | null = null;
+  let trialPanelSpy: jest.SpyInstance<unknown> | null = null;
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
-    appendChildSpy = jest.spyOn(document.body, 'appendChild');
+    trialPanelSpy = jest.spyOn(trialPanel, 'showTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
 
@@ -174,8 +176,7 @@ describe('license check', () => {
     { token: undefined, version: '1.2' },
   ])('trial panel should be displayed if license is empty, preview or not', ({ token, version }) => {
     validateLicense(token as string, version);
-    expect(document.body.appendChild).toHaveBeenCalledTimes(1);
-    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual('dx-license-trigger');
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
   test.each([
@@ -222,7 +223,7 @@ describe('license check', () => {
     { token: TOKEN_23_2, version: '23.2.6' },
   ])('Trial panel should not be displayed if license is valid', ({ token, version }) => {
     validateLicense(token, version);
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test('Message should be logged only once', () => {
@@ -231,6 +232,10 @@ describe('license check', () => {
     validateLicense('', '1.0');
 
     expect(errors.log).toHaveBeenCalledTimes(1);
+  });
+
+  test('Base z-index should match the corresponding setting in DevExtreme', () => {
+    expect(trialPanel.BASE_Z_INDEX).toEqual(base());
   });
 
   test('No messages should be logged if setLicenseCheckSkipCondition() used', () => {
@@ -255,8 +260,7 @@ describe('license check', () => {
     { token: TOKEN_23_2, version: '42.4.0' },
   ])('Trial panel should be displayed if license is outdated (>=1 major for RTM, >=2 major for preview)', ({ token, version }) => {
     validateLicense(token, version);
-    expect(document.body.appendChild).toHaveBeenCalledTimes(1);
-    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual('dx-license-trigger');
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 
   test.each([
@@ -266,7 +270,7 @@ describe('license check', () => {
     { token: TOKEN_23_2, version: '24.1.abc' },
   ])('Trial panel should not be displayed in previews if the license is for the previous RTM', ({ token, version }) => {
     validateLicense(token, version);
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test.each([
@@ -305,15 +309,16 @@ describe('license check', () => {
     { token: '3.2.1', version: '1.2.0' },
   ])('trial panel should be displayed if license is corrupted/invalid, preview or not', ({ token, version }) => {
     validateLicense(token, version);
-    expect(document.body.appendChild).toHaveBeenCalledTimes(1);
-    expect(appendChildSpy?.mock.calls[0][0].localName).toEqual('dx-license-trigger');
+    expect(trialPanelSpy).toHaveBeenCalledTimes(1);
   });
 });
 
 describe('internal license check', () => {
+  let trialPanelSpy: jest.SpyInstance<unknown> | null = null;
+
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
-    jest.spyOn(document.body, 'appendChild');
+    trialPanelSpy = jest.spyOn(trialPanel, 'showTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
 
@@ -325,27 +330,27 @@ describe('internal license check', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
     validateLicense(token, '1.2.3');
     expect(errors.log).not.toHaveBeenCalled();
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test('valid internal usage token (correct, pre-release)', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
     validateLicense(token, '1.2.1');
     expect(errors.log).not.toHaveBeenCalled();
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test('internal usage token (incorrect)', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
     validateLicense(token, '1.2.3');
     expect(errors.log).toHaveBeenCalledWith('W0020');
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
   test('internal usage token (incorrect, pre-release)', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
     validateLicense(token, '1.2.1');
     expect(errors.log).toHaveBeenCalledWith('W0022');
-    expect(document.body.appendChild).not.toHaveBeenCalled();
+    expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 });

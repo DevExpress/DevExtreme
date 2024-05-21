@@ -1,9 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "es2015",
+    "module": "ES2015",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
+    "moduleResolution":"node",
+    "noImplicitThis": false,
+    "strictNullChecks": false,
     "skipLibCheck": true,
     "typeRoots": [
       "./node_modules/@types",

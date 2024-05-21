@@ -1,5 +1,4 @@
 /* tslint:disable:component-selector */
-
 import {
     Component,
     ElementRef,
@@ -10,11 +9,9 @@ import {
     Output,
     OnDestroy,
     PLATFORM_ID,
-    Inject
+    Inject,
+    TransferState,
 } from '@angular/core';
-
-import { TransferState } from '@angular/platform-browser';
-import { BrowserTransferStateModule } from '@angular/platform-browser';
 
 import {
     TestBed,
@@ -121,7 +118,7 @@ describe('DevExtreme Angular widget', () => {
     beforeEach(() => {
         TestBed.configureTestingModule(
             {
-                imports: [BrowserTransferStateModule],
+                imports: [],
                 declarations: [TestContainerComponent, DxTestWidgetComponent]
             });
     });

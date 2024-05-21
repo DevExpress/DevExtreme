@@ -1,7 +1,7 @@
 import {
   NgModule, ChangeDetectionStrategy, Component, ViewChild, enableProdMode, Input,
 } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 import { DxSplitterModule } from 'devextreme-angular';
 
@@ -20,7 +20,7 @@ interface PaneContentTemplate {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+  dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
   paneContentTemplates: PaneContentTemplate[] = [
     { name: 'Left Pane' },
@@ -52,7 +52,6 @@ export class AppComponent {
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxSplitterModule,
   ],
   declarations: [AppComponent],

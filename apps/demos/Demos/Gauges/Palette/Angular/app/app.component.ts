@@ -1,5 +1,5 @@
 import { NgModule, Component, enableProdMode } from '@angular/core';
-import { BrowserModule, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
 import { DxBarGaugeModule } from 'devextreme-angular';
@@ -15,15 +15,11 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  customizeText(arg) {
-    return `${arg.valueText} mm`;
-  }
 }
 
 @NgModule({
   imports: [
     BrowserModule,
-    BrowserTransferStateModule,
     DxBarGaugeModule,
   ],
   declarations: [AppComponent],

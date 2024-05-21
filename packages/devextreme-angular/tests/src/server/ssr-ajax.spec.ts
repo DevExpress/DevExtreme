@@ -1,6 +1,10 @@
 /* tslint:disable:component-selector */
-
-import { Component, PLATFORM_ID } from '@angular/core';
+import {
+    Component,
+    PLATFORM_ID,
+    TransferState,
+    makeStateKey,
+} from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
 
@@ -12,7 +16,7 @@ import { Deferred } from 'devextreme/core/utils/deferred';
 import ajax from 'devextreme/core/utils/ajax';
 
 import { ServerModule, ServerTransferStateModule } from '@angular/platform-server';
-import { BrowserModule, TransferState, makeStateKey, BrowserTransferStateModule } from '@angular/platform-browser';
+import { BrowserModule } from '@angular/platform-browser';
 
 import {
     TestBed
@@ -50,7 +54,6 @@ describe('Universal', () => {
                     ServerModule,
                     DxServerTransferStateModule,
                     ServerTransferStateModule,
-                    BrowserTransferStateModule,
                     BrowserModule.withServerTransition({appId: 'appid'})]
             });
     });

@@ -1,8 +1,8 @@
 import dateUtils from '@js/core/utils/date';
 import dateSerialization from '@js/core/utils/date_serialization';
-import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
 
 import { ExpressionUtils } from '../../m_expression_utils';
+import timeZoneUtils from '../../m_utils_time_zone';
 
 const toMs = dateUtils.dateToMilliseconds;
 

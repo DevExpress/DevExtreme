@@ -1,7 +1,7 @@
 import 'generic_light.css!';
 
 import 'ui/data_grid';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 
 import $ from 'jquery';
 import ArrayStore from 'data/array_store';
@@ -9,7 +9,7 @@ import { noop } from 'core/utils/common';
 import ODataStore from 'data/odata/store';
 import devices from 'core/devices';
 import { DataSource } from 'data/data_source/data_source';
-import { invertFilterExpression } from 'ui/grid_core/ui.grid_core.header_filter';
+import { invertFilterExpression } from '__internal/grids/grid_core/header_filter/m_header_filter';
 import dragEvents from 'events/drag';
 import { setupDataGridModules, MockDataController, MockColumnsController } from '../../helpers/dataGridMocks.js';
 import viewPortUtils from 'core/utils/view_port';

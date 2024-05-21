@@ -1,13 +1,17 @@
 /* globals Intl */
+import errors from '@js/core/errors';
 import { dateUtilsTs } from '@ts/core/utils/date';
 
 import dateUtils from '../../core/utils/date';
 import DateAdapter from './m_date_adapter';
 import timeZoneDataUtils from './timezones/m_utils_timezones_data';
+import timeZoneList from './timezones/timezone_list';
 
 const toMs = dateUtils.dateToMilliseconds;
 const MINUTES_IN_HOUR = 60;
 const MS_IN_MINUTE = 60000;
+const GMT = 'GMT';
+const offsetFormatRegexp = /^GMT(?:[+-]\d{2}:\d{2})?$/;
 
 const createUTCDateWithLocalOffset = (date) => {
   if (!date) {
@@ -34,10 +38,11 @@ const createDateFromUTCWithLocalOffset = (date) => {
   return result.source;
 };
 
-const getTimeZones = (date = new Date()) => {
-  const dateInUTC = createUTCDate(date);
-  return timeZoneDataUtils.getDisplayedTimeZones(dateInUTC.getTime());
-};
+const getTimeZones = (date = new Date()) => timeZoneList.value.map((tz) => ({
+  offset: calculateTimezoneByValue(tz, date),
+  title: getTimezoneTitle(tz, date),
+  id: tz,
+}));
 
 const createUTCDate = (date) => new Date(Date.UTC(
   date.getUTCFullYear(),
@@ -55,17 +60,119 @@ const getDaylightOffset = (startDate, endDate) => new Date(startDate).getTimezon
 
 const getDaylightOffsetInMs = (startDate, endDate) => getDaylightOffset(startDate, endDate) * toMs('minute');
 
-const calculateTimezoneByValue = (timezone, date = new Date()) => {
-  // NOTE: This check could be removed. We don't support numerical timezones
-  if (typeof timezone === 'string') {
-    const dateUtc = createUTCDate(date);
-    return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+const isValidDate = (date: Date) => date instanceof Date && !isNaN(date.valueOf());
+
+const calculateTimezoneByValueOld = (timezone: string, date = new Date()): number | undefined => {
+  const customTimezones = timeZoneDataUtils.getTimeZonesOld();
+  if (customTimezones.length === 0) {
+    return undefined;
   }
-  return timezone;
+
+  const dateUtc = createUTCDate(date);
+  return timeZoneDataUtils.getTimeZoneOffsetById(timezone, dateUtc.getTime());
+};
+
+const calculateTimezoneByValueCore = (timeZone: string, date = new Date()): number | undefined => {
+  const offset = getStringOffset(timeZone, date);
+
+  if (offset === undefined) {
+    return undefined;
+  }
+
+  if (offset === GMT) {
+    return 0;
+  }
+
+  const isMinus = offset.substring(3, 4) === '-';
+  const hours = offset.substring(4, 6);
+  const minutes = offset.substring(7, 9);
+
+  const result = parseInt(hours, 10) + parseInt(minutes, 10) / MINUTES_IN_HOUR;
+  return isMinus ? -result : result;
+};
+
+const calculateTimezoneByValue = (timeZone: string | undefined, date = new Date()): number | undefined => {
+  if (!timeZone) {
+    return undefined;
+  }
+
+  const isValidTimezone = timeZoneList.value.includes(timeZone);
+  if (!isValidTimezone) {
+    errors.log('W0009', timeZone);
+    return undefined;
+  }
+
+  if (!isValidDate(date)) {
+    return undefined;
+  }
+
+  let result = calculateTimezoneByValueOld(timeZone, date);
+  if (result === undefined) {
+    result = calculateTimezoneByValueCore(timeZone, date);
+  }
+
+  return result;
+};
+
+// 'GMT±XX:YY' or 'GMT' format
+const getStringOffset = (timeZone: string, date = new Date()): string | undefined => {
+  let result = '';
+  try {
+    const dateTimeFormat = new Intl.DateTimeFormat('en-US', {
+      timeZone,
+      timeZoneName: 'longOffset',
+    } as any);
+
+    result = dateTimeFormat
+      .formatToParts(date)
+      .find(({ type }) => type === 'timeZoneName')?.value ?? '';
+  } catch (e) {
+    errors.log('W0009', timeZone);
+    return undefined;
+  }
+
+  const isSupportedFormat = offsetFormatRegexp.test(result);
+  if (!isSupportedFormat) {
+    errors.log('W0009', timeZone);
+    return undefined;
+  }
+
+  return result;
+};
+
+const getOffsetNamePart = (offset: string): string => {
+  if (offset === GMT) {
+    return `${offset} +00:00`;
+  }
+
+  return offset.replace(GMT, `${GMT} `);
+};
+
+const getTimezoneTitle = (timeZone: string, date = new Date()): string | undefined => {
+  if (!isValidDate(date)) {
+    return '';
+  }
+
+  const tzNamePart = timeZone.replace(/\//g, ' - ').replace(/_/g, ' ');
+  const offset = getStringOffset(timeZone, date);
+  if (offset === undefined) {
+    return undefined;
+  }
+
+  const offsetNamePart = getOffsetNamePart(offset);
+  return `(${offsetNamePart}) ${tzNamePart}`;
 };
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
-const _getDaylightOffsetByTimezone = (startDate, endDate, timeZone) => calculateTimezoneByValue(timeZone, startDate) - calculateTimezoneByValue(timeZone, endDate);
+const _getDaylightOffsetByTimezone = (startDate: Date, endDate: Date, timeZone: string): number => {
+  const startDayOffset = calculateTimezoneByValue(timeZone, startDate);
+  const endDayOffset = calculateTimezoneByValue(timeZone, endDate);
+  if (startDayOffset === undefined || endDayOffset === undefined) {
+    return 0;
+  }
+
+  return startDayOffset - endDayOffset;
+};
 
 const getCorrectedDateByDaylightOffsets = (convertedOriginalStartDate, convertedDate, date, timeZone, startDateTimezone) => {
   const daylightOffsetByCommonTimezone = _getDaylightOffsetByTimezone(convertedOriginalStartDate, convertedDate, timeZone);
@@ -130,10 +237,12 @@ const hasDSTInLocalTimeZone = () => {
   return startDate.getTimezoneOffset() !== endDate.getTimezoneOffset();
 };
 
-const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
+const getOffset = (date) => -date.getTimezoneOffset() / MINUTES_IN_HOUR;
+
+const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - toMs('hour'));
+
+const isEqualLocalTimeZoneByDeclarationOld = (timeZoneName: string, date: Date): boolean => {
   const year = date.getFullYear();
-  const getOffset = (date) => -date.getTimezoneOffset() / 60;
-  const getDateAndMoveHourBack = (dateStamp) => new Date(dateStamp - 3600000);
 
   const configTuple = timeZoneDataUtils.getTimeZoneDeclarationTuple(timeZoneName, year);
   const [summerTime, winterTime] = configTuple;
@@ -172,6 +281,17 @@ const isEqualLocalTimeZoneByDeclaration = (timeZoneName, date) => {
   return true;
 };
 
+const isEqualLocalTimeZoneByDeclaration = (timeZoneName: string, date: Date): boolean => {
+  const customTimezones = timeZoneDataUtils.getTimeZonesOld();
+  const targetTimezoneData = customTimezones.filter((tz) => tz.id === timeZoneName);
+
+  if (targetTimezoneData.length === 1) {
+    return isEqualLocalTimeZoneByDeclarationOld(timeZoneName, date);
+  }
+
+  return false;
+};
+
 // TODO: Getting two dates in january or june is the standard mechanism for determining that an offset has occurred.
 const getExtremeDates = () => {
   const nowDate = new Date(Date.now());
@@ -207,19 +327,6 @@ const addOffsetsWithoutDST = (date: Date, ...offsets: number[]): Date => {
     : newDate;
 };
 
-// NOTE:
-// GMT-N is "negative" timezone
-// GMT+N is "positive" timezone
-const isNegativeMachineTimezone = (): boolean => new Date().getTimezoneOffset() > 0;
-
-const isSummerToWinterDSTChange = (timezoneDiff: number): boolean => timezoneDiff < 0;
-
-const getSummerToWinterTimeDSTDiffMs = (firstDate: Date, secondDate: Date): number => {
-  const diffMinutes = getDaylightOffset(firstDate, secondDate);
-  const isSummerTimeChange = isSummerToWinterDSTChange(diffMinutes);
-  return isSummerTimeChange ? Math.abs(diffMinutes * toMs('minute')) : 0;
-};
-
 const utils = {
   getDaylightOffset,
   getDaylightOffsetInMs,
@@ -245,9 +352,6 @@ const utils = {
 
   setOffsetsToDate,
   addOffsetsWithoutDST,
-  isNegativeMachineTimezone,
-  isSummerTimeDSTChange: isSummerToWinterDSTChange,
-  getSummerToWinterTimeDSTDiffMs,
 };
 
 export default utils;

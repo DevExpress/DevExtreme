@@ -7,8 +7,8 @@ if(typeof define === 'function' && define.amd) {
 
         window.dataGridMocks = module.exports = gridBaseMock(
             require('jquery'),
-            require('ui/data_grid/ui.data_grid.core'),
-            require('ui/data_grid/ui.data_grid.columns_resizing_reordering'),
+            require('__internal/grids/data_grid/m_core').default,
+            require('__internal/grids/data_grid/module_not_extended/columns_resizing_reordering').default,
             require('core/utils/dom'),
             require('core/utils/common'),
             require('core/utils/type'),
@@ -21,8 +21,8 @@ if(typeof define === 'function' && define.amd) {
 
     jQuery.extend(window, gridBaseMock(
         jQuery,
-        DevExpress.require('ui/data_grid/ui.data_grid.core'),
-        DevExpress.require('ui/data_grid/ui.data_grid.columns_resizing_reordering'),
+        DevExpress.require('__internal/grids/data_grid/m_core'),
+        DevExpress.require('__internal/grids/data_grid/module_not_extended/columns_resizing_reordering'),
         DevExpress.require('core/utils/dom'),
         DevExpress.require('core/utils/common'),
         DevExpress.require('core/utils/type'),

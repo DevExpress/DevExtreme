@@ -3,7 +3,7 @@ import 'generic_light.css!';
 import 'ui/data_grid';
 
 import $ from 'jquery';
-import gridCoreUtils from 'ui/grid_core/ui.grid_core.utils';
+import gridCoreUtils from '__internal/grids/grid_core/m_utils';
 import dataUtils from 'core/element_data';
 import commonUtils from 'core/utils/common';
 import typeUtils from 'core/utils/type';
@@ -18,7 +18,7 @@ import nativePointerMock from '../../helpers/nativePointerMock.js';
 import { setupDataGridModules, MockDataController, MockColumnsController, MockSelectionController, getCells, generateItems } from '../../helpers/dataGridMocks.js';
 import { findShadowHostOrDocument } from '../../helpers/dataGridHelper.js';
 import numberLocalization from 'localization/number';
-import virtualScrollingCore from 'ui/grid_core/ui.grid_core.virtual_scrolling_core';
+import virtualScrollingCore from '__internal/grids/grid_core/virtual_scrolling/m_virtual_scrolling_core';
 import ODataStore from 'data/odata/store';
 import ArrayStore from 'data/array_store';
 

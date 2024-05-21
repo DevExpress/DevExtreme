@@ -45,21 +45,13 @@ const execTestCafeCode = (t, code) => {
   return testCafeFunction(t);
 };
 
-const SKIP_ACCESSIBILITY_TESTS = ['TabPanel-Overview'];
 const COMMON_SKIP_RULES = ['color-contrast'];
 const getTestSpecificSkipRules = (testName) => {
   switch (testName) {
     case 'Calendar-MultipleSelection':
-    case 'DataGrid-HorizontalVirtualScrolling':
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-    case 'DataGrid-InfiniteScrolling':
-      return ['aria-required-children'];
-    case 'Splitter-Overview':
-      return ['aria-allowed-attr'];
-    case 'TagBox-Overview':
-      return ['image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
@@ -138,6 +130,7 @@ const SKIPPED_TESTS = {
   React: {
     Charts: [
       { demo: 'PiesWithEqualSize', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
     ],
     DataGrid: [
       { demo: 'SignalRService', themes: [THEME.material, THEME.fluent] },
@@ -358,10 +351,6 @@ const SKIPPED_TESTS = {
         }
 
         if (process.env.STRATEGY === 'accessibility') {
-          if (SKIP_ACCESSIBILITY_TESTS.indexOf(testName) > -1) {
-            return;
-          }
-
           const specificSkipRules = getTestSpecificSkipRules(testName);
           const options = { rules: { } };
 

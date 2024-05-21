@@ -2,12 +2,11 @@
 
 import {
     Component,
-    PLATFORM_ID
+    PLATFORM_ID,
+    TransferState,
 } from '@angular/core';
 
 import { isPlatformServer } from '@angular/common';
-
-import { TransferState, BrowserTransferStateModule } from '@angular/platform-browser';
 
 import { DxServerModule } from 'devextreme-angular/server';
 
@@ -39,7 +38,6 @@ describe('Universal', () => {
             imports: [
                 DxServerModule,
                 DxDataGridModule,
-                BrowserTransferStateModule
             ]
         });
     });

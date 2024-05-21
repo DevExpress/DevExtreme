@@ -32,7 +32,8 @@ import {
 } from '@js/events/drag';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/events/utils/index';
-import Animator from '@js/ui/scroll_view/animator';
+
+import Animator from './ui/scroll_view/m_animator';
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
@@ -530,9 +531,7 @@ const Draggable = (DOMComponent as any).inherit({
   },
 
   _detachEventHandlers() {
-    // @ts-expect-error
     eventsEngine.off(this._$content(), `.${DRAGGABLE}`);
-    // @ts-expect-error
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
   },
 

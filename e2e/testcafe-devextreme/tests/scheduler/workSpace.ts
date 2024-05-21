@@ -6,9 +6,21 @@ import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { changeTheme } from '../../helpers/changeTheme';
 import { Themes } from '../../helpers/themes';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../helpers/domUtils';
 
 fixture.disablePageReloads`Scheduler: Workspace`
   .page(url(__dirname, '../container.html'));
+
+const FIXED_PARENT_CONTAINER_SIZE = `
+#parentContainer {
+  width: 400px;
+  height: 500px;
+}
+
+#container {
+  height: 100%;
+}
+`;
 
 const createScheduler = async (options = {}): Promise<void> => {
   await createWidget('dxScheduler', extend(options, {
@@ -17,6 +29,13 @@ const createScheduler = async (options = {}): Promise<void> => {
     height: 600,
   }));
 };
+
+const getResourcesDataSource = (count: number) => new Array(count)
+  .fill(null)
+  .map((_, idx) => ({
+    id: idx,
+    name: idx.toString(),
+  }));
 
 test('Vertical selection between two workspace cells should focus cells between them (T804954)', async (t) => {
   const scheduler = new Scheduler('#container');
@@ -274,4 +293,70 @@ test('All day panel should be hidden when allDayPanelMode=hidden by initializing
   }).after(async () => {
     await changeTheme(Themes.genericLight);
   });
+});
+
+[
+  Themes.genericLight,
+  Themes.materialBlue,
+  Themes.fluentBlue,
+].forEach((theme) => {
+  [
+    'day',
+    'week',
+    'workWeek',
+    'month',
+  ].forEach((viewName) => {
+    test(`[T1225772]: should not have the horizontal scroll in horizontal views when the crossScrollingEnabled: true (theme:${theme}, view:${viewName})`, async (t) => {
+      const scheduler = new Scheduler('#container');
+
+      const scrollableContainer = scheduler.dateTableScrollableContainer;
+      const scrollWidth = await scrollableContainer.scrollWidth;
+      const clientWidth = await scrollableContainer.clientWidth;
+      const hasHorizontalScroll = scrollWidth > clientWidth;
+
+      await t.expect(hasHorizontalScroll).notOk('workspace has the horizontal scrollbar');
+    }).before(async () => {
+      await changeTheme(theme);
+      await createWidget('dxScheduler', {
+        dataSource: [],
+        currentView: viewName,
+        currentDate: '2024-01-01T00:00:00',
+        crossScrollingEnabled: true,
+        height: 300,
+      });
+    })
+      .after(async () => {
+        await changeTheme(theme);
+      });
+  });
+});
+
+// NOTE: Moved "as is" from the QUnit integration.resources.tests (see history)
+test('[T716993]: should has horizontal scrollbar with multiple resources and fixed height container', async (t) => {
+  const scheduler = new Scheduler('#container');
+
+  const scrollableContainer = scheduler.dateTableScrollableContainer;
+  const scrollWidth = await scrollableContainer.scrollWidth;
+  const clientWidth = await scrollableContainer.clientWidth;
+  const hasHorizontalScroll = scrollWidth > clientWidth;
+
+  await t.expect(hasHorizontalScroll).ok('workspace hasn\'t the horizontal scrollbar');
+}).before(async () => {
+  const resourcesDataSource = getResourcesDataSource(10);
+
+  await insertStylesheetRulesToPage(FIXED_PARENT_CONTAINER_SIZE);
+  return createWidget('dxScheduler', {
+    dataSource: [],
+    groups: ['id'],
+    resources: [{
+      dataSource: resourcesDataSource,
+      displayExpr: 'name',
+      valueExpr: 'id',
+      fieldExpr: 'id',
+      allowMultiple: false,
+    }],
+    crossScrollingEnabled: true,
+  });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });

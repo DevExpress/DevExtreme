@@ -260,12 +260,16 @@ class ContextMenu extends MenuBase {
 
     _setFocusedElement($element) {
         if($element && $element.length !== 0) {
-            const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
-            const scrollableInstance = $scrollableElement.dxScrollable('instance');
-
             this.option('focusedElement', getPublicElement($element));
-            scrollableInstance.scrollToElement($element);
+            this._scrollToElement($element);
         }
+    }
+
+    _scrollToElement($element) {
+        const $scrollableElement = $element.closest(`.${SCROLLABLE_CLASS}`);
+        const scrollableInstance = $scrollableElement.dxScrollable('instance');
+
+        scrollableInstance?.scrollToElement($element);
     }
 
     _getItemsByLocation(location) {
@@ -514,6 +518,7 @@ class ContextMenu extends MenuBase {
             submenuElement: getPublicElement($submenu)
         });
         this._initScrollable($submenu);
+        this.setAria({ role: 'menu' }, $submenu);
     }
 
     _getOverlayOptions() {
@@ -639,6 +644,7 @@ class ContextMenu extends MenuBase {
 
     _initScrollable($container) {
         this._createComponent($container, Scrollable, {
+            useKeyboard: false,
             _onVisibilityChanged: (scrollable) => {
                 scrollable.scrollTo(0);
             },
@@ -671,6 +677,23 @@ class ContextMenu extends MenuBase {
             : Math.max(offsetTop + anchorHeight, windowHeight - offsetTop);
 
         return availableHeight - SUBMENU_PADDING;
+    }
+
+    _dimensionChanged() {
+        if(!this._shownSubmenus) {
+            return;
+        }
+
+        this._shownSubmenus.forEach(($submenu) => {
+            const $item = $submenu.closest(`.${DX_MENU_ITEM_CLASS}`);
+
+            this._setSubMenuHeight($submenu, $item, true);
+            this._scrollToElement($item);
+
+            const submenuPosition = this._getSubmenuPosition($item);
+
+            animationPosition.setup($submenu, submenuPosition);
+        });
     }
 
     _getSubmenuBorderWidth() {

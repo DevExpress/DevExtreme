@@ -17,9 +17,8 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalAlignment, VerticalAlignment } from 'devextreme/common';
-import { Palette, PaletteExtensionMode } from 'devextreme/common/charts';
+import { ChartsColor, Palette, PaletteExtensionMode } from 'devextreme/common/charts';
 import { CircularGaugeElementOrientation } from 'devextreme/viz/circular_gauge';
 
 import {
@@ -37,10 +36,10 @@ import { DxiRangeComponent } from './range-dxi';
 })
 export class DxoRangeContainerComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get backgroundColor(): DevExpress.common.charts.ChartsColor | string {
+    get backgroundColor(): ChartsColor | string {
         return this._getOption('backgroundColor');
     }
-    set backgroundColor(value: DevExpress.common.charts.ChartsColor | string) {
+    set backgroundColor(value: ChartsColor | string) {
         this._setOption('backgroundColor', value);
     }
 
@@ -77,10 +76,10 @@ export class DxoRangeContainerComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get ranges(): Array<any | { color?: DevExpress.common.charts.ChartsColor | string, endValue?: number, startValue?: number }> {
+    get ranges(): Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }> {
         return this._getOption('ranges');
     }
-    set ranges(value: Array<any | { color?: DevExpress.common.charts.ChartsColor | string, endValue?: number, startValue?: number }>) {
+    set ranges(value: Array<any | { color?: ChartsColor | string, endValue?: number, startValue?: number }>) {
         this._setOption('ranges', value);
     }
 

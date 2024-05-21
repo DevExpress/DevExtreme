@@ -20,10 +20,10 @@ export abstract class DxoPositionConfig extends NestedOption {
         this._setOption('at', value);
     }
 
-    get boundary(): string | UserDefinedElement | Window {
+    get boundary(): UserDefinedElement | string | Window {
         return this._getOption('boundary');
     }
-    set boundary(value: string | UserDefinedElement | Window) {
+    set boundary(value: UserDefinedElement | string | Window) {
         this._setOption('boundary', value);
     }
 
@@ -48,10 +48,10 @@ export abstract class DxoPositionConfig extends NestedOption {
         this._setOption('my', value);
     }
 
-    get of(): string | UserDefinedElement | Window {
+    get of(): UserDefinedElement | string | Window {
         return this._getOption('of');
     }
-    set of(value: string | UserDefinedElement | Window) {
+    set of(value: UserDefinedElement | string | Window) {
         this._setOption('of', value);
     }
 

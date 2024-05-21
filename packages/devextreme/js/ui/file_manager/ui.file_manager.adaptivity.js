@@ -5,7 +5,7 @@ import { isFunction } from '../../core/utils/type';
 import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
-import Drawer from '../drawer/ui.drawer';
+import Drawer from '../drawer';
 import SplitterControl from '../splitter_control';
 
 const window = getWindow();

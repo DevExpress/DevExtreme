@@ -11,7 +11,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import messageLocalization from 'localization/message';
 import { APPOINTMENT_FORM_GROUP_NAMES } from '__internal/scheduler/appointment_popup/m_form';
 import { dateToMilliseconds as toMs } from 'core/utils/date';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
 import viewPort from 'core/utils/view_port';
 
@@ -1897,7 +1897,8 @@ module('Timezone Editors', moduleOptions, () => {
         scheduler.instance.showAppointmentPopup({ startDate: new Date(2020, 1, 1, 1), endDate: new Date(2020, 1, 1, 2), text: 'test_text' });
         const form = scheduler.instance.getAppointmentDetailsForm();
         const startDateTimezoneEditor = form.getEditor('startDateTimeZone');
-        assert.equal(startDateTimezoneEditor.option('items').length, 46, 'Items are filtered');
+        const expectedItemCount = 45; // US/Pacific-New is excluded
+        assert.equal(startDateTimezoneEditor.option('items').length, expectedItemCount, 'Items are filtered');
 
     });
 

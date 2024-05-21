@@ -7,7 +7,7 @@ import { getWindow, hasWindow } from '../../core/utils/window';
 
 import Widget from '../widget/ui.widget';
 import Popup from '../popup/ui.popup';
-import Drawer from '../drawer/ui.drawer';
+import Drawer from '../drawer';
 
 import { NotificationManager, NotificationManagerStub, MANAGER_ID_NAME } from './ui.file_manager.notification_manager';
 

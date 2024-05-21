@@ -17,7 +17,7 @@ import {
 import { Orientation } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
-import { DiagramDataLayoutType } from 'devextreme/ui/diagram';
+import { DataLayoutType } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -33,10 +33,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get autoLayout(): DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType } {
+    get autoLayout(): DataLayoutType | { orientation?: Orientation, type?: DataLayoutType } {
         return this._getOption('autoLayout');
     }
-    set autoLayout(value: DiagramDataLayoutType | { orientation?: Orientation, type?: DiagramDataLayoutType }) {
+    set autoLayout(value: DataLayoutType | { orientation?: Orientation, type?: DataLayoutType }) {
         this._setOption('autoLayout', value);
     }
 
@@ -73,10 +73,10 @@ export class DxoNodesComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get dataSource(): DataSource | DataSourceOptions | Store | null | string | Array<any> {
+    get dataSource(): Store | DataSource | DataSourceOptions | null | string | Array<any> {
         return this._getOption('dataSource');
     }
-    set dataSource(value: DataSource | DataSourceOptions | Store | null | string | Array<any>) {
+    set dataSource(value: Store | DataSource | DataSourceOptions | null | string | Array<any>) {
         this._setOption('dataSource', value);
     }
 

@@ -19,9 +19,8 @@ import {
 
 
 
-import DevExpress from 'devextreme/bundles/dx.all';
 import { HorizontalAlignment, Position, VerticalAlignment } from 'devextreme/common';
-import { ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, RelativePosition, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
+import { ArgumentAxisHoverMode, AxisScaleType, ChartsAxisLabelOverlap, ChartsDataType, DashStyle, DiscreteAxisDivisionMode, Font, LabelOverlap, RelativePosition, ScaleBreak, ScaleBreakLineStyle, TextOverflow, TimeInterval, VisualRange, VisualRangeUpdateMode, WordWrap } from 'devextreme/common/charts';
 import { Format } from 'devextreme/localization';
 import { AggregatedPointsPosition, ChartLabelDisplayMode } from 'devextreme/viz/chart';
 
@@ -98,10 +97,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get breaks(): Array<DevExpress.common.charts.ScaleBreak> {
+    get breaks(): Array<ScaleBreak> {
         return this._getOption('breaks');
     }
-    set breaks(value: Array<DevExpress.common.charts.ScaleBreak>) {
+    set breaks(value: Array<ScaleBreak>) {
         this._setOption('breaks', value);
     }
 
@@ -394,10 +393,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get visualRange(): DevExpress.common.charts.VisualRange | Array<number | string | Date> {
+    get visualRange(): VisualRange | Array<number | string | Date> {
         return this._getOption('visualRange');
     }
-    set visualRange(value: DevExpress.common.charts.VisualRange | Array<number | string | Date>) {
+    set visualRange(value: VisualRange | Array<number | string | Date>) {
         this._setOption('visualRange', value);
     }
 
@@ -410,10 +409,10 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get wholeRange(): DevExpress.common.charts.VisualRange | undefined | Array<number | string | Date> {
+    get wholeRange(): VisualRange | undefined | Array<number | string | Date> {
         return this._getOption('wholeRange');
     }
-    set wholeRange(value: DevExpress.common.charts.VisualRange | undefined | Array<number | string | Date>) {
+    set wholeRange(value: VisualRange | undefined | Array<number | string | Date>) {
         this._setOption('wholeRange', value);
     }
 
@@ -486,7 +485,7 @@ export class DxoArgumentAxisComponent extends NestedOption implements OnDestroy,
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() visualRangeChange: EventEmitter<DevExpress.common.charts.VisualRange | Array<number | string | Date>>;
+    @Output() visualRangeChange: EventEmitter<VisualRange | Array<number | string | Date>>;
     protected get _optionPath() {
         return 'argumentAxis';
     }

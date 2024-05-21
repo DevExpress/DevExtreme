@@ -22,7 +22,7 @@ runManualTest('DataGrid', 'BatchUpdateRequest', ['jQuery', 'React', 'Vue', 'Angu
       .pressKey('enter');
 
     // remove
-    await t.click($('a').withText('Delete').nth(1));
+    await t.click($('.dx-link-delete').nth(1));
 
     // insert
     await t
