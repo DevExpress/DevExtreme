@@ -11,7 +11,7 @@ function itemClick(e) {
 function App() {
   return (
     <React.Fragment>
-      <div className="target-area">Right click here to show the context menu</div>
+      <div className="target-area">Right click within this region to display the DevExtreme Context Menu</div>
       <ContextMenu
         dataSource={items}
         width={200}
