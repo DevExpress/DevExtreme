@@ -1,13 +1,14 @@
 import React, { useCallback, useRef, useState } from 'react';
-import Diagram, {
-  CustomShape,
+import {
+  Diagram,
+  AutoLayout,
   ContextToolbox,
-  PropertiesPanel,
+  CustomShape,
   Group,
+  Nodes,
+  PropertiesPanel,
   Tab,
   Toolbox,
-  Nodes,
-  AutoLayout,
 } from 'devextreme-react/diagram';
 import { Popup } from 'devextreme-react/popup';
 import TextBox from 'devextreme-react/text-box';
