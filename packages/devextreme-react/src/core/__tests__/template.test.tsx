@@ -14,7 +14,14 @@ import {
 
 jest.useFakeTimers();
 
-const waitForceUpdateFromTemplateRenderer = () => act(() => new Promise((ok: any) => requestAnimationFrame(ok)));
+const waitForceUpdateFromTemplateRenderer = () => {
+  act(() => {
+    new Promise((ok: any) => {
+      requestAnimationFrame(ok);
+    });
+  });
+}
+
 
 const templateProps = [{
   tmplOption: 'item',

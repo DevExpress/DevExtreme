@@ -258,7 +258,8 @@ describe('component rendering', () => {
       expect(Widget.option).toHaveBeenCalledWith('sampleProp', 'new');
     });
 
-    it('component shouldn\'t update array value(by default)', async (done) => {
+    it('component shouldn\'t update array value(by default)', async () => {
+      expect.assertions(1);
       const component = defineComponent({
         template: `
                     <button @click="testData.push(2)">Click me</button>
@@ -277,13 +278,13 @@ describe('component rendering', () => {
 
       await wrapper.find('button').trigger('click');
 
-      nextTick(() => {
+      await nextTick(() => {
         expect(Widget.option).toHaveBeenCalledTimes(0);
-        done();
       });
     });
 
-    it('component updates array value if the deepWatch flag equal true', async (done) => {
+    it('component updates array value if the deepWatch flag equal true', async () => {
+      expect.assertions(2);
       globalConfig({ deepWatch: true });
       const component = defineComponent({
         template: `
@@ -303,11 +304,10 @@ describe('component rendering', () => {
 
       await wrapper.find('button').trigger('click');
 
-      nextTick(() => {
+      await nextTick(() => {
         expect(Widget.option).toHaveBeenCalledTimes(1);
         expect(Widget.option).toHaveBeenCalledWith('prop2', [1, 2]);
         globalConfig({ deepWatch: false });
-        done();
       });
     });
   });

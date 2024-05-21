@@ -1,7 +1,11 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "lib": [
+      "ES2020",
+      "dom"
+    ]
   },
   "include": [
     "src/core/**/*"

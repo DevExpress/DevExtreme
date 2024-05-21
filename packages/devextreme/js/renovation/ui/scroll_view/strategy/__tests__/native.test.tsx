@@ -438,6 +438,7 @@ describe('Native > Effects', () => {
     (forceGeneratePockets, refreshStrategy, pullDownEnabled, pocketState) => {
       jest.clearAllTimers();
       jest.useFakeTimers();
+      jest.spyOn(global, 'setTimeout');
 
       const event = {
         ...defaultEvent,
@@ -569,6 +570,7 @@ describe('Native > Effects', () => {
     ]))('refresh(), pocketState: %o, refreshStrategy: %o', (pocketState, refreshStrategy) => {
       jest.clearAllTimers();
       jest.useFakeTimers();
+      jest.spyOn(global, 'setTimeout');
 
       const helper = new ScrollableTestHelper({
         refreshStrategy,
@@ -1081,6 +1083,7 @@ describe('Methods', () => {
       it('should move scrollbar', () => {
         jest.clearAllTimers();
         jest.useFakeTimers();
+        jest.spyOn(global, 'setTimeout');
 
         const viewModel = new Scrollable({
           direction,

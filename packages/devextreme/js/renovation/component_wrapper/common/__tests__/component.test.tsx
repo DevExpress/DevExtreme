@@ -882,9 +882,8 @@ describe('templates and slots', () => {
       });
 
       expect(template).toHaveBeenCalledTimes(1);
-      expect(template.mock.calls[0][0]).toMatchObject({
-        nodeParam: param1, nonNodeParam: param2,
-      });
+      expect(template.mock.calls[0][0].nodeParam).toEqual(param1);
+      expect(template.mock.calls[0][0].nonNodeParam).toEqual(param2);
 
       const templateRoot = $('#component').children('.templates-root')[0];
 
@@ -1165,13 +1164,11 @@ describe('events/actions', () => {
       emptyField: element4,
     });
 
-    expect(onEventProp.mock.calls[0][0]).toMatchObject({
-      eventElement: element1,
-      wrappedField: element2,
-      nonWrappedField: element3,
-      emptyField: element4,
-      element: $('#component').get(0),
-    });
+    expect(onEventProp.mock.calls[0][0].eventElement).toEqual(element1);
+    expect(onEventProp.mock.calls[0][0].wrappedField).toEqual(element2);
+    expect(onEventProp.mock.calls[0][0].nonWrappedField).toEqual(element3);
+    expect(onEventProp.mock.calls[0][0].emptyField).toEqual(element4);
+    expect(onEventProp.mock.calls[0][0].element).toEqual($('#component').get(0));
 
     expect(getPublicElement).toHaveBeenCalledTimes(3);
     expect(getPublicElement).toHaveBeenNthCalledWith(1, $(element1));

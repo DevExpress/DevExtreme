@@ -41,7 +41,8 @@
     "strictNullChecks": true,
     "lib": [
       "dom"
-    ]
+    ],
+    "types": ["jest"]
   },
   "exclude": [
     "node_modules",
