@@ -2146,19 +2146,19 @@ QUnit.module('aria accessibility', () => {
             let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             const $textEditorLabel = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL}`);
 
-            assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id');
+            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id');
             keyboardMock($input)
                 .type('a');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id after typing');
+            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id after typing');
 
             keyboardMock($input)
                 .caret(1)
                 .press('backspace');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id after deleting');
+            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id after deleting');
 
             dropDownEditor.option('label', 'Updated Label');
 
