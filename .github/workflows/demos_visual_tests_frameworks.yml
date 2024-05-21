@@ -123,8 +123,16 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
+
+    - name: DevExtreme - Build
+      run: pnpx nx build devextreme-main
+
+    - name: Install dependencies
       working-directory: apps/demos
-      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+      run: pnpm add ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
 #    - name: Build wrappers
 #      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
@@ -372,15 +380,6 @@ jobs:
         name: changed-demos
         path: apps/demos
 
-    - name: Create bundles dir
-      run: mkdir -p apps/demos/bundles
-
-    - name: Download bundles artifacts
-      uses: actions/download-artifact@v4
-      with:
-        name: devextreme-bundles
-        path: apps/demos/bundles
-
     - uses: pnpm/action-setup@v3
       with:
         version: 9
@@ -423,6 +422,15 @@ jobs:
     - name: Update bundles config
       working-directory: apps/demos
       run: pnpx gulp update-config
+
+    - name: Create bundles dir
+      run: mkdir -p apps/demos/bundles
+
+    - name: Download bundles artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: devextreme-bundles
+        path: apps/demos/bundles
 
     - name: Run Web Server
       run: |
