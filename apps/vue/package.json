@@ -15,7 +15,7 @@
     "vue": "3.2.47"
   },
   "devDependencies": {
-    "@types/jest": "22.2.3",
+    "@types/jest": "29.5.12",
     "@types/node": "20.11.17",
     "@vue/compiler-sfc": "3.3.4",
     "@vue/test-utils": "2.0.0-beta.7",
