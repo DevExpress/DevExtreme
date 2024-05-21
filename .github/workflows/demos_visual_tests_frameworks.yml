@@ -52,7 +52,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          corepack enable
+          pnpm install
 
       - name: DevExtreme - Build-all
         env:
@@ -306,7 +308,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build wrappers
       run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
@@ -398,7 +402,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: DevExtreme - Build
       run: pnpx nx build devextreme-main

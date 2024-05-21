@@ -37,7 +37,9 @@ jobs:
             ${{ runner.os }}-pnpm-store-
 
       - name: Install dependencies
-        run: pnpm install
+        run: |
+          corepack enable
+          pnpm install
 
       - name: Build npm packages
         run: pnpm run all:pack

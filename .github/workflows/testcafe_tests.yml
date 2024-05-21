@@ -52,7 +52,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build
       env:
@@ -191,7 +193,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Run TestCafe tests
       working-directory: ./e2e/testcafe-devextreme

@@ -52,7 +52,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build DevExtreme
       run: pnpx nx build devextreme-main
@@ -127,7 +129,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}

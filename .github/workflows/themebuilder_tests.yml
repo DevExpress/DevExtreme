@@ -39,7 +39,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build etalon bundles
       working-directory: ./packages/devextreme

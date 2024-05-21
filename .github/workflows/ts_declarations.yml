@@ -43,7 +43,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Check dx.all.d.ts is up-to-date
       working-directory: ./packages/devextreme
@@ -95,7 +97,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Validate declarations
       working-directory: ./packages/devextreme
@@ -134,7 +138,9 @@ jobs:
           ${{ runner.os }}-pnpm-store-
 
     - name: Install dependencies
-      run: pnpm install
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Check sources compilation
       working-directory: ./packages/devextreme
