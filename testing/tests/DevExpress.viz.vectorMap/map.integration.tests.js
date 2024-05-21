@@ -121,6 +121,31 @@ QUnit.module('VectorMap bounds', {
     }
 });
 
+QUnit.test('VectorMap should be initialized with no errors if layer has no data (T1210450)', function(assert) {
+    let noErrorsOnInit = true;
+
+    try {
+        $('#container').dxVectorMap({
+            layers: [{
+                dataSource: [],
+            }, {
+                dataSource: {
+                    features: [{
+                        geometry: {
+                            coordinates: [[[-17.26391560048284, 72.23003475989351]]],
+                        },
+                    }],
+                },
+            },
+            ],
+        }).dxVectorMap('instance');
+    } catch(e) {
+        noErrorsOnInit = false;
+    } finally {
+        assert.ok(noErrorsOnInit);
+    }
+});
+
 QUnit.test('VectorMap should set prepared bounds from dataSource (root - FeatureCollection object)', function(assert) {
     this.dataSource['bbox'] = [0, 50, 100, 0];
     const map = $('#container').dxVectorMap({

@@ -1786,8 +1786,8 @@ QUnit.test('Hide marker when marker is visible', function(assert) {
     point.visibleBottomMarker = true;
     point.draw(this.renderer, this.groups);
 
-    point.graphic.topMarker.stub('attr').reset();
-    point.graphic.bottomMarker.stub('attr').reset();
+    point.graphic.topMarker.stub('attr').resetHistory();
+    point.graphic.bottomMarker.stub('attr').resetHistory();
 
     point.setInvisibility();
 
@@ -1810,8 +1810,8 @@ QUnit.test('Hide marker when marker has no visibility setting', function(assert)
     point.visibleBottomMarker = true;
     point.draw(this.renderer, this.groups);
 
-    point.graphic.topMarker.stub('attr').reset();
-    point.graphic.bottomMarker.stub('attr').reset();
+    point.graphic.topMarker.stub('attr').resetHistory();
+    point.graphic.bottomMarker.stub('attr').resetHistory();
 
     point.setInvisibility();
 
@@ -1837,8 +1837,8 @@ QUnit.test('Hide marker when marker is hidden', function(assert) {
     point.visibleBottomMarker = true;
     point.draw(this.renderer, this.groups);
 
-    point.graphic.topMarker.stub('attr').reset();
-    point.graphic.bottomMarker.stub('attr').reset();
+    point.graphic.topMarker.stub('attr').resetHistory();
+    point.graphic.bottomMarker.stub('attr').resetHistory();
 
     point.setInvisibility();
 

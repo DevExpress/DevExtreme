@@ -359,8 +359,7 @@ const TextEditorMask = TextEditorBase.inherit({
 
     _handleChain: function(args) {
         const handledCount = this._maskRulesChain.handle(this._normalizeChainArguments(args));
-        this._value = this._maskRulesChain.value();
-        this._textValue = this._maskRulesChain.text();
+        this._updateMaskInfo();
         return handledCount;
     },
 
@@ -505,6 +504,11 @@ const TextEditorMask = TextEditorBase.inherit({
         return this._direction() === FORWARD_DIRECTION;
     },
 
+    _updateMaskInfo() {
+        this._textValue = this._maskRulesChain.text();
+        this._value = this._maskRulesChain.value();
+    },
+
     _clean: function() {
         this._maskStrategy && this._maskStrategy.clean();
         this.callBase();
@@ -537,20 +541,25 @@ const TextEditorMask = TextEditorBase.inherit({
         this._updateHiddenElement();
         this._renderMask();
         this._validateMask();
+        this._refreshValueChangeEvent();
     },
 
     _processEmptyMask: function(mask) {
         if(mask) return;
 
         const value = this.option('value');
+
         this.option({
             text: value,
-            isValid: true
+            isValid: true,
+            validationError: null,
         });
+
         this.validationRequest.fire({
             value: value,
-            editor: this
+            editor: this,
         });
+
         this._renderValue();
     },
 
@@ -581,8 +590,15 @@ const TextEditorMask = TextEditorBase.inherit({
             default:
                 this.callBase(args);
         }
-    }
+    },
 
+    reset: function() {
+        const { value: defaultValue } = this._getDefaultOptions();
+        if(this.option('value') === defaultValue) {
+            this._renderMaskedValue();
+        }
+        this.callBase();
+    }
 });
 
 export default TextEditorMask;

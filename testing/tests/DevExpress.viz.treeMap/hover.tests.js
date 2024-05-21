@@ -29,7 +29,7 @@ QUnit.test('Turn tile hover on', function(assert) {
         onHoverChanged: spy
     }).getRootNode();
     const tile = this.tile(1);
-    tile.smartAttr.reset();
+    tile.smartAttr.resetHistory();
 
     root.getChild(1).setHover();
 
@@ -70,7 +70,7 @@ QUnit.test('Turn tile hover off', function(assert) {
     });
     const tile = this.tile(1);
     widget.getRootNode().getChild(1).setHover();
-    tile.smartAttr.reset();
+    tile.smartAttr.resetHistory();
     widget.on('hoverChanged', spy);
 
     widget.clearHover();
@@ -106,7 +106,7 @@ QUnit.test('Turn tile hover on when another tile is hovered', function(assert) {
         onHoverChanged: spy
     }).getRootNode();
     root.getChild(1).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -148,10 +148,10 @@ QUnit.test('Turn group hover on', function(assert) {
     const inner = this.tile(1);
     const tile1 = this.tile(2);
     const tile2 = this.tile(3);
-    outer.attr.reset();
-    inner.smartAttr.reset();
-    tile1.smartAttr.reset();
-    tile2.smartAttr.reset();
+    outer.attr.resetHistory();
+    inner.smartAttr.resetHistory();
+    tile1.smartAttr.resetHistory();
+    tile2.smartAttr.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -196,11 +196,11 @@ QUnit.test('Turn group hover off', function(assert) {
     const tile1 = this.tile(2);
     const tile2 = this.tile(3);
     widget.getRootNode().getChild(0).setHover();
-    outer.attr.reset();
-    inner.smartAttr.reset();
-    tile1.smartAttr.reset();
-    tile2.smartAttr.reset();
-    spy.reset();
+    outer.attr.resetHistory();
+    inner.smartAttr.resetHistory();
+    tile1.smartAttr.resetHistory();
+    tile2.smartAttr.resetHistory();
+    spy.resetHistory();
 
     widget.clearHover();
 
@@ -238,7 +238,7 @@ QUnit.test('Turn group hover on when another group is hovered', function(assert)
         onHoverChanged: spy
     }).getRootNode();
     root.getChild(1).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -279,10 +279,10 @@ QUnit.test('Disabled hover for group', function(assert) {
     const inner = this.tile(1);
     const tile1 = this.tile(2);
     const tile2 = this.tile(3);
-    outer.attr.reset();
-    inner.smartAttr.reset();
-    tile1.smartAttr.reset();
-    tile2.smartAttr.reset();
+    outer.attr.resetHistory();
+    inner.smartAttr.resetHistory();
+    tile1.smartAttr.resetHistory();
+    tile2.smartAttr.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -311,10 +311,10 @@ QUnit.test('Turn tile hover on with disabled hover for group', function(assert) 
     const inner = this.tile(1);
     const tile1 = this.tile(2);
     const tile2 = this.tile(3);
-    outer.attr.reset();
-    inner.smartAttr.reset();
-    tile1.smartAttr.reset();
-    tile2.smartAttr.reset();
+    outer.attr.resetHistory();
+    inner.smartAttr.resetHistory();
+    tile1.smartAttr.resetHistory();
+    tile2.smartAttr.resetHistory();
 
     root.getChild(0).getChild(0).setHover();
 
@@ -345,10 +345,10 @@ QUnit.test('Hover group after hover tile with disabled hover for group', functio
     const tile2 = this.tile(3);
     root.getChild(0).getChild(0).setHover();
 
-    outer.attr.reset();
-    inner.smartAttr.reset();
-    tile1.smartAttr.reset();
-    tile2.smartAttr.reset();
+    outer.attr.resetHistory();
+    inner.smartAttr.resetHistory();
+    tile1.smartAttr.resetHistory();
+    tile2.smartAttr.resetHistory();
 
     root.getChild(0).setHover();
 
@@ -367,7 +367,7 @@ QUnit.test('Change hover mode', function(assert) {
         onHoverChanged: spy
     });
     widget.getRootNode().getChild(0).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     widget.option('hoverEnabled', false);
 
@@ -383,7 +383,7 @@ QUnit.test('Change hover mode of the group', function(assert) {
         onHoverChanged: spy
     });
     widget.getRootNode().getChild(0).setHover();
-    spy.reset();
+    spy.resetHistory();
 
     widget.option({ group: { hoverEnabled: false } });
 
@@ -403,7 +403,7 @@ QUnit.test('Hover state is not applied until endUpdate', function(assert) {
         },
         onHoverChanged: spy
     });
-    this.tile(1).attr.reset();
+    this.tile(1).attr.resetHistory();
 
     widget.beginUpdate();
     widget.getRootNode().getChild(1).setHover();

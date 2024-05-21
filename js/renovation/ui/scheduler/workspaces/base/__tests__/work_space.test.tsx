@@ -2772,6 +2772,7 @@ describe('WorkSpace', () => {
               key: 0,
               text: '12:00 AM',
               groups: undefined,
+              highlighted: false,
             }, {
               startDate: new Date(2021, 9, 25, 0, 30),
               groupIndex: undefined,
@@ -2782,6 +2783,7 @@ describe('WorkSpace', () => {
               key: 1,
               text: '',
               groups: undefined,
+              highlighted: false,
             }]);
         });
 
@@ -2825,6 +2827,7 @@ describe('WorkSpace', () => {
                   key: 0,
                   text: '12:00 AM',
                   groups: undefined,
+                  highlighted: false,
                 }, {
                   startDate: new Date(2021, 9, 25, 0, 30),
                   groupIndex: undefined,
@@ -2835,9 +2838,11 @@ describe('WorkSpace', () => {
                   key: 1,
                   text: '',
                   groups: undefined,
+                  highlighted: false,
                 }],
                 groupIndex: undefined,
                 isGroupedAllDayPanel: false,
+                topVirtualRowHeight: undefined,
                 key: '0',
               }],
               isGroupedAllDayPanel: false,
@@ -2904,6 +2909,7 @@ describe('WorkSpace', () => {
               isGenerateWeekDaysHeaderData: false,
               isProvideVirtualCellsWidth: false,
               groupByDate: false,
+              today: expect.any(Date),
             });
           expect(mockCreateGroupedDataMapProvider)
             .toHaveBeenCalledTimes(1);

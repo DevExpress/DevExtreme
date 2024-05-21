@@ -286,6 +286,9 @@ class Menu extends MenuBase {
             state = !this._overlay.option('visible');
         }
         this._overlay.option('visible', state);
+        if(state) {
+            this._treeView.focus();
+        }
         this._toggleHamburgerActiveState(state);
     }
 

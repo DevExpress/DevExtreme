@@ -1,8 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import { ClientFunction, Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 
@@ -742,5 +744,42 @@ test.skip('Item should appear in a correct spot when dragging to a different pag
       }, { dependencies: { items } }),
     },
     showBorders: true,
+  });
+});
+
+// T1179218
+safeSizeTest('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // drag the row down
+  await dataGrid.moveRow(0, 30, 150, true);
+  await dataGrid.moveRow(0, 30, 350);
+
+  // waiting for autoscrolling
+  await t.wait(2000);
+
+  // drag the row up
+  await dataGrid.moveRow(0, 30, 75);
+
+  await t
+    .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 440,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    dataSource: [...new Array(100)].fill(null).map((_, index) => ({ id: index })),
+    columns: ['id'],
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+    },
   });
 });

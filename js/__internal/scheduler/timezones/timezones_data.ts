@@ -980,9 +980,9 @@ export default {
     },
     {
       id: 'America/Monterrey',
-      untils: '-p1u7c0|ykt480|ast80|3vppg0|afuk0|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|9q2s0|7k580|9q2s0|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|Infinity',
+      untils: '-p1u7c0|ykt480|ast80|3vppg0|afuk0|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|9q2s0|7k580|9q2s0|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|7x9g0|ast80|8a840|afuk0|8a840|afuk0|8a840|ast80|7x9g0|ast80|Infinity',
       offsets: '401.2667|360|300',
-      offsetIndices: '0121212121212121212121212121212121212121212121212121212121212121212121212121212121212121',
+      offsetIndices: '0121212121212121212121212121212121212121212121212121212121',
     },
     {
       id: 'America/Montevideo',

@@ -1,10 +1,16 @@
 import { isString } from '../../../js/core/utils/type';
 import { changeTheme } from './changeTheme';
 
+const defaultThemeName = 'generic.light';
+
 export const getThemePostfix = (theme?: string): string => {
-  const themeName = (theme ?? process.env.theme) ?? 'generic.light';
+  const themeName = (theme ?? process.env.theme) ?? defaultThemeName;
   return ` (${themeName.replace(/\./g, '-')})`;
 };
+
+export const getFullThemeName = (): string => process.env.theme ?? defaultThemeName;
+
+export const getThemeName = (): string => getFullThemeName().split('.')[0];
 
 export const isMaterial = (): boolean => process.env.theme === 'material.blue.light';
 

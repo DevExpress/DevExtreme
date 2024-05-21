@@ -2,7 +2,9 @@
 import domAdapter from '@js/core/dom_adapter';
 import { getPublicElement } from '@js/core/element';
 import { data as elementData } from '@js/core/element_data';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import Guid from '@js/core/guid';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { noop } from '@js/core/utils/common';
 import { Deferred, when } from '@js/core/utils/deferred';
@@ -25,12 +27,15 @@ import eventsEngine from '@js/events/core/events_engine';
 import { name as dblclickEvent } from '@js/events/double_click';
 import pointerEvents from '@js/events/pointer';
 import { removeEvent } from '@js/events/remove';
-import columnStateMixin from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import type { AdaptiveColumnsController } from '@ts/grids/grid_core/adaptivity/m_adaptivity';
+import type { ColumnChooserController, ColumnChooserView } from '@ts/grids/grid_core/column_chooser/m_column_chooser';
+import { ColumnStateMixin } from '@ts/grids/grid_core/column_state_mixin/m_column_state_mixin';
+import type { EditorFactory } from '@ts/grids/grid_core/editor_factory/m_editor_factory';
+import type { SelectionController } from '@ts/grids/grid_core/selection/m_selection';
 
-import { ColumnsController } from '../columns_controller/m_columns_controller';
-import { DataController } from '../data_controller/m_data_controller';
+import type { ColumnsController } from '../columns_controller/m_columns_controller';
+import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
-import { ModuleType, View } from '../m_types';
 import gridCoreUtils from '../m_utils';
 
 const SCROLL_CONTAINER_CLASS = 'scroll-container';
@@ -153,32 +158,101 @@ export const normalizeWidth = (width: string | number | undefined): string | und
   return width;
 };
 
-const viewWithColumnStateMixin: ModuleType<View> = modules.View.inherit(columnStateMixin);
+export class ColumnsView extends ColumnStateMixin(modules.View) {
+  protected _tableElement: any;
 
-export class ColumnsView extends viewWithColumnStateMixin {
-  _tableElement: any;
+  protected _scrollLeft: any;
 
-  _scrollLeft: any;
+  private _delayedTemplates: any;
 
-  _delayedTemplates: any;
+  private _templateDeferreds: any;
 
-  _templateDeferreds: any;
+  private _templateTimeouts: any;
 
-  _templateTimeouts: any;
+  private _templatesCache: any;
 
-  _templatesCache: any;
+  protected _requireReady: any;
 
-  _requireReady: any;
+  public scrollChanged: any;
 
-  scrollChanged: any;
+  protected _columnsController!: ColumnsController;
 
-  _columnsController!: ColumnsController;
+  protected _dataController!: DataController;
 
-  _dataController!: DataController;
+  protected _adaptiveColumnsController!: AdaptiveColumnsController;
+
+  protected _columnChooserController!: ColumnChooserController;
+
+  protected _editorFactoryController!: EditorFactory;
+
+  protected _selectionController!: SelectionController;
+
+  protected _columnChooserView!: ColumnChooserView;
+
+  public init() {
+    this._scrollLeft = -1;
+    this._columnsController = this.getController('columns');
+    this._dataController = this.getController('data');
+    this._adaptiveColumnsController = this.getController('adaptiveColumns');
+    this._columnChooserController = this.getController('columnChooser');
+    this._editorFactoryController = this.getController('editorFactory');
+    this._selectionController = this.getController('selection');
+    this._columnChooserView = this.getView('columnChooserView');
+    this._delayedTemplates = [];
+    this._templateDeferreds = new Set();
+    this._templatesCache = {};
+    this._templateTimeouts = new Set();
+    this.createAction('onCellClick');
+    this.createAction('onRowClick');
+    this.createAction('onCellDblClick');
+    this.createAction('onRowDblClick');
+    this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
+    this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
+    this.createAction('onRowPrepared', {
+      excludeValidators: ['disabled', 'readOnly'],
+      category: 'rendering',
+      afterExecute: (e) => {
+        this._afterRowPrepared(e);
+      },
+    });
+
+    this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
+    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
+  }
+
+  public dispose() {
+    if (hasWindow()) {
+      const window = getWindow();
+
+      this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
+      this._templateTimeouts?.clear();
+    }
+  }
+
+  public optionChanged(args) {
+    super.optionChanged(args);
+
+    // eslint-disable-next-line default-case
+    switch (args.name) {
+      case 'cellHintEnabled':
+      case 'onCellPrepared':
+      case 'onRowPrepared':
+      case 'onCellHoverChanged':
+        this._invalidate(true, true);
+        args.handled = true;
+        break;
+      case 'keyboardNavigation':
+        if (args.fullName === 'keyboardNavigation.enabled') {
+          this._invalidate(true, true);
+        }
+        args.handled = true;
+        break;
+    }
+  }
 
   protected setTableRole($tableElement: dxElementWrapper): void {}
 
-  _createScrollableOptions() {
+  protected _createScrollableOptions() {
     const that = this;
     const scrollingOptions = that.option('scrolling');
     let useNativeScrolling = that.option('scrolling.useNative');
@@ -203,13 +277,16 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return options;
   }
 
-  _updateCell($cell, parameters) {
+  public _updateCell($cell, parameters) {
     if (parameters.rowType) {
       this._cellPrepared($cell, parameters);
     }
   }
 
-  _createCell(options) {
+  /**
+   * @extended: column_fixing, editing
+   */
+  protected _createCell(options) {
     const { column } = options;
     const alignment = column.alignment || getDefaultAlignment(this.option('rtlEnabled'));
 
@@ -253,18 +330,24 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $cell;
   }
 
-  _createRow(rowObject, tagName?) {
+  /**
+   * @extended: selection
+   */
+  protected _createRow(rowObject, tagName?) {
     tagName = tagName || 'tr';
     const $element = $(`<${tagName}>`).addClass(ROW_CLASS);
     this.setAria('role', 'row', $element);
     return $element;
   }
 
-  _isAltRow(row) {
+  protected _isAltRow(row) {
     return row && row.dataIndex % 2 === 1;
   }
 
-  _createTable(columns, isAppend) {
+  /**
+   * @extended: selection
+   */
+  protected _createTable(columns, isAppend?) {
     const $table = $('<table>')
       .addClass(this.addWidgetPrefix(TABLE_CLASS))
       .addClass(this.addWidgetPrefix(TABLE_FIXED_CLASS));
@@ -395,19 +478,16 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $table;
   }
 
-  _rowPointerDown() {
+  /**
+   * @extended: editing
+   */
+  protected _rowPointerDown(e?: any) {}
 
-  }
+  protected _rowClick() {}
 
-  _rowClick() {
+  protected _rowDblClick() {}
 
-  }
-
-  _rowDblClick() {
-
-  }
-
-  _createColGroup(columns) {
+  protected _createColGroup(columns) {
     const colgroupElement = $('<colgroup>');
 
     for (let i = 0; i < columns.length; i++) {
@@ -420,7 +500,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return colgroupElement;
   }
 
-  _createCol(column) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _createCol(column) {
     let width = column.visibleWidth || column.width;
 
     if (width === 'adaptiveHidden') {
@@ -433,7 +516,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return col;
   }
 
-  renderDelayedTemplates(change?) {
+  /**
+   * @extended: keyboard_navigation, virtual_scrolling
+   */
+  public renderDelayedTemplates(change?) {
     const delayedTemplates = this._delayedTemplates;
     const syncTemplates = delayedTemplates.filter((template) => !template.async);
     const asyncTemplates = delayedTemplates.filter((template) => template.async);
@@ -444,7 +530,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     this._renderDelayedTemplatesCoreAsync(asyncTemplates);
   }
 
-  _renderDelayedTemplatesCoreAsync(templates) {
+  private _renderDelayedTemplatesCoreAsync(templates) {
     if (templates.length) {
       const templateTimeout = getWindow().setTimeout(() => {
         this._templateTimeouts.delete(templateTimeout);
@@ -455,7 +541,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _renderDelayedTemplatesCore(templates, isAsync, change?) {
+  private _renderDelayedTemplatesCore(templates, isAsync, change?) {
     const date = new Date();
 
     while (templates.length) {
@@ -485,7 +571,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _processTemplate(template, options?) {
+  protected _processTemplate(template, options?) {
     const that = this;
     let renderingTemplate;
 
@@ -524,7 +610,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return renderingTemplate;
   }
 
-  renderTemplate(container, template, options, allowRenderToDetachedContainer, change?) {
+  public renderTemplate(container, template, options, allowRenderToDetachedContainer?, change?) {
     const renderingTemplate = this._processTemplate(template, options);
     const { column } = options;
     const isDataRow = options.rowType === 'data';
@@ -571,17 +657,17 @@ export class ColumnsView extends viewWithColumnStateMixin {
     });
   }
 
-  _getBodies(tableElement) {
+  protected _getBodies(tableElement) {
     return $(tableElement).children('tbody').not('.dx-header').not('.dx-footer');
   }
 
-  _needWrapRow($tableElement) {
+  protected _needWrapRow($tableElement) {
     const hasRowTemplate = !!this.option().rowTemplate;
 
     return hasRowTemplate && !!this._getBodies($tableElement)?.filter(`.${ROW_CLASS}`).length;
   }
 
-  _wrapRowIfNeed($table, $row, isRefreshing?) {
+  protected _wrapRowIfNeed($table, $row, isRefreshing?) {
     const $tableElement = isRefreshing ? $table || this._tableElement : this._tableElement || $table;
     const needWrapRow = this._needWrapRow($tableElement);
 
@@ -596,12 +682,15 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $row;
   }
 
-  _appendRow($table, $row, appendTemplate?) {
+  private _appendRow($table, $row, appendTemplate?) {
     appendTemplate = appendTemplate || appendElementTemplate;
     appendTemplate.render({ content: $row, container: $table });
   }
 
-  _resizeCore() {
+  /**
+   * @extended: column_fixing, filter_row, row_dragging, virtual_columns
+   */
+  protected _resizeCore() {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
@@ -610,7 +699,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _renderCore(e?) {
+  /**
+   * @extended: column_fixing, header_panel, virtual_column
+   */
+  protected _renderCore(e?) {
     const $root = this.element().parent();
 
     if (!$root || $root.parent().length) {
@@ -618,7 +710,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _renderTable(options) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _renderTable(options) {
     options = options || {};
 
     options.columns = this._columnsController.getVisibleColumns();
@@ -630,7 +725,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $table;
   }
 
-  _renderRows($table, options) {
+  protected _renderRows($table, options) {
     const that = this;
     const rows = that._getRows(options.change);
     const columnIndices = options.change && options.change.columnIndices || [];
@@ -641,7 +736,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _renderRow($table, options) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _renderRow($table, options) {
     if (!options.columnIndices) {
       options.row.cells = [];
     }
@@ -659,11 +757,11 @@ export class ColumnsView extends viewWithColumnStateMixin {
     this._rowPrepared($wrappedRow, rowOptions, options.row);
   }
 
-  _needRenderCell(columnIndex, columnIndices) {
+  protected _needRenderCell(columnIndex, columnIndices) {
     return !columnIndices || columnIndices.indexOf(columnIndex) >= 0;
   }
 
-  _renderCells($row, options) {
+  protected _renderCells($row, options) {
     const that = this;
     let columnIndex = 0;
     const { row } = options;
@@ -684,7 +782,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _updateCells($rowElement, $newRowElement, columnIndices) {
+  protected _updateCells($rowElement, $newRowElement, columnIndices) {
     const $cells = $rowElement.children();
     const $newCells = $newRowElement.children();
     const highlightChanges = this.option('highlightChanges');
@@ -704,7 +802,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     copyAttributes($rowElement.get(0), $newRowElement.get(0));
   }
 
-  _setCellAriaAttributes($cell, cellOptions) {
+  /**
+   * @extended: editing
+   */
+  protected _setCellAriaAttributes($cell, cellOptions) {
     if (cellOptions.rowType !== 'freeSpace') {
       this.setAria('role', 'gridcell', $cell);
 
@@ -714,7 +815,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _renderCell($row, options) {
+  protected _renderCell($row, options) {
     const cellOptions = this._getCellOptions(options);
 
     if (options.columnIndices) {
@@ -737,7 +838,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $cell;
   }
 
-  _renderCellContent($cell, options, renderOptions) {
+  /**
+   * @extended: column_fixing, editing_form_based, filter_row, header_filter
+   */
+  protected _renderCellContent($cell, options, renderOptions) {
     const template = this._getCellTemplate(options);
 
     when(!template || this.renderTemplate($cell, template, options, undefined, renderOptions.change)).done(() => {
@@ -745,15 +849,15 @@ export class ColumnsView extends viewWithColumnStateMixin {
     });
   }
 
-  _getCellTemplate(options?): any {
+  protected _getCellTemplate(options?): any {
 
   }
 
-  _getRows(change?) {
-    return [];
+  protected _getRows(change?) {
+    return [] as any[];
   }
 
-  _getCellOptions(options): any {
+  protected _getCellOptions(options): any {
     const cellOptions = {
       column: options.column,
       columnIndex: options.columnIndex,
@@ -766,7 +870,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return cellOptions;
   }
 
-  _addWatchMethod(options, source?) {
+  public _addWatchMethod(options, source?) {
     if (!this.option('repaintChangesOnly')) return;
 
     const watchers: any[] = [];
@@ -827,19 +931,22 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return options;
   }
 
-  _cellPrepared(cell, options) {
+  /**
+   * @extended: adaptivity, editing, validating
+   */
+  public _cellPrepared(cell, options) {
     options.cellElement = getPublicElement($(cell));
     this.executeAction('onCellPrepared', options);
   }
 
-  _rowPrepared($row, options, row?) {
+  protected _rowPrepared($row, options, row?) {
     elementData($row.get(0), 'options', options);
 
     options.rowElement = getPublicElement($row);
     this.executeAction('onRowPrepared', options);
   }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { optionNames } = e;
 
     if (gridCoreUtils.checkChanges(optionNames, ['width', 'visibleWidth'])) {
@@ -855,79 +962,50 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  getCellIndex($cell) {
+  /**
+   * @extended: column_fixing, editing
+   */
+  public getCellIndex($cell, rowIndex?) {
     const cellIndex = $cell.length ? $cell[0].cellIndex : -1;
 
     return cellIndex;
   }
 
-  getTableElements() {
+  /**
+   * @extended: column_fixing
+   */
+  public getTableElements() {
     // @ts-expect-error
     return this._tableElement || $();
   }
 
-  getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
+  /**
+   * @extended: column_fixing
+   */
+  public getTableElement(isFixedTableRendering?): dxElementWrapper | undefined {
     return this._tableElement;
   }
 
-  setTableElement(tableElement, isFixedTableRendering?) {
+  /**
+   * @extended: column_fixing
+   */
+  public setTableElement(tableElement, isFixedTableRendering?) {
     this._tableElement = tableElement;
   }
 
-  optionChanged(args) {
-    super.optionChanged(args);
+  protected _afterRowPrepared(e?) {}
 
-    // eslint-disable-next-line default-case
-    switch (args.name) {
-      case 'cellHintEnabled':
-      case 'onCellPrepared':
-      case 'onRowPrepared':
-      case 'onCellHoverChanged':
-      case 'keyboardNavigation':
-        this._invalidate(true, true);
-        args.handled = true;
-        break;
-    }
+  /**
+   * @extended: header_panel
+   */
+  protected _handleDataChanged(e) {
   }
 
-  init() {
-    this._scrollLeft = -1;
-    this._columnsController = this.getController('columns');
-    this._dataController = this.getController('data');
-    this._delayedTemplates = [];
-    this._templateDeferreds = new Set();
-    this._templatesCache = {};
-    this._templateTimeouts = new Set();
-    this.createAction('onCellClick');
-    this.createAction('onRowClick');
-    this.createAction('onCellDblClick');
-    this.createAction('onRowDblClick');
-    this.createAction('onCellHoverChanged', { excludeValidators: ['disabled', 'readOnly'] });
-    this.createAction('onCellPrepared', { excludeValidators: ['disabled', 'readOnly'], category: 'rendering' });
-    this.createAction('onRowPrepared', {
-      excludeValidators: ['disabled', 'readOnly'],
-      category: 'rendering',
-      afterExecute: (e) => {
-        this._afterRowPrepared(e);
-      },
-    });
-
-    this._columnsController.columnsChanged.add(this._columnOptionChanged.bind(this));
-    this._dataController && this._dataController.changed.add(this._handleDataChanged.bind(this));
-  }
-
-  _afterRowPrepared(e?) {
-
-  }
-
-  _handleDataChanged() {
-  }
-
-  callbackNames() {
+  public callbackNames() {
     return ['scrollChanged'];
   }
 
-  _updateScrollLeftPosition() {
+  protected _updateScrollLeftPosition() {
     const scrollLeft = this._scrollLeft;
 
     if (scrollLeft >= 0) {
@@ -936,7 +1014,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  scrollTo(pos) {
+  public scrollTo(pos) {
     const $element = this.element();
     const $scrollContainer = $element && $element.children(`.${this.addWidgetPrefix(SCROLL_CONTAINER_CLASS)}`).not(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
 
@@ -946,11 +1024,14 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _getContent(isFixedTableRendering?) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _getContent(isFixedTableRendering?) {
     return this._tableElement?.parent();
   }
 
-  _removeContent(isFixedTableRendering) {
+  private _removeContent(isFixedTableRendering) {
     const $scrollContainer = this._getContent(isFixedTableRendering);
 
     if ($scrollContainer?.length) {
@@ -958,7 +1039,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  _wrapTableInScrollContainer($table, isFixedTableRendering?) {
+  /**
+   * @extended: column_fixing
+   */
+  protected _wrapTableInScrollContainer($table, isFixedTableRendering?) {
     const $scrollContainer = $('<div>');
     const useNative = this.option('scrolling.useNative');
 
@@ -984,12 +1068,12 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $scrollContainer;
   }
 
-  needWaitAsyncTemplates() {
+  private needWaitAsyncTemplates() {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-boolean-literal-compare
     return this.option('templatesRenderAsynchronously') && this.option('renderAsync') === false;
   }
 
-  waitAsyncTemplates(forceWaiting = false) {
+  public waitAsyncTemplates(forceWaiting = false) {
     // @ts-expect-error
     const result = new Deferred();
     const needWaitAsyncTemplates = forceWaiting || this.needWaitAsyncTemplates();
@@ -1014,7 +1098,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return result.promise();
   }
 
-  _updateContent($newTableElement, change, isFixedTableRendering) {
+  protected _updateContent($newTableElement, change, isFixedTableRendering?) {
     return this.waitAsyncTemplates().done(() => {
       this._removeContent(isFixedTableRendering);
       this.setTableElement($newTableElement, isFixedTableRendering);
@@ -1022,11 +1106,9 @@ export class ColumnsView extends viewWithColumnStateMixin {
     });
   }
 
-  _findContentElement() {
+  public _findContentElement(isFixedTableRendering?: any): any {}
 
-  }
-
-  _getWidths($cellElements?: dxElementWrapper): number[] {
+  public _getWidths($cellElements?: dxElementWrapper): number[] {
     if (!$cellElements) {
       return [];
     }
@@ -1053,7 +1135,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return result;
   }
 
-  getColumnWidths($tableElement?: dxElementWrapper): number[] {
+  /**
+   * @extended: column_fixing
+   */
+  public getColumnWidths($tableElement?: dxElementWrapper): number[] {
     (this.option('forceApplyBindings') || noop)();
 
     $tableElement = $tableElement ?? this.getTableElement();
@@ -1084,11 +1169,11 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return [];
   }
 
-  getVisibleColumnIndex(columnIndex, rowIndex) {
+  protected getVisibleColumnIndex(columnIndex, rowIndex) {
     return columnIndex;
   }
 
-  setColumnWidths({ widths, optionNames }: any): void {
+  protected setColumnWidths({ widths, optionNames }: any): void {
     const $tableElement = this.getTableElement();
 
     if (!$tableElement?.length || !widths) {
@@ -1142,11 +1227,14 @@ export class ColumnsView extends viewWithColumnStateMixin {
     });
   }
 
-  getCellElements(rowIndex): dxElementWrapper | undefined {
+  /**
+   * @extended: editing_form_based
+   */
+  public getCellElements(rowIndex): dxElementWrapper | undefined {
     return this._getCellElementsCore(rowIndex);
   }
 
-  _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
+  protected _getCellElementsCore(rowIndex): dxElementWrapper | undefined {
     if (rowIndex < 0) {
       return undefined;
     }
@@ -1156,7 +1244,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $row.children();
   }
 
-  _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
+  /**
+   * @extended: adaptivity
+   */
+  public _getCellElement(rowIndex, columnIdentifier): dxElementWrapper | undefined {
     const $cells = this.getCellElements(rowIndex);
     const columnVisibleIndex = this._getVisibleColumnIndex($cells, rowIndex, columnIdentifier);
 
@@ -1169,7 +1260,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $cell.length > 0 ? $cell : undefined;
   }
 
-  _getRowElement(rowIndex) {
+  private _getRowElement(rowIndex) {
     const that = this;
     // @ts-expect-error
     let $rowElement = $();
@@ -1185,7 +1276,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return undefined;
   }
 
-  getCellElement(rowIndex, columnIdentifier): Element | undefined {
+  private getCellElement(rowIndex, columnIdentifier): Element | undefined {
     const $cell = this._getCellElement(rowIndex, columnIdentifier);
 
     if ($cell) {
@@ -1195,7 +1286,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return undefined;
   }
 
-  getRowElement(rowIndex) {
+  public getRowElement(rowIndex) {
     const $rows = this._getRowElement(rowIndex);
     let elements: any = [];
 
@@ -1210,7 +1301,10 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return elements;
   }
 
-  _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
+  /**
+   * @extended: editing_form_based
+   */
+  protected _getVisibleColumnIndex($cells, rowIndex, columnIdentifier) {
     if (isString(columnIdentifier)) {
       const columnIndex = this._columnsController.columnOption(columnIdentifier, 'index');
       return this._columnsController.getVisibleIndex(columnIndex);
@@ -1219,13 +1313,16 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return columnIdentifier;
   }
 
-  getColumnElements() {}
+  public getColumnElements(): any {}
 
-  getColumns(rowIndex?) {
+  public getColumns(rowIndex?, $tableElement?) {
     return this._columnsController.getVisibleColumns(rowIndex);
   }
 
-  getCell(cellPosition, rows, cells) {
+  /**
+   * @extended: adaptivity
+   */
+  public getCell(cellPosition, rows?, cells?) {
     const $rows = rows || this._getRowElements();
     let $cells;
 
@@ -1240,7 +1337,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     }
   }
 
-  getRowsCount() {
+  private getRowsCount() {
     const tableElement = this.getTableElement();
 
     if (tableElement && tableElement.length === 1) {
@@ -1249,7 +1346,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return 0;
   }
 
-  _getRowElementsCore(tableElement) {
+  protected _getRowElementsCore(tableElement) {
     tableElement = tableElement || this.getTableElement();
 
     if (tableElement) {
@@ -1264,19 +1361,25 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return $();
   }
 
-  _getRowElements(tableElement?) {
+  public _getRowElements(tableElement?) {
     return this._getRowElementsCore(tableElement);
   }
 
-  getRowIndex($row) {
+  /**
+   * @extended: column_fixing
+   */
+  public getRowIndex($row) {
     return this._getRowElements().index($row);
   }
 
-  getBoundingRect() { }
+  protected getBoundingRect() { }
 
-  getName() { }
+  public getName() { }
 
-  setScrollerSpacing(width) {
+  /**
+   * @extended: column_fixing
+   */
+  public setScrollerSpacing(width) {
     const that = this;
     const $element = that.element();
     const rtlEnabled = that.option('rtlEnabled');
@@ -1287,7 +1390,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     });
   }
 
-  isScrollbarVisible(isHorizontal) {
+  protected isScrollbarVisible(isHorizontal) {
     const $element = this.element();
     const $tableElement = this._tableElement;
 
@@ -1298,16 +1401,7 @@ export class ColumnsView extends viewWithColumnStateMixin {
     return false;
   }
 
-  isDisposed() {
+  public isDisposed() {
     return this.component?._disposed;
-  }
-
-  dispose() {
-    if (hasWindow()) {
-      const window = getWindow();
-
-      this._templateTimeouts?.forEach((templateTimeout) => window.clearTimeout(templateTimeout));
-      this._templateTimeouts?.clear();
-    }
   }
 }

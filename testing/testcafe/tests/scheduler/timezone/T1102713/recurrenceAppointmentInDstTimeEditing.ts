@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import Scheduler from '../../../../model/scheduler';
 import AppointmentDialog from '../../../../model/scheduler/appointment/dialog';
 import Appointment from '../../../../model/scheduler/appointment';

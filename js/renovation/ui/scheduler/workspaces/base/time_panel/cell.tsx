@@ -3,6 +3,7 @@ import {
   ComponentBindings,
   JSXComponent,
   JSXTemplate,
+  OneWay,
   Template,
 } from '@devextreme-generator/declarations';
 import { CellBase as Cell, CellBaseProps } from '../cell';
@@ -10,18 +11,19 @@ import { DateTimeCellTemplateProps } from '../../types';
 
 export const viewFunction = ({
   props: {
+    className,
     text,
     isFirstGroupCell,
     isLastGroupCell,
-    className,
     timeCellTemplate: TimeCellTemplate,
+    highlighted,
   },
   timeCellTemplateProps,
 }: TimePanelCell): JSX.Element => (
   <Cell
     isFirstGroupCell={isFirstGroupCell}
     isLastGroupCell={isLastGroupCell}
-    className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${className}`}
+    className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${highlighted ? 'dx-scheduler-time-panel-current-time-cell' : ''} ${className}`}
   >
 
     {!TimeCellTemplate && (
@@ -40,6 +42,8 @@ export const viewFunction = ({
 
 @ComponentBindings()
 export class TimePanelCellProps extends CellBaseProps {
+  @OneWay() highlighted?: boolean;
+
   @Template() timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 

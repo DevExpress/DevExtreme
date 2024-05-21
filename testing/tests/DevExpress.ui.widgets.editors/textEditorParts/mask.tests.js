@@ -4,8 +4,10 @@ import keyboardMock from '../../../helpers/keyboardMock.js';
 import caretWorkaround from './caretWorkaround.js';
 
 import 'ui/text_box/ui.text_editor';
+import 'ui/validator';
 
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const CLEAR_BUTTON_CLASS = '.dx-clear-button-area';
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -410,7 +412,6 @@ QUnit.module('typing', moduleConfig, () => {
 
     QUnit.test('TextEditor with mask option should firing the \'onChange\' event', function(assert) {
         const handler = sinon.stub();
-        const clock = sinon.useFakeTimers();
 
         const $textEditor = $('#texteditor').dxTextEditor({
             onChange: handler,
@@ -424,7 +425,7 @@ QUnit.module('typing', moduleConfig, () => {
         keyboard.caret(0);
 
         $input.triggerHandler('focus');
-        clock.tick(10);
+        this.clock.tick(10);
 
         keyboard.type('123').press('enter');
         assert.equal(handler.callCount, 1, '\'change\' event is fired on enter after value change');
@@ -439,7 +440,6 @@ QUnit.module('typing', moduleConfig, () => {
         $input.triggerHandler('focus');
         $input.triggerHandler('blur');
         assert.equal(handler.callCount, 2, '\'change\' event is not fired after focus out without value change');
-        clock.restore();
     });
 
     QUnit.test('TextEditor with mask option should work correctly with autofill in webkit browsers (T869537)', function(assert) {
@@ -448,7 +448,6 @@ QUnit.module('typing', moduleConfig, () => {
             return;
         }
 
-        const clock = sinon.useFakeTimers();
         let inputMatchesStub;
 
         try {
@@ -471,11 +470,10 @@ QUnit.module('typing', moduleConfig, () => {
                 .beforeInput(testText)
                 .input();
 
-            clock.tick(10);
+            this.clock.tick(10);
             assert.strictEqual($input.val(), '+1 (555) 555', 'the mask is applied');
             assert.equal(textEditor.option('isValid'), true, 'isValid is true');
         } finally {
-            clock.restore();
             inputMatchesStub && inputMatchesStub.restore();
         }
     });
@@ -1512,7 +1510,7 @@ QUnit.module('value', moduleConfig, () => {
         const textEditor = $textEditor.dxTextEditor('instance');
 
         textEditor.option('value', '1');
-        valueChangedHandler.reset();
+        valueChangedHandler.resetHistory();
 
         const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const keyboard = keyboardMock($input, true);
@@ -1746,7 +1744,7 @@ QUnit.module('clear button', () => {
 
             const instance = $textEditor.dxTextEditor('instance');
             const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
-            const $clearButton = $textEditor.find('.dx-clear-button-area');
+            const $clearButton = $textEditor.find(CLEAR_BUTTON_CLASS);
 
             caretWorkaround($input);
 
@@ -1772,7 +1770,7 @@ QUnit.module('clear button', () => {
             });
 
             $textEditor
-                .find('.dx-clear-button-area')
+                .find(CLEAR_BUTTON_CLASS)
                 .trigger('dxclick');
 
             clock.tick(10);
@@ -1781,6 +1779,54 @@ QUnit.module('clear button', () => {
         } finally {
             clock.restore();
         }
+    });
+
+    QUnit.test('Input text should be cleared after click on a clear button even if value is not changed yet (T1193735)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '43#.###',
+            showClearButton: true
+        });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        $input.triggerHandler('focus');
+
+        caretWorkaround($input);
+        keyboard.caret(0);
+
+        keyboard.type('9');
+
+        const $clearButton = $textEditor.find(CLEAR_BUTTON_CLASS);
+
+        $clearButton.trigger('dxclick');
+
+        assert.strictEqual($input.val(), '43_.___');
+    });
+
+    QUnit.test('Cleared text should not be restored on focusout', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '43#.###',
+            showClearButton: true
+        });
+
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input, true);
+
+        $input.triggerHandler('focus');
+
+        caretWorkaround($input);
+        keyboard.caret(0);
+
+        keyboard.type('9');
+
+        const $clearButton = $textEditor.find(CLEAR_BUTTON_CLASS);
+
+        $clearButton.trigger('dxclick');
+        $input.trigger('focusout');
+
+        assert.strictEqual(textEditor.option('value'), '');
     });
 });
 
@@ -2285,6 +2331,50 @@ QUnit.module('validation', {}, () => {
         textEditor.option('value', 'f');
         assert.notOk(textEditor.option('isValid'), 'mask with an invalid value should be invalid');
     });
+
+    QUnit.test('The invalid mask error should be restores after removing the mask (T1214604)', function(assert) {
+        const maskInvalidMessage = 'mask error';
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000000/0009',
+            maskInvalidMessage,
+        });
+        const textEditor = $textEditor.dxTextEditor('instance');
+
+        textEditor.option({ value: '123' });
+
+        assert.strictEqual(textEditor.option('validationError').message, maskInvalidMessage, 'validation message was added');
+
+        textEditor.option({ mask: '' });
+
+        assert.strictEqual(textEditor.option('validationError'), null);
+    });
+
+    QUnit.test('A custom validation error is kept after mask restoring', function(assert) {
+        const customErrorMessage = 'custom error';
+
+        const $textEditor = $('#texteditor').dxTextEditor({
+            mask: '000000/0009',
+        }).dxValidator({
+            validationRules: [{
+                type: 'custom',
+                message: customErrorMessage,
+                validationCallback: () => false,
+            }],
+        });
+
+        const textEditor = $textEditor.dxTextEditor('instance');
+        const validator = $textEditor.dxValidator('instance');
+
+        textEditor.option({ value: '123' });
+
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
+
+        textEditor.option({ mask: '' });
+
+        assert.strictEqual(validator.option('validationStatus'), 'invalid');
+        assert.strictEqual(validator.option('validationRules')[0].message, customErrorMessage);
+    });
 });
 
 QUnit.module('T9', moduleConfig, () => {
@@ -2529,6 +2619,36 @@ QUnit.module('Hidden input', {}, () => {
 
         const $hiddenInput = $textEditor.find('input[type=hidden]');
         assert.equal($hiddenInput.attr('name'), 'Editor with mask', 'name of hidden input');
+    });
+
+    QUnit.test('Value change should work as usual after mask option is updated programmatically (T1214019)', function(assert) {
+        const $textEditor = $('#texteditor').dxTextEditor({
+            valueChangeEvent: 'input',
+            mask: '000',
+        });
+        const $input = $textEditor.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const instance = $textEditor.dxTextEditor('instance');
+
+        keyboardMock($input, true)
+            .caret(0)
+            .type('1')
+            .change();
+
+        $textEditor.blur();
+        instance.option('mask', '0000');
+        keyboardMock($input, true)
+            .caret(1)
+            .type('2')
+            .change();
+
+        $textEditor.blur();
+        instance.option('mask', '000');
+
+        const $hiddenInput = $textEditor.find('input[type=hidden]');
+
+        assert.strictEqual($input.val(), '12_', 'Value is saved');
+        assert.strictEqual($hiddenInput.val(), '12', 'Hidden value is saved');
+        assert.strictEqual(instance.option('value'), '12', 'Value option is correct');
     });
 
     [

@@ -81,7 +81,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '116.0.5845.110'
+        chrome-version: '120.0.6099.71'
 
     - name: Create directory link
       run: cd ../ && ln -s DevExtreme devextreme
@@ -220,7 +220,7 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '116.0.5845.110'
+        chrome-version: '120.0.6099.71'
 
     - name: Use Node.js
       uses: actions/setup-node@v3

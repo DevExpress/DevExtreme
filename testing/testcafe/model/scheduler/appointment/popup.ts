@@ -10,57 +10,69 @@ export const CLASS = {
   textEditorInput: 'dx-texteditor-input',
   overlayWrapper: 'dx-overlay-wrapper',
   fullScreen: 'dx-popup-fullscreen',
+  switch: 'dx-switch',
+  // e2e
+  form: 'e2e-dx-scheduler-form',
+  textEditor: 'e2e-dx-scheduler-form-text',
+  descriptionEditor: 'e2e-dx-scheduler-form-description',
+  startDateEditor: 'e2e-dx-scheduler-form-start-date',
+  endDateEditor: 'e2e-dx-scheduler-form-end-date',
+  startDateTimeZoneEditor: 'e2e-dx-scheduler-form-start-date-timezone',
+  endDateTimeZoneEditor: 'e2e-dx-scheduler-form-end-date-timezone',
+  allDaySwitch: 'e2e-dx-scheduler-form-all-day-switch',
+  recurrenceSwitch: 'e2e-dx-scheduler-form-recurrence-switch',
+  selectItem: 'dx-list-item',
+  radioButton: 'dx-radiobutton',
+};
+export const SELECTORS = {
+  textInput: `.${CLASS.textEditor} .${CLASS.textEditorInput}`,
+  descriptionTextArea: `.${CLASS.descriptionEditor} .${CLASS.textEditorInput}`,
+  startDateInput: `.${CLASS.startDateEditor} .${CLASS.textEditorInput}`,
+  endDateInput: `.${CLASS.endDateEditor} .${CLASS.textEditorInput}`,
+  startDateTimeZoneInput: `.${CLASS.startDateTimeZoneEditor} .${CLASS.textEditorInput}`,
+  endDateTimeZoneInput: `.${CLASS.endDateTimeZoneEditor} .${CLASS.textEditorInput}`,
+  allDaySwitch: `.${CLASS.allDaySwitch} .${CLASS.switch}`,
+  recurrenceSwitch: `.${CLASS.recurrenceSwitch} .${CLASS.switch}`,
 };
 
 export default class AppointmentPopup {
-  element: Selector;
+  element = this.scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
 
-  wrapper: Selector;
+  form = Selector(`.${CLASS.form}`);
 
-  subjectElement: Selector;
+  wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
 
-  descriptionElement: Selector;
+  subjectElement = this.wrapper.find(SELECTORS.textInput);
 
-  startDateElement: Selector;
+  descriptionElement = this.wrapper.find(SELECTORS.descriptionTextArea);
 
-  endDateElement: Selector;
+  startDateElement = this.wrapper.find(SELECTORS.startDateInput);
 
-  doneButton: Selector;
+  endDateElement = this.wrapper.find(SELECTORS.endDateInput);
 
-  cancelButton: Selector;
+  startDateTimeZoneElement = this.wrapper.find(SELECTORS.startDateTimeZoneInput);
 
-  allDayElement: Selector;
+  endDateTimeZoneElement = this.wrapper.find(SELECTORS.endDateTimeZoneInput);
 
-  recurrenceElement: Selector;
+  doneButton = this.wrapper.find('.dx-popup-done.dx-button');
 
-  freqElement: Selector;
+  cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
 
-  endRepeatDateElement: Selector;
+  allDayElement = this.wrapper.find(SELECTORS.allDaySwitch);
 
-  repeatEveryElement: Selector;
+  recurrenceElement = this.wrapper.find(SELECTORS.recurrenceSwitch);
 
-  fullScreen: Promise<boolean>;
+  freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
 
-  constructor(scheduler: Selector) {
-    this.element = scheduler.find(`.${CLASS.popup}.${CLASS.appointmentPopup}`);
-    this.wrapper = Selector(`.${CLASS.popupWrapper}.${CLASS.appointmentPopup}`);
+  recurrenceTypeElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(0);
 
-    this.subjectElement = this.wrapper.find('.dx-texteditor-input').nth(0);
-    this.startDateElement = this.wrapper.find('.dx-texteditor-input').nth(1);
-    this.endDateElement = this.wrapper.find('.dx-texteditor-input').nth(2);
-    this.descriptionElement = this.wrapper.find('.dx-texteditor-input').nth(3);
-    this.allDayElement = this.wrapper.find('.dx-switch').nth(0);
-    this.recurrenceElement = this.wrapper.find('.dx-switch').nth(1);
+  endRepeatDateElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(2);
 
-    this.freqElement = this.wrapper.find('.dx-recurrence-selectbox-freq .dx-selectbox');
+  repeatEveryElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(1);
 
-    this.doneButton = this.wrapper.find('.dx-popup-done.dx-button');
-    this.cancelButton = this.wrapper.find(`.${CLASS.cancelButton}`);
+  fullScreen = this.wrapper.find(`.${CLASS.overlayWrapper} .${CLASS.fullScreen}`).exists;
 
-    this.endRepeatDateElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(2);
-    this.repeatEveryElement = this.wrapper.find(`.${CLASS.recurrenceEditor} .${CLASS.textEditorInput}`).nth(1);
-
-    this.fullScreen = this.wrapper.find(`.${CLASS.overlayWrapper} .${CLASS.fullScreen}`).exists;
+  constructor(private readonly scheduler: Selector) {
   }
 
   isVisible(): Promise<boolean> {
@@ -70,5 +82,25 @@ export default class AppointmentPopup {
     return ClientFunction(() => !(element() as any).classList.contains(invisibleStateClass), {
       dependencies: { element, invisibleStateClass },
     })();
+  }
+
+  getAllDaySwitchValue(): Promise<string | undefined> {
+    return this.allDayElement.find('input[type="hidden"]').value;
+  }
+
+  getRecurrenceRuleSwitchValue(): Promise<string | undefined> {
+    return this.recurrenceElement.find('input[type="hidden"]').value;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  getRecurrenceTypeSelectItem(nth = 0): Selector {
+    return Selector(`.${CLASS.overlayWrapper}`)
+      .nth(1)
+      .find(`.${CLASS.selectItem}`)
+      .nth(nth);
+  }
+
+  getEndRepeatRadioButton(nth = 0): Selector {
+    return this.wrapper.find(`.${CLASS.radioButton}`).nth(nth);
   }
 }

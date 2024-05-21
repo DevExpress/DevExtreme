@@ -679,19 +679,6 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
 
         assert.strictEqual(this.instance.option('text'), '4.65');
     });
-
-    QUnit.test('pressing "." should clear selected text if it contains a decimal separator (T1199553)', function(assert) {
-        this.instance.option({
-            format: '0#.00',
-            value: 123.45
-        });
-
-        this.keyboard
-            .caret({ start: 0, end: 6 })
-            .type('.');
-
-        assert.strictEqual(this.input.val(), '0.00', 'mask value is cleared');
-    });
 });
 
 QUnit.module('format: minimum and maximum', moduleConfig, () => {
@@ -1299,6 +1286,20 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
 
         this.keyboard.caret(3).press('backspace');
         assert.equal(this.input.val(), '1.0', 'zero has not been removed');
+    });
+
+    QUnit.test('NumberBox should not accept entering letters if mask is "#0.0#" (T1211093)', function(assert) {
+        this.instance.option({
+            format: '#0.0#',
+            value: '14.30',
+        });
+
+        this.keyboard
+            .caret(4)
+            .press('backspace')
+            .type('b');
+
+        assert.strictEqual(this.input.val(), '14.0', 'letter is not accepted');
     });
 
     QUnit.test('incomplete values should be reformatted on enter', function(assert) {

@@ -250,7 +250,7 @@ QUnit.test('scrollbar height calculated correctly when simulatedScrollbar is tru
     $container.height(containerHeight);
     $content.height(contentHeight);
 
-    onUpdatedHandler.reset();
+    onUpdatedHandler.resetHistory();
     $scrollable.dxScrollable('instance').update();
 
     assert.strictEqual(onUpdatedHandler.callCount, 1, 'onUpdatedHandler.callCount');

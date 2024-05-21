@@ -19,7 +19,7 @@ function getMockElement() {
 utils.getNextDefsSvgId = sinon.stub().returns('DevExpressId');
 
 QUnit.testDone(function() {
-    renderers.SvgElement.reset && renderers.SvgElement.reset();
+    renderers.SvgElement.resetHistory && renderers.SvgElement.resetHistory();
 });
 
 // const elementsName = ['DEBUG_set_SvgElement', 'DEBUG_set_RectSvgElement', 'DEBUG_set_PathSvgElement', 'DEBUG_set_ArcSvgElement', 'DEBUG_set_TextSvgElement'];
@@ -120,8 +120,8 @@ QUnit.test('setOptions', function(assert) {
         cssClass: 'my-super-class',
         animation: { enabled: false, duration: 2000, easing: 'linear' }
     });
-    renderer.root.stub('attr').reset();
-    renderer.root.stub('css').reset();
+    renderer.root.stub('attr').resetHistory();
+    renderer.root.stub('css').resetHistory();
 
     // act
     renderer.setOptions({
@@ -208,7 +208,7 @@ QUnit.test('Resize with wrong size', function(assert) {
     // arrange
     const renderer = this.createRenderer();
 
-    renderer.root.stub('attr').reset();
+    renderer.root.stub('attr').resetHistory();
 
     // act
     const result = renderer.resize(0, -10);
@@ -222,7 +222,7 @@ QUnit.test('Resize with good size', function(assert) {
     // arrange
     const renderer = this.createRenderer();
 
-    renderer.root.stub('attr').reset();
+    renderer.root.stub('attr').resetHistory();
 
     // act
     const result = renderer.resize(1000, 100);
@@ -302,7 +302,7 @@ QUnit.module('Locking', {
     beforeEach: function() {
         this.container = document.createElement('div');
         this.renderer = new Renderer({ container: this.container });
-        this.renderer.root.append.reset();
+        this.renderer.root.append.resetHistory();
     },
 
     afterEach: function() {
@@ -623,7 +623,7 @@ QUnit.test('clipRect with params', function(assert) {
 QUnit.test('clipRect disposing', function(assert) {
     // arrange
     const clipRect = this.renderer.clipRect(10, 20, 30, 40);
-    clipRect.clipPath.stub('dispose').reset();
+    clipRect.clipPath.stub('dispose').resetHistory();
 
     // act
     clipRect.dispose();
@@ -703,9 +703,9 @@ QUnit.test('shadowFilter with params', function(assert) {
 QUnit.test('shadowFilter change filter attr function (full list of params)', function(assert) {
     // arrange
     const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
-    shadow.gaussianBlur.stub('attr').reset();
-    shadow.offset.stub('attr').reset();
-    shadow.flood.stub('attr').reset();
+    shadow.gaussianBlur.stub('attr').resetHistory();
+    shadow.offset.stub('attr').resetHistory();
+    shadow.flood.stub('attr').resetHistory();
     shadow.element.setAttribute = sinon.spy();
 
     // act
@@ -736,9 +736,9 @@ QUnit.test('shadowFilter change filter attr function (full list of params)', fun
 QUnit.test('shadowFilter change filter attr function (short list of params)', function(assert) {
     // arrange
     const shadow = this.renderer.shadowFilter(10, 20, 30, 40, 50, 60, 70, 'red', 0.6);
-    shadow.gaussianBlur.stub('attr').reset();
-    shadow.offset.stub('attr').reset();
-    shadow.flood.stub('attr').reset();
+    shadow.gaussianBlur.stub('attr').resetHistory();
+    shadow.offset.stub('attr').resetHistory();
+    shadow.flood.stub('attr').resetHistory();
     shadow.element.setAttribute = sinon.spy();
 
     // act

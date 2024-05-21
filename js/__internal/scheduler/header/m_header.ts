@@ -8,7 +8,7 @@ import $ from '@js/core/renderer';
 import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { renovationGetCurrentView } from '@js/renovation/ui/scheduler/model/untyped_getCurrentView';
-import { dxSchedulerOptions } from '@js/ui/scheduler';
+import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Toolbar from '@js/ui/toolbar';
 import Widget from '@js/ui/widget/ui.widget';
 

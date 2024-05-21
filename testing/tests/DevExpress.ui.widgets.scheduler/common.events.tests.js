@@ -739,7 +739,7 @@ QUnit.module('Events', {
             maxAppointmentsPerCell: 1,
             currentDate: new Date(2023, 7, 18),
             onAppointmentContextMenu,
-        });
+        }, this.clock);
 
         scheduler.appointments.click();
 

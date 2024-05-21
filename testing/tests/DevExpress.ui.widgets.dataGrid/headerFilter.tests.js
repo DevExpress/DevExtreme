@@ -4346,7 +4346,7 @@ QUnit.module('Header Filter with real columnsController', {
         }];
         this.options.dataSource = { load: spy };
         this.setupDataGrid();
-        spy.reset();
+        spy.resetHistory();
 
         // act
         this.columnOption('date', 'filterValues', [['date', '=', '2018/01/01']]);
@@ -4598,7 +4598,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(loadSpy.callCount, 1);
-        loadSpy.reset();
+        loadSpy.resetHistory();
 
         // act
         this.headerFilterController.showHeaderFilterMenu(0);
@@ -4613,7 +4613,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(loadSpy.callCount, 1);
-        loadSpy.reset();
+        loadSpy.resetHistory();
 
         // act
         const list = this.getListOrTreeView();
@@ -4626,7 +4626,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(loadSpy.callCount, 0);
-        loadSpy.reset();
+        loadSpy.resetHistory();
     });
 
 

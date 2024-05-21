@@ -1,4 +1,4 @@
-import { dxSchedulerOptions } from '@js/ui/scheduler';
+import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Widget from '@js/ui/widget/ui.widget';
 
 class WidgetObserver extends Widget<dxSchedulerOptions> {

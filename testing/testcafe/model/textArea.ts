@@ -1,5 +1,5 @@
 import TextBox from './textBox';
-import { WidgetName } from '../helpers/createWidget';
+import type { WidgetName } from '../helpers/widgetTypings';
 
 export default class TextArea extends TextBox {
   // eslint-disable-next-line class-methods-use-this

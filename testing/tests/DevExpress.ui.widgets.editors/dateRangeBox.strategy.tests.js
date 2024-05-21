@@ -720,7 +720,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="instantly"', moduleConfig,
             assert.strictEqual(onValueChangedHandler.callCount, 1, 'onValueChanged was called once after select start date');
             assert.strictEqual(onValueChangedHandler.getCall(0).args[0].event.type, 'dxclick', 'event is correct');
 
-            onValueChangedHandler.reset();
+            onValueChangedHandler.resetHistory();
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             $endDateCell.trigger('dxclick');
@@ -1079,7 +1079,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
             $cell.trigger('dxclick');
 
             assert.strictEqual(onValueChangedHandler.callCount, 0, 'onValueChanged was not called after select start date');
-            onValueChangedHandler.reset();
+            onValueChangedHandler.resetHistory();
 
             const $endDateCell = $(this.getCalendar().$element()).find(`.${CALENDAR_CELL_CLASS}`).eq(140);
             $endDateCell.trigger('dxclick');
@@ -1115,7 +1115,7 @@ QUnit.module('RangeCalendar strategy: applyValueMode="useButtons"', moduleConfig
 
             checkEventHandlerArgs(onValueChangedHandler.getCall(0).args[0].event);
 
-            onValueChangedHandler.reset();
+            onValueChangedHandler.resetHistory();
 
             $(this.instance.endDateField()).trigger('dxclick');
 

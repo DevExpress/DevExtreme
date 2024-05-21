@@ -1,5 +1,5 @@
 import { ClientFunction } from 'testcafe';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import Scheduler, { CLASS } from '../../../../model/scheduler';
 
 export const createScheduler = async (options = {}): Promise<void> => {

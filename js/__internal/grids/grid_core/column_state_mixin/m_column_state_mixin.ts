@@ -1,13 +1,25 @@
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { getDefaultAlignment } from '@js/core/utils/position';
+import type { View } from '@ts/grids/grid_core/m_modules';
+import type { InternalGrid } from '@ts/grids/grid_core/m_types';
 
 const COLUMN_INDICATORS_CLASS = 'dx-column-indicators';
 const GROUP_PANEL_ITEM_CLASS = 'dx-group-panel-item';
 
-export default {
-  _applyColumnState(options) {
+export interface ColumnStateMixinRequirements {
+  option: InternalGrid['option'];
+
+  component: InternalGrid;
+
+  setAria: View['setAria'];
+}
+
+export const ColumnStateMixin = <T extends new(...args: any[]) => ColumnStateMixinRequirements>(Base: T) => class extends Base {
+  /**
+   * @extended header_filter_core
+   */
+  protected _applyColumnState(options) {
     const that = this;
     const rtlEnabled = this.option('rtlEnabled');
     const columnAlignment = that._getColumnAlignment(options.column.alignment, rtlEnabled);
@@ -15,6 +27,7 @@ export default {
     const isGroupPanelItem = parameters.rootElement.hasClass(GROUP_PANEL_ITEM_CLASS);
     const $indicatorsContainer = that._createIndicatorContainer(parameters, isGroupPanelItem);
     const $span = $('<span>').addClass(that._getIndicatorClassName(options.name));
+    // TODO getController
     const columnsController = that.component?.getController('columns');
     const indicatorAlignment = columnsController?.getHeaderContentAlignment(columnAlignment) || columnAlignment;
 
@@ -25,17 +38,22 @@ export default {
     $indicatorsContainer[(isGroupPanelItem || !options.showColumnLines) && indicatorAlignment === 'left' ? 'appendTo' : 'prependTo'](options.rootElement);
 
     return $span;
-  },
+  }
 
-  _getIndicatorClassName: noop,
+  /**
+   * @extended header_filter_core
+   */
+  // @ts-expect-error
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _getIndicatorClassName(name: string): string {}
 
-  _getColumnAlignment(alignment, rtlEnabled) {
+  private _getColumnAlignment(alignment, rtlEnabled) {
     rtlEnabled = rtlEnabled || this.option('rtlEnabled');
 
     return alignment && alignment !== 'center' ? alignment : getDefaultAlignment(rtlEnabled);
-  },
+  }
 
-  _createIndicatorContainer(options, ignoreIndicatorAlignment) {
+  private _createIndicatorContainer(options, ignoreIndicatorAlignment) {
     let $indicatorsContainer = this._getIndicatorContainer(options.rootElement);
     const indicatorAlignment = options.columnAlignment === 'left' ? 'right' : 'left';
 
@@ -46,28 +64,33 @@ export default {
     this.setAria('role', 'presentation', $indicatorsContainer);
 
     return $indicatorsContainer.css('float', options.showColumnLines && !ignoreIndicatorAlignment ? indicatorAlignment : null);
-  },
+  }
 
-  _getIndicatorContainer($cell) {
+  protected _getIndicatorContainer($cell) {
     return $cell && $cell.find(`.${COLUMN_INDICATORS_CLASS}`);
-  },
+  }
 
-  _getIndicatorElements($cell) {
+  private _getIndicatorElements($cell) {
     const $indicatorContainer = this._getIndicatorContainer($cell);
 
     return $indicatorContainer && $indicatorContainer.children();
-  },
+  }
 
-  _renderIndicator(options) {
+  /**
+   * @extended header_filter_core
+   */
+  protected _renderIndicator(options) {
     const $container = options.container;
     const $indicator = options.indicator;
 
     $container && $indicator && $container.append($indicator);
-  },
+  }
 
-  _updateIndicators(indicatorName) {
+  protected _updateIndicators(indicatorName) {
     const that = this;
+    // @ts-expect-error
     const columns = that.getColumns();
+    // @ts-expect-error
     const $cells = that.getColumnElements();
     let $cell;
 
@@ -83,9 +106,9 @@ export default {
         rowOptions.cells[$cell.index()].column = columns[i];
       }
     }
-  },
+  }
 
-  _updateIndicator($cell, column, indicatorName) {
+  protected _updateIndicator($cell, column, indicatorName): any {
     if (!column.command) {
       return this._applyColumnState({
         name: indicatorName,
@@ -94,5 +117,9 @@ export default {
         showColumnLines: this.option('showColumnLines'),
       });
     }
-  },
+
+    return undefined;
+  }
 };
+
+export default ColumnStateMixin;

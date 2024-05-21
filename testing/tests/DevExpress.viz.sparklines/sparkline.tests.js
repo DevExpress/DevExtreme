@@ -42,9 +42,9 @@ QUnit.begin(function() {
     }));
 
     QUnit.testStart(function() {
-        translator2DModule.Translator2D.reset();
-        rendererModule.Renderer.reset();
-        seriesModule.Series.reset();
+        translator2DModule.Translator2D.resetHistory();
+        rendererModule.Renderer.resetHistory();
+        seriesModule.Series.resetHistory();
     });
 
     const environment = {
@@ -1433,6 +1433,23 @@ QUnit.begin(function() {
         ]);
     });
 
+    QUnit.test('winloss sparkline lossColor should be updated after runtime change (T1218338)', function(assert) {
+        const sparkline = this.createSparkline({
+            type: 'winloss',
+            lossColor: 'blue',
+            winlossThreshold: 4,
+            dataSource: [0, 3, 6]
+        });
+
+        sparkline.option({ lossColor: 'green' });
+
+        this.checkCustomizePoint(assert, [
+            { color: '#666666' },
+            { color: 'green' },
+            { color: '#666666' }
+        ]);
+    });
+
     QUnit.test('Several min/max in dataSource', function(assert) {
         this.createSparkline({
             dataSource: [1, 5, 5, -1, -1],
@@ -1892,7 +1909,7 @@ QUnit.begin(function() {
         };
         const sparkline = this.createSparkline(options);
 
-        this.renderer.resize.reset();
+        this.renderer.resize.resetHistory();
 
         this.$container.width(300);
         this.$container.height(40);
@@ -1915,7 +1932,7 @@ QUnit.begin(function() {
             dataSource: [4, 8, 6, 9, 1, 3, 5, 6, 1, 2, 5, 4]
         });
 
-        this.renderer.resize.reset();
+        this.renderer.resize.resetHistory();
 
         sparkline.option('size', { width: 300, height: 100 });
 
@@ -2065,7 +2082,7 @@ QUnit.begin(function() {
     QUnit.module('drawn', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
+            sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
         },
         afterEach: function() {
             environment.afterEach.call(this);
@@ -2099,7 +2116,7 @@ QUnit.begin(function() {
     QUnit.module('drawn with async data', {
         beforeEach: function() {
             environment.beforeEach.call(this);
-            sinon.stub(BaseWidget.prototype, '_drawn', sinon.spy());
+            sinon.stub(BaseWidget.prototype, '_drawn').callsFake(sinon.spy());
             this.data = new DataSource();
             this.isLoadedStub = sinon.stub(this.data, 'isLoaded');
         },

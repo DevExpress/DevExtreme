@@ -180,7 +180,7 @@ const Drawer = Widget.inherit({
             ///#ENDDEBUG
 
             this._initMinMaxSize();
-            this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide' || !this.isHorizontalDirection());
+            this._strategy.refreshPanelElementSize(this.option('revealMode') === 'slide');
 
             this._renderPosition(this.option('opened'), true);
             this._removePanelManualPosition();

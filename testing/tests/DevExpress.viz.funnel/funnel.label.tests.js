@@ -813,7 +813,7 @@ QUnit.test('change label option', function(assert) {
         }
     });
 
-    this.labelGroup().clear.reset();
+    this.labelGroup().clear.resetHistory();
 
     funnel.option({
         label: {
@@ -1287,8 +1287,8 @@ QUnit.test('change resolveLabelOverlapping option', function(assert) {
         }
     });
 
-    this.labelGroup().clear.reset();
-    labelModule.Label.reset();
+    this.labelGroup().clear.resetHistory();
+    labelModule.Label.resetHistory();
 
     funnel.option({
         resolveLabelOverlapping: 'shift',

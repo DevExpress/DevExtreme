@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import DataGrid from '../../../../model/dataGrid';
 
 fixture.disablePageReloads`Focused row`
@@ -165,7 +165,7 @@ test('Popup - Focused row should not be reset after editing a row (T879627)', as
     mode: 'popup',
     allowUpdating: true,
     popup: {
-      animation: null,
+      animation: undefined,
     },
   },
 }));
@@ -577,7 +577,7 @@ test('Focused row should not fire onFocusedRowChanging, onFocusedRowChanged even
     masterDetail: {
       enabled: true,
       template: (container): any => {
-        (container as any).append($('<div>')).dxDataGrid({
+        (container.append($('<div>') as any) as any).dxDataGrid({
           height: 500,
           keyExpr: 'id',
           dataSource: data,
@@ -876,3 +876,40 @@ test('Focused row should be shown after reloading the page (T1058983)', async (t
 }).after(async () => {
   await clearLocalStorage();
 });
+
+test.skip('It is possible to focus row that was added via push method if previously row with same index was focused (T1202646)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.click(dataGrid.getDataRow(0).element);
+
+  await ClientFunction(() => {
+    const grid = ($('#container') as any).dxDataGrid('instance');
+    grid.getDataSource().store().push([{
+      type: 'insert',
+      data: { value: 2 },
+    }]);
+  })();
+
+  await t.expect(dataGrid.dataRows.count).eql(2);
+
+  await t.click(dataGrid.getDataRow(0).element);
+
+  await t.expect(dataGrid.getDataRow(0).isFocusedRow).ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: {
+    store: {
+      type: 'array',
+      data: [{ value: 1 }],
+    },
+    reshapeOnPush: true,
+  },
+  keyExpr: 'value',
+  repaintChangesOnly: true,
+  focusedRowEnabled: true,
+  columns: [
+    {
+      dataField: 'value',
+      sortOrder: 'desc',
+    },
+  ],
+}));

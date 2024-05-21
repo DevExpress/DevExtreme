@@ -552,9 +552,12 @@ class MenuBase extends HierarchicalCollectionWidget {
     }
 
     _itemClick(actionArgs) {
-        const args = actionArgs.args[0];
-        const link = args.event.target.getElementsByClassName(ITEM_URL_CLASS)[0];
-        if(args.itemData.url && link) {
+        const { event, itemData } = actionArgs.args[0];
+
+        const $itemElement = this._getItemElementByEventArgs(event);
+        const link = $itemElement && $itemElement.find(`.${ITEM_URL_CLASS}`).get(0);
+
+        if(itemData.url && link) {
             link.click();
         }
     }

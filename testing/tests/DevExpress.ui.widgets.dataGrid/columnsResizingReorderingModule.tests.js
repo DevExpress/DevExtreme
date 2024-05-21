@@ -34,25 +34,25 @@ import devices from 'core/devices';
 import { getHeight } from 'core/utils/size';
 import publicComponentUtils from 'core/utils/public_component';
 
-const TestDraggingHeader2 = columnsResizingReordering.DraggingHeaderView.inherit({
-    callDragCounter: 0,
+class TestDraggingHeader2 extends columnsResizingReordering.DraggingHeaderView {
+    callDragCounter = 0;
 
-    callMoveCounter: 0,
+    callMoveCounter = 0;
 
-    callDropCounter: 0,
+    callDropCounter = 0;
 
-    dragHeader: function(args) {
+    dragHeader(args) {
         this.callDragCounter++;
-    },
+    }
 
-    moveHeader: function(args) {
+    moveHeader(args) {
         args.event.data.that.callMoveCounter++;
-    },
+    }
 
-    dropHeader: function(args) {
+    dropHeader(args) {
         args.event.data.that.callDropCounter++;
     }
-});
+}
 
 QUnit.testStart(function() {
     const markup =
@@ -3430,7 +3430,7 @@ QUnit.module('Headers reordering', {
             columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(that.component),
             draggingHeaderView: new columnsResizingReordering.DraggingHeaderView(that.component),
             columnHeadersView: new ColumnHeadersView(that.component),
-            headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
+            headerPanel: new (GroupingHeaderPanelExtender(HeaderPanel))(that.component),
             columnChooserView: new ColumnChooserView(that.component)
         };
 
@@ -6725,7 +6725,7 @@ QUnit.module('Headers reordering inside color swatch', {
             columnsSeparatorView: new columnsResizingReordering.ColumnsSeparatorView(that.component),
             draggingHeaderView: new columnsResizingReordering.DraggingHeaderView(that.component),
             columnHeadersView: new ColumnHeadersView(that.component),
-            headerPanel: new (HeaderPanel.inherit(GroupingHeaderPanelExtender))(that.component),
+            headerPanel: new (GroupingHeaderPanelExtender(HeaderPanel))(that.component),
             columnChooserView: new ColumnChooserView(that.component)
         };
 

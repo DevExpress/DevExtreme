@@ -1,6 +1,6 @@
 import { ClientFunction } from 'testcafe';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import TreeList from '../../model/treeList';
 
 const clearLocalStorage = ClientFunction(() => {

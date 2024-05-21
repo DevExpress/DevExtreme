@@ -1296,6 +1296,51 @@ QUnit.module('Menu tests', {
         assert.notOk(submenu.option('visible'), 'submenu hidden');
     });
 
+    QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked, showSubmenuMode is `onHover` (T1209825)', function(assert) {
+        if(!isDeviceDesktop(assert)) return;
+
+        const clickSpy = sinon.spy();
+
+        const menu = createMenu({
+            items: [{
+                text: 'Item_1',
+                url: 'http://some_url',
+                items: [{
+                    text: 'Item_1_1',
+                    url: 'http://some_url',
+                }, {
+                    text: 'Item_1_2',
+                    url: 'http://some_url',
+                }]
+            }],
+            showFirstSubmenuMode: { name: 'onHover', delay: 0 },
+        });
+
+        const $rootMenuItem = menu.element.find('.' + DX_MENU_ITEM_CLASS);
+        const $menuItemLink = $rootMenuItem
+            .find(`.${ITEM_URL_CLASS}`)
+            .get(0);
+
+        $menuItemLink.click = clickSpy;
+
+        menu.element.trigger($.Event('dxhoverstart', { target: $rootMenuItem.eq(0).get(0) }));
+        $rootMenuItem.eq(0).trigger('dxpointermove');
+        this.clock.tick(0);
+
+        const submenu = getSubMenuInstance($rootMenuItem);
+        assert.strictEqual(submenu.option('visible'), true, 'submenu shown');
+
+        const $item = menu.element
+            .find(`.${DX_MENU_ITEM_CLASS}`)
+            .eq(0);
+
+        const $coveringElement = $item.find(`.${DX_CONTEXT_MENU_CONTAINER_BORDER_CLASS}`);
+
+        $coveringElement.trigger('dxclick');
+
+        assert.strictEqual(clickSpy.callCount, 1, 'link was clicked');
+    });
+
     QUnit.test('Menu should hide after mouseleave when hideOnMouseLeave = true', function(assert) {
         if(!isDeviceDesktop(assert)) return;
 
@@ -1572,7 +1617,7 @@ QUnit.module('keyboard navigation', {
 
         assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
         assert.equal(itemClickHandler.args[0][0].itemData.id, '1_2', 'handler.itemData');
-        itemClickHandler.reset();
+        itemClickHandler.resetHistory();
 
         this.keyboard
             .press('down')
@@ -1584,7 +1629,7 @@ QUnit.module('keyboard navigation', {
 
         assert.equal(itemClickHandler.callCount, 1, 'handler.callCount');
         assert.equal(itemClickHandler.args[0][0].itemData.id, '2_2', 'handler.itemData');
-        itemClickHandler.reset();
+        itemClickHandler.resetHistory();
 
         this.keyboard
             .press('down')
@@ -1845,6 +1890,25 @@ QUnit.module('keyboard navigation', {
 
         assert.notOk($items.eq(1).hasClass(DX_STATE_FOCUSED_CLASS), 'item was not focused');
         assert.notOk($items.eq(0).hasClass(DX_STATE_FOCUSED_CLASS), 'first item lose focus');
+    });
+
+    [
+        [{ text: 'item1', items: [{ name: 'item_1_1' }] }],
+        [{ icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
+        [{ text: 'item1', icon: 'imageCssClass', items: [{ name: 'item_1_1' }] }],
+    ].forEach(items => {
+        checkStyleHelper.testInChromeOnDesktopActiveWindow('root item text should be visible after focusing when it\'s opened (T1227670)', function(assert) {
+            this.instance.option('items', items);
+
+            const $rootMenuItem = $(this.instance.itemElements().eq(0));
+
+            $($rootMenuItem).trigger('dxclick');
+            this.$element.trigger('focusin');
+
+            assert.ok($rootMenuItem.hasClass(DX_MENU_ITEM_EXPANDED_CLASS), 'root item should have expanded class');
+            assert.ok($rootMenuItem.hasClass(DX_STATE_FOCUSED_CLASS), 'root item should have focused class');
+            assert.strictEqual(checkStyleHelper.getColor($rootMenuItem[0]), 'rgb(51, 51, 51)', 'color');
+        });
     });
 
     [false, true].forEach(rtlEnabled => {
@@ -2867,6 +2931,24 @@ QUnit.module('adaptivity: behavior', {
 
         assert.ok($button.is(':hidden'), 'adaptive mode should be disabled');
     });
+
+    QUnit.test('TreeView should be focused after click on hamburger button (T1207839)', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
+        new Menu(this.$element, {
+            items: this.items,
+            adaptivityEnabled: true
+        });
+
+        const $button = this.$element.find('.' + DX_ADAPTIVE_HAMBURGER_BUTTON_CLASS).eq(0);
+        const $treeview = this.$element.find('.' + DX_TREEVIEW_CLASS).eq(0);
+
+        $($button).trigger('dxclick');
+
+        assert.ok($treeview.hasClass(DX_STATE_FOCUSED_CLASS), 'treeview is focused');
+    });
 });
 
 
@@ -2931,7 +3013,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
             assert.ok(handler.getCall(0).args[0], argument + ' is exist in parameters');
         });
 
-        handler.reset();
+        handler.resetHistory();
         menu.off(eventName);
         triggerFunc(treeView);
         assert.equal(handler.callCount, 0, 'handler for \'on\' was not executed after unsubscribe');
@@ -2954,7 +3036,7 @@ function transferActionTest(eventName, expectedArgs, triggerFunc) {
             assert.ok(handler.getCall(0).args[0][argument], argument + ' is exist in parameters');
         });
 
-        handler.reset();
+        handler.resetHistory();
         menu.option(optionName, undefined);
         triggerFunc(treeView);
         assert.equal(handler.callCount, 0, 'handler for option was not executed after unsubscribe');

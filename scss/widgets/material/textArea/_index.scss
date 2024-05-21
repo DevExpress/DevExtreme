@@ -18,6 +18,7 @@ $textarea-top-padding:
 
 .dx-textarea {
   height: auto;
+  font-size: $textarea-font-size;
 
   .dx-texteditor-input-container {
     margin: 2px;

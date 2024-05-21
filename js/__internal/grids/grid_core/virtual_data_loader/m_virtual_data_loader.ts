@@ -176,21 +176,21 @@ const processChanged = (that, changed, changeType, isDelayChanged?, removeCacheI
 };
 
 export class VirtualDataLoader {
-  _dataOptions;
+  private readonly _dataOptions;
 
-  _controller;
+  private readonly _controller;
 
-  _pageIndex;
+  private _pageIndex;
 
-  _cache;
+  private _cache;
 
-  _loadingPageIndexes;
+  private _loadingPageIndexes;
 
-  _lastPageIndex;
+  private readonly _lastPageIndex;
 
-  _delayDeferred;
+  private _delayDeferred;
 
-  _isChangedFiring;
+  private readonly _isChangedFiring;
 
   constructor(controller, dataOptions) {
     this._dataOptions = dataOptions;
@@ -200,11 +200,11 @@ export class VirtualDataLoader {
     this._loadingPageIndexes = {};
   }
 
-  option() {
+  private option() {
     return this._controller.option.apply(this._controller, arguments);
   }
 
-  viewportItemIndexChanged(itemIndex) {
+  private viewportItemIndexChanged(itemIndex) {
     const pageSize = this._dataOptions.pageSize();
     const pageCount = this._dataOptions.pageCount();
     const virtualMode = this._controller.isVirtualMode();
@@ -236,7 +236,7 @@ export class VirtualDataLoader {
     }
   }
 
-  pageIndex(pageIndex?) {
+  public pageIndex(pageIndex?) {
     const isVirtualMode = this._controller.isVirtualMode();
     const isAppendMode = this._controller.isAppendMode();
 
@@ -250,7 +250,7 @@ export class VirtualDataLoader {
     return this._dataOptions.pageIndex(pageIndex);
   }
 
-  beginPageIndex(defaultPageIndex) {
+  private beginPageIndex(defaultPageIndex) {
     let beginPageIndex = getBeginPageIndex(this);
     if (beginPageIndex < 0) {
       beginPageIndex = defaultPageIndex !== undefined ? defaultPageIndex : this.pageIndex();
@@ -258,17 +258,17 @@ export class VirtualDataLoader {
     return beginPageIndex;
   }
 
-  endPageIndex() {
+  private endPageIndex() {
     const endPageIndex = getEndPageIndex(this);
 
     return endPageIndex > 0 ? endPageIndex : this._lastPageIndex;
   }
 
-  pageSize() {
+  private pageSize() {
     return this._dataOptions.pageSize();
   }
 
-  load() {
+  private load() {
     const dataOptions = this._dataOptions;
     let result;
     const isVirtualMode = this._controller.isVirtualMode();
@@ -308,7 +308,7 @@ export class VirtualDataLoader {
     return result || new Deferred().resolve();
   }
 
-  loadIfNeed() {
+  private loadIfNeed() {
     const isVirtualMode = this._controller.isVirtualMode();
     const isAppendMode = this._controller.isAppendMode();
 
@@ -322,7 +322,7 @@ export class VirtualDataLoader {
     }
   }
 
-  handleDataChanged(callBase, e) {
+  private handleDataChanged(callBase, e) {
     const dataOptions = this._dataOptions;
     let lastCacheLength = this._cache.length;
     let changeType;
@@ -387,11 +387,11 @@ export class VirtualDataLoader {
     }
   }
 
-  getDelayDeferred() {
+  public getDelayDeferred() {
     return this._delayDeferred;
   }
 
-  itemsCount(isBase) {
+  private itemsCount(isBase) {
     let itemsCount = 0;
     const isVirtualMode = this._controller.isVirtualMode();
 
@@ -405,7 +405,7 @@ export class VirtualDataLoader {
     return itemsCount;
   }
 
-  virtualItemsCount() {
+  private virtualItemsCount() {
     let pageIndex = getBeginPageIndex(this);
     if (pageIndex < 0) {
       pageIndex = this._dataOptions.pageIndex();
@@ -419,7 +419,7 @@ export class VirtualDataLoader {
     };
   }
 
-  reset() {
+  public reset() {
     this._loadingPageIndexes = {};
     this._cache = [];
   }

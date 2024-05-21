@@ -1,5 +1,5 @@
 import { Selector } from 'testcafe';
-import { WidgetName } from '../helpers/createWidget';
+import type { WidgetName } from '../helpers/widgetTypings';
 import DropDownList from './internal/dropDownList';
 
 const CLASS = {

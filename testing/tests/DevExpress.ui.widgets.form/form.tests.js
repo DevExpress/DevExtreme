@@ -629,6 +629,22 @@ QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler
     assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
 });
 
+QUnit.test('onFieldDataChanged must be called once if new formData contains "length" property (T1213983)', function(assert) {
+    const onFieldDataChangedStub = sinon.stub();
+
+    const form = $('#form').dxForm({
+        formData: {},
+        items: [{
+            dataField: 'length',
+        }],
+        onFieldDataChanged: onFieldDataChangedStub,
+    }).dxForm('instance');
+
+    form.option({ formData: { length: 10 } });
+
+    assert.strictEqual(onFieldDataChangedStub.callCount, 1);
+});
+
 
 [
     { editorType: 'dxTextBox' },
@@ -4363,4 +4379,40 @@ QUnit.test('TagBox.SelectionChanged is raised once if formData is wrapped into a
     assert.deepEqual(form.getEditor('arrayField').option('value'), ['item1'], 'tagBox.option(value)');
     assert.deepEqual(formData, { arrayField: ['item1'] }, 'formData');
     assert.strictEqual(onSelectionChangedCounter, 1, 'onSelectionChangedCounter');
+});
+
+QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
+    let screen = 'lg';
+
+    const value = 'VINET';
+    const text = 'Vins et alcools Chevalier (France)';
+    const $form = $('#form').dxForm({
+        formData: { CustomerID: value },
+        screenByWidth: function() { return screen; },
+        colCountByScreen: {
+            sm: 1,
+            lg: 2
+        },
+        items: [
+            {
+                itemType: 'simple',
+                cssClass: 'test-ddbox',
+                dataField: 'CustomerID',
+                editorOptions: {
+                    displayExpr: 'Text',
+                    valueExpr: 'Value',
+                    showClearButton: true,
+                    dataSource: [{ Value: value, Text: text }],
+                },
+                editorType: 'dxDropDownBox',
+            },
+        ]
+    });
+    const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
+
+    screen = 'sm';
+    $input.focus();
+    resizeCallbacks.fire();
+
+    assert.strictEqual($input.val(), text, 'ddBox contain correct value');
 });

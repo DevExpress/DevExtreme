@@ -422,7 +422,7 @@ QUnit.module('Update on validator\'s validation', {
         ValidationEngine.validateGroup('group1');
         ValidationEngine.validateGroup('group1');
 
-        spy.reset();
+        spy.resetHistory();
         validator1.validate();
 
         assert.equal(spy.callCount, 1, 'Render of validation summary should be called only once');

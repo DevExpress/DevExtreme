@@ -24,8 +24,8 @@ const environment = {
         this.projection.setEngine(this.engine);
         this.projection.setCenter([20, -10]);
         this.projection.setZoom(2);
-        this.centerChanged.reset();
-        this.zoomChanged.reset();
+        this.centerChanged.resetHistory();
+        this.zoomChanged.resetHistory();
     },
 
     afterEach: function() {
@@ -127,8 +127,8 @@ QUnit.test('setEngine / center is not changed', function(assert) {
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setCenter(engine.center());
     this.projection.setZoom(1);
-    this.centerChanged.reset();
-    this.zoomChanged.reset();
+    this.centerChanged.resetHistory();
+    this.zoomChanged.resetHistory();
     this.projection.on({ engine: onEngine, screen: onScreen, center: onCenter, zoom: onZoom });
 
     this.projection.setEngine(engine);
@@ -446,7 +446,7 @@ QUnit.test('setZoom / not changed', function(assert) {
     const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
-    this.zoomChanged.reset();
+    this.zoomChanged.resetHistory();
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom(3);
@@ -461,7 +461,7 @@ QUnit.test('setZoom / out of bounds', function(assert) {
     const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setMaxZoom(5);
-    this.zoomChanged.reset();
+    this.zoomChanged.resetHistory();
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom(10);
@@ -476,7 +476,7 @@ QUnit.test('setZoom / not valid', function(assert) {
     const onZoom = sinon.spy();
     this.projection.setSize({ left: 200, top: 100, width: 800, height: 700 });
     this.projection.setZoom(3);
-    this.zoomChanged.reset();
+    this.zoomChanged.resetHistory();
     this.projection.on({ zoom: onZoom });
 
     this.projection.setZoom('test');
@@ -616,7 +616,7 @@ QUnit.test('setMaxZoom / not valid', function(assert) {
 });
 
 QUnit.test('getViewport', function(assert) {
-    assert.deepEqual(this.projection.getViewport(), [10, -15, 30, -5], 'viewport');
+    assert.deepEqual(this.projection.getViewport(), [10, -5, 30, -15], 'viewport');
 });
 
 QUnit.test('setViewport', function(assert) {
@@ -808,25 +808,25 @@ $.each([null, [-180, 90, 180, -20], [-50, 90, 180, -90], [-180, 20, 180, -90], [
 QUnit.test('Longitude range is less than latitude range - at center', function(assert) {
     this.projection1.setViewport([-40, 20, 40, -20]);
 
-    assert.arraysEqual(this.projection1.getViewport(), [-40, -37.098, 40, 37.098]);
+    assert.arraysEqual(this.projection1.getViewport(), [-40, 37.098, 40, -37.098]);
 });
 
 QUnit.test('Longitude range is greater than latitude range - at center', function(assert) {
     this.projection1.setViewport([-10, 20, 10, -20]);
 
-    assert.arraysEqual(this.projection1.getViewport(), [-20.419, -20, 20.419, 20]);
+    assert.arraysEqual(this.projection1.getViewport(), [-20.419, 20, 20.419, -20]);
 });
 
 QUnit.test('Longitude range is less than latitude range - not at center', function(assert) {
     this.projection1.setViewport([30, 40, 120, -30]);
 
-    assert.arraysEqual(this.projection1.getViewport(), [30, -36.2, 120, 45.4369]);
+    assert.arraysEqual(this.projection1.getViewport(), [30, 45.4369, 120, -36.2]);
 });
 
 QUnit.test('Longitude range is greater than latitude range - not at center', function(assert) {
     this.projection1.setViewport([-100, 80, -40, 10]);
 
-    assert.arraysEqual(this.projection1.getViewport(), [-134.7677, 10, -5.2323, 80]);
+    assert.arraysEqual(this.projection1.getViewport(), [-134.7677, 80, -5.2323, 10]);
 });
 
 QUnit.module('Project', $.extend({}, environment, {
@@ -1215,10 +1215,15 @@ QUnit.test('creation', function(assert) {
     const to = sinon.stub().returns([1000, 2000]);
     const from = sinon.stub().returns([3000, 4000]);
     from.withArgs([0, 0]).returns([300, 400]);
+    from.withArgs([0, -0]).returns([300, 400]);
     from.withArgs([-1, 0]).returns([10, 20]);
+    from.withArgs([-1, -0]).returns([10, 20]);
     from.withArgs([0, +1]).returns([30, 40]);
+    from.withArgs([-0, +1]).returns([30, 40]);
     from.withArgs([+1, 0]).returns([50, 60]);
+    from.withArgs([+1, -0]).returns([50, 60]);
     from.withArgs([0, -1]).returns([70, 80]);
+    from.withArgs([-0, -1]).returns([70, 80]);
 
     const proj = projection({
         aspectRatio: 3,

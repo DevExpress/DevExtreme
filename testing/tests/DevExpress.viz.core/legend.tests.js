@@ -17,9 +17,9 @@ const environment = {
         this.markerBBoxes = [];
 
         this.rootGroup = this.renderer.g();
-        this.renderer.g.reset();
+        this.renderer.g.resetHistory();
         this.renderer.text();
-        this.renderer.text.reset();
+        this.renderer.text.resetHistory();
         this.options = getLegendOptions();
 
         this.data = this.createData(3);
@@ -1848,9 +1848,9 @@ QUnit.module('States', $.extend({}, environment, {
 QUnit.test('Change state - leads to redraw marker', function(assert) {
     const markersGroup = this.findMarkersGroup();
 
-    markersGroup.children[0].children[0].stub('clear').reset();
-    this.renderer.rect.reset();
-    this.renderer.text.reset();
+    markersGroup.children[0].children[0].resetStub('clear');
+    this.renderer.rect.resetHistory();
+    this.renderer.text.resetHistory();
 
     this.legend.applyHover(0);
 
@@ -1915,8 +1915,8 @@ QUnit.test('resetItem', function(assert) {
 });
 
 QUnit.test('applyHover from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
-    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(0).returnValue.resetStub('smartAttr');
+    this.renderer.rect.getCall(1).returnValue.resetStub('smartAttr');
     this.legend.applyHover(4);
 
     assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
@@ -1924,8 +1924,8 @@ QUnit.test('applyHover from invisible series', function(assert) {
 });
 
 QUnit.test('applySelected from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
-    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(0).returnValue.resetStub('smartAttr');
+    this.renderer.rect.getCall(1).returnValue.resetStub('smartAttr');
     this.legend.applySelected(4);
 
     assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
@@ -1933,8 +1933,8 @@ QUnit.test('applySelected from invisible series', function(assert) {
 });
 
 QUnit.test('resetItem from invisible series', function(assert) {
-    this.renderer.rect.getCall(0).returnValue.stub('smartAttr').reset();
-    this.renderer.rect.getCall(1).returnValue.stub('smartAttr').reset();
+    this.renderer.rect.getCall(1).returnValue.resetStub('smartAttr');
+    this.renderer.rect.getCall(0).returnValue.resetStub('smartAttr');
     this.legend.resetItem(4);
 
     assert.strictEqual(this.renderer.rect.getCall(0).returnValue.stub('smartAttr').callCount, 0);
@@ -1985,7 +1985,7 @@ QUnit.test('Erase legend on update options', function(assert) {
         text: 'title'
     };
     const titleGroup = this.renderer.g.firstCall.returnValue;
-    titleGroup.linkRemove.reset();
+    titleGroup.linkRemove.resetHistory();
     this.legend.update([]);
 
     assert.deepEqual(this.renderer.g.getCall(1).returnValue.remove.lastCall.args, [], 'group is removed');
@@ -2681,7 +2681,7 @@ QUnit.test('Call template function', function(assert) {
 
 QUnit.test('Call second time when state changed', function(assert) {
     this.createAndDrawLegend();
-    this.options.markerTemplate.reset();
+    this.options.markerTemplate.resetHistory();
 
     this.legend.applyHover(0);
 
@@ -2716,7 +2716,7 @@ QUnit.test('Pass customized item size to hover state', function(assert) {
     };
 
     this.createAndDrawLegend();
-    this.options.markerTemplate.reset();
+    this.options.markerTemplate.resetHistory();
 
     this.legend.applyHover(0);
 
@@ -2739,13 +2739,13 @@ QUnit.test('Pass customized item opacity for different states', function(assert)
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.state, 'normal');
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.3);
 
-    this.options.markerTemplate.reset();
+    this.options.markerTemplate.resetHistory();
     this.legend.applyHover(0);
 
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.state, 'hovered');
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.opacity, 0.65);
 
-    this.options.markerTemplate.reset();
+    this.options.markerTemplate.resetHistory();
     this.legend.applySelected(0);
 
     assert.equal(this.options.markerTemplate.lastCall.args[0].marker.state, 'selected');

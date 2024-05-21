@@ -516,7 +516,7 @@ export type RangeRule = {
   * @docid
   * @public
   */
-  max?: Date | number;
+  max?: Date | number | string;
   /**
   * @docid
   * @default 'Value is out of range'
@@ -527,7 +527,7 @@ export type RangeRule = {
   * @docid
   * @public
   */
-  min?: Date | number;
+  min?: Date | number | string;
   /**
   * @docid
   * @default false
@@ -752,7 +752,7 @@ export type TextEditorButtonLocation = 'after' | 'before';
  * @public
  * @namespace DevExpress.common
  */
-export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxButtonGroup' | 'dxCheckBox' | 'dxDateBox' | 'dxDropDownButton' | 'dxMenu' | 'dxSelectBox' | 'dxSwitch' | 'dxTabs' | 'dxTextBox';
 
 /**
  * @public

@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 import { getData } from '../helpers/generateDataSourceData';
@@ -132,4 +132,39 @@ test('Should correctly change values (T1161941)', async (t) => {
     visible: true,
   },
   columns: ['Name', 'Amount'],
+}));
+
+test('Header filter should support string height and width', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const firstFilterIcon = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
+  const thirdFilterIcon = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).getFilterIcon();
+
+  await t
+    .click(firstFilterIcon)
+    .expect(new HeaderFilter().getContent().getStyleProperty('height'))
+    .eql('400px')
+    .expect(new HeaderFilter().getContent().getStyleProperty('width'))
+    .eql('330px')
+    .click(thirdFilterIcon)
+    .expect(new HeaderFilter().getContent().getStyleProperty('height'))
+    .eql('450px')
+    .expect(new HeaderFilter().getContent().getStyleProperty('width'))
+    .eql('380px');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  columns: [
+    'field1', 'field2', {
+      dataField: 'field3',
+      headerFilter: {
+        height: '450px',
+        width: '380px',
+      },
+    },
+  ],
+  width: 700,
+  headerFilter: {
+    visible: true,
+    height: '400px',
+    width: '330px',
+  },
 }));

@@ -2789,7 +2789,7 @@ QUnit.module('Editing', {
             startEditAction: 'dblClick'
         });
         rowsView.render(that.gridContainer);
-        allowUpdating.reset();
+        allowUpdating.resetHistory();
 
         // act
         that.gridContainer.find('td').first().trigger('click');
@@ -8511,7 +8511,7 @@ QUnit.module('Editing with real dataController', {
         $testElement.find('.dx-texteditor-input').first().val('Test11');
         $testElement.find('.dx-texteditor-input').first().trigger('change');
 
-        template.reset();
+        template.resetHistory();
         that.editingController.closeEditCell();
         that.clock.tick(10);
 
@@ -21848,11 +21848,8 @@ QUnit.module('Editing - public arguments of the events/templates', {
             assert.strictEqual(args.rowType, editMode === 'form' ? 'detail' : 'data', 'rowType arg');
             assert.strictEqual(typeof args.setValue, 'function', 'setValue arg');
             assert.strictEqual(args.value, 'Alex', 'value arg');
-
-            if(editMode !== 'form' && editMode !== 'popup') {
-                assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
-                assert.strictEqual(args.text, 'Alex', 'text arg');
-            }
+            assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
+            assert.strictEqual(args.text, 'Alex', 'text arg');
         });
 
         // T1118182

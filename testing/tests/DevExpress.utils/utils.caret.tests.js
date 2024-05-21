@@ -93,7 +93,7 @@ testModule('caret', () => {
             const itShouldBePrevented = !forceSetCaret && (ios || mac);
             const $input = $('<input>').val('12345').appendTo('#qunit-fixture');
             const otherInput = $('<input>').appendTo('#qunit-fixture').get(0);
-            const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement', () => itShouldBePrevented ? otherInput : $input.get(0));
+            const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').callsFake(() => itShouldBePrevented ? otherInput : $input.get(0));
 
             $input.focus();
             const initialStartPosition = caret($input).start;

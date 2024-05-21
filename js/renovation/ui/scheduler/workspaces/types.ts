@@ -19,6 +19,7 @@ export interface ViewCellData {
   firstDayOfMonth?: boolean;
   isSelected?: boolean;
   isFocused?: boolean;
+  highlighted?: boolean;
 }
 
 export interface DateHeaderCellData extends ViewCellData {
@@ -188,6 +189,8 @@ interface ViewOptions {
   isGroupedByDate: boolean;
   startCellIndex: number;
   startRowIndex: number;
+  startDayHour: number;
+  endDayHour: number;
 }
 
 export interface ViewDataProviderOptions {
@@ -211,6 +214,7 @@ export interface ViewDataProviderOptions {
   currentDate: Date;
   startDate?: Date;
   firstDayOfWeek: number;
+  today: Date;
 
   isGenerateTimePanelData: boolean;
   isGenerateWeekDaysHeaderData: boolean;
@@ -241,6 +245,7 @@ export interface ViewDataProviderType {
   createGroupedDataMapProvider: () => void;
   isSkippedDate: (date: Date) => boolean;
   getCellsByGroupIndexAndAllDay: (groupIndex: number, isAllDay: boolean) => ViewCellData[][];
+  viewType: ViewType;
 }
 
 interface CompleteViewDataGenerationOptions {
@@ -385,6 +390,7 @@ interface CompleteTimePanelMapGenerationOptions {
   currentDate: Date;
   viewType: ViewType;
   hoursInterval: number;
+  today: Date;
 }
 
 interface TimePanelDataGenerationOptions {
@@ -426,6 +432,7 @@ export interface WorkSpaceGenerationOptions {
   hoursInterval: number;
   type: ViewType;
   cellDuration: number;
+  today: Date;
 }
 
 export interface CellsMetaData {

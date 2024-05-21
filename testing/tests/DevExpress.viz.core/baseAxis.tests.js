@@ -92,7 +92,7 @@ QUnit.test('Create axis', function(assert) {
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
 
     const axis = new Axis({
         renderer: renderer,
@@ -134,7 +134,7 @@ QUnit.test('Create axis when axis class is undefined', function(assert) {
     const axesContainerGroup = renderer.g();
     const gridGroup = renderer.g();
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
 
     new Axis({
         renderer: renderer,
@@ -184,7 +184,7 @@ QUnit.module('API', {
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
 
-        renderer.g.reset();
+        renderer.g.resetHistory();
 
         this.axis = new Axis({
             renderer: renderer,
@@ -509,7 +509,7 @@ QUnit.test('set undefined types', function(assert) {
 });
 
 QUnit.test('applyClipRects', function(assert) {
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     const renderer = this.renderer;
     const axis = new Axis({
         renderer: renderer,
@@ -821,7 +821,7 @@ QUnit.module('Labels template', {
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
 
-        renderer.g.reset();
+        renderer.g.resetHistory();
         this.templateRender = sinon.spy();
         this.getTemplate = sinon.spy(() => {
             return {
@@ -883,7 +883,7 @@ QUnit.test('arguments passing to render', function(assert) {
     this.axis.createTicks(this.canvas);
 
     // act
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     this.axis.draw();
 
     // assert
@@ -1032,7 +1032,7 @@ QUnit.module('Labels Settings', {
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
 
-        renderer.g.reset();
+        renderer.g.resetHistory();
 
         this.axis = new Axis({
             renderer: renderer,
@@ -1118,7 +1118,7 @@ QUnit.module('Validate', {
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
 
-        renderer.g.reset();
+        renderer.g.resetHistory();
 
         this.incidentOccurred = sinon.stub();
         this.axis = new Axis({
@@ -1226,7 +1226,7 @@ QUnit.module('Zoom', {
             gridGroup: gridGroup
         };
 
-        renderer.g.reset();
+        renderer.g.resetHistory();
 
         this.axis = this.createAxis({});
 
@@ -1629,7 +1629,7 @@ QUnit.module('VisualRange', {
         const axesContainerGroup = renderer.g();
         const gridGroup = renderer.g();
 
-        renderer.g.reset();
+        renderer.g.resetHistory();
         this.incidentOccurred = sinon.stub();
         this.axis = new Axis({
             renderer: this.renderer,
@@ -2154,7 +2154,7 @@ QUnit.test('T746896. Pass correct range to tick generator after syncroniztion', 
         max: 250
     });
 
-    this.tickGeneratorSpy.reset();
+    this.tickGeneratorSpy.resetHistory();
 
     axis.createTicks(this.canvas);
 
@@ -3319,7 +3319,7 @@ QUnit.test('createTicks after synchronization (zoom chart) - recalculate margins
     axis.setTicks({});
     axis.draw();
 
-    this.translator.stub('updateBusinessRange').reset();
+    this.translator.stub('updateBusinessRange').resetHistory();
 
     axis.createTicks({
         top: 200,

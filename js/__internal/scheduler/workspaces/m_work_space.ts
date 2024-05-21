@@ -88,6 +88,18 @@ import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizonta
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
 import ViewDataProvider from './view_model/m_view_data_provider';
 
+interface RenderComponentOptions {
+  header?: boolean;
+  timePanel?: boolean;
+  dateTable?: boolean;
+  allDayPanel?: boolean;
+}
+
+interface RenderRWorkspaceOptions {
+  renderComponents: RenderComponentOptions;
+  generateNewData: boolean;
+}
+
 const { tableCreator } = tableCreatorModule;
 
 // TODO: The constant is needed so that the dragging is not sharp. To prevent small twitches
@@ -165,6 +177,16 @@ const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS}
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
 const CELL_INDEX_CALCULATION_EPSILON = 0.05;
+
+const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
+  renderComponents: {
+    header: true,
+    timePanel: true,
+    dateTable: true,
+    allDayPanel: true,
+  },
+  generateNewData: true,
+};
 
 class SchedulerWorkSpace extends WidgetObserver {
   _viewDataProvider: any;
@@ -798,6 +820,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       currentDate: this.option('currentDate'),
       startDate: this.option('startDate'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
+      showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
 
       ...this.virtualScrollingDispatcher.getRenderState(),
     };
@@ -1562,12 +1585,18 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   // NOTE: refactor leftIndex calculation
   getCellIndexByCoordinates(coordinates, allDay) {
-    const cellCount = this._getTotalCellCount(this._getGroupCount());
+    const { horizontalScrollingState, verticalScrollingState } = this.virtualScrollingDispatcher;
+
+    const cellCount = horizontalScrollingState?.itemCount ?? this._getTotalCellCount(this._getGroupCount());
+
     const cellWidth = this.getCellWidth();
     const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
 
-    const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
-    let leftIndex = coordinates.left / cellWidth;
+    const leftCoordinateOffset = horizontalScrollingState?.virtualItemSizeBefore ?? 0;
+    const topCoordinateOffset = verticalScrollingState?.virtualItemSizeBefore ?? 0;
+
+    const topIndex = Math.floor(Math.floor(coordinates.top - topCoordinateOffset) / Math.floor(cellHeight));
+    let leftIndex = (coordinates.left - leftCoordinateOffset) / cellWidth;
     leftIndex = Math.floor(leftIndex + CELL_INDEX_CALCULATION_EPSILON);
 
     if (this._isRTL()) {
@@ -2020,16 +2049,27 @@ class SchedulerWorkSpace extends WidgetObserver {
   // Methods that render renovated components. Useless in renovation
   // ------------
 
-  renderRWorkSpace(componentsToRender?: any) {
-    const allComponents = {
-      header: true, timePanel: true, dateTable: true, allDayPanel: true,
-    };
-    const components = componentsToRender ?? allComponents;
+  renderRWorkSpace({
+    header,
+    timePanel,
+    dateTable,
+    allDayPanel,
+  }: RenderComponentOptions = DEFAULT_WORKSPACE_RENDER_OPTIONS.renderComponents) {
+    if (header) {
+      this.renderRHeaderPanel();
+    }
 
-    components.header && this.renderRHeaderPanel();
-    components.timePanel && this.renderRTimeTable();
-    components.dateTable && this.renderRDateTable();
-    components.allDayPanel && this.renderRAllDayPanel();
+    if (timePanel) {
+      this.renderRTimeTable();
+    }
+
+    if (dateTable) {
+      this.renderRDateTable();
+    }
+
+    if (allDayPanel) {
+      this.renderRAllDayPanel();
+    }
   }
 
   renderRDateTable() {
@@ -2141,7 +2181,9 @@ class SchedulerWorkSpace extends WidgetObserver {
       const $rootElement = $(scheduler.element());
 
       this._createDragBehavior(this.getWorkArea(), $rootElement);
-      this._createDragBehavior(this._$allDayPanel, $rootElement);
+      if (!this._isVerticalGroupedWorkSpace()) {
+        this._createDragBehavior(this._$allDayPanel, $rootElement);
+      }
     }
   }
 
@@ -2729,11 +2771,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     });
   }
 
-  _renderDateTimeIndication() { return noop(); }
+  protected _renderDateTimeIndication() { return noop(); }
 
-  _setIndicationUpdateInterval() { return noop(); }
+  protected renderCurrentDateTimeLineAndShader(): void { return noop(); }
 
-  _refreshDateTimeIndication() { return noop(); }
+  protected renderCurrentDateTimeIndication(): void { return noop(); }
+
+  protected _setIndicationUpdateInterval() { return noop(); }
 
   _detachGroupCountClass() {
     [
@@ -2779,7 +2823,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     this._$allDayTitle && this._$allDayTitle.remove();
   }
 
-  _cleanView() {
+  _cleanView(): void {
     this.cache.clear();
     this._cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
@@ -2892,14 +2936,18 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
   }
 
-  renderWorkSpace(isGenerateNewViewData = true) {
+  renderWorkSpace({
+    generateNewData,
+    renderComponents,
+  } = DEFAULT_WORKSPACE_RENDER_OPTIONS): void {
     this.cache.clear();
 
-    this.viewDataProvider.update(this.generateRenderOptions(), isGenerateNewViewData);
+    this.viewDataProvider.update(this.generateRenderOptions(), generateNewData);
 
     if (this.isRenovatedRender()) {
-      this.renderRWorkSpace();
+      this.renderRWorkSpace(renderComponents);
     } else {
+      // TODO Old render: Delete this old render block after the SSR tests check.
       this._renderDateHeader();
       this._renderTimePanel();
       this._renderGroupAllDayPanel();

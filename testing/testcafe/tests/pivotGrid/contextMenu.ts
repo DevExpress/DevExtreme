@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 
 const CONTEXT_MENU_CLASS = 'dx-context-menu';
 const FIELD_CHOOSER_AREA_FIELDS_CLASS = 'dx-area-fields';

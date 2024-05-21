@@ -9,7 +9,7 @@ import themes from 'ui/themes';
 import config from 'core/config';
 import consoleUtils from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
-import { getWidth } from 'core/utils/size';
+import { getWidth, implementationsMap } from 'core/utils/size';
 
 import TextEditor from 'ui/text_box/ui.text_editor';
 import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
@@ -32,6 +32,8 @@ const EVENTS = [
     'KeyDown', 'KeyUp',
     'Change', 'Cut', 'Copy', 'Paste', 'Input'
 ];
+
+const LABEL_MODES = ['static', 'floating'];
 
 const moduleConfig = {
     beforeEach: function() {
@@ -562,16 +564,51 @@ QUnit.module('label integration', {
         QUnit.test('editor should pass containerWidth equal to input width', function(assert) {
             this.init();
             const inputWidth = getWidth(this.$input);
-            const borderWidth = 2;
 
-            assert.strictEqual(this.getProps().containerWidth + borderWidth, inputWidth);
+            assert.strictEqual(this.getProps().getContainerWidth(), inputWidth);
         });
 
         QUnit.test('editor should pass beforeWidth equal to before buttons container width', function(assert) {
             this.init();
             const beforeButtonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
 
-            assert.strictEqual(this.getProps().beforeWidth, beforeButtonsContainerWidth);
+            assert.strictEqual(this.getProps().getBeforeWidth(), beforeButtonsContainerWidth);
+        });
+
+        QUnit.test('editor should not initiate taking of width for label if labelMode is hidden (T1192938)', function(assert) {
+            const originalGetWidth = implementationsMap.getWidth;
+
+            try {
+                implementationsMap.getWidth = sinon.spy();
+
+                this.init({
+                    label: 'Label',
+                    labelMode: 'hidden',
+                });
+
+                assert.strictEqual(implementationsMap.getWidth.callCount, 0);
+            } finally {
+                implementationsMap.getWidth = originalGetWidth;
+            }
+        });
+
+        LABEL_MODES.forEach((labelMode) => {
+            QUnit.test(`editor initiate taking of width for label if labelMode is ${labelMode} (T1192938)`, function(assert) {
+                const originalGetWidth = implementationsMap.getWidth;
+
+                try {
+                    implementationsMap.getWidth = sinon.spy();
+
+                    this.init({
+                        label: 'Label',
+                        labelMode,
+                    });
+
+                    assert.strictEqual(implementationsMap.getWidth.callCount, 1);
+                } finally {
+                    implementationsMap.getWidth = originalGetWidth;
+                }
+            });
         });
     });
 
@@ -671,36 +708,31 @@ QUnit.module('aria-labelledby attribute', {
         this.$placeholder = this.$textEditor.find(`.${PLACEHOLDER_CLASS}`);
     }
 }, () => {
-    QUnit.test('aria-labelledby should be equal label and placeholder ids if label and placeholder are specified', function(assert) {
-        const inputAttr = this.$input.attr('aria-labelledby');
-        const labelId = this.$label.attr('id');
-        const placeholderId = this.$placeholder.attr('id');
-
-        assert.strictEqual(inputAttr, `${labelId} ${placeholderId}`);
-    });
-
-    QUnit.test('aria-labelledby should be equal label id if label is specified and placeholder is not specified', function(assert) {
-        this.textEditor.option({ placeholder: null });
+    QUnit.test('aria-labelledby should not be set if inputAttr containes aria-label', function(assert) {
+        this.textEditor.option({
+            inputAttr: { 'aria-label': 'custom' },
+            label: null,
+        });
 
         const inputAttr = this.$input.attr('aria-labelledby');
-        const labelId = this.$label.attr('id');
 
-        assert.strictEqual(inputAttr, labelId);
-    });
-
-    QUnit.test('aria-labelledby should be equal placeholder id if label is not specified and placeholder is specified', function(assert) {
-        this.textEditor.option({ label: null });
-
-        const inputAttr = this.$input.attr('aria-labelledby');
-        const placeholderId = this.$placeholder.attr('id');
-
-        assert.strictEqual(inputAttr, placeholderId);
+        assert.strictEqual(inputAttr, undefined);
     });
 
     QUnit.test('aria-labelledby should be equal undefined if label and placeholderId are not specified', function(assert) {
         this.textEditor.option({
             label: null,
             placeholder: null,
+        });
+        const inputAttr = this.$input.attr('aria-labelledby');
+
+        assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('aria-labelledby should be equal undefined if placeholder is specified and label is not specified', function(assert) {
+        this.textEditor.option({
+            label: null,
+            placeholder: 'placeholder',
         });
         const inputAttr = this.$input.attr('aria-labelledby');
 
@@ -715,6 +747,35 @@ QUnit.module('aria-labelledby attribute', {
         const inputAttr = this.$input.attr('aria-labelledby');
 
         assert.strictEqual(inputAttr, undefined);
+    });
+
+    QUnit.test('the placeholder attr should be equal custom placeholder', function(assert) {
+        this.textEditor.option({
+            placeholder: 'custom',
+            label: null,
+        });
+
+        const placeholder = this.$input.attr('placeholder');
+
+        assert.strictEqual(placeholder, this.textEditor.option('placeholder'));
+    });
+
+    QUnit.test('the placeholder attr should be equal empty string if placeholder is null in ios or mac', function(assert) {
+        this.textEditor.option({
+            placeholder: null,
+            label: null,
+        });
+
+        const { ios, mac } = devices.real();
+        const placeholder = this.$input.attr('placeholder');
+
+        if(ios || mac) {
+            assert.strictEqual(placeholder, ' ');
+
+            return;
+        }
+
+        assert.strictEqual(placeholder, undefined);
     });
 });
 
@@ -916,17 +977,14 @@ QUnit.module('options changing', moduleConfig, () => {
             ++eventWasHandled;
         };
 
-        const clock = sinon.useFakeTimers();
-
         assert.ok(!$element.hasClass(EMPTY_INPUT_CLASS), 'Element has NO \'empty input\' CSS class');
 
         instance.option('onValueChanged', handleValueUpdateEvent);
         pointerMock($element.find('.dx-clear-button-area')).click();
-        clock.tick(10);
+        this.clock.tick(10);
         assert.strictEqual($input.val(), '', 'Click on \'clear\' button causes input value reset');
         assert.ok($element.hasClass(EMPTY_INPUT_CLASS), 'Click on \'clear\' button causes marking with \'empty input\' CSS class');
         assert.equal(eventWasHandled, 1, 'Click on \'clear\' button rises value update event');
-        clock.restore();
     });
 
     QUnit.test('\'Clear\' button visibility depends on value', function(assert) {

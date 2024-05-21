@@ -9,6 +9,7 @@ import {
   isPopupFullScreenNeeded,
 } from '@js/renovation/ui/scheduler/appointment_edit_form/popup_config';
 import Popup from '@js/ui/popup/ui.popup';
+import { ExpressionUtils } from '@ts/scheduler/m_expression_utils';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { hide as hideLoading, show as showLoading } from '../m_loading';
@@ -198,7 +199,7 @@ export class AppointmentPopup {
       appointment.endDate = appointment.calculateEndDate('toAppointment');
     }
 
-    const formData = appointment.source();
+    const formData = appointment.clone().source();
 
     this.form.readOnly = this._isReadOnly(formData);
     this.form.updateFormData(formData);
@@ -222,13 +223,12 @@ export class AppointmentPopup {
   }
 
   updatePopupFullScreenMode() {
-    if (this.form.dxForm) { // TODO
+    if (this.form.dxForm && this.visible) { // TODO
       const { formData } = this.form;
-      const isRecurrence = formData[this.scheduler.getDataAccessors().expr.recurrenceRuleExpr];
+      const dataAccessors = this.scheduler.getDataAccessors();
+      const isRecurrence = ExpressionUtils.getField(dataAccessors, 'recurrenceRule', formData);
 
-      if (this.visible) {
-        this.changeSize(isRecurrence);
-      }
+      this.changeSize(isRecurrence);
     }
   }
 
@@ -246,10 +246,16 @@ export class AppointmentPopup {
         return;
       }
 
+      const { repeat } = this.form.formData;
       const adapter = this._createAppointmentAdapter(this.form.formData);
       const clonedAdapter = adapter.clone({ pathTimeZone: 'fromAppointment' } as any); // TODO:
+      const shouldClearRecurrenceRule = !repeat && !!clonedAdapter.recurrenceRule;
 
       this._addMissingDSTTime(adapter, clonedAdapter);
+
+      if (shouldClearRecurrenceRule) {
+        clonedAdapter.recurrenceRule = '';
+      }
 
       const appointment = clonedAdapter.source();
       delete appointment.repeat; // TODO

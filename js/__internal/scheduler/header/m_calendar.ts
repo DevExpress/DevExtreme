@@ -4,7 +4,7 @@ import $ from '@js/core/renderer';
 import Calendar from '@js/ui/calendar';
 import Popover from '@js/ui/popover/ui.popover';
 import Popup from '@js/ui/popup/ui.popup';
-import { dxSchedulerOptions } from '@js/ui/scheduler';
+import type { dxSchedulerOptions } from '@js/ui/scheduler';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import Widget from '@js/ui/widget/ui.widget';
 
@@ -62,6 +62,9 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
             fullScreen: true,
             showCloseButton: false,
             toolbarItems: [{ shortcut: 'cancel' }],
+            _ignorePreventScrollEventsDeprecation: true,
+            preventScrollEvents: false,
+            enableBodyScroll: false,
           },
         },
       ],
@@ -84,7 +87,8 @@ export default class SchedulerCalendar extends Widget<dxSchedulerOptions> {
   _createScrollable(content) {
     // @ts-expect-error
     const result = this._createComponent('<div>', Scrollable, {
-      direction: 'vertical',
+      height: 'auto',
+      direction: 'both',
     });
     result.$content().append(content);
 

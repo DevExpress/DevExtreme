@@ -39,7 +39,7 @@ const createInstanceBase = (options, clock) => {
     const scheduler = createWrapper({
         height: 600,
         ...options,
-    });
+    }, clock);
 
     clock.tick(300);
     scheduler.instance.focus();
@@ -1131,7 +1131,7 @@ module('Integration: Appointment Day, Week views', {
                         dataSource: priorityData,
                         label: 'Priority'
                     }]
-                });
+                }, this.clock);
 
                 scheduler.appointments.click(0);
                 scheduler.appointments.click(1);
@@ -1196,7 +1196,7 @@ module('Integration: Appointment Day, Week views', {
                 startDate: new Date(2018, 4, 22, 9, 0),
                 priorityId: 1,
             }],
-        });
+        }, this.clock);
 
         const appointments = scheduler.appointmentList;
 

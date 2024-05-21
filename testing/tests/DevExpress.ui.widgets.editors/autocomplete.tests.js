@@ -979,16 +979,15 @@ QUnit.module('dxAutocomplete', {
 
         const autocompleteInstance = $autocomplete.dxAutocomplete('instance');
         const keyboard = keyboardMock($autocomplete.find('.dx-texteditor-input'));
-        const clock = sinon.useFakeTimers();
 
         keyboard.type('i');
-        clock.tick(1000);
+        this.clock.tick(1000);
         let listItemsCount = $('.dx-overlay-content:visible .dx-list-item').length;
 
         assert.equal(listItemsCount, autocompleteInstance.option('maxItemCount'), 'drop down list items count is not equal to maxItemCount');
 
         autocompleteInstance.option('maxItemCount', 1);
-        clock.tick(1000);
+        this.clock.tick(1000);
         listItemsCount = $('.dx-overlay-content:visible .dx-list-item').length;
         assert.equal(listItemsCount, autocompleteInstance.option('maxItemCount'), 'drop down list items count is not equal to maxItemCount');
     });

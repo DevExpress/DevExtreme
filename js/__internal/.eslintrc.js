@@ -21,6 +21,12 @@ module.exports = {
                 tsconfigRootDir: __dirname,
             },
             rules: {
+                '@typescript-eslint/consistent-type-imports': [
+                    'error',
+                    {
+                        'disallowTypeAnnotations': false
+                    }
+                ],
                 'no-restricted-globals': [
                     'warn',
                     {
@@ -57,7 +63,8 @@ module.exports = {
                 'simple-import-sort/imports': 'error',
                 'simple-import-sort/exports': 'error',
                 'no-param-reassign': ['error', { 'props': false }],
-                'no-underscore-dangle': 'off'
+                'no-underscore-dangle': 'off',
+                'no-console': ['error', { 'allow': ['warn', 'error'] }],
             }
         },
         // Rules for a new TS files.
@@ -121,6 +128,56 @@ module.exports = {
                 '@typescript-eslint/no-implied-eval': 'warn',
                 '@typescript-eslint/ban-ts-comment': 'warn',
                 '@typescript-eslint/prefer-for-of': 'warn',
+            }
+        },
+        // Rules for grid controls
+        {
+            files: [
+                '**/grid_core/**/**.ts',
+                '**/data_grid/**/**.ts',
+                '**/tree_list/**/**.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/explicit-member-accessibility': [
+                    'error',
+                    {
+                        'accessibility': 'explicit',
+                        'overrides': {
+                            'constructors': 'off',
+                        },
+                    }
+                ],
+                // '@typescript-eslint/member-ordering': [
+                //     'error',
+                //     {
+                //         'default': [
+                //             'private-field',
+                //             'protected-field',
+                //             'public-field',
+                //             'constructor',
+                //             'private-method',
+                //             'protected-method',
+                //             'public-method'
+                //         ]
+                //     },
+                // ],
+                'no-restricted-syntax': [
+                    'error',
+                    {
+                        'selector': 'MethodDefinition[kind = "get"]',
+                    },
+                    {
+                        'selector': 'MethodDefinition[kind = "set"]',
+                    }
+                ],
+                'class-methods-use-this': 'off',
+                '@typescript-eslint/lines-between-class-members': 'off',
             }
         },
     ],

@@ -117,8 +117,8 @@ QUnit.test('MultiAxis chart', function(assert) {
         ]
     });
 
-    chart._valueAxes[0].adjust.reset();
-    chart._valueAxes[1].adjust.reset();
+    chart._valueAxes[0].adjust.resetHistory();
+    chart._valueAxes[1].adjust.resetHistory();
     // act
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), {});
     // assert
@@ -147,7 +147,7 @@ QUnit.test('Set visual range for all argument axis except original target one', 
             name: 'p2'
         }]
     });
-    chart._argumentAxes[0].visualRange.reset();
+    chart._argumentAxes[0].visualRange.resetHistory();
     // act
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { range: [10, 50] });
     // assert

@@ -583,8 +583,8 @@ QUnit.module('Manipulation', {
         tooltip.update(this.options);
 
         this.resetTooltipMocks = function() {
-            tooltip._text.stub('css').reset();
-            tooltip._renderer.stub('resize').reset();
+            tooltip._text.resetStub('css');
+            tooltip._renderer.resetStub('resize');
         };
 
         if(tooltip._textGroup && tooltip._textGroup.stub('getBBox')) {
@@ -1577,7 +1577,7 @@ QUnit.test('\'tooltipHidden\' is not triggered on hide if tooltip is already hid
     this.tooltip.update(this.options);
     this.tooltip.show({ valueText: 'text' }, {}, {});
     this.tooltip.hide();
-    this.eventTrigger.reset();
+    this.eventTrigger.resetHistory();
 
     this.tooltip.hide();
 
@@ -1589,7 +1589,7 @@ QUnit.test('Hide.', function(assert) {
     this.options.customizeTooltip = null;
     this.tooltip.update(this.options).show({ valueText: 'some-text' }, { x: 10, y: 20 }, eventObject);
     this.tooltip.move(100, 200, 30);
-    this.eventTrigger.reset();
+    this.eventTrigger.resetHistory();
 
     this.resetTooltipMocks();
     this.tooltip._wrapper.appendTo = sinon.spy();
@@ -1643,7 +1643,7 @@ QUnit.test('forceEvents. rise tooltipHidden event', function(assert) {
     const eventObject = { 'some-event-object': 'some-event-value' };
     this.options.forceEvents = true;
     this.tooltip.update(this.options).show({ valueText: 'some-text' }, {}, eventObject);
-    this.eventTrigger.reset();
+    this.eventTrigger.resetHistory();
 
     this.tooltip._wrapper.appendTo = sinon.spy();
     this.tooltip._wrapper.detach = sinon.spy();
@@ -1692,8 +1692,8 @@ QUnit.module('Movements', {
         tooltip.update(that.options);
 
         that.resetTooltipMocks = function() {
-            tooltip._text.stub('css').reset();
-            tooltip._renderer.stub('resize').reset();
+            tooltip._text.resetStub('css');
+            tooltip._renderer.resetStub('resize');
         };
 
         this.renderer.bBoxTemplate = { x: -12, y: -5, width: 24, height: 10 };
@@ -2148,8 +2148,8 @@ QUnit.module('Movements. Out of visible borders', {
         tooltip.update(that.options);
 
         that.resetTooltipMocks = function() {
-            tooltip._text.stub('css').reset();
-            tooltip._renderer.stub('resize').reset();
+            tooltip._text.resetStub('css');
+            tooltip._renderer.resetStub('resize');
         };
 
         that.canvas = { left: 10, top: 20, width: 800, height: 600, right: 0, bottom: 0 };

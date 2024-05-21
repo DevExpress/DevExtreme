@@ -1,7 +1,7 @@
 /* eslint-disable no-restricted-syntax */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction } from 'testcafe';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 import { appendElementTo } from '../../../helpers/domUtils';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';

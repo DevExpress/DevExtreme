@@ -2,8 +2,10 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
-import DataGrid from '../../model/dataGrid';
+import { createWidget, disposeWidget } from '../../helpers/createWidget';
+import DataGrid, { CLASS } from '../../model/dataGrid';
+import type { Column } from '../../../../js/ui/data_grid';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
 
 const showDataGrid = ClientFunction(() => {
   $('#wrapperContainer').css('display', '');
@@ -12,7 +14,7 @@ const showDataGrid = ClientFunction(() => {
 fixture.disablePageReloads`Virtual  Columns`
   .page(url(__dirname, '../container.html'));
 
-const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
+const generateData = (rowCount: number, columnCount: number): Record<string, unknown>[] => {
   const items: Record<string, unknown>[] = [];
 
   for (let i = 0; i < rowCount; i += 1) {
@@ -27,6 +29,11 @@ const generateData = (rowCount, columnCount): Record<string, unknown>[] => {
 
   return items;
 };
+
+const generateColumns = (columnCount: number): Column[] => [...new Array(columnCount)]
+  .map((_, index) => ({
+    dataField: `field${index + 1}`,
+  }));
 
 test('DataGrid should not scroll back to the focused cell after horizontal scrolling to the right when columnRenderingMode is virtual', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -134,57 +141,59 @@ test('The updateDimensions method should render the grid if a container was hidd
 });
 
 // T1176160
-test('The vertical scroll position should not be reset after horizontal scrolling when there is a fixed column and a master detail row', async (t) => {
-  // arrange
-  const dataGrid = new DataGrid('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+[true, false].forEach((useNative) => {
+  test(`The vertical scroll position should not be reset after horizontal scrolling when there are a fixed column and a master detail row (useNative = ${useNative})`, async (t) => {
+    // arrange
+    const dataGrid = new DataGrid('#container');
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await t.wait(50);
+    await t.expect(dataGrid.isReady()).ok();
 
-  // act
-  await dataGrid.scrollTo(t, { y: 5000 });
+    await dataGrid.apiExpandRow(9);
 
-  // assert
-  await takeScreenshot('T1176160-master-detail-with-virtual-columns-1.png', dataGrid.element);
+    // assert
+    await t
+      .expect(dataGrid.getContainer().find(`.${CLASS.masterDetailRow}`).exists)
+      .ok();
 
-  // act
-  await dataGrid.scrollTo(t, { x: 1000 });
+    // act
+    await dataGrid.scrollTo(t, { y: 5000 });
 
-  // assert
-  await takeScreenshot('T1176160-master-detail-with-virtual-columns-2.png', dataGrid.element);
+    // assert
+    await takeScreenshot(`T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-1.png`, dataGrid.element);
 
-  await t
-    .expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => createWidget('dxDataGrid', {
-  dataSource: generateData(10, 50).map((item, index) => ({ ...item, id: index })),
-  keyExpr: 'id',
-  width: 500,
-  height: 500,
-  columnWidth: 100,
-  scrolling: {
-    columnRenderingMode: 'virtual',
-  },
-  customizeColumns(columns) {
-    columns[0].fixed = true;
-  },
-  masterDetail: {
-    enabled: true,
-    template() {
-      return ($('<div style=\'height: 300px;\'>') as any).text('details');
+    // act
+    await dataGrid.scrollTo(t, { x: 1000 });
+    await dataGrid.scrollTo(t, { x: 2000 });
+
+    // assert
+    await takeScreenshot(`T1176160-master-detail-with-virtual-columns-and-useNative=${useNative}-2.png`, dataGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxDataGrid', {
+    dataSource: generateData(10, 50).map((item, index) => ({ ...item, id: index })),
+    keyExpr: 'id',
+    width: 500,
+    height: 500,
+    columnWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+      mode: 'virtual',
+      useNative,
     },
-  },
-  onContentReady(e) {
-    // @ts-expect-error flag for test
-    // eslint-disable-next-line no-underscore-dangle
-    if (!e.component.__initExpand) {
-      // @ts-expect-error flag for test
-      // eslint-disable-next-line no-underscore-dangle
-      e.component.__initExpand = true;
-      e.component.expandRow(9);
-    }
-  },
-}));
+    customizeColumns(columns) {
+      columns[0].fixed = true;
+    },
+    masterDetail: {
+      enabled: true,
+      template() {
+        return ($('<div style=\'height: 300px;\'>') as any).text('details');
+      },
+    },
+  })).after(async () => disposeWidget('dxDataGrid'));
+});
 
 // T1176161
 test('The markup should be correct after horizontal scrolling and collapse of the master detail row', async (t) => {
@@ -239,5 +248,37 @@ test('The markup should be correct after horizontal scrolling and collapse of th
       e.component.__initExpand = true;
       e.component.expandRow(0);
     }
+  },
+}));
+
+// T1191875
+safeSizeTest('Columns should be rendered correctly after reinit of columns controller', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await dataGrid.scrollTo(t, { x: 1000 });
+  await t.expect(dataGrid.getScrollLeft()).eql(1000);
+
+  const columns = generateColumns(500);
+  columns[0].visible = false;
+  await dataGrid.option('columns', columns);
+  await t.expect(dataGrid.getScrollLeft()).eql(1000);
+
+  columns[0].visible = true;
+  await dataGrid.option('columns', columns);
+  await t.expect(dataGrid.getScrollLeft()).eql(1000);
+
+  await t
+    .expect(await takeScreenshot('grid-virtual-columns-after-reinit.png'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  height: 440,
+  dataSource: generateData(150, 500),
+  columns: generateColumns(500),
+  columnWidth: 100,
+  scrolling: {
+    columnRenderingMode: 'virtual',
   },
 }));

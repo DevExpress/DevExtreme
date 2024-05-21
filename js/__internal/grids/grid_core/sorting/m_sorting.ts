@@ -1,18 +1,37 @@
+/* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
-import { extend } from '@js/core/utils/extend';
 import { isDefined } from '@js/core/utils/type';
 import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
+import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
+import type { HeaderPanel } from '@ts/grids/grid_core/header_panel/m_header_panel';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import sortingMixin from './m_sorting_mixin';
 
 const COLUMN_HEADERS_VIEW_NAMESPACE = 'dxDataGridColumnHeadersView';
 
-const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
-  _createRow(row) {
-    const $row = this.callBase(row);
+// TODO improve types of this mixin
+//  Now all members - protected by default (it may be wrong)
+// TODO getController
+const columnHeadersView = (Base: ModuleType<ColumnHeadersView>) => class ColumnHeadersViewSortingExtender extends sortingMixin(Base) {
+  public optionChanged(args) {
+    const that = this;
+
+    switch (args.name) {
+      case 'sorting':
+        that._invalidate();
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
+    }
+  }
+
+  protected _createRow(row) {
+    const $row = super._createRow(row);
 
     if (row.rowType === 'header') {
       eventsEngine.on($row, addNamespace(clickEventName, COLUMN_HEADERS_VIEW_NAMESPACE), 'td', this.createAction((e) => {
@@ -21,9 +40,9 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
     }
 
     return $row;
-  },
+  }
 
-  _processHeaderAction(event, $row) {
+  private _processHeaderAction(event, $row) {
     if ($(event.currentTarget).parent().get(0) !== $row.get(0)) {
       return;
     }
@@ -61,9 +80,9 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         that._columnsController.changeSortOrder(column.index, keyName);
       });
     }
-  },
+  }
 
-  _renderCellContent($cell, options) {
+  protected _renderCellContent($cell, options) {
     const that = this;
     const { column } = options;
 
@@ -76,10 +95,10 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
       });
     }
 
-    this.callBase.apply(this, arguments);
-  },
+    super._renderCellContent.apply(this, arguments);
+  }
 
-  _columnOptionChanged(e) {
+  protected _columnOptionChanged(e) {
     const { changeTypes } = e;
 
     if (changeTypes.length === 1 && changeTypes.sorting) {
@@ -87,10 +106,12 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
       return;
     }
 
-    this.callBase(e);
-  },
+    super._columnOptionChanged(e);
+  }
+};
 
-  optionChanged(args) {
+const headerPanel = (Base: ModuleType<HeaderPanel>) => class HeaderPanelSortingExtender extends sortingMixin(Base) {
+  public optionChanged(args) {
     const that = this;
 
     switch (args.name) {
@@ -99,15 +120,13 @@ const ColumnHeadersViewSortingExtender = extend({}, sortingMixin, {
         args.handled = true;
         break;
       default:
-        that.callBase(args);
+        super.optionChanged(args);
     }
-  },
-});
+  }
 
-const HeaderPanelSortingExtender = extend({}, sortingMixin, {
-  _createGroupPanelItem($rootElement, groupColumn) {
+  protected _createGroupPanelItem($rootElement, groupColumn) {
     const that = this;
-    const $item = that.callBase(...arguments);
+    const $item = super._createGroupPanelItem(...arguments);
 
     eventsEngine.on($item, addNamespace(clickEventName, 'dxDataGridHeaderPanel'), that.createAction(() => {
       that._processGroupItemAction(groupColumn.index);
@@ -125,25 +144,12 @@ const HeaderPanelSortingExtender = extend({}, sortingMixin, {
     });
 
     return $item;
-  },
+  }
 
-  _processGroupItemAction(groupColumnIndex) {
+  private _processGroupItemAction(groupColumnIndex) {
     setTimeout(() => this.getController('columns').changeSortOrder(groupColumnIndex));
-  },
-
-  optionChanged(args) {
-    const that = this;
-
-    switch (args.name) {
-      case 'sorting':
-        that._invalidate();
-        args.handled = true;
-        break;
-      default:
-        that.callBase(args);
-    }
-  },
-});
+  }
+};
 
 export const sortingModule = {
   defaultOptions() {
@@ -159,8 +165,8 @@ export const sortingModule = {
   },
   extenders: {
     views: {
-      columnHeadersView: ColumnHeadersViewSortingExtender,
-      headerPanel: HeaderPanelSortingExtender,
+      columnHeadersView,
+      headerPanel,
     },
   },
 };

@@ -188,7 +188,7 @@ QUnit.test('number of rendering on updating dataSource', function(assert) {
         onDrawn: drawn
     }).dxChart('instance');
 
-    drawn.reset();
+    drawn.resetHistory();
 
     chart.option({ dataSource: data });
     data.load();
@@ -507,7 +507,7 @@ QUnit.test('clearHover', function(assert) {
     const hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].hover();
-    hoverChanged.reset();
+    hoverChanged.resetHistory();
     // act
     this.chart.getAllSeries()[0].clearHover();
 
@@ -532,7 +532,7 @@ QUnit.test('clearPointHover', function(assert) {
     const pointHover = this.options.onPointHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
-    pointHover.reset();
+    pointHover.resetHistory();
 
     // act
     this.chart.getAllSeries()[0].getAllPoints()[0].clearHover();
@@ -562,7 +562,7 @@ QUnit.test('onPointhoverChanged on hover second', function(assert) {
 
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
-    pointHover.reset();
+    pointHover.resetHistory();
     // act
     this.chart.getAllSeries()[0].getAllPoints()[1].hover();
 
@@ -756,7 +756,7 @@ QUnit.module('Resizing (T1156890)', {
                     onDrawn: drawnHandler
                 });
 
-                drawnHandler.reset();
+                drawnHandler.resetHistory();
 
                 chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.98);
 

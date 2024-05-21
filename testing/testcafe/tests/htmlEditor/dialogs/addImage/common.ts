@@ -1,6 +1,6 @@
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1 } from './images/base64';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';

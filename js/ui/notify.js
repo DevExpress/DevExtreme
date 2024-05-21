@@ -28,6 +28,7 @@ function notify(message, /* optional */ typeOrStack, displayTime) {
 
         extend(options, {
             container: $container,
+            _skipContentPositioning: true,
             onShowing: function(args) {
                 setContainerStyles($container, direction, position);
                 userOnShowing?.(args);

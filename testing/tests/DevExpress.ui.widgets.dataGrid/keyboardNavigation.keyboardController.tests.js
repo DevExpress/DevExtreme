@@ -751,11 +751,11 @@ QUnit.module('Keyboard controller', {
         assert.ok(keyboard._getProcessor(navigationController._keyDownListener), 'subscribed to the "keydown" event');
 
         // arrange
-        onSpy.reset();
+        onSpy.resetHistory();
 
         // act
         navigationController.option('keyboardNavigation.enabled', false);
-        navigationController.optionChanged({ name: 'keyboardNavigation' });
+        navigationController.optionChanged({ name: 'keyboardNavigation', fullName: 'keyboardNavigation.enabled' });
         callViewsRenderCompleted(this.component._views);
 
         // assert
@@ -798,11 +798,11 @@ QUnit.module('Keyboard controller', {
         assert.notOk(keyboard._getProcessor(navigationController._keyDownListener), 'not subscribed to the "keydown" event');
 
         // arrange
-        onSpy.reset();
+        onSpy.resetHistory();
 
         // act
         navigationController.option('keyboardNavigation.enabled', true);
-        navigationController.optionChanged({ name: 'keyboardNavigation' });
+        navigationController.optionChanged({ name: 'keyboardNavigation', fullName: 'keyboardNavigation.enabled' });
         callViewsRenderCompleted(this.component._views);
 
         // assert

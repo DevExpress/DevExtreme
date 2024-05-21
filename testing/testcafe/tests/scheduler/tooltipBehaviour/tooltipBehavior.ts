@@ -1,4 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
+import { createWidget } from '../../../helpers/createWidget';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
 import dataSource from './init/widget.data';
 import { createScheduler, scroll } from './init/widget.setup';
@@ -116,4 +118,95 @@ safeSizeTest('The tooltip should hide after manually scrolling in the browser', 
     dataSource,
     adaptivityEnabled,
   }));
+});
+
+safeSizeTest('Tooltip on mobile devices should have enough hight if there are async templates (React)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const scheduler = new Scheduler('#container');
+
+  const resolveAllRenderDeferreds = ClientFunction(() => {
+    (window as any).deferreds
+      .filter((d) => d.state() === 'pending')
+      .map((d) => d.resolve());
+  });
+
+  await t.click(scheduler.headerPanel.element); // just click away
+  await t.click(scheduler.collectors.find('7').element);
+  await resolveAllRenderDeferreds();
+
+  await takeScreenshot('tooltip-rendering-with-react.png');
+
+  // check again after re-doing steps
+
+  await t.click(scheduler.headerPanel.element); // just click away
+  await t.click(scheduler.collectors.find('7').element);
+  await resolveAllRenderDeferreds();
+
+  await takeScreenshot('tooltip-rendering-with-react.png');
+
+  await t.expect(compareResults.isValid()).ok(compareResults.errorMessages());
+}, [600, 1000]).before(async () => {
+  const prepareRenderDeferreds = ClientFunction(() => {
+    (window as any).deferreds = [];
+  });
+  await prepareRenderDeferreds();
+
+  await createWidget('dxScheduler', {
+    currentDate: new Date(2017, 4, 25),
+    currentView: 'month',
+    adaptivityEnabled: true,
+    templatesRenderAsynchronously: true,
+    integrationOptions: {
+      templates: {
+        appointmentTooltip: {
+          render(args) {
+            const deferred = $.Deferred();
+            (window as any).deferreds.push(deferred);
+            // eslint-disable-next-line @typescript-eslint/no-floating-promises
+            deferred.done(() => {
+              args.container.append(
+                $('<div>')
+                  .height(50)
+                  .text(args.model.appointmentData.text),
+              );
+              args.onRendered();
+            });
+          },
+        },
+      },
+    },
+    dataSource: [{
+      text: 'A',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }, {
+      text: 'B',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }, {
+      text: 'C',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }, {
+      text: 'D',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }, {
+      text: 'E',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }, {
+      text: 'F',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }, {
+      text: 'G',
+      startDate: new Date(2017, 4, 22, 0, 30),
+      endDate: new Date(2017, 4, 22, 0, 30),
+    }],
+  });
+}).after(async () => {
+  await ClientFunction(() => {
+    delete (window as any).deferreds;
+  })();
 });

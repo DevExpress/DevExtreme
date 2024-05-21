@@ -2098,7 +2098,6 @@ QUnit.module('api', {
     QUnit.test('animationDuration', function(assert) {
         fx.off = false;
 
-        const clock = sinon.useFakeTimers();
         const oldRAF = animationFrame.requestAnimationFrame;
 
         animationFrame.requestAnimationFrame = callback => {
@@ -2119,10 +2118,10 @@ QUnit.module('api', {
 
             instance.nextItem(true);
 
-            clock.tick(150);
+            this.clock.tick(150);
             assert.ok($container.position().left < 0 && $container.position().left > -400, 'animation is preforming');
 
-            clock.tick(150);
+            this.clock.tick(150);
             assert.equal($container.position().left, -400, 'animation is completed');
 
 
@@ -2130,10 +2129,10 @@ QUnit.module('api', {
 
             instance.nextItem(true);
 
-            clock.tick(5000);
+            this.clock.tick(5000);
             assert.ok($container.position().left < -400 && $container.position().left > -800, 'animation is preforming');
 
-            clock.tick(5000);
+            this.clock.tick(5000);
             assert.equal($container.position().left, -800, 'animation is completed');
         } finally {
             animationFrame.requestAnimationFrame = oldRAF;

@@ -1,6 +1,6 @@
 import { Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import Calendar from '../../../model/calendar';
 
 const CALENDAR_SELECTED_DATE_CLASS = 'dx-calendar-selected-date';

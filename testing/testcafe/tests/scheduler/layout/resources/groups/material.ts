@@ -1,5 +1,5 @@
 import { compareScreenshot } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../../helpers/createWidget';
+import { createWidget } from '../../../../../helpers/createWidget';
 import url from '../../../../../helpers/getPageUrl';
 import { createDataSetForScreenShotTests, resourceDataSource } from '../../utils';
 import { changeTheme } from '../../../../../helpers/changeTheme';

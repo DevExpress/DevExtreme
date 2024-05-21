@@ -11,7 +11,7 @@ import HeaderPanel from './headers/panel';
 import DataCell from './data/cell';
 import Headers from './headers';
 
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
@@ -33,6 +33,7 @@ export const CLASS = {
   filterPanel: 'filter-panel',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
+  focusOverlay: 'focus-overlay',
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -40,6 +41,7 @@ export const CLASS = {
   popupEdit: 'edit-popup',
   masterDetailRow: 'dx-master-detail-row',
   adaptiveDetailRow: 'dx-adaptive-detail-row',
+  errorRow: 'dx-error-row',
 
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
@@ -47,6 +49,7 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
+  loadPanelWrapper: 'dx-loadpanel-wrapper',
   revertTooltip: 'revert-tooltip',
   invalidMessage: 'invalid-message',
 
@@ -159,6 +162,10 @@ export default class DataGrid extends Widget {
     return this.dataRows.filter(`.${CLASS.focusedRow}`);
   }
 
+  getErrorRow(): Selector {
+    return this.element.find(`.${CLASS.errorRow}`);
+  }
+
   getFilterPanel(): FilterPanel {
     return new FilterPanel(this.element.find(`.${this.addWidgetPrefix(CLASS.filterPanel)}`), this.getName());
   }
@@ -175,6 +182,10 @@ export default class DataGrid extends Widget {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
 
+  getFocusOverlay(): Selector {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
+  }
+
   getFilterEditor<T>(
     columnIndex: number,
     EditorType: new(mainElement: Selector) => T,
@@ -188,6 +199,10 @@ export default class DataGrid extends Widget {
 
   getOverlay(): Overlay {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
+  }
+
+  getLoadPanel(): Overlay {
+    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -524,6 +539,16 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiBeginCustomLoading(messageText: string): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
+      },
+      { dependencies: { getInstance, messageText } },
+    )();
+  }
+
   apiRefresh(): Promise<void> {
     const { getInstance } = this;
     return ClientFunction(
@@ -543,6 +568,19 @@ export default class DataGrid extends Widget {
         dependencies: {
           getInstance,
           value,
+        },
+      },
+    )();
+  }
+
+  apiPush(values: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).getDataSource().store().push(values),
+      {
+        dependencies: {
+          getInstance, values,
         },
       },
     )();

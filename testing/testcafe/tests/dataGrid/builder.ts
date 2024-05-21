@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 
 import url from '../../helpers/getPageUrl';
 import FilterBuilder from '../../model/filterBuilder';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import { DateBoxPopup } from '../../model/filterBuilder/dateboxPopup';
 
 const scrollTo = ClientFunction((x, y) => {

@@ -12,6 +12,7 @@ QUnit.testStart(function() {
         '<div id="inputWrapper">\
             <input id="input" />\
         </div>\
+        <div id="shadowhost" tabIndex="5"></div>\
         <div id="container">\
             <div id="element">\
                 <div id="wrapper">\
@@ -147,8 +148,67 @@ QUnit.test('click should not be prevented (T131440, T131837)', function(assert) 
     nativePointerMock($element).click();
 });
 
+QUnit.module('focus reset on mobile - resetActiveElement method', {
+    beforeEach: function() {
+        moduleConfig.beforeEach.call(this);
+        this.resetActiveElementSpy = sinon.spy(domUtils, 'resetActiveElement');
+    },
+    afterEach: function() {
+        moduleConfig.afterEach.call(this);
+        domUtils.resetActiveElement.restore();
+    }
+});
 
-QUnit.module('reset active element', moduleConfig);
+QUnit.test('native click should focus on input if the input is inside shadow DOM (T1218285)', function(assert) {
+    if(devices.real().generic) {
+        assert.ok(true);
+        return;
+    }
+
+    const $element = this.element;
+
+    const $shadowInput = $('<input>');
+    const $shadowHost = $('#shadowhost'); // div with tabIndex (it must me focusable)
+
+    $shadowHost[0]
+        .attachShadow({ mode: 'open' })
+        .appendChild($shadowInput[0]);
+
+    const pointer = nativePointerMock($shadowInput);
+    let isMouseDownPrevented = false;
+
+    $element.on('dxclick', noop)
+        .on('mousedown', function(e) {
+            isMouseDownPrevented = e.isDefaultPrevented();
+        });
+
+    pointer
+        .start()
+        .touchStart()
+        .touchEnd()
+        .mouseDown()
+        .mouseUp()
+        .pointerDown()
+        .pointerUp();
+
+    // NOTE: after animation/scroll on real device input can be placed under pointer
+    if(!isMouseDownPrevented) {
+        $shadowHost.focus();
+        $shadowHost.trigger({
+            type: 'click',
+            originalEvent: {
+                target: $shadowHost[0],
+                composedPath: () => [
+                    $shadowInput[0],
+                    $shadowHost[0].shadowRoot,
+                    $shadowHost[0]
+                ]
+            }
+        });
+    }
+
+    assert.equal(this.resetActiveElementSpy.callCount, 0, 'input should get focus if it is inside shadow DOM');
+});
 
 QUnit.test('native click should not focus on input after animation or scroll', function(assert) {
     if(devices.real().generic) {
@@ -156,43 +216,32 @@ QUnit.test('native click should not focus on input after animation or scroll', f
         return;
     }
 
-    const originalResetActiveElement = domUtils.resetActiveElement;
+    const $element = this.element;
+    const $input = $('#input');
+    const pointer = nativePointerMock($element);
+    let isMouseDownPrevented = false;
 
-    try {
-        const $element = this.element;
-        const $input = $('#input');
-        const pointer = nativePointerMock($element);
-        let isMouseDownPrevented = false;
-        let resetCount = 0;
+    $element.on('dxclick', noop)
+        .on('mousedown', function(e) {
+            isMouseDownPrevented = e.isDefaultPrevented();
+        });
 
-        $element.on('dxclick', noop)
-            .on('mousedown', function(e) {
-                isMouseDownPrevented = e.isDefaultPrevented();
-            });
+    pointer
+        .start()
+        .touchStart()
+        .touchEnd()
+        .mouseDown()
+        .mouseUp()
+        .pointerDown()
+        .pointerUp();
 
-        pointer
-            .start()
-            .touchStart()
-            .touchEnd()
-            .mouseDown()
-            .mouseUp()
-            .pointerDown()
-            .pointerUp();
-
-        domUtils.resetActiveElement = $.proxy(function() {
-            resetCount++;
-        }, this);
-
-        // NOTE: after animation/scroll on real device input can be placed under pointer
-        if(!isMouseDownPrevented) {
-            $input.focus();
-            $input.trigger('click');
-        }
-
-        assert.equal(resetCount, 1, 'input should not get focus after animation or scroll');
-    } finally {
-        domUtils.resetActiveElement = originalResetActiveElement;
+    // NOTE: after animation/scroll on real device input can be placed under pointer
+    if(!isMouseDownPrevented) {
+        $input.focus();
+        $input.trigger('click');
     }
+
+    assert.equal(this.resetActiveElementSpy.callCount, 1, 'input should not get focus after animation or scroll');
 });
 
 QUnit.test('native click should focus on input after animation or scroll if default action prevented', function(assert) {
@@ -201,68 +250,48 @@ QUnit.test('native click should focus on input after animation or scroll if defa
         return;
     }
 
-    const originalResetActiveElement = domUtils.resetActiveElement;
+    const $element = this.element;
+    const $input = $('#input');
+    const pointer = nativePointerMock($element);
+    let isMouseDownPrevented = false;
 
-    try {
-        const $element = this.element;
-        const $input = $('#input');
-        const pointer = nativePointerMock($element);
-        let isMouseDownPrevented = false;
-        let resetCount = 0;
-
-        $element.on({
-            'dxclick': noop,
-            'mousedown': function(e) {
-                isMouseDownPrevented = e.isDefaultPrevented();
-            },
-            'dxpointerdown': function(e) {
-                e.preventDefault();
-            }
-        });
-
-        pointer
-            .start()
-            .touchStart()
-            .touchEnd()
-            .mouseDown()
-            .mouseUp()
-            .pointerDown()
-            .pointerUp();
-
-        domUtils.resetActiveElement = $.proxy(function() {
-            resetCount++;
-        }, this);
-
-        // NOTE: after animation/scroll on real device input can be placed under pointer
-        if(!isMouseDownPrevented) {
-            $input.focus();
-            $input.trigger('click');
+    $element.on({
+        'dxclick': noop,
+        'mousedown': function(e) {
+            isMouseDownPrevented = e.isDefaultPrevented();
+        },
+        'dxpointerdown': function(e) {
+            e.preventDefault();
         }
+    });
 
-        assert.equal(resetCount, 0, 'input should get focus');
-    } finally {
-        domUtils.resetActiveElement = originalResetActiveElement;
+    pointer
+        .start()
+        .touchStart()
+        .touchEnd()
+        .mouseDown()
+        .mouseUp()
+        .pointerDown()
+        .pointerUp();
+
+    // NOTE: after animation/scroll on real device input can be placed under pointer
+    if(!isMouseDownPrevented) {
+        $input.focus();
+        $input.trigger('click');
     }
+
+    assert.equal(this.resetActiveElementSpy.callCount, 0, 'input should get focus');
 });
 
 QUnit.test('native click should focus on input', function(assert) {
-    const originalResetActiveElement = domUtils.resetActiveElement;
+    const $input = $('#input');
 
-    try {
-        const $input = $('#input');
-        let resetCount = 0;
+    $input.trigger('click');
 
-        domUtils.resetActiveElement = $.proxy(function() {
-            resetCount++;
-        }, this);
-
-        $input.trigger('click');
-
-        assert.equal(resetCount, 0, 'input should not get focus after animation or scroll');
-    } finally {
-        domUtils.resetActiveElement = originalResetActiveElement;
-    }
+    assert.equal(this.resetActiveElementSpy.callCount, 0, 'input should not get focus after animation or scroll');
 });
+
+QUnit.module('focus reset on mobile - default prevention', moduleConfig);
 
 QUnit.test('click on element should not prevent focus on mousedown if used native click (Q586100)', function(assert) {
     if(!support.touch) {

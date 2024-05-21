@@ -118,7 +118,7 @@ QUnit.test('No events hendling after dispose', function(assert) {
 
     const tracker = sparkline._tooltipTracker;
     this.trigger(pointerEvents.move, tracker, 10, 15);
-    tooltipShown.reset();
+    tooltipShown.resetHistory();
 
     // act
     this.$container.remove();

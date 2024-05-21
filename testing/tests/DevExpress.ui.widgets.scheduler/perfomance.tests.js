@@ -39,7 +39,7 @@ const renderLayoutModuleOptions = {
 };
 
 QUnit.module('Render layout', renderLayoutModuleOptions, function() {
-    const createScheduler = (view, dataSource, options) => {
+    const createScheduler = (view, dataSource, options, clock) => {
         const instance = $('#scheduler').dxScheduler($.extend(options, {
             views: ['week', 'month', 'agenda'],
             currentView: view,
@@ -51,7 +51,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
             editing: true,
         })).dxScheduler('instance');
 
-        return new SchedulerTestWrapper(instance);
+        return new SchedulerTestWrapper(instance, clock);
     };
 
     const markAppointments = (scheduler) => scheduler.appointments.getAppointments().data('mark', true);
@@ -329,7 +329,7 @@ QUnit.module('Render layout', renderLayoutModuleOptions, function() {
                 update: (key, values) => items[parseInt(key)] = values
             })
         };
-        const scheduler = createScheduler('agenda', dataSource);
+        const scheduler = createScheduler('agenda', dataSource, undefined, this.clock);
         assert.equal(scheduler.appointments.getAppointmentCount(), 2, 'Should render 2 appointments');
         markAppointments(scheduler);
 

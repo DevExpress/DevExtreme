@@ -255,7 +255,7 @@ QUnit.test('Recreate series points on zooming if aggregation is enabled', functi
     const series = chart.getAllSeries()[0];
     const argumentAxis = chart.getArgumentAxis();
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
     chart.seriesFamilies[0].adjustSeriesValues.reset();
 
     argumentAxis.applyVisualRangeSetter.lastCall.args[0](argumentAxis, { startValue: 0, endValue: 1 });
@@ -276,7 +276,7 @@ QUnit.test('Recreate series points on scrolling if aggregation is enabled', func
     });
     const series = chart.getAllSeries()[0];
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
 
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 0, endValue: 1 });
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 1, endValue: 2 });
@@ -297,7 +297,7 @@ QUnit.test('Recreate series points on zooming if aggregation is enabled (discret
     const series = chart.getAllSeries()[0];
     const oldGetBusinessRange = chart._argumentAxes[0].getTranslator().getBusinessRange;
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
     chart._argumentAxes[0].getTranslator = function() {
         return {
             getBusinessRange: function() {
@@ -328,7 +328,7 @@ QUnit.test('Do not recreate series points on scrolling if aggregation is enabled
     const series = chart.getAllSeries()[0];
     const oldGetBusinessRange = chart._argumentAxes[0].getTranslator().getBusinessRange;
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
     chart._argumentAxes[0].getTranslator = function() {
         return {
             getBusinessRange: function() {
@@ -366,7 +366,7 @@ QUnit.test('Do not recreate series points on scrolling if aggregation is enabled
     });
     const series = chart.getAllSeries()[0];
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
 
     chart._argumentAxes[0].getViewport.returns({
         min: 0,
@@ -394,7 +394,7 @@ QUnit.test('Do not recreate series points on zooming if aggregation is not enabl
     });
     const series = chart.getAllSeries()[0];
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
 
     chart.getArgumentAxis().applyVisualRangeSetter.lastCall.args[0](chart.getArgumentAxis(), { startValue: 0, endValue: 1 });
 
@@ -416,7 +416,7 @@ QUnit.test('Recreate points on resize if aggregation is enabled', function(asser
     const series = chart.getAllSeries()[0];
     const argumentAxis = chart._argumentAxes[0];
 
-    series.createPoints.reset();
+    series.createPoints.resetHistory();
     argumentAxis.updateCanvas.reset();
 
     chart.option({

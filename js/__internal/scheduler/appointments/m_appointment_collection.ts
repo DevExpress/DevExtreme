@@ -791,23 +791,29 @@ class SchedulerAppointments extends CollectionWidget {
   _correctEndDateByDelta(endDate, deltaTime) {
     const endDayHour = this.invoke('getEndDayHour');
     const startDayHour = this.invoke('getStartDayHour');
-    let result = endDate.getTime() + deltaTime;
+
+    const maxDate = new Date(endDate);
+    const minDate = new Date(endDate);
+    const correctEndDate = new Date(endDate);
+
+    minDate.setHours(startDayHour, 0, 0, 0);
+    maxDate.setHours(endDayHour, 0, 0, 0);
+
+    if (correctEndDate > maxDate) {
+      correctEndDate.setHours(endDayHour, 0, 0, 0);
+    }
+
+    let result = correctEndDate.getTime() + deltaTime;
     const visibleDayDuration = (endDayHour - startDayHour) * toMs('hour');
 
     const daysCount = deltaTime > 0
       ? Math.ceil(deltaTime / visibleDayDuration)
       : Math.floor(deltaTime / visibleDayDuration);
 
-    const maxDate = new Date(endDate);
-    const minDate = new Date(endDate);
-
-    minDate.setHours(startDayHour, 0, 0, 0);
-    maxDate.setHours(endDayHour, 0, 0, 0);
-
     if (result > maxDate.getTime() || result <= minDate.getTime()) {
-      const tailOfCurrentDay = maxDate.getTime() - endDate.getTime();
+      const tailOfCurrentDay = maxDate.getTime() - correctEndDate.getTime();
       const tailOfPrevDays = deltaTime - tailOfCurrentDay;
-      const correctedEndDate = new Date(endDate).setDate(endDate.getDate() + daysCount);
+      const correctedEndDate = new Date(correctEndDate).setDate(correctEndDate.getDate() + daysCount);
       const lastDay = new Date(correctedEndDate);
       lastDay.setHours(startDayHour, 0, 0, 0);
 
@@ -819,24 +825,31 @@ class SchedulerAppointments extends CollectionWidget {
   _correctStartDateByDelta(startDate, deltaTime) {
     const endDayHour = this.invoke('getEndDayHour');
     const startDayHour = this.invoke('getStartDayHour');
-    let result = startDate.getTime() - deltaTime;
+
+    const maxDate = new Date(startDate);
+    const minDate = new Date(startDate);
+    const correctStartDate = new Date(startDate);
+
+    minDate.setHours(startDayHour, 0, 0, 0);
+    maxDate.setHours(endDayHour, 0, 0, 0);
+
+    if (correctStartDate < minDate) {
+      correctStartDate.setHours(startDayHour, 0, 0, 0);
+    }
+
+    let result = correctStartDate.getTime() - deltaTime;
+
     const visibleDayDuration = (endDayHour - startDayHour) * toMs('hour');
 
     const daysCount = deltaTime > 0
       ? Math.ceil(deltaTime / visibleDayDuration)
       : Math.floor(deltaTime / visibleDayDuration);
 
-    const maxDate = new Date(startDate);
-    const minDate = new Date(startDate);
-
-    minDate.setHours(startDayHour, 0, 0, 0);
-    maxDate.setHours(endDayHour, 0, 0, 0);
-
     if (result < minDate.getTime() || result >= maxDate.getTime()) {
-      const tailOfCurrentDay = startDate.getTime() - minDate.getTime();
+      const tailOfCurrentDay = correctStartDate.getTime() - minDate.getTime();
       const tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
-      const firstDay = new Date(startDate.setDate(startDate.getDate() - daysCount));
+      const firstDay = new Date(correctStartDate.setDate(correctStartDate.getDate() - daysCount));
       firstDay.setHours(endDayHour, 0, 0, 0);
 
       result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);

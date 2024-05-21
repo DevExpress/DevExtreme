@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { changeTheme } from '../../../../helpers/changeTheme';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import DataGrid from '../../../../model/dataGrid';
 import { Themes } from '../../helpers/themes';

@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import Widget from '../internal/widget';
 import Overlay from '../overlay';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 
 const CLASS = {
   contextMenu: 'dx-context-menu',

@@ -346,7 +346,7 @@ testModule('render', moduleConfig, () => {
     });
 
     test('Overlay does not fail if swatch is undefined (render before documentReady, T713615, T1143527)', function(assert) {
-        const stub = sinon.stub(swatch, 'getSwatchContainer', () => {
+        const stub = sinon.stub(swatch, 'getSwatchContainer').callsFake(() => {
             return undefined;
         });
 
@@ -3536,7 +3536,7 @@ testModule('preventScrollEvents', () => {
         QUnit.test('should be logged if preventScrollEvents is used on initialization', function(assert) {
             assert.expect(2);
 
-            const stub = sinon.stub(errors, 'log', () => {
+            const stub = sinon.stub(errors, 'log').callsFake(() => {
                 assert.deepEqual(errors.log.lastCall.args, [
                     'W0001',
                     'dxOverlay',
@@ -3558,7 +3558,7 @@ testModule('preventScrollEvents', () => {
         QUnit.test('should not be logged if preventScrollEvents is not used on initialization', function(assert) {
             assert.expect(1);
 
-            const stub = sinon.stub(errors, 'log', () => {
+            const stub = sinon.stub(errors, 'log').callsFake(() => {
                 assert.deepEqual(errors.log.lastCall.args, [
                     'W0001',
                     'dxOverlay',
@@ -3584,7 +3584,7 @@ testModule('preventScrollEvents', () => {
                 preventScrollEvents,
             }).dxOverlay('instance');
 
-            const stub = sinon.stub(errors, 'log', () => {
+            const stub = sinon.stub(errors, 'log').callsFake(() => {
                 assert.deepEqual(errors.log.lastCall.args, [
                     'W0001',
                     'dxOverlay',
@@ -3604,7 +3604,7 @@ testModule('preventScrollEvents', () => {
             test(`"preventScrollEvents" deprecation warning should not be logged if "_ignorePreventScrollEventsDeprecation" option value is ${_ignorePreventScrollEventsDeprecation}`, function(assert) {
                 assert.expect(_ignorePreventScrollEventsDeprecation ? 0 : 1);
 
-                const stub = sinon.stub(errors, 'log', () => {
+                const stub = sinon.stub(errors, 'log').callsFake(() => {
                     assert.deepEqual(errors.log.lastCall.args, [
                         'W0001',
                         'dxOverlay',

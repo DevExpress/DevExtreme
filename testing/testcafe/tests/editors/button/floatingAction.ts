@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { ClientFunction, Selector } from 'testcafe';
 import { getThemePostfix, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo, setStyleAttribute } from '../../../helpers/domUtils';
 import { changeTheme } from '../../../helpers/changeTheme';
 

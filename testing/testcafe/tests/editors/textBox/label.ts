@@ -6,9 +6,9 @@ import {
   appendElementTo, setClassAttribute,
   removeClassAttribute,
 } from '../../../helpers/domUtils';
-import { isMaterial, testScreenshot } from '../../../helpers/themeUtils';
+import { testScreenshot, getThemeName } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import TextBox from '../../../model/textBox';
 import Guid from '../../../../../js/core/guid';
 
@@ -19,27 +19,41 @@ const labelModes = ['floating', 'static', 'hidden'];
 const stylingModes = ['outlined', 'underlined', 'filled'];
 
 const TEXTBOX_CLASS = 'dx-textbox';
-const LABEL_CLASS = 'dx-label';
 const HOVER_STATE_CLASS = 'dx-state-hover';
 const FOCUSED_STATE_CLASS = 'dx-state-focused';
 const INVALID_STATE_CLASS = 'dx-invalid';
 
-test('Label max-width changed with container size', async (t) => {
-  const textBox = new TextBox('#container');
+[
+  { labelMode: 'static', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
+  { labelMode: 'floating', expectedWidths: { generic: 82, material: 68, fluent: 74 } },
+].forEach(({ labelMode, expectedWidths }) => {
+  test(`Label max-width should be changed after container width was changed, labelMode is ${labelMode}`, async (t) => {
+    const textBox = new TextBox('#container');
 
-  await t
-    .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
-    .eql(isMaterial() ? '68px' : '82px');
+    const expectedWidth = expectedWidths[getThemeName()];
 
-  await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), 'width: 400px;');
+    await t
+      .expect(textBox.getLabel().getStyleProperty('max-width'))
+      .eql(`${expectedWidth}px`);
 
-  await t
-    .expect(textBox.element.find(`.${LABEL_CLASS}`).getStyleProperty('max-width'))
-    .eql(isMaterial() ? '368px' : '382px');
-}).before(async () => createWidget('dxTextBox', {
-  width: 100,
-  label: 'long label text long label text long label text long label text long label text',
-}));
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    await setStyleAttribute(Selector(`#${await textBox.element.getAttribute('id')}`), `width: ${t.ctx.initialWidth + t.ctx.deltaWidth}px;`);
+
+    await t
+      .expect(textBox.getLabel().getStyleProperty('max-width'))
+      // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+      .eql(`${expectedWidth + t.ctx.deltaWidth}px`);
+  }).before(async (t) => {
+    t.ctx.initialWidth = 100;
+    t.ctx.deltaWidth = 300;
+
+    return createWidget('dxTextBox', {
+      width: t.ctx.initialWidth,
+      label: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
+      labelMode,
+    });
+  });
+});
 
 stylingModes.forEach((stylingMode) => {
   test(`Textbox render with stylingMode=${stylingMode}`, async (t) => {

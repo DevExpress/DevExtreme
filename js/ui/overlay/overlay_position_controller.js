@@ -27,7 +27,8 @@ class OverlayPositionController {
         $root, $content, $wrapper,
         onPositioned, onVisualPositionChanged,
         restorePosition,
-        _fixWrapperPosition
+        _fixWrapperPosition,
+        _skipContentPositioning
     }) {
         this._props = {
             position,
@@ -36,7 +37,8 @@ class OverlayPositionController {
             restorePosition,
             onPositioned,
             onVisualPositionChanged,
-            _fixWrapperPosition
+            _fixWrapperPosition,
+            _skipContentPositioning
         };
 
         this._$root = $root;
@@ -151,9 +153,13 @@ class OverlayPositionController {
         resetPosition(this._$content);
         const wrapperOverflow = this._$wrapper.css('overflow');
         this._$wrapper.css('overflow', 'hidden');
-        const resultPosition = positionUtils.setup(this._$content, this._position);
+
+        if(!this._props._skipContentPositioning) {
+            const resultPosition = positionUtils.setup(this._$content, this._position);
+            this._initialPosition = resultPosition;
+        }
+
         this._$wrapper.css('overflow', wrapperOverflow);
-        this._initialPosition = resultPosition;
         this.detectVisualPositionChange();
     }
 

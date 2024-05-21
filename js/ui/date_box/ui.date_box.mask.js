@@ -12,6 +12,7 @@ import DateBoxBase from './ui.date_box.base';
 import numberLocalization from '../../localization/number';
 import devices from '../../core/devices';
 import browser from '../../core/utils/browser';
+import defaultDateNames from '../../localization/default_date_names';
 
 const MASK_EVENT_NAMESPACE = 'dateBoxMask';
 const FORWARD = 1;
@@ -110,7 +111,26 @@ const DateBoxMask = DateBoxBase.inherit({
         const delta = currentValue - originalValue;
 
         this._loadMaskValue(this._initialMaskValue);
-        this._partIncrease(delta + step, true);
+
+        this._changePartValue(delta + step, true);
+    },
+
+    _changePartValue(step, lockOtherParts) {
+        const activePartPattern = this._getActivePartProp('pattern');
+        const isAmPmPartActive = /^a{1,5}$/.test(activePartPattern);
+
+        if(isAmPmPartActive) {
+            this._toggleAmPm();
+        } else {
+            this._partIncrease(step, lockOtherParts);
+        }
+    },
+
+    _toggleAmPm() {
+        const currentValue = this._getActivePartProp('text');
+        const indexOfCurrentValue = defaultDateNames.getPeriodNames().indexOf(currentValue);
+        const newValue = indexOfCurrentValue ^ 1;
+        this._setActivePartValue(newValue);
     },
 
     _getDefaultOptions() {
@@ -296,7 +316,9 @@ const DateBoxMask = DateBoxBase.inherit({
 
         for(let i = 0; i <= endLimit; i++) {
             this._loadMaskValue(this._initialMaskValue);
-            this._partIncrease(i + 1);
+
+            this._changePartValue(i + 1);
+
             if(this._getActivePartProp('text').toLowerCase().indexOf(startString) === 0) {
                 this._searchValue = startString;
                 return;
@@ -532,26 +554,19 @@ const DateBoxMask = DateBoxBase.inherit({
 
         const { max, min } = this._getActivePartLimits(lockOtherParts);
 
-        let limitDelta = max - min;
-
-        // take AM\PM into account
-        if(limitDelta === 1) {
-            limitDelta++;
-        }
-
         let newValue = step + this._getActivePartValue();
 
         if(newValue > max) {
-            newValue = this._applyLimits(newValue, { limitBase: min, limitClosest: max, limitDelta });
+            newValue = this._applyLimits(newValue, { limitBase: min, limitClosest: max, max });
         } else if(newValue < min) {
-            newValue = this._applyLimits(newValue, { limitBase: max, limitClosest: min, limitDelta });
+            newValue = this._applyLimits(newValue, { limitBase: max, limitClosest: min, max });
         }
 
         this._setActivePartValue(newValue);
     },
 
-    _applyLimits(newValue, { limitBase, limitClosest, limitDelta }) {
-        const delta = (newValue - limitClosest) % limitDelta;
+    _applyLimits(newValue, { limitBase, limitClosest, max }) {
+        const delta = (newValue - limitClosest) % max;
         return delta ? limitBase + delta - 1 * sign(delta) : limitClosest;
     },
 

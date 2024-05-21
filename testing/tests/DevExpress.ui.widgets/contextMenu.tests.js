@@ -32,6 +32,7 @@ const DX_MENU_PHONE_CLASS = 'dx-menu-phone-overlay';
 const DX_MENU_ITEM_SELECTED_CLASS = 'dx-menu-item-selected';
 const DX_STATE_HOVER_CLASS = 'dx-state-hover';
 const DX_STATE_FOCUSED_CLASS = 'dx-state-focused';
+const DX_STATE_DISABLED_CLASS = 'dx-state-disabled';
 const DX_MENU_ITEM_EXPANDED_CLASS = 'dx-menu-item-expanded';
 const DX_MENU_ITEM_POPOUT_CLASS = 'dx-menu-item-popout';
 const DX_SUBMENU_CLASS = 'dx-submenu';
@@ -1556,6 +1557,27 @@ QUnit.module('Behavior', moduleConfig, () => {
         } finally {
             fx.off = true;
             fx.stop = origFxStop;
+        }
+    });
+
+    QUnit.test('Click on disabled submenu item should not raise an error (T1218229)', function(assert) {
+        assert.expect(0);
+
+        const instance = new ContextMenu(this.$element, {
+            items: [{ text: 'item 1', items: [{ text: 'subitem 1', disabled: true }] }],
+            target: '#menuTarget',
+            visible: true
+        });
+        const $rootItem = instance.itemsContainer().find('.' + DX_MENU_ITEM_CLASS).eq(0);
+
+        $($rootItem).trigger('dxclick');
+
+        const $disabledItem = instance.itemsContainer().find(`.${DX_STATE_DISABLED_CLASS}.${DX_MENU_ITEM_CLASS}`);
+
+        try {
+            $($disabledItem).parent().trigger('dxclick');
+        } catch(e) {
+            assert.ok(false);
         }
     });
 });

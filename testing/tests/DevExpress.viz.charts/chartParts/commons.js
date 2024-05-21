@@ -98,14 +98,14 @@ legendModule.Legend = sinon.spy(function(parameters) {
 });
 
 const resetModules = exports.resetModules = function() {
-    trackerModule.ChartTracker.reset();
-    trackerModule.PieTracker.reset();
+    trackerModule.ChartTracker.resetHistory();
+    trackerModule.PieTracker.resetHistory();
 
-    legendModule.Legend.reset();
+    legendModule.Legend.resetHistory();
 
-    rendererModule.Renderer.reset();
-    exportModule.ExportMenu.reset();
-    titleModule.Title.reset();
+    rendererModule.Renderer.resetHistory();
+    exportModule.ExportMenu.resetHistory();
+    titleModule.Title.resetHistory();
 };
 
 // stubs getters
@@ -135,6 +135,27 @@ function setupMocks($container) {
     $container.show();
     insertMockFactory();
 }
+
+/*
+    The behavior of withArgs(...).returnsArg() and withArgs(...).returns() has changed
+    after updating sinon from 2.4.1 to 17.0.1 (https://github.com/DevExpress/DevExtreme/pull/26744):
+
+    In 2.4.1:
+    stub.withArgs('test').returnsArg(1);
+    stub.withArgs('test').returns('overrided value');
+
+    stub('test', '123'); // return '123'
+    --------------------------------------------------
+    In 17.0.1:
+    stub.withArgs('test').returnsArg(1);
+    stub.withArgs('test').returns('overrided value');
+
+    stub('test', '123'); // return 'overrided value'
+    --------------------------------------------------
+
+    Therefore, in this case we do not override stubs with the same arguments.
+*/
+const NON_OVERRIDING_PROPERTIES = ['valueAxis', 'series'];
 
 exports.environment = {
     beforeEach: function() {
@@ -193,7 +214,7 @@ exports.environment = {
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCommonPaneSettings, v));
                 } else if(k === 'crosshair') {
                     that.themeManager.getOptions.withArgs(k).returns($.extend(true, {}, defaultCrosshairOptions, v));
-                } else if(k !== 'series') {
+                } else if(NON_OVERRIDING_PROPERTIES.indexOf(k) === -1) {
                     that.themeManager.getOptions.withArgs(k).returns(v);
                 }
             });
@@ -237,14 +258,14 @@ exports.environment = {
         resetMockFactory();
         this.createThemeManager.reset();
         this.createThemeManager.restore();
-        window.vizMocks.Element.prototype.updateRectangle.reset();
+        window.vizMocks.Element.prototype.updateRectangle.resetHistory();
         scrollBarClassModule.ScrollBar.restore();
         this.createSeriesFamily.restore();
         this.prepareSegmentRectPoints.restore();
         this.createCrosshair.restore();
         vizUtils.updatePanesCanvases.restore();
 
-        this.layoutManager.layoutElements.reset();
+        this.layoutManager.layoutElements.resetHistory();
         this.layoutManager = null;
         this.StubLayoutManager.reset();
         this.StubLayoutManager.restore();
@@ -265,7 +286,7 @@ exports.environment = {
     },
 
     mockValidateData: function() {
-        this.validateData = sinon.stub(dataValidatorModule, 'validateData', function(data, groupsData) {
+        this.validateData = sinon.stub(dataValidatorModule, 'validateData').callsFake(function(data, groupsData) {
             const categories = [];
             if(data) {
                 data.forEach(function(item) {

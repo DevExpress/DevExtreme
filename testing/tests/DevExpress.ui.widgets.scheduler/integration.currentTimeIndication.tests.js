@@ -48,14 +48,17 @@ module('Current Time Cell Indication Updating', {
         view: 'timelineDay',
         cellIndices: [4],
         timeDifference: HOUR,
+        highlightedCellsCount: 8,
     }, {
         view: 'timelineWeek',
         cellIndices: [28],
         timeDifference: HOUR,
+        highlightedCellsCount: 8,
     }, {
         view: 'timelineMonth',
         cellIndices: [8],
         timeDifference: HOUR * 48,
+        highlightedCellsCount: 1,
     }];
 
     const testBasicView = (assert, scheduler, clock, currentTimeCellsNumber, cellIndices) => {
@@ -144,7 +147,8 @@ module('Current Time Cell Indication Updating', {
                 ...getBaseConfig({ type: view }),
             });
 
-            testTimelineView(assert, scheduler, this.clock, timeDifference, 1, cellIndices);
+            const highlightedCellsCount = view === 'timelineMonth' ? 1 : 8;
+            testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
     });
 
@@ -167,15 +171,18 @@ module('Current Time Cell Indication Updating', {
         view: 'timelineDay',
         cellIndices: [4, 12],
         timeDifference: HOUR,
+        highlightedCellsCount: 16,
     }, {
         view: 'timelineWeek',
         cellIndices: [28, 84],
         timeDifference: HOUR,
+        highlightedCellsCount: 16,
     }, {
         view: 'timelineMonth',
         cellIndices: [8, 39],
         timeDifference: HOUR * 48,
-    }].forEach(({ view, cellIndices, timeDifference }) => {
+        highlightedCellsCount: 2,
+    }].forEach(({ view, cellIndices, timeDifference, highlightedCellsCount }) => {
         test(`Current Header Panel Cell indication should work correctly when horizontal grouping is used in ${view} view`, function(assert) {
             const scheduler = createWrapper({
                 ...getBaseConfig({
@@ -186,11 +193,11 @@ module('Current Time Cell Indication Updating', {
                 groups: ['priorityId'],
             });
 
-            testTimelineView(assert, scheduler, this.clock, timeDifference, 2, cellIndices);
+            testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
     });
 
-    timelineViewsConfig.forEach(({ view, cellIndices, timeDifference }) => {
+    timelineViewsConfig.forEach(({ view, cellIndices, timeDifference, highlightedCellsCount }) => {
         test(`Current Header Panel Cell indication should work correctly when grouping by date is used in ${view} view`, function(assert) {
             const scheduler = createWrapper({
                 ...getBaseConfig({
@@ -201,7 +208,7 @@ module('Current Time Cell Indication Updating', {
                 groups: ['priorityId'],
             });
 
-            testTimelineView(assert, scheduler, this.clock, timeDifference, 1, cellIndices);
+            testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
     });
 
@@ -225,7 +232,7 @@ module('Current Time Cell Indication Updating', {
         });
     });
 
-    timelineViewsConfig.forEach(({ view, cellIndices, timeDifference }) => {
+    timelineViewsConfig.forEach(({ view, cellIndices, timeDifference, highlightedCellsCount }) => {
         test(`Current Header Panel Cell indication should work correctly when vertical is used in ${view} view`, function(assert) {
             const scheduler = createWrapper({
                 ...getBaseConfig({
@@ -235,7 +242,7 @@ module('Current Time Cell Indication Updating', {
                 groups: ['priorityId'],
             });
 
-            testTimelineView(assert, scheduler, this.clock, timeDifference, 1, cellIndices);
+            testTimelineView(assert, scheduler, this.clock, timeDifference, highlightedCellsCount, cellIndices);
         });
     });
 
@@ -279,7 +286,7 @@ module('Current Time Cell Indication Updating', {
 
             let currentTimeCells = scheduler.workSpace.getHeaderPanelCurrentTimeCells();
 
-            assert.equal(currentTimeCells.length, 0, 'Correct number of current time cells');
+            assert.equal(currentTimeCells.length, 2, 'Correct number of current time cells');
 
             this.clock.tick(timeDifference);
 
@@ -287,7 +294,7 @@ module('Current Time Cell Indication Updating', {
             const currentCell = headerPanelCells.eq(cellIndex);
             currentTimeCells = scheduler.workSpace.getHeaderPanelCurrentTimeCells();
 
-            assert.equal(currentTimeCells.length, 1, 'Correct number of current time cells');
+            assert.equal(currentTimeCells.length, 2, 'Correct number of current time cells');
             assert.ok(currentCell.hasClass(HEADER_PANEL_CURRENT_TIME_CELL_CLASS), 'The current time cell has current-time class');
         });
     });

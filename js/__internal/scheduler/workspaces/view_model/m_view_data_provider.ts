@@ -32,6 +32,8 @@ export default class ViewDataProvider {
 
   viewDataMapWithSelection: any;
 
+  viewType: any;
+
   constructor(viewType) {
     this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
     this.viewData = {};
@@ -39,6 +41,7 @@ export default class ViewDataProvider {
     this.completeDateHeaderMap = [];
     this.viewDataMap = {};
     this._groupedDataMapProvider = null;
+    this.viewType = viewType;
   }
 
   get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }

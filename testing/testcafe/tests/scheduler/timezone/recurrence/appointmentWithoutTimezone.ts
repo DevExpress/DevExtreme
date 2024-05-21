@@ -2,7 +2,7 @@ import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../../helpers/getPageUrl';
 import { getScreenshotName } from '../timezoneTestingUtils';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import SelectBox from '../../../../model/selectBox';
 import Scheduler from '../../../../model/scheduler';
 

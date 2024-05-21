@@ -81,6 +81,9 @@ export class WorkSpaceProps extends BaseWidgetProps {
 
   @OneWay() indicatorTime = new Date();
 
+  // TODO: Check this field and change it to the "indicatorTime" if possible.
+  @OneWay() today = new Date();
+
   @OneWay() indicatorUpdateInterval = 5 * dateUtils.dateToMilliseconds('minute');
 
   @OneWay() shadeUntilCurrentTime = true;

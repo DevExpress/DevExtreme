@@ -495,7 +495,7 @@ QUnit.module('Recurrences', () => {
     });
 
     QUnit.test('generateDates should handle recurrence exception in long format with \'Z\', DAILY rule', function(assert) {
-        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset', function() {
+        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset').callsFake(function() {
             return new Date(2015, 4, 24).getTimezoneOffset();
         });
         try {
@@ -563,7 +563,7 @@ QUnit.module('Recurrences', () => {
     });
 
     QUnit.test('getRecurrenceString should handle objects with until', function(assert) {
-        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset', function() {
+        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset').callsFake(function() {
             return new Date(2015, 6, 9).getTimezoneOffset();
         });
 
@@ -730,7 +730,7 @@ QUnit.module('Recurrences', () => {
     });
 
     QUnit.test('getDateByAsciiString should return a valid date for yyyyMMddTHHmmssZ format', function(assert) {
-        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset', function() {
+        const recurrenceStub = sinon.stub(getRecurrenceProcessor(), '_getTimeZoneOffset').callsFake(function() {
             return new Date(2016, 6, 11).getTimezoneOffset();
         });
 

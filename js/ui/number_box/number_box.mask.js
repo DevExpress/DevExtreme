@@ -21,6 +21,7 @@ const MOVE_BACKWARD = -1;
 const MINUS = '-';
 const MINUS_KEY = 'minus';
 const INPUT_EVENT = 'input';
+const NUMPAD_DOT_KEY_CODE = 110;
 
 const CARET_TIMEOUT_DURATION = 0;
 
@@ -186,7 +187,12 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const normalizedText = this._getInputVal();
         const caret = this._caret();
 
-        const enteredChar = this._lastKeyName === MINUS_KEY ? '' : this._lastKey;
+        let enteredChar;
+        if(this._lastKeyName === MINUS_KEY) {
+            enteredChar = '';
+        } else {
+            enteredChar = e.which === NUMPAD_DOT_KEY_CODE ? number.getDecimalSeparator() : this._lastKey;
+        }
         const newValue = this._tryParse(normalizedText, caret, enteredChar);
 
         if(this._shouldMoveCaret(normalizedText, caret)) {
@@ -420,7 +426,10 @@ const NumberBoxMask = NumberBoxBase.inherit({
         const isValueChanged = parsedValue !== this._parsedValue;
 
         const isDecimalPointRestricted = char === decimalSeparator && maxPrecision === 0;
-        const isUselessCharRestricted = !isTextSelected && !isValueChanged && char !== MINUS && !this._isValueIncomplete(editedText) && this._isStub(char);
+        const isUselessCharRestricted = !isTextSelected
+            && !isValueChanged
+            && char !== MINUS
+            && this._isStub(char);
 
         if(isDecimalPointRestricted || isUselessCharRestricted) {
             return undefined;

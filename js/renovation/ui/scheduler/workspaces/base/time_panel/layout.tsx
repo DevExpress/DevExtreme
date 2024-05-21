@@ -10,7 +10,7 @@ import {
   RefObject,
 } from '@devextreme-generator/declarations';
 import { Row } from '../row';
-import { TimePanelCell as Cell } from './cell';
+import { TimePanelCell } from './cell';
 import { CellBase } from '../cell';
 import { Table } from '../table';
 import { AllDayPanelTitle } from '../date_table/all_day_panel/title';
@@ -61,6 +61,7 @@ export const viewFunction = ({
               isFirstGroupCell,
               isLastGroupCell,
               key,
+              highlighted,
             } = cell;
 
             return (
@@ -68,7 +69,7 @@ export const viewFunction = ({
                 className="dx-scheduler-time-panel-row"
                 key={key}
               >
-                <Cell
+                <TimePanelCell
                   startDate={startDate}
                   text={text}
                   groups={groups}
@@ -77,6 +78,7 @@ export const viewFunction = ({
                   isLastGroupCell={isLastGroupCell}
                   index={cellIndex}
                   timeCellTemplate={timeCellTemplate}
+                  highlighted={highlighted}
                 />
               </Row>
             );

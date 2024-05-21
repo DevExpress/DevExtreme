@@ -487,8 +487,8 @@ QUnit.test('Max depth option changing', function(assert) {
         }]
     });
     const group = this.tilesGroup();
-    this.renderer.simpleRect.reset();
-    group.clear.reset();
+    this.renderer.simpleRect.resetHistory();
+    group.clear.resetHistory();
 
     widget.option('maxDepth', 1);
 
@@ -524,8 +524,8 @@ QUnit.test('dataSource', function(assert) {
     const widget = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
     });
-    this.tilesGroup().clear.reset();
-    this.renderer.simpleRect.reset();
+    this.tilesGroup().clear.resetHistory();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option('dataSource', [{ value: 1 }, { value: 2 }]);
 
@@ -543,8 +543,8 @@ QUnit.test('dataSource / async', function(assert) {
     const widget = common.createWidget({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }, { value: 4 }]
     });
-    this.tilesGroup().clear.reset();
-    this.renderer.simpleRect.reset();
+    this.tilesGroup().clear.resetHistory();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option('dataSource', createDataSource(deferred.promise()));
     deferred.resolve([{ value: 1 }, { value: 2 }]);
@@ -567,8 +567,8 @@ QUnit.test('dataSource / external reloading', function(assert) {
     common.createWidget({
         dataSource: ds
     });
-    this.tilesGroup().clear.reset();
-    this.renderer.simpleRect.reset();
+    this.tilesGroup().clear.resetHistory();
+    this.renderer.simpleRect.resetHistory();
 
     data = [{ value: 1 }, { value: 2 }, { value: 3 }];
     ds.load();
@@ -585,8 +585,8 @@ QUnit.test('valueField', function(assert) {
     const widget = common.createWidget({
         dataSource: [{ value: 1, val: 4 }, { value: 2, val: 5 }, { value: 3 }, { value: 4, val: 6 }]
     });
-    this.tilesGroup().clear.reset();
-    this.renderer.simpleRect.reset();
+    this.tilesGroup().clear.resetHistory();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option('valueField', 'val');
 
@@ -616,8 +616,8 @@ QUnit.test('childrenField', function(assert) {
         }, {
         }]
     });
-    this.tilesGroup().clear.reset();
-    this.renderer.simpleRect.reset();
+    this.tilesGroup().clear.resetHistory();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option('childrenField', 'items2');
 
@@ -763,7 +763,7 @@ QUnit.test('colorizer', function(assert) {
     });
     let i;
     for(i = 0; i < 3; ++i) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
     }
 
     widget.option({ colorizer: { type: 'none' } });
@@ -782,7 +782,7 @@ QUnit.test('layoutAlgorithm', function(assert) {
     });
     let i;
     for(i = 0; i < 2; ++i) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
     }
 
     widget.option('layoutAlgorithm', 'strip');
@@ -805,10 +805,10 @@ QUnit.test('Appearance is not applied twice when \'dataSource\' and some appeara
     let i;
     const tiles = [];
     for(i = 0; i < 4; ++i) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
         tiles.push(this.tile(i));
     }
-    this.renderer.simpleRect.reset();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option({
         dataSource: [{ value: 1 }, { value: 2 }, { value: 3 }],
@@ -842,10 +842,10 @@ QUnit.test('Positioning is not changed twice when size and \'dataSource\' are ch
     let i;
     const tiles = [];
     for(i = 0; i < 4; ++i) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
         tiles.push(this.tile(i));
     }
-    this.renderer.simpleRect.reset();
+    this.renderer.simpleRect.resetHistory();
 
     widget.option({
         size: { width: 900, height: 600 },
@@ -876,7 +876,7 @@ QUnit.test('Appearance is reapplied when \'theme\' is changed', function(assert)
     });
     let i;
     for(i = 0; i < 3; ++i) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
     }
 
     widget.option('theme', 'test-theme');
@@ -899,7 +899,7 @@ QUnit.test('Appearance is reapplied when current theme is updated', function(ass
     });
     let i;
     for(i = 0; i < 3; ++i) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
     }
 
     themeModule.refreshTheme();
@@ -938,7 +938,7 @@ QUnit.test('recreating labels after labelField changing', function(assert) {
         dataSource: [{ value: 1, name: '1' }, { value: 2, newName: '2' }]
     });
 
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
     widget.option('labelField', 'newName');
 
     assert.equal(this.renderer.text.callCount, 1);
@@ -954,7 +954,7 @@ QUnit.test('layoutDirection changing', function(assert) {
     let i;
 
     for(i = 0; i < 3; i++) {
-        this.tile(i).attr.reset();
+        this.tile(i).attr.resetHistory();
     }
 
     widget.option('layoutDirection', 'leftBottomRightTop');
@@ -1194,7 +1194,7 @@ QUnit.test('toggle visibility by \'visible\' option - 1', function(assert) {
             value: 2, name: 'tile 2'
         }]
     });
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
 
     widget.option({
         tile: {
@@ -1219,7 +1219,7 @@ QUnit.test('toggle visibility by \'visible\' option - 2', function(assert) {
             }]
         }]
     });
-    this.renderer.text.reset();
+    this.renderer.text.resetHistory();
 
     widget.option({
         group: {
@@ -1248,7 +1248,7 @@ QUnit.test('ellipsis mode, change width from small to big - reapply ellipsis', f
         },
         dataSource: [{ name: 'g', value: 1 }]
     });
-    this.renderer.text.lastCall.returnValue.stub('setMaxSize').reset();
+    this.renderer.text.lastCall.returnValue.stub('setMaxSize').resetHistory();
 
     widget.option({
         size: {

@@ -63,6 +63,17 @@ QUnit.module('notify', {
         this.clock.tick(100);
     });
 
+    QUnit.test('notify content should have transform translate styles (stack disabled)', function(assert) {
+        notify({ displayTime: 100 });
+
+        const $content = $($(`.${TOAST_CLASS}`).dxToast('instance').content());
+        const translateStyles = $content.css('transform').replace(/[^0-9\-.,]/g, '').split(',');
+
+        assert.notStrictEqual(translateStyles[4], 0, 'translateX is defined');
+        assert.notStrictEqual(translateStyles[5], 0, 'translateY is defined');
+        this.clock.tick(100);
+    });
+
     QUnit.module('stack', {
         beforeEach: function() {
             this.options = {
@@ -174,6 +185,22 @@ QUnit.module('notify', {
             const toastsBaseZIndex = 9500;
 
             assert.strictEqual(stackZIndex, toastsBaseZIndex);
+        });
+
+        QUnit.test('notify content should not have transform styles, stack enabled (T1181708)', function(assert) {
+            notify(this.options, this.stack);
+
+            const $content = $($(`.${TOAST_CLASS}`).dxToast('instance').content());
+            let translateStyles = $content.css('transform');
+
+            if(translateStyles !== 'none') {
+                translateStyles = $content.css('transform').replace(/[^0-9\-.,]/g, '').split(',');
+
+                assert.strictEqual(translateStyles[4], '0', 'translateX is disabled');
+                assert.strictEqual(translateStyles[5], '0', 'translateY is disabled');
+            } else {
+                assert.strictEqual(translateStyles, 'none');
+            }
         });
     });
 

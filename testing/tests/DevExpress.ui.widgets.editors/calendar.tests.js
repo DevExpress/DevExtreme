@@ -1223,22 +1223,20 @@ QUnit.module('Keyboard navigation', {
         fx.off = false;
 
         const keyboard = keyboardMock(this.$element);
-        const clock = sinon.useFakeTimers();
 
         $(this.$element).trigger('focusin');
 
         try {
             keyboard.press('up');
-            clock.tick(VIEW_ANIMATION_DURATION / 5);
+            this.clock.tick(VIEW_ANIMATION_DURATION / 5);
             keyboard.press('up');
-            clock.tick(VIEW_ANIMATION_DURATION * 2);
+            this.clock.tick(VIEW_ANIMATION_DURATION * 2);
 
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 8, 17), 'current date is correct');
             assert.deepEqual(getCurrentViewInstance(this.calendar).option('date'), new Date(2013, 8, 1), 'correct view is shown');
             assert.equal(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)).length, 1, 'contoured date is rendered');
         } finally {
             fx.off = fxOrigState;
-            clock.restore();
         }
     });
 
@@ -3161,7 +3159,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             const lastAvailableDateOnJanuary = new Date(2020, 0, 19);
             const firstAvailableDateOnFebruary = new Date(2020, 1, 20);
@@ -3216,7 +3214,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 
@@ -3456,7 +3454,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 
@@ -3603,7 +3601,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 
@@ -3639,7 +3637,7 @@ QUnit.module('disabledDates option', {
             });
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             this.$element.trigger('focusin');
 

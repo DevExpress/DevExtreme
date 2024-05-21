@@ -32,6 +32,13 @@ describe('TimePanelCell', () => {
         .toBe(true);
     });
 
+    it('should render time cell with highlighted class if the cell is shuld be highlighted', () => {
+      const cell = render({ props: { highlighted: true } });
+
+      expect(cell.hasClass('dx-scheduler-time-panel-current-time-cell'))
+        .toBe(true);
+    });
+
     it('should pass correct props to the base cell', () => {
       const timeCellTemplateProps = {};
       const timeCellTemplate = () => null;

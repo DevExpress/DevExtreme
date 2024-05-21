@@ -3,7 +3,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
@@ -2586,3 +2586,95 @@ test('Component sends unexpected filtering request after inserting a new row if 
     };
   });
 });
+
+// T1201724
+test('An exception should not throw after pressing enter on the save button and onSaving\'s promise is resolved', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataRow = dataGrid.getDataRow(0);
+  const editButton = dataRow.getCommandCell(3).getButton(0);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
+
+  // act
+  await t
+    .click(editButton)
+    .expect(dataRow.isEdited)
+    .ok()
+    .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
+    .pressKey('tab tab tab')
+    .pressKey('enter');
+
+  await resolveOnSavingDeferred();
+
+  // assert
+  await t
+    .expect(dataRow.isEdited)
+    .notOk()
+    .expect(await takeScreenshot('grid-editing-with-onSaving-T1201724.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).deferred = $.Deferred();
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        id: 1, field1: 'value1', field2: 'value2', field3: 'value3',
+      },
+      {
+        id: 2, field1: 'value4', field2: 'value5', field3: 'value6',
+      },
+    ],
+    keyExpr: 'id',
+    showBorders: true,
+    columns: ['field1', 'field2', 'field3'],
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    onSaving(e) {
+      e.promise = (window as any).deferred;
+    },
+  });
+});
+
+// T1194439
+test('Focus behavior should be correct when editing cells', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  for (let i = 0; i < 10; i += 1) {
+    const cell = dataGrid.getDataCell(i, 0);
+
+    await t
+      .click(cell.element)
+      .expect(cell.isEditCell)
+      .ok()
+      .expect(cell.isFocused)
+      .ok()
+      .typeText(cell.element, `new_value ${i}`);
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(10)].map((_, i) => ({
+    ID: i + 1,
+    CompanyName: `company name ${i + 1}`,
+    City: `city ${i + 1}`,
+  })),
+  keyExpr: 'ID',
+  columns: [{
+    dataField: 'CompanyName',
+    showEditorAlways: true,
+  }, {
+    caption: 'City',
+    calculateCellValue(rowData) { return rowData.City; },
+    allowEditing: false,
+  }],
+  showBorders: true,
+  editing: {
+    allowUpdating: true,
+    mode: 'batch',
+  },
+}));

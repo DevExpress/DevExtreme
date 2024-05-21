@@ -952,7 +952,7 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type ExternalFormat = never;
+  type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1672,7 +1672,7 @@ declare module DevExpress.common {
     /**
      * [descr:RangeRule.max]
      */
-    max?: Date | number;
+    max?: Date | number | string;
     /**
      * [descr:RangeRule.message]
      */
@@ -1680,7 +1680,7 @@ declare module DevExpress.common {
     /**
      * [descr:RangeRule.min]
      */
-    min?: Date | number;
+    min?: Date | number | string;
     /**
      * [descr:RangeRule.reevaluate]
      */
@@ -1790,14 +1790,15 @@ declare module DevExpress.common {
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
     | 'dxButton'
+    | 'dxButtonGroup'
     | 'dxCheckBox'
     | 'dxDateBox'
+    | 'dxDropDownButton'
     | 'dxMenu'
     | 'dxSelectBox'
+    | 'dxSwitch'
     | 'dxTabs'
-    | 'dxTextBox'
-    | 'dxButtonGroup'
-    | 'dxDropDownButton';
+    | 'dxTextBox';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationCallbackData = {
@@ -2121,6 +2122,15 @@ declare module DevExpress.common.charts {
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
+  /**
+   * [descr:LegendItem]
+   */
+  export interface LegendItem extends BaseLegendItem {
+    /**
+     * [descr:LegendItem.series]
+     */
+    series?: DevExpress.viz.baseSeriesObject;
+  }
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
   export type Palette =
     | 'Bright'
@@ -2848,7 +2858,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseOptions.columnChooser.mode]
      */
@@ -2877,7 +2887,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.width]
      */
-    width?: number;
+    width?: number | string;
     /**
      * [descr:GridBaseOptions.columnChooser.sortOrder]
      */
@@ -2984,7 +2994,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseColumn.headerFilter.search]
      */
@@ -2997,7 +3007,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.width]
      */
-    width?: number;
+    width?: number | string;
   };
   /**
    * [descr:ColumnHeaderFilterSearchConfig]
@@ -4046,7 +4056,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.headerFilter.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseOptions.headerFilter.search]
      */
@@ -4067,7 +4077,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.headerFilter.width]
      */
-    width?: number;
+    width?: number | string;
   };
   export type HeaderFilterGroupInterval =
     | 'day'
@@ -4157,7 +4167,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorSrc]
      */
@@ -4185,7 +4195,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.width]
      */
-    width?: number;
+    width?: number | string;
   };
   /**
    * [descr:NewRowInfo]
@@ -5164,6 +5174,13 @@ declare module DevExpress.data {
      */
     loadMode?: 'processed' | 'raw';
     /**
+     * [descr:CustomStoreOptions.onLoaded]
+     */
+    onLoaded?: (
+      result: DevExpress.common.LoadResult<TItem>,
+      loadOptions: LoadOptions<TItem>
+    ) => void;
+    /**
      * [descr:CustomStoreOptions.remove]
      */
     remove?: (key: TKey) => PromiseLike<void>;
@@ -5891,10 +5908,6 @@ declare module DevExpress.data {
       | 'Single'
       | 'Decimal'
       | any;
-    /**
-     * [descr:ODataStoreOptions.onLoading]
-     */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -25748,7 +25761,8 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTabPanelItem extends DevExpress.ui.dxMultiView.Item {
+  export interface dxTabPanelItem
+    extends Omit<DevExpress.ui.dxMultiView.Item, 'visible'> {
     /**
      * [descr:dxTabPanelItem.badge]
      */
@@ -30469,28 +30483,17 @@ declare module DevExpress.viz {
      * [descr:BaseChartOptions.legend.customizeItems]
      */
     customizeItems?: (
-      items: Array<BaseChartLegendItem>
-    ) => Array<BaseChartLegendItem>;
+      items: Array<DevExpress.common.charts.LegendItem>
+    ) => Array<DevExpress.common.charts.LegendItem>;
     /**
      * [descr:BaseChartOptions.legend.markerTemplate]
      */
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: BaseChartLegendItem,
+          legendItem: DevExpress.common.charts.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-  }
-  /**
-   * [descr:BaseChartLegendItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseChartLegendItem
-    extends DevExpress.common.charts.BaseLegendItem {
-    /**
-     * [descr:BaseChartLegendItem.series]
-     */
-    series?: baseSeriesObject;
   }
   /**
    * [descr:BaseChartOptions]
