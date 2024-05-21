@@ -7,12 +7,12 @@ import {
 
 import DevExpress from 'devextreme/bundles/dx.all';
 import { ToolbarItemLocation } from 'devextreme/common';
-import { DiagramCommand } from 'devextreme/ui/diagram';
+import { Command } from 'devextreme/ui/diagram';
 
 @Component({
     template: ''
 })
-export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
+export abstract class DxiCustomCommand extends CollectionNestedOption {
     get icon(): string {
         return this._getOption('icon');
     }
@@ -20,10 +20,10 @@ export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
         this._setOption('icon', value);
     }
 
-    get items(): Array<DevExpress.ui.dxDiagramCustomCommand> {
+    get items(): Array<Command | DevExpress.ui.dxDiagram.CustomCommand> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxDiagramCustomCommand>) {
+    set items(value: Array<Command | DevExpress.ui.dxDiagram.CustomCommand>) {
         this._setOption('items', value);
     }
 
@@ -34,10 +34,10 @@ export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
         this._setOption('location', value);
     }
 
-    get name(): DiagramCommand | string {
+    get name(): Command | string {
         return this._getOption('name');
     }
-    set name(value: DiagramCommand | string) {
+    set name(value: Command | string) {
         this._setOption('name', value);
     }
 
