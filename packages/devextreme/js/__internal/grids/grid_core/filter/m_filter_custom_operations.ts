@@ -45,6 +45,7 @@ function baseOperation(grid) {
   };
 
   const headerFilterController = grid && grid.getController('headerFilter');
+  // Override in the private API WA [T1232532]
   const customizeText = function (fieldInfo, options) {
     options = options || {};
     const { value } = fieldInfo;

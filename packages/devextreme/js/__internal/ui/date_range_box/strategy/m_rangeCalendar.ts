@@ -3,8 +3,8 @@ import { isFunction } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import type Calendar from '@js/ui/calendar';
 import type DateBox from '@js/ui/date_box';
-import CalendarStrategy from '@js/ui/date_box/ui.date_box.strategy.calendar';
 
+import CalendarStrategy from '../../date_box/m_date_box.strategy.calendar';
 import { getDeserializedDate, isSameDateArrays, isSameDates } from '../m_date_range.utils';
 import type DateRangeBox from '../m_date_range_box';
 import type MultiselectDateBox from '../m_multiselect_date_box';

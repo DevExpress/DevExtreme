@@ -2,7 +2,7 @@
   "name": "devextreme-monorepo-tools",
   "version": "24.1.2",
   "devDependencies": {
-    "@types/jest": "26.0.24",
-    "ts-jest": "26.5.6"
+    "@types/jest": "^29.5.12",
+    "ts-jest": "^29.1.3"
   }
 }
