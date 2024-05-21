@@ -5,7 +5,6 @@
   "[Vue warn]: Failed to resolve component: ",
   "Warning: forwardRef render functions accept exactly two parameters: props and ref.",
   "Warning: %s: `ref` is not a prop.",
-  "W0001 -",
   "W0019 -",
   "W0022 -",
   "W1011 -",
