@@ -45,13 +45,6 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
     return this._map.size === 0;
   }
 
-  public shallowCopy(): DoubleKeyMap<TKey1, TKey2, TValue> {
-    const copy = new DoubleKeyMap<TKey1, TKey2, TValue>();
-
-    copy._map = this._map;
-    return copy;
-  }
-
   * [Symbol.iterator](): Generator<[{ key1: TKey1; key2: TKey2 }, TValue]> {
     for (const [key1, innerMap] of this._map) {
       for (const [key2, value] of innerMap) {

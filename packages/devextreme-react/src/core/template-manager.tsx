@@ -37,7 +37,9 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 }
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
-  const [instantiationModels, setInstantiationModels] = useState(new TemplateInstantiationModels());
+  const [instantiationModels, setInstantiationModels] = useState({
+    collection: new TemplateInstantiationModels()
+  });
   const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
   const widgetId = useRef('');
   const templateFactories = useRef<Record<string, TemplateFunc>>({});
@@ -59,7 +61,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const createMapKey = useCallback((key1: any, key2: HTMLElement) => ({ key1, key2 }), []);
 
   const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
-
+  
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
     model: data,
     index,
@@ -70,41 +72,32 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     const key = createMapKey(data, containerElement);
 
     const onRemoved = (): void => {
-      setInstantiationModels((currentInstantiationModels) => {
-        const template = currentInstantiationModels.get(key);
-
-        if (template) {
-          currentInstantiationModels.delete(key);
-
-          return currentInstantiationModels.shallowCopy();
-        }
-
-        return currentInstantiationModels;
-      });
+      if (instantiationModels.collection.get(key)) {
+        instantiationModels.collection.delete(key);
+      }
+      setInstantiationModels({ ...instantiationModels });
     };
 
     const hostWidgetId = widgetId.current;
 
-    setInstantiationModels((currentInstantiationModels) => {
-      currentInstantiationModels.set(key, {
-        templateKey,
-        index,
-        componentKey: getRandomId(),
-        onRendered: () => {
-          unsubscribeOnRemoval(containerElement, onRemoved);
+    instantiationModels.collection.set(key, {
+      templateKey,
+      index,
+      componentKey: getRandomId(),
+      onRendered: () => {
+        unsubscribeOnRemoval(containerElement, onRemoved);
 
-          if (hostWidgetId === widgetId.current) {
-            onRendered?.();
-          }
-        },
-        onRemoved,
-      });
-
-      return currentInstantiationModels.shallowCopy();
+        if (hostWidgetId === widgetId.current) {
+          onRendered?.();
+        }
+      },
+      onRemoved: onRemoved,
     });
 
+    setInstantiationModels({ ...instantiationModels });
+
     return containerElement;
-  }, [unsubscribeOnRemoval, createMapKey]);
+  }, [unsubscribeOnRemoval, createMapKey, instantiationModels]);
 
   useMemo(() => {
     function getTemplateFunction(template: ITemplate): TemplateFunc {
@@ -148,7 +141,9 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
     function clearInstantiationModels(): void {
       widgetId.current = getRandomId();
-      setInstantiationModels(new TemplateInstantiationModels());
+      setInstantiationModels({
+        collection: new TemplateInstantiationModels()
+      });
     }
 
     function updateTemplates(onUpdated: () => void): void {
@@ -164,14 +159,14 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     }
   }, [updateContext]);
 
-  if (instantiationModels.empty) {
+  if (instantiationModels.collection.empty) {
     return null;
   }
 
   return (
     <>
       {
-        Array.from(instantiationModels).map(([{ key1: data, key2: container }, {
+        Array.from(instantiationModels.collection).map(([{ key1: data, key2: container }, {
           index,
           templateKey,
           componentKey,
