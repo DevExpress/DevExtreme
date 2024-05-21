@@ -103,9 +103,6 @@ function removeDifferentElements(
     const hasOldChild = !!oldChildren.find((oldElement) => newElement === oldElement);
 
     if (!hasOldChild && newElement.parentNode) {
-      // @ts-expect-error The renderer's remove() function requires an argument in .d.ts.
-      // We currenlty suppress the error if we don't need the argument (see Grids).
-      // We should change the .d.ts (maybe make the parameter optional).
       $(newElement).remove();
     }
   });

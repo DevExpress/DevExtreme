@@ -4,7 +4,11 @@
   "compilerOptions": {
     "baseUrl": "./",
     "skipLibCheck": true,
-    "downlevelIteration": true
+    "downlevelIteration": true,
+    "lib": [
+      "ES2020",
+      "dom"
+    ]
   },
 
   "include": [

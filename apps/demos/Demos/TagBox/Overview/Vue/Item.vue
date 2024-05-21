@@ -1,6 +1,9 @@
 <template>
   <div class="custom-item">
-    <img :src="itemData.ImageSrc">
+    <img
+      :src="itemData.ImageSrc"
+      :alt="`${itemData.Name}. Picture`"
+    >
     <div class="product-name">
       {{ itemData.Name }}
     </div>

@@ -183,6 +183,7 @@ gulp.task('test-ts', gulp.series(
                 'noEmit': true,
                 'skipLibCheck': true,
                 'typeRoots': [],
+                'rootDir': '../../',
                 'target': 'es2015',
                 'lib': [
                     'ES2017',

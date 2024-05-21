@@ -36,7 +36,6 @@ class SplitterItem extends CollectionWidgetItem {
 
       const config = this._owner._getResizeHandleConfig(id);
 
-      // @ts-expect-error ts-error
       this._resizeHandle = this._owner._createComponent($('<div>'), ResizeHandle, config);
 
       if (this._resizeHandle && this._$element) {

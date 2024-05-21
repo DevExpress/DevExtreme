@@ -877,10 +877,9 @@ class Splitter extends CollectionWidget<Properties> {
   }
 
   _dimensionChanged(): void {
-    this._layout = this._getDefaultLayoutBasedOnSize();
-
-    this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
+
+    this._layout = this._getDefaultLayoutBasedOnSize();
   }
 
   _optionChanged(args: Record<string, unknown>): void {

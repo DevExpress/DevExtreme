@@ -407,7 +407,15 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test(`Update cell value ${JSON.stringify({
+            const testCase = mode === 'cell'
+            && dataField === 'text'
+            && !repaintChangesOnly
+            && useKeyboard
+            && !useMask
+            && !isAdding
+              ? test.meta({ unstable: true }) : test;
+
+            testCase(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;

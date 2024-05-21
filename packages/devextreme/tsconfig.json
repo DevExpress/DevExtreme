@@ -26,6 +26,9 @@
       "es2017.object",
       "dom"
     ],
+    "types": [
+      "jest"
+    ],
     "baseUrl": "./",
     "stripInternal": true,
     "paths": {

@@ -1023,7 +1023,6 @@ export class KeyboardNavigationController extends modules.ViewController {
       this._adaptiveColumnsController.toggleExpandAdaptiveDetailRow(key);
 
       this._updateFocusedCellPosition($cell);
-      // @ts-expect-error
     } else if (this.getMasterDetailCell($cell)?.is($cell)) {
       this.focusFirstInteractiveElementInside($cell);
     } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
@@ -2117,7 +2116,6 @@ export class KeyboardNavigationController extends modules.ViewController {
           $input.val(inputValue);
 
           const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
-          // @ts-expect-error
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           // @ts-expect-error
           eventsEngine.one($widgetContainer, 'focusout', () => {
