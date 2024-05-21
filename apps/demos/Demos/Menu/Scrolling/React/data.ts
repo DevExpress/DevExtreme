@@ -36,18 +36,18 @@ const products = [
             text: 'Projectors & Screens'
           },
           {
-            text: 'Computers Accessories',
+            text: 'Computer Accessories',
           },
         ]
       },
       {
-        text: 'Cell phones',
+        text: 'Cell Phones',
         items: [
           {
             text: 'Home & Office Phones',    
           },
           {
-            text: 'Smart phones & PDAs',
+            text: 'Smart Phones & PDAs',
           },
           {
             text: 'Senior Cell Phones'
@@ -56,7 +56,7 @@ const products = [
             text: 'Mobile Broadband Devices',
           },
           {
-            text: 'Cell phones Accessories',
+            text: 'Cell Phones Accessories',
           },
         ]
       },
@@ -106,7 +106,7 @@ const products = [
             text: 'Underwater Video & Photography',
           },
           {
-            text: 'Cameras Accessories',
+            text: 'Camera Accessories',
           },
         ]
       },
@@ -222,7 +222,7 @@ const products = [
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC games',    
+            text: 'PC Games',    
           },
           {
             text: 'Virtual Reality',
@@ -251,7 +251,7 @@ const products = [
     text: 'Healthcare & Living',
     items: [
       {
-        text: 'Sport & Outdoors',
+        text: 'Sports & Outdoors',
         items: [
           {
             text: 'Camping',
@@ -275,7 +275,7 @@ const products = [
             text: 'Sport Apparel'
           },
           {
-            text: 'Sport Shoes',
+            text: 'Trainers & Tennis Shoes',
           },
         ]
       },

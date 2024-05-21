@@ -6,7 +6,7 @@ export const contextMenuItems = [
         text: 'Computers',
         items: [
           {
-            text: 'Desktops',
+            text: 'Desktops',    
           },
           {
             text: 'Laptops',
@@ -33,32 +33,32 @@ export const contextMenuItems = [
             text: 'Warranties',
           },
           {
-            text: 'Projectors & Screens',
+            text: 'Projectors & Screens'
           },
           {
-            text: 'Computers Accessories',
+            text: 'Computer Accessories',
           },
-        ],
+        ]
       },
       {
-        text: 'Cell phones',
+        text: 'Cell Phones',
         items: [
           {
-            text: 'Home & Office Phones',
+            text: 'Home & Office Phones',    
           },
           {
-            text: 'Smart phones & PDAs',
+            text: 'Smart Phones & PDAs',
           },
           {
-            text: 'Senior Cell Phones',
+            text: 'Senior Cell Phones'
           },
           {
             text: 'Mobile Broadband Devices',
           },
           {
-            text: 'Cell phones Accessories',
+            text: 'Cell Phones Accessories',
           },
-        ],
+        ]
       },
       {
         text: 'Camera & Photo',
@@ -67,7 +67,7 @@ export const contextMenuItems = [
             text: 'Action Cameras',
           },
           {
-            text: 'Camcorders',
+            text: 'Camcorders',    
           },
           {
             text: 'Digital Cameras',
@@ -106,9 +106,9 @@ export const contextMenuItems = [
             text: 'Underwater Video & Photography',
           },
           {
-            text: 'Cameras Accessories',
+            text: 'Camera Accessories',
           },
-        ],
+        ]
       },
       {
         text: 'Audio',
@@ -117,7 +117,7 @@ export const contextMenuItems = [
             text: 'Boomboxes',
           },
           {
-            text: 'DVD & CD Player Bags',
+            text: 'DVD & CD Player Bags',    
           },
           {
             text: 'Hi-Fi & Home Audio Accessories',
@@ -143,7 +143,7 @@ export const contextMenuItems = [
           {
             text: 'Speakers',
           },
-        ],
+        ]
       },
       {
         text: 'Home Appliances',
@@ -152,7 +152,7 @@ export const contextMenuItems = [
             text: 'Air Conditioners',
           },
           {
-            text: 'Coffee Machines',
+            text: 'Coffee Machines',    
           },
           {
             text: 'Fans',
@@ -167,21 +167,22 @@ export const contextMenuItems = [
             text: 'Refrigerators',
           },
           {
-            text: 'Washers & Dryers',
+            text: 'Washers & Dryers'
           },
           {
             text: ' Water Heaters',
           },
           {
-            text: 'Vacuum',
+            'text': 'Vacuum'
           },
           {
-            text: 'Steaming & Ironing',
-          },
-        ],
+            text: 'Steaming & Ironing'
+          }
+        ]
       },
-    ],
+    ]
   },
+  
   {
     text: 'Entertainment',
     items: [
@@ -192,7 +193,7 @@ export const contextMenuItems = [
             text: 'TV Shows',
           },
           {
-            text: 'DVD',
+            text: 'DVD',    
           },
           {
             text: 'Blu-ray',
@@ -207,21 +208,21 @@ export const contextMenuItems = [
             text: 'Vinyl',
           },
           {
-            text: 'Cassette',
+            text: 'Cassette'
           },
           {
             text: 'Musical Instruments',
           },
           {
-            text: 'DJ Equipment',
-          },
-        ],
+            text: 'DJ Equipment'
+          }
+        ]
       },
       {
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC games',
+            text: 'PC Games',    
           },
           {
             text: 'Virtual Reality',
@@ -233,7 +234,7 @@ export const contextMenuItems = [
             text: 'Download Games',
           },
           {
-            text: 'Handheld Game Systems',
+            text: 'Handheld Game Systems'
           },
           {
             text: 'Legacy Systems',
@@ -241,21 +242,22 @@ export const contextMenuItems = [
           {
             text: 'Cards',
           },
-        ],
+        ]
       },
-    ],
+    ]
   },
+  
   {
     text: 'Healthcare & Living',
     items: [
       {
-        text: 'Sport & Outdoors',
+        text: 'Sports & Outdoors',
         items: [
           {
             text: 'Camping',
           },
           {
-            text: 'Fitness',
+            text: 'Fitness',    
           },
           {
             text: 'Football',
@@ -270,12 +272,12 @@ export const contextMenuItems = [
             text: 'Sport Electronics',
           },
           {
-            text: 'Sport Apparel',
+            text: 'Sport Apparel'
           },
           {
-            text: 'Sport Shoes',
+            text: 'Trainers & Tennis Shoes',
           },
-        ],
+        ]
       },
       {
         text: 'Beauty',
@@ -284,7 +286,7 @@ export const contextMenuItems = [
             text: 'Bath & Shower',
           },
           {
-            text: 'Skin Care',
+            text: 'Skin Care',    
           },
           {
             text: 'Hair Care',
@@ -293,7 +295,7 @@ export const contextMenuItems = [
             text: 'Nail Care',
           },
           {
-            text: 'Make-up',
+            text: 'Make-up'
           },
           {
             text: 'Fragrance',
@@ -304,7 +306,7 @@ export const contextMenuItems = [
           {
             text: 'Tools & Accessories',
           },
-        ],
+        ]
       },
       {
         text: 'Fashion',
@@ -313,7 +315,7 @@ export const contextMenuItems = [
             text: 'Clothing',
           },
           {
-            text: 'Jewellery',
+            text: 'Jewellery', 
           },
           {
             text: 'Shoes',
@@ -326,9 +328,9 @@ export const contextMenuItems = [
           },
           {
             text: 'Accessories',
-          },
-        ],
-      },
-    ],
+          }
+        ]
+      }
+    ]
   },
 ];

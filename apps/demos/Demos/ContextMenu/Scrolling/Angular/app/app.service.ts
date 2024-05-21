@@ -13,7 +13,7 @@ const contextMenuItems: ContextMenuItems[] = [
         text: 'Computers',
         items: [
           {
-            text: 'Desktops',
+            text: 'Desktops',    
           },
           {
             text: 'Laptops',
@@ -43,18 +43,18 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Projectors & Screens'
           },
           {
-            text: 'Computers Accessories',
+            text: 'Computer Accessories',
           },
         ]
       },
       {
-        text: 'Cell phones',
+        text: 'Cell Phones',
         items: [
           {
             text: 'Home & Office Phones',    
           },
           {
-            text: 'Smart phones & PDAs',
+            text: 'Smart Phones & PDAs',
           },
           {
             text: 'Senior Cell Phones'
@@ -63,7 +63,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Mobile Broadband Devices',
           },
           {
-            text: 'Cell phones Accessories',
+            text: 'Cell Phones Accessories',
           },
         ]
       },
@@ -113,7 +113,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Underwater Video & Photography',
           },
           {
-            text: 'Cameras Accessories',
+            text: 'Camera Accessories',
           },
         ]
       },
@@ -229,7 +229,7 @@ const contextMenuItems: ContextMenuItems[] = [
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC games',    
+            text: 'PC Games',    
           },
           {
             text: 'Virtual Reality',
@@ -258,7 +258,7 @@ const contextMenuItems: ContextMenuItems[] = [
     text: 'Healthcare & Living',
     items: [
       {
-        text: 'Sport & Outdoors',
+        text: 'Sports & Outdoors',
         items: [
           {
             text: 'Camping',
@@ -282,7 +282,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Sport Apparel'
           },
           {
-            text: 'Sport Shoes',
+            text: 'Trainers & Tennis Shoes',
           },
         ]
       },
