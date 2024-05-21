@@ -32,6 +32,7 @@ const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXT_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
+const TEXT_EDITOR_LABEL = 'dx-texteditor-label';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
@@ -2127,12 +2128,37 @@ QUnit.module('aria accessibility', () => {
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 
+    QUnit.test('component with fieldTemplate should have proper aria-labelledby attribute (T1230635)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            label: 'Field Template'
+        });
+        let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const $textEditorLabel = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL}`);
+
+        assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id');
+        keyboardMock($input)
+            .type('a');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id after typing');
+
+        keyboardMock($input)
+            .caret(1)
+            .press('backspace');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id after deleting');
+    });
+
     [
         { attribute: 'aria-required', value: 'true' },
         { attribute: 'aria-haspopup', value: 'true' },
         { attribute: 'aria-autocomplete', value: 'none' },
         { attribute: 'role', value: 'combobox' },
-        { attribute: 'aria-labelledby', value: 'Field Template' },
     ].forEach(({ attribute, value }) => {
         QUnit.test(`component with fieldTemplate should have proper ${attribute} attribute after interaction (T1230696, T1230971, T1230635)`, function(assert) {
             const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({

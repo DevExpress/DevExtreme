@@ -73,6 +73,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_LABEL = 'dx-texteditor-label';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
@@ -3298,7 +3299,6 @@ QUnit.module('search', moduleSetup, () => {
         { attribute: 'aria-haspopup', value: 'listbox' },
         { attribute: 'aria-autocomplete', value: 'list' },
         { attribute: 'role', value: 'combobox' },
-        { attribute: 'aria-labelledby', value: 'Field Template' },
     ].forEach(({ attribute, value }) => {
         QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971, T1230635)`, function(assert) {
             const $selectBox = $('#selectBox').dxSelectBox({
@@ -3327,6 +3327,34 @@ QUnit.module('search', moduleSetup, () => {
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
             assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
         });
+    });
+
+    QUnit.test('component with fieldTemplate should have correct aria-labelledby attribute after search and selection (T1230635)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+            itemTemplate: () => {
+                return '<div><span></span></div>';
+            },
+            label: 'Field Template'
+        });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $textEditorLabel = $selectBox.find(toSelector(TEXTEDITOR_LABEL));
+
+        assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should be equal to the label id');
+
+        keyboardMock($input)
+            .type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        assert.strictEqual($textEditorLabel.attr('id'), $input.attr('aria-labelledby'), 'aria-labelledby should stay equal to the label id after search and selection');
     });
 
     [0, 1].forEach((value) => {

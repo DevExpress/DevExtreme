@@ -34,7 +34,6 @@ const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
-const TEMPLATE_CONTENT_LABEL = 'Field Template';
 
 const isIOs = devices.current().platform === 'ios';
 
@@ -292,7 +291,7 @@ const DropDownEditor = TextBox.inherit({
         return 'none';
     },
 
-    _getRole() {
+    _getAriaRole() {
         return 'combobox';
     },
 
@@ -300,7 +299,7 @@ const DropDownEditor = TextBox.inherit({
         this.setAria({
             'haspopup': this._getAriaHasPopup(),
             'autocomplete': this._getAriaAutocomplete(),
-            'role': this._getRole(),
+            'role': this._getAriaRole(),
         });
     },
 
@@ -329,7 +328,9 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _setFieldAriaLabel() {
-        this.setAria('labelledby', TEMPLATE_CONTENT_LABEL);
+        if(this._label) {
+            this.setAria('labelledby', this._label.getId());
+        }
     },
 
     _renderField: function() {
