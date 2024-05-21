@@ -252,7 +252,7 @@ const DropDownEditor = TextBox.inherit({
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
-        this.setAria('role', 'combobox');
+        this.setAria('role', this._getAriaRole());
     },
 
     _render: function() {
@@ -329,7 +329,7 @@ const DropDownEditor = TextBox.inherit({
 
     _setFieldAriaLabel() {
         if(this._label) {
-            this.setAria('labelledby', this._label.getId());
+            this._setFieldAria();
         }
     },
 
