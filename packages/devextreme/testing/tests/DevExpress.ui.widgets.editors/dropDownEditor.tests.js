@@ -2128,7 +2128,7 @@ QUnit.module('aria accessibility', () => {
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 
-    QUnit.test('component with fieldTemplate should have proper aria-labelledby attribute (T1230635)', function(assert) {
+    QUnit.test('component with fieldTemplate and label should have proper aria-labelledby attribute (T1230635)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: (data) => {

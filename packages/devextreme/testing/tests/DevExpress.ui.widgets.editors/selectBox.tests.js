@@ -3329,7 +3329,7 @@ QUnit.module('search', moduleSetup, () => {
         });
     });
 
-    QUnit.test('component with fieldTemplate should have correct aria-labelledby attribute after search and selection (T1230635)', function(assert) {
+    QUnit.test('component with fieldTemplate and label should have correct aria-labelledby attribute after search and selection (T1230635)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: () => {
