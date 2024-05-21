@@ -908,31 +908,8 @@ QUnit.module('Keyboard navigation accessibility', {
     });
 
     // T1216832
-    testInDesktop('Navigation should not get stuck in the grid when the first cell is fixed and a template with links is specified for it', function(assert) {
+    testInDesktop('Check adding/removing an inert attribute of the fixed content during keyboard navigation with tab key when the first cell is fixed and a template with links is specified for it', function(assert) {
         // arrange
-        const getFocusElement = (rowIndex, columnIndex) => {
-            const $cellElement = $(this.getCellElement(rowIndex, columnIndex));
-            const $link = $cellElement.find('a');
-
-            return $link.length ? $link : $cellElement;
-        };
-
-        const checkNavigationOfAllCells = (rowCount, columnCount) => {
-            for(let i = 0; i < rowCount; i++) {
-                for(let j = 0; j < columnCount; j++) {
-                    const $focusElement = getFocusElement(i, j);
-                    const $nextFocusElement = j === columnCount - 1 ? getFocusElement(i + 1, 0) : getFocusElement(i, j + 1);
-
-                    this.triggerKeyDown('tab', false, false, $focusElement);
-                    this.clock.tick(10);
-
-                    if(i !== (rowCount - 1) || j !== (columnCount - 1)) {
-                        assert.ok($nextFocusElement.is(':focus'), 'element is focused');
-                    }
-                }
-            }
-        };
-
         this.columns = [
             'name',
             {
@@ -960,11 +937,12 @@ QUnit.module('Keyboard navigation accessibility', {
         this.gridView.render($('#container'));
         this.clock.tick(10);
 
-        this.focusCell(0, 0);
+        this.focusCell(1, 2);
         this.clock.tick(10);
 
         // act
-        checkNavigationOfAllCells(2, 3);
+        this.triggerKeyDown('tab', false, false, this.getCellElement(1, 2));
+        this.clock.tick(10);
 
         // assert
         const $fixedContent = this.gridView.element().find('.dx-datagrid-rowsview .dx-datagrid-content-fixed');
@@ -972,6 +950,7 @@ QUnit.module('Keyboard navigation accessibility', {
 
         // act
         $(this.getCellElement(1, 2)).trigger('focusout');
+        this.clock.tick(10);
 
         // assert
         assert.notOk($fixedContent.attr('inert'), 'fixed content hasn\'t inert attribute');

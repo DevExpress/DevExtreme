@@ -1150,8 +1150,8 @@ const resizing = (Base: ModuleType<ResizingController>) => class ResizingColumnF
 };
 
 const keyboardNavigation = (Base: ModuleType<KeyboardNavigationController>) => class KeyboardNavigationExtender extends Base {
-  protected _toggleInertAttr(value = false): void {
-    const $fixedContent = this._rowsView?.element()?.children(`.${this.addWidgetPrefix(CONTENT_FIXED_CLASS)}`);
+  protected _toggleInertAttr(value: boolean): void {
+    const $fixedContent = this._rowsView?.getFixedContentElement();
 
     if (value) {
       $fixedContent?.attr('inert', true);
