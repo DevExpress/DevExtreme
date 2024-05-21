@@ -45,6 +45,7 @@ const ROW_ALTERNATION_CLASS = 'dx-row-alt';
 const LAST_ROW_BORDER = 'dx-last-row-border';
 const EMPTY_CLASS = 'dx-empty';
 const ROW_INSERTED_ANIMATION_CLASS = 'row-inserted-animation';
+const CONTENT_FIXED_CLASS = 'content-fixed';
 
 const LOADPANEL_HIDE_TIMEOUT = 200;
 
@@ -1403,6 +1404,12 @@ export class RowsView extends ColumnsView {
    * @extended: column_fixing
    */
   public setScrollerSpacing(vScrollbarWidth?, hScrollbarWidth?) { }
+
+  public getFixedContentElement(): dxElementWrapper {
+    const fixedContentClass = this.addWidgetPrefix(CONTENT_FIXED_CLASS);
+
+    return this.element()?.children(`.${fixedContentClass}`);
+  }
 
   /**
    * @extended: validating, virtual_scrolling
