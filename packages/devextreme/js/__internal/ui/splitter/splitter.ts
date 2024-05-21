@@ -218,9 +218,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._shouldRecalculateLayout = false;
   }
 
-  _renderItems(items: Item[]): void {
-    super._renderItems(items);
-
+  updateItemsLayout(): void {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
 
@@ -276,6 +274,13 @@ class Splitter extends CollectionWidget<Properties> {
     return index === findLastIndexOfVisibleItem(items);
   }
 
+  _fireContentReadyAction(): void {
+    // @ts-expect-error badly typed base class
+    super._fireContentReadyAction();
+
+    this.updateItemsLayout();
+  }
+
   _renderItem(
     index: number,
     itemData: Item,
@@ -290,6 +295,12 @@ class Splitter extends CollectionWidget<Properties> {
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
     this._getItemInstance($itemFrame)._renderResizeHandle();
+
+    const previousElement = $(itemElement).prev();
+    if (previousElement.length && !previousElement.hasClass(RESIZE_HANDLE_CLASS)) {
+      const previousSplitterItem = this._getItemInstance(previousElement);
+      previousSplitterItem?._renderResizeHandle();
+    }
 
     return $itemFrame;
   }
@@ -308,10 +319,10 @@ class Splitter extends CollectionWidget<Properties> {
       const $rightItem = this._getResizeHandleRightItem($resizeHandle);
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
-      const resizable = leftItemData.resizable !== false
-        && rightItemData.resizable !== false
-        && leftItemData.collapsed !== true
-        && rightItemData.collapsed !== true;
+      const resizable = leftItemData?.resizable !== false
+        && rightItemData?.resizable !== false
+        && leftItemData?.collapsed !== true
+        && rightItemData?.collapsed !== true;
 
       resizeHandle.option('resizable', resizable);
 
@@ -328,13 +339,13 @@ class Splitter extends CollectionWidget<Properties> {
       const leftItemData = this._getItemData($leftItem);
       const rightItemData = this._getItemData($rightItem);
 
-      const showCollapsePrev = rightItemData.collapsed === true
-        ? rightItemData.collapsible === true && leftItemData.collapsed !== true
-        : leftItemData.collapsible === true && leftItemData.collapsed !== true;
+      const showCollapsePrev = rightItemData?.collapsed === true
+        ? rightItemData?.collapsible === true && leftItemData?.collapsed !== true
+        : leftItemData?.collapsible === true && leftItemData?.collapsed !== true;
 
-      const showCollapseNext = leftItemData.collapsed === true
-        ? leftItemData.collapsible === true
-        : rightItemData.collapsible === true && rightItemData.collapsed !== true;
+      const showCollapseNext = leftItemData?.collapsed === true
+        ? leftItemData?.collapsible === true
+        : rightItemData?.collapsible === true && rightItemData?.collapsed !== true;
 
       resizeHandle.option({ showCollapsePrev, showCollapseNext });
 
@@ -550,9 +561,8 @@ class Splitter extends CollectionWidget<Properties> {
         this._toggleActiveState($resizeHandle, true);
 
         const $leftItem = this._getResizeHandleLeftItem($resizeHandle);
-        const leftItemData = this._getItemData($leftItem);
-        const leftItemIndex = this._getIndexByItem(leftItemData);
-        this._activeResizeHandleIndex = leftItemIndex;
+
+        this._activeResizeHandleIndex = this._getItemInstance($leftItem).getIndex();
 
         this._currentOnePxRatio = convertSizeToRatio(
           1,
