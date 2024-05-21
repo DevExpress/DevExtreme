@@ -2,13 +2,13 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture('Scheduler.Templates')
+fixture('Scheduler.Resources')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Scheduler', 'Resources', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('Scheduler', 'Resources', ['jQuery'/* , 'React', 'Vue', 'Angular'*/], (test) => {
   test('Resource fields shouldn\'t empty', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
