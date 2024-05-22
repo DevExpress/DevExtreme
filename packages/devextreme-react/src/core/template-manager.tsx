@@ -141,9 +141,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
     function clearInstantiationModels(): void {
       widgetId.current = getRandomId();
-      setInstantiationModels({
-        collection: new TemplateInstantiationModels(),
-      });
+      instantiationModels.collection.clear();
+      setInstantiationModels({ ...instantiationModels });
     }
 
     function updateTemplates(onUpdated: () => void): void {

@@ -41,6 +41,10 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
     }
   }
 
+  public clear(): void {
+    this._map.clear();
+  }
+
   public get empty(): boolean {
     return this._map.size === 0;
   }
