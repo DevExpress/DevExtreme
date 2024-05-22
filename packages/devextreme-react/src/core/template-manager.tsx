@@ -77,7 +77,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       setInstantiationModels({ ...instantiationModels });
     };
 
-
     instantiationModels.collection.set(key, {
       templateKey,
       index,
