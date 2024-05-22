@@ -24,9 +24,13 @@
 </template>
 <script setup lang="ts">
 import DxScheduler, { DxResource } from 'devextreme-vue/scheduler';
+import ArrayStore from 'devextreme/data/array_store';
 import { data, assignees, priorities } from './data.ts';
 
 const views = ['agenda'];
 const currentDate = new Date(2021, 4, 11);
-const dataSource = data;
+const dataSource = new ArrayStore({
+  key: 'id',
+  data
+});
 </script>
