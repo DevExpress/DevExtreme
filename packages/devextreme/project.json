@@ -11,23 +11,151 @@
       },
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
-        "{projectRoot}/build/**/*",
-        "{projectRoot}/fonts/**/*",
-        "{projectRoot}/icons/**/*",
-        "{projectRoot}/images/**/*",
-        "{projectRoot}/js/**/*",
-        "{projectRoot}/scss/widgets/**/*",
-        "{projectRoot}/testing/**/*",
-        "!{projectRoot}/testing/*.txt",
-        "!{projectRoot}/testing/*.xml",
-        "{projectRoot}/ts/**/*",
-        "{projectRoot}/*.js"
+        "default",
+        "test"
       ],
       "outputs": [
         "{projectRoot}/artifacts",
         "{projectRoot}/scss/bundles"
       ]
+    },
+    "build:dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build:dev"
+      },
+      "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        { "env": "DEVEXTREME_TEST_CI" },
+        { "env": "DOTNET_CLI_TELEMETRY_OPTOUT" },
+        { "env": "DOTNET_SKIP_FIRST_TIME_EXPERIENCE" },
+        "default",
+        "test"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts",
+        "{projectRoot}/scss/bundles"
+      ],
+      "cache": true
+    },
+    "build:systemjs": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build:systemjs"
+      },
+      "dependsOn": [
+        "build:dev"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts/*-systemjs"
+      ],
+      "cache": true
+    },
+    "compile:r": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "compile:r"
+      },
+      "inputs": [
+        "{projectRoot}/js/renovation/**/*"
+      ],
+      "cache": true
+    },
+    "lint-css": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-css"
+      },
+      "inputs": [
+        "{projectRoot}/scss/**/*"
+      ],
+      "cache": true
+    },
+    "lint-dts": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-dts"
+      },
+      "inputs": [
+        { "env": "DEBUG" },
+        "{projectRoot}/**/*.d.ts",
+        "!{projectRoot}/js/renovation/**/*"
+      ],
+      "cache": true
+    },
+    "lint-js": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-js"
+      },
+      "inputs": [
+        "{projectRoot}/**/*.js"
+      ],
+      "cache": true
+    },
+    "lint-ts": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-ts"
+      },
+      "inputs": [
+        { "env": "DEBUG" },
+        "{projectRoot}/**/*.ts?(x)",
+        "!{projectRoot}/**/*.d.ts",
+        "!{projectRoot}/js/renovation/**/*",
+        "!{projectRoot}/testing/renovation/**/*"
+      ],
+      "cache": true
+    },
+    "lint-renovation": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-renovation"
+      },
+      "inputs": [
+        "{projectRoot}/js/renovation/**/*.ts?(x)"
+      ],
+      "cache": true
+    },
+    "test-jest": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test-jest"
+      },
+      "inputs": [
+        "{projectRoot}/js/**/*"
+      ],
+      "cache": true
+    },
+    "test-styles": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test-styles"
+      },
+      "inputs": [
+        "default",
+        "!{projectRoot}/js/**/*",
+        "!{projectRoot}/ts/**/*"
+      ],
+      "cache": true
     }
+  },
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/fonts/**/*",
+      "{projectRoot}/icons/**/*",
+      "{projectRoot}/images/**/*",
+      "{projectRoot}/js/**/*",
+      "{projectRoot}/scss/widgets/**/*",
+      "{projectRoot}/ts/**/*"
+    ],
+    "test": [
+      "{projectRoot}/build/**/*",
+      "{projectRoot}/testing/**/*",
+      "!{projectRoot}/testing/*.txt",
+      "!{projectRoot}/testing/*.xml",
+      "{projectRoot}/*.js"
+    ]
   },
   "tags": []
 }
