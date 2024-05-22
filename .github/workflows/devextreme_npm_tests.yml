@@ -220,7 +220,7 @@ jobs:
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
 
         if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-          git clone -b --depth 1 $REMOTE_BRANCH $REMOTE_URL ./devextreme-demos
+          git clone -b $REMOTE_BRANCH --depth 1 $REMOTE_URL  ./devextreme-demos
         fi
 
     - name: Clone devextreme-demos repo
