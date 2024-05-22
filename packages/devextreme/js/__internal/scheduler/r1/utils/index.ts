@@ -13,7 +13,13 @@ import {
   getViewStartByOptions,
 } from './month';
 import {
-  addHeightToStyle, addToStyles, addWidthToStyle, combineClasses, getGroupCellClasses,
+  addHeightToStyle,
+  addToStyles,
+  addWidthToStyle,
+  combineClasses,
+  getCellSizeHorizontalClass,
+  getCellSizeVerticalClass,
+  getGroupCellClasses,
 } from './render';
 import {
   calculateStartViewDate as timelineMonthCalculateStartViewDate,
@@ -133,6 +139,8 @@ export const renderUtils = {
   addHeightToStyle,
   getGroupCellClasses,
   combineClasses,
+  getCellSizeHorizontalClass,
+  getCellSizeVerticalClass,
 };
 
 export const themeUtils = {
