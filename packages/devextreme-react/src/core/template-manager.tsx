@@ -38,7 +38,7 @@ function normalizeProps(props: ITemplateArgs): ITemplateArgs | ITemplateArgs['da
 
 export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const [instantiationModels, setInstantiationModels] = useState({
-    collection: new TemplateInstantiationModels()
+    collection: new TemplateInstantiationModels(),
   });
   const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
   const widgetId = useRef('');
@@ -61,7 +61,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
   const createMapKey = useCallback((key1: any, key2: HTMLElement) => ({ key1, key2 }), []);
 
   const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
-  
+
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
     model: data,
     index,
@@ -91,7 +91,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
           onRendered?.();
         }
       },
-      onRemoved: onRemoved,
+      onRemoved,
     });
 
     setInstantiationModels({ ...instantiationModels });
@@ -142,7 +142,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     function clearInstantiationModels(): void {
       widgetId.current = getRandomId();
       setInstantiationModels({
-        collection: new TemplateInstantiationModels()
+        collection: new TemplateInstantiationModels(),
       });
     }
 
