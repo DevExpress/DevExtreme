@@ -99,12 +99,12 @@ test('Should switch focus after the textBox value change [T1194403]', async (t) 
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid(SELECTOR);
 
-  const textEditorCellFirst = dataGrid.getDataCell(0, 1).getEditor();
-  const textEditorCellSecond = dataGrid.getDataCell(0, 0).getEditor();
+  const textEditorCellOne = dataGrid.getDataCell(0, 1).getEditor();
+  const textEditorCellTwo = dataGrid.getDataCell(0, 0).getEditor();
 
-  await t.click(textEditorCellFirst.element);
-  await t.typeText(textEditorCellFirst.element, 'TEST_TEXT', { replace: true });
-  await t.click(textEditorCellSecond.element);
+  await t.click(textEditorCellOne.element);
+  await t.typeText(textEditorCellOne.element, 'TEST_TEXT', { replace: true });
+  await t.click(textEditorCellTwo.element);
 
   await takeScreenshot('focus-edit-cell_after-text-editor-change.png', dataGrid.element);
 
