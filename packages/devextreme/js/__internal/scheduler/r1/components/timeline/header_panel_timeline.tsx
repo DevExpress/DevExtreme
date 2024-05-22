@@ -13,6 +13,7 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
 
   render(): JSX.Element {
     const {
+      viewContext,
       dateCellTemplate,
       dateHeaderData,
       groupByDate,
@@ -29,6 +30,7 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
 
     return (
       <HeaderPanel
+        viewContext={viewContext}
         dateHeaderData={dateHeaderData}
         groupPanelData={groupPanelData}
         groupByDate={groupByDate}

@@ -6,7 +6,7 @@ describe('Logger tests', () => {
 
   beforeEach(() => {
     jest
-      .useFakeTimers('modern')
+      .useFakeTimers()
       .setSystemTime(new Date('1985-12-03').getTime());
 
     console.log = jest.fn();

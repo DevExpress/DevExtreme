@@ -65,21 +65,22 @@ describe('Pager size selector', () => {
     expect(tree.props()).toMatchObject({ className: 'dx-page-sizes' });
     expect(tree.find(PageSizeSmall)).toHaveLength(1);
     expect(tree.instance()).toBe((props.htmlRef as any).current);
-    expect(tree.childAt(0).props()).toMatchObject({
-      pageSize: 5,
-      pageSizes: [
-        {
-          text: '5',
-          value: 5,
-        },
-        {
-          text: '10',
-          value: 10,
-        },
-      ],
-      pageSizeChange: props.props?.pageSizeChange,
-      parentRef: props.htmlRef,
-    });
+
+    const childProps = tree.childAt(0).props();
+
+    expect(childProps.pageSize).toEqual(5);
+    expect(childProps.pageSizes).toMatchObject([
+      {
+        text: '5',
+        value: 5,
+      },
+      {
+        text: '10',
+        value: 10,
+      },
+    ]);
+    expect(childProps.pageSizeChange).toEqual(props.props?.pageSizeChange);
+    expect(childProps.parentRef).toEqual(props.htmlRef);
   });
 
   describe('Logic', () => {

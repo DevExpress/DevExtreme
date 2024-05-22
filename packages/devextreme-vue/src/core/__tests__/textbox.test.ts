@@ -11,7 +11,8 @@ beforeEach(() => {
 });
 
 describe('two-way binding', () => {
-  it('v-model works correctly', async (done) => {
+  it('v-model works correctly', async () => {
+    expect.assertions(1);
     const vm = defineComponent({
       template:
                 `<dx-text-box id="component1" v-model="testValue"></dx-text-box>
@@ -30,13 +31,13 @@ describe('two-way binding', () => {
     const component = wrapper.getComponent('#component2').vm as any as IConfigurable;
     component.$_config.updateValue = jest.fn();
     wrapper.getComponent('#component1').vm.$emit('update:modelValue', 'newValue');
-    nextTick(() => {
+    await nextTick(() => {
       expect(component.$_config.updateValue).toBeCalled();
-      done();
     });
   });
 
-  it('v-model with argument works correctly', async (done) => {
+  it('v-model with argument works correctly', async () => {
+    expect.assertions(1);
     const vm = defineComponent({
       template:
                 `<dx-text-box id="component1" v-model:value="testValue"></dx-text-box>
@@ -52,10 +53,9 @@ describe('two-way binding', () => {
     const wrapper = mount(vm);
     const component = wrapper.getComponent('#component2').vm as any as IConfigurable;
     component.$_config.updateValue = jest.fn();
-    wrapper.setProps({ testValue: 'test' });
-    nextTick(() => {
+    await wrapper.setProps({ testValue: 'test' });
+    await nextTick(() => {
       expect(component.$_config.updateValue).toBeCalled();
-      done();
     });
   });
 });
