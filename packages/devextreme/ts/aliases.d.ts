@@ -769,11 +769,6 @@ declare module DevExpress.ui.dxDataGrid {
 
 // v24.1
 
-declare module DevExpress.ui {
-    /** @deprecated DevExpress.ui.dxDiagram.CustomCommand instead */
-    export type dxDiagramCustomCommand = DevExpress.ui.dxDiagram.CustomCommand;
-}
-
 declare module DevExpress.ui.dxDiagram {
     /** @deprecated Use DevExpress.ui.dxDiagram.AutoZoomMode instead */
     export type DiagramAutoZoomMode = DevExpress.ui.dxDiagram.AutoZoomMode;
