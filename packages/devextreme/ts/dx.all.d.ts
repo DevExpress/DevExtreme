@@ -13019,6 +13019,31 @@ declare module DevExpress.ui {
     toPointIndex?: number;
   }
   /**
+   * [descr:dxDiagramCustomCommand]
+   */
+  export type dxDiagramCustomCommand = {
+    /**
+     * [descr:dxDiagramCustomCommand.name]
+     */
+    name?: string | DevExpress.ui.dxDiagram.Command;
+    /**
+     * [descr:dxDiagramCustomCommand.text]
+     */
+    text?: string;
+    /**
+     * [descr:dxDiagramCustomCommand.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:dxDiagramCustomCommand.items]
+     */
+    items?: Array<dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command>;
+    /**
+     * [descr:dxDiagramCustomCommand.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
+  /**
    * [descr:dxDiagramDeleteConnectorArgs]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -13114,7 +13139,7 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.contextMenu.commands]
        */
       commands?: Array<
-        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command
       >;
       /**
        * [descr:dxDiagramOptions.contextMenu.enabled]
@@ -13703,8 +13728,7 @@ declare module DevExpress.ui {
          * [descr:dxDiagramOptions.propertiesPanel.tabs.commands]
          */
         commands?: Array<
-          | DevExpress.ui.dxDiagram.CustomCommand
-          | DevExpress.ui.dxDiagram.Command
+          dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command
         >;
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.groups]
@@ -13714,8 +13738,7 @@ declare module DevExpress.ui {
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.commands]
            */
           commands?: Array<
-            | DevExpress.ui.dxDiagram.CustomCommand
-            | DevExpress.ui.dxDiagram.Command
+            dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command
           >;
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.title]
@@ -13760,7 +13783,7 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
       commands?: Array<
-        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command
       >;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
@@ -13775,7 +13798,7 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
       commands?: Array<
-        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command
       >;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
@@ -13790,7 +13813,7 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
       commands?: Array<
-        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+        dxDiagramCustomCommand | DevExpress.ui.dxDiagram.Command
       >;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
@@ -30522,31 +30545,6 @@ declare module DevExpress.ui.dxDiagram {
     | 'filledTriangle';
   export type ConnectorLineType = 'straight' | 'orthogonal';
   export type ConnectorPosition = 'start' | 'end';
-  /**
-   * [descr:CustomCommand]
-   */
-  export type CustomCommand = {
-    /**
-     * [descr:CustomCommand.name]
-     */
-    name?: string | Command;
-    /**
-     * [descr:CustomCommand.text]
-     */
-    text?: string;
-    /**
-     * [descr:CustomCommand.icon]
-     */
-    icon?: string;
-    /**
-     * [descr:CustomCommand.items]
-     */
-    items?: Array<CustomCommand | Command>;
-    /**
-     * [descr:CustomCommand.location]
-     */
-    location?: DevExpress.common.ToolbarItemLocation;
-  };
   export type DataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
   export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
   /**

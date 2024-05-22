@@ -256,7 +256,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -938,7 +938,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
         /**
          * @docid
          */
-        commands?: Array<CustomCommand | Command>;
+        commands?: Array<dxDiagramCustomCommand | Command>;
         /**
          * @docid
          */
@@ -946,7 +946,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
           /**
            * @docid
            */
-          commands?: Array<CustomCommand | Command>;
+          commands?: Array<dxDiagramCustomCommand | Command>;
           /**
            * @docid
            */
@@ -1004,7 +1004,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default false
@@ -1021,7 +1021,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1038,7 +1038,7 @@ export interface dxDiagramOptions extends WidgetOptions<dxDiagram> {
        * @docid
        * @default undefined
        */
-      commands?: Array<CustomCommand | Command>;
+      commands?: Array<dxDiagramCustomCommand | Command>;
       /**
        * @docid
        * @default true
@@ -1390,17 +1390,11 @@ export interface dxDiagramShape extends Item {
 }
 
 /**
- * @deprecated Use CustomCommand instead
- * @namespace DevExpress.ui
- */
-export type dxDiagramCustomCommand = CustomCommand;
-
-/**
  * @docid
  * @public
- * @namespace DevExpress.ui.dxDiagram
+ * @namespace DevExpress.ui
  */
-export type CustomCommand = {
+export type dxDiagramCustomCommand = {
     /**
      * @docid
      * @public
@@ -1420,14 +1414,14 @@ export type CustomCommand = {
      * @docid
      * @public
      */
-    items?: Array<CustomCommand | Command>;
+    items?: Array<dxDiagramCustomCommand | Command>;
     /**
      * @docid
      * @default "before"
      * @public
      */
     location?: ToolbarItemLocation;
-}
+};
 
 /**
  * @docid
