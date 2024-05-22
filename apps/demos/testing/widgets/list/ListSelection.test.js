@@ -14,7 +14,7 @@ fixture('List.ListSelection')
     ctx.initialWindowSize = [900, 800];
   });
 
-runManualTest('List', 'ListSelection', ['jQuery', /* 'React', */ 'Vue', /* 'Angular' */], (test) => {
+runManualTest('List', 'ListSelection', ['jQuery', /* 'React', */ 'Vue'], (test) => {
   test('List Selection', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

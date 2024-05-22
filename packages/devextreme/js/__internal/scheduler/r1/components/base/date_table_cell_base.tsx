@@ -98,7 +98,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-expect-error TS2786
+      // @ts-ignore
       <CellBase
         isFirstGroupCell={isFirstGroupCell}
         isLastGroupCell={isLastGroupCell}

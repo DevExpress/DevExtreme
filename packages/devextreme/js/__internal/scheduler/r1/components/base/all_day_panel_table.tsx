@@ -49,14 +49,14 @@ export class AllDayTable extends InfernoWrapperComponent<AllDayPanelTableProps> 
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
-      // @ts-expect-error TS2786
+      // @ts-ignore
       <Table
         className="dx-scheduler-all-day-table"
         height={allDayPanelData ? undefined : DefaultSizes.allDayPanelHeight}
         width={width}
         tableRef={tableRef}
       >
-        {/* @ts-expect-error TS2786 */}
+        {/* @ts-ignore */}
         <AllDayPanelTableBody
           viewData={allDayPanelData ?? AllDayPanelTableBodyDefaultProps.viewData}
           leftVirtualCellWidth={viewData.leftVirtualCellWidth

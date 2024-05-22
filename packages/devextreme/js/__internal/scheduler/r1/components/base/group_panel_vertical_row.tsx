@@ -23,7 +23,7 @@ export class GroupPanelVerticalRow extends BaseInfernoComponent<GroupPanelRowPro
             id,
             key,
             text,
-            // @ts-expect-error TS2786
+            // @ts-ignore
           }, index) => <GroupPanelVerticalCell
             key={key}
             text={text}

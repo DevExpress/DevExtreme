@@ -62,7 +62,7 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
     const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
-      // @ts-expect-error TS2786
+      // @ts-ignore
       <CellBase
         className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${highlighted ? 'dx-scheduler-time-panel-current-time-cell' : ''} ${className}`}
         isFirstGroupCell={isFirstGroupCell}

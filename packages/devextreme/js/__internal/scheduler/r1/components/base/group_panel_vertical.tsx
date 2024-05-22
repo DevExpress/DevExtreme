@@ -28,7 +28,7 @@ export class GroupPanelVertical extends BaseInfernoComponent<GroupPanelProps> {
         <div className="dx-scheduler-group-flex-container">
           {
             groupPanelData.groupPanelItems
-              // @ts-expect-error TS2786
+              // @ts-ignore
               .map((group) => <GroupPanelVerticalRow
                 key={group[0].key}
                 groupItems={group}

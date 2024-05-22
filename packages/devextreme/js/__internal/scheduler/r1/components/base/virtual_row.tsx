@@ -58,7 +58,7 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
     const virtualCells = this.getVirtualCells();
 
     return (
-      // @ts-expect-error TS2786
+      // @ts-ignore
       <Row
         className={classes}
         styles={modifiedStyles}
@@ -70,7 +70,7 @@ export class VirtualRow extends BaseInfernoComponent<VirtualRowProps> {
         {
           virtualCells.map(
             (_, index) => (
-              // @ts-expect-error TS2786
+              // @ts-ignore
               <VirtualCell
                 key={index.toString()}
                 width={VirtualCellDefaultProps.width}
