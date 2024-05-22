@@ -726,8 +726,8 @@ importers:
         specifier: 2.2.8
         version: 2.2.8
       devexpress-gantt:
-        specifier: 4.1.54
-        version: 4.1.54
+        specifier: 4.1.55
+        version: 4.1.55
       devextreme-quill:
         specifier: 1.7.1
         version: 1.7.1
@@ -1547,8 +1547,8 @@ importers:
         specifier: 2.2.8
         version: 2.2.8
       devexpress-gantt:
-        specifier: 4.1.54
-        version: 4.1.54
+        specifier: 4.1.55
+        version: 4.1.55
       devextreme-quill:
         specifier: 1.7.1
         version: 1.7.1
@@ -7487,6 +7487,9 @@ packages:
 
   devexpress-gantt@4.1.54:
     resolution: {integrity: sha512-5o5Y/v+mc/ukYGwmRy9UJ2SegKB/XXsa981BsXXT437QGHcwLzT47+NBRhsmQ8yIkp7NvCzKz8nEsF4tYORGFg==}
+
+  devexpress-gantt@4.1.55:
+    resolution: {integrity: sha512-fCHRlm61VRR4r5ULe0gSsg3phx52eLFgoCYONww0Gt0326IBLs++X/RH1c1M8BFWHtjagHZb58uMb8OFfVwtNA==}
 
   devextreme-aspnet-data-nojquery@3.0.0:
     resolution: {integrity: sha512-2wkePdGr4+nnSUZ8PUFR9biFhvMD2gztz/Yim7Iu/szAQJcgitfgOa12xqIQn4B5xpOm3+kupjccpBsED9nDMA==}
@@ -24470,6 +24473,11 @@ snapshots:
       es6-object-assign: 1.1.0
 
   devexpress-gantt@4.1.54:
+    dependencies:
+      '@devexpress/utils': 1.4.3
+      tslib: 2.3.1
+
+  devexpress-gantt@4.1.55:
     dependencies:
       '@devexpress/utils': 1.4.3
       tslib: 2.3.1
