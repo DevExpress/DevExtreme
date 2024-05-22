@@ -7,16 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      devextreme-aspnet-data:
-        specifier: 3.0.0
-        version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
-      devextreme-aspnet-data-nojquery:
-        specifier: 3.0.0
-        version: 3.0.0(devextreme@packages+devextreme+artifacts+npm+devextreme)
-      rxjs:
-        specifier: 7.8.1
-        version: 7.8.1
     devDependencies:
       '@nx/devkit':
         specifier: ^18.3.4
