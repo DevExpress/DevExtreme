@@ -56,7 +56,7 @@ export const contextMenuItems = [
             text: 'Mobile Broadband Devices',
           },
           {
-            text: 'Cell Phones Accessories',
+            text: 'Cell Phone Accessories',
           },
         ]
       },
