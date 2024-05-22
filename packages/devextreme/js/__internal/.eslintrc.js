@@ -66,6 +66,7 @@ module.exports = {
                 'no-underscore-dangle': 'off',
                 'no-console': ['error', { 'allow': ['warn', 'error'] }],
                 'class-methods-use-this': 'off',
+                'prefer-ts-expect-error': 'off',
             }
         },
         // Rules for a new TS files.

@@ -116,7 +116,7 @@ module.exports = {
             }
         },
         {
-            files: ['*.tsx?'],
+            files: ['**/*.ts?(x)'],
             excludedFiles: ['*.d.ts'],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -129,7 +129,6 @@ module.exports = {
             extends: ['devextreme/typescript'],
             rules: {
                 'prefer-regex-literals': 'off',
-                'prefer-ts-expect-error': 'off',
                 'i18n/no-russian-character': ['error', { 'includeIdentifier': true }],
             }
         },
