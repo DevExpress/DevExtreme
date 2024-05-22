@@ -41,7 +41,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     collection: new TemplateInstantiationModels()
   });
   const [updateContext, setUpdateContext] = useState<TemplateManagerUpdateContext>();
-  const widgetId = useRef('');
   const templateFactories = useRef<Record<string, TemplateFunc>>({});
 
   const subscribeOnRemoval = useCallback((container: HTMLElement, onRemoved: () => void) => {
@@ -78,7 +77,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       setInstantiationModels({ ...instantiationModels });
     };
 
-    const hostWidgetId = widgetId.current;
 
     instantiationModels.collection.set(key, {
       templateKey,
@@ -86,10 +84,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       componentKey: getRandomId(),
       onRendered: () => {
         unsubscribeOnRemoval(containerElement, onRemoved);
-
-        if (hostWidgetId === widgetId.current) {
-          onRendered?.();
-        }
+        onRendered?.();
       },
       onRemoved: onRemoved,
     });
@@ -140,7 +135,6 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     }
 
     function clearInstantiationModels(): void {
-      widgetId.current = getRandomId();
       setInstantiationModels({
         collection: new TemplateInstantiationModels()
       });
