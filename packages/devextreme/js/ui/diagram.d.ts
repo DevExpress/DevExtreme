@@ -1427,7 +1427,7 @@ export type CustomCommand = {
      * @public
      */
     location?: ToolbarItemLocation;
-};
+}
 
 /**
  * @docid
