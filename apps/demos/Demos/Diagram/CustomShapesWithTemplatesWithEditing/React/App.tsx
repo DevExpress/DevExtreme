@@ -20,7 +20,7 @@ import CustomShapeTemplate from './CustomShapeTemplate.tsx';
 import CustomShapeToolboxTemplate from './CustomShapeToolboxTemplate.tsx';
 import service, { Employee } from './data.ts';
 
-const pageCommands: DiagramTypes.Command[] = ['pageSize', 'pageOrientation', 'pageColor'];
+const pageCommands: DiagramTypes.DiagramCommand[] = ['pageSize', 'pageOrientation', 'pageColor'];
 
 const nameLabel = { 'aria-label': 'Name' };
 const emailLabel = { 'aria-label': 'Email' };

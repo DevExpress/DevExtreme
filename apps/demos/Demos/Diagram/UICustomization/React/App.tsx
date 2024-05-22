@@ -16,8 +16,8 @@ import {
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
-const pageCommands: DiagramTypes.Command[] = ['pageSize', 'pageOrientation', 'pageColor'];
-const menuCommands: DiagramTypes.Command[] = ['bringToFront', 'sendToBack', 'lock', 'unlock'];
+const pageCommands: DiagramTypes.DiagramCommand[] = ['pageSize', 'pageOrientation', 'pageColor'];
+const menuCommands: DiagramTypes.DiagramCommand[] = ['bringToFront', 'sendToBack', 'lock', 'unlock'];
 
 function onCustomCommand(e: DiagramTypes.CustomCommandEvent) {
   if (e.name === 'clear') {

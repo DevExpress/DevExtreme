@@ -17,7 +17,7 @@ import {
 
 
 
-import { PanelVisibility, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { DiagramPanelVisibility, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -34,10 +34,10 @@ import { DxiGroupComponent } from './group-dxi';
 })
 export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get groups(): Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }> {
+    get groups(): Array<DiagramShapeCategory | any | { category?: DiagramShapeCategory | string, displayMode?: DiagramToolboxDisplayMode, expanded?: boolean, shapes?: Array<DiagramShapeType | string>, title?: string }> {
         return this._getOption('groups');
     }
-    set groups(value: Array<ShapeCategory | any | { category?: ShapeCategory | string, displayMode?: ToolboxDisplayMode, expanded?: boolean, shapes?: Array<ShapeType | string>, title?: string }>) {
+    set groups(value: Array<DiagramShapeCategory | any | { category?: DiagramShapeCategory | string, displayMode?: DiagramToolboxDisplayMode, expanded?: boolean, shapes?: Array<DiagramShapeType | string>, title?: string }>) {
         this._setOption('groups', value);
     }
 
@@ -58,10 +58,10 @@ export class DxoToolboxComponent extends NestedOption implements OnDestroy, OnIn
     }
 
     @Input()
-    get visibility(): PanelVisibility {
+    get visibility(): DiagramPanelVisibility {
         return this._getOption('visibility');
     }
-    set visibility(value: PanelVisibility) {
+    set visibility(value: DiagramPanelVisibility) {
         this._setOption('visibility', value);
     }
 

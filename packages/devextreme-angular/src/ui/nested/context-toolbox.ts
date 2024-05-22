@@ -14,7 +14,7 @@ import {
 
 
 
-import { ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -30,18 +30,18 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoContextToolboxComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get category(): ShapeCategory | string {
+    get category(): DiagramShapeCategory | string {
         return this._getOption('category');
     }
-    set category(value: ShapeCategory | string) {
+    set category(value: DiagramShapeCategory | string) {
         this._setOption('category', value);
     }
 
     @Input()
-    get displayMode(): ToolboxDisplayMode {
+    get displayMode(): DiagramToolboxDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: ToolboxDisplayMode) {
+    set displayMode(value: DiagramToolboxDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -62,10 +62,10 @@ export class DxoContextToolboxComponent extends NestedOption implements OnDestro
     }
 
     @Input()
-    get shapes(): Array<ShapeType | string> {
+    get shapes(): Array<DiagramShapeType | string> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<ShapeType | string>) {
+    set shapes(value: Array<DiagramShapeType | string>) {
         this._setOption('shapes', value);
     }
 
