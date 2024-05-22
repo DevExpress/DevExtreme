@@ -33,6 +33,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
 
   render(): JSX.Element {
     const {
+      viewContext,
       dateHeaderData,
       groupByDate,
       groupOrientation,
@@ -55,6 +56,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       {
         isHorizontalGrouping && !groupByDate && (
           <GroupPanel
+            viewContext={viewContext}
             groupPanelData={groupPanelData}
             groups={groups}
             groupByDate={groupByDate}
@@ -65,6 +67,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       }
       {
         isRenderDateHeader && DateHeaderTemplateComponent({
+          viewContext,
           groupByDate,
           dateHeaderData,
           groupOrientation,
@@ -76,6 +79,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
       {
         groupByDate && (
           <GroupPanel
+            viewContext={viewContext}
             groupPanelData={groupPanelData}
             groups={groups}
             groupByDate={groupByDate}

@@ -76,7 +76,7 @@ QUnit.module('Keyboard navigation accessibility', {
         }, this.options);
 
         setupDataGridModules(this,
-            ['data', 'columns', 'columnHeaders', 'sorting', 'grouping', 'groupPanel', 'headerPanel', 'pager', 'headerFilter', 'filterSync', 'filterPanel', 'filterRow',
+            ['data', 'columns', 'columnHeaders', 'sorting', 'columnFixing', 'grouping', 'groupPanel', 'headerPanel', 'pager', 'headerFilter', 'filterSync', 'filterPanel', 'filterRow',
                 'rows', 'editorFactory', 'gridView', 'editing', 'editingRowBased', 'editingFormBased', 'editingCellBased', 'selection', 'focus', 'keyboardNavigation', 'validating', 'masterDetail'],
             { initViews: true }
         );
@@ -905,5 +905,54 @@ QUnit.module('Keyboard navigation accessibility', {
         // assert
         assert.ok($headerItem.is(':focus'), 'Header cell has focus');
         assert.notOk($headersElement.hasClass('dx-state-focused'), 'Headers main element has no dx-state-focused class');
+    });
+
+    // T1216832
+    testInDesktop('Check adding/removing an inert attribute of the fixed content during keyboard navigation with tab key when the first cell is fixed and a template with links is specified for it', function(assert) {
+        // arrange
+        this.columns = [
+            'name',
+            {
+                fixed: true,
+                fixedPosition: 'left',
+                cellTemplate: (cellElement) => $(cellElement).append('<a href=\'#\'>Link</a>'),
+            },
+            'phone'
+        ];
+
+        this.data = [
+            { name: 'Alex', phone: 555555 },
+            { name: 'Dan1', phone: 666666 },
+        ];
+
+        this.options = {
+            editing: {
+                allowUpdating: false,
+                allowAdding: false,
+                allowDeleting: false
+            }
+        };
+
+        this.setupModule();
+        this.gridView.render($('#container'));
+        this.clock.tick(10);
+
+        this.focusCell(1, 2);
+        this.clock.tick(10);
+
+        // act
+        this.triggerKeyDown('tab', false, false, this.getCellElement(1, 2));
+        this.clock.tick(10);
+
+        // assert
+        const $fixedContent = this.gridView.element().find('.dx-datagrid-rowsview .dx-datagrid-content-fixed');
+        assert.ok($fixedContent.attr('inert'), 'fixed content has inert attribute');
+
+        // act
+        $(this.getCellElement(1, 2)).trigger('focusout');
+        this.clock.tick(10);
+
+        // assert
+        assert.notOk($fixedContent.attr('inert'), 'fixed content hasn\'t inert attribute');
     });
 });

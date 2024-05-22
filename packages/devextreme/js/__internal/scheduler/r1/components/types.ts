@@ -1,5 +1,6 @@
 import type { JSXTemplate } from '@devextreme-generator/declarations';
-import type { GroupItem, ViewDataBase } from '@ts/scheduler/r1/types';
+
+import type { GroupItem, ViewDataBase, ViewType } from '../types';
 
 export interface BaseTemplateProps {
   index: number;
@@ -114,3 +115,16 @@ export interface GroupedViewData extends GroupedViewDataBase {
 export interface CellTemplateProps extends ViewCellData {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
+
+export interface ViewContext {
+  readonly view: {
+    readonly type: ViewType;
+  };
+  readonly crossScrollingEnabled: boolean;
+}
+
+export interface PropsWithViewContext {
+  readonly viewContext: ViewContext;
+}
+
+export type DefaultProps<TProps> = Omit<TProps, keyof PropsWithViewContext>;
