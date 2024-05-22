@@ -74,8 +74,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     const onRemoved = (): void => {
       if (instantiationModels.collection.get(key)) {
         instantiationModels.collection.delete(key);
+        setInstantiationModels({ ...instantiationModels });
       }
-      setInstantiationModels({ ...instantiationModels });
     };
 
     const hostWidgetId = widgetId.current;
