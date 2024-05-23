@@ -33,6 +33,7 @@ const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXT_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXT_EDITOR_LABEL = 'dx-texteditor-label';
+const LABEL_CLASS = 'dx-label';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
@@ -2128,58 +2129,54 @@ QUnit.module('aria accessibility', () => {
         assert.equal($input.attr('aria-expanded'), 'false', 'aria-expanded property on closed');
     });
 
-    [
-        { label: 'Field Template', inputAttr: undefined },
-        { label: undefined, inputAttr: { 'aria-label': 'Field Template' } },
-    ].forEach(({ label, inputAttr }) => {
-        QUnit.test(`component with fieldTemplate and label should have correct aria-labelledby attribute if ${label !== undefined ? 'label' : 'inputAttr'} is used (T1230635)`, function(assert) {
-            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-                dataSource: ['one', 'two', 'three'],
-                fieldTemplate: (data) => {
-                    return $('<div>').dxTextBox({ value: data });
-                },
-                labelMode: 'static',
-                label: label,
-                inputAttr: inputAttr,
-            });
-            const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
-            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            const $textEditorLabel = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL}`);
-
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id');
-            keyboardMock($input)
-                .type('a');
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id after typing');
-
-            keyboardMock($input)
-                .caret(1)
-                .press('backspace');
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id after deleting');
-
-            dropDownEditor.option('label', 'Updated Label');
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label change');
-
-            dropDownEditor.option('label', '');
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby not exist after label deletion');
-
-            dropDownEditor.option('label', 'Field Template');
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should exist after label addition');
-
-            dropDownEditor.option('labelMode', 'hidden');
-
-            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label mode change');
+    QUnit.test('component with fieldTemplate and label should have correct aria-labelledby attribute (T1230635)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            labelMode: 'static',
+            label: 'Field Template',
+            inputAttr: { 'aria-label': 'Aria Label' }
         });
+        const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
+        let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        const $textEditorLabel = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL}`);
+        const $label = $dropDownEditor.find(`.${LABEL_CLASS}`);
+        debugger
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id');
+        keyboardMock($input)
+            .type('a');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id after typing');
+
+        keyboardMock($input)
+            .caret(1)
+            .press('backspace');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id after deleting');
+
+        dropDownEditor.option('label', 'Updated Label');
+
+        assert.strictEqual($label[0].textContent, 'Updated Label', 'label set to Updated Label');
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label change');
+
+        dropDownEditor.option('label', '');
+
+        assert.strictEqual($label[0].textContent, '', 'label should empty');
+        assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby not exist after label deletion');
+
+        dropDownEditor.option('label', 'Field Template');
+
+        assert.strictEqual($label[0].textContent, 'Field Template', 'label set to Field Template');
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should exist after label addition');
+
+        dropDownEditor.option('labelMode', 'floating');
+
+        assert.strictEqual($label[0].textContent, 'Field Template', 'label value should stay as Field Template');
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label mode change');
     });
 
     [

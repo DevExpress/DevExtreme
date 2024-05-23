@@ -74,6 +74,7 @@ const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXTEDITOR_LABEL = 'dx-texteditor-label';
+const LABEL_CLASS = 'dx-label';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
@@ -3329,59 +3330,55 @@ QUnit.module('search', moduleSetup, () => {
         });
     });
 
-    [
-        { label: 'Field Template', inputAttr: undefined },
-        { label: undefined, inputAttr: { 'aria-label': 'Field Template' } },
-    ].forEach(({ label, inputAttr }) => {
-        QUnit.test(`component with fieldTemplate and label should have correct aria-labelledby attribute if ${label !== undefined ? 'label' : 'inputAttr'} is used (T1230635)`, function(assert) {
-            const $selectBox = $('#selectBox').dxSelectBox({
-                dataSource: ['one', 'two', 'three'],
-                fieldTemplate: () => {
-                    return $('<div>').dxTextBox({});
-                },
-                searchEnabled: true,
-                itemTemplate: () => {
-                    return '<div><span></span></div>';
-                },
-                labelMode: 'static',
-                label: label,
-                inputAttr: inputAttr,
-            });
-            const selectBox = $selectBox.dxSelectBox('instance');
-            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            const $textEditorLabel = $selectBox.find(toSelector(TEXTEDITOR_LABEL));
-
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'initial render should set aria-labelledby equal to the label id');
-
-            keyboardMock($input)
-                .type('a');
-
-            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
-            listItem.trigger('dxclick');
-
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after search and selection');
-
-            selectBox.option('label', 'Updated Label');
-
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label change');
-
-            selectBox.option('label', '');
-
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby not exist after label deletion');
-
-            selectBox.option('label', 'Field Template');
-
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should exist after label addition');
-
-            selectBox.option('labelMode', 'hidden');
-
-            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label mode change');
+    QUnit.test('component with fieldTemplate and label should have correct aria-labelledby attribute (T1230635)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+            itemTemplate: () => {
+                return '<div><span></span></div>';
+            },
+            labelMode: 'static',
+            label: 'Field Template',
+            inputAttr: { 'aria-label': 'Aria Label' }
         });
+        const selectBox = $selectBox.dxSelectBox('instance');
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $textEditorLabel = $selectBox.find(toSelector(TEXTEDITOR_LABEL));
+        const $label = $textEditorLabel.find(toSelector(LABEL_CLASS));
+
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'initial render should set aria-labelledby equal to the label id');
+
+        keyboardMock($input)
+            .type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after search and selection');
+
+        selectBox.option('label', 'Updated Label');
+
+        assert.strictEqual($label[0].textContent, 'Updated Label', 'label set to Updated Label');
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label change');
+
+        selectBox.option('label', '');
+
+        assert.strictEqual($label[0].textContent, '', 'label should empty');
+        assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby not exist after label deletion');
+
+        selectBox.option('label', 'Field Template');
+
+        assert.strictEqual($label[0].textContent, 'Field Template', 'label set to Field Template');
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should exist after label addition');
+
+        selectBox.option('labelMode', 'floating');
+
+        assert.strictEqual($label[0].textContent, 'Field Template', 'label value should stay as Field Template');
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after label mode change');
     });
 
     [0, 1].forEach((value) => {
