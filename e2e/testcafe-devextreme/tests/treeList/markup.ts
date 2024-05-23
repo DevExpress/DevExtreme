@@ -4,6 +4,7 @@ import TreeList from 'devextreme-testcafe-models/treeList';
 import { changeTheme } from '../../helpers/changeTheme';
 import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
+import { Themes } from '../../helpers/themes';
 
 fixture`Markup`
   .page(url(__dirname, '../container.html'));
@@ -22,7 +23,7 @@ const tasksT1223168 = [{
   Task_Parent_ID: 2,
 }];
 
-['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
+[Themes.genericLight, Themes.materialBlue, Themes.fluentBlue].forEach((theme) => {
   test(`TreeList - Expand/collapse buttons are too close to column borders if the first column is a boolean column (T1223168) in ${theme}`, async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
     const treeList = new TreeList('#container');
@@ -51,6 +52,6 @@ const tasksT1223168 = [{
       },
     });
   }).after(async () => {
-    await changeTheme('generic.light');
+    await changeTheme(Themes.genericLight);
   });
 });
