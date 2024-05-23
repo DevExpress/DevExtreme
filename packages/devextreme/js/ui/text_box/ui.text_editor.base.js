@@ -497,11 +497,9 @@ const TextEditorBase = Editor.inherit({
         const ariaLabel = inputAttr?.['aria-label'];
         const labelId = this._label.getId();
 
-        const value = ariaLabel ? undefined : labelId;
-
-        if(value || force) {
+        if(labelId || force) {
             const aria = {
-                'labelledby': value,
+                'labelledby': labelId,
                 label: ariaLabel,
             };
             this.setAria(aria, this._getFieldElement());
