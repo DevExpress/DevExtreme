@@ -16,6 +16,10 @@ const tasksT1223168 = [{
   Task_ID: 2,
   Task_Subject: 'Health Insurance',
   Task_Parent_ID: 1,
+}, {
+  Task_ID: 3,
+  Task_Subject: 'Training',
+  Task_Parent_ID: 2,
 }];
 
 ['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
@@ -34,6 +38,7 @@ const tasksT1223168 = [{
       dataSource: tasksT1223168,
       keyExpr: 'Task_ID',
       parentIdExpr: 'Task_Parent_ID',
+      autoExpandAll: true,
       wordWrapEnabled: true,
       showBorders: true,
       columns: [{
