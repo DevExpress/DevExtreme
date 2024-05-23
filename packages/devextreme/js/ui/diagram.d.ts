@@ -1427,7 +1427,7 @@ export type dxDiagramCustomCommand = {
      * @public
      */
     location?: ToolbarItemLocation;
-}
+};
 
 /**
  * @docid
