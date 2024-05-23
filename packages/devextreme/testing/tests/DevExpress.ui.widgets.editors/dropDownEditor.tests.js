@@ -2143,7 +2143,7 @@ QUnit.module('aria accessibility', () => {
         let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
         const $textEditorLabel = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL}`);
         const $label = $dropDownEditor.find(`.${LABEL_CLASS}`);
-        debugger
+
         assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should be equal to the label id');
         keyboardMock($input)
             .type('a');
