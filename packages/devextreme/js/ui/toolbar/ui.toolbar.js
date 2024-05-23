@@ -253,9 +253,3 @@ class Toolbar extends ToolbarBase {
 registerComponent('dxToolbar', Toolbar);
 
 export default Toolbar;
-
-/**
- * @name dxToolbarItem
- * @inherits CollectionWidgetItem
- * @type object
- */
