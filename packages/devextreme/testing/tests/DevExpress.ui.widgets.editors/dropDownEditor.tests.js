@@ -2209,14 +2209,14 @@ QUnit.module('aria accessibility', () => {
             let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
             assert.equal($input.val(), '', 'input value is empty');
-            assert.strictEqual($input.attr('aria-invalid'), undefined, `initial render should set aria-invalid to undefined`);
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
 
             keyboardMock($input)
                 .type('a');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), 'a', 'input value is not empty');
-            assert.strictEqual($input.attr('aria-invalid'), undefined, `input should set 'aria-invalid' to undefined after typing`);
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after typing');
 
             keyboardMock($input)
                 .caret(1)
@@ -2224,7 +2224,7 @@ QUnit.module('aria accessibility', () => {
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), '', 'input value is empty');
-            assert.strictEqual($input.attr('aria-invalid'), undefined, `input should set 'aria-invalid' to undefined after deleting`);
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
         });
     });
 
