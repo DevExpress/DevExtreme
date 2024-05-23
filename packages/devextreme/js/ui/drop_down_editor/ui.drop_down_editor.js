@@ -381,7 +381,7 @@ const DropDownEditor = TextBox.inherit({
 
                 this._integrateInput();
                 isFocused && eventsEngine.trigger($input, 'focus');
-                // isFocused && this._setFieldAria();
+                isFocused && this._setFieldAria();
             }
         });
 
