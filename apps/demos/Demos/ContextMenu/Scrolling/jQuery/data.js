@@ -315,7 +315,7 @@ const contextMenuItems = [
             text: 'Clothing',
           },
           {
-            text: 'Jewellery', 
+            text: 'Jewellery',
           },
           {
             text: 'Shoes',

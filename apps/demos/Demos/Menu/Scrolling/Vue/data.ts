@@ -315,7 +315,7 @@ const products = [
             text: 'Clothing',
           },
           {
-            text: 'Jewellery', 
+            text: 'Jewellery',
           },
           {
             text: 'Shoes',
