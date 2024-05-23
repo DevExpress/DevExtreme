@@ -327,12 +327,6 @@ const DropDownEditor = TextBox.inherit({
         this.callBase();
     },
 
-    _setFieldAriaLabel() {
-        if(this._label) {
-            this._setFieldAria();
-        }
-    },
-
     _renderField: function() {
         const fieldTemplate = this._getFieldTemplate();
 
@@ -387,6 +381,7 @@ const DropDownEditor = TextBox.inherit({
 
                 this._integrateInput();
                 isFocused && eventsEngine.trigger($input, 'focus');
+                // isFocused && this._setFieldAria();
             }
         });
 
@@ -422,7 +417,6 @@ const DropDownEditor = TextBox.inherit({
         this._refreshValueChangeEvent();
         this._refreshEvents();
         this._refreshEmptinessEvent();
-        this._setFieldAriaLabel();
         this._setDefaultAria();
         this.option('_onMarkupRendered')?.();
     },
