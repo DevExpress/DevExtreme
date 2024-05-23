@@ -6,7 +6,7 @@ const contextMenuItems = [
         text: 'Computers',
         items: [
           {
-            text: 'Desktops',    
+            text: 'Desktops',
           },
           {
             text: 'Laptops',
@@ -44,7 +44,7 @@ const contextMenuItems = [
         text: 'Cell Phones',
         items: [
           {
-            text: 'Home & Office Phones',    
+            text: 'Home & Office Phones',
           },
           {
             text: 'Smart Phones & PDAs',
@@ -67,7 +67,7 @@ const contextMenuItems = [
             text: 'Action Cameras',
           },
           {
-            text: 'Camcorders',    
+            text: 'Camcorders',
           },
           {
             text: 'Digital Cameras',
@@ -117,7 +117,7 @@ const contextMenuItems = [
             text: 'Boomboxes',
           },
           {
-            text: 'DVD & CD Player Bags',    
+            text: 'DVD & CD Player Bags',
           },
           {
             text: 'Hi-Fi & Home Audio Accessories',
@@ -152,7 +152,7 @@ const contextMenuItems = [
             text: 'Air Conditioners',
           },
           {
-            text: 'Coffee Machines',    
+            text: 'Coffee Machines',
           },
           {
             text: 'Fans',
@@ -193,7 +193,7 @@ const contextMenuItems = [
             text: 'TV Shows',
           },
           {
-            text: 'DVD',    
+            text: 'DVD',
           },
           {
             text: 'Blu-ray',
@@ -222,7 +222,7 @@ const contextMenuItems = [
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC Games',    
+            text: 'PC Games',
           },
           {
             text: 'Virtual Reality',
@@ -257,7 +257,7 @@ const contextMenuItems = [
             text: 'Camping',
           },
           {
-            text: 'Fitness',    
+            text: 'Fitness',
           },
           {
             text: 'Football',
@@ -286,7 +286,7 @@ const contextMenuItems = [
             text: 'Bath & Shower',
           },
           {
-            text: 'Skin Care',    
+            text: 'Skin Care',
           },
           {
             text: 'Hair Care',
