@@ -132,7 +132,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   private _internalState: any;
 
-  private _refocusEditCell: any;
+  protected _refocusEditCell: any;
 
   protected _editCellInProgress: any;
 
@@ -146,7 +146,7 @@ class EditingControllerImpl extends modules.ViewController {
 
   protected _pageIndex: any;
 
-  private _inputFocusTimeoutID: any;
+  protected _inputFocusTimeoutID: any;
 
   public init() {
     this._columnsController = this.getController('columns');
