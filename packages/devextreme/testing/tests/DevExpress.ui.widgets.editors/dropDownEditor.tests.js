@@ -2162,30 +2162,20 @@ QUnit.module('aria accessibility', () => {
     });
 
     QUnit.module('aria-invalid', {}, () => {
-        const setupDropDownEditor = (valueRequired) => {
-            const options = {
-                dataSource: ['one', 'two', 'three'],
-                fieldTemplate: (data) => {
-                    return $('<div>').dxTextBox({ value: data });
-                },
-                valueChangeEvent: 'keyup',
-            };
-
-            if(valueRequired) {
-                return $('#dropDownEditorSecond').dxDropDownEditor(options).dxValidator({
-                    validationRules: [{ type: 'required' }]
-                });
-            }
-
-            return $('#dropDownEditorSecond').dxDropDownEditor(options);
-        };
-
         [
             { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
             { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
-            QUnit.test(`component with fieldTemplate should ${!valueRequired ? 'not' : ''} have aria-invalid attribute when empty value is ${valueRequired ? 'not' : ''} allowed (T1230706)`, function(assert) {
-                const $dropDownEditor = setupDropDownEditor(valueRequired);
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required(T1230706)`, function(assert) {
+                const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                    dataSource: ['one', 'two', 'three'],
+                    fieldTemplate: (data) => {
+                        return $('<div>').dxTextBox({ value: data });
+                    },
+                    valueChangeEvent: 'keyup',
+                }).dxValidator({
+                    validationRules: valueRequired ? [{ type: 'required' }] : [],
+                });
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
                 assert.equal($input.val(), '', 'input value is empty');
@@ -2206,6 +2196,35 @@ QUnit.module('aria accessibility', () => {
                 assert.equal($input.val(), '', 'input value is empty');
                 assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
             });
+        });
+
+        QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: (data) => {
+                    return $('<div>').dxTextBox({ value: data });
+                },
+                valueChangeEvent: 'keyup',
+            });
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.equal($input.val(), '', 'input value is empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, `initial render should set aria-invalid to undefined`);
+
+            keyboardMock($input)
+                .type('a');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.equal($input.val(), 'a', 'input value is not empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, `input should set 'aria-invalid' to undefined after typing`);
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.equal($input.val(), '', 'input value is empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, `input should set 'aria-invalid' to undefined after deleting`);
         });
     });
 
