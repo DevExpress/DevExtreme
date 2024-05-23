@@ -12,7 +12,20 @@ export class DateTableMonthComponent extends DateTableComponent {
       allowNull: [],
       elements: [],
       templates: ['cellTemplate', 'dataCellTemplate'],
-      props: ['cellTemplate', 'viewData', 'groupOrientation', 'leftVirtualCellWidth', 'rightVirtualCellWidth', 'topVirtualRowHeight', 'bottomVirtualRowHeight', 'addDateTableClass', 'addVerticalSizesClassToRows', 'width', 'dataCellTemplate'],
+      props: [
+        'viewData',
+        'viewContext',
+        'cellTemplate',
+        'groupOrientation',
+        'leftVirtualCellWidth',
+        'rightVirtualCellWidth',
+        'topVirtualRowHeight',
+        'bottomVirtualRowHeight',
+        'addDateTableClass',
+        'addVerticalSizesClassToRows',
+        'width',
+        'dataCellTemplate',
+      ],
     };
   }
   /* eslint-enable @typescript-eslint/explicit-module-boundary-types */

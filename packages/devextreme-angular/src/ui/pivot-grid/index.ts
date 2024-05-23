@@ -1,9 +1,8 @@
 /* tslint:disable:max-line-length */
 
 
-import { TransferState } from '@angular/platform-browser';
-
 import {
+    TransferState,
     Component,
     NgModule,
     ElementRef,

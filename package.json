@@ -54,7 +54,7 @@
     "@types/yargs": "^17.0.32",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
-    "devextreme-internal-tools": "14.0.0-beta.1",
+    "devextreme-internal-tools": "14.0.0-beta.2",
     "eslint": "8.56.0",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "17.1.0",
