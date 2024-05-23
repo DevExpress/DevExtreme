@@ -1,15 +1,26 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "noEmit": true,
     "skipLibCheck": true,
+    "typeRoots": [],
+    "rootDir": "../../",
+    "target": "es2015",
+    "lib": [
+        "ES2017",
+        "ES2020.BigInt",
+        "DOM"
+    ],
     "noUnusedLocals": false,
     "noUnusedParameters": false,
-    "target": "ES6",
     // paths are only for ./license_validation.ts test
     "paths": {
       "@js/*": ["devextreme/js/*"],
       "@ts/*": ["devextreme/js/__internal/*"],
-    }
+    },
+    "types": []
   },
   "include": [
     "**/*.ts"
