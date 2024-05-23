@@ -13,7 +13,7 @@ const contextMenuItems: ContextMenuItems[] = [
         text: 'Computers',
         items: [
           {
-            text: 'Desktops',    
+            text: 'Desktops',
           },
           {
             text: 'Laptops',
@@ -51,7 +51,7 @@ const contextMenuItems: ContextMenuItems[] = [
         text: 'Cell Phones',
         items: [
           {
-            text: 'Home & Office Phones',    
+            text: 'Home & Office Phones',
           },
           {
             text: 'Smart Phones & PDAs',
@@ -74,7 +74,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Action Cameras',
           },
           {
-            text: 'Camcorders',    
+            text: 'Camcorders',
           },
           {
             text: 'Digital Cameras',
@@ -124,7 +124,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Boomboxes',
           },
           {
-            text: 'DVD & CD Player Bags',    
+            text: 'DVD & CD Player Bags',
           },
           {
             text: 'Hi-Fi & Home Audio Accessories',
@@ -159,7 +159,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Air Conditioners',
           },
           {
-            text: 'Coffee Machines',    
+            text: 'Coffee Machines',
           },
           {
             text: 'Fans',
@@ -200,7 +200,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'TV Shows',
           },
           {
-            text: 'DVD',    
+            text: 'DVD',
           },
           {
             text: 'Blu-ray',
@@ -229,7 +229,7 @@ const contextMenuItems: ContextMenuItems[] = [
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC Games',    
+            text: 'PC Games',
           },
           {
             text: 'Virtual Reality',
@@ -264,7 +264,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Camping',
           },
           {
-            text: 'Fitness',    
+            text: 'Fitness',
           },
           {
             text: 'Football',
@@ -293,7 +293,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Bath & Shower',
           },
           {
-            text: 'Skin Care',    
+            text: 'Skin Care',
           },
           {
             text: 'Hair Care',
@@ -322,7 +322,7 @@ const contextMenuItems: ContextMenuItems[] = [
             text: 'Clothing',
           },
           {
-            text: 'Jewellery', 
+            text: 'Jewellery',
           },
           {
             text: 'Shoes',
