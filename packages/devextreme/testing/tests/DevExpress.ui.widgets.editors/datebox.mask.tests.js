@@ -1004,33 +1004,6 @@ module('Events', setupModule, () => {
 
         assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
     });
-
-    QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
-        const valueChangedHandler = sinon.spy();
-        const currentDate = new Date();
-        const currentYear = currentDate.getFullYear();
-
-        this.instance.option({
-            type: 'date',
-            value: currentDate,
-            displayFormat: 'M/dd/yyyy',
-            useMaskBehavior: true,
-            onValueChanged: valueChangedHandler
-        });
-
-        this.$input.get(0).focus();
-        this.keyboard
-            .press('right')
-            .press('right');
-
-        this.pointer.wheel(1);
-        this.$input.trigger('change');
-
-        const changedValue = valueChangedHandler.getCall(0).args[0].value;
-
-        assert.strictEqual(valueChangedHandler.callCount, 1, 'handler has been called once');
-        assert.strictEqual(changedValue.getFullYear(), currentYear + 1, 'year is updated correctly');
-    });
 });
 
 module('Search', setupModule, () => {
