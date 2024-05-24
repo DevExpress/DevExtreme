@@ -252,7 +252,7 @@ const DropDownEditor = TextBox.inherit({
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
-        this.setAria('role', this._getAriaRole);
+        this.setAria('role', this._getAriaRole());
     },
 
     _render: function() {
