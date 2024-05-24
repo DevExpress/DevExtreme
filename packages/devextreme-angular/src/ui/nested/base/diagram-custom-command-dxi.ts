@@ -11,7 +11,7 @@ import { Command, CustomCommand } from 'devextreme/ui/diagram';
 @Component({
     template: ''
 })
-export abstract class DxiCustomCommand extends CollectionNestedOption {
+export abstract class DxiDiagramCustomCommand extends CollectionNestedOption {
     get icon(): string {
         return this._getOption('icon');
     }
