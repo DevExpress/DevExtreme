@@ -2084,6 +2084,10 @@ QUnit.module('datebox and calendar integration', () => {
     });
 
     QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'device is not desktop');
+            return;
+        }
         const valueChangedHandle = sinon.spy();
         const date = new Date();
         const currentYear = date.getFullYear();
