@@ -3353,7 +3353,7 @@ QUnit.module('search', moduleSetup, () => {
 
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        assert.strictEqual($input.attr('role'), 'combobox', 'role initial should stay to combobox after search and selection');
+        assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
     });
 
     [0, 1].forEach((value) => {
