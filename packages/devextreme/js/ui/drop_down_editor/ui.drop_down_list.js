@@ -488,11 +488,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _getAriaHasPopup() {
-        return 'true';
-    },
-
-    _getAriaAutocomplete() {
-        return 'list';
+        return 'listbox';
     },
 
     _refreshList: function() {
