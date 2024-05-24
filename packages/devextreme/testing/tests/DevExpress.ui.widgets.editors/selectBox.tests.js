@@ -3331,16 +3331,13 @@ QUnit.module('search', moduleSetup, () => {
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete should stay to list after search and selection');
     });
 
-    QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230696, T1230971)', function(assert) {
+    QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230635)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: () => {
                 return $('<div>').dxTextBox({});
             },
             searchEnabled: true,
-            itemTemplate: () => {
-                return '<div><span></span></div>';
-            }
         });
         let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
