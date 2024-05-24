@@ -490,7 +490,8 @@ const DropDownList = DropDownEditor.inherit({
     _setDefaultAria: function() {
         this.setAria({
             'haspopup': 'listbox',
-            'autocomplete': 'list'
+            'autocomplete': 'list',
+            'role': 'combobox'
         });
     },
 
