@@ -2194,7 +2194,7 @@ QUnit.module('aria accessibility', () => {
 
         $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should retain to combobox after deleting');
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should remain assigned to the combobox after deleting');
     });
 
     QUnit.module('aria-controls', {}, () => {
