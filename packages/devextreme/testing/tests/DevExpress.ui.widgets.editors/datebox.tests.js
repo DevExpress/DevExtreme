@@ -2088,6 +2088,7 @@ QUnit.module('datebox and calendar integration', () => {
             assert.ok(true, 'device is not desktop');
             return;
         }
+
         const valueChangedHandle = sinon.spy();
         const date = new Date();
         const currentYear = date.getFullYear();
@@ -2099,19 +2100,22 @@ QUnit.module('datebox and calendar integration', () => {
             useMaskBehavior: true,
             onValueChanged: valueChangedHandle
         }).dxDateBox('instance');
-        const $input = datebox.$element().find(`.${TEXTEDITOR_INPUT_CLASS}`);
 
-        keyboardMock($input, true)
-            .caret({ start: 12, end: 15 });
-        $($input).trigger('dxclick');
-        pointerMock($input)
-            .wheel(1);
+        const $input = $(datebox.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const pointer = pointerMock($input);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.caret({ start: 12, end: 15 });
+
+        $input.trigger('dxclick');
+
+        pointer.wheel(1);
 
         let changedValue = valueChangedHandle.getCall(0).args[0];
         assert.strictEqual(valueChangedHandle.callCount, 1, 'handler has been called once');
         assert.deepEqual(new Date(changedValue.value).getFullYear(), currentYear + 1, 'value year is correct'); assert.deepEqual(new Date(changedValue.previousValue).getFullYear(), currentYear, 'previous value year is correct');
-        pointerMock($input)
-            .wheel(1);
+
+        pointer.wheel(1);
 
         changedValue = valueChangedHandle.getCall(1).args[0];
         assert.strictEqual(valueChangedHandle.callCount, 2, 'handler has been called twice');
