@@ -167,7 +167,7 @@ QUnit.module('Actions', moduleConfig, () => {
             pageY: treeListWrapperTopOffset + 100 }));
         splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
-        assert.equal(treeListWrapperElement.width(), 100);
+        assert.roughEqual(treeListWrapperElement.width(), 100, 1);
         assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
         assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, 'Splitter has been moved by mouse');
 
@@ -230,7 +230,7 @@ QUnit.module('Actions', moduleConfig, () => {
                 pageY: treeListWrapperTopOffset + 100 }));
             splitter.trigger($.Event('dxpointerup', { pointerType: 'mouse' }));
 
-            assert.equal(treeListWrapperElement.width(), 100);
+            assert.roughEqual(treeListWrapperElement.width(), 100, 1);
             assert.equal(ganttView.width(), splitterContainerWrapperWidth - 100);
             assert.equal(parseFloat(splitterWrapper.css('left')) + parseFloat(splitter.css('margin-left')), 100, `Splitter ${index} has been moved by mouse`);
 

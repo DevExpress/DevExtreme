@@ -220,13 +220,13 @@ jobs:
         REMOTE_BRANCH=${{github.event.pull_request.head.ref}}
 
         if [ "$(git ls-remote --heads $REMOTE_URL $REMOTE_BRANCH | wc -l)" == "1" ]; then
-          git clone -b $REMOTE_BRANCH $REMOTE_URL ./devextreme-demos
+          git clone -b $REMOTE_BRANCH --depth 1 $REMOTE_URL  ./devextreme-demos
         fi
 
     - name: Clone devextreme-demos repo
       run: |
         BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
-        test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
+        test -d ./devextreme-demos || git clone -b $BASE_BRANCH --depth 1 https://github.com/devexpress/devextreme-demos ./devextreme-demos
 
     - name: Download artifacts
       uses: actions/download-artifact@v3

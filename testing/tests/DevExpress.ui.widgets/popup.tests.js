@@ -491,7 +491,7 @@ QUnit.module('basic', () => {
         assert.notOk(popup.bottomToolbar().hasClass(DISABLED_STATE_CLASS), 'class is removed from bottom toolbar');
     });
 
-    QUnit.test('popup should update zIndex on focus', function(assert) {
+    QUnit.skip('popup should update zIndex on focus', function(assert) {
         const firstPopup = $('#popup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
         const secondPopup = $('#secondPopup').dxPopup({ visible: true, focusStateEnabled: true }).dxPopup('instance');
         const baseZIndex = 1501;

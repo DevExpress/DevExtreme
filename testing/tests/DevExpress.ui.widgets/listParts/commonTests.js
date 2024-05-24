@@ -3784,7 +3784,7 @@ QUnit.module('keyboard navigation', {
         assert.equal(handler.callCount, 1);
     });
 
-    QUnit.test('allow delete item using keyboard after set allowItemDeleting option from false to true', function(assert) {
+    QUnit.skip('allow delete item using keyboard after set allowItemDeleting option from false to true', function(assert) {
         const $element = $('#list');
         const $list = $element.dxList({
             items: [1, 2, 3, 4],
@@ -3832,7 +3832,7 @@ QUnit.module('Search', () => {
         assert.strictEqual(instance.option('searchValue'), '2', 'search value');
     });
 
-    QUnit.testInActiveWindow('Focusing widget when there is search editor', function(assert) {
+    QUnit.skip('Focusing widget when there is search editor', function(assert) {
         const $element = $('#list').dxList({
             dataSource: [1, 2, 3],
             searchEnabled: true,

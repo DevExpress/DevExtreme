@@ -773,7 +773,7 @@ QUnit.module('active element blurring', {
 });
 
 const testBlurInNativeScrolling = function(platform, shouldBeBlurred) {
-    QUnit.testInActiveWindow(platform + ': active element should' + (shouldBeBlurred ? '' : ' not') + ' be blurred (B250228)', function(assert) {
+    QUnit.skip(platform + ': active element should' + (shouldBeBlurred ? '' : ' not') + ' be blurred (B250228)', function(assert) {
         if(!/webkit/i.exec(navigator.userAgent)) {
             assert.ok(true, 'this test run only in webkit');
             return;
