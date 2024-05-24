@@ -284,7 +284,8 @@ const DropDownEditor = TextBox.inherit({
     _setDefaultAria: function() {
         this.setAria({
             'haspopup': 'true',
-            'autocomplete': 'list'
+            'autocomplete': 'list',
+            'role': 'combobox'
         });
     },
 
