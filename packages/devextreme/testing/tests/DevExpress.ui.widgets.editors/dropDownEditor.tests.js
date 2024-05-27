@@ -2227,7 +2227,7 @@ QUnit.module('aria accessibility', () => {
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
         });
     });
-  
+
     QUnit.test('component with fieldTemplate should have proper role attribute after interaction (T1230635)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],

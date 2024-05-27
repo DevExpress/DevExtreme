@@ -527,7 +527,9 @@ QUnit.module('Editors Standard Adapter', {
         { valueRequired: false, value: '', expectedValue: undefined },
     ].forEach(({ valueRequired, value, expectedValue }) => {
         QUnit.test(`Editor on initialized should toggle an "aria-invalid" attribute if the "aria-required" is ${valueRequired} and value is ${value !== '' ? 'not' : ''} empty`, function(assert) {
-            this.fixture.createTextEditor({value: value});
+            this.fixture.createTextEditor({
+                value: value
+            });
 
             this.fixture.createValidator({
                 adapter: null,
@@ -540,7 +542,9 @@ QUnit.module('Editors Standard Adapter', {
         });
 
         QUnit.test(`Editor on markup render should toggle an "aria-required" attribute if the "aria-required" is true and value is ${value !== '' ? 'not' : ''} empty`, function(assert) {
-            const editor = this.fixture.createTextEditor({value: value});
+            const editor = this.fixture.createTextEditor({
+                value: value
+            });
             editor._initialized = false;
 
             this.fixture.createValidator({
