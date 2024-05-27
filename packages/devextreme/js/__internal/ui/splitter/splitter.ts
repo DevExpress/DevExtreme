@@ -581,9 +581,12 @@ class Splitter extends CollectionWidget<Properties> {
     }
 
     const indexToCollapse = direction === 'prev' ? leftItemIndex : rightItemIndex;
+
     this._panesCacheSize[indexToCollapse] = {
       size: this.getLayout()[indexToCollapse],
-      direction: CollapseExpandDirection[direction],
+      direction: direction === CollapseExpandDirection.Next
+        ? CollapseExpandDirection.Previous
+        : CollapseExpandDirection.Next,
     };
 
     this._collapsedItemSize = this.getLayout()[indexToCollapse];
