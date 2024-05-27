@@ -513,5 +513,32 @@ QUnit.module('Editors Standard Adapter', {
 
         assert.ok(Boolean($input.attr('aria-required')), '"aria-required" is rendered after editor initialization');
     });
+
+    [
+        { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
+        { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
+    ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
+        QUnit.test(`Editor should ${!valueRequired ? 'not' : ''} toggle "aria-invalid" attribute when "aria-required" is ${valueRequired} (T1230706)`, function(assert) {
+            const editor = this.fixture.createTextEditor({});
+            editor._initialized = false;
+
+            const validator = this.fixture.createValidator({
+                adapter: null,
+                validationRules: null
+            });
+
+            let $input = this.fixture.$element.find('.dx-texteditor-input');
+            validator.option('validationRules', valueRequired ? [{ type: 'required' }] : []);
+            validator.validate();
+
+            assert.strictEqual($input.attr('aria-required'), valueRequired ? 'true' : undefined, '"aria-required" is rendered after editor initialization');
+
+            editor.option('value', '');
+            assert.strictEqual($input.attr('aria-invalid'), emptyValue, `"aria-invalid" should ${!valueRequired ? 'not' : ''} be toggled when aria-required is ${valueRequired} and value is empty`);
+
+            editor.option('value', 'test');
+            assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `"aria-invalid" should ${!valueRequired ? 'not' : ''} be toggled when aria-required is ${valueRequired} and value is not empty`);
+        });
+    });
 });
 
