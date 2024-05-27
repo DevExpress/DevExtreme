@@ -39,6 +39,8 @@ function App() {
     setProduct(newProduct);
   }, []);
 
+  const getAltText = useCallback((text: String) => `${text}. Picture`, []);
+
   return (
     <React.Fragment>
       <div className="dx-fieldset">
@@ -144,11 +146,17 @@ function App() {
               inputAttr={productLabel}
               displayExpr="Name"
               valueExpr="Id"
-              itemRender={Item}
+              itemRender={(data) => (
+                <Item
+                  data={data}
+                  getAltText={getAltText}
+                />
+              )}
               tagRender={(data) => (
                 <Tag
                   product={data}
                   onMouseEnter={onMouseEnter}
+                  getAltText={getAltText}
                 />
               )}
             />

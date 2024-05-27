@@ -39,7 +39,7 @@ const App = () => {
         <div className="caption">Options</div>
         <div className="option">
           <CheckBox
-            text={`Limit submenus height by ${SUBMENU_HEIGHT}px`}
+            text={`Limit submenu height to ${SUBMENU_HEIGHT}px`}
             value={limitSubmenuHeight}
             onValueChanged={limitSubmenuHeightOnMouseClick}
           />

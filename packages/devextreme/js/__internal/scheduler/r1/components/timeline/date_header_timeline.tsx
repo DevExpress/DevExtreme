@@ -15,6 +15,7 @@ const {
 export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderProps> {
   render(): JSX.Element {
     const {
+      viewContext,
       groupByDate,
       groupOrientation,
       groups,
@@ -87,6 +88,7 @@ export class TimelineDateHeaderLayout extends BaseInfernoComponent<DateHeaderPro
                   }) => (
                     <DateHeaderCell
                       key={key}
+                      viewContext={viewContext}
                       startDate={startDate}
                       endDate={endDate}
                       groups={isHorizontalGrouping ? cellGroups : undefined}

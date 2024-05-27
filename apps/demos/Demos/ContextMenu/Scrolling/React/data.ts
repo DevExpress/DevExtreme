@@ -6,7 +6,7 @@ export const contextMenuItems = [
         text: 'Computers',
         items: [
           {
-            text: 'Desktops',    
+            text: 'Desktops',
           },
           {
             text: 'Laptops',
@@ -36,18 +36,18 @@ export const contextMenuItems = [
             text: 'Projectors & Screens'
           },
           {
-            text: 'Computers Accessories',
+            text: 'Computer Accessories',
           },
         ]
       },
       {
-        text: 'Cell phones',
+        text: 'Cell Phones',
         items: [
           {
-            text: 'Home & Office Phones',    
+            text: 'Home & Office Phones',
           },
           {
-            text: 'Smart phones & PDAs',
+            text: 'Smart Phones & PDAs',
           },
           {
             text: 'Senior Cell Phones'
@@ -56,7 +56,7 @@ export const contextMenuItems = [
             text: 'Mobile Broadband Devices',
           },
           {
-            text: 'Cell phones Accessories',
+            text: 'Cell Phone Accessories',
           },
         ]
       },
@@ -67,7 +67,7 @@ export const contextMenuItems = [
             text: 'Action Cameras',
           },
           {
-            text: 'Camcorders',    
+            text: 'Camcorders',
           },
           {
             text: 'Digital Cameras',
@@ -106,7 +106,7 @@ export const contextMenuItems = [
             text: 'Underwater Video & Photography',
           },
           {
-            text: 'Cameras Accessories',
+            text: 'Camera Accessories',
           },
         ]
       },
@@ -117,7 +117,7 @@ export const contextMenuItems = [
             text: 'Boomboxes',
           },
           {
-            text: 'DVD & CD Player Bags',    
+            text: 'DVD & CD Player Bags',
           },
           {
             text: 'Hi-Fi & Home Audio Accessories',
@@ -152,7 +152,7 @@ export const contextMenuItems = [
             text: 'Air Conditioners',
           },
           {
-            text: 'Coffee Machines',    
+            text: 'Coffee Machines',
           },
           {
             text: 'Fans',
@@ -193,7 +193,7 @@ export const contextMenuItems = [
             text: 'TV Shows',
           },
           {
-            text: 'DVD',    
+            text: 'DVD',
           },
           {
             text: 'Blu-ray',
@@ -222,7 +222,7 @@ export const contextMenuItems = [
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC games',    
+            text: 'PC Games',
           },
           {
             text: 'Virtual Reality',
@@ -251,13 +251,13 @@ export const contextMenuItems = [
     text: 'Healthcare & Living',
     items: [
       {
-        text: 'Sport & Outdoors',
+        text: 'Sports & Outdoors',
         items: [
           {
             text: 'Camping',
           },
           {
-            text: 'Fitness',    
+            text: 'Fitness',
           },
           {
             text: 'Football',
@@ -275,7 +275,7 @@ export const contextMenuItems = [
             text: 'Sport Apparel'
           },
           {
-            text: 'Sport Shoes',
+            text: 'Trainers & Tennis Shoes',
           },
         ]
       },
@@ -286,7 +286,7 @@ export const contextMenuItems = [
             text: 'Bath & Shower',
           },
           {
-            text: 'Skin Care',    
+            text: 'Skin Care',
           },
           {
             text: 'Hair Care',
@@ -315,7 +315,7 @@ export const contextMenuItems = [
             text: 'Clothing',
           },
           {
-            text: 'Jewellery', 
+            text: 'Jewellery',
           },
           {
             text: 'Shoes',

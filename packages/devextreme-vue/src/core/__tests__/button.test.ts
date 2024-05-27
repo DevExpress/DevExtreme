@@ -10,7 +10,7 @@ beforeEach(() => {
 });
 
 describe('template rendering', () => {
-  it('should render a template with child router-view', async (done) => {
+  it('should render a template with child router-view', async () => {
     const appView = defineComponent({
       template:
                 `<dx-button id="component">
@@ -56,7 +56,7 @@ describe('template rendering', () => {
       ],
       history: createWebHistory(),
     });
-    router.push('/');
+    await router.push('/');
     await router.isReady();
     const wrapper = mount(rootView, {
       global: {
@@ -65,6 +65,5 @@ describe('template rendering', () => {
     });
 
     expect(wrapper.vm.$el.getElementsByClassName('test')).toHaveLength(1);
-    done();
   });
 });

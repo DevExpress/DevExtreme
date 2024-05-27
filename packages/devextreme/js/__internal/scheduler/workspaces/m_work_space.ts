@@ -39,6 +39,7 @@ import {
   HeaderPanelComponent,
   TimePanelComponent,
 } from '@ts/scheduler/r1/components/index';
+import type { ViewContext } from '@ts/scheduler/r1/components/types';
 import type { ViewType } from '@ts/scheduler/r1/types';
 import {
   calculateIsGroupedAllDayPanel,
@@ -1887,10 +1888,20 @@ class SchedulerWorkSpace extends WidgetObserver {
   _getRDateTableProps() {
     return {
       viewData: this.viewDataProvider.viewData,
+      viewContext: this.getR1ComponentsViewContext(),
       dataCellTemplate: this.option('dataCellTemplate'),
       addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
       groupOrientation: this.option('groupOrientation'),
       addVerticalSizesClassToRows: false,
+    };
+  }
+
+  protected getR1ComponentsViewContext(): ViewContext {
+    return {
+      view: {
+        type: this.type as ViewType,
+      },
+      crossScrollingEnabled: !!this.option('crossScrollingEnabled'),
     };
   }
 
@@ -2078,6 +2089,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   renderRGroupPanel() {
     const options = {
+      viewContext: this.getR1ComponentsViewContext(),
       groups: this.option('groups'),
       groupOrientation: this.option('groupOrientation'),
       groupByDate: this.isGroupedByDate(),
@@ -2110,6 +2122,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
       const options = {
         viewData: this.viewDataProvider.viewData,
+        viewContext: this.getR1ComponentsViewContext(),
         dataCellTemplate: this.option('dataCellTemplate'),
         startCellIndex: 0,
         ...this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {},
@@ -2129,6 +2142,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       TimePanelComponent,
       'renovatedTimePanel',
       {
+        viewContext: this.getR1ComponentsViewContext(),
         timePanelData: this.viewDataProvider.timePanelData,
         timeCellTemplate: this.option('timeCellTemplate'),
         groupOrientation: this.option('groupOrientation'),
@@ -2149,6 +2163,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       this.renovatedHeaderPanelComponent,
       'renovatedHeaderPanel',
       {
+        viewContext: this.getR1ComponentsViewContext(),
         dateHeaderData: this.viewDataProvider.dateHeaderData,
         groupPanelData: this.viewDataProvider.getGroupPanelData(
           this.generateRenderOptions(),
