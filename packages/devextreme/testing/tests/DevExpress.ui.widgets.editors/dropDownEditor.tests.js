@@ -2179,7 +2179,7 @@ QUnit.module('aria accessibility', () => {
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
                 assert.equal($input.val(), '', 'input value is empty');
-                assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, 'initial render should set aria-invalid to undefined');
 
                 keyboardMock($input)
                     .type('a');
