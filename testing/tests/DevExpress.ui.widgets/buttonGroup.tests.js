@@ -15,6 +15,8 @@ const BUTTON_CONTENT_CLASS = 'dx-button-content';
 const BUTTON_GROUP_CLASS = 'dx-buttongroup';
 const BUTTON_GROUP_ITEM_CLASS = BUTTON_GROUP_CLASS + '-item';
 const BUTTON_GROUP_ITEM_HAS_WIDTH = BUTTON_GROUP_CLASS + '-item-has-width';
+const ITEM_SELECTED_CLASS = 'dx-item-selected';
+const STATE_SELECTED_CLASS = 'dx-state-selected';
 
 QUnit.testStart(() => {
     const markup = `
@@ -293,6 +295,34 @@ QUnit.module('option changed', {
 
         eventsEngine.trigger(button, 'dxclick');
         assert.strictEqual(handler.callCount, 1, 'handler has been called');
+    });
+
+    QUnit.test('selected class should not be added after hovering (T1222079)', function(assert) {
+        const buttonGroup = $('#widget').dxButtonGroup({
+            items: [
+                { text: 'Button_1' },
+                { text: 'Button_2' },
+            ],
+            selectedItemKeys: ['Button_1'],
+            disabled: true,
+        }).dxButtonGroup('instance');
+
+        buttonGroup.option('disabled', false);
+        const $buttons = buttonGroup.$element().find(`.${BUTTON_CLASS}`);
+
+        assert.strictEqual($buttons.eq(0).hasClass(ITEM_SELECTED_CLASS), true, `first item has ${ITEM_SELECTED_CLASS} class`);
+        assert.strictEqual($buttons.eq(1).hasClass(ITEM_SELECTED_CLASS), false, `second item does not have the ${ITEM_SELECTED_CLASS} class`);
+
+        eventsEngine.trigger($buttons.eq(1), 'dxclick');
+
+        assert.strictEqual($buttons.eq(0).hasClass(ITEM_SELECTED_CLASS), false, `first item does not have the ${ITEM_SELECTED_CLASS} class`);
+        assert.strictEqual($buttons.eq(1).hasClass(ITEM_SELECTED_CLASS), true, `second item has ${ITEM_SELECTED_CLASS} class`);
+
+        eventsEngine.trigger($buttons.eq(0), 'dxhoverstart');
+
+        assert.strictEqual($buttons.eq(0).hasClass(ITEM_SELECTED_CLASS), false, `first item does not have the ${ITEM_SELECTED_CLASS} class`);
+        assert.strictEqual($buttons.eq(0).hasClass(STATE_SELECTED_CLASS), false, `first item does not have the ${STATE_SELECTED_CLASS} class`);
+        assert.strictEqual($buttons.eq(1).hasClass(ITEM_SELECTED_CLASS), true, `second item has ${ITEM_SELECTED_CLASS} class`);
     });
 
     QUnit.test('change the stylingMode option', function(assert) {
