@@ -1,10 +1,8 @@
 import * as VueType from 'vue';
 
-const Vue = (VueType as any).default || VueType;
-
 export function getVueVersion() {
-  const currentVersion = Vue.version;
-  return Number(currentVersion.split('.')[0]);
+  const currentVersion = VueType.version;
+  return currentVersion ? Number(currentVersion.split('.')[0]) : 2;
 }
 
 export function isVue3() {

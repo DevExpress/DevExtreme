@@ -2,10 +2,11 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { PropsWithChildren, PropsWithClassName } from '@ts/core/r1/index';
 
 import { renderUtils } from '../../utils/index';
-import type { ContentTemplateProps } from '../types';
+import type { ContentTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 
 export interface CellBaseProps extends PropsWithClassName,
-  PropsWithChildren {
+  PropsWithChildren,
+  PropsWithViewContext {
   isFirstGroupCell?: boolean;
   isLastGroupCell?: boolean;
   startDate: Date;
@@ -19,7 +20,7 @@ export interface CellBaseProps extends PropsWithClassName,
   ariaLabel?: string;
 }
 
-export const CellBaseDefaultProps: CellBaseProps = {
+export const CellBaseDefaultProps: DefaultProps<CellBaseProps> = {
   className: '',
   isFirstGroupCell: false,
   isLastGroupCell: false,
@@ -33,6 +34,7 @@ export const CellBaseDefaultProps: CellBaseProps = {
     index: 0,
   },
 };
+
 export class CellBase extends BaseInfernoComponent<CellBaseProps> {
   render(): JSX.Element {
     const {

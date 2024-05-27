@@ -10,7 +10,7 @@ import { ButtonStyle, ButtonType, HorizontalAlignment, ToolbarItemComponent, Too
 import { dxBoxOptions } from 'devextreme/ui/box';
 import { dxButtonOptions } from 'devextreme/ui/button';
 import { DataGridPredefinedToolbarItem } from 'devextreme/ui/data_grid';
-import { DiagramCommand } from 'devextreme/ui/diagram';
+import { Command } from 'devextreme/ui/diagram';
 import { ItemClickEvent } from 'devextreme/ui/drop_down_button';
 import { FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { FormItemComponent, FormItemType, LabelLocation } from 'devextreme/ui/form';
@@ -157,10 +157,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('closeMenuOnClick', value);
     }
 
-    get items(): Array<DevExpress.ui.dxContextMenuItem | DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem | DevExpress.ui.dxDiagramCustomCommand | DevExpress.ui.dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | DevExpress.ui.dxMenuItem | DevExpress.ui.dxTreeViewItem> {
+    get items(): Array<DevExpress.ui.dxContextMenuItem | DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem | Command | DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | DevExpress.ui.dxMenuItem | DevExpress.ui.dxTreeViewItem> {
         return this._getOption('items');
     }
-    set items(value: Array<DevExpress.ui.dxContextMenuItem | DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem | DevExpress.ui.dxDiagramCustomCommand | DevExpress.ui.dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | DevExpress.ui.dxMenuItem | DevExpress.ui.dxTreeViewItem>) {
+    set items(value: Array<DevExpress.ui.dxContextMenuItem | DevExpress.ui.dxFormSimpleItem | DevExpress.ui.dxFormGroupItem | DevExpress.ui.dxFormTabbedItem | DevExpress.ui.dxFormEmptyItem | DevExpress.ui.dxFormButtonItem | Command | DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxFileManagerContextMenuItem | HtmlEditorPredefinedContextMenuItem | any | DevExpress.ui.dxMenuItem | DevExpress.ui.dxTreeViewItem>) {
         this._setOption('items', value);
     }
 
@@ -241,10 +241,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('label', value);
     }
 
-    get name(): string | undefined | DataGridPredefinedToolbarItem | DiagramCommand | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
+    get name(): string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: string | undefined | DataGridPredefinedToolbarItem | DiagramCommand | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
+    set name(value: string | undefined | DataGridPredefinedToolbarItem | Command | FileManagerPredefinedContextMenuItem | FileManagerPredefinedToolbarItem | GanttPredefinedContextMenuItem | GanttPredefinedToolbarItem | HtmlEditorPredefinedContextMenuItem | HtmlEditorPredefinedToolbarItem | TreeListPredefinedToolbarItem) {
         this._setOption('name', value);
     }
 

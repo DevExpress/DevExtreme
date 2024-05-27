@@ -165,7 +165,9 @@ export class HeaderFilterController extends Modules.ViewController {
     return item;
   }
 
-  private getHeaderItemText(displayValue, column, currentLevel, headerFilterOptions) {
+  // Used in the filter/m_filter_custom_operations as public method
+  // Used in the private API WA [T1232532]
+  public getHeaderItemText(displayValue, column, currentLevel, headerFilterOptions) {
     let text = gridCoreUtils.formatValue(displayValue, getFormatOptions(displayValue, column, currentLevel));
 
     if (!text) {

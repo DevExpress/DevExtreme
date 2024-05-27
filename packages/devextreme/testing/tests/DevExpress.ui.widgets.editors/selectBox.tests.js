@@ -15,6 +15,7 @@ import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelp
 import { normalizeKeyName } from 'events/utils/index';
 
 import 'generic_light.css!';
+import 'ui/validator';
 
 const EMPTY_MESSAGE_CLASS = 'dx-empty-message';
 
@@ -3290,6 +3291,44 @@ QUnit.module('search', moduleSetup, () => {
         listItem.trigger('dxclick');
 
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
+    });
+
+    QUnit.test('component with fieldTemplate should retain aria attributes after search and selection (T1230696, T1230971)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+            itemTemplate: () => {
+                return '<div><span></span></div>';
+            }
+        }).dxValidator({
+            validationRules: [ { type: 'required' } ]
+        });
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+
+        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopup attribute set to listbox');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
+
+        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopuphaspopup attribute set to listbox');
+
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
     });
 
     [0, 1].forEach((value) => {

@@ -7,7 +7,11 @@ import { isDefined } from '../../core/utils/type';
 import messageLocalization from '../../localization/message';
 import { format } from '../../core/utils/string';
 import coreLocalization from '../../localization/core';
+import { requestAnimationFrame, cancelAnimationFrame } from '../../animation/frame';
 
+
+const visualStateKey = 'visualState';
+const fullScreenModeKey = 'fullScreen';
 
 export class GanttView extends Widget {
     _init() {
@@ -51,6 +55,20 @@ export class GanttView extends Widget {
         });
         this._selectTask(this.option('selectedRowKey'));
         this.updateBarItemsState();
+
+        const visualState = this.option(visualStateKey);
+        if(visualState) {
+            this._restoreStateFrameId = requestAnimationFrame(() => this._restoreVisualState(visualState));
+        }
+    }
+    _dispose() {
+        super._dispose();
+        cancelAnimationFrame(this._restoreStateFrameId);
+    }
+    _restoreVisualState(state) {
+        if(state[fullScreenModeKey]) {
+            this._ganttViewCore.setFullScreenMode();
+        }
     }
     _getFirstDayOfWeek(value) {
         return isDefined(value) ? value : dateLocalization.firstDayOfWeekIndex();
@@ -407,5 +425,11 @@ export class GanttView extends Widget {
     }
     applyTasksExpandedState(state) {
         this._ganttViewCore?.applyTasksExpandedState(state);
+    }
+
+    getVisualStateToRestore() {
+        return {
+            [fullScreenModeKey]: this._ganttViewCore?.isInFullScreenMode()
+        };
     }
 }
