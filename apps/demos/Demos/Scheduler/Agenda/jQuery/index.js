@@ -1,7 +1,10 @@
 $(() => {
   $('#scheduler').dxScheduler({
     timeZone: 'America/Los_Angeles',
-    dataSource: data,
+    dataSource: new DevExpress.data.ArrayStore({
+      key: 'id',
+      data,
+    }),
     views: ['agenda'],
     currentView: 'agenda',
     currentDate: new Date(2021, 4, 11),

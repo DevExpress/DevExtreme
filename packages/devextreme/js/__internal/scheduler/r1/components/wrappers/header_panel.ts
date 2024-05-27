@@ -30,7 +30,21 @@ export class HeaderPanelComponent extends ComponentWrapper {
       allowNull: [],
       elements: [],
       templates: ['dateCellTemplate', 'timeCellTemplate', 'dateHeaderTemplate', 'resourceCellTemplate'],
-      props: ['dateHeaderData', 'isRenderDateHeader', 'dateCellTemplate', 'timeCellTemplate', 'dateHeaderTemplate', 'groups', 'groupOrientation', 'groupPanelData', 'groupByDate', 'height', 'className', 'resourceCellTemplate'],
+      props: [
+        'viewContext',
+        'dateHeaderData',
+        'isRenderDateHeader',
+        'dateCellTemplate',
+        'timeCellTemplate',
+        'dateHeaderTemplate',
+        'groups',
+        'groupOrientation',
+        'groupPanelData',
+        'groupByDate',
+        'height',
+        'className',
+        'resourceCellTemplate',
+      ],
     };
   }
   /* eslint-enable @typescript-eslint/explicit-module-boundary-types */

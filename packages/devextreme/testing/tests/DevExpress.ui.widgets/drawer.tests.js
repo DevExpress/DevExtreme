@@ -17,6 +17,7 @@ import Overlay from 'ui/overlay/ui.overlay';
 
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
+const DRAWER_PANEL_CONTENT_HIDDEN_CLASS = 'dx-drawer-panel-content-hidden';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 
@@ -158,6 +159,21 @@ QUnit.module('Drawer behavior', () => {
         });
 
         assert.equal(count, 0, 'callback not fired at animation start');
+    });
+
+    QUnit.test('drawer panel should have dx-drawer-panel-content-hidden class before it was shown', function(assert) {
+        const $element = $('#drawer').dxDrawer({ animationDuration: 0 });
+        const instance = $element.dxDrawer('instance');
+        const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
+
+        const done = assert.async();
+
+        instance.toggle().then(() => {
+            assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
+            done();
+        });
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
     });
 
     QUnit.test('Check dxresize event: opened:false,animationEnabled:true -> drawer.toggle()', function(assert) {

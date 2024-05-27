@@ -31,3 +31,22 @@ export default Drawer;
  * @name dxDrawerOptions.tabIndex
  * @hidden
  */
+
+/**
+ * @name dxDrawer.viewContent
+ * @publicName viewContent()
+ * @return DxElement
+ * @hidden
+ */
+
+/**
+ * @name dxDrawer.registerKeyHandler
+ * @publicName registerKeyHandler(key, handler)
+ * @hidden
+ */
+
+/**
+ * @name dxDrawer.focus
+ * @publicName focus()
+ * @hidden
+ */

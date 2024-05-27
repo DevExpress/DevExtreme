@@ -164,12 +164,6 @@ const SelectBox = (DropDownList as any).inherit({
 
       showSelectionControls: false,
 
-      /**
-            * @name dxSelectBoxOptions.allowClearing
-            * @type boolean
-            * @default true
-            * @hidden
-            */
       allowClearing: true,
 
       tooltipEnabled: false,

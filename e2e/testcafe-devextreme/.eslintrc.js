@@ -6,6 +6,9 @@ module.exports = {
         extends: ['devextreme/testcafe'],
         rules: {
             'no-only-tests/no-only-tests': 'error',
-        }
+        },
+        parserOptions: {
+            project: true,
+        },
     }],
 };

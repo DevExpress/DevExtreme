@@ -1,9 +1,6 @@
 {
   "extends": "nx/presets/npm.json",
   "$schema": "./node_modules/nx/schemas/nx-schema.json",
-  "affected": {
-    "defaultBase": "master"
-  },
   "nxCloudAccessToken": "ZDFmMzkyZTYtZmU5MC00MDMyLWI3NDktYjhhYWUxZWM4YTg3fHJlYWQ=",
   "targetDefaults": {
     "build": {
@@ -48,5 +45,6 @@
   "workspaceLayout": {
     "appsDir": "apps",
     "libsDir": "packages"
-  }
+  },
+  "defaultBase": "master"
 }

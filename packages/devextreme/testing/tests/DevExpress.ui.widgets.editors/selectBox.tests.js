@@ -3406,6 +3406,31 @@ QUnit.module('search', moduleSetup, () => {
         });
     });
 
+    QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230635)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+        });
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
+    });
+
     [0, 1].forEach((value) => {
         QUnit.testInActiveWindow(`Value=${value} should be null after input is cleared and enter key is tapped (T935801)`, function(assert) {
             const items = [0, 1, 2];

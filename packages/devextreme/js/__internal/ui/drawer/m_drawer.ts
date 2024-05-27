@@ -3,7 +3,7 @@ import registerComponent from '@js/core/component_registrator';
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
-import { Deferred } from '@js/core/utils/deferred';
+import { Deferred, when } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getBoundingRect } from '@js/core/utils/position';
 import { isDefined, isFunction } from '@js/core/utils/type';
@@ -21,7 +21,7 @@ import ShrinkStrategy from './m_drawer.rendering.strategy.shrink';
 const DRAWER_CLASS = 'dx-drawer';
 const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
 const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
-const DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS = 'dx-drawer-panel-content-has-min-size';
+const DRAWER_PANEL_CONTENT_HIDDEN_CLASS = 'dx-drawer-panel-content-hidden';
 const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
 const DRAWER_SHADER_CLASS = 'dx-drawer-shader';
 const INVISIBLE_STATE_CLASS = 'dx-state-invisible';
@@ -167,15 +167,26 @@ const Drawer = (Widget as any).inherit({
     }
   },
 
-  _togglePanelContentHasMinSizeClass(shouldBeSet) {
-    this._$panelContentWrapper.toggleClass(DRAWER_PANEL_CONTENT_HAS_MIN_SIZE_CLASS, shouldBeSet);
+  _togglePanelContentHiddenClass() {
+    const callback = (): void => {
+      const { minSize, opened } = this.option();
+      const shouldBeSet = minSize ? false : !opened;
+
+      this._$panelContentWrapper.toggleClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS, shouldBeSet);
+    };
+
+    if (this._whenAnimationCompleted) {
+      when(this._whenAnimationCompleted).done(callback);
+    } else {
+      callback();
+    }
   },
 
   _renderPanelContentWrapper() {
     const { openedStateMode, opened, minSize } = this.option();
 
     this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
-    this._togglePanelContentHasMinSizeClass(!!minSize);
+    this._togglePanelContentHiddenClass();
 
     const position = this.calcTargetPosition();
 
@@ -497,6 +508,7 @@ const Drawer = (Widget as any).inherit({
       case 'opened':
         this._renderPosition(this.option('opened'));
         this._toggleOpenedStateClass(args.value);
+        this._togglePanelContentHiddenClass();
         break;
       case 'position':
         this._refreshPositionClass(args.previousValue);
@@ -516,7 +528,7 @@ const Drawer = (Widget as any).inherit({
       case 'minSize':
         this._initMinMaxSize();
         this._renderPosition(this.option('opened'), true);
-        this._togglePanelContentHasMinSizeClass(!!args.value);
+        this._togglePanelContentHiddenClass();
         break;
       case 'maxSize':
         this._initMinMaxSize();
@@ -543,12 +555,6 @@ const Drawer = (Widget as any).inherit({
     return getPublicElement(this._$panelContentWrapper);
   },
 
-  /**
-  * @name dxDrawer.viewContent
-  * @publicName viewContent()
-  * @return DxElement
-  * @hidden
-  */
   viewContent() {
     return getPublicElement(this._$viewContentWrapper);
   },
@@ -569,18 +575,6 @@ const Drawer = (Widget as any).inherit({
 
     return this._whenAnimationCompleted.promise();
   },
-
-  /**
-  * @name dxDrawer.registerKeyHandler
-  * @publicName registerKeyHandler(key, handler)
-  * @hidden
-  */
-
-  /**
-  * @name dxDrawer.focus
-  * @publicName focus()
-  * @hidden
-  */
 });
 
 registerComponent('dxDrawer', Drawer);

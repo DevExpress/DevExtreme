@@ -1,6 +1,6 @@
 import React from 'react';
 
-export default function Tag({ product, onMouseEnter }) {
+export default function Tag({ product, onMouseEnter, getAltText }) {
   const isDisabled = product.Name === 'SuperHD Video Player';
   return (
     <React.Fragment>
@@ -11,6 +11,7 @@ export default function Tag({ product, onMouseEnter }) {
       >
         <img
           src={product.ImageSrc}
+          alt={getAltText(product.Name)}
           className="tag-img"
         />
         <span>{product.Name}</span>

@@ -6,7 +6,7 @@ import ArrayStore from 'devextreme/data/array_store';
 import { DxTagBoxTypes } from 'devextreme-angular/ui/tag-box';
 import { Service, Product } from './app.service';
 
-if (!/localhost/.test(document.location.host)) {
+if (!document.location.host.includes('localhost')) {
   enableProdMode();
 }
 
@@ -64,6 +64,10 @@ export class AppComponent {
 
   isDisabled(product: Product) {
     return product.Name === 'SuperHD Video Player';
+  }
+
+  getAltText(text: String) {
+    return `${text}. Picture`;
   }
 }
 

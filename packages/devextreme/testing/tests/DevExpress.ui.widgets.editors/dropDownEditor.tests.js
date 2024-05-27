@@ -2227,6 +2227,34 @@ QUnit.module('aria accessibility', () => {
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
         });
     });
+  
+    QUnit.test('component with fieldTemplate should have proper role attribute after interaction (T1230635)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            valueChangeEvent: 'keyup',
+        });
+        let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
+
+        keyboardMock($input)
+            .type('a');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should retain to combobox after typing');
+
+        keyboardMock($input)
+            .caret(1)
+            .press('backspace');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should remain assigned to the combobox after deleting');
+    });
 
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
