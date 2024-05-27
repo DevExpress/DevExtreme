@@ -385,7 +385,7 @@ const TextEditorBase = Editor.inherit({
 
         // fallback to empty string is required to support WebKit native date picker in some basic scenarios
         // can not be covered by QUnit
-        if(this._input().val() !== (isDefined(text) ? text : '')) {
+        if(this._input().val() !== (isDefined(text) ? text : '') && !this.option('visible')) {
             this._renderDisplayText(text);
         } else {
             this._toggleEmptinessEventHandler();
