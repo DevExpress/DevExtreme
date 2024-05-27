@@ -504,7 +504,7 @@ QUnit.module('Editors Standard Adapter', {
         assert.notOk(Boolean($input.attr('aria-invalid')), 'input still does not have an "aria-required" attribute');
     });
 
-    QUnit.test('Editor should toggle an "aria-required" attribute on markup render if the "required" rule is added', function(assert) {
+    QUnit.test('Editor should toggle an "aria-required" and "aria-invalid" attribute on markup render if the "required" rule is added', function(assert) {
         const editor = this.fixture.createTextEditor();
         editor._initialized = false;
 
@@ -517,6 +517,7 @@ QUnit.module('Editors Standard Adapter', {
         validator.option('validationRules', [{ type: 'required' }]); // initMarkup is called on endUpdate
 
         assert.ok(Boolean($input.attr('aria-required')), '"aria-required" is rendered after editor initialization');
+        assert.ok(Boolean($input.attr('aria-invalid')), '"aria-invalid" is rendered after editor initialization');
     });
 
     [
