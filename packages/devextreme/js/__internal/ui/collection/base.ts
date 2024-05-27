@@ -52,7 +52,8 @@ declare class Base<
   _getIndexByItemData(item: TItem): number;
   _findItemElementByItem(item: TItem): dxElementWrapper;
 
-  _itemOptionChanged(item: TItem, property: string, value: unknown): void;
+  _itemOptionChanged(item: TItem, property: string, value: unknown, prevValue: unknown): void;
+  _itemEventHandler($item: dxElementWrapper, eventName: string, eventData: unknown): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

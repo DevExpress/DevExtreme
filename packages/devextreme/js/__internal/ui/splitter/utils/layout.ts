@@ -31,6 +31,15 @@ export function findLastIndexOfVisibleItem(items: Item[]): number {
   return -1;
 }
 
+export function findLastIndexOfNonCollapsedItem(items: Item[]): number {
+  for (let i = items.length - 1; i >= 0; i -= 1) {
+    if (items[i].collapsed !== true) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 export function findIndexOfNextVisibleItem(items: Item[], index: number): number {
   for (let i = index + 1; i < items.length; i += 1) {
     if (items[i].visible !== false) {
@@ -111,10 +120,14 @@ function findMaxAvailableDelta(
 export function getNextLayout(
   currentLayout: number[],
   delta: number,
-  prevPaneIndex: number,
+  prevPaneIndex: number | undefined,
   paneRestrictions: PaneRestrictions[],
   collapseMode = false,
 ): number[] {
+  if (!isDefined(prevPaneIndex)) {
+    return currentLayout;
+  }
+
   const nextLayout = [...currentLayout];
   const nextPaneIndex = prevPaneIndex + 1;
 
