@@ -3349,7 +3349,7 @@ QUnit.module('search', moduleSetup, () => {
                 let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
                 assert.equal($input.val(), '', 'input value is empty');
-                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `initial render should set aria-invalid to ${emptyValue}`);
+                assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
 
                 keyboardMock($input)
                     .type('a');

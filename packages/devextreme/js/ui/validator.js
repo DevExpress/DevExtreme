@@ -136,7 +136,6 @@ const Validator = DOMComponent.inherit({
             if(dxStandardEditor.isInitialized()) {
                 dxStandardEditor.setAria({
                     'required': isRequired,
-                    'invalid': isRequired,
                 });
             }
             dxStandardEditor.option('_onMarkupRendered', (data) => {
