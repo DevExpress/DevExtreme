@@ -73,7 +73,7 @@ runs:
       id: setup-firefox
       uses: browser-actions/setup-firefox@v1
       with:
-        firefox-version: '122.0.1'
+        firefox-version: '125.0.3'
 
     - name: Use Node.js
       uses: actions/setup-node@v4
