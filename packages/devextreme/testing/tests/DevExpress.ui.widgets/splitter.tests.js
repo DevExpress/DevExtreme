@@ -751,7 +751,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         expectedLayout: ['45', '10', '45'],
     }, {
         items: [{}, { collapsed: true, collapsedSize: 100 }, { collapsed: true, collapsedSize: 100 }],
-        expectedLayout: ['79.798', '10.0806', '10.0806'],
+        expectedLayout: ['79.9197', '10.0806', '10.0806'],
     }, {
         items: [{ collapsed: true, collapsedSize: 100 }, {}],
         expectedLayout: ['10', '90'],
@@ -823,9 +823,17 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '30.9917', '29.8898', '19.5592', '19.5592'] },
                 { targetButton: 'next', resizeHandleIndex: 3, expectedLayout: ['0', '30.9917', '29.8898', '39.1185', '0'] },
                 { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['0', '30.9917', '69.0083', '0', '0'] },
-                { targetButton: 'prev', resizeHandleIndex: 3, expectedLayout: ['0', '30.9917', '49.449', '0', '19.5592'] },
-                { targetButton: 'prev', resizeHandleIndex: 2, expectedLayout: ['0', '30.9917', '10.3306', '39.1185', '19.5592'] },
-                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['15.4959', '15.4959', '10.3306', '39.1185', '19.5592'] },
+                { targetButton: 'next', resizeHandleIndex: 3, expectedLayout: ['0', '30.9917', '69.0083', '0', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 2, expectedLayout: ['0', '30.9917', '0', '69.0083', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 1, expectedLayout: ['0', '15.4959', '15.4959', '69.0083', '0'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['15.4959', '0', '15.4959', '69.0083', '0'] },
+            ]
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['25', '25', '50', '0'] },
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['25', '75', '0', '0'] },
             ]
         },
     ].forEach(({ items, scenarios }) => {
@@ -848,48 +856,98 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     [
         {
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true, size: '40%' }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['19.6721', '19.6721', '60.6557', '0'] },
+                { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['19.6721', '19.6721', '19.6721', '40.9836'] },
+            ]
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true, size: '40%' }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['19.6721', '19.6721', '60.6557', '0'] },
+                { newCollapsedValue: true, paneIndex: 2, expectedLayout: ['19.6721', '80.3279', '0', '0'] },
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '100', '0', '0'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['19.6721', '80.3279', '0', '0'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['19.6721', '19.6721', '60.6557', '0'] },
+            ]
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true, size: '30%' }, { collapsible: true }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['23.0874', '53.8251', '0', '23.0874'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['23.0874', '30.7377', '23.0874', '23.0874'] },
+            ]
+        },
+    ].forEach(({ items, scenarios }) => {
+        QUnit.test(`The pane collapse/expand scenarios using API and UI, items: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            scenarios.forEach((scenario) => {
+                const { newCollapsedValue, paneIndex, expectedLayout, targetButton, resizeHandleIndex } = scenario;
+
+                if(targetButton) {
+                    const $resizeHandle = this.getResizeHandles().eq(resizeHandleIndex);
+
+                    const $collapseButton = targetButton === 'prev'
+                        ? this.getCollapsePrevButton($resizeHandle)
+                        : this.getCollapseNextButton($resizeHandle);
+
+                    $collapseButton.trigger('dxclick');
+                } else {
+                    this.instance.option(`items[${paneIndex}].collapsed`, newCollapsedValue);
+                }
+
+                this.assertLayout(expectedLayout);
+            });
+        });
+    });
+
+    [
+        {
             items: [{ }, { }, { }, { }],
             scenarios: [
                 { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['25', '25', '25', '25'] },
             ]
         },
         {
-            items: [{ size: 400 }, { }, { }],
+            items: [{ size: '150px' }, { }, { }, { }],
             scenarios: [
-                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '70.3252', '29.6748'] },
-                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['40.6504', '29.6748', '29.6748'] },
-                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '70.3252', '29.6748'] },
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '43.5792', '28.2104', '28.2104'] },
+                { newCollapsedValue: true, paneIndex: 1, expectedLayout: ['0', '0', '71.7896', '28.2104'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['15.3689', '0', '56.4208', '28.2104'] },
             ]
         },
         {
-            items: [{ }, { }, { }],
+            items: [{ collapsed: true, size: '150px', collapsible: true }, { collapsible: true }, { collapsed: true, collapsible: true }, { }],
             scenarios: [
-                { newCollapsedValue: true, paneIndex: 1, expectedLayout: ['33.3333', '0', '66.6667'] },
-                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['33.3333', '33.3333', '33.3333'] },
-                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '66.6667', '33.3333'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['25', '25', '0', '50'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['25', '25', '25', '25'] },
             ]
         },
         {
-            items: [{ }, { }, { }, { }, { }],
+            items: [{ collapsed: false, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: true, size: '150px', collapsible: true }],
             scenarios: [
-                { newCollapsedValue: true, paneIndex: 2, expectedLayout: ['20', '20', '0', '40', '20'] },
-                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['20', '20', '20', '20', '20'] },
-                { newCollapsedValue: true, paneIndex: 1, expectedLayout: ['20', '0', '40', '20', '20'] },
-                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '0', '60', '20', '20'] },
-                { newCollapsedValue: true, paneIndex: 3, expectedLayout: ['0', '0', '60', '0', '40'] },
-                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['0', '20', '40', '0', '40'] },
+                { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['50', '0', '25', '25'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['50', '12.5', '12.5', '25'] },
             ]
         },
         {
-            items: [{ }, { }, { }, { }, { size: 300 }],
+            items: [{ collapsed: true, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: false, collapsible: true }],
             scenarios: [
-                { newCollapsedValue: true, paneIndex: 4, expectedLayout: ['17.2521', '17.2521', '17.2521', '48.2438', '0'] },
-                { newCollapsedValue: false, paneIndex: 4, expectedLayout: ['17.2521', '17.2521', '17.2521', '17.2521', '30.9917'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['0', '25', '25', '50'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['12.5', '12.5', '25', '50'] },
+                { newCollapsedValue: true, paneIndex: 1, expectedLayout: ['12.5', '0', '37.5', '50'] },
+            ]
+        },
+        {
+            items: [{ collapsed: true, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { size: '20%', collapsed: false, collapsible: true }],
+            scenarios: [
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['39.7541', '0', '39.7541', '20.4655674103'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['39.7541', '19.877', '19.877', '20.4655674103'] },
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '59.6311', '19.877', '20.4655674103'] },
             ]
         }
-        // // todo: reanimate
-        // // { collapsed: true, paneIndex: 2, expectedLayout: ['33.3333', '0', '66.6667'], items: [{ }, { }, { }] },
-        // { collapsed: true, paneIndex: 1, expectedLayout: ['33.3333', '0', '66.6667'], items: [{ }, { }, { }, { }, { }] },
     ].forEach(({ items, scenarios }) => {
         QUnit.test(`The pane should restore its size after collapsing and expanding at runtime, items: ${JSON.stringify(items)}`, function(assert) {
             this.reinit({ items });
