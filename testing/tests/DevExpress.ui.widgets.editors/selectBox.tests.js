@@ -3325,9 +3325,34 @@ QUnit.module('search', moduleSetup, () => {
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopuphaspopup attribute set to listbox');
+        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'aria-haspopup should stay to listbox after search and selection');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete should stay to list after search and selection');
+    });
+
+    QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230635)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+        });
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
     });
 
     [0, 1].forEach((value) => {
