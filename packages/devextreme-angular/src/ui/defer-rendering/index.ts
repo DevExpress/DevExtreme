@@ -61,7 +61,7 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
-    instance: DxDeferRendering;
+    instance: DxDeferRendering = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

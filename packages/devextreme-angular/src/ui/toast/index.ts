@@ -63,7 +63,7 @@ import { DxoShowModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxToastComponent extends DxComponent implements OnDestroy {
-    instance: DxToast;
+    instance: DxToast = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
