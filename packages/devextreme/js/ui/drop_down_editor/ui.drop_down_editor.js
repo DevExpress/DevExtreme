@@ -919,7 +919,6 @@ const DropDownEditor = TextBox.inherit({
             case 'fieldTemplate':
                 if(isDefined(args.value)) {
                     this._renderField();
-                    this._setFieldAria();
                 } else {
                     this._invalidate();
                 }
