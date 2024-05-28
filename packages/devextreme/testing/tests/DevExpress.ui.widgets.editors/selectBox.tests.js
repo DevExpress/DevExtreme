@@ -73,6 +73,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
@@ -3354,6 +3355,33 @@ QUnit.module('search', moduleSetup, () => {
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
+    });
+
+    QUnit.test('component with fieldTemplate should have proper aria-labelledby attribute after search and selection (T1230635)', function(assert) {
+        const $selectBox = $('#selectBox').dxSelectBox({
+            label: 'test',
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: () => {
+                return $('<div>').dxTextBox({});
+            },
+            searchEnabled: true,
+        });
+        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+        const $textEditorLabel = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
+
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'initial render should set aria-labelledby equal to the label id');
+
+        const selectBox = $selectBox.dxSelectBox('instance');
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('a');
+
+        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        listItem.trigger('dxclick');
+
+        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+        assert.strictEqual($input.attr('aria-labelledby'), $textEditorLabel.attr('id'), 'aria-labelledby should stay equal to the label id after search and selection');
     });
 
     [0, 1].forEach((value) => {
