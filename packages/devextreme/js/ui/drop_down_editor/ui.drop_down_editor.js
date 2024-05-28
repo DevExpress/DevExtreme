@@ -324,11 +324,8 @@ const DropDownEditor = TextBox.inherit({
 
     _renderField: function() {
         const fieldTemplate = this._getFieldTemplate();
-        const data = this._fieldRenderData();
 
-        if(data === null) {
-            fieldTemplate && this._renderTemplatedField(fieldTemplate, data);
-        }
+        fieldTemplate && this._renderTemplatedField(fieldTemplate, this._fieldRenderData());
     },
 
     _renderPlaceholder: function() {
