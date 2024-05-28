@@ -91,7 +91,7 @@ export const renderDateParts = (text, regExpInfo) => {
 
   let start = 0;
   let end = 0;
-  const sections = [];
+  const sections: any = [];
 
   for (let i = 1; i < result.length; i++) {
     start = end;
@@ -100,7 +100,6 @@ export const renderDateParts = (text, regExpInfo) => {
     const pattern = regExpInfo.patterns[i - 1].replace(/^'|'$/g, '');
     const getter = getPatternGetter(pattern[0]);
 
-    // @ts-expect-error
     sections.push({
       index: i - 1,
       isStub: pattern === result[i],

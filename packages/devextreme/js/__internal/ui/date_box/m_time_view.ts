@@ -2,6 +2,7 @@ import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
 import dateLocalization from '@js/localization/date';
+import type { Item } from '@js/ui/box';
 import Box from '@js/ui/box';
 import Editor from '@js/ui/editor/editor';
 import NumberBox from '@js/ui/number_box';
@@ -59,10 +60,9 @@ const TimeView = (Editor as any).inherit({
 
   _renderBox() {
     const $box = $('<div>').appendTo(this.$element());
-    const items = [];
+    const items: Item[] = [];
 
     if (this.option('_showClock')) {
-      // @ts-expect-error
       items.push({
         ratio: 1,
         shrink: 0,
@@ -70,7 +70,7 @@ const TimeView = (Editor as any).inherit({
         template: this._renderClock.bind(this),
       });
     }
-    // @ts-expect-error
+
     items.push({
       ratio: 0,
       shrink: 0,

@@ -1,231 +1,221 @@
-import { extend } from '../../core/utils/extend';
-import { each, map } from '../../core/utils/iterator';
-import Provider from './provider';
+import { extend } from '@js/core/utils/extend';
+import { each, map } from '@js/core/utils/iterator';
 
-const abstract = Provider.abstract;
+import Provider from './m_provider';
+
+const { abstract } = Provider;
 
 const DynamicProvider = Provider.inherit({
-    _geocodeLocation: function(location) {
-        return new Promise(function(resolve) {
-            const cache = this._geocodedLocations;
-            const cachedLocation = cache[location];
-            if(cachedLocation) {
-                resolve(cachedLocation);
-            } else {
-                this._geocodeLocationImpl(location).then(function(geocodedLocation) {
-                    cache[location] = geocodedLocation;
-                    resolve(geocodedLocation);
-                });
-            }
-        }.bind(this));
-    },
-
-    _renderImpl: function() {
-        return this._load().then(function() {
-            return this._init();
-        }.bind(this)).then(function() {
-            return Promise.all([
-                this.updateMapType(),
-                this._areBoundsSet() ? this.updateBounds() : this.updateCenter()
-            ]);
-        }.bind(this)).then(function() {
-            this._attachHandlers();
-
-            // NOTE: setTimeout is needed by providers to correctly initialize bounds
-            return new Promise(function(resolve) {
-                const timeout = setTimeout(function() {
-                    clearTimeout(timeout);
-                    resolve();
-                });
-            });
-        }.bind(this));
-    },
-
-    _load: function() {
-        if(!this._mapsLoader) {
-            this._mapsLoader = this._loadImpl();
-        }
-
-        this._markers = [];
-        this._routes = [];
-
-        return this._mapsLoader;
-    },
-
-    _loadImpl: abstract,
-
-    _init: abstract,
-
-    _attachHandlers: abstract,
-
-    addMarkers: function(options) {
-        return Promise.all(map(options, function(options) {
-            return this._addMarker(options);
-        }.bind(this))).then(function(markerObjects) {
-            this._fitBounds();
-
-            return [false, map(markerObjects, function(markerObject) {
-                return markerObject.marker;
-            })];
-        }.bind(this));
-    },
-
-    _addMarker: function(options) {
-        return this._renderMarker(options).then(function(markerObject) {
-            this._markers.push(extend({
-                options: options
-            }, markerObject));
-
-            this._fireMarkerAddedAction({
-                options: options,
-                originalMarker: markerObject.marker
-            });
-
-            return markerObject;
-        }.bind(this));
-    },
-
-    _renderMarker: abstract,
-
-    removeMarkers: function(markersOptionsToRemove) {
-        const that = this;
-
-        each(markersOptionsToRemove, function(_, markerOptionToRemove) {
-            that._removeMarker(markerOptionToRemove);
+  _geocodeLocation(location) {
+    return new Promise((resolve) => {
+      const cache = this._geocodedLocations;
+      const cachedLocation = cache[location];
+      if (cachedLocation) {
+        resolve(cachedLocation);
+      } else {
+        this._geocodeLocationImpl(location).then((geocodedLocation) => {
+          cache[location] = geocodedLocation;
+          resolve(geocodedLocation);
         });
+      }
+    });
+  },
 
-        return Promise.resolve();
-    },
+  _renderImpl() {
+    return this._load().then(() => this._init()).then(() => Promise.all([
+      this.updateMapType(),
+      this._areBoundsSet() ? this.updateBounds() : this.updateCenter(),
+    ])).then(() => {
+      this._attachHandlers();
 
-    _removeMarker: function(markersOptionToRemove) {
-        const that = this;
-
-        each(this._markers, function(markerIndex, markerObject) {
-            if(markerObject.options !== markersOptionToRemove) {
-                return true;
-            }
-
-            that._destroyMarker(markerObject);
-
-            that._markers.splice(markerIndex, 1);
-
-            that._fireMarkerRemovedAction({
-                options: markerObject.options
-            });
-
-            return false;
+      // NOTE: setTimeout is needed by providers to correctly initialize bounds
+      return new Promise((resolve) => {
+        const timeout = setTimeout(() => {
+          clearTimeout(timeout);
+          // @ts-expect-error
+          resolve();
         });
-    },
+      });
+    });
+  },
 
-    _destroyMarker: abstract,
+  _load() {
+    if (!this._mapsLoader) {
+      this._mapsLoader = this._loadImpl();
+    }
 
-    _clearMarkers: function() {
-        while(this._markers.length > 0) {
-            this._removeMarker(this._markers[0].options);
-        }
-    },
+    this._markers = [];
+    this._routes = [];
 
-    addRoutes: function(options) {
-        return Promise.all(map(options, function(options) {
-            return this._addRoute(options);
-        }.bind(this))).then(function(routeObjects) {
-            this._fitBounds();
+    return this._mapsLoader;
+  },
 
-            return [false, map(routeObjects, function(routeObject) {
-                return routeObject.instance;
-            })];
-        }.bind(this));
-    },
+  _loadImpl: abstract,
 
-    _addRoute: function(options) {
-        return this._renderRoute(options).then(function(routeObject) {
-            this._routes.push(extend({
-                options: options
-            }, routeObject));
+  _init: abstract,
 
-            this._fireRouteAddedAction({
-                options: options,
-                originalRoute: routeObject.instance
-            });
+  _attachHandlers: abstract,
 
-            return routeObject;
-        }.bind(this));
-    },
+  addMarkers(options) {
+    return Promise.all(map(options, (options) => this._addMarker(options))).then((markerObjects) => {
+      this._fitBounds();
 
-    _renderRoute: abstract,
+      return [false, map(markerObjects, (markerObject) => markerObject.marker)];
+    });
+  },
 
-    removeRoutes: function(options) {
-        const that = this;
+  _addMarker(options) {
+    return this._renderMarker(options).then((markerObject) => {
+      this._markers.push(extend({
+        options,
+      }, markerObject));
 
-        each(options, function(routeIndex, options) {
-            that._removeRoute(options);
-        });
+      this._fireMarkerAddedAction({
+        options,
+        originalMarker: markerObject.marker,
+      });
 
-        return Promise.resolve();
-    },
+      return markerObject;
+    });
+  },
 
-    _removeRoute: function(options) {
-        const that = this;
+  _renderMarker: abstract,
 
-        each(this._routes, function(routeIndex, routeObject) {
-            if(routeObject.options !== options) {
-                return true;
-            }
+  removeMarkers(markersOptionsToRemove) {
+    const that = this;
 
-            that._destroyRoute(routeObject);
+    each(markersOptionsToRemove, (_, markerOptionToRemove) => {
+      that._removeMarker(markerOptionToRemove);
+    });
 
-            that._routes.splice(routeIndex, 1);
+    return Promise.resolve();
+  },
 
-            that._fireRouteRemovedAction({
-                options: options
-            });
+  _removeMarker(markersOptionToRemove) {
+    const that = this;
 
-            return false;
-        });
-    },
-
-    _destroyRoute: abstract,
-
-    _clearRoutes: function() {
-        while(this._routes.length > 0) {
-            this._removeRoute(this._routes[0].options);
-        }
-    },
-
-    adjustViewport: function() {
-        return this._fitBounds();
-    },
-
-    isEventsCanceled: function() {
+    each(this._markers, (markerIndex, markerObject) => {
+      if (markerObject.options !== markersOptionToRemove) {
         return true;
-    },
+      }
 
-    _fitBounds: abstract,
+      that._destroyMarker(markerObject);
 
-    _updateBounds: function() {
-        const that = this;
+      that._markers.splice(markerIndex, 1);
 
-        this._clearBounds();
+      that._fireMarkerRemovedAction({
+        options: markerObject.options,
+      });
 
-        if(!this._option('autoAdjust')) {
-            return;
-        }
+      return false;
+    });
+  },
 
-        each(this._markers, function(_, markerObject) {
-            that._extendBounds(markerObject.location);
-        });
+  _destroyMarker: abstract,
 
-        each(this._routes, function(_, routeObject) {
-            routeObject.northEast && that._extendBounds(routeObject.northEast);
-            routeObject.southWest && that._extendBounds(routeObject.southWest);
-        });
-    },
+  _clearMarkers() {
+    while (this._markers.length > 0) {
+      this._removeMarker(this._markers[0].options);
+    }
+  },
 
-    _clearBounds: function() {
-        this._bounds = null;
-    },
+  addRoutes(options) {
+    return Promise.all(map(options, (options) => this._addRoute(options))).then((routeObjects) => {
+      this._fitBounds();
 
-    _extendBounds: abstract
+      return [false, map(routeObjects, (routeObject) => routeObject.instance)];
+    });
+  },
+
+  _addRoute(options) {
+    return this._renderRoute(options).then((routeObject) => {
+      this._routes.push(extend({
+        options,
+      }, routeObject));
+
+      this._fireRouteAddedAction({
+        options,
+        originalRoute: routeObject.instance,
+      });
+
+      return routeObject;
+    });
+  },
+
+  _renderRoute: abstract,
+
+  removeRoutes(options) {
+    const that = this;
+
+    each(options, (routeIndex, options) => {
+      that._removeRoute(options);
+    });
+
+    return Promise.resolve();
+  },
+
+  _removeRoute(options) {
+    const that = this;
+
+    each(this._routes, (routeIndex, routeObject) => {
+      if (routeObject.options !== options) {
+        return true;
+      }
+
+      that._destroyRoute(routeObject);
+
+      that._routes.splice(routeIndex, 1);
+
+      that._fireRouteRemovedAction({
+        options,
+      });
+
+      return false;
+    });
+  },
+
+  _destroyRoute: abstract,
+
+  _clearRoutes() {
+    while (this._routes.length > 0) {
+      this._removeRoute(this._routes[0].options);
+    }
+  },
+
+  adjustViewport() {
+    return this._fitBounds();
+  },
+
+  isEventsCanceled() {
+    return true;
+  },
+
+  _fitBounds: abstract,
+
+  _updateBounds() {
+    const that = this;
+
+    this._clearBounds();
+
+    if (!this._option('autoAdjust')) {
+      return;
+    }
+
+    each(this._markers, (_, markerObject) => {
+      that._extendBounds(markerObject.location);
+    });
+
+    each(this._routes, (_, routeObject) => {
+      routeObject.northEast && that._extendBounds(routeObject.northEast);
+      routeObject.southWest && that._extendBounds(routeObject.southWest);
+    });
+  },
+
+  _clearBounds() {
+    this._bounds = null;
+  },
+
+  _extendBounds: abstract,
 
 });
 
