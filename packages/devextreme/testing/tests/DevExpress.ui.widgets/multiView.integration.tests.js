@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
-import { animation, _translator } from 'ui/multi_view/ui.multi_view.animation';
+import { animation, _translator } from '__internal/ui/multi_view/m_multi_view.animation';
 import 'ui/multi_view';
 
 import 'generic_light.css!';

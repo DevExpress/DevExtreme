@@ -1,11 +1,11 @@
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import devices from '../../core/devices';
-import { extend } from '../../core/utils/extend';
-import registerComponent from '../../core/component_registrator';
-import Editor from '../editor/editor';
-import { addNamespace } from '../../events/utils/index';
-import { name as clickEventName } from '../../events/click';
+import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { name as clickEventName } from '@js/events/click';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils/index';
+import Editor from '@js/ui/editor/editor';
 
 const RADIO_BUTTON_CLASS = 'dx-radiobutton';
 const RADIO_BUTTON_ICON_CLASS = 'dx-radiobutton-icon';
@@ -13,107 +13,102 @@ const RADIO_BUTTON_ICON_DOT_CLASS = 'dx-radiobutton-icon-dot';
 const RADIO_BUTTON_CHECKED_CLASS = 'dx-radiobutton-checked';
 const RADIO_BUTTON_ICON_CHECKED_CLASS = 'dx-radiobutton-icon-checked';
 
-/**
-* @name dxRadioButton
-* @inherits CollectionWidget
-* @hidden
-*/
+// @ts-expect-error
 const RadioButton = Editor.inherit({
 
-    _supportedKeys: function() {
-        const click = function(e) {
-            e.preventDefault();
-            this._clickAction({ event: e });
-        };
-        return extend(this.callBase(), {
-            space: click
-        });
-    },
+  _supportedKeys() {
+    const click = function (e) {
+      e.preventDefault();
+      this._clickAction({ event: e });
+    };
+    return extend(this.callBase(), {
+      space: click,
+    });
+  },
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            hoverStateEnabled: true,
-            activeStateEnabled: true,
-            value: false
-        });
-    },
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      hoverStateEnabled: true,
+      activeStateEnabled: true,
+      value: false,
+    });
+  },
 
-    _canValueBeChangedByClick: function() {
-        return true;
-    },
+  _canValueBeChangedByClick() {
+    return true;
+  },
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
-                },
-                options: {
-                    focusStateEnabled: true
-                }
-            }
-        ]);
-    },
+  _defaultOptionsRules() {
+    return this.callBase().concat([
+      {
+        device() {
+          return devices.real().deviceType === 'desktop' && !devices.isSimulator();
+        },
+        options: {
+          focusStateEnabled: true,
+        },
+      },
+    ]);
+  },
 
-    _init: function() {
-        this.callBase();
+  _init() {
+    this.callBase();
 
-        this.$element().addClass(RADIO_BUTTON_CLASS);
-    },
+    this.$element().addClass(RADIO_BUTTON_CLASS);
+  },
 
-    _initMarkup: function() {
-        this.callBase();
+  _initMarkup() {
+    this.callBase();
 
-        this._renderIcon();
-        this._renderCheckedState(this.option('value'));
-        this._renderClick();
-        this.setAria('role', 'radio');
-    },
+    this._renderIcon();
+    this._renderCheckedState(this.option('value'));
+    this._renderClick();
+    this.setAria('role', 'radio');
+  },
 
-    _renderIcon: function() {
-        this._$icon = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
+  _renderIcon() {
+    this._$icon = $('<div>').addClass(RADIO_BUTTON_ICON_CLASS);
 
-        $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo(this._$icon);
-        this.$element().append(this._$icon);
-    },
+    $('<div>').addClass(RADIO_BUTTON_ICON_DOT_CLASS).appendTo(this._$icon);
+    this.$element().append(this._$icon);
+  },
 
-    _renderCheckedState: function(checked) {
-        this.$element()
-            .toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked)
-            .find('.' + RADIO_BUTTON_ICON_CLASS)
-            .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, checked);
-        this.setAria('checked', checked);
-    },
+  _renderCheckedState(checked) {
+    this.$element()
+      .toggleClass(RADIO_BUTTON_CHECKED_CLASS, checked)
+      .find(`.${RADIO_BUTTON_ICON_CLASS}`)
+      .toggleClass(RADIO_BUTTON_ICON_CHECKED_CLASS, checked);
+    this.setAria('checked', checked);
+  },
 
-    _renderClick: function() {
-        const eventName = addNamespace(clickEventName, this.NAME);
+  _renderClick() {
+    const eventName = addNamespace(clickEventName, this.NAME);
 
-        this._clickAction = this._createAction((function(args) {
-            this._clickHandler(args.event);
-        }).bind(this));
+    this._clickAction = this._createAction((args) => {
+      this._clickHandler(args.event);
+    });
 
+    eventsEngine.off(this.$element(), eventName);
+    eventsEngine.on(this.$element(), eventName, (e) => {
+      this._clickAction({ event: e });
+    });
+  },
 
-        eventsEngine.off(this.$element(), eventName);
-        eventsEngine.on(this.$element(), eventName, (function(e) {
-            this._clickAction({ event: e });
-        }).bind(this));
-    },
+  _clickHandler(e) {
+    this._saveValueChangeEvent(e);
+    this.option('value', true);
+  },
 
-    _clickHandler: function(e) {
-        this._saveValueChangeEvent(e);
-        this.option('value', true);
-    },
-
-    _optionChanged: function(args) {
-        switch(args.name) {
-            case 'value':
-                this._renderCheckedState(args.value);
-                this.callBase(args);
-                break;
-            default:
-                this.callBase(args);
-        }
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'value':
+        this._renderCheckedState(args.value);
+        this.callBase(args);
+        break;
+      default:
+        this.callBase(args);
     }
+  },
 });
 
 registerComponent('dxRadioButton', RadioButton);
