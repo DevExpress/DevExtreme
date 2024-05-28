@@ -40,6 +40,9 @@ declare class Base<
     contentClass: string;
     defaultTemplateName: string;
   }): dxElementWrapper;
+  _renderContent(): void;
+  _postprocessRenderItem(args: unknown): void;
+  _prepareContent(): void;
   _itemSelector(): string;
   _itemContainer(): dxElementWrapper;
 
