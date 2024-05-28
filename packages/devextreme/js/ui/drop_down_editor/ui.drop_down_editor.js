@@ -417,6 +417,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshEmptinessEvent();
         this._setDefaultAria();
+        this._label && this._setFieldAria();
         this.option('_onMarkupRendered')?.();
     },
 
@@ -918,6 +919,7 @@ const DropDownEditor = TextBox.inherit({
             case 'fieldTemplate':
                 if(isDefined(args.value)) {
                     this._renderField();
+                    this._setFieldAria();
                 } else {
                     this._invalidate();
                 }
