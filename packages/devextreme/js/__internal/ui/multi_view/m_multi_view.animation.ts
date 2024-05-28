@@ -1,24 +1,36 @@
+import fx from '@js/animation/fx';
+import { move } from '@js/animation/translator';
+import type { dxElementWrapper } from '@js/core/renderer';
 
-import fx from '../../animation/fx';
-import { move } from '../../animation/translator';
-
+// eslint-disable-next-line @typescript-eslint/naming-convention
 export const _translator = {
-    move($element, position) {
-        move($element, { left: position });
-    }
+  move(
+    $element: dxElementWrapper,
+    position: string | number,
+  ): void {
+    move($element, { left: position });
+  },
 };
 
 export const animation = {
-    moveTo($element, position, duration, completeAction) {
-        fx.animate($element, {
-            type: 'slide',
-            to: { left: position },
-            duration: duration,
-            complete: completeAction
-        });
-    },
+  moveTo(
+    $element: dxElementWrapper,
+    position: number,
+    duration: number,
+    completeAction: () => void,
+  ): void {
+    // @ts-expect-error
+    // eslint-disable-next-line @typescript-eslint/no-floating-promises
+    fx.animate($element, {
+      type: 'slide',
+      to: { left: position },
+      duration,
+      complete: completeAction,
+    });
+  },
 
-    complete($element) {
-        fx.stop($element, true);
-    }
+  complete($element: dxElementWrapper): void {
+    // @ts-expect-error
+    fx.stop($element, true);
+  },
 };
