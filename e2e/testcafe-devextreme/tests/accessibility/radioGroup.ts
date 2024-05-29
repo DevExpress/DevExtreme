@@ -10,10 +10,9 @@ const items = ['Item_1', 'Item_2', 'Item_3'];
 
 const options: Options<Properties> = {
   items: [items],
-  hint: [undefined, 'hint'],
-  name: [undefined, 'name'],
+  disabled: [true, false],
+  readOnly: [true, false],
   layout: ['horizontal', 'vertical'],
-  focusStateEnabled: [true],
 };
 
 const a11yCheckConfig = {
