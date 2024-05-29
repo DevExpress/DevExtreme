@@ -1,16 +1,17 @@
-import { getWidth, getHeight } from '../core/utils/size';
-import $ from '../core/renderer';
-import messageLocalization from '../localization/message';
-import { getNavigator } from '../core/utils/window';
-const navigator = getNavigator();
-import { animation } from '../core/utils/support';
-import { current, isGeneric, isMaterialBased } from './themes';
-import { extend } from '../core/utils/extend';
-import devices from '../core/devices';
-import registerComponent from '../core/component_registrator';
-import Widget from './widget/ui.widget';
+import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import { getHeight, getWidth } from '@js/core/utils/size';
+import { animation } from '@js/core/utils/support';
+// @ts-expect-error
+import { getNavigator } from '@js/core/utils/window';
+import messageLocalization from '@js/localization/message';
+// @ts-expect-error
+import { current, isGeneric, isMaterialBased } from '@js/ui/themes';
+import Widget from '@js/ui/widget/ui.widget';
 
-// STYLE loadIndicator
+const navigator = getNavigator();
 
 const LOADINDICATOR_CLASS = 'dx-loadindicator';
 const LOADINDICATOR_WRAPPER_CLASS = 'dx-loadindicator-wrapper';
@@ -20,230 +21,186 @@ const LOADINDICATOR_SEGMENT_CLASS = 'dx-loadindicator-segment';
 const LOADINDICATOR_SEGMENT_INNER_CLASS = 'dx-loadindicator-segment-inner';
 const LOADINDICATOR_IMAGE_CLASS = 'dx-loadindicator-image';
 
+// @ts-expect-error
 const LoadIndicator = Widget.inherit({
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      indicatorSrc: '',
+      activeStateEnabled: false,
+      hoverStateEnabled: false,
+      _animatingSegmentCount: 1,
+      _animatingSegmentInner: false,
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            indicatorSrc: '',
+    });
+  },
 
-            /**
-            * @name dxLoadIndicatorOptions.disabled
-            * @hidden
-            */
+  _defaultOptionsRules() {
+    const themeName = current();
 
-            /**
-            * @name dxLoadIndicatorOptions.activeStateEnabled
-            * @hidden
-            */
-            activeStateEnabled: false,
+    return this.callBase().concat([
+      {
+        device() {
+          const realDevice = devices.real();
+          const obsoleteAndroid = realDevice.platform === 'android' && !/chrome/i.test(navigator.userAgent);
+          return obsoleteAndroid;
+        },
+        options: {
+          viaImage: true,
+        },
+      },
+      {
+        device() {
+          return isMaterialBased(themeName);
+        },
+        options: {
+          _animatingSegmentCount: 2,
+          _animatingSegmentInner: true,
+        },
+      },
+      {
+        device() {
+          return isGeneric(themeName);
+        },
+        options: {
+          _animatingSegmentCount: 7,
+        },
+      },
+    ]);
+  },
 
-            /**
-             * @name dxLoadIndicatorOptions.hoverStateEnabled
-             * @default false
-             * @hidden
-            */
-            hoverStateEnabled: false,
+  _useTemplates() {
+    return false;
+  },
 
-            /**
-            * @name dxLoadIndicatorOptions.focusStateEnabled
-            * @hidden
-            */
+  _init() {
+    this.callBase();
 
-            /**
-            * @name dxLoadIndicatorOptions.accessKey
-            * @hidden
-            */
+    this.$element().addClass(LOADINDICATOR_CLASS);
 
-            /**
-            * @name dxLoadIndicatorOptions.tabIndex
-            * @hidden
-            */
+    const label = messageLocalization.format('Loading');
+    const aria = {
+      role: 'alert',
+      label,
+    };
 
-            _animatingSegmentCount: 1,
-            _animatingSegmentInner: false
+    this.setAria(aria);
+  },
 
-        });
-    },
+  _initMarkup() {
+    this.callBase();
+    this._renderWrapper();
+    this._renderIndicatorContent();
+    this._renderMarkup();
+  },
 
-    _defaultOptionsRules: function() {
-        const themeName = current();
+  _renderWrapper() {
+    this._$wrapper = $('<div>').addClass(LOADINDICATOR_WRAPPER_CLASS);
+    this.$element().append(this._$wrapper);
+  },
 
-        return this.callBase().concat([
-            {
-                device: function() {
-                    const realDevice = devices.real();
-                    const obsoleteAndroid = realDevice.platform === 'android' && !(/chrome/i.test(navigator.userAgent));
-                    return obsoleteAndroid;
-                },
-                options: {
-                    viaImage: true
-                }
-            },
-            {
-                device: function() {
-                    return isMaterialBased(themeName);
-                },
-                options: {
-                    _animatingSegmentCount: 2,
-                    _animatingSegmentInner: true
-                }
-            },
-            {
-                device: function() {
-                    return isGeneric(themeName);
-                },
-                options: {
-                    _animatingSegmentCount: 7
-                }
-            }
-        ]);
-    },
+  _renderIndicatorContent() {
+    this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
+    this._$wrapper.append(this._$content);
+  },
 
-    _useTemplates: function() {
-        return false;
-    },
+  _renderMarkup() {
+    const { viaImage, indicatorSrc } = this.option();
 
-    _init: function() {
-        this.callBase();
+    if (animation() && !viaImage && !indicatorSrc) { // B236922
+      this._renderMarkupForAnimation();
+    } else {
+      this._renderMarkupForImage();
+    }
+  },
 
-        this.$element().addClass(LOADINDICATOR_CLASS);
+  _renderMarkupForAnimation() {
+    const animatingSegmentInner = this.option('_animatingSegmentInner');
 
-        const label = messageLocalization.format('Loading');
-        const aria = {
-            role: 'alert',
-            label,
-        };
+    this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
+    this._$content.append(this._$indicator);
 
-        this.setAria(aria);
-    },
+    // Indicator markup
+    for (let i = this.option('_animatingSegmentCount'); i >= 0; --i) {
+      const $segment = $('<div>')
+        .addClass(LOADINDICATOR_SEGMENT_CLASS)
+        .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
 
-    _initMarkup: function() {
-        this.callBase();
-        this._renderWrapper();
-        this._renderIndicatorContent();
-        this._renderMarkup();
-    },
+      if (animatingSegmentInner) {
+        $segment.append($('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
+      }
 
-    _renderWrapper: function() {
-        this._$wrapper = $('<div>').addClass(LOADINDICATOR_WRAPPER_CLASS);
-        this.$element().append(this._$wrapper);
-    },
+      this._$indicator.append($segment);
+    }
+  },
 
-    _renderIndicatorContent: function() {
-        this._$content = $('<div>').addClass(LOADINDICATOR_CONTENT_CLASS);
-        this._$wrapper.append(this._$content);
-    },
+  _renderMarkupForImage() {
+    const { indicatorSrc } = this.option();
 
-    _renderMarkup: function() {
-        const { viaImage, indicatorSrc } = this.option();
+    if (indicatorSrc) {
+      this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
+      this._$wrapper.css('backgroundImage', `url(${indicatorSrc})`);
+    } else if (animation()) {
+      this._renderMarkupForAnimation();
+    }
+  },
 
-        if(animation() && !viaImage && !indicatorSrc) { // B236922
-            this._renderMarkupForAnimation();
-        } else {
-            this._renderMarkupForImage();
-        }
-    },
+  _renderDimensions() {
+    this.callBase();
+    this._updateContentSizeForAnimation();
+  },
 
-    _renderMarkupForAnimation: function() {
-        const animatingSegmentInner = this.option('_animatingSegmentInner');
-
-        this._$indicator = $('<div>').addClass(LOADINDICATOR_ICON_CLASS);
-        this._$content.append(this._$indicator);
-
-        // Indicator markup
-        for(let i = this.option('_animatingSegmentCount'); i >= 0; --i) {
-            const $segment = $('<div>')
-                .addClass(LOADINDICATOR_SEGMENT_CLASS)
-                .addClass(LOADINDICATOR_SEGMENT_CLASS + i);
-
-            if(animatingSegmentInner) {
-                $segment.append($('<div>').addClass(LOADINDICATOR_SEGMENT_INNER_CLASS));
-            }
-
-            this._$indicator.append($segment);
-        }
-    },
-
-    _renderMarkupForImage: function() {
-        const { indicatorSrc } = this.option();
-
-        if(indicatorSrc) {
-            this._$wrapper.addClass(LOADINDICATOR_IMAGE_CLASS);
-            this._$wrapper.css('backgroundImage', 'url(' + indicatorSrc + ')');
-        } else if(animation()) {
-            this._renderMarkupForAnimation();
-        }
-    },
-
-    _renderDimensions: function() {
-        this.callBase();
-        this._updateContentSizeForAnimation();
-    },
-
-    _updateContentSizeForAnimation: function() {
-        if(!this._$indicator) {
-            return;
-        }
-
-        let width = this.option('width');
-        let height = this.option('height');
-
-        if(width || height) {
-            width = getWidth(this.$element());
-            height = getHeight(this.$element());
-            const minDimension = Math.min(height, width);
-
-            this._$wrapper.css({
-                height: minDimension,
-                width: minDimension,
-                fontSize: minDimension
-            });
-        }
-    },
-
-    _clean: function() {
-        this.callBase();
-
-        this._removeMarkupForAnimation();
-        this._removeMarkupForImage();
-    },
-
-    _removeMarkupForAnimation: function() {
-        if(!this._$indicator) {
-            return;
-        }
-
-        this._$indicator.remove();
-        delete this._$indicator;
-    },
-
-    _removeMarkupForImage: function() {
-        this._$wrapper.css('backgroundImage', 'none');
-    },
-
-    _optionChanged: function(args) {
-        switch(args.name) {
-            case '_animatingSegmentCount':
-            case '_animatingSegmentInner':
-            case 'indicatorSrc':
-                this._invalidate();
-                break;
-            default:
-                this.callBase(args);
-        }
+  _updateContentSizeForAnimation() {
+    if (!this._$indicator) {
+      return;
     }
 
-    /**
-    * @name dxLoadIndicator.registerKeyHandler
-    * @publicName registerKeyHandler(key, handler)
-    * @hidden
-    */
+    let width = this.option('width');
+    let height = this.option('height');
 
-    /**
-    * @name dxLoadIndicator.focus
-    * @publicName focus()
-    * @hidden
-    */
+    if (width || height) {
+      width = getWidth(this.$element());
+      height = getHeight(this.$element());
+      const minDimension = Math.min(height, width);
+
+      this._$wrapper.css({
+        height: minDimension,
+        width: minDimension,
+        fontSize: minDimension,
+      });
+    }
+  },
+
+  _clean() {
+    this.callBase();
+
+    this._removeMarkupForAnimation();
+    this._removeMarkupForImage();
+  },
+
+  _removeMarkupForAnimation() {
+    if (!this._$indicator) {
+      return;
+    }
+
+    this._$indicator.remove();
+    delete this._$indicator;
+  },
+
+  _removeMarkupForImage() {
+    this._$wrapper.css('backgroundImage', 'none');
+  },
+
+  _optionChanged(args) {
+    switch (args.name) {
+      case '_animatingSegmentCount':
+      case '_animatingSegmentInner':
+      case 'indicatorSrc':
+        this._invalidate();
+        break;
+      default:
+        this.callBase(args);
+    }
+  },
 });
 
 registerComponent('dxLoadIndicator', LoadIndicator);
