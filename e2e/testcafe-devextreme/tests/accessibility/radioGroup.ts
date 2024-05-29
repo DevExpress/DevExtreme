@@ -12,6 +12,8 @@ const options: Options<Properties> = {
   items: [items],
   disabled: [true, false],
   readOnly: [true, false],
+  hint: [undefined, 'hint'],
+  name: [undefined, 'name'],
   layout: ['horizontal', 'vertical'],
 };
 
