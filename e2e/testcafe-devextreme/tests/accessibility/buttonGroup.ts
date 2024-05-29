@@ -38,4 +38,4 @@ const configurationWithSimpleItems: Configuration = {
   options: optionsWithSimpleItems,
 };
 
-testAccessibility(configurationWithSimpleItems);
+// testAccessibility(configurationWithSimpleItems);

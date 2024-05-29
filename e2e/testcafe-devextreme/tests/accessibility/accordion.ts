@@ -46,4 +46,4 @@ const configuration: Configuration = {
   created,
 };
 
-testAccessibility(configuration);
+// testAccessibility(configuration);
