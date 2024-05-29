@@ -1,4 +1,4 @@
-import Map from '../__internal/ui/m_map';
+import Map from '../__internal/ui/map/m_map';
 
 export default Map;
 
