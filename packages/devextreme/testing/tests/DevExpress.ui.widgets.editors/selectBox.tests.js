@@ -3359,24 +3359,28 @@ QUnit.module('search', moduleSetup, () => {
         assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
     });
 
-    [true, false].forEach((inputAttr) => {
-        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute ${inputAttr ? 'with' : 'without'} inputAttr after search and selection (T1230635)`, function(assert) {
+    [
+        { label: 'test', inputAttr: undefined, expectedId: '' },
+        { label: 'test', inputAttr: { 'aria-label': 'test' }, expectedId: undefined },
+        { label: '', inputAttr: undefined, expectedId: undefined },
+    ].forEach(({label, inputAttr, expectedId}) => {
+        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute when label is ${label !== '' ? 'defined' : 'undefined'} ${inputAttr ? 'with' : 'without'} inputAttr after interaction (T1230635)`, function(assert) {
             const $selectBox = $('#selectBox').dxSelectBox({
-                label: 'test',
+                label: label,
                 dataSource: ['a', 'ab', 'abc'],
                 fieldTemplate: () => {
                     return $('<div>').dxTextBox({});
                 },
                 searchEnabled: true,
                 searchTimeout: 0,
-                inputAttr: inputAttr ? { 'aria-label': 'aria-label' } : null
+                inputAttr: inputAttr
             });
             let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
             const $textEditorLabel = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
 
-            const expectedValue = inputAttr ? undefined : $textEditorLabel.attr('id');
+            const expectedValue = expectedId === undefined ? undefined : $textEditorLabel.attr('id');
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `initial render should set aria-labelledby equal to ${inputAttr ? 'undefined' : 'label id'}`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `initial render should set aria-labelledby equal to ${expectedValue}`);
 
             const selectBox = $selectBox.dxSelectBox('instance');
             const keyboard = keyboardMock($input);
@@ -3388,7 +3392,7 @@ QUnit.module('search', moduleSetup, () => {
 
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `aria-labelledby should stay equal to ${inputAttr ? 'undefined' : 'label id'} after search and selection`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `aria-labelledby should stay equal to ${expectedValue} after search and selection`);
         });
     });
 
