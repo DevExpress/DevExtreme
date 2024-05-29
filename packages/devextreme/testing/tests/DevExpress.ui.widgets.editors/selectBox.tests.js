@@ -3363,7 +3363,7 @@ QUnit.module('search', moduleSetup, () => {
         { label: 'test', inputAttr: undefined, expectedId: '' },
         { label: 'test', inputAttr: { 'aria-label': 'test' }, expectedId: undefined },
         { label: '', inputAttr: undefined, expectedId: undefined },
-    ].forEach(({label, inputAttr, expectedId}) => {
+    ].forEach(({ label, inputAttr, expectedId }) => {
         QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute when label is ${label !== '' ? 'defined' : 'undefined'} ${inputAttr ? 'with' : 'without'} inputAttr after interaction (T1230635)`, function(assert) {
             const $selectBox = $('#selectBox').dxSelectBox({
                 label: label,
