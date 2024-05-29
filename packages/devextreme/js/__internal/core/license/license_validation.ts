@@ -188,7 +188,7 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   if (mismatchingDependents.length) {
     errors.log('W0023', stringifyVersionList([
       {
-        dependentName: 'DevExtreme',
+        dependentName: 'devextreme',
         version: versionStr,
       },
       ...mismatchingDependents,

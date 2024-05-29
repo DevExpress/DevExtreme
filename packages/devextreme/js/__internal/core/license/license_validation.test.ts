@@ -232,7 +232,7 @@ describe('version mismatch', () => {
     [
       { name: 'A', version: '24.2.2' },
     ],
-    `DevExtreme: ${CORRECT_VERSION}\nA: 24.2.2`,
+    `devextreme: ${CORRECT_VERSION}\nA: 24.2.2`,
   ],
   [
     [
@@ -240,7 +240,7 @@ describe('version mismatch', () => {
       { name: 'A', version: '24.2.5' },
       { name: 'B', version: CORRECT_VERSION },
     ],
-    `DevExtreme: ${CORRECT_VERSION}\nA: 24.2.5`,
+    `devextreme: ${CORRECT_VERSION}\nA: 24.2.5`,
   ],
   [
     [
@@ -248,7 +248,7 @@ describe('version mismatch', () => {
       { name: 'A', version: '24.2.5' },
       { name: 'B', version: CORRECT_VERSION },
     ],
-    `DevExtreme: ${CORRECT_VERSION}\nA: 24.2.5\nA: 24.2.5`,
+    `devextreme: ${CORRECT_VERSION}\nA: 24.2.5\nA: 24.2.5`,
   ],
   [
     [
@@ -259,7 +259,7 @@ describe('version mismatch', () => {
       { name: 'E', version: `${CORRECT_VERSION}.3` },
       { name: 'F', version: `${CORRECT_VERSION}-beta` },
     ],
-    `DevExtreme: ${CORRECT_VERSION}\nB: 24.2.5\nC: a.b.c\nD: NaN\nE: 24.2.3.3\nF: 24.2.3-beta`,
+    `devextreme: ${CORRECT_VERSION}\nB: 24.2.5\nC: a.b.c\nD: NaN\nE: 24.2.3.3\nF: 24.2.3-beta`,
   ]])('Correct version list is generated', (reportedVersions, versionList) => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
 
