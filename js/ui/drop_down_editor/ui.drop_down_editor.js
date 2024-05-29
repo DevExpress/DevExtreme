@@ -415,6 +415,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshEmptinessEvent();
         this._setDefaultAria();
+        this._setFieldAria();
         this.option('_onMarkupRendered')?.();
     },
 
