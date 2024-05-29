@@ -7,6 +7,7 @@ import {
   parseVersion,
   stringifyVersion,
   VERSION_SPLITTER,
+  versionsEqual,
 } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
@@ -15,6 +16,7 @@ import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
 import { showTrialPanel } from './trial_panel';
 import type {
+  DependentVersion,
   License,
   LicenseCheckParams,
   Token,
@@ -38,6 +40,7 @@ const DESERIALIZATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'deseri
 const PAYLOAD_ERROR: Token = { kind: TokenKind.corrupted, error: 'payload' };
 const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
+const dependentVersions: DependentVersion[] = [];
 let validationPerformed = false;
 
 // verifies RSASSA-PKCS1-v1.5 signature
@@ -50,6 +53,19 @@ function verifySignature({ text, signature: encodedSignature }: {
     signature: base64ToBytes(encodedSignature),
     actual: pad(sha1(text)),
   });
+}
+
+export function reportDependentVersion(dependentName: string, version: string): void {
+  dependentVersions.push({
+    dependentName,
+    version,
+  });
+}
+
+function stringifyVersionList(dependents: DependentVersion[]): string {
+  return dependents
+    .map((dependent) => `${dependent.dependentName}: ${dependent.version}`)
+    .join('\n');
 }
 
 export function parseLicenseKey(encodedKey: string | undefined): Token {
@@ -162,8 +178,25 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   }
   validationPerformed = true;
 
+  const mismatchingDependents = dependentVersions.filter(
+    (dependent) => !versionsEqual(
+      dependent.version,
+      versionStr,
+    ),
+  );
+
+  if (mismatchingDependents.length) {
+    errors.log('W0023', stringifyVersionList([
+      {
+        dependentName: 'DevExtreme',
+        version: versionStr,
+      },
+      ...mismatchingDependents,
+    ]));
+    return;
+  }
+
   const version = parseVersion(versionStr);
-  const preview = isPreview(version.patch);
 
   const { internal, error } = getLicenseCheckParams({
     licenseKey,
@@ -173,6 +206,8 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   if (error && !internal) {
     showTrialPanel(BUY_NOW_LINK, stringifyVersion(version));
   }
+
+  const preview = isPreview(version.patch);
 
   if (error) {
     errors.log(preview ? 'W0022' : error);
@@ -191,6 +226,12 @@ export function peekValidationPerformed(): boolean {
 export function setLicenseCheckSkipCondition(value = true): void {
   /// #DEBUG
   validationPerformed = value;
+  /// #ENDDEBUG
+}
+
+export function clearDependentVersions(): void {
+  /// #DEBUG
+  dependentVersions.splice(0);
   /// #ENDDEBUG
 }
 

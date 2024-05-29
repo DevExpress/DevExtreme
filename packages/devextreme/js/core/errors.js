@@ -277,4 +277,10 @@ export default errorUtils({
      */
     W0022: 'DevExtreme: Pre-release software. Not suitable for commercial use.\n\n' +
         'Pre-release software may contain deficiencies and as such, should not be considered for use or integrated in any mission critical application.\n\n',
+    /**
+     * @name ErrorsCore.W0023
+     */
+    W0023: 'DevExtreme: the DevExtreme version does not match the version of other DevExpress products used in this application:\n\n' +
+        '{0}\n\n' +
+        'Please ensure your application uses the same version of these products.\n\n',
 });

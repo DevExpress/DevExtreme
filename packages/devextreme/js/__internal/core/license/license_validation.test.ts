@@ -2,7 +2,9 @@ import errors from '@js/core/errors';
 
 import { base } from '../../../ui/overlay/z_index';
 import {
+  clearDependentVersions,
   parseLicenseKey,
+  reportDependentVersion,
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
@@ -131,6 +133,142 @@ describe('license token', () => {
     if (license.kind === 'corrupted') {
       expect(license.error).toBe('general');
     }
+  });
+});
+
+describe('version mismatch', () => {
+  const CORRECT_VERSION = '24.2.3';
+  let errorsLogMock: jest.SpyInstance<unknown> | null = null;
+
+  beforeEach(() => {
+    errorsLogMock = jest.spyOn(errors, 'log').mockImplementation(() => {});
+    setLicenseCheckSkipCondition(false);
+  });
+
+  afterEach(() => {
+    jest.restoreAllMocks();
+    clearDependentVersions();
+  });
+
+  test('Perform license check if versions match', () => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
+    reportDependentVersion('DevExpress.Product.A', CORRECT_VERSION);
+    reportDependentVersion('DevExpress.Product.A', CORRECT_VERSION);
+    reportDependentVersion('DevExpress.Product.B', CORRECT_VERSION);
+    validateLicense(token, CORRECT_VERSION);
+    expect(errors.log).toHaveBeenCalledWith('W0020');
+  });
+
+  test.each([[
+    [
+      { name: 'A', version: '24.2.2' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: CORRECT_VERSION },
+      { name: 'B', version: '24.2.4' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: CORRECT_VERSION },
+      { name: 'A', version: '24.2.5' },
+      { name: 'B', version: CORRECT_VERSION },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: '23.2.3' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: '24.3.3' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: '24.2' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: '.2' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: '24.2.a' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: 'a.b.c' },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: `${CORRECT_VERSION}.0` },
+    ],
+  ],
+  [
+    [
+      { name: 'A', version: `${CORRECT_VERSION}-beta` },
+    ],
+  ]])('Do not check license, fire version mismatch warning if a version does not match', (reportedVersions) => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
+
+    reportedVersions.forEach(({ name, version }) => {
+      reportDependentVersion(name, version);
+    });
+
+    validateLicense(token, CORRECT_VERSION);
+    expect(errorsLogMock?.mock.calls.length).toEqual(1);
+    expect(errorsLogMock?.mock.calls[0][0]).toEqual('W0023');
+  });
+
+  test.each([[
+    [
+      { name: 'A', version: '24.2.2' },
+    ],
+    `DevExtreme: ${CORRECT_VERSION}\nA: 24.2.2`,
+  ],
+  [
+    [
+      { name: 'A', version: CORRECT_VERSION },
+      { name: 'A', version: '24.2.5' },
+      { name: 'B', version: CORRECT_VERSION },
+    ],
+    `DevExtreme: ${CORRECT_VERSION}\nA: 24.2.5`,
+  ],
+  [
+    [
+      { name: 'A', version: '24.2.5' },
+      { name: 'A', version: '24.2.5' },
+      { name: 'B', version: CORRECT_VERSION },
+    ],
+    `DevExtreme: ${CORRECT_VERSION}\nA: 24.2.5\nA: 24.2.5`,
+  ],
+  [
+    [
+      { name: 'A', version: CORRECT_VERSION },
+      { name: 'B', version: '24.2.5' },
+      { name: 'C', version: 'a.b.c' },
+      { name: 'D', version: 'NaN' },
+      { name: 'E', version: `${CORRECT_VERSION}.3` },
+      { name: 'F', version: `${CORRECT_VERSION}-beta` },
+    ],
+    `DevExtreme: ${CORRECT_VERSION}\nB: 24.2.5\nC: a.b.c\nD: NaN\nE: 24.2.3.3\nF: 24.2.3-beta`,
+  ]])('Correct version list is generated', (reportedVersions, versionList) => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
+
+    reportedVersions.forEach(({ name, version }) => {
+      reportDependentVersion(name, version);
+    });
+
+    validateLicense(token, CORRECT_VERSION);
+    expect(errors.log).toHaveBeenCalledWith('W0023', versionList);
   });
 });
 

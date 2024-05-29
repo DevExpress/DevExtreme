@@ -25,6 +25,22 @@ export function parseVersion(version: string): Version {
   };
 }
 
+export function versionsEqual(versionAStr: string, versionBStr: string): boolean {
+  const versionAComponents = versionAStr.split('.').map(Number);
+  const versionBComponents = versionBStr.split('.').map(Number);
+
+  if (versionAComponents.length !== versionBComponents.length) {
+    return false;
+  }
+
+  const [majorA, minorA, patchA] = versionAComponents;
+  const [majorB, minorB, patchB] = versionBComponents;
+
+  return majorA === majorB
+    && minorA === minorB
+    && patchA === patchB;
+}
+
 export function getPreviousMajorVersion({ major, minor, patch }: Version): Version {
   const previousMajorVersion = minor === MIN_MINOR_VERSION
     ? {
