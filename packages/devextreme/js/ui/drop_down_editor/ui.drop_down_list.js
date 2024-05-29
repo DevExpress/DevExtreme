@@ -705,6 +705,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _searchDataSource: function(searchValue = this._searchValue()) {
+        this._refreshList();
         this._filterDataSource(searchValue);
     },
 
