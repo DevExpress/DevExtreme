@@ -73,6 +73,7 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const CLEAR_BUTTON_AREA = 'dx-clear-button-area';
 const SCROLLVIEW_CONTENT_CLASS = 'dx-scrollview-content';
@@ -3295,11 +3296,12 @@ QUnit.module('search', moduleSetup, () => {
 
     QUnit.test('component with fieldTemplate should retain aria attributes after search and selection (T1230696, T1230971)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['one', 'two', 'three'],
+            dataSource: ['a', 'ab', 'abc'],
             fieldTemplate: () => {
                 return $('<div>').dxTextBox({});
             },
             searchEnabled: true,
+            searchTimeout: 0,
             itemTemplate: () => {
                 return '<div><span></span></div>';
             }
@@ -3333,11 +3335,12 @@ QUnit.module('search', moduleSetup, () => {
 
     QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230635)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['one', 'two', 'three'],
+            dataSource: ['a', 'ab', 'abc'],
             fieldTemplate: () => {
                 return $('<div>').dxTextBox({});
             },
             searchEnabled: true,
+            searchTimeout: 0,
         });
         let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
@@ -3354,6 +3357,43 @@ QUnit.module('search', moduleSetup, () => {
         $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
         assert.strictEqual($input.attr('role'), 'combobox', 'role should stay to combobox after search and selection');
+    });
+
+    [
+        { label: 'Label' },
+        { label: 'Label', inputAttr: { 'aria-label': 'Label' } },
+        { label: undefined },
+        { label: '' },
+    ].forEach((options) => {
+        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute, options: ${JSON.stringify(options)} (T1230635)`, function(assert) {
+            const $selectBox = $('#selectBox').dxSelectBox({
+                dataSource: ['a', 'ab', 'abc'],
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox({});
+                },
+                searchEnabled: true,
+                searchTimeout: 0,
+                ...options
+            });
+            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            const $label = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
+
+            const expectedAriaLabelledByValue = !options.inputAttr && options.label ?  $label.attr('id') : undefined;
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after initialization`);
+
+            const selectBox = $selectBox.dxSelectBox('instance');
+            const keyboard = keyboardMock($input);
+
+            keyboard.type('a');
+
+            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            listItem.trigger('dxclick');
+
+            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after search and selection`);
+        });
     });
 
     [0, 1].forEach((value) => {
