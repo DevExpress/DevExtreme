@@ -18,6 +18,15 @@ const options: Options<Properties> = {
   max: [undefined, 90],
   showRange: [true, false],
   focusStateEnabled: [true],
+  label: [
+    {
+      visible: true,
+      format(value) {
+        return `${value}%`;
+      },
+      position: 'top',
+    },
+  ],
 };
 
 const a11yCheckConfig = {
