@@ -31,6 +31,7 @@ const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXT_EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXT_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
 const POPUP_CONTENT = 'dx-popup-content';
@@ -2195,6 +2196,45 @@ QUnit.module('aria accessibility', () => {
         $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
         assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should remain assigned to the combobox after deleting');
+    });
+
+    [
+        { label: 'Label' },
+        { label: 'Label', inputAttr: { 'aria-label': 'Label' } },
+        { label: undefined },
+        { label: '' },
+    ].forEach((options) => {
+        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute, options: ${JSON.stringify(options)} (T1230635)`, function(assert) {
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: (data) => {
+                    return $('<div>').dxTextBox({ value: data });
+                },
+                valueChangeEvent: 'keyup',
+                ...options
+            });
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            const $label = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL_CLASS}`);
+
+            const expectedAriaLabeledByValue = !options.inputAttr && options.label ? $label.attr('id') : undefined;
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after initialization');
+
+            keyboardMock($input)
+                .type('a');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after typing');
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after deleting');
+        });
     });
 
     QUnit.module('aria-controls', {}, () => {
