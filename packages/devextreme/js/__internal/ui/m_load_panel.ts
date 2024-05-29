@@ -1,14 +1,12 @@
-import $ from '../core/renderer';
-import { noop } from '../core/utils/common';
-import messageLocalization from '../localization/message';
-import registerComponent from '../core/component_registrator';
-import { extend } from '../core/utils/extend';
-import LoadIndicator from './load_indicator';
-import Overlay from './overlay/ui.overlay';
-import { Deferred } from '../core/utils/deferred';
-import { isMaterial, isFluent } from './themes';
-
-// STYLE loadPanel
+import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import { Deferred } from '@js/core/utils/deferred';
+import { extend } from '@js/core/utils/extend';
+import messageLocalization from '@js/localization/message';
+import LoadIndicator from '@js/ui/load_indicator';
+import Overlay from '@js/ui/overlay/ui.overlay';
+import { isFluent, isMaterial } from '@js/ui/themes';
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
@@ -19,256 +17,212 @@ const LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper';
 const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
 
 const LoadPanel = Overlay.inherit({
+  _supportedKeys() {
+    return extend(this.callBase(), {
+      escape: noop,
+    });
+  },
 
-    _supportedKeys: function() {
-        return extend(this.callBase(), {
-            escape: noop
-        });
-    },
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      message: messageLocalization.format('Loading'),
+      width: 222,
+      height: 90,
+      animation: null,
+      showIndicator: true,
+      indicatorSrc: '',
+      showPane: true,
+      delay: 0,
+      templatesRenderAsynchronously: false,
+      hideTopOverlayHandler: null,
+      focusStateEnabled: false,
+      propagateOutsideClick: true,
+      preventScrollEvents: false,
+    });
+  },
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            message: messageLocalization.format('Loading'),
+  _defaultOptionsRules() {
+    return this.callBase().concat([
+      {
+        device: { platform: 'generic' },
+        options: {
+          shadingColor: 'transparent',
+        },
+      },
+      {
+        device() {
+          // @ts-expect-error
+          return isMaterial();
+        },
+        options: {
+          message: '',
+          width: 60,
+          height: 60,
+          maxHeight: 60,
+          maxWidth: 60,
+        },
+      },
+      {
+        device() {
+          // @ts-expect-error
+          return isFluent();
+        },
+        options: {
+          width: 'auto',
+          height: 'auto',
+        },
+      },
+    ]);
+  },
 
-            width: 222,
+  _init() {
+    this.callBase.apply(this, arguments);
+  },
 
-            height: 90,
+  _render() {
+    this.callBase();
 
-            animation: null,
+    this.$element().addClass(LOADPANEL_CLASS);
+    this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
+    this._updateWrapperAria();
+  },
 
-            /**
-            * @name dxLoadPanelOptions.disabled
-            * @hidden
-            */
+  _updateWrapperAria() {
+    this.$wrapper()
+      .removeAttr('aria-label')
+      .removeAttr('role');
 
-            showIndicator: true,
+    const showIndicator = this.option('showIndicator');
+    if (!showIndicator) {
+      const aria = this._getAriaAttributes();
+      this.$wrapper().attr(aria);
+    }
+  },
 
-            indicatorSrc: '',
+  _getAriaAttributes() {
+    const { message } = this.option();
+    const label = message || messageLocalization.format('Loading');
 
-            showPane: true,
+    const aria = {
+      role: 'alert',
+      'aria-label': label,
+    };
 
-            delay: 0,
+    return aria;
+  },
 
-            templatesRenderAsynchronously: false,
+  _renderContentImpl() {
+    this.callBase();
 
-            hideTopOverlayHandler: null,
+    this.$content().addClass(LOADPANEL_CONTENT_CLASS);
 
-            focusStateEnabled: false,
+    this._$loadPanelContentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
+    this._$loadPanelContentWrapper.appendTo(this.$content());
 
-            propagateOutsideClick: true,
+    this._togglePaneVisible();
 
-            preventScrollEvents: false,
+    this._cleanPreviousContent();
+    this._renderLoadIndicator();
+    this._renderMessage();
+  },
 
-            /**
-            * @name dxLoadPanelOptions.contentTemplate
-            * @type template
-            * @hidden
-            */
+  _show() {
+    const delay = this.option('delay');
 
-            /**
-            * @name dxLoadPanelOptions.accessKey
-            * @hidden
-            */
+    if (!delay) {
+      return this.callBase();
+    }
 
-            /**
-            * @name dxLoadPanelOptions.tabIndex
-            * @hidden
-            */
-        });
-    },
+    const deferred = Deferred();
+    const callBase = this.callBase.bind(this);
 
-    _defaultOptionsRules: function() {
-        return this.callBase().concat([
-            {
-                device: { platform: 'generic' },
-                options: {
-                    shadingColor: 'transparent'
-                }
-            },
-            {
-                device: function() {
-                    return isMaterial();
-                },
-                options: {
-                    message: '',
-                    width: 60,
-                    height: 60,
-                    maxHeight: 60,
-                    maxWidth: 60
-                }
-            },
-            {
-                device: function() {
-                    return isFluent();
-                },
-                options: {
-                    width: 'auto',
-                    height: 'auto',
-                }
-            }
-        ]);
-    },
+    this._clearShowTimeout();
+    this._showTimeout = setTimeout(() => {
+      callBase().done(() => {
+        deferred.resolve();
+      });
+    }, delay);
 
-    _init: function() {
-        this.callBase.apply(this, arguments);
-    },
+    return deferred.promise();
+  },
 
-    _render: function() {
-        this.callBase();
+  _hide() {
+    this._clearShowTimeout();
+    return this.callBase();
+  },
 
-        this.$element().addClass(LOADPANEL_CLASS);
-        this.$wrapper().addClass(LOADPANEL_WRAPPER_CLASS);
-        this._updateWrapperAria();
-    },
+  _clearShowTimeout() {
+    clearTimeout(this._showTimeout);
+  },
 
-    _updateWrapperAria() {
-        this.$wrapper()
-            .removeAttr('aria-label')
-            .removeAttr('role');
+  _renderMessage() {
+    if (!this._$loadPanelContentWrapper) {
+      return;
+    }
 
-        const showIndicator = this.option('showIndicator');
-        if(!showIndicator) {
-            const aria = this._getAriaAttributes();
-            this.$wrapper().attr(aria);
-        }
-    },
+    const message = this.option('message');
 
-    _getAriaAttributes() {
-        const { message } = this.option();
-        const label = message || messageLocalization.format('Loading');
+    if (!message) return;
 
-        const aria = {
-            role: 'alert',
-            'aria-label': label,
-        };
+    const $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
+      .text(message);
 
-        return aria;
-    },
+    this._$loadPanelContentWrapper.append($message);
+  },
 
-    _renderContentImpl: function() {
-        this.callBase();
+  _renderLoadIndicator() {
+    if (!this._$loadPanelContentWrapper || !this.option('showIndicator')) {
+      return;
+    }
 
-        this.$content().addClass(LOADPANEL_CONTENT_CLASS);
+    if (!this._$indicator) {
+      this._$indicator = $('<div>')
+        .addClass(LOADPANEL_INDICATOR_CLASS)
+        .appendTo(this._$loadPanelContentWrapper);
+    }
 
-        this._$loadPanelContentWrapper = $('<div>').addClass(LOADPANEL_CONTENT_WRAPPER_CLASS);
-        this._$loadPanelContentWrapper.appendTo(this.$content());
+    this._createComponent(this._$indicator, LoadIndicator, {
+      elementAttr: this._getAriaAttributes(),
+      indicatorSrc: this.option('indicatorSrc'),
+    });
+  },
 
-        this._togglePaneVisible();
+  _cleanPreviousContent() {
+    this.$content().find(`.${LOADPANEL_MESSAGE_CLASS}`).remove();
+    this.$content().find(`.${LOADPANEL_INDICATOR_CLASS}`).remove();
+    delete this._$indicator;
+  },
 
+  _togglePaneVisible() {
+    this.$content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option('showPane'));
+  },
+
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'delay':
+        break;
+      case 'message':
+      case 'showIndicator':
         this._cleanPreviousContent();
         this._renderLoadIndicator();
         this._renderMessage();
-    },
-
-    _show: function() {
-        const delay = this.option('delay');
-
-        if(!delay) {
-            return this.callBase();
-        }
-
-        const deferred = new Deferred();
-        const callBase = this.callBase.bind(this);
-
-        this._clearShowTimeout();
-        this._showTimeout = setTimeout(function() {
-            callBase().done(function() {
-                deferred.resolve();
-            });
-        }, delay);
-
-        return deferred.promise();
-    },
-
-    _hide: function() {
-        this._clearShowTimeout();
-        return this.callBase();
-    },
-
-    _clearShowTimeout: function() {
-        clearTimeout(this._showTimeout);
-    },
-
-    _renderMessage: function() {
-        if(!this._$loadPanelContentWrapper) {
-            return;
-        }
-
-        const message = this.option('message');
-
-        if(!message) return;
-
-        const $message = $('<div>').addClass(LOADPANEL_MESSAGE_CLASS)
-            .text(message);
-
-        this._$loadPanelContentWrapper.append($message);
-    },
-
-    _renderLoadIndicator: function() {
-        if(!this._$loadPanelContentWrapper || !this.option('showIndicator')) {
-            return;
-        }
-
-        if(!this._$indicator) {
-            this._$indicator = $('<div>')
-                .addClass(LOADPANEL_INDICATOR_CLASS)
-                .appendTo(this._$loadPanelContentWrapper);
-        }
-
-        this._createComponent(this._$indicator, LoadIndicator, {
-            elementAttr: this._getAriaAttributes(),
-            indicatorSrc: this.option('indicatorSrc')
-        });
-    },
-
-    _cleanPreviousContent: function() {
-        this.$content().find('.' + LOADPANEL_MESSAGE_CLASS).remove();
-        this.$content().find('.' + LOADPANEL_INDICATOR_CLASS).remove();
-        delete this._$indicator;
-    },
-
-    _togglePaneVisible: function() {
-        this.$content().toggleClass(LOADPANEL_PANE_HIDDEN_CLASS, !this.option('showPane'));
-    },
-
-    _optionChanged: function(args) {
-        switch(args.name) {
-            case 'delay':
-                break;
-            case 'message':
-            case 'showIndicator':
-                this._cleanPreviousContent();
-                this._renderLoadIndicator();
-                this._renderMessage();
-                this._updateWrapperAria();
-                break;
-            case 'showPane':
-                this._togglePaneVisible();
-                break;
-            case 'indicatorSrc':
-                this._renderLoadIndicator();
-                break;
-            default:
-                this.callBase(args);
-        }
-    },
-
-    _dispose: function() {
-        this._clearShowTimeout();
-        this.callBase();
+        this._updateWrapperAria();
+        break;
+      case 'showPane':
+        this._togglePaneVisible();
+        break;
+      case 'indicatorSrc':
+        this._renderLoadIndicator();
+        break;
+      default:
+        this.callBase(args);
     }
+  },
 
-    /**
-    * @name dxLoadPanel.registerKeyHandler
-    * @publicName registerKeyHandler(key, handler)
-    * @hidden
-    */
-
-    /**
-    * @name dxLoadPanel.focus
-    * @publicName focus()
-    * @hidden
-    */
+  _dispose() {
+    this._clearShowTimeout();
+    this.callBase();
+  },
 });
 
 registerComponent('dxLoadPanel', LoadPanel);
