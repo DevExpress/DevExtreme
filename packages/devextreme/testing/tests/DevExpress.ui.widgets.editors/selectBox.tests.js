@@ -3378,9 +3378,9 @@ QUnit.module('search', moduleSetup, () => {
             let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
             const $label = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
 
-            const expectedAriaLabelledByValue = !options.inputAttr && options.label ?  $label.attr('id') : undefined;
+            const expectedAriaLabeledByValue = !options.inputAttr && options.label ? $label.attr('id') : undefined;
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after initialization`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after initialization');
 
             const selectBox = $selectBox.dxSelectBox('instance');
             const keyboard = keyboardMock($input);
@@ -3392,7 +3392,7 @@ QUnit.module('search', moduleSetup, () => {
 
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after search and selection`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after search and selection');
         });
     });
 
