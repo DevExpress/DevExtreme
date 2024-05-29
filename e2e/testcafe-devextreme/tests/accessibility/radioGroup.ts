@@ -12,7 +12,6 @@ const options: Options<Properties> = {
   items: [items],
   disabled: [true, false],
   readOnly: [true, false],
-  name: [undefined, 'name'],
   layout: ['horizontal', 'vertical'],
 };
 
