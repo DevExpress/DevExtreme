@@ -9,10 +9,10 @@ fixture.disablePageReloads`Accessibility`
 const options: Options<Properties> = {
   start: [40],
   end: [60],
-  hint: [undefined, 'hint'],
+  disabled: [true, false],
+  readOnly: [true, false],
   height: [undefined, 250],
   width: [undefined, '50%'],
-  focusStateEnabled: [true],
   label: [
     {
       visible: true,
