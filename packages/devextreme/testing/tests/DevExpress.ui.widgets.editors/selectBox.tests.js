@@ -3360,27 +3360,27 @@ QUnit.module('search', moduleSetup, () => {
     });
 
     [
-        { label: 'test', inputAttr: undefined, expectedId: '' },
-        { label: 'test', inputAttr: { 'aria-label': 'test' }, expectedId: undefined },
-        { label: '', inputAttr: undefined, expectedId: undefined },
-    ].forEach(({ label, inputAttr, expectedId }) => {
-        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute when label is ${label !== '' ? 'defined' : 'undefined'} ${inputAttr ? 'with' : 'without'} inputAttr after interaction (T1230635)`, function(assert) {
+        { label: 'Label' },
+        { label: 'Label', inputAttr: { 'aria-label': 'Label' } },
+        { label: undefined },
+        { label: '' },
+    ].forEach((options) => {
+        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute, options: ${JSON.stringify(options)} (T1230635)`, function(assert) {
             const $selectBox = $('#selectBox').dxSelectBox({
-                label: label,
                 dataSource: ['a', 'ab', 'abc'],
                 fieldTemplate: () => {
                     return $('<div>').dxTextBox({});
                 },
                 searchEnabled: true,
                 searchTimeout: 0,
-                inputAttr: inputAttr
+                ...options
             });
             let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-            const $textEditorLabel = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
+            const $label = $selectBox.find(toSelector(TEXTEDITOR_LABEL_CLASS));
 
-            const expectedValue = expectedId === undefined ? undefined : $textEditorLabel.attr('id');
+            const expectedAriaLabelledByValue = !options.inputAttr && options.label ?  $label.attr('id') : undefined;
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `initial render should set aria-labelledby equal to ${expectedValue}`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after initialization`);
 
             const selectBox = $selectBox.dxSelectBox('instance');
             const keyboard = keyboardMock($input);
@@ -3392,7 +3392,7 @@ QUnit.module('search', moduleSetup, () => {
 
             $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `aria-labelledby should stay equal to ${expectedValue} after search and selection`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after search and selection`);
         });
     });
 

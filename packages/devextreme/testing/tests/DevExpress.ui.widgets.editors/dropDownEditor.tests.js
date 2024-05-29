@@ -2199,33 +2199,33 @@ QUnit.module('aria accessibility', () => {
     });
 
     [
-        { label: 'test', inputAttr: undefined, expectedId: '' },
-        { label: 'test', inputAttr: { 'aria-label': 'test' }, expectedId: undefined },
-        { label: '', inputAttr: undefined, expectedId: undefined },
-    ].forEach(({ label, inputAttr, expectedId }) => {
-        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute when label is ${label !== '' ? 'defined' : 'undefined'} ${inputAttr ? 'with' : 'without'} inputAttr after interaction (T1230635)`, function(assert) {
+        { label: 'Label' },
+        { label: 'Label', inputAttr: { 'aria-label': 'Label' } },
+        { label: undefined },
+        { label: '' },
+    ].forEach((options) => {
+        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute, options: ${JSON.stringify(options)} (T1230635)`, function(assert) {
             const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-                label: label,
                 dataSource: ['one', 'two', 'three'],
                 fieldTemplate: (data) => {
                     return $('<div>').dxTextBox({ value: data });
                 },
                 valueChangeEvent: 'keyup',
-                inputAttr: inputAttr
+                ...options
             });
             let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            const $textEditorLabel = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL_CLASS}`);
+            const $label = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL_CLASS}`);
 
-            const expectedValue = expectedId === undefined ? undefined : $textEditorLabel.attr('id');
+            const expectedAriaLabelledByValue = !options.inputAttr && options.label ?  $label.attr('id') : undefined;
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `aria-labelledby should be equal to ${expectedValue}`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after initialization`);
 
             keyboardMock($input)
                 .type('a');
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `aria-labelledby should be equal to ${expectedValue} after typing`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after typing`);
 
             keyboardMock($input)
                 .caret(1)
@@ -2233,7 +2233,7 @@ QUnit.module('aria accessibility', () => {
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-            assert.strictEqual($input.attr('aria-labelledby'), expectedValue, `aria-labelledby should be equal to ${expectedValue} after deleting`);
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabelledByValue, `aria-labelledby attribute value after deleting`);
         });
     });
 
