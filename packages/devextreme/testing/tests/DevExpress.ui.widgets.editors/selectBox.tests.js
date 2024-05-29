@@ -3332,7 +3332,7 @@ QUnit.module('search', moduleSetup, () => {
             { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
             { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
-            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required(T1230706)`, function(assert) {
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
                 const $selectBox = $('#selectBox').dxSelectBox({
                     dataSource: ['one', ''],
                     fieldTemplate: () => {

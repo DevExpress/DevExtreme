@@ -521,27 +521,27 @@ QUnit.module('Editors Standard Adapter', {
     });
 
     [
-        { valueRequired: true, value: '123', expectedValue: 'false' },
-        { valueRequired: true, value: '', expectedValue: 'true' },
-        { valueRequired: false, value: '123', expectedValue: undefined },
-        { valueRequired: false, value: '', expectedValue: undefined },
-    ].forEach(({ valueRequired, value, expectedValue }) => {
-        QUnit.test(`Editor on initialization should ${!valueRequired ? 'not' : ''} toggle "aria-invalid" attribute if "aria-required" is ${valueRequired} and value is ${value !== '' ? 'not' : ''} empty`, function(assert) {
+        { required: true, value: '123', expectedValue: 'false' },
+        { required: true, value: '', expectedValue: 'true' },
+        { required: false, value: '123', expectedValue: undefined },
+        { required: false, value: '', expectedValue: undefined },
+    ].forEach(({ required, value, expectedValue }) => {
+        QUnit.test(`Editor on initialization should ${!required ? 'not' : ''} toggle "aria-invalid" attribute if "aria-required" is ${required} and value is ${value !== '' ? 'not' : ''} empty (T1230706)`, function(assert) {
             this.fixture.createTextEditor({
                 value: value
             });
 
             this.fixture.createValidator({
                 adapter: null,
-                validationRules: valueRequired ? [{ type: 'required' }] : []
+                validationRules: required ? [{ type: 'required' }] : []
             });
             const $input = this.fixture.$element.find('.dx-texteditor-input');
 
-            assert.strictEqual($input.attr('aria-required'), valueRequired ? 'true' : undefined, `"aria-required" should be set to ${valueRequired ? 'true' : 'undefined'}`);
+            assert.strictEqual($input.attr('aria-required'), required ? 'true' : undefined, `"aria-required" should be set to ${required ? 'true' : 'undefined'}`);
             assert.strictEqual($input.attr('aria-invalid'), expectedValue, `"aria-invalid" should be set to ${expectedValue}`);
         });
 
-        QUnit.test(`Editor on markup render should ${!valueRequired ? 'not' : ''} toggle "aria-invalid" attribute if "aria-required" is ${valueRequired} and value is ${value !== '' ? 'not' : ''} empty`, function(assert) {
+        QUnit.test(`Editor on markup render should ${!required ? 'not' : ''} toggle "aria-invalid" attribute if "aria-required" is ${required} and value is ${value !== '' ? 'not' : ''} empty (T1230706)`, function(assert) {
             const editor = this.fixture.createTextEditor({
                 value: value
             });
@@ -549,12 +549,12 @@ QUnit.module('Editors Standard Adapter', {
 
             this.fixture.createValidator({
                 adapter: null,
-                validationRules: valueRequired ? [{ type: 'required' }] : []
+                validationRules: required ? [{ type: 'required' }] : []
             });
 
             const $input = this.fixture.$element.find('.dx-texteditor-input');
 
-            assert.strictEqual($input.attr('aria-required'), valueRequired ? 'true' : undefined, `"aria-required" should be set to ${valueRequired ? 'true' : 'undefined'}`);
+            assert.strictEqual($input.attr('aria-required'), required ? 'true' : undefined, `"aria-required" should be set to ${required ? 'true' : 'undefined'}`);
             assert.strictEqual($input.attr('aria-invalid'), expectedValue, `"aria-invalid" should be set to ${expectedValue}`);
         });
     });
