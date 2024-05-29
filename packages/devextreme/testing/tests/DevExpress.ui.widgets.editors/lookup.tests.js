@@ -3291,20 +3291,15 @@ QUnit.module('dataSource integration', {
             cleanSearchOnOpening: false,
             searchTimeout: 500,
         }).dxLookup('instance');
-        // debugger;
-        $('#qunit-fixture').css('position', 'static');
-        $('#lookup').css('margin-top', '50px');
 
         $(instance._$field).trigger('dxclick');
         const $content = $(instance.content());
         const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-
-        keyboard.type('fff').change();
-        $input.trigger('change');
+        const keyboard = keyboardMock($input, true);
+        keyboard.type('fff');
 
         const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
-        // assert.ok($loadPanel.is(':visible'), 'load panel is visible');
+        assert.ok($loadPanel.is(':visible'), 'load panel is visible');
     });
 });
 
