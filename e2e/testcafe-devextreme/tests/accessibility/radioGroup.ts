@@ -10,7 +10,7 @@ const items = ['Item_1', 'Item_2', 'Item_3'];
 
 const options: Options<Properties> = {
   items: [items],
-  disabled: [true, false],
+  readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: [undefined, 'name'],
   layout: ['horizontal', 'vertical'],
