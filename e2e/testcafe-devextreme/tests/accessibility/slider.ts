@@ -27,6 +27,16 @@ const options: Options<Properties> = {
       position: 'top',
     },
   ],
+  tooltip: [
+    {
+      enabled: true,
+      format(value) {
+        return `${value}%`;
+      },
+      showMode: 'always',
+      position: 'bottom',
+    },
+  ],
 };
 
 const a11yCheckConfig = {
