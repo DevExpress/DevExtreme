@@ -7,5 +7,5 @@ body {
 /* trying to achieve more predictable results of rendered text */
 
 * {
-  text-rendering: geometricPrecision !important;
+  text-rendering: geometricprecision !important;
 }

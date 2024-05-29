@@ -1,6 +1,6 @@
 {
     "name": "devextreme-demos",
-    "version": "24.1.1",
+    "version": "24.1.2",
     "description": "",
     "repository": {
         "type": "git",
@@ -8,14 +8,15 @@
     },
     "author": "Developer Express Inc.",
     "peerDependencies": {
-        "devextreme": "~24.1.1",
-        "devextreme-angular": "~24.1.1",
-        "devextreme-dist": "~24.1.1",
-        "devextreme-react": "~24.1.1",
-        "devextreme-vue": "~24.1.1"
+        "devextreme": "~24.1.2",
+        "devextreme-angular": "~24.1.2",
+        "devextreme-dist": "~24.1.2",
+        "devextreme-react": "~24.1.2",
+        "devextreme-vue": "~24.1.2"
     },
     "dependencies": {
         "@angular/common": "~16.2.12",
+        "@angular/cli": "~16.2.12",
         "@angular/compiler": "~16.2.12",
         "@angular/compiler-cli": "~16.2.12",
         "@angular/core": "~16.2.12",
@@ -65,9 +66,9 @@
     },
     "devDependencies": {
         "@angular/platform-server": "~16.2.12",
-        "@babel/core": "7.20.12",
+        "@babel/core": "7.23.9",
         "@babel/eslint-parser": "7.23.10",
-        "@babel/preset-env": "7.20.2",
+        "@babel/preset-env": "7.23.9",
         "@testcafe-community/axe": "3.5.0",
         "@types/fs-extra": "11.0.2",
         "@types/react": "17.0.2",
@@ -77,7 +78,7 @@
         "@typescript-eslint/parser": "5.62.0",
         "@vue/eslint-config-typescript": "12.0.0",
         "axe-core": "4.9.0",
-        "babel-jest": "27.5.1",
+        "babel-jest": "29.7.0",
         "consola": "3.2.3",
         "cookie-parser": "1.4.6",
         "cross-env": "7.0.3",
@@ -87,7 +88,6 @@
         "gulp-clean": "0.4.0",
         "gulp-minify": "3.1.0",
         "gulp-replace": "1.1.4",
-        "jest": "26.6.3",
         "lodash.partial": "4.2.1",
         "looks-same": "7.3.0",
         "minimist": "1.2.8",
@@ -100,8 +100,9 @@
         "@rollup/plugin-babel": "^6.0.4",
         "serve-index": "1.9.1",
         "serve-static": "1.15.0",
-        "stylelint": "13.13.1",
-        "stylelint-config-standard": "22.0.0",
+        "stylelint": "16.5.0",
+        "stylelint-config-standard": "35.0.0",
+        "stylelint-config-recommended-vue": "1.5.0",
         "systemjs-builder": "0.16.15",
         "ts-node": "10.9.2"
     },

@@ -166,4 +166,57 @@ QUnit.module('FullScreen Mode', moduleConfig, () => {
         fullScreenCommand.execute();
         assert.equal(Math.floor(leftPanelWidth), Math.floor(this.instance._splitter._leftPanelPercentageWidth), 'left Panel Width is not changed in Normal mode');
     });
+
+    test('Check full screen after refresh (T1230629)', function(assert) {
+        this.createInstance(options.tasksOnlyOptions);
+        this.clock.tick(10);
+        this.instance.option({
+            'height': 200,
+            'width': 400,
+            'toolbar': {
+                items: [
+                    'fullScreen',
+                    {
+                        widget: 'dxButton',
+                        options: {
+                            icon: 'refresh',
+                            stylingMode: 'text',
+                            onClick: () => { $('#gantt').dxGantt('instance').refresh(); }
+                        }
+                    },
+                ]
+            }
+        });
+        this.clock.tick(10);
+
+        const triggerToolbarItemClick = (isFirst) => {
+            const $items = this.$element.find(Consts.TOOLBAR_ITEM_SELECTOR);
+            const $item = isFirst ? $items.first() : $items.last();
+            $item.children().first().trigger('dxclick');
+        };
+        // init state - normal state
+        assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '1.normalMode: gantt height < window height');
+        assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '1.normalMode: gantt width < window width');
+
+        // toggle to full screen
+        triggerToolbarItemClick(true);
+        this.clock.tick(500);
+        assert.ok(getGanttViewCore(this.instance).isInFullScreenMode(), 'Full screen mode on');
+        assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '2.fullScreenMode: gantt height == window height');
+        assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '2.fullScreenMode: gantt width == window width');
+
+        // refresh
+        triggerToolbarItemClick(false);
+        this.clock.tick(500);
+        assert.ok(getGanttViewCore(this.instance).isInFullScreenMode(), 'Full screen mode on');
+        assert.equal(getHeight(this.instance.$element()), getHeight($(window)), '3.fullScreenMode: gantt height == window height');
+        assert.equal(getWidth(this.instance.$element()), getWidth($(window)), '3.fullScreenMode: gantt width == window width');
+
+        // toggle to normal screen
+        triggerToolbarItemClick(true);
+        this.clock.tick(500);
+        assert.notOk(getGanttViewCore(this.instance).isInFullScreenMode(), 'Full screen mode off');
+        assert.ok(getHeight(this.instance.$element()) < getHeight($(window)), '4.normalMode: gantt height < window height');
+        assert.ok(getWidth(this.instance.$element()) < getWidth($(window)), '4.normalMode: gantt width < window width');
+    });
 });

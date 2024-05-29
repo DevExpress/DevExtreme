@@ -52,7 +52,6 @@ export interface WidgetOptions<TComponent> extends DOMComponentOptions<TComponen
     /**
      * @docid
      * @default null
-     * @type_function_param1 e:EventInfo
      * @action
      * @public
      */

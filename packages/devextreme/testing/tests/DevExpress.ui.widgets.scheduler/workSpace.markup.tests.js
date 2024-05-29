@@ -4,7 +4,7 @@ import SchedulerWorkSpaceHorizontalStrategy from '__internal/scheduler/workspace
 import SchedulerWorkSpaceVerticalStrategy from '__internal/scheduler/workspaces/m_work_space_grouped_strategy_vertical';
 import dateLocalization from 'localization/date';
 import devices from 'core/devices';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 import 'generic_light.css!';
 
@@ -333,9 +333,9 @@ QUnit.module('Workspace Day markup', dayModuleConfig, () => {
         const $element = this.instance.$element();
         const classes = $element.find('.dx-scheduler-date-table td').attr('class').split(' ');
 
-        assert.ok($.inArray(CELL_CLASS, classes) > -1, 'Cell has a css class');
-        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, 'Cell has a css class');
-        assert.ok($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, 'Cell has a css class');
+        assert.ok($.inArray(CELL_CLASS, classes) > -1, `Cell has the ${CELL_CLASS} class`);
+        assert.notOk($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, `Cell hasn't the ${HORIZONTAL_SIZES_CLASS} class`);
+        assert.ok($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, `Cell has the ${VERTICAL_SIZES_CLASS} class`);
     });
 
     QUnit.test('Scheduler all day panel should contain one row', function(assert) {
@@ -608,9 +608,9 @@ QUnit.module('Workspace Week markup', weekModuleConfig, () => {
         const $element = this.instance.$element();
         const classes = $element.find('.dx-scheduler-header-panel th').attr('class').split(' ');
 
-        assert.ok($.inArray('dx-scheduler-header-panel-cell', classes) > -1, 'Cell has a css class');
-        assert.ok($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, 'Cell has a css class');
-        assert.notOk($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, 'Cell hasn\'t a css class');
+        assert.ok($.inArray('dx-scheduler-header-panel-cell', classes) > -1, 'Cell has the dx-scheduler-header-panel-cell class');
+        assert.notOk($.inArray(HORIZONTAL_SIZES_CLASS, classes) > -1, `Cell hasn't the ${HORIZONTAL_SIZES_CLASS} class`);
+        assert.notOk($.inArray(VERTICAL_SIZES_CLASS, classes) > -1, `Cell hasn't the ${VERTICAL_SIZES_CLASS} class`);
     });
 
     QUnit.test('Scheduler all day panel should contain one row & 7 cells', function(assert) {

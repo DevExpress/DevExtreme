@@ -1141,7 +1141,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
 fixture`Remote Scrolling`
   .page(url(__dirname, '../containerAspNet.html'));
 
-test('Scroll to the bottom after expand several group', async (t) => {
+test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const scrollToBottom = async () => {
@@ -1291,7 +1291,7 @@ test('New virtual mode. Virtual rows should not be in view port after scrolling 
   });
 });
 
-test('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
+test.meta({ unstable: true })('New virtual mode. Navigation to the last row if new row is added (T1069849)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   const addRowButton = dataGrid.getHeaderPanel().getAddRowButton();

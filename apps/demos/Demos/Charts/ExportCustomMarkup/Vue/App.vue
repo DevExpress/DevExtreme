@@ -76,8 +76,22 @@ import Form from './Form.vue';
 const form = ref();
 const chart = ref();
 
-const prepareMarkup = (chartSVG, markup) => `
-   <svg xmlns="http://www.w3.org/2000/svg" version="1.1" width="820px" height="420px">${markup}<g transform="translate(305,12)">${chartSVG}</g></svg>`;
+const prepareMarkup = (chartSVG, markup) => {
+  const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+  svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+  svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+  svg.setAttribute('version', '1.1');
+  svg.setAttribute('width', '820px');
+  svg.setAttribute('height', '420px');
+  svg.innerHTML = markup;
+
+  const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+  group.setAttribute('transform', 'translate(305,12)');
+  group.innerHTML = chartSVG;
+  svg.appendChild(group);
+
+  return svg;
+};
 
 function onClick() {
   const chartSVG = chart.value.instance.svg();

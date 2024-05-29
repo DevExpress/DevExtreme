@@ -1,22 +1,23 @@
 import React, { useEffect, useRef } from 'react';
-import Diagram, {
+import {
+  Diagram,
+  Command,
   ContextMenu,
   ContextToolbox,
-  PropertiesPanel,
   Group,
-  Tab,
   HistoryToolbar,
-  ViewToolbar,
   MainToolbar,
-  Command,
+  PropertiesPanel,
+  Tab,
   Toolbox,
+  ViewToolbar,
   DiagramTypes,
 } from 'devextreme-react/diagram';
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';
 
-const pageCommands = ['pageSize', 'pageOrientation', 'pageColor'];
-const menuCommands = ['bringToFront', 'sendToBack', 'lock', 'unlock'];
+const pageCommands: DiagramTypes.Command[] = ['pageSize', 'pageOrientation', 'pageColor'];
+const menuCommands: DiagramTypes.Command[] = ['bringToFront', 'sendToBack', 'lock', 'unlock'];
 
 function onCustomCommand(e: DiagramTypes.CustomCommandEvent) {
   if (e.name === 'clear') {
@@ -54,7 +55,7 @@ export default function App() {
     >
       <ContextMenu
         enabled={true}
-        commands={menuCommands as any}
+        commands={menuCommands}
       />
       <ContextToolbox
         enabled={true}
@@ -64,7 +65,7 @@ export default function App() {
       />
       <PropertiesPanel visibility="visible">
         <Tab>
-          <Group title="Page Properties" commands={pageCommands as any} />
+          <Group title="Page Properties" commands={pageCommands} />
         </Tab>
       </PropertiesPanel>
       <HistoryToolbar visible={false} />

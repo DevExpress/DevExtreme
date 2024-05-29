@@ -15,7 +15,7 @@ import {
 } from '../../helpers/scheduler/helpers.js';
 
 import 'generic_light.css!';
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 
 const { module, test, testStart } = QUnit;
 

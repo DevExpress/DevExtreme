@@ -1,15 +1,16 @@
 import React, { useEffect, useRef } from 'react';
-import Diagram, {
+import {
+  Diagram,
+  Command,
   ContextMenu,
   ContextToolbox,
-  PropertiesPanel,
   Group,
-  Tab,
   HistoryToolbar,
-  ViewToolbar,
   MainToolbar,
-  Command,
+  PropertiesPanel,
+  Tab,
   Toolbox,
+  ViewToolbar,
 } from 'devextreme-react/diagram';
 import { confirm } from 'devextreme/ui/dialog';
 import 'whatwg-fetch';

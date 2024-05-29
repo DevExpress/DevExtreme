@@ -4,7 +4,7 @@ import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { renderUtils } from '../../utils/index';
 import { DATE_TABLE_CELL_CLASS } from '../const';
-import type { DataCellTemplateProps } from '../types';
+import type { DataCellTemplateProps, DefaultProps } from '../types';
 import type { CellBaseProps } from './cell';
 import { CellBase, CellBaseDefaultProps } from './cell';
 
@@ -17,7 +17,7 @@ export interface DateTableCellBaseProps extends CellBaseProps {
   isFocused: boolean;
 }
 
-export const DateTableCallBaseDefaultProps: DateTableCellBaseProps = {
+export const DateTableCallBaseDefaultProps: DefaultProps<DateTableCellBaseProps> = {
   ...CellBaseDefaultProps,
   otherMonth: false,
   today: false,
@@ -76,6 +76,7 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
 
   render(): JSX.Element {
     const {
+      viewContext,
       allDay,
       className,
       isFocused,
@@ -85,9 +86,16 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
       dataCellTemplate,
       children,
     } = this.props;
+    const { view: { type: viewType }, crossScrollingEnabled } = viewContext;
+
+    const cellSizeHorizontalClass = renderUtils
+      .getCellSizeHorizontalClass(viewType, crossScrollingEnabled);
+    const cellSizeVerticalClass = renderUtils
+      .getCellSizeVerticalClass(!!allDay);
+
     const classes = renderUtils.combineClasses({
-      'dx-scheduler-cell-sizes-horizontal': true,
-      'dx-scheduler-cell-sizes-vertical': !allDay,
+      [cellSizeHorizontalClass]: true,
+      [cellSizeVerticalClass]: true,
       [DATE_TABLE_CELL_CLASS]: !allDay,
       'dx-state-focused': isSelected,
       'dx-scheduler-focused-cell': isFocused,
@@ -99,9 +107,10 @@ export class DateTableCellBase extends BaseInfernoComponent<DateTableCellBasePro
 
     return (
       <CellBase
+        className={classes}
+        viewContext={viewContext}
         isFirstGroupCell={isFirstGroupCell}
         isLastGroupCell={isLastGroupCell}
-        className={classes}
         ariaLabel={ariaLabel}
         startDate={CellBaseDefaultProps.startDate}
         endDate={CellBaseDefaultProps.endDate}

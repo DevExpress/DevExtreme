@@ -66,11 +66,19 @@ $(() => {
   });
 
   function prepareMarkup() {
-    return `<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="820px" height="420px">${
-      $('#custom_markup_container').html()
-    }<g transform="translate(305,12)">${
-      chart.svg()
-    }</g>`
-            + '</svg>';
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+    svg.setAttribute('xmlns:xlink', 'http://www.w3.org/1999/xlink');
+    svg.setAttribute('version', '1.1');
+    svg.setAttribute('width', '820px');
+    svg.setAttribute('height', '420px');
+    svg.innerHTML = document.getElementById('custom_markup_container').innerHTML;
+
+    const group = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    group.setAttribute('transform', 'translate(305,12)');
+    group.innerHTML = chart.svg();
+    svg.appendChild(group);
+
+    return svg;
   }
 });

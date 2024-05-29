@@ -4,13 +4,13 @@ If you want each tab and view to have differently structured content, define ind
 
 Use the following properties to configure user navigation between tabs:
 
-- [swipeEnabled](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#swipeEnabled)  
-  Defines whether to switch between views with a swipe gesture.
+- [swipeEnabled](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#swipeEnabled)      
+Defines whether to switch between views with a swipe gesture.
 
-- [loop](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#loop)  
-  Specifies whether to loop views.
+- [loop](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#loop)      
+Specifies whether to loop views.
 
-- [animationEnabled](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#animationEnabled)  
-  Specifies whether to animate transition between views.
+- [animationEnabled](/Documentation/ApiReference/UI_Components/dxTabPanel/Configuration/#animationEnabled)      
+Specifies whether to animate transition between views.
 
 You can switch the checkboxes below the TabPanel to change the **loop**, **animationEnabled**, and **swipeEnabled** property values.

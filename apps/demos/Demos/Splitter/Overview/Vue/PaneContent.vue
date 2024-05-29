@@ -1,21 +1,22 @@
 <template>
-  <div
-    class="pane-content"
-    tabindex="0"
-  >
-    <div class="pane-title">
-      {{ data.text }}
-    </div>
-    <div class="pane-state">
-      {{ getStateText() }}
-    </div>
-
+  <div tabindex="0">
     <div
-      class="pane-option"
-      v-for="(value, key) in filteredData"
-      :key="key"
+      class="pane-content"
     >
-      {{ `${key}: ${value}` }}
+      <div class="pane-title">
+        {{ data.text }}
+      </div>
+      <div class="pane-state">
+        {{ getStateText() }}
+      </div>
+
+      <div
+        class="pane-option"
+        v-for="(value, key) in filteredData"
+        :key="key"
+      >
+        {{ `${key}: ${value}` }}
+      </div>
     </div>
   </div>
 </template>
@@ -29,7 +30,7 @@ const props = defineProps<{
 
 const { data } = props;
 
-const dimensionOptions = new Set(['size', 'minSize', 'maxSize']);
+const dimensionOptions = new Set(['size', 'minSize', 'maxSize', 'collapsedSize']);
 
 const getStateText = function() {
   if (data.resizable !== false && !data.collapsible) {

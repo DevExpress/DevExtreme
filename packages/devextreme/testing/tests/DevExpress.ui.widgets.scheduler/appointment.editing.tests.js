@@ -11,7 +11,7 @@ import {
     createWrapper
 } from '../../helpers/scheduler/helpers.js';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
 
 const {

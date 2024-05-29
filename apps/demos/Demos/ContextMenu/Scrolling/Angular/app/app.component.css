@@ -1,0 +1,26 @@
+::ng-deep html,
+::ng-deep body {
+  width: 100%;
+  height: 100%;
+}
+
+::ng-deep body {
+  margin: 0;
+}
+
+::ng-deep .demo-container {
+  height: 100%;
+}
+
+.target-area {
+  color: var(--dx-color-text);
+  background-color: var(--dx-color-border);
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}

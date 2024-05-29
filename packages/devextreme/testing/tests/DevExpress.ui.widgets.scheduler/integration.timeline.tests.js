@@ -13,7 +13,7 @@ import fx from 'animation/fx';
 import { DataSource } from 'data/data_source/data_source';
 import devices from 'core/devices';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import { SchedulerTestWrapper, createWrapper } from '../../helpers/scheduler/helpers.js';
 
 const createInstance = options => {

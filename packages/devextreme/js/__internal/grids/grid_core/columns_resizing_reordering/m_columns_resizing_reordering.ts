@@ -1422,11 +1422,8 @@ export class DraggingHeaderViewController extends modules.ViewController {
 
         each(columnElements, (index, columnElement) => {
           const $columnElement = $(columnElement);
-          // @ts-expect-error
           eventsEngine.off($columnElement, addNamespace(dragEventStart, MODULE_NAMESPACE));
-          // @ts-expect-error
           eventsEngine.off($columnElement, addNamespace(dragEventMove, MODULE_NAMESPACE));
-          // @ts-expect-error
           eventsEngine.off($columnElement, addNamespace(dragEventEnd, MODULE_NAMESPACE));
           $columnElement.removeClass(that.addWidgetPrefix(HEADERS_DRAG_ACTION_CLASS));
         });

@@ -291,12 +291,12 @@ const columns = (Base: ModuleType<ColumnsController>) => class VirtualColumnsCon
     }
 
     if (beginWidth) {
-      visibleColumns.unshift({ command: 'virtual', width: beginWidth });
+      visibleColumns.unshift({ command: 'virtual', type: 'virtual', width: beginWidth });
       visibleColumns = beginFixedColumns.concat(visibleColumns);
     }
 
     if (endWidth) {
-      visibleColumns.push({ command: 'virtual', width: endWidth });
+      visibleColumns.push({ command: 'virtual', type: 'virtual', width: endWidth });
       visibleColumns = visibleColumns.concat(endFixedColumns);
     }
 

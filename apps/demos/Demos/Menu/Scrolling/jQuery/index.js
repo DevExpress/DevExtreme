@@ -17,7 +17,7 @@ $(() => {
 
   $('#limit-height').dxCheckBox({
     value: false,
-    text: `Limit Submenus height by ${SUBMENU_HEIGHT}px`,
+    text: `Limit submenu height to ${SUBMENU_HEIGHT}px`,
     onValueChanged(data) {
       submenuMaxHeight = data.value ? SUBMENU_HEIGHT : 0;
     },

@@ -22,7 +22,7 @@ import { GanttToolbar, GanttContextMenuBar } from './ui.gantt.bars';
 import { GanttTreeList } from './ui.gantt.treelist';
 import { GanttView } from './ui.gantt.view';
 import { GanttDataChangesProcessingHelper } from './ui.gantt.data_changes_processing_helper';
-import gridCoreUtils from '../grid_core/ui.grid_core.utils';
+import gridCoreUtils from '../../__internal/grids/grid_core/m_utils';
 
 const window = getWindow();
 
@@ -84,6 +84,7 @@ class Gantt extends Widget {
             .appendTo(this.$element());
     }
     _clean() {
+        this._savedGanttViewState = this._ganttView?.getVisualStateToRestore();
         this._ganttView?._ganttViewCore.cleanMarkup();
         delete this._ganttView;
         delete this._dialogInstance;
@@ -207,8 +208,11 @@ class Gantt extends Widget {
             onTaskClick: (e) => { this._ganttTreeList.onRowClick(e); },
             onTaskDblClick: (e) => { this._ganttTreeList.onRowDblClick(e); },
             onAdjustControl: () => { this._sizeHelper.onAdjustControl(); },
-            onContentReady: this._onGanttViewContentReady.bind(this)
+            onContentReady: this._onGanttViewContentReady.bind(this),
+            visualState: this._savedGanttViewState
         });
+
+        delete this._savedGanttViewState;
     }
     _onGanttViewContentReady(e) {
         if(!this._isParentAutoUpdateMode()) {

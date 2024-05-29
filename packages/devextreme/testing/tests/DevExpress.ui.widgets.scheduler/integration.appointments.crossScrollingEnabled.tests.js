@@ -5,7 +5,7 @@ import pointerMock from '../../helpers/pointerMock.js';
 import devices from 'core/devices';
 import { initTestMarkup, createWrapper } from '../../helpers/scheduler/helpers.js';
 
-import 'ui/scheduler/ui.scheduler';
+import '__internal/scheduler/m_scheduler';
 import 'ui/switch';
 import 'generic_light.css!';
 
@@ -130,11 +130,14 @@ module('crossScrollingEnabled = true', config, () => {
             crossScrollingEnabled: true
         });
 
-        const appointmentsInstance = scheduler.instance.getAppointmentsInstance();
-        const items = appointmentsInstance.option('items');
+        const $apptBeforeRepaint = scheduler.appointments.getAppointment();
+        $apptBeforeRepaint.attr('test', 'true');
 
         scheduler.option('crossScrollingEnabled', false);
-        assert.notDeepEqual(appointmentsInstance.option('items'), items, 'Appointments are repainted');
+
+        const $apptAfterRepaint = scheduler.appointments.getAppointment();
+        const customTestAttr = $apptAfterRepaint.attr('test');
+        assert.equal(customTestAttr, undefined, 'Appointments are repainted');
     });
 
     if(!isMobile) {

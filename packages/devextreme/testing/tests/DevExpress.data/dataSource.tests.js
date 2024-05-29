@@ -7,7 +7,7 @@ import { DataSource } from 'data/data_source/data_source';
 import Store from 'data/abstract_store';
 import ArrayStore from 'data/array_store';
 import ODataStore from 'data/odata/store';
-import AggregateCalculator from 'ui/data_grid/aggregate_calculator';
+import AggregateCalculator from '__internal/grids/data_grid/m_aggregate_calculator';
 import LocalStore from 'data/local_store';
 
 const TEN_NUMBERS = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];

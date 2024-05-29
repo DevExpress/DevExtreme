@@ -167,6 +167,10 @@ registerDecorator(
         },
 
         _updateSelectAllAriaLabel() {
+            if(!this._$selectAll) {
+                return;
+            }
+
             const { value } = this._selectAllCheckBox.option();
 
             const indeterminate = value === undefined;
