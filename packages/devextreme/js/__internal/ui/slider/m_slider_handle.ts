@@ -1,92 +1,98 @@
-import $ from '../../core/renderer';
-import Widget from '../widget/ui.widget';
-import SliderTooltip from './ui.slider_tooltip';
-import { extend } from '../../core/utils/extend';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import Widget from '@js/ui/widget/ui.widget';
+
+import SliderTooltip from './m_slider_tooltip';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
+// @ts-expect-error
 const SliderHandle = Widget.inherit({
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
-            hoverStateEnabled: false,
-            value: 0,
-            tooltip: {
-                enabled: false,
-                format: (value) => value,
-                position: 'top',
-                showMode: 'onHover'
-            }
-        });
-    },
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      hoverStateEnabled: false,
+      value: 0,
+      tooltip: {
+        enabled: false,
+        format: (value) => value,
+        position: 'top',
+        showMode: 'onHover',
+      },
+    });
+  },
 
-    _initMarkup: function() {
-        this.callBase();
-        this.$element().addClass(SLIDER_HANDLE_CLASS);
+  _initMarkup() {
+    this.callBase();
+    this.$element().addClass(SLIDER_HANDLE_CLASS);
 
-        this.setAria({
-            role: 'slider',
-            'valuenow': this.option('value'),
-            label: 'Slider',
-        });
-    },
+    this.setAria({
+      role: 'slider',
+      // eslint-disable-next-line spellcheck/spell-checker
+      valuenow: this.option('value'),
+      label: 'Slider',
+    });
+  },
 
-    _render: function() {
-        this.callBase();
-        this._renderTooltip();
-    },
+  _render() {
+    this.callBase();
+    this._renderTooltip();
+  },
 
-    _renderTooltip: function() {
-        const { tooltip, value } = this.option();
-        const { position, format, enabled, showMode } = tooltip;
+  _renderTooltip() {
+    const { tooltip, value } = this.option();
+    const {
+      position, format, enabled, showMode,
+    } = tooltip;
 
-        const $sliderTooltip = $('<div>');
-        this._sliderTooltip = this._createComponent($sliderTooltip, SliderTooltip, {
-            target: this.$element(),
-            container: $sliderTooltip,
-            position,
-            visible: enabled,
+    const $sliderTooltip = $('<div>');
+    this._sliderTooltip = this._createComponent($sliderTooltip, SliderTooltip, {
+      target: this.$element(),
+      container: $sliderTooltip,
+      position,
+      visible: enabled,
 
-            showMode,
-            format,
-            value
-        });
-    },
+      showMode,
+      format,
+      value,
+    });
+  },
 
-    _clean: function() {
-        this.callBase();
-        this._sliderTooltip = null;
-    },
+  _clean() {
+    this.callBase();
+    this._sliderTooltip = null;
+  },
 
-    _updateTooltipOptions(args) {
-        const tooltipOptions = Widget.getOptionsFromContainer(args);
+  _updateTooltipOptions(args) {
+    // @ts-expect-error
+    const tooltipOptions = Widget.getOptionsFromContainer(args);
 
-        this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
-        this._sliderTooltip?.option('visible', tooltipOptions.enabled);
-    },
+    this._setWidgetOption('_sliderTooltip', [tooltipOptions]);
+    this._sliderTooltip?.option('visible', tooltipOptions.enabled);
+  },
 
-    _optionChanged: function(args) {
-        const { name, value } = args;
-        switch(name) {
-            case 'value': {
-                this._sliderTooltip?.option('value', value);
-                this.setAria('valuenow', value);
-                break;
-            }
-            case 'tooltip':
-                this._updateTooltipOptions(args);
-                break;
-            default:
-                this.callBase(args);
-        }
-    },
-
-    updateTooltipPosition: function() {
-        this._sliderTooltip?.updatePosition();
-    },
-
-    repaint: function() {
-        this._sliderTooltip?.repaint();
+  _optionChanged(args) {
+    const { name, value } = args;
+    switch (name) {
+      case 'value': {
+        this._sliderTooltip?.option('value', value);
+        this.setAria('valuenow', value);
+        break;
+      }
+      case 'tooltip':
+        this._updateTooltipOptions(args);
+        break;
+      default:
+        this.callBase(args);
     }
+  },
+
+  updateTooltipPosition() {
+    this._sliderTooltip?.updatePosition();
+  },
+
+  repaint() {
+    this._sliderTooltip?.repaint();
+  },
 });
 
 export default SliderHandle;

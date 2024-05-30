@@ -170,7 +170,6 @@ const Drawer = (Widget as any).inherit({
     const { openedStateMode, opened, minSize } = this.option();
 
     this._$panelContentWrapper = $('<div>').addClass(DRAWER_PANEL_CONTENT_CLASS);
-    this._togglePanelContentHasMinSizeClass(!!minSize);
 
     const position = this.calcTargetPosition();
 
