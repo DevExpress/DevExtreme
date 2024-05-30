@@ -19,7 +19,6 @@ const options: Options<Properties> = {
   placeholder: ['', 'placeholder'],
   focusStateEnabled: [true],
   toolbar: [
-    undefined,
     {
       items: ['bold', 'color'],
     },
