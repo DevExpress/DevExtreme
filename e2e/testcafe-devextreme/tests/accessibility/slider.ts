@@ -12,7 +12,6 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   height: [undefined, 250],
   width: [undefined, '50%'],
-  showRange: [true, false],
   label: [
     {
       visible: true,
