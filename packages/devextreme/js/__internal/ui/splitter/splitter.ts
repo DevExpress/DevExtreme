@@ -598,6 +598,14 @@ class Splitter extends CollectionWidget<Properties> {
 
       this._updateItemData('collapsed', indexToExpand, false, false);
 
+      if (this.option('repaintChangesOnly')) {
+        this._itemCollapsedOptionChanged(
+          this._getItemDataByIndex(indexToExpand),
+          isCollapsed,
+          !isCollapsed,
+        );
+      }
+
       return;
     }
 
@@ -611,6 +619,14 @@ class Splitter extends CollectionWidget<Properties> {
     };
 
     this._collapsedItemSize = this.getLayout()[indexToCollapse];
+
+    if (this.option('repaintChangesOnly')) {
+      this._itemCollapsedOptionChanged(
+        this._getItemDataByIndex(indexToCollapse),
+        isCollapsed,
+        !isCollapsed,
+      );
+    }
 
     this._updateItemData('collapsed', indexToCollapse, true, false);
   }
