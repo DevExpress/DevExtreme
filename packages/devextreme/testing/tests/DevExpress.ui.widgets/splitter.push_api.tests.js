@@ -7,7 +7,7 @@ import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
 
 import 'generic_light.css!';
-
+const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
 
@@ -38,6 +38,10 @@ const moduleConfig = {
         };
 
         init();
+
+        this.getNestedSplitter = (splitterElement) => {
+            return splitterElement.find(`.${SPLITTER_CLASS}`);
+        };
 
         this.reinit = (options, selector) => {
             this.instance.dispose();
@@ -230,6 +234,31 @@ QUnit.module('Push API', moduleConfig, () => {
 
                         this.assertLayout([14.3443, 43.2377, 42.418, 0]);
                         this.checkItemSizes([140, 422, 414, 0]);
+                    });
+
+                    QUnit.test(`nested splitter content should be rendered after pushApi insert, repaintChangesOnly ${repaintChangesOnly}, reshapeOnPush ${reshapeOnPush}, orientation ${orientation}`, function(assert) {
+                        const dataSource = new DataSource({
+                            store: new ArrayStore({
+                                data: [{
+                                    resizable: true,
+                                    size: '140px',
+                                }, {
+                                    splitter: {
+                                        orientation: 'vertical',
+                                        dataSource: [{ text: 'innerPane' }, { }],
+                                    },
+                                }, { }],
+                            }),
+                            reshapeOnPush
+                        });
+
+                        this.reinit({ dataSource, orientation, repaintChangesOnly });
+
+                        const store = this.instance.getDataSource().store();
+                        store.push([{ data: { text: 'new' }, type: 'insert' }]);
+                        this.clock.tick(100);
+
+                        assert.strictEqual($(this.instance.$element().children()[2].children).text(), 'innerPane');
                     });
 
                     [

@@ -117,8 +117,6 @@ class Splitter extends CollectionWidget<Properties> {
 
   private _shouldRecalculateLayout?: boolean;
 
-  private _sizeUpdateLock?: boolean;
-
   private _layout?: number[];
 
   private _currentLayout?: number[];
@@ -253,9 +251,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._layout = this._getDefaultLayoutBasedOnSize();
     this._applyStylesFromLayout(this._layout);
 
-    if (!this._sizeUpdateLock) {
-      this._updateItemSizes();
-    }
+    this._updateItemSizes();
   }
 
   _processRenderQueue(): void {
@@ -303,6 +299,7 @@ class Splitter extends CollectionWidget<Properties> {
 
     if (this.option('repaintChangesOnly')) {
       this.updateItemsLayout();
+      this._processRenderQueue();
     }
   }
 
@@ -320,12 +317,6 @@ class Splitter extends CollectionWidget<Properties> {
     setFlexProp(itemElement, FLEX_PROPERTY.flexBasis, DEFAULT_FLEX_BASIS_PROP);
 
     this._getItemInstance($itemFrame)._renderResizeHandle();
-
-    const previousElement = $(itemElement).prev();
-    if (previousElement.length && !previousElement.hasClass(RESIZE_HANDLE_CLASS)) {
-      const previousSplitterItem = this._getItemInstance(previousElement);
-      previousSplitterItem?._renderResizeHandle();
-    }
 
     return $itemFrame;
   }
@@ -607,14 +598,6 @@ class Splitter extends CollectionWidget<Properties> {
 
       this._updateItemData('collapsed', indexToExpand, false, false);
 
-      if (this.option('repaintChangesOnly')) {
-        this._itemCollapsedOptionChanged(
-          this._getItemDataByIndex(indexToExpand),
-          isCollapsed,
-          !isCollapsed,
-        );
-      }
-
       return;
     }
 
@@ -628,14 +611,6 @@ class Splitter extends CollectionWidget<Properties> {
     };
 
     this._collapsedItemSize = this.getLayout()[indexToCollapse];
-
-    if (this.option('repaintChangesOnly')) {
-      this._itemCollapsedOptionChanged(
-        this._getItemDataByIndex(indexToCollapse),
-        isCollapsed,
-        !isCollapsed,
-      );
-    }
 
     this._updateItemData('collapsed', indexToCollapse, true, false);
   }
@@ -912,8 +887,6 @@ class Splitter extends CollectionWidget<Properties> {
     const itemPath = `items[${itemIndex}]`;
     const itemData = this.option(itemPath);
 
-    this._sizeUpdateLock = true;
-
     if (isObject(itemData)) {
       this._updateItemOption(`${itemPath}.${prop}`, value, silent);
     } else {
@@ -922,8 +895,6 @@ class Splitter extends CollectionWidget<Properties> {
         [prop]: value,
       }, silent);
     }
-
-    this._sizeUpdateLock = false;
   }
 
   _updateItemOption(path: string, value: unknown, silent = false): void {
