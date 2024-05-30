@@ -1,5 +1,5 @@
 Filter and search results depend on the [filterMode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#filterMode) property.
-// _split_
+<--split-->
 
 The TreeList supports the following modes:
  

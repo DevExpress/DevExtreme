@@ -1,5 +1,5 @@
 A recurring appointment repeats at a specified interval. A circular arrow glyph denotes such an appointment in the view.
-// _split_
+<--split-->
 
 Do the following to create a recurring appointment:
 

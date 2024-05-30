@@ -1,5 +1,5 @@
 The [TagBox](/Documentation/ApiReference/UI_Components/dxTagBox/) component allows users to select multiple items from a drop-down list. 
-// _split_
+<--split-->
 
 This demo illustrates the following TagBox properties:
 

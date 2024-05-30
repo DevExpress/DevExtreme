@@ -1,5 +1,5 @@
 The Menu component supports submenu item scrolling. If the combined item height exceeds the screen size or a pre-defined height limit, a scrollbar appears.
-// _split_
+<--split-->
 
 You can use one of the following event handlers to configure submenus:
 

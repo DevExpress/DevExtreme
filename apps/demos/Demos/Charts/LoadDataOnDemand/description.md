@@ -1,5 +1,5 @@
 In this demo, the [range area](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/RangeArea/) Chart loads data as you pan it. Once the component loads a data block, this data stays in memory to reduce requests to the server.
-// _split_
+<--split-->
 
 To implement this functionality, do the following:
 

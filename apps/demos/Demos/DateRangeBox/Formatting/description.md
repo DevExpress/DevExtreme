@@ -1,5 +1,5 @@
 Use our DateRangeBox [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateRangeBox/Configuration/#displayFormat) property to change date display format as requirements dictate.
-// _split_
+<--split-->
 
 This demo illustrates the following:
 

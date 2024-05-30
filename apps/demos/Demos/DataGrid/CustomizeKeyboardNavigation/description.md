@@ -1,5 +1,5 @@
 The following properties customize keyboard navigation.
-// _split_
+<--split-->
  
 - [enterKeyAction](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/keyboardNavigation/#enterKeyAction)    
 Specifies the DataGrid's actions when a user presses Enter key: 

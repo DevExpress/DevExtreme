@@ -1,5 +1,5 @@
 If you enable deferred row selection, the grid does not request selected rows' data with every selection change. For example, if a user clicks the checkbox in the column header to select all the rows, the grid does not immediately fetch all data from the server. 
-// _split_
+<--split-->
 
 This is helpful in the following cases:
 

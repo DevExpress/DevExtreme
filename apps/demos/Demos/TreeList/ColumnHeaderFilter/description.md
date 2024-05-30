@@ -1,5 +1,5 @@
 A header filter allows users to select values from a predefined set and filter rows by these values. The values are listed in a pop-up menu. To open this menu, users can click header filter icons in column headers.
-// _split_
+<--split-->
 
 ### Display Header Filter Icons
 

@@ -1,5 +1,5 @@
 The TreeList allows users to drag and drop nodes. Use the icons in the leftmost column as the drag handles.
-// _split_
+<--split-->
 
 To configure node drag and drop, follow these steps:
 

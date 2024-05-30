@@ -39,7 +39,7 @@ MDFilesList.forEach((file) => {
       console.error('No text paragraph found in the file.');
       return;
     }
-    paragraphs.splice(firstTextParagraphIndex + 1, 0, '// _split_');
+    paragraphs.splice(firstTextParagraphIndex + 1, 0, '<--split-->');
 
     const modifiedContent = paragraphs.join('\n');
 

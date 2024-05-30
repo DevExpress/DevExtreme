@@ -1,5 +1,5 @@
 Use the [displayFormat](/Documentation/ApiReference/UI_Widgets/dxDateBox/Configuration/#displayFormat) property to change how DateBox displays date values. 
-// _split_
+<--split-->
 
 This demo illustrates the following:
 

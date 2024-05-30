@@ -1,5 +1,5 @@
 The TreeView's plain (one-dimensional) array contains items each of which references its parent item.
-// _split_
+<--split-->
 
 Use either of the following properties to bind the component to plain data:
 
