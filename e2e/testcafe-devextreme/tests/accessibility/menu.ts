@@ -41,7 +41,6 @@ const items: Item[] = [
 const options: Options<Properties> = {
   items: [items],
   orientation: ['horizontal', 'vertical'],
-  selectionMode: ['single', 'none'],
 };
 
 const created = async (t: TestController, optionConfiguration): Promise<void> => {
@@ -72,4 +71,4 @@ const configuration: Configuration = {
   created,
 };
 
-// testAccessibility(configuration);
+testAccessibility(configuration);
