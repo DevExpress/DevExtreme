@@ -50,4 +50,4 @@ const configurationWithSimpleItems: Configuration = {
   created,
 };
 
-// testAccessibility(configurationWithSimpleItems);
+testAccessibility(configurationWithSimpleItems);

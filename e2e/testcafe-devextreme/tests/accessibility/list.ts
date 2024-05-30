@@ -33,7 +33,7 @@ const configurationWithSimpleItems: Configuration = {
   options: optionsWithSimpleItems,
 };
 
-// testAccessibility(configurationWithSimpleItems);
+testAccessibility(configurationWithSimpleItems);
 
 const groupedItems = [[
   {
@@ -85,4 +85,4 @@ const configuration: Configuration = {
   options,
 };
 
-// testAccessibility(configuration);
+testAccessibility(configuration);

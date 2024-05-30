@@ -34,7 +34,7 @@ const configurationWithSingleSelectionMode: Configuration = {
   options: { ...options, value: [undefined, now] },
 };
 
-// testAccessibility(configurationWithSingleSelectionMode);
+testAccessibility(configurationWithSingleSelectionMode);
 
 const configurationWithoutSingleSelectionMode: Configuration = {
   component: 'dxCalendar',
@@ -46,4 +46,4 @@ const configurationWithoutSingleSelectionMode: Configuration = {
   },
 };
 
-// testAccessibility(configurationWithoutSingleSelectionMode);
+testAccessibility(configurationWithoutSingleSelectionMode);
