@@ -18,9 +18,10 @@ const options: Options<Properties> = {
   apiKey: [{
     bing: 'Aq3LKP2BOmzWY47TZoT1YdieypN_rB6RY9FqBfx-MDCKjvvWBbT68R51xwbL-AqC',
   }],
+  hint: [undefined, 'hint'],
   controls: [true, false],
   zoom: [undefined, 10],
-  markers: [undefined, markersData],
+  markers: [markersData],
 };
 
 const a11yCheckConfig = {
