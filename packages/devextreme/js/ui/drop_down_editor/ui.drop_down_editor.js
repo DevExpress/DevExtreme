@@ -32,6 +32,7 @@ const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const TEXT_EDITOR_BUTTON_CONTAINER = 'dx-texteditor-buttons-container';
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
@@ -350,13 +351,21 @@ const DropDownEditor = TextBox.inherit({
         const isFocused = focused(this._input());
         const $container = this._$container;
 
+        const isDirectChild = $container.find(`> .${TEXT_EDITOR_BUTTON_CONTAINER}`).length > 0;
+
         this._detachKeyboardEvents();
         this._refreshButtonsContainer();
-        this._detachWrapperContent();
         this._detachFocusEvents();
-        $container.empty();
 
-        const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
+        if(!isDirectChild) {
+            this._detachWrapperContent();
+            $container.empty();
+            $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
+        }
+
+        const $templateWrapper = $container.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
+
+        $templateWrapper.empty();
 
         fieldTemplate.render({
             model: data,
@@ -379,7 +388,7 @@ const DropDownEditor = TextBox.inherit({
             }
         });
 
-        this._attachWrapperContent($container);
+        !isDirectChild && this._attachWrapperContent($container);
     },
 
     _detachWrapperContent() {
