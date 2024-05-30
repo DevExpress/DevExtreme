@@ -1,27 +1,28 @@
 import Scheduler from 'devextreme-testcafe-models/scheduler';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { ClientFunction } from 'testcafe';
 import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
-import { ClientFunction } from 'testcafe';
 
 fixture.disablePageReloads`Timezone DB backward compatibility`
   .page(url(__dirname, '../../container.html'));
 
-  const setGlobalConfig = ClientFunction(() => {
-    (window as any).DevExpress.config({
-      timezones: [
-        { id: 'Europe/London', untils: 'Infinity', offsets: '5', offsetIndices: '0' },
-      ]
-    });
+const setGlobalConfig = ClientFunction(() => {
+  (window as any).DevExpress.config({
+    timezones: [
+      {
+        id: 'Europe/London', untils: 'Infinity', offsets: '5', offsetIndices: '0',
+      },
+    ],
   });
+});
 
 test('Scheduler should support old timezone DB format', async (t) => {
   const scheduler = new Scheduler('#container');
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-
   await takeScreenshot(
-    `appointments support old timezone db.png`,
+    'appointments support old timezone db.png',
     scheduler.workSpace,
   );
 
@@ -29,17 +30,17 @@ test('Scheduler should support old timezone DB format', async (t) => {
     .ok(compareResults.errorMessages());
 }).before(async () => {
   const currentDate = new Date(2021, 3, 27);
-  await setGlobalConfig();         
-  
+  await setGlobalConfig();
+
   await createWidget('dxScheduler', {
-      dataSource: data,
-      views: ['workWeek'],
-      timeZone: 'Europe/London',
-      currentView: 'workWeek',
-      currentDate,
-      startDayHour: 8,
-      height: 600,
-  })
+    dataSource: data,
+    views: ['workWeek'],
+    timeZone: 'Europe/London',
+    currentView: 'workWeek',
+    currentDate,
+    startDayHour: 8,
+    height: 600,
+  });
 });
 
 const data = [
