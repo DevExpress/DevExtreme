@@ -64,7 +64,9 @@ class SplitterItem extends CollectionWidgetItem {
     // @ts-expect-error badly typed base class
     super._dispose();
 
-    this._resizeHandle?.dispose();
+    this._resizeHandle?.$element().remove();
+
+    delete this._resizeHandle;
   }
 }
 

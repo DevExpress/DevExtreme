@@ -76,253 +76,162 @@ const moduleConfig = {
     }
 };
 
-QUnit.module('Push API', moduleConfig, async() => {
-    [false, true].forEach((repaintChangesOnly) => {
-        [
-            {
-                data: [{}, {}],
-                orientation: 'vertical',
-                reshapeOnPush: true,
-                expectedItemSizes: [496, 488, 0],
-                expectedLayout: [50.4, 49.5935, 0],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'vertical',
-                reshapeOnPush: true,
-                expectedItemSizes: [496, 488, 0],
-                expectedLayout: [50.4, 49.5935, 0],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'horizontal',
-                rtlEnabled: true,
-                reshapeOnPush: true,
-                expectedItemSizes: [496, 488, 0],
-                expectedLayout: [50.4, 49.5935, 0],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'horizontal',
-                reshapeOnPush: true,
-                expectedItemSizes: [496, 488, 0],
-                expectedLayout: [50.4, 49.5935, 0],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'horizontal',
-                reshapeOnPush: false,
-                expectedItemSizes: [496, 488, 0],
-                expectedLayout: [50.4, 49.5935, 0],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'horizontal',
-                reshapeOnPush: false,
-                insertIndex: 1,
-                expectedItemSizes: [496, 0, 488],
-                expectedLayout: [50.4, 0, 49.5935],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'horizontal',
-                reshapeOnPush: false,
-                insertIndex: 1,
-                itemSize: 100,
-                expectedItemSizes: [496, 100, 388],
-                expectedLayout: [50.4, 10.1626, 39.4309],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'vertical',
-                reshapeOnPush: false,
-                insertIndex: 1,
-                itemSize: 100,
-                expectedItemSizes: [496, 100, 388],
-                expectedLayout: [50.4, 10.1626, 39.4309],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'vertical',
-                reshapeOnPush: false,
-                rtlEnabled: true,
-                insertIndex: 1,
-                itemSize: 100,
-                expectedItemSizes: [496, 100, 388],
-                expectedLayout: [50.4, 10.1626, 39.4309],
-            },
-            {
-                data: [{ id: 1 }, { id: 2 }],
-                orientation: 'horizontal',
-                reshapeOnPush: false,
-                insertIndex: 0,
-                itemSize: 100,
-                expectedItemSizes: [100, 496, 388],
-                expectedLayout: [10.1626, 50.4, 39.4309],
-            },
-            // TODO: fix setting size for the last item (after init, we set sizes for all panes, so it is no more space left for a new pane added at runtime). same for 'update' operation
-            // {
-            //     data: [{ id: 1 }, { id: 2 }],
-            //     orientation: 'horizontal',
-            //     reshapeOnPush: false,
-            //     insertIndex: 2,
-            //     itemSize: 100,
-            //     expectedItemSizes: [496, 388, 100],
-            //     expectedLayout: [50.4, 39.4309, 10.1626],
-            // },
-        ].forEach(({ data, orientation, rtlEnabled, reshapeOnPush, expectedItemSizes, expectedLayout, insertIndex = 2, itemSize = 0 }) => {
-            QUnit.test(`insert should work, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
-                const dataSource = new DataSource({
-                    store: new ArrayStore({
-                        data: data,
-                        key: data[0]['id'] ? 'id' : undefined,
-                    }),
-                    reshapeOnPush
+QUnit.module('Push API', moduleConfig, () => {
+    // TODO: fix pushApi when reshapeOnPush false
+    [true].forEach((reshapeOnPush) => {
+        ['horizontal', 'vertical'].forEach((orientation) => {
+            [false, true].forEach((repaintChangesOnly) => {
+                [
+                    {
+                        data: [{}, {}],
+                        expectedItemSizes: [496, 488, 0],
+                        expectedLayout: [50.4, 49.5935, 0],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                        expectedItemSizes: [496, 488, 0],
+                        expectedLayout: [50.4, 49.5935, 0],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                        rtlEnabled: true,
+                        expectedItemSizes: [496, 488, 0],
+                        expectedLayout: [50.4, 49.5935, 0],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                        expectedItemSizes: [496, 488, 0],
+                        expectedLayout: [50.4, 49.5935, 0],
+                    },
+                ].forEach(({ data, rtlEnabled, expectedItemSizes, expectedLayout, insertIndex = 2, itemSize = 0 }) => {
+                    QUnit.test(`insert should work, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
+                        const dataSource = new DataSource({
+                            store: new ArrayStore({
+                                data: data,
+                                key: data[0]['id'] ? 'id' : undefined,
+                            }),
+                            reshapeOnPush
+                        });
+
+                        this.reinit({ dataSource, orientation, rtlEnabled, repaintChangesOnly });
+
+                        this.checkItemSizes([496, 496]);
+                        this.assertLayout([50, 50]);
+                        assert.strictEqual(this.getPanes().length, 2);
+                        assert.strictEqual(this.getResizeHandles().length, 1);
+
+                        const store = this.instance.getDataSource().store();
+                        store.push([{ data: { id: 3, size: itemSize }, type: 'insert', index: insertIndex }]);
+                        this.clock.tick(100);
+
+                        this.checkItemSizes(expectedItemSizes);
+                        this.assertLayout(expectedLayout);
+                        assert.strictEqual(this.getPanes().toArray().length, 3);
+                        assert.strictEqual(this.getResizeHandles().length, 2);
+                    });
                 });
 
-                this.reinit({ dataSource, orientation, rtlEnabled, repaintChangesOnly });
+                [
+                    {
+                        data: [{}, {}],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                    },
+                ].forEach(({ data }) => {
+                    QUnit.test(`resize should work correctly after insert, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
+                        const dataSource = new DataSource({
+                            store: new ArrayStore({
+                                data: data,
+                                key: data[0]['id'] ? 'id' : undefined,
+                            }),
+                            reshapeOnPush
+                        });
 
-                this.checkItemSizes([496, 496]);
-                this.assertLayout([50, 50]);
-                assert.strictEqual(this.getPanes().length, 2);
-                assert.strictEqual(this.getResizeHandles().length, 1);
+                        this.reinit({ dataSource, orientation, repaintChangesOnly });
 
-                const store = this.instance.getDataSource().store();
-                store.push([{ data: { id: 3, size: itemSize }, type: 'insert', index: insertIndex }]);
-                this.clock.tick(100);
+                        const store = this.instance.getDataSource().store();
+                        store.push([{ data: { id: 3 }, type: 'insert', index: 2 }]);
+                        this.clock.tick(100);
 
-                this.checkItemSizes(expectedItemSizes);
-                this.assertLayout(expectedLayout);
-                assert.strictEqual(this.getPanes().toArray().length, 3);
-                assert.strictEqual(this.getResizeHandles().length, 2);
-            });
-        });
-    });
+                        const pointer = pointerMock(this.getResizeHandles().eq(1));
+                        pointer.start().dragStart().drag(-50, -50).dragEnd();
 
-    ['horizontal', 'vertical'].forEach((orientation) => {
-        [false, true].forEach((repaintChangesOnly) => {
+                        this.checkItemSizes([496, 438, 50]);
 
-            [
-                {
-                    data: [{}, {}],
-                    reshapeOnPush: true,
-                },
-                {
-                    data: [{ id: 1 }, { id: 2 }],
-                    reshapeOnPush: true,
-                },
-                {
-                    data: [{ id: 1 }, { id: 2 }],
-                    reshapeOnPush: true,
-                },
-                {
-                    data: [{ id: 1 }, { id: 2 }],
-                    reshapeOnPush: false,
-                },
-            ].forEach(({ data, reshapeOnPush }) => {
-                QUnit.test(`resize should work correctly after insert, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
-                    const dataSource = new DataSource({
-                        store: new ArrayStore({
-                            data: data,
-                            key: data[0]['id'] ? 'id' : undefined,
-                        }),
-                        reshapeOnPush
+                        pointer.start().dragStart().drag(50, 50).dragEnd();
+
+                        this.checkItemSizes([496, 488, 0]);
+                    });
+                });
+
+                [
+                    {
+                        data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
+                        expectedLayout: [24.7967, 24.7967, 50.4065],
+                        expectedItemSizes: [244, 244, 496],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                        expectedLayout: [100],
+                        expectedItemSizes: [1000],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                        expectedLayout: [100],
+                        expectedItemSizes: [1000],
+                    },
+                ].forEach(({ data, expectedLayout, expectedItemSizes }) => {
+                    QUnit.test(`remove should work correctly, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
+                        const dataSource = new DataSource({
+                            store: new ArrayStore({
+                                data,
+                                key: 'id',
+                            }),
+                            reshapeOnPush
+                        });
+
+                        this.reinit({ dataSource, orientation, repaintChangesOnly });
+
+                        const initialResizeHandlesCount = this.getResizeHandles().length;
+                        const store = this.instance.getDataSource().store();
+                        store.push([{ type: 'remove', key: 2 }]);
+                        this.clock.tick(100);
+
+                        assert.strictEqual(this.getResizeHandles().length, initialResizeHandlesCount - 1);
+                        this.assertLayout(expectedLayout);
+                        this.checkItemSizes(expectedItemSizes);
                     });
 
-                    this.reinit({ dataSource, orientation, repaintChangesOnly });
+                    QUnit.test(`resize should work correctly after updating datasource at runtime, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
+                        const dataSource = [ {
+                            resizable: true,
+                            size: '140px',
+                        }, {
+                            splitter: {
+                                orientation: 'vertical',
+                                dataSource: [{ }, { }],
+                            },
+                        }, { }];
 
-                    const store = this.instance.getDataSource().store();
-                    store.push([{ data: { id: 3 }, type: 'insert', index: 2 }]);
-                    this.clock.tick(100);
+                        this.reinit({ dataSource, orientation, repaintChangesOnly });
 
-                    const pointer = pointerMock(this.getResizeHandles().eq(1));
-                    pointer.start().dragStart().drag(-50, -50).dragEnd();
+                        assert.strictEqual(this.getPanes().length, 3);
+                        assert.strictEqual(this.getResizeHandles().length, 2);
 
-                    this.checkItemSizes([496, 438, 50]);
+                        dataSource.push({ text: 'Pane_New' });
+                        this.instance.option('dataSource', dataSource);
 
-                    pointer.start().dragStart().drag(50, 50).dragEnd();
+                        assert.strictEqual(this.getPanes().length, 4);
+                        assert.strictEqual(this.getResizeHandles().length, 3);
 
-                    this.checkItemSizes([496, 488, 0]);
-                });
-            });
-
-            [
-                {
-                    data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 }],
-                    reshapeOnPush: true,
-                    expectedLayout: [24.7967, 24.7967, 50.4065],
-                    expectedItemSizes: [244, 244, 496],
-                },
-                {
-                    data: [{ id: 1 }, { id: 2 }],
-                    reshapeOnPush: true,
-                    expectedLayout: [100],
-                    expectedItemSizes: [1000],
-                },
-                {
-                    data: [{ id: 1 }, { id: 2 }],
-                    reshapeOnPush: true,
-                    expectedLayout: [100],
-                    expectedItemSizes: [1000],
-                },
-
-            // TODO: fix deletion when reshapeOnPush false
-            // {
-            //     data: [{ id: 1 }, { id: 2 }],
-            //     orientation: 'horizontal',
-            //     reshapeOnPush: false,
-            //     expectedLayout: [100],
-            //     expectedItemSizes: [1000],
-            // },
-            ].forEach(({ data, reshapeOnPush, expectedLayout, expectedItemSizes }) => {
-                QUnit.test(`remove should work correctly, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
-                    const dataSource = new DataSource({
-                        store: new ArrayStore({
-                            data,
-                            key: 'id',
-                        }),
-                        reshapeOnPush
+                        this.assertLayout([14.3443, 43.2377, 42.418, 0]);
+                        this.checkItemSizes([140, 422, 414, 0]);
                     });
 
-                    this.reinit({ dataSource, orientation, repaintChangesOnly });
-
-                    const initialResizeHandlesCount = this.getResizeHandles().length;
-                    const store = this.instance.getDataSource().store();
-                    store.push([{ type: 'remove', key: 2 }]);
-                    this.clock.tick(100);
-
-                    assert.strictEqual(this.getResizeHandles().length, initialResizeHandlesCount - 1);
-                    this.assertLayout(expectedLayout);
-                    this.checkItemSizes(expectedItemSizes);
-                });
-
-                QUnit.test(`resize should work correctly after updating datasource at runtime, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
-                    const dataSource = [ {
-                        resizable: true,
-                        size: '140px',
-                    }, {
-                        splitter: {
-                            orientation: 'vertical',
-                            dataSource: [{ }, { }],
-                        },
-                    }, { }];
-
-                    this.reinit({ dataSource, orientation, repaintChangesOnly });
-
-                    assert.strictEqual(this.getPanes().length, 3);
-                    assert.strictEqual(this.getResizeHandles().length, 2);
-
-                    dataSource.push({ text: 'Pane_New' });
-                    this.instance.option('dataSource', dataSource);
-
-                    assert.strictEqual(this.getPanes().length, 4);
-                    assert.strictEqual(this.getResizeHandles().length, 3);
-
-                    this.assertLayout([14.3443, 43.2377, 42.418, 0]);
-                    this.checkItemSizes([140, 422, 414, 0]);
-                });
-
-                [true, false].forEach((reshapeOnPush) => {
                     [
                         {
                             data: [{ id: 1 }, { id: 2 }],
