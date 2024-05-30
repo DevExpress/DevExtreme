@@ -11,9 +11,10 @@ const options: Options<Properties> = {
   placeholder: [undefined, 'placeholder'],
   disabled: [true, false],
   readOnly: [true, false],
-  mode: ['number', 'tel', 'text'],
-  min: [undefined, 10],
-  max: [undefined, 90],
+  showClearButton: [true, false],
+  showSpinButtons: [true, false],
+  label: ['', 'label'],
+  name: ['', 'name'],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
