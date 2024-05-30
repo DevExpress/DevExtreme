@@ -1,5 +1,9 @@
+import type { DependentVersion } from '../core/license/types';
+
 const MAX_MINOR_VERSION = 2;
 const MIN_MINOR_VERSION = 1;
+
+const dependentVersions: DependentVersion[] = [];
 
 export interface Version {
   major: number;
@@ -23,6 +27,29 @@ export function parseVersion(version: string): Version {
     minor,
     patch,
   };
+}
+
+export function reportDependentVersion(dependentName: string, version: string): void {
+  dependentVersions.push({
+    dependentName,
+    version,
+  });
+}
+
+export function getDependentVersions(): DependentVersion[] {
+  return dependentVersions;
+}
+
+export function clearDependentVersions(): void {
+  /// #DEBUG
+  dependentVersions.splice(0);
+  /// #ENDDEBUG
+}
+
+export function stringifyVersionList(dependents: DependentVersion[]): string {
+  return dependents
+    .map((dependent) => `${dependent.dependentName}: ${dependent.version}`)
+    .join('\n');
 }
 
 export function versionsEqual(versionAStr: string, versionBStr: string): boolean {

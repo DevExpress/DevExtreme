@@ -1,10 +1,9 @@
 import errors from '@js/core/errors';
 
 import { base } from '../../../ui/overlay/z_index';
+import { clearDependentVersions, reportDependentVersion } from '../../utils/version';
 import {
-  clearDependentVersions,
   parseLicenseKey,
-  reportDependentVersion,
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';

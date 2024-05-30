@@ -1,4 +1,4 @@
-import { reportDependentVersion as reportVersion } from '../__internal/core/license/license_validation';
+import { reportDependentVersion as reportVersion } from '../__internal/utils/version';
 
 export const version = '24.1.2';
 

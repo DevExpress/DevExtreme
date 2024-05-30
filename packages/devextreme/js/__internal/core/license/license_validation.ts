@@ -3,9 +3,11 @@ import { version as packageVersion } from '@js/core/version';
 
 import type { Version } from '../../utils/version';
 import {
+  getDependentVersions,
   getPreviousMajorVersion,
   parseVersion,
   stringifyVersion,
+  stringifyVersionList,
   VERSION_SPLITTER,
   versionsEqual,
 } from '../../utils/version';
@@ -16,7 +18,6 @@ import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
 import { showTrialPanel } from './trial_panel';
 import type {
-  DependentVersion,
   License,
   LicenseCheckParams,
   Token,
@@ -40,7 +41,6 @@ const DESERIALIZATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'deseri
 const PAYLOAD_ERROR: Token = { kind: TokenKind.corrupted, error: 'payload' };
 const VERSION_ERROR: Token = { kind: TokenKind.corrupted, error: 'version' };
 
-const dependentVersions: DependentVersion[] = [];
 let validationPerformed = false;
 
 // verifies RSASSA-PKCS1-v1.5 signature
@@ -53,19 +53,6 @@ function verifySignature({ text, signature: encodedSignature }: {
     signature: base64ToBytes(encodedSignature),
     actual: pad(sha1(text)),
   });
-}
-
-export function reportDependentVersion(dependentName: string, version: string): void {
-  dependentVersions.push({
-    dependentName,
-    version,
-  });
-}
-
-function stringifyVersionList(dependents: DependentVersion[]): string {
-  return dependents
-    .map((dependent) => `${dependent.dependentName}: ${dependent.version}`)
-    .join('\n');
 }
 
 export function parseLicenseKey(encodedKey: string | undefined): Token {
@@ -178,6 +165,7 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   }
   validationPerformed = true;
 
+  const dependentVersions = getDependentVersions();
   const mismatchingDependents = dependentVersions.filter(
     (dependent) => !versionsEqual(
       dependent.version,
@@ -226,12 +214,6 @@ export function peekValidationPerformed(): boolean {
 export function setLicenseCheckSkipCondition(value = true): void {
   /// #DEBUG
   validationPerformed = value;
-  /// #ENDDEBUG
-}
-
-export function clearDependentVersions(): void {
-  /// #DEBUG
-  dependentVersions.splice(0);
   /// #ENDDEBUG
 }
 
