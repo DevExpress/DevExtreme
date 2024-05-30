@@ -111,7 +111,7 @@ class Splitter extends CollectionWidget<Properties> {
 
   private _panesCacheSize: (PaneCache | undefined)[] = [];
 
-  private _collapsedItemSize?: number;
+  private _targetPaneSize?: number;
 
   private _savedCollapsingEvent?: InteractionEvent;
 
@@ -548,6 +548,8 @@ class Splitter extends CollectionWidget<Properties> {
     direction: CollapseExpandDirection,
     isItemCollapsed?: boolean,
   ): void {
+    this._updateItemsRestrictions();
+
     const $leftItem = $resizeHandle;
     const leftItemData = this._getItemData($leftItem);
     const leftItemIndex = this._getIndexByItem(leftItemData);
@@ -563,33 +565,33 @@ class Splitter extends CollectionWidget<Properties> {
     if (isCollapsed) {
       const indexToExpand = direction === 'prev' ? rightItemIndex : leftItemIndex;
 
-      const paneCache = this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex];
+      // const paneCache = this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex];
 
-      this._collapsedItemSize = paneCache?.direction === direction ? paneCache.size : undefined;
+      // if(paneCache?.direction === direction) {
+      //   this._targetPaneSize = paneCache.size;
+      // } else {
+      //   this._targetPaneSize = direction === 'prev'
+      //     ? this._calculateExpandToLeftSize(leftItemIndex)
+      //     : this._calculateExpandToRightSize(rightItemIndex);
+      // }
 
-      if (!this._collapsedItemSize) {
-        this._collapsedItemSize = direction === 'prev'
-          ? this._calculateExpandToLeftSize(leftItemIndex)
-          : this._calculateExpandToRightSize(rightItemIndex);
-      }
-
-      this._panesCacheSize[indexToExpand] = undefined;
+      // this._panesCacheSize[indexToExpand] = undefined;
 
       this._updateItemData('collapsed', indexToExpand, false, false);
 
       return;
     }
 
-    const indexToCollapse = direction === 'prev' ? leftItemIndex : rightItemIndex;
+     const indexToCollapse = direction === 'prev' ? leftItemIndex : rightItemIndex;
 
-    this._panesCacheSize[indexToCollapse] = {
-      size: this.getLayout()[indexToCollapse],
-      direction: direction === CollapseExpandDirection.Next
-        ? CollapseExpandDirection.Previous
-        : CollapseExpandDirection.Next,
-    };
+    // this._panesCacheSize[indexToCollapse] = {
+    //   size: this.getLayout()[indexToCollapse],
+    //   direction: direction === CollapseExpandDirection.Next
+    //     ? CollapseExpandDirection.Previous
+    //     : CollapseExpandDirection.Next,
+    // };
 
-    this._collapsedItemSize = this.getLayout()[indexToCollapse];
+    // this._targetPaneSize = this.getLayout()[indexToCollapse];
 
     this._updateItemData('collapsed', indexToCollapse, true, false);
   }
@@ -738,7 +740,7 @@ class Splitter extends CollectionWidget<Properties> {
       }
     }
 
-    const collapsedDelta = this._getCollapseDelta(item);
+    const collapsedDelta = this._getCollapseDelta(item, value);
 
     this._layout = getNextLayout(
       this.getLayout(),
@@ -758,7 +760,7 @@ class Splitter extends CollectionWidget<Properties> {
 
     this._savedCollapsingEvent = undefined;
     this._collapseDirection = undefined;
-    this._collapsedItemSize = undefined;
+    this._targetPaneSize = undefined;
     this._activeResizeHandleIndex = undefined;
   }
 
@@ -785,18 +787,48 @@ class Splitter extends CollectionWidget<Properties> {
     return 0;
   }
 
-  _getCollapseDelta(item: Item): number {
+  _getCollapseDelta(item: Item, newCollapsedState: boolean): number {
     const itemIndex = this._getIndexByItem(item);
 
     const { collapsedSize = 0, minSize = 0 } = this._itemRestrictions[itemIndex];
 
-    const itemSize = this._collapsedItemSize !== undefined && this._collapsedItemSize >= minSize
-      ? this._collapsedItemSize
+    const currentPaneSize = this.getLayout()[itemIndex];
+
+    if(newCollapsedState === true) {
+      const targetPaneSize = collapsedSize;
+      
+      if(currentPaneSize > targetPaneSize) {
+        this._panesCacheSize[itemIndex] = {
+          size: currentPaneSize,
+          direction: this._collapseDirection === CollapseExpandDirection.Next
+            ? CollapseExpandDirection.Previous
+            : CollapseExpandDirection.Next,
+        };
+      }
+
+      return this._collapseDirection === 'prev' ? targetPaneSize - currentPaneSize : currentPaneSize - targetPaneSize;
+    }
+
+    const paneCache = this._panesCacheSize[itemIndex];
+
+    if(paneCache && paneCache.direction === this._collapseDirection) {
+      this._targetPaneSize = paneCache.size - collapsedSize;
+    } else {
+      debugger
+      this._targetPaneSize = this._collapseDirection === 'prev'
+        ? this._calculateExpandToLeftSize(itemIndex - 1)
+        : this._calculateExpandToRightSize(itemIndex + 1);
+    }
+
+    this._panesCacheSize[itemIndex] = undefined;
+
+    const itemSize = this._targetPaneSize !== undefined && this._targetPaneSize >= minSize
+      ? this._targetPaneSize
       : minSize;
 
     const deltaSign = this._collapseDirection === 'prev' ? -1 : 1;
 
-    const delta = Math.abs(itemSize - collapsedSize) * deltaSign;
+    const delta = itemSize * deltaSign;
 
     return delta;
   }
