@@ -47,7 +47,7 @@ const moduleConfig = {
     beforeEach: function() {
         fx.off = true;
 
-        const init = (options = {}, selector = '#splitter') => {
+        const init = (options = { }, selector = '#splitter') => {
             this.$element = $(selector).dxSplitter(options);
             this.instance = this.$element.dxSplitter('instance');
         };
@@ -723,10 +723,10 @@ QUnit.module('Pane sizing', moduleConfig, () => {
     });
 
     [{
-        items: [{ collapsed: true }, {}],
+        items: [{ collapsed: true }, { }],
         expectedLayout: ['0', '100'],
     }, {
-        items: [{}, { collapsed: true }],
+        items: [{ }, { collapsed: true }],
         expectedLayout: ['100', '0'],
     }, {
         items: [{ collapsed: true }, { collapsed: true }, { collapsed: true }],
@@ -738,28 +738,28 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         items: [{ visible: false }, { collapsed: true }],
         expectedLayout: ['0', '0'],
     }, {
-        items: [{}, { visible: false }, { collapsed: true }],
+        items: [{ }, { visible: false }, { collapsed: true }],
         expectedLayout: ['100', '0', '0'],
     }, {
-        items: [{}, { collapsed: true }, {}],
+        items: [{ }, { collapsed: true }, { }],
         expectedLayout: ['50', '0', '50'],
     }, {
-        items: [{}, { collapsed: true, collapsedSize: '9.9%' }, {}],
+        items: [{ }, { collapsed: true, collapsedSize: '9.9%' }, { }],
         expectedLayout: ['45', '9.93976', '45'],
     }, {
-        items: [{}, { collapsed: true, collapsedSize: 100 }, {}],
+        items: [{ }, { collapsed: true, collapsedSize: 100 }, { }],
         expectedLayout: ['45', '10', '45'],
     }, {
-        items: [{}, { collapsed: true, collapsedSize: 100 }, { collapsed: true, collapsedSize: 100 }],
+        items: [{ }, { collapsed: true, collapsedSize: 100 }, { collapsed: true, collapsedSize: 100 }],
         expectedLayout: ['79.9197', '10.0806', '10.0806'],
     }, {
-        items: [{ collapsed: true, collapsedSize: 100 }, {}],
+        items: [{ collapsed: true, collapsedSize: 100 }, { }],
         expectedLayout: ['10', '90'],
     }, {
-        items: [{}, { collapsed: true, collapsedSize: 100 }],
+        items: [{ }, { collapsed: true, collapsedSize: 100 }],
         expectedLayout: ['90', '10'],
     }, {
-        items: [{ collapsed: true, collapsedSize: 100 }, { visible: false }, {}],
+        items: [{ collapsed: true, collapsedSize: 100 }, { visible: false }, { }],
         expectedLayout: ['10', '0', '90'],
     }].forEach(({ items, expectedLayout }) => {
         QUnit.test(`Panes with collapsed/collapsedSize, items: ${JSON.stringify(items)}`, function(assert) {
@@ -778,25 +778,25 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         { position: 'next', expectedLayout: ['100', '0'], items: [{ minSize: '15%', collapsible: true }, { collapsible: true }] },
         { position: 'prev', expectedLayout: ['0', '100'], items: [{ collapsible: true }, { collapsible: true }] },
         { position: 'next', expectedLayout: ['100', '0'], items: [{ collapsible: true }, { collapsible: true }] },
-        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
-        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
-        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
-        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
-        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
-        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 } ] },
-        { position: 'next', expectedLayout: ['50', '0', '50'], items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {} ] },
-        { position: 'prev', expectedLayout: ['25', '25', '50'], items: [{ collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, {} ] },
-        { position: 'prev', expectedLayout: ['0', '66.6667', '33.3333'], items: [{ collapsible: true, collapsed: false }, { collapsible: true, collapsed: false }, {} ] },
-        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['0', '50', '50'], items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {} ] },
-        { position: 'next', expectedLayout: ['55.0813', '0', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {} ] },
-        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '44.9187', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {} ] },
-        { position: 'prev', expectedLayout: ['10.1626', '10.1626', '79.6748'], items: [{ collapsedSize: 100, size: 200, collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, {} ] },
-        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '44.9187', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {} ] },
+        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, maxSize: '75%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'prev', expectedLayout: [ '10.0806', '89.9194'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true, minSize: '50%', collapsedSize: 100 }, { collapsible: true, collapsedSize: 100 }] },
+        { position: 'next', expectedLayout: ['50', '0', '50'], items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
+        { position: 'prev', expectedLayout: ['25', '25', '50'], items: [{ collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, { }] },
+        { position: 'prev', expectedLayout: ['0', '66.6667', '33.3333'], items: [{ collapsible: true, collapsed: false }, { collapsible: true, collapsed: false }, { }] },
+        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['0', '50', '50'], items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
+        { position: 'next', expectedLayout: ['55.0813', '0', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
+        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '44.9187', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
+        { position: 'prev', expectedLayout: ['10.1626', '10.1626', '79.6748'], items: [{ collapsedSize: 100, size: 200, collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, { }] },
+        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '44.9187', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
         { position: 'prev', expectedLayout: ['50', '50', '0', '0'], items: [
             { collapsedSize: 100, collapsible: true, collapsed: false, resizable: true },
             { maxSize: 200, collapsible: true, collapsed: true, resizable: true },
-            { collapsed: true, collapsible: true, },
-            { collapsed: true, collapsible: true, }
+            { collapsed: true, collapsible: true },
+            { collapsed: true, collapsible: true }
         ] },
     ].forEach(({ position, expectedLayout, items, resizeHandleIndex = 0 }) => {
         QUnit.test(`Pane collapse ${position} at runtime, items: ${JSON.stringify(items)}`, function(assert) {
@@ -836,15 +836,8 @@ QUnit.module('Pane sizing', moduleConfig, () => {
                 { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['25', '75', '0', '0'] },
             ]
         },
-        // todo: reanimate
-        // {
-        //     items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { visible: false }, { collapsible: true, collapsed: true }, {} ],
-        //     scenarios: [
-        //         { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['55.0813', '0', '0', '44.9187'] },
-        //     ]
-        // },
         {
-            items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {} ],
+            items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }],
             scenarios: [
                 { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['55.0813', '0', '44.9187'] },
                 { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['27.5407', '27.5407', '44.9187'] },
@@ -893,6 +886,29 @@ QUnit.module('Pane sizing', moduleConfig, () => {
             scenarios: [
                 { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['23.0874', '53.8251', '0', '23.0874'] },
                 { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['23.0874', '30.7377', '23.0874', '23.0874'] },
+            ]
+        },
+        {
+            items: [{ collapsedSize: 100, size: 50, collapsible: true, collapsed: false }, { collapsible: true }, { collapsible: true }],
+            scenarios: [
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['10.1626', '42.378', '47.4593'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['31.3516', '21.189', '47.4593'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['52.5407', '0', '47.4593'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['31.3516', '21.189', '47.4593'] },
+            ]
+        },
+        {
+            items: [{ size: 700 }, { visible: false }, { collapsed: true, collapsible: true }, { visible: false }, { }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['35.5691', '0', '35.5691', '0', '28.8618'] },
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '0', '71.1382', '0', '28.8618'] },
+            ]
+        },
+        {
+            items: [{ }, { visible: false }, { collapsed: true, collapsible: true }, { visible: false }, { size: 700 }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['28.8618', '0', '35.5691', '0', '35.5691'] },
+                { newCollapsedValue: true, paneIndex: 4, expectedLayout: ['28.8618', '0', '71.1382', '0', '0'] },
             ]
         },
     ].forEach(({ items, scenarios }) => {
@@ -1070,7 +1086,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     QUnit.test('Expanded pane that was collapsed on init should take half of next pane size', function(assert) {
         this.reinit({
-            items: [ { collapsible: true, }, { collapsible: true, collapsed: true }, { collapsible: true } ],
+            items: [ { collapsible: true }, { collapsible: true, collapsed: true }, { collapsible: true }],
         });
 
         this.assertLayout(['50', '0', '50']);
@@ -1085,7 +1101,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     QUnit.test('Collapsed + expanded pane should have old size', function(assert) {
         this.reinit({
-            items: [ { collapsible: true, }, { collapsible: true, size: 98 }, { collapsible: true } ],
+            items: [ { collapsible: true }, { collapsible: true, size: 98 }, { collapsible: true }],
         });
 
         this.assertLayout(['45', '10', '45']);
@@ -1131,7 +1147,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     QUnit.test('Collapsed pane should restore full width when size to next neighbor is 0', function(assert) {
         this.reinit({
-            items: [ { collapsible: true, }, { collapsible: true, size: 500 }, { collapsible: true } ],
+            items: [ { collapsible: true }, { collapsible: true, size: 500 }, { collapsible: true }],
         });
 
         this.assertLayout(['24.5935', '50.8', '24.5935']);
@@ -1156,7 +1172,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     QUnit.test('Whole layout should be repositined on collapse using api', function(assert) {
         this.reinit({
-            items: [ { collapsible: true }, { collapsible: true }, { collapsible: true } ],
+            items: [ { collapsible: true }, { collapsible: true }, { collapsible: true }],
         });
 
         this.assertLayout(['33.3', '33.3', '33.3']);
@@ -1168,7 +1184,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     QUnit.test('Whole layout should be repositined on change Pane.collapsedSize option at runtime', function(assert) {
         this.reinit({
-            items: [{ collapsedSize: 200, collapsed: true, collapsible: true }, { }, {}]
+            items: [{ collapsedSize: 200, collapsed: true, collapsible: true }, { }, { }]
         });
 
         this.assertLayout(['20.3252', '39.8374', '39.8374']);
@@ -1180,7 +1196,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
     QUnit.test('Whole layout should be repositined on change Pane.collapsedSize option at runtime after resize', function(assert) {
         this.reinit({
-            items: [{ collapsedSize: 200, collapsed: true, collapsible: true }, { }, {}]
+            items: [{ collapsedSize: 200, collapsed: true, collapsible: true }, { }, { }]
         });
 
         this.assertLayout(['20.3252', '39.8374', '39.8374']);
@@ -1320,7 +1336,7 @@ QUnit.module('Resizing', moduleConfig, () => {
         QUnit.test(`items should have no size if not visible, ${orientation} orientation`, function(assert) {
             this.reinit({
                 orientation,
-                dataSource: [{ }, { visible: false }, {}]
+                dataSource: [{ }, { visible: false }, { }]
             });
 
             this.assertLayout(['50', '0', '50']);
@@ -1330,7 +1346,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 224, height: 224,
                 orientation,
-                dataSource: [{ }, { }, { visible: false, }, { }, { }]
+                dataSource: [{ }, { }, { visible: false }, { }, { }]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -1343,7 +1359,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 224, height: 224,
                 orientation,
-                dataSource: [{ }, { }, { visible: false, }, { }, { }]
+                dataSource: [{ }, { }, { visible: false }, { }, { }]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(2));
@@ -1356,7 +1372,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 208, height: 208,
                 orientation,
-                dataSource: [{ }, { visible: false, }, { },]
+                dataSource: [{ }, { visible: false }, { },]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -1370,7 +1386,7 @@ QUnit.module('Resizing', moduleConfig, () => {
                 width: '100%',
                 height: '100%',
                 orientation,
-                dataSource: [{ }, { splitter: { dataSource: [{}, {}, {}] } }, { }, { }]
+                dataSource: [{ }, { splitter: { dataSource: [{ }, { }, { }] } }, { }, { }]
             }, '#splitterInContainer');
 
             this.assertLayout(['25', '25', '25', '25'], 1);
@@ -1415,7 +1431,7 @@ QUnit.module('Resizing', moduleConfig, () => {
             this.reinit({
                 width: 208, height: 208,
                 orientation,
-                dataSource: [{ visible: false, }, {}, {},]
+                dataSource: [{ visible: false }, { }, { },]
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -1743,7 +1759,7 @@ QUnit.module('Resizing', moduleConfig, () => {
         QUnit.test(`panes sizes should be correct after resizing multiple panes beyond neighbor and changing resize direction, ${orientation} orientation, rtl ${rtl}`, function(assert) {
             this.reinit({
                 orientation: orientation, width: 232, height: 232, rtlEnabled: rtl,
-                dataSource: [{}, {}, {}, {}, {}],
+                dataSource: [{ }, { }, { }, { }, { }],
             });
 
             const pointer = pointerMock(this.getResizeHandles().eq(0));
@@ -2270,7 +2286,7 @@ QUnit.module('Visibility of control elements', {
 
     QUnit.test('Only collapse prev button should be visible when only left pane is collapsible', function(assert) {
         this.reinit({
-            dataSource: [{ collapsible: true }, {}],
+            dataSource: [{ collapsible: true }, { }],
         });
         const $resizeHandle = this.getResizeHandles();
         const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
@@ -2282,7 +2298,7 @@ QUnit.module('Visibility of control elements', {
 
     QUnit.test('Only collapse next button should be visible when only right pane is collapsible', function(assert) {
         this.reinit({
-            dataSource: [{}, { collapsible: true }],
+            dataSource: [{ }, { collapsible: true }],
         });
         const $resizeHandle = this.getResizeHandles();
         const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
@@ -2294,7 +2310,7 @@ QUnit.module('Visibility of control elements', {
 
     QUnit.test('Collapsible buttons should become visible on panes runtime collapsable enable', function(assert) {
         this.reinit({
-            dataSource: [{}, {}],
+            dataSource: [{ }, { }],
         });
         const $resizeHandle = this.getResizeHandles();
         const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
@@ -2309,7 +2325,7 @@ QUnit.module('Visibility of control elements', {
 
     QUnit.test('Collapse prev button should be invisible (left item is collapsed on init)', function(assert) {
         this.reinit({
-            dataSource: [{ collapsible: true, collapsed: true }, {}],
+            dataSource: [{ collapsible: true, collapsed: true }, { }],
         });
         const $resizeHandle = this.getResizeHandles();
         const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
@@ -2333,7 +2349,7 @@ QUnit.module('Visibility of control elements', {
 
     QUnit.test('Collapse prev button should be invisible (left item is collapsed at runtime)', function(assert) {
         this.reinit({
-            dataSource: [{ collapsible: true }, {}],
+            dataSource: [{ collapsible: true }, { }],
         });
         const $resizeHandle = this.getResizeHandles();
         const $collapsePrevButton = this.getCollapsePrevButton($resizeHandle);
@@ -2415,40 +2431,40 @@ QUnit.module('Visibility of control elements', {
 
     [{
         items: [{ }, { }, { }],
-        expectedVisibleIcons: [{ prev: false, resize: true, next: false }, { prev: false, resize: true, next: false } ]
+        expectedVisibleIcons: [{ prev: false, resize: true, next: false }, { prev: false, resize: true, next: false }]
     }, {
         items: [{ }, { collapsible: true }, { }],
-        expectedVisibleIcons: [{ prev: false, resize: true, next: true }, { prev: true, resize: true, next: false } ]
+        expectedVisibleIcons: [{ prev: false, resize: true, next: true }, { prev: true, resize: true, next: false }]
     }, {
         items: [{ }, { resizable: false, collapsible: true }, { }],
-        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: false, next: false } ]
+        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: false, next: false }]
     }, {
-        items: [{ resizable: false, }, { collapsible: true }, { resizable: true }],
-        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: true, next: false } ]
+        items: [{ resizable: false }, { collapsible: true }, { resizable: true }],
+        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: true, next: false }]
     }, {
-        items: [{ collapsible: true, }, { collapsible: false }, { collapsible: true }],
-        expectedVisibleIcons: [{ prev: true, resize: true, next: false }, { prev: false, resize: true, next: true } ]
+        items: [{ collapsible: true }, { collapsible: false }, { collapsible: true }],
+        expectedVisibleIcons: [{ prev: true, resize: true, next: false }, { prev: false, resize: true, next: true }]
     }, {
-        items: [{ collapsible: true, }, { collapsible: false, collapsed: true }, { collapsible: true }],
-        expectedVisibleIcons: [{ prev: false, resize: false, next: false }, { prev: false, resize: false, next: false } ]
+        items: [{ collapsible: true }, { collapsible: false, collapsed: true }, { collapsible: true }],
+        expectedVisibleIcons: [{ prev: false, resize: false, next: false }, { prev: false, resize: false, next: false }]
     }, {
-        items: [{ collapsible: true, }, { collapsible: true, collapsed: true }, { collapsible: false }],
-        expectedVisibleIcons: [{ prev: true, resize: false, next: false }, { prev: false, resize: false, next: true } ]
+        items: [{ collapsible: true }, { collapsible: true, collapsed: true }, { collapsible: false }],
+        expectedVisibleIcons: [{ prev: true, resize: false, next: false }, { prev: false, resize: false, next: true }]
     }, {
         items: [{ collapsible: true, collapsed: true }, { collapsible: true }, { collapsible: false }],
-        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: true, next: false } ]
+        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: true, next: false }]
     }, {
         items: [{ collapsible: false }, { collapsible: true }, { collapsible: true, collapsed: true }],
-        expectedVisibleIcons: [{ prev: false, resize: true, next: true }, { prev: true, resize: false, next: false } ]
+        expectedVisibleIcons: [{ prev: false, resize: true, next: true }, { prev: true, resize: false, next: false }]
     }, {
-        items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, {}],
-        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: false, resize: false, next: true }, { prev: false, resize: false, next: true } ]
+        items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }],
+        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: false, resize: false, next: true }, { prev: false, resize: false, next: true }]
     }, {
-        items: [{}, { collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }],
-        expectedVisibleIcons: [{ prev: true, resize: false, next: false }, { prev: false, resize: false, next: true }, { prev: false, resize: false, next: true } ]
+        items: [{ }, { collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }],
+        expectedVisibleIcons: [{ prev: true, resize: false, next: false }, { prev: false, resize: false, next: true }, { prev: false, resize: false, next: true }]
     }, {
-        items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, {}],
-        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: false, next: false }, { prev: false, resize: false, next: true } ]
+        items: [{ collapsible: true, collapsed: true }, { collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, { }],
+        expectedVisibleIcons: [{ prev: false, resize: false, next: true }, { prev: true, resize: false, next: false }, { prev: false, resize: false, next: true }]
     }].forEach(({ items, expectedVisibleIcons }) => {
         QUnit.test(`Control elements visibility, items: ${JSON.stringify(items)}`, function(assert) {
             this.reinit({
@@ -2729,7 +2745,7 @@ QUnit.module('Events', moduleConfig, () => {
                     assert.deepEqual(itemData, { collapsed: true, size: 0, collapsible: true }, 'itemData field is correct');
                     assert.strictEqual(itemIndex, item === 'left' ? 0 : 1, 'itemIndex is correct');
                 },
-                dataSource: [{ collapsible: true, }, { collapsible: true, }]
+                dataSource: [{ collapsible: true }, { collapsible: true }]
             });
 
             const $resizeHandle = this.getResizeHandles().eq(0);
@@ -2790,7 +2806,7 @@ QUnit.module('Events', moduleConfig, () => {
                 assert.deepEqual(itemData, { collapsed: true, size: 0, collapsible: true }, 'itemData field is correct');
                 assert.strictEqual(itemIndex, 0, 'itemIndex is correct');
             },
-            dataSource: [{ collapsible: true, }, { collapsible: true, }]
+            dataSource: [{ collapsible: true }, { collapsible: true }]
         });
 
         this.instance.option('items[0].collapsed', true);
@@ -2869,7 +2885,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             width: 408,
             height: 408,
-            dataSource: [{ size: '200px', }, { size: '200px' }],
+            dataSource: [{ size: '200px' }, { size: '200px' }],
             onResizeStart: function(e) {
                 resizeEvent = e;
                 e.cancel = true;
@@ -2887,7 +2903,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             width: 408,
             height: 408,
-            dataSource: [{ size: '200px', }, { size: '200px' }],
+            dataSource: [{ size: '200px' }, { size: '200px' }],
             onResize: function(e) {
                 resizeEvent = e;
                 e.cancel = true;
@@ -2907,7 +2923,7 @@ QUnit.module('Events', moduleConfig, () => {
         this.reinit({
             width: 408,
             height: 408,
-            dataSource: [{ size: '200px', }, { size: '200px' }],
+            dataSource: [{ size: '200px' }, { size: '200px' }],
             onResizeEnd: function(e) {
                 resizeEvent = e;
                 e.cancel = true;
@@ -2928,11 +2944,11 @@ QUnit.module('Events', moduleConfig, () => {
 
 QUnit.module('Nested Splitters', moduleConfig, () => {
     [
-        { propertyName: 'onResizeStart', propertyValue: () => {} },
-        { propertyName: 'onResizeEnd', propertyValue: () => {} },
-        { propertyName: 'onResize', propertyValue: () => {} },
-        { propertyName: 'onItemCollapsed', propertyValue: () => {} },
-        { propertyName: 'onItemExpanded', propertyValue: () => {} },
+        { propertyName: 'onResizeStart', propertyValue: () => { } },
+        { propertyName: 'onResizeEnd', propertyValue: () => { } },
+        { propertyName: 'onResize', propertyValue: () => { } },
+        { propertyName: 'onItemCollapsed', propertyValue: () => { } },
+        { propertyName: 'onItemExpanded', propertyValue: () => { } },
         { propertyName: 'allowKeyboardNavigation', propertyValue: false },
         { propertyName: 'allowKeyboardNavigation', propertyValue: true },
         { propertyName: 'rtlEnabled', propertyValue: false },
@@ -2958,7 +2974,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
 
     [
         { eventHandler: 'onItemCollapsed', arrowKey: 'ArrowLeft', dataSource: [{ collapsible: true }, { collapsible: true }] },
-        { eventHandler: 'onItemExpanded', arrowKey: 'ArrowRight', dataSource: [{ collapsed: true, collapsible: true, }, { }] },
+        { eventHandler: 'onItemExpanded', arrowKey: 'ArrowRight', dataSource: [{ collapsed: true, collapsible: true }, { }] },
     ].forEach(({ eventHandler, arrowKey, dataSource }) => {
         QUnit.test(`${eventHandler} should be invoked when nested splitter's pane collapsed state changed if option was changed at runtime`, function(assert) {
             const handlerStub = sinon.stub();
@@ -3001,7 +3017,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                     splitter: {
                         dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
-                }, {},
+                }, { },
                 {
                     splitter: {
                         dataSource: [
@@ -3033,11 +3049,11 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
     });
 
     [
-        { propertyName: 'onResizeStart', propertyValue: () => {} },
-        { propertyName: 'onResizeEnd', propertyValue: () => {} },
-        { propertyName: 'onResize', propertyValue: () => {} },
-        { propertyName: 'onItemCollapsed', propertyValue: () => {} },
-        { propertyName: 'onItemExpanded', propertyValue: () => {} },
+        { propertyName: 'onResizeStart', propertyValue: () => { } },
+        { propertyName: 'onResizeEnd', propertyValue: () => { } },
+        { propertyName: 'onResize', propertyValue: () => { } },
+        { propertyName: 'onItemCollapsed', propertyValue: () => { } },
+        { propertyName: 'onItemExpanded', propertyValue: () => { } },
     ].forEach(({ propertyName, propertyValue, newPropertyValue }) => {
         QUnit.test(`${propertyName} handler property should be passed to nested splitters at runtime`, function(assert) {
             this.reinit({
@@ -3046,7 +3062,7 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
                     splitter: {
                         dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
                     }
-                }, {},
+                }, { },
                 {
                     splitter: {
                         dataSource: [
@@ -3244,7 +3260,6 @@ QUnit.module('Nested Splitters', moduleConfig, () => {
             assert.strictEqual(nestedSplitterResizeHandlerStub.callCount, 1);
         });
 
-        // TODO: repair this scenario
         QUnit.skip(`nestedSplitter.${eventHandler} event handler should be able to be updated at runtime`, function(assert) {
             const handlerStub = sinon.stub();
             const handlerStubAfterUpdate = sinon.stub();

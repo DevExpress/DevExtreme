@@ -111,8 +111,6 @@ class Splitter extends CollectionWidget<Properties> {
 
   private _panesCacheSize: (PaneCache | undefined)[] = [];
 
-  private _targetPaneSize?: number;
-
   private _savedCollapsingEvent?: InteractionEvent;
 
   private _shouldRecalculateLayout?: boolean;
@@ -548,8 +546,6 @@ class Splitter extends CollectionWidget<Properties> {
     direction: CollapseExpandDirection,
     isItemCollapsed?: boolean,
   ): void {
-    this._updateItemsRestrictions();
-
     const $leftItem = $resizeHandle;
     const leftItemData = this._getItemData($leftItem);
     const leftItemIndex = this._getIndexByItem(leftItemData);
@@ -557,43 +553,22 @@ class Splitter extends CollectionWidget<Properties> {
     const rightItemData = this._getItemData($rightItem);
     const rightItemIndex = this._getIndexByItem(rightItemData);
 
-    const isCollapsed = direction === 'prev' ? isItemCollapsed ?? rightItemData.collapsed : isItemCollapsed ?? leftItemData.collapsed;
-
     this._activeResizeHandleIndex = leftItemIndex;
     this._collapseDirection = direction;
 
-    if (isCollapsed) {
-      const indexToExpand = direction === 'prev' ? rightItemIndex : leftItemIndex;
+    const isCollapsed = isItemCollapsed
+      ?? (direction === CollapseExpandDirection.Previous
+        ? rightItemData.collapsed
+        : leftItemData.collapsed);
 
-      // const paneCache = this._panesCacheSize[direction === 'prev' ? rightItemIndex : leftItemIndex];
-
-      // if(paneCache?.direction === direction) {
-      //   this._targetPaneSize = paneCache.size;
-      // } else {
-      //   this._targetPaneSize = direction === 'prev'
-      //     ? this._calculateExpandToLeftSize(leftItemIndex)
-      //     : this._calculateExpandToRightSize(rightItemIndex);
-      // }
-
-      // this._panesCacheSize[indexToExpand] = undefined;
-
-      this._updateItemData('collapsed', indexToExpand, false, false);
-
-      return;
+    let index = 0;
+    if (direction === CollapseExpandDirection.Previous) {
+      index = isCollapsed ? rightItemIndex : leftItemIndex;
+    } else {
+      index = isCollapsed ? leftItemIndex : rightItemIndex;
     }
 
-     const indexToCollapse = direction === 'prev' ? leftItemIndex : rightItemIndex;
-
-    // this._panesCacheSize[indexToCollapse] = {
-    //   size: this.getLayout()[indexToCollapse],
-    //   direction: direction === CollapseExpandDirection.Next
-    //     ? CollapseExpandDirection.Previous
-    //     : CollapseExpandDirection.Next,
-    // };
-
-    // this._targetPaneSize = this.getLayout()[indexToCollapse];
-
-    this._updateItemData('collapsed', indexToCollapse, true, false);
+    this._updateItemData('collapsed', index, !isCollapsed, false);
   }
 
   _getResizeHandleLeftItem($element: dxElementWrapper): dxElementWrapper {
@@ -760,7 +735,6 @@ class Splitter extends CollectionWidget<Properties> {
 
     this._savedCollapsingEvent = undefined;
     this._collapseDirection = undefined;
-    this._targetPaneSize = undefined;
     this._activeResizeHandleIndex = undefined;
   }
 
@@ -768,7 +742,9 @@ class Splitter extends CollectionWidget<Properties> {
     const { items = [] } = this.option();
 
     for (let i = leftItemIndex; i >= 0; i -= 1) {
-      if (items[i].collapsed !== true) {
+      const { collapsed, visible } = items[i];
+
+      if (collapsed !== true && visible !== false) {
         return this.getLayout()[i] / 2;
       }
     }
@@ -779,7 +755,9 @@ class Splitter extends CollectionWidget<Properties> {
   _calculateExpandToRightSize(rightItemIndex: number): number {
     const { items = [] } = this.option();
     for (let i = rightItemIndex; i <= items.length - 1; i += 1) {
-      if (items[i].collapsed !== true) {
+      const { collapsed, visible } = items[i];
+
+      if (collapsed !== true && visible !== false) {
         return this.getLayout()[i] / 2;
       }
     }
@@ -794,10 +772,10 @@ class Splitter extends CollectionWidget<Properties> {
 
     const currentPaneSize = this.getLayout()[itemIndex];
 
-    if(newCollapsedState === true) {
+    if (newCollapsedState) {
       const targetPaneSize = collapsedSize;
-      
-      if(currentPaneSize > targetPaneSize) {
+
+      if (currentPaneSize > targetPaneSize) {
         this._panesCacheSize[itemIndex] = {
           size: currentPaneSize,
           direction: this._collapseDirection === CollapseExpandDirection.Next
@@ -806,27 +784,31 @@ class Splitter extends CollectionWidget<Properties> {
         };
       }
 
-      return this._collapseDirection === 'prev' ? targetPaneSize - currentPaneSize : currentPaneSize - targetPaneSize;
+      const delta = this._collapseDirection === CollapseExpandDirection.Previous
+        ? targetPaneSize - currentPaneSize
+        : currentPaneSize - targetPaneSize;
+
+      return delta;
     }
 
     const paneCache = this._panesCacheSize[itemIndex];
+    this._panesCacheSize[itemIndex] = undefined;
 
-    if(paneCache && paneCache.direction === this._collapseDirection) {
-      this._targetPaneSize = paneCache.size - collapsedSize;
+    let targetPaneSize = 0;
+
+    if (paneCache && paneCache.direction === this._collapseDirection) {
+      targetPaneSize = paneCache.size - collapsedSize;
     } else {
-      debugger
-      this._targetPaneSize = this._collapseDirection === 'prev'
+      targetPaneSize = this._collapseDirection === CollapseExpandDirection.Previous
         ? this._calculateExpandToLeftSize(itemIndex - 1)
         : this._calculateExpandToRightSize(itemIndex + 1);
     }
 
-    this._panesCacheSize[itemIndex] = undefined;
-
-    const itemSize = this._targetPaneSize !== undefined && this._targetPaneSize >= minSize
-      ? this._targetPaneSize
+    const itemSize = targetPaneSize >= minSize
+      ? targetPaneSize
       : minSize;
 
-    const deltaSign = this._collapseDirection === 'prev' ? -1 : 1;
+    const deltaSign = this._collapseDirection === CollapseExpandDirection.Previous ? -1 : 1;
 
     const delta = itemSize * deltaSign;
 
