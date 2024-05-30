@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SliderHandle from 'ui/slider/ui.slider_handle';
+import SliderHandle from '__internal/ui/slider/m_slider_handle';
 
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 
