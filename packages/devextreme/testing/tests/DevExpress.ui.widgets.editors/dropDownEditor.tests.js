@@ -1101,6 +1101,37 @@ QUnit.module('Templates', () => {
         }
     });
 
+    QUnit.testInActiveWindow('custom button should be triggered when fieldTemplate is used (T1225549)', function(assert) {
+        const clickStub = sinon.stub();
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            fieldTemplate() {
+                const $textBox = $('<div>').dxTextBox();
+                return $('<div>').text(this.option('value')).append($textBox);
+            },
+            buttons: [{
+                name: 'test',
+                options: {
+                    onClick: clickStub,
+                }
+            }],
+        });
+        const instance = $dropDownEditor.dxDropDownEditor('instance');
+        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        $input.trigger('dxclick');
+        instance.option('value', 'test');
+
+        assert.ok($dropDownEditor.hasClass('dx-state-focused'), 'editor should be focused');
+        assert.equal($input.val(), 'test', 'input should not be empty');
+
+        const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttons = $buttonsContainer.children();
+
+        $buttons.eq(1).trigger('dxclick');
+
+        assert.strictEqual(clickStub.callCount, 1, 'custom button should be clicked');
+    });
+
     QUnit.testInActiveWindow('widget should detach focus events before fieldTemplate rerender', function(assert) {
         const focusOutSpy = sinon.stub();
         const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({

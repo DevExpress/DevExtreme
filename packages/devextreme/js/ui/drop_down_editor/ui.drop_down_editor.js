@@ -350,8 +350,7 @@ const DropDownEditor = TextBox.inherit({
     _renderTemplatedField: function(fieldTemplate, data) {
         const isFocused = focused(this._input());
         const $container = this._$container;
-
-        const isDirectChild = $container.find(`> .${TEXT_EDITOR_BUTTON_CONTAINER}`).length > 0;
+        const isDirectChild = $container.children(`.${TEXT_EDITOR_BUTTON_CONTAINER}`).length;
 
         this._detachKeyboardEvents();
         this._refreshButtonsContainer();
@@ -359,13 +358,10 @@ const DropDownEditor = TextBox.inherit({
 
         if(!isDirectChild) {
             this._detachWrapperContent();
-            $container.empty();
-            $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
+            $container.empty().append($('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER));
         }
 
-        const $templateWrapper = $container.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`);
-
-        $templateWrapper.empty();
+        const $templateWrapper = $container.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).empty();
 
         fieldTemplate.render({
             model: data,
