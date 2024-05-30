@@ -13,7 +13,7 @@
       <div class="option">
         <DxCheckBox
           v-model:value="limitSubmenuHeight"
-          :text="`Limit submenus height by ${SUBMENU_HEIGHT}px`"
+          :text="`Limit submenu height to ${SUBMENU_HEIGHT}px`"
         />
       </div>
     </div>

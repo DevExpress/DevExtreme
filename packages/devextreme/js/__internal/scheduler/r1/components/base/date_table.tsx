@@ -3,7 +3,7 @@ import { createReRenderEffect, InfernoWrapperComponent } from '@devextreme/runti
 import type { JSXTemplate, RefObject } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
-import type { CellTemplateProps } from '../types';
+import type { CellTemplateProps, DefaultProps } from '../types';
 import { DateTableBody, DateTableBodyDefaultProps } from './date_table_body';
 import { DateTableCellBase } from './date_table_cell_base';
 import type { LayoutProps } from './layout_props';
@@ -15,7 +15,7 @@ export interface DateTableProps extends LayoutProps {
   tableRef?: RefObject<HTMLTableElement>;
 }
 
-export const DateTableDefaultProps: DateTableProps = {
+export const DateTableDefaultProps: DefaultProps<DateTableProps> = {
   ...LayoutDefaultProps,
   // @ts-expect-error Different types between React and Inferno
   cellTemplate: DateTableCellBase,
@@ -28,9 +28,10 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
 
   render(): JSX.Element {
     const {
-      addDateTableClass,
-      tableRef,
       viewData,
+      viewContext,
+      tableRef,
+      addDateTableClass,
       width,
       cellTemplate,
       dataCellTemplate,
@@ -62,8 +63,9 @@ export class DateTable extends InfernoWrapperComponent<DateTableProps> {
         width={width}
       >
         <DateTableBody
-          cellTemplate={CellTemplateComponent}
           viewData={viewData}
+          viewContext={viewContext}
+          cellTemplate={CellTemplateComponent}
           dataCellTemplate={DataCellTemplateComponent}
           leftVirtualCellWidth={leftVirtualCellWidth}
           rightVirtualCellWidth={rightVirtualCellWidth}

@@ -39,5 +39,9 @@ export type HandlerMap = {
 export type InteractionEvent = KeyboardEvent | PointerEvent | MouseEvent | TouchEvent;
 export type ResizeEvents = 'onResize' | 'onResizeStart' | 'onResizeEnd';
 export type CollapseEvents = 'onCollapsePrev' | 'onCollapseNext';
+export enum CollapseExpandDirection {
+  Previous = 'prev',
+  Next = 'next',
+}
 
 export type FlexProperty = 'flexGrow' | 'flexDirection' | 'flexBasis' | 'flexShrink';

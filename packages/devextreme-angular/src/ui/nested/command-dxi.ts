@@ -19,7 +19,7 @@ import {
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
-import { DxiCustomCommand } from './base/custom-command-dxi';
+import { DxiDiagramCustomCommand } from './base/diagram-custom-command-dxi';
 import { DxiItemComponent } from './item-dxi';
 
 
@@ -36,7 +36,7 @@ import { DxiItemComponent } from './item-dxi';
         'text'
     ]
 })
-export class DxiCommandComponent extends DxiCustomCommand {
+export class DxiCommandComponent extends DxiDiagramCustomCommand {
 
     protected get _optionPath() {
         return 'commands';

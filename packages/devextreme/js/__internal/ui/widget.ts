@@ -11,8 +11,13 @@ interface AriaOptions {
 
 declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   setAria(ariaOptions: AriaOptions): void;
+  setAria(attribute: string, value: string | boolean, $element?: dxElementWrapper): void;
+
+  _setWidgetOption(componentInstancePath: string, args: unknown): void;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => void>;
+
+  _fireContentReadyAction(force?: boolean): void;
 
   // dom_component
   _render(): void;
