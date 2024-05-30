@@ -40,7 +40,6 @@ const items: Item[] = [
 
 const options: Options<Properties> = {
   items: [items],
-  disabled: [true, false],
   orientation: ['horizontal', 'vertical'],
   selectionMode: ['single', 'none'],
 };
