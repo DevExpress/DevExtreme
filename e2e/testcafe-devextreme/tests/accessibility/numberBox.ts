@@ -11,8 +11,6 @@ const options: Options<Properties> = {
   placeholder: [undefined, 'placeholder'],
   disabled: [true, false],
   readOnly: [true, false],
-  showClearButton: [true, false],
-  showSpinButtons: [true, false],
   mode: ['number', 'tel', 'text'],
   min: [undefined, 10],
   max: [undefined, 90],

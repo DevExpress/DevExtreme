@@ -31,10 +31,9 @@ const options: Options<Properties> = {
   height: [280],
   visible: [true, false],
   showTitle: [true, false],
-  title: [undefined, 'title'],
   dragEnabled: [true, false],
   showCloseButton: [true, false],
-  toolbarItems: [undefined, toolbarItems],
+  toolbarItems: [toolbarItems],
 };
 
 const a11yCheckConfig = isMaterialBased() ? {
