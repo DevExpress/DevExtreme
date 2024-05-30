@@ -14,6 +14,8 @@ const options: Options<Properties> = {
   name: ['', 'name'],
   height: [undefined, 250],
   width: [undefined, '50%'],
+  min: [undefined, 10],
+  max: [undefined, 90],
   label: [
     {
       visible: true,
@@ -46,4 +48,4 @@ const configuration: Configuration = {
   options,
 };
 
-// testAccessibility(configuration);
+testAccessibility(configuration);
