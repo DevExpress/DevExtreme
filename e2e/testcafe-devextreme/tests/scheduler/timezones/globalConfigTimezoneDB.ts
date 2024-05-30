@@ -17,32 +17,6 @@ const setGlobalConfig = ClientFunction(() => {
   });
 });
 
-test('Scheduler should support old timezone DB format', async (t) => {
-  const scheduler = new Scheduler('#container');
-  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
-
-  await takeScreenshot(
-    'appointments support old timezone db.png',
-    scheduler.workSpace,
-  );
-
-  await t.expect(compareResults.isValid())
-    .ok(compareResults.errorMessages());
-}).before(async () => {
-  const currentDate = new Date(2021, 3, 27);
-  await setGlobalConfig();
-
-  await createWidget('dxScheduler', {
-    dataSource: data,
-    views: ['workWeek'],
-    timeZone: 'Europe/London',
-    currentView: 'workWeek',
-    currentDate,
-    startDayHour: 8,
-    height: 600,
-  });
-});
-
 const data = [
   {
     text: 'Stand-up meeting',
@@ -90,3 +64,29 @@ const data = [
     startDate: '2021-04-27T09:00:00.000Z',
     endDate: '2021-04-27T10:35:00.000Z',
   }];
+
+test('Scheduler should support old timezone DB format', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await takeScreenshot(
+    'appointments support old timezone db.png',
+    scheduler.workSpace,
+  );
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const currentDate = new Date(2021, 3, 27);
+  await setGlobalConfig();
+
+  await createWidget('dxScheduler', {
+    dataSource: data,
+    views: ['workWeek'],
+    timeZone: 'Europe/London',
+    currentView: 'workWeek',
+    currentDate,
+    startDayHour: 8,
+    height: 600,
+  });
+});
