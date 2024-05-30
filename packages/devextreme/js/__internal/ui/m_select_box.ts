@@ -500,9 +500,9 @@ const SelectBox = (DropDownList as any).inherit({
   _isValueEqualInputText() {
     const initialSelectedItem = this.option('selectedItem');
 
-    if (initialSelectedItem === null) {
-      return false;
-    }
+    // if (initialSelectedItem === null) {
+    //   return false;
+    // }
 
     const value = this._displayGetter(initialSelectedItem);
     const displayValue = value ? String(value) : '';
