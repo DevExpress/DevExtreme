@@ -7,10 +7,12 @@ import ArrayStore from 'data/array_store';
 import DataSource from 'data/data_source';
 
 import 'generic_light.css!';
-const SPLITTER_CLASS = 'dx-splitter';
 const SPLITTER_ITEM_CLASS = 'dx-splitter-item';
 const RESIZE_HANDLE_CLASS = 'dx-resize-handle';
-
+const RESIZE_HANDLE_ICON_CLASS = 'dx-resize-handle-icon';
+const RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS = 'dx-resize-handle-collapse-prev-pane';
+const RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS = 'dx-resize-handle-collapse-next-pane';
+const SPLITTER_CLASS = 'dx-splitter';
 QUnit.testStart(() => {
     const markup =
         `<style nonce="qunit-test">
@@ -38,6 +40,18 @@ const moduleConfig = {
         };
 
         init();
+
+        this.getCollapsePrevButton = ($resizeHandle) => {
+            return $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_PREV_PANE_CLASS}`);
+        };
+
+        this.getCollapseNextButton = ($resizeHandle) => {
+            return $resizeHandle.find(`.${RESIZE_HANDLE_COLLAPSE_NEXT_PANE_CLASS}`);
+        };
+
+        this.getResizeHandleIcon = ($resizeHandle) => {
+            return $resizeHandle.find(`.${RESIZE_HANDLE_ICON_CLASS}`);
+        };
 
         this.getNestedSplitter = (splitterElement) => {
             return splitterElement.find(`.${SPLITTER_CLASS}`);
@@ -209,45 +223,76 @@ QUnit.module('Push API', moduleConfig, () => {
                         this.assertLayout(expectedLayout);
                         this.checkItemSizes(expectedItemSizes);
                     });
+                });
 
-                    QUnit.test(`resize should work correctly after updating datasource at runtime, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
-                        const dataSource = [ {
-                            resizable: true,
-                            size: '140px',
-                        }, {
-                            splitter: {
-                                orientation: 'vertical',
-                                dataSource: [{ }, { }],
-                            },
-                        }, { }];
+                QUnit.test(`resize should work correctly after updating datasource at runtime, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
+                    const dataSource = [ {
+                        resizable: true,
+                        size: '140px',
+                    }, {
+                        splitter: {
+                            orientation: 'vertical',
+                            dataSource: [{ }, { }],
+                        },
+                    }, { }];
 
-                        this.reinit({ dataSource, orientation, repaintChangesOnly });
+                    this.reinit({ dataSource, orientation, repaintChangesOnly });
 
-                        assert.strictEqual(this.getPanes().length, 3);
-                        assert.strictEqual(this.getResizeHandles().length, 2);
+                    assert.strictEqual(this.getPanes().length, 3);
+                    assert.strictEqual(this.getResizeHandles().length, 2);
 
-                        dataSource.push({ text: 'Pane_New' });
-                        this.instance.option('dataSource', dataSource);
+                    dataSource.push({ text: 'Pane_New' });
+                    this.instance.option('dataSource', dataSource);
 
-                        assert.strictEqual(this.getPanes().length, 4);
-                        assert.strictEqual(this.getResizeHandles().length, 3);
+                    assert.strictEqual(this.getPanes().length, 4);
+                    assert.strictEqual(this.getResizeHandles().length, 3);
 
-                        this.assertLayout([14.3443, 43.2377, 42.418, 0]);
-                        this.checkItemSizes([140, 422, 414, 0]);
+                    this.assertLayout([14.3443, 43.2377, 42.418, 0]);
+                    this.checkItemSizes([140, 422, 414, 0]);
+                });
+
+                QUnit.test(`nested splitter content should be rendered after pushApi insert, repaintChangesOnly ${repaintChangesOnly}, reshapeOnPush ${reshapeOnPush}, orientation ${orientation}`, function(assert) {
+                    const dataSource = new DataSource({
+                        store: new ArrayStore({
+                            data: [{
+                                resizable: true,
+                                size: '140px',
+                            }, {
+                                splitter: {
+                                    orientation: 'vertical',
+                                    dataSource: [{ text: 'innerPane' }, { }],
+                                },
+                            }, { }],
+                        }),
+                        reshapeOnPush
                     });
 
-                    QUnit.test(`nested splitter content should be rendered after pushApi insert, repaintChangesOnly ${repaintChangesOnly}, reshapeOnPush ${reshapeOnPush}, orientation ${orientation}`, function(assert) {
+                    this.reinit({ dataSource, orientation, repaintChangesOnly });
+
+                    const store = this.instance.getDataSource().store();
+                    store.push([{ data: { text: 'new' }, type: 'insert' }]);
+                    this.clock.tick(100);
+
+                    assert.strictEqual($(this.instance.$element().children()[2].children).text(), 'innerPane');
+                });
+
+                [
+                    {
+                        data: [{ id: 1 }, { id: 2 }],
+                        expectedLayout: [12.2984, 87.7016],
+                        expectedItemSizes: [122, 870],
+                    },
+                    {
+                        data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 } ],
+                        expectedLayout: [12.5, 25, 25, 37.5],
+                        expectedItemSizes: [122, 244, 244, 366],
+                    },
+                ].forEach(({ data, expectedLayout, expectedItemSizes }) => {
+                    QUnit.test(`update should work correctly, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
                         const dataSource = new DataSource({
                             store: new ArrayStore({
-                                data: [{
-                                    resizable: true,
-                                    size: '140px',
-                                }, {
-                                    splitter: {
-                                        orientation: 'vertical',
-                                        dataSource: [{ text: 'innerPane' }, { }],
-                                    },
-                                }, { }],
+                                data,
+                                key: 'id',
                             }),
                             reshapeOnPush
                         });
@@ -255,43 +300,42 @@ QUnit.module('Push API', moduleConfig, () => {
                         this.reinit({ dataSource, orientation, repaintChangesOnly });
 
                         const store = this.instance.getDataSource().store();
-                        store.push([{ data: { text: 'new' }, type: 'insert' }]);
+                        store.push([{ type: 'update', data: { size: 122 }, key: 1 }]);
                         this.clock.tick(100);
 
-                        assert.strictEqual($(this.instance.$element().children()[2].children).text(), 'innerPane');
+                        this.assertLayout(expectedLayout);
+                        this.checkItemSizes(expectedItemSizes);
+                    });
+                });
+
+                QUnit.test(`collapse and expand should work after insert, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
+                    const dataSource = new DataSource({
+                        store: new ArrayStore({
+                            data: [{ id: 1, collapsible: true }, { id: 2 }],
+                        }),
+                        reshapeOnPush
                     });
 
-                    [
-                        {
-                            data: [{ id: 1 }, { id: 2 }],
-                            expectedLayout: [12.2984, 87.7016],
-                            expectedItemSizes: [122, 870],
-                        },
-                        {
-                            data: [{ id: 1 }, { id: 2 }, { id: 3 }, { id: 4 } ],
-                            expectedLayout: [12.5, 25, 25, 37.5],
-                            expectedItemSizes: [122, 244, 244, 366],
-                        },
-                    ].forEach(({ data, expectedLayout, expectedItemSizes }) => {
-                        QUnit.test(`update should work correctly, reshapeOnPush ${reshapeOnPush}, repaintChangesOnly ${repaintChangesOnly}, orientation ${orientation}`, function(assert) {
-                            const dataSource = new DataSource({
-                                store: new ArrayStore({
-                                    data,
-                                    key: 'id',
-                                }),
-                                reshapeOnPush
-                            });
+                    this.reinit({ dataSource, orientation, repaintChangesOnly });
 
-                            this.reinit({ dataSource, orientation, repaintChangesOnly });
+                    const store = this.instance.getDataSource().store();
+                    store.push([{ data: { id: 5 }, type: 'insert' }]);
+                    this.clock.tick(100);
 
-                            const store = this.instance.getDataSource().store();
-                            store.push([{ type: 'update', data: { size: 122 }, key: 1 }]);
-                            this.clock.tick(100);
+                    this.assertLayout([50.4065, 49.5935, 0]);
+                    this.checkItemSizes([496, 488, 0]);
 
-                            this.assertLayout(expectedLayout);
-                            this.checkItemSizes(expectedItemSizes);
-                        });
-                    });
+                    const $collapsePrevButton = this.getCollapsePrevButton(this.getResizeHandles().eq(0));
+                    $collapsePrevButton.trigger('dxclick');
+
+                    this.assertLayout([0, 100, 0]);
+                    this.checkItemSizes([0, 984, 0 ]);
+
+                    const $collapseNextButton = this.getCollapseNextButton(this.getResizeHandles().eq(0));
+                    $collapseNextButton.trigger('dxclick');
+
+                    this.assertLayout([50.4065, 49.5935, 0]);
+                    this.checkItemSizes([496, 488, 0]);
                 });
             });
         });
