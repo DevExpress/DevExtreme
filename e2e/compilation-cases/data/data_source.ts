@@ -14,12 +14,12 @@ import {
 import DataSource, {
   DataSourceLike,
   DataSourceOptionsStub,
-} from '../../../js/data/data_source';
-import CustomStore from '../../../js/data/custom_store';
-import ArrayStore from '../../../js/data/array_store';
-import ODataStore from '../../../js/data/odata/store';
-import LocalStore from '../../../js/data/local_store';
-import { Store } from '../../../js/data/index';
+} from 'devextreme/data/data_source';
+import CustomStore from 'devextreme/data/custom_store';
+import ArrayStore from 'devextreme/data/array_store';
+import ODataStore from 'devextreme/data/odata/store';
+import LocalStore from 'devextreme/data/local_store';
+import { Store } from 'devextreme/data/index';
 
 export function promiseResolveAcceptsMultipleArguments() {
   const callback: (a: any, b: any) => void = ANY;

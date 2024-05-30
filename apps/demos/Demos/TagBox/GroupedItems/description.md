@@ -1,4 +1,7 @@
-The TagBox component can arrange items into a two-level parent-child hierarchy. To group items, set the [grouped](/Documentation/ApiReference/UI_Components/dxTagBox/Configuration/#grouped) property to **true** and ensure the data source defines the hierarchy in one of the following ways:
+The TagBox component can arrange items into a two-level parent-child hierarchy. To group items, set the [grouped](/Documentation/ApiReference/UI_Components/dxTagBox/Configuration/#grouped) property to **true**. 
+<--split-->
+
+Ensure the data source defines the hierarchy in one of the following ways:
 
 - **Grouping Field**    
 The data source can contain a plain array of objects with multiple fields. Assign a field to the DataSource's [group](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#group) property to create a hierarchical display. Parent items display unique values from the specified field, and Child items display grouped values. This demo shows how to use this data source type.

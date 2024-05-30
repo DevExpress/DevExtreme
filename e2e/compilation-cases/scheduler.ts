@@ -2,7 +2,7 @@
 
 import {
   Appointment,
-} from '../../js/ui/scheduler';
+} from 'devextreme/js/ui/scheduler';
 
 import {
   ANY,
