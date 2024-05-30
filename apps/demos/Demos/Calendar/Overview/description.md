@@ -1,3 +1,6 @@
+This demo shows how to use additional properties to customize your Calendar. You can toggle the checkboxes on the right to change the Calendar in real time.
+<--split-->
+
 When you add a Calendar to an application, you need to specify its [value](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#value) in one of the following formats: 
 
 - Date    
@@ -16,8 +19,6 @@ Specifies the date with a string value. The UI component supports the following 
 
 - Array of the formats mentioned before    
 Available only for *'multiple'* and *'range'* [selection modes](/Documentation/ApiReference/UI_Components/dxCalendar/Configuration/#selectionMode). The array includes all selected dates. 
-
-This demo shows how to use additional properties to customize your Calendar. You can toggle the checkboxes on the right to change the Calendar in real time.
 
 ## Specify First Day of Week and Display Week Numbers
 

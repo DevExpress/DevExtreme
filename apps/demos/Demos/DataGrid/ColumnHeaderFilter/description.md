@@ -1,4 +1,5 @@
 The DevExtreme Data Grid includes a column header filter option – with it, users can quickly filter rows against values selected in a pop-up menu. To display the built-in filter menu, users can click the Grid’s header filter icon (displayed within the column header).
+<--split-->
 
 ### Display Header Filter Icons
 
