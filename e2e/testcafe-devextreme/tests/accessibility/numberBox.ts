@@ -15,7 +15,7 @@ const options: Options<Properties> = {
   showSpinButtons: [true, false],
   mode: ['number', 'tel', 'text'],
   min: [undefined, 10],
-  max: [undefined, 90],
+  max: [undefined, 20],
   label: ['', 'label'],
   name: ['', 'name'],
   // NOTE: Doesn't matter if there are contrast issues

@@ -34,7 +34,7 @@ const options: Options<Properties> = {
   title: [undefined, 'title'],
   dragEnabled: [true, false],
   showCloseButton: [true, false],
-  toolbarItems: [toolbarItems],
+  toolbarItems: [undefined, toolbarItems],
 };
 
 const a11yCheckConfig = isMaterialBased() ? {
