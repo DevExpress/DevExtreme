@@ -59,6 +59,10 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
     super.init();
   }
 
+  public isEditRow(rowIndex) {
+    return !this.isPopupEditMode() && super.isEditRow(rowIndex);
+  }
+
   private isFormOrPopupEditMode() {
     return this.isPopupEditMode() || this.isFormEditMode();
   }
