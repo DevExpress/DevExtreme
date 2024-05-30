@@ -2,7 +2,7 @@
   "name": "devextreme-angular-playground",
   "description": "DevExtreme Angular UI and Visualization Components",
   "private": true,
-  "version": "24.1.1",
+  "version": "24.1.2",
   "author": "Developer Express Inc.",
   "license": "MIT",
   "dependencies": {
@@ -16,14 +16,14 @@
     "@angular/platform-browser-dynamic": "~16.2.12",
     "@angular/router": "~16.2.12",
     "core-js": "^2.6.12",
-    "devextreme": "~24.1.1",
-    "devextreme-angular": "~24.1.1",
+    "devextreme": "~24.1.2",
+    "devextreme-angular": "~24.1.2",
     "rxjs": "^6.6.7",
     "tslib": "^2.6.1",
     "zone.js": "0.13.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "16.2.12",
+    "@angular-devkit/build-angular": "16.2.14",
     "@angular/cli": "~16.2.12",
     "@angular/platform-server": "~16.2.12",
     "@angular/language-service": "~16.2.12",

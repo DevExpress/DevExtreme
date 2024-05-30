@@ -9,6 +9,7 @@
     >
       <img
         :src="tagData.ImageSrc"
+        :alt="`${tagData.Name}. Picture`"
         class="tag-img"
       >
       <span>{{ tagData.Name }}</span>

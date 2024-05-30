@@ -220,7 +220,6 @@ export class Appointment extends DOMComponent {
     const tooltipLabel = messageLocalization.format('dxScheduler-editorLabelEndDate');
     const tooltipText = [tooltipLabel, ': ', dateLocalization.format(endDate, 'monthAndDay'), ', ', dateLocalization.format(endDate, 'year')].join('');
 
-    // @ts-expect-error
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERENTER_EVENT_NAME, () => {
       show({
@@ -228,7 +227,6 @@ export class Appointment extends DOMComponent {
         content: tooltipText,
       });
     });
-    // @ts-expect-error
     eventsEngine.off($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME);
     eventsEngine.on($icon, REDUCED_APPOINTMENT_POINTERLEAVE_EVENT_NAME, () => {
       hide();

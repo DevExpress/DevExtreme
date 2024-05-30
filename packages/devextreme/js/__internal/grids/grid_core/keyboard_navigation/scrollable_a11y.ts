@@ -13,7 +13,6 @@ And to make navigation via Tab key working properly some focus event handlers ar
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
@@ -21,31 +20,6 @@ import type { KeyboardNavigationController } from './m_keyboard_navigation';
 // eslint-disable-next-line max-len
 export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
-
-  private rowsViewFocusOutHandlerContext!: (event: Event) => void;
-
-  public init(): void {
-    super.init();
-
-    // eslint-disable-next-line max-len
-    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext ?? this.rowsViewFocusOutHandler.bind(this);
-  }
-
-  protected subscribeToRowsViewFocusEvent(): void {
-    super.subscribeToRowsViewFocusEvent();
-
-    const $rowsView = this._rowsView?.element();
-
-    eventsEngine.on($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
-  }
-
-  protected unsubscribeFromRowsViewFocusEvent(): void {
-    super.unsubscribeFromRowsViewFocusEvent();
-
-    const $rowsView = this._rowsView?.element();
-
-    eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
-  }
 
   protected rowsViewFocusHandler(event: any): void {
     const $target = $(event.target);
@@ -55,7 +29,8 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.rowsViewFocusHandler(event);
   }
 
-  private rowsViewFocusOutHandler(): void {
+  protected rowsViewFocusOutHandler(): void {
+    super.rowsViewFocusOutHandler();
     this.makeScrollableFocusableIfNeed();
   }
 

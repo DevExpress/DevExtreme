@@ -1,13 +1,11 @@
 $(() => {
   $('#gauge').dxBarGauge({
-    startValue: -50,
-    endValue: 50,
+    startValue: -5,
+    endValue: 5,
     baseValue: 0,
-    values: [-21.3, 14.8, -30.9, 45.2],
+    values: [-2.13, 1.48, -3.09, 4.52, 4.9, 3.9],
     label: {
-      customizeText(arg) {
-        return `${arg.valueText} mm`;
-      },
+      format: "##.## mm;-##.## mm",
     },
     export: {
       enabled: true,

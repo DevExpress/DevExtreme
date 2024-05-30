@@ -814,6 +814,154 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         });
     });
 
+    [
+        {
+            items: [{ size: '30%', collapsible: true }, { size: '10%', collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'prev', resizeHandleIndex: 1, expectedLayout: ['30.9917', '0', '29.8898', '19.5592', '19.5592'] },
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['15.4959', '15.4959', '29.8898', '19.5592', '19.5592'] },
+                { targetButton: 'prev', resizeHandleIndex: 0, expectedLayout: ['0', '30.9917', '29.8898', '19.5592', '19.5592'] },
+                { targetButton: 'next', resizeHandleIndex: 3, expectedLayout: ['0', '30.9917', '29.8898', '39.1185', '0'] },
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['0', '30.9917', '69.0083', '0', '0'] },
+                { targetButton: 'next', resizeHandleIndex: 3, expectedLayout: ['0', '30.9917', '69.0083', '0', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 2, expectedLayout: ['0', '30.9917', '0', '69.0083', '0'] },
+                { targetButton: 'prev', resizeHandleIndex: 1, expectedLayout: ['0', '15.4959', '15.4959', '69.0083', '0'] },
+                { targetButton: 'next', resizeHandleIndex: 0, expectedLayout: ['15.4959', '0', '15.4959', '69.0083', '0'] },
+            ]
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['25', '25', '50', '0'] },
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['25', '75', '0', '0'] },
+            ]
+        },
+    ].forEach(({ items, scenarios }) => {
+        QUnit.test(`The pane should restore its size after collapsing and expanding by click, items: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            scenarios.forEach(({ targetButton, expectedLayout, resizeHandleIndex = 0 }) => {
+                const $resizeHandle = this.getResizeHandles().eq(resizeHandleIndex);
+
+                const $collapseButton = targetButton === 'prev'
+                    ? this.getCollapsePrevButton($resizeHandle)
+                    : this.getCollapseNextButton($resizeHandle);
+
+                $collapseButton.trigger('dxclick');
+
+                this.assertLayout(expectedLayout);
+            });
+        });
+    });
+
+    [
+        {
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true, size: '40%' }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['19.6721', '19.6721', '60.6557', '0'] },
+                { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['19.6721', '19.6721', '19.6721', '40.9836'] },
+            ]
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true }, { collapsible: true }, { collapsible: true, size: '40%' }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 2, expectedLayout: ['19.6721', '19.6721', '60.6557', '0'] },
+                { newCollapsedValue: true, paneIndex: 2, expectedLayout: ['19.6721', '80.3279', '0', '0'] },
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '100', '0', '0'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['19.6721', '80.3279', '0', '0'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['19.6721', '19.6721', '60.6557', '0'] },
+            ]
+        },
+        {
+            items: [{ collapsible: true }, { collapsible: true, size: '30%' }, { collapsible: true }, { collapsible: true }],
+            scenarios: [
+                { targetButton: 'next', resizeHandleIndex: 1, expectedLayout: ['23.0874', '53.8251', '0', '23.0874'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['23.0874', '30.7377', '23.0874', '23.0874'] },
+            ]
+        },
+    ].forEach(({ items, scenarios }) => {
+        QUnit.test(`The pane collapse/expand scenarios using API and UI, items: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            scenarios.forEach((scenario) => {
+                const { newCollapsedValue, paneIndex, expectedLayout, targetButton, resizeHandleIndex } = scenario;
+
+                if(targetButton) {
+                    const $resizeHandle = this.getResizeHandles().eq(resizeHandleIndex);
+
+                    const $collapseButton = targetButton === 'prev'
+                        ? this.getCollapsePrevButton($resizeHandle)
+                        : this.getCollapseNextButton($resizeHandle);
+
+                    $collapseButton.trigger('dxclick');
+                } else {
+                    this.instance.option(`items[${paneIndex}].collapsed`, newCollapsedValue);
+                }
+
+                this.assertLayout(expectedLayout);
+            });
+        });
+    });
+
+    [
+        {
+            items: [{ }, { }, { }, { }],
+            scenarios: [
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['25', '25', '25', '25'] },
+            ]
+        },
+        {
+            items: [{ size: '150px' }, { }, { }, { }],
+            scenarios: [
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '43.5792', '28.2104', '28.2104'] },
+                { newCollapsedValue: true, paneIndex: 1, expectedLayout: ['0', '0', '71.7896', '28.2104'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['15.3689', '0', '56.4208', '28.2104'] },
+            ]
+        },
+        {
+            items: [{ collapsed: true, size: '150px', collapsible: true }, { collapsible: true }, { collapsed: true, collapsible: true }, { }],
+            scenarios: [
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['25', '25', '0', '50'] },
+                { newCollapsedValue: false, paneIndex: 2, expectedLayout: ['25', '25', '25', '25'] },
+            ]
+        },
+        {
+            items: [{ collapsed: false, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: true, size: '150px', collapsible: true }],
+            scenarios: [
+                { newCollapsedValue: false, paneIndex: 3, expectedLayout: ['50', '0', '25', '25'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['50', '12.5', '12.5', '25'] },
+            ]
+        },
+        {
+            items: [{ collapsed: true, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { collapsed: false, collapsible: true }],
+            scenarios: [
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['0', '25', '25', '50'] },
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['12.5', '12.5', '25', '50'] },
+                { newCollapsedValue: true, paneIndex: 1, expectedLayout: ['12.5', '0', '37.5', '50'] },
+            ]
+        },
+        {
+            items: [{ collapsed: true, collapsible: true }, { collapsed: true, collapsible: true }, { collapsible: true }, { size: '20%', collapsed: false, collapsible: true }],
+            scenarios: [
+                { newCollapsedValue: false, paneIndex: 0, expectedLayout: ['39.7541', '0', '39.7541', '20.4655674103'] },
+                { newCollapsedValue: false, paneIndex: 1, expectedLayout: ['39.7541', '19.877', '19.877', '20.4655674103'] },
+                { newCollapsedValue: true, paneIndex: 0, expectedLayout: ['0', '59.6311', '19.877', '20.4655674103'] },
+            ]
+        }
+    ].forEach(({ items, scenarios }) => {
+        QUnit.test(`The pane should restore its size after collapsing and expanding at runtime, items: ${JSON.stringify(items)}`, function(assert) {
+            this.reinit({ items });
+
+            scenarios.forEach((scenario) => {
+                const { newCollapsedValue, paneIndex, expectedLayout } = scenario;
+
+                this.instance.option(`items[${paneIndex}].collapsed`, newCollapsedValue);
+
+                this.assertLayout(expectedLayout);
+            });
+        });
+    });
+
     [{
         items: [{ collapsible: true }, { collapsible: true }],
         expectedLayout: ['0', '100'],
@@ -999,7 +1147,7 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
         this.instance.option('items[0].collapsed', true);
 
-        this.assertLayout(['0', '33.3333', '66.6667']);
+        this.assertLayout(['0', '66.6667', '33.3333']);
     });
 
     QUnit.test('Whole layout should be repositined on change Pane.collapsedSize option at runtime', function(assert) {
@@ -1337,8 +1485,8 @@ QUnit.module('Resizing', moduleConfig, () => {
 
             this.instance.option(orientation === 'horizontal' ? 'width' : 'height', 700);
 
-            this.checkItemSizes([0, 166.672, 215.328, 300]);
-            this.assertLayout([0, 24.4387, 31.573, 43.9883]);
+            this.checkItemSizes([159.133, 159.133, 159.133, 204.602]);
+            this.assertLayout([23.3333, 23.3333, 23.3333, 30]);
         });
     });
 
@@ -2350,7 +2498,6 @@ QUnit.module('Events', moduleConfig, () => {
                 dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
             });
 
-
             const pointer = pointerMock(this.getResizeHandles(false).eq(0));
 
             pointer.start().dragStart().drag(0, 50).dragEnd();
@@ -2494,6 +2641,38 @@ QUnit.module('Events', moduleConfig, () => {
         assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');
     });
 
+    QUnit.test('onItemExpanded should be called after change collapsed option at runtime', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsed: true, collapsible: true }, { collapsible: true }]
+        });
+
+        this.instance.option('items[0].collapsed', false);
+
+        assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
+        assert.strictEqual(onItemExpanded.callCount, 1, 'onItemExpanded called');
+    });
+
+    QUnit.test('onItemCollapsed should be called after change collapsed option at runtime', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsed: false, collapsible: true }, { collapsible: true }]
+        });
+
+        this.instance.option('items[0].collapsed', true);
+
+        assert.strictEqual(onItemCollapsed.callCount, 1, 'onItemCollapsed called');
+        assert.strictEqual(onItemExpanded.callCount, 0, 'onItemExpanded not called');
+    });
+
     QUnit.test('Two clicks on collapse buttons should not trigger double click event on resizeHandle', function(assert) {
         const doubleClickStub = sinon.stub();
 
@@ -2575,6 +2754,70 @@ QUnit.module('Events', moduleConfig, () => {
 
             $targetButton.trigger('dxclick');
         });
+    });
+
+    QUnit.test('onItemCollapsed should have correct argument fields on item collapse at runtime', function(assert) {
+        assert.expect(8);
+
+        this.reinit({
+            onItemCollapsed: (e) => {
+                const { component, element, event, itemData, itemElement, itemIndex } = e;
+
+                const $item = this.getPanes().eq(0);
+
+                assert.strictEqual(component, this.instance, 'component field is correct');
+                assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                assert.strictEqual(event, undefined, 'event is not defined');
+                assert.strictEqual(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
+                assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
+                assert.deepEqual(itemData, { collapsed: true, size: 0, collapsible: true }, 'itemData field is correct');
+                assert.strictEqual(itemIndex, 0, 'itemIndex is correct');
+            },
+            dataSource: [{ collapsible: true, }, { collapsible: true, }]
+        });
+
+        this.instance.option('items[0].collapsed', true);
+    });
+
+    QUnit.test('onItemExpanded should have correct argument fields on item expand at runtime', function(assert) {
+        assert.expect(8);
+
+        this.reinit({
+            onItemExpanded: (e) => {
+                const { component, element, event, itemData, itemElement, itemIndex } = e;
+
+                const $item = this.getPanes().eq(0);
+
+                assert.strictEqual(component, this.instance, 'component field is correct');
+                assert.strictEqual(isRenderer(element), !!config().useJQuery, 'element is correct');
+                assert.strictEqual($(element).is(this.$element), true, 'element field is correct');
+                assert.strictEqual(event, undefined, 'event is not defined');
+                assert.strictEqual(isRenderer(itemElement), !!config().useJQuery, 'itemElement is correct');
+                assert.strictEqual($(itemElement).is($item), true, 'itemElement field is correct');
+                assert.strictEqual(itemData.collapsed, false, 'itemData is correct');
+                assert.strictEqual(itemIndex, 0, 'itemIndex');
+            },
+            dataSource: [{ collapsed: true, collapsible: true }, { collapsible: true }]
+        });
+
+        this.instance.option('items[0].collapsed', false);
+    });
+
+    QUnit.test('onItemCollapsed events should not be called if non declared collapsed option is changing to false', function(assert) {
+        const onItemCollapsed = sinon.stub();
+        const onItemExpanded = sinon.stub();
+
+        this.reinit({
+            onItemCollapsed,
+            onItemExpanded,
+            dataSource: [{ collapsible: true }, { collapsible: true }]
+        });
+
+        this.instance.option('items[0].collapsed', false);
+
+        assert.strictEqual(onItemCollapsed.callCount, 0, 'onItemCollapsed not called');
+        assert.strictEqual(onItemExpanded.callCount, 0, 'onItemExpanded not called');
     });
 
     ['onItemCollapsed', 'onItemExpanded'].forEach(eventHandler => {

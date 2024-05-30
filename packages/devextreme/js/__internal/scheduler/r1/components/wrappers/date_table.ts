@@ -25,8 +25,9 @@ export class DateTableComponent extends ComponentWrapper {
       elements: [],
       templates: ['cellTemplate', 'dataCellTemplate'],
       props: [
-        'cellTemplate',
         'viewData',
+        'viewContext',
+        'cellTemplate',
         'groupOrientation',
         'leftVirtualCellWidth',
         'rightVirtualCellWidth',

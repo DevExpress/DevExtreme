@@ -2,7 +2,7 @@
   "name": "devextreme-vue-playground",
   "description": "DevExtreme Vue UI and Visualization Components",
   "private": true,
-  "version": "24.1.1",
+  "version": "24.1.2",
   "author": "Developer Express Inc.",
   "license": "MIT",
   "repository": {
@@ -10,12 +10,11 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "dependencies": {
-    "devextreme": "~24.1.1",
-    "devextreme-vue": "~24.1.1",
+    "devextreme": "~24.1.2",
+    "devextreme-vue": "~24.1.2",
     "vue": "3.2.47"
   },
   "devDependencies": {
-    "@types/jest": "22.2.3",
     "@types/node": "20.11.17",
     "@vue/compiler-sfc": "3.3.4",
     "@vue/test-utils": "2.0.0-beta.7",
@@ -25,7 +24,7 @@
     "style-loader": "0.23.1",
     "ts-loader": "8.4.0",
     "tsconfig-paths-webpack-plugin": "3.5.2",
-    "typescript": "4.7.4",
+    "typescript": "4.9.5",
     "url-loader": "1.1.2",
     "vue-loader": "17.4.2",
     "vue-router": "4.2.5",

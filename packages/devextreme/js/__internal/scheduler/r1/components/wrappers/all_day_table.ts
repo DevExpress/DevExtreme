@@ -14,7 +14,19 @@ export class AllDayTableComponent extends DateTableComponent {
       allowNull: [],
       elements: [],
       templates: ['dataCellTemplate'],
-      props: ['viewData', 'groupOrientation', 'leftVirtualCellWidth', 'rightVirtualCellWidth', 'topVirtualRowHeight', 'bottomVirtualRowHeight', 'addDateTableClass', 'addVerticalSizesClassToRows', 'width', 'dataCellTemplate'],
+      props: [
+        'viewData',
+        'viewContext',
+        'groupOrientation',
+        'leftVirtualCellWidth',
+        'rightVirtualCellWidth',
+        'topVirtualRowHeight',
+        'bottomVirtualRowHeight',
+        'addDateTableClass',
+        'addVerticalSizesClassToRows',
+        'width',
+        'dataCellTemplate',
+      ],
     };
   }
   /* eslint-enable @typescript-eslint/explicit-module-boundary-types */

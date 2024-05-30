@@ -1,9 +1,11 @@
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 
 import type { GroupOrientation } from '../../types';
-import type { DataCellTemplateProps, GroupedViewData } from '../types';
+import type {
+  DataCellTemplateProps, DefaultProps, GroupedViewData, PropsWithViewContext,
+} from '../types';
 
-export interface LayoutProps {
+export interface LayoutProps extends PropsWithViewContext {
   viewData: GroupedViewData;
   groupOrientation?: GroupOrientation;
   leftVirtualCellWidth: number;
@@ -16,7 +18,7 @@ export interface LayoutProps {
   dataCellTemplate?: JSXTemplate<DataCellTemplateProps>;
 }
 
-export const LayoutDefaultProps: LayoutProps = {
+export const LayoutDefaultProps: DefaultProps<LayoutProps> = {
   viewData: {
     groupedData: [],
     leftVirtualCellCount: 0,

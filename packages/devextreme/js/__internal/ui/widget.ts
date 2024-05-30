@@ -1,3 +1,4 @@
+import type { Component } from '@js/core/component';
 import type { dxElementWrapper } from '@js/core/renderer';
 import Widget from '@js/ui/widget/ui.widget';
 
@@ -10,8 +11,13 @@ interface AriaOptions {
 
 declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   setAria(ariaOptions: AriaOptions): void;
+  setAria(attribute: string, value: string | boolean, $element?: dxElementWrapper): void;
+
+  _setWidgetOption(componentInstancePath: string, args: unknown): void;
 
   _supportedKeys(): Record<string, (e: KeyboardEvent) => void>;
+
+  _fireContentReadyAction(force?: boolean): void;
 
   // dom_component
   _render(): void;
@@ -19,19 +25,20 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   _clean(): void;
 
   _getDefaultOptions(): TProperties;
+  _defaultOptionsRules(): Record<string, unknown>[];
   _optionChanged(args: Record<string, unknown>): void;
 
   _toggleActiveState($element: dxElementWrapper, value: boolean): void;
 
-  _createComponent(
+  _createComponent<TComponent>(
     element: string | HTMLElement | dxElementWrapper,
-    component: unknown,
-    config: TProperties,
-  ): void;
+    component: new (...args) => TComponent,
+    config: TComponent extends Component<infer TTProperties> ? TTProperties : never,
+  ): TComponent;
 
   // component
   _init(): void;
-  _createActionByOption(optionName: string, config: Record<string, unknown>);
+  _createActionByOption(optionName: string, config?: Record<string, unknown>);
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
