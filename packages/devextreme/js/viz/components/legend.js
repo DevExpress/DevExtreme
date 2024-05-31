@@ -423,7 +423,7 @@ extend(legendPrototype, {
             y: 0
         };
 
-        if(that.isVisible() && !that._title) {
+        if(that.isVisible()) {
             that._title = new Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
 
