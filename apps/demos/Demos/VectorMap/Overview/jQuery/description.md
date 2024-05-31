@@ -1,5 +1,5 @@
 DevExtreme includes two map controls available as jQuery plugins - JavaScript Map for creating GPS navigation maps, and JavaScript Vector Map for creating vector maps. The Map control works with Google Maps and Bing Maps API, supports roadmap, satellite, and hybrid views, and allows a user to create markers and routes. The Vector Map control ships with several ready-to-use data sources, provides a variety of colorization modes, and supports multiple legends. Both the controls are interactive and highly customizable.
-<--split-->
+<!--split-->
 
 [note]
 

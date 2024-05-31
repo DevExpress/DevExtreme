@@ -1,5 +1,5 @@
 The TreeList allows users to edit data in multiple modes. This demo shows the *"row"* edit mode. To edit a row, click its "Edit" button. Only one row can be in the edit state at a time.
-<--split-->
+<!--split-->
 
 To enable row edit mode, set the [mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#mode) property to *"row"* and enable the [editing](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#mode) object's [allowUpdating](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#allowUpdating), [allowAdding](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#allowAdding), and [allowDeleting](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#allowDeleting) properties to allow edit operations.
 

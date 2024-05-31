@@ -1,5 +1,5 @@
 The filter row allows users to enter a value for each column and filter grid data by those values. To display the filter row, set the **filterRow**.[visible](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/filterRow/#visible) property to **true**. If you need to disable a filter row cell for a specific column, set the column's [allowFiltering](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#allowFiltering) property to **false**.
-<--split-->
+<!--split-->
 
 Depending on a column's [dataType](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#dataType), its filter row cell contains different editors:
 

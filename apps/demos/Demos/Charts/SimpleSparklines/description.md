@@ -1,2 +1,2 @@
 In&nbsp;this demo, a&nbsp;set of&nbsp;line-like sparklines is&nbsp;placed into a&nbsp;table. Although these sparklines look similar, they have different series types. The first table column contains sparklines of&nbsp;the _line_ series type. In&nbsp;the second table column, _spline_ sparklines are placed. The third table column displays sparklines of&nbsp;the _step line_ series type.
-<--split-->
+<!--split-->

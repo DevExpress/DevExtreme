@@ -1,5 +1,5 @@
 This functionality requires that data objects have a data field that identifies which grid they belong to. In this demo, this data field is `Status`.
-<--split-->
+<!--split-->
 
 To allow users to move rows between grids, follow these steps:
 

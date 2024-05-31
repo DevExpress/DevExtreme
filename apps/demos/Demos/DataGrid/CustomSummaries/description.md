@@ -1,5 +1,5 @@
 The DataGrid can calculate custom summaries on the client or server side. In this demo, we have implemented client-side logic. The instructions below explain how to do this in your code.
-<--split-->
+<!--split-->
 
 1. Make sure that the **remoteOperations**.[summary](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/remoteOperations/#summary), **remoteOperations**.[groupPaging](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/remoteOperations/#groupPaging), or [remoteOperations](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/remoteOperations/) property is not set or set to **false**.
 

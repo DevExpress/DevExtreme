@@ -1,2 +1,2 @@
 This demo illustrates the use of&nbsp;the **pointClick** callback function to&nbsp;implement selection in&nbsp;the Chart component. The **selectionMode** of&nbsp;the series is&nbsp;set to _&laquo;allArgumentPoints&raquo;_, which means that when a&nbsp;user selects a&nbsp;point, other points with the same argument also become selected.
-<--split-->
+<!--split-->

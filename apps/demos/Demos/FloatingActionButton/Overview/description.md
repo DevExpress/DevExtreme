@@ -1,7 +1,7 @@
 The Floating Action Button (FAB) is the primary action button on a screen that is displayed in front of all screen content. The FAB can perform an action or open a stack of two to five related actions (speed dial).
 
 This demo illustrates a FAB that opens a speed dial when there are selected grid rows or performs a custom action&mdash;adds a new row&mdash;when nothing is selected.
-<--split-->
+<!--split-->
 
 In DevExtreme, the FAB is implemented as a container that collects and stores [SpeedDialAction][0] components. To display a FAB that performs a custom action, add a SpeedDialAction to the page. Specify its [onClick][1] and [icon][2] properties. Setting other properties is not required.
 

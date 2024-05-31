@@ -1,5 +1,5 @@
 Layout algorithms determine the position and size of tiles and groups. In this demo, you can use the drop-down menu below the component to apply different algorithms.
-<--split-->
+<!--split-->
 
 The TreeMap component supports three layout algorithms out of the box:
 

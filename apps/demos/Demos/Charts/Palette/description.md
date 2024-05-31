@@ -1,5 +1,5 @@
 The PieChart, like other DevExtreme Data Visualization components, allows you to apply multiple predefined palettes. In this demo, you can use two drop-down menus under the PieChart to choose a palette and change the way it is extended when the number of colors is insufficient to paint each series point differently.
-<--split-->
+<!--split-->
 
 ## Specify a Palette
 

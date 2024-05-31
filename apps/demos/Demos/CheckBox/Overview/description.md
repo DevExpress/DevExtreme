@@ -3,7 +3,7 @@ When you add the CheckBox component to an application, specify its [value](/Docu
 - Checked ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `true`).
 - Unchecked ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `false`).
 - Indeterminate ([value](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#value) is `null` or `undefined`).
-<--split-->
+<!--split-->
 
 The component supports the three state mode. In this demo, the [enableThreeStateBehavior](/Documentation/ApiReference/UI_Components/dxCheckBox/Configuration/#enableThreeStateBehavior) property of the "Three state mode" CheckBox is enabled. You can cycle through the states of this CheckBox in the following order:
 

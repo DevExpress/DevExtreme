@@ -1,2 +1,2 @@
 The TileView component supports 3rd-party template engines, such as <a href="http://mustache.github.io/" target="_blank">Mustache</a> used in this example. A custom template is defined as a script in the _index.html_ file. To enforce the use of the Mustache template engine, call the [DevExpress.setTemplateEngine(options)](/Documentation/ApiReference/Common/Utils/#setTemplateEngineoptions) method as shown in this demo.
-<--split-->
+<!--split-->

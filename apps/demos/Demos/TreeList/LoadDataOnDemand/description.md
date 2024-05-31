@@ -1,5 +1,5 @@
 The TreeList can load a remote dataset dynamically as a user expands nodes. The dataset must have a [plain structure](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#dataStructure).
-<--split-->
+<!--split-->
 
 This feature requires client- and server-side configurations. To configure the client-side part, do the following:
 

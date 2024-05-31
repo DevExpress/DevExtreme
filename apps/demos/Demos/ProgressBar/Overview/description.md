@@ -1,5 +1,5 @@
 This demo shows how to configure the ProgressBar component.
-<--split-->
+<!--split-->
 
 To create a ProgressBar, declare it in markup. You can specify the following properties to change the ProgressBar's numeric scale:
 

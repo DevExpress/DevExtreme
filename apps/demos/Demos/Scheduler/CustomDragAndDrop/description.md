@@ -1,5 +1,5 @@
 Appointment drag and drop is enabled out-of-the-box, but only if appointments are moved within the Scheduler. In this demo, appointments can be moved between the Scheduler and a list.
-<--split-->
+<!--split-->
 
 Follow the steps below to implement this functionality:
 

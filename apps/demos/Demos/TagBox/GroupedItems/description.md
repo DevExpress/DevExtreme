@@ -1,5 +1,5 @@
 The TagBox component can arrange items into a two-level parent-child hierarchy. To group items, set the [grouped](/Documentation/ApiReference/UI_Components/dxTagBox/Configuration/#grouped) property to **true**. 
-<--split-->
+<!--split-->
 
 Ensure the data source defines the hierarchy in one of the following ways:
 

@@ -1,2 +1,2 @@
 _Range area_ series can be&nbsp;used to&nbsp;display value ranges corresponding to&nbsp;specified arguments. Data is&nbsp;displayed as&nbsp;a&nbsp;color filled space between the line that joins the beginning and the line that joins the end series points.
-<--split-->
+<!--split-->

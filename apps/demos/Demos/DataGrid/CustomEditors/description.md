@@ -1,5 +1,5 @@
 Different editors can be used to edit cell values in grid columns. The default editor depends on the column configuration. The dependency is illustrated in the [editorOptions](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#editorOptions) object's description (this object is used to customize the default editor). In this demo, the [SelectBox](/Documentation/ApiReference/UI_Components/dxSelectBox/) component is the Status column's default editor, and the **editorOptions** object is used to specify the component's [itemTemplate](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#itemTemplate).
-<--split-->
+<!--split-->
  
 If the default editor is unsuitable, you can replace it with a custom editor. For this, implement an [editCellTemplate](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#editCellTemplate) that allows you to configure the replacement editor's appearance and behavior. To change the cell value and, optionally, the displayed value after the editor's value is changed, use the **setValue()** method of the **editCellTemplate**. In this demo, the default editors in the Owner and Assignees columns are replaced with the [DropDownBox](/Documentation/ApiReference/UI_Components/dxDropDownBox/) and [TagBox](/Documentation/ApiReference/UI_Components/dxTagBox/) components.
 

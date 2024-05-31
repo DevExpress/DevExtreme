@@ -1,5 +1,5 @@
 The [TextBox](/Documentation/ApiReference/UI_Components/dxTextBox/) is a UI component that allows users to enter and edit a single line of text.
-<--split-->
+<!--split-->
 
 This demo illustrates the following TextBox properties:
 

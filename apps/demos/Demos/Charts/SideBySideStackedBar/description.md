@@ -1,5 +1,5 @@
 This demo shows the _side-by-side stacked bar_ series that allows you to visualize data as bars stacked in different groups. This series type is useful when you compare values of an individual series with the total values of groups.
-<--split-->
+<!--split-->
 
 ## Bind Chart to Data
 

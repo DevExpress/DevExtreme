@@ -1,5 +1,5 @@
 To change column visibility at runtime, set the **columnChooser**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columnChooser/#enabled) property to **true**. To make certain that a given column(s) always stay visible, set the **columns[]**.[allowHiding](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columns/#allowHiding) property to **false**.
-<--split-->
+<!--split-->
 
 To display the column chooser, click the appropriate toolbar button above the DataGrid. You can specify the column chooser's position via the **columnChooser**.[position](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columnChooser/#position) property. The manner in which users can display/hide columns depends on **columnChooser**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/columnChooser/#mode):
 

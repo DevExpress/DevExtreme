@@ -1,5 +1,5 @@
 The Chart assigns one color to one series. To color bars differently, create a separate series for each bar.
-<--split-->
+<!--split-->
 
 Assign the `age` field to the [argumentField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/#argumentField) property of the [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/) object to specify a common argument for the series. Then specify the [valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField) property.
 

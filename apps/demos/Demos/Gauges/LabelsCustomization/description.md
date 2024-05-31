@@ -1,2 +1,2 @@
 This demo shows how to use the properties of the [label](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/label/) object to adjust the label appearance in the BarGauge component. You can specify the [format](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/label/#format) and [precision](/Documentation/ApiReference/Common/Object_Structures/format/#precision) and [customize the text](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/label/#customizeText) displayed by labels. You can also use the [indent](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/label/#indent) property to change the distance between labels and the upper gauge bar.
-<--split-->
+<!--split-->

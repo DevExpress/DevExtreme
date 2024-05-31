@@ -1,5 +1,5 @@
 The ActionSheet component is a pop-up sheet that contains a set of buttons. These buttons allow users to perform custom actions related to a single task (call, send a message, delete, or edit a selected contact). This demo shows how to create a simple ActionSheet and handle button clicks.
-<--split-->
+<!--split-->
 
 ## Specify Buttons and Title
 

@@ -1,5 +1,5 @@
 The Popover component shows pop-up notifications within a box with an arrow that points to a specified UI element. In this demo, you can hover the mouse pointer over one of the *details* labels or click the *more* link to display Popover.
-<--split-->
+<!--split-->
 
 ## Attach Popover to a Page Element
 

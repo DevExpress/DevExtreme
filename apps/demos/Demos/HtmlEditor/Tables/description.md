@@ -1,5 +1,5 @@
 DevExtreme HTML/Markdown Editor allows users to create and manage tables. This demo illustrates table resize support and table management with the toolbar, context menu, and in code.
-<--split-->
+<!--split-->
 
 ## Manage Tables with the Built-in Toolbar
 

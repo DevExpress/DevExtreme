@@ -1,5 +1,5 @@
 The [List](/Documentation/ApiReference/UI_Components/dxList/) displays a collection of items as a scrollable list. To create a list, pass an array of items to the [dataSource](/Documentation/ApiReference/UI_Components/dxList/Configuration/#dataSource) property. 
-<--split-->
+<!--split-->
 
 To allow users to delete items, set the [allowItemDeleting](/Documentation/ApiReference/UI_Components/dxList/Configuration/#allowItemDeleting) property to **true**. Use the "Allow deletion" checkbox under the List to toggle this property.
 

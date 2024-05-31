@@ -1,5 +1,5 @@
 Our PivotGrid allows you to control and manage the data export process. You can use the PivotGrid's [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExcelExportPivotGridProps/#customizeCell) callback to modify cell data and associated formatting prior to export operations (from the PivotGrid to an Excel file).
-<--split-->
+<!--split-->
 
 Our PivotGrid gives you access and allows you to change the following attributes:
 

@@ -1,5 +1,5 @@
 You can use two approaches to print and export the Chart: call methods, or add a built-in button with drop-down options. The supported export formats are PNG, PDF, JPEG, SVG, and GIF.
-<--split-->
+<!--split-->
 
 ## Use Methods to Export and Print Chart
 

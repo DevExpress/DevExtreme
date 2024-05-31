@@ -1,5 +1,5 @@
 This demo shows two implementations of scrolling in the Popup component.
-<--split-->
+<!--split-->
 
 When you click the first **Show Popup** button, a Popup with a native scrollbar appears. The component always displays a native scrollbar when the height of the Popup's content is greater than that of the Popup.
 

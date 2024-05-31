@@ -1,4 +1,4 @@
 DevExtreme JavaScript Scheduler is a client-side scheduling component available as a jQuery plugin. This control can be bound to local or remote data including online services like Google Calendar. In this demo, Scheduler is highly customized using templates. Appointments on the view are grouped by employee. View other demos in this section to explore more Scheduler features, like multiple calendar views, appointment editing, time zones support, etc.
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme Scheduler component, refer to the following tutorial for step-by-step instructions: [Getting Started with Scheduler](/Documentation/Guide/UI_Components/Scheduler/Getting_Started_with_Scheduler/).

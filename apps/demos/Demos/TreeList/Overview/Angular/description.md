@@ -1,4 +1,4 @@
 DevExtreme Angular Tree List is a client-side control for displaying hierarchical data. You can use it as an Angular component. It is so flexible that you do not need to feed it hierarchical data structures. Even with a collection of linked plain objects, the Tree List can still build a tree hierarchy. It supports native Angular features as well: AOT compilation, declarative configuration, TypeScript compile-time checking, and more.
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme TreeList component, refer to the following tutorial for step-by-step instructions: [Getting Started with TreeList](/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/).

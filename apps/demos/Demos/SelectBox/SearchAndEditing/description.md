@@ -1,5 +1,5 @@
 Set the [searchEnabled](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#searchEnabled) property to **true** to allow users to search.
-<--split-->
+<!--split-->
 
 The following properties help you configure the feature:
 

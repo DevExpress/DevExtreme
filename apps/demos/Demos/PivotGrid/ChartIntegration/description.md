@@ -1,5 +1,5 @@
 PivotGrid allows you to integrate the [Chart](/Documentation/ApiReference/UI_Components/dxChart/) component to visualize data. The Chart is synchronized with the PivotGrid and visualizes the currently displayed total summary values. Expand a row or column header in the PivotGrid below to see how it works.
-<--split-->
+<!--split-->
 
 ## Bind the Chart to the PivotGrid
 

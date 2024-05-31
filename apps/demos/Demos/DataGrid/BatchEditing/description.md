@@ -1,5 +1,5 @@
 You can use batch edit mode to defer saving multiple cell changes. Changes are stored in a buffer and can be discarded before a user clicks the **Save** button.
-<--split-->
+<!--split-->
 
 To enable batch edit mode, configure the following properties:
 

@@ -1,2 +1,2 @@
 The Map component can display markers on&nbsp;the map. The collection of&nbsp;displayed markers is&nbsp;declared in&nbsp;the **markers** array. Markers can include tooltips that provide additional information.
-<--split-->
+<!--split-->

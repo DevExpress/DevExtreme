@@ -1,2 +1,2 @@
 To set the tooltip's content, specify the [contentTemplate](/Documentation/ApiReference/UI_Components/dxChart/Configuration/tooltip/#contentTemplate). Inside the template, you can identify the chart series point for which the tooltip is displayed and thus display information related to that point.
-<--split-->
+<!--split-->
