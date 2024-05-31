@@ -12,7 +12,7 @@ export function generateID(): string {
 }
 
 export class DoubleKeyMap<TKey1, TKey2, TValue> {
-  readonly _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
+  private readonly _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
 
   public set({ key1, key2 }: { key1: TKey1; key2: TKey2 }, value: TValue): void {
     let innerMap = this._map.get(key1);
