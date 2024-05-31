@@ -1101,32 +1101,59 @@ QUnit.module('Templates', () => {
         }
     });
 
-    QUnit.testInActiveWindow('custom button should be triggered when fieldTemplate is used (T1225549)', function(assert) {
-        const clickStub = sinon.stub();
-        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-            fieldTemplate() {
-                const $textBox = $('<div>').dxTextBox();
-                return $('<div>').text(this.option('value')).append($textBox);
-            },
-            buttons: [{
-                name: 'test',
-                options: {
-                    onClick: clickStub,
-                }
-            }],
+
+    QUnit.module('fieldTemplate rerendering', {
+        beforeEach: function() {
+            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                acceptCustomValue: true,
+                fieldTemplate(value, fieldElement) {
+                    const $textBox = $('<div>').dxTextBox({ value });
+                    fieldElement.append($textBox);
+                    return $textBox;
+                },
+                buttons: [{
+                    name: 'test',
+                }],
+            });
+            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            this.keyboard = keyboardMock($input);
+            this.$buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container').eq(1);
+
+
+            this.mutationCallbacks = [];
+
+            this.observer = new MutationObserver((mutationsList) => {
+                this.mutationCallbacks.forEach(callback => {
+                    callback(mutationsList);
+                });
+            });
+        },
+        afterEach: function() {
+            this.observer.disconnect();
+        }
+    }, () => {
+        QUnit.testInActiveWindow('should not reattach buttons container (T1225549)', function(assert) {
+            assert.expect(0);
+
+            this.mutationCallbacks.push((mutationsList) => {
+                mutationsList.forEach(mutation => {
+                    if(mutation.type === 'childList') {
+                        mutation.removedNodes.forEach(node => {
+                            if(node === this.$buttonsContainer.get(0)) {
+                                assert.ok(false, 'buttons container should not be reattached on field template rendering');
+                            }
+                        });
+                    }
+                });
+            });
+
+            this.observer.observe(this.$buttonsContainer.parent().get(0), { childList: true });
+
+            // NOTE: Triggers field template rerendering.
+            this.keyboard
+                .type('123')
+                .change();
         });
-        const instance = $dropDownEditor.dxDropDownEditor('instance');
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-
-        $input.trigger('dxclick');
-        instance.option('value', 'test');
-
-        const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
-        const $buttons = $buttonsContainer.children();
-
-        $buttons.eq(1).trigger('dxclick');
-
-        assert.strictEqual(clickStub.callCount, 1, 'custom button should be clicked');
     });
 
     QUnit.testInActiveWindow('widget should detach focus events before fieldTemplate rerender', function(assert) {
