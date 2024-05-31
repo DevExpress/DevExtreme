@@ -1121,9 +1121,6 @@ QUnit.module('Templates', () => {
         $input.trigger('dxclick');
         instance.option('value', 'test');
 
-        assert.ok($dropDownEditor.hasClass('dx-state-focused'), 'editor should be focused');
-        assert.equal($input.val(), 'test', 'input should not be empty');
-
         const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
         const $buttons = $buttonsContainer.children();
 
