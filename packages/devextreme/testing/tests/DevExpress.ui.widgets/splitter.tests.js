@@ -792,7 +792,11 @@ QUnit.module('Pane sizing', moduleConfig, () => {
         { position: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '44.9187', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
         { position: 'prev', expectedLayout: ['10.1626', '10.1626', '79.6748'], items: [{ collapsedSize: 100, size: 200, collapsible: true, collapsed: false }, { collapsible: true, collapsed: true }, { }] },
         { position: 'next', resizeHandleIndex: 1, expectedLayout: ['10.1626', '44.9187', '44.9187'], items: [{ collapsedSize: 100, collapsible: true, collapsed: true }, { collapsible: true, collapsed: true }, { }] },
-        { position: 'prev', expectedLayout: ['50', '50', '0', '0'], items: [
+        { position: 'next', expectedLayout: ['10.0806', '89.9194'], items: [{ collapsible: true, collapsed: true, maxSize: 100 }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['89.9194', '10.0806'], items: [{ collapsible: true }, { collapsible: true, collapsed: true, maxSize: 100 }] },
+        { position: 'prev', expectedLayout: ['39.8374', '10.1626', '50'], items: [{ collapsible: true }, { collapsible: true, collapsed: true, maxSize: 100 }, { collapsible: true }] },
+        { position: 'next', resizeHandleIndex: 1, expectedLayout: ['50', '10.1626', '39.8374'], items: [{ collapsible: true }, { collapsible: true, collapsed: true, maxSize: 100 }, { collapsible: true }] },
+        { position: 'prev', expectedLayout: ['79.5082', '20.4918', '0', '0'], items: [
             { collapsedSize: 100, collapsible: true, collapsed: false, resizable: true },
             { maxSize: 200, collapsible: true, collapsed: true, resizable: true },
             { collapsed: true, collapsible: true },
@@ -812,6 +816,20 @@ QUnit.module('Pane sizing', moduleConfig, () => {
 
             this.assertLayout(expectedLayout);
         });
+    });
+
+    QUnit.test('Expanded pane size should not exceed maxSize', function(assert) {
+        this.reinit({
+            items: [{ collapsible: true, collapsed: true, maxSize: 100 }, { collapsible: true }]
+        });
+
+        const $resizeHandle = this.getResizeHandles();
+
+        const $collapseButton = this.getCollapseNextButton($resizeHandle);
+
+        $collapseButton.trigger('dxclick');
+
+        this.assertLayout(['10.0806', '89.9194']);
     });
 
     [
@@ -2190,6 +2208,19 @@ QUnit.module('Behavior', moduleConfig, () => {
             this.instance.option('items[0].collapsed', true);
 
             assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+        });
+
+        QUnit.test('Expanded on runtime pane should not have hidden content class', function(assert) {
+            this.reinit({
+                items: [{ collapsible: true, collapsed: true }, { }],
+            });
+            const $pane = this.getPanes().first();
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), true);
+
+            this.instance.option('items[0].collapsed', false);
+
+            assert.strictEqual($pane.hasClass(SPLITTER_ITEM_HIDDEN_CONTENT_CLASS), false);
         });
 
         QUnit.test('Expanded on init pane should not have hidden content class', function(assert) {
