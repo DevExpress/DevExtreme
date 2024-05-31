@@ -804,9 +804,17 @@ class Splitter extends CollectionWidget<Properties> {
         : this._calculateExpandToRightSize(itemIndex + 1);
     }
 
-    const itemSize = targetPaneSize >= minSize
+    let itemSize = targetPaneSize >= minSize
       ? targetPaneSize
       : minSize;
+
+    if (isDefined(item.maxSize)) {
+      const { orientation } = this.option();
+      const handlesSizeSum = this._getResizeHandlesSize();
+      const elementSize = getElementSize($(this.element()), orientation);
+      const maxSize = convertSizeToRatio(item.maxSize, elementSize, handlesSizeSum) ?? itemSize;
+      itemSize = Math.min(maxSize, itemSize);
+    }
 
     const deltaSign = this._collapseDirection === CollapseExpandDirection.Previous ? -1 : 1;
 
