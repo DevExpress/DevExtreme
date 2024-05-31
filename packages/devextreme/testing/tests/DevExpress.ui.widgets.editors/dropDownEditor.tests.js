@@ -245,7 +245,7 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
     QUnit.test('correct buttons order after option change', function(assert) {
         this.dropDownEditor.option('showClearButton', true);
 
-        const $buttonsContainer = this.$dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttonsContainer = this.$dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`);
         const $buttons = $buttonsContainer.children();
 
         assert.equal($buttons.length, 2, 'clear button and drop button were rendered');
@@ -447,7 +447,7 @@ QUnit.module('focus policy', () => {
 
         assert.ok($dropDownEditor.find('.dx-texteditor').hasClass('dx-state-focused'), 'Widget is focused');
 
-        const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttonsContainer = $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`);
         const $buttons = $buttonsContainer.children();
 
         $buttons.eq(1).trigger('dxclick');
@@ -1091,7 +1091,7 @@ QUnit.module('Templates', () => {
         });
         const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
 
-        $dropDownEditor.find('.dx-texteditor-buttons-container').remove();
+        $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).remove();
 
         try {
             dropDownEditor.option('value', 2);
@@ -1117,7 +1117,7 @@ QUnit.module('Templates', () => {
             });
             const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             this.keyboard = keyboardMock($input);
-            this.$buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container').eq(1);
+            this.$buttonsContainer = $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).eq(1);
 
 
             this.mutationCallbacks = [];
