@@ -223,6 +223,27 @@ QUnit.test('Legend\'s title as string', function(assert) {
     assert.strictEqual(drawn.callCount, 1);
 });
 
+QUnit.test('Legend title position should not change after legend visibility change (T1210271)', function(assert) {
+    const chart = $('#chart').dxChart({
+        legend: {
+            title: 'Legend',
+            visible: true
+        },
+        series: [{}],
+    });
+
+    const initialTextY = chart.find('.dxc-legend > .dxc-title > text').attr('y');
+
+    assert.strictEqual(initialTextY, '17');
+
+    const chartInstance = chart.dxChart('instance');
+    chartInstance.option('legend.visible', false);
+    chartInstance.option('legend.visible', true);
+
+    const textYAfterVisibilityChange = chart.find('.dxc-legend > .dxc-title > text').attr('y');
+    assert.strictEqual(textYAfterVisibilityChange, '17');
+});
+
 // T999609
 QUnit.test('Value axis range ajusting after resetVisualRange', function(assert) {
     const dataSource = [];
