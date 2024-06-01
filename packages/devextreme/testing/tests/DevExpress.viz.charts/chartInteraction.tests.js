@@ -7,6 +7,7 @@ import 'viz/chart';
 import 'viz/polar_chart';
 
 const SERIES_POINT_MARKER_SELECTOR = '.dxc-series circle';
+const LEGEND_TEXT_SELECTOR = '.dxc-legend > .dxc-title > text';
 
 QUnit.testStart(function() {
     const markup =
@@ -232,7 +233,7 @@ QUnit.test('Legend title position should not change after legend visibility chan
         series: [{}],
     });
 
-    const initialTextY = Number(chart.find('.dxc-legend > .dxc-title > text').attr('y'));
+    const initialTextY = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
 
     assert.roughEqual(initialTextY, 17, 1);
 
@@ -240,7 +241,7 @@ QUnit.test('Legend title position should not change after legend visibility chan
     chartInstance.option('legend.visible', false);
     chartInstance.option('legend.visible', true);
 
-    const textYAfterVisibilityChange = Number(chart.find('.dxc-legend > .dxc-title > text').attr('y'));
+    const textYAfterVisibilityChange = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
     assert.roughEqual(textYAfterVisibilityChange, 17, 1);
 });
 
