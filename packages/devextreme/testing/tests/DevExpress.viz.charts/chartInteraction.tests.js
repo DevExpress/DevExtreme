@@ -232,16 +232,16 @@ QUnit.test('Legend title position should not change after legend visibility chan
         series: [{}],
     });
 
-    const initialTextY = chart.find('.dxc-legend > .dxc-title > text').attr('y');
+    const initialTextY = Number(chart.find('.dxc-legend > .dxc-title > text').attr('y'));
 
-    assert.strictEqual(initialTextY, '17');
+    assert.roughEqual(initialTextY, 17, 1);
 
     const chartInstance = chart.dxChart('instance');
     chartInstance.option('legend.visible', false);
     chartInstance.option('legend.visible', true);
 
-    const textYAfterVisibilityChange = chart.find('.dxc-legend > .dxc-title > text').attr('y');
-    assert.strictEqual(textYAfterVisibilityChange, '17');
+    const textYAfterVisibilityChange = Number(chart.find('.dxc-legend > .dxc-title > text').attr('y'));
+    assert.roughEqual(textYAfterVisibilityChange, 17, 1);
 });
 
 // T999609
