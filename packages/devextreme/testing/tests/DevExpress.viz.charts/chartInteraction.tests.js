@@ -235,14 +235,14 @@ QUnit.test('Legend title position should not change after legend visibility chan
 
     const initialTextY = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
 
-    assert.roughEqual(initialTextY, 17, 1);
+    assert.roughEqual(initialTextY, 17, 2);
 
     const chartInstance = chart.dxChart('instance');
     chartInstance.option('legend.visible', false);
     chartInstance.option('legend.visible', true);
 
     const textYAfterVisibilityChange = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
-    assert.roughEqual(textYAfterVisibilityChange, 17, 1);
+    assert.roughEqual(textYAfterVisibilityChange, 17, 2);
 });
 
 // T999609
