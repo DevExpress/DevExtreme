@@ -197,7 +197,7 @@ jobs:
       matrix:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 20
 
