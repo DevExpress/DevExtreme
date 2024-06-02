@@ -1169,6 +1169,27 @@ QUnit.module('Templates', () => {
             this.triggerFieldTemplateRendering();
         });
 
+        QUnit.test('should not recreate template wrapper, only empty it', function(assert) {
+            assert.expect(0);
+
+            const $templateWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).eq(0);
+            this.mutationCallbacks.push((mutationsList) => {
+                mutationsList.forEach(mutation => {
+                    if(mutation.type === 'childList') {
+                        mutation.removedNodes.forEach(node => {
+                            if(node === $templateWrapper.get(0)) {
+                                assert.ok(false, 'template wrapper should not be recreated');
+                            }
+                        });
+                    }
+                });
+            });
+
+            this.observer.observe($templateWrapper.parent().get(0), { childList: true });
+
+            this.triggerFieldTemplateRendering();
+        });
+
         QUnit.test('should keep elements correct order', function(assert) {
             this.reinit({
                 buttons: [{
