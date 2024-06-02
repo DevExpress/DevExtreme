@@ -348,7 +348,8 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _getButtonsContainer() {
-        return this._$container;
+        const fieldTemplate = this._getFieldTemplate();
+        return fieldTemplate ? this._$container : this._$textEditorContainer;
     },
 
     _renderTemplateWrapper() {
