@@ -32,7 +32,6 @@ const DROP_DOWN_EDITOR_OVERLAY_FLIPPED = 'dx-dropdowneditor-overlay-flipped';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const DROP_DOWN_EDITOR_FIELD_CLICKABLE = 'dx-dropdowneditor-field-clickable';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
-const TEXT_EDITOR_BUTTON_CONTAINER = 'dx-texteditor-buttons-container';
 
 const OVERLAY_CONTENT_LABEL = 'Dropdown';
 
@@ -272,6 +271,7 @@ const DropDownEditor = TextBox.inherit({
 
     _renderInput: function() {
         this.callBase();
+        this._renderTemplateWrapper();
 
         this._wrapInput();
         this._setDefaultAria();
@@ -347,22 +347,33 @@ const DropDownEditor = TextBox.inherit({
         promise.always(this._renderField.bind(this));
     },
 
-    _renderTemplatedField: function(fieldTemplate, data) {
-        const isFocused = focused(this._input());
-        const $container = this._$container;
-        const isDirectChild = $container.children(`.${TEXT_EDITOR_BUTTON_CONTAINER}`).length;
+    _getButtonsContainer() {
+        return this._$container;
+    },
 
-        this._detachKeyboardEvents();
-        this._refreshButtonsContainer();
-        this._detachFocusEvents();
-
-        if(!isDirectChild) {
-            this._detachWrapperContent();
-            $container.empty().append($('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER));
+    _renderTemplateWrapper() {
+        const fieldTemplate = this._getFieldTemplate();
+        if(!fieldTemplate) {
+            return;
         }
 
-        const $templateWrapper = $container.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).empty();
+        if(!this._$templateWrapper) {
+            this._$templateWrapper = $('<div>')
+                .addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER)
+                .prependTo(this.$element());
+        }
+    },
 
+    _renderTemplatedField: function(fieldTemplate, data) {
+        const isFocused = focused(this._input());
+
+        this._detachKeyboardEvents();
+        this._detachFocusEvents();
+
+        this._$textEditorContainer.remove();
+        this._$templateWrapper.empty();
+
+        const $templateWrapper = this._$templateWrapper;
         fieldTemplate.render({
             model: data,
             container: getPublicElement($templateWrapper),
@@ -380,35 +391,10 @@ const DropDownEditor = TextBox.inherit({
                 }
 
                 this._integrateInput();
+
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
-
-        !isDirectChild && this._attachWrapperContent($container);
-    },
-
-    _detachWrapperContent() {
-        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
-
-        useHiddenSubmitElement && this._$submitElement?.detach();
-
-        // NOTE: to prevent buttons disposition
-        const beforeButtonsContainerParent = this._$beforeButtonsContainer?.[0].parentNode;
-        const afterButtonsContainerParent = this._$afterButtonsContainer?.[0].parentNode;
-        beforeButtonsContainerParent?.removeChild(this._$beforeButtonsContainer[0]);
-        afterButtonsContainerParent?.removeChild(this._$afterButtonsContainer[0]);
-    },
-
-    _attachWrapperContent($container) {
-        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
-
-        $container.prepend(this._$beforeButtonsContainer);
-        useHiddenSubmitElement && this._$submitElement?.appendTo($container);
-        $container.append(this._$afterButtonsContainer);
-    },
-
-    _refreshButtonsContainer() {
-        this._$buttonsContainer = this.$element().children().eq(0);
     },
 
     _integrateInput: function() {
@@ -780,6 +766,7 @@ const DropDownEditor = TextBox.inherit({
 
     _clean: function() {
         delete this._openOnFieldClickAction;
+        delete this._$templateWrapper;
 
         if(this._$popup) {
             this._$popup.remove();
@@ -916,12 +903,6 @@ const DropDownEditor = TextBox.inherit({
                 this._initPopupInitializedAction();
                 break;
             case 'fieldTemplate':
-                if(isDefined(args.value)) {
-                    this._renderField();
-                } else {
-                    this._invalidate();
-                }
-                break;
             case 'acceptCustomValue':
             case 'openOnFieldClick':
                 this._invalidate();

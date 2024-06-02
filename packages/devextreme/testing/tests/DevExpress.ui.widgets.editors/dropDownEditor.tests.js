@@ -33,6 +33,7 @@ const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const TEXT_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
@@ -1104,35 +1105,51 @@ QUnit.module('Templates', () => {
 
     QUnit.module('fieldTemplate rerendering', {
         beforeEach: function() {
-            const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-                acceptCustomValue: true,
-                fieldTemplate(value, fieldElement) {
-                    const $textBox = $('<div>').dxTextBox({ value });
-                    fieldElement.append($textBox);
-                    return $textBox;
-                },
-                buttons: [{
-                    name: 'test',
-                }],
-            });
-            const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-            this.keyboard = keyboardMock($input);
-            this.$buttonsContainer = $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).eq(1);
-
-
-            this.mutationCallbacks = [];
-
-            this.observer = new MutationObserver((mutationsList) => {
-                this.mutationCallbacks.forEach(callback => {
-                    callback(mutationsList);
+            const init = (options = {}) => {
+                this.$dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                    acceptCustomValue: true,
+                    fieldTemplate(value, fieldElement) {
+                        const $textBox = $('<div>').dxTextBox({ value });
+                        fieldElement.append($textBox);
+                        return $textBox;
+                    },
+                    buttons: [{
+                        name: 'after',
+                    }],
+                    ...options
                 });
-            });
+                this.instance = this.$dropDownEditor.dxDropDownEditor('instance');
+                const $input = this.$dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                this.keyboard = keyboardMock($input);
+                this.$buttonsContainer = this.$dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).eq(1);
+
+
+                this.mutationCallbacks = [];
+
+                this.observer = new MutationObserver((mutationsList) => {
+                    this.mutationCallbacks.forEach(callback => {
+                        callback(mutationsList);
+                    });
+                });
+            };
+
+            init();
+            this.reinit = (options) => {
+                this.observer.disconnect();
+                this.instance.dispose();
+                init(options);
+            };
+            this.triggerFieldTemplateRendering = () => {
+                this.keyboard
+                    .type('123')
+                    .change();
+            };
         },
         afterEach: function() {
             this.observer.disconnect();
         }
     }, () => {
-        QUnit.testInActiveWindow('should not reattach buttons container (T1225549)', function(assert) {
+        QUnit.test('should not reattach buttons container (T1225549)', function(assert) {
             assert.expect(0);
 
             this.mutationCallbacks.push((mutationsList) => {
@@ -1149,10 +1166,49 @@ QUnit.module('Templates', () => {
 
             this.observer.observe(this.$buttonsContainer.parent().get(0), { childList: true });
 
-            // NOTE: Triggers field template rerendering.
-            this.keyboard
-                .type('123')
-                .change();
+            this.triggerFieldTemplateRendering();
+        });
+
+        QUnit.test('should keep elements correct order', function(assert) {
+            this.reinit({
+                buttons: [{
+                    name: 'before',
+                    location: 'before'
+                }, {
+                    name: 'after'
+                }]
+            });
+
+            this.triggerFieldTemplateRendering();
+
+            const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
+            const $children = $inputWrapper.children();
+            assert.strictEqual($children.length, 3, 'element count is correct');
+            assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
+            assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
+            assert.ok($children.eq(2).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+        });
+
+        QUnit.test('should keep elements correct order when hidden input is used', function(assert) {
+            this.reinit({
+                useHiddenSubmitElement: true,
+                buttons: [{
+                    name: 'before',
+                    location: 'before'
+                }, {
+                    name: 'after'
+                }]
+            });
+
+            this.triggerFieldTemplateRendering();
+
+            const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
+            const $children = $inputWrapper.children();
+            assert.strictEqual($children.length, 4, 'element count is correct');
+            assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
+            assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
+            assert.strictEqual($children.get(2).tagName, 'INPUT', 'hidden input');
+            assert.ok($children.eq(3).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
     });
 
