@@ -1119,8 +1119,8 @@ QUnit.module('Templates', () => {
                     ...options
                 });
                 this.instance = this.$dropDownEditor.dxDropDownEditor('instance');
-                const $input = this.$dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-                this.keyboard = keyboardMock($input);
+                this.$input = this.$dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                this.keyboard = keyboardMock(this.$input);
                 this.$buttonsContainer = this.$dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).eq(1);
 
 
@@ -1210,32 +1210,18 @@ QUnit.module('Templates', () => {
             assert.strictEqual($children.get(2).tagName, 'INPUT', 'hidden input');
             assert.ok($children.eq(3).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
         });
-    });
 
-    QUnit.testInActiveWindow('widget should detach focus events before fieldTemplate rerender', function(assert) {
-        const focusOutSpy = sinon.stub();
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dataSource: [1, 2],
-            fieldTemplate(value, container) {
-                const $textBoxContainer = $('<div>').appendTo(container);
-                $('<div>').dxTextBox().appendTo($textBoxContainer);
+        QUnit.testInActiveWindow('should not trigger focusout event (T751314)', function(assert) {
+            const focusOutStub = sinon.stub();
+            this.reinit({
+                onFocusOut: focusOutStub,
+            });
 
-                $($textBoxContainer).one('dxremove', () => {
-                    $textBoxContainer.detach();
-                });
-            },
-            onFocusOut: focusOutSpy,
-            opened: true
+            this.$input.trigger('focus');
+            this.triggerFieldTemplateRendering();
+
+            assert.strictEqual(focusOutStub.callCount, 0, 'there is no focusout from deleted field container');
         });
-
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
-
-        $input.focus();
-        keyboard.press('down');
-        keyboard.press('enter');
-
-        assert.strictEqual(focusOutSpy.callCount, 0, 'there\'s no focus outs from deleted field container');
     });
 
     QUnit.test('fieldTemplate item element should have 100% width (T826516)', function(assert) {
