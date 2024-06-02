@@ -1122,20 +1122,10 @@ QUnit.module('Templates', () => {
                 this.$input = this.$dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 this.keyboard = keyboardMock(this.$input);
                 this.$buttonsContainer = this.$dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).eq(1);
-
-
-                this.mutationCallbacks = [];
-
-                this.observer = new MutationObserver((mutationsList) => {
-                    this.mutationCallbacks.forEach(callback => {
-                        callback(mutationsList);
-                    });
-                });
             };
 
             init();
             this.reinit = (options) => {
-                this.observer.disconnect();
                 this.instance.dispose();
                 init(options);
             };
@@ -1144,53 +1134,65 @@ QUnit.module('Templates', () => {
                     .type('123')
                     .change();
             };
-        },
-        afterEach: function() {
-            this.observer.disconnect();
         }
     }, () => {
-        QUnit.test('should not reattach buttons container (T1225549)', function(assert) {
-            assert.expect(0);
+        QUnit.module('should not recreate', {
+            beforeEach: function() {
+                this.mutationCallbacks = [];
 
-            this.mutationCallbacks.push((mutationsList) => {
-                mutationsList.forEach(mutation => {
-                    if(mutation.type === 'childList') {
-                        mutation.removedNodes.forEach(node => {
-                            if(node === this.$buttonsContainer.get(0)) {
-                                assert.ok(false, 'buttons container should not be reattached on field template rendering');
-                            }
-                        });
-                    }
+                this.observer = new MutationObserver((mutationsList) => {
+                    this.mutationCallbacks.forEach(callback => {
+                        callback(mutationsList);
+                    });
                 });
+            },
+            afterEach: function() {
+                this.observer.disconnect();
+            }
+        }, () => {
+            QUnit.test('buttons container (T1225549)', function(assert) {
+                assert.expect(0);
+
+                this.mutationCallbacks.push((mutationsList) => {
+                    mutationsList.forEach(mutation => {
+                        if(mutation.type === 'childList') {
+                            mutation.removedNodes.forEach(node => {
+                                if(node === this.$buttonsContainer.get(0)) {
+                                    assert.ok(false, 'buttons container should not be reattached on field template rendering');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                this.observer.observe(this.$buttonsContainer.parent().get(0), { childList: true });
+
+                this.triggerFieldTemplateRendering();
             });
 
-            this.observer.observe(this.$buttonsContainer.parent().get(0), { childList: true });
+            QUnit.test('template wrapper, only empty it', function(assert) {
+                assert.expect(0);
 
-            this.triggerFieldTemplateRendering();
-        });
-
-        QUnit.test('should not recreate template wrapper, only empty it', function(assert) {
-            assert.expect(0);
-
-            const $templateWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).eq(0);
-            this.mutationCallbacks.push((mutationsList) => {
-                mutationsList.forEach(mutation => {
-                    if(mutation.type === 'childList') {
-                        mutation.removedNodes.forEach(node => {
-                            if(node === $templateWrapper.get(0)) {
-                                assert.ok(false, 'template wrapper should not be recreated');
-                            }
-                        });
-                    }
+                const $templateWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).eq(0);
+                this.mutationCallbacks.push((mutationsList) => {
+                    mutationsList.forEach(mutation => {
+                        if(mutation.type === 'childList') {
+                            mutation.removedNodes.forEach(node => {
+                                if(node === $templateWrapper.get(0)) {
+                                    assert.ok(false, 'template wrapper should not be recreated');
+                                }
+                            });
+                        }
+                    });
                 });
+
+                this.observer.observe($templateWrapper.parent().get(0), { childList: true });
+
+                this.triggerFieldTemplateRendering();
             });
-
-            this.observer.observe($templateWrapper.parent().get(0), { childList: true });
-
-            this.triggerFieldTemplateRendering();
         });
 
-        QUnit.test('should keep elements correct order', function(assert) {
+        QUnit.test('should keep elements correct order when custom buttons are used', function(assert) {
             this.reinit({
                 buttons: [{
                     name: 'before',
