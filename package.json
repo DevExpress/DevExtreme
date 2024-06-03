@@ -70,6 +70,11 @@
   "pnpm": {
     "patchedDependencies": {
       "@devextreme/runtime@3.0.13": "patches/@devextreme__runtime@3.0.13.patch"
+    },
+    "overrides": {
+      "inferno": "$inferno",
+      "inferno-hydrate": "$inferno",
+      "inferno-create-element": "$inferno"
     }
   }
 }
