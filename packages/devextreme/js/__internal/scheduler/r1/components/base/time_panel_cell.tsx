@@ -83,6 +83,7 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
         endDate={CellBaseDefaultProps.endDate}
         index={CellBaseDefaultProps.index}
       >
+        { /* @ts-expect-error */}
         {
           TimeCellTemplateComponent
             ? TimeCellTemplateComponent({

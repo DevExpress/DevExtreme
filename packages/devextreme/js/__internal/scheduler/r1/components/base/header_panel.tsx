@@ -62,6 +62,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
             groups={groups}
             groupByDate={groupByDate}
             groupOrientation={groupOrientation}
+            // @ts-expect-error
             resourceCellTemplate={ResourceCellTemplateComponent}
           />
         )
@@ -86,6 +87,7 @@ export class HeaderPanel extends InfernoWrapperComponent<HeaderPanelProps> {
             groups={groups}
             groupByDate={groupByDate}
             groupOrientation={groupOrientation}
+            // @ts-expect-error
             resourceCellTemplate={ResourceCellTemplateComponent}
           />
         )

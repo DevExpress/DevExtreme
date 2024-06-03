@@ -36,6 +36,7 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
         isFirstGroupCell={isFirstGroupCell}
         isLastGroupCell={isLastGroupCell}
         index={index}
+        // @ts-expect-error
         dataCellTemplate={DataCellTemplateComponent}
         isSelected={isSelected}
         isFocused={isFocused}

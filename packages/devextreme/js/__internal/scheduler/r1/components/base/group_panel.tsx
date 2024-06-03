@@ -54,6 +54,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
      <Layout
        viewContext={viewContext}
        height={height}
+       // @ts-expect-error
        resourceCellTemplate={ResourceCellTemplateComponent}
        className={className}
        groupPanelData={groupPanelData}

@@ -240,6 +240,7 @@ export class ComponentWrapper extends DOMComponent<ComponentWrapperProps> {
     super._dispose();
   }
 
+  // @ts-expect-error
   get elementAttr(): HTMLAttributes<unknown> {
     const element = this.$element()[0];
     if (!this._elementAttr) {

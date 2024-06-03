@@ -40,8 +40,11 @@ export class HeaderPanelTimeline extends InfernoWrapperComponent<HeaderPanelProp
         isRenderDateHeader={isRenderDateHeader}
         // @ts-expect-error JSXTemplate types issue
         dateHeaderTemplate={TimelineDateHeaderLayout}
+        // @ts-expect-error
         resourceCellTemplate={ResourceCellTemplateComponent}
+        // @ts-expect-error
         dateCellTemplate={DateCellTemplateComponent}
+        // @ts-expect-error
         timeCellTemplate={TimeCellTemplateComponent}
       />
     );
