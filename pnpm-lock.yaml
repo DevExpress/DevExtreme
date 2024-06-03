@@ -679,6 +679,9 @@ importers:
       '@types/jquery':
         specifier: 3.5.29
         version: 3.5.29
+      devextreme:
+        specifier: '*'
+        version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-main:
         specifier: '*'
         version: link:../../packages/devextreme
@@ -23723,7 +23726,7 @@ snapshots:
       postcss-modules-scope: 3.2.0(postcss@8.4.38)
       postcss-modules-values: 4.0.0(postcss@8.4.38)
       postcss-value-parser: 4.2.0
-      semver: 7.6.2
+      semver: 7.6.0
     optionalDependencies:
       webpack: 5.89.0(@swc/core@1.4.17)(esbuild@0.18.20)
 
