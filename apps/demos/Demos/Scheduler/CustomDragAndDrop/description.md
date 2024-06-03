@@ -1,4 +1,7 @@
-Appointment drag and drop is enabled out-of-the-box, but only if appointments are moved within the Scheduler. In this demo, appointments can be moved between the Scheduler  and a list. Follow the steps below to implement this functionality:
+Appointment drag and drop is enabled out-of-the-box, but only if appointments are moved within the Scheduler. In this demo, appointments can be moved between the Scheduler and a list.
+<--split-->
+
+Follow the steps below to implement this functionality:
 
 1. **Configure the Scheduler**       
 In the [appointmentDragging][0] object, implement the [onAdd][2] function (in which you should [add an appointment][1]) and the [onRemove][4] function (in which you should [delete an appointment][3] and create a corresponding list item).

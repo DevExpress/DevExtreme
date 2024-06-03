@@ -43,7 +43,7 @@ import Scheduler from '__internal/scheduler/m_scheduler';
 import Scrollable from 'ui/scroll_view/ui.scrollable';
 import ScrollView from 'ui/scroll_view';
 import SelectBox from 'ui/select_box';
-import SliderHandle from 'ui/slider/ui.slider_handle';
+import SliderHandle from '__internal/ui/slider/m_slider_handle';
 import Splitter from 'ui/splitter';
 import Tabs from 'ui/tabs';
 import TabPanel from 'ui/tab_panel';

@@ -1,4 +1,5 @@
 This demo shows a drill-down chart that visualizes data on two hierarchical views. The main view displays the population breakdown by continent. When you click the bar, a detailed view reveals the most populated countries on the selected continent.
+<--split-->
 
 ## Bind to Data
 
