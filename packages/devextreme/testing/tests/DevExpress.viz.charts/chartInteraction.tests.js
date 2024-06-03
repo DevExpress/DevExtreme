@@ -252,14 +252,12 @@ QUnit.test('Old title should be disposed upon creating a new one', function(asse
             visible: true
         },
         series: [{}],
-    });
+    }).dxChart('instance');
 
-    const chartInstance = chart.dxChart('instance');
+    const disposeSpy = sinon.spy(chart._legend._title, 'dispose');
 
-    const disposeSpy = sinon.spy(chartInstance._legend._title, 'dispose');
-
-    chartInstance.option('legend.visible', false);
-    chartInstance.option('legend.visible', true);
+    chart.option('legend.visible', false);
+    chart.option('legend.visible', true);
 
     assert.strictEqual(disposeSpy.callCount, 1);
 });
