@@ -1,5 +1,5 @@
 This example demonstrates a real-time data update in a financial [candlestick](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/Candlestick/) chart bound to a [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-6.0) server. Note that data used in this demo is for demonstration purposes only.
-<--split-->
+<!--split-->
 
 To integrate the Chart with a [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-6.0) server, specify a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/). Use the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/)'s [push(changes)](/Documentation/ApiReference/Data_Layer/CustomStore/Methods/#pushchanges) method to insert, update, and remove data objects. This method accepts an array and allows you to update data in batches.
 

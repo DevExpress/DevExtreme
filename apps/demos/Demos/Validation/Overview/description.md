@@ -1,5 +1,5 @@
 This demo shows how to implement a [default validation group](/Documentation/Guide/UI_Components/Common/UI_Widgets/Data_Validation/#Validate_Several_Editor_Values/Group_the_Editors) - a group of editors on a page with enabled data validation. In this particular demo, the editors are grouped in an HTML form.
-<--split-->
+<!--split-->
 
 To enable data validation for an editor, you need to declare the [Validator](/Documentation/ApiReference/UI_Components/dxValidator/) component and implement [validation rules](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/). You can attach multiple validation rules to one component. The following list contains all available validation rule types:
 

@@ -1,4 +1,4 @@
 The PivotGrid can calculate running totals by rows or columns. Assign *"row"* or *"column"* to a field's [runningTotal](/Documentation/ApiReference/Data_Layer/PivotGridDataSource/Configuration/fields/#runningTotal) property to specify how running totals are calculated. This property is available only for data fields.
-<--split-->
+<!--split-->
 
 Running totals are calculated from scratch for each [group](/Documentation/ApiReference/Data_Layer/PivotGridDataSource/Configuration/fields/#groupName) within a row or column. You can assign **true** to the [allowCrossGroupCalculation](/Documentation/ApiReference/Data_Layer/PivotGridDataSource/Configuration/fields/#allowCrossGroupCalculation) property to calculate running totals across all groups.

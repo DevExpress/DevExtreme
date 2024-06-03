@@ -1,5 +1,5 @@
 The DataGrid allows you to customize a header and a footer in the exported PDF file. 
-<--split-->
+<!--split-->
 
 Follow the steps below to configure a header/footer:
 

@@ -1,5 +1,5 @@
 This demo shows how to specify a CircularGauge title and display custom labels in the component's center. 
-<--split-->
+<!--split-->
 
 A CircularGauge title usually informs users about the nature of gauge data. To customize it, use the properties of the [title](/Documentation/ApiReference/UI_Components/dxCircularGauge/Configuration/title/) configuration object:
 

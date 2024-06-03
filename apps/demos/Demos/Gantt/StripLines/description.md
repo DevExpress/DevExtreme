@@ -1,4 +1,4 @@
 This demo illustrates how to use strip lines to highlight different times in the DevExtreme JavaScript Gantt component. The Gantt stores strip lines in its [stripLines](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/stripLines/) collection. You can specify a title ([title](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/stripLines/#title)) and appearance settings ([CssClass](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/stripLines/#cssClass)) for each strip line.
-<--split-->
+<!--split-->
 
 Use the [start](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/stripLines/#start) property to specify an individual strip line or combine it with the [end](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/stripLines/#end) property to specify a time interval.

@@ -1,5 +1,5 @@
 Drawer is a dismissible or permanently visible panel that usually contains navigation elements. 
-<--split-->
+<!--split-->
 
 To open or close the Drawer component in this demo, click the 'Hamburger' button. Each Drawer visibility change can adjust the layout in the following ways (see [openedStateMode](/Documentation/ApiReference/UI_Components/dxDrawer/Configuration/#openedStateMode)): 
 

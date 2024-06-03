@@ -1,5 +1,5 @@
 The **All day** Scheduler panel displays appointments that last longer than 24 hours or have the [allDay](/Documentation/ApiReference/UI_Components/dxScheduler/Interfaces/dxSchedulerAppointment/#allDay) property set to **true** (don't have specific start/end times).
-<--split-->
+<!--split-->
 
 To change the **All day** panel display mode, assign one of the following values to the [allDayPanelMode](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#allDayPanelMode) property:
 

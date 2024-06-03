@@ -1,4 +1,4 @@
 This demo shows a step area [series type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type). The primary difference between area and step area is that in step area series, data points are connected by perpendicular vertical and horizontal lines.
-<--split-->
+<!--split-->
 
 To create multiple area series, use the [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) array to declare each series and the [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/) object to specify the common series type. In that object you can implement specific parameters to configure [step area](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/StepAreaSeries/) specifically. For example, this demo disables a [border](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/StepAreaSeries/border/) for all series.

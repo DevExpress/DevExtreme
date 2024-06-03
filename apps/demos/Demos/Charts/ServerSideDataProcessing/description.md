@@ -1,5 +1,5 @@
 In many cases, you need to process data on the server before a chart displays it. The Chart component supports this scenario. 
-<--split-->
+<!--split-->
 
 In this demo, the data source of the Chart loads weather data for a selected month from an OData service. Each time you select a different month in the drop-down menu, the data source sends a new query to the service. To implement this functionality, assign a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object to the Chart's [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource) property. 
 

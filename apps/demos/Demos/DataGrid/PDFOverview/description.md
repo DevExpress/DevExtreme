@@ -1,5 +1,5 @@
 The [DataGrid](/Documentation/ApiReference/UI_Components/dxDataGrid/) allows you to export its contents to a PDF document. 
-<--split-->
+<!--split-->
 
 To enable PDF export operations, import the <a href="https://github.com/parallax/jsPDF" target="_blank">jsPDF</a> library and set the **export**.[enabled](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/export/#enabled) property to **true**.
 

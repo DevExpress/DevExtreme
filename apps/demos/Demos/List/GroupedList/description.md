@@ -1,5 +1,5 @@
 The List component can display items as a two-level hierarchy: parent and child items. To group items, set the [grouped](/Documentation/ApiReference/UI_Components/dxList/Configuration/#grouped) property to **true** and ensure the data source defines the hierarchy in one of the following ways.
-<--split-->
+<!--split-->
 
 ### Hierarchical Data Source Structure
 

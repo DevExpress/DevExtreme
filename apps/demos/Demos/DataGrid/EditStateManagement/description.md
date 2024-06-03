@@ -1,5 +1,5 @@
 Our DataGrid component manages its edit state automatically. If your use case requires full control over the editing process, you can use the API members below to manage state manually.
-<--split-->
+<!--split-->
 
 **Component Properties**
 

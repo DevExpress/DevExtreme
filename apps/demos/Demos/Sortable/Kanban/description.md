@@ -1,5 +1,5 @@
 The [Sortable](/Documentation/ApiReference/UI_Components/dxSortable/) component allows users to reorder elements using drag and drop.
-<--split-->
+<!--split-->
 
 In this demo, two different Sortables (identified by the `class` attribute) are used:
 

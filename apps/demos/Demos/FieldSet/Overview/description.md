@@ -1,5 +1,5 @@
 DevExtreme ships with CSS classes that allow you to define the appearance of list-like structures that contain multiple field items -- field sets.
-<--split-->
+<!--split-->
 
 ## A Simple Field Set
 

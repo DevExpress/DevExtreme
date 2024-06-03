@@ -1,5 +1,5 @@
 The Diagram component provides the following properties to create custom shape templates.
-<--split-->
+<!--split-->
 
 * The [customShapeTemplate](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/#customShapeTemplate) property defines a common template for all shapes in the component.
 * The [template](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/customShapes/#template) property defines a template for an individual shape. 

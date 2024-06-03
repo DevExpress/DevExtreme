@@ -1,5 +1,5 @@
 The Toolbar contains items that manage the page content. In this demo, the Toolbar manages the [List](/Documentation/ApiReference/UI_Components/dxList/).
-<--split-->
+<!--split-->
 
 ## Configure Toolbar Items
 

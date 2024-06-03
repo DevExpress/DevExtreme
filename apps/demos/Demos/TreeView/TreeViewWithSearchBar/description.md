@@ -1,7 +1,7 @@
 To add a search bar to the TreeView and customize the search functionality, do the following:
 
 - Set the [searchEnabled](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#searchEnabled) property to **true**.
-<--split-->
+<!--split-->
 
 - Use the [searchMode](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#searchMode) property to specify whether items should contain (default), start with, or match the search string. In this example, you can switch between search modes in the drop-down menu.
 

@@ -1,5 +1,5 @@
 To bind the TreeList to an array that contains plain-structured data objects, do the following.
-<--split-->
+<!--split-->
 
 1. Assign the array to the [dataSource](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#dataSource) property.
 

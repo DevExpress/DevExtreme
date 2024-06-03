@@ -1,5 +1,5 @@
 This demo illustrates how to change the map's viewport. Use the drop-down menu under the map to choose a continent and change the visible area so that the chosen continent is displayed optimally.
-<--split-->
+<!--split-->
 
 To implement this functionality, call the [viewport(viewportCoordinates)](/Documentation/ApiReference/UI_Components/dxVectorMap/Methods/#viewportviewportCoordinates) method every time the drop-down box value changes. You can also implement the [onCenterChanged](/Documentation/ApiReference/UI_Components/dxVectorMap/Configuration/#onCenterChanged) and [onZoomFactorChanged](/Documentation/ApiReference/UI_Components/dxVectorMap/Configuration/#onZoomFactorChanged) functions to display the map center's coordinates and the current zoom factor in text boxes under the map.
 

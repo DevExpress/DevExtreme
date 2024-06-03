@@ -1,5 +1,5 @@
 You can organize Form items in groups and tabs. To do this, declare [Group](/Documentation/ApiReference/UI_Components/dxForm/Item_Types/GroupItem/) and [Tabbed](/Documentation/ApiReference/UI_Components/dxForm/Item_Types/TabbedItem/) items in the [items[]](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#items) array. Each group and tab can have their own layout and contain other item types.
-<--split-->
+<!--split-->
 
 To create a group item, assign *"group"* to the [itemType](/Documentation/ApiReference/UI_Components/dxForm/Item_Types/GroupItem/#itemType) property. To specify a group's title, use the [caption](/Documentation/ApiReference/UI_Components/dxForm/Item_Types/GroupItem/#caption) property. To replace a group's title with custom content, implement a [caption template](/Documentation/ApiReference/UI_Components/dxForm/Item_Types/GroupItem/#captionTemplate). This demo shows three groups. The `Personal Data` group is nested in the `System Information` group.  
 

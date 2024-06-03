@@ -1,2 +1,2 @@
 This example demonstrates how to&nbsp;visualize discrete data using the PolarChart component. Months in&nbsp;the data source form discrete categories that divide the PolarChart. In&nbsp;addition, you can spot the difference between series types. Use the drop-down menu below the PolarChart to&nbsp;change the applied series type.
-<--split-->
+<!--split-->

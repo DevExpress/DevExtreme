@@ -1,5 +1,5 @@
 Line charts help visualize data and display them as lines with points placed over specified intervals. This demo shows how to initialize and configure Line, Stacked Line, and Full-Stacked Line charts. A Stacked Line chart visualizes multiple data series and allows you to compare the manner in which each series contributes to the total aggregate value for specific arguments. A Full-Stacked Line chart helps compare the percentage value of multiple line series for each argument. Use the drop-down menu under the chart to switch between chart types.
-<--split-->
+<!--split-->
 
 ## Bind to Data
 

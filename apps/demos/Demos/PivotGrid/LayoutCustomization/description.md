@@ -1,5 +1,5 @@
 PivotGrid allows you to customize its layout.
-<--split-->
+<!--split-->
 
 This demo illustrates the following properties:
 

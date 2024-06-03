@@ -1,5 +1,5 @@
 DevExtreme Chart can display background strips to better highlight a range of values.
-<--split-->
+<!--split-->
 
 To configure strips, declare an array of objects in the **argumentAxis**.[strips[]](Documentation/ApiReference/UI_Components/dxChart/Configuration/argumentAxis/strips/) or **valueAxis**.[strips[]](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/strips/) property. Each object in this array configures an individual strip. The [startValue](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/strips/#startValue) and [endValue](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/strips/#endValue) properties define the highlighted range. 
 

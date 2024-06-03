@@ -1,5 +1,5 @@
 This demo shows how to use drag and drop to reorder records stored on the server. This functionality requires that records' order indexes are in an individual data field (`OrderIndex` in this demo) and sorted against that field.
-<--split-->
+<!--split-->
 
 Row drag and drop is configured in the [rowDragging][5] object. Set [allowReordering][2] to **true** to enable this feature. To specify the highlight mode of the row's drop position, use the [dropFeedbackMode][6] property. In this demo, it is set to *"push"*: rows move up or down with animation to create space for the new position of the row.
 

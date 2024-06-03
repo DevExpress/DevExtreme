@@ -1,5 +1,5 @@
 The [SelectBox](/Documentation/ApiReference/UI_Components/dxSelectBox/) component allows users to select an item from a drop-down list.
-<--split-->
+<!--split-->
 
 This demo illustrates the following  SelectBox properties:
 

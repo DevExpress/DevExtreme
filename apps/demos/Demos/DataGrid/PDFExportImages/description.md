@@ -1,4 +1,4 @@
 This demo shows how to configure the DataGrid to export data with images to a PDF document.
-<--split-->
+<!--split-->
 
 Use the [customDrawCell](/Documentation/ApiReference/Common/Object_Structures/PdfExportDataGridProps/#customDrawCell) function to redraw the content of the cell. Inside this function, implement the **jsPDF**.<a href="https://raw.githack.com/parallax/jsPDF/master/docs/module-addImage.html#~addImage" target="_blank">addImage()</a> method that specifies image data. Specify the [onRowExporting](/Documentation/ApiReference/Common/Object_Structures/PdfExportDataGridProps/#onRowExporting) function to change the height of the rows to fit the images.

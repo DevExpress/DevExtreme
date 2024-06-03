@@ -1,5 +1,5 @@
 In certain scenarios, you may need to add more series to the data source after you created the Chart. 
-<--split-->
+<!--split-->
 
 In this case, arrange your data source structure as follows:
 

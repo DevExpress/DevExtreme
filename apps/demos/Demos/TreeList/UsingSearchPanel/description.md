@@ -1,5 +1,5 @@
 If you want users to search data, display the [searchPanel](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/searchPanel/). Set its [visible](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/searchPanel/#visible) property to **true**.
-<--split-->
+<!--split-->
 
 The TreeList searches in all columns, regardless of whether they are [visible](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#visible) or hidden. To exclude hidden columns from search, enable the **searchPanel**.[searchVisibleColumnsOnly](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/searchPanel/#searchVisibleColumnsOnly) property. You can also exclude any specific column. To do this, set its [allowSearch](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#allowSearch) property to **false**
 

@@ -1,5 +1,5 @@
 The Toast is a UI component that displays pop-up notifications. 
-<--split-->
+<!--split-->
 
 When you need to display a notification, call the [notify(message, type, displayTime)](/Documentation/ApiReference/Common/Utils/ui/#notifymessage_type_displayTime) method with values for the [message](/Documentation/ApiReference/UI_Components/dxToast/Configuration/#message), [type](/Documentation/ApiReference/UI_Components/dxToast/Configuration/#type), and [displayTime](/Documentation/ApiReference/UI_Components/dxToast/Configuration/#displayTime) properties passed as arguments.
 
