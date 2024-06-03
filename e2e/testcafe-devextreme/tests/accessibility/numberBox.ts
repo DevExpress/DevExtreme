@@ -7,12 +7,12 @@ fixture.disablePageReloads`Accessibility`
   .page(url(__dirname, '../container.html'));
 
 const options: Options<Properties> = {
-  value: [undefined, 20.5],
+  value: [20.5],
   placeholder: [undefined, 'placeholder'],
   disabled: [true, false],
   readOnly: [true, false],
-  min: [undefined, 10],
-  max: [undefined, 20],
+  showClearButton: [true, false],
+  showSpinButtons: [true, false],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
