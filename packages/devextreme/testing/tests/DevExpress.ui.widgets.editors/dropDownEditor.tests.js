@@ -2164,7 +2164,7 @@ QUnit.module('aria accessibility', () => {
 
     QUnit.module('aria-invalid', {}, () => {
         [
-            { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
+            { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
             { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
             QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
@@ -2180,7 +2180,7 @@ QUnit.module('aria accessibility', () => {
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
                 assert.equal($input.val(), '', 'input value is empty');
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, 'initial render should set aria-invalid to undefined');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
 
                 keyboardMock($input)
                     .type('a');

@@ -264,6 +264,7 @@ const TextEditorBase = Editor.inherit({
 
     _renderValidationState: function() {
         this.callBase();
+        const isValid = this.option('isValid') && this.option('validationStatus') !== 'invalid';
         const isPending = this.option('validationStatus') === 'pending';
 
         if(isPending) {
@@ -279,6 +280,7 @@ const TextEditorBase = Editor.inherit({
             this._disposePendingIndicator();
         }
 
+        this._toggleValidationClasses(!isValid);
         this._toggleValidMark();
     },
 
