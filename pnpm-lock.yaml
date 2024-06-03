@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  inferno: ^8.2.3
+  inferno-hydrate: ^8.2.3
+  inferno-create-element: ^8.2.3
+
 patchedDependencies:
   '@devextreme/runtime@3.0.13':
     hash: daiheimdp4kulfvktqz7ktcx2m
@@ -1040,8 +1045,8 @@ importers:
         specifier: 5.3.1
         version: 5.3.1
       inferno-create-element:
-        specifier: 7.4.11
-        version: 7.4.11
+        specifier: ^8.2.3
+        version: 8.2.3
       intl:
         specifier: 1.2.5
         version: 1.2.5
@@ -9411,14 +9416,8 @@ packages:
   infer-owner@1.0.4:
     resolution: {integrity: sha512-IClj+Xz94+d7irH5qRyfJonOdfTzuDaifE6ZPWfx0N0+/ATZCbuTPq2prFl526urkQd90WyUKIh1DfBQ2hMz9A==}
 
-  inferno-create-element@7.4.11:
-    resolution: {integrity: sha512-kE6XIx2hPAd5qpDli2iGjNXgubvuyxdLvoiW71WnSzIIxA+Uxa/s8lY8m03VyHHVypFV3n329ZY5dFvKc7UQMg==}
-
   inferno-create-element@8.2.3:
     resolution: {integrity: sha512-YEwX4OiFlgeTutvE16uCGxkaSVwZ1DklpAPX8okjVsGaLIWQrM8QIQFxn3mTLWSu70Uea+afQfKL5wE4hxn39Q==}
-
-  inferno-hydrate@7.4.11:
-    resolution: {integrity: sha512-hF9Ke4GHAkj8GQrMXBZPfsUqhq6WjkoDCAfXhPBuF1Wiceqyy8KerOOXEnuocHky77fuEXq0AzVnQcC064Bkfw==}
 
   inferno-hydrate@8.2.3:
     resolution: {integrity: sha512-AyCiswnjYg7D9veJdjiQg06Npp0/iXKhwOm2hjoY3cjadT3fIdz2XtDElLB7imU4icuJ3xOmXA8FgIfnSJfHrQ==}
@@ -9427,17 +9426,8 @@ packages:
     resolution: {integrity: sha512-SUnkCqZNWOIrjRVoVk/E1/70O1f1ImkCX9H2gDPbS0uc3GDxuzIeCgn0rpcc0XV9KzZJ2LTGxuBtEoQQOjUn2Q==}
     engines: {node: '>=8'}
 
-  inferno-shared@7.4.11:
-    resolution: {integrity: sha512-pN725bDSTxkQmRS3e/3H02/xAqgHl+xgddCMjPm8M0etRdRcVCisi3NGPhzSbDDmiftrxhY31exs7+dwsngcDA==}
-
-  inferno-vnode-flags@7.4.11:
-    resolution: {integrity: sha512-L7lslEQCq3IfwgT/b9zhuMf8fv6KXCNXXHZevk/WYxnqJsOWGDcKpJn0zkzXfvmj0otbB149iLUQVBq3oe2sfA==}
-
   inferno-vnode-flags@8.2.3:
     resolution: {integrity: sha512-dfC0MIwFv9PCbZCUsuk9ISejFS3fKJODC0rZ/LjxxzE+OrCk+PMwPLsUnGU6O9/jbBnPACVz1BkACDf5LWgU5Q==}
-
-  inferno@7.4.11:
-    resolution: {integrity: sha512-N+cs33ESWI8fdToCd98yMRYl7jkLnCkJskxov3FKKlaKOvk3PRlAttbhmUaYdWXlRvt2WeXi+J4MbzNj3V6G0w==}
 
   inferno@8.2.3:
     resolution: {integrity: sha512-LMeRlCe+RlXw8kHCLyOWRk2PsZ3Fo4jkESyAR1g4FfPT48N78i11YhTVXW2ukCx5MFjv+qrfa73JzJWU9sg4CQ==}
@@ -18276,9 +18266,9 @@ snapshots:
 
   '@devextreme/runtime@3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)':
     dependencies:
-      inferno: 7.4.11
-      inferno-create-element: 7.4.11
-      inferno-hydrate: 7.4.11
+      inferno: 8.2.3
+      inferno-create-element: 8.2.3
+      inferno-hydrate: 8.2.3
 
   '@discoveryjs/json-ext@0.5.7': {}
 
@@ -27138,17 +27128,9 @@ snapshots:
 
   infer-owner@1.0.4: {}
 
-  inferno-create-element@7.4.11:
-    dependencies:
-      inferno: 7.4.11
-
   inferno-create-element@8.2.3:
     dependencies:
       inferno: 8.2.3
-
-  inferno-hydrate@7.4.11:
-    dependencies:
-      inferno: 7.4.11
 
   inferno-hydrate@8.2.3:
     dependencies:
@@ -27156,19 +27138,9 @@ snapshots:
 
   inferno-server@7.4.11:
     dependencies:
-      inferno: 7.4.11
-
-  inferno-shared@7.4.11: {}
-
-  inferno-vnode-flags@7.4.11: {}
+      inferno: 8.2.3
 
   inferno-vnode-flags@8.2.3: {}
-
-  inferno@7.4.11:
-    dependencies:
-      inferno-shared: 7.4.11
-      inferno-vnode-flags: 7.4.11
-      opencollective-postinstall: 2.0.3
 
   inferno@8.2.3:
     dependencies:

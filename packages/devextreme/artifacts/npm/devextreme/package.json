@@ -27,6 +27,13 @@
   },
   "types": "./bundles/dx.all.d.ts",
   "license": "SEE LICENSE IN README.md",
+  "pnpm": {
+    "overrides": {
+      "inferno": "$inferno",
+      "inferno-hydrate": "$inferno",
+      "inferno-create-element": "$inferno"
+    }
+  },
   "dependencies": {
     "@babel/runtime": "^7.12.1",
     "@devextreme/runtime": "3.0.13",

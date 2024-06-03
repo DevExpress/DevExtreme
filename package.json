@@ -72,9 +72,9 @@
       "@devextreme/runtime@3.0.13": "patches/@devextreme__runtime@3.0.13.patch"
     },
     "overrides": {
-      "inferno": "$inferno",
-      "inferno-hydrate": "$inferno",
-      "inferno-create-element": "$inferno"
+      "inferno": "^8.2.3",
+      "inferno-hydrate": "^8.2.3",
+      "inferno-create-element": "^8.2.3"
     }
   }
 }
