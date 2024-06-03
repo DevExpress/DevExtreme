@@ -281,16 +281,6 @@ const DropDownEditor = TextBox.inherit({
             .eq(0);
     },
 
-    _toggleAriaInvalid() {
-        const fieldData = this._fieldRenderData();
-
-        if(fieldData === null) {
-            this.setAria('invalid', 'true');
-        } else {
-            this.setAria('invalid', 'false');
-        }
-    },
-
     _setDefaultAria: function() {
         this.setAria({
             'haspopup': 'true',
@@ -412,7 +402,6 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshEmptinessEvent();
         this._setDefaultAria();
-        this._toggleAriaInvalid();
         this.option('_onMarkupRendered')?.();
     },
 
