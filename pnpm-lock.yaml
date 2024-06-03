@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@devextreme/runtime@3.0.13':
+    hash: daiheimdp4kulfvktqz7ktcx2m
+    path: patches/@devextreme__runtime@3.0.13.patch
+
 importers:
 
   .:
@@ -200,7 +205,7 @@ importers:
         version: 1.0.27
       '@devextreme/runtime':
         specifier: 3.0.13
-        version: 3.0.13
+        version: 3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)
       '@vue/compiler-sfc':
         specifier: 3.4.27
         version: 3.4.27
@@ -732,7 +737,7 @@ importers:
         version: 7.24.5
       '@devextreme/runtime':
         specifier: 3.0.13
-        version: 3.0.13
+        version: 3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)
       devexpress-diagram:
         specifier: 2.2.8
         version: 2.2.8
@@ -1553,7 +1558,7 @@ importers:
         version: 7.24.5
       '@devextreme/runtime':
         specifier: 3.0.13
-        version: 3.0.13
+        version: 3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)
       devexpress-diagram:
         specifier: 2.2.8
         version: 2.2.8
@@ -18269,7 +18274,7 @@ snapshots:
       - eslint-plugin-spellcheck
       - supports-color
 
-  '@devextreme/runtime@3.0.13':
+  '@devextreme/runtime@3.0.13(patch_hash=daiheimdp4kulfvktqz7ktcx2m)':
     dependencies:
       inferno: 7.4.11
       inferno-create-element: 7.4.11
