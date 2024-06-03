@@ -1,6 +1,6 @@
 import { InfernoComponent, InfernoEffect } from '@devextreme/runtime/inferno';
 // eslint-disable-next-line spellcheck/spell-checker
-import { findDOMfromVNode } from 'inferno';
+import { findDOMFromVNode } from 'inferno';
 import { replaceWith } from '../../../core/utils/dom';
 import { shallowEquals } from '../../utils/shallow_equals';
 // eslint-disable-next-line import/named
@@ -116,7 +116,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
 
   renderTemplate(): () => void {
     // eslint-disable-next-line spellcheck/spell-checker
-    const node = findDOMfromVNode(this.$LI, true);
+    const node = findDOMFromVNode(this.$LI, true);
 
     /* istanbul ignore next */
     if (!node?.parentNode) {

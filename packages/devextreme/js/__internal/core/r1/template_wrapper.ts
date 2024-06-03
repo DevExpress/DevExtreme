@@ -9,7 +9,7 @@ import type { FunctionTemplate } from '@js/core/templates/function_template';
 import { replaceWith } from '@js/core/utils/dom';
 import { isDefined } from '@js/core/utils/type';
 // eslint-disable-next-line spellcheck/spell-checker
-import { findDOMfromVNode } from 'inferno';
+import { findDOMFromVNode } from 'inferno';
 
 import { shallowEquals } from './utils/shallow_equals';
 
@@ -115,7 +115,7 @@ export class TemplateWrapper extends InfernoComponent<TemplateWrapperProps> {
 
   renderTemplate(): () => void {
     // eslint-disable-next-line spellcheck/spell-checker
-    const node = findDOMfromVNode(this.$LI, true);
+    const node = findDOMFromVNode(this.$LI, true);
 
     /* istanbul ignore next */
     if (!node?.parentNode) {
