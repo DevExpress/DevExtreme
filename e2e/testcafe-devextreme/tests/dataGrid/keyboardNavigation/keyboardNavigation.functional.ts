@@ -4629,3 +4629,78 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   keyExpr: 'field_0',
   showBorders: true,
 }));
+
+// T1223277
+test('Re-navigation should work correctly on a grid when a cellTemplate with interactive elements is specified', async (t) => {
+  const rowCount = 2;
+  const columnCount = 3;
+  const dataGrid = new DataGrid('#container');
+  const headerRow = dataGrid.getHeaders().getHeaderRow(0);
+
+  const focusFirstHeader = ClientFunction((firstHeader) => {
+    $(firstHeader()).trigger('focus');
+  });
+
+  const navigateByHeaders = async () => {
+    for (let i = 0; i < columnCount - 1; i += 1) {
+      await t
+        .pressKey('tab')
+        .expect(headerRow.getHeaderCell(i + 1).element.focused)
+        .ok();
+    }
+  };
+  const navigateByDataCells = async () => {
+    for (let i = 0; i < rowCount; i += 1) {
+      for (let j = 0; j < columnCount; j += 1) {
+        if ((i !== rowCount - 1) || (j !== columnCount - 1)) {
+          const nextDataCell = j === columnCount - 1
+            ? dataGrid.getDataCell(i + 1, 0)
+            : dataGrid.getDataCell(i, j + 1);
+
+          await t
+            .pressKey('tab')
+            .expect(nextDataCell.isFocused)
+            .ok();
+        }
+      }
+    }
+  };
+
+  for (let i = 0; i <= 1; i += 1) {
+    // set focus for first header
+    await focusFirstHeader(headerRow.getHeaderCell(0).element);
+    await t
+      .expect(headerRow.getHeaderCell(0).element.focused)
+      .ok();
+
+    await navigateByHeaders();
+
+    if (i === 0) {
+      // navigate from the last header to the first data cell
+      await t
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(0, 0).isFocused)
+        .ok();
+
+      await navigateByDataCells();
+    } else {
+      // navigate from the last header to the last data cell
+      await t
+        .pressKey('tab')
+        .expect(dataGrid.getDataCell(1, 2).isFocused)
+        .ok();
+    }
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(2)].map((_, i) => ({
+    ID: i + 1,
+    CompanyName: `company name ${i + 1}`,
+    City: `city ${i + 1}`,
+  })),
+  keyExpr: 'ID',
+  columns: ['CompanyName', 'City', {
+    dataField: 'test',
+    cellTemplate: () => $('<div/>').html('<input type="checkbox"/>'),
+  }],
+  showBorders: true,
+}));

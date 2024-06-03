@@ -216,11 +216,11 @@ export class KeyboardNavigationController extends modules.ViewController {
     const isRelatedTargetInRowsView = $(event.relatedTarget).closest(
       this._rowsView.element(),
     ).length;
-    const isLink = $element.is('a');
+    const isInteractiveElement = $element.is(NON_FOCUSABLE_ELEMENTS_SELECTOR);
 
     if (
       event.relatedTarget
-      && isLink
+      && isInteractiveElement
       && !isRelatedTargetInRowsView
       && this._isEventInCurrentGrid(event)
     ) {
