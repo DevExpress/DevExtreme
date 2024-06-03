@@ -3294,43 +3294,118 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.test('component with fieldTemplate should retain aria attributes after search and selection (T1230696, T1230971)', function(assert) {
-        const $selectBox = $('#selectBox').dxSelectBox({
-            dataSource: ['a', 'ab', 'abc'],
-            fieldTemplate: () => {
-                return $('<div>').dxTextBox({});
-            },
-            searchEnabled: true,
-            searchTimeout: 0,
-            itemTemplate: () => {
-                return '<div><span></span></div>';
-            }
-        }).dxValidator({
-            validationRules: [ { type: 'required' } ]
+    [
+        { attribute: 'aria-required', value: 'true' },
+        { attribute: 'aria-haspopup', value: 'listbox' },
+        { attribute: 'aria-autocomplete', value: 'list' },
+    ].forEach(({ attribute, value }) => {
+        QUnit.test(`component with fieldTemplate should have correct ${attribute} attribute after search and selection (T1230696, T1230971)`, function(assert) {
+            const $selectBox = $('#selectBox').dxSelectBox({
+                dataSource: ['a', 'ab', 'abc'],
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox({});
+                },
+                searchEnabled: true,
+                searchTimeout: 0,
+                itemTemplate: () => {
+                    return '<div><span></span></div>';
+                }
+            }).dxValidator({
+                validationRules: [ { type: 'required' } ]
+            });
+            const selectBox = $selectBox.dxSelectBox('instance');
+            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+
+            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
+
+            keyboardMock($input)
+                .type('a');
+
+            const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            listItem.trigger('dxclick');
+
+            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            assert.strictEqual($input.attr(attribute), value, `${attribute} should stay ${value} after search and selection`);
         });
-        let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+    });
 
-        assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+    QUnit.module('aria-invalid', {}, () => {
+        [
+            { valueRequired: true, emptyValue: 'true', nonEmptyValue: 'false' },
+            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
+        ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
+                const $selectBox = $('#selectBox').dxSelectBox({
+                    dataSource: ['one', ''],
+                    fieldTemplate: () => {
+                        return $('<div>').dxTextBox({});
+                    },
+                    searchEnabled: true,
+                    itemTemplate: () => {
+                        return '<div><span></span></div>';
+                    }
+                }).dxValidator({
+                    validationRules: valueRequired ? [{ type: 'required' }] : [],
+                });
+                const selectBox = $selectBox.dxSelectBox('instance');
+                let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopup attribute set to listbox');
+                assert.equal($input.val(), '', 'input value is empty');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, 'initial render should set aria-invalid to undefined');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
+                keyboardMock($input)
+                    .type('a');
 
-        const selectBox = $selectBox.dxSelectBox('instance');
-        const keyboard = keyboardMock($input);
+                let listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+                listItem.trigger('dxclick');
 
-        keyboard.type('a');
+                assert.equal($input.val(), 'one', 'input value is not empty');
+                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
 
-        const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
-        listItem.trigger('dxclick');
+                listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+                listItem.trigger('dxclick');
 
-        $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                assert.equal($input.val(), '', 'input value is empty');
+                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value set aria-invalid to ${emptyValue}`);
+            });
+        });
 
-        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
+        QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
+            const $selectBox = $('#selectBox').dxSelectBox({
+                dataSource: ['one', ''],
+                fieldTemplate: () => {
+                    return $('<div>').dxTextBox({});
+                },
+                searchEnabled: true,
+                itemTemplate: () => {
+                    return '<div><span></span></div>';
+                }
+            });
+            const selectBox = $selectBox.dxSelectBox('instance');
+            let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'aria-haspopup should stay to listbox after search and selection');
+            assert.equal($input.val(), '', 'input value is empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete should stay to list after search and selection');
+            keyboardMock($input)
+                .type('a');
+
+            let listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            listItem.trigger('dxclick');
+
+            assert.equal($input.val(), 'one', 'input value is not empty');
+            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'non empty input value set aria-invalid to undefined');
+
+            listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
+            listItem.trigger('dxclick');
+
+            assert.equal($input.val(), '', 'input value is empty');
+            $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'empty input value set aria-invalid to undefined');
+        });
     });
 
     QUnit.test('component with fieldTemplate should have proper role attribute after search and selection (T1230635)', function(assert) {
