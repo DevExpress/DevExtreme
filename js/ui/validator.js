@@ -131,13 +131,22 @@ const Validator = DOMComponent.inherit({
         const dxStandardEditor = this._getEditor();
         if(dxStandardEditor) {
             const rules = this.option('validationRules') || [];
+            const data = dxStandardEditor.option('value');
+
             const isRequired = rules.some(({ type }) => type === 'required') || null;
+            const isInvalid = isRequired && data === '';
 
             if(dxStandardEditor.isInitialized()) {
-                dxStandardEditor.setAria('required', isRequired);
+                dxStandardEditor.setAria({
+                    'required': isRequired,
+                    'invalid': isInvalid,
+                });
             }
             dxStandardEditor.option('_onMarkupRendered', () => {
-                dxStandardEditor.setAria('required', isRequired);
+                dxStandardEditor.setAria({
+                    'required': isRequired,
+                    'invalid': isInvalid,
+                });
             });
         }
     },
