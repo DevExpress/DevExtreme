@@ -2135,7 +2135,7 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 
-    QUnit.test('component with fieldTemplate should have retain attributes after interaction (T1230696, T1230971, T1230706)', function(assert) {
+    QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: (data) => {
