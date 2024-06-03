@@ -81,7 +81,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                         leftVirtualCellCount={viewData.leftVirtualCellCount}
                         rightVirtualCellCount={viewData.rightVirtualCellCount}
                       >
-                        // @ts-expect-error
+                        {/* @ts-expect-error */}
                         {
                           cells.map(({
                             key: cellKey,
