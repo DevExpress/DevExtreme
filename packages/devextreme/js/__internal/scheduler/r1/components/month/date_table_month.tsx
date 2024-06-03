@@ -13,12 +13,13 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
 
   render(): JSX.Element {
     const {
+      viewData,
+      viewContext,
       addDateTableClass,
       addVerticalSizesClassToRows,
       dataCellTemplate,
       groupOrientation,
       tableRef,
-      viewData,
       width,
       ...restProps
     } = this.props;
@@ -29,17 +30,19 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
       // @ts-ignore
       <DateTable
         {...restProps}
-      viewData={viewData}
-      groupOrientation={groupOrientation}
-      addDateTableClass={addDateTableClass}
-      dataCellTemplate={DataCellTemplateComponent}
+        viewData={viewData}
+        viewContext={viewContext}
+        groupOrientation={groupOrientation}
+        addDateTableClass={addDateTableClass}
+        dataCellTemplate={DataCellTemplateComponent}
         // @ts-expect-error JSX template types issue
-      cellTemplate={DateTableMonthCell}
-      tableRef={tableRef}
-      addVerticalSizesClassToRows={addVerticalSizesClassToRows}
-      width={width}
+        cellTemplate={DateTableMonthCell}
+        tableRef={tableRef}
+        addVerticalSizesClassToRows={addVerticalSizesClassToRows}
+        width={width}
       />
     );
   }
 }
+
 DateTableMonth.defaultProps = DateTableDefaultProps;

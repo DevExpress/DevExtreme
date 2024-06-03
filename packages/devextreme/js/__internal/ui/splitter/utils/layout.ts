@@ -31,6 +31,15 @@ export function findLastIndexOfVisibleItem(items: Item[]): number {
   return -1;
 }
 
+export function findLastIndexOfNonCollapsedItem(items: Item[]): number {
+  for (let i = items.length - 1; i >= 0; i -= 1) {
+    if (items[i].collapsed !== true) {
+      return i;
+    }
+  }
+  return -1;
+}
+
 export function findIndexOfNextVisibleItem(items: Item[], index: number): number {
   for (let i = index + 1; i < items.length; i += 1) {
     if (items[i].visible !== false) {
@@ -43,7 +52,6 @@ export function findIndexOfNextVisibleItem(items: Item[], index: number): number
 export function normalizePanelSize(
   paneRestrictions: PaneRestrictions,
   size: number,
-  collapseMode = false,
 ): number {
   const {
     minSize = 0,
@@ -71,10 +79,6 @@ export function normalizePanelSize(
   adjustedSize = Math.min(maxSize, adjustedSize);
   adjustedSize = parseFloat(toFixed(adjustedSize, PRECISION));
 
-  if (collapseMode && size < collapsedSize) {
-    return collapsedSize;
-  }
-
   return adjustedSize;
 }
 
@@ -84,7 +88,6 @@ function findMaxAvailableDelta(
   paneRestrictions: PaneRestrictions[],
   paneIndex: number,
   maxDelta = 0,
-  collapseMode = false,
 ): number {
   if (paneIndex < 0 || paneIndex >= paneRestrictions.length) {
     return maxDelta;
@@ -92,7 +95,7 @@ function findMaxAvailableDelta(
 
   const prevSize = currentLayout[paneIndex];
 
-  const maxPaneSize = normalizePanelSize(paneRestrictions[paneIndex], 100, collapseMode);
+  const maxPaneSize = normalizePanelSize(paneRestrictions[paneIndex], 100);
 
   const delta = maxPaneSize - prevSize;
 
@@ -104,17 +107,19 @@ function findMaxAvailableDelta(
     paneRestrictions,
     paneIndex + increment,
     nextMaxDelta,
-    collapseMode,
   );
 }
 
 export function getNextLayout(
   currentLayout: number[],
   delta: number,
-  prevPaneIndex: number,
+  prevPaneIndex: number | undefined,
   paneRestrictions: PaneRestrictions[],
-  collapseMode = false,
 ): number[] {
+  if (!isDefined(prevPaneIndex)) {
+    return currentLayout;
+  }
+
   const nextLayout = [...currentLayout];
   const nextPaneIndex = prevPaneIndex + 1;
 
@@ -128,7 +133,6 @@ export function getNextLayout(
     paneRestrictions,
     currentItemIndex,
     0,
-    collapseMode,
   );
   const minAbsDelta = Math.min(Math.abs(currentDelta), Math.abs(maxDelta));
 
@@ -144,7 +148,6 @@ export function getNextLayout(
     const safeSize = normalizePanelSize(
       paneRestrictions[currentItemIndex],
       unsafeSize,
-      collapseMode,
     );
 
     if (!(compareNumbersWithPrecision(prevSize, safeSize) === 0)) {
@@ -172,7 +175,6 @@ export function getNextLayout(
   let safeSize = normalizePanelSize(
     paneRestrictions[pivotIndex],
     unsafeSize,
-    collapseMode,
   );
 
   nextLayout[pivotIndex] = safeSize;
@@ -190,7 +192,6 @@ export function getNextLayout(
       safeSize = normalizePanelSize(
         paneRestrictions[index],
         unsafeSize,
-        collapseMode,
       );
       if (!(compareNumbersWithPrecision(prevSize, safeSize) === 0)) {
         deltaRemaining -= safeSize - prevSize;

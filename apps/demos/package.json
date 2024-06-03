@@ -79,10 +79,10 @@
         "zone.js": "0.13.3"
     },
     "devDependencies": {
-        "@angular/platform-server": "16.2.0",
-        "@babel/core": "7.20.12",
+        "@angular/platform-server": "~16.2.12",
+        "@babel/core": "7.23.9",
         "@babel/eslint-parser": "7.23.10",
-        "@babel/preset-env": "7.20.2",
+        "@babel/preset-env": "7.23.9",
         "@rollup/plugin-babel": "^6.0.4",
         "@rollup/plugin-node-resolve": "15.2.3",
         "@rollup/plugin-replace": "^5.0.5",
@@ -94,8 +94,8 @@
         "@types/yargs": "17.0.32",
         "@typescript-eslint/parser": "5.62.0",
         "@vue/eslint-config-typescript": "12.0.0",
-        "axe-core": "4.9.0",
-        "babel-jest": "27.5.1",
+        "axe-core": "4.9.1",
+        "babel-jest": "29.7.0",
         "consola": "3.2.3",
         "cookie-parser": "1.4.6",
         "cross-env": "7.0.3",
@@ -155,7 +155,8 @@
         "prepare-bundles": "pnpm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles"
+        "make-demos-bundle": "ts-node ./utils/create-bundles",
+        "split-doc-paragraph": "ts-node ./utils/internal/split-paragraph"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

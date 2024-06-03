@@ -6,6 +6,7 @@ import { getTemplate } from '@ts/core/r1/utils/index';
 import { VERTICAL_GROUP_ORIENTATION } from '../../const';
 import type { Group, GroupOrientation } from '../../types';
 import { isVerticalGroupingApplied } from '../../utils/index';
+import type { DefaultProps } from '../types';
 import { GroupPanelHorizontal } from './group_panel_horizontal';
 import type { GroupPanelBaseProps } from './group_panel_props';
 import { GroupPanelBaseDefaultProps } from './group_panel_props';
@@ -17,7 +18,7 @@ export interface GroupPanelProps extends GroupPanelBaseProps {
   elementRef?: RefObject<HTMLDivElement>;
 }
 
-export const GroupPanelDefaultProps: GroupPanelProps = {
+export const GroupPanelDefaultProps: DefaultProps<GroupPanelProps> = {
   ...GroupPanelBaseDefaultProps,
   groups: [],
   groupOrientation: VERTICAL_GROUP_ORIENTATION,
@@ -32,6 +33,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
   render(): JSX.Element {
     const {
       className,
+      viewContext,
       elementRef,
       groupPanelData,
       height,
@@ -50,6 +52,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
     return (
     // @ts-ignore
      <Layout
+       viewContext={viewContext}
        height={height}
        resourceCellTemplate={ResourceCellTemplateComponent}
        className={className}

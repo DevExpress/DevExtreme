@@ -34,8 +34,8 @@
   "private": true,
   "devDependencies": {
     "@nx/devkit": "^18.3.4",
-    "@nx/jest": "^16.10.0",
-    "@nx/js": "^16.10.0",
+    "@nx/jest": "19.0.4",
+    "@nx/js": "19.0.4",
     "@types/jest": "^29.5.12",
     "@types/node": "^20.11.5",
     "@types/shelljs": "0.8.15",
@@ -45,15 +45,15 @@
     "axe-core": "4.9.0",
     "cheerio": "1.0.0-rc.10",
     "codelyzer": "^6.0.2",
-    "devextreme-internal-tools": "14.0.0-beta.1",
+    "devextreme-internal-tools": "14.0.0-beta.3",
     "http-server": "14.1.1",
     "husky": "^8.0.3",
     "jest": "29.7.0",
     "jspdf-autotable": "3.8.2",
     "lint-staged": "14.0.1",
-    "ng-packagr": "16.2.3",
-    "nx": "17.3.2",
-    "nx-cloud": "16.5.2",
+    "ng-packagr": "16.2.2",
+    "nx": "19.0.4",
+    "nx-cloud": "19.0.0",
     "postcss": "^8.4.31",
     "shx": "0.3.4",
     "source-map": "0.7.4",
@@ -68,3 +68,4 @@
   ],
   "packageManager": "pnpm@9.1.2"
 }
+

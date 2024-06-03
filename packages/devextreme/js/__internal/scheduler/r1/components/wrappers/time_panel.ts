@@ -24,7 +24,12 @@ export class TimePanelComponent extends ComponentWrapper {
       allowNull: [],
       elements: [],
       templates: ['timeCellTemplate'],
-      props: ['groupOrientation', 'timePanelData', 'timeCellTemplate'],
+      props: [
+        'viewContext',
+        'groupOrientation',
+        'timePanelData',
+        'timeCellTemplate',
+      ],
     };
   }
   /* eslint-enable @typescript-eslint/explicit-module-boundary-types */

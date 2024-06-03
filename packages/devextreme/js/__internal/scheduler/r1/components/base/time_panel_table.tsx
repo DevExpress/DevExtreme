@@ -5,21 +5,21 @@ import { getTemplate } from '@ts/core/r1/utils/index';
 import { Fragment } from 'inferno';
 
 import type { GroupOrientation, TimePanelData } from '../../types';
-import type { DateTimeCellTemplateProps } from '../types';
+import type { DateTimeCellTemplateProps, DefaultProps, PropsWithViewContext } from '../types';
 import { AllDayPanelTitle } from './all_day_panel_title';
 import { CellBase, CellBaseDefaultProps } from './cell';
 import { Row, RowDefaultProps } from './row';
 import { Table } from './table';
 import { TimePanelCell } from './time_panel_cell';
 
-export interface TimePanelTableProps {
+export interface TimePanelTableProps extends PropsWithViewContext {
   groupOrientation?: GroupOrientation;
   timePanelData: TimePanelData;
   timeCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
   tableRef?: RefObject<HTMLTableElement>;
 }
 
-export const TimePanelTableDefaultProps = {
+export const TimePanelTableDefaultProps: DefaultProps<TimePanelTableProps> = {
   timePanelData: {
     groupedData: [],
     leftVirtualCellCount: 0,
@@ -37,6 +37,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
   render(): JSX.Element {
     const {
       timePanelData,
+      viewContext,
       tableRef,
       timeCellTemplate,
       ...restProps
@@ -75,6 +76,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                     {/* @ts-ignore */}
                     <CellBase
                       className="dx-scheduler-time-panel-title-cell"
+                      viewContext={viewContext}
                       startDate={CellBaseDefaultProps.startDate}
                       endDate={CellBaseDefaultProps.endDate}
                       index={CellBaseDefaultProps.index}
@@ -105,6 +107,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                   >
                     {/* @ts-ignore */}
                     <TimePanelCell
+                      viewContext={viewContext}
                       startDate={startDate}
                       endDate={CellBaseDefaultProps.endDate}
                       text={text}

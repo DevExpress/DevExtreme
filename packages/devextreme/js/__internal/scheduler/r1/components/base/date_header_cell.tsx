@@ -3,7 +3,7 @@ import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
 import { renderUtils } from '../../utils/index';
-import type { DateTimeCellTemplateProps } from '../types';
+import type { DateTimeCellTemplateProps, DefaultProps } from '../types';
 import type { CellBaseProps } from './cell';
 import { CellBaseDefaultProps } from './cell';
 import { DateHeaderText } from './date_header_text';
@@ -19,7 +19,7 @@ export interface DateHeaderCellProps extends CellBaseProps {
   dateCellTemplate?: JSXTemplate<DateTimeCellTemplateProps>;
 }
 
-export const DateHeaderCellDefaultProps: DateHeaderCellProps = {
+export const DateHeaderCellDefaultProps: DefaultProps<DateHeaderCellProps> = {
   ...CellBaseDefaultProps,
   today: false,
   colSpan: 1,
@@ -31,6 +31,7 @@ export const DateHeaderCellDefaultProps: DateHeaderCellProps = {
 export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
   render(): JSX.Element {
     const {
+      viewContext: { view: { type: viewType }, crossScrollingEnabled },
       colSpan,
       dateCellTemplate,
       groupIndex,
@@ -47,9 +48,11 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
       isWeekDayCell,
       today,
     } = this.props;
+    const cellSizeHorizontalClass = renderUtils
+      .getCellSizeHorizontalClass(viewType, crossScrollingEnabled);
     const cellClasses = renderUtils.combineClasses({
       'dx-scheduler-header-panel-cell': true,
-      'dx-scheduler-cell-sizes-horizontal': true,
+      [cellSizeHorizontalClass]: true,
       'dx-scheduler-header-panel-current-time-cell': today,
       'dx-scheduler-header-panel-week-cell': isWeekDayCell,
       [className ?? '']: !!className,

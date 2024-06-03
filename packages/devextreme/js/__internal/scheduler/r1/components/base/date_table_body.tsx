@@ -5,7 +5,7 @@ import { Fragment } from 'inferno';
 
 import { renderUtils } from '../../utils/index';
 import { DATE_TABLE_ROW_CLASS } from '../const';
-import type { CellTemplateProps } from '../types';
+import type { CellTemplateProps, DefaultProps } from '../types';
 import { AllDayPanelTableBody, AllDayPanelTableBodyDefaultProps } from './all_day_panel_table_body';
 import { DateTableCellBase } from './date_table_cell_base';
 import type { LayoutProps } from './layout_props';
@@ -16,7 +16,7 @@ export interface DateTableBodyProps extends LayoutProps {
   cellTemplate: JSXTemplate<CellTemplateProps>;
 }
 
-export const DateTableBodyDefaultProps: DateTableBodyProps = {
+export const DateTableBodyDefaultProps: DefaultProps<DateTableBodyProps> = {
   ...LayoutDefaultProps,
   // @ts-expect-error Different types between React and Inferno
   cellTemplate: DateTableCellBase,
@@ -25,8 +25,9 @@ export const DateTableBodyDefaultProps: DateTableBodyProps = {
 export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
   render(): JSX.Element {
     const {
-      addVerticalSizesClassToRows,
       viewData,
+      viewContext,
+      addVerticalSizesClassToRows,
       cellTemplate,
       dataCellTemplate,
     } = this.props;
@@ -51,6 +52,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                   // @ts-ignore
                   isGroupedAllDayPanel && <AllDayPanelTableBody
                     viewData={allDayPanel ?? AllDayPanelTableBodyDefaultProps.viewData}
+                    viewContext={viewContext}
                     dataCellTemplate={DataCellTemplateComponent}
                     isVerticalGroupOrientation={true}
                     leftVirtualCellWidth={viewData.leftVirtualCellWidth
@@ -95,6 +97,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                             today,
                           }) => CellTemplateComponent({
                             key: cellKey,
+                            viewContext,
                             isFirstGroupCell,
                             isLastGroupCell,
                             startDate,

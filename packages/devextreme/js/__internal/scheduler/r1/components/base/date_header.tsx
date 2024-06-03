@@ -4,7 +4,7 @@ import { getTemplate } from '@ts/core/r1/utils/index';
 
 import type { DateHeaderData, Group, GroupOrientation } from '../../types';
 import { isHorizontalGroupingApplied, themeUtils } from '../../utils/index';
-import type { DateTimeCellTemplateProps } from '../types';
+import type { DateTimeCellTemplateProps, PropsWithViewContext } from '../types';
 import { DateHeaderCell } from './date_header_cell';
 import { Row } from './row';
 
@@ -12,7 +12,7 @@ const {
   isMaterialBased,
 } = themeUtils.getThemeType();
 
-export interface DateHeaderProps {
+export interface DateHeaderProps extends PropsWithViewContext {
   // TODO: bug in angular
   groupOrientation: GroupOrientation;
   groupByDate: boolean;
@@ -31,6 +31,7 @@ export const DateHeaderDefaultProps = {
 export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
   render(): JSX.Element {
     const {
+      viewContext,
       dateCellTemplate,
       dateHeaderData: {
         dataMap,
@@ -78,6 +79,7 @@ export class DateHeader extends BaseInfernoComponent<DateHeaderProps> {
                   // @ts-ignore
                   <DateHeaderCell
                     key={key}
+                    viewContext={viewContext}
                     startDate={startDate}
                     endDate={endDate}
                     groups={isHorizontalGrouping ? cellGroups : undefined}

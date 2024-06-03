@@ -252,7 +252,7 @@ const DropDownEditor = TextBox.inherit({
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
-        this.setAria('role', 'combobox');
+        this.setAria('role', this._getAriaRole());
     },
 
     _render: function() {
@@ -291,10 +291,15 @@ const DropDownEditor = TextBox.inherit({
         return 'none';
     },
 
+    _getAriaRole() {
+        return 'combobox';
+    },
+
     _setDefaultAria: function() {
         this.setAria({
             'haspopup': this._getAriaHasPopup(),
             'autocomplete': this._getAriaAutocomplete(),
+            'role': this._getAriaRole(),
         });
     },
 
@@ -412,6 +417,7 @@ const DropDownEditor = TextBox.inherit({
         this._refreshEvents();
         this._refreshEmptinessEvent();
         this._setDefaultAria();
+        this._setFieldAria();
         this.option('_onMarkupRendered')?.();
     },
 

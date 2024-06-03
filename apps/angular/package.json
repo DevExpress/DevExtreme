@@ -23,10 +23,10 @@
     "zone.js": "0.13.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "16.2.0",
-    "@angular/cli": "16.2.0",
-    "@angular/language-service": "16.2.0",
-    "@angular/platform-server": "16.2.0",
+    "@angular-devkit/build-angular": "16.2.14",
+    "@angular/cli": "~16.2.12",
+    "@angular/language-service": "~16.2.12",
+    "@angular/platform-server": "~16.2.12",
     "@types/jasmine": "^5.1.4",
     "@types/node": "20.11.17",
     "cross-env": "7.0.3",

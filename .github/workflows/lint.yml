@@ -94,13 +94,6 @@ jobs:
         corepack enable
         pnpm install
 
-    - name: Run pnpm install TS testing
-      working-directory: ./packages/devextreme
-      run: |
-        pushd testing/typescript
-        pnpm install
-        popd
-
     - name: Build
       working-directory: ./packages/devextreme
       run: pnpm run build

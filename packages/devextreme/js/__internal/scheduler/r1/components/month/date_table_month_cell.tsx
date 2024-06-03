@@ -36,6 +36,7 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
 
   render(): JSX.Element {
     const {
+      viewContext,
       dataCellTemplate,
       endDate,
       groupIndex,
@@ -65,6 +66,7 @@ export class DateTableMonthCell extends BaseInfernoComponent<DateTableCellBasePr
       // @ts-ignore
       <DateTableCellBase
         className={classes}
+        viewContext={viewContext}
         dataCellTemplate={DataCellTemplateComponent}
         startDate={startDate}
         endDate={endDate}

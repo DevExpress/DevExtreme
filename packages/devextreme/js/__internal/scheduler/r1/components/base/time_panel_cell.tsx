@@ -2,6 +2,7 @@ import { BaseInfernoComponent } from '@devextreme/runtime/inferno';
 import type { JSXTemplate } from '@devextreme-generator/declarations';
 import { getTemplate } from '@ts/core/r1/utils/index';
 
+import { renderUtils } from '../../utils/index';
 import type { DateTimeCellTemplateProps } from '../types';
 import type { CellBaseProps } from './cell';
 import { CellBase, CellBaseDefaultProps } from './cell';
@@ -52,19 +53,30 @@ export class TimePanelCell extends BaseInfernoComponent<TimePanelCellProps> {
   render(): JSX.Element {
     const {
       className,
+      viewContext,
       highlighted,
       isFirstGroupCell,
       isLastGroupCell,
       text,
       timeCellTemplate,
     } = this.props;
+
+    const cellSizeVerticalClass = renderUtils
+      .getCellSizeVerticalClass(false);
+    const classes = renderUtils.combineClasses({
+      'dx-scheduler-time-panel-cell': true,
+      [cellSizeVerticalClass]: true,
+      'dx-scheduler-time-panel-current-time-cell': !!highlighted,
+      [className ?? '']: true,
+    });
     const timeCellTemplateProps = this.getTimeCellTemplateProps();
     const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
       // @ts-ignore
       <CellBase
-        className={`dx-scheduler-time-panel-cell dx-scheduler-cell-sizes-vertical ${highlighted ? 'dx-scheduler-time-panel-current-time-cell' : ''} ${className}`}
+        className={classes}
+        viewContext={viewContext}
         isFirstGroupCell={isFirstGroupCell}
         isLastGroupCell={isLastGroupCell}
         startDate={CellBaseDefaultProps.startDate}

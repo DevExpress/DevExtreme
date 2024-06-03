@@ -1,11 +1,13 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import Scheduler from 'devextreme-testcafe-models/scheduler';
-import { insertStylesheetRulesToPage } from '../../../../helpers/domUtils';
+import { insertStylesheetRulesToPage, removeStylesheetRulesFromPage } from '../../../../helpers/domUtils';
 import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 
 fixture.disablePageReloads`Scheduler: Layout Customization: Cell Sizes`
   .page(url(__dirname, '../../../container.html'));
+
+const SELECTOR = '#container';
 
 const createScheduler = async (
   additionalProps: Record<string, unknown>,
@@ -67,7 +69,7 @@ const views = [{
 }];
 
 test('Cell sizes customization should work', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const scheduler = new Scheduler(SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   // eslint-disable-next-line no-restricted-syntax
@@ -85,10 +87,12 @@ test('Cell sizes customization should work', async (t) => {
   await createScheduler({
     views,
   });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });
 
 test('Cell sizes customization should work when all-day panel is enabled', async (t) => {
-  const scheduler = new Scheduler('#container');
+  const scheduler = new Scheduler(SELECTOR);
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
   await t.expect(
@@ -105,4 +109,6 @@ test('Cell sizes customization should work when all-day panel is enabled', async
     showAllDayPanel: true,
     currentView: 'week',
   });
+}).after(async () => {
+  await removeStylesheetRulesFromPage();
 });
