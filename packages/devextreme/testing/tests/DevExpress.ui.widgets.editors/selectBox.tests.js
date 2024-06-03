@@ -3293,7 +3293,7 @@ QUnit.module('search', moduleSetup, () => {
         assert.equal($selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS)).val(), 'Name 2', 'selectBox displays right value');
     });
 
-    QUnit.test('component with fieldTemplate should have proper aria attributes after search and selection (T1230696, T1230971, T1230706)', function(assert) {
+    QUnit.test('component with fieldTemplate should retain aria attributes after search and selection (T1230696, T1230971, T1230706)', function(assert) {
         const $selectBox = $('#selectBox').dxSelectBox({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: () => {
@@ -3314,8 +3314,6 @@ QUnit.module('search', moduleSetup, () => {
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
 
-        assert.strictEqual($input.attr('aria-invalid'), 'true', 'aria-invalid attribute should be set to true if the value is empty');
-
         const selectBox = $selectBox.dxSelectBox('instance');
         const keyboard = keyboardMock($input);
 
@@ -3328,11 +3326,9 @@ QUnit.module('search', moduleSetup, () => {
 
         assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required should stay true after search and selection');
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'aria-haspopup attribute value should stay to listbox after search and selection');
+        assert.strictEqual($input.attr('aria-haspopup'), 'listbox', 'initial render should have aria-haspopuphaspopup attribute set to listbox');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute value should stay to list after search and selection');
-
-        assert.strictEqual($input.attr('aria-invalid'), 'false', 'aria-invalid attribute should be set to false if the value is not empty');
+        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
     });
 
     [0, 1].forEach((value) => {

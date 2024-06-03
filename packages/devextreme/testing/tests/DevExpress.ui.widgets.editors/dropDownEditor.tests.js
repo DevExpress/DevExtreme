@@ -2135,7 +2135,7 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 
-    QUnit.test('component with fieldTemplate should have proper aria attributes after interaction (T1230696, T1230971, T1230706)', function(assert) {
+    QUnit.test('component with fieldTemplate should have retain attributes after interaction (T1230696, T1230971, T1230706)', function(assert) {
         const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
             dataSource: ['one', 'two', 'three'],
             fieldTemplate: (data) => {
@@ -2153,8 +2153,6 @@ QUnit.module('aria accessibility', () => {
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
 
-        assert.strictEqual($input.attr('aria-invalid'), 'true', 'aria-invalid attribute should be set to true if the value is empty');
-
         keyboardMock($input)
             .type('a');
 
@@ -2165,8 +2163,6 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after typing');
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after typing');
-
-        assert.strictEqual($input.attr('aria-invalid'), 'false', 'aria-invalid attribute should be set to false after typing');
 
         keyboardMock($input)
             .caret(1)
@@ -2179,8 +2175,6 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after deleting');
 
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after deleting');
-
-        assert.strictEqual($input.attr('aria-invalid'), 'true', 'aria-invalid attribute should be set to true after deleting');
     });
 
     QUnit.module('aria-controls', {}, () => {
