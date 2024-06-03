@@ -7,9 +7,10 @@
     "test": "tsc --noEmit"
   },
   "devDependencies": {
-    "jquery": "3.7.1",
-    "@types/jquery": "3.5.29",
     "@angular/common": "^11.2.14",
-    "devextreme-main": "*"
+    "@types/jquery": "3.5.29",
+    "devextreme-main": "*",
+    "jquery": "3.7.1",
+    "typescript": "4.9.5"
   }
 }

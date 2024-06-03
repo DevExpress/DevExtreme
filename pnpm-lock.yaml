@@ -685,6 +685,9 @@ importers:
       jquery:
         specifier: 3.7.1
         version: 3.7.1
+      typescript:
+        specifier: 4.9.5
+        version: 4.9.5
 
   e2e/testcafe-devextreme:
     devDependencies:
