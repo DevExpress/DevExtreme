@@ -131,7 +131,6 @@ const Validator = DOMComponent.inherit({
         const dxStandardEditor = this._getEditor();
         if(dxStandardEditor) {
             const rules = this.option('validationRules') || [];
-
             const isRequired = rules.some(({ type }) => type === 'required') || null;
 
             if(dxStandardEditor.isInitialized()) {
