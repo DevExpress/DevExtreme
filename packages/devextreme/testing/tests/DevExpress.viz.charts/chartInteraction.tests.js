@@ -7,7 +7,7 @@ import 'viz/chart';
 import 'viz/polar_chart';
 
 const SERIES_POINT_MARKER_SELECTOR = '.dxc-series circle';
-const LEGEND_TEXT_SELECTOR = '.dxc-legend > .dxc-title > text';
+const LEGEND_TEXT_SELECTOR = '.dxc-legend .dxc-title text';
 
 QUnit.testStart(function() {
     const markup =
@@ -243,6 +243,25 @@ QUnit.test('Legend title position should not change after legend visibility chan
 
     const textYAfterVisibilityChange = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
     assert.roughEqual(textYAfterVisibilityChange, 17, 2);
+});
+
+QUnit.test('Old title should be disposed upon creating a new one', function(assert) {
+    const chart = $('#chart').dxChart({
+        legend: {
+            title: 'Legend',
+            visible: true
+        },
+        series: [{}],
+    });
+
+    const chartInstance = chart.dxChart('instance');
+
+    const disposeSpy = sinon.spy(chartInstance._legend._title, 'dispose');
+
+    chartInstance.option('legend.visible', false);
+    chartInstance.option('legend.visible', true);
+
+    assert.strictEqual(disposeSpy.callCount, 1);
 });
 
 // T999609
