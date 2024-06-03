@@ -20,7 +20,7 @@ jobs:
   build-devextreme:
     runs-on: ubuntu-latest
     name: Build DevExtreme
-    timeout-minutes: 20
+    timeout-minutes: 40
 
     steps:
       - name: Get sources
