@@ -13,8 +13,7 @@ const options: Options<Properties> = {
   readOnly: [true, false],
   showClearButton: [true, false],
   showSpinButtons: [true, false],
-  label: ['', 'label'],
-  name: ['', 'name'],
+  mode: ['number', 'tel', 'text'],
   // NOTE: Doesn't matter if there are contrast issues
   // stylingMode: ['outlined', 'filled', 'underlined'],
   inputAttr: [{ 'aria-label': 'aria-label' }],
