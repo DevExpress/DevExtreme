@@ -424,6 +424,10 @@ extend(legendPrototype, {
         };
 
         if(that.isVisible()) {
+            if(that._title) {
+                that._title.dispose();
+            }
+
             that._title = new Title({ renderer: that._renderer, cssClass: that._titleGroupClass, root: that._legendGroup });
         }
 
