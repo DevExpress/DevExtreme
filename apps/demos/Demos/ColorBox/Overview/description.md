@@ -1,5 +1,5 @@
 The ColorBox allows users to enter a color or select it in the drop-down editor. When you create a ColorBox, specify its [value](/Documentation/ApiReference/UI_Components/dxColorBox/Configuration/#value) property to set the initial color. Users can change the value after they pick a shade, or after they click the **OK** button. To specify the mode, use the [applyValueMode](/Documentation/ApiReference/UI_Components/dxColorBox/Configuration/#applyValueMode) property. 
-<--split-->
+<!--split-->
 
 You can hide the editor's drop-down button to allow users to only type in a color code. To do this, disable the [showDropDownButton](/Documentation/ApiReference/UI_Components/dxColorBox/Configuration/#showDropDownButton) property. Users can also edit the transparency of the selected shade if the [editAlphaChannel](/Documentation/ApiReference/UI_Components/dxColorBox/Configuration/#editAlphaChannel) property is set to **true**.
 

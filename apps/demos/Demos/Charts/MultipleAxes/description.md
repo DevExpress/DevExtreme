@@ -1,5 +1,5 @@
 You can display the Chart component with multiple axes for better data visualization. This demo illustrates a chart with two separate axes that display percentage and absolute values.
-<--split-->
+<!--split-->
 
 To configure a multi-axis chart, follow the steps below:
 

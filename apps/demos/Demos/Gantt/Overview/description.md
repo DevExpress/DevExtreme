@@ -1,5 +1,5 @@
 The DevExtreme JavaScript Gantt component allows you to display task flow and dependencies between tasks over a specified period.
-<--split-->
+<!--split-->
 
 You can move and modify tasks (task name, duration or progress, for example) directly from the chart. Adjust the timescale to display tasks in smaller or greater time intervals, from hours to years. Hold the CTRL key and rotate your mouse's scroll wheel to zoom and browse data in detail.
 

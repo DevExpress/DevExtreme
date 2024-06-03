@@ -1,5 +1,5 @@
 The DevExtreme JavaScript Gantt component allows users to filter columns by filter row values. To display the filter row, set the **filterRow**.[visible](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/filterRow/#visible) property to **true**.
-<--split-->
+<!--split-->
 
 To apply filter criteria to a column, enter or select a value for the filter row cell or specify the [filterValue](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/columns/#filterValue) property (for the appropriate column) in code.
 

@@ -1,5 +1,5 @@
 This demo demonstrates how the DevExtreme Toolbar component can adapt itself to different screen widths.
-<--split-->
+<!--split-->
 
 If you would like to learn more about our feature-complete Toolbar component, please refer to the following tutorial: [Getting Started with Toolbar](/Documentation/Guide/UI_Components/Toolbar/Getting_Started_with_Toolbar/). 
 

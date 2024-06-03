@@ -1,5 +1,5 @@
 Timeline charts represent events in chronological order.
-<--split-->
+<!--split-->
 
 The exact timeline chart implementation steps depend on the data source. Below are general recommendations on how to create a timeline chart.
  

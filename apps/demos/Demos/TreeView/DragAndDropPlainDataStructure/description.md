@@ -1,5 +1,5 @@
 This sample app demonstrates node drag and drop operations within DevExtreme TreeView when using simple data structures. You can reorder nodes within a single tree view or drag and drop nodes between two separate tree views.
-<--split-->
+<!--split-->
 
 Use [Sortable][0] to implement the necessary drag and drop functionality within your web app. The following steps outline configuration requirements for our JavaScript TreeView:
 

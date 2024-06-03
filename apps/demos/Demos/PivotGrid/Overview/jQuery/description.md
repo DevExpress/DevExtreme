@@ -1,5 +1,5 @@
 DevExtreme JavaScript PivotGrid is a client-side control available as a jQuery component. It is optimized for multi-dimensional data analysis and supports binding to data from local arrays and OLAP cubes (MS SQL Server Analysis Services), as well as custom remote services. PivotGrid's key features include: several summary calculation modes, customizable layout, data sorting and exporting, and integration with DevExtreme Chart, which is shown in this demo.
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme PivotGrid component, refer to the following tutorial for step-by-step instructions: [Getting Started with PivotGrid](/Documentation/Guide/UI_Components/PivotGrid/Getting_Started_with_PivotGrid/).
 

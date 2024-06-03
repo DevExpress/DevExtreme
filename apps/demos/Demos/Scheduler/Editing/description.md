@@ -1,5 +1,5 @@
 Scheduler allows users to add, update, resize, drag, and delete appointments. To control these operations, specify properties in the [editing](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/editing/) object. In this demo, you can use the checkboxes below the Scheduler to toggle the edit operations.
-<--split-->
+<!--split-->
 
 These operations raise events that you can handle with the following functions:
 

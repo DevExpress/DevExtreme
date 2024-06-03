@@ -1,5 +1,5 @@
 The TreeList can use the [Form](/Documentation/ApiReference/UI_Components/dxForm/) component to arrange cell editors when users modify a row. The Form allows users to edit values from [visible and hidden](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/columns/#visible) columns.
-<--split-->
+<!--split-->
 
 To enable form edit mode, configure the following properties:
 - Set **editing**.[mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#mode) to *"form"*

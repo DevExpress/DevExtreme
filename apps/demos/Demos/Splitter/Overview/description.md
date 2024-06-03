@@ -1,7 +1,7 @@
 You can use our Splitter UI widgets to create resizable panes within your DevExtreme-powered web app/page.
 
 To get started with DevExtreme Splitter, refer to the following tutorial for step-by-step instructions: [Getting Started with Splitter](/Documentation/Guide/UI_Components/Splitter/Getting_Started_with_Splitter/).
-<--split-->
+<!--split-->
 
 To specify individual splitter panes, set the [items](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#items) or [dataSource](/Documentation/ApiReference/UI_Components/dxSplitter/Configuration/#dataSource) property. Use **dataSource** if data is remote or should be processed. If you specify multiple panes, they will appear one after another with splitters between them.
 

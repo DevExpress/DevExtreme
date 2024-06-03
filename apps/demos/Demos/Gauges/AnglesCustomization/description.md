@@ -1,2 +1,2 @@
 This demo illustrates how to&nbsp;change the geometry of&nbsp;the CircularGauge. The shape of&nbsp;the gauge arc is&nbsp;defined by&nbsp;the values assigned to&nbsp;the **startAngle** and **endAngle** properties of&nbsp;the **geometry** configuration object.
-<--split-->
+<!--split-->

@@ -1,5 +1,5 @@
 Annotations are containers for images, text blocks, and custom content. Annotations can help deliver a more refined user-experience and can improve analysis and readability (by displaying additional information for visualized data).
-<--split-->
+<!--split-->
 
 To create annotations, populate the PieChart's [annotations](/Documentation/ApiReference/UI_Components/dxPieChart/Configuration/annotations/) array. Each object in the array configures an individual annotation. To specify settings for all annotations, use the [commonAnnotationSettings](/Documentation/ApiReference/UI_Components/dxPieChart/Configuration/commonAnnotationSettings/) object. Individual settings take precedence over common settings.
 

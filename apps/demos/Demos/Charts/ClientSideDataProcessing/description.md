@@ -1,5 +1,5 @@
 The Chart component can get data from a remote storage and process it on the client side. To implement this functionality, assign a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object to the Chart [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource) property.
-<--split-->
+<!--split-->
 
 In the [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/), implement a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/). Switch the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/) to the `raw` [loadMode](/Documentation/ApiReference/Data_Layer/CustomStore/Configuration/#loadMode) and load all data from the server in the [load](/Documentation/ApiReference/Data_Layer/CustomStore/Configuration/#load) function as shown in the demo. Set the [paginate](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#paginate) property to **false** to prevent data from partitioning. You can also apply [filter](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#filter) to the received values. In this demo, select different values of the drop-down menu under the chart to apply different filters.
 

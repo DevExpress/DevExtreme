@@ -1,5 +1,5 @@
 The [Filter panel](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/filterPanel/) is a UI element that displays the combined filter. This filter is stored in the [filterValue](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#filterValue) property and consists of filters that users apply in other UI elements ([filter row](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/filterRow/), [header filter](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/headerFilter/), [filterBuilder](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/#filterBuilder)).
-<--split-->
+<!--split-->
 
 To display the filter panel, set the **filterPanel**.[visible](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/filterPanel/#visible) property to **true**. 
 

@@ -1,5 +1,5 @@
 The DevExtreme JavaScript FileManager component allows you to display and manage files and directories for different file systems. The FileManager uses file system providers to access file systems.
-<--split-->
+<!--split-->
 
 Use the [fileSystemProvider](/Documentation/ApiReference/UI_Components/dxFileManager/Configuration/#fileSystemProvider) property to configure the component's file system provider. The ["File System Types"](/Demos/WidgetsGallery/Demo/FileManager/BindingToFileSystem/NetCore/Light) demo group illustrates how to use the FileManager with different file system providers.
 

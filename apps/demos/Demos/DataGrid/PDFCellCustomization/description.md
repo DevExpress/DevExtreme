@@ -1,5 +1,5 @@
 DataGrid allows you to modify cell style settings and custom paint cells in a PDF document.
-<--split-->
+<!--split-->
 
 Use the [customizeCell](/Documentation/ApiReference/Common/Object_Structures/PdfExportDataGridProps/#customizeCell) function to customize the appearance settings of DataGrid cells in a PDF document. For example, you can change the text alignment and the background color of cells. The following function parameters are available:
 

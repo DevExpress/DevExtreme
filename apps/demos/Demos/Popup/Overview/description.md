@@ -1,7 +1,7 @@
 This example demonstrates how to show and hide the Popup component, populate it with content, specify its position and other settings. 
 
 To see step-by-step instructions on how to get started with the DevExtreme Popup component, refer to the following tutorial: [Getting Started with Popup](/Documentation/Guide/UI_Components/Popup/Getting_Started_with_Popup/).
-<--split-->
+<!--split-->
 
 ## Show and Hide the Popup
 

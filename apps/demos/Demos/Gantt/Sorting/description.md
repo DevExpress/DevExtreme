@@ -1,5 +1,5 @@
 The DevExtreme JavaScript Gantt component allows users to sort the displayed data by one or more columns.
-<--split-->
+<!--split-->
 
 Use the **sorting**.[mode](/Documentation/ApiReference/UI_Components/dxGantt/Configuration/sorting/#mode) property to switch between the following sort options:
 

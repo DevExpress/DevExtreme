@@ -1,5 +1,5 @@
 Remote (server-side) operations can boost the DataGrid's performance on large datasets. In this demo, the DataGrid works with a million records seamlessly because they are processed on the server.
-<--split-->
+<!--split-->
 
 To notify the DataGrid that it works with a pre-processed dataset, set the [remoteOperations](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/remoteOperations/) property to **true**.
 

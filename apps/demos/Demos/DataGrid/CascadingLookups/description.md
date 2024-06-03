@@ -1,5 +1,5 @@
 You can assign a lookup editor to a column. This editor displays a drop-down list populated with values from the specified data source. Users can filter the drop-down list to quickly locate required values. 
-<--split-->
+<!--split-->
 
 This demo shows how to implement cascading lookups:
 

@@ -1,5 +1,5 @@
 The DataGrid allows users to group data against a single column or multiple columns.
-<--split-->
+<!--split-->
 
 To group data, users can drag and drop column headers onto and from the area above the grid. This area is called the [groupPanel](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/groupPanel/). Set its **visible** property to **true** to show it. 
 

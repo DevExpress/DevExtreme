@@ -1,5 +1,5 @@
 This demo uses custom patterns and gradients for PieChart slices.
-<--split-->
+<!--split-->
 
 ## Gradient
 

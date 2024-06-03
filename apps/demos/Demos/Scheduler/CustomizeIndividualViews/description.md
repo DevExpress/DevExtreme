@@ -1,5 +1,5 @@
 To customize a view, configure its settings in an object inside the [views[]](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views) array. You should specify the view's [type](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#type) and other properties to override global view settings.
-<--split-->
+<!--split-->
 
 This demo customizes two views - Week and Work Week - in the following manner: 
 

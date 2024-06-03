@@ -1,2 +1,2 @@
 The FileManager component can display a collection of hierarchical items that present a file system structure. The component allows end users to easily upload and select files and to change folder structure (rename, move, copy and delete files and folders). File and folder management capabilities are fully customizable and can be switched off if necessary.
-<--split-->
+<!--split-->
