@@ -57,7 +57,8 @@
         "script": "compile:r"
       },
       "inputs": [
-        "{projectRoot}/js/renovation/**/*"
+        "{projectRoot}/js/renovation/**/*",
+        "{projectRoot}/renovation.tsconfig.json"
       ],
       "cache": true
     },
@@ -79,6 +80,8 @@
       "inputs": [
         { "env": "DEBUG" },
         "{projectRoot}/**/*.d.ts",
+        "{projectRoot}/.eslint*",
+        "{projectRoot}/tsconfig.json",
         "!{projectRoot}/js/renovation/**/*"
       ],
       "cache": true
@@ -89,7 +92,8 @@
         "script": "lint-js"
       },
       "inputs": [
-        "{projectRoot}/**/*.js"
+        "{projectRoot}/**/*.js",
+        "{projectRoot}/.eslint*"
       ],
       "cache": true
     },
@@ -101,6 +105,7 @@
       "inputs": [
         { "env": "DEBUG" },
         "{projectRoot}/**/*.ts?(x)",
+        "{projectRoot}/.eslint*",
         "!{projectRoot}/**/*.d.ts",
         "!{projectRoot}/js/renovation/**/*",
         "!{projectRoot}/testing/renovation/**/*"
@@ -113,7 +118,8 @@
         "script": "lint-renovation"
       },
       "inputs": [
-        "{projectRoot}/js/renovation/**/*.ts?(x)"
+        "{projectRoot}/js/renovation/**/*.ts?(x)",
+        "{projectRoot}/.eslint*"
       ],
       "cache": true
     },
@@ -123,7 +129,8 @@
         "script": "test-jest"
       },
       "inputs": [
-        "{projectRoot}/js/**/*"
+        "{projectRoot}/js/**/*",
+        "{projectRoot}/jest.*"
       ],
       "cache": true
     },
