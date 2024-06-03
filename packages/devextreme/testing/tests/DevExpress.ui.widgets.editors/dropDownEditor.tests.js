@@ -2177,6 +2177,7 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after deleting');
     });
 
+
     QUnit.module('aria-controls', {}, () => {
         const attrName = 'aria-controls';
         const deferRenderings = [true, false];
