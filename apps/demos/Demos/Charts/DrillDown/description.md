@@ -2,7 +2,7 @@ If you bind a TreeMap to a data source with a hierarchical structure, you can en
 
 - *"Drill down"* means navigate to a more detailed view. 
 - *"Drill up"* means navigate back up a level.
-<--split-->
+<!--split-->
 
 In this demo, you can click/tap a group of TreeMap tiles to drill down. Once you go down a level, navigation links appear at the top of the TreeMap. Use them to drill back up. To implement this technique, follow the steps below:
 

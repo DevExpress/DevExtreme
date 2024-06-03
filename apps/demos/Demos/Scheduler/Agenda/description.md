@@ -1,5 +1,5 @@
 The Agenda view shows appointments as a simple list. This is the most compact display style because it doesn't render a time scale. Appointments follow each other without empty spaces and their sizes do not depend on event duration.
-<--split-->
+<!--split-->
 
 To add the Agenda view to your Scheduler, declare it in the [views](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/) array.
 

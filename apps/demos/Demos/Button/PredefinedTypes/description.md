@@ -4,7 +4,7 @@ The Button component supports several predefined color schemes. To apply a schem
 - *"success"*
 - *"default"*    
 - *"danger"*      
-<--split-->
+<!--split-->
 
 To further customize the Button, use the [stylingMode](/Documentation/ApiReference/UI_Widgets/dxButton/Configuration/#stylingMode) property. This property affects the fill and borders, and accepts the following values:    
 

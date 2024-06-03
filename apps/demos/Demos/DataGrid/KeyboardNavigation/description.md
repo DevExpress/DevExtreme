@@ -1,5 +1,5 @@
 In this demo, you can use the following keys and key combinations to interact with the DataGrid.
-<--split-->
+<!--split-->
 
 - **Enter**             
 Execute an action on a focused element.

@@ -1,5 +1,5 @@
 The PivotGrid can persist its state. If a user sorts and filters data, modifies summary display modes, expands headers, or makes other changes, the component saves these modifications and restores them when a user reloads the page. Refer to the [stateStoring](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/stateStoring/) article for a full list of modifications that can be saved.
-<--split-->
+<!--split-->
 
 To enable state persistence, set **stateStoring**.[enabled](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/stateStoring/#enabled) to **true** and specify the [storageKey](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/stateStoring/#storageKey) and [type](/Documentation/ApiReference/UI_Components/dxPivotGrid/Configuration/stateStoring/#type) properties. Depending on the **type**, the state can be saved to a <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage" target="_blank">localStorage</a> or <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/sessionStorage" target="_blank">sessionStorage</a>. With **localStorage**, the state persists across browser sessions; with **sessionStorage**, it is reset after the current session. This demo uses **localStorage**.
 

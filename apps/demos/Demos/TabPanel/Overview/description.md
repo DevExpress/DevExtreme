@@ -1,5 +1,5 @@
 The [TabPanel](/Documentation/ApiReference/UI_Components/dxTabPanel/) UI component includes both the [Tabs](/Documentation/ApiReference/UI_Components/dxTabs/) and [MultiView](/Documentation/ApiReference/UI_Components/dxMultiView/) components. The TabPanel automatically synchronizes the selected tab with the currently displayed view (and vice versa).
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme TabPanel component, refer to the following step-by-step tutorial: [Getting Started with TabPanel](/Documentation/Guide/UI_Components/TabPanel/Getting_Started_with_TabPanel/).
 

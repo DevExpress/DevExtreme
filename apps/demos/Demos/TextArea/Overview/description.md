@@ -1,5 +1,5 @@
 The TextArea component enables users to enter and edit multi-line text. This component can have a fixed or resizable [height](/Documentation/ApiReference/UI_Components/dxTextArea/Configuration/#height). The component with the fixed **height** displays a native scroll bar if the entered text exceeds the text area. If you set the [autoResizeEnabled](/Documentation/ApiReference/UI_Components/dxTextArea/Configuration/#autoResizeEnabled) property to **true**, the TextArea automatically resizes its height to fit the text.
-<--split-->
+<!--split-->
 
 You can also specify the [maxLength](/Documentation/ApiReference/UI_Components/dxTextArea/Configuration/#maxLength) property to limit the number of characters a user can enter. Note that this property only limits the number of characters for users. You can enter text that exceeds the maximum character length programmatically, but the number of characters displayed to users will still be limited by this property setting.
 

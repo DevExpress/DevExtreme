@@ -1,4 +1,4 @@
 If you do not need to populate the Chart with data from a remote server, and the data does not change frequently, then bind the component to a local JavaScript array. Pass the array to the Chart's [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource) property. 
-<--split-->
+<!--split-->
 
 Once you assign the data source, specify the [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) type and its nested options: [argumentField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#argumentField) and [valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField). If you specify these properties, the component can determine the object fields that indicate Chart arguments and values in the array. The default values for these properties are `arg` and `val`, respectively. You can use these data field names to structure your array as shown in this demo.

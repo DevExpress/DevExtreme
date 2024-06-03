@@ -1,5 +1,5 @@
 The [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExportDataGridProps/#customizeCell) function allows you to modify cell data and value formatting in exported worksheets.
-<--split-->
+<!--split-->
 
 You can access and change the following attributes:
 

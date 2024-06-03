@@ -1,2 +1,2 @@
 This demo shows how to enable and customize tooltips in the BarGauge component. A tooltip is a small pop-up rectangle that displays the value of the bar that is currently hovered over. To enable the tooltips, set the **tooltip**.[enabled](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/tooltip/#enabled) property to `true`. In this demo, the text displayed by the tooltips is [customized](/Documentation/ApiReference/UI_Components/dxBarGauge/Configuration/tooltip/#customizeTooltip).
-<--split-->
+<!--split-->

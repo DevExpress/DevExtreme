@@ -1,5 +1,5 @@
 With the DevExtreme DataGrid, users can modify multiple records and submit all changes simultaneously (when **editing**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#mode) is set to *"batch"*). Batch editing allows you to optimize your app, address performance related issues, and deliver the best possible user experience across a variety of usage scenarios. 
-<--split-->
+<!--split-->
 
 If data is stored on a server, our DataGrid sends multiple requests to save edited objects - one request per object (this is because most servers only process one edit operation at a time). If your server supports batch update, you can configure the DataGrid to save all changes with a single request.
 

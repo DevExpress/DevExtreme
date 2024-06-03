@@ -1,5 +1,5 @@
 The [DateRangeBox](/Documentation/ApiReference/UI_Components/dxDateRangeBox/) component allows users to select a date range with ease. The component includes input boxes for start/end dates and a drop-down date picker. 
-<--split-->
+<!--split-->
 
 This demo illustrates how to apply the following DateRangeBox settings:
 

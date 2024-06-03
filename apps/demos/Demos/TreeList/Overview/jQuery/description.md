@@ -1,4 +1,4 @@
 DevExtreme JavaScript TreeList control is a cross-breed of a tree view and data grid. This control is available as a jQuery plugin and can be bound to data from local arrays, JSON files, Web API and OData services, or custom remote services. This demo shows a slightly customized TreeList with selection, filtering, and column rearranging enabled. Move to other demos to explore more TreeList features, like sorting, data editing, adaptability, etc.
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme TreeList component, refer to the following tutorial for step-by-step instructions: [Getting Started with TreeList](/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/).

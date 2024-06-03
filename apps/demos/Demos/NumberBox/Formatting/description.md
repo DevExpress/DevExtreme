@@ -1,5 +1,5 @@
 Use the [format](/Documentation/ApiReference/UI_Components/dxNumberBox/Configuration/#format) property to specify the integer, currency, accounting, percent, and other formats of the NumberBox value.
-<--split-->
+<!--split-->
 
 The format property can accept the following value types:
 

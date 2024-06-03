@@ -1,5 +1,5 @@
 This demo shows how to disable specific days, dates, and times when a user cannot schedule an appointment. In the demo, appointments are disabled for weekends, certain individual dates (e.g., May 25th), and the time period from 12:00pm to 1:00pm.
-<--split-->
+<!--split-->
 
 To implement this functionality in your application, follow the steps below:
 

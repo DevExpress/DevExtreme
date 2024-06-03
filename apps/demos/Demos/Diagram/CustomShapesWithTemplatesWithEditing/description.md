@@ -1,5 +1,5 @@
 In this demo, the [customShapeTemplate](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/#customShapeTemplate) property defines a common shape template and adds the **Edit** and **Delete** links to a shape. These links allow users to modify and remove employee data from the data source. The Diagram component reloads modified diagram data whenever the data source changes.
-<--split-->
+<!--split-->
 
 The [onRequestLayoutUpdate](/Documentation/ApiReference/UI_Components/dxDiagram/Configuration/#onRequestLayoutUpdate) function specifies whether the component must reapply its auto layout once the diagram is reloaded.
 

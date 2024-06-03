@@ -1,4 +1,4 @@
 DevExtreme Vue Tree List is a powerful UI component for visualizing hierarchical data in a grid. It is so flexible that you do not need to feed it hierarchical data structures. Even with a collection of linked plain objects, the Tree List can still build a tree hierarchy. Its other key features include data editing and validation, sorting, filtering, and searching, adaptability, and many more. You can use Vue syntax and techniques to instantiate and configure the Tree List or handle its events. In addition, the component supports [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) and templates that use [named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots). [Find out more about DevExtreme Vue components](/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/).
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme TreeList component, refer to the following tutorial for step-by-step instructions: [Getting Started with TreeList](/Documentation/Guide/UI_Components/TreeList/Getting_Started_with_TreeList/).

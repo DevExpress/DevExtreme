@@ -1,5 +1,5 @@
 Text editors have built-in action buttons that allow users to open a drop-down menu, increase, decrease, or nullify the value, and perform other actions. To add custom action buttons for different scenarios, use the [buttons[]](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/buttons/) array.
-<--split-->
+<!--split-->
 
 Each object in the **buttons[]** array should have the [name](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/buttons/#name) field&mdash;the button's identifier. In addition, specify the button's [location](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/buttons/#location) relative to the input text field and [options of the Button component](/Documentation/ApiReference/UI_Components/dxTextBox/Configuration/buttons/#options) used as the action button.
 

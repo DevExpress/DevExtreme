@@ -1,5 +1,5 @@
 This demo illustrates how you can allow end-users to reorder, add, and remove tabs within the DevExtreme [TabPanel](/Documentation/ApiReference/UI_Components/dxTabPanel/) component.     
-<--split-->
+<!--split-->
 
 **Reorder tabs**       
 

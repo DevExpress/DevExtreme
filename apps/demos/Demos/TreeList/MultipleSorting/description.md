@@ -1,5 +1,5 @@
 The TreeList component can sort values by a single or multiple columns. Use the **sorting**.[mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/sorting/#mode) property to specify the sort mode.
-<--split-->
+<!--split-->
 
 - **Single sort mode**       
 A user can click the column header to sort by this column and click it again to change the sort order. An arrow icon in the column's header indicates the sort order.

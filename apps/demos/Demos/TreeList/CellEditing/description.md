@@ -1,5 +1,5 @@
 Users can modify TreeList data cell by cell. In this mode, only one cell can be in the edit state at a time. The TreeList saves changes immediately after the focus leaves cell.
-<--split-->
+<!--split-->
 
 To enable cell mode, do the following:
 - Set the **editing**.[mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#mode) property to *"cell*".

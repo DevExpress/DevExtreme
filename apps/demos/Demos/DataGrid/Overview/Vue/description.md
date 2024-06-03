@@ -1,5 +1,5 @@
 DevExtreme Vue Data Grid is&nbsp;a&nbsp;a client-side grid component that includes all the features needed for use in a modern business application: powerful data binding, editing, and validation capabilities, versatile searching and filtering, flexible layout, and many more. You can use Vue syntax and techniques to&nbsp;instantiate and configure the Data Grid or&nbsp;handle its events. In&nbsp;addition, the Data Grid supports [prop validation](https://vuejs.org/v2/guide/components-props.html#Prop-Validation) and templates that use [named slots](https://vuejs.org/v2/guide/components-slots.html#Named-Slots). [Find out more about DevExtreme Vue components](/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/).
-<--split-->
+<!--split-->
 
 To get started with the DevExtreme DataGrid component, refer to the following tutorial for step-by-step instructions: [Getting Started with DataGrid](/Documentation/Guide/UI_Components/DataGrid/Getting_Started_with_DataGrid/).
 

@@ -1,5 +1,5 @@
 A stock [series type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type) displays variations in stock prices over the course of a day. You can specify the stock series type for each object in the [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) or specify the type in the [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/) object for all series in the Chart. Use the [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/).[stock](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/StockSeries/) object to configure properties of the Chart stock series.
-<--split-->
+<!--split-->
 
 In stock series, the bottom and top values of a vertical line correspond to high and low prices. Use the [highValueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#highValueField) and [lowValueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#lowValueField) properties to specify data source fields for high and low prices.
 

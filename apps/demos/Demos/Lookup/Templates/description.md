@@ -1,5 +1,5 @@
 You can use the following properties to specify custom templates for Lookup elements.
-<--split-->
+<!--split-->
 
 <table class="dx-table">
     <tr>

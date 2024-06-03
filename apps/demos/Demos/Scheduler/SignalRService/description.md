@@ -1,5 +1,5 @@
 This demo shows how you can use a <a href="https://dotnet.microsoft.com/en-us/apps/aspnet/signalr" target="blank">SignalR</a> service to synchronize appointments across different devices. To emulate such a setup, each Scheduler on this page reads data from its own separate data store. Changes made in one control are repeated in the other and persist until the browser session has expired.
-<--split-->
+<!--split-->
 
 Follow the steps below to implement this functionality. Note again that this demo repeats all steps twice for the two Schedulers. Your project will have a single control and a single store.
 

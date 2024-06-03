@@ -1,2 +1,2 @@
 This demo shows how to adjust a relative position of the **LinerGauge** elements. The [range container](/Documentation/ApiReference/UI_Components/dxLinearGauge/Configuration/rangeContainer/), [value](/Documentation/ApiReference/UI_Components/dxLinearGauge/Configuration/valueIndicator/) and [subvalue](/Documentation/ApiReference/UI_Components/dxLinearGauge/Configuration/subvalueIndicator/) indicators include the **offset** property that specifies a shift from the scale for this element. When this property is assigned to a positive value, the corresponding element moves down from its initial position. Otherwise, it moves up.
-<--split-->
+<!--split-->

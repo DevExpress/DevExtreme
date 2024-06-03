@@ -1,2 +1,2 @@
 The DataGrid component supports the use of custom column templates and offers multiple methods for defining template markup. In this example, the <a href="http://mustache.github.io/" target="_blank">Mustache</a> template engine is used. A custom column template is defined as a script (see the *index.html* tab). To enforce the use of the Mustache template engine, call the [DevExpress.setTemplateEngine(options)](/Documentation/ApiReference/Common/Utils/#setTemplateEngineoptions) method as shown in this demo.
-<--split-->
+<!--split-->

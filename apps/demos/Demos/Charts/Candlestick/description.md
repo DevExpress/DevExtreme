@@ -1,5 +1,5 @@
 The Candlestick financial chart is designed to communicate trading patterns over a short period of time. A single data point on a Candlestick [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type) displays variations in stock prices over the course of a day.
-<--split-->
+<!--split-->
 
 You can use the Candlestick type for an individual [series](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) or specify the type in the [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/) object for all series in the Chart. Use the [commonSeriesSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonSeriesSettings/).[candlestick](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/CandleStickSeries/) object to configure properties of the Chart Candlestick series.
 

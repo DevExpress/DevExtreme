@@ -1,5 +1,5 @@
 The doughnut chart is a variation of the pie chart. It displays data as a circle divided into portions (slices) with a space in the center. To create a doughnut chart, use the DevExtreme [PieChart](/Documentation/ApiReference/UI_Components/dxPieChart/) component. In this demo, you can see how to initialize and configure it.
-<--split-->
+<!--split-->
 
 ## Bind to Data
 

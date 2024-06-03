@@ -1,5 +1,5 @@
 Axis labels display values for [major axis ticks](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonAxisSettings/tick/).
-<--split-->
+<!--split-->
 
 To configure labels for individual axes, specify label settings in the **valueAxis**.[label](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/label/) and **argumentAxis**.[label](/Documentation/ApiReference/UI_Components/dxChart/Configuration/argumentAxis/label/) objects. To configure labels for all axes, use the **commonAxisSettings**.[label](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonAxisSettings/label/) object. Individual settings take precedence over common settings.
 

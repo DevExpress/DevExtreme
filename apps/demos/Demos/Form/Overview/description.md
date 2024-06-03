@@ -1,5 +1,5 @@
 The Form component builds a data entry UI for an object assigned to the [formData](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#formData) property. The component displays and aligns label-editor pairs for each field in the bound object.
-<--split-->
+<!--split-->
 
 You can use the editors on the right to modify the following properties:
 
