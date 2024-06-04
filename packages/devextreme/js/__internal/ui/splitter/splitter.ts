@@ -219,10 +219,7 @@ class Splitter extends CollectionWidget<Properties> {
       return;
     }
 
-    this._layout = this._getDefaultLayoutBasedOnSize();
-
-    this._applyStylesFromLayout(this._layout);
-    this._updateItemSizes();
+    this._updateItemsLayout();
 
     this._shouldRecalculateLayout = false;
   }
@@ -233,10 +230,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._updateResizeHandlesStates();
 
     if (isElementVisible($(this.element())[0])) {
-      this._layout = this._getDefaultLayoutBasedOnSize();
-      this._applyStylesFromLayout(this._layout);
-
-      this._updateItemSizes();
+      this._updateItemsLayout();
     } else {
       this._shouldRecalculateLayout = true;
     }
@@ -312,23 +306,21 @@ class Splitter extends CollectionWidget<Properties> {
     super._fireContentReadyAction();
 
     if (this.option('repaintChangesOnly')) {
-      this.updateItemsLayout();
+      this._updateResizeHandlesStates();
+      this._updateItemsLayout();
       this._processRenderQueue();
     }
+  }
+
+  _updateItemsLayout(): void {
+    this._layout = this._getDefaultLayoutBasedOnSize();
+    this._applyStylesFromLayout(this.getLayout());
+    this._updateItemSizes();
   }
 
   _updateResizeHandlesStates(): void {
     this._updateResizeHandlesResizableState();
     this._updateResizeHandlesCollapsibleState();
-  }
-
-  updateItemsLayout(): void {
-    this._updateResizeHandlesStates();
-
-    this._layout = this._getDefaultLayoutBasedOnSize();
-    this._applyStylesFromLayout(this._layout);
-
-    this._updateItemSizes();
   }
 
   _updateResizeHandlesResizableState(): void {
@@ -678,10 +670,7 @@ class Splitter extends CollectionWidget<Properties> {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        this._layout = this._getDefaultLayoutBasedOnSize();
-
-        this._applyStylesFromLayout(this.getLayout());
-        this._updateItemSizes();
+        this._updateItemsLayout();
         break;
       case 'collapsed':
         this._itemCollapsedOptionChanged(item, value as boolean, prevValue as boolean);
