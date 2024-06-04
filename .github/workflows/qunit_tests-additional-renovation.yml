@@ -41,8 +41,8 @@ jobs:
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
         working-directory: ./packages/devextreme
         run: |
-          npm run build:dev
-          npm run build:systemjs
+          npx nx build:dev
+          npx nx build:systemjs
 
       - name: Zip artifacts
         working-directory: ./packages/devextreme

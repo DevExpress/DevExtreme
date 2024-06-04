@@ -107,7 +107,7 @@ jobs:
 
     - name: Prepare bundles
       working-directory: apps/demos
-      run: npm run prepare-bundles
+      run: npx nx prepare-bundles
 
     - name: Demos - Run tsc
       working-directory: apps/demos
@@ -160,7 +160,7 @@ jobs:
       matrix:
         include:
           - name: Lint code base (excluding demos)
-            command: npm run lint-non-demos
+            command: npx nx lint-non-demos
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
@@ -378,7 +378,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: npm run test-testcafe
+      run: npx nx test-testcafe
 
     - name: Get screenshots artifacts name
       if: ${{ failure() }}

@@ -34,11 +34,11 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder
-      run: npm run build
+      run: npx nx build
 
     - name: Run themebuilder tests (full set, node)
-      run: npm run test
       working-directory: ./packages/devextreme-themebuilder
+      run: npx nx test
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme

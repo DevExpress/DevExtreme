@@ -40,7 +40,8 @@ jobs:
         DEVEXTREME_TEST_CI: "true"
         DOTNET_CLI_TELEMETRY_OPTOUT: "true"
         DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
-      run: BUILD_INPROGRESS_RENOVATION=true npm run build:dev
+        BUILD_INPROGRESS_RENOVATION: "true"
+      run: npx nx build:dev
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

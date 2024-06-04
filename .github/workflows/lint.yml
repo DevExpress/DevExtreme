@@ -35,12 +35,12 @@ jobs:
     - name: Compile renovation
       working-directory: ./packages/devextreme
       run: |
-        npm run compile:r
+        npx nx compile:r
 # Remove package install after upgrade to TypeScript >= 4.6
 
     - name: Lint renovation
       working-directory: ./packages/devextreme
-      run: npm run lint-renovation
+      run: npx nx lint-renovation
 
   TS:
     runs-on: devextreme-shr2
@@ -66,25 +66,25 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npm run build
+      run: npx nx build
 
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npm run lint-ts
+      run: npx nx lint-ts
 
     - name: Lint .d.ts
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npm run lint-dts
-    
+      run: npx nx lint-dts
+
     - name: Lint Testcafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npm run lint
+      run: npx nx lint
 
   JS:
     runs-on: devextreme-shr2
@@ -110,13 +110,13 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npm run build
+      run: npx nx build
 
     - name: Lint JS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npm run lint-js
+      run: npx nx lint-js
 
   texts:
     runs-on: devextreme-shr2
@@ -142,7 +142,7 @@ jobs:
 
     - name: Check texts
       working-directory: ./packages/devextreme
-      run: npm run lint-texts
+      run: npx nx lint-texts
 
   CSS:
     runs-on: devextreme-shr2
@@ -168,7 +168,7 @@ jobs:
 
     - name: Lint CSS
       working-directory: ./packages/devextreme
-      run: npm run lint-css
+      run: npx nx lint-css
 
   package_lock:
     runs-on: devextreme-shr2
@@ -193,7 +193,7 @@ jobs:
       with:
         name: package-lock.json
         path: ./package-lock.json
-        retention-days: 1  
+        retention-days: 1
 
     - name: Check package-lock
       run: git diff --exit-code package-lock.json
@@ -260,17 +260,8 @@ jobs:
     - name: Install dependencies
       run: npm install --no-audit --no-fund
 
-    - name: Lint devextreme-angular
-      working-directory: ./packages/devextreme-angular
-      run: npm run lint
-
-    - name: Lint devextreme-react
-      working-directory: ./packages/devextreme-react
-      run: npm run lint
-
-    - name: Lint devextreme-vue
-      working-directory: ./packages/devextreme-vue
-      run: npm run lint
+    - name: Lint wrappers
+      run: npx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
     runs-on: devextreme-shr2

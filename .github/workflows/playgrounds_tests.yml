@@ -39,7 +39,7 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npm run build
+      run: npx nx build
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
