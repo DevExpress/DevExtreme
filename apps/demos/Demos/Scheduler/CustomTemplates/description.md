@@ -1,5 +1,4 @@
-The Scheduler contains the following properties used to specify custom templates globally and for individual views.
-<--split-->
+The Scheduler contains the following properties used to specify custom templates globally and for individual views:
 
 * Appointment rectangle: [appointmentTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#appointmentTemplate) / **views[]**.[appointmentTemplate](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/views/#appointmentTemplate)
 

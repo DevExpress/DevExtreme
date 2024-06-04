@@ -1,7 +1,4 @@
-The [DateRangeBox](/Documentation/ApiReference/UI_Components/dxDateRangeBox/) component allows users to select a date range with ease. The component includes input boxes for start/end dates and a drop-down date picker. 
-<--split-->
-
-This demo illustrates how to apply the following DateRangeBox settings:
+The [DateRangeBox](/Documentation/ApiReference/UI_Components/dxDateRangeBox/) component allows users to select a date range with ease. The component includes input boxes for start/end dates and a drop-down date picker. This demo illustrates how to apply the following DateRangeBox settings:
 
 - [value](/Documentation/ApiReference/UI_Components/dxDateRangeBox/Configuration/#value)
 An array where you can specify the selected range (start/end dates). The DateRangeBox also allows you to define start/end dates separately. For this purpose, use the [startDate](/Documentation/ApiReference/UI_Components/dxDateRangeBox/Configuration/#startDate) and [endDate](/Documentation/ApiReference/UI_Components/dxDateRangeBox/Configuration/#endDate) properties instead.

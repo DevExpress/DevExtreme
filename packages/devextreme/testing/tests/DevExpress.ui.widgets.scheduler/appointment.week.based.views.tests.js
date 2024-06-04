@@ -6,7 +6,7 @@ import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import { hide } from '__internal/ui/tooltip/m_tooltip';
+import tooltip from 'ui/tooltip/ui.tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
@@ -246,7 +246,7 @@ module('Integration: Appointment Day, Week views', {
                     assert.deepEqual(args.startDate, startDate, 'Start date is OK');
                     assert.deepEqual(args.endDate, endDate, 'End date is OK');
 
-                    hide();
+                    tooltip.hide();
                 } finally {
                     scheduler.instance._appointmentPopup.show.restore();
                 }

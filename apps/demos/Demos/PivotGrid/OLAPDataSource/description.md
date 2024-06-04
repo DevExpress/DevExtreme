@@ -1,5 +1,4 @@
 The PivotGrid component supports OLAP services (Microsoft SQL Server Analysis Services). This demo shows how to use a remote OLAP cube as the PivotGrid's data source.
-<--split-->
 
 ## Configure the Store
 Use [XmlaStore](/Documentation/ApiReference/Data_Layer/XmlaStore/) to connect your component to an OLAP storage. Specify the following properties to configure it:    

@@ -1,5 +1,4 @@
 This demo shows how to use the [maxAppointmentsPerCell][0] property to limit the number of full-sized appointments displayed per cell.
-<--split-->
 
 This property accepts one of the following values. To see how they affect the appointments, switch between Scheduler views.
 

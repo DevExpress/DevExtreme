@@ -1,8 +1,8 @@
-import $ from 'jquery';
-import Tooltip from 'ui/tooltip';
-import { show } from '__internal/ui/tooltip/m_tooltip';
-import viewPort from 'core/utils/view_port';
-import fx from 'animation/fx';
+const $ = require('jquery');
+const Tooltip = require('ui/tooltip');
+const tooltip = require('ui/tooltip/ui.tooltip');
+const viewPort = require('core/utils/view_port').value;
+const fx = require('animation/fx');
 
 function checkTooltip(assert) {
     const $testContent = $('.dx-popup-content').find('.test-content');
@@ -22,7 +22,7 @@ QUnit.testStart(function() {
 QUnit.module('tooltip tests', {
     beforeEach: function() {
         fx.off = true;
-        viewPort.value('#qunit-fixture');
+        viewPort('#qunit-fixture');
     },
 
     afterEach: function() {
@@ -31,7 +31,7 @@ QUnit.module('tooltip tests', {
 });
 
 QUnit.test('show tooltip', function(assert) {
-    show({
+    tooltip.show({
         target: '#qunit-fixture button',
         content: '<div class="test-content">My tooltip</div>',
         position: 'right'
@@ -43,7 +43,7 @@ QUnit.test('show tooltip', function(assert) {
 QUnit.test('show tooltip using $ target', function(assert) {
     const $target = $('#tooltip-target');
 
-    show({
+    tooltip.show({
         target: $target,
         content: '<div class="test-content">My tooltip</div>',
         position: 'right'
@@ -56,7 +56,7 @@ QUnit.test('show tooltip once', function(assert) {
     const $target = $('#tooltip-target');
 
     $target.on('dxclick', function() {
-        show({
+        tooltip.show({
             target: $target,
             content: '<div class="test-content">My tooltip</div>',
             position: 'right'
@@ -72,7 +72,7 @@ QUnit.test('show tooltip once', function(assert) {
 QUnit.test('show tooltip with custom animation', function(assert) {
     const $target = $('#tooltip-target');
 
-    show({
+    tooltip.show({
         target: $target,
         content: '<div class="test-content">My tooltip</div>',
         position: 'right',
@@ -86,7 +86,7 @@ QUnit.test('show tooltip with custom animation', function(assert) {
 QUnit.test('tooltip option', function(assert) {
     const $target = $('#tooltip-target');
 
-    show({
+    tooltip.show({
         target: $target,
         content: '<div class="test-content">My tooltip</div>',
         position: 'right',
@@ -105,8 +105,8 @@ QUnit.test('second shown tooltip should remove first shown (T107568)', function(
     fx.off = false;
     const done = assert.async();
 
-    show().done(function() {
-        show();
+    tooltip.show().done(function() {
+        tooltip.show();
         assert.equal($('.dx-tooltip').length, 1);
         done();
     });

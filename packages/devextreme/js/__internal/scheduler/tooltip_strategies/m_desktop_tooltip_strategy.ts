@@ -1,5 +1,5 @@
 import { touch } from '@js/core/utils/support';
-import Tooltip from '@ts/ui/m_tooltip';
+import Tooltip from '@js/ui/tooltip';
 
 import { TooltipStrategyBase } from './m_tooltip_strategy_base';
 

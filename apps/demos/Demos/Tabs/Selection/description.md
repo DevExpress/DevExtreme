@@ -1,5 +1,4 @@
 This demo processes tab selection and uses SelectBox and MultiView components to emulate page content. Both these components are bound to Tabs, and vice versa.
-<--split-->
 
 You can use the following properties to configure selection:
 

@@ -1,5 +1,4 @@
-Users can do the following to customize grid columns at runtime.
-<--split-->
+Users can do the following to customize grid columns at runtime:
 
 **Reorder Columns**         
 Drag the column's header to reorder the column.

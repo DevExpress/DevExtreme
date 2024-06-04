@@ -1,5 +1,4 @@
-You can use the following properties to specify custom templates for Lookup elements.
-<--split-->
+You can use the following properties to specify custom templates for Lookup elements:
 
 <table class="dx-table">
     <tr>

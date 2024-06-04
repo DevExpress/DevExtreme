@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import dateSerialization from 'core/utils/date_serialization';
 import Tooltip from 'ui/tooltip';
-import { hide } from '__internal/ui/tooltip/m_tooltip';
+import tooltip from 'ui/tooltip/ui.tooltip';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import fx from 'animation/fx';
 import dateLocalization from 'localization/date';
@@ -31,7 +31,7 @@ const moduleConfig = {
 
     afterEach() {
         fx.off = false;
-        hide();
+        tooltip.hide();
         this.clock.restore();
     }
 };

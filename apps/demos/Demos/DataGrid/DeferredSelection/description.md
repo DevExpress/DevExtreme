@@ -1,7 +1,4 @@
-If you enable deferred row selection, the grid does not request selected rows' data with every selection change. For example, if a user clicks the checkbox in the column header to select all the rows, the grid does not immediately fetch all data from the server. 
-<--split-->
-
-This is helpful in the following cases:
+If you enable deferred row selection, the grid does not request selected rows' data with every selection change. For example, if a user clicks the checkbox in the column header to select all the rows, the grid does not immediately fetch all data from the server. This is helpful in the following cases:
 
 - You process data on the server and do not want to load the selected rows' data.
 - You do process selected records on the client, but want to reduce the number of requests that are sent.

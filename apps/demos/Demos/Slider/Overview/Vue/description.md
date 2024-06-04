@@ -1,5 +1,4 @@
 This demo shows how you can create and configure a Slider.
-<--split-->
 
 ## Create a Slider
 

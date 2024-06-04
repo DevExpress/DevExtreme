@@ -1,5 +1,4 @@
-The following properties customize keyboard navigation.
-<--split-->
+The following properties customize keyboard navigation:
  
 - [enterKeyAction](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/keyboardNavigation/#enterKeyAction)    
 Specifies the TreeList's actions when a user presses Enter key: 

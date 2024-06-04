@@ -1,5 +1,4 @@
 This demo sets **selection**.[mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/selection/#mode) to *"multiple"*. This allows users to select multiple rows using checkboxes or keyboard shortcuts.
-<--split-->
 
 To configure when the checkboxes appear, set the [showCheckBoxesMode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/selection/#showCheckBoxesMode) property.
 

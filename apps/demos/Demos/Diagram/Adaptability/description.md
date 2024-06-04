@@ -1,5 +1,4 @@
 The Diagram can adapt its layout to narrow screens. In this demo, the component's **Height** property is set to 100% to fit a screen.
-<--split-->
 
 Note the following changes to the toolbox and properties panel:
 

@@ -11,7 +11,7 @@ import { addNamespace } from '@js/events/utils/index';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
 import Resizable from '@js/ui/resizable';
-import { hide, show } from '@ts/ui/tooltip/m_tooltip';
+import { hide, show } from '@js/ui/tooltip/ui.tooltip';
 
 import {
   ALL_DAY_APPOINTMENT_CLASS,

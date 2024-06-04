@@ -1,5 +1,4 @@
 The RangeSlider component allows users to choose a range of numeric values. This demo shows how you can create and configure a RangeSlider.
-<--split-->
 
 ## Create a RangeSlider
 

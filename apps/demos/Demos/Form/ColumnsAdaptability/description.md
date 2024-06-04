@@ -1,7 +1,4 @@
-The Form component can use different layouts depending on the screen width. Click one of the buttons on the right from the demo title to switch between horizontal and vertical orientations.
-<--split-->
-
-You can determine the number of columns in the Form in one of the following ways:
+The Form component can use different layouts depending on the screen width. Click one of the buttons on the right from the demo title to switch between horizontal and vertical orientations. You can determine the number of columns in the Form in one of the following ways:
 
 **Calculate the Number of Columns Automatically**         
 

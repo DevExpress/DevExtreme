@@ -1,7 +1,4 @@
-The [Sortable](/Documentation/ApiReference/UI_Components/dxSortable/) component allows users to reorder elements using drag and drop.
-<--split-->
-
-In this demo, two different Sortables (identified by the `class` attribute) are used:
+The [Sortable](/Documentation/ApiReference/UI_Components/dxSortable/) component allows users to reorder elements using drag and drop.  In this demo, two different Sortables (identified by the `class` attribute) are used:
 
 - `sortable-lists`        
 This Sortable allows users to reorder card lists. It nests `<div>` elements that represent the lists. The [handle](/Documentation/ApiReference/UI_Components/dxSortable/Configuration/#handle) property specifies that lists can be dragged by their titles. To correctly animate items being reordered, Sortable requires the item orientation. The [itemOrientation](/Documentation/ApiReference/UI_Components/dxSortable/Configuration/#itemOrientation) property is set to *"horizontal"* because card lists are orientated horizontally.

@@ -1,5 +1,4 @@
-To create a bi-directional bar chart, follow the steps below.
-<--split-->
+To create a bi-directional bar chart, follow the steps below:
 
 1. Convert half of the data source values from positive to negative. In this demo, the `male` percentages are negative, while the `female` are positive.
 

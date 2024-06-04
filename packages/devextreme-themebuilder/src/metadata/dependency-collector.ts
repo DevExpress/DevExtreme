@@ -14,7 +14,7 @@ const busyCache = {
   dependencies: {},
 };
 
-const REGEXP_IS_TS_NOT_DTS = /^(?!.*\.d\.ts$).*\.tsx?$/;
+const REGEXP_IS_TS_NOT_DTS = /^(?!.*\.d\.ts$).*\.ts$/;
 const REGEXP_IS_DTS = /\.d\.ts$/;
 
 export default class DependencyCollector {

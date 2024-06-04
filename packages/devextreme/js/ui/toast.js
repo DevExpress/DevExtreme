@@ -1,10 +1,3 @@
-import Toast from '../__internal/ui/toast/m_toast';
+import Toast from './toast/ui.toast';
 
 export default Toast;
-
-// STYLE toast
-
-/**
- * @name dxToastOptions.disabled
- * @hidden
- */

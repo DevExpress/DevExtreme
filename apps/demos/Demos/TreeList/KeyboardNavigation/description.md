@@ -1,5 +1,4 @@
-In this demo, you can use the following keys and key combinations to interact with the TreeList.
-<--split-->
+In this demo, you can use the following keys and key combinations to interact with the TreeList:
 
 - **Enter**             
 Execute an action on a focused element.

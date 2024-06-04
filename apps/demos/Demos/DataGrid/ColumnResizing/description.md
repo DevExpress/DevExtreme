@@ -1,5 +1,4 @@
-The DataGrid sets the same width for all columns, but you can change column widths as described below.
-<--split-->
+The DataGrid sets the same width for all columns, but you can change column widths as described below:
 
 ### Specify Custom Column Widths
 You can set custom widths for all or individual columns. Individual settings override common settings. Use the following properties to specify the widths:

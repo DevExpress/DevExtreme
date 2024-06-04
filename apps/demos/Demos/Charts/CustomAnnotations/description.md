@@ -1,5 +1,4 @@
 Annotations are designed to show additional information about visualized data. You can display images, text blocks, and custom content in annotations. To create custom annotations, specify the following Chart properties.
-<--split-->
 
 ## annotations[]
 

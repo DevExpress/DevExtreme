@@ -1,5 +1,4 @@
 The LoadPanel is an overlay component used to notify users that a process is in progress. In this demo, you can see how to initialize and configure the component.
-<--split-->
 
 ## Show and Hide the Indicator and Pane 
 

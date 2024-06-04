@@ -1,5 +1,4 @@
-This demo shows the standard _bar_ series type that displays rectangular bars side by side. The side by side bar series help you compare values across different categories. Follow the steps below to create and configure the bar chart.
-<--split-->
+This demo shows the standard _bar_ series type that displays rectangular bars side by side. The side by side bar series help you compare values across different categories. Follow the steps below to create and configure the bar chart:
 
 ## Bind to Data
 

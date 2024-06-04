@@ -1,5 +1,4 @@
-To [aggregate](/Documentation/Guide/UI_Components/Chart/Data_Aggregation/) points on discrete axes, follow the steps below.
-<--split-->
+To [aggregate](/Documentation/Guide/UI_Components/Chart/Data_Aggregation/) points on discrete axes, follow the steps below:
 
 1. Enable aggregation.    
 You can enable data aggregation for the following series:

@@ -1,5 +1,4 @@
 This demo shows the _stacked bar_ series type that visualizes data as columns stacked over each other. You can use this series type to compare values of an individual series with total values aggregated for each argument.
-<--split-->
 
 ## Bind to Data
 

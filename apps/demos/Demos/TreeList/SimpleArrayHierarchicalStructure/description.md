@@ -1,5 +1,4 @@
-To bind the TreeList to a hierarchical array, do the following.
-<--split-->
+To bind the TreeList to a hierarchical array, do the following:
 
 1. Assign the array to the [dataSource](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#dataSource) property.
 

@@ -5,7 +5,6 @@ ButtonGroup displays a set of two-state buttons and allows users to select one o
 - Enable or disable multiple selection.
 
 - Customize the ButtonGroup appearance.
-<--split-->
 
 ## Bind ButtonGroup to Data
 

@@ -1,4 +1,2 @@
-import Slider from '../__internal/ui/slider/m_slider';
+import Slider from './slider/ui.slider';
 export default Slider;
-
-// STYLE slider

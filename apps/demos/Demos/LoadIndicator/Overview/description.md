@@ -1,5 +1,4 @@
 The LoadIndicator component notifies users that a process is in progress. In this demo, you can see how to initialize and configure the component and integrate it into other components.
-<--split-->
 
 ## Specify Dimensions
 
