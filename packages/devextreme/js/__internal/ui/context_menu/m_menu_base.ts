@@ -1,707 +1,723 @@
-import $ from '../../core/renderer';
-import { noop, asyncNoop } from '../../core/utils/common';
-import { isPlainObject, isObject, isDefined } from '../../core/utils/type';
-import { each } from '../../core/utils/iterator';
-import { extend } from '../../core/utils/extend';
-import { render } from '../widget/utils.ink_ripple';
-import HierarchicalCollectionWidget from '../hierarchical_collection/ui.hierarchical_collection_widget';
-import MenuBaseEditStrategy from './ui.menu_base.edit.strategy';
-import devices from '../../core/devices';
-import MenuItem from '../collection/item';
+import devices from '@js/core/devices';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
+// @ts-expect-error
+import { asyncNoop, noop } from '@js/core/utils/common';
+import { extend } from '@js/core/utils/extend';
+import { each } from '@js/core/utils/iterator';
+import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
+import MenuItem from '@js/ui/collection/item';
+import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
+import type { Item } from '@js/ui/menu';
+import { render } from '@js/ui/widget/utils.ink_ripple';
+import HierarchicalCollectionWidget from '@ts/ui/collection/hierarchical';
+import MenuBaseEditStrategy from '@ts/ui/context_menu/m_menu_base.edit.strategy';
 
 const DX_MENU_CLASS = 'dx-menu';
-const DX_MENU_NO_ICONS_CLASS = DX_MENU_CLASS + '-no-icons';
+const DX_MENU_NO_ICONS_CLASS = `${DX_MENU_CLASS}-no-icons`;
 const DX_MENU_BASE_CLASS = 'dx-menu-base';
-const ITEM_CLASS = DX_MENU_CLASS + '-item';
-const DX_ITEM_CONTENT_CLASS = ITEM_CLASS + '-content';
-const DX_MENU_SELECTED_ITEM_CLASS = ITEM_CLASS + '-selected';
-const DX_MENU_ITEM_WRAPPER_CLASS = ITEM_CLASS + '-wrapper';
-const DX_MENU_ITEMS_CONTAINER_CLASS = DX_MENU_CLASS + '-items-container';
-const DX_MENU_ITEM_EXPANDED_CLASS = ITEM_CLASS + '-expanded';
-const DX_MENU_SEPARATOR_CLASS = DX_MENU_CLASS + '-separator';
-const DX_MENU_ITEM_LAST_GROUP_ITEM = DX_MENU_CLASS + '-last-group-item';
-const DX_ITEM_HAS_TEXT = ITEM_CLASS + '-has-text';
-const DX_ITEM_HAS_ICON = ITEM_CLASS + '-has-icon';
-const DX_ITEM_HAS_SUBMENU = ITEM_CLASS + '-has-submenu';
-const DX_MENU_ITEM_POPOUT_CLASS = ITEM_CLASS + '-popout';
-const DX_MENU_ITEM_POPOUT_CONTAINER_CLASS = DX_MENU_ITEM_POPOUT_CLASS + '-container';
-const DX_MENU_ITEM_CAPTION_CLASS = ITEM_CLASS + '-text';
+const ITEM_CLASS = `${DX_MENU_CLASS}-item`;
+const DX_ITEM_CONTENT_CLASS = `${ITEM_CLASS}-content`;
+const DX_MENU_SELECTED_ITEM_CLASS = `${ITEM_CLASS}-selected`;
+const DX_MENU_ITEM_WRAPPER_CLASS = `${ITEM_CLASS}-wrapper`;
+const DX_MENU_ITEMS_CONTAINER_CLASS = `${DX_MENU_CLASS}-items-container`;
+const DX_MENU_ITEM_EXPANDED_CLASS = `${ITEM_CLASS}-expanded`;
+const DX_MENU_SEPARATOR_CLASS = `${DX_MENU_CLASS}-separator`;
+const DX_MENU_ITEM_LAST_GROUP_ITEM = `${DX_MENU_CLASS}-last-group-item`;
+const DX_ITEM_HAS_TEXT = `${ITEM_CLASS}-has-text`;
+const DX_ITEM_HAS_ICON = `${ITEM_CLASS}-has-icon`;
+const DX_ITEM_HAS_SUBMENU = `${ITEM_CLASS}-has-submenu`;
+const DX_MENU_ITEM_POPOUT_CLASS = `${ITEM_CLASS}-popout`;
+const DX_MENU_ITEM_POPOUT_CONTAINER_CLASS = `${DX_MENU_ITEM_POPOUT_CLASS}-container`;
+const DX_MENU_ITEM_CAPTION_CLASS = `${ITEM_CLASS}-text`;
 const SINGLE_SELECTION_MODE = 'single';
-const DEFAULT_DELAY = { 'show': 50, 'hide': 300 };
+const DEFAULT_DELAY = { show: 50, hide: 300 };
 const DX_MENU_ITEM_CAPTION_URL_CLASS = `${DX_MENU_ITEM_CAPTION_CLASS}-with-url`;
 const DX_ICON_WITH_URL_CLASS = 'dx-icon-with-url';
 const ITEM_URL_CLASS = 'dx-item-url';
 
+export type Properties = dxMenuBaseOptions<MenuBase, Item>;
 
-class MenuBase extends HierarchicalCollectionWidget {
+class MenuBase extends HierarchicalCollectionWidget<Properties> {
+  static ItemClass = MenuItem;
 
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            items: [],
+  _editStrategy?: MenuBaseEditStrategy;
 
-            cssClass: '',
+  _activeStateUnit?: string;
 
-            activeStateEnabled: true,
+  hasIcons?: boolean;
 
-            showSubmenuMode: {
-                name: 'onHover',
-                delay: {
-                    show: 50,
-                    hide: 300
-                }
-            },
+  _inkRipple?: {
+    showWave: (args: any) => void;
+    hideWave: (args: any) => void;
+  };
 
-            animation: {
-                show: {
-                    type: 'fade',
-                    from: 0,
-                    to: 1,
-                    duration: 100
-                },
-                hide: {
-                    type: 'fade',
-                    from: 1,
-                    to: 0,
-                    duration: 100
-                }
-            },
+  _showSubmenusTimeout?: any;
 
-            selectByClick: false,
+  _getDefaultOptions() {
+    return extend(super._getDefaultOptions(), {
+      items: [],
+      cssClass: '',
+      activeStateEnabled: true,
+      showSubmenuMode: {
+        name: 'onHover',
+        delay: {
+          show: 50,
+          hide: 300,
+        },
+      },
+      animation: {
+        show: {
+          type: 'fade',
+          from: 0,
+          to: 1,
+          duration: 100,
+        },
+        hide: {
+          type: 'fade',
+          from: 1,
+          to: 0,
+          duration: 100,
+        },
+      },
+      selectByClick: false,
+      focusOnSelectedItem: false,
+      keyExpr: null,
+      _itemAttributes: { role: 'menuitem' },
+      useInkRipple: false,
+    });
+  }
 
-            focusOnSelectedItem: false,
+  _itemDataKey(): string {
+    return 'dxMenuItemDataKey';
+  }
 
-            /**
-            * @name dxMenuBaseOptions.onItemHold
-            * @hidden
-            * @action
-            */
+  _itemClass(): string {
+    return ITEM_CLASS;
+  }
 
-            /**
-            * @name dxMenuBaseOptions.itemHoldTimeout
-            * @hidden
-            */
+  _setAriaSelectionAttribute(
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    $itemElement: dxElementWrapper,
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    isSelected: string,
+  ): void {}
 
-            /**
-            * @name dxMenuBaseOptions.noDataText
-            * @hidden
-            */
+  _selectedItemClass(): string {
+    return DX_MENU_SELECTED_ITEM_CLASS;
+  }
 
-            /**
-            * @name dxMenuBaseOptions.selectedIndex
-            * @hidden
-            */
+  _widgetClass(): string {
+    return DX_MENU_BASE_CLASS;
+  }
 
-            /**
-            * @name dxMenuBaseOptions.selectedItemKeys
-            * @hidden
-            */
+  _focusTarget() {
+    return this._itemContainer();
+  }
 
-            /**
-            * @name dxMenuBaseOptions.keyExpr
-            * @hidden
-            */
-            keyExpr: null,
+  _clean(): void {
+    this.option('focusedElement', null);
 
-            /**
-            * @name dxMenuBaseOptions.parentIdExpr
-            * @hidden
-            */
+    super._clean();
+  }
 
-            /**
-            * @name dxMenuBaseOptions.expandedExpr
-            * @hidden
-            */
+  _supportedKeys() {
+    const selectItem = () => {
+      // @ts-expect-error
+      const $item = $(this.option('focusedElement'));
 
-            _itemAttributes: { role: 'menuitem' },
+      if (!$item.length || !this._isSelectionEnabled()) {
+        return;
+      }
 
-            useInkRipple: false
+      this.selectItem($item[0]);
+    };
+    return extend(super._supportedKeys(), {
+      space: selectItem,
+      pageUp: noop,
+      pageDown: noop,
+    });
+  }
 
-            /**
-             * @name dxMenuBaseItem.html
-             * @type String
-             * @hidden
-            */
-        });
+  _isSelectionEnabled() {
+    return this.option('selectionMode') === SINGLE_SELECTION_MODE;
+  }
+
+  _init() {
+    this._activeStateUnit = `.${ITEM_CLASS}`;
+    super._init();
+    this._renderSelectedItem();
+    this._initActions();
+  }
+
+  _getLinkContainer(
+    iconContainer: dxElementWrapper,
+    textContainer: dxElementWrapper,
+    itemData: Item,
+  ): dxElementWrapper {
+    const { linkAttr, url } = itemData;
+
+    iconContainer?.addClass(DX_ICON_WITH_URL_CLASS);
+    textContainer?.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
+
+    return super._getLinkContainer(iconContainer, textContainer, { linkAttr, url });
+  }
+
+  _addContent($container: dxElementWrapper, itemData: Item): void {
+    const { html, url } = itemData;
+
+    if (url) {
+      // @ts-expect-error
+      $container.html(html);
+      const link = this._getLinkContainer(
+        this._getIconContainer(itemData),
+        this._getTextContainer(itemData),
+        itemData,
+      );
+      $container.append(link);
+    } else {
+      super._addContent($container, itemData);
     }
 
-    _itemDataKey() {
-        return 'dxMenuItemDataKey';
+    $container.append(this._getPopoutContainer(itemData));
+    this._addContentClasses(itemData, $container.parent());
+  }
+
+  _getTextContainer(itemData: Item): dxElementWrapper {
+    const { text } = itemData;
+    if (!text) {
+      // @ts-expect-error
+      return;
+    }
+    const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
+    const itemText = isPlainObject(itemData) ? text : String(itemData);
+    return $itemContainer.text(itemText);
+  }
+
+  _getItemExtraPropNames(): string[] {
+    return ['url', 'linkAttr'];
+  }
+
+  _getPopoutContainer(itemData: Item): dxElementWrapper {
+    const { items } = itemData;
+    let $popOutContainer;
+
+    if (items && items.length) {
+      const $popOutImage = $('<div>').addClass(DX_MENU_ITEM_POPOUT_CLASS);
+      $popOutContainer = $('<span>').addClass(DX_MENU_ITEM_POPOUT_CONTAINER_CLASS).append($popOutImage);
     }
 
-    _itemClass() {
-        return ITEM_CLASS;
+    return $popOutContainer;
+  }
+
+  _getDataAdapterOptions() {
+    return {
+      rootValue: 0,
+      multipleSelection: false,
+      recursiveSelection: false,
+      recursiveExpansion: false,
+      searchValue: '',
+    };
+  }
+
+  _selectByItem(selectedItem): void {
+    if (!selectedItem) return;
+
+    const nodeToSelect = this._dataAdapter.getNodeByItem(selectedItem);
+    this._dataAdapter.toggleSelection(nodeToSelect.internalFields.key, true);
+  }
+
+  _renderSelectedItem(): void {
+    const selectedKeys = this._dataAdapter.getSelectedNodesKeys();
+    const selectedKey = selectedKeys.length && selectedKeys[0];
+    const selectedItem = this.option('selectedItem');
+
+    if (!selectedKey) {
+      this._selectByItem(selectedItem);
+      return;
     }
 
-    _setAriaSelectionAttribute() {}
+    const node = this._dataAdapter.getNodeByKey(selectedKey);
 
-    _selectedItemClass() {
-        return DX_MENU_SELECTED_ITEM_CLASS;
+    if (node.selectable === false) return;
+
+    if (!selectedItem) {
+      this.option('selectedItem', node.internalFields.item);
+      return;
     }
 
-    _widgetClass() {
-        return DX_MENU_BASE_CLASS;
+    if (selectedItem !== node.internalFields.item) {
+      this._dataAdapter.toggleSelection(selectedKey, false);
+      this._selectByItem(selectedItem);
+    }
+  }
+
+  _initActions(): void {}
+
+  _initMarkup(): void {
+    super._initMarkup();
+    this.option('useInkRipple') && this._renderInkRipple();
+  }
+
+  _renderInkRipple(): void {
+    this._inkRipple = render();
+  }
+
+  _toggleActiveState($element: dxElementWrapper, value, e): void {
+    // @ts-expect-error
+    super._toggleActiveState.apply(this, arguments);
+
+    if (!this._inkRipple) {
+      return;
     }
 
-    _focusTarget() {
-        return this._itemContainer();
+    const config = {
+      element: $element,
+      event: e,
+    };
+
+    if (value) {
+      this._inkRipple.showWave(config);
+    } else {
+      this._inkRipple.hideWave(config);
+    }
+  }
+
+  _getShowSubmenuMode() {
+    const defaultValue = 'onClick';
+    let optionValue = this.option('showSubmenuMode');
+
+    optionValue = isObject(optionValue) ? optionValue.name : optionValue;
+
+    return this._isDesktopDevice() ? optionValue : defaultValue;
+  }
+
+  _initSelectedItems() {}
+
+  _isDesktopDevice() {
+    return devices.real().deviceType === 'desktop';
+  }
+
+  _initEditStrategy() {
+    const Strategy = MenuBaseEditStrategy;
+    this._editStrategy = new Strategy(this);
+  }
+
+  _addCustomCssClass($element: dxElementWrapper): void {
+    // @ts-expect-error
+    $element.addClass(this.option('cssClass'));
+  }
+
+  _itemWrapperSelector(): string {
+    return `.${DX_MENU_ITEM_WRAPPER_CLASS}`;
+  }
+
+  _hoverStartHandler(e) {
+    const $itemElement = this._getItemElementByEventArgs(e);
+
+    if (!$itemElement || this._isItemDisabled($itemElement)) return;
+
+    e.stopPropagation();
+
+    if (this._getShowSubmenuMode() === 'onHover') {
+      clearTimeout(this._showSubmenusTimeout);
+      this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), this._getSubmenuDelay('show'));
+    }
+  }
+
+  _getAvailableItems($itemElements?: dxElementWrapper): dxElementWrapper {
+    // @ts-expect-error
+    return super._getAvailableItems($itemElements).filter(function () {
+      // @ts-expect-error
+      return $(this).css('visibility') !== 'hidden';
+    });
+  }
+
+  _isItemDisabled($item) {
+    // @ts-expect-error
+    return this._disabledGetter($item.data(this._itemDataKey()));
+  }
+
+  _showSubmenu($itemElement: dxElementWrapper): void {
+    this._addExpandedClass($itemElement);
+  }
+
+  _addExpandedClass(itemElement: Element | dxElementWrapper): void {
+    $(itemElement).addClass(DX_MENU_ITEM_EXPANDED_CLASS);
+  }
+
+  _getSubmenuDelay(action: 'show'): number {
+    // @ts-expect-error
+    const { delay } = this.option('showSubmenuMode');
+    if (!isDefined(delay)) {
+      return DEFAULT_DELAY[action];
     }
 
-    _clean() {
-        this.option('focusedElement', null);
+    return isObject(delay) ? delay[action] : delay;
+  }
 
-        super._clean();
+  // TODO: try to simplify
+  _getItemElementByEventArgs(eventArgs): dxElementWrapper {
+    let $target = $(eventArgs.target);
+
+    if ($target.hasClass(this._itemClass()) || $target.get(0) === eventArgs.currentTarget) {
+      return $target;
     }
 
-    _supportedKeys() {
-        const selectItem = () => {
-            const $item = $(this.option('focusedElement'));
-
-            if(!$item.length || !this._isSelectionEnabled()) {
-                return;
-            }
-
-            this.selectItem($item[0]);
-        };
-        return extend(super._supportedKeys(), {
-            space: selectItem,
-            pageUp: noop,
-            pageDown: noop,
-        });
+    // TODO: move it to inheritors, menuBase don't know about dx-submenu
+    while (!$target.hasClass(this._itemClass())) {
+      $target = $target.parent();
+      if ($target.hasClass('dx-submenu')) {
+        // @ts-expect-error
+        return null;
+      }
     }
 
-    _isSelectionEnabled() {
-        return this.option('selectionMode') === SINGLE_SELECTION_MODE;
+    return $target;
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _hoverEndHandler(event: unknown): void {
+    clearTimeout(this._showSubmenusTimeout);
+  }
+
+  _hasSubmenu(node) {
+    return node && node.internalFields.childrenKeys.length;
+  }
+
+  _renderContentImpl() {
+    this._renderItems(this._dataAdapter.getRootNodes());
+  }
+
+  _renderItems(
+    nodes: Item[],
+    submenuContainer?: dxElementWrapper,
+  ): void {
+    if (!nodes.length) {
+      return;
     }
 
-    _init() {
-        this._activeStateUnit = `.${ITEM_CLASS}`;
-        super._init();
-        this._renderSelectedItem();
-        this._initActions();
+    this.hasIcons = false;
+
+    // @ts-expect-error
+    const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
+    let firstVisibleIndex = -1;
+    let nextGroupFirstIndex = -1;
+
+    each(nodes, (index, node) => {
+      const isVisibleNode = node.visible !== false;
+
+      if (isVisibleNode && firstVisibleIndex < 0) {
+        firstVisibleIndex = index;
+      }
+
+      const isBeginGroup = firstVisibleIndex < index && (node.beginGroup || index === nextGroupFirstIndex);
+
+      if (isBeginGroup) {
+        nextGroupFirstIndex = isVisibleNode ? index : index + 1;
+      }
+
+      if (index === nextGroupFirstIndex && firstVisibleIndex < index) {
+        this._renderSeparator($nodeContainer);
+      }
+
+      this._renderItem(index, node, $nodeContainer);
+    });
+
+    if (!this.hasIcons) $nodeContainer.addClass(DX_MENU_NO_ICONS_CLASS);
+  }
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  _renderContainer($wrapper: dxElementWrapper, submenuContainer?: Element): dxElementWrapper {
+    const $container = $('<ul>');
+
+    this.setAria('role', 'none', $container);
+
+    return $container
+      .appendTo($wrapper)
+      .addClass(DX_MENU_ITEMS_CONTAINER_CLASS);
+  }
+
+  _createDOMElement($nodeContainer: dxElementWrapper): dxElementWrapper {
+    const $node = $('<li>');
+
+    this.setAria('role', 'none', $node);
+
+    return $node
+      .appendTo($nodeContainer)
+      .addClass(DX_MENU_ITEM_WRAPPER_CLASS);
+  }
+
+  // @ts-expect-error
+  _renderItem(
+    index: number,
+    node: any,
+    $nodeContainer: dxElementWrapper,
+    $nodeElement?: dxElementWrapper,
+  ): void {
+    const { items = [] } = this.option();
+
+    const $node = $nodeElement ?? this._createDOMElement($nodeContainer);
+
+    if (items[index + 1] && items[index + 1].beginGroup) {
+      $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
     }
 
-    _getLinkContainer(iconContainer, textContainer, { linkAttr, url }) {
-        iconContainer?.addClass(DX_ICON_WITH_URL_CLASS);
-        textContainer?.addClass(DX_MENU_ITEM_CAPTION_URL_CLASS);
+    const $itemFrame = super._renderItem(index, node.internalFields.item, $node);
 
-        return super._getLinkContainer(iconContainer, textContainer, { linkAttr, url });
+    if (node.internalFields.item === this.option('selectedItem')) {
+      $itemFrame.addClass(DX_MENU_SELECTED_ITEM_CLASS);
     }
 
-    _addContent($container, itemData) {
-        const { html, url } = itemData;
+    $itemFrame.attr('tabIndex', -1);
 
-        if(url) {
-            $container.html(html);
-            const link = this._getLinkContainer(this._getIconContainer(itemData), this._getTextContainer(itemData), itemData);
-            $container.append(link);
-        } else {
-            super._addContent($container, itemData);
-        }
+    if (this._hasSubmenu(node)) this.setAria('haspopup', 'true', $itemFrame);
+  }
 
-        $container.append(this._getPopoutContainer(itemData));
-        this._addContentClasses(itemData, $container.parent());
+  _renderItemFrame(
+    index: number,
+    itemData: Item,
+    $itemContainer: dxElementWrapper,
+  ): dxElementWrapper {
+    const $itemFrame = $itemContainer.children(`.${ITEM_CLASS}`);
+
+    // @ts-expect-error
+    return $itemFrame.length ? $itemFrame : super._renderItemFrame.apply(this, arguments);
+  }
+
+  _refreshItem($item: dxElementWrapper, item: Item): void {
+    const node = this._dataAdapter.getNodeByItem(item);
+    // @ts-expect-error
+    const index = $item.data(this._itemIndexKey());
+    const $nodeContainer = $item.closest('ul');
+    const $nodeElement = $item.closest('li');
+
+    // @ts-expect-error
+    this._renderItem(index, node, $nodeContainer, $nodeElement);
+  }
+
+  _addContentClasses(itemData: Item, $itemFrame: dxElementWrapper): void {
+    const hasText = itemData.text ? !!itemData.text.length : false;
+    const hasIcon = !!itemData.icon;
+    const hasSubmenu = itemData.items ? !!itemData.items.length : false;
+
+    $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
+    $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
+
+    if (!this.hasIcons) {
+      this.hasIcons = hasIcon;
     }
 
-    _getTextContainer(itemData) {
-        const { text } = itemData;
-        if(!text) {
-            return;
-        }
-        const $itemContainer = $('<span>').addClass(DX_MENU_ITEM_CAPTION_CLASS);
-        const itemText = isPlainObject(itemData) ? text : String(itemData);
-        return $itemContainer.text(itemText);
+    $itemFrame.toggleClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
+  }
+
+  _getItemContent($itemFrame: dxElementWrapper): dxElementWrapper {
+    let $itemContent = super._getItemContent($itemFrame);
+
+    if (!$itemContent.length) {
+      $itemContent = $itemFrame.children(`.${DX_ITEM_CONTENT_CLASS}`);
+    }
+    return $itemContent;
+  }
+
+  _postprocessRenderItem(args): void {
+    const $itemElement = $(args.itemElement);
+    const selectedIndex = this._dataAdapter.getSelectedNodesKeys();
+
+    // @ts-expect-error
+    if (!selectedIndex.length || !this._selectedGetter(args.itemData) || !this._isItemSelectable(args.itemData)) {
+      this._setAriaSelectionAttribute($itemElement, 'false');
+      return;
     }
 
-    _getItemExtraPropNames() {
-        return ['url', 'linkAttr'];
+    const node = this._dataAdapter.getNodeByItem(args.itemData);
+
+    if (node.internalFields.key === selectedIndex[0]) {
+      $itemElement.addClass(this._selectedItemClass());
+      this._setAriaSelectionAttribute($itemElement, 'true');
+    } else {
+      this._setAriaSelectionAttribute($itemElement, 'false');
+    }
+  }
+
+  _isItemSelectable(item: Item): boolean {
+    return item.selectable !== false;
+  }
+
+  _renderSeparator($itemsContainer: dxElementWrapper): void {
+    $('<li>')
+      .appendTo($itemsContainer)
+      .addClass(DX_MENU_SEPARATOR_CLASS);
+  }
+
+  _itemClickHandler(e) {
+    if (e._skipHandling) return;
+
+    // @ts-expect-error
+    const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
+    this._itemDXEventHandler(e, 'onItemClick', {}, {
+      beforeExecute: this._itemClick,
+      afterExecute: itemClickActionHandler.bind(this),
+    });
+    e._skipHandling = true;
+  }
+
+  _itemClick(actionArgs): void {
+    const { event, itemData } = actionArgs.args[0];
+
+    const $itemElement = this._getItemElementByEventArgs(event);
+    const link = $itemElement && $itemElement.find(`.${ITEM_URL_CLASS}`).get(0);
+
+    if (itemData.url && link) {
+      // @ts-expect-error
+      link.click();
+    }
+  }
+
+  _updateSubmenuVisibilityOnClick(actionArgs): void {
+    this._updateSelectedItemOnClick(actionArgs);
+
+    if (this._getShowSubmenuMode() === 'onClick') {
+      this._addExpandedClass(actionArgs.args[0].itemElement);
+    }
+  }
+
+  _updateSelectedItemOnClick(actionArgs) {
+    const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
+
+    if (!this._isItemSelectAllowed(args.itemData)) {
+      return;
     }
 
-    _getPopoutContainer(itemData) {
-        const items = itemData.items;
-        let $popOutContainer;
+    const selectedItemKey = this._dataAdapter.getSelectedNodesKeys();
+    const selectedNode = selectedItemKey.length && this._dataAdapter.getNodeByKey(selectedItemKey[0]);
 
-        if(items && items.length) {
-            const $popOutImage = $('<div>').addClass(DX_MENU_ITEM_POPOUT_CLASS);
-            $popOutContainer = $('<span>').addClass(DX_MENU_ITEM_POPOUT_CONTAINER_CLASS).append($popOutImage);
-        }
-
-        return $popOutContainer;
+    if (selectedNode) {
+      this._toggleItemSelection(selectedNode, false);
     }
 
-    _getDataAdapterOptions() {
-        return {
-            rootValue: 0,
-            multipleSelection: false,
-            recursiveSelection: false,
-            recursiveExpansion: false,
-            searchValue: ''
-        };
+    if (!selectedNode || (selectedNode.internalFields.item !== args.itemData)) {
+      this.selectItem(args.itemData);
+    } else {
+      this._fireSelectionChangeEvent(null, this.option('selectedItem'));
+      this._setOptionWithoutOptionChange('selectedItem', null);
     }
-
-    _selectByItem(selectedItem) {
-        if(!selectedItem) return;
-
-        const nodeToSelect = this._dataAdapter.getNodeByItem(selectedItem);
-        this._dataAdapter.toggleSelection(nodeToSelect.internalFields.key, true);
-    }
-
-    _renderSelectedItem() {
-        const selectedKeys = this._dataAdapter.getSelectedNodesKeys();
-        const selectedKey = selectedKeys.length && selectedKeys[0];
-        const selectedItem = this.option('selectedItem');
-
-        if(!selectedKey) {
-            this._selectByItem(selectedItem);
-            return;
-        }
-
-        const node = this._dataAdapter.getNodeByKey(selectedKey);
-
-        if(node.selectable === false) return;
-
-        if(!selectedItem) {
-            this.option('selectedItem', node.internalFields.item);
-            return;
-        }
-
-        if(selectedItem !== node.internalFields.item) {
-            this._dataAdapter.toggleSelection(selectedKey, false);
-            this._selectByItem(selectedItem);
-        }
-    }
-
-    _initActions() {}
-
-    _initMarkup() {
-        super._initMarkup();
-        this.option('useInkRipple') && this._renderInkRipple();
-    }
-
-    _renderInkRipple() {
-        this._inkRipple = render();
-    }
-
-    _toggleActiveState($element, value, e) {
-        super._toggleActiveState.apply(this, arguments);
-
-        if(!this._inkRipple) {
-            return;
-        }
-
-        const config = {
-            element: $element,
-            event: e
-        };
-
-        if(value) {
-            this._inkRipple.showWave(config);
-        } else {
-            this._inkRipple.hideWave(config);
-        }
-    }
-
-    _getShowSubmenuMode() {
-        const defaultValue = 'onClick';
-        let optionValue = this.option('showSubmenuMode');
-
-        optionValue = isObject(optionValue) ? optionValue.name : optionValue;
-
-        return this._isDesktopDevice() ? optionValue : defaultValue;
-    }
-
-    _initSelectedItems() {}
-
-    _isDesktopDevice() {
-        return devices.real().deviceType === 'desktop';
-    }
-
-    _initEditStrategy() {
-        const Strategy = MenuBaseEditStrategy;
-        this._editStrategy = new Strategy(this);
-    }
-
-    _addCustomCssClass($element) {
-        $element.addClass(this.option('cssClass'));
-    }
-
-    _itemWrapperSelector() {
-        return `.${DX_MENU_ITEM_WRAPPER_CLASS}`;
-    }
-
-    _hoverStartHandler(e) {
-        const $itemElement = this._getItemElementByEventArgs(e);
-
-        if(!$itemElement || this._isItemDisabled($itemElement)) return;
-
-        e.stopPropagation();
-
-        if(this._getShowSubmenuMode() === 'onHover') {
-            clearTimeout(this._showSubmenusTimeout);
-            this._showSubmenusTimeout = setTimeout(this._showSubmenu.bind(this, $itemElement), this._getSubmenuDelay('show'));
-        }
-    }
-
-    _getAvailableItems($itemElements) {
-        return super._getAvailableItems($itemElements).filter(function() {
-            return $(this).css('visibility') !== 'hidden';
-        });
-    }
-
-    _isItemDisabled($item) {
-        return this._disabledGetter($item.data(this._itemDataKey()));
-    }
-
-    _showSubmenu($itemElement) {
-        this._addExpandedClass($itemElement);
-    }
-
-    _addExpandedClass(itemElement) {
-        $(itemElement).addClass(DX_MENU_ITEM_EXPANDED_CLASS);
-    }
-
-    _getSubmenuDelay(action) {
-        const { delay } = this.option('showSubmenuMode');
-        if(!isDefined(delay)) {
-            return DEFAULT_DELAY[action];
-        }
-
-        return isObject(delay) ? delay[action] : delay;
-    }
-
-    // TODO: try to simplify
-    _getItemElementByEventArgs(eventArgs) {
-        let $target = $(eventArgs.target);
-
-        if($target.hasClass(this._itemClass()) || $target.get(0) === eventArgs.currentTarget) {
-            return $target;
-        }
-
-        // TODO: move it to inheritors, menuBase don't know about dx-submenu
-        while(!$target.hasClass(this._itemClass())) {
-            $target = $target.parent();
-            if($target.hasClass('dx-submenu')) {
-                return null;
-            }
-        }
-
-        return $target;
-    }
-
-    _hoverEndHandler() {
-        clearTimeout(this._showSubmenusTimeout);
-    }
-
-    _hasSubmenu(node) {
-        return node && node.internalFields.childrenKeys.length;
-    }
-
-    _renderContentImpl() {
-        this._renderItems(this._dataAdapter.getRootNodes());
-    }
-
-    _renderItems(nodes, submenuContainer) {
-        if(!nodes.length) {
-            return;
-        }
-
-        this.hasIcons = false;
-
-        const $nodeContainer = this._renderContainer(this.$element(), submenuContainer);
-        let firstVisibleIndex = -1;
-        let nextGroupFirstIndex = -1;
-
-        each(nodes, (index, node) => {
-            const isVisibleNode = node.visible !== false;
-
-            if(isVisibleNode && firstVisibleIndex < 0) {
-                firstVisibleIndex = index;
-            }
-
-            const isBeginGroup = firstVisibleIndex < index && (node.beginGroup || index === nextGroupFirstIndex);
-
-            if(isBeginGroup) {
-                nextGroupFirstIndex = isVisibleNode ? index : index + 1;
-            }
-
-            if(index === nextGroupFirstIndex && firstVisibleIndex < index) {
-                this._renderSeparator($nodeContainer);
-            }
-
-            this._renderItem(index, node, $nodeContainer);
-        });
-
-        if(!this.hasIcons) $nodeContainer.addClass(DX_MENU_NO_ICONS_CLASS);
-    }
-
-    _renderContainer($wrapper) {
-        const $container = $('<ul>');
-
-        this.setAria('role', 'none', $container);
-
-        return $container
-            .appendTo($wrapper)
-            .addClass(DX_MENU_ITEMS_CONTAINER_CLASS);
-    }
-
-    _createDOMElement($nodeContainer) {
-        const $node = $('<li>');
-
-        this.setAria('role', 'none', $node);
-
-        return $node
-            .appendTo($nodeContainer)
-            .addClass(DX_MENU_ITEM_WRAPPER_CLASS);
-    }
-
-    _renderItem(index, node, $nodeContainer, $nodeElement) {
-        const items = this.option('items');
-
-        const $node = $nodeElement || this._createDOMElement($nodeContainer);
-
-        if(items[index + 1] && items[index + 1].beginGroup) {
-            $node.addClass(DX_MENU_ITEM_LAST_GROUP_ITEM);
-        }
-
-        const $itemFrame = super._renderItem(index, node.internalFields.item, $node);
-
-        if(node.internalFields.item === this.option('selectedItem')) {
-            $itemFrame.addClass(DX_MENU_SELECTED_ITEM_CLASS);
-        }
-
-        $itemFrame.attr('tabIndex', -1);
-
-        if(this._hasSubmenu(node)) this.setAria('haspopup', 'true', $itemFrame);
-    }
-
-    _renderItemFrame(index, itemData, $itemContainer) {
-        const $itemFrame = $itemContainer.children(`.${ITEM_CLASS}`);
-
-        return $itemFrame.length ? $itemFrame : super._renderItemFrame.apply(this, arguments);
-    }
-
-    _refreshItem($item, item) {
-        const node = this._dataAdapter.getNodeByItem(item);
-        const index = $item.data(this._itemIndexKey());
-        const $nodeContainer = $item.closest('ul');
-        const $nodeElement = $item.closest('li');
-
-        this._renderItem(index, node, $nodeContainer, $nodeElement);
-    }
-
-    _addContentClasses(itemData, $itemFrame) {
-        const hasText = itemData.text ? !!itemData.text.length : false;
-        const hasIcon = !!itemData.icon;
-        const hasSubmenu = itemData.items ? !!itemData.items.length : false;
-
-        $itemFrame.toggleClass(DX_ITEM_HAS_TEXT, hasText);
-        $itemFrame.toggleClass(DX_ITEM_HAS_ICON, hasIcon);
-
-        if(!this.hasIcons) {
-            this.hasIcons = hasIcon;
-        }
-
-        $itemFrame.toggleClass(DX_ITEM_HAS_SUBMENU, hasSubmenu);
-    }
-
-    _getItemContent($itemFrame) {
-        let $itemContent = super._getItemContent($itemFrame);
-
-        if(!$itemContent.length) {
-            $itemContent = $itemFrame.children(`.${DX_ITEM_CONTENT_CLASS}`);
-        }
-        return $itemContent;
-    }
-
-    _postprocessRenderItem(args) {
-        const $itemElement = $(args.itemElement);
-        const selectedIndex = this._dataAdapter.getSelectedNodesKeys();
-
-        if(!selectedIndex.length || !this._selectedGetter(args.itemData) || !this._isItemSelectable(args.itemData)) {
-            this._setAriaSelectionAttribute($itemElement, 'false');
-            return;
-        }
-
-        const node = this._dataAdapter.getNodeByItem(args.itemData);
-
-        if(node.internalFields.key === selectedIndex[0]) {
-            $itemElement.addClass(this._selectedItemClass());
-            this._setAriaSelectionAttribute($itemElement, 'true');
-        } else {
-            this._setAriaSelectionAttribute($itemElement, 'false');
-        }
-    }
-
-    _isItemSelectable(item) {
-        return item.selectable !== false;
-    }
-
-    _renderSeparator($itemsContainer) {
-        $('<li>')
-            .appendTo($itemsContainer)
-            .addClass(DX_MENU_SEPARATOR_CLASS);
-    }
-
-    _itemClickHandler(e) {
-        if(e._skipHandling) return;
-
-        const itemClickActionHandler = this._createAction(this._updateSubmenuVisibilityOnClick.bind(this));
-        this._itemDXEventHandler(e, 'onItemClick', {}, {
-            beforeExecute: this._itemClick,
-            afterExecute: itemClickActionHandler.bind(this)
-        });
-        e._skipHandling = true;
-    }
-
-    _itemClick(actionArgs) {
-        const { event, itemData } = actionArgs.args[0];
-
-        const $itemElement = this._getItemElementByEventArgs(event);
-        const link = $itemElement && $itemElement.find(`.${ITEM_URL_CLASS}`).get(0);
-
-        if(itemData.url && link) {
-            link.click();
-        }
-    }
-
-    _updateSubmenuVisibilityOnClick(actionArgs) {
-        this._updateSelectedItemOnClick(actionArgs);
-
-        if(this._getShowSubmenuMode() === 'onClick') {
-            this._addExpandedClass(actionArgs.args[0].itemElement);
-        }
-    }
-
-    _updateSelectedItemOnClick(actionArgs) {
-        const args = actionArgs.args ? actionArgs.args[0] : actionArgs;
-
-        if(!this._isItemSelectAllowed(args.itemData)) {
-            return;
-        }
-
-        const selectedItemKey = this._dataAdapter.getSelectedNodesKeys();
-        const selectedNode = selectedItemKey.length && this._dataAdapter.getNodeByKey(selectedItemKey[0]);
-
-        if(selectedNode) {
-            this._toggleItemSelection(selectedNode, false);
-        }
-
-        if(!selectedNode || (selectedNode.internalFields.item !== args.itemData)) {
-            this.selectItem(args.itemData);
-        } else {
-            this._fireSelectionChangeEvent(null, this.option('selectedItem'));
-            this._setOptionWithoutOptionChange('selectedItem', null);
-        }
-
-    }
-
-    _isItemSelectAllowed(item) {
-        const isSelectByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
-        return !this._isContainerEmpty() && isSelectByClickEnabled && this._isItemSelectable(item) && !this._itemsGetter(item);
-    }
-
-    _isContainerEmpty() {
-        return this._itemContainer().is(':empty');
-    }
-
-    _syncSelectionOptions() {
-        return asyncNoop();
-    }
-
-    _optionChanged(args) {
-        switch(args.name) {
-            case 'showSubmenuMode':
-                break;
-            case 'selectedItem': {
-                const node = this._dataAdapter.getNodeByItem(args.value);
-                const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
-
-                if(node && node.internalFields.key !== selectedKey) {
-                    if(node.selectable === false) break;
-
-                    if(selectedKey) {
-                        this._toggleItemSelection(this._dataAdapter.getNodeByKey(selectedKey), false);
-                    }
-                    this._toggleItemSelection(node, true);
-                    this._updateSelectedItems();
-                }
-                break;
-            }
-            case 'cssClass':
-            case 'position':
-            case 'selectByClick':
-            case 'animation':
-            case 'useInkRipple':
-                this._invalidate();
-                break;
-            default:
-                super._optionChanged(args);
-        }
-    }
-
-    _toggleItemSelection(node, value) {
-        const itemElement = this._getElementByItem(node.internalFields.item);
-        itemElement && $(itemElement).toggleClass(DX_MENU_SELECTED_ITEM_CLASS);
-        this._dataAdapter.toggleSelection(node.internalFields.key, value);
-    }
-
-    _getElementByItem(itemData) {
-        let result;
-
-        each(this._itemElements(), (_, itemElement) => {
-            if($(itemElement).data(this._itemDataKey()) !== itemData) {
-                return true;
-            }
-
-            result = itemElement;
-            return false;
-        });
-        return result;
-    }
-
-    _updateSelectedItems(oldSelection, newSelection) {
-        if(oldSelection || newSelection) {
-            this._fireSelectionChangeEvent(newSelection, oldSelection);
-        }
-    }
-
-    _fireSelectionChangeEvent(addedSelection, removedSelection) {
-        this._createActionByOption('onSelectionChanged', {
-            excludeValidators: ['disabled', 'readOnly']
-        })({
-            addedItems: [addedSelection],
-            removedItems: [removedSelection]
-        });
-    }
-
-    selectItem(itemElement) {
-        const itemData = (itemElement.nodeType) ? this._getItemData(itemElement) : itemElement;
+  }
+
+  _isItemSelectAllowed(item: Item): boolean | undefined {
+    const isSelectByClickEnabled = this._isSelectionEnabled() && this.option('selectByClick');
+    return !this._isContainerEmpty()
+      && isSelectByClickEnabled
+      && this._isItemSelectable(item)
+      // @ts-expect-error
+      && !this._itemsGetter(item);
+  }
+
+  _isContainerEmpty(): boolean {
+    return this._itemContainer().is(':empty');
+  }
+
+  _syncSelectionOptions() {
+    return asyncNoop();
+  }
+
+  _optionChanged(args) {
+    switch (args.name) {
+      case 'showSubmenuMode':
+        break;
+      case 'selectedItem': {
+        const node = this._dataAdapter.getNodeByItem(args.value);
         const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
-        const selectedItem = this.option('selectedItem');
-        const node = this._dataAdapter.getNodeByItem(itemData);
 
-        if(node.internalFields.key !== selectedKey) {
-            if(selectedKey) {
-                this._toggleItemSelection(this._dataAdapter.getNodeByKey(selectedKey), false);
-            }
-            this._toggleItemSelection(node, true);
-            this._updateSelectedItems(selectedItem, itemData);
-            this._setOptionWithoutOptionChange('selectedItem', itemData);
+        if (node && node.internalFields.key !== selectedKey) {
+          if (node.selectable === false) break;
+
+          if (selectedKey) {
+            this._toggleItemSelection(this._dataAdapter.getNodeByKey(selectedKey), false);
+          }
+          this._toggleItemSelection(node, true);
+          this._updateSelectedItems();
         }
+        break;
+      }
+      case 'cssClass':
+      case 'position':
+      case 'selectByClick':
+      case 'animation':
+      case 'useInkRipple':
+        this._invalidate();
+        break;
+      default:
+        super._optionChanged(args);
     }
+  }
 
-    unselectItem(itemElement) {
-        const itemData = (itemElement.nodeType) ? this._getItemData(itemElement) : itemElement;
-        const node = this._dataAdapter.getNodeByItem(itemData);
-        const selectedItem = this.option('selectedItem');
+  _toggleItemSelection(node, value) {
+    const itemElement = this._getElementByItem(node.internalFields.item);
+    itemElement && $(itemElement).toggleClass(DX_MENU_SELECTED_ITEM_CLASS);
+    this._dataAdapter.toggleSelection(node.internalFields.key, value);
+  }
 
-        if(node.internalFields.selected) {
-            this._toggleItemSelection(node, false);
-            this._updateSelectedItems(selectedItem, null);
-            this._setOptionWithoutOptionChange('selectedItem', null);
-        }
+  _getElementByItem(itemData) {
+    let result;
 
+    // @ts-expect-error
+    each(this._itemElements(), (_, itemElement) => {
+      if ($(itemElement).data(this._itemDataKey()) !== itemData) {
+        return true;
+      }
+
+      result = itemElement;
+      return false;
+    });
+    return result;
+  }
+
+  _updateSelectedItems(
+    oldSelection?: Item,
+    newSelection?: Item | null,
+  ): void {
+    if (oldSelection || newSelection) {
+      this._fireSelectionChangeEvent(newSelection, oldSelection);
     }
+  }
+
+  _fireSelectionChangeEvent(addedSelection, removedSelection): void {
+    this._createActionByOption('onSelectionChanged', {
+      excludeValidators: ['disabled', 'readOnly'],
+    })({
+      addedItems: [addedSelection],
+      removedItems: [removedSelection],
+    });
+  }
+
+  selectItem(itemElement): void {
+    const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
+    const selectedKey = this._dataAdapter.getSelectedNodesKeys()[0];
+    const selectedItem = this.option('selectedItem');
+    const node = this._dataAdapter.getNodeByItem(itemData);
+
+    if (node.internalFields.key !== selectedKey) {
+      if (selectedKey) {
+        this._toggleItemSelection(this._dataAdapter.getNodeByKey(selectedKey), false);
+      }
+      this._toggleItemSelection(node, true);
+      this._updateSelectedItems(selectedItem, itemData);
+      this._setOptionWithoutOptionChange('selectedItem', itemData);
+    }
+  }
+
+  unselectItem(itemElement): void {
+    const itemData = itemElement.nodeType ? this._getItemData(itemElement) : itemElement;
+    const node = this._dataAdapter.getNodeByItem(itemData);
+    const selectedItem = this.option('selectedItem');
+
+    if (node.internalFields.selected) {
+      this._toggleItemSelection(node, false);
+      this._updateSelectedItems(selectedItem, null);
+      this._setOptionWithoutOptionChange('selectedItem', null);
+    }
+  }
 }
 
-MenuBase.ItemClass = MenuItem;
 export default MenuBase;
