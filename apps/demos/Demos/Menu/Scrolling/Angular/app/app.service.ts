@@ -13,7 +13,7 @@ const products: Product[] = [
         text: 'Computers',
         items: [
           {
-            text: 'Desktops',    
+            text: 'Desktops',
           },
           {
             text: 'Laptops',
@@ -43,18 +43,18 @@ const products: Product[] = [
             text: 'Projectors & Screens'
           },
           {
-            text: 'Computers Accessories',
+            text: 'Computer Accessories',
           },
         ]
       },
       {
-        text: 'Cell phones',
+        text: 'Cell Phones',
         items: [
           {
-            text: 'Home & Office Phones',    
+            text: 'Home & Office Phones',
           },
           {
-            text: 'Smart phones & PDAs',
+            text: 'Smart Phones & PDAs',
           },
           {
             text: 'Senior Cell Phones'
@@ -63,7 +63,7 @@ const products: Product[] = [
             text: 'Mobile Broadband Devices',
           },
           {
-            text: 'Cell phones Accessories',
+            text: 'Cell Phone Accessories',
           },
         ]
       },
@@ -74,7 +74,7 @@ const products: Product[] = [
             text: 'Action Cameras',
           },
           {
-            text: 'Camcorders',    
+            text: 'Camcorders',
           },
           {
             text: 'Digital Cameras',
@@ -113,7 +113,7 @@ const products: Product[] = [
             text: 'Underwater Video & Photography',
           },
           {
-            text: 'Cameras Accessories',
+            text: 'Camera Accessories',
           },
         ]
       },
@@ -124,7 +124,7 @@ const products: Product[] = [
             text: 'Boomboxes',
           },
           {
-            text: 'DVD & CD Player Bags',    
+            text: 'DVD & CD Player Bags',
           },
           {
             text: 'Hi-Fi & Home Audio Accessories',
@@ -159,7 +159,7 @@ const products: Product[] = [
             text: 'Air Conditioners',
           },
           {
-            text: 'Coffee Machines',    
+            text: 'Coffee Machines',
           },
           {
             text: 'Fans',
@@ -200,7 +200,7 @@ const products: Product[] = [
             text: 'TV Shows',
           },
           {
-            text: 'DVD',    
+            text: 'DVD',
           },
           {
             text: 'Blu-ray',
@@ -229,7 +229,7 @@ const products: Product[] = [
         text: 'Games & Toys',
         items: [
           {
-            text: 'PC games',    
+            text: 'PC Games',
           },
           {
             text: 'Virtual Reality',
@@ -258,13 +258,13 @@ const products: Product[] = [
     text: 'Healthcare & Living',
     items: [
       {
-        text: 'Sport & Outdoors',
+        text: 'Sports & Outdoors',
         items: [
           {
             text: 'Camping',
           },
           {
-            text: 'Fitness',    
+            text: 'Fitness',
           },
           {
             text: 'Football',
@@ -282,7 +282,7 @@ const products: Product[] = [
             text: 'Sport Apparel'
           },
           {
-            text: 'Sport Shoes',
+            text: 'Trainers & Tennis Shoes',
           },
         ]
       },
@@ -293,7 +293,7 @@ const products: Product[] = [
             text: 'Bath & Shower',
           },
           {
-            text: 'Skin Care',    
+            text: 'Skin Care',
           },
           {
             text: 'Hair Care',
@@ -322,7 +322,7 @@ const products: Product[] = [
             text: 'Clothing',
           },
           {
-            text: 'Jewellery', 
+            text: 'Jewellery',
           },
           {
             text: 'Shoes',

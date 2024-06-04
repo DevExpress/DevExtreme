@@ -765,7 +765,7 @@ safeSizeTest('Rows should appear correctly during dragging when virtual scrollin
     .ok()
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}).before(async (t) => {
+}).meta({ unstable: true }).before(async (t) => {
   await t.maximizeWindow();
   return createWidget('dxDataGrid', {
     height: 440,

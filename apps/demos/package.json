@@ -47,7 +47,7 @@
         "mustache": "4.2.0",
         "plugin-typescript": "8.0.0",
         "preact": "10.12.1",
-        "prettier": "2.8.4",
+        "prettier": "2.8.8",
         "prompts": "2.4.2",
         "react": "17.0.2",
         "react-dom": "17.0.2",
@@ -66,9 +66,9 @@
     },
     "devDependencies": {
         "@angular/platform-server": "~16.2.12",
-        "@babel/core": "7.20.12",
+        "@babel/core": "7.23.9",
         "@babel/eslint-parser": "7.23.10",
-        "@babel/preset-env": "7.20.2",
+        "@babel/preset-env": "7.23.9",
         "@testcafe-community/axe": "3.5.0",
         "@types/fs-extra": "11.0.2",
         "@types/react": "17.0.2",
@@ -77,7 +77,7 @@
         "@types/eslint": "8.56.2",
         "@typescript-eslint/parser": "5.62.0",
         "@vue/eslint-config-typescript": "12.0.0",
-        "axe-core": "4.9.0",
+        "axe-core": "4.9.1",
         "babel-jest": "29.7.0",
         "consola": "3.2.3",
         "cookie-parser": "1.4.6",
@@ -94,7 +94,7 @@
         "mockdate": "3.0.5",
         "npm-run-all": "4.1.5",
         "open": "8.4.2",
-        "prettier": "2.8.4",
+        "prettier": "2.8.8",
         "rollup": "^4.14.3",
         "@rollup/plugin-replace": "^5.0.5",
         "@rollup/plugin-babel": "^6.0.4",
@@ -131,7 +131,8 @@
         "prepare-bundles": "npm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles"
+        "make-demos-bundle": "ts-node ./utils/create-bundles",
+        "split-doc-paragraph": "ts-node ./utils/internal/split-paragraph"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

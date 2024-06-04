@@ -2,7 +2,7 @@
 
 import $ from 'jquery';
 import testing from './utils.js';
-import BingProvider from 'ui/map/provider.dynamic.bing';
+import BingProvider from '__internal/ui/map/m_provider.dynamic.bing';
 import ajaxMock from '../../../helpers/ajaxMock.js';
 import errors from 'ui/widget/ui.errors';
 

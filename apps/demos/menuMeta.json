@@ -4116,6 +4116,158 @@
     ]
   },
   {
+    "Name": "Layout",
+    "Equivalents": "",
+    "Groups": [
+      {
+        "Name": "Tile View",
+        "Breadcrumb": true,
+        "Equivalents": "dxTileView, dx-tile-view",
+        "Demos": [
+          {
+            "Title": "Basics",
+            "Name": "Basics",
+            "DocUrl": "Guide/UI_Components/TileView/Overview/",
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
+          },
+          {
+            "Title": "Directions",
+            "Name": "Directions",
+            "DocUrl": "ApiReference/UI_Components/dxTileView/Configuration/#direction",
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
+          },
+          {
+            "Title": "Item Template",
+            "Name": "ItemTemplate",
+            "DocUrl": "Guide/UI_Components/TileView/Customize_Tile_Appearance/",
+            "Widget": "TileView",
+            "MvcAdditionalFiles": [
+              "/Models/TileViewItem.cs",
+              "/Models/SampleData/TileViewItems.cs"
+            ]
+          },
+          {
+            "Title": "Item 3rd Party Engine Template",
+            "Name": "Item3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "TileView"
+          }
+        ]
+      },
+      {
+        "Name": "Splitter",
+        "Equivalents": "Layout Control",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Splitter",
+            "Badge": "New",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Gallery",
+        "Breadcrumb": true,
+        "Equivalents": "dxGallery, dx-gallery",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/Gallery/Overview/",
+            "Widget": "Gallery",
+            "MvcAdditionalFiles": [
+              "/ViewModels/GalleryViewModel.cs"
+            ]
+          },
+          {
+            "Title": "Item Template",
+            "Name": "ItemTemplate",
+            "DocUrl": "Guide/UI_Components/Gallery/Customize_Item_Appearance/",
+            "Widget": "Gallery",
+            "MvcAdditionalFiles": [
+              "/Models/SampleData/GalleryItems.cs",
+              "/Models/GalleryItem.cs"
+            ]
+          },
+          {
+            "Title": "Item 3rd Party Engine Template",
+            "Name": "Item3RdPartyEngineTemplate",
+            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
+            "Widget": "Gallery"
+          }
+        ]
+      },
+      {
+        "Name": "Scroll View",
+        "Breadcrumb": true,
+        "Equivalents": "dxScrollView, dx-scroll-view",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/ScrollView/Overview/",
+            "Widget": "ScrollView"
+          }
+        ]
+      },
+      {
+        "Name": "Box",
+        "Equivalents": "Layout Control, Stack Panel, dxBox, dx-box",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "Widget": "Box",
+            "DemoType": "Web"
+          }
+        ]
+      },
+      {
+        "Name": "Responsive Box",
+        "Breadcrumb": true,
+        "Equivalents": "ResponsiveBox, Layout Control, Stack Panel, dxResponsiveBox, dx-responsive-box, adaptive",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "Guide/UI_Components/ResponsiveBox/Overview/",
+            "Widget": "ResponsiveBox",
+            "DemoType": "Adaptivity"
+          }
+        ]
+      },
+      {
+        "Name": "Resizable",
+        "Breadcrumb": false,
+        "Equivalents": "dxResizable, dx-resizable",
+        "Demos": [
+          {
+            "Title": "Overview",
+            "Name": "Overview",
+            "DocUrl": "",
+            "Widget": "Resizable",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DemoType": "Web",
+            "WideDemo": true
+          }
+        ]
+      }
+    ]
+  },
+  {
     "Name": "Editors",
     "Equivalents": "",
     "Groups": [
@@ -4498,18 +4650,6 @@
         ]
       },
       {
-        "Name": "Box",
-        "Equivalents": "Layout Control, Stack Panel, dxBox, dx-box",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "Box",
-            "DemoType": "Web"
-          }
-        ]
-      },
-      {
         "Name": "Button Group",
         "Breadcrumb": true,
         "Equivalents": "dxButtonGroup, dx-buttongroup",
@@ -4770,33 +4910,6 @@
         ]
       },
       {
-        "Name": "Responsive Box",
-        "Breadcrumb": true,
-        "Equivalents": "ResponsiveBox, Layout Control, Stack Panel, dxResponsiveBox, dx-responsive-box, adaptive",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/ResponsiveBox/Overview/",
-            "Widget": "ResponsiveBox",
-            "DemoType": "Adaptivity"
-          }
-        ]
-      },
-      {
-        "Name": "Scroll View",
-        "Breadcrumb": true,
-        "Equivalents": "dxScrollView, dx-scroll-view",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/ScrollView/Overview/",
-            "Widget": "ScrollView"
-          }
-        ]
-      },
-      {
         "Name": "Slider",
         "Breadcrumb": true,
         "Equivalents": "SeekBar, TrackBar, dxSlider, dx-slider",
@@ -4833,19 +4946,6 @@
             "Title": "Customization",
             "Name": "Customization",
             "Widget": "Sortable"
-          }
-        ]
-      },
-      {
-        "Name": "Splitter",
-        "Equivalents": "Layout Control",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "Widget": "Splitter",
-            "Badge": "New",
-            "DemoType": "Web"
           }
         ]
       }
@@ -5137,38 +5237,6 @@
         ]
       },
       {
-        "Name": "Gallery",
-        "Breadcrumb": true,
-        "Equivalents": "dxGallery, dx-gallery",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "DocUrl": "Guide/UI_Components/Gallery/Overview/",
-            "Widget": "Gallery",
-            "MvcAdditionalFiles": [
-              "/ViewModels/GalleryViewModel.cs"
-            ]
-          },
-          {
-            "Title": "Item Template",
-            "Name": "ItemTemplate",
-            "DocUrl": "Guide/UI_Components/Gallery/Customize_Item_Appearance/",
-            "Widget": "Gallery",
-            "MvcAdditionalFiles": [
-              "/Models/SampleData/GalleryItems.cs",
-              "/Models/GalleryItem.cs"
-            ]
-          },
-          {
-            "Title": "Item 3rd Party Engine Template",
-            "Name": "Item3RdPartyEngineTemplate",
-            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
-            "Widget": "Gallery"
-          }
-        ]
-      },
-      {
         "Name": "List",
         "Breadcrumb": true,
         "Equivalents": "ListView, TableView, ListBox, dxList, dx-list",
@@ -5291,68 +5359,6 @@
               "/Models/DataGrid/Employee.cs",
               "/Models/SampleData/DataGridEmployees.cs"
             ]
-          }
-        ]
-      },
-      {
-        "Name": "Tile View",
-        "Breadcrumb": true,
-        "Equivalents": "dxTileView, dx-tile-view",
-        "Demos": [
-          {
-            "Title": "Basics",
-            "Name": "Basics",
-            "DocUrl": "Guide/UI_Components/TileView/Overview/",
-            "Widget": "TileView",
-            "MvcAdditionalFiles": [
-              "/Models/TileViewItem.cs",
-              "/Models/SampleData/TileViewItems.cs"
-            ]
-          },
-          {
-            "Title": "Directions",
-            "Name": "Directions",
-            "DocUrl": "ApiReference/UI_Components/dxTileView/Configuration/#direction",
-            "Widget": "TileView",
-            "MvcAdditionalFiles": [
-              "/Models/TileViewItem.cs",
-              "/Models/SampleData/TileViewItems.cs"
-            ]
-          },
-          {
-            "Title": "Item Template",
-            "Name": "ItemTemplate",
-            "DocUrl": "Guide/UI_Components/TileView/Customize_Tile_Appearance/",
-            "Widget": "TileView",
-            "MvcAdditionalFiles": [
-              "/Models/TileViewItem.cs",
-              "/Models/SampleData/TileViewItems.cs"
-            ]
-          },
-          {
-            "Title": "Item 3rd Party Engine Template",
-            "Name": "Item3RdPartyEngineTemplate",
-            "DocUrl": "Guide/UI_Components/Common/Templates/#3rd-Party_Template_Engines",
-            "Widget": "TileView"
-          }
-        ]
-      },
-      {
-        "Name": "Resizable",
-        "Breadcrumb": false,
-        "Equivalents": "dxResizable, dx-resizable",
-        "Demos": [
-          {
-            "Title": "Overview",
-            "Name": "Overview",
-            "DocUrl": "",
-            "Widget": "Resizable",
-            "MvcAdditionalFiles": [
-              "/Models/Order.cs",
-              "/Models/SampleData/Orders.cs"
-            ],
-            "DemoType": "Web",
-            "WideDemo": true
           }
         ]
       }
