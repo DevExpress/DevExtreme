@@ -93,7 +93,7 @@ const Switch = Editor.inherit({
 
     this._renderClick();
 
-    this.setAria('role', 'switch');
+    this.setAria('role', 'button');
 
     this._renderSwipeable();
 
@@ -333,7 +333,7 @@ const Switch = Editor.inherit({
     this.$element().toggleClass(SWITCH_ON_VALUE_CLASS, value);
     this._getSubmitElement().val(value);
     this.setAria({
-      checked: value,
+      pressed: value,
       label: value ? this.option('switchedOnText') : this.option('switchedOffText'),
     });
   },

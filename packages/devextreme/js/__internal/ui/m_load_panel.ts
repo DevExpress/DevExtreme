@@ -6,7 +6,7 @@ import { extend } from '@js/core/utils/extend';
 import messageLocalization from '@js/localization/message';
 import LoadIndicator from '@js/ui/load_indicator';
 import Overlay from '@js/ui/overlay/ui.overlay';
-import { isFluent, isMaterial } from '@js/ui/themes';
+import { isFluent, isMaterial, isMaterialBased } from '@js/ui/themes';
 
 const LOADPANEL_CLASS = 'dx-loadpanel';
 const LOADPANEL_WRAPPER_CLASS = 'dx-loadpanel-wrapper';
@@ -196,7 +196,7 @@ const LoadPanel = Overlay.inherit({
         this._cleanPreviousContent();
         this._renderLoadIndicator();
         this._renderMessage();
-        this._updateWrapperAria();
+        this._setWrapperAria();
         break;
       case 'showPane':
         this._togglePaneVisible();
