@@ -1,4 +1,5 @@
 /* eslint-disable max-classes-per-file */
+import { equalByValue } from '@js/core/utils/common';
 import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
 
@@ -7,6 +8,7 @@ import {
   EDIT_FORM_CLASS,
   EDIT_MODE_ROW,
   EDIT_ROW,
+  EDITING_EDITROWKEY_OPTION_NAME,
   MODES_WITH_DELAYED_FOCUS,
   ROW_SELECTED_CLASS,
 } from './const';
@@ -32,7 +34,8 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   protected _isDefaultButtonVisible(button, options) {
     const isRowMode = this.isRowBasedEditMode();
-    const isEditRow = this.isEditRow(options?.row?.rowIndex);
+    const isPopupEditMode = this.isPopupEditMode();
+    const isEditRow = !isPopupEditMode && options.row && equalByValue(options.row.key, this.option(EDITING_EDITROWKEY_OPTION_NAME));
 
     if (isRowMode) {
       switch (button.name) {

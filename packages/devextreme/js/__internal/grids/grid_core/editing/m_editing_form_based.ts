@@ -25,7 +25,6 @@ import {
   DATA_EDIT_DATA_INSERT_TYPE,
   EDIT_FORM_ITEM_CLASS,
   EDIT_MODE_FORM,
-  EDIT_MODE_POPUP,
   EDIT_POPUP_CLASS,
   EDIT_POPUP_FORM_CLASS,
   EDITING_EDITROWKEY_OPTION_NAME,
@@ -65,11 +64,6 @@ const editingControllerExtender = (Base: ModuleType<EditingController>) => class
 
   private isFormOrPopupEditMode() {
     return this.isPopupEditMode() || this.isFormEditMode();
-  }
-
-  private isPopupEditMode() {
-    const editMode = this.option('editing.mode');
-    return editMode === EDIT_MODE_POPUP;
   }
 
   private isFormEditMode() {
