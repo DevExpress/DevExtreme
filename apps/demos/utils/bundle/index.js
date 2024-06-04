@@ -5,7 +5,6 @@ const Builder = require('systemjs-builder');
 const babel = require('@babel/core');
 const url = require('url');
 
-
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
   const modules = [
@@ -88,7 +87,7 @@ const prepareDevextremexAngularFiles = () => {
 
   try {
     fs.rmSync(dxNgBaseDir, { recursive: true });
-  } catch (e){}
+  } catch (e) {}
 
   try {
     fs.mkdirSync('../../node_modules/devextreme-angular/bundles');
@@ -97,9 +96,9 @@ const prepareDevextremexAngularFiles = () => {
 
   fs.copySync('./bundles/devextreme-angular', '../../node_modules/devextreme-angular/bundles');
   console.log('Copy devextreme-angular files to node_modules/devextreme-angular/bundles completed!');
-}
+};
 
-const prepareConfigs = (framework)=> {
+const prepareConfigs = (framework) => {
   // eslint-disable-next-line import/no-dynamic-require,global-require
   const currentPackage = require(`devextreme-${framework}/package.json`);
 
@@ -134,9 +133,9 @@ const prepareConfigs = (framework)=> {
 
       const bundlesRoot = '../../node_modules/devextreme-angular/bundles';
       const componentNames = fs.readdirSync(bundlesRoot)
-          .filter((fileName) => fileName.indexOf('umd.js') !== -1)
-          .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
-          .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
+        .filter((fileName) => fileName.indexOf('umd.js') !== -1)
+        .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
+        .map((fileName) => fileName.replace('devextreme-angular-ui-', '').replace('.umd.js', ''));
 
       additionPaths = {
         'devextreme-angular': `${bundlesRoot}/devextreme-angular.umd.js`,
@@ -179,8 +178,8 @@ const prepareConfigs = (framework)=> {
     };
 
     packages = [
-      'react/umd/react.development.js',
-      'react-dom/umd/react-dom.development.js',
+      'react/cjs/react.development.js',
+      'react-dom/cjs/react-dom.development.js',
     ];
   }
 
@@ -192,8 +191,8 @@ const prepareConfigs = (framework)=> {
   });
 
   packages.push(
-      'devextreme/bundles/dx.custom.config.js',
-      main,
+    'devextreme/bundles/dx.custom.config.js',
+    main,
   );
 
   return {
@@ -204,7 +203,7 @@ const prepareConfigs = (framework)=> {
       minify,
       uglify: { mangle: true },
       async fetch(load, fetch) {
-        if(load?.metadata?.transpile) {
+        if (load?.metadata?.transpile) {
           // access to path-specific meta if required: load?.metadata?.babelOptions
           const babelOptions = {
             plugins: [
@@ -212,24 +211,23 @@ const prepareConfigs = (framework)=> {
               '@babel/plugin-transform-object-rest-spread',
               '@babel/plugin-transform-optional-catch-binding',
               '@babel/plugin-transform-optional-chaining',
-            ]
+            ],
           };
-  
+
           const result = new Promise((resolve) => {
             // systemjs-builder uses babel 6, so we use babel 7 here for transpiling ES2020
             babel.transformFile(url.fileURLToPath(load.name), babelOptions, (err, result) => {
-                if(err) {
-                  fetch(load).then(r => resolve(r));
-                  console.log('Unexpected transipling error (babel 7): ' + err);
-                } else {
-                  resolve(result.code);
-                }
+              if (err) {
+                fetch(load).then((r) => resolve(r));
+                console.log(`Unexpected transipling error (babel 7): ${err}`);
+              } else {
+                resolve(result.code);
+              }
             });
-          })
+          });
           return result;
-        } else {
-          return fetch(load);
         }
+        return fetch(load);
       },
     },
   };
@@ -242,7 +240,6 @@ const build = async (framework) => {
   const {
     builderConfig, packages, bundlePath, bundleOpts,
   } = prepareConfigs(framework);
-
 
   builder.config(builderConfig);
 

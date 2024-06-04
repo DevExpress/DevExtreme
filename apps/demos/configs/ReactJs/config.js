@@ -46,8 +46,8 @@ window.config = {
   map: {
     'ts': 'npm:plugin-typescript/lib/plugin.js',
     'typescript': 'npm:typescript/lib/typescript.js',
-    'react': 'npm:react/umd/react.development.js',
-    'react-dom': 'npm:react-dom/umd/react-dom.development.js',
+    'react': 'npm:react/cjs/react.development.js',
+    'react-dom': 'npm:react-dom/cjs/react-dom.development.js',
     'prop-types': 'npm:prop-types/prop-types.js',
     'sha-1': 'npm:sha-1/dist/sha1.cjs.js',
 
