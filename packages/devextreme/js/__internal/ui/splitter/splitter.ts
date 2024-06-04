@@ -230,8 +230,7 @@ class Splitter extends CollectionWidget<Properties> {
   _renderItems(items: Item[]): void {
     super._renderItems(items);
 
-    this._updateResizeHandlesResizableState();
-    this._updateResizeHandlesCollapsibleState();
+    this._updateResizeHandlesStates();
 
     if (isElementVisible($(this.element())[0])) {
       this._layout = this._getDefaultLayoutBasedOnSize();
@@ -774,8 +773,7 @@ class Splitter extends CollectionWidget<Properties> {
     this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
 
-    this._updateResizeHandlesResizableState();
-    this._updateResizeHandlesCollapsibleState();
+    this._updateResizeHandlesStates();
 
     this._fireCollapsedStateChanged(!value, $item, this._savedCollapsingEvent);
 
