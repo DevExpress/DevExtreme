@@ -1,9 +1,7 @@
+import { createRoot } from 'react-dom/client';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 import App from './App.tsx';
 
-ReactDOM.render(
-  <App />,
-  document.getElementById('scheduler'),
-);
+const root = createRoot(document.getElementById('scheduler'));
+root.render(<App />);
