@@ -468,6 +468,8 @@ const Lookup = DropDownList.inherit({
         }
     },
 
+    _renderButtonContainers: noop,
+
     _renderFieldTemplate: function(template) {
         this._$field.empty();
         const data = this._fieldRenderData();
