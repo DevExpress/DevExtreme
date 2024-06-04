@@ -45,8 +45,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2(@angular/compiler@16.2.12(@angular/core@16.2.12(rxjs@7.8.1)(zone.js@0.14.0)))(@angular/core@16.2.12(rxjs@7.8.1)(zone.js@0.14.0))(tslint@6.1.3(typescript@5.4.5))
       devextreme-internal-tools:
-        specifier: 14.0.0-beta.3
-        version: 14.0.0-beta.3
+        specifier: 14.0.0-beta.4
+        version: 14.0.0-beta.4
       http-server:
         specifier: 14.1.1
         version: 14.1.1
@@ -313,8 +313,8 @@ importers:
         specifier: 10.12.1
         version: 10.12.1
       prettier:
-        specifier: 2.8.4
-        version: 2.8.4
+        specifier: 2.8.8
+        version: 2.8.8
       prompts:
         specifier: 2.4.2
         version: 2.4.2
@@ -7289,8 +7289,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-internal-tools@14.0.0-beta.3:
-    resolution: {integrity: sha512-5P+mbM1+qnKSW4iclMnzbtW1oDk3ljmCwKATe6GBsSWHuGzbDqJ0xUorCbB8oYFBeL8Yu+65ebaSIZlyd0zkhw==}
+  devextreme-internal-tools@14.0.0-beta.4:
+    resolution: {integrity: sha512-bSsJI1duDOxfAKsnlaJK7O/lLLlv/EEPEq4Knd5sf7ScwsLdGMrSwIOLlc6+epm9A5rY4D7sRKXaWVo0pLPQ+A==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -12200,6 +12200,11 @@ packages:
 
   prettier@2.8.4:
     resolution: {integrity: sha512-vIS4Rlc2FNh0BySk3Wkd6xmwxB0FpOndW5fisM5H8hsZSxU2VWVB5CWIkIjWvrHjIhxk2g3bfMKM87zNTrZddw==}
+    engines: {node: '>=10.13.0'}
+    hasBin: true
+
+  prettier@2.8.8:
+    resolution: {integrity: sha512-tdN8qQGvNjw4CHbY+XXk0JgCXn9QiF21a55rBe5LJAU+kDyC4WQn4+awm2Xfk2lQMk5fKup9XgzTZtGkjBdP9Q==}
     engines: {node: '>=10.13.0'}
     hasBin: true
 
@@ -20124,7 +20129,7 @@ snapshots:
       jscodeshift: 0.15.2(@babel/preset-env@7.23.9(@babel/core@7.23.9))
       leven: 3.1.0
       ora: 5.4.1
-      prettier: 2.8.4
+      prettier: 2.8.8
       prompts: 2.4.2
       puppeteer-core: 2.1.1
       read-pkg-up: 7.0.1
@@ -20157,7 +20162,7 @@ snapshots:
       globby: 11.1.0
       jscodeshift: 0.15.2(@babel/preset-env@7.23.9(@babel/core@7.23.9))
       lodash: 4.17.21
-      prettier: 2.8.4
+      prettier: 2.8.8
       recast: 0.23.4
     transitivePeerDependencies:
       - supports-color
@@ -24153,7 +24158,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-internal-tools@14.0.0-beta.3:
+  devextreme-internal-tools@14.0.0-beta.4:
     dependencies:
       dasherize: 2.0.0
       deepmerge: 4.3.1
@@ -30707,7 +30712,7 @@ snapshots:
       indent-string: 4.0.0
       lodash.merge: 4.6.2
       loglevel-colored-level-prefix: 1.0.0
-      prettier: 2.8.4
+      prettier: 2.8.8
       pretty-format: 23.6.0
       require-relative: 0.8.7
       typescript: 3.9.10
@@ -30718,6 +30723,8 @@ snapshots:
   prettier@2.3.2: {}
 
   prettier@2.8.4: {}
+
+  prettier@2.8.8: {}
 
   pretty-bytes@5.6.0: {}
 
