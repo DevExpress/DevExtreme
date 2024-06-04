@@ -4,7 +4,7 @@ import { isDefined, isString } from '../../core/utils/type';
 import { ensureDefined } from '../../core/utils/common';
 
 import Widget from '../widget/ui.widget';
-import ContextMenu from '../context_menu/ui.context_menu';
+import ContextMenu from '../context_menu';
 import { extendAttributes } from './ui.file_manager.common';
 
 const FILEMANAGER_CONTEXT_MEMU_CLASS = 'dx-filemanager-context-menu';
