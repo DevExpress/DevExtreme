@@ -140,10 +140,11 @@ function selectionModeValueChanged(e) {
 
 .selected-container {
   padding: 20px;
-  margin-left: 23.33px;
+  margin-left: 23.25px;
   background-color: rgba(191, 191, 191, 0.15);
   font-size: 115%;
   font-weight: bold;
+  letter-spacing: .01125px;
 }
 
 #selected-employees {
@@ -152,6 +153,7 @@ function selectionModeValueChanged(e) {
 
 .selected-container .dx-list-item-content {
   padding-left: 0;
+  letter-spacing: .01125px;
 }
 
 .options {
