@@ -1,4 +1,7 @@
-The [DateBox](/Documentation/ApiReference/UI_Components/dxDateBox/) editor helps users enter or modify date and time values. This demo illustrates the following DateBox properties:
+The [DateBox](/Documentation/ApiReference/UI_Components/dxDateBox/) editor helps users enter or modify date and time values.
+<!--split--> 
+
+This demo illustrates the following DateBox properties:
 
 - [value](/Documentation/ApiReference/UI_Components/dxDateBox/Configuration/#value)     
 A value the DateBox displays.

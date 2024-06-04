@@ -1,4 +1,5 @@
 This demo applies different selection modes and date availability options to the Calendar component.
+<!--split-->
 
 ## Selection Modes
 

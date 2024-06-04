@@ -1,4 +1,5 @@
 This demo shows how you can customize individual points and labels in the Chart component.
+<!--split-->
 
 ## Customize Points
 
