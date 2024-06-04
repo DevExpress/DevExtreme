@@ -462,4 +462,8 @@ function onFontFamilyClick() {
   height: 1px;
   border-bottom: 1px solid #ddd;
 }
+
+.dx-dropdownmenu-popup-wrapper .dx-list-item-content {
+  display: flex;
+}
 </style>
