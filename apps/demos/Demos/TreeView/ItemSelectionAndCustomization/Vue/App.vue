@@ -132,6 +132,10 @@ function selectionModeValueChanged(e) {
   margin-bottom: 20px;
 }
 
+.form {
+  font-size: 0;
+}
+
 .form > div,
 #treeview {
   display: inline-block;
@@ -140,9 +144,9 @@ function selectionModeValueChanged(e) {
 
 .selected-container {
   padding: 20px;
-  margin-left: 24px;
+  margin-left: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-  font-size: 115%;
+  font-size: initial;
   font-weight: bold;
 }
 
