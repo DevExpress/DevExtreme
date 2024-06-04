@@ -239,4 +239,8 @@ function getTopVisibleNode(component) {
 .drive-panel:last-of-type {
   border-right: none;
 }
+
+.dx-sortable {
+  overflow: visible;
+}
 </style>
