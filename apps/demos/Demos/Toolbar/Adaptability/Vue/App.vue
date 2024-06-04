@@ -16,7 +16,7 @@
           >
             <DxButton
               icon="undo"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onUndoButtonClick"
             />
           </DxItem>
@@ -27,7 +27,7 @@
           >
             <DxButton
               icon="redo"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onRedoButtonClick"
             />
           </DxItem>
@@ -48,7 +48,7 @@
               display-expr="text"
               key-expr="size"
               item-template="fontSizeTemplate"
-              stylingMode="text"
+              styling-mode="text"
               :use-select-mode="true"
               :items="fontSizes"
               :selected-item-key="fontSize"
@@ -71,7 +71,7 @@
               icon="indent"
               display-expr="text"
               key-expr="lineHeight"
-              stylingMode="text"
+              styling-mode="text"
               :use-select-mode="true"
               :items="lineHeights"
               :selected-item-key="lineHeight"
@@ -169,7 +169,7 @@
             <DxButton
               icon="link"
               text="Link"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onLinkButtonClick"
             />
           </DxItem>
@@ -183,7 +183,7 @@
             <DxButton
               icon="image"
               text="Add image"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onAddImageButtonClick"
             />
           </DxItem>
@@ -204,7 +204,7 @@
             <DxButton
               icon="clearformat"
               text="Clear formating"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onClearButtonClick"
             />
           </DxItem>
@@ -218,7 +218,7 @@
             <DxButton
               icon="codeblock"
               text="Code block"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onCodeBlockButtonClick"
             />
           </DxItem>
@@ -232,7 +232,7 @@
             <DxButton
               icon="blockquote"
               text="Blockquote"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onQuoteButtonClick"
             />
           </DxItem>
@@ -252,7 +252,7 @@
             <DxButton
               icon="attach"
               text="Attach"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onAttachButtonClick"
             />
           </DxItem>
@@ -265,7 +265,7 @@
             <DxButton
               icon="help"
               text="About"
-              stylingMode="text"
+              styling-mode="text"
               :on-click="onAboutButtonClick"
             />
           </DxItem>
