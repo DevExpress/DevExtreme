@@ -462,6 +462,8 @@ const Lookup = DropDownList.inherit({
         this._$field.text(text);
     },
 
+    _renderButtonContainers: noop,
+
     _renderFieldTemplate: function(template) {
         this._$field.empty();
         const data = this._fieldRenderData();
