@@ -16,7 +16,7 @@ DevExpress.excelExporter = require('../../excel_exporter');
 DevExpress.pdfExporter = require('../../pdf_exporter');
 
 DevExpress.VERSION = require('../../core/version').version;
-DevExpress.reportDependentVersion = require('../../core/version').reportDependentVersion;
+DevExpress.assertDevExtremeVersion = require('../../core/version').assertDevExtremeVersion;
 
 DevExpress.Class = require('../../core/class');
 DevExpress.DOMComponent = require('../../core/dom_component');

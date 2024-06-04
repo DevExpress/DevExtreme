@@ -1,7 +1,7 @@
 import errors from '@js/core/errors';
 
 import { base } from '../../../ui/overlay/z_index';
-import { clearDependentVersions, reportDependentVersion } from '../../utils/version';
+import { assertDevExtremeVersion, clearAssertedVersions } from '../../utils/version';
 import {
   parseLicenseKey,
   setLicenseCheckSkipCondition,
@@ -146,16 +146,25 @@ describe('version mismatch', () => {
 
   afterEach(() => {
     jest.restoreAllMocks();
-    clearDependentVersions();
+    clearAssertedVersions();
   });
 
   test('Perform license check if versions match', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
-    reportDependentVersion('DevExpress.Product.A', CORRECT_VERSION);
-    reportDependentVersion('DevExpress.Product.A', CORRECT_VERSION);
-    reportDependentVersion('DevExpress.Product.B', CORRECT_VERSION);
+    assertDevExtremeVersion('DevExpress.Product.A', CORRECT_VERSION);
+    assertDevExtremeVersion('DevExpress.Product.A', CORRECT_VERSION);
+    assertDevExtremeVersion('DevExpress.Product.B', CORRECT_VERSION);
     validateLicense(token, CORRECT_VERSION);
     expect(errors.log).toHaveBeenCalledWith('W0020');
+  });
+
+  test('Perform version comparison if the license is okay', () => {
+    const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiYVlDN0VIaWJwMHl4dFhUaWhKRVJrQSIsCiAgImZvcm1hdCI6IDEKfQ==.emWMjFDkBI2bvqc6R/hwh//2wE9YqS7yyTPSglqLBP7oPFMthW9tHNHsh1lG8MEuSKoi8TYOY+4R9GgvFi190f62iOy4iz8FenPXZodiv9hgDaovb2eIkwK4pilthOEAS9/JYhgTAentJ1f2+PlbjkTIqvYogk01GrRrd+WOtIA=';
+    assertDevExtremeVersion('DevExpress.Product.A', '1.2.3');
+    assertDevExtremeVersion('DevExpress.Product.B', '1.2.4');
+    validateLicense(token, '1.2.3');
+    expect(errorsLogMock?.mock.calls.length).toEqual(1);
+    expect(errorsLogMock?.mock.calls[0][0]).toEqual('W0023');
   });
 
   test.each([[
@@ -219,7 +228,7 @@ describe('version mismatch', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
 
     reportedVersions.forEach(({ name, version }) => {
-      reportDependentVersion(name, version);
+      assertDevExtremeVersion(name, version);
     });
 
     validateLicense(token, CORRECT_VERSION);
@@ -263,7 +272,7 @@ describe('version mismatch', () => {
     const token = 'ewogICJpbnRlcm5hbFVzYWdlSWQiOiAiUDdmNU5icU9WMDZYRFVpa3Q1bkRyQSIsCiAgImZvcm1hdCI6IDEKfQ==.ox52WAqudazQ0ZKdnJqvh/RmNNNX+IB9cmun97irvSeZK2JMf9sbBXC1YCrSZNIPBjQapyIV8Ctv9z2wzb3BkWy+R9CEh+ev7purq7Lk0ugpwDye6GaCzqlDg+58EHwPCNaasIuBiQC3ztvOItrGwWSu0aEFooiajk9uAWwzWeM=';
 
     reportedVersions.forEach(({ name, version }) => {
-      reportDependentVersion(name, version);
+      assertDevExtremeVersion(name, version);
     });
 
     validateLicense(token, CORRECT_VERSION);

@@ -28,8 +28,3 @@ export interface LicenseCheckParams {
   internal?: true;
   error: LicenseVerifyResult | undefined;
 }
-
-export interface DependentVersion {
-  dependentName: string;
-  version: string;
-}

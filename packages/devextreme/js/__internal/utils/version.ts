@@ -1,14 +1,20 @@
-import type { DependentVersion } from '../core/license/types';
+import errors from '@js/core/errors';
 
 const MAX_MINOR_VERSION = 2;
 const MIN_MINOR_VERSION = 1;
 
-const dependentVersions: DependentVersion[] = [];
+interface AssertedVersion {
+  packageName: string;
+  version: string;
+}
+
+const assertedVersions: AssertedVersion[] = [];
 
 export interface Version {
   major: number;
   minor: number;
   patch: number;
+  buildParts?: number[];
 }
 
 export const VERSION_SPLITTER = '.';
@@ -20,52 +26,45 @@ export function stringifyVersion(version: Version): string {
 }
 
 export function parseVersion(version: string): Version {
-  const [major, minor, patch] = version.split('.').map(Number);
+  const [major, minor, patch, ...rest] = version.split('.').map(Number);
 
   return {
     major,
     minor,
     patch,
+    buildParts: rest || [],
   };
 }
 
-export function reportDependentVersion(dependentName: string, version: string): void {
-  dependentVersions.push({
-    dependentName,
+export function assertDevExtremeVersion(packageName: string, version: string): void {
+  assertedVersions.push({
+    packageName,
     version,
   });
 }
 
-export function getDependentVersions(): DependentVersion[] {
-  return dependentVersions;
-}
-
-export function clearDependentVersions(): void {
+export function clearAssertedVersions(): void {
   /// #DEBUG
-  dependentVersions.splice(0);
+  assertedVersions.splice(0);
   /// #ENDDEBUG
 }
 
-export function stringifyVersionList(dependents: DependentVersion[]): string {
-  return dependents
-    .map((dependent) => `${dependent.dependentName}: ${dependent.version}`)
+function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
+  return assertedVersionList
+    .map((assertedVersion) => `${assertedVersion.packageName}: ${assertedVersion.version}`)
     .join('\n');
 }
 
-export function versionsEqual(versionAStr: string, versionBStr: string): boolean {
-  const versionAComponents = versionAStr.split('.').map(Number);
-  const versionBComponents = versionBStr.split('.').map(Number);
-
-  if (versionAComponents.length !== versionBComponents.length) {
-    return false;
-  }
-
-  const [majorA, minorA, patchA] = versionAComponents;
-  const [majorB, minorB, patchB] = versionBComponents;
-
-  return majorA === majorB
-    && minorA === minorB
-    && patchA === patchB;
+function versionsEqual(versionA: Version, versionB: Version): boolean {
+  return versionA.major === versionB.major
+    && versionA.minor === versionB.minor
+    && versionA.patch === versionB.patch
+    && versionA.buildParts?.length === versionB.buildParts?.length
+    && (!versionA.buildParts?.length
+      || versionA.buildParts?.every(
+        (buildPart, index) => buildPart === versionB.buildParts?.[index],
+      )
+    );
 }
 
 export function getPreviousMajorVersion({ major, minor, patch }: Version): Version {
@@ -82,4 +81,26 @@ export function getPreviousMajorVersion({ major, minor, patch }: Version): Versi
     };
 
   return previousMajorVersion;
+}
+
+export function assertedVersionsCompatible(currentVersion: Version): boolean {
+  const mismatchingVersions = assertedVersions.filter(
+    (assertedVersion) => !versionsEqual(
+      parseVersion(assertedVersion.version),
+      currentVersion,
+    ),
+  );
+
+  if (mismatchingVersions.length) {
+    errors.log('W0023', stringifyVersionList([
+      {
+        packageName: 'devextreme',
+        version: stringifyVersion(currentVersion),
+      },
+      ...mismatchingVersions,
+    ]));
+    return false;
+  }
+
+  return true;
 }

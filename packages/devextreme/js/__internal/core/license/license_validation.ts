@@ -3,13 +3,11 @@ import { version as packageVersion } from '@js/core/version';
 
 import type { Version } from '../../utils/version';
 import {
-  getDependentVersions,
+  assertedVersionsCompatible,
   getPreviousMajorVersion,
   parseVersion,
   stringifyVersion,
-  stringifyVersionList,
   VERSION_SPLITTER,
-  versionsEqual,
 } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
@@ -165,26 +163,11 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   }
   validationPerformed = true;
 
-  const dependentVersions = getDependentVersions();
-  const mismatchingDependents = dependentVersions.filter(
-    (dependent) => !versionsEqual(
-      dependent.version,
-      versionStr,
-    ),
-  );
+  const version = parseVersion(versionStr);
 
-  if (mismatchingDependents.length) {
-    errors.log('W0023', stringifyVersionList([
-      {
-        dependentName: 'devextreme',
-        version: versionStr,
-      },
-      ...mismatchingDependents,
-    ]));
+  if (!assertedVersionsCompatible(version)) {
     return;
   }
-
-  const version = parseVersion(versionStr);
 
   const { internal, error } = getLicenseCheckParams({
     licenseKey,
