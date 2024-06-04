@@ -3336,39 +3336,34 @@ QUnit.module('search', moduleSetup, () => {
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
             QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
                 const $selectBox = $('#selectBox').dxSelectBox({
-                    dataSource: ['one', ''],
-                    fieldTemplate: () => {
-                        return $('<div>').dxTextBox({});
+                    items: [1, 2],
+                    fieldTemplate: (data) => {
+                        return $('<div>').dxTextBox({ value: data });
                     },
-                    searchEnabled: true,
-                    itemTemplate: () => {
-                        return '<div><span></span></div>';
-                    }
+                    showClearButton: true,
+                    value: 1
                 }).dxValidator({
                     validationRules: valueRequired ? [{ type: 'required' }] : [],
                 });
                 const selectBox = $selectBox.dxSelectBox('instance');
                 let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-                assert.equal($input.val(), '', 'input value is empty');
+                assert.equal($input.val(), '1', 'input value is not empty');
                 assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
 
-                keyboardMock($input)
-                    .type('a');
-
-                let listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
-                listItem.trigger('dxclick');
-
-                assert.equal($input.val(), 'one', 'input value is not empty');
-                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
-                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
-
-                listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(1);
-                listItem.trigger('dxclick');
+                const $clearButton = $(toSelector(CLEAR_BUTTON_AREA));
+                $($clearButton).trigger('dxclick');
 
                 assert.equal($input.val(), '', 'input value is empty');
                 $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
                 assert.strictEqual($input.attr('aria-invalid'), emptyValue, `empty input value set aria-invalid to ${emptyValue}`);
+
+                const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
+                listItem.trigger('dxclick');
+
+                assert.equal($input.val(), '1', 'input value is not empty');
+                $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `non empty input value set aria-invalid to ${nonEmptyValue}`);
             });
         });
 
