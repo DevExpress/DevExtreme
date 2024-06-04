@@ -6,7 +6,7 @@ import 'whatwg-fetch';
 const employees = service.getEmployees();
 
 export default function App() {
-  const diagramRef = useRef<DiagramRef>();
+  const diagramRef = useRef<DiagramRef>(undefined);
 
   useEffect(() => {
     const diagram = diagramRef.current.instance();

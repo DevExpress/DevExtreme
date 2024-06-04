@@ -1,3 +1,4 @@
+import type * as PropTypes from "prop-types";
 import React, { useCallback, useRef, useState } from 'react';
 import Form, {
   ButtonItem,
@@ -154,7 +155,7 @@ function App() {
     onValueChanged: () => {
       const editor = formRef.current.instance().getEditor('ConfirmPassword');
       if (editor.option('value')) {
-        const instance = Validator.getInstance(editor.element()) as Validator;
+        const instance = Validator.getInstance(editor.element()) as PropTypes.Validator;
         instance.validate();
       }
     },

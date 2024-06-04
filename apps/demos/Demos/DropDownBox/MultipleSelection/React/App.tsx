@@ -29,7 +29,7 @@ const gridDataSource = makeAsyncDataSource('customers.json');
 function App() {
   const [treeBoxValue, setTreeBoxValue] = useState(['1_1']);
   const [gridBoxValue, setGridBoxValue] = useState([3]);
-  const treeViewRef = useRef<TreeViewRef>();
+  const treeViewRef = useRef<TreeViewRef>(undefined);
 
   const treeViewRender = useCallback(
     () => (
