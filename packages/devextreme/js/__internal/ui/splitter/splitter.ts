@@ -219,7 +219,10 @@ class Splitter extends CollectionWidget<Properties> {
       return;
     }
 
-    this._updateItemsLayout();
+    this._layout = this._getDefaultLayoutBasedOnSize();
+
+    this._applyStylesFromLayout(this._layout);
+    this._updateItemSizes();
 
     this._shouldRecalculateLayout = false;
   }
@@ -227,10 +230,14 @@ class Splitter extends CollectionWidget<Properties> {
   _renderItems(items: Item[]): void {
     super._renderItems(items);
 
-    this._updateResizeHandlesStates();
+    this._updateResizeHandlesResizableState();
+    this._updateResizeHandlesCollapsibleState();
 
     if (isElementVisible($(this.element())[0])) {
-      this._updateItemsLayout();
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      this._applyStylesFromLayout(this._layout);
+
+      this._updateItemSizes();
     } else {
       this._shouldRecalculateLayout = true;
     }
@@ -306,21 +313,15 @@ class Splitter extends CollectionWidget<Properties> {
     super._fireContentReadyAction();
 
     if (this.option('repaintChangesOnly')) {
-      this._updateResizeHandlesStates();
-      this._updateItemsLayout();
+      this._updateResizeHandlesResizableState();
+      this._updateResizeHandlesCollapsibleState();
+
+      this._layout = this._getDefaultLayoutBasedOnSize();
+      this._applyStylesFromLayout(this.getLayout());
+      this._updateItemSizes();
+
       this._processRenderQueue();
     }
-  }
-
-  _updateItemsLayout(): void {
-    this._layout = this._getDefaultLayoutBasedOnSize();
-    this._applyStylesFromLayout(this.getLayout());
-    this._updateItemSizes();
-  }
-
-  _updateResizeHandlesStates(): void {
-    this._updateResizeHandlesResizableState();
-    this._updateResizeHandlesCollapsibleState();
   }
 
   _updateResizeHandlesResizableState(): void {
@@ -670,7 +671,10 @@ class Splitter extends CollectionWidget<Properties> {
       case 'maxSize':
       case 'minSize':
       case 'collapsedSize':
-        this._updateItemsLayout();
+        this._layout = this._getDefaultLayoutBasedOnSize();
+
+        this._applyStylesFromLayout(this.getLayout());
+        this._updateItemSizes();
         break;
       case 'collapsed':
         this._itemCollapsedOptionChanged(item, value as boolean, prevValue as boolean);
@@ -762,7 +766,8 @@ class Splitter extends CollectionWidget<Properties> {
     this._applyStylesFromLayout(this.getLayout());
     this._updateItemSizes();
 
-    this._updateResizeHandlesStates();
+    this._updateResizeHandlesResizableState();
+    this._updateResizeHandlesCollapsibleState();
 
     this._fireCollapsedStateChanged(!value, $item, this._savedCollapsingEvent);
 
