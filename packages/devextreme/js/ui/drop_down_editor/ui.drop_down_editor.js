@@ -413,7 +413,7 @@ const DropDownEditor = TextBox.inherit({
 
     _integrateInput: function() {
         const isValid = this.option('isValid') && this.option('validationStatus') !== 'invalid';
-        debugger
+
         this._renderFocusState();
         this._refreshValueChangeEvent();
         this._refreshEvents();
