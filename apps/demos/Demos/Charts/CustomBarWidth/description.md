@@ -1,5 +1,5 @@
 This demo illustrates how to use the [barPadding](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#barPadding) property to customize bar width.
-<--split-->
+<!--split-->
 
 ## Bind to Data
 

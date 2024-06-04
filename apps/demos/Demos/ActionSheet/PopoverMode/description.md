@@ -1,2 +1,2 @@
 ActionSheet can appear at the bottom of the page or over a certain element. Enable the [usePopover](/Documentation/ApiReference/UI_Components/dxActionSheet/Configuration/#usePopover) property to display ActionSheet over a certain element on the page and use the [target](/Documentation/ApiReference/UI_Components/dxActionSheet/Configuration/#target) property to specify this element. In this demo, ActionSheet is integrated with the List component and appears when you click a list item.
-<--split-->
+<!--split-->

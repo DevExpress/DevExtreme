@@ -1,5 +1,5 @@
 The field chooser allows users to manage pivot grid fields. You can configure the field chooser integrated into the PivotGrid or [use it as a standalone component](https://js.devexpress.com/Demos/WidgetsGallery/Demo/PivotGrid/StandaloneFieldChooser/). This example demonstrates the integrated field chooser. To open the field chooser window, click the icon in the top-left corner or right-click a row or column header and select Show Field Chooser from the context menu.
-<--split-->
+<!--split-->
 
 ### Enable the Integrated Field Chooser
 

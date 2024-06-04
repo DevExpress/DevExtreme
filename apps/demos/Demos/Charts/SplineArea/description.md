@@ -1,5 +1,5 @@
 Spline area series display smooth lines that connect data points. This demo shows different spline area [series types](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#type). Use the drop-down editor below the Chart to select the type.
-<--split-->
+<!--split-->
 
 - *splinearea*    
 The spline area series draws a line between neighboring data points and fills the area under the line. If the Chart contains multiple area series, they overlap.

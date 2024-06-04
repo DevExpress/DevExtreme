@@ -1,5 +1,5 @@
 The Lookup component allows users to search through its drop-down list and select a single item. The drop-down list can be grouped by category.
-<--split-->
+<!--split-->
 
 ### Bind the Component to Data
 To bind the component to data, use one of these properties:

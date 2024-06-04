@@ -5,7 +5,7 @@ Assigns a local array as done in this demo.
 
 * [dataSource](/Documentation/ApiReference/UI_Components/dxTreeView/Configuration/#dataSource)            
 Assigns a DataSource object that allows you to perform data shaping operations and use a remote source. 
-<--split-->
+<!--split-->
 
 Each object in the TreeView's hierarchical data structure should include the following fields:
 

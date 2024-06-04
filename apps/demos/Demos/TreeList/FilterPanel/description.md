@@ -1,5 +1,5 @@
 The [filterPanel](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/filterPanel/) displays the combined filter in the bottom of the TreeList. This filter is stored in the [filterValue](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#filterValue) property and consists of conditions that a user applied in the following UI elements: [filter row](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/filterRow/), [header filter](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/headerFilter/), [filterBuilder](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#filterBuilder). Users can deselect the checkbox in the filter panel to temporarily deactivate the current filter.
-<--split-->
+<!--split-->
 
 To display the filter panel, set the **filterPanel**.[visible](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/filterPanel/#visible) property to **true**. 
 

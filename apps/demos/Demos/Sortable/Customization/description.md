@@ -1,5 +1,5 @@
 This demo illustrates some of the properties that allow you to customize the [Sortable](/Documentation/ApiReference/UI_Components/dxSortable/) component's behavior.
-<--split-->
+<!--split-->
 
 - [dropFeedbackMode](/Documentation/ApiReference/UI_Components/dxSortable/Configuration/#dropFeedbackMode)    
   Specifies how to highlight the item's drop position.

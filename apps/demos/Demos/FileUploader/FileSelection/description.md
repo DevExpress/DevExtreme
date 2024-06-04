@@ -1,5 +1,5 @@
 The FileUploader component allows an&nbsp;end user to&nbsp;upload files to&nbsp;the server. This demo illustrates the use of&nbsp;the FileUploader within a&nbsp;web page. To&nbsp;select a&nbsp;file using the **Open file** dialog, click the _Select photo_ button. Note that the **Open file** dialog only accepts image file types as&nbsp;the **accept** configuration property of&nbsp;the FileUploader is&nbsp;set to&nbsp;_&laquo;image/\*&raquo;_. 
-<--split-->
+<!--split-->
 
 To see an example of server-side implementation, refer to the **HTML Form Upload** article for [ASP.NET](/Documentation/Guide/UI_Components/FileUploader/Upload_Files/Server-Side_Implementation_in_ASP.NET/#HTML_Form_Upload) or [PHP](/Documentation/Guide/UI_Components/FileUploader/Upload_Files/Server-Side_Implementation_in_PHP/#HTML_Form_Upload).
 

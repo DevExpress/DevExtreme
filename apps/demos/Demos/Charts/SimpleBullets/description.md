@@ -1,5 +1,5 @@
 Bullet charts are useful when you need to compare a single measure to a target value. A bullet bar indicates the measure and a vertical line indicates the target value. The bullet also includes a zero level line that indicates zero on the scale.
-<--split-->
+<!--split-->
 
 ## Configure the Bullet Bar
 

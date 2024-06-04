@@ -1,5 +1,5 @@
 TreeList can display a popup edit form. The form can include any fields from the bound data source, regardless of whether the corresponding column is visible in the grid (see the `Head` column).
-<--split-->
+<!--split-->
 
 To enable this behavior in your application, do the following:
 - Set **editing**.[mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/editing/#mode) to *"popup"*.

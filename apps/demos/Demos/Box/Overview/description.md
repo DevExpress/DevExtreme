@@ -1,5 +1,5 @@
 The Box component allows you to create layouts of any complexity. You can arrange multiple blocks (items) horizontally or vertically, specify relative or absolute block sizes, and nest layouts within each other. 
-<--split-->
+<!--split-->
 
 Set the Box's [width](/Documentation/ApiReference/UI_Components/dxBox/Configuration/#width) and [height](/Documentation/ApiReference/UI_Components/dxBox/Configuration/#height) properties to specify the layout's overall dimensions. To add blocks, use the [items](/Documentation/ApiReference/UI_Components/dxBox/Configuration/items/) array, the [dataSource](/Documentation/ApiReference/UI_Components/dxBox/Configuration/#dataSource) property, or specify dxItems in the markup.
 

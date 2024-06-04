@@ -1,5 +1,5 @@
 This demo shows two DataGrids in different tabs. Click the **Export multiple grids** button to export two grids and arrange them on different pages of the PDF document. 
-<--split-->
+<!--split-->
 
 To implement this functionality, call the [exportDataGrid(options)](/Documentation/ApiReference/Common/Utils/pdfExporter/#exportDataGridoptions) methods in a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Promise/then" target="_blank">chain of Promises</a>, one after another. Use the **jsPDF**.<a href="https://raw.githack.com/parallax/jsPDF/master/docs/jsPDF.html#addPage" target="_blank">addPage()</a> method to add a page in the PDF document.
 

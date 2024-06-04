@@ -1,5 +1,5 @@
 The TreeMap component visualizes data as a set of rectangles (tiles). The tile size corresponds to a data point value relative to other data points. 
-<--split-->
+<!--split-->
 
 The TreeMap component works with collections of objects. If objects in your collection have a plain structure, the component visualizes them as tiles. If your data is hierarchical, the TreeMap displays it as a group of nested tiles.
 

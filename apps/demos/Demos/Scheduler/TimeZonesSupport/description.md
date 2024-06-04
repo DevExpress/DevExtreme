@@ -1,5 +1,5 @@
 The Scheduler allows its users to view appointments in different time zones. Set the [timeZone](/Documentation/ApiReference/UI_Components/dxScheduler/Configuration/#timeZone) property to specify the current time zone. This property accepts values from the <a href="https://en.wikipedia.org/wiki/List_of_tz_database_time_zones" target="_blank">IANA time zone database</a>.
-<--split-->
+<!--split-->
 
 In this demo, you can use the drop-down menu above the Scheduler to choose between the London, Berlin, and Helsinki time zones. To populate the menu, the [getTimeZones](/Documentation/ApiReference/Common/Utils/utils/#getTimeZonesdate) utility method is used. It returns a list of all IANA time zones that is then filtered.
 

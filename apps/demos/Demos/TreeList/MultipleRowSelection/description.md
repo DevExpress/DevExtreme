@@ -1,5 +1,5 @@
 This demo enables multiple selection [mode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/selection/#mode). This mode allows users to press keyboard shortcuts or click checkboxes to select multiple rows.
-<--split-->
+<!--split-->
 
 The checkbox in the leftmost column header selects all rows. You can set the [allowSelectAll](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/selection/#allowSelectAll) property to **false** to disable the checkbox.
 

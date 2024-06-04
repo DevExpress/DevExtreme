@@ -1,5 +1,5 @@
 The RadioGroup component contains a set of radio buttons and allows users to select one item from it. This demo illustrates how to bind the component to data, change the component layout, define a custom template, and handle the value change event.
-<--split-->
+<!--split-->
 
 ## Bind RadioGroup to Data
 

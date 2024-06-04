@@ -1,5 +1,5 @@
 ﻿This demo shows how to validate Form editors. To apply validation rules to an editor, declare them in the [validationRules](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/) array. Specify [type](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/RequiredRule/#type) and other properties for each rule. 
-<--split-->
+<!--split-->
 
 The following validation rules are shown in this demo:  
 - [RequiredRule](/Documentation/ApiReference/UI_Components/dxValidator/Validation_Rules/RequiredRule/)  

@@ -1,5 +1,5 @@
 The NumberBox is a component that displays a number. Users can change this number (for example, type a new value or use the spin buttons, keyboard arrows, or mouse wheel to increment/decrement it).
-<--split-->
+<!--split-->
 
 Use the [value](/Documentation/ApiReference/UI_Components/dxNumberBox/Configuration/#value) property to specify the number displayed in the NumberBox. If you do not specify the **value** property, the NumberBox displays 0 (the default value). You can use the [min](/Documentation/ApiReference/UI_Components/dxNumberBox/Configuration/#min) and [max](/Documentation/ApiReference/UI_Components/dxNumberBox/Configuration/#max) properties to set the value range.
 

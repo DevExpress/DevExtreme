@@ -1,5 +1,5 @@
 Autocomplete is a text box that displays suggestions while a user types. This demo shows how to customize the Autocomplete component and handle value changes.
-<--split-->
+<!--split-->
 
 ## Bind Autocomplete to Data
 

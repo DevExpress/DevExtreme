@@ -1,4 +1,4 @@
 This demo illustrates a common issue in multi-series charts. Individual [series](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/BarSeries/) can skip values for certain arguments or include zero values. In such cases, arguments can display a different number of bars and cause uneven gaps between data. 
-<--split-->
+<!--split-->
 
 The [ignoreEmptyPoints](/Documentation/ApiReference/UI_Components/dxChart/Series_Types/BarSeries/#ignoreEmptyPoints) property allows you to change this behavior. If you set it to **true**, bars increase their width to fill the gaps. In this demo, you can see how the property affects the following arguments: `Iran`, `Canada`, `Saudi Arabia`, and `Mexico`.

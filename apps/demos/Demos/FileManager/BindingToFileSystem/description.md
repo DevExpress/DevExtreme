@@ -1,5 +1,5 @@
 The FileManager component can work with a file system located on the server. To connect the component with the file system items, assign the [Remote File System Provider](/Documentation/ApiReference/UI_Components/dxFileManager/File_System_Providers/Remote/) to the [fileSystemProvider](/Documentation/ApiReference/UI_Components/dxFileManager/Configuration/#fileSystemProvider) property. Pass the [endpointUrl](/Documentation/ApiReference/UI_Components/dxFileManager/File_System_Providers/Remote/Configuration/#endpointUrl) to the remote file system provider object to specify the Url at which the component can access the file system items.
-<--split-->
+<!--split-->
 
 Configure the built-in server-side helper methods to process the FileManager component's AJAX requests on the ASP.NET MVC and ASP.NET Core back-end:
 1. Create an instance of the [FileSystemConfiguration](https://docs.devexpress.com/AspNetCore/DevExtreme.AspNet.Mvc.FileManagement.FileSystemConfiguration) class to create a file system provider and configure its interaction with file system items.

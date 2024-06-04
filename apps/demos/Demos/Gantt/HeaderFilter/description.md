@@ -1,5 +1,5 @@
 The DevExtreme JavaScript **Gantt** component allows users to filter a particular column by values listed in a pop-up menu. To open this menu, click the filter icon in the column header.
-<--split-->
+<!--split-->
 
 ## Display Header Filter Icons
 

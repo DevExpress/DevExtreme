@@ -1,5 +1,5 @@
 This demo shows options that you can use to colorize TreeMap tiles. To see each option, use the drop-down editor below the component.
-<--split-->
+<!--split-->
 
 To colorize the TreeMap tiles, you can use the [colorizer](/Documentation/ApiReference/UI_Components/dxTreeMap/Configuration/colorizer/) object. This object allows you to specify the colorization [type](/Documentation/ApiReference/UI_Components/dxTreeMap/Configuration/colorizer/#type):
 

@@ -1,5 +1,5 @@
 PivotGrid supports the drill-down operation that allows you to retrieve individual facts (records) used to calculate a specific summary value.
-<--split-->
+<!--split-->
 
 Call the [createDrillDownDataSource(options)](/Documentation/ApiReference/Data_Layer/PivotGridDataSource/Methods/#createDrillDownDataSourceoptions) method to get a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) instance that contains a list of facts for a summary value.
 

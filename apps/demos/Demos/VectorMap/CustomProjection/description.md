@@ -1,2 +1,2 @@
 This demo illustrates how to implement a custom projection. To do it, set the [aspectRatio](/Documentation/ApiReference/UI_Components/dxVectorMap/Configuration/projection/#aspectRatio), [to](/Documentation/ApiReference/UI_Components/dxVectorMap/Configuration/projection/#to), and [from](/Documentation/ApiReference/UI_Components/dxVectorMap/Configuration/projection/#from) properties. The&nbsp;Wagner-VI projection is used in this example.
-<--split-->
+<!--split-->

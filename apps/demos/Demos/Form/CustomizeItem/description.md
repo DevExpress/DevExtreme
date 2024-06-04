@@ -1,5 +1,5 @@
 You can use the [items[]](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#items) array to configure all form items. This array can contain strings ([formData](/Documentation/ApiReference/UI_Components/dxForm/Configuration/#formData) field names) and objects (item configurations). 
-<--split-->
+<!--split-->
 
 Use a string to create a simple item with default configuration as shown for the **Email** item. 
 

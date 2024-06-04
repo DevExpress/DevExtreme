@@ -1,4 +1,4 @@
 If your server stores data in JSON format, you do not need to make AJAX requests to get the data. Instead, assign the URL of your data storage to the Chart's [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource) property. To configure how the component displays data, specify the [series](Documentation/ApiReference/UI_Components/dxChart/Configuration/series/) type and its nested options: [argumentField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#argumentField) and [valueField](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/#valueField), so the component can determine the object fields that indicate Chart arguments and values in JSON.
-<--split-->
+<!--split-->
 
 Note that you can also use a JSONP callback parameter supported by <a href="http://api.jquery.com/jQuery.ajax/" target="_blank">jQuery.ajax()</a> in the [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource).

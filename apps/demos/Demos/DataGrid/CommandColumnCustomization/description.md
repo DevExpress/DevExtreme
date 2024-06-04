@@ -1,5 +1,5 @@
 The DataGrid supports multiple predefined types of [command columns](/Documentation/Guide/UI_Components/DataGrid/Columns/Column_Types/Command_Columns/). Each column type supports one type of action (edit, select, drag, etc.). This demo shows how to customize the Edit Command Column. This column type contains predefined edit buttons and optional custom buttons.
-<--split-->
+<!--split-->
 
 **Predefined buttons**           
 The available selection of predefined buttons depends on the selected [edit mode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#mode), and the availability of the update and delete operations. To enable them, set the [allowUpdating](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#allowUpdating) and [allowDeleting](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/editing/#allowDeleting) properties to **true**. You can also set any of these properties to a custom function that enables the corresponding operation and displays its button only for certain rows.
