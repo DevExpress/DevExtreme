@@ -592,25 +592,22 @@ class Splitter extends CollectionWidget<Properties> {
       index = isCollapsed ? leftItemIndex : rightItemIndex;
     }
 
-    if (isCollapsed) {
-      this._updateItemData('collapsed', index, !isCollapsed, false);
+    if (!isCollapsed && this.option('repaintChangesOnly')) {
+      this._itemCollapsedOptionChanged(
+        this._getItemDataByIndex(index),
+        !isCollapsed,
+        isCollapsed,
+      );
+    }
 
-      if (this.option('repaintChangesOnly')) {
-        this._itemCollapsedOptionChanged(
-          this._getItemDataByIndex(index),
-          !isCollapsed,
-          isCollapsed,
-        );
-      }
-    } else {
-      if (this.option('repaintChangesOnly')) {
-        this._itemCollapsedOptionChanged(
-          this._getItemDataByIndex(index),
-          !isCollapsed,
-          isCollapsed,
-        );
-      }
-      this._updateItemData('collapsed', index, !isCollapsed, false);
+    this._updateItemData('collapsed', index, !isCollapsed, false);
+
+    if (isCollapsed && this.option('repaintChangesOnly')) {
+      this._itemCollapsedOptionChanged(
+        this._getItemDataByIndex(index),
+        !isCollapsed,
+        isCollapsed,
+      );
     }
   }
 
