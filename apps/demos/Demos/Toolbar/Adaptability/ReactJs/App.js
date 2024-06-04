@@ -149,6 +149,7 @@ function App() {
             <Item location="before">
               <Button
                 icon="undo"
+                stylingMode="text"
                 onClick={onUndoButtonClick}
               ></Button>
             </Item>
@@ -156,6 +157,7 @@ function App() {
             <Item location="before">
               <Button
                 icon="redo"
+                stylingMode="text"
                 onClick={onRedoButtonClick}
               ></Button>
             </Item>
@@ -177,6 +179,7 @@ function App() {
                 displayExpr="text"
                 keyExpr="size"
                 useSelectMode={true}
+                stylingMode="text"
                 items={fontSizes}
                 selectedItemKey={fontSize}
                 itemRender={renderFontSize}
@@ -194,6 +197,7 @@ function App() {
                 displayExpr="text"
                 keyExpr="lineHeight"
                 useSelectMode={true}
+                stylingMode="text"
                 items={lineHeights}
                 selectedItemKey={lineHeight}
                 onSelectionChanged={onLineHeightChanged}
@@ -291,6 +295,7 @@ function App() {
               <Button
                 icon="link"
                 text="Link"
+                stylingMode="text"
                 onClick={onLinkButtonClick}
               ></Button>
             </Item>
@@ -304,6 +309,7 @@ function App() {
               <Button
                 icon="image"
                 text="Add image"
+                stylingMode="text"
                 onClick={onAddImageButtonClick}
               ></Button>
             </Item>
@@ -325,6 +331,7 @@ function App() {
               <Button
                 icon="clearformat"
                 text="Clear formating"
+                stylingMode="text"
                 onClick={onClearButtonClick}
               ></Button>
             </Item>
@@ -338,6 +345,7 @@ function App() {
               <Button
                 icon="codeblock"
                 text="Code block"
+                stylingMode="text"
                 onClick={onCodeBlockButtonClick}
               ></Button>
             </Item>
@@ -351,6 +359,7 @@ function App() {
               <Button
                 icon="blockquote"
                 text="Blockquote"
+                stylingMode="text"
                 onClick={onQuoteButtonClick}
               ></Button>
             </Item>
@@ -371,6 +380,7 @@ function App() {
               <Button
                 icon="attach"
                 text="Attach"
+                stylingMode="text"
                 onClick={onAttachButtonClick}
               ></Button>
             </Item>
@@ -383,6 +393,7 @@ function App() {
               <Button
                 icon="help"
                 text="About"
+                stylingMode="text"
                 onClick={onAboutButtonClick}
               ></Button>
             </Item>

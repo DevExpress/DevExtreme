@@ -16,6 +16,7 @@
           >
             <DxButton
               icon="undo"
+              stylingMode="text"
               :on-click="onUndoButtonClick"
             />
           </DxItem>
@@ -26,6 +27,7 @@
           >
             <DxButton
               icon="redo"
+              stylingMode="text"
               :on-click="onRedoButtonClick"
             />
           </DxItem>
@@ -46,6 +48,7 @@
               display-expr="text"
               key-expr="size"
               item-template="fontSizeTemplate"
+              stylingMode="text"
               :use-select-mode="true"
               :items="fontSizes"
               :selected-item-key="fontSize"
@@ -68,6 +71,7 @@
               icon="indent"
               display-expr="text"
               key-expr="lineHeight"
+              stylingMode="text"
               :use-select-mode="true"
               :items="lineHeights"
               :selected-item-key="lineHeight"
@@ -165,6 +169,7 @@
             <DxButton
               icon="link"
               text="Link"
+              stylingMode="text"
               :on-click="onLinkButtonClick"
             />
           </DxItem>
@@ -178,6 +183,7 @@
             <DxButton
               icon="image"
               text="Add image"
+              stylingMode="text"
               :on-click="onAddImageButtonClick"
             />
           </DxItem>
@@ -198,6 +204,7 @@
             <DxButton
               icon="clearformat"
               text="Clear formating"
+              stylingMode="text"
               :on-click="onClearButtonClick"
             />
           </DxItem>
@@ -211,6 +218,7 @@
             <DxButton
               icon="codeblock"
               text="Code block"
+              stylingMode="text"
               :on-click="onCodeBlockButtonClick"
             />
           </DxItem>
@@ -224,6 +232,7 @@
             <DxButton
               icon="blockquote"
               text="Blockquote"
+              stylingMode="text"
               :on-click="onQuoteButtonClick"
             />
           </DxItem>
@@ -243,6 +252,7 @@
             <DxButton
               icon="attach"
               text="Attach"
+              stylingMode="text"
               :on-click="onAttachButtonClick"
             />
           </DxItem>
@@ -255,6 +265,7 @@
             <DxButton
               icon="help"
               text="About"
+              stylingMode="text"
               :on-click="onAboutButtonClick"
             />
           </DxItem>
