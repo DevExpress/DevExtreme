@@ -179,8 +179,8 @@ const prepareConfigs = (framework)=> {
     };
 
     packages = [
-      'react/umd/react.development.js',
-      'react-dom/umd/react-dom.development.js',
+      'react/cjs/react.development.js',
+      'react-dom/cjs/react-dom.development.js',
     ];
   }
 
