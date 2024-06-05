@@ -25713,10 +25713,6 @@ declare module DevExpress.ui {
      */
     items?: Array<TItem>;
     /**
-     * [descr:dxSplitterOptions.repaintChangesOnly]
-     */
-    repaintChangesOnly?: boolean;
-    /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
      */
     allowKeyboardNavigation?: boolean;
