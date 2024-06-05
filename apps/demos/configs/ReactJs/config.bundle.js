@@ -31,11 +31,11 @@ const bundleConfig = {
   packages: {
     'react': {
       defaultExtension: 'js',
-      main: 'umd/react.development.js',
+      main: 'cjs/react.development.js',
     },
     'react-dom': {
       defaultExtension: 'js',
-      main: 'umd/react-dom.development.js',
+      main: 'cjs/react-dom.development.js',
     },
   },
 };
