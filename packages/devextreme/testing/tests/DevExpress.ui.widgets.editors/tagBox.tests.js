@@ -6822,6 +6822,31 @@ QUnit.module('performance', () => {
         assert.ok($.isFunction(filter), 'filter is function');
     });
 
+    QUnit.test('subsequent added values should be correctly displayed when valueExpr is function and hideSelectedItems is enabled (T1234032)', function(assert) {
+        const load = sinon.stub().returns([{ id: 1, name: 'item1' }, { id: 2, name: 'item2' }]);
+
+        const $tagBox = $('#tagBox').dxTagBox({
+            dataSource: {
+                load
+            },
+            valueExpr() {
+                return 'id';
+            },
+            displayExpr: 'name',
+            hideSelectedItems: true,
+            opened: true,
+        });
+
+        const tagBox = $tagBox.dxTagBox('instance');
+        const $item = $(getList(tagBox).find('.dx-list-item').eq(0));
+
+        $item.trigger('dxclick');
+
+        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+        assert.strictEqual($.trim($tagContainer.text()), 'item1item2', 'selected values are displayed correctly');
+    });
+
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {
         const load = sinon.stub().returns([{ id: 1, text: 'item 1' }, { id: 2, text: 'item 2' }]);
 
