@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <title>DevExtreme jQuery Example</title>
 
@@ -18,9 +19,9 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <!-- HtmlEditor -->
-    <!-- <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script> -->
+    <script type="text/javascript" src="../artifacts/js/dx-quill.min.js"></script>
 
-    <!--<script type="text/javascript" src="../artifacts/js/cldr.js"></script>
+    <script type="text/javascript" src="../artifacts/js/cldr.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/event.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/supplemental.js"></script>
     <script type="text/javascript" src="../artifacts/js/cldr/unresolved.js"></script>
@@ -28,20 +29,42 @@
     <script type="text/javascript" src="../artifacts/js/globalize/message.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/number.js"></script>
     <script type="text/javascript" src="../artifacts/js/globalize/currency.js"></script>
-    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>-->
+    <script type="text/javascript" src="../artifacts/js/globalize/date.js"></script>
 
-    <!--
+    
     <script type="text/javascript" src="../artifacts/js/exceljs.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/FileSaver.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jszip.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jspdf.umd.min.js"></script>
     <script type="text/javascript" src="../artifacts/js/jspdf.plugin.autotable.min.js"></script>
-    -->
+   
 
+    <script src="https://unpkg.com/turndown@7.1.2/dist/turndown.js"></script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+    <script src="https://unpkg.com/prettier@2.8.4/standalone.js"></script>
+    <script src="https://unpkg.com/prettier@2.8.4/parser-html.js"></script>
     <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../../../node_modules/axe-core/axe.min.js"></script>
+
+    <style>
+        .value-content {
+            margin-top: 20px;
+            overflow: auto;
+            height: 110px;
+            width: 100%;
+            white-space: pre-wrap;
+        }
+
+        .options {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: rgba(191, 191, 191, 0.15);
+            box-sizing: border-box;
+            width: 100%;
+        }
+    </style>
 </head>
+
 <body class="dx-surface">
     <div role="main">
         <h1 style="position: fixed; left: 0; top: 0; clip: rect(1px, 1px, 1px, 1px);">Test header</h1>
@@ -49,15 +72,96 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div class="dx-viewport">
+            <div class="demo-container">
+                <div class="html-editor"></div>
+                <div class="options">
+                    <div class="value-types"></div>
+                    <div class="value-content" tabindex="0"></div>
+                </div>
+            </div>
+        </div>
         <script>
-            $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+            const markup = `
+                # Title
+
+                <table>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <p>custom<br /></p>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            `;
+
+            $(() => {
+                const formatOutput = (value, valueType) => {
+                    const formattedValue = valueType === 'html' ? prettierFormat(value) : value;
+                    $('.value-content').text(formattedValue);
+                };
+
+                const editorInstance = $('.html-editor').dxHtmlEditor({
+                    height: 300,
+                    // valueType: 'markdown',
+                    value: markup,
+                    toolbar: {
+                        items: [
+                            'insertTable',
+                            'undo', 'redo', 'separator',
+                            {
+                                name: 'size',
+                                acceptedValues: ['8pt', '10pt', '12pt', '14pt', '18pt', '24pt', '36pt'],
+                                options: {
+                                    inputAttr: {
+                                        'aria-label': 'Font size',
+                                    },
+                                },
+                            },
+                            {
+                                name: 'font',
+                                acceptedValues: ['Arial', 'Courier New', 'Georgia', 'Impact', 'Lucida Console', 'Tahoma', 'Times New Roman', 'Verdana'],
+                                options: {
+                                    inputAttr: {
+                                        'aria-label': 'Font family',
+                                    },
+                                },
+                            },
+                            'separator',
+                            'bold', 'italic', 'strike', 'underline', 'separator',
+                            'alignLeft', 'alignCenter', 'alignRight', 'alignJustify', 'separator',
+                            'color', 'background',
+                        ],
+                    },
+                    onValueChanged({ component, value }) {
+                        formatOutput(value, component.option('valueType'));
+                    },
+                }).dxHtmlEditor('instance');
+
+                $('.value-types').dxButtonGroup({
+                    items: [{ text: 'Html' }, { text: 'Markdown' }],
+                    selectedItemKeys: ['Markdown'],
+                    // selectedItemKeys: ['Html'],
+                    onSelectionChanged(e) {
+                        const valueType = e.addedItems[0].text.toLowerCase();
+                        editorInstance.option({ valueType });
+                        const value = editorInstance.option('value');
+                        formatOutput(value, valueType);
+                    },
                 });
+
+                formatOutput(markup, 'markdown');
             });
+
+            function prettierFormat(markup) {
+                return prettier.format(markup, {
+                    parser: 'html',
+                    plugins: prettierPlugins,
+                });
+            }
         </script>
     </div>
 </body>
+
 </html>

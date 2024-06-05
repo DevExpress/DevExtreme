@@ -1,6 +1,8 @@
 
 import TurnDown from 'turndown';
-import ShowDown from 'showdown';
+import { unified } from 'unified';
+import remarkParse from 'remark-parse';
+import remarkHtml from 'remark-html';
 
 import { getWindow } from '../../../core/utils/window';
 import Errors from '../../widget/ui.errors';
@@ -10,14 +12,21 @@ class MarkdownConverter {
     constructor() {
         const window = getWindow();
         const turndown = window && window.TurndownService || TurnDown;
-        const showdown = window && window.showdown || ShowDown;
 
         if(!turndown) {
             throw Errors.Error('E1041', 'Turndown');
         }
 
-        if(!showdown) {
-            throw Errors.Error('E1041', 'Showdown');
+        if(!unified) {
+            throw Errors.Error('E1041', 'unified');
+        }
+
+        if(!remarkParse) {
+            throw Errors.Error('E1041', 'remarkParse');
+        }
+
+        if(!remarkHtml) {
+            throw Errors.Error('E1041', 'remarkHtml');
         }
 
         this._html2Markdown = new turndown();
@@ -34,11 +43,7 @@ class MarkdownConverter {
             this._html2Markdown.keep(['table']);
         }
 
-        this._markdown2Html = new showdown.Converter({
-            simpleLineBreaks: true,
-            strikethrough: true,
-            tables: true
-        });
+        this._markdown2Html = unified;
     }
 
     toMarkdown(htmlMarkup) {
@@ -46,7 +51,10 @@ class MarkdownConverter {
     }
 
     toHtml(markdownMarkup) {
-        let markup = this._markdown2Html.makeHtml(markdownMarkup);
+        let markup = String(this._markdown2Html()
+            .use(remarkParse)
+            .use(remarkHtml, { sanitize: false })
+            .processSync(markdownMarkup));
 
         if(markup) {
             markup = markup.replace(new RegExp('\\r?\\n', 'g'), '');

@@ -33,12 +33,14 @@
     "devexpress-diagram": "2.2.8",
     "devexpress-gantt": "4.1.55",
     "devextreme-quill": "1.7.1",
-    "showdown": "^2.1.0",
     "inferno": "^7.4.9",
     "inferno-hydrate": "^7.4.9",
     "jszip": "^3.10.1",
+    "remark-html": "^16.0.1",
+    "remark-parse": "^11.0.0",
     "rrule": "^2.7.1",
-    "turndown": "~7.1.0"
+    "turndown": "~7.1.0",
+    "unified": "^11.0.4"
   },
   "devDependencies": {
     "@babel/core": "7.23.9",
