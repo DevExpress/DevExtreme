@@ -705,7 +705,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _searchDataSource: function(searchValue = this._searchValue()) {
-        this._refreshList();
+        this._list._scrollView?.startLoading();
         this._filterDataSource(searchValue);
     },
 
@@ -729,6 +729,7 @@ const DropDownList = DropDownEditor.inherit({
         this._isLastMinSearchLengthExceeded = this._isMinSearchLengthExceeded();
         this._refreshList();
         this._refreshPopupVisibility();
+        this._list._scrollView?.finishLoading();
     },
 
     _shouldOpenPopup: function() {
