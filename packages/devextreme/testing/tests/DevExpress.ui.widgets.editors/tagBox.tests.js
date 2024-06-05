@@ -6823,14 +6823,18 @@ QUnit.module('performance', () => {
     });
 
     QUnit.test('subsequent added values should be correctly displayed when valueExpr is function and hideSelectedItems is enabled (T1234032)', function(assert) {
-        const load = sinon.stub().returns([{ id: 1, name: 'item1' }, { id: 2, name: 'item2' }]);
+        const dataSource = [
+            { id: 1, scheme: 'schema 1', name: 'item1' },
+            { id: 2, scheme: 'schema 2', name: 'item2' },
+            { id: 3, scheme: 'schema 3', name: 'item3' },
+            { id: 4, scheme: 'schema 4', name: 'item4' },
+            { id: 5, scheme: 'schema 5', name: 'item5' },
+        ];
 
         const $tagBox = $('#tagBox').dxTagBox({
-            dataSource: {
-                load
-            },
-            valueExpr() {
-                return 'id';
+            dataSource,
+            valueExpr(x) {
+                return x && x.name + ' ' + x.scheme;
             },
             displayExpr: 'name',
             hideSelectedItems: true,
@@ -6838,13 +6842,26 @@ QUnit.module('performance', () => {
         });
 
         const tagBox = $tagBox.dxTagBox('instance');
-        const $item = $(getList(tagBox).find('.dx-list-item').eq(0));
+        const list = tagBox._list;
+        const $list = list.$element();
 
-        $item.trigger('dxclick');
+        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+        tagBox.open();
+        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+        tagBox.open();
+        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+        tagBox.open();
+        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+        tagBox.open();
+        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
 
         const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
 
-        assert.strictEqual($.trim($tagContainer.text()), 'item1item2', 'selected values are displayed correctly');
+        assert.strictEqual($.trim($tagContainer.text()), 'item1item2item3item4item5', 'selected values are displayed correctly');
     });
 
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {

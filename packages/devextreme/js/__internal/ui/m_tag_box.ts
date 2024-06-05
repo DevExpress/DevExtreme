@@ -967,6 +967,10 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _shouldGetItemsFromPlain(values) {
+    if (this.option('hideSelectedItems')) {
+      return values && this._dataController.isLoaded();
+    }
+
     return values && this._dataController.isLoaded() && values.length <= this._getPlainItems().length;
   },
 
