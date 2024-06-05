@@ -19,9 +19,7 @@ export class AppComponent {
   dataSource: DataSourceConfig;
 
   constructor(service: Service) {
-    this.dataSource = {
-      store: service.generateData(100000),
-    };
+    this.dataSource = service.generateData(100000);
   }
 
   customizeColumns(columns: DxDataGridTypes.Column[]) {
