@@ -2295,7 +2295,7 @@ test('Popup EditForm screenshot when editRowKey is initially specified', async (
   const dataGrid = new DataGrid('#container');
 
   await t
-    .expect(await takeScreenshot('popup-edit-form.png', dataGrid.element))
+    .expect(await takeScreenshot('popup-edit-form-with-initial-editrowkey.png', dataGrid.element))
     .ok()
     .expect(dataGrid.getPopupEditForm().element.exists)
     .ok()
