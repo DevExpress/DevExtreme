@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { extend } from '../../core/utils/extend';
 import eventsEngine from '../../events/core/events_engine';
 import messageLocalization from '../../localization/message';
-import TextEditorButton from '../text_box/texteditor_button_collection/button';
+import TextEditorButton from '../../__internal/ui/text_box/texteditor_button_collection/m_button';
 import Button from '../button';
 
 const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
