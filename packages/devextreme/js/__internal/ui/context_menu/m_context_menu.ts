@@ -22,7 +22,6 @@ import { name as contextMenuEventName } from '@js/events/contextmenu';
 import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
 import { addNamespace } from '@js/events/utils/index';
-import type { Properties } from '@js/ui/context_menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
@@ -71,8 +70,6 @@ class ContextMenu extends MenuBase {
   _overlayContentId?: string;
 
   _actions?: any;
-
-  _optionsByReference?: Properties;
 
   _showContextMenuEventHandler?: (event: unknown) => any;
 
