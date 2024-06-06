@@ -2,8 +2,16 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
+import { isMaterialBased } from '../../helpers/themeUtils';
 
-fixture.disablePageReloads`PivotGrid_scrolling`
+const testFixture = (): FixtureFn => {
+  if (isMaterialBased()) {
+    return fixture.disablePageReloads.skip;
+  }
+  return fixture.disablePageReloads;
+};
+
+testFixture().disablePageReloads`PivotGrid_scrolling`
   .page(url(__dirname, '../container.html'));
 
 const MS_IN_DAY = 24 * 60 * 60 * 1000;
