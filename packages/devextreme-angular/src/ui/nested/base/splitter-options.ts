@@ -161,13 +161,6 @@ export abstract class DxoSplitterOptions extends NestedOption {
         this._setOption('orientation', value);
     }
 
-    get repaintChangesOnly(): boolean {
-        return this._getOption('repaintChangesOnly');
-    }
-    set repaintChangesOnly(value: boolean) {
-        this._setOption('repaintChangesOnly', value);
-    }
-
     get rtlEnabled(): boolean {
         return this._getOption('rtlEnabled');
     }

@@ -55,7 +55,6 @@ import { DxiItemComponent } from './item-dxi';
         'onResizeEnd',
         'onResizeStart',
         'orientation',
-        'repaintChangesOnly',
         'rtlEnabled',
         'separatorSize',
         'visible',
