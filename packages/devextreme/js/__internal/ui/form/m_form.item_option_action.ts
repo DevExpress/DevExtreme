@@ -1,24 +1,28 @@
-import Class from '../../core/class';
+import Class from '@js/core/class';
 
 export default class ItemOptionAction {
-    constructor(options) {
-        this._options = options;
-        this._itemsRunTimeInfo = this._options.itemsRunTimeInfo;
-    }
+  _options?: any;
 
-    findInstance() {
-        return this._itemsRunTimeInfo.findWidgetInstanceByItem(this._options.item);
-    }
+  _itemsRunTimeInfo?: any;
 
-    findItemContainer() {
-        return this._itemsRunTimeInfo.findItemContainerByItem(this._options.item);
-    }
+  constructor(options) {
+    this._options = options;
+    this._itemsRunTimeInfo = this._options.itemsRunTimeInfo;
+  }
 
-    findPreparedItem() {
-        return this._itemsRunTimeInfo.findPreparedItemByItem(this._options.item);
-    }
+  findInstance() {
+    return this._itemsRunTimeInfo.findWidgetInstanceByItem(this._options.item);
+  }
 
-    tryExecute() {
-        Class.abstract();
-    }
+  findItemContainer() {
+    return this._itemsRunTimeInfo.findItemContainerByItem(this._options.item);
+  }
+
+  findPreparedItem() {
+    return this._itemsRunTimeInfo.findPreparedItemByItem(this._options.item);
+  }
+
+  tryExecute() {
+    Class.abstract();
+  }
 }
