@@ -1,152 +1,159 @@
-import $ from '../../../core/renderer';
-import CustomButton from './custom';
-import { extend } from '../../../core/utils/extend';
-import errors from '../../widget/ui.errors';
+import $ from '@js/core/renderer';
+import { extend } from '@js/core/utils/extend';
+import errors from '@js/ui/widget/ui.errors';
+
+import CustomButton from './m_custom';
 
 const TEXTEDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 
 function checkButtonInfo(buttonInfo) {
-    const checkButtonType = () => {
-        if(!buttonInfo || typeof buttonInfo !== 'object' || Array.isArray(buttonInfo)) {
-            throw errors.Error('E1053');
-        }
-    };
+  const checkButtonType = () => {
+    if (!buttonInfo || typeof buttonInfo !== 'object' || Array.isArray(buttonInfo)) {
+      throw errors.Error('E1053');
+    }
+  };
 
-    const checkLocation = () => {
-        const { location } = buttonInfo;
+  const checkLocation = () => {
+    const { location } = buttonInfo;
 
-        if('location' in buttonInfo && location !== 'after' && location !== 'before') {
-            buttonInfo.location = 'after';
-        }
-    };
+    if ('location' in buttonInfo && location !== 'after' && location !== 'before') {
+      buttonInfo.location = 'after';
+    }
+  };
 
-    const checkNameIsDefined = () => {
-        if(!('name' in buttonInfo)) {
-            throw errors.Error('E1054');
-        }
-    };
+  const checkNameIsDefined = () => {
+    if (!('name' in buttonInfo)) {
+      throw errors.Error('E1054');
+    }
+  };
 
-    const checkNameIsString = () => {
-        const { name } = buttonInfo;
+  const checkNameIsString = () => {
+    const { name } = buttonInfo;
 
-        if(typeof name !== 'string') {
-            throw errors.Error('E1055');
-        }
-    };
+    if (typeof name !== 'string') {
+      throw errors.Error('E1055');
+    }
+  };
 
-    checkButtonType();
-    checkNameIsDefined();
-    checkNameIsString();
-    checkLocation();
+  checkButtonType();
+  checkNameIsDefined();
+  checkNameIsString();
+  checkLocation();
 }
 
 function checkNamesUniqueness(existingNames, newName) {
-    if(existingNames.indexOf(newName) !== -1) {
-        throw errors.Error('E1055', newName);
-    }
+  if (existingNames.indexOf(newName) !== -1) {
+    throw errors.Error('E1055', newName);
+  }
 
-    existingNames.push(newName);
+  existingNames.push(newName);
 }
 
 function isPredefinedButtonName(name, predefinedButtonsInfo) {
-    return !!(predefinedButtonsInfo.find(info => info.name === name));
+  return !!predefinedButtonsInfo.find((info) => info.name === name);
 }
 
 export default class TextEditorButtonCollection {
-    constructor(editor, defaultButtonsInfo) {
-        this.buttons = [];
-        this.defaultButtonsInfo = defaultButtonsInfo;
-        this.editor = editor;
-    }
+  buttons!: any[];
 
-    _compileButtonInfo(buttons) {
-        const names = [];
+  editor?: any;
 
-        return buttons.map((button) => {
-            const isStringButton = typeof button === 'string';
+  defaultButtonsInfo?: any;
 
-            if(!isStringButton) {
-                checkButtonInfo(button);
-            }
-            const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
+  constructor(editor, defaultButtonsInfo) {
+    this.buttons = [];
+    this.defaultButtonsInfo = defaultButtonsInfo;
+    this.editor = editor;
+  }
 
-            if(isDefaultButton) {
-                const defaultButtonInfo = this.defaultButtonsInfo.find(({ name }) => name === button || name === button.name);
+  _compileButtonInfo(buttons) {
+    const names = [];
 
-                if(!defaultButtonInfo) {
-                    throw errors.Error('E1056', this.editor.NAME, button);
-                }
+    return buttons.map((button) => {
+      const isStringButton = typeof button === 'string';
 
-                checkNamesUniqueness(names, button);
+      if (!isStringButton) {
+        checkButtonInfo(button);
+      }
+      const isDefaultButton = isStringButton || isPredefinedButtonName(button.name, this.defaultButtonsInfo);
 
-                return defaultButtonInfo;
-            } else {
-                const { name } = button;
+      if (isDefaultButton) {
+        const defaultButtonInfo = this.defaultButtonsInfo.find(({ name }) => name === button || name === button.name);
 
-                checkNamesUniqueness(names, name);
+        if (!defaultButtonInfo) {
+          throw errors.Error('E1056', this.editor.NAME, button);
+        }
 
-                return extend(button, { Ctor: CustomButton });
-            }
-        });
-    }
+        checkNamesUniqueness(names, button);
 
-    _createButton(buttonsInfo) {
-        const { Ctor, options, name } = buttonsInfo;
-        const button = new Ctor(name, this.editor, options);
+        return defaultButtonInfo;
+      }
+      const { name } = button;
 
-        this.buttons.push(button);
+      checkNamesUniqueness(names, name);
 
-        return button;
-    }
+      return extend(button, { Ctor: CustomButton });
+    });
+  }
 
-    _renderButtons(buttons, $container, targetLocation) {
-        let $buttonsContainer = null;
-        const buttonsInfo = buttons ? this._compileButtonInfo(buttons) : this.defaultButtonsInfo;
-        const getButtonsContainer = () => {
-            $buttonsContainer = $buttonsContainer || $('<div>')
-                .addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
+  _createButton(buttonsInfo) {
+    const { Ctor, options, name } = buttonsInfo;
+    const button = new Ctor(name, this.editor, options);
 
-            targetLocation === 'before' ? $container.prepend($buttonsContainer) : $container.append($buttonsContainer);
+    this.buttons.push(button);
 
-            return $buttonsContainer;
-        };
+    return button;
+  }
 
-        buttonsInfo.forEach((buttonsInfo) => {
-            const { location = 'after' } = buttonsInfo;
+  _renderButtons(buttons, $container, targetLocation) {
+    let $buttonsContainer = null;
+    const buttonsInfo = buttons ? this._compileButtonInfo(buttons) : this.defaultButtonsInfo;
+    const getButtonsContainer = () => {
+      // @ts-expect-error
+      $buttonsContainer = $buttonsContainer ?? $('<div>')
+        .addClass(TEXTEDITOR_BUTTONS_CONTAINER_CLASS);
 
-            if(location === targetLocation) {
-                this._createButton(buttonsInfo)
-                    .render(getButtonsContainer());
-            }
-        });
+      targetLocation === 'before' ? $container.prepend($buttonsContainer) : $container.append($buttonsContainer);
 
-        return $buttonsContainer;
-    }
+      return $buttonsContainer;
+    };
 
-    clean() {
-        this.buttons.forEach(button => button.dispose());
-        this.buttons = [];
-    }
+    buttonsInfo.forEach((buttonsInfo) => {
+      const { location = 'after' } = buttonsInfo;
 
-    getButton(buttonName) {
-        const button = this.buttons.find(({ name }) => name === buttonName);
+      if (location === targetLocation) {
+        this._createButton(buttonsInfo)
+          .render(getButtonsContainer());
+      }
+    });
 
-        return button && button.instance;
-    }
+    return $buttonsContainer;
+  }
 
-    renderAfterButtons(buttons, $container) {
-        return this._renderButtons(buttons, $container, 'after');
-    }
+  clean() {
+    this.buttons.forEach((button) => button.dispose());
+    this.buttons = [];
+  }
 
-    renderBeforeButtons(buttons, $container) {
-        return this._renderButtons(buttons, $container, 'before');
-    }
+  getButton(buttonName) {
+    const button = this.buttons.find(({ name }) => name === buttonName);
 
-    updateButtons(names) {
-        this.buttons.forEach(button => {
-            if(!names || names.indexOf(button.name) !== -1) {
-                button.update();
-            }
-        });
-    }
+    return button && button.instance;
+  }
+
+  renderAfterButtons(buttons, $container) {
+    return this._renderButtons(buttons, $container, 'after');
+  }
+
+  renderBeforeButtons(buttons, $container) {
+    return this._renderButtons(buttons, $container, 'before');
+  }
+
+  updateButtons(names) {
+    this.buttons.forEach((button) => {
+      if (!names || names.indexOf(button.name) !== -1) {
+        button.update();
+      }
+    });
+  }
 }
