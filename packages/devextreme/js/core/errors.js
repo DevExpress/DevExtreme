@@ -280,7 +280,7 @@ export default errorUtils({
     /**
      * @name ErrorsCore.W0023
      */
-    W0023: 'DevExtreme: the \'devextreme\' package version does not match the version of other DevExpress products used in this application:\n\n' +
+    W0023: 'DevExtreme: the following \'devextreme\' package version does not match versions of other DevExpress products used in this application:\n\n' +
         '{0}\n\n' +
-        'Correct interoperability between different versions of these products is not guaranteed.\n\n',
+        'Interoperability between different versions of the products listed herein cannot be guaranteed.\n\n',
 });
