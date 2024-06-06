@@ -3,6 +3,7 @@ import { version as packageVersion } from '@js/core/version';
 
 import type { Version } from '../../utils/version';
 import {
+  assertedVersionsCompatible,
   getPreviousMajorVersion,
   parseVersion,
   stringifyVersion,
@@ -163,7 +164,10 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   validationPerformed = true;
 
   const version = parseVersion(versionStr);
-  const preview = isPreview(version.patch);
+
+  if (!assertedVersionsCompatible(version)) {
+    return;
+  }
 
   const { internal, error } = getLicenseCheckParams({
     licenseKey,
@@ -173,6 +177,8 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   if (error && !internal) {
     showTrialPanel(BUY_NOW_LINK, stringifyVersion(version));
   }
+
+  const preview = isPreview(version.patch);
 
   if (error) {
     errors.log(preview ? 'W0022' : error);
