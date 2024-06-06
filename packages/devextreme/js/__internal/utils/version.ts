@@ -17,14 +17,6 @@ export interface Version {
   buildParts?: number[];
 }
 
-export const VERSION_SPLITTER = '.';
-
-export function stringifyVersion(version: Version): string {
-  const { major, minor, patch } = version;
-
-  return [major, minor, patch].join(VERSION_SPLITTER);
-}
-
 export function parseVersion(version: string): Version {
   const [major, minor, patch, ...rest] = version.split('.').map(Number);
 

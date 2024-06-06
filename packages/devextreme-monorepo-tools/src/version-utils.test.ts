@@ -39,11 +39,11 @@ describe('version utils', () => {
     { baseVersion: '23.2.3', daily: true, date: new Date(2001, 2, 30, 4, 15), expected: '23.2.4-build-01089-0415' },
     { baseVersion: '23.2.3', daily: true, date: new Date(2023, 5, 10, 0, 10), expected: '23.2.4-build-23161-0010' },
    ])('makeVersion [%#]', ({ baseVersion, daily, date, expected }) => {
-    expect(makeVersion(baseVersion, daily, date)).toBe(expected);
+    expect(makeVersion(baseVersion, daily, date).fullVersion).toBe(expected);
   })
 
-  test.each<{ baseVersion: string | undefined, date: Date }>([
-    { baseVersion: undefined, date: new Date(2023, 5, 5, 12, 30) },
+  test.each<{ baseVersion: string, date: Date }>([
+    { baseVersion: undefined as any, date: new Date(2023, 5, 5, 12, 30) },
     { baseVersion: '1234.5', date: new Date(2023, 5, 5, 12, 30) },
     { baseVersion: '123456', date: new Date(2023, 5, 5, 12, 30) },
     { baseVersion: 'abcdef', date: new Date(2023, 5, 5, 12, 30) },

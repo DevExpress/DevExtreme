@@ -1,13 +1,11 @@
 import errors from '@js/core/errors';
-import { version as packageVersion } from '@js/core/version';
+import { fullVersion } from '@js/core/version';
 
 import type { Version } from '../../utils/version';
 import {
   assertedVersionsCompatible,
   getPreviousMajorVersion,
   parseVersion,
-  stringifyVersion,
-  VERSION_SPLITTER,
 } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
@@ -29,6 +27,7 @@ interface Payload extends Partial<License> {
 
 const FORMAT = 1;
 const RTM_MIN_PATCH_VERSION = 3;
+const KEY_SPLITTER = '.';
 
 const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtreme.aspx';
 
@@ -58,7 +57,7 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
     return GENERAL_ERROR;
   }
 
-  const parts = encodedKey.split(VERSION_SPLITTER);
+  const parts = encodedKey.split(KEY_SPLITTER);
 
   if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
     return GENERAL_ERROR;
@@ -157,7 +156,7 @@ function getLicenseCheckParams({
   }
 }
 
-export function validateLicense(licenseKey: string, versionStr: string = packageVersion): void {
+export function validateLicense(licenseKey: string, versionStr: string = fullVersion): void {
   if (validationPerformed) {
     return;
   }
@@ -175,7 +174,7 @@ export function validateLicense(licenseKey: string, versionStr: string = package
   });
 
   if (error && !internal) {
-    showTrialPanel(BUY_NOW_LINK, stringifyVersion(version));
+    showTrialPanel(BUY_NOW_LINK, fullVersion);
   }
 
   const preview = isPreview(version.patch);
