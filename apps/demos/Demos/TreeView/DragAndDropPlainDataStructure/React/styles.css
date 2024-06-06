@@ -7,11 +7,6 @@
   vertical-align: top;
 }
 
-#treeviewDriveC,
-#treeviewDriveD {
-  margin-top: 10px;
-}
-
 .dx-treeview-item {
   box-sizing: border-box;
 }
@@ -20,6 +15,7 @@
   min-height: auto;
   padding: 0;
   cursor: default;
+  margin-bottom: 10px;
 }
 
 .drive-panel {
@@ -32,8 +28,4 @@
 
 .drive-panel:last-of-type {
   border-right: none;
-}
-
-.dx-sortable {
-  overflow: visible;
 }

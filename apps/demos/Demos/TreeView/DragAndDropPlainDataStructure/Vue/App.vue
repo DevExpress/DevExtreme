@@ -213,11 +213,6 @@ function getTopVisibleNode(component) {
   vertical-align: top;
 }
 
-#treeviewDriveC,
-#treeviewDriveD {
-  margin-top: 10px;
-}
-
 .dx-treeview-item {
   box-sizing: border-box;
 }
@@ -226,6 +221,7 @@ function getTopVisibleNode(component) {
   min-height: auto;
   padding: 0;
   cursor: default;
+  margin-bottom: 10px;
 }
 
 .drive-panel {
@@ -238,9 +234,5 @@ function getTopVisibleNode(component) {
 
 .drive-panel:last-of-type {
   border-right: none;
-}
-
-.dx-sortable {
-  overflow: visible;
 }
 </style>
