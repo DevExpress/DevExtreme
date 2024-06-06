@@ -1,19 +1,19 @@
-import $ from '../core/renderer';
-import { touch } from '../core/utils/support';
-import { extend } from '../core/utils/extend';
-import devices from '../core/devices';
-import domAdapter from '../core/dom_adapter';
-import registerComponent from '../core/component_registrator';
-import MultiView from './multi_view';
-import Tabs from './tabs';
-import { default as TabPanelItem } from './tab_panel/item';
-import { getImageContainer } from '../core/utils/icon';
-import { getPublicElement } from '../core/element';
-import { isPlainObject, isDefined } from '../core/utils/type';
-import { BindableTemplate } from '../core/templates/bindable_template';
-import { isMaterialBased, isFluent, current as currentTheme } from './themes';
+import registerComponent from '@js/core/component_registrator';
+import devices from '@js/core/devices';
+import domAdapter from '@js/core/dom_adapter';
+import { getPublicElement } from '@js/core/element';
+import $ from '@js/core/renderer';
+import { BindableTemplate } from '@js/core/templates/bindable_template';
+import { extend } from '@js/core/utils/extend';
+import { getImageContainer } from '@js/core/utils/icon';
+import { touch } from '@js/core/utils/support';
+import { isDefined, isPlainObject } from '@js/core/utils/type';
+import MultiView from '@js/ui/multi_view';
+import Tabs from '@js/ui/tabs';
+import { current as currentTheme, isFluent, isMaterialBased } from '@js/ui/themes';
 
-// STYLE tabPanel
+// eslint-disable-next-line import/no-named-default
+import { default as TabPanelItem } from './m_item';
 
 const TABPANEL_CLASS = 'dx-tabpanel';
 const TABPANEL_TABS_CLASS = 'dx-tabpanel-tabs';
@@ -25,509 +25,494 @@ const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
 const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const TABPANEL_TABS_POSITION_CLASS = {
-    top: 'dx-tabpanel-tabs-position-top',
-    right: 'dx-tabpanel-tabs-position-right',
-    bottom: 'dx-tabpanel-tabs-position-bottom',
-    left: 'dx-tabpanel-tabs-position-left',
+  top: 'dx-tabpanel-tabs-position-top',
+  right: 'dx-tabpanel-tabs-position-right',
+  bottom: 'dx-tabpanel-tabs-position-bottom',
+  left: 'dx-tabpanel-tabs-position-left',
 };
 
 const TABS_POSITION = {
-    top: 'top',
-    right: 'right',
-    bottom: 'bottom',
-    left: 'left',
+  top: 'top',
+  right: 'right',
+  bottom: 'bottom',
+  left: 'left',
 };
 
 const TABS_INDICATOR_POSITION_BY_TABS_POSITION = {
-    top: 'bottom',
-    right: 'left',
-    bottom: 'top',
-    left: 'right',
+  top: 'bottom',
+  right: 'left',
+  bottom: 'top',
+  left: 'right',
 };
 
 const TABS_ORIENTATION = {
-    horizontal: 'horizontal',
-    vertical: 'vertical',
+  horizontal: 'horizontal',
+  vertical: 'vertical',
 };
 
 const ICON_POSITION = {
-    top: 'top',
-    end: 'end',
-    bottom: 'bottom',
-    start: 'start',
+  top: 'top',
+  end: 'end',
+  bottom: 'bottom',
+  start: 'start',
 };
 
 const STYLING_MODE = {
-    primary: 'primary',
-    secondary: 'secondary',
+  primary: 'primary',
+  secondary: 'secondary',
 };
 
+// @ts-expect-error
 const TabPanel = MultiView.inherit({
 
-    _getDefaultOptions: function() {
-        return extend(this.callBase(), {
+  _getDefaultOptions() {
+    return extend(this.callBase(), {
+      itemTitleTemplate: 'title',
+      hoverStateEnabled: true,
+      showNavButtons: false,
+      scrollByContent: true,
+      scrollingEnabled: true,
+      tabsPosition: TABS_POSITION.top,
+      iconPosition: ICON_POSITION.start,
+      stylingMode: STYLING_MODE.primary,
+      onTitleClick: null,
+      onTitleHold: null,
+      onTitleRendered: null,
+      badgeExpr(data) { return data ? data.badge : undefined; },
 
+      _tabsIndicatorPosition: null,
+    });
+  },
 
-            itemTitleTemplate: 'title',
+  _defaultOptionsRules() {
+    const themeName = currentTheme();
 
-            hoverStateEnabled: true,
+    return this.callBase().concat([
+      {
+        device() {
+          return devices.real().deviceType === 'desktop' && !devices.isSimulator();
+        },
+        options: {
+          focusStateEnabled: true,
+        },
+      },
+      {
+        device() {
+          return !touch;
+        },
+        options: {
+          swipeEnabled: false,
+        },
+      },
+      {
+        device: { platform: 'generic' },
+        options: {
+          animationEnabled: false,
+        },
+      },
+      {
+        device() {
+          return isFluent(themeName);
+        },
+        options: {
+          stylingMode: STYLING_MODE.secondary,
+        },
+      },
+      {
+        device() {
+          return isMaterialBased(themeName);
+        },
+        options: {
+          iconPosition: ICON_POSITION.top,
+        },
+      },
+    ]);
+  },
 
-            showNavButtons: false,
+  _init() {
+    this.callBase();
 
-            scrollByContent: true,
+    this.$element().addClass(TABPANEL_CLASS);
+    this._toggleTabPanelTabsPositionClass();
+  },
 
-            scrollingEnabled: true,
+  _getElementAria() {
+    return { role: 'tabpanel' };
+  },
 
-            tabsPosition: TABS_POSITION.top,
+  _getItemAria() {
+    return { role: 'tabpanel' };
+  },
 
-            iconPosition: ICON_POSITION.start,
+  _initMarkup() {
+    this.callBase();
 
-            stylingMode: STYLING_MODE.primary,
+    this._createTitleActions();
+    this._renderLayout();
+  },
 
-            onTitleClick: null,
+  _prepareTabsItemTemplate(data, $container) {
+    const $iconElement = getImageContainer(data?.icon);
 
-            onTitleHold: null,
+    if ($iconElement) {
+      $container.append($iconElement);
+    }
 
-            onTitleRendered: null,
+    const title = isPlainObject(data) ? data?.title : data;
 
-            badgeExpr: function(data) { return data ? data.badge : undefined; },
+    if (isDefined(title) && !isPlainObject(title)) {
+      const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
+      // @ts-expect-error
+      $tabTextSpan.append(domAdapter.createTextNode(title));
 
-            /**
-            * @name dxTabPanelItem.visible
-            * @hidden
-            */
+      const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
+      // @ts-expect-error
+      $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
+      $tabTextSpanPseudo.appendTo($tabTextSpan);
 
-            _tabsIndicatorPosition: null,
-        });
-    },
+      $tabTextSpan.appendTo($container);
+    }
+  },
 
-    _defaultOptionsRules: function() {
-        const themeName = currentTheme();
+  _initTemplates() {
+    this.callBase();
 
-        return this.callBase().concat([
-            {
-                device: function() {
-                    return devices.real().deviceType === 'desktop' && !devices.isSimulator();
-                },
-                options: {
-                    focusStateEnabled: true
-                }
-            },
-            {
-                device: function() {
-                    return !touch;
-                },
-                options: {
-                    swipeEnabled: false
-                }
-            },
-            {
-                device: { platform: 'generic' },
-                options: {
-                    animationEnabled: false
-                }
-            },
-            {
-                device() {
-                    return isFluent(themeName);
-                },
-                options: {
-                    stylingMode: STYLING_MODE.secondary,
-                }
-            },
-            {
-                device() {
-                    return isMaterialBased(themeName);
-                },
-                options: {
-                    iconPosition: ICON_POSITION.top,
-                }
-            }
-        ]);
-    },
+    this._templateManager.addDefaultTemplates({
+      title: new BindableTemplate(($container, data) => {
+        this._prepareTabsItemTemplate(data, $container);
 
-    _init: function() {
-        this.callBase();
+        const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
 
-        this.$element().addClass(TABPANEL_CLASS);
-        this._toggleTabPanelTabsPositionClass();
-    },
+        $container.wrapInner($tabItem);
+      }, ['title', 'icon'], this.option('integrationOptions.watchMethod')),
+    });
+  },
 
-    _getElementAria() {
-        return { role: 'tabpanel' };
-    },
+  _createTitleActions() {
+    this._createTitleClickAction();
+    this._createTitleHoldAction();
+    this._createTitleRenderedAction();
+  },
 
-    _getItemAria() {
-        return { role: 'tabpanel' };
-    },
+  _createTitleClickAction() {
+    this._titleClickAction = this._createActionByOption('onTitleClick');
+  },
 
-    _initMarkup: function() {
-        this.callBase();
+  _createTitleHoldAction() {
+    this._titleHoldAction = this._createActionByOption('onTitleHold');
+  },
 
-        this._createTitleActions();
-        this._renderLayout();
-    },
+  _createTitleRenderedAction() {
+    this._titleRenderedAction = this._createActionByOption('onTitleRendered');
+  },
 
-    _prepareTabsItemTemplate(data, $container) {
-        const $iconElement = getImageContainer(data?.icon);
+  _renderLayout() {
+    if (this._tabs) {
+      return;
+    }
 
-        if($iconElement) {
-            $container.append($iconElement);
+    const $element = this.$element();
+
+    this._$tabContainer = $('<div>')
+      .addClass(TABPANEL_TABS_CLASS)
+      .appendTo($element);
+
+    const $tabs = $('<div>').appendTo(this._$tabContainer);
+
+    this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
+
+    this._$container = $('<div>')
+      .addClass(TABPANEL_CONTAINER_CLASS)
+      .appendTo($element);
+    this._$container.append(this._$wrapper);
+  },
+
+  _refreshActiveDescendant() {
+    if (!this._tabs) {
+      return;
+    }
+
+    const tabs = this._tabs;
+    const tabItems = tabs.itemElements();
+    const $activeTab = $(tabItems[tabs.option('selectedIndex')]);
+    const id = this.getFocusedItemId();
+
+    this.setAria('controls', undefined, $(tabItems));
+    this.setAria('controls', id, $activeTab);
+  },
+
+  _getTabsIndicatorPosition() {
+    // eslint-disable-next-line @typescript-eslint/naming-convention
+    const { _tabsIndicatorPosition, tabsPosition } = this.option();
+
+    return _tabsIndicatorPosition ?? TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
+  },
+
+  _tabConfig() {
+    const tabsIndicatorPosition = this._getTabsIndicatorPosition();
+
+    return {
+      selectOnFocus: true,
+      focusStateEnabled: this.option('focusStateEnabled'),
+      hoverStateEnabled: this.option('hoverStateEnabled'),
+      repaintChangesOnly: this.option('repaintChangesOnly'),
+      tabIndex: this.option('tabIndex'),
+      selectedIndex: this.option('selectedIndex'),
+      badgeExpr: this.option('badgeExpr'),
+      onItemClick: this._titleClickAction.bind(this),
+      onItemHold: this._titleHoldAction.bind(this),
+      itemHoldTimeout: this.option('itemHoldTimeout'),
+      onSelectionChanged: function (e) {
+        this.option('selectedIndex', e.component.option('selectedIndex'));
+        this._refreshActiveDescendant();
+      }.bind(this),
+      onItemRendered: this._titleRenderedAction.bind(this),
+      itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
+      items: this.option('items'),
+      noDataText: null,
+      scrollingEnabled: this.option('scrollingEnabled'),
+      scrollByContent: this.option('scrollByContent'),
+      showNavButtons: this.option('showNavButtons'),
+      itemTemplateProperty: 'tabTemplate',
+      loopItemFocus: this.option('loop'),
+      selectionRequired: true,
+      onOptionChanged: function (args) {
+        if (args.name === 'focusedElement') {
+          if (args.value) {
+            const $value = $(args.value);
+            const $newItem = this._itemElements().eq($value.index());
+            this.option('focusedElement', getPublicElement($newItem));
+          } else {
+            this.option('focusedElement', args.value);
+          }
         }
-
-        const title = isPlainObject(data) ? data?.title : data;
-
-        if(isDefined(title) && !isPlainObject(title)) {
-            const $tabTextSpan = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_CLASS);
-
-            $tabTextSpan.append(domAdapter.createTextNode(title));
-
-            const $tabTextSpanPseudo = $('<span>').addClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS);
-
-            $tabTextSpanPseudo.append(domAdapter.createTextNode(title));
-            $tabTextSpanPseudo.appendTo($tabTextSpan);
-
-            $tabTextSpan.appendTo($container);
+      }.bind(this),
+      onFocusIn: function (args) { this._focusInHandler(args.event); }.bind(this),
+      onFocusOut: function (args) {
+        if (!this._isFocusOutHandlerExecuting) {
+          this._focusOutHandler(args.event);
         }
-    },
+      }.bind(this),
+      orientation: this._getTabsOrientation(),
+      iconPosition: this.option('iconPosition'),
+      stylingMode: this.option('stylingMode'),
+      _itemAttributes: { class: TABPANEL_TABS_ITEM_CLASS },
+      _indicatorPosition: tabsIndicatorPosition,
+    };
+  },
 
-    _initTemplates() {
-        this.callBase();
+  _renderFocusTarget() {
+    this._focusTarget().attr('tabIndex', -1);
+  },
 
-        this._templateManager.addDefaultTemplates({
-            title: new BindableTemplate(($container, data) => {
-                this._prepareTabsItemTemplate(data, $container);
+  _getTabsOrientation() {
+    const { tabsPosition } = this.option();
 
-                const $tabItem = $('<div>').addClass(TABS_ITEM_TEXT_CLASS);
+    if ([TABS_POSITION.right, TABS_POSITION.left].includes(tabsPosition)) {
+      return TABS_ORIENTATION.vertical;
+    }
 
-                $container.wrapInner($tabItem);
-            }, ['title', 'icon'], this.option('integrationOptions.watchMethod'))
-        });
-    },
+    return TABS_ORIENTATION.horizontal;
+  },
 
-    _createTitleActions: function() {
-        this._createTitleClickAction();
-        this._createTitleHoldAction();
-        this._createTitleRenderedAction();
-    },
+  _getTabPanelTabsPositionClass() {
+    const position = this.option('tabsPosition');
 
-    _createTitleClickAction: function() {
-        this._titleClickAction = this._createActionByOption('onTitleClick');
-    },
+    switch (position) {
+      case TABS_POSITION.right:
+        return TABPANEL_TABS_POSITION_CLASS.right;
+      case TABS_POSITION.bottom:
+        return TABPANEL_TABS_POSITION_CLASS.bottom;
+      case TABS_POSITION.left:
+        return TABPANEL_TABS_POSITION_CLASS.left;
+      case TABS_POSITION.top:
+      default:
+        return TABPANEL_TABS_POSITION_CLASS.top;
+    }
+  },
 
-    _createTitleHoldAction: function() {
-        this._titleHoldAction = this._createActionByOption('onTitleHold');
-    },
+  _toggleTabPanelTabsPositionClass() {
+    // eslint-disable-next-line guard-for-in, no-restricted-syntax
+    for (const key in TABPANEL_TABS_POSITION_CLASS) {
+      this.$element().removeClass(TABPANEL_TABS_POSITION_CLASS[key]);
+    }
 
-    _createTitleRenderedAction: function() {
-        this._titleRenderedAction = this._createActionByOption('onTitleRendered');
-    },
+    const newClass = this._getTabPanelTabsPositionClass();
 
-    _renderLayout: function() {
-        if(this._tabs) {
-            return;
+    this.$element().addClass(newClass);
+  },
+
+  _updateTabsOrientation() {
+    const orientation = this._getTabsOrientation();
+
+    this._setTabsOption('orientation', orientation);
+  },
+
+  _toggleWrapperFocusedClass(isFocused) {
+    this._toggleFocusClass(isFocused, this._$wrapper);
+  },
+
+  _toggleDisabledFocusedClass(isFocused) {
+    this._focusTarget().toggleClass(DISABLED_FOCUSED_TAB_CLASS, isFocused);
+  },
+
+  _updateFocusState(e, isFocused) {
+    this.callBase(e, isFocused);
+
+    const isTabsTarget = e.target === this._tabs._focusTarget().get(0);
+    const isMultiViewTarget = e.target === this._focusTarget().get(0);
+
+    if (isTabsTarget) {
+      this._toggleFocusClass(isFocused, this._focusTarget());
+    }
+
+    if (isTabsTarget || isMultiViewTarget) {
+      const isDisabled = this._isDisabled(this.option('focusedElement'));
+
+      this._toggleWrapperFocusedClass(isFocused && !isDisabled);
+      this._toggleDisabledFocusedClass(isFocused && isDisabled);
+    }
+
+    if (isMultiViewTarget) {
+      this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
+    }
+  },
+
+  _focusOutHandler(e) {
+    this._isFocusOutHandlerExecuting = true;
+
+    this.callBase.apply(this, arguments);
+
+    this._tabs._focusOutHandler(e);
+    this._isFocusOutHandlerExecuting = false;
+  },
+
+  _setTabsOption(name, value) {
+    if (this._tabs) {
+      this._tabs.option(name, value);
+    }
+  },
+
+  _visibilityChanged(visible) {
+    if (visible) {
+      this._tabs._dimensionChanged();
+    }
+  },
+
+  registerKeyHandler(key, handler) {
+    this.callBase(key, handler);
+
+    if (this._tabs) {
+      this._tabs.registerKeyHandler(key, handler);
+    }
+  },
+
+  repaint() {
+    this.callBase();
+    this._tabs.repaint();
+  },
+
+  _updateTabsIndicatorPosition() {
+    const value = this._getTabsIndicatorPosition();
+
+    this._setTabsOption('_indicatorPosition', value);
+  },
+
+  _optionChanged(args) {
+    const { name, value, fullName } = args;
+
+    switch (name) {
+      case 'dataSource':
+        this.callBase(args);
+        break;
+      case 'items':
+        this._setTabsOption(name, this.option(name));
+        if (!this.option('repaintChangesOnly')) {
+          this._tabs.repaint();
         }
-
-        const $element = this.$element();
-
-        this._$tabContainer = $('<div>')
-            .addClass(TABPANEL_TABS_CLASS)
-            .appendTo($element);
-
-        const $tabs = $('<div>').appendTo(this._$tabContainer);
-
-        this._tabs = this._createComponent($tabs, Tabs, this._tabConfig());
-
-        this._$container = $('<div>')
-            .addClass(TABPANEL_CONTAINER_CLASS)
-            .appendTo($element);
-        this._$container.append(this._$wrapper);
-    },
-
-    _refreshActiveDescendant: function() {
-        if(!this._tabs) {
-            return;
-        }
-
-        const tabs = this._tabs;
-        const tabItems = tabs.itemElements();
-        const $activeTab = $(tabItems[tabs.option('selectedIndex')]);
-        const id = this.getFocusedItemId();
-
-        this.setAria('controls', undefined, $(tabItems));
-        this.setAria('controls', id, $activeTab);
-    },
-
-    _getTabsIndicatorPosition() {
-        const { _tabsIndicatorPosition, tabsPosition } = this.option();
-
-        return _tabsIndicatorPosition ?? TABS_INDICATOR_POSITION_BY_TABS_POSITION[tabsPosition];
-    },
-
-    _tabConfig() {
-        const tabsIndicatorPosition = this._getTabsIndicatorPosition();
-
-        return {
-            selectOnFocus: true,
-            focusStateEnabled: this.option('focusStateEnabled'),
-            hoverStateEnabled: this.option('hoverStateEnabled'),
-            repaintChangesOnly: this.option('repaintChangesOnly'),
-            tabIndex: this.option('tabIndex'),
-            selectedIndex: this.option('selectedIndex'),
-            badgeExpr: this.option('badgeExpr'),
-            onItemClick: this._titleClickAction.bind(this),
-            onItemHold: this._titleHoldAction.bind(this),
-            itemHoldTimeout: this.option('itemHoldTimeout'),
-            onSelectionChanged: (function(e) {
-                this.option('selectedIndex', e.component.option('selectedIndex'));
-                this._refreshActiveDescendant();
-            }).bind(this),
-            onItemRendered: this._titleRenderedAction.bind(this),
-            itemTemplate: this._getTemplateByOption('itemTitleTemplate'),
-            items: this.option('items'),
-            noDataText: null,
-            scrollingEnabled: this.option('scrollingEnabled'),
-            scrollByContent: this.option('scrollByContent'),
-            showNavButtons: this.option('showNavButtons'),
-            itemTemplateProperty: 'tabTemplate',
-            loopItemFocus: this.option('loop'),
-            selectionRequired: true,
-            onOptionChanged: (function(args) {
-                if(args.name === 'focusedElement') {
-                    if(args.value) {
-                        const $value = $(args.value);
-                        const $newItem = this._itemElements().eq($value.index());
-                        this.option('focusedElement', getPublicElement($newItem));
-                    } else {
-                        this.option('focusedElement', args.value);
-                    }
-                }
-            }).bind(this),
-            onFocusIn: (function(args) { this._focusInHandler(args.event); }).bind(this),
-            onFocusOut: (function(args) {
-                if(!this._isFocusOutHandlerExecuting) {
-                    this._focusOutHandler(args.event);
-                }
-            }).bind(this),
-            orientation: this._getTabsOrientation(),
-            iconPosition: this.option('iconPosition'),
-            stylingMode: this.option('stylingMode'),
-            _itemAttributes: { class: TABPANEL_TABS_ITEM_CLASS },
-            _indicatorPosition: tabsIndicatorPosition,
-        };
-    },
-
-    _renderFocusTarget: function() {
-        this._focusTarget().attr('tabIndex', -1);
-    },
-
-    _getTabsOrientation() {
-        const { tabsPosition } = this.option();
-
-        if([TABS_POSITION.right, TABS_POSITION.left].includes(tabsPosition)) {
-            return TABS_ORIENTATION.vertical;
-        }
-
-        return TABS_ORIENTATION.horizontal;
-    },
-
-    _getTabPanelTabsPositionClass() {
-        const position = this.option('tabsPosition');
-
-        switch(position) {
-            case TABS_POSITION.right:
-                return TABPANEL_TABS_POSITION_CLASS.right;
-            case TABS_POSITION.bottom:
-                return TABPANEL_TABS_POSITION_CLASS.bottom;
-            case TABS_POSITION.left:
-                return TABPANEL_TABS_POSITION_CLASS.left;
-            case TABS_POSITION.top:
-            default:
-                return TABPANEL_TABS_POSITION_CLASS.top;
-        }
-    },
-
-    _toggleTabPanelTabsPositionClass() {
-        for(const key in TABPANEL_TABS_POSITION_CLASS) {
-            this.$element().removeClass(TABPANEL_TABS_POSITION_CLASS[key]);
-        }
-
-        const newClass = this._getTabPanelTabsPositionClass();
-
-        this.$element().addClass(newClass);
-    },
-
-    _updateTabsOrientation() {
-        const orientation = this._getTabsOrientation();
-
-        this._setTabsOption('orientation', orientation);
-    },
-
-    _toggleWrapperFocusedClass(isFocused) {
-        this._toggleFocusClass(isFocused, this._$wrapper);
-    },
-
-    _toggleDisabledFocusedClass(isFocused) {
-        this._focusTarget().toggleClass(DISABLED_FOCUSED_TAB_CLASS, isFocused);
-    },
-
-    _updateFocusState: function(e, isFocused) {
-        this.callBase(e, isFocused);
-
-        const isTabsTarget = e.target === this._tabs._focusTarget().get(0);
-        const isMultiViewTarget = e.target === this._focusTarget().get(0);
-
-        if(isTabsTarget) {
-            this._toggleFocusClass(isFocused, this._focusTarget());
-        }
-
-        if(isTabsTarget || isMultiViewTarget) {
-            const isDisabled = this._isDisabled(this.option('focusedElement'));
-
-            this._toggleWrapperFocusedClass(isFocused && !isDisabled);
-            this._toggleDisabledFocusedClass(isFocused && isDisabled);
-        }
-
-        if(isMultiViewTarget) {
-            this._toggleFocusClass(isFocused, this._tabs.option('focusedElement'));
-        }
-    },
-
-    _focusOutHandler: function(e) {
-        this._isFocusOutHandlerExecuting = true;
-
-        this.callBase.apply(this, arguments);
-
-        this._tabs._focusOutHandler(e);
-        this._isFocusOutHandlerExecuting = false;
-    },
-
-    _setTabsOption(name, value) {
-        if(this._tabs) {
-            this._tabs.option(name, value);
-        }
-    },
-
-    _visibilityChanged: function(visible) {
-        if(visible) {
-            this._tabs._dimensionChanged();
-        }
-    },
-
-    registerKeyHandler: function(key, handler) {
-        this.callBase(key, handler);
-
-        if(this._tabs) {
-            this._tabs.registerKeyHandler(key, handler);
-        }
-    },
-
-    repaint: function() {
-        this.callBase();
+        this.callBase(args);
+        break;
+      case 'width':
+        this.callBase(args);
         this._tabs.repaint();
-    },
+        break;
+      case 'selectedIndex':
+      case 'selectedItem': {
+        this._setTabsOption(fullName, value);
+        this.callBase(args);
 
-    _updateTabsIndicatorPosition() {
-        const value = this._getTabsIndicatorPosition();
-
-        this._setTabsOption('_indicatorPosition', value);
-    },
-
-    _optionChanged: function(args) {
-        const { name, value, fullName } = args;
-
-        switch(name) {
-            case 'dataSource':
-                this.callBase(args);
-                break;
-            case 'items':
-                this._setTabsOption(name, this.option(name));
-                if(!this.option('repaintChangesOnly')) {
-                    this._tabs.repaint();
-                }
-                this.callBase(args);
-                break;
-            case 'width':
-                this.callBase(args);
-                this._tabs.repaint();
-                break;
-            case 'selectedIndex':
-            case 'selectedItem': {
-                this._setTabsOption(fullName, value);
-                this.callBase(args);
-
-                if(this.option('focusStateEnabled') === true) {
-                    const selectedIndex = this.option('selectedIndex');
-                    const selectedTabContent = this._itemElements().eq(selectedIndex);
-                    this.option('focusedElement', getPublicElement(selectedTabContent));
-                }
-                break;
-            }
-            case 'itemHoldTimeout':
-            case 'focusStateEnabled':
-            case 'hoverStateEnabled':
-                this._setTabsOption(fullName, value);
-                this.callBase(args);
-                break;
-            case 'scrollingEnabled':
-            case 'scrollByContent':
-            case 'showNavButtons':
-                this._setTabsOption(fullName, value);
-                break;
-            case 'focusedElement': {
-                const id = value ? $(value).index() : value;
-                const newItem = value ? this._tabs._itemElements().eq(id) : value;
-                this._setTabsOption('focusedElement', getPublicElement(newItem));
-
-                if(value) {
-                    const isDisabled = this._isDisabled(value);
-
-                    this._toggleWrapperFocusedClass(!isDisabled);
-                    this._toggleDisabledFocusedClass(isDisabled);
-                }
-
-                this.callBase(args);
-                break;
-            }
-            case 'itemTitleTemplate':
-                this._setTabsOption('itemTemplate', this._getTemplateByOption('itemTitleTemplate'));
-                break;
-            case 'onTitleClick':
-                this._createTitleClickAction();
-                this._setTabsOption('onItemClick', this._titleClickAction.bind(this));
-                break;
-            case 'onTitleHold':
-                this._createTitleHoldAction();
-                this._setTabsOption('onItemHold', this._titleHoldAction.bind(this));
-                break;
-            case 'onTitleRendered':
-                this._createTitleRenderedAction();
-                this._setTabsOption('onItemRendered', this._titleRenderedAction.bind(this));
-                break;
-            case 'loop':
-                this._setTabsOption('loopItemFocus', value);
-                break;
-            case 'badgeExpr':
-                this._invalidate();
-                break;
-            case 'tabsPosition':
-                this._toggleTabPanelTabsPositionClass();
-                this._updateTabsIndicatorPosition();
-                this._updateTabsOrientation();
-                break;
-            case 'iconPosition':
-                this._setTabsOption('iconPosition', value);
-                break;
-            case 'stylingMode':
-                this._setTabsOption('stylingMode', value);
-                break;
-            case '_tabsIndicatorPosition':
-                this._setTabsOption('_indicatorPosition', value);
-                break;
-            default:
-                this.callBase(args);
+        if (this.option('focusStateEnabled') === true) {
+          const selectedIndex = this.option('selectedIndex');
+          const selectedTabContent = this._itemElements().eq(selectedIndex);
+          this.option('focusedElement', getPublicElement(selectedTabContent));
         }
-    },
+        break;
+      }
+      case 'itemHoldTimeout':
+      case 'focusStateEnabled':
+      case 'hoverStateEnabled':
+        this._setTabsOption(fullName, value);
+        this.callBase(args);
+        break;
+      case 'scrollingEnabled':
+      case 'scrollByContent':
+      case 'showNavButtons':
+        this._setTabsOption(fullName, value);
+        break;
+      case 'focusedElement': {
+        const id = value ? $(value).index() : value;
+        const newItem = value ? this._tabs._itemElements().eq(id) : value;
+        this._setTabsOption('focusedElement', getPublicElement(newItem));
+
+        if (value) {
+          const isDisabled = this._isDisabled(value);
+
+          this._toggleWrapperFocusedClass(!isDisabled);
+          this._toggleDisabledFocusedClass(isDisabled);
+        }
+
+        this.callBase(args);
+        break;
+      }
+      case 'itemTitleTemplate':
+        this._setTabsOption('itemTemplate', this._getTemplateByOption('itemTitleTemplate'));
+        break;
+      case 'onTitleClick':
+        this._createTitleClickAction();
+        this._setTabsOption('onItemClick', this._titleClickAction.bind(this));
+        break;
+      case 'onTitleHold':
+        this._createTitleHoldAction();
+        this._setTabsOption('onItemHold', this._titleHoldAction.bind(this));
+        break;
+      case 'onTitleRendered':
+        this._createTitleRenderedAction();
+        this._setTabsOption('onItemRendered', this._titleRenderedAction.bind(this));
+        break;
+      case 'loop':
+        this._setTabsOption('loopItemFocus', value);
+        break;
+      case 'badgeExpr':
+        this._invalidate();
+        break;
+      case 'tabsPosition':
+        this._toggleTabPanelTabsPositionClass();
+        this._updateTabsIndicatorPosition();
+        this._updateTabsOrientation();
+        break;
+      case 'iconPosition':
+        this._setTabsOption('iconPosition', value);
+        break;
+      case 'stylingMode':
+        this._setTabsOption('stylingMode', value);
+        break;
+      case '_tabsIndicatorPosition':
+        this._setTabsOption('_indicatorPosition', value);
+        break;
+      default:
+        this.callBase(args);
+    }
+  },
 });
 
 TabPanel.ItemClass = TabPanelItem;
@@ -535,9 +520,3 @@ TabPanel.ItemClass = TabPanelItem;
 registerComponent('dxTabPanel', TabPanel);
 
 export default TabPanel;
-
-/**
- * @name dxTabPanelItem
- * @inherits dxMultiViewItem
- * @type object
- */
