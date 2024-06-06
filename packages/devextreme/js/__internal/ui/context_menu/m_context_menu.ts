@@ -669,7 +669,6 @@ class ContextMenu extends MenuBase {
   }
 
   _initScrollable($container) {
-    // @ts-expect-error
     this._createComponent($container, Scrollable, {
       useKeyboard: false,
       _onVisibilityChanged: (scrollable) => {
