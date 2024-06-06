@@ -13,7 +13,7 @@ import { end as hoverEventEnd } from '@js/events/hover';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 import Button from '@js/ui/button';
-import type { Item, Properties } from '@js/ui/menu';
+import type { Item } from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
@@ -79,8 +79,6 @@ class Menu extends MenuBase {
   _hoveredRootItem?: dxElementWrapper;
 
   _actions?: any;
-
-  _optionsByReference?: Properties;
 
   _showSubmenuTimer?: any;
 

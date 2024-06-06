@@ -234,7 +234,6 @@ class RadioGroup extends Editor<Properties> {
 
   _setOptionsByReference(): void {
     super._setOptionsByReference();
-    // @ts-expect-error
     extend(this._optionsByReference, { value: true });
   }
 
