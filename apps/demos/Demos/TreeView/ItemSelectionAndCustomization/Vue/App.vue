@@ -19,7 +19,7 @@
           {{ item.data.fullName + ' (' + item.data.position + ')' }}
         </template>
       </DxTreeView>
-      <span>{{' '}}</span>
+      <span>{{ ' ' }}</span>
       <div class="selected-container">Selected employees
         <DxList
           id="selected-employees"
