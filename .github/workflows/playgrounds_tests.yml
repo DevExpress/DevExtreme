@@ -9,6 +9,10 @@ on:
   push:
     branches: [24_1]
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   build:
     name: build
