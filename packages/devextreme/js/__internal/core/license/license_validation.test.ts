@@ -343,12 +343,10 @@ describe('license check', () => {
     { token: TOKEN_MISSING_FIELD_3, version: '1.2.' },
     { token: TOKEN_UNSUPPORTED_VERSION, version: '1.2.abc' },
     { token: 'Another', version: '1.2.0' },
-    { token: 'str@nge', version: undefined },
-    { token: 'in.put', version: undefined },
     { token: '3.2.1', version: '1.2.1' },
     { token: TOKEN_23_1, version: '123' },
   ])('W0022 error should be logged if version is preview [%#]', ({ token, version }) => {
-    validateLicense(token as string, version as string);
+    validateLicense(token as string, version);
     expect(errors.log).toHaveBeenCalledWith('W0022');
   });
 
