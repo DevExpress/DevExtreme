@@ -8,6 +8,8 @@ interface AriaOptions {
   // eslint-disable-next-line spellcheck/spell-checker
   roledescription?: string;
   label?: string;
+  haspopup?: boolean;
+  expanded?: boolean | undefined;
 }
 
 declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
@@ -17,6 +19,8 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   _deprecatedOptions: Record<string, unknown>;
 
   _optionsByReference: Record<string, unknown>;
+
+  _disposed?: boolean;
 
   setAria(ariaOptions: AriaOptions, $element?: dxElementWrapper): void;
   setAria(
@@ -43,13 +47,19 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   _attachClickEvent(): void;
 
   _renderFocusState(): void;
+  _cleanFocusState(): void;
+
+  _toggleVisibility(visible: boolean): void;
 
   // dom_component
   _render(): void;
   _initMarkup(): void;
+  _initTemplates(): void;
   _clean(): void;
 
   _getDefaultOptions(): TProperties;
+  _getTemplateByOption(optionName: string): unknown;
+  _getSynchronizableOptionsForCreateComponent(): string[];
   _defaultOptionsRules(): Record<string, unknown>[];
   _optionChanged(args: Record<string, unknown>): void;
   _setOptionWithoutOptionChange(optionName: string, value: unknown): void;
@@ -60,7 +70,7 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
 
   _createComponent<TComponent>(
     element: string | HTMLElement | dxElementWrapper,
-    component: new (...args) => TComponent,
+    component: string | (new (...args) => TComponent),
     config: TComponent extends Component<infer TTProperties> ? TTProperties : never,
   ): TComponent;
 
@@ -70,6 +80,8 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   _createActionByOption(optionName: string, config?: Record<string, unknown>);
   _isInitialOptionValue(name: string): boolean;
   _setDeprecatedOptions(): void;
+
+  _dispose(): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
