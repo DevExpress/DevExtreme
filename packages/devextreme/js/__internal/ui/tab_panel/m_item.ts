@@ -1,10 +1,12 @@
-import CollectionWidgetItem from '../collection/item';
-import { noop } from '../../core/utils/common';
+import { noop } from '@js/core/utils/common';
+import CollectionWidgetItem from '@js/ui/collection/item';
 
 export default class TabPanelItem extends CollectionWidgetItem {
-    _renderWatchers() {
-        this._startWatcher('badge', noop);
+  _renderWatchers() {
+    // @ts-expect-error
+    this._startWatcher('badge', noop);
 
-        return super._renderWatchers();
-    }
+    // @ts-expect-error
+    return super._renderWatchers();
+  }
 }
