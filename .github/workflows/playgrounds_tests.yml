@@ -106,7 +106,7 @@ jobs:
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: npm run build
+      run: npx nx build
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}

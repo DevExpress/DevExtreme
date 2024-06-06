@@ -41,7 +41,7 @@ jobs:
         working-directory: ./packages/devextreme
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: npm run build
+        run: npx nx build
 
       - name: Generate wrappers
         run: npm run regenerate-all
@@ -59,16 +59,13 @@ jobs:
           fi
 
       - name: Angular - Build
-        working-directory: ./packages/devextreme-angular
-        run: npm run build
+        run: npx nx build devextreme-angular
 
       - name: Angular - Run tests
-        working-directory: ./packages/devextreme-angular
-        run: npm run test:dev
+        run: npx nx test:dev devextreme-angular
 
       - name: Angular - Check packing
-        working-directory: ./packages/devextreme-angular
-        run: npm run pack
+        run: npx nx pack devextreme-angular
 
       - name: React - Run tests
         run: npx nx test devextreme-react
@@ -77,11 +74,10 @@ jobs:
         run: npx nx pack devextreme-react
 
       - name: Vue - Run tests
-        working-directory: packages/devextreme-vue
-        run: npm run test
+        run: npx nx test devextreme-vue
 
       - name: Vue - Check packing
-        run: npx nx run-many -t pack -p devextreme-vue
+        run: npx nx pack devextreme-vue
 
       - name: Archive internal-tools artifacts
         uses: actions/upload-artifact@v3

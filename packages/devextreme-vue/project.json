@@ -7,13 +7,52 @@
     "devextreme-main"
   ],
   "targets": {
+    "pack": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "pack"
+      },
+      "inputs": [
+        "default"
+      ],
+      "outputs": [
+        "{projectRoot}/npm"
+      ],
+      "cache": true
+    },
     "regenerate": {
       "executor": "nx:run-script",
       "options": {
         "script": "regenerate"
       },
       "dependsOn": ["devextreme-monorepo:\"vue:copy-metadata\""]
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "inputs": [
+        "default",
+        "test"
+      ],
+      "cache": true
     }
+  },
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/metadata/**/*",
+      "{projectRoot}/src/**/*",
+      "!{projectRoot}/src/**/__tests__/*",
+      "{projectRoot}/build.config.js",
+      "{projectRoot}/gulpfile.js",
+      "{projectRoot}/tsconfig*",
+      "{workspaceRoot}/tsconfig.json"
+    ],
+    "test": [
+      "{projectRoot}/src/**/__tests__/*",
+      "{projectRoot}/jest.config.js"
+    ]
   },
   "tags": []
 }
