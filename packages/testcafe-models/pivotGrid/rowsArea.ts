@@ -5,8 +5,8 @@ const CLASSES = {
 export default class RowsArea {
   private readonly element: Selector;
 
-  constructor(selector: Selector) {
-    this.element = selector.find(`.${CLASSES.root}`);
+  constructor(selector: Selector, idx?: number) {
+    this.element = selector.find(`.${CLASSES.root}`).nth(idx || 0);
   }
 
   getCell(idx = 0): Selector {
