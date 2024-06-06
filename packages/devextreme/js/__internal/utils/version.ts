@@ -56,7 +56,7 @@ function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
 function versionsEqual(versionA: Version, versionB: Version): boolean {
   return versionA.major === versionB.major
     && versionA.minor === versionB.minor
-    && versionA.patch === versionB.patch
+    && versionA.patch === versionB.patch;
 }
 
 export function getPreviousMajorVersion({ major, minor, patch }: Version): Version {
