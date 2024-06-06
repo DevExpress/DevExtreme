@@ -12,12 +12,12 @@ import { FIELD_ITEM_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     FIELD_ITEM_LABEL_CONTENT_CLASS,
     FORM_GROUP_CAPTION_CLASS,
-} from 'ui/form/constants';
+} from '__internal/ui/form/constants';
 
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
     TOGGLE_CONTROLS_PADDING_CLASS
-} from 'ui/form/components/field_item';
+} from '__internal/ui/form/components/m_field_item';
 
 import ValidationEngine from 'ui/validation_engine';
 
