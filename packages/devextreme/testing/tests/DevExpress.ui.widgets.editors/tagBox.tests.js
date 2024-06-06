@@ -6822,7 +6822,7 @@ QUnit.module('performance', () => {
         assert.ok($.isFunction(filter), 'filter is function');
     });
 
-    QUnit.test('Tag labels should be correctly displayed with valueExpr as function and hideSelectedItems enabled (T1234032)', function(assert) {
+    QUnit.test('tag labels should be correctly displayed with valueExpr as function and hideSelectedItems enabled (T1234032)', function(assert) {
         const dataSource = [
             { id: 1, scheme: 'schema 1', name: 'item1' },
             { id: 2, scheme: 'schema 2', name: 'item2' },
