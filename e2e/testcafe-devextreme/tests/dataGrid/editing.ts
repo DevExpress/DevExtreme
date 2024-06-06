@@ -2289,6 +2289,30 @@ test('Popup EditForm screenshot', async (t) => {
   },
 }));
 
+// T1218553
+test('Popup EditForm screenshot when editRowKey is initially specified', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(await takeScreenshot('popup-edit-form.png', dataGrid.element))
+    .ok()
+    .expect(dataGrid.getPopupEditForm().element.exists)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 2).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  height: 400,
+  showBorders: true,
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
+    editRowKey: 0,
+  },
+}));
+
 // T1165529
 [
   true,
