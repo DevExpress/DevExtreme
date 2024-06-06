@@ -19,6 +19,7 @@
           {{ item.data.fullName + ' (' + item.data.position + ')' }}
         </template>
       </DxTreeView>
+      <span>&nbsp;</span>
       <div class="selected-container">Selected employees
         <DxList
           id="selected-employees"
@@ -132,10 +133,6 @@ function selectionModeValueChanged(e) {
   margin-bottom: 20px;
 }
 
-.form {
-  font-size: 0;
-}
-
 .form > div,
 #treeview {
   display: inline-block;
@@ -146,7 +143,7 @@ function selectionModeValueChanged(e) {
   padding: 20px;
   margin-left: 20px;
   background-color: rgba(191, 191, 191, 0.15);
-  font-size: initial;
+  font-size: 115%;
   font-weight: bold;
 }
 
