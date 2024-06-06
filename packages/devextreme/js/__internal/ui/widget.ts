@@ -16,6 +16,8 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
   // component
   _deprecatedOptions: Record<string, unknown>;
 
+  _optionsByReference: Record<string, unknown>;
+
   setAria(ariaOptions: AriaOptions, $element?: dxElementWrapper): void;
   setAria(
     attribute: string,
@@ -64,6 +66,7 @@ declare class ExtendedWidget<TProperties> extends Widget<TProperties> {
 
   // component
   _init(): void;
+  _initOptions(options: TProperties): void;
   _createActionByOption(optionName: string, config?: Record<string, unknown>);
   _isInitialOptionValue(name: string): boolean;
   _setDeprecatedOptions(): void;
