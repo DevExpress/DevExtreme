@@ -60,12 +60,8 @@ jobs:
       - name: Run deps scanner
         run: |
           ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-
-      #      - name: Copy scanner artifacts
-      #        shell: bash
-      #        run: |
-      #          mkdir -p ./artifacts/deps-scanner
-      #          cp reportGithub.json ./artifacts/deps-scanner
+          mkdir -p ./artifatcs/deps-scanner
+          cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
@@ -81,7 +77,6 @@ jobs:
         working-directory: artifacts/npm
         shell: bash
         run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
-
 
 #  publish:
 #    name: Publish package
