@@ -833,6 +833,9 @@ const CollectionWidget = Widget.inherit({
 
     _renderItems: function(items) {
         if(items.length) {
+            this._itemsToRenderCount = items.length;
+            this._itemsRenderedCount = 0;
+
             each(items, function(index, itemData) {
                 this._renderItem(this._renderedItemsCount + index, itemData);
             }.bind(this));
@@ -1023,7 +1026,13 @@ const CollectionWidget = Widget.inherit({
     },
 
     _onItemTemplateRendered: function() {
-        return noop;
+        return () => {
+            this._itemsRenderedCount += 1;
+
+            if(this._itemsRenderedCount === this._itemsToRenderCount) {
+                this.option('_onItemsRendered')?.();
+            }
+        };
     },
 
     _emptyMessageContainer: function() {

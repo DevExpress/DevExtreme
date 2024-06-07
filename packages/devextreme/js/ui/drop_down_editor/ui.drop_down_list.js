@@ -527,7 +527,8 @@ const DropDownList = DropDownEditor.inherit({
             dataSource: this._getDataSource(),
             _dataController: this._dataController,
             hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
-            focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false
+            focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false,
+            _onItemsRendered: this._listItemsRendered.bind(this)
         };
 
         if(!this._canListHaveFocus()) {
@@ -535,6 +536,10 @@ const DropDownList = DropDownEditor.inherit({
         }
 
         return options;
+    },
+
+    _listItemsRendered: function() {
+        this._updateListDimensions();
     },
 
     _canListHaveFocus: () => false,
@@ -789,7 +794,7 @@ const DropDownList = DropDownEditor.inherit({
     _needPopupRepaint: function() {
         const dataController = this._dataController;
         const currentPageIndex = dataController.pageIndex();
-        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (dataController.isLastPage() && !this._list._scrollViewIsFull());
+        const needRepaint = (isDefined(this._pageIndex) && currentPageIndex <= this._pageIndex) || (dataController.isLastPage() && this._list && !this._list._scrollViewIsFull());
 
         this._pageIndex = currentPageIndex;
 
