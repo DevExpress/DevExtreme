@@ -23,7 +23,6 @@ env:
   MOVE_STABLE_TAG: ${{ inputs.tag == 'stable' }}
 
 jobs:
-
   build:
     name: Build packages
     runs-on: windows-latest
@@ -78,89 +77,89 @@ jobs:
         shell: bash
         run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
-#  publish:
-#    name: Publish package
-#    runs-on: ubuntu-latest
-#    needs: build
-#    strategy:
-#      fail-fast: false
-#      matrix:
-#        package: ${{ fromJSON(needs.build.outputs.packages) }}
-#    steps:
-#      - name: Get sources
-#        uses: actions/checkout@v4
-#        with:
-#          sparse-checkout: |
-#            /tools
-#            /packages/devextreme-monorepo-tools
-#            package.json
-#          sparse-checkout-cone-mode: false
-#
-#      - name: Download artifacts
-#        uses: actions/download-artifact@v3
-#        with:
-#          name: packages
-#
-#      - name: Install dependencies
-#        run: npm install --no-audit --no-fund --legacy-peer-deps --ignore-scripts
-#
-#      - name: Change package scope
-#        id: scopedPackage
-#        env:
-#          PACKAGE: ${{ matrix.package }}
-#        run: |
-#          SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
-#          PACKAGE_DIR=$(npx ts-node tools/scripts/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
-#          echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
-#          cd $PACKAGE_DIR;
-#          npm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
-#          npm pkg get version --workspaces=false | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
-#          npm pkg get version --workspaces=false | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
-#
-#        # --ignore-scripts is required for publishing devextreme-angular which fails with error:
-#        # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'
-#        # Should be removed.
-#      - name: Publish to npm.pkg.github.com
-#        working-directory: ${{ steps.scopedPackage.outputs.packageDir }}
-#        env:
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
-#          npm publish --quiet --ignore-scripts --registry https://npm.pkg.github.com;
-#
-#      - name: Move 'daily' tag
-#        if: ${{ env.MOVE_DAILY_TAG == 'true' }}
-#        env:
-#          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-#          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
-#          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-#          npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily
-#
-#      - name: Move 'stable' tag
-#        if: ${{ env.MOVE_STABLE_TAG == 'true' }}
-#        env:
-#          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
-#          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
-#          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
-#          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-#        run: |
-#          npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
-#          npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable
-#
-#
-#  notify:
-#    runs-on: devextreme-shr2
-#    name: Send notifications
-#    needs: [ build, publish ]
-#    if: failure()
-#
-#    steps:
-#      - uses: actions/checkout@v4
-#      - uses: DevExpress/github-actions/send-teams-notification@main
-#        with:
-#          hook_url: ${{secrets.TEAMS_ALERT}}
-#          bearer_token: ${{secrets.GITHUB_TOKEN}}
-#          specific_repo: DevExpress/DevExtreme
+  publish:
+    name: Publish package
+    runs-on: ubuntu-latest
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        package: ${{ fromJSON(needs.build.outputs.packages) }}
+    steps:
+      - name: Get sources
+        uses: actions/checkout@v4
+        with:
+          sparse-checkout: |
+            /tools
+            /packages/devextreme-monorepo-tools
+            package.json
+          sparse-checkout-cone-mode: false
+
+      - name: Download artifacts
+        uses: actions/download-artifact@v3
+        with:
+          name: packages
+
+      - name: Install dependencies
+        run: npm install --no-audit --no-fund --legacy-peer-deps --ignore-scripts
+
+      - name: Change package scope
+        id: scopedPackage
+        env:
+          PACKAGE: ${{ matrix.package }}
+        run: |
+          SCOPE=$(echo "${{ github.repository_owner }}" | tr '[:upper:]' '[:lower:]');
+          PACKAGE_DIR=$(npx ts-node tools/scripts/change-package-scope --tgz $PACKAGE.tgz --scope $SCOPE)
+          echo "packageDir=$PACKAGE_DIR" >> "$GITHUB_OUTPUT";
+          cd $PACKAGE_DIR;
+          npm pkg get name --workspaces=false | tr -d '"' | sed -r 's/(.*)/name=\1/' >> "$GITHUB_OUTPUT";
+          npm pkg get version --workspaces=false | tr -d '"' | sed -r 's/(.*)/version=\1/' >> "$GITHUB_OUTPUT";
+          npm pkg get version --workspaces=false | tr -d '"' | sed -r 's/([0-9]+\.[0-9]+).*/majorVersion=\1/' >> "$GITHUB_OUTPUT";
+
+        # --ignore-scripts is required for publishing devextreme-angular which fails with error:
+        # 'Trying to publish a package that has been compiled by Ivy in full compilation mode.'
+        # Should be removed.
+      - name: Publish to npm.pkg.github.com
+        working-directory: ${{ steps.scopedPackage.outputs.packageDir }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN";
+          npm publish --quiet --ignore-scripts --registry https://npm.pkg.github.com;
+
+      - name: Move 'daily' tag
+        if: ${{ env.MOVE_DAILY_TAG == 'true' }}
+        env:
+          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
+          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
+          npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-daily
+
+      - name: Move 'stable' tag
+        if: ${{ env.MOVE_STABLE_TAG == 'true' }}
+        env:
+          PACKAGE_NAME: ${{ steps.scopedPackage.outputs.name }}
+          PACKAGE_VERSION: ${{ steps.scopedPackage.outputs.version }}
+          PACKAGE_VERSION_MAJOR: ${{ steps.scopedPackage.outputs.majorVersion }}
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          npm set //npm.pkg.github.com/:_authToken="$NODE_AUTH_TOKEN"
+          npm --registry=https://npm.pkg.github.com dist-tag add $PACKAGE_NAME@$PACKAGE_VERSION $PACKAGE_VERSION_MAJOR-stable
+
+
+  notify:
+    runs-on: devextreme-shr2
+    name: Send notifications
+    needs: [ build, publish ]
+    if: failure()
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: DevExpress/github-actions/send-teams-notification@main
+        with:
+          hook_url: ${{secrets.TEAMS_ALERT}}
+          bearer_token: ${{secrets.GITHUB_TOKEN}}
+          specific_repo: DevExpress/DevExtreme
