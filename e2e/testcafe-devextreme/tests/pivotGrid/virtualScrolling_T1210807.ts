@@ -38,8 +38,8 @@ test('Row fields overlap data fields if dataFieldArea is set to "row" and virtua
   const firstHeaderRow = pivotGrid.getRowsArea(2).getCell(0);
   await t
     .click(firstHeaderRow);
-  await pivotGrid.scrollBy({ top: 10000 });
-  await pivotGrid.scrollBy({ top: 10000 });
+  await pivotGrid.scrollBy({ top: 30000 });
+  await pivotGrid.scrollBy({ top: 30000 });
 
   await takeScreenshot('rows_do_not_overlap_data_fields_if_virtual_scrolling_enabled_T1210807.png', pivotGrid.element);
   await t
