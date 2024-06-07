@@ -12,7 +12,8 @@ import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-import { showTrialPanel } from './trial_panel';
+import type { CustomTrialPanelStyles } from './trial_panel';
+import { registerCustomComponents, renderTrialPanel } from './trial_panel';
 import type {
   License,
   LicenseCheckParams,
@@ -153,6 +154,22 @@ function getLicenseCheckParams({
     return { preview, error: undefined };
   } catch {
     return { preview, error: 'W0021' };
+  }
+}
+
+export function showTrialPanel(
+  buyNowUrl: string,
+  version: string,
+  customStyles?: CustomTrialPanelStyles,
+): void {
+  if (typeof customElements !== 'undefined') {
+    renderTrialPanel(buyNowUrl, version, customStyles);
+  }
+}
+
+export function registerTrialPanelComponents(customStyles?: CustomTrialPanelStyles): void {
+  if (typeof customElements !== 'undefined') {
+    registerCustomComponents(customStyles);
   }
 }
 

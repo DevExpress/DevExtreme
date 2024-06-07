@@ -289,7 +289,7 @@ describe('license check', () => {
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
-    trialPanelSpy = jest.spyOn(trialPanel, 'showTrialPanel');
+    trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
 
@@ -456,7 +456,7 @@ describe('internal license check', () => {
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
-    trialPanelSpy = jest.spyOn(trialPanel, 'showTrialPanel');
+    trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
 
