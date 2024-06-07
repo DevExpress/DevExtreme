@@ -7,11 +7,6 @@
   vertical-align: top;
 }
 
-::ng-deep #treeviewDriveC,
-::ng-deep #treeviewDriveD {
-  margin-top: 10px;
-}
-
 ::ng-deep .dx-treeview-item {
   box-sizing: border-box;
 }
@@ -20,6 +15,7 @@
   min-height: auto;
   padding: 0;
   cursor: default;
+  margin-bottom: 10px;
 }
 
 ::ng-deep .drive-panel {

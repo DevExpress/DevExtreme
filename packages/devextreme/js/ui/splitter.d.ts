@@ -167,12 +167,6 @@ export interface dxSplitterOptions<
     items?: Array<TItem>;
     /**
      * @docid
-     * @default false
-     * @public
-     */
-    repaintChangesOnly?: boolean;
-    /**
-     * @docid
      * @default true
      * @public
      */
