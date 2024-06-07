@@ -11,12 +11,9 @@ const options: Options<Properties> = {
   end: [60],
   disabled: [true, false],
   readOnly: [true, false],
-  hint: [undefined, 'hint'],
   height: [undefined, 250],
   width: [undefined, '50%'],
-  focusStateEnabled: [true],
   label: [
-    undefined,
     {
       visible: true,
       format(value) {
@@ -26,7 +23,6 @@ const options: Options<Properties> = {
     },
   ],
   tooltip: [
-    undefined,
     {
       enabled: true,
       format(value) {
