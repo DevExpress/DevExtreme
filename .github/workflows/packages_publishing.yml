@@ -57,12 +57,15 @@ jobs:
           token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
           path: deps-scanner
 
-      - name: Build and run deps scanner
-        working-directory: deps-scanner
+      - name: Run deps scanner
         run: |
-          dotnet build -c Release -o ../
-          cd ../
-          dotnet npmDepsScanner.dll scan_cache reportGithub.json
+          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+
+      #      - name: Copy scanner artifacts
+      #        shell: bash
+      #        run: |
+      #          mkdir -p ./artifacts/deps-scanner
+      #          cp reportGithub.json ./artifacts/deps-scanner
 
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
@@ -73,10 +76,11 @@ jobs:
           path: artifacts/npm/*.tgz
           retention-days: 2
 
-#      - name: Filter packages
-#        id: filter
-#        working-directory: artifacts/npm
-#        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
+      - name: Filter packages
+        id: filter
+        working-directory: artifacts/npm
+        shell: bash
+        run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
 
 
 #  publish:
