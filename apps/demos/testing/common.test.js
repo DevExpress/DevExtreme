@@ -143,11 +143,6 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
-    ],
     TabPanel: [
       { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
     ],
@@ -204,11 +199,6 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
-    ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
-      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
     ],
     TileView: [
       { demo: 'Directions', themes: [THEME.material] },

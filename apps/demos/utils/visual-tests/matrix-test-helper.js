@@ -254,9 +254,6 @@ const SKIPPED_TESTS = {
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-    ],
   },
   React: {
     Charts: [
