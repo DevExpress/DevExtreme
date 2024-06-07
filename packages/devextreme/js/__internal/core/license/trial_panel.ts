@@ -249,24 +249,20 @@ class DxLicenseTrigger extends HTMLElement {
   }
 }
 
-export function registerTrialPanelComponents(customStyles?: CustomTrialPanelStyles): void {
-  if (typeof customElements !== 'undefined' && !customElements.get(componentNames.trigger)) {
+export function registerCustomComponents(customStyles?: CustomTrialPanelStyles): void {
+  if (!customElements.get(componentNames.trigger)) {
     DxLicense.customStyles = customStyles;
     customElements.define(componentNames.trigger, DxLicenseTrigger);
     customElements.define(componentNames.panel, DxLicense);
   }
 }
 
-export function showTrialPanel(
+export function renderTrialPanel(
   buyNowUrl: string,
   version: string,
   customStyles?: CustomTrialPanelStyles,
 ): void {
-  if (typeof customElements === 'undefined') {
-    return;
-  }
-
-  registerTrialPanelComponents(customStyles);
+  registerCustomComponents(customStyles);
 
   const trialPanelTrigger = document.createElement(componentNames.trigger);
 
