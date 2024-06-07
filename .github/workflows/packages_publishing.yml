@@ -60,7 +60,7 @@ jobs:
       - name: Run deps scanner
         run: |
           ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
-          mkdir -p ./artifatcs/deps-scanner
+          mkdir -p ./artifacts/deps-scanner
           cp reportGithub.json ./artifacts/deps-scanner/
 
       - name: Build artifacts package
