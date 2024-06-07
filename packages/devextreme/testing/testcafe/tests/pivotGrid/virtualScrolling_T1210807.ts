@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import PivotGrid from 'devextreme-testcafe-models/pivotGrid';
+import PivotGrid from '../../model/pivotGrid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { isMaterialBased } from '../../helpers/themeUtils';
