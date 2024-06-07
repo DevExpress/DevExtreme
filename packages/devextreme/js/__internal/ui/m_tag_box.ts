@@ -967,11 +967,15 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _shouldGetItemsFromPlain(values) {
-    if (this.option('hideSelectedItems')) {
-      return values && this._dataController.isLoaded();
+    if (!values || !this._dataController.isLoaded()) {
+      return false;
     }
 
-    return values && this._dataController.isLoaded() && values.length <= this._getPlainItems().length;
+    if (this.option('hideSelectedItems')) {
+      return true;
+    }
+
+    return values.length <= this._getPlainItems().length;
   },
 
   _getItemsFromPlain(values) {
@@ -980,11 +984,9 @@ const TagBox = (SelectBox as any).inherit({
 
     if (needFilterPlainItems) {
       const plainItems = this._getPlainItems();
-      selectedItems = this._filterSelectedItems(plainItems, values);
+      const filteredItems = this._filterSelectedItems(plainItems, values);
 
-      if (this.option('hideSelectedItems')) {
-        return this.option('selectedItems').concat(selectedItems);
-      }
+      selectedItems = this.option('hideSelectedItems') ? this.option('selectedItems').concat(filteredItems) : filteredItems;
     }
 
     return selectedItems;
