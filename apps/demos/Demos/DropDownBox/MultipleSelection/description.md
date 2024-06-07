@@ -1,4 +1,4 @@
-DropDownBox is one of multiple DevExtreme drop-down editors. To learn how to choose a DevExtreme drop-down editor, refer to the following article: [How to Choose a Drop-Down Editor](/Documentation/Guide/UI_Components/Lookup/Choose_a_Drop-Down_Editor/).
+DropDownBox is one of multiple DevExtreme drop-down editors. For information on which DevExtreme drop-down editor you should use, review the following article: [How to Choose a Drop-Down Editor](/Documentation/Guide/UI_Components/Lookup/Choose_a_Drop-Down_Editor/).
 
 DropDownBox allows you to embed any content, including other components. If the UI component embedded into the DropDownBox allows multiple selection, synchronize the DropDownBox value with the selected items. [Synchronization instructions](/Demos/WidgetsGallery/Demo/DropDownBox/SingleSelection/) are the same for every selection mode.
 <!--split-->
