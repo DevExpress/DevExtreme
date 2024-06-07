@@ -26,9 +26,9 @@ type ISplitterOptionsNarrowedEvents<TItem = any, TKey = any> = {
   onItemContextMenu?: ((e: ItemContextMenuEvent<TItem, TKey>) => void);
   onItemExpanded?: ((e: ItemExpandedEvent<TItem, TKey>) => void);
   onItemRendered?: ((e: ItemRenderedEvent<TItem, TKey>) => void);
-  onResize?: ((e: ResizeEvent<TItem, TKey>) => void);
-  onResizeEnd?: ((e: ResizeEndEvent<TItem, TKey>) => void);
-  onResizeStart?: ((e: ResizeStartEvent<TItem, TKey>) => void);
+  onResize?: ((e: ResizeEvent<TKey>) => void);
+  onResizeEnd?: ((e: ResizeEndEvent<TKey>) => void);
+  onResizeStart?: ((e: ResizeStartEvent<TKey>) => void);
 }
 
 type ISplitterOptions<TItem = any, TKey = any> = React.PropsWithChildren<ReplaceFieldTypes<Properties<TItem, TKey>, ISplitterOptionsNarrowedEvents<TItem, TKey>> & IHtmlOptions & {
