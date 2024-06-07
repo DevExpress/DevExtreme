@@ -157,14 +157,16 @@ export function validateLicense(licenseKey: string, versionStr: string = package
 
   const version = parseVersion(versionStr);
 
-  if (!assertedVersionsCompatible(version)) {
-    return;
-  }
+  const versionsCompatible = assertedVersionsCompatible(version);
 
   const { preview, internal, error } = getLicenseCheckParams({
     licenseKey,
     version,
   });
+
+  if (!versionsCompatible && internal) {
+    return;
+  }
 
   if (error) {
     errors.log(preview ? 'W0022' : error);
