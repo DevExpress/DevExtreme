@@ -14,6 +14,9 @@ export interface CustomTrialPanelStyles {
   buttonStyles?: StylesMap;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-extraneous-class
+const SafeHTMLElement = typeof HTMLElement !== 'undefined' ? HTMLElement : class {};
+
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const componentNames = {
   trigger: 'dx-license-trigger',
@@ -72,8 +75,10 @@ const textStyles = {
   'font-wight': '600',
 };
 
-class DxLicense extends HTMLElement {
+class DxLicense extends SafeHTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
+
+  private readonly that = this as unknown as HTMLElement;
 
   private _observer: MutationObserver | null = null;
 
@@ -166,7 +171,7 @@ class DxLicense extends HTMLElement {
 
     button.onclick = (): void => {
       this._hidden = true;
-      this.style.cssText = this._createImportantStyles({
+      this.that.style.cssText = this._createImportantStyles({
         display: 'none',
       });
     };
@@ -178,16 +183,16 @@ class DxLicense extends HTMLElement {
     contentContainer.style.cssText = this._contentStyles;
     contentContainer.append(
       this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
-      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
-      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
+      this._createLink('purchase a license', this.that.getAttribute(attributeNames.buyNow) as string),
+      this._createSpan(` to continue use of DevExpress product libraries (v${this.that.getAttribute(attributeNames.version)}).`),
     );
     return contentContainer;
   }
 
   private _reassignComponent(): void {
-    this.innerHTML = '';
-    this.style.cssText = this._containerStyles;
-    this.append(
+    this.that.innerHTML = '';
+    this.that.style.cssText = this._containerStyles;
+    this.that.append(
       this._createContentContainer(),
       this._createButton(),
     );
@@ -208,7 +213,7 @@ class DxLicense extends HTMLElement {
           this._reassignComponent();
         }
       });
-      this._observer.observe(this, {
+      this._observer.observe(this.that, {
         childList: true,
         attributes: true,
         // eslint-disable-next-line spellcheck/spell-checker
@@ -221,12 +226,14 @@ class DxLicense extends HTMLElement {
     setTimeout(() => {
       const licensePanel = document.getElementsByTagName(componentNames.panel);
       if (!licensePanel.length) {
-        document.body.prepend(this);
+        document.body.prepend(this.that);
       }
     }, 100);
   }
 }
-class DxLicenseTrigger extends HTMLElement {
+class DxLicenseTrigger extends SafeHTMLElement {
+  private readonly that = this as unknown as HTMLElement;
+
   public connectedCallback(): void {
     const licensePanel = document.getElementsByTagName(componentNames.panel);
     if (!licensePanel.length) {
@@ -234,12 +241,12 @@ class DxLicenseTrigger extends HTMLElement {
 
       license.setAttribute(
         attributeNames.version,
-        this.getAttribute(attributeNames.version) as string,
+        this.that.getAttribute(attributeNames.version) as string,
       );
 
       license.setAttribute(
         attributeNames.buyNow,
-        this.getAttribute(attributeNames.buyNow) as string,
+        this.that.getAttribute(attributeNames.buyNow) as string,
       );
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
@@ -252,8 +259,14 @@ class DxLicenseTrigger extends HTMLElement {
 export function registerCustomComponents(customStyles?: CustomTrialPanelStyles): void {
   if (!customElements.get(componentNames.trigger)) {
     DxLicense.customStyles = customStyles;
-    customElements.define(componentNames.trigger, DxLicenseTrigger);
-    customElements.define(componentNames.panel, DxLicense);
+    customElements.define(
+      componentNames.trigger,
+      DxLicenseTrigger as unknown as CustomElementConstructor,
+    );
+    customElements.define(
+      componentNames.panel,
+      DxLicense as unknown as CustomElementConstructor,
+    );
   }
 }
 
