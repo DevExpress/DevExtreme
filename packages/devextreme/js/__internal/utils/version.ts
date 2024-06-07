@@ -14,10 +14,9 @@ export interface Version {
   major: number;
   minor: number;
   patch: number;
-  buildParts?: number[];
 }
 
-export const VERSION_SPLITTER = '.';
+const VERSION_SPLITTER = '.';
 
 export function stringifyVersion(version: Version): string {
   const { major, minor, patch } = version;
@@ -26,13 +25,12 @@ export function stringifyVersion(version: Version): string {
 }
 
 export function parseVersion(version: string): Version {
-  const [major, minor, patch, ...rest] = version.split('.').map(Number);
+  const [major, minor, patch] = version.split('.').map(Number);
 
   return {
     major,
     minor,
     patch,
-    buildParts: rest || [],
   };
 }
 
@@ -58,13 +56,7 @@ function stringifyVersionList(assertedVersionList: AssertedVersion[]): string {
 function versionsEqual(versionA: Version, versionB: Version): boolean {
   return versionA.major === versionB.major
     && versionA.minor === versionB.minor
-    && versionA.patch === versionB.patch
-    && versionA.buildParts?.length === versionB.buildParts?.length
-    && (!versionA.buildParts?.length
-      || versionA.buildParts?.every(
-        (buildPart, index) => buildPart === versionB.buildParts?.[index],
-      )
-    );
+    && versionA.patch === versionB.patch;
 }
 
 export function getPreviousMajorVersion({ major, minor, patch }: Version): Version {
