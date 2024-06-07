@@ -248,9 +248,6 @@ const SKIPPED_TESTS = {
     TabPanel: [
       { demo: 'Overview', themes: [THEME.material] },
     ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-    ],
   },
   React: {
     Charts: [
