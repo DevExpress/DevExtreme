@@ -1,4 +1,6 @@
-The DropDownBox component consists of a text field and drop-down content. In this demo, the content is the TreeView and the DataGrid in single selection mode.
+DropDownBox is one of multiple DevExtreme drop-down editors. To learn how to choose a DevExtreme drop-down editor, refer to the following article: [How to Choose a Drop-Down Editor](/Documentation/Guide/UI_Components/Lookup/Choose_a_Drop-Down_Editor/).
+
+The DropDownBox component consists of a text field and drop-down content. DropDownBox allows you to embed any content, including other components. In this demo, the content is the TreeView and the DataGrid in single selection mode.
 
 To get started with the DevExtreme DropDownBox component, refer to the following step-by-step tutorial: [Getting Started with DropDownBox](/Documentation/Guide/UI_Components/DropDownBox/Getting_Started_with_DropDownBox/).
 <!--split-->
