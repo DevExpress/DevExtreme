@@ -209,9 +209,6 @@ const SKIPPED_TESTS = {
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
     ],
-    Tabs: [
-      { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
-    ],
     List: [
       { demo: 'ListSelection', themes: [THEME.material] },
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
