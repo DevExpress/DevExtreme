@@ -12,7 +12,8 @@ import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-import { showTrialPanel } from './trial_panel';
+import type { CustomTrialPanelStyles } from './trial_panel';
+import { registerCustomComponents, renderTrialPanel } from './trial_panel';
 import type {
   License,
   LicenseCheckParams,
@@ -156,6 +157,22 @@ function getLicenseCheckParams({
   }
 }
 
+export function showTrialPanel(
+  buyNowUrl: string,
+  version: string,
+  customStyles?: CustomTrialPanelStyles,
+): void {
+  if (typeof customElements !== 'undefined') {
+    renderTrialPanel(buyNowUrl, version, customStyles);
+  }
+}
+
+export function registerTrialPanelComponents(customStyles?: CustomTrialPanelStyles): void {
+  if (typeof customElements !== 'undefined') {
+    registerCustomComponents(customStyles);
+  }
+}
+
 export function validateLicense(licenseKey: string, versionStr: string = fullVersion): void {
   if (validationPerformed) {
     return;
@@ -164,14 +181,16 @@ export function validateLicense(licenseKey: string, versionStr: string = fullVer
 
   const version = parseVersion(versionStr);
 
-  if (!assertedVersionsCompatible(version)) {
-    return;
-  }
+  const versionsCompatible = assertedVersionsCompatible(version);
 
   const { internal, error } = getLicenseCheckParams({
     licenseKey,
     version,
   });
+
+  if (!versionsCompatible && internal) {
+    return;
+  }
 
   if (error && !internal) {
     showTrialPanel(BUY_NOW_LINK, fullVersion);
