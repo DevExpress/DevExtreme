@@ -213,7 +213,6 @@ const SKIPPED_TESTS = {
       { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
     ],
     List: [
-      { demo: 'ListSelection', themes: [THEME.material] },
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
     Gauges: [
