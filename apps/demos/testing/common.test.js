@@ -200,9 +200,6 @@ const SKIPPED_TESTS = {
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
-    TileView: [
-      { demo: 'Directions', themes: [THEME.material] },
-    ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
