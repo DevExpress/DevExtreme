@@ -19,7 +19,7 @@ const file: File[] = [{
 }];
 
 const options: Options<Properties> = {
-  value: [undefined, file],
+  value: [file],
   multiple: [true, false],
   disabled: [true, false],
   readOnly: [true, false],

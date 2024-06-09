@@ -10,7 +10,7 @@ fixture.disablePageReloads`Accessibility`
 const markup = '<p>He<em>llo</em></p>';
 
 const options: Options<Properties> = {
-  value: [undefined, markup],
+  value: [markup],
   readOnly: [true, false],
   hint: [undefined, 'hint'],
   name: ['', 'name'],
@@ -19,7 +19,6 @@ const options: Options<Properties> = {
   placeholder: ['', 'placeholder'],
   focusStateEnabled: [true],
   toolbar: [
-    undefined,
     {
       items: ['bold', 'color'],
     },

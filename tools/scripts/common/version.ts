@@ -20,7 +20,13 @@ export function updateVersion(version: string | undefined): void {
   sh.exec('npm i --legacy-peer-deps');
 }
 
-export function updateVersionJs(version: string | undefined): void {
+export function updateVersionJs(version: string | undefined, build?: string | undefined): void {
   const versionJsPath = path.join(ROOT_DIR, 'packages/devextreme/js/core/version.js');
-  fs.writeFileSync(versionJsPath, `export const version = '${validateVersion(version)}';\n`);
+  const validatedVersion = validateVersion(version);
+  const fullVersion = build ? `${validatedVersion}.${build}` : validatedVersion;
+  fs.writeFileSync(
+    versionJsPath,
+    `export const version = '${validatedVersion}';\n` +
+    `export const fullVersion = '${fullVersion}';\n`
+  );
 }

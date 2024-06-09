@@ -4,7 +4,7 @@
     "testcafe": "*"
   },
   "devDependencies": {
-    "devextreme": "~24.1.2"
+    "devextreme": "~24.1.3"
   },
-  "version": "24.1.2"
+  "version": "24.1.3"
 }

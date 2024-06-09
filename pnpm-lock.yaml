@@ -45,8 +45,8 @@ importers:
         specifier: ^6.0.2
         version: 6.0.2(@angular/compiler@16.2.12(@angular/core@16.2.12(rxjs@7.8.1)(zone.js@0.14.0)))(@angular/core@16.2.12(rxjs@7.8.1)(zone.js@0.14.0))(tslint@6.1.3(typescript@5.4.5))
       devextreme-internal-tools:
-        specifier: 14.0.0-beta.4
-        version: 14.0.0-beta.4
+        specifier: 14.0.0-beta.5
+        version: 14.0.0-beta.5
       http-server:
         specifier: 14.1.1
         version: 14.1.1
@@ -126,10 +126,10 @@ importers:
         specifier: ^2.6.12
         version: 2.6.12
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-angular:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme-angular/npm/dist
       rxjs:
         specifier: 7.8.1
@@ -232,7 +232,7 @@ importers:
         specifier: 4.1.54
         version: 4.1.54
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-aspnet-data:
         specifier: 3.0.0
@@ -244,16 +244,16 @@ importers:
         specifier: 1.0.3
         version: 1.0.3
       devextreme-dist:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme-dist
       devextreme-quill:
         specifier: 1.7.1
         version: 1.7.1
       devextreme-react:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme-react/npm
       devextreme-vue:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme-vue/npm
       dx-systemjs-vue-browser:
         specifier: 1.1.1
@@ -521,10 +521,10 @@ importers:
   apps/react:
     dependencies:
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme-react/npm
       react:
         specifier: ~18.0.0
@@ -567,10 +567,10 @@ importers:
   apps/react-storybook:
     dependencies:
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-react:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme-react/npm
     devDependencies:
       '@storybook/addon-essentials':
@@ -613,10 +613,10 @@ importers:
   apps/vue:
     dependencies:
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-vue:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme-vue/npm
       vue:
         specifier: 3.2.47
@@ -707,7 +707,7 @@ importers:
         specifier: 4.9.0
         version: 4.9.0
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../../packages/devextreme/artifacts/npm/devextreme
       devextreme-screenshot-comparer:
         specifier: 2.0.17
@@ -1116,8 +1116,8 @@ importers:
         specifier: 0.8.5
         version: 0.8.5
       sinon:
-        specifier: 17.0.1
-        version: 17.0.1
+        specifier: 18.0.0
+        version: 18.0.0
       staged-git-files:
         specifier: 1.3.0
         version: 1.3.0
@@ -1197,7 +1197,7 @@ importers:
         specifier: 16.2.14
         version: 16.2.14(chokidar@3.6.0)
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../devextreme/artifacts/npm/devextreme
       devextreme-schematics:
         specifier: '*'
@@ -1340,7 +1340,7 @@ importers:
   packages/devextreme-react:
     dependencies:
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../devextreme/artifacts/npm/devextreme
       prop-types:
         specifier: ^15.8.1
@@ -1472,8 +1472,8 @@ importers:
         specifier: 11.0.5
         version: 11.0.5
       sinon:
-        specifier: 9.2.4
-        version: 9.2.4
+        specifier: 18.0.0
+        version: 18.0.0
       ts-jest:
         specifier: 29.1.2
         version: 29.1.2(@babel/core@7.24.5)(@jest/types@29.6.3)(babel-jest@29.7.0(@babel/core@7.24.5))(jest@29.7.0(@types/node@20.11.17)(node-notifier@9.0.1)(ts-node@10.9.2(@swc/core@1.4.17)(@types/node@20.11.17)(typescript@4.9.5)))(typescript@4.9.5)
@@ -1487,7 +1487,7 @@ importers:
   packages/devextreme-vue:
     dependencies:
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../devextreme/artifacts/npm/devextreme
     devDependencies:
       '@vue/compiler-sfc':
@@ -1591,7 +1591,7 @@ importers:
         version: 2.5.0(encoding@0.1.13)
     devDependencies:
       devextreme:
-        specifier: ~24.1.2
+        specifier: ~24.1.3
         version: link:../devextreme/artifacts/npm/devextreme
 
 packages:
@@ -4190,9 +4190,6 @@ packages:
 
   '@sinonjs/fake-timers@6.0.1':
     resolution: {integrity: sha512-MZPUxrmFubI36XS1DI3qmI0YdN1gks62JtFZvxR67ljjSNCeK6U08Zx4msEWOXuofgqUt6zPHSi1H9fbjR/NRA==}
-
-  '@sinonjs/samsam@5.3.1':
-    resolution: {integrity: sha512-1Hc0b1TtyfBu8ixF/tpfSHTVWKwCBLY4QJbkgnE7HcwyvT2xArDxb4K7dMgqRm3szI+LJbzmW/s4xxEhv6hwDg==}
 
   '@sinonjs/samsam@8.0.0':
     resolution: {integrity: sha512-Bp8KUVlLp8ibJZrnvq2foVhP0IVX2CIprMJPK0vqGqgrDa0OHVKeZyBykqskkrdxV6yKBPmGasO8LVjAKR3Gew==}
@@ -7289,8 +7286,8 @@ packages:
   devextreme-cldr-data@1.0.3:
     resolution: {integrity: sha512-xd+uWv1KzEhr+ZH/MOWfDei3GFz+NAYyKUR9HgjM9BBwPel7PpMElYp4whM+PtAjziBaTssQnA//ob5c3BovTA==}
 
-  devextreme-internal-tools@14.0.0-beta.4:
-    resolution: {integrity: sha512-bSsJI1duDOxfAKsnlaJK7O/lLLlv/EEPEq4Knd5sf7ScwsLdGMrSwIOLlc6+epm9A5rY4D7sRKXaWVo0pLPQ+A==}
+  devextreme-internal-tools@14.0.0-beta.5:
+    resolution: {integrity: sha512-HuswhGy8ZwCNmafGw5M+DlUvTSloNR2QK006Kvy7kOBdw814O81XG8lw4XlUJN5SZ6hq+Mi8ls1NLLoQtpbbDQ==}
     engines: {node: '>=12.0.0'}
     hasBin: true
 
@@ -10416,9 +10413,6 @@ packages:
   just-debounce@1.1.0:
     resolution: {integrity: sha512-qpcRocdkUmf+UTNBYx5w6dexX5J31AKK1OmPwH630a83DdVVUIngk55RSAiIGpQyoH0dlr872VHfPjnQnK1qDQ==}
 
-  just-extend@4.2.1:
-    resolution: {integrity: sha512-g3UB796vUFIY90VIv/WX3L2c8CS2MdWUww3CNrYmqza1Fg0DURc2K/O4YrnklBdQarSJ/y8JnJYDGc+1iumQjg==}
-
   just-extend@6.2.0:
     resolution: {integrity: sha512-cYofQu2Xpom82S6qD778jBDpwvvy39s1l/hrYij2u9AMdQcGRpaBu6kY4mVhuno5kJVi1DAz4aiphA2WI1/OAw==}
 
@@ -11311,11 +11305,8 @@ packages:
   nice-try@1.0.5:
     resolution: {integrity: sha512-1nh45deeb5olNY7eX82BkPO7SSxR5SSYJiPTrTdFUVYwAl8CKMA5N9PjTYkHiRjisVcxcQ1HXdLhx2qxxJzLNQ==}
 
-  nise@4.1.0:
-    resolution: {integrity: sha512-eQMEmGN/8arp0xsvGoQ+B1qvSkR73B1nWSCh7nOt5neMCtwcQVYQGdzQMhcNscktTsWB54xnlSQFzOAPJD8nXA==}
-
-  nise@5.1.9:
-    resolution: {integrity: sha512-qOnoujW4SV6e40dYxJOb3uvuoPHtmLzIk4TFo+j0jPJoC+5Z9xja5qH5JZobEPsa8+YYphMrOSwnrshEhG2qww==}
+  nise@6.0.0:
+    resolution: {integrity: sha512-K8ePqo9BFvN31HXwEtTNGzgrPpmvgciDsFz8aztFjt4LqKO/JeFD8tBOeuDiCMXrIl/m1YvfH8auSpxfaD09wg==}
 
   no-case@3.0.4:
     resolution: {integrity: sha512-fgAN3jGAh+RoxUGZHTSOLJIqUc2wmoBwGR4tbpNAKmmovFoWq0OdRkb0VkldReO2a2iBT/OEulG9XSUc10r3zg==}
@@ -11896,9 +11887,6 @@ packages:
 
   path-to-regexp@0.1.7:
     resolution: {integrity: sha512-5DFkuoqlv1uYQKxy8omFBeJPQcdoE07Kv2sferDCrAq1ohOU+MSDswDIbnx3YAM60qIOnYa53wBhXW0EbMonrQ==}
-
-  path-to-regexp@1.8.0:
-    resolution: {integrity: sha512-n43JRhlUKUAlibEJhPeir1ncUID16QnEjNpwzNdO3Lm4ywrBpBZ5oLD0I6br9evr1Y9JTqwRtAh7JLoOzAQdVA==}
 
   path-to-regexp@6.2.2:
     resolution: {integrity: sha512-GQX3SSMokngb36+whdpRXE+3f9V8UzyAorlYvOGx87ufGHehNTn5lCxrKtLyZ4Yl/wEKnNnr98ZzOwwDZV5ogw==}
@@ -13284,12 +13272,8 @@ packages:
   simple-swizzle@0.2.2:
     resolution: {integrity: sha512-JA//kQgZtbuY83m+xT+tXJkmJncGMTFT+C+g2h2R9uxkYIrE2yy9sgmcLhCnw57/WSD+Eh3J97FPEDFnbXnDUg==}
 
-  sinon@17.0.1:
-    resolution: {integrity: sha512-wmwE19Lie0MLT+ZYNpDymasPHUKTaZHUH/pKEubRXIzySv9Atnlw+BUMGCzWgV7b7wO+Hw6f1TEOr0IUnmU8/g==}
-
-  sinon@9.2.4:
-    resolution: {integrity: sha512-zljcULZQsJxVra28qIAL6ow1Z9tpattkCTEJR4RBP3TGc00FcttsP5pK284Nas5WjMZU5Yzy3kAIp3B3KRf5Yg==}
-    deprecated: 16.1.1
+  sinon@18.0.0:
+    resolution: {integrity: sha512-+dXDXzD1sBO6HlmZDd7mXZCR/y5ECiEiGCBSGuFD/kZ0bDTofPYc6JaeGmPSF+1j1MejGUWkORbYOLDyvqCWpA==}
 
   sisteransi@1.0.5:
     resolution: {integrity: sha512-bLGGlR1QxBcynn2d5YmDX4MGjlZvy2MRBDRNHLJ8VI6l6+9FUiyTFNJ0IveOSP0bcXgVDPRcfGqA0pjaqUpfVg==}
@@ -19848,12 +19832,6 @@ snapshots:
     dependencies:
       '@sinonjs/commons': 1.8.6
 
-  '@sinonjs/samsam@5.3.1':
-    dependencies:
-      '@sinonjs/commons': 1.8.6
-      lodash.get: 4.4.2
-      type-detect: 4.0.8
-
   '@sinonjs/samsam@8.0.0':
     dependencies:
       '@sinonjs/commons': 2.0.0
@@ -24158,7 +24136,7 @@ snapshots:
 
   devextreme-cldr-data@1.0.3: {}
 
-  devextreme-internal-tools@14.0.0-beta.4:
+  devextreme-internal-tools@14.0.0-beta.5:
     dependencies:
       dasherize: 2.0.0
       deepmerge: 4.3.1
@@ -28661,8 +28639,6 @@ snapshots:
 
   just-debounce@1.1.0: {}
 
-  just-extend@4.2.1: {}
-
   just-extend@6.2.0: {}
 
   jwa@1.4.1:
@@ -29720,15 +29696,7 @@ snapshots:
 
   nice-try@1.0.5: {}
 
-  nise@4.1.0:
-    dependencies:
-      '@sinonjs/commons': 1.8.6
-      '@sinonjs/fake-timers': 6.0.1
-      '@sinonjs/text-encoding': 0.7.2
-      just-extend: 4.2.1
-      path-to-regexp: 1.8.0
-
-  nise@5.1.9:
+  nise@6.0.0:
     dependencies:
       '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
@@ -30432,10 +30400,6 @@ snapshots:
       minipass: 7.0.4
 
   path-to-regexp@0.1.7: {}
-
-  path-to-regexp@1.8.0:
-    dependencies:
-      isarray: 0.0.1
 
   path-to-regexp@6.2.2: {}
 
@@ -31922,22 +31886,13 @@ snapshots:
     dependencies:
       is-arrayish: 0.3.2
 
-  sinon@17.0.1:
+  sinon@18.0.0:
     dependencies:
       '@sinonjs/commons': 3.0.1
       '@sinonjs/fake-timers': 11.2.2
       '@sinonjs/samsam': 8.0.0
       diff: 5.2.0
-      nise: 5.1.9
-      supports-color: 7.2.0
-
-  sinon@9.2.4:
-    dependencies:
-      '@sinonjs/commons': 1.8.6
-      '@sinonjs/fake-timers': 6.0.1
-      '@sinonjs/samsam': 5.3.1
-      diff: 4.0.2
-      nise: 4.1.0
+      nise: 6.0.0
       supports-color: 7.2.0
 
   sisteransi@1.0.5: {}
