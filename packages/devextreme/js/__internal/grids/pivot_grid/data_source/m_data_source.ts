@@ -640,6 +640,10 @@ const PivotGridDataSource = Class.inherit((function () {
       return areaFields;
     },
 
+    getSummaryFields() {
+      return this.getAreaFields('data').filter((field) => isDefined(field.summaryType));
+    },
+
     fields(fields) {
       const that: any = this;
       if (fields) {
