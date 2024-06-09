@@ -248,9 +248,6 @@ const SKIPPED_TESTS = {
     Tabs: [
       { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
     ],
-    TabPanel: [
-      { demo: 'Overview', themes: [THEME.material] },
-    ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
