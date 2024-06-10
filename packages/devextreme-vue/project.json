@@ -22,7 +22,7 @@
       "options": {
         "script": "regenerate"
       },
-      "dependsOn": ["devextreme-monorepo:\"vue:copy-metadata\""]
+      "dependsOn": ["devextreme-metadata:build"]
     },
     "test": {
       "executor": "nx:run-script",

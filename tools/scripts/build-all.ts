@@ -45,8 +45,7 @@ const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
 // Prepare metadata
 sh.cd(ROOT_DIR);
-sh.exec('pnpm run tools:discover-declarations');
-sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
+sh.exec('pnpx nx build devextreme-metadata');
 
 if (!devMode) {
     injectDescriptions();

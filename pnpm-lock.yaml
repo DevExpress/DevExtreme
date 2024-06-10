@@ -1312,6 +1312,9 @@ importers:
       del:
         specifier: ^2.2.2
         version: 2.2.2
+      devextreme-metadata:
+        specifier: '*'
+        version: link:../devextreme-metadata/dist
       eslint:
         specifier: 8.56.0
         version: 8.56.0
@@ -1380,6 +1383,9 @@ importers:
         version: 0.13.3
     publishDirectory: npm/dist
 
+  packages/devextreme-metadata:
+    publishDirectory: ./dist
+
   packages/devextreme-monorepo-tools:
     devDependencies:
       '@types/jest':
@@ -1413,6 +1419,9 @@ importers:
       del:
         specifier: ^3.0.0
         version: 3.0.0
+      devextreme-metadata:
+        specifier: '*'
+        version: link:../devextreme-metadata/dist
       eslint:
         specifier: 8.56.0
         version: 8.56.0
@@ -1554,6 +1563,9 @@ importers:
       del:
         specifier: ^3.0.0
         version: 3.0.0
+      devextreme-metadata:
+        specifier: '*'
+        version: link:../devextreme-metadata/dist
       eslint:
         specifier: 8.56.0
         version: 8.56.0

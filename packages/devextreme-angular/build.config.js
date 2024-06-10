@@ -1,7 +1,7 @@
 module.exports = {
     tools: {
         metadataGenerator: {
-            sourceMetadataFilePath: './metadata/NGMetaData.json',
+            sourceMetadataFilePath: require.resolve('devextreme-metadata/NGMetaData.json'),
             deprecatedMetadataFilePath: './metadata/DeprecatedComponentsMetadata.json',
             outputFolderPath: './metadata/generated',
             nestedPathPart: 'nested',
@@ -55,7 +55,7 @@ module.exports = {
             outputFileName: 'tests/src/server/component-names.ts'
         },
         commonReexportsGenerator: {
-            metadataPath: './metadata/NGMetaData.json',
+            metadataPath: require.resolve('devextreme-metadata/NGMetaData.json'),
             outputPath: './src/'
         },
 

@@ -1,0 +1,7 @@
+{
+  "name": "devextreme-metadata",
+  "publishConfig": {
+    "directory": "./dist",
+    "linkDirectory": true
+  }
+}

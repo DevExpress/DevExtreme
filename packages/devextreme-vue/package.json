@@ -45,7 +45,8 @@
     "typescript": "^4.9.5",
     "vue": "3.2.47",
     "@vue/shared": "^3.2.47",
-    "vue-router": "^4.0.16"
+    "vue-router": "^4.0.16",
+    "devextreme-metadata": "*"
   },
   "publishConfig": {
     "directory": "npm",

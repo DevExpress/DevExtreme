@@ -1,0 +1,22 @@
+{
+  "name": "devextreme-metadata",
+  "targets": {
+    "build": {
+      "executor": "nx:run-commands",
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "options": {
+        "parallel": false,
+        "commands": [
+          "dx-tools discover-declarations --sources ./packages/devextreme/js --exclude \"js/(renovation|__internal|.eslintrc.js)\" --compiler-options \"{ \\\"typeRoots\\\": [] }\" --artifacts ./packages/devextreme-metadata/dist",
+          "dx-tools make-integration-metadata --artifacts ./packages/devextreme-metadata/dist",
+          "dx-tools make-angular-metadata --artifacts ./packages/devextreme-metadata/dist",
+          "dx-tools make-aspnet-metadata --artifacts ./packages/devextreme-metadata/dist --version 24_1"
+        ]
+      },
+      "dependsOn": []
+    }
+  },
+  "implicitDependencies": ["devextreme-main"]
+}
