@@ -1,6 +1,6 @@
+import config from '@js/core/config';
 import errors from '@js/core/errors';
 import { fullVersion } from '@js/core/version';
-import config from '@js/core/config';
 
 import type { Version } from '../../utils/version';
 import {
