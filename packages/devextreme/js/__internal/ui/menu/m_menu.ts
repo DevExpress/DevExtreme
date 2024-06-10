@@ -17,9 +17,9 @@ import type { Item, Properties } from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
-import { getElementMaxHeightByWindow } from '@js/ui/overlay/utils';
 import TreeView from '@js/ui/tree_view';
 import MenuBase from '@ts/ui/context_menu/m_menu_base';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 
 import Submenu from './m_submenu';
 
@@ -360,6 +360,7 @@ class Menu extends MenuBase {
 
     return {
       _ignoreFunctionValueDeprecation: true,
+      // @ts-expect-error
       maxHeight: () => getElementMaxHeightByWindow(this.$element()),
       deferRendering: false,
       shading: false,
