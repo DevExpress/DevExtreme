@@ -29,7 +29,7 @@ import { ComponentProps } from './component';
 const DX_REMOVE_EVENT = 'dxremove';
 
 config({
-  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx'
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx',
 });
 
 type ComponentBaseProps = ComponentProps & {

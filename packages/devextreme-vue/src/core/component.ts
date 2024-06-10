@@ -46,7 +46,7 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
 const includeAttrs = ['id', 'class', 'style'];
 
 config({
-  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx'
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
 });
 
 function getAttrs(attrs) {

@@ -37,7 +37,7 @@ import {
 } from './nested-option';
 
 config({
-  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx'
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
 });
 
 let serverStateKey;
