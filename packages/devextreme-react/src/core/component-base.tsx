@@ -14,6 +14,8 @@ import {
 
 import { requestAnimationFrame } from 'devextreme/animation/frame';
 import { deferUpdate } from 'devextreme/core/utils/common';
+import config from 'devextreme/core/config';
+
 import { createPortal } from 'react-dom';
 
 import { RemovalLockerContext, RestoreTreeContext } from './helpers';
@@ -25,6 +27,10 @@ import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
 
 const DX_REMOVE_EVENT = 'dxremove';
+
+config({
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx'
+});
 
 type ComponentBaseProps = ComponentProps & {
   renderChildren?: () => Record<string, unknown>[] | null | undefined;
