@@ -263,12 +263,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       updateCssClasses(prevPropsRef.current, props);
 
-      const config = getConfig();
+      const widgetConfig = getConfig();
 
-      const templateOptions = optionsManager.current.getTemplateOptions(config);
+      const templateOptions = optionsManager.current.getTemplateOptions(widgetConfig);
       const dxTemplates = createDXTemplates.current?.(templateOptions) || {};
 
-      optionsManager.current.update(config, dxTemplates);
+      optionsManager.current.update(widgetConfig, dxTemplates);
       scheduleTemplatesUpdate();
 
       prevPropsRef.current = props;
