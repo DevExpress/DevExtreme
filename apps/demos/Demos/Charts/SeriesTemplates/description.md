@@ -1,4 +1,7 @@
-In certain scenarios, you may need to add more series to the data source after you created the Chart. In this case, arrange your data source structure as follows:
+In certain scenarios, you may need to add more series to the data source after you created the Chart. 
+<!--split-->
+
+In this case, arrange your data source structure as follows:
 
     [
         {seriesName: series1, arg: arg11Value, val: value11 }

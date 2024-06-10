@@ -25,7 +25,6 @@ type AccessibleOptions = Pick<Properties,
   "onResizeEnd" |
   "onResizeStart" |
   "orientation" |
-  "repaintChangesOnly" |
   "rtlEnabled" |
   "separatorSize" |
   "visible" |
@@ -58,7 +57,6 @@ const DxSplitter = createComponent({
     onResizeEnd: Function,
     onResizeStart: Function,
     orientation: String,
-    repaintChangesOnly: Boolean,
     rtlEnabled: Boolean,
     separatorSize: Number,
     visible: Boolean,
@@ -88,7 +86,6 @@ const DxSplitter = createComponent({
     "update:onResizeEnd": null,
     "update:onResizeStart": null,
     "update:orientation": null,
-    "update:repaintChangesOnly": null,
     "update:rtlEnabled": null,
     "update:separatorSize": null,
     "update:visible": null,

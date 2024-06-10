@@ -67,8 +67,8 @@ export default class PivotGrid extends Widget {
     return new RowHeaderArea(this.element);
   }
 
-  getRowsArea(): RowsArea {
-    return new RowsArea(this.element);
+  getRowsArea(idx?: number): RowsArea {
+    return new RowsArea(this.element, idx);
   }
 
   getDataHeaderArea(): DataHeaderArea {

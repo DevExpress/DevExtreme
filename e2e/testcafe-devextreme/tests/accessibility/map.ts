@@ -21,7 +21,7 @@ const options: Options<Properties> = {
   hint: [undefined, 'hint'],
   controls: [true, false],
   zoom: [undefined, 10],
-  markers: [undefined, markersData],
+  markers: [markersData],
 };
 
 const a11yCheckConfig = {

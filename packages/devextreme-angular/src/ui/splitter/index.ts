@@ -183,19 +183,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
 
 
     /**
-     * [descr:dxSplitterOptions.repaintChangesOnly]
-    
-     */
-    @Input()
-    get repaintChangesOnly(): boolean {
-        return this._getOption('repaintChangesOnly');
-    }
-    set repaintChangesOnly(value: boolean) {
-        this._setOption('repaintChangesOnly', value);
-    }
-
-
-    /**
      * [descr:DOMComponentOptions.rtlEnabled]
     
      */
@@ -410,13 +397,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() repaintChangesOnlyChange: EventEmitter<boolean>;
-
-    /**
-    
-     * This member supports the internal infrastructure and is not intended to be used directly from your code.
-    
-     */
     @Output() rtlEnabledChange: EventEmitter<boolean>;
 
     /**
@@ -485,7 +465,6 @@ export class DxSplitterComponent<TItem = any, TKey = any> extends DxComponent im
             { emit: 'itemsChange' },
             { emit: 'itemTemplateChange' },
             { emit: 'orientationChange' },
-            { emit: 'repaintChangesOnlyChange' },
             { emit: 'rtlEnabledChange' },
             { emit: 'separatorSizeChange' },
             { emit: 'visibleChange' },

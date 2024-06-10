@@ -79,12 +79,12 @@ const itemsDriveC = [{
 }, {
   id: '14',
   name: 'Description.rtf',
-  icon: 'activefolder',
+  icon: 'file',
   isDirectory: false,
 }, {
   id: '15',
   name: 'Description.txt',
-  icon: 'activefolder',
+  icon: 'file',
   isDirectory: false,
 }];
 
