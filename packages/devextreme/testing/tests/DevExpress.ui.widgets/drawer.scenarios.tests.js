@@ -3,7 +3,7 @@ import { extend } from 'core/utils/extend';
 import { isNumeric } from 'core/utils/type';
 import { drawerTesters } from '../../helpers/drawerHelpers.js';
 import resizeCallbacks from 'core/utils/resize_callbacks';
-import { clearStack } from 'ui/overlay/z_index';
+import { clearStack } from '__internal/ui/overlay/m_z_index';
 import 'ui/file_manager';
 import 'ui/color_box';
 import 'ui/menu';
