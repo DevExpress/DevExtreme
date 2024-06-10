@@ -9,7 +9,6 @@ const url = require('url');
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
   const modules = [
-    'time_zone_utils.js',
     'localization.js',
     'viz/export.js',
     'viz/core/export.js',
