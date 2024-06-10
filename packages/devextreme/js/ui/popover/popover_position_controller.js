@@ -4,7 +4,7 @@ import positionUtils from '../../animation/position';
 import { pairToObject } from '../../core/utils/common';
 import { borderWidthStyles } from '../../renovation/ui/resizable/utils';
 import { getWidth, getHeight } from '../../core/utils/size';
-import { OverlayPositionController } from '../overlay/overlay_position_controller';
+import { OverlayPositionController } from '../../__internal/ui/overlay/m_overlay_position_controller';
 
 const WEIGHT_OF_SIDES = {
     'left': -1,

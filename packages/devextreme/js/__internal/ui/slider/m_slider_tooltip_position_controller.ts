@@ -38,7 +38,6 @@ class SliderTooltipPositionController extends PopoverPositionController {
   _fitIntoSlider() {
     // @ts-expect-error
     const { collisionSide, oversize } = positionUtils.calculate(this._$content, this._position).h;
-    // @ts-expect-error
     const { left } = this._visualPosition;
     const isLeftSide = collisionSide === 'left';
 
