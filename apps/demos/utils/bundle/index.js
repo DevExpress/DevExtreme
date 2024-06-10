@@ -23,8 +23,9 @@ const prepareModulesToNamedImport = () => {
   ];
 
   const paths = [
-    '../npm-scripts/npm-devextreme/cjs',
-    'node_modules/devextreme/cjs',
+    '../npm-scripts/npm-devextreme/cjs', // un-used / legacy?
+    'node_modules/devextreme/cjs',       // mono repo + 'overwrite-wrappers-packages'
+    '../../node_modules/devextreme/cjs', // wg & no 'overwrite-wrappers-packages'
   ];
 
   const esModuleExport = 'exports.__esModule = true;';
