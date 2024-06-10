@@ -9,9 +9,7 @@
       "options": {
         "script": "test"
       },
-      "dependsOn": [
-        "!^build"
-      ],
+      "dependsOn": [],
       "inputs": [
         "default",
         "test"
