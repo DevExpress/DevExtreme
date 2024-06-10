@@ -207,14 +207,14 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       el = el || element.current;
 
-      const config = getConfig();
+      const widgetConfig = getConfig();
 
       let options: any = {
         templatesRenderAsynchronously: true,
-        ...optionsManager.current.getInitialOptions(config),
+        ...optionsManager.current.getInitialOptions(widgetConfig),
       };
 
-      const templateOptions = optionsManager.current.getTemplateOptions(config);
+      const templateOptions = optionsManager.current.getTemplateOptions(widgetConfig);
       const dxTemplates = createDXTemplates.current?.(templateOptions);
 
       if (dxTemplates && Object.keys(dxTemplates).length) {
@@ -236,7 +236,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         );
       }
 
-      optionsManager.current.setInstance(instance.current, config, subscribableOptions, independentEvents);
+      optionsManager.current.setInstance(instance.current, widgetConfig, subscribableOptions, independentEvents);
       instance.current.on('optionChanged', optionsManager.current.onOptionChanged);
 
       afterCreateWidget();
