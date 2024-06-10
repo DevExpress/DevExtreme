@@ -2168,15 +2168,34 @@ QUnit.module('aria accessibility', () => {
             { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
         ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
             QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
+                const clock = sinon.useFakeTimers();
+
                 const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
                     dataSource: ['one', 'two', 'three'],
-                    fieldTemplate: (data) => {
-                        return $('<div>').dxTextBox({ value: data });
+                    searchEnabled: true,
+                    fieldTemplate: 'field',
+                    templatesRenderAsynchronously: true,
+                    integrationOptions: {
+                        templates: {
+                            field: {
+                                render: function({ model, container, onRendered }) {
+                                    const $input = $('<div>').appendTo(container);
+
+                                    setTimeout(() => {
+                                        $input.dxTextBox({ value: model });
+                                        onRendered();
+                                    }, 0);
+                                }
+                            }
+                        }
                     },
                     valueChangeEvent: 'keyup',
                 }).dxValidator({
-                    validationRules: valueRequired ? [{ type: 'required' }] : [],
+                    validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
                 });
+
+                clock.tick(500);
+
                 let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
                 assert.equal($input.val(), '', 'input value is empty');
@@ -2184,6 +2203,8 @@ QUnit.module('aria accessibility', () => {
 
                 keyboardMock($input)
                     .type('a');
+
+                clock.tick(500);
 
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 assert.equal($input.val(), 'a', 'input value is not empty');
@@ -2193,20 +2214,43 @@ QUnit.module('aria accessibility', () => {
                     .caret(1)
                     .press('backspace');
 
+                clock.tick(500);
+
                 $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
                 assert.equal($input.val(), '', 'input value is empty');
                 assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
+
+                clock.restore();
             });
         });
 
         QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
+            const clock = sinon.useFakeTimers();
+
             const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
                 dataSource: ['one', 'two', 'three'],
-                fieldTemplate: (data) => {
-                    return $('<div>').dxTextBox({ value: data });
+                searchEnabled: true,
+                fieldTemplate: 'field',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        field: {
+                            render: function({ model, container, onRendered }) {
+                                const $input = $('<div>').appendTo(container);
+
+                                setTimeout(() => {
+                                    $input.dxTextBox({ value: model });
+                                    onRendered();
+                                }, 0);
+                            }
+                        }
+                    }
                 },
                 valueChangeEvent: 'keyup',
             });
+
+            clock.tick(500);
+
             let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
             assert.equal($input.val(), '', 'input value is empty');
@@ -2214,6 +2258,8 @@ QUnit.module('aria accessibility', () => {
 
             keyboardMock($input)
                 .type('a');
+
+            clock.tick(500);
 
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), 'a', 'input value is not empty');
@@ -2223,9 +2269,13 @@ QUnit.module('aria accessibility', () => {
                 .caret(1)
                 .press('backspace');
 
+            clock.tick(500);
+
             $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
             assert.equal($input.val(), '', 'input value is empty');
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
+
+            clock.restore();
         });
     });
 
