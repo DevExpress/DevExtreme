@@ -3,8 +3,8 @@
 // eslint-disable-next-line import/no-extraneous-dependencies
 import $ from 'jquery';
 import { HttpClient } from '@angular/common/http';
-import CustomStore from '../../../js/data/custom_store';
-import { Store, StoreOptions } from '../../../js/data';
+import CustomStore from 'devextreme/data/custom_store';
+import { Store, StoreOptions } from 'devextreme/data';
 import {
   ANY,
   assertType,
@@ -12,7 +12,7 @@ import {
   notNever,
   toAssertion,
 } from '../consts';
-import type { LoadResult } from '../../../js/common/data/custom-store';
+import type { LoadResult } from 'devextreme/common/data/custom-store';
 
 export async function infersTItemFromComplexLoadResult() {
   const store = new CustomStore({

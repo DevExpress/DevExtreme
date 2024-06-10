@@ -1,4 +1,7 @@
-The **DevExpress.viz.exportWidgets(widgetInstances, options)** method allows you to export several charts to a single image or document. The **widgetInstances** parameter accepts an array with the following format:
+The **DevExpress.viz.exportWidgets(widgetInstances, options)** method allows you to export several charts to a single image or document. 
+<!--split-->
+
+The **widgetInstances** parameter accepts an array with the following format:
 
     [
         [ widgetInstance0_1, widgetInstance0_2, ..., widgetInstance0_N ],

@@ -10,5 +10,5 @@ if (version == null) {
 
 sh.set('-e');
 
-updateVersion(version);
 updateVersionJs(version);
+updateVersion(version);

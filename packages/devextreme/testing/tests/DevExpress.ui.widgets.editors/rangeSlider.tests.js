@@ -1,11 +1,11 @@
 import $ from 'jquery';
-import SliderTooltip from 'ui/slider/ui.slider_tooltip';
+import SliderTooltip from '__internal/ui/slider/m_slider_tooltip';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import { normalizeKeyName } from 'events/utils/index';
 
-import 'ui/range_slider';
+import '__internal/ui/m_range_slider';
 import 'ui/number_box/number_box';
 import 'ui/validator';
 import 'generic_light.css!';

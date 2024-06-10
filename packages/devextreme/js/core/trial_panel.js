@@ -1,4 +1,4 @@
-import { registerTrialPanelComponents, showTrialPanel } from '../__internal/core/license/trial_panel';
+import { registerTrialPanelComponents, showTrialPanel } from '../__internal/core/license/license_validation';
 
 export default {
     registerTrialPanelComponents,
