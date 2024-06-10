@@ -192,26 +192,26 @@ function initBaseComponent() {
         thisComponent.$_pendingOptions = {};
         thisComponent.$_templatesManager = new TemplatesManager(this as ComponentPublicInstance);
 
-        const config = thisComponent.$_config;
+        const widgetConfig = thisComponent.$_config;
 
-        if (config.initialValues.hasOwnProperty(VMODEL_NAME)) {
-          config.initialValues.value = getVModelValue(config.initialValues);
+        if (widgetConfig.initialValues.hasOwnProperty(VMODEL_NAME)) {
+          widgetConfig.initialValues.value = getVModelValue(widgetConfig.initialValues);
         }
 
         const options: object = {
           templatesRenderAsynchronously: thisComponent.$_hasAsyncTemplate,
           ...getComponentProps(thisComponent),
-          ...config.initialValues,
-          ...config.getNestedOptionValues(),
+          ...widgetConfig.initialValues,
+          ...widgetConfig.getNestedOptionValues(),
           ...this.$_getIntegrationOptions(),
         };
 
         const instance = new thisComponent.$_WidgetClass(element, options);
         thisComponent.$_instance = instance;
 
-        instance.on('optionChanged', (args) => config.onOptionChanged(args));
-        setEmitOptionChangedFunc(config, thisComponent, thisComponent.$_innerChanges);
-        bindOptionWatchers(config, thisComponent, thisComponent.$_innerChanges);
+        instance.on('optionChanged', (args) => widgetConfig.onOptionChanged(args));
+        setEmitOptionChangedFunc(widgetConfig, thisComponent, thisComponent.$_innerChanges);
+        bindOptionWatchers(widgetConfig, thisComponent, thisComponent.$_innerChanges);
         this.$_createEmitters(instance);
       },
 
