@@ -109,7 +109,7 @@ const prepareConfigs = (framework)=> {
   let modulesMap = {};
 
   let main = `devextreme-${framework}/index.js`;
-  let minify = true;
+  let minify = false;
 
   if (framework === 'angular') {
     additionPackage = [{
@@ -128,7 +128,6 @@ const prepareConfigs = (framework)=> {
     // eslint-disable-next-line spellcheck/spell-checker
     if (currentPackage.module?.startsWith('fesm2022')) {
       main = `devextreme-${framework}`;
-      minify = false;
 
       prepareDevextremexAngularFiles();
 
@@ -202,7 +201,7 @@ const prepareConfigs = (framework)=> {
     bundlePath: `bundles/devextreme.${framework}.systemjs.js`,
     bundleOpts: {
       minify,
-      uglify: { mangle: true },
+      uglify: { mangle: false },
       async fetch(load, fetch) {
         if(load?.metadata?.transpile) {
           // access to path-specific meta if required: load?.metadata?.babelOptions
