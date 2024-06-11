@@ -3827,6 +3827,33 @@ QUnit.test('Recalculate argument range data from all visible series', function(a
     assert.equal(argRange.isEmpty(), false);
 });
 
+QUnit.test('Chart should handle unix timestamp correctly without throwing an error (T1236326)', function(assert) {
+    const chart = this.createChart({
+        dataSource: [
+            {
+                timeStamp: new Date('2024-04-26T06:28:00Z'),
+                key: 'Spacing',
+                val: 'Good',
+                end: new Date('2024-04-26T07:22:00Z'),
+                Order: 1,
+                label: 3,
+            }
+        ],
+        rotated: true,
+        commonSeriesSettings: { argumentField: 'key', type: 'rangebar', minBarSize: '4' },
+        series: [{ rangeValue1Field: 'timeStamp', rangeValue2Field: 'end' }],
+    });
+
+    try {
+        chart.getAllSeries()[0].hide();
+        chart.getAllSeries()[0].show();
+
+        assert.ok(true);
+    } catch(e) {
+        assert.ok(false, 'the error is thrown');
+    }
+});
+
 QUnit.test('T720002, T719994. Change hovered series at runtime should not throw exception', function(assert) {
     const clock = sinon.useFakeTimers();
     try {
