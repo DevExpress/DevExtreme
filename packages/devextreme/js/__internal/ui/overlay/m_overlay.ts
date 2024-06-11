@@ -28,6 +28,7 @@ import { keyboard } from '@js/events/short';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
 import { triggerHidingEvent, triggerResizeEvent, triggerShownEvent } from '@js/events/visibility_change';
 import { hideCallback as hideTopOverlayCallback } from '@js/mobile/hide_callback';
+import type OverlayInstance from '@js/ui/overlay';
 import { tabbable } from '@js/ui/widget/selectors';
 import uiErrors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
@@ -67,8 +68,9 @@ ready(() => {
     }
   });
 });
+
 // @ts-expect-error
-const Overlay = Widget.inherit({
+const Overlay: typeof OverlayInstance = Widget.inherit({
   _supportedKeys() {
     return extend(this.callBase(), {
       escape() {
@@ -350,6 +352,7 @@ const Overlay = Widget.inherit({
   },
 
   _zIndexInitValue() {
+    // @ts-expect-error
     return Overlay.baseZIndex();
   },
 
@@ -1291,7 +1294,7 @@ const Overlay = Widget.inherit({
     }
   },
 });
-
+// @ts-expect-error
 Overlay.baseZIndex = (zIndex) => zIndexPool.base(zIndex);
 
 registerComponent('dxOverlay', Overlay);
