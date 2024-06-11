@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { isElementInDom } from '@js/core/utils/dom';
 import { each } from '@js/core/utils/iterator';
@@ -1319,7 +1320,7 @@ export const resizing = (Base: ModuleType<ResizingController>) => class VirtualS
     return !!this._resizeTimeout;
   }
 
-  public resize() {
+  public resize(): DeferredObj<unknown> {
     let result;
 
     if (isVirtualMode(this) || gridCoreUtils.isVirtualRowRendering(this)) {

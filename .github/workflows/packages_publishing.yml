@@ -23,10 +23,9 @@ env:
   MOVE_STABLE_TAG: ${{ inputs.tag == 'stable' }}
 
 jobs:
-
   build:
     name: Build packages
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     outputs:
       packages: ${{ steps.filter.outputs.packages }}
     steps:
@@ -50,6 +49,19 @@ jobs:
           BUILD_INTERNAL_PACKAGE: true
         run: npm run all:build
 
+      - name: Clone deps scanner
+        uses: actions/checkout@v4
+        with:
+          repository: DevExpress/npmdeps-scanner
+          token: ${{ secrets.NPM_DEPS_SCANNER_PAT }}
+          path: deps-scanner
+
+      - name: Run deps scanner
+        run: |
+          ./deps-scanner/exe/npmDepsScanner.exe scan_cache ${{ github.workspace }} reportGithub.json
+          mkdir -p ./artifacts/deps-scanner
+          cp reportGithub.json ./artifacts/deps-scanner/
+
       - name: Build artifacts package
         run: npx ts-node tools/scripts/make-artifacts-package
 
@@ -62,8 +74,8 @@ jobs:
       - name: Filter packages
         id: filter
         working-directory: artifacts/npm
+        shell: bash
         run: ls *.tgz | grep -E -i "$FILTER" | sed -r 's/^(.*).tgz$/"\1"/g' | paste -sd "," - | sed -r 's/(.*)/packages=[\1]/' >> "$GITHUB_OUTPUT"
-
 
   publish:
     name: Publish package
