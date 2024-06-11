@@ -398,7 +398,7 @@ function getGrandTotalRequest(
   let newOptions;
 
   if (expandedPaths.length) {
-    for (let i = expandedIndex; i < expandedLevel + 1; i += 1) {
+    for (let i = expandedIndex; i < expandedLevel; i += 1) {
       newOptions = {
         filters: commonFilters
           .concat(
