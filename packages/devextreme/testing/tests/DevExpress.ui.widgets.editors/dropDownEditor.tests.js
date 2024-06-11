@@ -2256,46 +2256,153 @@ QUnit.module('aria accessibility', () => {
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
     });
 
-    QUnit.test('component with fieldTemplate should retain aria attributes after interaction (T1230696, T1230971)', function(assert) {
-        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
-            dataSource: ['one', 'two', 'three'],
-            fieldTemplate: (data) => {
-                return $('<div>').dxTextBox({ value: data });
-            },
-            valueChangeEvent: 'keyup',
-        }).dxValidator({
-            validationRules: [ { type: 'required' } ]
+    [
+        { attribute: 'aria-required', value: 'true' },
+        { attribute: 'aria-haspopup', value: 'true' },
+        { attribute: 'aria-autocomplete', value: 'list' },
+    ].forEach(({ attribute, value }) => {
+        QUnit.test(`component with fieldTemplate should have proper ${attribute} attribute after interaction (T1230696, T1230971)`, function(assert) {
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: (data) => {
+                    return $('<div>').dxTextBox({ value: data });
+                },
+                valueChangeEvent: 'keyup',
+            }).dxValidator({
+                validationRules: [ { type: 'required' } ]
+            });
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
+
+            keyboardMock($input)
+                .type('a');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after typing`);
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after deleting`);
         });
-        let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+    });
 
-        assert.strictEqual($input.attr('aria-required'), 'true', 'initial render should have aria-required attribute set to true');
+    QUnit.module('aria-invalid', {}, () => {
+        [
+            { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
+            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
+        ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
+                const clock = sinon.useFakeTimers();
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'initial render should have aria-haspopup attribute set to true');
+                const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                    dataSource: ['one', 'two', 'three'],
+                    searchEnabled: true,
+                    fieldTemplate: 'field',
+                    templatesRenderAsynchronously: true,
+                    integrationOptions: {
+                        templates: {
+                            field: {
+                                render: function({ model, container, onRendered }) {
+                                    const $input = $('<div>').appendTo(container);
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'initial render should have aria-autocomplete attribute set to list');
+                                    setTimeout(() => {
+                                        $input.dxTextBox({ value: model });
+                                        onRendered();
+                                    }, 0);
+                                }
+                            }
+                        }
+                    },
+                    valueChangeEvent: 'keyup',
+                }).dxValidator({
+                    validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
+                });
 
-        keyboardMock($input)
-            .type('a');
+                clock.tick(500);
 
-        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
 
-        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required attribute should remain true after typing');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after typing');
+                keyboardMock($input)
+                    .type('a');
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after typing');
+                clock.tick(500);
 
-        keyboardMock($input)
-            .caret(1)
-            .press('backspace');
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.equal($input.val(), 'a', 'input value is not empty');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `input should set 'aria-invalid' to ${nonEmptyValue} after typing`);
 
-        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                keyboardMock($input)
+                    .caret(1)
+                    .press('backspace');
 
-        assert.strictEqual($input.attr('aria-required'), 'true', 'aria-required attribute should remain true after deleting');
+                clock.tick(500);
 
-        assert.strictEqual($input.attr('aria-haspopup'), 'true', 'aria-haspopup attribute should retain to true after deleting');
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.equal($input.val(), '', 'input value is empty');
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
 
-        assert.strictEqual($input.attr('aria-autocomplete'), 'list', 'aria-autocomplete attribute should retain to list after deleting');
+                clock.restore();
+            });
+        });
+
+        QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                searchEnabled: true,
+                fieldTemplate: 'field',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        field: {
+                            render: function({ model, container, onRendered }) {
+                                const $input = $('<div>').appendTo(container);
+
+                                setTimeout(() => {
+                                    $input.dxTextBox({ value: model });
+                                    onRendered();
+                                }, 0);
+                            }
+                        }
+                    }
+                },
+                valueChangeEvent: 'keyup',
+            });
+
+            clock.tick(500);
+
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
+
+            keyboardMock($input)
+                .type('a');
+
+            clock.tick(500);
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.equal($input.val(), 'a', 'input value is not empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after typing');
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            clock.tick(500);
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.equal($input.val(), '', 'input value is empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
+
+            clock.restore();
+        });
     });
 
     QUnit.test('component with fieldTemplate should have proper role attribute after interaction (T1230635)', function(assert) {
