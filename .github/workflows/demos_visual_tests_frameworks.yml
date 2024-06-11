@@ -384,15 +384,10 @@ jobs:
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
       run: npx nx test-testcafe
 
-    - name: Get screenshots artifacts name
-      if: ${{ failure() }}
-      id: screenshotname
-      run: echo "value=$(echo "${{ matrix.CONSTEL }}" | grep -oP "^\w+")" >> $GITHUB_OUTPUT
-
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
       uses: actions/upload-artifact@v3
       with:
-        name: screenshots-${{ steps.screenshotname.outputs.value }}-${{ matrix.THEME }}
+        name: screenshots
         path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
         if-no-files-found: ignore
