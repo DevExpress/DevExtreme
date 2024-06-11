@@ -6822,38 +6822,43 @@ QUnit.module('performance', () => {
         assert.ok($.isFunction(filter), 'filter is function');
     });
 
-    QUnit.test('tag labels should be correctly displayed with valueExpr as function and hideSelectedItems enabled (T1234032)', function(assert) {
-        const dataSource = [
-            { id: 1, scheme: 'schema 1', name: 'item1' },
-            { id: 2, scheme: 'schema 2', name: 'item2' },
-            { id: 3, scheme: 'schema 3', name: 'item3' },
-        ];
+    [false, true].forEach(changeAtRuntime => {
+        QUnit.test(`tag labels should be correctly displayed with valueExpr as function and hideSelectedItems enabled ${changeAtRuntime ? 'at runtime' : ''} (T1234032)`, function(assert) {
+            const dataSource = [
+                { id: 1, scheme: 'schema 1', name: 'item1' },
+                { id: 2, scheme: 'schema 2', name: 'item2' },
+                { id: 3, scheme: 'schema 3', name: 'item3' },
+            ];
 
-        const $tagBox = $('#tagBox').dxTagBox({
-            dataSource,
-            valueExpr(x) {
-                return x && x.name + ' ' + x.scheme;
-            },
-            displayExpr: 'name',
-            hideSelectedItems: true,
-            opened: true,
+            const $tagBox = $('#tagBox').dxTagBox({
+                dataSource,
+                valueExpr(x) {
+                    return x && x.name + ' ' + x.scheme;
+                },
+                displayExpr: 'name',
+                hideSelectedItems: !changeAtRuntime,
+                opened: true,
+            });
+
+            const tagBox = $tagBox.dxTagBox('instance');
+            const $list = tagBox._list.$element();
+
+            if(changeAtRuntime) {
+                tagBox.option('hideSelectedItems', true);
+            }
+
+            $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+            tagBox.open();
+            $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+            tagBox.open();
+            $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+
+            const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
+
+            assert.strictEqual($.trim($tagContainer.text()), 'item1item2item3', 'label values are displayed correctly');
         });
-
-        const tagBox = $tagBox.dxTagBox('instance');
-        const list = tagBox._list;
-        const $list = list.$element();
-
-        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-
-        tagBox.open();
-        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-
-        tagBox.open();
-        $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
-
-        const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
-
-        assert.strictEqual($.trim($tagContainer.text()), 'item1item2item3', 'label values are displayed correctly');
     });
 
     QUnit.test('loadOptions.filter should be correct when user filter is also used', function(assert) {
