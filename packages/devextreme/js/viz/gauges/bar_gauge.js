@@ -126,21 +126,19 @@ export const dxBarGauge = BaseGauge.inherit({
         context.textEnabled = labelOptions === undefined || (labelOptions && (!('visible' in labelOptions) || labelOptions.visible));
 
         if(context.textEnabled) {
-            context.textColor = (labelOptions && labelOptions.font && labelOptions.font.color) || null;
+            context.fontStyles = _patchFontOptions(_extend({}, that._themeManager.theme().label.font, labelOptions?.font, { color: labelOptions?.font?.color || null }));
+
             labelOptions = _extend(true, {}, that._themeManager.theme().label, labelOptions);
-            context.formatOptions = {
-                format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
-                customizeText: labelOptions.customizeText
-            };
-            context.textOptions = { align: 'center' };
-            context.fontStyles = _patchFontOptions(_extend({}, that._themeManager.theme().label.font, labelOptions.font, { color: null }));
-            context.fontStyles.opacity = labelOptions?.font?.opacity;
 
             that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
             context.lineWidth = labelOptions.connectorWidth > 0 ? _Number(labelOptions.connectorWidth) : 0;
             context.lineColor = labelOptions.connectorColor || null;
+            context.formatOptions = {
+                format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
+                customizeText: labelOptions.customizeText
+            };
 
-            text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).attr(context.textOptions).css(context.fontStyles).append(that._barsGroup);
+            text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).append(that._barsGroup);
             bBox = text.getBBox();
             text.remove();
 
@@ -597,7 +595,7 @@ _extend(BarWrapper.prototype, {
         that._bar = context.renderer.arc().attr(_extend({ 'stroke-linejoin': 'round' }, that._settings)).append(context.group);
         if(context.textEnabled) {
             that._line = context.renderer.path([], 'line').attr({ 'stroke-width': context.lineWidth }).append(context.group);
-            that._text = context.renderer.text().css(context.fontStyles).attr(context.textOptions).append(context.group);
+            that._text = context.renderer.text().css(context.fontStyles).attr({ align: 'center' }).append(context.group);
         }
 
         that._angle = isFinite(that._angle) ? that._angle : context.baseAngle;
@@ -612,7 +610,7 @@ _extend(BarWrapper.prototype, {
         that._tracker.attr(that._settings);
         if(context.textEnabled) {
             that._line.attr({ points: [context.x, context.y - that._settings.innerRadius, context.x, context.y - context.textRadius - context.textIndent], stroke: context.lineColor || that._color }).sharp();
-            that._text.css({ fill: context.textColor || that._color });
+            that._text.css({ fill: context.fontStyles.fill || that._color });
         }
         return that;
     },
