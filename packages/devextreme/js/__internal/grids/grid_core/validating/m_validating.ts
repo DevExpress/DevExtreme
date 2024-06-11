@@ -1251,6 +1251,7 @@ export const validatingEditorFactoryExtender = (Base: ModuleType<EditorFactory>)
 
     this._hideFixedGroupCell($cell, overlayOptions);
 
+    // @ts-expect-error
     // eslint-disable-next-line no-new
     new Overlay($overlayElement, overlayOptions);
   }
