@@ -404,12 +404,15 @@ const DropDownEditor = TextBox.inherit({
     },
 
     _integrateInput: function() {
+        const { isValid } = this.option();
+
         this._renderFocusState();
         this._refreshValueChangeEvent();
         this._refreshEvents();
         this._refreshEmptinessEvent();
         this._setDefaultAria();
         this._setFieldAria();
+        this._toggleValidationClasses(!isValid);
         this.option('_onMarkupRendered')?.();
     },
 
