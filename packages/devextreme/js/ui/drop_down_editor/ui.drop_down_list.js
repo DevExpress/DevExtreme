@@ -539,9 +539,7 @@ const DropDownList = DropDownEditor.inherit({
     },
 
     _listItemsRendered: function() {
-        if(this._list) {
-            this._updateListDimensions();
-        }
+        this._popup?.repaint();
     },
 
     _canListHaveFocus: () => false,
