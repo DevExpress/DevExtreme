@@ -6,7 +6,7 @@ import { createWidget } from '../../helpers/createWidget';
 import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../containerQuill.html'));
+  .page(url(__dirname, '../container.html'));
 
 const labelLocations = ['left', 'right', 'top'];
 
