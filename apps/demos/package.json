@@ -145,7 +145,7 @@
         "lint-js": "eslint . --ignore-pattern 'Demos'",
         "lint-demos": "ts-node utils/eslint-runner",
         "lint-css": "stylelint **/*.{css,vue}",
-        "lint-non-demos": "pnpm run lint-js && pnpm run lint-css && pnpm run lint-html",
+        "lint-non-demos": "pnpx nx run-many -t lint-js lint-css lint-html -p devextreme-demos",
         "lint": "pnpm run lint-non-demos && pnpm run lint-demos",
         "test-testcafe": "node utils/visual-tests/testcafe-runner.mjs",
         "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.mjs",

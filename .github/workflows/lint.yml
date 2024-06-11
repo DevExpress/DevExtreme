@@ -9,6 +9,10 @@ on:
   push:
     branches: [24_1]
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   Renovation:
     runs-on: devextreme-shr2
@@ -50,12 +54,12 @@ jobs:
     - name: Compile renovation
       working-directory: ./packages/devextreme
       run: |
-        pnpm run compile:r
+        pnpx nx compile:r
 # Remove package install after upgrade to TypeScript >= 4.6
 
     - name: Lint renovation
       working-directory: ./packages/devextreme
-      run: pnpm run lint-renovation
+      run: pnpx nx lint-renovation
 
   TS:
     runs-on: devextreme-shr2
@@ -96,25 +100,25 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpm run build
+      run: pnpx nx build
 
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpm run lint-ts
+      run: pnpx nx lint-ts
 
     - name: Lint .d.ts
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpm run lint-dts
+      run: pnpx nx lint-dts
 
     - name: Lint Testcafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpm run lint
+      run: pnpx nx lint
 
   JS:
     runs-on: devextreme-shr2
@@ -155,13 +159,13 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: pnpm run build
+      run: pnpx nx build
 
     - name: Lint JS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: pnpm run lint-js
+      run: pnpx nx lint-js
 
   texts:
     runs-on: devextreme-shr2
@@ -202,7 +206,7 @@ jobs:
 
     - name: Check texts
       working-directory: ./packages/devextreme
-      run: pnpm run lint-texts
+      run: pnpx nx lint-texts
 
   CSS:
     runs-on: devextreme-shr2
@@ -243,7 +247,7 @@ jobs:
 
     - name: Lint CSS
       working-directory: ./packages/devextreme
-      run: pnpm run lint-css
+      run: pnpx nx lint-css
 
   pnpm_lock:
     runs-on: devextreme-shr2
@@ -286,8 +290,8 @@ jobs:
     - name: Upload lock-file
       uses: actions/upload-artifact@v3
       with:
-        name: pnpm-lock.yaml
-        path: ./pnpm-lock.yaml
+        name: package-lock.json
+        path: ./package-lock.json
         retention-days: 1
 
     - name: Check lock-file
@@ -382,17 +386,8 @@ jobs:
         corepack enable
         pnpm install
 
-    - name: Lint devextreme-angular
-      working-directory: ./packages/devextreme-angular
-      run: pnpm run lint
-
-    - name: Lint devextreme-react
-      working-directory: ./packages/devextreme-react
-      run: pnpm run lint
-
-    - name: Lint devextreme-vue
-      working-directory: ./packages/devextreme-vue
-      run: pnpm run lint
+    - name: Lint wrappers
+      run: pnpx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
     runs-on: devextreme-shr2

@@ -39,12 +39,10 @@ function App() {
 
   const renderTitle = useCallback((data) => (
     <React.Fragment>
-      <div>
         <span>
           {data.FirstName} {data.LastName}
         </span>
         {employees.length >= 2 && <i className="dx-icon dx-icon-close" onClick={() => { closeButtonHandler(data); }} />}
-      </div>
     </React.Fragment>
   ), [employees, closeButtonHandler]);
 

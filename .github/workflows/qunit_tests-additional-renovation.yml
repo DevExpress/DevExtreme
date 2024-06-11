@@ -9,6 +9,10 @@ on:
   push:
     branches: [24_1]
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   build:
     runs-on: devextreme-shr2
@@ -56,8 +60,8 @@ jobs:
           DOTNET_SKIP_FIRST_TIME_EXPERIENCE: "true"
         working-directory: ./packages/devextreme
         run: |
-          pnpm run build:dev
-          pnpm run build:systemjs
+          pnpx nx build:dev
+          pnpx nx build:systemjs
 
       - name: Zip artifacts
         working-directory: ./packages/devextreme

@@ -56,8 +56,9 @@ jobs:
         corepack enable
         pnpm install
 
-    - name: Build DevExtreme
-      run: pnpx nx build devextreme-main
+    - name: Build
+      working-directory: ./packages/devextreme
+      run: pnpx nx build
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme

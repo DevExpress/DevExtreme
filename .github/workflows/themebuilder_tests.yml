@@ -9,6 +9,10 @@ on:
   push:
     branches: [24_1]
 
+env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
+  NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+
 jobs:
   test:
     runs-on: devextreme-shr2
@@ -54,11 +58,11 @@ jobs:
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder
-      run: pnpm run build
+      run: pnpx nx build
 
     - name: Run themebuilder tests (full set, node)
-      run: pnpm run test
       working-directory: ./packages/devextreme-themebuilder
+      run: pnpx nx test
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme
