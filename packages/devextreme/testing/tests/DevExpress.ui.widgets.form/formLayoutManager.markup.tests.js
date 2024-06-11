@@ -7,7 +7,7 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
-} from 'ui/form/constants';
+} from '__internal/ui/form/constants';
 
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
@@ -18,17 +18,17 @@ import {
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-} from 'ui/form/components/field_item';
+} from '__internal/ui/form/components/m_field_item';
 
 import {
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
-} from 'ui/form/components/label';
+} from '__internal/ui/form/components/m_label';
 
 import {
     FIELD_EMPTY_ITEM_CLASS,
-} from 'ui/form/components/empty_item';
+} from '__internal/ui/form/components/m_empty_item';
 
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
