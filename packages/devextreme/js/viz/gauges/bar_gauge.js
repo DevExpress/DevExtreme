@@ -134,6 +134,7 @@ export const dxBarGauge = BaseGauge.inherit({
             };
             context.textOptions = { align: 'center' };
             context.fontStyles = _patchFontOptions(_extend({}, that._themeManager.theme().label.font, labelOptions.font, { color: null }));
+            context.fontStyles.opacity = labelOptions?.font?.opacity;
 
             that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
             context.lineWidth = labelOptions.connectorWidth > 0 ? _Number(labelOptions.connectorWidth) : 0;
