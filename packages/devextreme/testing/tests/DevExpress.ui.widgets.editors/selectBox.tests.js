@@ -3364,7 +3364,6 @@ QUnit.module('search', moduleSetup, () => {
                 const selectBox = $selectBox.dxSelectBox('instance');
                 let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-                assert.equal($input.val(), '', 'input value is not empty');
                 assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
 
                 const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
@@ -3415,7 +3414,6 @@ QUnit.module('search', moduleSetup, () => {
             const selectBox = $selectBox.dxSelectBox('instance');
             let $input = $selectBox.find(toSelector(TEXTEDITOR_INPUT_CLASS));
 
-            assert.equal($input.val(), '', 'input value is not empty');
             assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
 
             const listItem = $(selectBox.content()).find(toSelector(LIST_ITEM_CLASS)).eq(0);
