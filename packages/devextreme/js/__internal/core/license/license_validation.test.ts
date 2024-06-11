@@ -1,6 +1,6 @@
 import errors from '@js/core/errors';
 
-import { base } from '../../../ui/overlay/z_index';
+import { base } from '../../ui/overlay/m_z_index';
 import { assertDevExtremeVersion, clearAssertedVersions } from '../../utils/version';
 import {
   parseLicenseKey,
@@ -289,7 +289,7 @@ describe('license check', () => {
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
-    trialPanelSpy = jest.spyOn(trialPanel, 'showTrialPanel');
+    trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
 
@@ -456,7 +456,7 @@ describe('internal license check', () => {
 
   beforeEach(() => {
     jest.spyOn(errors, 'log').mockImplementation(() => {});
-    trialPanelSpy = jest.spyOn(trialPanel, 'showTrialPanel');
+    trialPanelSpy = jest.spyOn(trialPanel, 'renderTrialPanel');
     setLicenseCheckSkipCondition(false);
   });
 

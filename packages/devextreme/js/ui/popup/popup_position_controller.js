@@ -2,7 +2,7 @@ import $ from '../../core/renderer';
 import { move } from '../../animation/translator';
 import { getWindow } from '../../core/utils/window';
 import { originalViewPort } from '../../core/utils/view_port';
-import { OverlayPositionController } from '../overlay/overlay_position_controller';
+import { OverlayPositionController } from '../../__internal/ui/overlay/m_overlay_position_controller';
 
 const window = getWindow();
 
