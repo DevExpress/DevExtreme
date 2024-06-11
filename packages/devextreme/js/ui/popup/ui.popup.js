@@ -30,7 +30,7 @@ import Overlay from '../overlay/ui.overlay';
 import { isMaterialBased, isMaterial, isFluent } from '../themes';
 import '../toolbar/ui.toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
-import * as zIndexPool from '../overlay/z_index';
+import * as zIndexPool from '../../__internal/ui/overlay/m_z_index';
 import { PopupPositionController } from './popup_position_controller';
 import { createBodyOverflowManager } from './popup_overflow_manager';
 import Guid from '../../core/guid';

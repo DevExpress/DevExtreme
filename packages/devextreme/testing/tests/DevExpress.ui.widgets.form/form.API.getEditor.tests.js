@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { isDefined } from 'core/utils/type';
 
-import 'ui/form/ui.form';
+import 'ui/form';
 import 'ui/text_area';
 
 import 'generic_light.css!';

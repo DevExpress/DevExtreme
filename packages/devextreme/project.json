@@ -16,6 +16,10 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
+        "{projectRoot}/js/bundles/dx.custom.js",
+        "{projectRoot}/js/localization/cldr-data",
+        "{projectRoot}/js/localization/default_messages.js",
+        "{projectRoot}/js/renovation/**/*.j.tsx",
         "{projectRoot}/scss/bundles"
       ]
     },
@@ -26,6 +30,7 @@
       },
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        { "env": "BUILD_INPROGRESS_RENOVATION" },
         { "env": "DEVEXTREME_TEST_CI" },
         { "env": "DOTNET_CLI_TELEMETRY_OPTOUT" },
         { "env": "DOTNET_SKIP_FIRST_TIME_EXPERIENCE" },
@@ -34,6 +39,10 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
+        "{projectRoot}/js/bundles/dx.custom.js",
+        "{projectRoot}/js/localization/cldr-data",
+        "{projectRoot}/js/localization/default_messages.js",
+        "{projectRoot}/js/renovation/**/*.j.tsx",
         "{projectRoot}/scss/bundles"
       ],
       "cache": true

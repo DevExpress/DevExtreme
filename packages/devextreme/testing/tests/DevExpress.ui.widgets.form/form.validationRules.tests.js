@@ -4,7 +4,7 @@ import { logger } from 'core/utils/console';
 import ValidationEngine from 'ui/validation_engine';
 import { Deferred } from 'core/utils/deferred';
 
-import 'ui/form/ui.form';
+import 'ui/form';
 import 'ui/text_area';
 import 'ui/autocomplete';
 import 'ui/calendar';

@@ -4,6 +4,7 @@ import {
 
 import CreateCallback from 'devextreme/core/utils/callbacks';
 import { triggerHandler } from 'devextreme/events';
+import config from 'devextreme/core/config';
 
 import {
   defaultSlots, getChildren, getComponentProps, getVModelValue, VMODEL_NAME,
@@ -43,6 +44,10 @@ export interface IBaseComponent extends ComponentPublicInstance, IWidgetComponen
 }
 
 const includeAttrs = ['id', 'class', 'style'];
+
+config({
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx',
+});
 
 function getAttrs(attrs) {
   const attributes = {};
@@ -187,26 +192,26 @@ function initBaseComponent() {
         thisComponent.$_pendingOptions = {};
         thisComponent.$_templatesManager = new TemplatesManager(this as ComponentPublicInstance);
 
-        const config = thisComponent.$_config;
+        const widgetConfig = thisComponent.$_config;
 
-        if (config.initialValues.hasOwnProperty(VMODEL_NAME)) {
-          config.initialValues.value = getVModelValue(config.initialValues);
+        if (widgetConfig.initialValues.hasOwnProperty(VMODEL_NAME)) {
+          widgetConfig.initialValues.value = getVModelValue(widgetConfig.initialValues);
         }
 
         const options: object = {
           templatesRenderAsynchronously: thisComponent.$_hasAsyncTemplate,
           ...getComponentProps(thisComponent),
-          ...config.initialValues,
-          ...config.getNestedOptionValues(),
+          ...widgetConfig.initialValues,
+          ...widgetConfig.getNestedOptionValues(),
           ...this.$_getIntegrationOptions(),
         };
 
         const instance = new thisComponent.$_WidgetClass(element, options);
         thisComponent.$_instance = instance;
 
-        instance.on('optionChanged', (args) => config.onOptionChanged(args));
-        setEmitOptionChangedFunc(config, thisComponent, thisComponent.$_innerChanges);
-        bindOptionWatchers(config, thisComponent, thisComponent.$_innerChanges);
+        instance.on('optionChanged', (args) => widgetConfig.onOptionChanged(args));
+        setEmitOptionChangedFunc(widgetConfig, thisComponent, thisComponent.$_innerChanges);
+        bindOptionWatchers(widgetConfig, thisComponent, thisComponent.$_innerChanges);
         this.$_createEmitters(instance);
       },
 

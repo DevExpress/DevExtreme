@@ -14,6 +14,8 @@ import {
 
 import { requestAnimationFrame } from 'devextreme/animation/frame';
 import { deferUpdate } from 'devextreme/core/utils/common';
+import config from 'devextreme/core/config';
+
 import { createPortal } from 'react-dom';
 
 import { RemovalLockerContext, RestoreTreeContext } from './helpers';
@@ -25,6 +27,10 @@ import { TemplateManager } from './template-manager';
 import { ComponentProps } from './component';
 
 const DX_REMOVE_EVENT = 'dxremove';
+
+config({
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx',
+});
 
 type ComponentBaseProps = ComponentProps & {
   renderChildren?: () => Record<string, unknown>[] | null | undefined;
@@ -201,14 +207,14 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       el = el || element.current;
 
-      const config = getConfig();
+      const widgetConfig = getConfig();
 
       let options: any = {
         templatesRenderAsynchronously: true,
-        ...optionsManager.current.getInitialOptions(config),
+        ...optionsManager.current.getInitialOptions(widgetConfig),
       };
 
-      const templateOptions = optionsManager.current.getTemplateOptions(config);
+      const templateOptions = optionsManager.current.getTemplateOptions(widgetConfig);
       const dxTemplates = createDXTemplates.current?.(templateOptions);
 
       if (dxTemplates && Object.keys(dxTemplates).length) {
@@ -230,7 +236,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
         );
       }
 
-      optionsManager.current.setInstance(instance.current, config, subscribableOptions, independentEvents);
+      optionsManager.current.setInstance(instance.current, widgetConfig, subscribableOptions, independentEvents);
       instance.current.on('optionChanged', optionsManager.current.onOptionChanged);
 
       afterCreateWidget();
@@ -257,12 +263,12 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
 
       updateCssClasses(prevPropsRef.current, props);
 
-      const config = getConfig();
+      const widgetConfig = getConfig();
 
-      const templateOptions = optionsManager.current.getTemplateOptions(config);
+      const templateOptions = optionsManager.current.getTemplateOptions(widgetConfig);
       const dxTemplates = createDXTemplates.current?.(templateOptions) || {};
 
-      optionsManager.current.update(config, dxTemplates);
+      optionsManager.current.update(widgetConfig, dxTemplates);
       scheduleTemplatesUpdate();
 
       prevPropsRef.current = props;

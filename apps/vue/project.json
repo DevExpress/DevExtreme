@@ -1,0 +1,29 @@
+{
+  "name": "devextreme-vue-playground",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/vue",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "inputs": [
+        "{projectRoot}/components/**/*",
+        "{projectRoot}/public/**/*",
+        "!{projectRoot}/public/js/bundle*",
+        "{projectRoot}/*.ts",
+        "{projectRoot}/*.vue",
+        "{projectRoot}/*.js",
+        "!{projectRoot}/test.js",
+        "{projectRoot}/tsconfig.json"
+      ],
+      "outputs": [
+        "{projectRoot}/public/js/bundle*"
+      ],
+      "cache": true
+    }
+  },
+  "tags": []
+}
