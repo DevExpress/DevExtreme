@@ -42,22 +42,6 @@
       },
       "dependsOn": ["devextreme-monorepo:\"angular:copy-metadata\""]
     },
-    "pack": {
-      "executor": "nx:run-script",
-      "options": {
-        "script": "pack"
-      },
-      "inputs": [
-        "{projectRoot}/src/**/*"
-      ],
-      "outputs": [
-        "{projectRoot}/npm"
-      ],
-      "dependsOn": [
-        "devextreme-main:build"
-      ],
-      "cache": true
-    },
     "test:dev": {
       "executor": "nx:run-script",
       "options": {
