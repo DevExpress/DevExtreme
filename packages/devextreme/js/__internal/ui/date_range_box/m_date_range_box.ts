@@ -17,9 +17,9 @@ import messageLocalization from '@js/localization/message';
 import type { Properties } from '@js/ui/date_range_box';
 import DropDownButton from '@js/ui/drop_down_editor/ui.drop_down_button';
 import Editor from '@js/ui/editor/editor';
-import TextEditorButtonCollection from '@js/ui/text_box/texteditor_button_collection/index';
-import ClearButton from '@js/ui/text_box/ui.text_editor.clear';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
+import ClearButton from '@ts/ui/text_box/m_text_editor.clear';
+import TextEditorButtonCollection from '@ts/ui/text_box/texteditor_button_collection/m_index';
 
 import {
   getDeserializedDate, isSameDateArrays, isSameDates, sortDatesArray,
