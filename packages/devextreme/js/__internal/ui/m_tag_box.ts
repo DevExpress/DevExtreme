@@ -984,9 +984,11 @@ const TagBox = (SelectBox as any).inherit({
 
     if (needFilterPlainItems) {
       const plainItems = this._getPlainItems();
-      const filteredItems = this._filterSelectedItems(plainItems, values);
+      selectedItems = this._filterSelectedItems(plainItems, values);
 
-      selectedItems = this.option('hideSelectedItems') ? this.option('selectedItems').concat(filteredItems) : filteredItems;
+      if (this.option('hideSelectedItems')) {
+        selectedItems = (selectedItems || []).concat(this.option('selectedItems') || []);
+      }
     }
 
     return selectedItems;
