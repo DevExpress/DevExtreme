@@ -26,12 +26,18 @@ declare class Base<
 > extends Widget<TProperties> {
   getDataSource(): DataSource<TItem, TKey>;
 
-  _renderItems(items: unknown): void;
+  _renderItems(items: TItem[]): void;
   _renderItem(
     index: number,
     itemData: TItem,
     $container: dxElementWrapper,
-    $itemToReplace: dxElementWrapper,
+    $itemToReplace?: dxElementWrapper,
+  ): dxElementWrapper;
+  _renderItemFrame(
+    index: number,
+    itemData: TItem,
+    $container: dxElementWrapper,
+    $itemToReplace?: dxElementWrapper,
   ): dxElementWrapper;
   _renderItemContent(args: {
     index: number;
@@ -51,12 +57,31 @@ declare class Base<
     args: { itemData: unknown }): void;
 
   _getItemData(item: Element | HTMLElement | dxElementWrapper): TItem;
+  _getItemContent($item: dxElementWrapper): dxElementWrapper;
   _getIndexByItem(item: TItem): number;
   _getIndexByItemData(item: TItem): number;
+  _getAvailableItems($items?: dxElementWrapper): dxElementWrapper;
+  _getSummaryItemsSize(dimension: string, items: TItem[], includeMargin: boolean): number;
+  _getActiveItem(last?: boolean): dxElementWrapper;
   _findItemElementByItem(item: TItem): dxElementWrapper;
 
   _itemOptionChanged(item: TItem, property: string, value: unknown, prevValue: unknown): void;
   _itemEventHandler($item: dxElementWrapper, eventName: string, eventData: unknown): void;
+  _itemIndexKey(): number;
+
+  _prevItem($items: dxElementWrapper): dxElementWrapper;
+  _nextItem($items: dxElementWrapper): dxElementWrapper;
+
+  _attachContextMenuEvent(): void;
+  _itemContextMenuHandler(event: unknown): void;
+  _itemPointerDownHandler(event: unknown): void;
+  _itemDXEventHandler(event: unknown, eventHandlerName: string, args: unknown, actionConfig: {
+    beforeExecute: (args?: unknown) => void;
+    afterExecute: () => void;
+  }): void;
+
+  _refreshActiveDescendant($target: dxElementWrapper): void;
+  _moveFocus(location: string, event?: unknown): void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
