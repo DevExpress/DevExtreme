@@ -1,7 +1,7 @@
 const $ = require('jquery');
 const ko = require('knockout');
 
-require('ui/context_menu/ui.context_menu');
+require('ui/context_menu');
 require('integration/knockout');
 
 if(QUnit.urlParams['nocsp']) {
