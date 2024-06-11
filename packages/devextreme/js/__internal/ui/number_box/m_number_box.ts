@@ -1,7 +1,6 @@
-import registerComponent from '../../core/component_registrator';
-import NumberBoxMask from './number_box.mask';
+import registerComponent from '@js/core/component_registrator';
 
-// STYLE numberBox
+import NumberBoxMask from './m_number_box.mask';
 
 registerComponent('dxNumberBox', NumberBoxMask);
 
