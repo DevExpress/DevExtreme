@@ -449,7 +449,7 @@ class Menu extends MenuBase {
     const $hamburger = this._renderHamburgerButton();
 
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
-
+    // @ts-expect-error
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     // @ts-expect-error
     this._overlay.$content()
