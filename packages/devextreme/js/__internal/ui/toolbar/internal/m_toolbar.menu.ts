@@ -305,7 +305,7 @@ export default class DropDownMenu extends Widget<Properties> {
       activeStateEnabled: true,
       onItemRendered: this.option('onItemRendered'),
       _itemAttributes: { role: 'menuitem' },
-    });
+    } as any);
   }
 
   _itemOptionChanged(item, property, value): void {
