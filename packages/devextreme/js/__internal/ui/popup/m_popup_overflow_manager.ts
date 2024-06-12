@@ -1,136 +1,147 @@
-import { getWindow, hasWindow } from '../../core/utils/window';
-import { isDefined } from '../../core/utils/type';
-import domAdapter from '../../core/dom_adapter';
-import devices from '../../core/devices';
-import { noop } from '../../core/utils/common';
+import devices from '@js/core/devices';
+import domAdapter from '@js/core/dom_adapter';
+import { noop } from '@js/core/utils/common';
+import { isDefined } from '@js/core/utils/type';
+import { getWindow, hasWindow } from '@js/core/utils/window';
 
-const overflowManagerMock = {
-    setOverflow: noop,
-    restoreOverflow: noop,
+const overflowManagerMock: {
+  setOverflow: () => void;
+  restoreOverflow: () => void;
+} = {
+  setOverflow: noop,
+  restoreOverflow: noop,
 };
 
-export const createBodyOverflowManager = () => {
-    if(!hasWindow()) {
-        return overflowManagerMock;
+export const createBodyOverflowManager = (): typeof overflowManagerMock => {
+  if (!hasWindow()) {
+    return overflowManagerMock;
+  }
+
+  const window = getWindow();
+  const { documentElement } = domAdapter.getDocument();
+  const body = domAdapter.getBody();
+
+  const isIosDevice = devices.real().platform === 'ios';
+
+  const prevSettings: {
+    overflow: string | null;
+    overflowX: string | null;
+    overflowY: string | null;
+    paddingRight: number | null;
+    position: string | null;
+    top: string | null;
+    left: string | null;
+  } = {
+    overflow: null,
+    overflowX: null,
+    overflowY: null,
+    paddingRight: null,
+    position: null,
+    top: null,
+    left: null,
+  };
+
+  const setBodyPositionFixed = (): void => {
+    if (isDefined(prevSettings.position) || body.style.position === 'fixed') {
+      return;
     }
 
-    const window = getWindow();
-    const documentElement = domAdapter.getDocument().documentElement;
-    const body = domAdapter.getBody();
+    const { scrollY, scrollX } = window;
 
-    const isIosDevice = devices.real().platform === 'ios';
+    prevSettings.position = body.style.position;
+    prevSettings.top = body.style.top;
+    prevSettings.left = body.style.left;
 
-    const prevSettings = {
-        overflow: null,
-        overflowX: null,
-        overflowY: null,
-        paddingRight: null,
-        position: null,
-        top: null,
-        left: null,
-    };
+    body.style.setProperty('position', 'fixed');
+    body.style.setProperty('top', `${-scrollY}px`);
+    body.style.setProperty('left', `${-scrollX}px`);
+  };
 
-    const setBodyPositionFixed = () => {
-        if(isDefined(prevSettings.position) || body.style.position === 'fixed') {
-            return;
-        }
+  const restoreBodyPositionFixed = (): void => {
+    if (!isDefined(prevSettings.position)) {
+      return;
+    }
 
-        const { scrollY, scrollX } = window;
+    const scrollY = -parseInt(body.style.top, 10);
+    const scrollX = -parseInt(body.style.left, 10);
 
-        prevSettings.position = body.style.position;
-        prevSettings.top = body.style.top;
-        prevSettings.left = body.style.left;
+    ['position', 'top', 'left'].forEach((property) => {
+      if (prevSettings[property]) {
+        body.style.setProperty(property, prevSettings[property]);
+      } else {
+        body.style.removeProperty(property);
+      }
+    });
 
-        body.style.setProperty('position', 'fixed');
-        body.style.setProperty('top', `${-scrollY}px`);
-        body.style.setProperty('left', `${-scrollX}px`);
-    };
+    window.scrollTo(scrollX, scrollY);
 
-    const restoreBodyPositionFixed = () => {
-        if(!isDefined(prevSettings.position)) {
-            return;
-        }
+    prevSettings.position = null;
+  };
 
-        const scrollY = -parseInt(body.style.top, 10);
-        const scrollX = -parseInt(body.style.left, 10);
+  const setBodyPaddingRight = (): void => {
+    const scrollBarWidth = window.innerWidth - documentElement.clientWidth;
+    if (prevSettings.paddingRight || scrollBarWidth <= 0) {
+      return;
+    }
 
-        ['position', 'top', 'left'].forEach((property) => {
-            if(prevSettings[property]) {
-                body.style.setProperty(property, prevSettings[property]);
-            } else {
-                body.style.removeProperty(property);
-            }
-        });
+    const paddingRight = window.getComputedStyle(body).getPropertyValue('padding-right');
+    const computedBodyPaddingRight = parseInt(paddingRight, 10);
+    prevSettings.paddingRight = computedBodyPaddingRight;
 
-        window.scrollTo(scrollX, scrollY);
+    body.style.setProperty('padding-right', `${computedBodyPaddingRight + scrollBarWidth}px`);
+  };
 
-        prevSettings.position = null;
-    };
+  const setBodyOverflow = (): void => {
+    setBodyPaddingRight();
 
-    const setBodyOverflow = () => {
-        setBodyPaddingRight();
+    if (prevSettings.overflow || body.style.overflow === 'hidden') {
+      return;
+    }
 
-        if(prevSettings.overflow || body.style.overflow === 'hidden') {
-            return;
-        }
+    prevSettings.overflow = body.style.overflow;
+    prevSettings.overflowX = body.style.overflowX;
+    prevSettings.overflowY = body.style.overflowY;
 
-        prevSettings.overflow = body.style.overflow;
-        prevSettings.overflowX = body.style.overflowX;
-        prevSettings.overflowY = body.style.overflowY;
+    body.style.setProperty('overflow', 'hidden');
+  };
 
-        body.style.setProperty('overflow', 'hidden');
-    };
+  const restoreBodyPaddingRight = (): void => {
+    if (!isDefined(prevSettings.paddingRight)) {
+      return;
+    }
 
-    const restoreBodyOverflow = () => {
-        restoreBodyPaddingRight();
+    if (prevSettings.paddingRight) {
+      body.style.setProperty('padding-right', `${prevSettings.paddingRight}px`);
+    } else {
+      body.style.removeProperty('padding-right');
+    }
 
-        ['overflow', 'overflowX', 'overflowY'].forEach((property) => {
-            if(!isDefined(prevSettings[property])) {
-                return;
-            }
-            const propertyInKebabCase = property.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
-            if(prevSettings[property]) {
-                body.style.setProperty(propertyInKebabCase, prevSettings[property]);
-            } else {
-                body.style.removeProperty(propertyInKebabCase);
-            }
-            prevSettings[property] = null;
-        });
-    };
+    prevSettings.paddingRight = null;
+  };
 
-    const setBodyPaddingRight = () => {
-        const scrollBarWidth = window.innerWidth - documentElement.clientWidth;
-        if(prevSettings.paddingRight || scrollBarWidth <= 0) {
-            return;
-        }
+  const restoreBodyOverflow = (): void => {
+    restoreBodyPaddingRight();
 
-        const paddingRight = window.getComputedStyle(body).getPropertyValue('padding-right');
-        const computedBodyPaddingRight = parseInt(paddingRight, 10);
-        prevSettings.paddingRight = computedBodyPaddingRight;
+    ['overflow', 'overflowX', 'overflowY'].forEach((property) => {
+      if (!isDefined(prevSettings[property])) {
+        return;
+      }
+      const propertyInKebabCase = property.replace(/(X)|(Y)/, (symbol) => `-${symbol.toLowerCase()}`);
+      if (prevSettings[property]) {
+        body.style.setProperty(propertyInKebabCase, prevSettings[property]);
+      } else {
+        body.style.removeProperty(propertyInKebabCase);
+      }
+      prevSettings[property] = null;
+    });
+  };
 
-        body.style.setProperty('padding-right', `${computedBodyPaddingRight + scrollBarWidth}px`);
-    };
-
-    const restoreBodyPaddingRight = () => {
-        if(!isDefined(prevSettings.paddingRight)) {
-            return;
-        }
-
-        if(prevSettings.paddingRight) {
-            body.style.setProperty('padding-right', `${prevSettings.paddingRight}px`);
-        } else {
-            body.style.removeProperty('padding-right');
-        }
-
-        prevSettings.paddingRight = null;
-    };
-
-    return {
-        setOverflow: isIosDevice
-            ? setBodyPositionFixed
-            : setBodyOverflow,
-        restoreOverflow: isIosDevice
-            ? restoreBodyPositionFixed
-            : restoreBodyOverflow,
-    };
+  return {
+    setOverflow: isIosDevice
+      ? setBodyPositionFixed
+      : setBodyOverflow,
+    restoreOverflow: isIosDevice
+      ? restoreBodyPositionFixed
+      : restoreBodyOverflow,
+  };
 };

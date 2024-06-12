@@ -74,7 +74,6 @@ class SpeedDialAction extends Widget<Properties> {
   }
 
   _render(): void {
-    // @ts-expect-error
     this._toggleVisibility(false);
 
     if (!getSwatchContainer(this.$element())) {
@@ -87,7 +86,6 @@ class SpeedDialAction extends Widget<Properties> {
   _dispose() {
     // @ts-expect-error
     disposeAction(this._options.silent('id'));
-    // @ts-expect-error
     super._dispose();
   }
 }
