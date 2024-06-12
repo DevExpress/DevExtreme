@@ -1,21 +1,23 @@
-import '../toolbar';
-import Popover from '../popover/ui.popover';
-import registerComponent from '../../core/component_registrator';
-import { extend } from '../../core/utils/extend';
+import '@js/ui/toolbar';
+
+import registerComponent from '@js/core/component_registrator';
+import { extend } from '@js/core/utils/extend';
+import Popover from '@js/ui/popover/ui.popover';
+
 export default class PopoverFull extends Popover {
-    _getDefaultOptions() {
-        return extend(super._getDefaultOptions(), {
-            preventScrollEvents: false,
-        });
-    }
+  _getDefaultOptions() {
+    return extend(super._getDefaultOptions(), {
+      preventScrollEvents: false,
+    });
+  }
 
-    _getToolbarName() {
-        return 'dxToolbar';
-    }
+  _getToolbarName() {
+    return 'dxToolbar';
+  }
 }
-
-PopoverFull.defaultOptions = function(rule) {
-    Popover.defaultOptions(rule);
+// @ts-expect-error
+PopoverFull.defaultOptions = function (rule) {
+  Popover.defaultOptions(rule);
 };
-
+// @ts-expect-error
 registerComponent('dxPopover', PopoverFull);
