@@ -12,7 +12,7 @@ import scrollEvents from '@js/events/gesture/emitter.gesture.scroll';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, eventData } from '@js/events/utils/index';
 import TextBox from '@js/ui/text_box';
-import { allowScroll, prepareScrollData } from '@js/ui/text_box/utils.scroll';
+import { allowScroll, prepareScrollData } from '@ts/ui/text_box/m_utils.scroll';
 
 const TEXTAREA_CLASS = 'dx-textarea';
 const TEXTEDITOR_INPUT_CLASS_AUTO_RESIZE = 'dx-texteditor-input-auto-resize';
