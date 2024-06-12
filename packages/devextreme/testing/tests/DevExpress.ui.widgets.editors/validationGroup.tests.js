@@ -2,7 +2,7 @@ import Class from 'core/class';
 import { Deferred } from 'core/utils/deferred';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
-import DefaultAdapter from 'ui/validation/default_adapter';
+import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import 'ui/validation_group';
 
