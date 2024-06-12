@@ -13,12 +13,12 @@ const autoPrefix = require('gulp-autoprefixer');
 const parseArguments = require('minimist');
 
 const cleanCssSanitizeOptions = require('./clean-css-options.json');
-const cleanCssOptions = require('../../../../devextreme-themebuilder/src/data/clean-css-options.json');
+const cleanCssOptions = require('../../devextreme-themebuilder/src/data/clean-css-options.json');
 const { getThemes } = require('./theme-options');
-const functions = require('../gulp-data-uri').sassFunctions;
-const starLicense = require('../header-pipes').starLicense;
+const functions = require('./gulp-data-uri').sassFunctions;
+const starLicense = require('../../devextreme/build/gulp/header-pipes').starLicense;
 
-const cssArtifactsPath = join(process.cwd(), 'artifacts', 'css');
+const cssArtifactsPath = join(process.cwd(), '..', 'devextreme', 'artifacts', 'css');
 
 const DEFAULT_DEV_BUNDLE_NAMES = [
     'light',
@@ -152,8 +152,3 @@ task('style-compiler-themes-watch', () => {
     watch('scss/**/*', parallel(() => compileBundles(bundles), 'copy-fonts-and-icons'))
         .on('ready', () => console.log('style-compiler-themes task is watching for changes...'));
 });
-
-module.exports = {
-    generateScssBundleName,
-    generateScssBundles
-};

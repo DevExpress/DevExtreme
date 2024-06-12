@@ -154,19 +154,18 @@ gulp.task('npm-dist', () => gulp
 const scssDir = `${packagePath}/scss`;
 
 gulp.task('npm-sass', gulp.series(
-    'create-scss-bundles',
     gulp.parallel(
         () => gulp
-            .src('scss/**/*')
+            .src(`${ctx.SCSS_PACKAGE_PATH}/scss/**/*`)
             .pipe(dataUri())
             .pipe(gulp.dest(scssDir)),
 
         () => gulp
-            .src('fonts/**/*', { base: '.' })
+            .src(`${ctx.SCSS_PACKAGE_PATH}/fonts/**/*`, { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/material/typography`)),
 
         () => gulp
-            .src('icons/**/*', { base: '.' })
+            .src(`${ctx.SCSS_PACKAGE_PATH}/icons/**/*`, { base: '.' })
             .pipe(gulp.dest(`${scssDir}/widgets/base`)),
     )
 ));

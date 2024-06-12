@@ -3,6 +3,9 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme",
   "projectType": "library",
+  "implicitDependencies": [
+    "devextreme-scss"
+  ],
   "targets": {
     "build": {
       "executor": "nx:run-script",
@@ -16,11 +19,11 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
+        "!{projectRoot}/artifacts/css",
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/localization/cldr-data",
         "{projectRoot}/js/localization/default_messages.js",
-        "{projectRoot}/js/renovation/**/*.j.tsx",
-        "{projectRoot}/scss/bundles"
+        "{projectRoot}/js/renovation/**/*.j.tsx"
       ]
     },
     "build-dist": {
@@ -44,6 +47,9 @@
       "options": {
         "script": "build:dev"
       },
+      "dependsOn": [
+        "^build"
+      ],
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
         { "env": "BUILD_INPROGRESS_RENOVATION" },
@@ -55,11 +61,11 @@
       ],
       "outputs": [
         "{projectRoot}/artifacts",
+        "!{projectRoot}/artifacts/css",
         "{projectRoot}/js/bundles/dx.custom.js",
         "{projectRoot}/js/localization/cldr-data",
         "{projectRoot}/js/localization/default_messages.js",
-        "{projectRoot}/js/renovation/**/*.j.tsx",
-        "{projectRoot}/scss/bundles"
+        "{projectRoot}/js/renovation/**/*.j.tsx"
       ],
       "cache": true
     },
