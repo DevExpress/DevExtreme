@@ -3266,6 +3266,46 @@ QUnit.module('dataSource integration', {
 
         assert.ok($loadPanel.is(':visible'), 'load panel is visible');
     });
+
+    QUnit.test('loadPanel should be visible when minSearchLength is initialized (T1215813)', function(assert) {
+        const loadDelay = 1500;
+        const delayDS = {
+            load: function() {
+                return new Promise((resolve) => {
+                    setTimeout(() => {
+                        resolve([
+                            { id: 1, text: 'test res' },
+                            { id: 2, text: 'test res 2' },
+                            { id: 3, text: 'test res 3' }
+                        ]);
+                    }, loadDelay);
+                });
+            }
+        };
+        const instance = this.$element.dxLookup({
+            dataSource: delayDS,
+            searchExpr: 'text',
+            displayExpr: 'text',
+            minSearchLength: 3,
+            searchEnabled: true,
+            showDataBeforeSearch: false,
+            cleanSearchOnOpening: false,
+            searchTimeout: loadDelay / 10,
+        }).dxLookup('instance');
+
+        this.clock.tick(loadDelay);
+        const inputField = $(instance._$field);
+        inputField.trigger('dxclick');
+        const $content = $(instance.content());
+        const $input = $content.find(`.${LOOKUP_SEARCH_CLASS} .${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('fff');
+        this.clock.tick(loadDelay);
+        const $loadPanel = $content.find(`.${SCROLL_VIEW_LOAD_PANEL_CLASS}`);
+
+        assert.ok($loadPanel.is(':visible'), 'load panel is visible');
+    });
 });
 
 
