@@ -22,9 +22,9 @@ import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import SelectBox from '@js/ui/select_box';
-import caret from '@js/ui/text_box/utils.caret';
-import { allowScroll } from '@js/ui/text_box/utils.scroll';
 import errors from '@js/ui/widget/ui.errors';
+import caret from '@ts/ui/text_box/m_utils.caret';
+import { allowScroll } from '@ts/ui/text_box/m_utils.scroll';
 
 function xor(a: boolean, b: boolean): boolean {
   return (a || b) && !(a && b);

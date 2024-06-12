@@ -13,7 +13,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import { Event as dxEvent } from '../../events/index';
 import scrollEvents from '../../events/gesture/emitter.gesture.scroll';
-import { prepareScrollData } from '../text_box/utils.scroll';
+import { prepareScrollData } from '../../__internal/ui/text_box/m_utils.scroll';
 
 import pointerEvents from '../../events/pointer';
 import devices from '../../core/devices';
