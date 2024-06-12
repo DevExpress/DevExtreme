@@ -49,6 +49,7 @@ import {
   EDIT_FORM_CLASS,
   EDIT_ICON_CLASS,
   EDIT_LINK_CLASS,
+  EDIT_MODE_POPUP,
   EDIT_MODE_ROW,
   EDIT_MODES,
   EDITING_CHANGES_OPTION_NAME,
@@ -345,6 +346,11 @@ class EditingControllerImpl extends modules.ViewController {
     }
 
     return result;
+  }
+
+  protected isPopupEditMode() {
+    const editMode = this.option('editing.mode');
+    return editMode === EDIT_MODE_POPUP;
   }
 
   private _isButtonVisible(button, options) {
