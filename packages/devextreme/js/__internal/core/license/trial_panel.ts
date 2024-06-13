@@ -235,6 +235,8 @@ class DxLicenseTrigger extends SafeHTMLElement {
   private readonly that = this as unknown as HTMLElement;
 
   public connectedCallback(): void {
+    this.that.style.display = 'none';
+
     const licensePanel = document.getElementsByTagName(componentNames.panel);
     if (!licensePanel.length) {
       const license = document.createElement(componentNames.panel);
