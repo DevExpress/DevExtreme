@@ -1,1 +1,1 @@
-import '../ui.list.edit.decorator.switchable.slide';
+import '../m_list.edit.decorator.switchable.slide';

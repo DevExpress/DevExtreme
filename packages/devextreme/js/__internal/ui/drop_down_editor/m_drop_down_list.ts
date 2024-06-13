@@ -21,8 +21,8 @@ import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import List from '@js/ui/list_light';
-import DataConverterMixin from '@js/ui/shared/grouped_data_converter_mixin';
 import errors from '@js/ui/widget/ui.errors';
+import DataConverterMixin from '@ts/ui/shared/m_grouped_data_converter_mixin';
 
 import DropDownEditor from './m_drop_down_editor';
 

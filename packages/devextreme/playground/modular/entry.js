@@ -10,62 +10,62 @@ const newElement = (name) => {
     return el;
 };
 
-import 'devextreme/ui/list/modules/selection';
+import 'devextreme/__internal/ui/list/modules/m_selection';
 new ListBase(newElement('selection'), {
     dataSource: [ 1, 2, 3 ],
     showSelectionControls: true,
     selectionMode: 'single'
 });
 
-import 'devextreme/ui/list/modules/deleting';
+import 'devextreme/__internal/ui/list/modules/m_deleting';
 new ListBase(newElement('deleting'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true
 });
 
-import 'devextreme/ui/list/modules/deleting.context';
+import 'devextreme/__internal/ui/list/modules/m_deleting.context';
 new ListBase(newElement('itemDeleteMode context'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true,
     itemDeleteMode: 'context'
 });
 
-import 'devextreme/ui/list/modules/deleting.swipe';
+import 'devextreme/__internal/ui/list/modules/m_deleting.swipe';
 new ListBase(newElement('itemDeleteMode swipe'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true,
     itemDeleteMode: 'swipe'
 });
 
-import 'devextreme/ui/list/modules/deleting.slideItem';
+import 'devextreme/__internal/ui/list/modules/m_deleting.slideItem';
 new ListBase(newElement('itemDeleteMode slideItem'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true,
     itemDeleteMode: 'slideItem'
 });
 
-import 'devextreme/ui/list/modules/deleting.toggle';
+import 'devextreme/__internal/ui/list/modules/m_deleting.toggle';
 new ListBase(newElement('itemDeleteMode toggle'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true,
     itemDeleteMode: 'toggle'
 });
 
-import 'devextreme/ui/list/modules/deleting.slideButton';
+import 'devextreme/__internal/ui/list/modules/m_deleting.slideButton';
 new ListBase(newElement('itemDeleteModeslideButton'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true,
     itemDeleteMode: 'slideButton'
 });
 
-import 'devextreme/ui/list/modules/deleting.static';
+import 'devextreme/__internal/ui/list/modules/m_deleting.static';
 new ListBase(newElement('itemDeleteModestatic'), {
     dataSource: [ 1, 2, 3 ],
     allowItemDeleting: true,
     itemDeleteMode: 'static'
 });
 
-import 'devextreme/ui/list/modules/dragging';
+import 'devextreme/__internal/ui/list/modules/m_dragging';
 new ListBase(newElement('itemDragging allowReordering'), {
     dataSource: [ 1, 2, 3 ],
     itemDragging: {
@@ -87,7 +87,7 @@ new ListBase(newElement('itemDragging group'), {
     }
 });
 
-import 'devextreme/ui/list/modules/context';
+import 'devextreme/__internal/ui/list/modules/m_context';
 new ListBase(newElement('context'), {
     dataSource: [ 1, 2, 3 ],
     menuItems: [
@@ -95,7 +95,7 @@ new ListBase(newElement('context'), {
     ]
 });
 
-import 'devextreme/ui/list/modules/search';
+import 'devextreme/__internal/ui/list/modules/m_search';
 new ListBase(newElement('search'), {
     dataSource: [ 1, 2, 3 ],
     searchEnabled: true
