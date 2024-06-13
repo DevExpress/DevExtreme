@@ -25,10 +25,10 @@
           :show-nav-buttons="true"
           :repaint-changes-only="true"
           v-model:selected-index="selectedIndex"
-          item-title-template="title"
+          item-title-template="itemTitle"
           item-template="itemTemplate"
         >
-          <template #title="{ data: employee }">
+          <template #itemTitle="{ data: employee }">
             <div>
               <span>{{ employee.FirstName }} {{ employee.LastName }}</span><i
                 v-show="showCloseButton()"
