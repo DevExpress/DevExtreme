@@ -15,11 +15,13 @@
     "stylelint": "15.11.0",
     "stylelint-config-standard-scss": "9.0.0",
     "stylelint-scss": "5.3.1",
-    "through2": "2.0.5"
+    "through2": "2.0.5",
+    "ts-jest": "29.1.2"
   },
   "scripts": {
     "build": "gulp",
-    "lint": "stylelint widgets",
+    "lint": "stylelint scss/widgets",
+    "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
     "watch": "gulp watch"
   },
   "version": "24.1.3"

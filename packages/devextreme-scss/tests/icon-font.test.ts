@@ -2,7 +2,7 @@ import { loadSync } from 'opentype.js';
 import { readdirSync } from 'fs';
 import { join, extname } from 'path';
 
-const BASE_PATH = join(__dirname, '..', '..');
+const BASE_PATH = join(__dirname, '..');
 
 describe('Equals svg to font', () => {
   const getCountElementInFont = (pathToFont: string): number => {
