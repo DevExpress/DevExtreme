@@ -118,8 +118,6 @@ export const dxBarGauge = BaseGauge.inherit({
     _renderContent: function() {
         const that = this;
         let labelOptions = that.option('label');
-        let text;
-        let bBox;
         const context = that._context;
 
         that._barsGroup.linkAppend();
@@ -138,8 +136,8 @@ export const dxBarGauge = BaseGauge.inherit({
                 customizeText: labelOptions.customizeText
             };
 
-            text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).append(that._barsGroup);
-            bBox = text.getBBox();
+            const text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).append(that._barsGroup);
+            const bBox = text.getBBox();
             text.remove();
 
             context.textY = bBox.y;
