@@ -1969,7 +1969,7 @@ QUnit.module('deferred datasource', {
         });
     });
 
-    QUnit.test('dropDownButton should show correct selected item text on custom constructor object. (T1233565)', function(assert) {
+    QUnit.test('should display correct text for non-plain objects(T1233565)', function(assert) {
         class Alignment {
             constructor(id, name, icon) {
                 this.id = id;
