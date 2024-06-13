@@ -1,86 +1,91 @@
-import { getQuill } from './quill_importer';
-import BaseTheme from './themes/base';
-import Image from './formats/image';
-import Link from './formats/link';
-import FontStyle from './formats/font';
-import SizeStyle from './formats/size';
-import AlignStyle from './formats/align';
-import Toolbar from './modules/toolbar';
-import DropImage from './modules/dropImage';
-import Variables from './modules/variables';
-import Resizing from './modules/resizing';
-import TableResizing from './modules/tableResizing';
-import TableContextMenu from './modules/tableContextMenu';
-import ImageUpload from './modules/imageUpload';
-import ImageCursor from './modules/imageCursor';
-import MentionsModule from './modules/mentions';
+import AlignStyle from './formats/m_align';
+import FontStyle from './formats/m_font';
+import Image from './formats/m_image';
+import Link from './formats/m_link';
+import SizeStyle from './formats/m_size';
+import { getQuill } from './m_quill_importer';
+import DropImage from './modules/m_dropImage';
+import ImageCursor from './modules/m_imageCursor';
+import ImageUpload from './modules/m_imageUpload';
+import MentionsModule from './modules/m_mentions';
+import Resizing from './modules/m_resizing';
+import TableContextMenu from './modules/m_tableContextMenu';
+import TableResizing from './modules/m_tableResizing';
+import Toolbar from './modules/m_toolbar';
+import Variables from './modules/m_variables';
+import BaseTheme from './themes/m_base';
 
 class QuillRegistrator {
-    constructor() {
-        if(QuillRegistrator.initialized) {
-            return;
-        }
+  _customModules: any[] = [];
 
-        const quill = this.getQuill();
-        const DirectionStyle = quill.import('attributors/style/direction');
-
-        quill.register({
-            'formats/align': AlignStyle,
-            'formats/direction': DirectionStyle,
-            'formats/font': FontStyle,
-            'formats/size': SizeStyle,
-
-            'formats/extendedImage': Image,
-            'formats/link': Link,
-
-            'modules/toolbar': Toolbar,
-            'modules/dropImage': DropImage,
-            'modules/variables': Variables,
-            'modules/resizing': Resizing,
-            'modules/tableResizing': TableResizing,
-            'modules/tableContextMenu': TableContextMenu,
-            'modules/imageUpload': ImageUpload,
-            'modules/imageCursor': ImageCursor,
-            'modules/mentions': MentionsModule,
-
-            'themes/basic': BaseTheme
-        },
-        true
-        );
-
-        this._customModules = [];
-        QuillRegistrator._initialized = true;
+  constructor() {
+    // @ts-expect-error
+    if (QuillRegistrator.initialized) {
+      return;
     }
 
-    createEditor(container, config) {
-        const quill = this.getQuill();
+    const quill = this.getQuill();
+    const DirectionStyle = quill.import('attributors/style/direction');
 
-        return new quill(container, config);
+    quill.register(
+      {
+        'formats/align': AlignStyle,
+        'formats/direction': DirectionStyle,
+        'formats/font': FontStyle,
+        'formats/size': SizeStyle,
+
+        'formats/extendedImage': Image,
+        'formats/link': Link,
+
+        'modules/toolbar': Toolbar,
+        'modules/dropImage': DropImage,
+        'modules/variables': Variables,
+        'modules/resizing': Resizing,
+        'modules/tableResizing': TableResizing,
+        'modules/tableContextMenu': TableContextMenu,
+        'modules/imageUpload': ImageUpload,
+        'modules/imageCursor': ImageCursor,
+        'modules/mentions': MentionsModule,
+
+        'themes/basic': BaseTheme,
+      },
+      true,
+    );
+
+    this._customModules = [];
+    // @ts-expect-error
+    QuillRegistrator._initialized = true;
+  }
+
+  createEditor(container, config) {
+    const quill = this.getQuill();
+
+    // eslint-disable-next-line new-cap
+    return new quill(container, config);
+  }
+
+  registerModules(modulesConfig) {
+    const isModule = RegExp('modules/*');
+    const quill = this.getQuill();
+    const isRegisteredModule = (modulePath) => !!quill.imports[modulePath];
+
+    // eslint-disable-next-line no-restricted-syntax
+    for (const modulePath in modulesConfig) {
+      if (isModule.test(modulePath) && !isRegisteredModule(modulePath)) {
+        this._customModules.push(modulePath.slice(8));
+      }
     }
 
-    registerModules(modulesConfig) {
-        const isModule = RegExp('modules/*');
-        const quill = this.getQuill();
-        const isRegisteredModule = (modulePath) => {
-            return !!quill.imports[modulePath];
-        };
+    quill.register(modulesConfig, true);
+  }
 
-        for(const modulePath in modulesConfig) {
-            if(isModule.test(modulePath) && !isRegisteredModule(modulePath)) {
-                this._customModules.push(modulePath.slice(8));
-            }
-        }
+  getRegisteredModuleNames() {
+    return this._customModules;
+  }
 
-        quill.register(modulesConfig, true);
-    }
-
-    getRegisteredModuleNames() {
-        return this._customModules;
-    }
-
-    getQuill() {
-        return getQuill();
-    }
+  getQuill() {
+    return getQuill();
+  }
 }
 
 export default QuillRegistrator;
