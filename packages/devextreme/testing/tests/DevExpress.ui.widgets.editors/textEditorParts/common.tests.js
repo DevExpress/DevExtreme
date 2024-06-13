@@ -12,7 +12,7 @@ import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, implementationsMap } from 'core/utils/size';
 
 import TextEditor from 'ui/text_box/ui.text_editor';
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 const TEXTEDITOR_CLASS = 'dx-texteditor';
 const INPUT_CLASS = 'dx-texteditor-input';

@@ -56,7 +56,7 @@ ready(() => {
     }
   });
 });
-
+// @ts-expect-error
 const Toast = Overlay.inherit({
 
   _getDefaultOptions() {

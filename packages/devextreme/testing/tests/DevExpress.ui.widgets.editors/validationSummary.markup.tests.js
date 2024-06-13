@@ -1,6 +1,6 @@
 import $ from 'jquery';
 import Class from 'core/class';
-import DefaultAdapter from 'ui/validation/default_adapter';
+import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import Validator from 'ui/validator';
 

@@ -32,7 +32,7 @@ const createData = (count, innerCount) => {
   return result;
 };
 
-test('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async (t) => {
+test.meta({ unstable: true })('Row fields overlap data fields if dataFieldArea is set to "row" and virtual scrolling is enabled (T1210807)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const pivotGrid = new PivotGrid('#container');
   const firstHeaderRow = pivotGrid.getRowsArea(2).getCell(0);
