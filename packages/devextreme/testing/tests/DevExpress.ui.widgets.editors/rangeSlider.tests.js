@@ -5,8 +5,8 @@ import pointerMock from '../../helpers/pointerMock.js';
 import fx from 'animation/fx';
 import { normalizeKeyName } from 'events/utils/index';
 
-import '__internal/ui/m_range_slider';
-import 'ui/number_box/number_box';
+import 'ui/range_slider';
+import 'ui/number_box';
 import 'ui/validator';
 import 'generic_light.css!';
 

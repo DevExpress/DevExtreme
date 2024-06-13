@@ -31,16 +31,18 @@
             :animation-enabled="true"
           >
             <template #item="{ data }">
-              <div class="employee-info">
-                <img
-                  class="employee-photo"
-                  :alt="data.text"
-                  :src="data.picture"
-                >
-                <p class="employee-notes">
-                  <b>Position: {{ data.position }}</b><br>
-                  {{ data.notes }}
-                </p>
+              <div>
+                <div class="employee-info">
+                  <img
+                    class="employee-photo"
+                    :alt="data.text"
+                    :src="data.picture"
+                  >
+                  <p class="employee-notes">
+                    <b>Position: {{ data.position }}</b><br>
+                    {{ data.notes }}
+                  </p>
+                </div>
               </div>
             </template>
           </DxMultiView>

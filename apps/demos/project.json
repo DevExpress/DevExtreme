@@ -1,0 +1,119 @@
+{
+  "name": "devextreme-demos",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/demos",
+  "projectType": "application",
+  "targets": {
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "dependsOn": [],
+      "inputs": [
+        "default",
+        "test"
+      ],
+      "outputs": [
+        "{projectRoot}/coverage"
+      ],
+      "cache": true
+    },
+    "test-testcafe": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test-testcafe"
+      },
+      "dependsOn": [
+        // NOTE: uncomment me when the NX cache is fixed to work in GHA
+        // "devextreme-main:build"
+      ],
+      "inputs": [
+        { "env": "STRATEGY" },
+        { "env": "CHANGEDFILEINFOSPATH" },
+        { "env": "BROWSERS" },
+        { "env": "DEBUG" },
+        { "env": "TCQUARANTINE" },
+        { "env": "CONSTEL" },
+        { "env": "THEME" },
+        { "env": "DISABLE_DEMO_TEST_SETTINGS" },
+        { "env": "CI_ENV" },
+        "default",
+        "test"
+      ],
+      "outputs": [
+        "{projectRoot}/testing/artifacts"
+      ],
+      "cache": true
+    },
+    "prepare-bundles": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "prepare-bundles"
+      },
+      "dependsOn": [
+        // "^build" uncomment me after migrating to PNPM
+      ],
+      "inputs": [
+        "default",
+        "{projectRoot}/gulpfile.js/**/*",
+        "{projectRoot}/rollup.devextreme-angular.umd.config.mjs"
+      ],
+      "outputs": [
+        "{projectRoot}/bundles"
+      ],
+      "cache": true
+    },
+    "lint-js": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-js"
+      },
+      "inputs": [
+        "default",
+        "!{projectRoot}/Demos/**/*",
+        "{projectRoot}/.eslint*"
+      ],
+      "cache": true
+    },
+    "lint-css": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-css"
+      },
+      "inputs": [
+        "{projectRoot}/Demos/**/*.css",
+        "{projectRoot}/Demos/**/*.vue",
+        "{projectRoot}/Demos/.stylelintrc.json"
+      ],
+      "cache": true
+    },
+    "lint-html": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint-html"
+      },
+      "inputs": [
+        "{projectRoot}/**/*"
+      ],
+      "cache": true
+    }
+  },
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/configs/**/*",
+      "{projectRoot}/data/**/*",
+      "{projectRoot}/Demos/**/*",
+      "{projectRoot}/images/**/*",
+      "{projectRoot}/shared/**/*",
+      "{projectRoot}/tsconfig.json"
+    ],
+    "test": [
+      "{projectRoot}/testing/**/*",
+      "{projectRoot}/utils/**/*",
+      "{projectRoot}/babel.config.js",
+      "{projectRoot}/jest.config.js"
+    ]
+  },
+  "tags": []
+}

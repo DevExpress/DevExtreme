@@ -1,6 +1,3 @@
-import registerComponent from '../../core/component_registrator';
-import TextEditorMask from './ui.text_editor.mask';
-
-registerComponent('dxTextEditor', TextEditorMask);
+import TextEditorMask from '../../__internal/ui/text_box/m_text_editor';
 
 export default TextEditorMask;

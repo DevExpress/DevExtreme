@@ -2,7 +2,7 @@ import Color from '@js/color';
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
 import { extend } from '@js/core/utils/extend';
-import DropDownEditor from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
 import ColorView from './m_color_view';
 

@@ -143,9 +143,6 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
-    TabPanel: [
-      { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
-    ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
@@ -208,9 +205,6 @@ const SKIPPED_TESTS = {
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
-    ],
-    Tabs: [
-      { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
     ],
     List: [
       { demo: 'ListSelection', themes: [THEME.material] },

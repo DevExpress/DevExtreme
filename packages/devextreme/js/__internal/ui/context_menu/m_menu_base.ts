@@ -661,8 +661,8 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
   _getElementByItem(itemData) {
     let result;
 
-    // @ts-expect-error
     each(this._itemElements(), (_, itemElement) => {
+      // @ts-expect-error
       if ($(itemElement).data(this._itemDataKey()) !== itemData) {
         return true;
       }

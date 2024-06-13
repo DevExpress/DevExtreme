@@ -1,6 +1,6 @@
 import errors from '@js/core/errors';
 
-import { base } from '../../../ui/overlay/z_index';
+import { base } from '../../ui/overlay/m_z_index';
 import { assertDevExtremeVersion, clearAssertedVersions } from '../../utils/version';
 import {
   parseLicenseKey,
