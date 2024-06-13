@@ -310,8 +310,7 @@ const ActionSheet = CollectionWidget.inherit({
 
   toggle(showing) {
     const that = this;
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred();
 
     that._popup.toggle(showing).done(() => {
       that.option('visible', showing);
