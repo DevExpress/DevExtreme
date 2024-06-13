@@ -1968,6 +1968,33 @@ QUnit.module('deferred datasource', {
             assert.strictEqual(this.dropDownButton.option('selectedItem'), null, 'init byKey result is ignored');
         });
     });
+
+    QUnit.test('dropDownButton should show correct selected item text on custom constructor object. (T1233565)', function(assert) {
+        class Alignment {
+            constructor(id, name, icon) {
+                this.id = id;
+                this.name = name;
+                this.icon = icon;
+            }
+        }
+        const alignments = [
+            new Alignment(1, 'Left', 'alignleft'),
+            new Alignment(4, 'Right', 'alignright'),
+            new Alignment(2, 'Center', 'aligncenter'),
+            new Alignment(3, 'Justify', 'alignjustify'),
+        ];
+        const instance = new DropDownButton($('#dropDownButton'), {
+            displayExpr: 'name',
+            keyExpr: 'id',
+            selectedItemKey: 1,
+            useSelectMode: true,
+            dataSource: alignments,
+        });
+
+        const textValue = instance.option('text');
+
+        assert.strictEqual(textValue, 'Left', 'the selected item text is properly shown');
+    });
 });
 
 QUnit.module('events', {}, () => {
