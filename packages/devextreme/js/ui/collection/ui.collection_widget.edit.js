@@ -10,7 +10,7 @@ import PlainEditStrategy from './ui.collection_widget.edit.strategy.plain';
 import { compileGetter } from '../../core/utils/data';
 import { DataSource } from '../../data/data_source/data_source';
 import { normalizeLoadResult } from '../../data/data_source/utils';
-import Selection from '../selection/selection';
+import Selection from '../../__internal/ui/selection/m_selection';
 import { when, Deferred, fromPromise } from '../../core/utils/deferred';
 
 const ITEM_DELETING_DATA_KEY = 'dxItemDeleting';
