@@ -2,7 +2,7 @@ import positionUtils from '@js/animation/position';
 import { move } from '@js/animation/translator';
 import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
-import { PopoverPositionController } from '@js/ui/popover/popover_position_controller';
+import { PopoverPositionController } from '@ts/ui/popover/m_popover_position_controller';
 
 const SLIDER_TOOLTIP_POSITION_ALIASES = {
   top: { my: 'bottom center', at: 'top center', collision: 'fit none' },
@@ -38,7 +38,6 @@ class SliderTooltipPositionController extends PopoverPositionController {
   _fitIntoSlider() {
     // @ts-expect-error
     const { collisionSide, oversize } = positionUtils.calculate(this._$content, this._position).h;
-    // @ts-expect-error
     const { left } = this._visualPosition;
     const isLeftSide = collisionSide === 'left';
 
