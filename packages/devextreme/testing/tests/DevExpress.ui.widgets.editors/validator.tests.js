@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
 import Class from 'core/class';
-import DefaultAdapter from 'ui/validation/default_adapter';
+import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import { Deferred } from 'core/utils/deferred';
 import { isPromise } from 'core/utils/type';

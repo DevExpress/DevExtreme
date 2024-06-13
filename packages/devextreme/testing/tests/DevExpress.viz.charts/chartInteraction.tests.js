@@ -7,6 +7,7 @@ import 'viz/chart';
 import 'viz/polar_chart';
 
 const SERIES_POINT_MARKER_SELECTOR = '.dxc-series circle';
+const LEGEND_TEXT_SELECTOR = '.dxc-legend .dxc-title text';
 
 QUnit.testStart(function() {
     const markup =
@@ -221,6 +222,44 @@ QUnit.test('Legend\'s title as string', function(assert) {
     });
 
     assert.strictEqual(drawn.callCount, 1);
+});
+
+QUnit.test('Legend title position should not change after legend visibility change (T1210271)', function(assert) {
+    const chart = $('#chart').dxChart({
+        legend: {
+            title: 'Legend',
+            visible: true
+        },
+        series: [{}],
+    });
+
+    const initialTextY = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
+
+    assert.roughEqual(initialTextY, 17, 2);
+
+    const chartInstance = chart.dxChart('instance');
+    chartInstance.option('legend.visible', false);
+    chartInstance.option('legend.visible', true);
+
+    const textYAfterVisibilityChange = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
+    assert.roughEqual(textYAfterVisibilityChange, 17, 2);
+});
+
+QUnit.test('Old title should be disposed upon creating a new one', function(assert) {
+    const chart = $('#chart').dxChart({
+        legend: {
+            title: 'Legend',
+            visible: true
+        },
+        series: [{}],
+    }).dxChart('instance');
+
+    const disposeSpy = sinon.spy(chart._legend._title, 'dispose');
+
+    chart.option('legend.visible', false);
+    chart.option('legend.visible', true);
+
+    assert.strictEqual(disposeSpy.callCount, 1);
 });
 
 // T999609

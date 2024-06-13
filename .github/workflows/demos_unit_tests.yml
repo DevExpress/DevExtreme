@@ -38,4 +38,4 @@ jobs:
 
       - name: Run unit tests
         working-directory: apps/demos
-        run: npm run test
+        run: npx nx test

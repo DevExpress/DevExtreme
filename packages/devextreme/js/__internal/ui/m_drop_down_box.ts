@@ -11,10 +11,10 @@ import { map } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { normalizeKeyName } from '@js/events/utils/index';
-import DropDownEditor from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
-import { getElementMaxHeightByWindow } from '@js/ui/overlay/utils';
 import { tabbable } from '@js/ui/widget/selectors';
+import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 
 const { getActiveElement } = domAdapter;
 
