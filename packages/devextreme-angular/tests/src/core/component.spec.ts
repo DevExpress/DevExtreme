@@ -150,7 +150,7 @@ describe('DevExtreme Angular widget', () => {
             }
         });
         TestBed.createComponent(TestContainerComponent);
-        expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
+        expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx');
     });
 
     it('should be disposed', () => {
