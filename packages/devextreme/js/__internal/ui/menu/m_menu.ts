@@ -13,7 +13,7 @@ import { end as hoverEventEnd } from '@js/events/hover';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace } from '@js/events/utils/index';
 import Button from '@js/ui/button';
-import type { Item, Properties } from '@js/ui/menu';
+import type { Item } from '@js/ui/menu';
 import type { Properties as OverlayProperties } from '@js/ui/overlay';
 import type dxOverlay from '@js/ui/overlay';
 import Overlay from '@js/ui/overlay/ui.overlay';
@@ -80,8 +80,6 @@ class Menu extends MenuBase {
 
   _actions?: any;
 
-  _optionsByReference?: Properties;
-
   _showSubmenuTimer?: any;
 
   _hideSubmenuTimer?: any;
@@ -118,10 +116,9 @@ class Menu extends MenuBase {
   }
 
   _itemElements() {
-    // @ts-expect-error
     const rootMenuElements = super._itemElements();
     const submenuElements = this._submenuItemElements();
-
+    // @ts-expect-error
     return rootMenuElements.add(submenuElements);
   }
 
@@ -452,7 +449,7 @@ class Menu extends MenuBase {
     const $hamburger = this._renderHamburgerButton();
 
     this._treeView = this._createComponent($('<div>'), TreeView, this._getTreeViewOptions());
-
+    // @ts-expect-error
     this._overlay = this._createComponent($('<div>'), Overlay, this._getAdaptiveOverlayOptions());
     // @ts-expect-error
     this._overlay.$content()

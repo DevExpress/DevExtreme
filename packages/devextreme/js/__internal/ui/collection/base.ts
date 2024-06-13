@@ -24,6 +24,8 @@ declare class Base<
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey = any,
 > extends Widget<TProperties> {
+  _renderedItemsCount: number;
+
   getDataSource(): DataSource<TItem, TKey>;
 
   _renderItems(items: TItem[]): void;
@@ -61,7 +63,12 @@ declare class Base<
   _getIndexByItem(item: TItem): number;
   _getIndexByItemData(item: TItem): number;
   _getAvailableItems($items?: dxElementWrapper): dxElementWrapper;
-  _getSummaryItemsSize(dimension: string, items: TItem[], includeMargin: boolean): number;
+  _itemElements(): dxElementWrapper;
+  _getSummaryItemsSize(
+    dimension: string,
+    items: dxElementWrapper,
+    includeMargin?: boolean
+  ): number;
   _getActiveItem(last?: boolean): dxElementWrapper;
   _findItemElementByItem(item: TItem): dxElementWrapper;
 

@@ -20,7 +20,7 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import DropDownBox from 'ui/drop_down_box';
 import DropDownButton from 'ui/drop_down_button';
 import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
-import DropDownMenu from 'ui/toolbar/internal/ui.toolbar.menu';
+import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
 import TextEditor from 'ui/text_box/ui.text_editor';
 import Gallery from 'ui/gallery';
 import Lookup from 'ui/lookup';
