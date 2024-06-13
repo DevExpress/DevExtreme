@@ -15,9 +15,9 @@ import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import type { Properties } from '@js/ui/date_range_box';
-import DropDownButton from '@js/ui/drop_down_editor/ui.drop_down_button';
 import Editor from '@js/ui/editor/editor';
 import { current, isFluent, isMaterial } from '@js/ui/themes';
+import DropDownButton from '@ts/ui/drop_down_editor/m_drop_down_button';
 import ClearButton from '@ts/ui/text_box/m_text_editor.clear';
 import TextEditorButtonCollection from '@ts/ui/text_box/texteditor_button_collection/m_index';
 

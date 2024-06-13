@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import SpinButton from 'ui/number_box/number_box.spin';
+import SpinButton from '__internal/ui/number_box/m_number_box.spin';
 import config from 'core/config';
 import devices from 'core/devices';
 import eventsEngine from 'events/core/events_engine';

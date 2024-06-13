@@ -15,7 +15,7 @@ const LOADPANEL_MESSAGE_CLASS = 'dx-loadpanel-message';
 const LOADPANEL_CONTENT_CLASS = 'dx-loadpanel-content';
 const LOADPANEL_CONTENT_WRAPPER_CLASS = 'dx-loadpanel-content-wrapper';
 const LOADPANEL_PANE_HIDDEN_CLASS = 'dx-loadpanel-pane-hidden';
-
+// @ts-expect-error
 const LoadPanel = Overlay.inherit({
   _supportedKeys() {
     return extend(this.callBase(), {

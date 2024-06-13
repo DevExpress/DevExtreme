@@ -12,10 +12,10 @@ import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import DataController from '@js/data_controller';
 import messageLocalization from '@js/localization/message';
 import ButtonGroup from '@js/ui/button_group';
-import { getElementWidth, getSizeValue } from '@js/ui/drop_down_editor/utils';
 import List from '@js/ui/list_light';
 import Popup from '@js/ui/popup/ui.popup';
 import Widget from '@js/ui/widget/ui.widget';
+import { getElementWidth, getSizeValue } from '@ts/ui/drop_down_editor/m_utils';
 
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdownbutton';
 const DROP_DOWN_BUTTON_CONTENT = 'dx-dropdownbutton-content';
