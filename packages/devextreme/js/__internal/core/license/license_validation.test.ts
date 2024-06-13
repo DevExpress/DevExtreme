@@ -364,6 +364,18 @@ describe('license check', () => {
     expect(trialPanelSpy).not.toHaveBeenCalled();
   });
 
+  test.each([
+    { token: '', version: '1.0.3' },
+    { token: null, version: '1.0.4' },
+    { token: undefined, version: '1.0.50' },
+    { token: '', version: '1.0.0' },
+    { token: null, version: '1.2.4-preview' },
+    { token: undefined, version: '1.2' },
+  ])('Buy now link is set correctly', ({ token, version }) => {
+    validateLicense(token as string, version);
+    expect(trialPanelSpy?.mock.calls[0][0]).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx');
+  });
+
   test('Message should be logged only once', () => {
     validateLicense('', '1.0');
     validateLicense('', '1.0');
