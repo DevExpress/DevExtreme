@@ -475,6 +475,62 @@ QUnit.test('Changing an validationRules options of an any item does not invalida
     assert.strictEqual(renderComponentSpy.callCount, 0, 'renderComponentSpy.callCount');
 });
 
+[false, true].forEach(hasValidationGroup => {
+    QUnit.test(`form ${hasValidationGroup ? 'with' : 'without'} validation group should validate without errors (T1233487)`, function(assert) {
+        const form = $('#form').dxForm({
+            validationGroup: hasValidationGroup ? 'test' : undefined,
+            formData: {
+                firstName: 'Kyle',
+            },
+            items: [{
+                itemType: 'group',
+                items: [{
+                    dataField: 'firstName',
+                    validationRules: [{ type: 'required' }]
+                }],
+            }],
+        }).dxForm('instance');
+
+        form.option('items[0].items', []);
+
+        try {
+            form.validate();
+            assert.ok(true);
+        } catch(e) {
+            assert.ok(false, 'error is thrown');
+        }
+    });
+});
+
+QUnit.test('validation group should not be removed after its validators are removed (T1233487)', function(assert) {
+    const $formContainer = $('#form').dxForm({
+        validationGroup: 'Test',
+        formData: {
+            firstName: 'Kyle',
+        },
+        items: [{
+            itemType: 'group',
+            items: [{
+                dataField: 'firstName',
+                validationRules: [{ type: 'required' }]
+            }],
+        }],
+    });
+    const form = $formContainer.dxForm('instance');
+
+    let $validator = $formContainer.find(`.${VALIDATOR_CLASS}`);
+    const validator = $validator.dxValidator('instance');
+
+    assert.equal(validator.option('validationGroup'), 'Test', 'validation group of the validator');
+    assert.equal($validator.length, 1, 'validators count');
+
+    form.option('items[0].items[0]', 'validationRules', []);
+    $validator = $formContainer.find(`.${VALIDATOR_CLASS}`);
+
+    assert.equal(validator.option('validationGroup'), 'Test', 'validation group should not be removed');
+    assert.equal($validator.length, 0, 'validators count');
+});
+
 QUnit.test('Validate the form without validation rules for an any simple items', function(assert) {
     const errorStub = sinon.stub();
     logger.error = errorStub;
