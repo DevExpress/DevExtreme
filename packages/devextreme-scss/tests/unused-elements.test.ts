@@ -4,7 +4,7 @@ import { resolve, join, extname } from 'path';
 const VAR_NAME_CHARS = 'A-Za-z0-9_-';
 
 const getFilePath = (fileName: string): string => {
-  const relativePath = join(__dirname, '..', '..', fileName);
+  const relativePath = join(__dirname, '..', fileName);
   return resolve(relativePath);
 };
 
@@ -60,8 +60,10 @@ const findUniqueVariables = (variables: string[]): string[] => {
   });
   return Array.from(variableCounts.entries())
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // @ts-ignore
     .filter(([variable, count]) => count === 1)
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    // @ts-ignore
     .map(([variable, count]) => variable);
 };
 

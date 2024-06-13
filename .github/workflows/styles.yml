@@ -52,7 +52,7 @@ jobs:
         pnpm install
 
     - name: Run tests
-      run: pnpx nx test-styles devextreme-main
+      run: pnpx nx test devextreme-scss
 
   notify:
     runs-on: devextreme-shr2

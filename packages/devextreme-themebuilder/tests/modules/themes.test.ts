@@ -1,5 +1,5 @@
 /* eslint no-console: 0 */
-import { getThemes } from '../../../devextreme/build/gulp/styles/theme-options';
+import { getThemes } from '../../../devextreme-scss/build/theme-options';
 import themes from '../../src/modules/themes';
 
 describe('Themes', () => {

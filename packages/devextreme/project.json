@@ -69,6 +69,15 @@
       ],
       "cache": true
     },
+    "dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "dev"
+      },
+      "dependsOn": [
+        "^build"
+      ]
+    },
     "build:systemjs": {
       "executor": "nx:run-script",
       "options": {
@@ -180,11 +189,7 @@
   },
   "namedInputs": {
     "default": [
-      "{projectRoot}/fonts/**/*",
-      "{projectRoot}/icons/**/*",
-      "{projectRoot}/images/**/*",
       "{projectRoot}/js/**/*",
-      "{projectRoot}/scss/widgets/**/*",
       "{projectRoot}/ts/**/*"
     ],
     "test": [
