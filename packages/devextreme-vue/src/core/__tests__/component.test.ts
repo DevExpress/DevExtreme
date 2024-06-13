@@ -6,6 +6,7 @@ import {
   App, createVNode, defineComponent, h, nextTick, renderSlot,
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
+
 import { pullConfigComponents } from '../children-processing';
 import { IWidgetComponent } from '../component';
 import globalConfig from '../config';
