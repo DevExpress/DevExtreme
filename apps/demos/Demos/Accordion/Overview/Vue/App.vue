@@ -7,8 +7,9 @@
       :animation-duration="animationDuration"
       v-model:selected-items="selectedItems"
       id="accordion-container"
+      item-title-template="itemTitle"
     >
-      <template #title="{ data }">
+      <template #itemTitle="{ data }">
         <CustomTitle :item-data="data"/>
       </template>
       <template #item="{ data }">
