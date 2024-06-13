@@ -1,11 +1,11 @@
 import { PatchFlags } from '@vue/shared';
 import { mount } from '@vue/test-utils';
 import * as events from 'devextreme/events';
+import config from 'devextreme/core/config';
 import {
   App, createVNode, defineComponent, h, nextTick, renderSlot,
 } from 'vue';
 import { createRouter, createWebHistory } from 'vue-router';
-
 import { pullConfigComponents } from '../children-processing';
 import { IWidgetComponent } from '../component';
 import globalConfig from '../config';
@@ -154,6 +154,11 @@ describe('component rendering', () => {
 
     expect(WidgetClass.mock.instances.length).toBe(2);
     expect(WidgetClass.mock.instances[1]).toEqual({});
+  });
+
+  it('correctly sets the buy now link', () => {
+    mount(TestComponent);
+    expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeVue.aspx');
   });
 
   describe('options', () => {
