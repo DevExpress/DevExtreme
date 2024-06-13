@@ -28,7 +28,7 @@
     "all:build-dev": "npm run all:build -- --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "overwrite-wrappers-packages": "ts-node tools/scripts/overwrite-wrappers-packages.ts",
-    "webserver": "http-server --port 8080 -c-1"
+    "webserver": "http-server --port 5645 -c-1"
   },
   "nx": {},
   "private": true,

@@ -10,11 +10,13 @@ if (!/localhost/.test(document.location.host)) {
 
 const customizeText: DxChartTypes.ArgumentAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   highAverageColor = '#ff9b52';

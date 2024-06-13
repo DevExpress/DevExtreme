@@ -15,10 +15,12 @@ type TreeView = ReturnType<AppComponent['getTreeView']>;
 type Node = DxTreeViewTypes.Node;
 type Item = DxTreeViewTypes.Item;
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
   providers: [Service],
 })
 export class AppComponent {

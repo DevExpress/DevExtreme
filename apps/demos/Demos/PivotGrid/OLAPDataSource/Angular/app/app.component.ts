@@ -10,10 +10,12 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+declare var __moduleName: string;
 @Component({
-  styleUrls: ['app/app.component.css'],
+  moduleId: __moduleName,
+  styleUrls: ['./app.component.css'],
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
   dataSource: DataSourceConfig;

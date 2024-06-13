@@ -1,23 +1,30 @@
 import {
   existsSync, readFileSync, writeFileSync, readdirSync, copyFileSync, mkdirSync, copySync,
+  removeSync,
 } from 'fs-extra';
-import { join, basename, extname } from 'path';
+import {
+  join, basename, extname, relative,
+} from 'path';
 import { createHash } from 'crypto';
 import { version as DX_Version } from 'devextreme/package.json';
 import { Demo, Framework } from './types';
 
 export const isSkipDemo = (demo: Demo) => {
-  const { Widget } = demo;
-  const isLocalization = Widget === 'Localization';
+  const { Widget, Name } = demo;
+  const excluded = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];
+  const shouldSkip = excluded.includes(Widget) || excluded.includes(Name);
 
-  return isLocalization;
+  return shouldSkip;
 };
 
-const sourceDemosDir = join(__dirname, '..', '..', '..', 'JSDemos', 'Demos');
+const sourceDemosDir = join(__dirname, '..', '..', '..', 'Demos');
 const destinationPublishDir = join(__dirname, '..', '..', '..', 'publish-demos');
 
 export const getSourcePathByDemo = (demo: Demo, framework: string) => join(sourceDemosDir, demo.Widget, demo.Name, framework);
+export const getSourcePathByDemoRelative = (demo: Demo, framework: string) => join('Demos', demo.Widget, demo.Name, framework);
 export const getDestinationPathByDemo = (demo: Demo, framework: string) => join(destinationPublishDir, 'Demos', demo.Widget, demo.Name, framework);
+export const getDestinationPathByDemoRelative = (demo: Demo, framework: string) => join('publish-demos', 'Demos', demo.Widget, demo.Name, framework);
+
 
 const getFileHash = (fileContent: string) => {
   const hash = createHash('shake256', { outputLength: 4 }).update(fileContent);
@@ -38,8 +45,26 @@ const getTemplateContent = (framework: Framework) => {
 const getBundlePath = (demoPath: string, prefix: string, postfix: string) => readdirSync(demoPath)
   .find((item) => item.startsWith(prefix) && item.endsWith(postfix));
 
+  // refactor with new paths
+const getSpecificCssPath = (WidgetName: string, demoPath: string) => {
+  if (WidgetName !== 'Gantt' && WidgetName !== 'Diagram') {
+    return '';
+  }
+  return relative(
+    demoPath,
+    join(
+      destinationPublishDir,
+      'css',
+      `dx-${WidgetName.toLowerCase()}.css`,
+    ),
+  ).split('\\').join('/');
+};
+
 export const createDemoLayout = (demo: Demo, framework: Framework) => {
   const demoPath = getDestinationPathByDemo(demo, framework);
+  const demoHtmlPath = framework !== 'Angular'
+    ? join(demoPath, 'index.html')
+    : join(demoPath, '..', 'AngularTemplates', 'index.html');
   const templateContent = getTemplateContent(framework);
 
   const metadataScripts = join(destinationPublishDir, 'scripts');
@@ -49,6 +74,7 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
     js_bundle_path: getBundlePath(demoPath, 'bundle', '.js'),
     css_bundle_path: getBundlePath(demoPath, 'bundle', '.css'),
     init_theme: getBundlePath(metadataScripts, 'init-theme', '.js'),
+    specific_css: `<link href="${getSpecificCssPath(demo.Widget, demoPath)}" rel="stylesheet" />`,
   };
 
   let result = templateContent;
@@ -56,7 +82,6 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
     result = result.replace(`{{${key}}}`, options[key]);
   });
 
-  const demoHtmlPath = join(demoPath, 'index.html');
   writeFileSync(demoHtmlPath, result, { encoding: 'utf-8' });
 };
 
@@ -84,7 +109,9 @@ const getFileInfo = (filePath: string) => {
 
 const copyMetadataDir = (sourceDir: string, destinatonDir: string) => {
   const listFiles = getFilesByPath(sourceDir);
-
+  if (existsSync(destinatonDir)) {
+    removeSync(destinatonDir);
+  }
   mkdirSync(destinatonDir, { recursive: true });
   listFiles.forEach((sourceFilePath) => {
     const fileContent = readFileSync(sourceFilePath, 'utf-8');
@@ -104,7 +131,7 @@ export const copyMetadata = () => {
   const destScripts = join(destinationPublishDir, 'scripts');
   copyMetadataDir(sourceScripts, destScripts);
 
-  const nodeModulesPath = join(__dirname, '..', '..', '..', 'node_modules');
+  const nodeModulesPath = join(__dirname, '..', '..', '..', '..', '..', 'node_modules');
 
   const destinationCss = join(destinationPublishDir, 'css');
 

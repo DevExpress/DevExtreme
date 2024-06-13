@@ -21,11 +21,13 @@ const anyOfOperation = {
   ).slice(0, -1),
 } as const;
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 
 export class AppComponent {

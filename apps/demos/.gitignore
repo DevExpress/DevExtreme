@@ -32,3 +32,5 @@ Demos/**/tsconfig.json
 
 .DS_Store
 publish-demos
+
+.angular

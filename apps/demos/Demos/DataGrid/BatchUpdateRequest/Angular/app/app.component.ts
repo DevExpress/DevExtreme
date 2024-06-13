@@ -12,10 +12,12 @@ if (!/localhost/.test(document.location.host)) {
 
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridBatchUpdateWebApi';
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   ordersStore: AspNetData.CustomStore;

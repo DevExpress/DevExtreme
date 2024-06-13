@@ -4,10 +4,12 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'detail-view',
-  templateUrl: 'app/detail-view/detail-view.component.html',
-  styleUrls: ['app/detail-view/detail-view.component.css'],
+  templateUrl: './detail-view.component.html',
+  styleUrls: ['./detail-view.component.css'],
   providers: [],
 })
 export class DetailViewComponent implements AfterViewInit {

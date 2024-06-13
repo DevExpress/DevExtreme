@@ -8,9 +8,11 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: './app.component.html',
   providers: [Service],
 })
 export class AppComponent {

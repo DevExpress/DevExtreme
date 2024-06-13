@@ -10,9 +10,11 @@ if (!/localhost/.test(document.location.host)) {
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
 
+declare var __moduleName: string;
 @Component({
+  moduleId: __moduleName,
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: './app.component.html',
 })
 export class AppComponent {
   currentDate = new Date(2021, 3, 27);
