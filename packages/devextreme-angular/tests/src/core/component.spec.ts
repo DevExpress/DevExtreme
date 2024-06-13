@@ -25,6 +25,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular';
 
+import config from 'devextreme/core/config';
 // TODO: Try to replace dxButton to Widget ('require' required)
 import dxButton from 'devextreme/ui/button';
 let DxTestWidget = dxButton;
@@ -140,6 +141,16 @@ describe('DevExtreme Angular widget', () => {
         let element = getWidget(fixture).element();
 
         expect(element.classList).toContain('dx-test-widget');
+    });
+
+    it('correctly sets the buy now link', () => {
+        TestBed.overrideComponent(TestContainerComponent, {
+            set: {
+                template: '<dx-test-widget [testOption]="\'Test Value\'" > </dx-test-widget>'
+            }
+        });
+        TestBed.createComponent(TestContainerComponent);
+        expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
     });
 
     it('should be disposed', () => {
