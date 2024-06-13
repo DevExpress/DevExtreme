@@ -23,8 +23,8 @@ const prepareModulesToNamedImport = () => {
 
   const paths = [
     '../npm-scripts/npm-devextreme/cjs', // un-used / legacy?
-    'node_modules/devextreme/cjs',       // 24.1+ migrated from devextreme-demos / likely un-used
-    '../../node_modules/devextreme/cjs', // 24.1+ wg ci
+    'node_modules/devextreme/cjs',       // 24.1+ migrated from devextreme-demos, kept as is / likely un-used, but works ok in mono repo
+    '../../node_modules/devextreme/cjs', // 24.1+ wg / individual em modules are not discovered
   ];
 
   const esModuleExport = 'exports.__esModule = true;';
