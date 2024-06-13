@@ -7,7 +7,7 @@ import {
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
-import * as trialPanel from './trial_panel';
+import * as trialPanel from './trial_panel.client';
 
 jest.mock('./key', () => ({
   PUBLIC_KEY: {

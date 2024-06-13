@@ -15,7 +15,11 @@ export interface CustomTrialPanelStyles {
 }
 
 // eslint-disable-next-line @typescript-eslint/no-extraneous-class
-const SafeHTMLElement = typeof HTMLElement !== 'undefined' ? HTMLElement : class {};
+const SafeHTMLElement = typeof HTMLElement !== 'undefined'
+  ? HTMLElement
+  // eslint-disable-next-line max-len
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-extraneous-class
+  : class {} as any as typeof HTMLElement;
 
 const DATA_PERMANENT_ATTRIBUTE = 'data-permanent';
 const componentNames = {
@@ -75,10 +79,18 @@ const textStyles = {
   'font-wight': '600',
 };
 
+function createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
+  const styles = customStyles ? { ...defaultStyles, ...customStyles } : defaultStyles;
+
+  return Object.keys(styles)
+    .reduce(
+      (cssString, currentKey) => `${cssString}${[currentKey, `${styles[currentKey]} !important;`].join(': ')}`,
+      '',
+    );
+}
+
 class DxLicense extends SafeHTMLElement {
   public static customStyles: CustomTrialPanelStyles | undefined = undefined;
-
-  private readonly that = this as unknown as HTMLElement;
 
   private _observer: MutationObserver | null = null;
 
@@ -99,33 +111,23 @@ class DxLicense extends SafeHTMLElement {
   constructor() {
     super();
 
-    this._spanStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.textStyles);
-    this._linkStyles = this._createImportantStyles(textStyles, DxLicense.customStyles?.linkStyles);
+    this._spanStyles = createImportantStyles(textStyles, DxLicense.customStyles?.textStyles);
+    this._linkStyles = createImportantStyles(textStyles, DxLicense.customStyles?.linkStyles);
 
-    this._containerStyles = this._createImportantStyles(
+    this._containerStyles = createImportantStyles(
       containerStyles,
       DxLicense.customStyles?.containerStyles,
     );
 
-    this._contentStyles = this._createImportantStyles(
+    this._contentStyles = createImportantStyles(
       contentStyles,
       DxLicense.customStyles?.contentStyles,
     );
 
-    this._buttonStyles = this._createImportantStyles(
+    this._buttonStyles = createImportantStyles(
       buttonStyles,
       DxLicense.customStyles?.contentStyles,
     );
-  }
-
-  private _createImportantStyles(defaultStyles: StylesMap, customStyles?: StylesMap): string {
-    const styles = customStyles ? { ...defaultStyles, ...customStyles } : defaultStyles;
-
-    return Object.keys(styles)
-      .reduce(
-        (cssString, currentKey) => `${cssString}${[currentKey, `${styles[currentKey]} !important;`].join(': ')}`,
-        '',
-      );
   }
 
   private _createSpan(text: string): HTMLSpanElement {
@@ -152,7 +154,7 @@ class DxLicense extends SafeHTMLElement {
     const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
 
     polygon.setAttribute('points', '13.4 12.7 8.7 8 13.4 3.4 12.6 2.6 8 7.3 3.4 2.6 2.6 3.4 7.3 8 2.6 12.6 3.4 13.4 8 8.7 12.7 13.4 13.4 12.7');
-    polygon.style.cssText = this._createImportantStyles({
+    polygon.style.cssText = createImportantStyles({
       fill: '#fff',
       opacity: '.5',
       'stroke-width': '0px',
@@ -162,7 +164,7 @@ class DxLicense extends SafeHTMLElement {
     svg.setAttribute('data-name', 'Layer 1');
     svg.setAttribute('version', '1.1');
     svg.setAttribute('viewBox', '0 0 16 16');
-    svg.style.cssText = this._createImportantStyles({
+    svg.style.cssText = createImportantStyles({
       'vertical-align': 'baseline',
     });
 
@@ -171,7 +173,7 @@ class DxLicense extends SafeHTMLElement {
 
     button.onclick = (): void => {
       this._hidden = true;
-      this.that.style.cssText = this._createImportantStyles({
+      this.style.cssText = createImportantStyles({
         display: 'none',
       });
     };
@@ -183,16 +185,16 @@ class DxLicense extends SafeHTMLElement {
     contentContainer.style.cssText = this._contentStyles;
     contentContainer.append(
       this._createSpan('For evaluation purposes only. Redistribution not authorized. Please '),
-      this._createLink('purchase a license', this.that.getAttribute(attributeNames.buyNow) as string),
-      this._createSpan(` to continue use of DevExpress product libraries (v${this.that.getAttribute(attributeNames.version)}).`),
+      this._createLink('purchase a license', this.getAttribute(attributeNames.buyNow) as string),
+      this._createSpan(` to continue use of DevExpress product libraries (v${this.getAttribute(attributeNames.version)}).`),
     );
     return contentContainer;
   }
 
   private _reassignComponent(): void {
-    this.that.innerHTML = '';
-    this.that.style.cssText = this._containerStyles;
-    this.that.append(
+    this.innerHTML = '';
+    this.style.cssText = this._containerStyles;
+    this.append(
       this._createContentContainer(),
       this._createButton(),
     );
@@ -213,7 +215,7 @@ class DxLicense extends SafeHTMLElement {
           this._reassignComponent();
         }
       });
-      this._observer.observe(this.that, {
+      this._observer.observe(this, {
         childList: true,
         attributes: true,
         // eslint-disable-next-line spellcheck/spell-checker
@@ -226,16 +228,16 @@ class DxLicense extends SafeHTMLElement {
     setTimeout(() => {
       const licensePanel = document.getElementsByTagName(componentNames.panel);
       if (!licensePanel.length) {
-        document.body.prepend(this.that);
+        document.body.prepend(this);
       }
     }, 100);
   }
 }
 class DxLicenseTrigger extends SafeHTMLElement {
-  private readonly that = this as unknown as HTMLElement;
-
   public connectedCallback(): void {
-    this.that.style.display = 'none';
+    this.style.cssText = createImportantStyles({
+      display: 'none',
+    });
 
     const licensePanel = document.getElementsByTagName(componentNames.panel);
     if (!licensePanel.length) {
@@ -243,12 +245,12 @@ class DxLicenseTrigger extends SafeHTMLElement {
 
       license.setAttribute(
         attributeNames.version,
-        this.that.getAttribute(attributeNames.version) as string,
+        this.getAttribute(attributeNames.version) as string,
       );
 
       license.setAttribute(
         attributeNames.buyNow,
-        this.that.getAttribute(attributeNames.buyNow) as string,
+        this.getAttribute(attributeNames.buyNow) as string,
       );
 
       license.setAttribute(DATA_PERMANENT_ATTRIBUTE, 'true');
@@ -263,11 +265,11 @@ export function registerCustomComponents(customStyles?: CustomTrialPanelStyles):
     DxLicense.customStyles = customStyles;
     customElements.define(
       componentNames.trigger,
-      DxLicenseTrigger as unknown as CustomElementConstructor,
+      DxLicenseTrigger,
     );
     customElements.define(
       componentNames.panel,
-      DxLicense as unknown as CustomElementConstructor,
+      DxLicense,
     );
   }
 }
