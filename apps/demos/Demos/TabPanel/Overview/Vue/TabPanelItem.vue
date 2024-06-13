@@ -1,12 +1,10 @@
 <template>
-  <div>
-    <div class="tabpanel-item">
-      <TaskItem
-        v-for="(task, index) in tasks"
-        :key="index"
-        :task="task"
-      />
-    </div>
+  <div class="tabpanel-item">
+    <TaskItem
+      v-for="(task, index) in tasks"
+      :key="index"
+      :task="task"
+    />
   </div>
 </template>
 
