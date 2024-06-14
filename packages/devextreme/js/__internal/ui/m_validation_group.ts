@@ -19,7 +19,7 @@ class ValidationGroup extends DOMComponent {
   _init() {
     // @ts-expect-error
     super._init();
-    ValidationEngine.addGroup(this);
+    ValidationEngine.addGroup(this, true);
   }
 
   _initMarkup() {
