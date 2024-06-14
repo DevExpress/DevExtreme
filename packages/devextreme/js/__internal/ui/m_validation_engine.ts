@@ -563,11 +563,11 @@ const ValidationEngine = {
     this.addGroup();
   },
 
-  addGroup(group, removable) {
+  addGroup(group, isRemovable) {
     let config = this.getGroupConfig(group);
     if (!config) {
       config = new GroupConfig(group);
-      config.isRemovable = removable;
+      config.isRemovable = isRemovable;
       this.groups.push(config);
     }
     return config;
@@ -784,18 +784,17 @@ const ValidationEngine = {
     groupConfig.registerValidator.call(groupConfig, validator);
   },
 
-  _shouldRemoveGroup(group, validatorsInGroup, isGroupRemovable) {
+  _shouldRemoveGroup(group, validators, isRemovable) {
     const isDefaultGroup = group === undefined;
-    return !isDefaultGroup && !validatorsInGroup.length && isGroupRemovable;
+    return !isDefaultGroup && !validators.length && isRemovable;
   },
 
   removeRegisteredValidator(group, validator) {
     const config = ValidationEngine.getGroupConfig(group);
     if (config) {
       config.removeRegisteredValidator.call(config, validator);
-      const validatorsInGroup = config.validators;
-      const isGroupRemovable = config.isRemovable;
-      if (this._shouldRemoveGroup(group, validatorsInGroup, isGroupRemovable)) {
+      const { validators, isRemovable } = config;
+      if (this._shouldRemoveGroup(group, validators, isRemovable)) {
         this.removeGroup(group);
       }
     }
