@@ -1,4 +1,4 @@
-import '@js/ui/popup';
+import '@js/ui/popup/ui.popup';
 
 import devices from '@js/core/devices';
 import type { dxElementWrapper } from '@js/core/renderer';
