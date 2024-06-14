@@ -6843,17 +6843,15 @@ QUnit.module('performance', () => {
             const tagBox = $tagBox.dxTagBox('instance');
             const $list = tagBox._list.$element();
 
-            if(changeAtRuntime) {
-                tagBox.option('hideSelectedItems', true);
-            }
+            tagBox.option('hideSelectedItems', true);
 
-            $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+            $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
 
             tagBox.open();
-            $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+            $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
 
             tagBox.open();
-            $($list.find('.dx-list-item').eq(0)).trigger('dxclick');
+            $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
 
             const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
 
