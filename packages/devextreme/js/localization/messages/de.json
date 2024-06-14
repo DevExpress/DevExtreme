@@ -272,8 +272,8 @@
         "dxScheduler-recurrenceRepeatCount": "Ereignisse",
         "dxScheduler-allDay": "Ganztägig",
 
-        "dxScheduler-confirmRecurrenceEditTitle": "Edit Recurring Appointment",
-        "dxScheduler-confirmRecurrenceDeleteTitle": "Delete Recurring Appointment",
+        "dxScheduler-confirmRecurrenceEditTitle": "Wiederkehrenden Termin bearbeiten",
+        "dxScheduler-confirmRecurrenceDeleteTitle": "Wiederkehrenden Termin löschen",
 
         "dxScheduler-confirmRecurrenceEditMessage": "Möchten Sie nur diesen Termin bearbeiten, oder die gesamte Serie?",
         "dxScheduler-confirmRecurrenceDeleteMessage": "Möchten Sie nur diesen Termin löschen, oder die gesamte Serie?",

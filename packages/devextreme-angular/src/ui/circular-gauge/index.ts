@@ -85,7 +85,7 @@ import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxCircularGaugeComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxCircularGauge;
+    instance: DxCircularGauge = null;
 
     /**
      * [descr:BaseGaugeOptions.animation]
