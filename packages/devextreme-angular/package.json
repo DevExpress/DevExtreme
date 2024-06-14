@@ -18,9 +18,9 @@
   "author": "Developer Express Inc.",
   "license": "MIT",
   "peerDependencies": {
-    "@angular/common": ">12.0.0",
-    "@angular/core": ">12.0.0",
-    "@angular/forms": ">12.0.0",
+    "@angular/common": ">=12.0.0 <=17.X.X",
+    "@angular/core": ">=12.0.0 <=17.X.X",
+    "@angular/forms": ">=12.0.0 <=17.X.X",
     "devextreme": "~23.2.6"
   },
   "devDependencies": {
