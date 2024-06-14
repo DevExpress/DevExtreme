@@ -195,6 +195,7 @@ const TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_CLASS);
 
         this._renderInput();
+        this._renderButtonContainers();
         this._renderStylingMode();
         this._renderInputType();
         this._renderPlaceholder();
@@ -219,7 +220,7 @@ const TextEditorBase = Editor.inherit({
     },
 
     _renderInput: function() {
-        this._$buttonsContainer = this._$textEditorContainer = $('<div>')
+        this._$textEditorContainer = $('<div>')
             .addClass(TEXTEDITOR_CONTAINER_CLASS)
             .appendTo(this.$element());
 
@@ -227,8 +228,6 @@ const TextEditorBase = Editor.inherit({
             .addClass(TEXTEDITOR_INPUT_CONTAINER_CLASS)
             .appendTo(this._$textEditorContainer);
         this._$textEditorInputContainer.append(this._createInput());
-
-        this._renderButtonContainers();
     },
 
     _getInputContainer() {
@@ -275,11 +274,16 @@ const TextEditorBase = Editor.inherit({
         $element.toggleClass(TEXTEDITOR_VALID_CLASS, !!this._showValidMark);
     },
 
+    _getButtonsContainer() {
+        return this._$textEditorContainer;
+    },
+
     _renderButtonContainers: function() {
         const buttons = this.option('buttons');
 
-        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, this._$buttonsContainer);
-        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, this._$buttonsContainer);
+        const $buttonsContainer = this._getButtonsContainer();
+        this._$beforeButtonsContainer = this._buttonCollection.renderBeforeButtons(buttons, $buttonsContainer);
+        this._$afterButtonsContainer = this._buttonCollection.renderAfterButtons(buttons, $buttonsContainer);
     },
 
     _cleanButtonContainers: function() {
@@ -295,7 +299,6 @@ const TextEditorBase = Editor.inherit({
         this._$beforeButtonsContainer = null;
         this._$afterButtonsContainer = null;
         this._$textEditorContainer = null;
-        this._$buttonsContainer = null;
         this.callBase();
     },
 
@@ -488,7 +491,7 @@ const TextEditorBase = Editor.inherit({
     _setFieldAria(force) {
         const inputAttr = this.option('inputAttr');
         const ariaLabel = inputAttr?.['aria-label'];
-        const labelId = this._label.getId();
+        const labelId = this._label?.getId();
 
         const value = ariaLabel ? undefined : labelId;
 

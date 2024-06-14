@@ -165,10 +165,10 @@ const TextEditorMask = TextEditorBase.inherit({
     },
 
     _render: function() {
+        this._attachMouseWheelEventHandlers();
         this._renderMask();
         this.callBase();
         this._attachDropEventHandler();
-        this._attachMouseWheelEventHandlers();
     },
 
     _renderHiddenElement: function() {

@@ -250,7 +250,7 @@ const DropDownEditor = TextBox.inherit({
         this.$element()
             .addClass(DROP_DOWN_EDITOR_CLASS);
 
-        this.setAria('role', 'combobox');
+        this.setAria('role', this._getAriaRole());
     },
 
     _render: function() {
@@ -269,6 +269,7 @@ const DropDownEditor = TextBox.inherit({
 
     _renderInput: function() {
         this.callBase();
+        this._renderTemplateWrapper();
 
         this._wrapInput();
         this._setDefaultAria();
@@ -281,10 +282,23 @@ const DropDownEditor = TextBox.inherit({
             .eq(0);
     },
 
+    _getAriaHasPopup() {
+        return 'true';
+    },
+
+    _getAriaAutocomplete() {
+        return 'list';
+    },
+
+    _getAriaRole() {
+        return 'combobox';
+    },
+
     _setDefaultAria: function() {
         this.setAria({
-            'haspopup': 'true',
-            'autocomplete': 'list'
+            'haspopup': this._getAriaHasPopup(),
+            'autocomplete': this._getAriaAutocomplete(),
+            'role': this._getAriaRole(),
         });
     },
 
@@ -336,18 +350,34 @@ const DropDownEditor = TextBox.inherit({
         promise.always(this._renderField.bind(this));
     },
 
+    _getButtonsContainer() {
+        const fieldTemplate = this._getFieldTemplate();
+        return fieldTemplate ? this._$container : this._$textEditorContainer;
+    },
+
+    _renderTemplateWrapper() {
+        const fieldTemplate = this._getFieldTemplate();
+        if(!fieldTemplate) {
+            return;
+        }
+
+        if(!this._$templateWrapper) {
+            this._$templateWrapper = $('<div>')
+                .addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER)
+                .prependTo(this.$element());
+        }
+    },
+
     _renderTemplatedField: function(fieldTemplate, data) {
         const isFocused = focused(this._input());
-        const $container = this._$container;
 
         this._detachKeyboardEvents();
-        this._refreshButtonsContainer();
-        this._detachWrapperContent();
         this._detachFocusEvents();
-        $container.empty();
 
-        const $templateWrapper = $('<div>').addClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER).appendTo($container);
+        this._$textEditorContainer.remove();
+        this._$templateWrapper.empty();
 
+        const $templateWrapper = this._$templateWrapper;
         fieldTemplate.render({
             model: data,
             container: getPublicElement($templateWrapper),
@@ -365,43 +395,22 @@ const DropDownEditor = TextBox.inherit({
                 }
 
                 this._integrateInput();
+
                 isFocused && eventsEngine.trigger($input, 'focus');
             }
         });
-
-        this._attachWrapperContent($container);
-    },
-
-    _detachWrapperContent() {
-        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
-
-        useHiddenSubmitElement && this._$submitElement?.detach();
-
-        // NOTE: to prevent buttons disposition
-        const beforeButtonsContainerParent = this._$beforeButtonsContainer?.[0].parentNode;
-        const afterButtonsContainerParent = this._$afterButtonsContainer?.[0].parentNode;
-        beforeButtonsContainerParent?.removeChild(this._$beforeButtonsContainer[0]);
-        afterButtonsContainerParent?.removeChild(this._$afterButtonsContainer[0]);
-    },
-
-    _attachWrapperContent($container) {
-        const useHiddenSubmitElement = this.option('useHiddenSubmitElement');
-
-        $container.prepend(this._$beforeButtonsContainer);
-        useHiddenSubmitElement && this._$submitElement?.appendTo($container);
-        $container.append(this._$afterButtonsContainer);
-    },
-
-    _refreshButtonsContainer() {
-        this._$buttonsContainer = this.$element().children().eq(0);
     },
 
     _integrateInput: function() {
+        const { isValid } = this.option();
+
         this._renderFocusState();
         this._refreshValueChangeEvent();
         this._refreshEvents();
         this._refreshEmptinessEvent();
         this._setDefaultAria();
+        this._setFieldAria();
+        this._toggleValidationClasses(!isValid);
         this.option('_onMarkupRendered')?.();
     },
 
@@ -725,6 +734,7 @@ const DropDownEditor = TextBox.inherit({
 
     _clean: function() {
         delete this._openOnFieldClickAction;
+        delete this._$templateWrapper;
 
         if(this._$popup) {
             this._$popup.remove();
@@ -884,12 +894,6 @@ const DropDownEditor = TextBox.inherit({
                 this._initPopupInitializedAction();
                 break;
             case 'fieldTemplate':
-                if(isDefined(args.value)) {
-                    this._renderField();
-                } else {
-                    this._invalidate();
-                }
-                break;
             case 'acceptCustomValue':
             case 'openOnFieldClick':
                 this._invalidate();
