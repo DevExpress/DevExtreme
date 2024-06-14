@@ -242,9 +242,6 @@ const SKIPPED_TESTS = {
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
-    List: [
-      { demo: 'ListSelection', themes: [THEME.material] },
-    ],
     TabPanel: [
       { demo: 'Overview', themes: [THEME.material] },
     ],
