@@ -14,7 +14,6 @@ export interface CustomTrialPanelStyles {
   buttonStyles?: StylesMap;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-extraneous-class
 const SafeHTMLElement = typeof HTMLElement !== 'undefined'
   ? HTMLElement
   // eslint-disable-next-line max-len
