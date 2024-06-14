@@ -232,6 +232,7 @@ export default class DropDownMenu extends Widget<Properties> {
           .addClass(DROP_DOWN_MENU_POPUP_CLASS);
       },
       deferRendering: false,
+      preventScrollEvents: false,
       contentTemplate: (contentElement) => this._renderList(contentElement),
       _ignoreFunctionValueDeprecation: true,
       maxHeight: () => this._getMaxHeight(),
