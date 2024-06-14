@@ -11,7 +11,7 @@ import { isDate as isDateType, isNumeric, isString } from '@js/core/utils/type';
 import { getWindow, hasWindow } from '@js/core/utils/window';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import DropDownEditor from '@js/ui/drop_down_editor/ui.drop_down_editor';
+import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 
 import Calendar from './m_date_box.strategy.calendar';
 import CalendarWithTime from './m_date_box.strategy.calendar_with_time';
@@ -58,7 +58,6 @@ const STRATEGY_CLASSES = {
   List,
 };
 
-// @ts-expect-error
 const DateBox = DropDownEditor.inherit({
 
   _supportedKeys() {

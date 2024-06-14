@@ -143,14 +143,6 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
     ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
-    ],
-    TabPanel: [
-      { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
-    ],
     Toolbar: [
       { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
@@ -205,11 +197,6 @@ const SKIPPED_TESTS = {
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
-      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
-    ],
     TileView: [
       { demo: 'Directions', themes: [THEME.material] },
     ],
@@ -218,9 +205,6 @@ const SKIPPED_TESTS = {
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
-    ],
-    Tabs: [
-      { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
     ],
     List: [
       { demo: 'ListSelection', themes: [THEME.material] },

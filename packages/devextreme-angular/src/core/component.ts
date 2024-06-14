@@ -22,6 +22,8 @@ import { isPlatformServer } from '@angular/common';
 
 import domAdapter from 'devextreme/core/dom_adapter';
 import { triggerHandler } from 'devextreme/events';
+import config from 'devextreme/core/config';
+
 import { DxTemplateDirective } from './template';
 import { IDxTemplateHost, DxTemplateHost } from './template-host';
 import { EmitterHelper, NgEventsStrategy } from './events-strategy';
@@ -33,6 +35,10 @@ import {
   ICollectionNestedOptionContainer,
   CollectionNestedOptionContainerImpl,
 } from './nested-option';
+
+config({
+  buyNowLink: 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx',
+});
 
 let serverStateKey;
 export const getServerStateKey = () => {

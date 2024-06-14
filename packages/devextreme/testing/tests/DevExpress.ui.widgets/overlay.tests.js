@@ -16,7 +16,7 @@ import { hideCallback as hideTopOverlayCallback } from 'mobile/hide_callback';
 import errors from 'core/errors';
 import uiErrors from 'ui/widget/ui.errors';
 import Overlay from 'ui/overlay/ui.overlay';
-import * as zIndex from 'ui/overlay/z_index';
+import * as zIndex from '__internal/ui/overlay/m_z_index';
 import 'ui/scroll_view/ui.scrollable';
 import selectors from 'ui/widget/selectors';
 import swatch from 'ui/widget/swatch_container';

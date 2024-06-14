@@ -18,6 +18,22 @@
         "{projectRoot}/src/data/metadata",
         "{projectRoot}/src/data/scss"
       ]
+    },
+    "test": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test"
+      },
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/tests/**/*",
+        "{projectRoot}/jest.config.js",
+        "{projectRoot}/tsconfig*"
+      ],
+      "outputs": [
+        "{projectRoot}/coverage"
+      ],
+      "cache": true
     }
   },
   "tags": []

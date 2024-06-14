@@ -21,7 +21,7 @@ import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 import Guid from 'core/guid';
 
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 import 'generic_light.css!';
 

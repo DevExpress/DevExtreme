@@ -6,7 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'events/visibility_change';
-import { EDITORS_WITHOUT_LABELS } from 'ui/form/ui.form.layout_manager.utils';
+import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/m_form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -18,9 +18,8 @@ import 'ui/slider';
 import 'ui/range_slider';
 
 import windowModule from 'core/utils/window';
-import Form from 'ui/form/ui.form.js';
+import Form from 'ui/form';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
-import { renderLabel } from 'ui/form/components/label.js';
 
 import {
     FIELD_ITEM_CLASS,
@@ -33,20 +32,21 @@ import {
     FORM_GROUP_CAPTION_CLASS,
     FORM_UNDERLINED_CLASS,
     FORM_VALIDATION_SUMMARY
-} from 'ui/form/constants';
+} from '__internal/ui/form/constants';
 
 import {
     GET_LABEL_WIDTH_BY_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_LABEL_TEXT_CLASS,
-} from 'ui/form/components/label';
+    renderLabel,
+} from '__internal/ui/form/components/m_label';
 
 const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 
-import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
+import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';

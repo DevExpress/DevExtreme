@@ -1545,6 +1545,7 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.licenseKey]
      */
     licenseKey?: string;
+    buyNowLink?: string;
   };
   /**
    * [descr:GroupItem]
@@ -25610,10 +25611,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ResizeEndEvent]
      */
-    export type ResizeEndEvent<
-      TItem extends ItemLike<TKey> = any,
-      TKey = any
-    > = DevExpress.events.Cancelable &
+    export type ResizeEndEvent<TKey = any> = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
         dxSplitter<TKey>,
         KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
@@ -25622,10 +25620,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ResizeEvent]
      */
-    export type ResizeEvent<
-      TItem extends ItemLike<TKey> = any,
-      TKey = any
-    > = DevExpress.events.Cancelable &
+    export type ResizeEvent<TKey = any> = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
         dxSplitter<TKey>,
         KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
@@ -25644,10 +25639,7 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ResizeStartEvent]
      */
-    export type ResizeStartEvent<
-      TItem extends ItemLike<TKey> = any,
-      TKey = any
-    > = DevExpress.events.Cancelable &
+    export type ResizeStartEvent<TKey = any> = DevExpress.events.Cancelable &
       DevExpress.events.NativeEventInfo<
         dxSplitter<TKey>,
         KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
@@ -25712,10 +25704,6 @@ declare module DevExpress.ui {
      * [descr:dxSplitterOptions.items]
      */
     items?: Array<TItem>;
-    /**
-     * [descr:dxSplitterOptions.repaintChangesOnly]
-     */
-    repaintChangesOnly?: boolean;
     /**
      * [descr:dxSplitterOptions.allowKeyboardNavigation]
      */

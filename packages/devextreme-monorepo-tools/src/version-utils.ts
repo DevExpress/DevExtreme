@@ -30,7 +30,11 @@ export function makeTimestamp(date: Date): string {
 
 type BuildStage = 'alpha' | 'beta' | 'build' | '';
 
-export function makeVersion(baseVersion: string | undefined, daily: boolean, date: Date): string {
+export function makeVersion(baseVersion: string, daily: boolean, date: Date): {
+  fullVersion: string,
+  baseVersion: string,
+  build: string | undefined,
+} {
   let [major, minor, patch] = validateVersion(baseVersion)
       .split('.')
       .map(n => Number(n));
@@ -46,10 +50,14 @@ export function makeVersion(baseVersion: string | undefined, daily: boolean, dat
   const base = [major, minor, patch].join('.');
   const fullVersion = [base, stage];
 
-  if (daily) {
-    const timestamp = makeTimestamp(date);
+  const timestamp = daily ? makeTimestamp(date) : undefined; 
+  if (timestamp) {
     fullVersion.push(timestamp);
   }
 
-  return fullVersion.filter(v => v).join('-');
+  return {
+    baseVersion,
+    fullVersion: fullVersion.filter(v => v).join('-'),
+    build: timestamp
+  };
 }
