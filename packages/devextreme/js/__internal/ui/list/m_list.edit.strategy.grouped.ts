@@ -3,7 +3,7 @@ import { each } from '@js/core/utils/iterator';
 import { isNumeric } from '@js/core/utils/type';
 import query from '@js/data/query';
 import storeHelper from '@js/data/store_helper';
-import EditStrategy from '@js/ui/collection/ui.collection_widget.edit.strategy.plain';
+import EditStrategy from '@ts/ui/collection/m_collection_widget.edit.strategy.plain';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_GROUP_CLASS = 'dx-list-group';
