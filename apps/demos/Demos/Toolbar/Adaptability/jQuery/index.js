@@ -35,7 +35,6 @@ const toolbarItems = [
     widget: 'dxButton',
     options: {
       icon: 'undo',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Undo');
       },
@@ -46,7 +45,6 @@ const toolbarItems = [
     widget: 'dxButton',
     options: {
       icon: 'redo',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Redo');
       },
@@ -62,7 +60,6 @@ const toolbarItems = [
       displayExpr: 'text',
       keyExpr: 'size',
       useSelectMode: true,
-      stylingMode: 'text',
       items: fontSizes,
       selectedItemKey: 14,
       itemTemplate(itemData) {
@@ -85,7 +82,6 @@ const toolbarItems = [
       displayExpr: 'text',
       keyExpr: 'lineHeight',
       useSelectMode: true,
-      stylingMode: 'text',
       items: lineHeights,
       selectedItemKey: 1.35,
       onSelectionChanged() {
@@ -197,7 +193,6 @@ const toolbarItems = [
     options: {
       icon: 'link',
       text: 'Link',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Link');
       },
@@ -211,7 +206,6 @@ const toolbarItems = [
     options: {
       icon: 'image',
       text: 'Add image',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Add Image');
       },
@@ -226,7 +220,6 @@ const toolbarItems = [
     options: {
       icon: 'clearformat',
       text: 'Clear formating',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Clear Formating');
       },
@@ -240,7 +233,6 @@ const toolbarItems = [
     options: {
       icon: 'codeblock',
       text: 'Code block',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Code Block');
       },
@@ -254,7 +246,6 @@ const toolbarItems = [
     options: {
       icon: 'blockquote',
       text: 'Blockquote',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Blockquote');
       },
@@ -268,7 +259,6 @@ const toolbarItems = [
     options: {
       icon: 'attach',
       text: 'Attach',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('Attach');
       },
@@ -281,7 +271,6 @@ const toolbarItems = [
     options: {
       icon: 'help',
       text: 'About',
-      stylingMode: 'text',
       onClick() {
         onButtonClick('About');
       },

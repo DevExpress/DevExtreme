@@ -16,7 +16,7 @@
           >
             <DxButton
               icon="undo"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onUndoButtonClick"
             />
           </DxItem>
@@ -27,7 +27,7 @@
           >
             <DxButton
               icon="redo"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onRedoButtonClick"
             />
           </DxItem>
@@ -48,7 +48,7 @@
               display-expr="text"
               key-expr="size"
               item-template="fontSizeTemplate"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :use-select-mode="true"
               :items="fontSizes"
               :selected-item-key="fontSize"
@@ -71,7 +71,7 @@
               icon="indent"
               display-expr="text"
               key-expr="lineHeight"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :use-select-mode="true"
               :items="lineHeights"
               :selected-item-key="lineHeight"
@@ -169,7 +169,7 @@
             <DxButton
               icon="link"
               text="Link"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onLinkButtonClick"
             />
           </DxItem>
@@ -183,7 +183,7 @@
             <DxButton
               icon="image"
               text="Add image"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onAddImageButtonClick"
             />
           </DxItem>
@@ -204,7 +204,7 @@
             <DxButton
               icon="clearformat"
               text="Clear formating"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onClearButtonClick"
             />
           </DxItem>
@@ -218,7 +218,7 @@
             <DxButton
               icon="codeblock"
               text="Code block"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onCodeBlockButtonClick"
             />
           </DxItem>
@@ -232,7 +232,7 @@
             <DxButton
               icon="blockquote"
               text="Blockquote"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onQuoteButtonClick"
             />
           </DxItem>
@@ -252,7 +252,7 @@
             <DxButton
               icon="attach"
               text="Attach"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onAttachButtonClick"
             />
           </DxItem>
@@ -265,7 +265,7 @@
             <DxButton
               icon="help"
               text="About"
-              styling-mode="text"
+              :styling-mode="stylingMode"
               :on-click="onAboutButtonClick"
             />
           </DxItem>
@@ -322,6 +322,7 @@ import DxButtonGroup from 'devextreme-vue/button-group';
 import DxResizable from 'devextreme-vue/resizable';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxSelectBox from 'devextreme-vue/select-box';
+import { isMaterialBased } from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import {
   fontSizes,
@@ -335,6 +336,7 @@ import {
 } from './data.ts';
 import 'devextreme/ui/select_box';
 
+const stylingMode = isMaterialBased() ? 'text' : undefined;
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;
