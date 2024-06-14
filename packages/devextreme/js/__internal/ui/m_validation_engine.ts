@@ -344,7 +344,7 @@ const GroupConfig = Class.inherit({
   ctor(group) {
     this.group = group;
     this.validators = [];
-    this.isRemovable = true;
+    this.isRemovable = false;
     this._pendingValidators = [];
     this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
     this._resetValidationInfo();
@@ -780,13 +780,13 @@ const ValidationEngine = {
   },
 
   registerValidatorInGroup(group, validator) {
-    const groupConfig = ValidationEngine.addGroup(group, true);
+    const groupConfig = ValidationEngine.addGroup(group, false);
     groupConfig.registerValidator.call(groupConfig, validator);
   },
 
   _shouldRemoveGroup(group, validators, isRemovable) {
     const isDefaultGroup = group === undefined;
-    return !isDefaultGroup && !validators.length && isRemovable;
+    return !isDefaultGroup && !validators.length && !isRemovable;
   },
 
   removeRegisteredValidator(group, validator) {

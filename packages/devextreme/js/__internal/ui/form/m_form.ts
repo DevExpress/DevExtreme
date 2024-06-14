@@ -264,7 +264,7 @@ const Form = Widget.inherit({
 
   _initMarkup() {
     // @ts-expect-error
-    ValidationEngine.addGroup(this._getValidationGroup(), false);
+    ValidationEngine.addGroup(this._getValidationGroup(), true);
     this._clearCachedInstances();
     this._prepareFormData();
     this.$element().addClass(FORM_CLASS);
@@ -879,7 +879,7 @@ const Form = Widget.inherit({
     const optionName = getOptionNameFromFullName(fullName);
     if (ITEM_OPTIONS_FOR_VALIDATION_UPDATING.includes(optionName)) {
       // @ts-expect-error
-      ValidationEngine.addGroup(this._getValidationGroup(), false);
+      ValidationEngine.addGroup(this._getValidationGroup(), true);
       if (this.option('showValidationSummary')) {
         this._validationSummary?.refreshValidationGroup();
       }
