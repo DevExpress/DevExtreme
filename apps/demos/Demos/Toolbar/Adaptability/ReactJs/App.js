@@ -6,7 +6,7 @@ import Resizable from 'devextreme-react/resizable';
 import CheckBox from 'devextreme-react/check-box';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import SelectBox from 'devextreme-react/select-box';
-import { isMaterialBased } from 'devextreme/ui/themes';
+import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
 import {
@@ -22,7 +22,7 @@ import {
   textStyleInputAttr,
 } from './data.js';
 
-const stylingMode = isMaterialBased() ? 'text' : undefined;
+const stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;

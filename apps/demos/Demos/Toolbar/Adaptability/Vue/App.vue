@@ -322,7 +322,7 @@ import DxButtonGroup from 'devextreme-vue/button-group';
 import DxResizable from 'devextreme-vue/resizable';
 import DxDropDownButton from 'devextreme-vue/drop-down-button';
 import DxSelectBox from 'devextreme-vue/select-box';
-import { isMaterialBased } from 'devextreme/ui/themes';
+import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import {
   fontSizes,
@@ -336,7 +336,7 @@ import {
 } from './data.ts';
 import 'devextreme/ui/select_box';
 
-const stylingMode = isMaterialBased() ? 'text' : undefined;
+const stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;

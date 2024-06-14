@@ -11,7 +11,7 @@ import {
   DxButtonGroupModule,
   DxCheckBoxModule,
 } from 'devextreme-angular';
-import { isMaterialBased } from 'devextreme/ui/themes';
+import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import {
   FontFamily,
@@ -37,7 +37,7 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  stylingMode = isMaterialBased() ? 'text' : undefined;
+  stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
   fontSizes: FontSize[] = this.service.getFontSizes();
 
