@@ -1,5 +1,5 @@
 import $ from '@js/core/renderer';
-import CollectionWidgetItem from '@js/ui/collection/item';
+import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 const TABS_ITEM_BADGE_CLASS = 'dx-tabs-item-badge';
 const BADGE_CLASS = 'dx-badge';
