@@ -11,7 +11,7 @@ declare class Edit<
     TItem extends ItemLike = any,
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     TKey = any,
-> extends CollectionWidgetBase<TProperties> {
+> extends CollectionWidgetBase<TProperties, TItem> {
   _processSelectableItem($itemElement: dxElementWrapper, isSelected: boolean): void;
   _setAriaSelectionAttribute($itemElement: dxElementWrapper, isSelected: string): void;
   _clearSelectedItems(): void;

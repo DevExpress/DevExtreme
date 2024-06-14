@@ -10,8 +10,8 @@ import MenuItem from '@js/ui/collection/item';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type { Item } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
-import HierarchicalCollectionWidget from '@ts/ui/collection/hierarchical';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/m_menu_base.edit.strategy';
+import HierarchicalCollectionWidget from '@ts/ui/hierarchical_collection/m_hierarchical_collection_widget';
 
 const DX_MENU_CLASS = 'dx-menu';
 const DX_MENU_NO_ICONS_CLASS = `${DX_MENU_CLASS}-no-icons`;
@@ -170,6 +170,7 @@ class MenuBase extends HierarchicalCollectionWidget<Properties> {
       // @ts-expect-error
       $container.html(html);
       const link = this._getLinkContainer(
+        // @ts-expect-error
         this._getIconContainer(itemData),
         this._getTextContainer(itemData),
         itemData,
