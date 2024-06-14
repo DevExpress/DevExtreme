@@ -1,49 +1,50 @@
-import CollectionWidgetEdit from './ui.collection_widget.edit';
-import { Deferred, when } from '../../core/utils/deferred';
-import { noop } from '../../core/utils/common';
+import { noop } from '@js/core/utils/common';
+import { Deferred, when } from '@js/core/utils/deferred';
+
+import CollectionWidgetEdit from './m_collection_widget.edit';
 
 const AsyncCollectionWidget = CollectionWidgetEdit.inherit({
-    _initMarkup() {
-        this._deferredItems = [];
-        this.callBase();
-    },
+  _initMarkup() {
+    this._deferredItems = [];
+    this.callBase();
+  },
 
-    _renderItemContent(args) {
-        const renderContentDeferred = new Deferred();
-        const itemDeferred = new Deferred();
-        const that = this;
+  _renderItemContent(args) {
+    const renderContentDeferred = Deferred();
+    const itemDeferred = Deferred();
+    const that = this;
 
-        this._deferredItems[args.index] = itemDeferred;
-        const $itemContent = this.callBase.call(that, args);
+    this._deferredItems[args.index] = itemDeferred;
+    const $itemContent = this.callBase.call(that, args);
 
-        itemDeferred.done(() => {
-            renderContentDeferred.resolve($itemContent);
-        });
+    itemDeferred.done(() => {
+      renderContentDeferred.resolve($itemContent);
+    });
 
-        return renderContentDeferred.promise();
-    },
+    return renderContentDeferred.promise();
+  },
 
-    _onItemTemplateRendered: function(itemTemplate, renderArgs) {
-        return () => {
-            this._deferredItems[renderArgs.index].resolve();
-        };
-    },
+  _onItemTemplateRendered(itemTemplate, renderArgs) {
+    return () => {
+      this._deferredItems[renderArgs.index].resolve();
+    };
+  },
 
-    _postProcessRenderItems: noop,
+  _postProcessRenderItems: noop,
 
-    _renderItemsAsync() {
-        const d = new Deferred();
-        when.apply(this, this._deferredItems).done(() => {
-            this._postProcessRenderItems();
-            d.resolve();
-        });
-        return d.promise();
-    },
+  _renderItemsAsync() {
+    const d = Deferred();
+    when.apply(this, this._deferredItems).done(() => {
+      this._postProcessRenderItems();
+      d.resolve();
+    });
+    return d.promise();
+  },
 
-    _clean() {
-        this.callBase();
-        this._deferredItems = [];
-    }
+  _clean() {
+    this.callBase();
+    this._deferredItems = [];
+  },
 });
 
 export default AsyncCollectionWidget;
