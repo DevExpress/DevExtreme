@@ -1,5 +1,8 @@
+/* eslint-disable @typescript-eslint/restrict-plus-operands */
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
+import { ClientFunction } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import { createWidget } from '../../../helpers/createWidget';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';
@@ -61,4 +64,56 @@ const DATA_GRID_SELECTOR = '#container';
     });
     await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR);
   });
+});
+
+test('Focused cell should not flick', async (t) => {
+  const dataGrid = new DataGrid(DATA_GRID_SELECTOR);
+  const firstCell = dataGrid.getDataCell(0, 0).element;
+  const secondCell = dataGrid.getDataCell(1, 0).element;
+  await t.click(firstCell);
+  await t.click(secondCell);
+
+  await ClientFunction(() => {
+    // @ts-expect-error
+    window.counter = 0;
+    (secondCell() as any as HTMLElement).addEventListener('focusin', () => {
+      // @ts-expect-error
+      window.counter += 1;
+    });
+  }, {
+    dependencies: { secondCell },
+  })();
+
+  await t.pressKey('M');
+  await t.pressKey('enter');
+
+  const focusEventCount = await ClientFunction(
+    // @ts-expect-error
+    () => window.counter,
+  )();
+
+  await t.expect(focusEventCount).eql(1);
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        value: 'data',
+      },
+      {
+        value: 'data',
+      },
+    ],
+    keyboardNavigation: {
+      enabled: true,
+      editOnKeyPress: true,
+      enterKeyDirection: 'column',
+    },
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+      allowAdding: true,
+      startEditAction: 'dblClick',
+    },
+  });
+  await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR);
 });
