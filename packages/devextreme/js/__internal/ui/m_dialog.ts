@@ -13,6 +13,7 @@ import { value as getViewport } from '@js/core/utils/view_port';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
+import type { ToolbarItem } from '@js/ui/popup';
 import Popup from '@js/ui/popup/ui.popup';
 import { isFluent } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
@@ -82,7 +83,7 @@ export const custom = function (options) {
     // @ts-expect-error
     .attr('id', messageId);
 
-  const popupToolbarItems = [];
+  const popupToolbarItems: ToolbarItem[] = [];
 
   const popupInstance = new Popup($element, extend({
     title: options.title ?? '',
@@ -157,7 +158,6 @@ export const custom = function (options) {
     const action = new Action(options.onClick, {
       context: popupInstance,
     });
-    // @ts-expect-error
     popupToolbarItems.push({
       toolbar: 'bottom',
       location: devices.current().android ? 'after' : 'center',
