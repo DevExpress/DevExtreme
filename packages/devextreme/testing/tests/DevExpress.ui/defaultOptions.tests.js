@@ -1,4 +1,4 @@
-require('../../helpers/includeThemesLinks.js');
+import '../../helpers/includeThemesLinks.js';
 
 import $ from 'jquery';
 import { noop } from 'core/utils/common';
@@ -20,7 +20,7 @@ import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
 import DropDownBox from 'ui/drop_down_box';
 import DropDownButton from 'ui/drop_down_button';
 import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
-import DropDownMenu from 'ui/toolbar/internal/ui.toolbar.menu';
+import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
 import TextEditor from 'ui/text_box/ui.text_editor';
 import Gallery from 'ui/gallery';
 import Lookup from 'ui/lookup';
@@ -81,7 +81,8 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
             if(componentClass.IS_RENOVATED_WIDGET) {
                 componentClass.defaultOptions({});
             }
-            const component = new componentClass('#cmp');
+            const $container = $('#cmp');
+            const component = new componentClass($container);
             options = $.isFunction(options) ? options.call(component) : options;
 
             const defaults = component.option();
@@ -1233,30 +1234,36 @@ testComponentDefaults(TabPanel,
 testComponentDefaults(LoadIndicator,
     {},
     {
-        _animatingSegmentCount: 2,
-        _animatingSegmentInner: true
+        _animatingSegmentCount: 7,
+        _animatingSegmentInner: false
     },
     function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('material');
+        this.origIsMaterialBased = themes.isMaterialBased;
+        this.origIsGeneric = themes.isGeneric;
+        themes.isMaterialBased = function() { return false; };
+        themes.isGeneric = function() { return true; };
     },
     function() {
-        themes.current(this.originalCurrentTheme);
+        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isGeneric = this.origIsGeneric;
     }
 );
 
 testComponentDefaults(LoadIndicator,
     {},
     {
-        _animatingSegmentCount: 7,
-        _animatingSegmentInner: false
+        _animatingSegmentCount: 2,
+        _animatingSegmentInner: true
     },
     function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('generic');
+        this.origIsMaterialBased = themes.isMaterialBased;
+        this.origIsGeneric = themes.isGeneric;
+        themes.isMaterialBased = function() { return true; };
+        themes.isGeneric = function() { return false; };
     },
     function() {
-        themes.current(this.originalCurrentTheme);
+        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isGeneric = this.origIsGeneric;
     }
 );
 
@@ -1501,7 +1508,12 @@ testComponentDefaults(Tabs,
         { mode: item.mode },
         function() {
             this.originalRealDevice = devices.real();
-            this._origBrowser = browser;
+            this._origBrowserSettings = {
+                chrome: browser.chrome,
+                safari: browser.safari,
+                version: item.version,
+                [item.name]: browser[item.name]
+            };
 
             delete browser.chrome;
             delete browser.safari;
@@ -1511,8 +1523,11 @@ testComponentDefaults(Tabs,
             devices.real({ platform: 'ios', deviceType: 'phone' });
         },
         function() {
-            // eslint-disable-next-line no-import-assign
-            browser = this._origBrowser;
+            browser.chrome = this._origBrowserSettings.chrome;
+            browser.safari = this._origBrowserSettings.safari;
+            browser.version = this._origBrowserSettings.version;
+            browser[item.name] = this._origBrowserSettings[item.name];
+
             devices.real(this.originalRealDevice);
         }
     );

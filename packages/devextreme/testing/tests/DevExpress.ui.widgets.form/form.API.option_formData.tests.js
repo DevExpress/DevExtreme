@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import 'ui/form/ui.form';
+import 'ui/form';
 import 'ui/text_area';
 import 'ui/tag_box';
 import 'ui/slider';
