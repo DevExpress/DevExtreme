@@ -1,6 +1,6 @@
 import $ from '@js/core/renderer';
 import { each } from '@js/core/utils/iterator';
-import { ListBase } from '@js/ui/list/ui.list.base';
+import { ListBase } from '@ts/ui/list/m_list.base';
 
 const TOOLBAR_MENU_ACTION_CLASS = 'dx-toolbar-menu-action';
 const TOOLBAR_HIDDEN_BUTTON_CLASS = 'dx-toolbar-hidden-button';

@@ -1,1 +1,1 @@
-import '../ui.list.edit.decorator.switchable.button';
+import '../m_list.edit.decorator.switchable.button';

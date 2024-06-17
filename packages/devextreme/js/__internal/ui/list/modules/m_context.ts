@@ -1,1 +1,1 @@
-import '../ui.list.edit.decorator.context';
+import '../m_list.edit.decorator.context';

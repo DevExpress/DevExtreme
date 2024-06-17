@@ -107,8 +107,8 @@ const DropDownBox = (DropDownEditor as any).inherit({
 
     if (!this._dataSource) {
       this.callBase(values);
-      // @ts-expect-error
-      return new Deferred().resolve();
+
+      return Deferred().resolve();
     }
 
     const currentValue = this._getCurrentValue();
@@ -117,8 +117,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
     keys = Array.isArray(keys) ? keys : [keys];
 
     const itemLoadDeferreds = map(keys, (key) => {
-      // @ts-expect-error
-      const deferred = new Deferred();
+      const deferred = Deferred();
       this
         ._loadItem(key)
         .always((item) => {
@@ -144,8 +143,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
   },
 
   _loadItem(value) {
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred();
     const that = this;
 
     const selectedItem = grep(this.option('items') || [], (item) => this._isValueEquals(this._valueGetter(item), value))[0];

@@ -129,8 +129,7 @@ const Autocomplete = (DropDownList as any).inherit({
   _loadItem(value, cache) {
     const selectedItem = this._getItemFromPlain(value, cache);
 
-    // @ts-expect-error
-    return new Deferred().resolve(selectedItem).promise();
+    return Deferred().resolve(selectedItem).promise();
   },
 
   _dataSourceOptions() {

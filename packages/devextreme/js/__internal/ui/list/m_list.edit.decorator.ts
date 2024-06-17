@@ -1,15 +1,14 @@
-import { getWidth } from '../../core/utils/size';
-import $ from '../../core/renderer';
-import eventsEngine from '../../events/core/events_engine';
-import { noop } from '../../core/utils/common';
-import Class from '../../core/class';
+import Class from '@js/core/class';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import { getWidth } from '@js/core/utils/size';
+import eventsEngine from '@js/events/core/events_engine';
 import {
-    start as swipeEventStart,
-    swipe as swipeEventSwipe,
-    end as swipeEventEnd
-} from '../../events/swipe';
-import { addNamespace } from '../../events/utils/index';
-
+  end as swipeEventEnd,
+  start as swipeEventStart,
+  swipe as swipeEventSwipe,
+} from '@js/events/swipe';
+import { addNamespace } from '@js/events/utils/index';
 
 const LIST_EDIT_DECORATOR = 'dxListEditDecorator';
 const SWIPE_START_EVENT_NAME = addNamespace(swipeEventStart, LIST_EDIT_DECORATOR);
@@ -18,98 +17,98 @@ const SWIPE_END_EVENT_NAME = addNamespace(swipeEventEnd, LIST_EDIT_DECORATOR);
 
 const EditDecorator = Class.inherit({
 
-    ctor: function(list) {
-        this._list = list;
+  ctor(list) {
+    this._list = list;
 
-        this._init();
-    },
+    this._init();
+  },
 
-    _init: noop,
+  _init: noop,
 
-    _shouldHandleSwipe: false,
+  _shouldHandleSwipe: false,
 
-    _attachSwipeEvent: function(config) {
-        const swipeConfig = {
-            itemSizeFunc: (function() {
-                if(this._clearSwipeCache) {
-                    this._itemWidthCache = getWidth(this._list.$element());
-                    this._clearSwipeCache = false;
-                }
-                return this._itemWidthCache;
-            }).bind(this)
-        };
-
-        eventsEngine.on(config.$itemElement, SWIPE_START_EVENT_NAME, swipeConfig, this._itemSwipeStartHandler.bind(this));
-        eventsEngine.on(config.$itemElement, SWIPE_UPDATE_EVENT_NAME, this._itemSwipeUpdateHandler.bind(this));
-        eventsEngine.on(config.$itemElement, SWIPE_END_EVENT_NAME, this._itemSwipeEndHandler.bind(this));
-    },
-
-    _itemSwipeStartHandler: function(e) {
-        const $itemElement = $(e.currentTarget);
-        if($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
-            e.cancel = true;
-            return;
+  _attachSwipeEvent(config) {
+    const swipeConfig = {
+      itemSizeFunc: function () {
+        if (this._clearSwipeCache) {
+          this._itemWidthCache = getWidth(this._list.$element());
+          this._clearSwipeCache = false;
         }
+        return this._itemWidthCache;
+      }.bind(this),
+    };
 
-        clearTimeout(this._list._inkRippleTimer);
+    eventsEngine.on(config.$itemElement, SWIPE_START_EVENT_NAME, swipeConfig, this._itemSwipeStartHandler.bind(this));
+    eventsEngine.on(config.$itemElement, SWIPE_UPDATE_EVENT_NAME, this._itemSwipeUpdateHandler.bind(this));
+    eventsEngine.on(config.$itemElement, SWIPE_END_EVENT_NAME, this._itemSwipeEndHandler.bind(this));
+  },
 
-        this._swipeStartHandler($itemElement, e);
-    },
+  _itemSwipeStartHandler(e) {
+    const $itemElement = $(e.currentTarget);
+    if ($itemElement.is('.dx-state-disabled, .dx-state-disabled *')) {
+      e.cancel = true;
+      return;
+    }
 
-    _itemSwipeUpdateHandler: function(e) {
-        const $itemElement = $(e.currentTarget);
+    clearTimeout(this._list._inkRippleTimer);
 
-        this._swipeUpdateHandler($itemElement, e);
-    },
+    this._swipeStartHandler($itemElement, e);
+  },
 
-    _itemSwipeEndHandler: function(e) {
-        const $itemElement = $(e.currentTarget);
+  _itemSwipeUpdateHandler(e) {
+    const $itemElement = $(e.currentTarget);
 
-        this._swipeEndHandler($itemElement, e);
+    this._swipeUpdateHandler($itemElement, e);
+  },
 
-        this._clearSwipeCache = true;
-    },
+  _itemSwipeEndHandler(e) {
+    const $itemElement = $(e.currentTarget);
 
-    beforeBag: noop,
+    this._swipeEndHandler($itemElement, e);
 
-    afterBag: noop,
+    this._clearSwipeCache = true;
+  },
 
-    _commonOptions: function() {
-        return {
-            activeStateEnabled: this._list.option('activeStateEnabled'),
-            hoverStateEnabled: this._list.option('hoverStateEnabled'),
-            focusStateEnabled: this._list.option('focusStateEnabled')
-        };
-    },
+  beforeBag: noop,
 
-    modifyElement: function(config) {
-        if(this._shouldHandleSwipe) {
-            this._attachSwipeEvent(config);
-            this._clearSwipeCache = true;
-        }
-    },
+  afterBag: noop,
 
-    afterRender: noop,
+  _commonOptions() {
+    return {
+      activeStateEnabled: this._list.option('activeStateEnabled'),
+      hoverStateEnabled: this._list.option('hoverStateEnabled'),
+      focusStateEnabled: this._list.option('focusStateEnabled'),
+    };
+  },
 
-    handleClick: noop,
+  modifyElement(config) {
+    if (this._shouldHandleSwipe) {
+      this._attachSwipeEvent(config);
+      this._clearSwipeCache = true;
+    }
+  },
 
-    handleKeyboardEvents: noop,
+  afterRender: noop,
 
-    handleEnterPressing: noop,
+  handleClick: noop,
 
-    handleContextMenu: noop,
+  handleKeyboardEvents: noop,
 
-    _swipeStartHandler: noop,
+  handleEnterPressing: noop,
 
-    _swipeUpdateHandler: noop,
+  handleContextMenu: noop,
 
-    _swipeEndHandler: noop,
+  _swipeStartHandler: noop,
 
-    visibilityChange: noop,
+  _swipeUpdateHandler: noop,
 
-    getExcludedSelectors: noop,
+  _swipeEndHandler: noop,
 
-    dispose: noop
+  visibilityChange: noop,
+
+  getExcludedSelectors: noop,
+
+  dispose: noop,
 
 });
 

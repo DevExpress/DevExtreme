@@ -1,4 +1,4 @@
-import '@js/ui/list/modules/selection';
+import '@ts/ui/list/modules/m_selection';
 
 import { ensureDefined, noop } from '@js/core/utils/common';
 import dateSerialization from '@js/core/utils/date_serialization';
