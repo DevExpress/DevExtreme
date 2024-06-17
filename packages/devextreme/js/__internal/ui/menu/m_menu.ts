@@ -116,10 +116,9 @@ class Menu extends MenuBase {
   }
 
   _itemElements() {
-    // @ts-expect-error
     const rootMenuElements = super._itemElements();
     const submenuElements = this._submenuItemElements();
-
+    // @ts-expect-error
     return rootMenuElements.add(submenuElements);
   }
 

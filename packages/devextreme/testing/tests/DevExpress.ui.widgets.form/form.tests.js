@@ -46,7 +46,7 @@ const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 
-import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
+import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
