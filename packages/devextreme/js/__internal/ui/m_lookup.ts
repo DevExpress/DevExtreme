@@ -17,10 +17,10 @@ import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
-import { getElementWidth } from '@js/ui/drop_down_editor/utils';
 import Popover from '@js/ui/popover/ui.popover';
 import TextBox from '@js/ui/text_box';
 import { current, isMaterial } from '@js/ui/themes';
+import { getElementWidth } from '@ts/ui/drop_down_editor/m_utils';
 
 const window = getWindow();
 
