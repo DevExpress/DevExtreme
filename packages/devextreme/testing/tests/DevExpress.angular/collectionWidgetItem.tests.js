@@ -3,7 +3,7 @@ import angular from 'angular';
 
 import registerComponent from 'core/component_registrator';
 import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
-import CollectionWidgetItem from 'ui/collection/item';
+import CollectionWidgetItem from '__internal/ui/collection/m_item';
 
 import 'integration/angular';
 

@@ -8,7 +8,7 @@ import { compileGetter } from '@js/core/utils/data';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { getImageContainer } from '@js/core/utils/icon';
-import { isDefined, isPlainObject } from '@js/core/utils/type';
+import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
 import ArrayStore from '@js/data/array_store';
 import { DataSource } from '@js/data/data_source/data_source';
 import DataHelperMixin from '@js/data_helper';
@@ -524,9 +524,9 @@ const DropDownButton = (Widget as any).inherit({
   },
 
   _getDisplayValue(item) {
-    const isPrimitiveItem = !isPlainObject(item);
+    const isPrimitiveItem = !isObject(item);
     const displayValue = isPrimitiveItem ? item : this._displayGetter(item);
-    return !isPlainObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
+    return !isObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
   },
 
   _updateActionButton(selectedItem) {

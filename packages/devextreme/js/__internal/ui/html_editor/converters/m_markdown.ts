@@ -1,59 +1,63 @@
-
-import TurnDown from 'turndown';
+import { getWindow } from '@js/core/utils/window';
+import Errors from '@js/ui/widget/ui.errors';
 import ShowDown from 'showdown';
+import TurnDown from 'turndown';
 
-import { getWindow } from '../../../core/utils/window';
-import Errors from '../../widget/ui.errors';
-import converterController from '../converterController';
+import converterController from '../m_converterController';
 
 class MarkdownConverter {
-    constructor() {
-        const window = getWindow();
-        const turndown = window && window.TurndownService || TurnDown;
-        const showdown = window && window.showdown || ShowDown;
+  _markdown2Html: any;
 
-        if(!turndown) {
-            throw Errors.Error('E1041', 'Turndown');
-        }
+  _html2Markdown: any;
 
-        if(!showdown) {
-            throw Errors.Error('E1041', 'Showdown');
-        }
+  constructor() {
+    const window = getWindow();
+    // @ts-expect-error
+    const turndown = window && window.TurndownService || TurnDown;
+    // @ts-expect-error
+    const showdown = window && window.showdown || ShowDown;
 
-        this._html2Markdown = new turndown();
-
-        if(this._html2Markdown?.addRule) {
-            this._html2Markdown.addRule('emptyLine', {
-                filter: (element) => {
-                    return element.nodeName.toLowerCase() === 'p' && element.innerHTML === '<br>';
-                },
-                replacement: function() {
-                    return '<br>';
-                }
-            });
-            this._html2Markdown.keep(['table']);
-        }
-
-        this._markdown2Html = new showdown.Converter({
-            simpleLineBreaks: true,
-            strikethrough: true,
-            tables: true
-        });
+    if (!turndown) {
+      throw Errors.Error('E1041', 'Turndown');
     }
 
-    toMarkdown(htmlMarkup) {
-        return this._html2Markdown.turndown(htmlMarkup || '');
+    if (!showdown) {
+      throw Errors.Error('E1041', 'Showdown');
     }
 
-    toHtml(markdownMarkup) {
-        let markup = this._markdown2Html.makeHtml(markdownMarkup);
+    // eslint-disable-next-line new-cap
+    this._html2Markdown = new turndown();
 
-        if(markup) {
-            markup = markup.replace(new RegExp('\\r?\\n', 'g'), '');
-        }
-
-        return markup;
+    if (this._html2Markdown?.addRule) {
+      this._html2Markdown.addRule('emptyLine', {
+        filter: (element) => element.nodeName.toLowerCase() === 'p' && element.innerHTML === '<br>',
+        replacement() {
+          return '<br>';
+        },
+      });
+      this._html2Markdown.keep(['table']);
     }
+
+    this._markdown2Html = new showdown.Converter({
+      simpleLineBreaks: true,
+      strikethrough: true,
+      tables: true,
+    });
+  }
+
+  toMarkdown(htmlMarkup) {
+    return this._html2Markdown.turndown(htmlMarkup || '');
+  }
+
+  toHtml(markdownMarkup) {
+    let markup = this._markdown2Html.makeHtml(markdownMarkup);
+
+    if (markup) {
+      markup = markup.replace(new RegExp('\\r?\\n', 'g'), '');
+    }
+
+    return markup;
+  }
 }
 
 converterController.addConverter('markdown', MarkdownConverter);

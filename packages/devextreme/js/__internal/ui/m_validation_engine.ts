@@ -616,7 +616,7 @@ const ValidationEngine = {
     };
     const validator = rules?.[0]?.validator;
 
-    const asyncRuleItems = [];
+    const asyncRuleItems: any = [];
     // @ts-expect-error
     each(rules || [], (_, rule) => {
       const ruleValidator = rulesValidators[rule.type];
@@ -635,7 +635,6 @@ const ValidationEngine = {
         }
         rule.value = value;
         if (rule.type === 'async') {
-          // @ts-expect-error
           asyncRuleItems.push({
             rule,
             ruleValidator,
