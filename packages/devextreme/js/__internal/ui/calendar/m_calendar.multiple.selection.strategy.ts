@@ -1,57 +1,57 @@
-import CalendarSelectionStrategy from './ui.calendar.selection.strategy';
+import CalendarSelectionStrategy from './m_calendar.selection.strategy';
 
 class CalendarMultiSelectionStrategy extends CalendarSelectionStrategy {
-    constructor(component) {
-        super(component);
-        this.NAME = 'MultiSelection';
+  constructor(component) {
+    super(component);
+    this.NAME = 'MultiSelection';
+  }
+
+  getViewOptions() {
+    return {
+      value: this.dateOption('value'),
+      range: [],
+      selectionMode: 'multiple',
+      onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
+    };
+  }
+
+  selectValue(selectedValue, e) {
+    const value = [...this.dateOption('value')];
+    const alreadySelectedIndex = value.findIndex((date) => date?.toDateString() === selectedValue.toDateString());
+
+    if (alreadySelectedIndex > -1) {
+      value.splice(alreadySelectedIndex, 1);
+    } else {
+      value.push(selectedValue);
     }
 
-    getViewOptions() {
-        return {
-            value: this.dateOption('value'),
-            range: [],
-            selectionMode: 'multi',
-            onWeekNumberClick: this._shouldHandleWeekNumberClick() ? this._weekNumberClickHandler.bind(this) : null,
-        };
-    }
+    this.skipNavigate();
+    this._updateCurrentDate(selectedValue);
+    this._currentDateChanged = true;
+    this.dateValue(value, e);
+  }
 
-    selectValue(selectedValue, e) {
-        const value = [...this.dateOption('value')];
-        const alreadySelectedIndex = value.findIndex(date => date?.toDateString() === selectedValue.toDateString());
+  updateAriaSelected(value, previousValue) {
+    value ??= this.dateOption('value');
+    previousValue ??= [];
 
-        if(alreadySelectedIndex > -1) {
-            value.splice(alreadySelectedIndex, 1);
-        } else {
-            value.push(selectedValue);
-        }
+    super.updateAriaSelected(value, previousValue);
+  }
 
-        this.skipNavigate();
-        this._updateCurrentDate(selectedValue);
-        this._currentDateChanged = true;
-        this.dateValue(value, e);
-    }
+  getDefaultCurrentDate() {
+    const dates = this.dateOption('value').filter((value) => value);
+    return this._getLowestDateInArray(dates);
+  }
 
-    updateAriaSelected(value, previousValue) {
-        value ??= this.dateOption('value');
-        previousValue ??= [];
+  restoreValue() {
+    this.calendar.option('value', []);
+  }
 
-        super.updateAriaSelected(value, previousValue);
-    }
+  _weekNumberClickHandler({ rowDates, event }) {
+    const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
 
-    getDefaultCurrentDate() {
-        const dates = this.dateOption('value').filter(value => value);
-        return this._getLowestDateInArray(dates);
-    }
-
-    restoreValue() {
-        this.calendar.option('value', []);
-    }
-
-    _weekNumberClickHandler({ rowDates, event }) {
-        const selectedDates = rowDates.filter((date) => !this._isDateDisabled(date));
-
-        this.dateValue(selectedDates, event);
-    }
+    this.dateValue(selectedDates, event);
+  }
 }
 
 export default CalendarMultiSelectionStrategy;
