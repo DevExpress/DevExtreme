@@ -1,36 +1,38 @@
-import { each } from '../../../core/utils/iterator';
+import { each } from '@js/core/utils/iterator';
 
 export default class WidgetCollector {
-    constructor() {
-        this._collection = [];
-    }
+  _collection: any[];
 
-    clear() {
-        this._collection = [];
-    }
+  constructor() {
+    this._collection = [];
+  }
 
-    add(name, instance) {
-        this._collection.push({ name, instance });
-    }
+  clear() {
+    this._collection = [];
+  }
 
-    remove(name) {
-        this._collection = this._collection.filter(item => item.name !== name);
-    }
+  add(name, instance) {
+    this._collection.push({ name, instance });
+  }
 
-    getByName(widgetName) {
-        let widget = null;
+  remove(name) {
+    this._collection = this._collection.filter((item) => item.name !== name);
+  }
 
-        each(this._collection, (index, { name, instance }) => {
-            if(name === widgetName) {
-                widget = instance;
-                return false;
-            }
-        });
+  getByName(widgetName) {
+    let widget = null;
+    // @ts-expect-error
+    each(this._collection, (index, { name, instance }) => {
+      if (name === widgetName) {
+        widget = instance;
+        return false;
+      }
+    });
 
-        return widget;
-    }
+    return widget;
+  }
 
-    each(handler) {
-        this._collection.forEach(({ name, instance }) => instance && handler(name, instance));
-    }
+  each(handler) {
+    this._collection.forEach(({ name, instance }) => instance && handler(name, instance));
+  }
 }

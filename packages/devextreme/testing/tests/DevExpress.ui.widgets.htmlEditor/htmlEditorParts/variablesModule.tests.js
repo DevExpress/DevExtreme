@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import VariableFormat from 'ui/html_editor/formats/variable';
-import Variables from 'ui/html_editor/modules/variables';
+import VariableFormat from '__internal/ui/html_editor/formats/m_variable';
+import Variables from '__internal/ui/html_editor/modules/m_variables';
 import { noop } from 'core/utils/common';
 
 const SUGGESTION_LIST_CLASS = 'dx-suggestion-list';
