@@ -510,7 +510,6 @@ const TagBox = (SelectBox as any).inherit({
     const tagRemoveAction = this._createAction(this._removeTagHandler.bind(this));
     const eventName = addNamespace(clickEvent, 'dxTagBoxTagRemove');
 
-    // @ts-expect-error
     eventsEngine.off(this._$tagsContainer, eventName);
     eventsEngine.on(this._$tagsContainer, eventName, `.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`, (event) => {
       tagRemoveAction({ event });
@@ -522,7 +521,6 @@ const TagBox = (SelectBox as any).inherit({
     const $element = this.$element();
     const isMultiline = this.option('multiline');
 
-    // @ts-expect-error
     eventsEngine.off($element, mouseWheelEvent);
 
     if (devices.real().deviceType !== 'desktop') {
@@ -573,7 +571,6 @@ const TagBox = (SelectBox as any).inherit({
   _renderPreventBlurOnInputClick() {
     const eventName = addNamespace('mousedown', 'dxTagBox');
 
-    // @ts-expect-error
     eventsEngine.off(this._inputWrapper(), eventName);
     eventsEngine.on(this._inputWrapper(), eventName, (e) => {
       if (e.target !== this._input()[0] && this._isFocused()) {
@@ -702,7 +699,6 @@ const TagBox = (SelectBox as any).inherit({
       $calculationElement.insertAfter($input);
       width = getOuterWidth($calculationElement) + cursorWidth;
 
-      // @ts-expect-error
       $calculationElement.remove();
     } else if (!value) {
       size = 1;
@@ -1068,7 +1064,6 @@ const TagBox = (SelectBox as any).inherit({
         const tagData = $tag.data(TAGBOX_TAG_DATA_KEY);
 
         if (!values?.includes(tagData)) {
-          // @ts-expect-error
           $tag.remove();
         }
       });
