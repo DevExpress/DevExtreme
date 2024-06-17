@@ -1,20 +1,20 @@
 const EditDecoratorMenuHelperMixin = {
 
-    _menuEnabled: function() {
-        return !!this._menuItems().length;
-    },
+  _menuEnabled() {
+    return !!this._menuItems().length;
+  },
 
-    _menuItems: function() {
-        return this._list.option('menuItems');
-    },
+  _menuItems() {
+    return this._list.option('menuItems');
+  },
 
-    _deleteEnabled: function() {
-        return this._list.option('allowItemDeleting');
-    },
+  _deleteEnabled() {
+    return this._list.option('allowItemDeleting');
+  },
 
-    _fireMenuAction: function($itemElement, action) {
-        this._list._itemEventHandlerByHandler($itemElement, action, {}, { excludeValidators: ['disabled', 'readOnly'] });
-    }
+  _fireMenuAction($itemElement, action) {
+    this._list._itemEventHandlerByHandler($itemElement, action, {}, { excludeValidators: ['disabled', 'readOnly'] });
+  },
 
 };
 

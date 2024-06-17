@@ -130,13 +130,15 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
       closeOnOutsideClick: false,
       hideOnOutsideClick: false,
 
-      _ignorePreventScrollEventsDeprecation: false,
-
       copyRootClassesToWrapper: false,
 
       _ignoreCopyRootClassesToWrapperDeprecation: false,
 
       _ignoreElementAttrDeprecation: false,
+
+      _ignorePreventScrollEventsDeprecation: false,
+
+      onShowing: null,
 
       onShown: null,
 
@@ -209,7 +211,21 @@ const Overlay: typeof OverlayInstance = Widget.inherit({
   ctor(element, options) {
     this.callBase(element, options);
 
+    function createWrapperAttrDeprecationInfo() {
+      return {
+        since: '21.2',
+        message: 'Use the "wrapperAttr" option instead',
+      };
+    }
+
     if (options) {
+      if (options.copyRootClassesToWrapper && !options._ignoreCopyRootClassesToWrapperDeprecation) {
+        this._logDeprecatedOptionWarning('copyRootClassesToWrapper', createWrapperAttrDeprecationInfo());
+      }
+      if (options.elementAttr && !options._ignoreElementAttrDeprecation) {
+        this._logDeprecatedOptionWarning('elementAttr', createWrapperAttrDeprecationInfo());
+      }
+
       if ('preventScrollEvents' in options && !options._ignorePreventScrollEventsDeprecation) {
         this._logDeprecatedPreventScrollEventsInfo();
       }

@@ -1,1 +1,1 @@
-import '../ui.list.edit.decorator.static';
+import '../m_list.edit.decorator.static';
