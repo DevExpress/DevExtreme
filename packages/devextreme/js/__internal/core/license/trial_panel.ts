@@ -1,5 +1,6 @@
 import {
   type CustomTrialPanelStyles,
+  isClient,
   registerCustomComponents,
   renderTrialPanel,
 } from './trial_panel.client';
@@ -9,13 +10,13 @@ export function showTrialPanel(
   version: string,
   customStyles?: CustomTrialPanelStyles,
 ): void {
-  if (typeof customElements !== 'undefined') {
+  if (isClient()) {
     renderTrialPanel(buyNowUrl, version, customStyles);
   }
 }
 
 export function registerTrialPanelComponents(customStyles?: CustomTrialPanelStyles): void {
-  if (typeof customElements !== 'undefined') {
+  if (isClient()) {
     registerCustomComponents(customStyles);
   }
 }
