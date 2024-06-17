@@ -1,11 +1,12 @@
-import $ from '../../core/renderer';
-import BaseView from './ui.calendar.base_view';
-import domAdapter from '../../core/dom_adapter';
-import { noop } from '../../core/utils/common';
-import dateUtils from '../../core/utils/date';
-import { extend } from '../../core/utils/extend';
-import dateLocalization from '../../localization/date';
-import dateSerialization from '../../core/utils/date_serialization';
+import domAdapter from '@js/core/dom_adapter';
+import $ from '@js/core/renderer';
+import { noop } from '@js/core/utils/common';
+import dateUtils from '@js/core/utils/date';
+import dateSerialization from '@js/core/utils/date_serialization';
+import { extend } from '@js/core/utils/extend';
+import dateLocalization from '@js/localization/date';
+
+import BaseView from './m_calendar.base_view';
 
 const CALENDAR_OTHER_MONTH_CLASS = 'dx-calendar-other-month';
 const CALENDAR_OTHER_VIEW_CLASS = 'dx-calendar-other-view';
@@ -14,439 +15,452 @@ const CALENDAR_WEEK_SELECTION_CLASS = 'dx-calendar-week-selection';
 
 const Views = {
 
-    'month': BaseView.inherit({
+  month: BaseView.inherit({
 
-        _getViewName: function() {
-            return 'month';
-        },
+    _getViewName() {
+      return 'month';
+    },
 
-        _getDefaultOptions: function() {
-            return extend(this.callBase(), {
-                firstDayOfWeek: 0,
-                rowCount: 6,
-                colCount: 7
-            });
-        },
+    _getCurrentDateFormat() {
+      return 'longdate';
+    },
 
-        _renderImpl: function() {
-            this.callBase();
-            this._renderHeader();
-        },
+    _getDefaultOptions() {
+      return extend(this.callBase(), {
+        firstDayOfWeek: 0,
+        rowCount: 6,
+        colCount: 7,
+      });
+    },
 
-        _renderBody: function() {
-            this.callBase();
+    _renderImpl() {
+      this.callBase();
+      this._renderHeader();
+    },
 
-            this._$table.find(`.${CALENDAR_OTHER_VIEW_CLASS}`).addClass(CALENDAR_OTHER_MONTH_CLASS);
-        },
+    _renderBody() {
+      this.callBase();
 
-        _renderFocusTarget: noop,
+      this._$table.find(`.${CALENDAR_OTHER_VIEW_CLASS}`).addClass(CALENDAR_OTHER_MONTH_CLASS);
+    },
 
-        getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'longdate');
-        },
+    _renderFocusTarget: noop,
 
-        _renderHeader: function() {
-            const $headerRow = $('<tr>');
-            const $header = $('<thead>').append($headerRow);
+    getCellAriaLabel(date) {
+      return dateLocalization.format(date, 'longdate');
+    },
 
-            this._$table.prepend($header);
+    _renderHeader() {
+      const $headerRow = $('<tr>');
+      const $header = $('<thead>').append($headerRow);
 
-            for(let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
-                this._renderHeaderCell(colIndex, $headerRow);
-            }
+      this._$table.prepend($header);
 
-            if(this.option('showWeekNumbers')) {
-                this._renderWeekHeaderCell($headerRow);
-            }
-        },
+      for (let colIndex = 0, colCount = this.option('colCount'); colIndex < colCount; colIndex++) {
+        this._renderHeaderCell(colIndex, $headerRow);
+      }
 
-        _renderHeaderCell: function(cellIndex, $headerRow) {
-            const { firstDayOfWeek } = this.option();
+      if (this.option('showWeekNumbers')) {
+        this._renderWeekHeaderCell($headerRow);
+      }
+    },
 
-            const {
-                full: fullCaption,
-                abbreviated: abbrCaption
-            } = this._getDayCaption(firstDayOfWeek + cellIndex);
-            const $cell = $('<th>')
-                .attr({
-                    scope: 'col',
-                    abbr: fullCaption
-                })
-                .text(abbrCaption);
+    _renderHeaderCell(cellIndex, $headerRow) {
+      const { firstDayOfWeek } = this.option();
 
-            $headerRow.append($cell);
-        },
+      const {
+        full: fullCaption,
+        abbreviated: abbrCaption,
+      } = this._getDayCaption(firstDayOfWeek + cellIndex);
+      const $cell = $('<th>')
+        // @ts-expect-error
+        .attr({
+          scope: 'col',
+          abbr: fullCaption,
+        })
+        .text(abbrCaption);
 
-        _renderWeekHeaderCell: function($headerRow) {
-            const $weekNumberHeaderCell = $('<th>')
-                .attr({
-                    scope: 'col',
-                    abbr: 'WeekNumber',
-                    class: 'dx-week-number-header'
-                });
+      $headerRow.append($cell);
+    },
 
-            $headerRow.prepend($weekNumberHeaderCell);
-        },
+    _renderWeekHeaderCell($headerRow) {
+      const $weekNumberHeaderCell = $('<th>')
+        // @ts-expect-error
+        .attr({
+          scope: 'col',
+          abbr: 'WeekNumber',
+          class: 'dx-week-number-header',
+        });
 
-        _renderWeekNumberCell: function(rowData) {
-            const { showWeekNumbers, cellTemplate, selectionMode, selectWeekOnClick } = this.option();
+      $headerRow.prepend($weekNumberHeaderCell);
+    },
 
-            if(!showWeekNumbers) {
-                return;
-            }
+    _renderWeekNumberCell(rowData) {
+      const {
+        showWeekNumbers, cellTemplate, selectionMode, selectWeekOnClick,
+      } = this.option();
 
-            const weekNumber = this._getWeekNumber(rowData.prevCellDate);
+      if (!showWeekNumbers) {
+        return;
+      }
 
-            const cell = domAdapter.createElement('td');
-            const $cell = $(cell);
+      const weekNumber = this._getWeekNumber(rowData.prevCellDate);
 
-            cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
+      const cell = domAdapter.createElement('td');
+      const $cell = $(cell);
 
-            if(selectionMode !== 'single' && selectWeekOnClick) {
-                $cell.addClass(CALENDAR_WEEK_SELECTION_CLASS);
-            }
+      cell.className = CALENDAR_WEEK_NUMBER_CELL_CLASS;
 
-            if(cellTemplate) {
-                cellTemplate.render(this._prepareCellTemplateData(weekNumber, -1, $cell));
-            } else {
-                cell.innerHTML = weekNumber;
-            }
+      if (selectionMode !== 'single' && selectWeekOnClick) {
+        $cell.addClass(CALENDAR_WEEK_SELECTION_CLASS);
+      }
 
-            rowData.row.prepend(cell);
+      if (cellTemplate) {
+        cellTemplate.render(this._prepareCellTemplateData(weekNumber, -1, $cell));
+      } else {
+        cell.innerHTML = weekNumber;
+      }
 
-            this.setAria({
-                'role': 'gridcell',
-                'label': `Week ${weekNumber}`,
-            }, $cell);
-        },
+      rowData.row.prepend(cell);
 
-        _getWeekNumber: function(date) {
-            const { weekNumberRule, firstDayOfWeek } = this.option();
+      this.setAria({
+        role: 'gridcell',
+        label: `Week ${weekNumber}`,
+      }, $cell);
+    },
 
-            if(weekNumberRule === 'auto') {
-                return dateUtils.getWeekNumber(date, firstDayOfWeek, firstDayOfWeek === 1 ? 'firstFourDays' : 'firstDay');
-            }
+    _getWeekNumber(date) {
+      const { weekNumberRule, firstDayOfWeek } = this.option();
 
-            return dateUtils.getWeekNumber(date, firstDayOfWeek, weekNumberRule);
-        },
+      if (weekNumberRule === 'auto') {
+        return dateUtils.getWeekNumber(date, firstDayOfWeek, firstDayOfWeek === 1 ? 'firstFourDays' : 'firstDay');
+      }
 
-        getNavigatorCaption: function() {
-            return dateLocalization.format(this.option('date'), 'monthandyear');
-        },
+      return dateUtils.getWeekNumber(date, firstDayOfWeek, weekNumberRule);
+    },
 
-        _isTodayCell: function(cellDate) {
-            const today = this.option('_todayDate')();
+    getNavigatorCaption() {
+      return dateLocalization.format(this.option('date'), 'monthandyear');
+    },
 
-            return dateUtils.sameDate(cellDate, today);
-        },
+    _isTodayCell(cellDate) {
+      const today = this.option('_todayDate')();
 
-        _isDateOutOfRange: function(cellDate) {
-            const minDate = this.option('min');
-            const maxDate = this.option('max');
+      return dateUtils.sameDate(cellDate, today);
+    },
 
-            return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
-        },
+    _isDateOutOfRange(cellDate) {
+      const minDate = this.option('min');
+      const maxDate = this.option('max');
 
-        _isOtherView: function(cellDate) {
-            return cellDate.getMonth() !== this.option('date').getMonth();
-        },
+      return !dateUtils.dateInRange(cellDate, minDate, maxDate, 'date');
+    },
 
-        _isStartDayOfMonth: function(cellDate) {
-            return dateUtils.sameDate(cellDate, dateUtils.getFirstMonthDate(this.option('date')));
-        },
+    _isOtherView(cellDate) {
+      return cellDate.getMonth() !== this.option('date').getMonth();
+    },
 
-        _isEndDayOfMonth: function(cellDate) {
-            return dateUtils.sameDate(cellDate, dateUtils.getLastMonthDate(this.option('date')));
-        },
+    _isStartDayOfMonth(cellDate) {
+      return dateUtils.sameDate(cellDate, dateUtils.getFirstMonthDate(this.option('date')));
+    },
 
-        _getCellText: function(cellDate) {
-            return dateLocalization.format(cellDate, 'd');
-        },
+    _isEndDayOfMonth(cellDate) {
+      return dateUtils.sameDate(cellDate, dateUtils.getLastMonthDate(this.option('date')));
+    },
 
-        _getDayCaption: function(day) {
-            const daysInWeek = this.option('colCount');
-            const dayIndex = day % daysInWeek;
+    _getCellText(cellDate) {
+      return dateLocalization.format(cellDate, 'd');
+    },
 
-            return {
-                full: dateLocalization.getDayNames()[dayIndex],
-                abbreviated: dateLocalization.getDayNames('abbreviated')[dayIndex]
-            };
-        },
+    _getDayCaption(day) {
+      const daysInWeek = this.option('colCount');
+      const dayIndex = day % daysInWeek;
 
-        _getFirstCellData: function() {
-            const { firstDayOfWeek } = this.option();
+      return {
+        full: dateLocalization.getDayNames()[dayIndex],
+        abbreviated: dateLocalization.getDayNames('abbreviated')[dayIndex],
+      };
+    },
 
-            const firstDay = dateUtils.getFirstMonthDate(this.option('date'));
-            let firstMonthDayOffset = firstDayOfWeek - firstDay.getDay();
-            const daysInWeek = this.option('colCount');
+    _getFirstCellData() {
+      const { firstDayOfWeek } = this.option();
 
-            if(firstMonthDayOffset >= 0) {
-                firstMonthDayOffset -= daysInWeek;
-            }
+      const firstDay = dateUtils.getFirstMonthDate(this.option('date'));
+      // @ts-expect-error
+      let firstMonthDayOffset = firstDayOfWeek - firstDay.getDay();
+      const daysInWeek = this.option('colCount');
 
-            firstDay.setDate(firstDay.getDate() + firstMonthDayOffset);
-            return firstDay;
-        },
+      if (firstMonthDayOffset >= 0) {
+        firstMonthDayOffset -= daysInWeek;
+      }
 
-        _getNextCellData: function(date) {
-            date = new Date(date);
-            date.setDate(date.getDate() + 1);
-            return date;
-        },
+      // @ts-expect-error
+      firstDay.setDate(firstDay.getDate() + firstMonthDayOffset);
+      return firstDay;
+    },
 
-        _getCellByDate: function(date) {
-            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(date, dateUtils.getShortDateFormat())}']`);
-        },
+    _getNextCellData(date) {
+      date = new Date(date);
+      date.setDate(date.getDate() + 1);
+      return date;
+    },
 
-        isBoundary: function(date) {
-            return dateUtils.sameMonthAndYear(date, this.option('min')) || dateUtils.sameMonthAndYear(date, this.option('max'));
-        },
+    _getCellByDate(date) {
+      return this._$table.find(`td[data-value='${dateSerialization.serializeDate(date, dateUtils.getShortDateFormat())}']`);
+    },
 
-        _getDefaultDisabledDatesHandler: function(disabledDates) {
-            return function(args) {
-                const isDisabledDate = disabledDates.some(function(item) {
-                    return dateUtils.sameDate(item, args.date);
-                });
+    isBoundary(date) {
+      return dateUtils.sameMonthAndYear(date, this.option('min')) || dateUtils.sameMonthAndYear(date, this.option('max'));
+    },
 
-                if(isDisabledDate) {
-                    return true;
-                }
-            };
+    _getDefaultDisabledDatesHandler(disabledDates) {
+      // @ts-expect-error
+      return function (args) {
+        const isDisabledDate = disabledDates.some((item) => dateUtils.sameDate(item, args.date));
+
+        if (isDisabledDate) {
+          return true;
         }
-    }),
+      };
+    },
+  }),
 
-    'year': BaseView.inherit({
+  year: BaseView.inherit({
 
-        _getViewName: function() {
-            return 'year';
-        },
+    _getViewName() {
+      return 'year';
+    },
 
-        _isTodayCell: function(cellDate) {
-            const today = this.option('_todayDate')();
+    _getCurrentDateFormat() {
+      return 'monthandyear';
+    },
 
-            return dateUtils.sameMonthAndYear(cellDate, today);
-        },
+    _isTodayCell(cellDate) {
+      const today = this.option('_todayDate')();
 
-        _isDateOutOfRange: function(cellDate) {
-            return !dateUtils.dateInRange(cellDate, dateUtils.getFirstMonthDate(this.option('min')), dateUtils.getLastMonthDate(this.option('max')));
-        },
+      return dateUtils.sameMonthAndYear(cellDate, today);
+    },
 
-        _isOtherView: function() {
-            return false;
-        },
+    _isDateOutOfRange(cellDate) {
+      return !dateUtils.dateInRange(cellDate, dateUtils.getFirstMonthDate(this.option('min')), dateUtils.getLastMonthDate(this.option('max')));
+    },
 
-        _isStartDayOfMonth: function() {
-            return false;
-        },
+    _isOtherView() {
+      return false;
+    },
 
-        _isEndDayOfMonth: function() {
-            return false;
-        },
+    _isStartDayOfMonth() {
+      return false;
+    },
 
-        _getCellText: function(cellDate) {
-            return dateLocalization.getMonthNames('abbreviated')[cellDate.getMonth()];
-        },
+    _isEndDayOfMonth() {
+      return false;
+    },
 
-        _getFirstCellData: function() {
-            const currentDate = this.option('date');
-            const data = new Date(currentDate);
+    _getCellText(cellDate) {
+      return dateLocalization.getMonthNames('abbreviated')[cellDate.getMonth()];
+    },
 
-            data.setDate(1);
-            data.setMonth(0);
+    _getFirstCellData() {
+      const currentDate = this.option('date');
+      const data = new Date(currentDate);
 
-            return data;
-        },
+      data.setDate(1);
+      data.setMonth(0);
 
-        _getNextCellData: function(date) {
-            date = new Date(date);
-            date.setMonth(date.getMonth() + 1);
-            return date;
-        },
+      return data;
+    },
 
-        _getCellByDate: function(date) {
-            const foundDate = new Date(date);
-            foundDate.setDate(1);
+    _getNextCellData(date) {
+      date = new Date(date);
+      date.setMonth(date.getMonth() + 1);
+      return date;
+    },
 
-            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
-        },
+    _getCellByDate(date) {
+      const foundDate = new Date(date);
+      foundDate.setDate(1);
 
-        getCellAriaLabel: function(date) {
-            return dateLocalization.format(date, 'monthandyear');
-        },
+      return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+    },
 
-        getNavigatorCaption: function() {
-            return dateLocalization.format(this.option('date'), 'yyyy');
-        },
+    getCellAriaLabel(date) {
+      return dateLocalization.format(date, 'monthandyear');
+    },
 
-        isBoundary: function(date) {
-            return dateUtils.sameYear(date, this.option('min')) || dateUtils.sameYear(date, this.option('max'));
-        },
+    getNavigatorCaption() {
+      return dateLocalization.format(this.option('date'), 'yyyy');
+    },
 
-        _renderWeekNumberCell: noop,
-    }),
+    isBoundary(date) {
+      return dateUtils.sameYear(date, this.option('min')) || dateUtils.sameYear(date, this.option('max'));
+    },
 
-    'decade': BaseView.inherit({
+    _renderWeekNumberCell: noop,
+  }),
 
-        _getViewName: function() {
-            return 'decade';
-        },
+  decade: BaseView.inherit({
 
-        _isTodayCell: function(cellDate) {
-            const today = this.option('_todayDate')();
+    _getViewName() {
+      return 'decade';
+    },
 
-            return dateUtils.sameYear(cellDate, today);
-        },
+    _isTodayCell(cellDate) {
+      const today = this.option('_todayDate')();
 
-        _isDateOutOfRange: function(cellDate) {
-            const min = this.option('min');
-            const max = this.option('max');
+      return dateUtils.sameYear(cellDate, today);
+    },
 
-            return !dateUtils.dateInRange(cellDate.getFullYear(), min && min.getFullYear(), max && max.getFullYear());
-        },
+    _isDateOutOfRange(cellDate) {
+      const min = this.option('min');
+      const max = this.option('max');
 
-        _isOtherView: function(cellDate) {
-            const date = new Date(cellDate);
-            date.setMonth(1);
+      return !dateUtils.dateInRange(cellDate.getFullYear(), min && min.getFullYear(), max && max.getFullYear());
+    },
 
-            return !dateUtils.sameDecade(date, this.option('date'));
-        },
+    _isOtherView(cellDate) {
+      const date = new Date(cellDate);
+      date.setMonth(1);
 
-        _isStartDayOfMonth: function() {
-            return false;
-        },
+      return !dateUtils.sameDecade(date, this.option('date'));
+    },
 
-        _isEndDayOfMonth: function() {
-            return false;
-        },
+    _isStartDayOfMonth() {
+      return false;
+    },
 
-        _getCellText: function(cellDate) {
-            return dateLocalization.format(cellDate, 'yyyy');
-        },
+    _isEndDayOfMonth() {
+      return false;
+    },
 
-        _getFirstCellData: function() {
-            const year = dateUtils.getFirstYearInDecade(this.option('date')) - 1;
-            return dateUtils.createDateWithFullYear(year, 0, 1);
-        },
+    _getCellText(cellDate) {
+      return dateLocalization.format(cellDate, 'yyyy');
+    },
 
-        _getNextCellData: function(date) {
-            date = new Date(date);
-            date.setFullYear(date.getFullYear() + 1);
-            return date;
-        },
+    _getFirstCellData() {
+      const year = dateUtils.getFirstYearInDecade(this.option('date')) - 1;
+      return dateUtils.createDateWithFullYear(year, 0, 1);
+    },
 
-        getNavigatorCaption: function() {
-            const currentDate = this.option('date');
-            const firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate);
-            const startDate = new Date(currentDate);
-            const endDate = new Date(currentDate);
+    _getNextCellData(date) {
+      date = new Date(date);
+      date.setFullYear(date.getFullYear() + 1);
+      return date;
+    },
 
-            startDate.setFullYear(firstYearInDecade);
-            endDate.setFullYear(firstYearInDecade + 9);
+    getNavigatorCaption() {
+      const currentDate = this.option('date');
+      const firstYearInDecade = dateUtils.getFirstYearInDecade(currentDate);
+      const startDate = new Date(currentDate);
+      const endDate = new Date(currentDate);
 
-            return dateLocalization.format(startDate, 'yyyy') + '-' + dateLocalization.format(endDate, 'yyyy');
-        },
+      startDate.setFullYear(firstYearInDecade);
+      endDate.setFullYear(firstYearInDecade + 9);
 
-        _isValueOnCurrentView: function(currentDate, value) {
-            return dateUtils.sameDecade(currentDate, value);
-        },
+      return `${dateLocalization.format(startDate, 'yyyy')}-${dateLocalization.format(endDate, 'yyyy')}`;
+    },
 
-        _getCellByDate: function(date) {
-            const foundDate = new Date(date);
-            foundDate.setDate(1);
-            foundDate.setMonth(0);
+    _isValueOnCurrentView(currentDate, value) {
+      return dateUtils.sameDecade(currentDate, value);
+    },
 
-            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
-        },
+    _getCellByDate(date) {
+      const foundDate = new Date(date);
+      foundDate.setDate(1);
+      foundDate.setMonth(0);
 
-        isBoundary: function(date) {
-            return dateUtils.sameDecade(date, this.option('min')) || dateUtils.sameDecade(date, this.option('max'));
-        },
+      return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+    },
 
-        _renderWeekNumberCell: noop,
-    }),
+    isBoundary(date) {
+      return dateUtils.sameDecade(date, this.option('min')) || dateUtils.sameDecade(date, this.option('max'));
+    },
 
-    'century': BaseView.inherit({
+    _renderWeekNumberCell: noop,
+  }),
 
-        _getViewName: function() {
-            return 'century';
-        },
+  century: BaseView.inherit({
 
-        _isTodayCell: function(cellDate) {
-            const today = this.option('_todayDate')();
+    _getViewName() {
+      return 'century';
+    },
 
-            return dateUtils.sameDecade(cellDate, today);
-        },
+    _isTodayCell(cellDate) {
+      const today = this.option('_todayDate')();
 
-        _isDateOutOfRange: function(cellDate) {
-            const decade = dateUtils.getFirstYearInDecade(cellDate);
-            const minDecade = dateUtils.getFirstYearInDecade(this.option('min'));
-            const maxDecade = dateUtils.getFirstYearInDecade(this.option('max'));
+      return dateUtils.sameDecade(cellDate, today);
+    },
 
-            return !dateUtils.dateInRange(decade, minDecade, maxDecade);
-        },
+    _isDateOutOfRange(cellDate) {
+      const decade = dateUtils.getFirstYearInDecade(cellDate);
+      const minDecade = dateUtils.getFirstYearInDecade(this.option('min'));
+      const maxDecade = dateUtils.getFirstYearInDecade(this.option('max'));
 
-        _isOtherView: function(cellDate) {
-            const date = new Date(cellDate);
-            date.setMonth(1);
+      return !dateUtils.dateInRange(decade, minDecade, maxDecade);
+    },
 
-            return !dateUtils.sameCentury(date, this.option('date'));
-        },
+    _isOtherView(cellDate) {
+      const date = new Date(cellDate);
+      date.setMonth(1);
 
-        _isStartDayOfMonth: function() {
-            return false;
-        },
+      return !dateUtils.sameCentury(date, this.option('date'));
+    },
 
-        _isEndDayOfMonth: function() {
-            return false;
-        },
+    _isStartDayOfMonth() {
+      return false;
+    },
 
-        _getCellText: function(cellDate) {
-            const startDate = dateLocalization.format(cellDate, 'yyyy');
-            const endDate = new Date(cellDate);
+    _isEndDayOfMonth() {
+      return false;
+    },
 
-            endDate.setFullYear(endDate.getFullYear() + 9);
+    _getCellText(cellDate) {
+      const startDate = dateLocalization.format(cellDate, 'yyyy');
+      const endDate = new Date(cellDate);
 
-            return startDate + ' - ' + dateLocalization.format(endDate, 'yyyy');
-        },
+      endDate.setFullYear(endDate.getFullYear() + 9);
 
-        _getFirstCellData: function() {
-            const decade = dateUtils.getFirstDecadeInCentury(this.option('date')) - 10;
-            return dateUtils.createDateWithFullYear(decade, 0, 1);
-        },
+      return `${startDate} - ${dateLocalization.format(endDate, 'yyyy')}`;
+    },
 
-        _getNextCellData: function(date) {
-            date = new Date(date);
-            date.setFullYear(date.getFullYear() + 10);
-            return date;
-        },
+    _getFirstCellData() {
+      const decade = dateUtils.getFirstDecadeInCentury(this.option('date')) - 10;
+      return dateUtils.createDateWithFullYear(decade, 0, 1);
+    },
 
-        _getCellByDate: function(date) {
-            const foundDate = new Date(date);
-            foundDate.setDate(1);
-            foundDate.setMonth(0);
-            foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
+    _getNextCellData(date) {
+      date = new Date(date);
+      date.setFullYear(date.getFullYear() + 10);
+      return date;
+    },
 
-            return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
-        },
+    _getCellByDate(date) {
+      const foundDate = new Date(date);
+      foundDate.setDate(1);
+      foundDate.setMonth(0);
+      foundDate.setFullYear(dateUtils.getFirstYearInDecade(foundDate));
 
-        getNavigatorCaption: function() {
-            const currentDate = this.option('date');
-            const firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate);
-            const startDate = new Date(currentDate);
-            const endDate = new Date(currentDate);
+      return this._$table.find(`td[data-value='${dateSerialization.serializeDate(foundDate, dateUtils.getShortDateFormat())}']`);
+    },
 
-            startDate.setFullYear(firstDecadeInCentury);
-            endDate.setFullYear(firstDecadeInCentury + 99);
+    getNavigatorCaption() {
+      const currentDate = this.option('date');
+      const firstDecadeInCentury = dateUtils.getFirstDecadeInCentury(currentDate);
+      const startDate = new Date(currentDate);
+      const endDate = new Date(currentDate);
 
-            return dateLocalization.format(startDate, 'yyyy') + '-' + dateLocalization.format(endDate, 'yyyy');
-        },
+      startDate.setFullYear(firstDecadeInCentury);
+      endDate.setFullYear(firstDecadeInCentury + 99);
 
-        isBoundary: function(date) {
-            return dateUtils.sameCentury(date, this.option('min')) || dateUtils.sameCentury(date, this.option('max'));
-        },
+      return `${dateLocalization.format(startDate, 'yyyy')}-${dateLocalization.format(endDate, 'yyyy')}`;
+    },
 
-        _renderWeekNumberCell: noop,
-    })
+    isBoundary(date) {
+      return dateUtils.sameCentury(date, this.option('min')) || dateUtils.sameCentury(date, this.option('max'));
+    },
+
+    _renderWeekNumberCell: noop,
+  }),
 };
 
 export default Views;
