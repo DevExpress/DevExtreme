@@ -3,7 +3,7 @@ name: DevExtreme Wrappers Tests
 on:
   pull_request:
   push:
-    branches: [24_1]
+    branches: [24_2]
 
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
