@@ -28,7 +28,7 @@ import Resizable from '../resizable';
 import Button from '../button';
 import Overlay from '../overlay/ui.overlay';
 import { isMaterialBased, isMaterial, isFluent } from '../themes';
-import '../toolbar/ui.toolbar.base';
+import '../../__internal/ui/toolbar/m_toolbar.base';
 import resizeObserverSingleton from '../../core/resize_observer';
 import * as zIndexPool from '../../__internal/ui/overlay/m_z_index';
 import { PopupPositionController } from './popup_position_controller';
