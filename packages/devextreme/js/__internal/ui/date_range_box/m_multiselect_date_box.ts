@@ -1,227 +1,287 @@
-import $ from '../../core/renderer';
-import DateBox from '../date_box/ui.date_box.mask';
-import RangeCalendarStrategy from './strategy/rangeCalendar';
-import { addNamespace } from '../../events/utils';
-import eventsEngine from '../../events/core/events_engine';
-import { getDeserializedDate, monthDifference } from './ui.date_range.utils';
-import { getWidth } from '../../core/utils/size';
+// eslint-disable-next-line max-classes-per-file
+import $ from '@js/core/renderer';
+import { getWidth } from '@js/core/utils/size';
+import eventsEngine from '@js/events/core/events_engine';
+import { addNamespace } from '@js/events/utils';
+import type { Properties } from '@js/ui/date_box';
+import DateBox, { DateBoxBase } from '@js/ui/date_box';
+import type Popup from '@js/ui/popup';
+
+import { getDeserializedDate, monthDifference } from './m_date_range.utils';
+import type DateRangeBox from './m_date_range_box';
+import RangeCalendarStrategy from './strategy/m_rangeCalendar';
 
 const START_DATEBOX_CLASS = 'dx-start-datebox';
-class MultiselectDateBox extends DateBox {
-    _initStrategy() {
-        this._strategy = new RangeCalendarStrategy(this);
+
+export interface MultiselectDateBoxProperties extends Properties {
+  _dateRangeBoxInstance: DateRangeBox;
+  _showValidationMessage?: boolean;
+}
+
+declare class ExtendedDateBox extends DateBoxBase<MultiselectDateBoxProperties> {
+  reset(value?: Date | number | string | null): void;
+}
+
+const TypedDateBox: typeof ExtendedDateBox = DateBox as any;
+
+class MultiselectDateBox extends TypedDateBox {
+  // Temporary solution. Move to component level
+  public NAME!: string;
+
+  private _skipIsValidOptionChange?: boolean;
+
+  private _strategy!: RangeCalendarStrategy;
+
+  private readonly _popup?: Popup;
+
+  private readonly _label: any;
+
+  _initStrategy(): void {
+    this._strategy = new RangeCalendarStrategy(this);
+  }
+
+  _initMarkup(): void {
+    // @ts-expect-error
+    super._initMarkup();
+
+    this._renderInputClickEvent();
+  }
+
+  _renderInputClickEvent(): void {
+    const clickEventName = addNamespace('dxclick', this.NAME);
+    // @ts-expect-error
+    eventsEngine.off(this._input(), clickEventName);
+    // @ts-expect-error
+    eventsEngine.on(this._input(), clickEventName, (e) => {
+      this._processValueChange(e);
+    });
+  }
+
+  _applyButtonHandler({ event }): void {
+    const strategy = this.getStrategy();
+    const value = strategy.getValue();
+
+    strategy.getDateRangeBox().updateValue(value, event);
+
+    this.close();
+    this.option('focusStateEnabled') && this.focus();
+  }
+
+  _openHandler(e): void {
+    if (this.getStrategy().getDateRangeBox().option('opened')) {
+      return;
     }
 
-    _initMarkup() {
-        super._initMarkup();
+    // @ts-expect-error
+    super._openHandler(e);
+  }
 
-        this._renderInputClickEvent();
+  _renderOpenedState() {
+    const { opened } = this.option();
+
+    this._getDateRangeBox().option('opened', opened);
+
+    if (this._isStartDateBox()) {
+      if (opened) {
+        // @ts-expect-error
+        this._createPopup();
+      }
+
+      // @ts-expect-error
+      this._getDateRangeBox()._popupContentIdentifier(this._getControlsAria());
+
+      // @ts-expect-error
+      this._setPopupOption('visible', opened);
+
+      this._getDateRangeBox()._setAriaAttributes();
+    }
+  }
+
+  _getDateRangeBox(): DateRangeBox {
+    return this.getStrategy().getDateRangeBox();
+  }
+
+  _isStartDateBox(): boolean {
+    return $(this.element()).hasClass(START_DATEBOX_CLASS);
+  }
+
+  _renderPopup(): void {
+    // @ts-expect-error
+    super._renderPopup();
+
+    if (this._isStartDateBox()) {
+      // @ts-expect-error
+      this._getDateRangeBox()._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
+    }
+  }
+
+  _popupShownHandler(): void {
+    // @ts-expect-error
+    super._popupShownHandler();
+    // @ts-expect-error
+    this._getDateRangeBox()._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
+  }
+
+  _popupHiddenHandler(): void {
+    // @ts-expect-error
+    super._popupHiddenHandler();
+
+    // @ts-expect-error
+    this._getDateRangeBox()._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
+  }
+
+  _focusInHandler(e) {
+    // @ts-expect-error
+    super._focusInHandler(e);
+    this._processValueChange(e);
+  }
+
+  _popupTabHandler(e): void {
+    const $element = $(e.target);
+
+    // @ts-expect-error
+    if (e.shiftKey && $element.is(this._getFirstPopupElement())) {
+      this._getDateRangeBox().getEndDateBox().focus();
+      e.preventDefault();
     }
 
-    _renderInputClickEvent() {
-        const clickEventName = addNamespace('dxclick', this.NAME);
-        eventsEngine.off(this._input(), clickEventName);
-        eventsEngine.on(this._input(), clickEventName, (e) => {
-            this._processValueChange(e);
-        });
+    // @ts-expect-error
+    if (!e.shiftKey && $element.is(this._getLastPopupElement())) {
+      this._getDateRangeBox().getStartDateBox().focus();
+      e.preventDefault();
+    }
+  }
+
+  _processValueChange(e): void {
+    const { target } = e;
+    const dateRangeBox = this._getDateRangeBox();
+    const [startDateInput, endDateInput] = dateRangeBox.field();
+    if ($(target).is($(startDateInput))) {
+      dateRangeBox.option('_currentSelection', 'startDate');
+    }
+    if ($(target).is($(endDateInput))) {
+      dateRangeBox.option('_currentSelection', 'endDate');
     }
 
-    _applyButtonHandler({ event }) {
-        const value = this._strategy.getValue();
-
-        this._strategy.dateRangeBox.updateValue(value, event);
-
-        this.close();
-        this.option('focusStateEnabled') && this.focus();
+    if (!dateRangeBox.getStartDateBox().getStrategy().getWidget()) {
+      return;
     }
 
-    _openHandler(e) {
-        if(this._strategy.dateRangeBox.option('opened')) {
-            return;
+    const calendar = dateRangeBox.getStartDateBox().getStrategy().getWidget();
+    const { value } = calendar.option();
+    const startDate = getDeserializedDate(value?.[0]);
+    const endDate = getDeserializedDate(value?.[1]);
+
+    if ($(target).is($(startDateInput))) {
+      if (startDate) {
+        // @ts-expect-error
+        calendar._skipNavigate = true;
+        calendar.option('currentDate', startDate);
+      }
+      this.getStrategy().setActiveStartDateBox();
+      calendar.option('_currentSelection', 'startDate');
+
+      if (dateRangeBox.option('disableOutOfRangeSelection')) {
+        // @ts-expect-error
+        calendar._setViewsMaxOption(endDate);
+      }
+    }
+
+    if ($(target).is($(endDateInput))) {
+      if (endDate) {
+        if (startDate && monthDifference(startDate, endDate) > 1) {
+          // @ts-expect-error
+          calendar.option('currentDate', calendar._getDateByOffset(null, endDate));
+          // @ts-expect-error
+          calendar.option('currentDate', calendar._getDateByOffset(-1, endDate));
         }
 
-        super._openHandler(e);
+        // @ts-expect-error
+        calendar._skipNavigate = true;
+        calendar.option('currentDate', endDate);
+      }
+      dateRangeBox.getStartDateBox().getStrategy().setActiveEndDateBox();
+      calendar.option('_currentSelection', 'endDate');
+
+      if (dateRangeBox.option('disableOutOfRangeSelection')) {
+        // @ts-expect-error
+        calendar._setViewsMinOption(startDate);
+      }
+    }
+  }
+
+  _invalidate(): void {
+    super._invalidate();
+
+    // @ts-expect-error
+    this._refreshStrategy();
+  }
+
+  _updateInternalValidationState(isValid, validationMessage): void {
+    this.option({
+      isValid,
+      validationError: isValid ? null : {
+        message: validationMessage,
+      },
+    });
+  }
+
+  _recallInternalValidation(value): void {
+    // @ts-expect-error
+    this._applyInternalValidation(value);
+  }
+
+  _isTargetOutOfComponent(target) {
+    const $dateRangeBox = $(this._getDateRangeBox().element());
+    const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
+
+    // @ts-expect-error
+    return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
+  }
+
+  _updateLabelWidth(): void {
+    const $beforeButtonsContainer = this._getDateRangeBox()._$beforeButtonsContainer;
+    const { labelMode } = this.option();
+
+    if (labelMode === 'outside' && $beforeButtonsContainer && this._isStartDateBox()) {
+      this._label._updateLabelTransform(getWidth($beforeButtonsContainer));
+      return;
     }
 
-    _renderOpenedState() {
-        const { opened } = this.option();
+    // @ts-expect-error
+    super._updateLabelWidth();
+  }
 
-        this._getDateRangeBox().option('opened', opened);
+  _optionChanged(args): void {
+    switch (args.name) {
+      case 'isValid': {
+        const isValid = this._getDateRangeBox().option('isValid');
 
-        if(this._isStartDateBox()) {
-            if(opened) {
-                this._createPopup();
-            }
-
-            this._getDateRangeBox()._popupContentIdentifier(this._getControlsAria());
-
-            this._setPopupOption('visible', opened);
-
-            this._getDateRangeBox()._setAriaAttributes();
-        }
-    }
-
-    _getDateRangeBox() {
-        return this._strategy.dateRangeBox;
-    }
-
-    _isStartDateBox() {
-        return this.$element().hasClass(START_DATEBOX_CLASS);
-    }
-
-    _renderPopup() {
-        super._renderPopup();
-
-        if(this._isStartDateBox()) {
-            const dateRangeBox = this._strategy.dateRangeBox;
-            dateRangeBox._bindInnerWidgetOptions(this._popup, 'dropDownOptions');
-        }
-    }
-
-    _popupShownHandler() {
-        super._popupShownHandler();
-
-        this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
-    }
-
-    _popupHiddenHandler() {
-        super._popupHiddenHandler();
-
-        this._strategy.dateRangeBox._validationMessage?.option('positionSide', this._getValidationMessagePositionSide());
-    }
-
-    _focusInHandler(e) {
-        super._focusInHandler(e);
-        this._processValueChange(e);
-    }
-
-    _popupTabHandler(e) {
-        const $element = $(e.target);
-
-        if(e.shiftKey && $element.is(this._getFirstPopupElement())) {
-            this._strategy.dateRangeBox.getEndDateBox().focus();
-            e.preventDefault();
-        }
-
-        if(!e.shiftKey && $element.is(this._getLastPopupElement())) {
-            this._strategy.dateRangeBox.getStartDateBox().focus();
-            e.preventDefault();
-        }
-    }
-
-    _processValueChange(e) {
-        const { target } = e;
-        const [startDateInput, endDateInput] = this._strategy.dateRangeBox.field();
-
-        if($(target).is(startDateInput)) {
-            this._strategy.dateRangeBox.option('_currentSelection', 'startDate');
-        }
-        if($(target).is(endDateInput)) {
-            this._strategy.dateRangeBox.option('_currentSelection', 'endDate');
+        if (this._skipIsValidOptionChange || isValid === args.value) {
+          // @ts-expect-error
+          super._optionChanged(args);
+          return;
         }
 
-        if(!this._strategy.dateRangeBox.getStartDateBox()._strategy._widget) {
-            return;
-        }
-
-        const calendar = this._strategy.dateRangeBox.getStartDateBox()._strategy._widget;
-        const value = calendar.option('value');
-        const startDate = getDeserializedDate(value[0]);
-        const endDate = getDeserializedDate(value[1]);
-
-        if($(target).is(startDateInput)) {
-            if(startDate) {
-                calendar._skipNavigate = true;
-                calendar.option('currentDate', startDate);
-            }
-            this._strategy.setActiveStartDateBox();
-            calendar.option('_currentSelection', 'startDate');
-
-            if(this._strategy.dateRangeBox.option('disableOutOfRangeSelection')) {
-                calendar._setViewsMaxOption(endDate);
-            }
-        }
-        if($(target).is(endDateInput)) {
-            if(endDate) {
-                if(startDate && monthDifference(startDate, endDate) > 1) {
-                    calendar.option('currentDate', calendar._getDateByOffset(null, endDate));
-                    calendar.option('currentDate', calendar._getDateByOffset(-1, endDate));
-                }
-
-                calendar._skipNavigate = true;
-                calendar.option('currentDate', endDate);
-
-            }
-            this._strategy.dateRangeBox.getStartDateBox()._strategy.setActiveEndDateBox();
-            calendar.option('_currentSelection', 'endDate');
-
-            if(this._strategy.dateRangeBox.option('disableOutOfRangeSelection')) {
-                calendar._setViewsMinOption(startDate);
-            }
-        }
+        this._skipIsValidOptionChange = true;
+        this.option({ isValid });
+        this._skipIsValidOptionChange = false;
+        break;
+      }
+      default:
+        // @ts-expect-error
+        super._optionChanged(args);
+        break;
     }
+  }
 
-    _invalidate() {
-        super._invalidate();
-        this._refreshStrategy();
-    }
+  close(): void {
+    this.getStrategy().getDateRangeBox().getStartDateBox().option('opened', false);
+  }
 
-    _updateInternalValidationState(isValid, validationMessage) {
-        this.option({
-            isValid,
-            validationError: isValid ? null : {
-                message: validationMessage
-            }
-        });
-    }
-
-    _recallInternalValidation(value) {
-        this._applyInternalValidation(value);
-    }
-
-    _isTargetOutOfComponent(target) {
-        const $dateRangeBox = this._strategy.dateRangeBox.$element();
-        const isTargetOutOfDateRangeBox = $(target).closest($dateRangeBox).length === 0;
-
-        return super._isTargetOutOfComponent(target) && isTargetOutOfDateRangeBox;
-    }
-
-    _updateLabelWidth() {
-        const $beforeButtonsContainer = this._strategy.dateRangeBox._$beforeButtonsContainer;
-        const { labelMode } = this.option();
-
-        if(labelMode === 'outside' && $beforeButtonsContainer && this._isStartDateBox()) {
-            this._label._updateLabelTransform(getWidth($beforeButtonsContainer));
-            return;
-        }
-
-        super._updateLabelWidth();
-    }
-
-    _optionChanged(args) {
-        switch(args.name) {
-            case 'isValid': {
-                const isValid = this._strategy.dateRangeBox.option('isValid');
-
-                if(this._skipIsValidOptionChange || isValid === args.value) {
-                    super._optionChanged(args);
-                    return;
-                }
-
-                this._skipIsValidOptionChange = true;
-                this.option({ isValid });
-                this._skipIsValidOptionChange = false;
-                break;
-            }
-            default:
-                super._optionChanged(args);
-                break;
-        }
-    }
-
-    close() {
-        this._strategy.getDateRangeBox().getStartDateBox().option('opened', false);
-    }
+  getStrategy(): RangeCalendarStrategy {
+    return this._strategy;
+  }
 }
 
 export default MultiselectDateBox;

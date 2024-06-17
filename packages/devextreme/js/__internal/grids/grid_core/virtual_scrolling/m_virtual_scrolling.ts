@@ -1482,7 +1482,6 @@ export const rowsView = (Base: ModuleType<RowsView>) => class VirtualScrollingRo
         // @ts-expect-error
         $rowElement.next(),
       );
-      // @ts-expect-error
       $rowElement.remove();
     });
   }

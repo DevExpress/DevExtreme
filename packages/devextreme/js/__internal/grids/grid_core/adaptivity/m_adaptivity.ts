@@ -257,7 +257,6 @@ export class AdaptiveColumnsController extends modules.ViewController {
           isItemEdited: that._isItemEdited(item),
           value: cellOptions.row.values[columnIndex],
         }), () => {
-          // @ts-expect-error
           $container.contents().remove();
           $container.removeClass(ADAPTIVE_ITEM_TEXT_CLASS);
           renderFormTemplate();

@@ -2109,7 +2109,6 @@ export class KeyboardNavigationController extends modules.ViewController {
           $input.val(inputValue);
 
           const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
-          // @ts-expect-error
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           // @ts-expect-error
           eventsEngine.one($widgetContainer, 'focusout', () => {
