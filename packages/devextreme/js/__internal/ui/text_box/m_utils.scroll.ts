@@ -29,7 +29,7 @@ const allowScroll = function (container, delta, shiftKey?: boolean) {
   }
 };
 
-const prepareScrollData = function (container, validateTarget) {
+const prepareScrollData = function (container, validateTarget?: any) {
   const $container = $(container);
   const isCorrectTarget = function (eventTarget) {
     return validateTarget ? $(eventTarget).is(container) : true;

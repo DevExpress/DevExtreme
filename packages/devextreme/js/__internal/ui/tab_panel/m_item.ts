@@ -1,5 +1,5 @@
 import { noop } from '@js/core/utils/common';
-import CollectionWidgetItem from '@js/ui/collection/item';
+import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 export default class TabPanelItem extends CollectionWidgetItem {
   _renderWatchers() {
