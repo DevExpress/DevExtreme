@@ -6,6 +6,7 @@ import Resizable from 'devextreme-react/resizable';
 import CheckBox from 'devextreme-react/check-box';
 import DropDownButton from 'devextreme-react/drop-down-button';
 import SelectBox from 'devextreme-react/select-box';
+import themes from 'devextreme/ui/themes';
 import notify from 'devextreme/ui/notify';
 import 'devextreme/ui/select_box';
 import {
@@ -21,6 +22,7 @@ import {
   textStyleInputAttr,
 } from './data.js';
 
+const stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 const lineHeightDefault = lineHeights[1].lineHeight;
 const textAlignDefault = [textAlignItems[0].alignment];
 const fontSizeDefault = fontSizes[2].size;
@@ -149,6 +151,7 @@ function App() {
             <Item location="before">
               <Button
                 icon="undo"
+                stylingMode={stylingMode}
                 onClick={onUndoButtonClick}
               ></Button>
             </Item>
@@ -156,6 +159,7 @@ function App() {
             <Item location="before">
               <Button
                 icon="redo"
+                stylingMode={stylingMode}
                 onClick={onRedoButtonClick}
               ></Button>
             </Item>
@@ -177,6 +181,7 @@ function App() {
                 displayExpr="text"
                 keyExpr="size"
                 useSelectMode={true}
+                stylingMode={stylingMode}
                 items={fontSizes}
                 selectedItemKey={fontSize}
                 itemRender={renderFontSize}
@@ -194,6 +199,7 @@ function App() {
                 displayExpr="text"
                 keyExpr="lineHeight"
                 useSelectMode={true}
+                stylingMode={stylingMode}
                 items={lineHeights}
                 selectedItemKey={lineHeight}
                 onSelectionChanged={onLineHeightChanged}
@@ -291,6 +297,7 @@ function App() {
               <Button
                 icon="link"
                 text="Link"
+                stylingMode={stylingMode}
                 onClick={onLinkButtonClick}
               ></Button>
             </Item>
@@ -304,6 +311,7 @@ function App() {
               <Button
                 icon="image"
                 text="Add image"
+                stylingMode={stylingMode}
                 onClick={onAddImageButtonClick}
               ></Button>
             </Item>
@@ -325,6 +333,7 @@ function App() {
               <Button
                 icon="clearformat"
                 text="Clear formating"
+                stylingMode={stylingMode}
                 onClick={onClearButtonClick}
               ></Button>
             </Item>
@@ -338,6 +347,7 @@ function App() {
               <Button
                 icon="codeblock"
                 text="Code block"
+                stylingMode={stylingMode}
                 onClick={onCodeBlockButtonClick}
               ></Button>
             </Item>
@@ -351,6 +361,7 @@ function App() {
               <Button
                 icon="blockquote"
                 text="Blockquote"
+                stylingMode={stylingMode}
                 onClick={onQuoteButtonClick}
               ></Button>
             </Item>
@@ -371,6 +382,7 @@ function App() {
               <Button
                 icon="attach"
                 text="Attach"
+                stylingMode={stylingMode}
                 onClick={onAttachButtonClick}
               ></Button>
             </Item>
@@ -383,6 +395,7 @@ function App() {
               <Button
                 icon="help"
                 text="About"
+                stylingMode={stylingMode}
                 onClick={onAboutButtonClick}
               ></Button>
             </Item>
