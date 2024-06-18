@@ -4,10 +4,6 @@ node_modules
 !/artifacts/npm/devextreme/project.json
 !/artifacts/npm/devextreme-dist/package.json
 /testing/testcafe/artifacts
-/testing/bundlers/dist
-/testing/bundlers/entry
-/testing/bundlers/devextreme*
-/testing/bundlers/.parcel-cache
 /testing/LastSuiteTime.txt
 /dotnet_packages
 /js/bundles/dx.custom.js

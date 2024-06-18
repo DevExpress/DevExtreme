@@ -1,7 +1,7 @@
 import $ from 'jquery';
 
-import MentionFormat from 'ui/html_editor/formats/mention';
-import Mentions from 'ui/html_editor/modules/mentions';
+import MentionFormat from '__internal/ui/html_editor/formats/m_mention';
+import Mentions from '__internal/ui/html_editor/modules/m_mentions';
 
 import { noop } from 'core/utils/common';
 import devices from 'core/devices';

@@ -1,8 +1,8 @@
 import Guid from '@js/core/guid';
 import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
-import CollectionWidgetItem from '@js/ui/collection/item';
 import type { Item } from '@js/ui/splitter';
+import CollectionWidgetItem from '@ts/ui/collection/m_item';
 
 import ResizeHandle from './resize_handle';
 import type Splitter from './splitter';
