@@ -3831,12 +3831,9 @@ QUnit.test('Chart should handle unix timestamp correctly without throwing an err
     const chart = this.createChart({
         dataSource: [
             {
-                timeStamp: new Date('2024-04-26T06:28:00Z'),
                 key: 'Spacing',
-                val: 'Good',
+                timeStamp: new Date('2024-04-26T06:28:00Z'),
                 end: new Date('2024-04-26T07:22:00Z'),
-                Order: 1,
-                label: 3,
             }
         ],
         rotated: true,
