@@ -303,7 +303,6 @@ export class ColumnChooserView extends ColumnsView {
     return {
       noDataText: columnChooserOptions.emptyPanelText,
       activeStateEnabled: false,
-      focusStateEnabled: true,
       hoverStateEnabled: false,
       itemTemplate(data, index, item) {
         $(item)
