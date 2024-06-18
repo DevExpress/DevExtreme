@@ -122,7 +122,6 @@ describe('rendering', () => {
     });
 
     it('correctly sets the buy now link', () => {
-      testingLib.render(<TestComponent />);
       expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
     });
   });
