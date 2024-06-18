@@ -6,11 +6,11 @@ import { asyncNoop, noop } from '@js/core/utils/common';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
 import { isDefined, isObject, isPlainObject } from '@js/core/utils/type';
-import MenuItem from '@js/ui/collection/item';
 import type { dxMenuBaseOptions } from '@js/ui/context_menu/ui.menu_base';
 import type { Item } from '@js/ui/menu';
 import { render } from '@js/ui/widget/utils.ink_ripple';
 import HierarchicalCollectionWidget from '@ts/ui/collection/hierarchical';
+import MenuItem from '@ts/ui/collection/m_item';
 import MenuBaseEditStrategy from '@ts/ui/context_menu/m_menu_base.edit.strategy';
 
 const DX_MENU_CLASS = 'dx-menu';
