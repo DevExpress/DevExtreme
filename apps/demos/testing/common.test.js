@@ -94,9 +94,6 @@ const SKIPPED_TESTS = {
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ChartIntegration', themes: [THEME.material] },
     ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
-    ],
     TreeList: [
       { demo: 'BatchEditing', themes: [THEME.material] },
       { demo: 'RowEditing', themes: [THEME.material] },
@@ -142,9 +139,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
@@ -199,9 +193,6 @@ const SKIPPED_TESTS = {
     ],
     TileView: [
       { demo: 'Directions', themes: [THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
