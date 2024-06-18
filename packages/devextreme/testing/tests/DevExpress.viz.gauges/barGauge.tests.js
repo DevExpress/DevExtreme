@@ -1072,6 +1072,20 @@ QUnit.test('Font color', function(assert) {
     this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'blue');
 });
 
+QUnit.test('Font opacity (T1238556)', function(assert) {
+    this.$container.dxBarGauge({
+        values: [10, 20, 30],
+        palette: 'office',
+        label: {
+            font: {
+                color: 'blue',
+                opacity: 0
+            }
+        }
+    });
+    this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'rgba(0,0,255,0)');
+});
+
 QUnit.module('Animation', $.extend({}, environment, {
     check: function(assert, angle) {
         assert.strictEqual(this.getBarsGroup().children[1]._stored_settings.startAngle, angle, 'bar position');
