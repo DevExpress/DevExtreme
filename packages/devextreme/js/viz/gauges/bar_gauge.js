@@ -127,14 +127,14 @@ export const dxBarGauge = BaseGauge.inherit({
             context.fontStyles = _patchFontOptions(_extend({}, that._themeManager.theme().label.font, labelOptions?.font, { color: labelOptions?.font?.color || null }));
 
             labelOptions = _extend(true, {}, that._themeManager.theme().label, labelOptions);
-
-            that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
-            context.lineWidth = labelOptions.connectorWidth > 0 ? _Number(labelOptions.connectorWidth) : 0;
-            context.lineColor = labelOptions.connectorColor || null;
             context.formatOptions = {
                 format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
                 customizeText: labelOptions.customizeText
             };
+
+            that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
+            context.lineWidth = labelOptions.connectorWidth > 0 ? _Number(labelOptions.connectorWidth) : 0;
+            context.lineColor = labelOptions.connectorColor || null;
 
             const text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).append(that._barsGroup);
             const bBox = text.getBBox();
