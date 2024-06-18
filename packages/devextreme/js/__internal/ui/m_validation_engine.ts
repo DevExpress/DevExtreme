@@ -341,10 +341,10 @@ const rulesValidators = {
 };
 
 const GroupConfig = Class.inherit({
-  ctor(group) {
+  ctor(group, isRemovable) {
     this.group = group;
     this.validators = [];
-    this.isRemovable = false;
+    this._isRemovable = isRemovable;
     this._pendingValidators = [];
     this._onValidatorStatusChanged = this._onValidatorStatusChanged.bind(this);
     this._resetValidationInfo();
@@ -566,8 +566,7 @@ const ValidationEngine = {
   addGroup(group, isRemovable) {
     let config = this.getGroupConfig(group);
     if (!config) {
-      config = new GroupConfig(group);
-      config.isRemovable = isRemovable;
+      config = new GroupConfig(group, isRemovable);
       this.groups.push(config);
     }
     return config;
@@ -780,21 +779,23 @@ const ValidationEngine = {
   },
 
   registerValidatorInGroup(group, validator) {
-    const groupConfig = ValidationEngine.addGroup(group, false);
+    const groupConfig = ValidationEngine.addGroup(group, true);
     groupConfig.registerValidator.call(groupConfig, validator);
   },
 
-  _shouldRemoveGroup(group, validators, isRemovable) {
+  _shouldRemoveGroup(group, validatorsInGroup, isRemovable) {
     const isDefaultGroup = group === undefined;
-    return !isDefaultGroup && !validators.length && !isRemovable;
+    const isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
+    return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length && isRemovable;
   },
 
   removeRegisteredValidator(group, validator) {
     const config = ValidationEngine.getGroupConfig(group);
     if (config) {
       config.removeRegisteredValidator.call(config, validator);
-      const { validators, isRemovable } = config;
-      if (this._shouldRemoveGroup(group, validators, isRemovable)) {
+      const validatorsInGroup = config.validators;
+      const isRemovable = config._isRemovable;
+      if (this._shouldRemoveGroup(group, validatorsInGroup, isRemovable)) {
         this.removeGroup(group);
       }
     }
