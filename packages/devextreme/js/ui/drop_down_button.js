@@ -13,7 +13,7 @@ import { DataSource } from '../data/data_source/data_source';
 import ArrayStore from '../data/array_store';
 import { Deferred } from '../core/utils/deferred';
 import { extend } from '../core/utils/extend';
-import { isPlainObject, isDefined } from '../core/utils/type';
+import { isObject, isPlainObject, isDefined } from '../core/utils/type';
 import { ensureDefined, noop } from '../core/utils/common';
 import Guid from '../core/guid';
 import { getElementWidth, getSizeValue } from './drop_down_editor/utils';
@@ -553,9 +553,9 @@ const DropDownButton = Widget.inherit({
     },
 
     _getDisplayValue(item) {
-        const isPrimitiveItem = !isPlainObject(item);
+        const isPrimitiveItem = !isObject(item);
         const displayValue = isPrimitiveItem ? item : this._displayGetter(item);
-        return !isPlainObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
+        return !isObject(displayValue) ? String(ensureDefined(displayValue, '')) : '';
     },
 
     _updateActionButton(selectedItem) {
