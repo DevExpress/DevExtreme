@@ -144,12 +144,6 @@ describe('DevExtreme Angular widget', () => {
     });
 
     it('correctly sets the buy now link', () => {
-        TestBed.overrideComponent(TestContainerComponent, {
-            set: {
-                template: '<dx-test-widget [testOption]="\'Test Value\'" > </dx-test-widget>'
-            }
-        });
-        TestBed.createComponent(TestContainerComponent);
         expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeAngular.aspx');
     });
 
