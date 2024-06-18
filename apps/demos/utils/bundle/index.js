@@ -9,6 +9,7 @@ const url = require('url');
 // https://stackoverflow.com/questions/42412965/how-to-load-named-exports-with-systemjs/47108328
 const prepareModulesToNamedImport = () => {
   const modules = [
+    'time_zone_utils.js',
     'localization.js',
     'viz/export.js',
     'viz/core/export.js',
@@ -22,9 +23,8 @@ const prepareModulesToNamedImport = () => {
   ];
 
   const paths = [
-    '../npm-scripts/npm-devextreme/cjs', // unused / legacy?
-    'node_modules/devextreme/cjs',       // 24.1+ migrated from devextreme-demos, kept as is / likely un-used, but works ok in mono repo
-    '../../node_modules/devextreme/cjs', // 24.1+ wg / individual em modules are not discovered
+    '../npm-scripts/npm-devextreme/cjs',
+    'node_modules/devextreme/cjs',
   ];
 
   const esModuleExport = 'exports.__esModule = true;';
