@@ -101,7 +101,7 @@ test('Focused cell should not flick (T1206435)', async (t) => {
     delete (window as TestWindow).counter;
   })();
 }).before(async () => {
-  await createWidget('dxDataGrid', ClientFunction(() => {
+  await createWidget('dxDataGrid', () => {
     const data = [
       { value: 'data' },
       { value: 'data' },
@@ -133,6 +133,6 @@ test('Focused cell should not flick (T1206435)', async (t) => {
         refreshMode: 'reshape',
       },
       repaintChangesOnly: true,
-    } satisfies Properties;
-  }));
+    };
+  });
 });
