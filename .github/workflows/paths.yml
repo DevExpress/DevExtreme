@@ -7,7 +7,7 @@ concurrency:
 on:
   pull_request:
   push:
-    branches: [24_1]
+    branches: [24_2]
 
 env:
   MAX_LENGTH: 170

@@ -3821,7 +3821,6 @@
             "Title": "Scrolling",
             "Name": "Scrolling",
             "Widget": "Menu",
-            "Badge": "New",
             "DemoType": "Web"
           }
         ]
@@ -4170,7 +4169,6 @@
             "Title": "Overview",
             "Name": "Overview",
             "Widget": "Splitter",
-            "Badge": "New",
             "DemoType": "Web"
           }
         ]
@@ -4727,8 +4725,7 @@
           {
             "Title": "Grouped Fields",
             "Name": "GroupedFields",
-            "Widget": "Form",
-            "Badge": "Updated"
+            "Widget": "Form"
           },
           {
             "Title": "Columns Adaptability",
@@ -5194,7 +5191,6 @@
           {
             "Title": "Overview",
             "Name": "Overview",
-            "Badge": "Updated",
             "DocUrl": "",
             "Widget": "DropDownButton",
             "DemoType": "Web",
@@ -5224,7 +5220,6 @@
             "Title": "Scrolling",
             "Name": "Scrolling",
             "Widget": "ContextMenu",
-            "Badge": "New",
             "DemoType": "Web"
           },
           {
