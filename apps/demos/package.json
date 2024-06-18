@@ -133,7 +133,7 @@
         "prepare-bundles": "npm run generate-devextreme-angular-umd && gulp bundles && gulp update-config",
         "convert-to-js": "ts-node ./utils/ts-to-js-converter/cli.ts",
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
-        "make-demos-bundle": "ts-node ./utils/create-bundles --framework Angular --copy-metadata",
+        "make-demos-bundle": "ts-node ./utils/create-bundles",
         "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
         "build-angular": "ng build",
         "launch-ngcc": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"

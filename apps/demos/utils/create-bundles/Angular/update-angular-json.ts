@@ -37,8 +37,11 @@ const createConfigForDemo = (Demo: Demo) => {
           tsConfig: `${demoSourcePathRelative}/tsconfig.json`,
           scripts: [],
           allowedCommonJsDependencies: [
-            "jszip",
-            
+            'jszip',
+            'devexpress-diagram',
+            'devexpress-gantt',
+            'devextreme-quill',
+            'devextreme-aspnet-data-nojquery'
           ]
         },
         configurations: {
@@ -46,7 +49,7 @@ const createConfigForDemo = (Demo: Demo) => {
             budgets: [
               {
                 type: 'initial',
-                maximumWarning: '1mb',
+                maximumWarning: '2mb',
                 maximumError: '4mb',
               },
               {

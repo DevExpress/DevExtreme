@@ -34,3 +34,4 @@ Demos/**/tsconfig.json
 publish-demos
 
 .angular
+angular.json

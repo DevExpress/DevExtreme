@@ -27,7 +27,6 @@ export abstract class ESBundler implements Bundler {
 
     const destinationDemoPath = getDestinationPathByDemo(demo, this.framework);
     if (existsSync(destinationDemoPath)) {
-      console.log('main remove', destinationDemoPath);
       removeSync(destinationDemoPath);
     }
 

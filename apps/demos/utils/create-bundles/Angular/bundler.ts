@@ -30,12 +30,10 @@ export default class AngularBundler implements Bundler {
     const indexHtmlPath = getIndexHtmlPath(demo);
 
     if (existsSync(destinationDemoPath)) {
-      console.log('rm destination', destinationDemoPath);
       removeSync(destinationDemoPath);
     }
 
     if (existsSync(indexHtmlPath)) {
-      console.log('rm index', indexHtmlPath);
       removeSync(indexHtmlPath);
     }
 
