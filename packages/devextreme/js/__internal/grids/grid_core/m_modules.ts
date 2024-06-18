@@ -512,7 +512,7 @@ export function processModules(
   componentInstance.diContext = diContext;
 }
 
-const callModuleItemsMethod = function (that, methodName, args?) {
+export const callModuleItemsMethod = function (that, methodName, args?) {
   args = args || [];
   if (that._controllers) {
     each(that._controllers, function () {
@@ -556,6 +556,4 @@ export default {
   },
 
   processModules,
-
-  callModuleItemsMethod,
 };
