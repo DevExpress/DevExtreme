@@ -11,9 +11,9 @@ import { map } from '@js/core/utils/iterator';
 import { isDefined, isObject } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { normalizeKeyName } from '@js/events/utils/index';
-import DropDownEditor from '@js/ui/drop_down_editor/ui.drop_down_editor';
 import DataExpressionMixin from '@js/ui/editor/ui.data_expression';
 import { tabbable } from '@js/ui/widget/selectors';
+import DropDownEditor from '@ts/ui/drop_down_editor/m_drop_down_editor';
 import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 
 const { getActiveElement } = domAdapter;
@@ -107,8 +107,8 @@ const DropDownBox = (DropDownEditor as any).inherit({
 
     if (!this._dataSource) {
       this.callBase(values);
-      // @ts-expect-error
-      return new Deferred().resolve();
+
+      return Deferred().resolve();
     }
 
     const currentValue = this._getCurrentValue();
@@ -117,8 +117,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
     keys = Array.isArray(keys) ? keys : [keys];
 
     const itemLoadDeferreds = map(keys, (key) => {
-      // @ts-expect-error
-      const deferred = new Deferred();
+      const deferred = Deferred();
       this
         ._loadItem(key)
         .always((item) => {
@@ -144,8 +143,7 @@ const DropDownBox = (DropDownEditor as any).inherit({
   },
 
   _loadItem(value) {
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred();
     const that = this;
 
     const selectedItem = grep(this.option('items') || [], (item) => this._isValueEquals(this._valueGetter(item), value))[0];

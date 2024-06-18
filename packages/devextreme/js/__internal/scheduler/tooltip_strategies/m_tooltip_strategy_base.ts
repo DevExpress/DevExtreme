@@ -1,8 +1,8 @@
 import $ from '@js/core/renderer';
 import { FunctionTemplate } from '@js/core/templates/function_template';
 import Button from '@js/ui/button';
-import List from '@js/ui/list/ui.list.edit';
 import { createPromise } from '@ts/core/utils/promise';
+import List from '@ts/ui/list/m_list.edit';
 
 const TOOLTIP_APPOINTMENT_ITEM = 'dx-tooltip-appointment-item';
 const TOOLTIP_APPOINTMENT_ITEM_CONTENT = `${TOOLTIP_APPOINTMENT_ITEM}-content`;

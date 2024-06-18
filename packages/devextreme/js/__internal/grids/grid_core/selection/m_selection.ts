@@ -1,6 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import $ from '@js/core/renderer';
 import { equalByValue } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { each } from '@js/core/utils/iterator';
@@ -12,7 +13,6 @@ import eventsEngine from '@js/events/core/events_engine';
 import holdEvent from '@js/events/hold';
 import { addNamespace, isCommandKeyPressed } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import Selection from '@js/ui/selection/selection';
 import errors from '@js/ui/widget/ui.errors';
 import type { ColumnHeadersView } from '@ts/grids/grid_core/column_headers/m_column_headers';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
@@ -20,6 +20,7 @@ import type { ContextMenuController } from '@ts/grids/grid_core/context_menu/m_c
 import type { ModuleType } from '@ts/grids/grid_core/m_types';
 import type { StateStoringController } from '@ts/grids/grid_core/state_storing/m_state_storing_core';
 import type { RowsView } from '@ts/grids/grid_core/views/m_rows_view';
+import Selection from '@ts/ui/selection/m_selection';
 
 import type { DataController } from '../data_controller/m_data_controller';
 import modules from '../m_modules';
@@ -553,7 +554,7 @@ export class SelectionController extends modules.Controller {
     return this._selection.loadSelectedItemsWithFilter();
   }
 
-  public changeItemSelection(visibleItemIndex, keys, setFocusOnly?) {
+  public changeItemSelection(visibleItemIndex, keys, setFocusOnly?: boolean): boolean | DeferredObj<unknown> | undefined {
     keys = keys || {};
     if (this.isSelectionWithCheckboxes()) {
       keys.control = true;

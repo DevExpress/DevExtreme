@@ -18,7 +18,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { setScrollView } from 'ui/list/ui.list.base';
+import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
