@@ -783,9 +783,9 @@ const ValidationEngine = {
     groupConfig.registerValidator.call(groupConfig, validator);
   },
 
-  _shouldRemoveGroup(group, validatorsInGroup, isRemovable) {
-    const isDefaultGroup = group === undefined;
-    return !isDefaultGroup && !validatorsInGroup.length && isRemovable;
+  _shouldRemoveGroup(validatorsInGroup, isRemovable) {
+    debugger
+    return !validatorsInGroup.length && isRemovable;
   },
 
   removeRegisteredValidator(group, validator) {
@@ -794,7 +794,7 @@ const ValidationEngine = {
       config.removeRegisteredValidator.call(config, validator);
       const validatorsInGroup = config.validators;
       const isRemovable = config._isRemovable;
-      if (this._shouldRemoveGroup(group, validatorsInGroup, isRemovable)) {
+      if (this._shouldRemoveGroup(validatorsInGroup, isRemovable)) {
         this.removeGroup(group);
       }
     }
