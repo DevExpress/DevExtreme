@@ -560,7 +560,7 @@ const ValidationEngine = {
 
   initGroups() {
     this.groups = [];
-    this.addGroup();
+    this.addGroup(undefined, false);
   },
 
   addGroup(group, isRemovable) {
