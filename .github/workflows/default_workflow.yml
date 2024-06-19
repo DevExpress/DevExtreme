@@ -18,24 +18,44 @@ jobs:
     name: main
     runs-on: devextreme-shr2
     timeout-minutes: 30
-    
+
     steps:
     - name: Get sources
       uses: actions/checkout@v4
-    
-    - name: Restore npm cache
-      uses: actions/cache@v4
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
 
-    - name: Run npm install
-      run: npm ci --no-audit --no-fund
-    
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
+
     - name: Run targets
       run: >
-        npx nx run-many
+        pnpx nx run-many
         -t test
         --exclude
         devextreme

@@ -22,15 +22,30 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Check dx.all.d.ts is up-to-date
       working-directory: ./packages/devextreme
@@ -38,12 +53,12 @@ jobs:
         target=./ts/dx.all.d.ts
         cp $target $target.current
 
-        npm run regenerate
+        pnpm run regenerate
 
         if ! diff $target.current $target -U 5 > $target.diff; then
             echo "FAIL: $target is outdated:"
             cat $target.diff | sed "1,2d"
-            echo "Execute 'npm run regenerate-all' to update dx.all.d.ts"
+            echo "Execute 'pnpm run regenerate-all' to update dx.all.d.ts"
             exit 1
         else
             echo "TS is up-to-date"
@@ -61,21 +76,36 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Validate declarations
       working-directory: ./packages/devextreme
       run: |
-        npm run validate-ts
-        npm run validate-declarations
+        pnpm run validate-ts
+        pnpm run validate-declarations
 
   notify:
     runs-on: devextreme-shr2

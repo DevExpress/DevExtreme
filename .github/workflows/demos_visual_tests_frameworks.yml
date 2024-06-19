@@ -14,12 +14,13 @@ on:
 env:
   NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
+  BUILD_TEST_INTERNAL_PACKAGE: true
 
 jobs:
   build-devextreme:
     runs-on: ubuntu-latest
     name: Build DevExtreme
-    timeout-minutes: 20
+    timeout-minutes: 40
 
     steps:
       - name: Get sources
@@ -30,20 +31,35 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Restore npm cache
-        uses: actions/cache@v4
+      - uses: pnpm/action-setup@v3
         with:
-          path: '**/node_modules'
-          key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-          restore-keys: ${{ runner.os }}-node-modules
+          version: 9
+          run_install: false
 
-      - name: DevExtreme - Install packages
-        run: npm install --no-audit --no-fund
+      - name: Get pnpm store directory
+        shell: bash
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: |
+            ${{ env.STORE_PATH }}
+            .nx/cache
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install dependencies
+        run: |
+          corepack enable
+          pnpm install
 
       - name: DevExtreme - Build-all
         env:
           BUILD_TEST_INTERNAL_PACKAGE: true
-        run: npm run all:build
+        run: pnpm run all:build-dev
 
       - name: Move packages
         run: |
@@ -86,32 +102,39 @@ jobs:
       with:
         name: devextreme-sources
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-      # NOTE: workaround due to wrappers are incorrect NPM packages now
-    - name: Install wrappers packages
+    - name: Get pnpm store directory
+      shell: bash
       run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+#    - name: Build wrappers
+#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
+
+#    - name: Link wrappers packages
+#      run: pnpm install
 
     - name: Prepare bundles
       working-directory: apps/demos
-      run: npx nx prepare-bundles
+      run: pnpx nx prepare-bundles
 
     - name: Demos - Run tsc
       working-directory: apps/demos
@@ -164,7 +187,7 @@ jobs:
       matrix:
         include:
           - name: Lint code base (excluding demos)
-            command: npx nx lint-non-demos
+            command: pnpx nx lint-non-demos
           # NOTE: skipped due to enormous number of errors
           # - name: Lint demos (1/4)
           #   command: CONSTEL=1/4 npm run lint-demos
@@ -191,8 +214,33 @@ jobs:
       with:
         name: devextreme-sources
 
+    - name: Use Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
     - name: Install packages
-      run: npm install devextreme-installer.tgz devextreme-dist-installer.tgz devextreme-react-installer.tgz devextreme-vue-installer.tgz devextreme-angular-installer.tgz
+      run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
 
     - uses: actions/setup-dotnet@v3
       with:
@@ -221,54 +269,62 @@ jobs:
       matrix:
         include:
           - name: Check generated demos (1/5)
-            command: CONSTEL=1/5 npm run convert-to-js
+            command: CONSTEL=1/5 pnpm run convert-to-js
           - name: Check generated demos (2/5)
-            command: CONSTEL=2/5 npm run convert-to-js
+            command: CONSTEL=2/5 pnpm run convert-to-js
           - name: Check generated demos (3/5)
-            command: CONSTEL=3/5 npm run convert-to-js
+            command: CONSTEL=3/5 pnpm run convert-to-js
           - name: Check generated demos (4/5)
-            command: CONSTEL=4/5 npm run convert-to-js
+            command: CONSTEL=4/5 pnpm run convert-to-js
           - name: Check generated demos (5/5)
-            command: CONSTEL=5/5 npm run convert-to-js
+            command: CONSTEL=5/5 pnpm run convert-to-js
 
     steps:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        node-version: '20'
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
 
-    - name: Install packages
-      run: npm install --no-audit --no-fund
-
-      # NOTE: workaround due to wrappers are incorrect NPM packages now
-    - name: Install wrappers packages
-      run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
+    - name: Install dependencies
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
 
     - name: Prepare JS
       working-directory: apps/demos
-      run: npm run prepare-js
+      run: pnpm run prepare-js
 
     - name: Check generated JS demos
       working-directory: apps/demos
@@ -280,7 +336,7 @@ jobs:
         if git diff --exit-code . ':!package.json' ; then
           echo "Generated JS demos are up-to-date"
         else
-            echo "Generated JS demos are outdated. Execute 'npm run convert-to-js split' and commit changes."
+            echo "Generated JS demos are outdated. Execute 'pnpm run convert-to-js split' and commit changes."
             echo "If you see another diff, ensure that extra listed files have LF endings."
             exit 1
         fi
@@ -306,51 +362,15 @@ jobs:
       with:
         chrome-version: '121.0.6167.160'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        node-version: '20'
 
     - name: Download devextreme sources
       uses: actions/download-artifact@v4
       with:
         name: devextreme-sources
-
-    - name: Install packages
-      run: npm install --no-audit --no-fund
-
-    # NOTE: workaround due to wrappers are incorrect NPM packages now
-    - name: Install wrappers packages
-      run: |
-        rm -rf node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        mkdir node_modules/devextreme node_modules/devextreme-dist node_modules/devextreme-angular node_modules/devextreme-react node_modules/devextreme-vue
-        tar -xzf devextreme-installer.tgz -C node_modules/devextreme
-        mv node_modules/devextreme/package/* node_modules/devextreme
-        tar -xzf devextreme-dist-installer.tgz -C node_modules/devextreme-dist
-        mv node_modules/devextreme-dist/package/* node_modules/devextreme-dist
-        tar -xzf devextreme-angular-installer.tgz -C node_modules/devextreme-angular
-        mv node_modules/devextreme-angular/package/* node_modules/devextreme-angular
-        tar -xzf devextreme-react-installer.tgz -C node_modules/devextreme-react
-        mv node_modules/devextreme-react/package/* node_modules/devextreme-react
-        tar -xzf devextreme-vue-installer.tgz -C node_modules/devextreme-vue
-        mv node_modules/devextreme-vue/package/* node_modules/devextreme-vue
-
-    - name: Prepare JS
-      working-directory: apps/demos
-      run: npm run prepare-js
-
-    - name: Update bundles config
-      working-directory: apps/demos
-      run: npx gulp update-config
-
-    - name: Run Web Server
-      run: |
-        python -m http.server 8080 &
-        python -m http.server 8081 &
-        python -m http.server 8082 &
-        python -m http.server 8083 &
 
     - name: Download artifacts
       if: github.event_name == 'pull_request' && !contains(github.event.pull_request.labels.*.name, 'force all tests')
@@ -358,6 +378,41 @@ jobs:
       with:
         name: changed-demos
         path: apps/demos
+
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      working-directory: apps/demos
+      run: pnpm add ../../devextreme-installer.tgz ../../devextreme-dist-installer.tgz ../../devextreme-react-installer.tgz ../../devextreme-vue-installer.tgz ../../devextreme-angular-installer.tgz
+
+#    - name: Build wrappers
+#      run: pnpm exec nx run-many -t pack -p devextreme-angular devextreme-react devetreme-vue
+
+    - name: Prepare JS
+      working-directory: apps/demos
+      run: pnpm run prepare-js
+
+    - name: Update bundles config
+      working-directory: apps/demos
+      run: pnpx gulp update-config
 
     - name: Create bundles dir
       run: mkdir -p apps/demos/bundles
@@ -368,12 +423,19 @@ jobs:
         name: devextreme-bundles
         path: apps/demos/bundles
 
+    - name: Run Web Server
+      run: |
+        python -m http.server 8080 &
+        python -m http.server 8081 &
+        python -m http.server 8082 &
+        python -m http.server 8083 &
+
     - name: Run TestCafe tests
       working-directory: apps/demos
       env:
         CHANGEDFILEINFOSPATH: changed-files.json
-        BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
-        #DEBUG: hammerhead:*,testcafe:*
+        BROWSERS: chrome:headless --disable-gpu --window-size=1200,800 --js-flags=--random-seed=2147483647
+        # DEBUG: hammerhead:*,testcafe:*
         CONCURRENCY: 4
         TCQUARANTINE: true
         CONSTEL: ${{ matrix.CONSTEL }}
@@ -382,7 +444,7 @@ jobs:
         # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
         # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
         CI_ENV: true # The `ignore` field in the visualtestrc.json should be disabled when running test locally
-      run: npx nx test-testcafe
+      run: pnpx nx test-testcafe
 
     - name: Copy screenshots artifacts
       if: ${{ failure() }}
