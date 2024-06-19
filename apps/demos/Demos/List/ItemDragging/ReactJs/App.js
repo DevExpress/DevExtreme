@@ -16,7 +16,8 @@ const App = () => {
   const onAdd = useCallback(
     (e) => {
       const tasks = e.toData === 'plannedTasks' ? plannedTasksState : doingTasksState;
-      const updatedTasks = [...tasks.slice(0, e.toIndex), e.itemData, ...tasks.slice(e.toIndex)];
+      const updatedTasks = [...tasks];
+      updatedTasks.splice(e.toIndex, 0, e.itemData);
       if (e.toData === 'plannedTasks') {
         setPlannedTasksState(updatedTasks);
       } else {
@@ -28,7 +29,8 @@ const App = () => {
   const onRemove = useCallback(
     (e) => {
       const tasks = e.fromData === 'plannedTasks' ? plannedTasksState : doingTasksState;
-      const updatedTasks = [...tasks.slice(0, e.fromIndex), ...tasks.slice(e.fromIndex + 1)];
+      const updatedTasks = [...tasks];
+      updatedTasks.splice(e.fromIndex, 1);
       if (e.fromData === 'plannedTasks') {
         setPlannedTasksState(updatedTasks);
       } else {
@@ -39,8 +41,22 @@ const App = () => {
   );
   const onReorder = useCallback(
     (e) => {
-      onRemove(e);
-      onAdd(e);
+      if (e.fromData === e.toData) {
+        const updateTasks = (tasks) => {
+          const updatedTasks = [...tasks];
+          const [movedTask] = updatedTasks.splice(e.fromIndex, 1);
+          updatedTasks.splice(e.toIndex, 0, movedTask);
+          return updatedTasks;
+        };
+        if (e.fromData === 'plannedTasks') {
+          setPlannedTasksState((prevTasks) => updateTasks(prevTasks));
+        } else {
+          setDoingTasksState((prevTasks) => updateTasks(prevTasks));
+        }
+      } else {
+        onRemove(e);
+        onAdd(e);
+      }
     },
     [onAdd, onRemove],
   );
