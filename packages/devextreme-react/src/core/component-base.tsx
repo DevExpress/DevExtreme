@@ -86,7 +86,7 @@ const ComponentBase = forwardRef<ComponentBaseRef, any>(
     const prevPropsRef = useRef<P & ComponentBaseProps>();
 
     const restoreTree = useCallback(() => {
-      if (childNodes.current?.length && element.current) {
+      if (childElementsDetached.current && childNodes.current?.length && element.current) {
         element.current.append(...childNodes.current);
         childElementsDetached.current = false;
       }
