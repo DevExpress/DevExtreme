@@ -1,5 +1,4 @@
 In certain scenarios, you may need to add more series to the data source after you created the Chart. 
-<!--split-->
 
 In this case, arrange your data source structure as follows:
 
@@ -13,6 +12,7 @@ In this case, arrange your data source structure as follows:
     ]
 
 Every object in the data source should correspond to a point in a single series.
+<!--split-->
 
 This demo uses the structure displayed above to organize data:
 

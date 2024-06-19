@@ -1,7 +1,7 @@
 This example demonstrates a real-time data update in a financial [candlestick](https://js.devexpress.com/Demos/WidgetsGallery/Demo/Charts/Candlestick/) chart bound to a [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-6.0) server. Note that data used in this demo is for demonstration purposes only.
-<!--split-->
 
 To integrate the Chart with a [SignalR](https://docs.microsoft.com/en-us/aspnet/core/signalr/introduction?view=aspnetcore-6.0) server, specify a [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/). Use the [CustomStore](/Documentation/ApiReference/Data_Layer/CustomStore/)'s [push(changes)](/Documentation/ApiReference/Data_Layer/CustomStore/Methods/#pushchanges) method to insert, update, and remove data objects. This method accepts an array and allows you to update data in batches.
+<!--split-->
 
 To display updated data in real time, use the [aggregation](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/aggregation/) configuration object. In this object, set the [enabled](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/aggregation/#enabled) property to **true**, the [method](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/aggregation/#method) property to `custom`, and then implement the [calculate](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/aggregation/#calculate) function to process the incoming data. In this demo, the [calculate](/Documentation/ApiReference/UI_Components/dxChart/Configuration/series/aggregation/#calculate) function aggregates data into a one point for each interval.
 

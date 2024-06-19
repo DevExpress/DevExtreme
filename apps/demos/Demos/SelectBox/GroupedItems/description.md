@@ -1,7 +1,7 @@
 Data items in the SelectBox's drop-down list can be organized in groups.
-<!--split-->
 
 If the data source contains ungrouped data items, use the [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/)'s [group](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#group) property to specify the data field to group by. This case is illustrated in this demo's first and third SelectBoxes.
+<!--split-->
 
 The SelectBox can also work with initially grouped data items. In this case, the data array should contain objects with the **key** and **items** fields:
 
