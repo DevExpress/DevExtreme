@@ -37,7 +37,7 @@ class ValidationGroup extends DOMComponent {
 
     _init() {
         super._init();
-        ValidationEngine.addGroup(this, false);
+        ValidationEngine.addGroup(this);
     }
 
     _initMarkup() {
