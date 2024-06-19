@@ -1,5 +1,4 @@
 You can use the following properties to specify custom templates for Lookup elements.
-<!--split-->
 
 <table class="dx-table">
     <tr>
@@ -21,3 +20,4 @@ You can use the following properties to specify custom templates for Lookup elem
 </table>
 
 To customize elements, you can also define specific fields in data objects. Visit the [items](/Documentation/ApiReference/UI_Components/dxLookup/Configuration/items/) documentation for a full list of such fields. Refer to the [Default Templates](/Documentation/Guide/UI_Components/Common/Templates/#Default_Templates) help topic for more information about this feature.
+<!--split-->

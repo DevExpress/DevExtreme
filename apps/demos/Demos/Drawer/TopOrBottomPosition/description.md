@@ -1,5 +1,4 @@
 Drawer is a dismissible or permanently visible panel that usually contains navigation elements. 
-<!--split-->
 
 To open or close the Drawer component in this demo, click the 'Hamburger' button. Each Drawer visibility change can adjust the layout in the following ways (see [openedStateMode](/Documentation/ApiReference/UI_Components/dxDrawer/Configuration/#openedStateMode)): 
 
@@ -11,6 +10,7 @@ The view shrinks to accommodate the Drawer.
 
 - "*overlap*"    
 The Drawer overlaps the view.
+<!--split-->
 
 Use the radio buttons at the bottom of this demo module to try different layout modes. You can also change the Drawer's [position](/Documentation/ApiReference/UI_Components/dxDrawer/Configuration/#position) and [revealMode](/Documentation/ApiReference/UI_Components/dxDrawer/Configuration/#revealMode) properties.
 

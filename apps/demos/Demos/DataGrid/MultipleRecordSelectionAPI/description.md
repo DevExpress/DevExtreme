@@ -1,5 +1,4 @@
-DataGrid has the following API for multiple record selection.
-<!--split-->
+DataGrid has the following API for multiple record selection:
 
 * [selectAll()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#selectAll) / [deselectAll()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#deselectAll)       
 Selects / deselects all rows or current page rows, depending on the value of [selectAllMode](/Documentation/ApiReference/UI_Components/dxDataGrid/Configuration/selection/#selectAllMode).
@@ -15,5 +14,6 @@ Clears the selection of all rows on all pages.
 
 * [getSelectedRowKeys()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#getSelectedRowKeys) / [getSelectedRowsData()](/Documentation/ApiReference/UI_Components/dxDataGrid/Methods/#getSelectedRowsData)       
 Gets the selected rows' keys or data objects.
+<!--split-->
 
 In this demo, **selectAll()** or **selectRows(keys, preserve)** is called when you change the SelectBox value and **clearSelection()** is called when you click the Clear Selection button.
