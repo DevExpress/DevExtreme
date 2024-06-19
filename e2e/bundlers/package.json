@@ -20,9 +20,9 @@
     "devextreme-main": "*"
   },
   "alias": {
-    "globalize$": "../../node_modules/globalize/dist/globalize.js",
-    "globalize": "../../node_modules/globalize/dist/globalize",
-    "cldr$": "../../node_modules/cldrjs/dist/cldr.js",
-    "cldr": "../../node_modules/cldrjs/dist/cldr"
+    "globalize$": "./node_modules/globalize/dist/globalize.js",
+    "globalize": "./node_modules/globalize/dist/globalize",
+    "cldr$": "./node_modules/cldrjs/dist/cldr.js",
+    "cldr": "./node_modules/cldrjs/dist/cldr"
   }
 }

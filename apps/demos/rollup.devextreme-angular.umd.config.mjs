@@ -3,7 +3,7 @@ import replace from '@rollup/plugin-replace';
 import babel from '@rollup/plugin-babel';
 import fs from 'fs-extra';
 
-const baseDir = '../../node_modules/devextreme-angular/fesm2022/';
+const baseDir = './node_modules/devextreme-angular/fesm2022/';
 const componentNames = fs.readdirSync(baseDir)
     .filter((fileName) => fileName.indexOf('mjs.map') !== -1)
     .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)

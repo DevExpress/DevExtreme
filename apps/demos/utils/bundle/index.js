@@ -75,27 +75,27 @@ const getDefaultBuilderConfig = (framework, additionPaths, map) => ({
     },
   },
   paths: {
-    'devextreme/*': '../../node_modules/devextreme/cjs/*',
-    'devexpress-gantt': '../../node_modules/devexpress-gantt/dist/dx-gantt.min.js',
-    'devexpress-diagram': '../../node_modules/devexpress-diagram/dist/dx-diagram.min.js',
-    [`devextreme-${framework}/*`]: `../../node_modules/devextreme-${framework}/${['react', 'vue'].includes(framework) ? 'cjs/*' : '*'}`,
+    'devextreme/*': 'node_modules/devextreme/cjs/*',
+    'devexpress-gantt': 'node_modules/devexpress-gantt/dist/dx-gantt.min.js',
+    'devexpress-diagram': 'node_modules/devexpress-diagram/dist/dx-diagram.min.js',
+    [`devextreme-${framework}/*`]: `node_modules/devextreme-${framework}/${['react', 'vue'].includes(framework) ? 'cjs/*' : '*'}`,
     ...additionPaths,
   },
 });
 
 const prepareDevextremexAngularFiles = () => {
-  const dxNgBaseDir = path.resolve('../../node_modules/devextreme-angular/bundles');
+  const dxNgBaseDir = path.resolve('node_modules/devextreme-angular/bundles');
 
   try {
     fs.rmSync(dxNgBaseDir, { recursive: true });
   } catch (e){}
 
   try {
-    fs.mkdirSync('../../node_modules/devextreme-angular/bundles');
+    fs.mkdirSync('node_modules/devextreme-angular/bundles');
     console.log(`Directory ${dxNgBaseDir} CLEANED successfully`);
   } catch (e) {}
 
-  fs.copySync('./bundles/devextreme-angular', '../../node_modules/devextreme-angular/bundles');
+  fs.copySync('./bundles/devextreme-angular', 'node_modules/devextreme-angular/bundles');
   console.log('Copy devextreme-angular files to node_modules/devextreme-angular/bundles completed!');
 }
 
@@ -117,7 +117,7 @@ const prepareConfigs = (framework)=> {
       metaValue: {
         build: true,
       },
-      pathValue: '../../node_modules/rxjs/*',
+      pathValue: 'node_modules/rxjs/*',
     }];
 
     packages = [
@@ -132,7 +132,7 @@ const prepareConfigs = (framework)=> {
 
       prepareDevextremexAngularFiles();
 
-      const bundlesRoot = '../../node_modules/devextreme-angular/bundles';
+      const bundlesRoot = 'node_modules/devextreme-angular/bundles';
       const componentNames = fs.readdirSync(bundlesRoot)
           .filter((fileName) => fileName.indexOf('umd.js') !== -1)
           .filter((fileName) => fileName.indexOf('devextreme-angular-ui') === 0)
@@ -255,7 +255,7 @@ const build = async (framework) => {
 };
 
 const copyBundlesFolder = () => {
-  const dxPath = path.join(process.cwd(), '..', '..', 'node_modules', 'devextreme');
+  const dxPath = path.join(process.cwd(), 'node_modules', 'devextreme');
   const dxBundlesPath = path.join(dxPath, 'bundles');
   const dxCjsBundlesPath = path.join(dxPath, 'cjs', 'bundles');
 

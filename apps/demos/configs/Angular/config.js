@@ -141,7 +141,7 @@ window.config = {
     },
   },
   paths: {
-    'npm:': '../../../../../../node_modules/',
+    'npm:': '../../../../node_modules/',
     'bundles:': '../../../../bundles/',
   },
   map: {
