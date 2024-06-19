@@ -3,14 +3,74 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/devextreme-angular",
   "projectType": "library",
+  "implicitDependencies": [
+    "devextreme-main"
+  ],
   "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "inputs": [
+        "default"
+      ],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/npm/dist"
+      ],
+      "cache": true
+    },
+    "pack": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "pack"
+      },
+      "inputs": [
+        "default"
+      ],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/npm/dist"
+      ],
+      "cache": true
+    },
     "regenerate": {
       "executor": "nx:run-script",
       "options": {
         "script": "regenerate"
       },
       "dependsOn": ["devextreme-monorepo:\"angular:copy-metadata\""]
+    },
+    "test:dev": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "test:dev"
+      },
+      "inputs": [
+        "default",
+        "test"
+      ],
+      "cache": true
     }
+  },
+  "namedInputs": {
+    "default": [
+      "{projectRoot}/metadata/**/*",
+      "{projectRoot}/src/**/*",
+      "{projectRoot}/build.config.js",
+      "{projectRoot}/gulpfile.js",
+      "{projectRoot}/ng-package.json",
+      "{projectRoot}/tsconfig.json",
+      "{projectRoot}/tsconfig.lib.json",
+      "{workspaceRoot}/tsconfig.json"
+    ],
+    "test": [
+      "{projectRoot}/tests/**/*",
+      "{projectRoot}/karma*",
+      "{projectRoot}/tsconfig.tests.json",
+      "{projectRoot}/webpack.test.js"
+    ]
   },
   "tags": []
 }

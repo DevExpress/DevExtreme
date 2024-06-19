@@ -9,7 +9,8 @@ beforeEach(() => {
 });
 
 describe('form', () => {
-  it('should render config components by condition', async (done) => {
+  it('should render config components by condition', async () => {
+    expect.assertions(1);
     const vm = defineComponent({
       template:
                 `<DxForm
@@ -44,15 +45,15 @@ describe('form', () => {
 
     const wrapper = mount(vm);
 
-    wrapper.setProps({ show: false });
+    await wrapper.setProps({ show: false });
 
-    nextTick(() => {
+    await nextTick(() => {
       wrapper.setProps({ show: true });
-      nextTick(() => {
-        expect(wrapper.getComponent('#form').vm.$el
-          .getElementsByClassName('dx-field-item-label-text')).toHaveLength(2);
-        done();
-      });
+    });
+
+    await nextTick(() => {
+      expect(wrapper.getComponent('#form').vm.$el
+        .getElementsByClassName('dx-field-item-label-text')).toHaveLength(2);
     });
   });
 });

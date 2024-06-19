@@ -1,19 +1,20 @@
+import config from '@js/core/config';
 import errors from '@js/core/errors';
-import { version as packageVersion } from '@js/core/version';
+import { fullVersion } from '@js/core/version';
 
 import type { Version } from '../../utils/version';
 import {
+  assertedVersionsCompatible,
   getPreviousMajorVersion,
   parseVersion,
-  stringifyVersion,
-  VERSION_SPLITTER,
 } from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
 import { compareSignatures } from './rsa_bigint';
 import { sha1 } from './sha1';
-import { showTrialPanel } from './trial_panel';
+import type { CustomTrialPanelStyles } from './trial_panel';
+import { registerCustomComponents, renderTrialPanel } from './trial_panel';
 import type {
   License,
   LicenseCheckParams,
@@ -28,8 +29,9 @@ interface Payload extends Partial<License> {
 
 const FORMAT = 1;
 const RTM_MIN_PATCH_VERSION = 3;
+const KEY_SPLITTER = '.';
 
-const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtreme.aspx';
+const BUY_NOW_LINK = 'https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx';
 
 const GENERAL_ERROR: Token = { kind: TokenKind.corrupted, error: 'general' };
 const VERIFICATION_ERROR: Token = { kind: TokenKind.corrupted, error: 'verification' };
@@ -57,7 +59,7 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
     return GENERAL_ERROR;
   }
 
-  const parts = encodedKey.split(VERSION_SPLITTER);
+  const parts = encodedKey.split(KEY_SPLITTER);
 
   if (parts.length !== 2 || parts[0].length === 0 || parts[1].length === 0) {
     return GENERAL_ERROR;
@@ -156,23 +158,46 @@ function getLicenseCheckParams({
   }
 }
 
-export function validateLicense(licenseKey: string, versionStr: string = packageVersion): void {
+export function showTrialPanel(
+  buyNowUrl: string,
+  version: string,
+  customStyles?: CustomTrialPanelStyles,
+): void {
+  if (typeof customElements !== 'undefined') {
+    renderTrialPanel(buyNowUrl, version, customStyles);
+  }
+}
+
+export function registerTrialPanelComponents(customStyles?: CustomTrialPanelStyles): void {
+  if (typeof customElements !== 'undefined') {
+    registerCustomComponents(customStyles);
+  }
+}
+
+export function validateLicense(licenseKey: string, versionStr: string = fullVersion): void {
   if (validationPerformed) {
     return;
   }
   validationPerformed = true;
 
   const version = parseVersion(versionStr);
-  const preview = isPreview(version.patch);
+
+  const versionsCompatible = assertedVersionsCompatible(version);
 
   const { internal, error } = getLicenseCheckParams({
     licenseKey,
     version,
   });
 
-  if (error && !internal) {
-    showTrialPanel(BUY_NOW_LINK, stringifyVersion(version));
+  if (!versionsCompatible && internal) {
+    return;
   }
+
+  if (error && !internal) {
+    showTrialPanel(config().buyNowLink ?? BUY_NOW_LINK, fullVersion);
+  }
+
+  const preview = isPreview(version.patch);
 
   if (error) {
     errors.log(preview ? 'W0022' : error);

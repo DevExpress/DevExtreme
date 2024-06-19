@@ -213,9 +213,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       'CustomDragAndDrop',
     ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
-    ],
   },
   Vue: {
     Charts: [
@@ -242,21 +239,6 @@ const SKIPPED_TESTS = {
     Drawer: [
       { demo: 'TopOrBottomPosition', themes: [THEME.material] },
     ],
-    List: [
-      { demo: 'ListSelection', themes: [THEME.material] },
-    ],
-    Tabs: [
-      { demo: 'Selection', themes: [THEME.fluent, THEME.material] },
-    ],
-    TabPanel: [
-      { demo: 'Overview', themes: [THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
-    ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-    ],
   },
   React: {
     Charts: [
@@ -278,9 +260,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'Templates', themes: [THEME.fluent, THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
   },
 };

@@ -15,7 +15,7 @@ import {
 
 
 
-import { DiagramCommand, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode, dxDiagramCustomCommand } from 'devextreme/ui/diagram';
+import { Command, CustomCommand, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -32,10 +32,10 @@ import { DxiCommandComponent } from './command-dxi';
 })
 export class DxiGroupComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<dxDiagramCustomCommand | DiagramCommand> {
+    get commands(): Array<CustomCommand | Command> {
         return this._getOption('commands');
     }
-    set commands(value: Array<dxDiagramCustomCommand | DiagramCommand>) {
+    set commands(value: Array<CustomCommand | Command>) {
         this._setOption('commands', value);
     }
 
@@ -48,18 +48,18 @@ export class DxiGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get category(): DiagramShapeCategory | string {
+    get category(): ShapeCategory | string {
         return this._getOption('category');
     }
-    set category(value: DiagramShapeCategory | string) {
+    set category(value: ShapeCategory | string) {
         this._setOption('category', value);
     }
 
     @Input()
-    get displayMode(): DiagramToolboxDisplayMode {
+    get displayMode(): ToolboxDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: DiagramToolboxDisplayMode) {
+    set displayMode(value: ToolboxDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -72,10 +72,10 @@ export class DxiGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get shapes(): Array<DiagramShapeType | string> {
+    get shapes(): Array<ShapeType | string> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<DiagramShapeType | string>) {
+    set shapes(value: Array<ShapeType | string>) {
         this._setOption('shapes', value);
     }
 

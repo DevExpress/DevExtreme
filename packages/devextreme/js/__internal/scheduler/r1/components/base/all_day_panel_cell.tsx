@@ -9,6 +9,7 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
   render(): JSX.Element {
     const {
       className,
+      viewContext,
       dataCellTemplate,
       endDate,
       groupIndex,
@@ -25,6 +26,7 @@ export class AllDayPanelCell extends BaseInfernoComponent<DateTableCellBaseProps
     return (
       <DateTableCellBase
         className={`${ALL_DAY_PANEL_CELL_CLASS} ${className}`}
+        viewContext={viewContext}
         startDate={startDate}
         endDate={endDate}
         groups={groups}

@@ -19,6 +19,7 @@
           {{ item.data.fullName + ' (' + item.data.position + ')' }}
         </template>
       </DxTreeView>
+      {{ ' ' }}
       <div class="selected-container">Selected employees
         <DxList
           id="selected-employees"
@@ -140,7 +141,7 @@ function selectionModeValueChanged(e) {
 
 .selected-container {
   padding: 20px;
-  margin-left: 24px;
+  margin-left: 20px;
   background-color: rgba(191, 191, 191, 0.15);
   font-size: 115%;
   font-weight: bold;

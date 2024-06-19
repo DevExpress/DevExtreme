@@ -49,14 +49,9 @@ const COMMON_SKIP_RULES = ['color-contrast'];
 const getTestSpecificSkipRules = (testName) => {
   switch (testName) {
     case 'Calendar-MultipleSelection':
-    case 'DataGrid-HorizontalVirtualScrolling':
       return ['empty-table-header'];
     case 'Localization-UsingGlobalize':
       return ['label'];
-    case 'DataGrid-InfiniteScrolling':
-      return ['aria-required-children'];
-    case 'TagBox-Overview':
-      return ['image-alt', 'image-redundant-alt'];
     default:
       return [];
   }
@@ -98,9 +93,6 @@ const SKIPPED_TESTS = {
     PivotGrid: [
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'ChartIntegration', themes: [THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     TreeList: [
       { demo: 'BatchEditing', themes: [THEME.material] },
@@ -147,17 +139,6 @@ const SKIPPED_TESTS = {
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
-    ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
-    ],
-    TabPanel: [
-      { demo: 'SortableClosableTabs', themes: [THEME.fluent, THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     List: [
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
@@ -210,25 +191,13 @@ const SKIPPED_TESTS = {
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
-    TreeView: [
-      { demo: 'ItemSelectionAndCustomization', themes: [THEME.material] },
-      { demo: 'DragAndDropPlainDataStructure', themes: [THEME.fluent] },
-      { demo: 'DragAndDropHierarchicalDataStructure', themes: [THEME.fluent] },
-    ],
     TileView: [
       { demo: 'Directions', themes: [THEME.material] },
-    ],
-    Toolbar: [
-      { demo: 'Adaptability', themes: [THEME.fluent, THEME.material] },
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
     ],
-    Tabs: [
-      { demo: 'Selection', themes: [THEME.material, THEME.fluent] },
-    ],
     List: [
-      { demo: 'ListSelection', themes: [THEME.material] },
       { demo: 'ListWithSearchBar', themes: [THEME.material] },
     ],
     Gauges: [

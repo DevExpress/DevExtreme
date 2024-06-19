@@ -15,7 +15,7 @@ export interface dxElementWrapper {
 
   appendTo(element: Element | dxElementWrapper): this;
 
-  attr(attributeName: string, value: string | number | null): this;
+  attr(attributeName: string, value: string | number | boolean | null): this;
 
   attr(attributeName: string): string | undefined;
 

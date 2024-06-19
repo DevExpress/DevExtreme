@@ -3,7 +3,7 @@ import { Selector as $ } from 'testcafe';
 import { runManualTest } from '../../../utils/visual-tests/matrix-test-helper';
 import { testScreenshot } from '../../../utils/visual-tests/helpers/theme-utils';
 
-fixture.skip('PieWithResolvedLabelOverlapping')
+fixture('PieWithResolvedLabelOverlapping')
   .page('http://localhost:8080/')
   .before(async (ctx) => {
     ctx.initialWindowSize = [900, 600];

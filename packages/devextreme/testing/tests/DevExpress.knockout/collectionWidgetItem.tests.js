@@ -1,10 +1,10 @@
-const $ = require('jquery');
-const ko = require('knockout');
-const registerComponent = require('core/component_registrator');
-const CollectionWidget = require('ui/collection/ui.collection_widget.edit');
-const CollectionWidgetItem = require('ui/collection/item');
+import $ from 'jquery';
+import ko from 'knockout';
+import registerComponent from 'core/component_registrator';
+import CollectionWidget from 'ui/collection/ui.collection_widget.edit';
+import CollectionWidgetItem from '__internal/ui/collection/m_item';
 
-require('integration/knockout');
+import 'integration/knockout';
 
 const moduleWithoutCsp = QUnit.urlParams['nocsp'] ? QUnit.module : QUnit.module.skip;
 

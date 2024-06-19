@@ -1,0 +1,25 @@
+{
+  "name": "devextreme-angular-playground",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/angular",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "inputs": [
+        "{projectRoot}/src/**/*",
+        "{projectRoot}/angular.json",
+        "{projectRoot}/tsconfig*",
+        "{workspaceRoot}/tsconfig.json"
+      ],
+      "outputs": [
+        "{projectRoot}/dist"
+      ],
+      "cache": true
+    }
+  },
+  "tags": []
+}

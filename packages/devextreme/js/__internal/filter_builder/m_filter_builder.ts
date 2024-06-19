@@ -8,11 +8,11 @@ import { isDefined } from '@js/core/utils/type';
 import eventsEngine from '@js/events/core/events_engine';
 import { normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { getElementMaxHeightByWindow } from '@js/ui/overlay/utils';
-import Popup from '@js/ui/popup';
+import Popup from '@js/ui/popup/ui.popup';
 import EditorFactoryMixin from '@js/ui/shared/ui.editor_factory_mixin';
 import TreeView from '@js/ui/tree_view';
 import Widget from '@js/ui/widget/ui.widget';
+import { getElementMaxHeightByWindow } from '@ts/ui/overlay/m_utils';
 
 import {
   addItem, convertToInnerStructure,
@@ -817,6 +817,7 @@ class FilterBuilder extends Widget<any> {
       },
       visible: true,
       focusStateEnabled: false,
+      preventScrollEvents: false,
       hideOnParentScroll: this.option('closePopupOnTargetScroll'),
       hideOnOutsideClick: true,
       onShown: options.popup.onShown,

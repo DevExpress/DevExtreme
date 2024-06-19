@@ -8,7 +8,7 @@ const open = require('open');
 const { join, normalize } = require('path');
 const { readFileSync, readdirSync } = require('fs');
 
-const root = join(__dirname, '..', '..');
+const root = join(__dirname, '..', '..', '..', '..');
 const indexFileName = 'index.html';
 const cssDirectory = join(root, 'node_modules', 'devextreme', 'dist', 'css');
 const getAvailableThemes = readdirSync(cssDirectory).filter((f) => /^dx\.(?!common).*\.css$/i.test(f));
@@ -49,4 +49,4 @@ app.use(
 
 app.listen(port);
 
-open(`http://localhost:${port}/`);
+open(`http://localhost:${port}/apps/demos`);

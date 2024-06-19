@@ -9,7 +9,8 @@ beforeEach(() => {
 });
 
 describe('data grid', () => {
-  it('vmodel should work correctly for nested components', async (done) => {
+  it('vmodel should work correctly for nested components', async () => {
+    expect.assertions(2);
     const vm = defineComponent({
       template:
                 `<DxDataGrid
@@ -51,13 +52,13 @@ describe('data grid', () => {
     const instance = (wrapper.getComponent('#grid').vm as any).$_instance;
     instance.option('columns[0].visible', false);
 
-    nextTick(() => {
+    await nextTick(() => {
       instance.option('columns[1].visible', false);
-      nextTick(() => {
-        expect(wrapper.vm.visible1).toBe(false);
-        expect(wrapper.vm.visible2).toBe(false);
-        done();
-      });
+    });
+
+    await nextTick(() => {
+      expect(wrapper.vm.visible1).toBe(false);
+      expect(wrapper.vm.visible2).toBe(false);
     });
   });
 });

@@ -4,6 +4,7 @@ import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import { deferRender, deferUpdate } from '@js/core/utils/common';
+import type { DeferredObj } from '@js/core/utils/deferred';
 import { Deferred, when } from '@js/core/utils/deferred';
 import { each } from '@js/core/utils/iterator';
 import { getBoundingRect } from '@js/core/utils/position';
@@ -646,9 +647,10 @@ export class ResizingController extends modules.ViewController {
   /**
    * @extended: virtual_scrolling
    */
-  public resize() {
+  public resize(): DeferredObj<unknown> {
     if (this.component._requireResize) {
-      return;
+      // @ts-expect-error
+      return new Deferred().resolve();
     }
 
     // @ts-expect-error

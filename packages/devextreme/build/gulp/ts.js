@@ -4,7 +4,6 @@ const gulp = require('gulp');
 const file = require('gulp-file');
 const footer = require('gulp-footer');
 const concat = require('gulp-concat');
-const { spawn } = require('child_process');
 const path = require('path');
 const replace = require('gulp-replace');
 const ts = require('gulp-typescript');
@@ -19,8 +18,6 @@ const OUTPUT_ARTIFACTS_DIR = 'artifacts/ts';
 const TS_BUNDLE_FILE = './ts/dx.all.d.ts';
 const TS_BUNDLE_SOURCES = [TS_BUNDLE_FILE, './ts/aliases.d.ts'];
 const src = ['./js/**/*.d.ts', '!./js/renovation/**/*'];
-
-const TS_TESTS_PATH = './testing/typescript';
 
 function compileTS(settings) {
     return ts.createProject({
@@ -164,40 +161,6 @@ gulp.task('ts-check-public-modules', gulp.series('ts-copy-modules', function() {
     return file('artifacts/modules.ts', content, { src: true })
         .pipe(compileTS({ allowSyntheticDefaultImports: true }));
 }));
-
-gulp.task('test-ts', gulp.series(
-    (callback) => {
-        spawn('npm', ['i', '--no-audit', '--no-fund'], { shell: true, cwd: TS_TESTS_PATH })
-            .on('error', callback)
-            .on('close', code => code ? callback(new Error(code)) : callback());
-    },
-    () => {
-        return gulp
-            .src([
-                `${TS_TESTS_PATH}/**/*.ts`,
-                `!${TS_TESTS_PATH}/node_modules/**/*`,
-            ])
-            .pipe(compileTS({
-                'esModuleInterop': true,
-                'moduleResolution': 'node',
-                'noEmit': true,
-                'skipLibCheck': true,
-                'typeRoots': [],
-                'target': 'es2015',
-                'lib': [
-                    'ES2017',
-                    'ES2020.BigInt',
-                    'DOM'
-                ],
-                'baseUrl': `${TS_TESTS_PATH}`,
-                'paths': {
-                    '@js/*': ['../../js/*'],
-                    '@ts/*': ['../../js/__internal/*'],
-                    '*': ['node_modules/*'],
-                }
-            }));
-    }
-));
 
 gulp.task('validate-ts', gulp.series(
     'ts-check-modules',

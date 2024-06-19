@@ -15,9 +15,6 @@ if (!/localhost/.test(document.location.host)) {
 })
 
 export class AppComponent {
-  customizeText(arg) {
-    return `${arg.valueText} mm`;
-  }
 }
 
 @NgModule({

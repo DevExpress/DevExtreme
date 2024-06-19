@@ -2,7 +2,7 @@ import { DesktopTooltipStrategy } from '__internal/scheduler/tooltip_strategies/
 import { FunctionTemplate } from 'core/templates/function_template';
 import { extend } from 'core/utils/extend';
 import Tooltip from 'ui/tooltip';
-import List from 'ui/list/ui.list.edit';
+import List from '__internal/ui/list/m_list.edit';
 import Button from 'ui/button';
 import support from 'core/utils/support';
 

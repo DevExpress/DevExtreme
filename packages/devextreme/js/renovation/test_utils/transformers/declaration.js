@@ -4,7 +4,7 @@ const generator = require('@devextreme-generator/inferno').default;
 const ts = require('typescript');
 const path = require('path');
 const fs = require('fs');
-const tsJest = require('ts-jest');
+const tsJest = require('ts-jest').default;
 const getCacheKey = require('./get_cache_key');
 const { BASE_GENERATOR_OPTIONS_WITH_JQUERY } = require('../../../../build/gulp/generator/generator-options');
 
@@ -16,7 +16,7 @@ const tsConfig = getTsConfig(TS_CONFIG_PATH);
 generator.options = BASE_GENERATOR_OPTIONS_WITH_JQUERY;
 
 module.exports = {
-    process(src, filename, config) {
+    process(src, filename, options) {
         if(filename.indexOf('test_components') !== -1 && path.extname(filename) === '.tsx') {
             const result = compileCode(generator, src, {
                 path: filename,
@@ -41,13 +41,13 @@ module.exports = {
         .replace(new RegExp(`\\b${componentName}\\b`, 'g'), `${componentName}Class`)
         .replace(new RegExp(`import ${componentName}Component from\\s+\\S+`), `const ${componentName}Component = ${componentName}`)}`,
                         tsConfig,
-                    ).outputText, filename, config,
+                    ).outputText, filename, options,
                 );
             }
         }
-        return jestTransformer.process(src, filename, config);
+        return jestTransformer.process(src, filename, options);
     },
-    getCacheKey(fileData, filePath, configStr) {
-        return getCacheKey(fileData, filePath, configStr, THIS_FILE);
+    getCacheKey(fileData, filePath, transformOptions) {
+        return getCacheKey(fileData, filePath, transformOptions.configString, THIS_FILE);
     },
 };

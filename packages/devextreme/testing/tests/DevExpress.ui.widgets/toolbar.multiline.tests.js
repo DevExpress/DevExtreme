@@ -5,8 +5,8 @@ import 'ui/select_box';
 import { extend } from 'core/utils/extend';
 import { value as viewPort } from 'core/utils/view_port';
 
-import { MultiLineStrategy } from 'ui/toolbar/strategy/toolbar.multiline';
-import { SingleLineStrategy } from 'ui/toolbar/strategy/toolbar.singleline';
+import { MultiLineStrategy } from '__internal/ui/toolbar/strategy/m_toolbar.multiline';
+import { SingleLineStrategy } from '__internal/ui/toolbar/strategy/m_toolbar.singleline';
 
 import 'generic_light.css!';
 

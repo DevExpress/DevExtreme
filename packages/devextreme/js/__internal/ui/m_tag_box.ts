@@ -22,9 +22,9 @@ import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace, isCommandKeyPressed, normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import SelectBox from '@js/ui/select_box';
-import caret from '@js/ui/text_box/utils.caret';
-import { allowScroll } from '@js/ui/text_box/utils.scroll';
 import errors from '@js/ui/widget/ui.errors';
+import caret from '@ts/ui/text_box/m_utils.caret';
+import { allowScroll } from '@ts/ui/text_box/m_utils.scroll';
 
 function xor(a: boolean, b: boolean): boolean {
   return (a || b) && !(a && b);
@@ -652,8 +652,7 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _renderMultiSelect() {
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred();
 
     this._updateTagsContainer(this._$textEditorInputContainer);
     this._renderInputSize();
@@ -785,8 +784,7 @@ const TagBox = (SelectBox as any).inherit({
     const clientFilterFunction = creator.getLocalFilter(this._valueGetter);
     const filteredItems = selectedItems.filter(clientFilterFunction);
     const selectedItemsAlreadyLoaded = filteredItems.length === values.length;
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred();
     const dataController = this._dataController;
 
     if ((!this._isDataSourceChanged || isListItemsLoaded) && selectedItemsAlreadyLoaded) {
@@ -844,8 +842,7 @@ const TagBox = (SelectBox as any).inherit({
       }
     });
 
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred();
     when.apply(this, loadItemPromises).always(() => {
       d.resolve(items);
     });
@@ -880,8 +877,7 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _getFilteredGroupedItems(values) {
-    // @ts-expect-error
-    const selectedItems = new Deferred();
+    const selectedItems = Deferred();
 
     if (this._filteredGroupedItemsLoadPromise) {
       this._dataController.cancel(this._filteredGroupedItemsLoadPromise.operationId);
@@ -906,8 +902,7 @@ const TagBox = (SelectBox as any).inherit({
 
   _loadTagsData() {
     const values = this._getValue();
-    // @ts-expect-error
-    const tagData = new Deferred();
+    const tagData = Deferred();
 
     this._selectedItems = [];
 
@@ -926,8 +921,7 @@ const TagBox = (SelectBox as any).inherit({
   },
 
   _renderTags() {
-    // @ts-expect-error
-    const d = new Deferred();
+    const d = Deferred();
     let isPlainDataUsed = false;
 
     if (this._shouldGetItemsFromPlain(this._valuesToUpdate)) {
@@ -1024,8 +1018,8 @@ const TagBox = (SelectBox as any).inherit({
 
   _renderTagsCore(items) {
     this._isInputReady?.reject();
-    // @ts-expect-error
-    this._isInputReady = new Deferred();
+
+    this._isInputReady = Deferred();
     this._renderField();
 
     this.option('selectedItems', this._selectedItems.slice());

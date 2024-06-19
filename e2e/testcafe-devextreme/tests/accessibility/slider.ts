@@ -16,10 +16,7 @@ const options: Options<Properties> = {
   width: [undefined, '50%'],
   min: [undefined, 10],
   max: [undefined, 90],
-  showRange: [true, false],
-  focusStateEnabled: [true],
   label: [
-    undefined,
     {
       visible: true,
       format(value) {
@@ -29,7 +26,6 @@ const options: Options<Properties> = {
     },
   ],
   tooltip: [
-    undefined,
     {
       enabled: true,
       format(value) {

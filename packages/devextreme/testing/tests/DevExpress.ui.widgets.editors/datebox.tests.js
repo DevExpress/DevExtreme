@@ -17,7 +17,7 @@ import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
-import uiDateUtils from 'ui/date_box/ui.date_utils';
+import uiDateUtils from '__internal/ui/date_box/m_date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
@@ -2081,6 +2081,46 @@ QUnit.module('datebox and calendar integration', () => {
 
         instance.option('calendarOptions.visible', true);
         assert.strictEqual($(instance.content()).parent().find('.dx-button-today').length, 1);
+    });
+
+    QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'device is not desktop');
+            return;
+        }
+
+        const valueChangedHandle = sinon.spy();
+        const date = new Date();
+        const currentYear = date.getFullYear();
+        const datebox = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: date,
+            displayFormat: 'M/dd/yyyy',
+            valueChangeEvent: 'dxmousewheel',
+            useMaskBehavior: true,
+            onValueChanged: valueChangedHandle
+        }).dxDateBox('instance');
+
+        const $input = $(datebox.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const pointer = pointerMock($input);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.caret({ start: 12, end: 15 });
+
+        $input.trigger('dxclick');
+
+        pointer.wheel(1);
+
+        let changedValue = valueChangedHandle.getCall(0).args[0];
+        assert.strictEqual(valueChangedHandle.callCount, 1, 'handler has been called once');
+        assert.deepEqual(new Date(changedValue.value).getFullYear(), currentYear + 1, 'value year is correct'); assert.deepEqual(new Date(changedValue.previousValue).getFullYear(), currentYear, 'previous value year is correct');
+
+        pointer.wheel(1);
+
+        changedValue = valueChangedHandle.getCall(1).args[0];
+        assert.strictEqual(valueChangedHandle.callCount, 2, 'handler has been called twice');
+        assert.deepEqual(new Date(changedValue.value).getFullYear(), currentYear + 2, 'value year is correct');
+        assert.deepEqual(new Date(changedValue.previousValue).getFullYear(), currentYear + 1, 'previous value year is correct');
     });
 });
 
