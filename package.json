@@ -95,12 +95,7 @@
     "lint-staged",
     "pre-commit"
   ],
-  "workspaces": [
-    "apps/*",
-    "packages/*",
-    "e2e/*",
-    "packages/devextreme/artifacts/npm/*"
-  ],
+  "packageManager": "pnpm@9.1.2",
   "dependencies": {
     "devextreme-aspnet-data": "3.0.0",
     "devextreme-aspnet-data-nojquery": "3.0.0",
