@@ -194,9 +194,11 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('copy.dist.dx-angular', () => gulp
-  .src(`${buildConfig.npm.distPath}/**/*`)
-  .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular'))));
+gulp.task('copy.dist.dx-angular', () => {
+  return gulp
+    .src(`${buildConfig.npm.distPath}/**/*`)
+    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
+});
 
 gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
   const config = buildConfig.components;
