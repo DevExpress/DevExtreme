@@ -1,6 +1,11 @@
 import errors from '@js/core/errors';
 import { version as packageVersion } from '@js/core/version';
 
+import type { Version } from '../../utils/version';
+import {
+  assertedVersionsCompatible,
+  parseVersion,
+} from '../../utils/version';
 import { base64ToBytes } from './byte_utils';
 import { INTERNAL_USAGE_ID, PUBLIC_KEY } from './key';
 import { pad } from './pkcs1';
@@ -37,6 +42,10 @@ function verifySignature({ text, signature: encodedSignature }: {
     signature: base64ToBytes(encodedSignature),
     actual: pad(sha1(text)),
   });
+}
+
+function isPreview(patch: number): boolean {
+  return isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
 }
 
 export function parseLicenseKey(encodedKey: string | undefined): Token {
@@ -99,7 +108,7 @@ export function parseLicenseKey(encodedKey: string | undefined): Token {
 
 function getLicenseCheckParams({ licenseKey, version }: {
   licenseKey: string | undefined;
-  version: string;
+  version: Version;
 }): {
     preview: boolean;
     internal?: true;
@@ -108,8 +117,9 @@ function getLicenseCheckParams({ licenseKey, version }: {
   let preview = false;
 
   try {
-    const [major, minor, patch] = version.split('.').map(Number);
-    preview = isNaN(patch) || patch < RTM_MIN_PATCH_VERSION;
+    preview = isPreview(version.patch);
+
+    const { major, minor } = version;
 
     if (!licenseKey) {
       return { preview, error: 'W0019' };
@@ -139,13 +149,22 @@ function getLicenseCheckParams({ licenseKey, version }: {
   }
 }
 
-export function validateLicense(licenseKey: string, version: string = packageVersion): void {
+export function validateLicense(licenseKey: string, versionStr: string = packageVersion): void {
   if (validationPerformed) {
     return;
   }
   validationPerformed = true;
 
-  const { preview, internal, error } = getLicenseCheckParams({ licenseKey, version });
+  const version = parseVersion(versionStr);
+
+  if (!assertedVersionsCompatible(version)) {
+    return;
+  }
+
+  const { preview, internal, error } = getLicenseCheckParams({
+    licenseKey,
+    version,
+  });
 
   if (error) {
     errors.log(preview ? 'W0022' : error);
