@@ -9,16 +9,9 @@ const argv = yargs
 
 const devMode = argv.dev;
 
+console.log(`Dev mode: ${devMode}`);
+
 const DEVEXTREME_NPM_DIR = path.join(ROOT_DIR, 'packages/devextreme/artifacts/npm');
-
-sh.set('-e');
-
-sh.mkdir('-p', NPM_DIR);
-
-const packAndCopy = (outputDir: string) => {
-    sh.exec('npm pack', { silent: true });
-    sh.cp('*.tgz', outputDir);
-}
 
 const injectDescriptions = () => {
     sh.pushd(ROOT_DIR);
@@ -27,32 +20,41 @@ const injectDescriptions = () => {
     sh.exec(`git clone -b ${MAJOR_VERSION} --depth 1 --config core.longpaths=true https://github.com/DevExpress/devextreme-documentation.git ${DOCUMENTATION_TEMP_DIR}`);
 
     sh.pushd(DOCUMENTATION_TEMP_DIR);
-    sh.exec('npm i');
-    sh.exec(`npm run update-topics -- --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
+    sh.exec('pnpm i');
+    sh.exec(`pnpm run update-topics --artifacts ${INTERNAL_TOOLS_ARTIFACTS}`);
     sh.popd();
 
     sh.rm('-rf', DOCUMENTATION_TEMP_DIR);
 
-    sh.exec('npm run devextreme:inject-descriptions');
+    sh.exec('pnpm run devextreme:inject-descriptions');
     sh.popd();
 }
 
-const monorepoVersion = sh.exec('npm pkg get version', { silent: true }).stdout.replaceAll('"', '');
+sh.set('-e');
+
+sh.mkdir('-p', NPM_DIR);
+
+const packAndCopy = (outputDir: string) => {
+    sh.exec('pnpm pack', { silent: true });
+    sh.cp('*.tgz', outputDir);
+}
+
+const monorepoVersion = sh.exec('pnpm pkg get version', { silent: true }).stdout.replaceAll('"', '');
 const MAJOR_VERSION = monorepoVersion.split('.').slice(0, 2).join('_');
 
 // Prepare metadata
 sh.cd(ROOT_DIR);
-sh.exec('npm run tools:discover-declarations');
-sh.exec(`npm run tools -- make-aspnet-metadata --version ${MAJOR_VERSION}`);
+sh.exec('pnpm run tools:discover-declarations');
+sh.exec(`pnpm run tools make-aspnet-metadata --version ${MAJOR_VERSION}`);
 
 if (!devMode) {
     injectDescriptions();
 }
 
 if (devMode) {
-    sh.exec('npx nx build devextreme-main');
+    sh.exec('pnpx nx build devextreme-main');
 } else {
-    sh.exec('npm run build-dist -w devextreme-main', {
+    sh.exec('pnpx nx build-dist devextreme-main --skipNxCache', {
         env: {
             ...sh.env,
             BUILD_INTERNAL_PACKAGE: 'false'
@@ -60,11 +62,7 @@ if (devMode) {
     });
 }
 
-if (devMode) {
-    sh.exec(`npx nx build devextreme-themebuilder`);
-} else {
-    sh.exec('npm run build -w devextreme-themebuilder');
-}
+sh.exec(`pnpx nx build devextreme-themebuilder${devMode ? '' : ' --skipNxCache'}`);
 
 // Copy artifacts for DXBuild (Installation)
 sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
@@ -72,13 +70,19 @@ sh.pushd(path.join(ROOT_DIR, 'packages/devextreme/artifacts'));
 sh.popd();
 
 // TODO: maybe we should add bootstrap to vendors
-const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'node_modules', 'bootstrap', 'dist');
+const BOOTSTRAP_DIR = path.join(ROOT_DIR, 'packages', 'devextreme', 'node_modules', 'bootstrap', 'dist');
 sh.cp([path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.js'), path.join(BOOTSTRAP_DIR, 'js', 'bootstrap.min.js')], JS_ARTIFACTS);
 sh.cp([path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.css'), path.join(BOOTSTRAP_DIR, 'css', 'bootstrap.min.css')], CSS_ARTIFACTS);
 
-const { devextreme: devextremeNpmVersion } = JSON.parse(sh.exec('npm pkg get version -ws --json').stdout);
+const {
+    devextreme: devextremeNpmVersion
+} = JSON.parse(sh.exec('pnpm m ls --json --depth=-1 | jq \'reduce .[] as $item ({}; .[$item.name] = $item.version)\'').stdout);
 
-sh.exec('npm run all:pack-and-copy');
+sh.exec('pnpm run all:pack-and-copy');
+
+sh.exec('pnpx nx pack devextreme-react', { silent: true });
+sh.exec('pnpx nx pack devextreme-vue', { silent: true });
+sh.exec(`pnpx nx pack devextreme-angular${devMode ? '' : ' --with-descriptions'}`, { silent: true });
 
 sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme'));
     packAndCopy(NPM_DIR);
@@ -89,15 +93,8 @@ sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-dist'));
 sh.popd();
 
 sh.pushd(path.join(ROOT_DIR, 'packages', 'devextreme-themebuilder', 'dist'));
-    sh.exec(`npm pkg set version="${devextremeNpmVersion}"`);
+    sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
     packAndCopy(NPM_DIR);
-sh.popd();
-
-sh.exec('npm run pack -w devextreme-react -w devextreme-vue', { silent: true });
-
-sh.pushd('packages/devextreme-angular');
-    const additionalArgs = devMode ? '' : ' -- --with-descriptions';
-    sh.exec('npm run pack' + additionalArgs, { silent: true });
 sh.popd();
 
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-angular', 'npm', 'dist', '*.tgz'), NPM_DIR);
@@ -105,10 +102,10 @@ sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_D
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_DIR);
 
 if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('npm run build-dist -w devextreme-main');
+    sh.exec('pnpx nx build-dist devextreme-main');
 
     sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
-        sh.exec(`npm pkg set version="${devextremeNpmVersion}"`);
+        sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);
         packAndCopy(NPM_DIR);
     sh.popd();
 
