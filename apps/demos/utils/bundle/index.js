@@ -214,7 +214,7 @@ const prepareConfigs = (framework)=> {
               '@babel/plugin-transform-optional-chaining',
             ]
           };
-  
+
           const result = new Promise((resolve) => {
             // systemjs-builder uses babel 6, so we use babel 7 here for transpiling ES2020
             babel.transformFile(url.fileURLToPath(load.name), babelOptions, (err, result) => {
