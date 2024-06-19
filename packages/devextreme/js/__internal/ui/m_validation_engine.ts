@@ -563,7 +563,7 @@ const ValidationEngine = {
     this.addGroup(undefined, false);
   },
 
-  addGroup(group, isRemovable) {
+  addGroup(group, isRemovable = true) {
     let config = this.getGroupConfig(group);
     if (!config) {
       config = new GroupConfig(group, isRemovable);
@@ -779,7 +779,7 @@ const ValidationEngine = {
   },
 
   registerValidatorInGroup(group, validator) {
-    const groupConfig = ValidationEngine.addGroup(group, true);
+    const groupConfig = ValidationEngine.addGroup(group);
     groupConfig.registerValidator.call(groupConfig, validator);
   },
 
