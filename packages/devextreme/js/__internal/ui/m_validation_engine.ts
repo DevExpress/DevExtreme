@@ -784,7 +784,6 @@ const ValidationEngine = {
   },
 
   _shouldRemoveGroup(validatorsInGroup, isRemovable) {
-    debugger
     return !validatorsInGroup.length && isRemovable;
   },
 
