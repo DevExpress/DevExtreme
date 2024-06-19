@@ -26,6 +26,7 @@ export class GroupPanelHorizontalRow extends BaseInfernoComponent<GroupPanelRowP
             isLastGroupCell,
             key,
             text,
+            // @ts-ignore
           }, index) => <GroupPanelHorizontalCell
             key={key}
             text={text}
