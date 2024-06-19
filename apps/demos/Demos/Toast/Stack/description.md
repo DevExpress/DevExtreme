@@ -1,7 +1,7 @@
 The DevExtreme Toast components can stack multiple notifications. Use the [notify(message, stack)](/Documentation/ApiReference/Common/Utils/ui/#notifymessage_stack) or [notify(options, stack)](/Documentation/ApiReference/Common/Utils/ui/#notifyoptions_stack) method to display stacked messages.
-<!--split-->
 
 These methods use a **stack** object that has the following structure: *{position, direction}*.
+<!--split-->
 
 ## Specify Position
 
