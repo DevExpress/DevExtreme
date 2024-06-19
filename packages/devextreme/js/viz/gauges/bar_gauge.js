@@ -131,12 +131,13 @@ export const dxBarGauge = BaseGauge.inherit({
                 format: labelOptions.format !== undefined ? labelOptions.format : that._defaultFormatOptions,
                 customizeText: labelOptions.customizeText
             };
+            context.textOptions = { align: 'center' };
 
             that._textIndent = labelOptions.indent > 0 ? _Number(labelOptions.indent) : 0;
             context.lineWidth = labelOptions.connectorWidth > 0 ? _Number(labelOptions.connectorWidth) : 0;
             context.lineColor = labelOptions.connectorColor || null;
 
-            const text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).append(that._barsGroup);
+            const text = that._renderer.text(_getSampleText(that._translator, context.formatOptions), 0, 0).attr(context.textOptions).css(context.fontStyles).append(that._barsGroup);
             const bBox = text.getBBox();
             text.remove();
 
@@ -593,7 +594,7 @@ _extend(BarWrapper.prototype, {
         that._bar = context.renderer.arc().attr(_extend({ 'stroke-linejoin': 'round' }, that._settings)).append(context.group);
         if(context.textEnabled) {
             that._line = context.renderer.path([], 'line').attr({ 'stroke-width': context.lineWidth }).append(context.group);
-            that._text = context.renderer.text().css(context.fontStyles).attr({ align: 'center' }).append(context.group);
+            that._text = context.renderer.text().css(context.fontStyles).attr(context.textOptions).append(context.group);
         }
 
         that._angle = isFinite(that._angle) ? that._angle : context.baseAngle;
