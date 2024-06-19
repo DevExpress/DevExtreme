@@ -16,7 +16,7 @@ function DXDemoTheme(version) {
   const themeLink = document.createElement('link');
   themeLink.rel = 'stylesheet';
   // fix licence warning - there is cdn themes for devextreme-dist v23.2.4 but not for 23.2.3
-  themeLink.href = `../../../../../../../../packages/devextreme/artifacts/npm/devextreme-dist/css/${theme}.css`;
+  themeLink.href = `../../../../../../../../node_modules/devextreme/dist/css/devextreme-dist/css/${theme}.css`;
 
   document.head.appendChild(themeLink);
 }
