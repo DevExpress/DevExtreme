@@ -158,7 +158,7 @@ gulp.task(NPM_PACK, gulp.series(
     NPM_BUILD,
     NPM_PREPARE_MODULES,
     ADD_HEADERS,
-    shell.task(['npm pack'], {cwd: config.npm.dist})
+    shell.task(['pnpm pack'], {cwd: config.npm.dist})
 ));
 
 function makeModule(folder, moduleFileNames, moduleFilePath) {

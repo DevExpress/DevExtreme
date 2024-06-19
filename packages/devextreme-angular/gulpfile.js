@@ -160,9 +160,9 @@ gulp.task('npm.content', gulp.series(
 gulp.task('npm.pack', gulp.series(
   'npm.content',
   (cb) => {
-    argv.withDescriptions ? exec('npm --prefix ../../ run angular:inject-descriptions', (err) => cb(err)) : cb();
+    argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
   },
-  (cb) => { exec('npm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)); },
+  (cb) => { exec('pnpm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)); },
   () => gulp.src(buildConfig.npm.distPath)
     .pipe(gulp.dest('./node_modules/devextreme-angular')),
 ));
@@ -194,11 +194,9 @@ gulp.task('generate-component-names', (done) => {
   done();
 });
 
-gulp.task('copy.dist.dx-angular', () => {
-  return gulp
-    .src(`${buildConfig.npm.distPath}/**/*`)
-    .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular')));
-});
+gulp.task('copy.dist.dx-angular', () => gulp
+  .src(`${buildConfig.npm.distPath}/**/*`)
+  .pipe(gulp.dest(path.join(buildConfig.components.testsPath, 'node_modules/devextreme-angular'))));
 
 gulp.task('build.tests', gulp.series('clean.tests', 'generate-component-names', 'copy.dist.dx-angular', () => {
   const config = buildConfig.components;

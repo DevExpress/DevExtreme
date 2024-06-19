@@ -25,7 +25,7 @@
     "prepare": "husky install",
     "all:update-version": "ts-node tools/scripts/update-version.ts",
     "all:build": "ts-node tools/scripts/build-all.ts",
-    "all:build-dev": "npm run all:build -- --dev",
+    "all:build-dev": "pnpm run all:build --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
     "overwrite-wrappers-packages": "ts-node tools/scripts/overwrite-wrappers-packages.ts",
     "webserver": "http-server --port 8080 -c-1"
