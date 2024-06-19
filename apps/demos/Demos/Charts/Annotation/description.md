@@ -1,7 +1,7 @@
 Annotations are containers for images, text blocks, and custom content that display additional information about the visualized data.
-<!--split-->
 
 To create annotations, populate the Chart's [annotations](/Documentation/ApiReference/UI_Components/dxChart/Configuration/annotations/) array. Each object in the array configures an individual annotation. To specify properties for all annotations, use the [commonAnnotationSettings](/Documentation/ApiReference/UI_Components/dxChart/Configuration/commonAnnotationSettings/) object. Individual settings take precedence over common settings.
+<!--split-->
 
 You can set each annotation's [type](/Documentation/ApiReference/UI_Components/dxChart/Configuration/annotations/#type) property to *"text"*, *"image"*, or *"custom"*. Depending on the **type**, specify the [text](/Documentation/ApiReference/UI_Components/dxChart/Configuration/annotations/#text) or [image](/Documentation/ApiReference/UI_Components/dxChart/Configuration/annotations/image/) property. You can also add a [description](/Documentation/ApiReference/UI_Components/dxChart/Configuration/annotations/#description) that will be displayed in a tooltip.
 
