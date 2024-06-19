@@ -268,7 +268,7 @@ QUnit.module('General', {
         ValidationEngine.removeRegisteredValidator(group, validator2);
     });
 
-    QUnit.test('group should be validated positively and should not be removed after all validators are removed (T1006667)', function(assert) {
+    QUnit.test('group should be validated positively after all validators remove (T1006667)', function(assert) {
         const $container = $('#dxValidationGroup');
         const group = this.fixture.createGroup($container);
         const adapter = sinon.createStubInstance(DefaultAdapter);
@@ -293,6 +293,7 @@ QUnit.module('General', {
         });
         const validator2 = $validator2.dxValidator('instance');
 
+
         $validator1.appendTo($container);
         $validator2.appendTo($container);
         triggerShownEvent($container);
@@ -304,6 +305,18 @@ QUnit.module('General', {
             assert.ok(isValid, 'validation is correct');
         });
         ValidationEngine.removeRegisteredValidator(group, validator2);
+    });
+
+    QUnit.test('group should not be removed after its validators are removed (T1233487)', function(assert) {
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        const $validator1 = $('<div>').dxValidator({
+            adapter: adapter
+        });
+        const validator1 = $validator1.dxValidator('instance');
+
+        ValidationEngine.removeRegisteredValidator(group, validator1);
 
         assert.ok(ValidationEngine.getGroupConfig(group), 'group is not removed');
     });
