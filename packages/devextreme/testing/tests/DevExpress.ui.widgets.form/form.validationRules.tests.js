@@ -476,7 +476,7 @@ QUnit.test('Changing an validationRules options of an any item does not invalida
 });
 
 [false, true].forEach(hasValidationGroup => {
-    QUnit.test(`form ${hasValidationGroup ? 'with' : 'without'} validation group should validate without errors (T1233487)`, function(assert) {
+    QUnit.test(`form ${hasValidationGroup ? 'with' : 'without'} validationGroup property specified should validate without errors after nested validators remove (T1233487)`, function(assert) {
         const form = $('#form').dxForm({
             validationGroup: hasValidationGroup ? 'test' : undefined,
             formData: {
