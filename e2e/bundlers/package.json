@@ -9,6 +9,7 @@
     "cross-env": "7.0.3",
     "devextreme-cldr-data": "1.0.3",
     "globalize": "1.7.0",
+    "cldrjs": "0.5.5",
     "jquery": "3.7.1",
     "minimist": "1.2.8",
     "parcel": "2.11.0",
@@ -17,7 +18,8 @@
     "vite": "2.9.18",
     "webpack": "5.76.0",
     "webpack-cli": "4.10.0",
-    "devextreme-main": "*"
+    "devextreme-main": "*",
+    "devextreme": "*"
   },
   "alias": {
     "globalize$": "./node_modules/globalize/dist/globalize.js",
