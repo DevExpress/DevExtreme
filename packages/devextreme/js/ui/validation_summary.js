@@ -145,7 +145,7 @@ const ValidationSummary = CollectionWidget.inherit({
         const $element = this.$element();
         const group = this.option('validationGroup') ||
             ValidationEngine.findGroup($element, this._modelByElement($element));
-        const groupConfig = ValidationEngine.addGroup(group);
+        const groupConfig = ValidationEngine.addGroup(group, true);
 
         this._unsubscribeGroup();
 
