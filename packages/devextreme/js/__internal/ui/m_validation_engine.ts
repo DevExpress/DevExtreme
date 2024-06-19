@@ -785,8 +785,7 @@ const ValidationEngine = {
 
   _shouldRemoveGroup(group, validatorsInGroup, isRemovable) {
     const isDefaultGroup = group === undefined;
-    const isValidationGroupInstance = group && group.NAME === 'dxValidationGroup';
-    return !isDefaultGroup && !isValidationGroupInstance && !validatorsInGroup.length && isRemovable;
+    return !isDefaultGroup && !validatorsInGroup.length && isRemovable;
   },
 
   removeRegisteredValidator(group, validator) {
