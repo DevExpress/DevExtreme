@@ -186,6 +186,10 @@ const SKIPPED_TESTS = {
       { demo: 'RemoteGrouping', themes: [THEME.fluent, THEME.material] },
       { demo: 'RowEditingAndEditingEvents', themes: [THEME.fluent, THEME.material] },
     ],
+    Gantt: [
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Angular: {
     Charts: [

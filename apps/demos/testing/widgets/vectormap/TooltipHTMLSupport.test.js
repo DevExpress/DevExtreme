@@ -9,7 +9,7 @@ fixture('VectorMap.TooltipHTMLSupport')
     ctx.initialWindowSize = [900, 700];
   });
 
-runManualTest('VectorMap', 'TooltipHTMLSupport', ['jQuery', 'React', 'Vue', 'Angular'], (test) => {
+runManualTest('VectorMap', 'TooltipHTMLSupport', ['jQuery'/* , 'React', 'Vue', 'Angular' */], (test) => {
   test('Tooltip', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

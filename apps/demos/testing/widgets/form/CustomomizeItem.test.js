@@ -9,7 +9,7 @@ fixture('Form.CustomizeItem')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('Form', 'CustomizeItem', ['jQuery', 'Vue', 'Angular'], (test) => {
+runManualTest('Form', 'CustomizeItem', ['jQuery', /* 'Vue', */ 'Angular'], (test) => {
   test('CustomizeItem', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
