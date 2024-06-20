@@ -1,6 +1,6 @@
 import {
   existsSync, readFileSync, writeFileSync, readdirSync, copyFileSync, mkdirSync, copySync,
-  removeSync,
+  removeSync, cpSync,
 } from 'fs-extra';
 import {
   join, basename, extname, relative,
@@ -135,11 +135,14 @@ export const copyMetadata = () => {
 
   const destinationCss = join(destinationPublishDir, 'css');
 
-  const diagramCss = join(nodeModulesPath, 'devexpress-diagram', 'dist', 'dx-diagram.css');
-  copySync(diagramCss, join(destinationCss, 'dx-diagram.css'));
+  const themesPath = join(nodeModulesPath, 'devextreme', 'dist', 'css');
+  cpSync(themesPath, destinationCss, {recursive: true});
 
-  const ganttCss = join(nodeModulesPath, 'devexpress-gantt', 'dist', 'dx-gantt.css');
-  copySync(ganttCss, join(destinationCss, 'dx-gantt.css'));
+  const diagramCssPath = join(nodeModulesPath, 'devexpress-diagram', 'dist', 'dx-diagram.css');
+  copySync(diagramCssPath, join(destinationCss, 'dx-diagram.css'));
+
+  const ganttCssPath = join(nodeModulesPath, 'devexpress-gantt', 'dist', 'dx-gantt.css');
+  copySync(ganttCssPath, join(destinationCss, 'dx-gantt.css'));
 
   const sourceData = join(sourceDemosDir, '..', 'data');
   const destinationData = join(destinationPublishDir, 'data');
