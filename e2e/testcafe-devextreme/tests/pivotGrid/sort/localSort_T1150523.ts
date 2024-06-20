@@ -7,7 +7,7 @@ import { isMaterial } from '../../../helpers/themeUtils';
 const testFixture = () => (isMaterial() ? fixture.skip : fixture);
 
 testFixture()`pivotGrid_sort`
-  .page(url(__dirname, '../../containerAspNet.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const requestLogger = RequestLogger(/\/api\/data/);
 const apiRequestMock = RequestMock()

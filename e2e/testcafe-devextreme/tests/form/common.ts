@@ -9,7 +9,7 @@ import { appendElementTo, insertStylesheetRulesToPage, removeStylesheetRulesFrom
 const DATERANGEBOX_CLASS = 'dx-daterangebox';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../containerQuill.html'));
+  .page(url(__dirname, '../container.html'));
 
 test('Color of the mark (T882067)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
