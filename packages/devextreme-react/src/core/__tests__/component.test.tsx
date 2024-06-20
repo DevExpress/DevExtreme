@@ -165,7 +165,7 @@ describe('rendering', () => {
 
       testingLib.render(component);
 
-      const element = (ParentComponentRef.current as any).instance().element();
+      const element = ParentComponentRef.current!.instance().element()!;
       const appendFn = jest.spyOn(element, 'append');
 
       testingLib.act(() => {
