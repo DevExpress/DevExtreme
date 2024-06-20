@@ -4,7 +4,7 @@ import { createWidget } from '../../helpers/createWidget';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
-  .page(url(__dirname, '../containerQuill.html'));
+  .page(url(__dirname, '../container.html'));
 
 ['left', 'right', 'top'].forEach((formLabelLocation) => {
   ['outside', 'floating', 'hidden', 'static'].forEach((formLabelMode) => {
