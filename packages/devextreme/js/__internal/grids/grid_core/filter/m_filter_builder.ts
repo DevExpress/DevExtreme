@@ -8,9 +8,9 @@ import { restoreFocus } from '@js/ui/shared/accessibility';
 import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
 import type { FilterSyncController } from '@ts/grids/grid_core/filter/m_filter_sync';
 
-import modules from '../m_modules';
+import { View } from '../m_modules';
 
-export class FilterBuilderView extends modules.View {
+export class FilterBuilderView extends View {
   private _filterBuilderPopup: any;
 
   private _filterBuilder: any;

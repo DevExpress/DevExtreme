@@ -529,12 +529,6 @@ export const callModuleItemsMethod = function (that, methodName, args?) {
 export default {
   modules: [],
 
-  View,
-
-  ViewController,
-
-  Controller,
-
   registerModule(name, module) {
     const { modules } = this;
 
