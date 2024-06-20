@@ -6,10 +6,13 @@ import {
   memo,
   useImperativeHandle,
   useCallback,
+  useContext,
   useRef,
   forwardRef,
   ReactElement,
 } from 'react';
+
+import { RestoreTreeContext } from '../helpers';
 
 const eventHandlers: { [index: string]: ((e?: any) => void)[] } = {};
 
@@ -97,6 +100,18 @@ const TestPortalComponent = memo(forwardRef<TestComponentRef, any>(function Test
   );
 })) as <P = any>(props: P, ref: React.ForwardedRef<ComponentRef>) => ReactElement<any> | null;
 
+const TestRestoreTreeComponent = forwardRef((_, ref: React.ForwardedRef<{ restoreTree?: () => void }>) => {
+  const restoreParentLink = useContext(RestoreTreeContext);
+
+  useImperativeHandle(ref, () => {
+    return {
+      restoreTree: restoreParentLink
+    };
+  }, [restoreParentLink]);
+
+  return <div>Context Component</div>;
+});
+
 function fireOptionChange(fullName: string, value: unknown): void {
   eventHandlers.optionChanged?.forEach((e) => e({
     name: fullName.split('.')[0],
@@ -108,6 +123,7 @@ function fireOptionChange(fullName: string, value: unknown): void {
 export {
   TestComponent,
   TestPortalComponent,
+  TestRestoreTreeComponent,
   TestComponentRef,
   Widget,
   WidgetClass,
