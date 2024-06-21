@@ -1,12 +1,13 @@
 import createTestCafe from 'testcafe';
-import { resolve, join } from 'path';
+import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
+// consider refactoring to find a better way to determine path to tests
 const __filename = fileURLToPath(import.meta.url);
 
-const dirname = path.dirname(__filename);
+const _dirname = dirname(__filename);
 
-const testingPath = resolve(dirname, '..', '..', 'testing');
+const testingPath = resolve(_dirname, '..', '..', 'testing');
 const commonTestPath = join(testingPath, 'common-github.test.js');
 const widgetTestsPath = join(testingPath, 'widgets');
 

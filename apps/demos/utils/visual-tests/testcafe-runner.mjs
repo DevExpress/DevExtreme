@@ -1,13 +1,13 @@
 import createTestCafe from 'testcafe';
 import fs from 'fs';
-import { resolve, join } from 'path';
+import { resolve, join, dirname } from 'path';
 import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 
-const dirname = path.dirname(__filename);
+const _dirname = dirname(__filename);
 
-const testingPath = resolve(dirname, '..', '..', 'testing');
+const testingPath = resolve(_dirname, '..', '..', 'testing');
 const commonTestPath = join(testingPath, 'common.test.js');
 const widgetTestsPath = join(testingPath, 'widgets');
 
