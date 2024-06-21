@@ -1,7 +1,4 @@
 {
-  "src": [
-    "./testing/**/*.test.js"
-  ],
   "screenshots": {
     "path": "./",
     "pathPattern": "${TEST}.png"

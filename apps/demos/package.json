@@ -126,6 +126,7 @@
         "lint-non-demos": "npx nx run-many -t lint-js lint-css lint-html -p devextreme-demos",
         "lint": "npm-run-all -p -c lint-non-demos lint-demos",
         "test-testcafe": "node utils/visual-tests/testcafe-runner.mjs",
+        "test-testcafe-github": "node utils/visual-tests/testcafe-runner-github.mjs",
         "test-testcafe:accessibility": "cross-env STRATEGY=accessibility CONSTEL=jquery node utils/visual-tests/testcafe-runner.mjs",
         "fix-lint": "prettier --write . && eslint --fix . && stylelint **/*.{css,vue} --fix",
         "prettier": "prettier",
@@ -136,7 +137,8 @@
         "make-demos-bundle": "ts-node ./utils/create-bundles",
         "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
         "build-angular": "ng build",
-        "launch-ngcc": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
+        "launch-ngcc": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
+        "webserver-gh": "cd ./publish-demos && http-server --port 5645"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

@@ -1,9 +1,8 @@
 import createTestCafe from 'testcafe';
-import fs from 'fs';
 import { resolve, join } from 'path';
 
 const testingPath = resolve(__dirname, '..', '..', 'testing');
-const commonTestPath = join(testingPath, 'common.test.js');
+const commonTestPath = join(testingPath, 'common-github.test.js');
 const widgetTestsPath = join(testingPath, 'widgets');
 
 function reporter() {
@@ -160,64 +159,12 @@ function reporter() {
   };
 }
 
-function accessibilityTestCafeReporter() {
-  return {
-    violationsCount: {
-      minor: 0,
-      moderate: 0,
-      serious: 0,
-      critical: 0,
-    },
-
-    appendAxeViolationsCount(reportData, browsers) {
-      if (!reportData) { return; }
-
-      if (!Object.values(reportData).some((data) => data.length)) { return; }
-
-      browsers.forEach(({ testRunId }) => {
-        const browserReportData = reportData[testRunId];
-
-        if (!browserReportData) { return; }
-
-        browserReportData.forEach((data) => {
-          Object.keys(data).forEach((violation) => {
-            this.violationsCount[violation] += data[violation];
-          });
-        });
-      });
-    },
-
-    reportFixtureStart() {},
-
-    reportTaskStart() {},
-
-    reportTestStart() {},
-
-    reportTestDone(name, testRunInfo) {
-      this.appendAxeViolationsCount(testRunInfo.reportData, testRunInfo.browsers);
-    },
-
-    reportTaskDone() {
-      const {
-        minor, moderate, serious, critical,
-      } = this.violationsCount;
-      const total = minor + minor + serious + critical;
-
-      fs.writeFileSync(process.env.ACCESSIBILITY_TESTCAFE_REPORT_PATH || 'accessibility_report.txt', `Axe report: ${total} accessibility issues found (${critical} critical, ${serious} serious, ${moderate} moderate, and ${minor} minor)`);
-    },
-  };
-}
-
 async function main() {
   const tester = await createTestCafe();
   const runner = tester.createRunner();
   const concurrency = (process.env.CONCURRENCY && (+process.env.CONCURRENCY)) || 1;
 
   const reporters = [reporter];
-
-  if (process.env.STRATEGY === 'accessibility') {
-    reporters.push(accessibilityTestCafeReporter);
-  }
 
   const failedCount = await runner
     .reporter(reporters)
