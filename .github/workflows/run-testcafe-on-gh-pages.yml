@@ -41,6 +41,7 @@ jobs:
               uses: actions/checkout@v2
               with:
                 ref: ${{ env.TARGET_BRANCH }}
+                path: devextreme
             
             - name: Console.log ls
               run: ls -al & cd gh-pages & ls -al
@@ -51,10 +52,11 @@ jobs:
                 chrome-version: '121.0.6167.160'
 
             - name: DevExtreme - Install packages
+              working-directory: devextreme
               run: npm install --no-audit --no-fund
             
             - name: Run TestCafe tests
-              working-directory: apps/demos
+              working-directory: devextreme/apps/demos
               env:
                 CHANGEDFILEINFOSPATH: changed-files.json
                 BROWSERS: chrome:headless --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning
@@ -74,5 +76,5 @@ jobs:
               uses: actions/upload-artifact@v3
               with:
                 name: screenshots
-                path: ${{ github.workspace }}/apps/demos/testing/artifacts/compared-screenshots/**/*
+                path: ${{ github.workspace }}/devextreme/apps/demos/testing/artifacts/compared-screenshots/**/*
                 if-no-files-found: ignore
