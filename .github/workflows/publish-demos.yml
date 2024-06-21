@@ -1,11 +1,7 @@
 name: Publish Demos to GH Pages
 
-# seems like we dont have the release tag
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'release-*'
 
 jobs:
   build-devextreme:
