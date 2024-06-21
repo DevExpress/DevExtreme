@@ -41,6 +41,9 @@ jobs:
               uses: actions/checkout@v2
               with:
                 ref: ${{ env.TARGET_BRANCH }}
+            
+            - name: Console.log ls
+              run: ls -al & cd gh-pages & ls -al
 
             - name: Setup Chrome
               uses: ./.github/actions/setup-chrome
