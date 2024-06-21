@@ -2,7 +2,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
-import type { Column, Properties } from 'devextreme/ui/data_grid';
+import type { Column } from 'devextreme/ui/data_grid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
@@ -289,36 +289,59 @@ test('Columns should be rendered correctly after reinit of columns controller', 
   },
 }));
 
-test('Group row should have right colspan with summary, virtual columns and fixed columns (t1221369)', async (t) => {
+test('Group row should have right colspan with summary, virtual columns and fixed columns (T1221369)', async (t) => {
   const grid = new DataGrid('#container');
-  grid.scrollTo(t, { x: 100_000 });
-  await t.debug();
-}).before(async () => {
-  const columns = generateColumns(20);
-  const data = generateData(10, 20);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  columns[0].groupIndex = 0;
-  columns[1].fixed = true;
-  columns[1].alignment = 'left';
-  columns[2].fixed = true;
-  columns[2].alignment = 'left';
-  columns[3].fixed = true;
-  columns[3].alignment = 'left';
+  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_0.png', grid.element);
+
+  // NOTE: There is an issue with Scrollable
+  // So, we should scroll two times to reach maximum right scroll position
+  await grid.scrollTo(t, { x: 10000 });
+  await grid.scrollTo(t, { x: 10000 });
+
+  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_1.png', grid.element);
+
+  await grid.scrollTo(t, { x: 0 });
+
+  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_2.png', grid.element);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const generatedColumns = generateColumns(20);
+  const columns = [
+    {
+      ...generatedColumns[0],
+      groupIndex: 0,
+    },
+    {
+      ...generatedColumns[1],
+      fixed: true,
+    },
+    {
+      ...generatedColumns[2],
+      fixed: true,
+    },
+    ...generatedColumns.splice(3),
+  ];
+  const data = generateData(10, 20);
 
   await createWidget('dxDataGrid', {
     dataSource: data,
-    width: 500,
+    width: 400,
+    height: 400,
+    columns,
     columnFixing: {
       enabled: true,
     },
     columnMinWidth: 100,
-    columns,
     scrolling: {
       columnRenderingMode: 'virtual',
     },
     summary: {
       groupItems: [{
-        column: 'field4',
+        column: columns[2].dataField,
         summaryType: 'count',
         alignByColumn: true,
       }],
