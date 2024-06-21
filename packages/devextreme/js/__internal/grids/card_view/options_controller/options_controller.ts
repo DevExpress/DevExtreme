@@ -1,9 +1,6 @@
-export class OptionsController {
-  oneWay(name: string): any {
+import { Properties } from '@js/ui/card_view';
+import { OptionsController } from "./options_controller_base";
 
-  }
+class CardViewOptionsController extends OptionsController<Properties> {}
 
-  twoWay(name: string): any {
-
-  }
-}
+export {CardViewOptionsController as OptionsController};

@@ -7,7 +7,7 @@ function liftObservable() {
 }
 
 export class ColumnsController {
-  columnsConfiguration = this.options.oneWay('asd');
+  columnsConfiguration = this.options.oneWay('columns');
 
   columns = computed((columnsConfiguration) => {
     
