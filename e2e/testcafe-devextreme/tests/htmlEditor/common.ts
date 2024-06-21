@@ -5,7 +5,7 @@ import url from '../../helpers/getPageUrl';
 import { testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor`
-  .page(url(__dirname, '../containerQuill.html'));
+  .page(url(__dirname, '../container.html'));
 
 [false, true].forEach((toolbar) => {
   const selector = toolbar ? '#otherContainer' : '#container';
