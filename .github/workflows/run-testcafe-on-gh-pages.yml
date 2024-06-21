@@ -29,11 +29,6 @@ jobs:
                 ref: gh-pages
                 path: gh-pages
 
-            - name: Setup Chrome
-              uses: ./.github/actions/setup-chrome
-              with:
-                chrome-version: '121.0.6167.160'
-
             - name: Run Web Server
               working-directory: gh-pages
               run: |
@@ -46,6 +41,11 @@ jobs:
               uses: actions/checkout@v2
               with:
                 ref: ${{ env.TARGET_BRANCH }}
+
+            - name: Setup Chrome
+              uses: ./.github/actions/setup-chrome
+              with:
+                chrome-version: '121.0.6167.160'
 
             - name: DevExtreme - Install packages
               run: npm install --no-audit --no-fund
