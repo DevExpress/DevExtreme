@@ -208,13 +208,12 @@ QUnit.module('Mention format', () => {
 
 QUnit.module('Mentions module', moduleConfig, () => {
     test('retain formatting after applying mentions.(T1236869)', function(assert) {
-        const INSERT_TEST_MENTION_DELTA = { ops: [{ attributes: { bold: true }, insert: '@' }] };
-        this.quillMock.getContents = () => {
-            return INSERT_TEST_MENTION_DELTA;
+        this.quillMock.getFormat = () => {
+            return { bold: true };
         };
         const mention = new Mentions(this.quillMock, this.options);
         mention.savePosition(0);
-        mention.onTextChange(INSERT_TEST_MENTION_DELTA, {}, 'user');
+        mention.onTextChange(INSERT_DEFAULT_MENTION_DELTA, {}, 'user');
 
         $(`.${SUGGESTION_LIST_CLASS} .${LIST_ITEM_CLASS}`).first().trigger('dxclick');
 
@@ -227,7 +226,7 @@ QUnit.module('Mentions module', moduleConfig, () => {
                 marker: '@',
                 id: 'Alex',
                 keyInTemplateStorage: 'my_key_in_storage'
-            } }, { bold: true })
+            } })
             .insert(' ', { bold: true });
 
         assert.deepEqual(this.log[0].delta.ops, expectedDelta.ops, 'Correct formatting');

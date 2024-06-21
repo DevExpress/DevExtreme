@@ -239,20 +239,13 @@ if (Quill) {
       const Delta = Quill.import('delta');
       const startIndex = Math.max(0, caretPosition - markerLength);
 
-      const currentContents = this.quill.getContents();
-
-      let retainedAttributes = {};
-      currentContents.ops.forEach((op, index) => {
-        if (index <= startIndex && op.attributes) {
-          retainedAttributes = { ...retainedAttributes, ...op.attributes };
-        }
-      });
+      const currentFormat = this.quill.getFormat(startIndex);
 
       const newDelta = new Delta()
         .retain(startIndex)
         .delete(textLength)
-        .insert({ mention: value }, retainedAttributes)
-        .insert(' ', retainedAttributes);
+        .insert({ mention: value })
+        .insert(' ', currentFormat);
 
       this.quill.updateContents(newDelta);
       this.quill.setSelection(startIndex + 2);
