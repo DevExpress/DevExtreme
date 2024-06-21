@@ -54,6 +54,9 @@ const DblClick = Class.inherit({
     } else {
       this._firstClickTarget = e.target;
       this._lastClickTimeStamp = timeStamp;
+      setTimeout(() => {
+        this._forgetLastClick();
+      }, DBLCLICK_TIMEOUT * 2);
     }
   },
 
