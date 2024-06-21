@@ -10,7 +10,6 @@ QUnit.testStart(function() {
 import 'ui/tree_view';
 
 const WIDGET_CLASS = 'dx-treeview';
-const SCROLLABLE_CLASS = 'dx-scrollable';
 const NODE_CONTAINER_CLASS = 'dx-treeview-node-container';
 const OPENED_NODE_CONTAINER_CLASS = 'dx-treeview-node-container-opened';
 const NODE_CLASS = 'dx-treeview-node';
@@ -139,6 +138,28 @@ QUnit.module('markup', {
         return $element.length && !$element.hasClass('dx-state-invisible');
     }
 }, () => {
+    QUnit.test('shouldnt contain <a> node tag when url is passed as attribute (T1237378)', function(assert) {
+        const items = [
+            {
+                id: 50,
+                text: 'Dashboard',
+                icon: null,
+                url: '/admin',
+                visible: true,
+            }
+        ];
+        initTree({
+            items: items,
+        });
+        const $treeViewItem = $(`.${ITEM_CLASS}`);
+
+        if($treeViewItem.find('a').length === 0) {
+            assert.ok(true, 'Doesnt contain an <a> tag when url is included in items.');
+        } else {
+            assert.ok(false, 'Contains an <a> tag when url is included in items.');
+        }
+    });
+
     QUnit.test('expand icon should be able to change at runtime', function(assert) {
         const $treeView = initTree({
             items: this.treeItems,
