@@ -207,7 +207,7 @@ QUnit.module('Mention format', () => {
 });
 
 QUnit.module('Mentions module', moduleConfig, () => {
-    test('retain formatting after applying mentions.(T1236869)', function(assert) {
+    test('retain formatting after inserting a mention (T1236869)', function(assert) {
         this.quillMock.getFormat = () => {
             return { bold: true };
         };
