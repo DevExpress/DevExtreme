@@ -1139,7 +1139,7 @@ safeSizeTest('The page should not be changed when hiding/showing the grid view a
 })());
 
 fixture`Remote Scrolling`
-  .page(url(__dirname, '../containerAspNet.html'));
+  .page(url(__dirname, '../container.html'));
 
 test.meta({ unstable: true })('Scroll to the bottom after expand several group', async (t) => {
   const dataGrid = new DataGrid('#container');
