@@ -2,7 +2,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid, { CLASS } from 'devextreme-testcafe-models/dataGrid';
-import type { Column } from 'devextreme/ui/data_grid';
+import type { Column, Properties } from 'devextreme/ui/data_grid';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
@@ -288,3 +288,40 @@ test('Columns should be rendered correctly after reinit of columns controller', 
     columnRenderingMode: 'virtual',
   },
 }));
+
+test('Group row should have right colspan with summary, virtual columns and fixed columns (t1221369)', async (t) => {
+  const grid = new DataGrid('#container');
+  grid.scrollTo(t, { x: 100_000 });
+  await t.debug();
+}).before(async () => {
+  const columns = generateColumns(20);
+  const data = generateData(10, 20);
+
+  columns[0].groupIndex = 0;
+  columns[1].fixed = true;
+  columns[1].alignment = 'left';
+  columns[2].fixed = true;
+  columns[2].alignment = 'left';
+  columns[3].fixed = true;
+  columns[3].alignment = 'left';
+
+  await createWidget('dxDataGrid', {
+    dataSource: data,
+    width: 500,
+    columnFixing: {
+      enabled: true,
+    },
+    columnMinWidth: 100,
+    columns,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    summary: {
+      groupItems: [{
+        column: 'field4',
+        summaryType: 'count',
+        alignByColumn: true,
+      }],
+    },
+  });
+});
