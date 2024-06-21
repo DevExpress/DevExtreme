@@ -262,7 +262,7 @@ const SKIPPED_TESTS = {
           });`,
       },
     ]);
-
+  // need to adjust path?
   const getDemoPaths = (platform) => glob.sync('Demos/*/*')
     .map((path) => join(path, platform));
   const ACCESSIBILITY_UNSUPPORTED_COMPONENTS = [
@@ -316,7 +316,7 @@ const SKIPPED_TESTS = {
       }
     }
 
-    runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${process.env.THEME}`)
+    runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${process.env.THEME}`)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
