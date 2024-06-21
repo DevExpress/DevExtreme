@@ -47,7 +47,7 @@ jobs:
               run: ls -al & cd gh-pages & ls -al
 
             - name: Setup Chrome
-              uses: ./.github/actions/setup-chrome
+              uses: ./devextreme/.github/actions/setup-chrome
               with:
                 chrome-version: '121.0.6167.160'
 
