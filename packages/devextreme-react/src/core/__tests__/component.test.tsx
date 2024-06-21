@@ -6,7 +6,9 @@ import * as ReactDOM from 'react-dom';
 import {
   fireOptionChange,
   TestComponent,
+  TestComponentRef,
   TestPortalComponent,
+  TestRestoreTreeComponent,
   Widget,
   WidgetClass,
 } from './test-component';
@@ -146,6 +148,31 @@ describe('rendering', () => {
       testingLib.render(component);
   
       expect(didRenderToDetachedBranch).toBeFalsy();
+    });
+
+    it('does not restore the parent tree if its child elements are still attached', () => {
+      testingLib.configure({ reactStrictMode: true });
+
+      const TreeComponentRef = React.createRef<{ restoreTree?: () => void }>();
+      const ParentComponentRef = React.createRef<TestComponentRef>();
+
+      const component = (
+        <TestComponent ref={ParentComponentRef}>
+          <span>Span Element</span>
+          <TestRestoreTreeComponent ref={TreeComponentRef} />
+        </TestComponent>
+      );
+
+      testingLib.render(component);
+
+      const element = ParentComponentRef.current!.instance().element()!;
+      const appendFn = jest.spyOn(element, 'append');
+
+      testingLib.act(() => {
+        TreeComponentRef.current?.restoreTree?.();
+      });
+
+      expect(appendFn).toHaveBeenCalledTimes(0);
     });
   });
 
