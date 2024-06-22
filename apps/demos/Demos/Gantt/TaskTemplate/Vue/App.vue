@@ -5,7 +5,7 @@
         :task-list-width="500"
         :height="700"
         scale-type="days"
-        :task-content-template="taskContentTemplate"
+        task-content-template="taskContentTemplate"
       >
 
         <DxTasks :data-source="tasks"/>

@@ -7,8 +7,9 @@
       :loop="loop"
       :animation-enabled="animationEnabled"
       :swipe-enabled="swipeEnabled"
+      item-title-template="itemTitle"
     >
-      <template #title="{ data: company }">
+      <template #itemTitle="{ data: company }">
         <span>{{ company.CompanyName }}</span>
       </template>
       <template #item="{ data: company }">

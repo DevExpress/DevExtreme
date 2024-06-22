@@ -2,7 +2,7 @@
   "name": "devextreme-vue-playground",
   "description": "DevExtreme Vue UI and Visualization Components",
   "private": true,
-  "version": "24.1.3",
+  "version": "24.2.0",
   "author": "Developer Express Inc.",
   "license": "MIT",
   "repository": {
@@ -10,8 +10,8 @@
     "url": "https://github.com/DevExpress/devextreme-vue.git"
   },
   "dependencies": {
-    "devextreme": "~24.1.3",
-    "devextreme-vue": "~24.1.3",
+    "devextreme": "~24.2.0",
+    "devextreme-vue": "~24.2.0",
     "vue": "3.2.47"
   },
   "devDependencies": {

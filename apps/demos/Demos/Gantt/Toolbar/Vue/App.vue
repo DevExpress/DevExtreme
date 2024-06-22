@@ -52,7 +52,7 @@
     <DxPopup
       v-model:visible="popupVisible"
       title="About"
-      :height="auto"
+      height="auto"
       :show-title="true"
       :hide-on-outside-click="true"
     >

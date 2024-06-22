@@ -114,19 +114,19 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     }
   }
 
-  private _partialUpdateFixedTable(fixedColumns) {
+  private _partialUpdateFixedTable(fixedColumns, rows) {
     const fixedTableElement = this._fixedTableElement;
     const $rows = this._getRowElementsCore(fixedTableElement);
     const $colgroup = fixedTableElement.children('colgroup');
 
     $colgroup.replaceWith(this._createColGroup(fixedColumns));
 
-    for (let i = 0; i < $rows.length; i++) {
-      this._partialUpdateFixedRow($($rows[i]), fixedColumns);
+    for (let i = 0; i < rows.length; i++) {
+      this._partialUpdateFixedRow($($rows[i]), fixedColumns, rows[i]);
     }
   }
 
-  private _partialUpdateFixedRow($row, fixedColumns) {
+  private _partialUpdateFixedRow($row, fixedColumns, row) {
     const cellElements = $row.get(0).childNodes;
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const transparentColumn = fixedColumns[transparentColumnIndex];
@@ -144,11 +144,23 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     if ($row.hasClass(GROUP_ROW_CLASS)) {
       // @ts-expect-error RowsView's method
       groupCellOptions = this._getGroupCellOptions({
-        row: $row.data('options'),
+        row,
         columns: this._columnsController.getVisibleColumns(),
       });
 
-      colspan = groupCellOptions.colspan - Math.max(0, cellElements.length - (groupCellOptions.columnIndex + 2));
+      const hasSummary = row.summaryCells.length > 0;
+      if (hasSummary) {
+        // @ts-expect-error RowsView's method
+        const alignByColumnCellCount = this._getAlignByColumnCellCount(groupCellOptions.colspan, {
+          columns: this._columnsController.getVisibleColumns(),
+          row,
+          isFixed: true,
+        });
+
+        colspan = groupCellOptions.colspan - alignByColumnCellCount;
+      } else {
+        colspan = groupCellOptions.colspan - Math.max(0, cellElements.length - (groupCellOptions.columnIndex + 2));
+      }
     }
 
     for (let j = 0; j < cellElements.length; j++) {
@@ -180,7 +192,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
       this._isFixedTableRendering = true;
 
       if (needPartialUpdate && this.option('scrolling.legacyMode') !== true) {
-        this._partialUpdateFixedTable(fixedColumns);
+        this._partialUpdateFixedTable(fixedColumns, options?.change?.items);
         this._isFixedTableRendering = false;
       } else {
         const columnIndices = change?.columnIndices;
@@ -301,14 +313,14 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
         if (options.row.summaryCells && options.row.summaryCells.length) {
           const columns = this._columnsController.getVisibleColumns();
           // @ts-expect-error DataGrid's method
-          const alignByFixedColumnCellCount = this._getAlignByColumnCellCount
-            // @ts-expect-error DataGrid's method
-            ? this._getAlignByColumnCellCount(column.colspan, {
+          const alignByFixedColumnCellCount = this._getAlignByColumnCellCount?.(
+            column.colspan,
+            {
               columns,
               row: options.row,
               isFixed: true,
-            })
-            : 0;
+            },
+          ) ?? 0;
 
           if (alignByFixedColumnCellCount > 0) {
             const transparentColumnIndex = getTransparentColumnIndex(this._columnsController.getFixedColumns());

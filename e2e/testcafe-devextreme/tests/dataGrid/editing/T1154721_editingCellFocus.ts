@@ -4,7 +4,7 @@ import { createWidget } from '../../../helpers/createWidget';
 import url from '../../../helpers/getPageUrl';
 
 fixture`Editing - cell focus`
-  .page(url(__dirname, '../../containerAspNet.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const apiRequestMock = RequestMock()
   .onRequestTo(/\/api\/data/)

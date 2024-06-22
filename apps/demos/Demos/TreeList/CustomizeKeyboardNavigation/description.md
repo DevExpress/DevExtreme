@@ -1,5 +1,4 @@
-The following properties customize keyboard navigation.
-<!--split-->
+The following properties customize keyboard navigation:
  
 - [enterKeyAction](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/keyboardNavigation/#enterKeyAction)    
 Specifies the TreeList's actions when a user presses Enter key: 
@@ -17,3 +16,4 @@ Specifies the direction in which to move focus when a user presses Enter:
 Specifies whether to start entering a new cell value on a key press.
 
 In this demo, you can use the controls under the TreeList to change any of these properties.
+<!--split-->

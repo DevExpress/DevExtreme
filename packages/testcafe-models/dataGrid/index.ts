@@ -649,6 +649,24 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  moveColumnChooserColumn(columnIndex: number, x: number, y: number, isStart = false): Promise<void> {
+    const columnChooser = this.getColumnChooser();
+    const column = columnChooser.getColumn(columnIndex);
+
+    return ClientFunction(
+      (column) => {
+        const $column = $(column());
+
+        moveElement($column, x, y, isStart);
+      },
+      {
+        dependencies: {
+          column, x, y, isStart, moveElement,
+        },
+      },
+    )(column);
+  }
+
   hide(): Promise<void> {
     const { getInstance } = this;
 

@@ -17,6 +17,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <span>Direction </span>
+        {{ " " }}
         <DxSelectBox
           v-model:value="direction"
           :input-attr="{ 'aria-label': 'Direction' }"
@@ -66,7 +67,7 @@ const itemMargin = 10;
 }
 
 .option > span {
-  width: 74px;
+  width: 70px;
   display: inline-block;
 }
 
