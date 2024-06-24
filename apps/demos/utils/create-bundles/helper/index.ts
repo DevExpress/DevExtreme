@@ -8,6 +8,7 @@ import {
 import { createHash } from 'crypto';
 import { version as DX_Version } from 'devextreme/package.json';
 import { Demo, Framework } from './types';
+import { resourceLinks } from './external-resource-metadata';
 
 export const isSkipDemo = (demo: Demo) => {
   const { Widget, Name } = demo;
@@ -68,13 +69,23 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
   const templateContent = getTemplateContent(framework);
 
   const metadataScripts = join(destinationPublishDir, 'scripts');
+  let specific_css = `<link href="${getSpecificCssPath(demo.Widget, demoPath)}" rel="stylesheet" />`;
+
+  const externalResources = resourceLinks[demo.Widget]?.[demo.Name];
+  externalResources?.resources?.forEach(resource => {
+    if (resource.frameworks.includes(framework)){
+      specific_css = specific_css.concat('\n', resource.link)
+    }
+  });
+  
+  
   const options = {
     demo_title: `${framework} ${demo.Widget} - ${demo.Title} - DevExtreme ${framework} Demo`,
     dx_version: DX_Version,
     js_bundle_path: getBundlePath(demoPath, 'bundle', '.js'),
     css_bundle_path: getBundlePath(demoPath, 'bundle', '.css'),
     init_theme: getBundlePath(metadataScripts, 'init-theme', '.js'),
-    specific_css: `<link href="${getSpecificCssPath(demo.Widget, demoPath)}" rel="stylesheet" />`,
+    specific_css: specific_css,
   };
 
   let result = templateContent;
@@ -132,6 +143,10 @@ export const copyMetadata = () => {
   copyMetadataDir(sourceScripts, destScripts);
 
   const nodeModulesPath = join(__dirname, '..', '..', '..', '..', '..', 'node_modules');
+
+  const imagesPath = join(__dirname, '..', '..', '..', 'images');
+  const imagesDest = join(destinationPublishDir, 'images');
+  cpSync(imagesPath, imagesDest, {recursive: true});
 
   const destinationCss = join(destinationPublishDir, 'css');
 
