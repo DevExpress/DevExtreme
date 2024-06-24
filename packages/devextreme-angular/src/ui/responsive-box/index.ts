@@ -40,14 +40,14 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiColModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxiLocationModule } from 'devextreme-angular/ui/nested';
-import { DxiRowModule } from 'devextreme-angular/ui/nested';
+import { DxiColModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiLocationModule } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiRowModule } from 'devextreme-angular/ui/responsive-box/nested';
 
-import { DxiColComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiRowComponent } from 'devextreme-angular/ui/nested';
+import { DxiColComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/responsive-box/nested';
+import { DxiRowComponent } from 'devextreme-angular/ui/responsive-box/nested';
 
 
 

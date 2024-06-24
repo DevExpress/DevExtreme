@@ -35,17 +35,17 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoToModule } from 'devextreme-angular/ui/load-panel/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/load-panel/nested';
 
 
 

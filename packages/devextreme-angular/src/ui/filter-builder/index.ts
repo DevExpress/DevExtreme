@@ -43,15 +43,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiCustomOperationModule } from 'devextreme-angular/ui/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoLookupModule } from 'devextreme-angular/ui/nested';
-import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
+import { DxiCustomOperationModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiFieldModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoLookupModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoFilterOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxoGroupOperationDescriptionsModule } from 'devextreme-angular/ui/filter-builder/nested';
 
-import { DxiCustomOperationComponent } from 'devextreme-angular/ui/nested';
-import { DxiFieldComponent } from 'devextreme-angular/ui/nested';
+import { DxiCustomOperationComponent } from 'devextreme-angular/ui/filter-builder/nested';
+import { DxiFieldComponent } from 'devextreme-angular/ui/filter-builder/nested';
 
 
 

@@ -40,10 +40,10 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoBoxModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/box/nested';
+import { DxoBoxModule } from 'devextreme-angular/ui/box/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/box/nested';
 
 
 

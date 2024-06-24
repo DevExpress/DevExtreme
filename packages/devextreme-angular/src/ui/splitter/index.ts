@@ -41,10 +41,10 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoSplitterModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/splitter/nested';
+import { DxoSplitterModule } from 'devextreme-angular/ui/splitter/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/splitter/nested';
 
 
 

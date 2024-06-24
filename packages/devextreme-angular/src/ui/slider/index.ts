@@ -43,9 +43,9 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/slider/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/slider/nested';
 
 
 

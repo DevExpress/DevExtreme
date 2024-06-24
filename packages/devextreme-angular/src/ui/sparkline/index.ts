@@ -40,13 +40,13 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/sparkline/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/sparkline/nested';
 
 
 

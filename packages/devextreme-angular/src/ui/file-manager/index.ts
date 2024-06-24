@@ -36,16 +36,16 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoItemViewModule } from 'devextreme-angular/ui/nested';
-import { DxoDetailsModule } from 'devextreme-angular/ui/nested';
-import { DxiColumnModule } from 'devextreme-angular/ui/nested';
-import { DxoNotificationsModule } from 'devextreme-angular/ui/nested';
-import { DxoPermissionsModule } from 'devextreme-angular/ui/nested';
-import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxiFileSelectionItemModule } from 'devextreme-angular/ui/nested';
-import { DxoUploadModule } from 'devextreme-angular/ui/nested';
+import { DxoContextMenuModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoItemViewModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoDetailsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiColumnModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoNotificationsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoPermissionsModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoToolbarModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxiFileSelectionItemModule } from 'devextreme-angular/ui/file-manager/nested';
+import { DxoUploadModule } from 'devextreme-angular/ui/file-manager/nested';
 
 
 

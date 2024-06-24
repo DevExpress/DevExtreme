@@ -41,23 +41,23 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoColorizerModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoGroupModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoSelectionStyleModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoTileModule } from 'devextreme-angular/ui/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+import { DxoColorizerModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoGroupModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoSelectionStyleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTileModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/tree-map/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/tree-map/nested';
 
 
 

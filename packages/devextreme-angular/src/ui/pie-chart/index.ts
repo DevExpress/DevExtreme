@@ -43,37 +43,37 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoImageModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
-import { DxoCommonAnnotationSettingsModule } from 'devextreme-angular/ui/nested';
-import { DxoCommonSeriesSettingsModule } from 'devextreme-angular/ui/nested';
-import { DxoColorModule } from 'devextreme-angular/ui/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
-import { DxoHatchingModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxoArgumentFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoConnectorModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoSelectionStyleModule } from 'devextreme-angular/ui/nested';
-import { DxoSmallValuesGroupingModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoLegendModule } from 'devextreme-angular/ui/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxiSeriesModule } from 'devextreme-angular/ui/nested';
-import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiAnnotationModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoImageModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoCommonAnnotationSettingsModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoCommonSeriesSettingsModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoColorModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoHatchingModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoArgumentFormatModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoConnectorModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoSelectionStyleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoSmallValuesGroupingModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoLegendModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiSeriesModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoSeriesTemplateModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/pie-chart/nested';
 
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiSeriesComponent } from 'devextreme-angular/ui/nested';
+import { DxiAnnotationComponent } from 'devextreme-angular/ui/pie-chart/nested';
+import { DxiSeriesComponent } from 'devextreme-angular/ui/pie-chart/nested';
 
 
 

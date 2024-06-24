@@ -38,9 +38,9 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
-import { DxoSearchModule } from 'devextreme-angular/ui/nested';
-import { DxoTextsModule } from 'devextreme-angular/ui/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoSearchModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
+import { DxoTextsModule } from 'devextreme-angular/ui/pivot-grid-field-chooser/nested';
 
 
 

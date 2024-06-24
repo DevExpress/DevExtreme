@@ -42,12 +42,12 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxiButtonModule } from 'devextreme-angular/ui/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/tree-view/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/tree-view/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/tree-view/nested';
 
 
 

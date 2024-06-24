@@ -40,28 +40,28 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiColumnModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
-import { DxoSearchModule } from 'devextreme-angular/ui/nested';
-import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoDependenciesModule } from 'devextreme-angular/ui/nested';
-import { DxoEditingModule } from 'devextreme-angular/ui/nested';
-import { DxoFilterRowModule } from 'devextreme-angular/ui/nested';
-import { DxoOperationDescriptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoTextsModule } from 'devextreme-angular/ui/nested';
-import { DxoResourceAssignmentsModule } from 'devextreme-angular/ui/nested';
-import { DxoResourcesModule } from 'devextreme-angular/ui/nested';
-import { DxoScaleTypeRangeModule } from 'devextreme-angular/ui/nested';
-import { DxoSortingModule } from 'devextreme-angular/ui/nested';
-import { DxiStripLineModule } from 'devextreme-angular/ui/nested';
-import { DxoTasksModule } from 'devextreme-angular/ui/nested';
-import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxoValidationModule } from 'devextreme-angular/ui/nested';
+import { DxiColumnModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoSearchModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoContextMenuModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoDependenciesModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoFilterRowModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoOperationDescriptionsModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoTextsModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoResourceAssignmentsModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoResourcesModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoScaleTypeRangeModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoSortingModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxiStripLineModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoTasksModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoToolbarModule } from 'devextreme-angular/ui/gantt/nested';
+import { DxoValidationModule } from 'devextreme-angular/ui/gantt/nested';
 
-import { DxiColumnComponent } from 'devextreme-angular/ui/nested';
-import { DxiStripLineComponent } from 'devextreme-angular/ui/nested';
+import { DxiColumnComponent } from 'devextreme-angular/ui/gantt/nested';
+import { DxiStripLineComponent } from 'devextreme-angular/ui/gantt/nested';
 
 
 

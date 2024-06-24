@@ -33,17 +33,17 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoToModule } from 'devextreme-angular/ui/toast/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/toast/nested';
 
 
 

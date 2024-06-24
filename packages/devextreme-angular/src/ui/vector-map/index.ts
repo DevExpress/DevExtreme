@@ -43,30 +43,30 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiAnnotationModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoImageModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
-import { DxoBackgroundModule } from 'devextreme-angular/ui/nested';
-import { DxoCommonAnnotationSettingsModule } from 'devextreme-angular/ui/nested';
-import { DxoControlBarModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxiLayerModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxiLegendModule } from 'devextreme-angular/ui/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoSourceModule } from 'devextreme-angular/ui/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxoProjectionModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
+import { DxiAnnotationModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoImageModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoBackgroundModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoCommonAnnotationSettingsModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoControlBarModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiLayerModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiLegendModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoSourceModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoProjectionModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/vector-map/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/vector-map/nested';
 
-import { DxiAnnotationComponent } from 'devextreme-angular/ui/nested';
-import { DxiLayerComponent } from 'devextreme-angular/ui/nested';
-import { DxiLegendComponent } from 'devextreme-angular/ui/nested';
+import { DxiAnnotationComponent } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiLayerComponent } from 'devextreme-angular/ui/vector-map/nested';
+import { DxiLegendComponent } from 'devextreme-angular/ui/vector-map/nested';
 
 
 

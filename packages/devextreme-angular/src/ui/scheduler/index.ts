@@ -40,14 +40,14 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/nested';
-import { DxoEditingModule } from 'devextreme-angular/ui/nested';
-import { DxiResourceModule } from 'devextreme-angular/ui/nested';
-import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
-import { DxiViewModule } from 'devextreme-angular/ui/nested';
+import { DxoAppointmentDraggingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiResourceModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxoScrollingModule } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiViewModule } from 'devextreme-angular/ui/scheduler/nested';
 
-import { DxiResourceComponent } from 'devextreme-angular/ui/nested';
-import { DxiViewComponent } from 'devextreme-angular/ui/nested';
+import { DxiResourceComponent } from 'devextreme-angular/ui/scheduler/nested';
+import { DxiViewComponent } from 'devextreme-angular/ui/scheduler/nested';
 
 
 

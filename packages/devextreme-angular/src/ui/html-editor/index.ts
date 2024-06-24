@@ -44,18 +44,18 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoImageUploadModule } from 'devextreme-angular/ui/nested';
-import { DxoFileUploaderOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxiTabModule } from 'devextreme-angular/ui/nested';
-import { DxoMediaResizingModule } from 'devextreme-angular/ui/nested';
-import { DxiMentionModule } from 'devextreme-angular/ui/nested';
-import { DxoTableContextMenuModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoTableResizingModule } from 'devextreme-angular/ui/nested';
-import { DxoToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxoVariablesModule } from 'devextreme-angular/ui/nested';
+import { DxoImageUploadModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoFileUploaderOptionsModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiTabModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoMediaResizingModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiMentionModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoTableContextMenuModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoTableResizingModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoToolbarModule } from 'devextreme-angular/ui/html-editor/nested';
+import { DxoVariablesModule } from 'devextreme-angular/ui/html-editor/nested';
 
-import { DxiMentionComponent } from 'devextreme-angular/ui/nested';
+import { DxiMentionComponent } from 'devextreme-angular/ui/html-editor/nested';
 
 
 

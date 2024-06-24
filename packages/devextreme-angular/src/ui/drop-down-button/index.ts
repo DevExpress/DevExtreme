@@ -41,22 +41,22 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoToModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/drop-down-button/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/drop-down-button/nested';
 
 
 

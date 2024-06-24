@@ -43,16 +43,16 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoItemDraggingModule } from 'devextreme-angular/ui/nested';
-import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemModule } from 'devextreme-angular/ui/nested';
-import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxiButtonModule } from 'devextreme-angular/ui/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoItemDraggingModule } from 'devextreme-angular/ui/list/nested';
+import { DxoCursorOffsetModule } from 'devextreme-angular/ui/list/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/list/nested';
+import { DxiMenuItemModule } from 'devextreme-angular/ui/list/nested';
+import { DxoSearchEditorOptionsModule } from 'devextreme-angular/ui/list/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/list/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/list/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
-import { DxiMenuItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/list/nested';
+import { DxiMenuItemComponent } from 'devextreme-angular/ui/list/nested';
 
 
 

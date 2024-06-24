@@ -33,7 +33,7 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoCursorOffsetModule } from 'devextreme-angular/ui/nested';
+import { DxoCursorOffsetModule } from 'devextreme-angular/ui/sortable/nested';
 
 
 

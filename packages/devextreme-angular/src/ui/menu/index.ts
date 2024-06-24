@@ -42,23 +42,23 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoShowFirstSubmenuModeModule } from 'devextreme-angular/ui/nested';
-import { DxoDelayModule } from 'devextreme-angular/ui/nested';
-import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoToModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/menu/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoShowFirstSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoDelayModule } from 'devextreme-angular/ui/menu/nested';
+import { DxoShowSubmenuModeModule } from 'devextreme-angular/ui/menu/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/menu/nested';
 
 
 

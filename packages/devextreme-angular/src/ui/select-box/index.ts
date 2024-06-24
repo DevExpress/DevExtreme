@@ -49,25 +49,25 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoToModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/select-box/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/select-box/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiButtonComponent } from 'devextreme-angular/ui/select-box/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/select-box/nested';
 
 
 

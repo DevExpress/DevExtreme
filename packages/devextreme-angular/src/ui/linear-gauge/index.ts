@@ -40,31 +40,31 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoGeometryModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoRangeContainerModule } from 'devextreme-angular/ui/nested';
-import { DxoBackgroundColorModule } from 'devextreme-angular/ui/nested';
-import { DxiRangeModule } from 'devextreme-angular/ui/nested';
-import { DxoColorModule } from 'devextreme-angular/ui/nested';
-import { DxoWidthModule } from 'devextreme-angular/ui/nested';
-import { DxoScaleModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoMinorTickModule } from 'devextreme-angular/ui/nested';
-import { DxoTickModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoSubvalueIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxoTextModule } from 'devextreme-angular/ui/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
-import { DxoValueIndicatorModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoGeometryModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoRangeContainerModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoBackgroundColorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxiRangeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoColorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoWidthModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoScaleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoMinorTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoTickModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoSubvalueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoTextModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/linear-gauge/nested';
+import { DxoValueIndicatorModule } from 'devextreme-angular/ui/linear-gauge/nested';
 
 
 

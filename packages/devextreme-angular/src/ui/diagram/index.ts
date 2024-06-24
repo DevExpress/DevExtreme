@@ -40,30 +40,30 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoContextMenuModule } from 'devextreme-angular/ui/nested';
-import { DxiCommandModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoContextToolboxModule } from 'devextreme-angular/ui/nested';
-import { DxiCustomShapeModule } from 'devextreme-angular/ui/nested';
-import { DxiConnectionPointModule } from 'devextreme-angular/ui/nested';
-import { DxoDefaultItemPropertiesModule } from 'devextreme-angular/ui/nested';
-import { DxoEdgesModule } from 'devextreme-angular/ui/nested';
-import { DxoEditingModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoGridSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoHistoryToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxoMainToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxoNodesModule } from 'devextreme-angular/ui/nested';
-import { DxoAutoLayoutModule } from 'devextreme-angular/ui/nested';
-import { DxoPageSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoPropertiesPanelModule } from 'devextreme-angular/ui/nested';
-import { DxiTabModule } from 'devextreme-angular/ui/nested';
-import { DxiGroupModule } from 'devextreme-angular/ui/nested';
-import { DxoToolboxModule } from 'devextreme-angular/ui/nested';
-import { DxoViewToolbarModule } from 'devextreme-angular/ui/nested';
-import { DxoZoomLevelModule } from 'devextreme-angular/ui/nested';
+import { DxoContextMenuModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiCommandModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoContextToolboxModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiCustomShapeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiConnectionPointModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoDefaultItemPropertiesModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoEdgesModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoEditingModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoGridSizeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoHistoryToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoMainToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoNodesModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoAutoLayoutModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoPageSizeModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoPropertiesPanelModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiTabModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxiGroupModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoToolboxModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoViewToolbarModule } from 'devextreme-angular/ui/diagram/nested';
+import { DxoZoomLevelModule } from 'devextreme-angular/ui/diagram/nested';
 
-import { DxiCustomShapeComponent } from 'devextreme-angular/ui/nested';
+import { DxiCustomShapeComponent } from 'devextreme-angular/ui/diagram/nested';
 
 
 

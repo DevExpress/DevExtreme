@@ -43,22 +43,22 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
-import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoToModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoHideEventModule } from 'devextreme-angular/ui/popover/nested';
+import { DxoShowEventModule } from 'devextreme-angular/ui/popover/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/popover/nested';
 
-import { DxiToolbarItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiToolbarItemComponent } from 'devextreme-angular/ui/popover/nested';
 
 
 

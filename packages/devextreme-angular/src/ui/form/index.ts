@@ -38,15 +38,15 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoColCountByScreenModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
-import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxiTabModule } from 'devextreme-angular/ui/nested';
-import { DxoButtonOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxoColCountByScreenModule } from 'devextreme-angular/ui/form/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/form/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/form/nested';
+import { DxiValidationRuleModule } from 'devextreme-angular/ui/form/nested';
+import { DxoTabPanelOptionsModule } from 'devextreme-angular/ui/form/nested';
+import { DxiTabModule } from 'devextreme-angular/ui/form/nested';
+import { DxoButtonOptionsModule } from 'devextreme-angular/ui/form/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/form/nested';
 
 
 

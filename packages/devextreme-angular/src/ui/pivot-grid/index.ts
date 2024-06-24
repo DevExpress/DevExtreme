@@ -38,19 +38,19 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoDataSourceModule } from 'devextreme-angular/ui/nested';
-import { DxiFieldModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoHeaderFilterModule } from 'devextreme-angular/ui/nested';
-import { DxoStoreModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoFieldChooserModule } from 'devextreme-angular/ui/nested';
-import { DxoTextsModule } from 'devextreme-angular/ui/nested';
-import { DxoFieldPanelModule } from 'devextreme-angular/ui/nested';
-import { DxoSearchModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadPanelModule } from 'devextreme-angular/ui/nested';
-import { DxoScrollingModule } from 'devextreme-angular/ui/nested';
-import { DxoStateStoringModule } from 'devextreme-angular/ui/nested';
+import { DxoDataSourceModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxiFieldModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoHeaderFilterModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoStoreModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoFieldChooserModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoTextsModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoFieldPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoSearchModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoLoadPanelModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoScrollingModule } from 'devextreme-angular/ui/pivot-grid/nested';
+import { DxoStateStoringModule } from 'devextreme-angular/ui/pivot-grid/nested';
 
 
 

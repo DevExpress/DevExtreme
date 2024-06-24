@@ -41,23 +41,23 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
-import { DxoLinkModule } from 'devextreme-angular/ui/nested';
-import { DxoHoverStyleModule } from 'devextreme-angular/ui/nested';
-import { DxoHatchingModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoNodeModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
+import { DxoAdaptiveLayoutModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoLinkModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoHoverStyleModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoHatchingModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoNodeModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/sankey/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/sankey/nested';
 
 
 

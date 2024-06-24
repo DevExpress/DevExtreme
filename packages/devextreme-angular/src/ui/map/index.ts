@@ -37,16 +37,16 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoApiKeyModule } from 'devextreme-angular/ui/nested';
-import { DxiCenterModule } from 'devextreme-angular/ui/nested';
-import { DxiMarkerModule } from 'devextreme-angular/ui/nested';
-import { DxiLocationModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
-import { DxiRouteModule } from 'devextreme-angular/ui/nested';
+import { DxoApiKeyModule } from 'devextreme-angular/ui/map/nested';
+import { DxiCenterModule } from 'devextreme-angular/ui/map/nested';
+import { DxiMarkerModule } from 'devextreme-angular/ui/map/nested';
+import { DxiLocationModule } from 'devextreme-angular/ui/map/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/map/nested';
+import { DxiRouteModule } from 'devextreme-angular/ui/map/nested';
 
-import { DxiCenterComponent } from 'devextreme-angular/ui/nested';
-import { DxiMarkerComponent } from 'devextreme-angular/ui/nested';
-import { DxiRouteComponent } from 'devextreme-angular/ui/nested';
+import { DxiCenterComponent } from 'devextreme-angular/ui/map/nested';
+import { DxiMarkerComponent } from 'devextreme-angular/ui/map/nested';
+import { DxiRouteComponent } from 'devextreme-angular/ui/map/nested';
 
 
 

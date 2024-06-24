@@ -39,22 +39,22 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoExportModule } from 'devextreme-angular/ui/nested';
-import { DxoGeometryModule } from 'devextreme-angular/ui/nested';
-import { DxoLabelModule } from 'devextreme-angular/ui/nested';
-import { DxoFontModule } from 'devextreme-angular/ui/nested';
-import { DxoFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoLegendModule } from 'devextreme-angular/ui/nested';
-import { DxoBorderModule } from 'devextreme-angular/ui/nested';
-import { DxoItemTextFormatModule } from 'devextreme-angular/ui/nested';
-import { DxoMarginModule } from 'devextreme-angular/ui/nested';
-import { DxoTitleModule } from 'devextreme-angular/ui/nested';
-import { DxoSubtitleModule } from 'devextreme-angular/ui/nested';
-import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/nested';
-import { DxoSizeModule } from 'devextreme-angular/ui/nested';
-import { DxoTooltipModule } from 'devextreme-angular/ui/nested';
-import { DxoShadowModule } from 'devextreme-angular/ui/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoExportModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoGeometryModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoLabelModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoFontModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoFormatModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoLegendModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoBorderModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoItemTextFormatModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoMarginModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoTitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoSubtitleModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoLoadingIndicatorModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoSizeModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoTooltipModule } from 'devextreme-angular/ui/bar-gauge/nested';
+import { DxoShadowModule } from 'devextreme-angular/ui/bar-gauge/nested';
 
 
 

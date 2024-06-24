@@ -48,24 +48,24 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/nested';
-import { DxoAnimationModule } from 'devextreme-angular/ui/nested';
-import { DxoHideModule } from 'devextreme-angular/ui/nested';
-import { DxoFromModule } from 'devextreme-angular/ui/nested';
-import { DxoPositionModule } from 'devextreme-angular/ui/nested';
-import { DxoAtModule } from 'devextreme-angular/ui/nested';
-import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoCollisionModule } from 'devextreme-angular/ui/nested';
-import { DxoMyModule } from 'devextreme-angular/ui/nested';
-import { DxoOffsetModule } from 'devextreme-angular/ui/nested';
-import { DxoToModule } from 'devextreme-angular/ui/nested';
-import { DxoShowModule } from 'devextreme-angular/ui/nested';
-import { DxoHideEventModule } from 'devextreme-angular/ui/nested';
-import { DxoShowEventModule } from 'devextreme-angular/ui/nested';
-import { DxiToolbarItemModule } from 'devextreme-angular/ui/nested';
-import { DxiItemModule } from 'devextreme-angular/ui/nested';
+import { DxoDropDownOptionsModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoAnimationModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoHideModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoFromModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoPositionModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoAtModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoBoundaryOffsetModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoCollisionModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoMyModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoOffsetModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoToModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoShowModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoHideEventModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxoShowEventModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxiToolbarItemModule } from 'devextreme-angular/ui/lookup/nested';
+import { DxiItemModule } from 'devextreme-angular/ui/lookup/nested';
 
-import { DxiItemComponent } from 'devextreme-angular/ui/nested';
+import { DxiItemComponent } from 'devextreme-angular/ui/lookup/nested';
 
 
 

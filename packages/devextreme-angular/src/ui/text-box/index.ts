@@ -44,10 +44,10 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxiButtonModule } from 'devextreme-angular/ui/nested';
-import { DxoOptionsModule } from 'devextreme-angular/ui/nested';
+import { DxiButtonModule } from 'devextreme-angular/ui/text-box/nested';
+import { DxoOptionsModule } from 'devextreme-angular/ui/text-box/nested';
 
-import { DxiButtonComponent } from 'devextreme-angular/ui/nested';
+import { DxiButtonComponent } from 'devextreme-angular/ui/text-box/nested';
 
 
 

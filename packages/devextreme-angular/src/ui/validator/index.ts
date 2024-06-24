@@ -40,10 +40,10 @@ import {
     WatcherHelper
 } from 'devextreme-angular/core';
 
-import { DxoAdapterModule } from 'devextreme-angular/ui/nested';
-import { DxiValidationRuleModule } from 'devextreme-angular/ui/nested';
+import { DxoAdapterModule } from 'devextreme-angular/ui/validator/nested';
+import { DxiValidationRuleModule } from 'devextreme-angular/ui/validator/nested';
 
-import { DxiValidationRuleComponent } from 'devextreme-angular/ui/nested';
+import { DxiValidationRuleComponent } from 'devextreme-angular/ui/validator/nested';
 
 
 
