@@ -1,4 +1,5 @@
 import * as events from 'devextreme/events';
+import config from 'devextreme/core/config';
 import * as testingLib from '@testing-library/react';
 import * as React from 'react';
 import { useLayoutEffect } from 'react';
@@ -118,6 +119,10 @@ describe('rendering', () => {
       expect.assertions(1);
 
       testingLib.render(<MyComponent />);
+    });
+
+    it('correctly sets the buy now link', () => {
+      expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
     });
   });
 
