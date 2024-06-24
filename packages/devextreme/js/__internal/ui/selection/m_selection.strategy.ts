@@ -5,7 +5,7 @@ import {
   noop,
 } from '@js/core/utils/common';
 import { Deferred } from '@js/core/utils/deferred';
-import { isObject, isPlainObject } from '@js/core/utils/type';
+import { isFunction, isObject, isPlainObject } from '@js/core/utils/type';
 import dataQuery from '@js/data/query';
 
 export default class SelectionStrategy {
@@ -88,8 +88,9 @@ export default class SelectionStrategy {
   }
 
   _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
+    const keyField = this.options.key();
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
-    const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest);
+    const needLoadAllData = (this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest)) || isFunction(keyField);
     const deferred = Deferred();
     const loadOptions = {
       filter: needLoadAllData ? undefined : remoteFilter,
