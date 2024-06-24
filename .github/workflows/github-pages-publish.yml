@@ -1,0 +1,21 @@
+name: Deploy github pages
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    name: Depoly to github pages from gh-pages branch
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout gh-pages branch
+        uses: actions/checkout@v4
+        with:
+          ref: gh-pages
+          path: gh-pages
+      
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./
