@@ -3048,7 +3048,15 @@ QUnit.module('Selection SelectAllMode', {
         // act
         const selectedRows = this.selectionController.getSelectedRowsData();
         // assert
-        assert.deepEqual(selectedRows, []);
+        assert.deepEqual(selectedRows, [
+            { id: 1, value: 'value1' },
+            { id: 2, value: 'value2' },
+            { id: 3, value: 'value3' },
+            { id: 4, value: 'value4' },
+            { id: 5, value: 'value5' },
+            { id: 6, value: 'value6' },
+            { id: 7, value: 'value7' },
+        ]);
     });
 
     QUnit.test('get isSelected rows after Select All when dataSource has complex key', function(assert) {
