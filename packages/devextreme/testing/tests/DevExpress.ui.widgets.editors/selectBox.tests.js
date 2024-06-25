@@ -6481,6 +6481,48 @@ QUnit.module('valueChanged handler should receive correct event', {
     });
 });
 
+QUnit.module('onKeyDown', () => {
+    QUnit.test('should fire event only once (T1238121)', function(assert) {
+        const onKeyDownHandler = sinon.spy();
+        const products = [{
+            ID: 1,
+            Name: 'HD Video Player',
+            ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/1-small.png',
+        }, {
+            ID: 2,
+            Name: 'SuperHD Player',
+            ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/2-small.png',
+        }, {
+            ID: 3,
+            Name: 'SuperPlasma 50',
+            ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/3-small.png',
+        }];
+        const $element = $('#selectBox').dxSelectBox({
+            dataSource: products,
+            displayExpr: 'Name',
+            valueExpr: 'ID',
+            value: products[0].ID,
+            onKeyDown: onKeyDownHandler,
+            fieldTemplate(data,) {
+                const result = $(`<div class='custom-item'><img alt='Product name' src='${
+                    data ? data.ImageSrc : ''
+                }' /><div class='product-name'></div></div>`);
+                return result
+                    .find('.product-name')
+                    .dxTextBox({
+                        value: data && data.Name,
+                        readOnly: true,
+                    });
+            },
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('a').change();
+
+        assert.strictEqual(onKeyDownHandler.callCount, 1, 'handler has been called once');
+    });
+});
+
 QUnit.module('displayExpr', moduleSetup, () => {
     [false, true].forEach((deferRendering) => {
         QUnit.test(`displayExpr should not recalculated on closing dropDown window in case the widget has no actual value(deferRendering is ${deferRendering})`, function(assert) {
