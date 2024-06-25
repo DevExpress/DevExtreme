@@ -354,7 +354,7 @@ function updateRangeSeriesValues() {
         const minBarSize = singleSeries.getOptions().minBarSize;
         const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
         const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
-        if(minShownBusinessValue) {
+        if(minShownBusinessValue && !that.rotated) {
             _each(singleSeries.getPoints(), function(_, point) {
                 if(!point.hasValue()) {
                     return;
@@ -442,6 +442,7 @@ export function SeriesFamily(options) {
 
     that.type = _normalizeEnum(options.type);
     that.pane = options.pane;
+    that.rotated = options.rotated;
     that.series = [];
 
     that.updateOptions(options);

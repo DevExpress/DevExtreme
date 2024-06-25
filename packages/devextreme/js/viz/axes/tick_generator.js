@@ -730,7 +730,7 @@ function dateGenerator(options) {
         const correctDateWithUnitBeginning = v => dateUtils.correctDateWithUnitBeginning(v, intervalObject, null, options.firstDayOfWeek);
         const floorAtStartDate = v => new Date(mathFloor((v.getTime() - v.getTimezoneOffset() * MINUTE) / divider) * divider + v.getTimezoneOffset() * MINUTE);
 
-        value = correctDateWithUnitBeginning(new Date(value));
+        value = correctDateWithUnitBeginning(value);
 
         if('years' in intervalObject) {
             value.setFullYear(floorNumber(value.getFullYear(), intervalObject.years));
