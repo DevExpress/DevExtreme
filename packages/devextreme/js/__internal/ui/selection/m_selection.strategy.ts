@@ -90,7 +90,7 @@ export default class SelectionStrategy {
   _loadFilteredData(remoteFilter, localFilter?: any, select?: any, isSelectAll?: boolean) {
     const keyField = this.options.key();
     const filterLength = encodeURI(JSON.stringify(this._removeTemplateProperty(remoteFilter))).length;
-    const needLoadAllData = this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest) || isFunction(keyField);
+    const needLoadAllData = (this.options.maxFilterLengthInRequest && (filterLength > this.options.maxFilterLengthInRequest)) || isFunction(keyField);
     const deferred = Deferred();
     const loadOptions = {
       filter: needLoadAllData ? undefined : remoteFilter,
