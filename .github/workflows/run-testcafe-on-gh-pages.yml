@@ -8,11 +8,8 @@ jobs:
         strategy:
             fail-fast: false
             matrix:
-                CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4),]
-                
-                # THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
-                #CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4),]
-                THEME: ['material.blue.light',]
+              CONSTEL: [react(1/4), react(2/4), react(3/4), react(4/4), vue(1/4), vue(2/4), vue(3/4), vue(4/4), angular(1/4), angular(2/4), angular(3/4), angular(4/4)]
+              THEME: ['generic.light', 'material.blue.light', 'fluent.blue.light']
 
 
         runs-on: ubuntu-latest
