@@ -1,21 +1,37 @@
-name: Deploy github pages
+name: Deploy static content to Pages
 
 on:
+  push:
+    branches: [gh-pages]
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
 
 jobs:
   deploy:
-    name: Depoly to github pages from gh-pages branch
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout gh-pages branch
+      - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: gh-pages
-          path: gh-pages
-      
-      - name: Deploy
-        uses: peaceiris/actions-gh-pages@v4
+            ref: gh-pages
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./
+          # Upload entire repository
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
