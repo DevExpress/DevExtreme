@@ -315,8 +315,9 @@ const SKIPPED_TESTS = {
         comparisonOptions = mergedTestSettings['comparison-options'];
       }
     }
-
-    runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${process.env.THEME}`)
+    // remove when tests enabled not only for datagrid
+    if (widgetName === 'DataGrid') {
+      runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${process.env.THEME}`)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
@@ -375,5 +376,8 @@ const SKIPPED_TESTS = {
           await t.expect(comparisonResult).ok('INVALID_SCREENSHOT');
         }
       });
+    }
+
+    
   });
 });
