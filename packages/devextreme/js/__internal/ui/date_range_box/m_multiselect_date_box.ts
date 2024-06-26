@@ -4,8 +4,8 @@ import { getWidth } from '@js/core/utils/size';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils';
 // eslint-disable-next-line @typescript-eslint/consistent-type-imports
-import type { DateBoxBase, Properties } from '@js/ui/date_box';
-import DateBox from '@js/ui/date_box';
+import type { Properties } from '@js/ui/date_box';
+import DateBox, { DateBoxBase } from '@js/ui/date_box';
 import type Popup from '@js/ui/popup';
 
 import { getDeserializedDate, monthDifference } from './m_date_range.utils';
