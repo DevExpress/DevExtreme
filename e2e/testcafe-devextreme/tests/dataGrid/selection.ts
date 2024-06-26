@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import DataSource from 'devextreme/data/data_source';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
-import DataSource from "devextreme/data/data_source"
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../container.html'));
@@ -95,7 +95,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test.only('Select rows by shift should work when grid has real time updates', async (t) => {
+test('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
   const secondRow = dataGrid.getDataRow(1);
   const seventhRow = dataGrid.getDataRow(6);
