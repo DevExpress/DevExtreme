@@ -26,6 +26,7 @@ const TypedDateBox: typeof ExtendedDateBox = DateBox as any;
 
 class MultiselectDateBox extends TypedDateBox {
   // Temporary solution. Move to component level
+
   public NAME!: string;
 
   private _skipIsValidOptionChange?: boolean;
