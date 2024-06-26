@@ -317,7 +317,8 @@ const SKIPPED_TESTS = {
     }
     // remove when tests enabled not only for datagrid
     if (widgetName === 'DataGrid') {
-      runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${process.env.THEME}`)
+      const theme = process.env.THEME.replace('generic.', '');
+      runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
