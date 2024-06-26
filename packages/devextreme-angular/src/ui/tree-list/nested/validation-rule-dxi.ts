@@ -12,7 +12,7 @@ import {
 
 
 
-import { ValidationRuleType } from 'devextreme/common';
+import { ComparisonOperator, ValidationRuleType } from 'devextreme/common';
 
 import {
     NestedOptionHost,
@@ -28,14 +28,6 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiValidationRuleComponent extends CollectionNestedOption {
     @Input()
-    get ignoreEmptyValue(): boolean {
-        return this._getOption('ignoreEmptyValue');
-    }
-    set ignoreEmptyValue(value: boolean) {
-        this._setOption('ignoreEmptyValue', value);
-    }
-
-    @Input()
     get message(): string {
         return this._getOption('message');
     }
@@ -44,11 +36,11 @@ export class DxiValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get reevaluate(): boolean {
-        return this._getOption('reevaluate');
+    get trim(): boolean {
+        return this._getOption('trim');
     }
-    set reevaluate(value: boolean) {
-        this._setOption('reevaluate', value);
+    set trim(value: boolean) {
+        this._setOption('trim', value);
     }
 
     @Input()
@@ -60,11 +52,67 @@ export class DxiValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get ignoreEmptyValue(): boolean {
+        return this._getOption('ignoreEmptyValue');
+    }
+    set ignoreEmptyValue(value: boolean) {
+        this._setOption('ignoreEmptyValue', value);
+    }
+
+    @Input()
+    get max(): Date | number | string {
+        return this._getOption('max');
+    }
+    set max(value: Date | number | string) {
+        this._setOption('max', value);
+    }
+
+    @Input()
+    get min(): Date | number | string {
+        return this._getOption('min');
+    }
+    set min(value: Date | number | string) {
+        this._setOption('min', value);
+    }
+
+    @Input()
+    get reevaluate(): boolean {
+        return this._getOption('reevaluate');
+    }
+    set reevaluate(value: boolean) {
+        this._setOption('reevaluate', value);
+    }
+
+    @Input()
     get validationCallback(): Function {
         return this._getOption('validationCallback');
     }
     set validationCallback(value: Function) {
         this._setOption('validationCallback', value);
+    }
+
+    @Input()
+    get comparisonTarget(): Function {
+        return this._getOption('comparisonTarget');
+    }
+    set comparisonTarget(value: Function) {
+        this._setOption('comparisonTarget', value);
+    }
+
+    @Input()
+    get comparisonType(): ComparisonOperator {
+        return this._getOption('comparisonType');
+    }
+    set comparisonType(value: ComparisonOperator) {
+        this._setOption('comparisonType', value);
+    }
+
+    @Input()
+    get pattern(): RegExp | string {
+        return this._getOption('pattern');
+    }
+    set pattern(value: RegExp | string) {
+        this._setOption('pattern', value);
     }
 
 

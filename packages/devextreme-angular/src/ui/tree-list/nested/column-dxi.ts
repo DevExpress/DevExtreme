@@ -8,7 +8,10 @@ import {
     SkipSelf,
     Input,
     Output,
-    EventEmitter
+    EventEmitter,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
@@ -26,6 +29,8 @@ import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiButtonComponent } from './button-dxi';
+import { DxiValidationRuleComponent } from './validation-rule-dxi';
 
 
 @Component({
@@ -536,6 +541,30 @@ export class DxiColumnComponent extends CollectionNestedOption {
         return 'columns';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiButtonComponent))
+    get buttonsChildren(): QueryList<DxiButtonComponent> {
+        return this._getOption('buttons');
+    }
+    set buttonsChildren(value) {
+        this.setChildren('buttons', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiColumnComponent))
+    get columnsChildren(): QueryList<DxiColumnComponent> {
+        return this._getOption('columns');
+    }
+    set columnsChildren(value) {
+        this.setChildren('columns', value);
+    }
+
+    @ContentChildren(forwardRef(() => DxiValidationRuleComponent))
+    get validationRulesChildren(): QueryList<DxiValidationRuleComponent> {
+        return this._getOption('validationRules');
+    }
+    set validationRulesChildren(value) {
+        this.setChildren('validationRules', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

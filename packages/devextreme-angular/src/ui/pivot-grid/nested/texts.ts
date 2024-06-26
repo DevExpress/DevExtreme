@@ -29,6 +29,102 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get allFields(): string {
+        return this._getOption('allFields');
+    }
+    set allFields(value: string) {
+        this._setOption('allFields', value);
+    }
+
+    @Input()
+    get columnFields(): string {
+        return this._getOption('columnFields');
+    }
+    set columnFields(value: string) {
+        this._setOption('columnFields', value);
+    }
+
+    @Input()
+    get dataFields(): string {
+        return this._getOption('dataFields');
+    }
+    set dataFields(value: string) {
+        this._setOption('dataFields', value);
+    }
+
+    @Input()
+    get filterFields(): string {
+        return this._getOption('filterFields');
+    }
+    set filterFields(value: string) {
+        this._setOption('filterFields', value);
+    }
+
+    @Input()
+    get rowFields(): string {
+        return this._getOption('rowFields');
+    }
+    set rowFields(value: string) {
+        this._setOption('rowFields', value);
+    }
+
+    @Input()
+    get columnFieldArea(): string {
+        return this._getOption('columnFieldArea');
+    }
+    set columnFieldArea(value: string) {
+        this._setOption('columnFieldArea', value);
+    }
+
+    @Input()
+    get dataFieldArea(): string {
+        return this._getOption('dataFieldArea');
+    }
+    set dataFieldArea(value: string) {
+        this._setOption('dataFieldArea', value);
+    }
+
+    @Input()
+    get filterFieldArea(): string {
+        return this._getOption('filterFieldArea');
+    }
+    set filterFieldArea(value: string) {
+        this._setOption('filterFieldArea', value);
+    }
+
+    @Input()
+    get rowFieldArea(): string {
+        return this._getOption('rowFieldArea');
+    }
+    set rowFieldArea(value: string) {
+        this._setOption('rowFieldArea', value);
+    }
+
+    @Input()
+    get cancel(): string {
+        return this._getOption('cancel');
+    }
+    set cancel(value: string) {
+        this._setOption('cancel', value);
+    }
+
+    @Input()
+    get emptyValue(): string {
+        return this._getOption('emptyValue');
+    }
+    set emptyValue(value: string) {
+        this._setOption('emptyValue', value);
+    }
+
+    @Input()
+    get ok(): string {
+        return this._getOption('ok');
+    }
+    set ok(value: string) {
+        this._setOption('ok', value);
+    }
+
+    @Input()
     get collapseAll(): string {
         return this._getOption('collapseAll');
     }

@@ -68,6 +68,22 @@ export class DxiItemComponent extends CollectionNestedOption {
         this._setOption('text', value);
     }
 
+    @Input()
+    get height(): number {
+        return this._getOption('height');
+    }
+    set height(value: number) {
+        this._setOption('height', value);
+    }
+
+    @Input()
+    get width(): number {
+        return this._getOption('width');
+    }
+    set width(value: number) {
+        this._setOption('width', value);
+    }
+
 
     protected get _optionPath() {
         return 'items';

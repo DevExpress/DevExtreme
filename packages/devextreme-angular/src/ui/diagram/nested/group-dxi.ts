@@ -6,18 +6,22 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
 
 
-import { ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { Command, CustomCommand, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiCommandComponent } from './command-dxi';
 
 
 @Component({
@@ -27,6 +31,22 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
     providers: [NestedOptionHost]
 })
 export class DxiGroupComponent extends CollectionNestedOption {
+    @Input()
+    get commands(): Array<CustomCommand | Command> {
+        return this._getOption('commands');
+    }
+    set commands(value: Array<CustomCommand | Command>) {
+        this._setOption('commands', value);
+    }
+
+    @Input()
+    get title(): string {
+        return this._getOption('title');
+    }
+    set title(value: string) {
+        this._setOption('title', value);
+    }
+
     @Input()
     get category(): ShapeCategory | string {
         return this._getOption('category');
@@ -59,19 +79,19 @@ export class DxiGroupComponent extends CollectionNestedOption {
         this._setOption('shapes', value);
     }
 
-    @Input()
-    get title(): string {
-        return this._getOption('title');
-    }
-    set title(value: string) {
-        this._setOption('title', value);
-    }
-
 
     protected get _optionPath() {
         return 'groups';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiCommandComponent))
+    get commandsChildren(): QueryList<DxiCommandComponent> {
+        return this._getOption('commands');
+    }
+    set commandsChildren(value) {
+        this.setChildren('commands', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

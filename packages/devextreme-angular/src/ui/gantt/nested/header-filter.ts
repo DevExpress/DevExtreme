@@ -14,7 +14,10 @@ import {
 
 
 
-import { HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { SearchMode } from 'devextreme/common';
+import { ColumnHeaderFilterSearchConfig, HeaderFilterGroupInterval, HeaderFilterSearchConfig } from 'devextreme/common/grids';
+import { Store } from 'devextreme/data';
+import { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { dxGanttHeaderFilterTexts } from 'devextreme/ui/gantt';
 
 import {
@@ -47,19 +50,51 @@ export class DxoHeaderFilterComponent extends NestedOption implements OnDestroy,
     }
 
     @Input()
-    get height(): number {
+    get dataSource(): Store | DataSourceOptions | Function | null | undefined | Array<any> {
+        return this._getOption('dataSource');
+    }
+    set dataSource(value: Store | DataSourceOptions | Function | null | undefined | Array<any>) {
+        this._setOption('dataSource', value);
+    }
+
+    @Input()
+    get groupInterval(): HeaderFilterGroupInterval | number | undefined {
+        return this._getOption('groupInterval');
+    }
+    set groupInterval(value: HeaderFilterGroupInterval | number | undefined) {
+        this._setOption('groupInterval', value);
+    }
+
+    @Input()
+    get height(): number | string | undefined {
         return this._getOption('height');
     }
-    set height(value: number) {
+    set height(value: number | string | undefined) {
         this._setOption('height', value);
     }
 
     @Input()
-    get search(): HeaderFilterSearchConfig {
+    get search(): ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig {
         return this._getOption('search');
     }
-    set search(value: HeaderFilterSearchConfig) {
+    set search(value: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig) {
         this._setOption('search', value);
+    }
+
+    @Input()
+    get searchMode(): SearchMode {
+        return this._getOption('searchMode');
+    }
+    set searchMode(value: SearchMode) {
+        this._setOption('searchMode', value);
+    }
+
+    @Input()
+    get width(): number | string | undefined {
+        return this._getOption('width');
+    }
+    set width(value: number | string | undefined) {
+        this._setOption('width', value);
     }
 
     @Input()
@@ -84,14 +119,6 @@ export class DxoHeaderFilterComponent extends NestedOption implements OnDestroy,
     }
     set visible(value: boolean) {
         this._setOption('visible', value);
-    }
-
-    @Input()
-    get width(): number {
-        return this._getOption('width');
-    }
-    set width(value: number) {
-        this._setOption('width', value);
     }
 
 

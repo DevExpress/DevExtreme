@@ -38,6 +38,14 @@ export class DxoBorderComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
+    get cornerRadius(): number {
+        return this._getOption('cornerRadius');
+    }
+    set cornerRadius(value: number) {
+        this._setOption('cornerRadius', value);
+    }
+
+    @Input()
     get dashStyle(): DashStyle {
         return this._getOption('dashStyle');
     }

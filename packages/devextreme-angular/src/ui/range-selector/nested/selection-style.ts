@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoSelectionStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, visible?: boolean, width?: number } | { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -43,6 +43,14 @@ export class DxoSelectionStyleComponent extends NestedOption implements OnDestro
     }
     set color(value: ChartsColor | string | undefined) {
         this._setOption('color', value);
+    }
+
+    @Input()
+    get size(): number | undefined {
+        return this._getOption('size');
+    }
+    set size(value: number | undefined) {
+        this._setOption('size', value);
     }
 
     @Input()

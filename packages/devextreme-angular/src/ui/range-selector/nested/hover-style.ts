@@ -14,7 +14,7 @@ import {
 
 
 
-import { ChartsColor } from 'devextreme/common/charts';
+import { ChartsColor, DashStyle, HatchDirection } from 'devextreme/common/charts';
 
 import {
     NestedOptionHost,
@@ -30,10 +30,10 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get border(): { color?: string | undefined, visible?: boolean, width?: number } {
+    get border(): { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number } {
         return this._getOption('border');
     }
-    set border(value: { color?: string | undefined, visible?: boolean, width?: number }) {
+    set border(value: { color?: string | undefined, dashStyle?: DashStyle, visible?: boolean, width?: number } | { color?: string | undefined, visible?: boolean, width?: number }) {
         this._setOption('border', value);
     }
 
@@ -43,6 +43,38 @@ export class DxoHoverStyleComponent extends NestedOption implements OnDestroy, O
     }
     set color(value: ChartsColor | string | undefined) {
         this._setOption('color', value);
+    }
+
+    @Input()
+    get dashStyle(): DashStyle {
+        return this._getOption('dashStyle');
+    }
+    set dashStyle(value: DashStyle) {
+        this._setOption('dashStyle', value);
+    }
+
+    @Input()
+    get hatching(): { direction?: HatchDirection, opacity?: number, step?: number, width?: number } {
+        return this._getOption('hatching');
+    }
+    set hatching(value: { direction?: HatchDirection, opacity?: number, step?: number, width?: number }) {
+        this._setOption('hatching', value);
+    }
+
+    @Input()
+    get highlight(): boolean {
+        return this._getOption('highlight');
+    }
+    set highlight(value: boolean) {
+        this._setOption('highlight', value);
+    }
+
+    @Input()
+    get width(): number {
+        return this._getOption('width');
+    }
+    set width(value: number) {
+        this._setOption('width', value);
     }
 
     @Input()

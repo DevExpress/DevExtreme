@@ -30,18 +30,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get color(): string {
+    get color(): string | undefined {
         return this._getOption('color');
     }
-    set color(value: string) {
+    set color(value: string | undefined) {
         this._setOption('color', value);
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get cornerRadius(): number {
+        return this._getOption('cornerRadius');
+    }
+    set cornerRadius(value: number) {
+        this._setOption('cornerRadius', value);
+    }
+
+    @Input()
+    get dashStyle(): DashStyle | undefined {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | undefined) {
         this._setOption('dashStyle', value);
     }
 

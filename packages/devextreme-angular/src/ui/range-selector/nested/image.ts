@@ -14,6 +14,7 @@ import {
 
 
 
+import { BackgroundImageLocation } from 'devextreme/viz/range_selector';
 
 import {
     NestedOptionHost,
@@ -29,11 +30,11 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
-        return this._getOption('height');
+    get location(): BackgroundImageLocation {
+        return this._getOption('location');
     }
-    set height(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
-        this._setOption('height', value);
+    set location(value: BackgroundImageLocation) {
+        this._setOption('location', value);
     }
 
     @Input()
@@ -42,6 +43,14 @@ export class DxoImageComponent extends NestedOption implements OnDestroy, OnInit
     }
     set url(value: string | undefined | { rangeMaxPoint?: string | undefined, rangeMinPoint?: string | undefined }) {
         this._setOption('url', value);
+    }
+
+    @Input()
+    get height(): number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined } {
+        return this._getOption('height');
+    }
+    set height(value: number | { rangeMaxPoint?: number | undefined, rangeMinPoint?: number | undefined }) {
+        this._setOption('height', value);
     }
 
     @Input()

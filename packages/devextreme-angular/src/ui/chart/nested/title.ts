@@ -14,7 +14,7 @@ import {
 
 
 
-import { HorizontalAlignment } from 'devextreme/common';
+import { HorizontalAlignment, VerticalEdge } from 'devextreme/common';
 import { Font, TextOverflow, WordWrap } from 'devextreme/common/charts';
 
 import {
@@ -47,10 +47,10 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get margin(): number {
+    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
         return this._getOption('margin');
     }
-    set margin(value: number) {
+    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
         this._setOption('margin', value);
     }
 
@@ -76,6 +76,38 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
     set wordWrap(value: WordWrap) {
         this._setOption('wordWrap', value);
+    }
+
+    @Input()
+    get horizontalAlignment(): HorizontalAlignment | undefined {
+        return this._getOption('horizontalAlignment');
+    }
+    set horizontalAlignment(value: HorizontalAlignment | undefined) {
+        this._setOption('horizontalAlignment', value);
+    }
+
+    @Input()
+    get placeholderSize(): number | undefined {
+        return this._getOption('placeholderSize');
+    }
+    set placeholderSize(value: number | undefined) {
+        this._setOption('placeholderSize', value);
+    }
+
+    @Input()
+    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+        return this._getOption('subtitle');
+    }
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+        this._setOption('subtitle', value);
+    }
+
+    @Input()
+    get verticalAlignment(): VerticalEdge {
+        return this._getOption('verticalAlignment');
+    }
+    set verticalAlignment(value: VerticalEdge) {
+        this._setOption('verticalAlignment', value);
     }
 
 

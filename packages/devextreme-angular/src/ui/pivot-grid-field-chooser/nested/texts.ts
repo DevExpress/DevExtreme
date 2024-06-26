@@ -29,6 +29,30 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoTextsComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
+    get cancel(): string {
+        return this._getOption('cancel');
+    }
+    set cancel(value: string) {
+        this._setOption('cancel', value);
+    }
+
+    @Input()
+    get emptyValue(): string {
+        return this._getOption('emptyValue');
+    }
+    set emptyValue(value: string) {
+        this._setOption('emptyValue', value);
+    }
+
+    @Input()
+    get ok(): string {
+        return this._getOption('ok');
+    }
+    set ok(value: string) {
+        this._setOption('ok', value);
+    }
+
+    @Input()
     get allFields(): string {
         return this._getOption('allFields');
     }

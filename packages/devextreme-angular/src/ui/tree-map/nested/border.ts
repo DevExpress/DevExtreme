@@ -30,11 +30,19 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get color(): string {
+    get color(): string | undefined {
         return this._getOption('color');
     }
-    set color(value: string) {
+    set color(value: string | undefined) {
         this._setOption('color', value);
+    }
+
+    @Input()
+    get width(): number | undefined {
+        return this._getOption('width');
+    }
+    set width(value: number | undefined) {
+        this._setOption('width', value);
     }
 
     @Input()
@@ -59,14 +67,6 @@ export class DxoBorderComponent extends NestedOption implements OnDestroy, OnIni
     }
     set visible(value: boolean) {
         this._setOption('visible', value);
-    }
-
-    @Input()
-    get width(): number {
-        return this._getOption('width');
-    }
-    set width(value: number) {
-        this._setOption('width', value);
     }
 
 

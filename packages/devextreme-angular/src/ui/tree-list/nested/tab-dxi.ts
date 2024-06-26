@@ -10,7 +10,10 @@ import {
     Inject,
     AfterViewInit,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 import { DOCUMENT } from '@angular/common';
@@ -26,6 +29,7 @@ import {
     DxTemplateHost
 } from 'devextreme-angular/core';
 import { CollectionNestedOption } from 'devextreme-angular/core';
+import { DxiItemComponent } from './item-dxi';
 
 
 @Component({
@@ -121,6 +125,14 @@ export class DxiTabComponent extends CollectionNestedOption implements AfterView
         return 'tabs';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiItemComponent))
+    get itemsChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost,

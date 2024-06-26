@@ -6,14 +6,17 @@ import {
     NgModule,
     Host,
     SkipSelf,
-    Input
+    Input,
+    ContentChildren,
+    forwardRef,
+    QueryList
 } from '@angular/core';
 
 
 
 
 import { ToolbarItemComponent, ToolbarItemLocation } from 'devextreme/common';
-import { FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
+import { dxFileManagerContextMenuItem, FileManagerPredefinedContextMenuItem, FileManagerPredefinedToolbarItem } from 'devextreme/ui/file_manager';
 import { LocateInMenuMode, ShowTextMode } from 'devextreme/ui/toolbar';
 
 import {
@@ -30,11 +33,19 @@ import { CollectionNestedOption } from 'devextreme-angular/core';
 })
 export class DxiItemComponent extends CollectionNestedOption {
     @Input()
-    get cssClass(): string | undefined {
-        return this._getOption('cssClass');
+    get beginGroup(): boolean {
+        return this._getOption('beginGroup');
     }
-    set cssClass(value: string | undefined) {
-        this._setOption('cssClass', value);
+    set beginGroup(value: boolean) {
+        this._setOption('beginGroup', value);
+    }
+
+    @Input()
+    get closeMenuOnClick(): boolean {
+        return this._getOption('closeMenuOnClick');
+    }
+    set closeMenuOnClick(value: boolean) {
+        this._setOption('closeMenuOnClick', value);
     }
 
     @Input()
@@ -54,43 +65,35 @@ export class DxiItemComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get locateInMenu(): LocateInMenuMode {
-        return this._getOption('locateInMenu');
+    get items(): Array<dxFileManagerContextMenuItem> {
+        return this._getOption('items');
     }
-    set locateInMenu(value: LocateInMenuMode) {
-        this._setOption('locateInMenu', value);
-    }
-
-    @Input()
-    get location(): ToolbarItemLocation {
-        return this._getOption('location');
-    }
-    set location(value: ToolbarItemLocation) {
-        this._setOption('location', value);
+    set items(value: Array<dxFileManagerContextMenuItem>) {
+        this._setOption('items', value);
     }
 
     @Input()
-    get name(): FileManagerPredefinedToolbarItem | string {
+    get name(): FileManagerPredefinedContextMenuItem | string | FileManagerPredefinedToolbarItem {
         return this._getOption('name');
     }
-    set name(value: FileManagerPredefinedToolbarItem | string) {
+    set name(value: FileManagerPredefinedContextMenuItem | string | FileManagerPredefinedToolbarItem) {
         this._setOption('name', value);
     }
 
     @Input()
-    get options(): any {
-        return this._getOption('options');
+    get selectable(): boolean {
+        return this._getOption('selectable');
     }
-    set options(value: any) {
-        this._setOption('options', value);
+    set selectable(value: boolean) {
+        this._setOption('selectable', value);
     }
 
     @Input()
-    get showText(): ShowTextMode {
-        return this._getOption('showText');
+    get selected(): boolean {
+        return this._getOption('selected');
     }
-    set showText(value: ShowTextMode) {
-        this._setOption('showText', value);
+    set selected(value: boolean) {
+        this._setOption('selected', value);
     }
 
     @Input()
@@ -110,6 +113,46 @@ export class DxiItemComponent extends CollectionNestedOption {
     }
 
     @Input()
+    get cssClass(): string | undefined {
+        return this._getOption('cssClass');
+    }
+    set cssClass(value: string | undefined) {
+        this._setOption('cssClass', value);
+    }
+
+    @Input()
+    get locateInMenu(): LocateInMenuMode {
+        return this._getOption('locateInMenu');
+    }
+    set locateInMenu(value: LocateInMenuMode) {
+        this._setOption('locateInMenu', value);
+    }
+
+    @Input()
+    get location(): ToolbarItemLocation {
+        return this._getOption('location');
+    }
+    set location(value: ToolbarItemLocation) {
+        this._setOption('location', value);
+    }
+
+    @Input()
+    get options(): any {
+        return this._getOption('options');
+    }
+    set options(value: any) {
+        this._setOption('options', value);
+    }
+
+    @Input()
+    get showText(): ShowTextMode {
+        return this._getOption('showText');
+    }
+    set showText(value: ShowTextMode) {
+        this._setOption('showText', value);
+    }
+
+    @Input()
     get widget(): ToolbarItemComponent {
         return this._getOption('widget');
     }
@@ -122,6 +165,14 @@ export class DxiItemComponent extends CollectionNestedOption {
         return 'items';
     }
 
+
+    @ContentChildren(forwardRef(() => DxiItemComponent))
+    get itemsChildren(): QueryList<DxiItemComponent> {
+        return this._getOption('items');
+    }
+    set itemsChildren(value) {
+        this.setChildren('items', value);
+    }
 
     constructor(@SkipSelf() @Host() parentOptionHost: NestedOptionHost,
             @Host() optionHost: NestedOptionHost) {

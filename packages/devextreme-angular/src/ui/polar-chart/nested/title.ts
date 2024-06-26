@@ -39,18 +39,18 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get horizontalAlignment(): HorizontalAlignment {
+    get horizontalAlignment(): HorizontalAlignment | undefined {
         return this._getOption('horizontalAlignment');
     }
-    set horizontalAlignment(value: HorizontalAlignment) {
+    set horizontalAlignment(value: HorizontalAlignment | undefined) {
         this._setOption('horizontalAlignment', value);
     }
 
     @Input()
-    get margin(): number | { bottom?: number, left?: number, right?: number, top?: number } {
+    get margin(): { bottom?: number, left?: number, right?: number, top?: number } | number {
         return this._getOption('margin');
     }
-    set margin(value: number | { bottom?: number, left?: number, right?: number, top?: number }) {
+    set margin(value: { bottom?: number, left?: number, right?: number, top?: number } | number) {
         this._setOption('margin', value);
     }
 
@@ -63,10 +63,10 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get subtitle(): string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
+    get subtitle(): string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap } {
         return this._getOption('subtitle');
     }
-    set subtitle(value: string | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
+    set subtitle(value: string | { font?: Font, offset?: number, text?: string } | { font?: Font, offset?: number, text?: string, textOverflow?: TextOverflow, wordWrap?: WordWrap }) {
         this._setOption('subtitle', value);
     }
 
@@ -79,19 +79,19 @@ export class DxoTitleComponent extends NestedOption implements OnDestroy, OnInit
     }
 
     @Input()
-    get textOverflow(): TextOverflow {
-        return this._getOption('textOverflow');
-    }
-    set textOverflow(value: TextOverflow) {
-        this._setOption('textOverflow', value);
-    }
-
-    @Input()
     get verticalAlignment(): VerticalEdge {
         return this._getOption('verticalAlignment');
     }
     set verticalAlignment(value: VerticalEdge) {
         this._setOption('verticalAlignment', value);
+    }
+
+    @Input()
+    get textOverflow(): TextOverflow {
+        return this._getOption('textOverflow');
+    }
+    set textOverflow(value: TextOverflow) {
+        this._setOption('textOverflow', value);
     }
 
     @Input()

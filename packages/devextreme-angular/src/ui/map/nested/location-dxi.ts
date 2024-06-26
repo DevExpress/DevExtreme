@@ -44,7 +44,7 @@ export class DxiLocationComponent extends CollectionNestedOption {
 
 
     protected get _optionPath() {
-        return 'locations';
+        return 'location';
     }
 
 

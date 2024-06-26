@@ -54,6 +54,14 @@ export class DxoSearchComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
+    get searchExpr(): Function | string | undefined | Array<Function | string> {
+        return this._getOption('searchExpr');
+    }
+    set searchExpr(value: Function | string | undefined | Array<Function | string>) {
+        this._setOption('searchExpr', value);
+    }
+
+    @Input()
     get timeout(): number {
         return this._getOption('timeout');
     }

@@ -30,18 +30,26 @@ import { NestedOption } from 'devextreme-angular/core';
 })
 export class DxoBorderComponent extends NestedOption implements OnDestroy, OnInit  {
     @Input()
-    get color(): string {
+    get color(): string | undefined {
         return this._getOption('color');
     }
-    set color(value: string) {
+    set color(value: string | undefined) {
         this._setOption('color', value);
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get cornerRadius(): number {
+        return this._getOption('cornerRadius');
+    }
+    set cornerRadius(value: number) {
+        this._setOption('cornerRadius', value);
+    }
+
+    @Input()
+    get dashStyle(): DashStyle | undefined {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | undefined) {
         this._setOption('dashStyle', value);
     }
 
@@ -67,6 +75,38 @@ export class DxoBorderComponent extends NestedOption implements OnDestroy, OnIni
     }
     set width(value: number) {
         this._setOption('width', value);
+    }
+
+    @Input()
+    get bottom(): boolean {
+        return this._getOption('bottom');
+    }
+    set bottom(value: boolean) {
+        this._setOption('bottom', value);
+    }
+
+    @Input()
+    get left(): boolean {
+        return this._getOption('left');
+    }
+    set left(value: boolean) {
+        this._setOption('left', value);
+    }
+
+    @Input()
+    get right(): boolean {
+        return this._getOption('right');
+    }
+    set right(value: boolean) {
+        this._setOption('right', value);
+    }
+
+    @Input()
+    get top(): boolean {
+        return this._getOption('top');
+    }
+    set top(value: boolean) {
+        this._setOption('top', value);
     }
 
 

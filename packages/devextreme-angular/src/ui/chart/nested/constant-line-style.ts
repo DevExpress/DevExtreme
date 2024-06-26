@@ -47,10 +47,10 @@ export class DxoConstantLineStyleComponent extends NestedOption implements OnDes
     }
 
     @Input()
-    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } {
+    get label(): { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, position?: RelativePosition, visible?: boolean } {
         return this._getOption('label');
     }
-    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean }) {
+    set label(value: { font?: Font, horizontalAlignment?: HorizontalAlignment, position?: RelativePosition, verticalAlignment?: VerticalAlignment, visible?: boolean } | { font?: Font, position?: RelativePosition, visible?: boolean }) {
         this._setOption('label', value);
     }
 

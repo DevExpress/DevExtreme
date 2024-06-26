@@ -39,6 +39,22 @@ export class DxoSelectionComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
+    get recursive(): boolean {
+        return this._getOption('recursive');
+    }
+    set recursive(value: boolean) {
+        this._setOption('recursive', value);
+    }
+
+    @Input()
+    get selectByClick(): boolean {
+        return this._getOption('selectByClick');
+    }
+    set selectByClick(value: boolean) {
+        this._setOption('selectByClick', value);
+    }
+
+    @Input()
     get deferred(): boolean {
         return this._getOption('deferred');
     }

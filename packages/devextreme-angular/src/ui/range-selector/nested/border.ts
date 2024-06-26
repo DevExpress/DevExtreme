@@ -38,10 +38,10 @@ export class DxoBorderComponent extends NestedOption implements OnDestroy, OnIni
     }
 
     @Input()
-    get dashStyle(): DashStyle {
+    get dashStyle(): DashStyle | undefined {
         return this._getOption('dashStyle');
     }
-    set dashStyle(value: DashStyle) {
+    set dashStyle(value: DashStyle | undefined) {
         this._setOption('dashStyle', value);
     }
 

@@ -53,6 +53,14 @@ export class DxoMinorTickComponent extends NestedOption implements OnDestroy, On
     }
 
     @Input()
+    get shift(): number {
+        return this._getOption('shift');
+    }
+    set shift(value: number) {
+        this._setOption('shift', value);
+    }
+
+    @Input()
     get visible(): boolean {
         return this._getOption('visible');
     }
