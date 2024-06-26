@@ -166,27 +166,27 @@ test('Key case sensitivity can be toggled if deferred selection is enabled', asy
   const data = [
     { ID: 'aaa', Name: 'Name 1' },
     { ID: 'AAA', Name: 'Name 2' },
-    { ID: 'BBB', Name: 'Name 3' }
+    { ID: 'BBB', Name: 'Name 3' },
   ];
   const dataSource = new DataSource({
     langParams: {
       collatorOptions: {
-        sensitivity: 'case'
-      }
+        sensitivity: 'case',
+      },
     },
-    store: data
+    store: data,
   } as any);
   const selectionFilter = ['ID', '=', 'aaa'];
 
-  createWidget('dxDataGrid', {
-    dataSource: dataSource,
+  return createWidget('dxDataGrid', {
+    dataSource,
     keyExpr: 'ID',
     columns: ['ID', 'Name'],
     showBorders: true,
     selection: {
       mode: 'multiple',
-      deferred: true
+      deferred: true,
     },
-    selectionFilter
+    selectionFilter,
   });
 });

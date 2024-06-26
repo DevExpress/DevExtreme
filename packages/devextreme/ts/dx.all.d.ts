@@ -6363,7 +6363,7 @@ declare module DevExpress.data {
   /**
    * [descr:Utils.query(array)]
    */
-  export function query(array: Array<any>): Query;
+  export function query(array: Array<any>, queryOptions?: any): Query;
   /**
    * [descr:Utils.query(url, queryOptions)]
    */
