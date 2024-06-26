@@ -354,9 +354,9 @@ function updateRangeSeriesValues() {
         const minBarSize = singleSeries.getOptions().minBarSize;
         const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
         const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
-        if(minShownBusinessValue && !that.rotated) {
+        if(minShownBusinessValue) {
             _each(singleSeries.getPoints(), function(_, point) {
-                if(!point.hasValue()) {
+                if(!point.hasValue() || that.rotated) {
                     return;
                 }
                 if(point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
