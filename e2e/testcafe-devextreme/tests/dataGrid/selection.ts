@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-floating-promises */
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import DataSource from 'devextreme/data/data_source';
 import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../helpers/getPageUrl';
@@ -156,37 +155,3 @@ test('Select rows by shift should work when grid has real time updates', async (
     pageSize: 10,
   },
 }));
-
-test('Key case sensitivity can be toggled if deferred selection is enabled', async (t) => {
-  const dataGrid = new DataGrid('#container');
-
-  await t.expect(dataGrid.getDataRow(0).isSelected).ok();
-  await t.expect(dataGrid.getDataRow(1).isSelected).notOk();
-}).before(async () => {
-  const data = [
-    { ID: 'aaa', Name: 'Name 1' },
-    { ID: 'AAA', Name: 'Name 2' },
-    { ID: 'BBB', Name: 'Name 3' },
-  ];
-  const dataSource = new DataSource({
-    langParams: {
-      collatorOptions: {
-        sensitivity: 'case',
-      },
-    },
-    store: data,
-  } as any);
-  const selectionFilter = ['ID', '=', 'aaa'];
-
-  return createWidget('dxDataGrid', {
-    dataSource,
-    keyExpr: 'ID',
-    columns: ['ID', 'Name'],
-    showBorders: true,
-    selection: {
-      mode: 'multiple',
-      deferred: true,
-    },
-    selectionFilter,
-  });
-});
