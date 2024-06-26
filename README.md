@@ -1,6 +1,6 @@
 # DevExtreme
 
-[!DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
+![DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
 
 DevExtreme is an enterprise-ready suite of UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
 
