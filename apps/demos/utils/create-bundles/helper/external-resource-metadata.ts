@@ -61,34 +61,6 @@ export const resourceLinks: resorceLinksType = {
             ],
         },
     },
-    DataGrid: {
-        ExcelJSHeaderAndFooter: {
-            resources: [{
-                title: `
-<div class="long-title">
-    <h3>Country Area, Population, and GDP Structure</h3>
-</div>
-                `,
-                frameworks: [],
-            }]
-        },
-        KeyboardNavigation: {
-            resources: [{
-                title: `<p>Click this text and press <b>Tab</b></p>`,
-                frameworks: [],
-            }]
-        },
-        PDFHeaderAndFooter: {
-            resources: [{
-                title: `
-<div class="long-title">
-    <h3>Country Area, Population, and GDP Structure</h3>
-</div>
-                `,
-                frameworks: [],
-            }]
-        }
-    },
     DateRangeBox: {
         Overview: {
             resources: [

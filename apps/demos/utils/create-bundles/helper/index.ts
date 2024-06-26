@@ -70,15 +70,11 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
 
   const metadataScripts = join(destinationPublishDir, 'scripts');
   let specific_css = `<link href="${getSpecificCssPath(demo.Widget, demoPath)}" rel="stylesheet" />`;
-  let title = '';
 
   const externalResources = resourceLinks[demo.Widget]?.[demo.Name];
   externalResources?.resources?.forEach(resource => {
     if (resource.frameworks.includes(framework)){
       specific_css = specific_css.concat('\n', resource.link)
-    }
-    if (resource.title){
-      title = resource.title;
     }
   });
   
@@ -90,7 +86,6 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
     js_bundle_path: getBundlePath(demoPath, 'bundle', '.js'),
     init_theme: getBundlePath(metadataScripts, 'init-theme', '.js'),
     specific_css,
-    title,
   };
 
   let result = templateContent;

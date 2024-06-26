@@ -1,4 +1,7 @@
 <template>
+  <div class="long-title">
+    <h3>Country Area, Population, and GDP Structure</h3>
+  </div>
   <DxDataGrid
     id="grid"
     :data-source="countries"
