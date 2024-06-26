@@ -3,8 +3,12 @@ import $ from '@js/core/renderer';
 import { getWidth } from '@js/core/utils/size';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils';
-import type { Properties } from '@js/ui/date_box';
-import DateBox, { DateBoxBase } from '@js/ui/date_box';
+// NOTE: The DateBoxBase used like type here
+// and the DateBoxBase doesn't exists in JS date_box module
+// Moving the DateBoxBase to suggested by ESLint import breaks the component in ESM
+// eslint-disable-next-line @typescript-eslint/consistent-type-imports
+import type { DateBoxBase, Properties } from '@js/ui/date_box';
+import DateBox from '@js/ui/date_box';
 import type Popup from '@js/ui/popup';
 
 import { getDeserializedDate, monthDifference } from './m_date_range.utils';
