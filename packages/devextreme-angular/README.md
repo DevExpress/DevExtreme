@@ -6,6 +6,9 @@ The `devextreme-angular` package contains the [DevExtreme component suite](http:
 
 * [Documentation](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/)
 * [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Angular/Light/)
+* **Template Gallery**
+    * [Fluent theme](https://devexpress.github.io/devextreme-ui-template-gallery/fluent.blue.light/angular/default/#/crm-contact-list)
+    * [Generic theme](https://devexpress.github.io/devextreme-ui-template-gallery/generic.light.compact/angular/default/#/crm-contact-list)
 * Application Demos
     * [Sales and Revenue Dashboard](https://github.com/DevExpress/SalesViewer)
     * [Golf Course Booking Page](https://github.com/DevExpress/golfclub)

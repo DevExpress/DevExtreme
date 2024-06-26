@@ -6,6 +6,9 @@ The `devextreme-vue` package contains the [DevExtreme component suite](http://js
 
 * [Documentation](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)
 * [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Vue/Light/)
+* **Template Gallery**
+    * [Fluent theme](https://devexpress.github.io/devextreme-ui-template-gallery/fluent.blue.light/vue/default/#/crm-contact-list)
+    * [Generic theme](https://devexpress.github.io/devextreme-ui-template-gallery/generic.light.compact/vue/default/#/crm-contact-list)
 * [Vue Application Template](https://github.com/DevExpress/devextreme-vue-template)
 * [Sandbox example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example)
 

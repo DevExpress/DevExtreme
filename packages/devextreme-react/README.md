@@ -6,6 +6,9 @@ The `devextreme-react` package contains the [DevExtreme component suite](http://
 
 * [Documentation](https://js.devexpress.com/React/Documentation/Guide/React_Components/DevExtreme_React_Components/)
 * [Component Demos](https://js.devexpress.com/React/Demos/WidgetsGallery/Demo/DataGrid/Overview/React/Light/)
+* **Template Gallery**
+    * [Fluent theme](https://devexpress.github.io/devextreme-ui-template-gallery/fluent.blue.light/react/default/#/crm-contact-list)
+    * [Generic theme](https://devexpress.github.io/devextreme-ui-template-gallery/generic.light.compact/react/default/#/crm-contact-list)
 * [Sandbox example](https://stackblitz.com/edit/devextreme-react)
 
 ## License
