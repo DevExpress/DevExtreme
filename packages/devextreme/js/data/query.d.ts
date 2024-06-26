@@ -172,7 +172,7 @@ export interface Query {
  * @namespace DevExpress.data
  * @public
  */
-declare function query(array: Array<any>): Query;
+declare function query(array: Array<any>, queryOptions: any): Query;
 
 /**
  * @docid Utils.query

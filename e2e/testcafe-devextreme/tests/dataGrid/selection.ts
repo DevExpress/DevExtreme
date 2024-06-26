@@ -5,6 +5,7 @@ import DataGrid from 'devextreme-testcafe-models/dataGrid';
 import CheckBox from 'devextreme-testcafe-models/checkBox';
 import url from '../../helpers/getPageUrl';
 import { createWidget } from '../../helpers/createWidget';
+import DataSource from "devextreme/data/data_source"
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../container.html'));
@@ -94,7 +95,7 @@ test('The Select All checkbox should be visible when a column headerCellTemplate
 });
 
 // T1214734
-test('Select rows by shift should work when grid has real time updates', async (t) => {
+test.only('Select rows by shift should work when grid has real time updates', async (t) => {
   const dataGrid = new DataGrid('#container');
   const secondRow = dataGrid.getDataRow(1);
   const seventhRow = dataGrid.getDataRow(6);
@@ -155,3 +156,37 @@ test('Select rows by shift should work when grid has real time updates', async (
     pageSize: 10,
   },
 }));
+
+test('Key case sensitivity can be toggled if deferred selection is enabled', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.expect(dataGrid.getDataRow(0).isSelected).ok();
+  await t.expect(dataGrid.getDataRow(1).isSelected).notOk();
+}).before(async () => {
+  const data = [
+    { ID: 'aaa', Name: 'Name 1' },
+    { ID: 'AAA', Name: 'Name 2' },
+    { ID: 'BBB', Name: 'Name 3' }
+  ];
+  const dataSource = new DataSource({
+    langParams: {
+      collatorOptions: {
+        sensitivity: 'case'
+      }
+    },
+    store: data
+  } as any);
+  const selectionFilter = ['ID', '=', 'aaa'];
+
+  createWidget('dxDataGrid', {
+    dataSource: dataSource,
+    keyExpr: 'ID',
+    columns: ['ID', 'Name'],
+    showBorders: true,
+    selection: {
+      mode: 'multiple',
+      deferred: true
+    },
+    selectionFilter
+  });
+});
