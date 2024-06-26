@@ -350,6 +350,20 @@ QUnit.test('filter with functional getter', function(assert) {
     });
 });
 
+QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(assert) {
+    assert.expect(1);
+
+    const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+    const filterLength = QUERY(input, {
+        langParams: {
+            collatorOptions: {
+                sensitivity: 'case'
+            }
+        }
+    }).filter(['ID', '=', 'aaa']).toArray().length;
+    assert.equal(filterLength, 1);
+});
+
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
