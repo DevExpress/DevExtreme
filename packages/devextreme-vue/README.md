@@ -1,8 +1,8 @@
-# DevExtreme (Vue add-on)
+# DevExtreme for Vue
 
 [![NPM version](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
 
-The `devextreme-vue` package allows you to use [DevExtreme components](http://js.devexpress.com/Demos/WidgetsGallery/) in [Vue](https://vuejs.org) applications.
+The `devextreme-vue` package contains the [DevExtreme component suite](http://js.devexpress.com/Demos/WidgetsGallery/) for the [Vue](https://vuejs.org) framework.
 
 * [Documentation](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)
 * [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Vue/Light/)
@@ -11,11 +11,11 @@ The `devextreme-vue` package allows you to use [DevExtreme components](http://js
 
 ## License
 
-The `devextreme-vue` package is an **MIT-licensed (free and open-source)** add-on for DevExtreme.
+DevExpress distributes the `devextreme-vue` package under the free and open-source **MIT** license.
 
 For more information on licensing requirements, read the [FAQ](https://js.devexpress.com/Licensing/). DevExpress offers a [free trial](http://js.devexpress.com/Buy/) of the product.
 
-## Support & Feedback ##
+## Support & Feedback
 
 For more information on the Vue framework and how to use it, see the [official documentation](https://vuejs.org/guide/introduction.html).
 

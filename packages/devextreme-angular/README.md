@@ -1,8 +1,8 @@
-# DevExtreme (Angular add-on)
+# DevExtreme for Angluar
 
 [![NPM version](https://img.shields.io/npm/v/devextreme-angular.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-angular)
 
-The `devextreme-angular` package allows you to use [DevExtreme components](http://js.devexpress.com/Demos/WidgetsGallery/) in [Angular](https://angular.io/) applications.
+The `devextreme-angular` package contains the [DevExtreme component suite](http://js.devexpress.com/Demos/WidgetsGallery/) for the [Angular](https://angular.io/) framework.
 
 * [Documentation](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/)
 * [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Angular/Light/)
@@ -13,7 +13,7 @@ The `devextreme-angular` package allows you to use [DevExtreme components](http:
 
 ## License
 
-The `devextreme-angular` package is an **MIT-licensed (free and open-source)** add-on for DevExtreme.
+DevExpress distributes the `devextreme-angular` package under the free and open-source **MIT** license.
 
 For more information on licensing requirements, read the [FAQ](https://js.devexpress.com/Licensing/). DevExpress offers a [free trial](http://js.devexpress.com/Buy/) of the product.
 

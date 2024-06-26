@@ -1,8 +1,8 @@
-# DevExtreme (React add-on)
+# DevExtreme for React
 
 [![NPM version](https://img.shields.io/npm/v/devextreme-react.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-react)
 
-The `devextreme-react` package allows you to use [DevExtreme widgets](http://js.devexpress.com/Demos/WidgetsGallery/) in [React](https://reactjs.org) applications.
+The `devextreme-react` package contains the [DevExtreme component suite](http://js.devexpress.com/Demos/WidgetsGallery/) for the [React](https://reactjs.org) framework.
 
 * [Documentation](https://js.devexpress.com/React/Documentation/Guide/React_Components/DevExtreme_React_Components/)
 * [Component Demos](https://js.devexpress.com/React/Demos/WidgetsGallery/Demo/DataGrid/Overview/React/Light/)
@@ -10,7 +10,7 @@ The `devextreme-react` package allows you to use [DevExtreme widgets](http://js.
 
 ## License
 
-The `devextreme-react` package is an **MIT-licensed (free and open-source)** add-on for DevExtreme.
+DevExpress distributes the `devextreme-react` package under the free and open-source **MIT** license.
 
 For more information on licensing requirements, read the [FAQ](https://js.devexpress.com/Licensing/). DevExpress offers a [free trial](http://js.devexpress.com/Buy/) of the product.
 

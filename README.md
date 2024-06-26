@@ -32,11 +32,12 @@ The DevExtreme website includes "Getting Started" guides for every flavor of Dev
 
 ## Learn
 
-- [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery/)
+- [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery)
+- [Ready-To-Run Application Templates](https://js.devexpress.com/Templates/UITemplates)
 - [Documentation](https://js.devexpress.com/Documentation)
 - [Examples on GitHub](https://github.com/DevExpress/DevExtreme-examples)
 - [YouTube videos](https://www.youtube.com/user/DeveloperExpress/)
 
 ## Contributing
 
-The DevExtreme team welcomes outside contributions - bug reports, feature requests, and pull requests. Read our [contribution guidelines](CONTRIBUTING.md) for more information.
+The DevExtreme team welcomes outside contributions - bug reports and feature requests. Read our [contribution guidelines](CONTRIBUTING.md) for more information.
