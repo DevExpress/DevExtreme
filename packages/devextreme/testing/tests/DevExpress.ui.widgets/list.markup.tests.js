@@ -4,6 +4,7 @@ import config from 'core/config';
 import devices from 'core/devices';
 import List from 'ui/list';
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
+import localization from 'localization';
 
 import 'generic_light.css!';
 
@@ -432,6 +433,8 @@ const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
 const TOGGLE_DELETE_SWITCH_ICON_CLASS = 'dx-icon-toggle-delete';
 const SELECT_CHECKBOX_CONTAINER_CLASS = 'dx-list-select-checkbox-container';
 const SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
+const SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
+const SELECT_ALL_CLASS = 'dx-list-select-all';
 const SELECT_RADIO_BUTTON_CONTAINER_CLASS = 'dx-list-select-radiobutton-container';
 const SELECT_RADIO_BUTTON_CLASS = 'dx-list-select-radiobutton';
 const REORDER_HANDLE_CONTAINER_CLASS = 'dx-list-reorder-handle-container';
@@ -524,11 +527,34 @@ QUnit.module('decorators markup', {}, () => {
             selectAllText: 'Test'
         }));
 
-        const $multipleContainer = $list.find('.dx-list-select-all');
+        const $multipleContainer = $list.find(toSelector(SELECT_ALL_CLASS));
         assert.equal($multipleContainer.length, 1, 'container for SelectAll rendered');
         assert.equal($multipleContainer.text(), 'Test', 'select all rendered');
         const $checkbox = $multipleContainer.find('.dx-checkbox');
         assert.equal($checkbox.length, 1, 'checkbox rendered');
+    });
+
+    QUnit.test('selectAll text and aria-label attribute should be equal to custom localized text (T1239880)', function(assert) {
+        localization.loadMessages({ 'en': { 'dxList-selectAll': 'custom-select-all' } });
+        localization.locale('en');
+
+        const $list = $($('#list').dxList({
+            dataSource: [
+                { id: 1, text: 'Item 1' },
+                { id: 2, text: 'Item 2' },
+                { id: 3, text: 'Item 3' },
+            ],
+            showSelectionControls: true,
+            selectionMode: 'all',
+        }));
+
+        const $selectAllCheckBox = $list.find(toSelector(SELECT_ALL_CHECKBOX_CLASS));
+        const $multipleContainer = $list.find(toSelector(SELECT_ALL_CLASS));
+
+        assert.equal($selectAllCheckBox.attr('aria-label'), 'custom-select-all', 'selectAll checkbox aria-label should be equal to localized text');
+
+        assert.equal($multipleContainer.text(), 'custom-select-all', 'text should be equal to localized text');
+        assert.equal($multipleContainer.attr('aria-label'), 'custom-select-all, not checked', 'unchecked checkbox aria-label should be equal to localized text');
     });
 
     QUnit.test('list item markup should be correct, reordering decorator', function(assert) {
