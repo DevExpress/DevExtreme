@@ -63,18 +63,18 @@ export default class DeferredStrategy extends SelectionStrategy {
     }
   }
 
-  isItemDataSelected(itemData) {
-    return this.isItemKeySelected(itemData);
+  isItemDataSelected(itemData, options = {}) {
+    return this.isItemKeySelected(itemData, options);
   }
 
-  isItemKeySelected(itemData) {
+  isItemKeySelected(itemData, options = {}) {
     const { selectionFilter } = this.options;
 
     if (!selectionFilter) {
       return true;
     }
 
-    return !!dataQuery([itemData]).filter(selectionFilter).toArray().length;
+    return !!dataQuery([itemData], options).filter(selectionFilter).toArray().length;
   }
 
   _getKeyExpr() {
