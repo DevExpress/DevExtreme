@@ -536,7 +536,6 @@ QUnit.module('decorators markup', {}, () => {
 
     QUnit.test('selectAll text and aria-label attribute should be equal to custom localized text (T1239880)', function(assert) {
         localization.loadMessages({ 'en': { 'dxList-selectAll': 'custom-select-all' } });
-        localization.locale('en');
 
         const $list = $($('#list').dxList({
             dataSource: [
