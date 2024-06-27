@@ -52,6 +52,10 @@ export class AppComponent {
       },
     });
   }
+  
+  getSelectedRowKeys(value: any): any[] {
+    return value ? [value] : [];
+  }
 
   onSelectionChanged(selectedRowKeys, cellInfo, dropDownBoxComponent) {
     cellInfo.setValue(selectedRowKeys[0]);

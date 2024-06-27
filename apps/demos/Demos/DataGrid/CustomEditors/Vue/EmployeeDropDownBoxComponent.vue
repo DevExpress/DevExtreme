@@ -14,7 +14,7 @@
         :data-source="dataSource"
         :remote-operations="true"
         :height="250"
-        :selected-row-keys="[currentValue]"
+        :selected-row-keys="getSelectedRowKeys(currentValue)"
         :hover-state-enabled="true"
         :on-selection-changed="onSelectionChanged"
         :focused-row-enabled="true"
@@ -56,6 +56,10 @@ const props = defineProps<{
 const currentValue = ref(props.value);
 const dropDownBoxRef = ref<DxDropDownBox | null>(null);
 const dropDownOptions: DxDropDownBoxTypes.Properties['dropDownOptions'] = { width: 500 };
+
+const getSelectedRowKeys = (value: any): any[] => {
+  return value ? [value] : [];
+};
 
 const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {
   currentValue.value = e.selectedRowKeys[0];

@@ -113,7 +113,7 @@ $(() => {
           scrolling: { mode: 'virtual' },
           height: 250,
           selection: { mode: 'single' },
-          selectedRowKeys: [cellInfo.value],
+          selectedRowKeys: cellInfo.value ? [cellInfo.value] : [],
           focusedRowEnabled: true,
           focusedRowKey: cellInfo.value,
           onSelectionChanged(selectionChangedArgs) {
