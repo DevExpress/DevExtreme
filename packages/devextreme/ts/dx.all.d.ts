@@ -6363,7 +6363,7 @@ declare module DevExpress.data {
   /**
    * [descr:Utils.query(array)]
    */
-  export function query(array: Array<any>, queryOptions?: any): Query;
+  export function query(array: Array<any>, queryOptions?: QueryOptions): Query;
   /**
    * [descr:Utils.query(url, queryOptions)]
    */
@@ -6464,6 +6464,15 @@ declare module DevExpress.data {
      * [descr:Query.toArray()]
      */
     toArray(): Array<any>;
+  }
+  /**
+   * [descr:QueryOptions]
+   */
+  export interface QueryOptions {
+    /**
+     * [descr:QueryOptions.langParams]
+     */
+    langParams?: LangParams;
   }
   export type SearchOperation =
     | '='
