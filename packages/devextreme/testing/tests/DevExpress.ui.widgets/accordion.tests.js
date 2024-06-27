@@ -939,6 +939,29 @@ QUnit.module('widget options changed', moduleSetup, () => {
 });
 
 QUnit.module('widget behavior', moduleSetup, () => {
+    QUnit.test('updating accordion items shouldnt throw any error (T1239052)', function(assert) {
+        const instance = this.$element.dxAccordion({
+            items: [
+                { id: 1, title: 'Title 1', text: 'text 1' },
+                { id: 2, title: 'Title 2', text: 'text 2' },
+            ],
+            keyExpr: 'id',
+        }).dxAccordion('instance');
+
+        const items = [...instance.option('items')];
+        items.push({ id: 3, title: 'Title 3', text: 'text 3' });
+
+        const selectedItemKeys = instance.option('selectedItemKeys');
+        selectedItemKeys.push(3);
+
+        try {
+            instance.option({ items, selectedItemKeys });
+        } catch(error) {
+            assert.ok(false, 'error encountered');
+        }
+        assert.strictEqual(instance.option('items').length, 3, 'Items length should be 3');
+    });
+
     QUnit.test('item selection', function(assert) {
         const instance = this.$element.dxAccordion({
             items: this.items

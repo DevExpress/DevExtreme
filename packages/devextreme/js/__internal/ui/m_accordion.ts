@@ -257,7 +257,7 @@ const Accordion = CollectionWidget.inherit({
     const $items = this._itemElements();
 
     iteratorUtils.each(addedSelection, (_, index) => {
-      this._deferredItems[index].resolve();
+      this._deferredItems[index]?.resolve();
 
       const $item = $items.eq(index)
         .addClass(ACCORDION_ITEM_OPENED_CLASS)
