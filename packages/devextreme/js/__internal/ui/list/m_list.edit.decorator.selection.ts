@@ -27,8 +27,6 @@ const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const CLICK_EVENT_NAME = addNamespace(clickEventName, 'dxListEditDecorator');
 
-const DEFAULT_SELECT_ALL_ARIA_LABEL = messageLocalization.format('dxList-selectAll');
-
 registerDecorator(
   'selection',
   'default',
@@ -141,7 +139,7 @@ registerDecorator(
         selectAllCheckBoxElement,
         CheckBox,
         {
-          elementAttr: { 'aria-label': DEFAULT_SELECT_ALL_ARIA_LABEL },
+          elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
           focusStateEnabled: false,
           hoverStateEnabled: false,
         },
@@ -177,7 +175,7 @@ registerDecorator(
       const indeterminate = value === undefined;
 
       const checkedText = indeterminate ? 'half checked' : value ? 'checked' : 'not checked';
-      const label = `${DEFAULT_SELECT_ALL_ARIA_LABEL}, ${checkedText}`;
+      const label = `${messageLocalization.format('dxList-selectAll')}, ${checkedText}`;
 
       this._$selectAll.attr({ 'aria-label': label });
     },
