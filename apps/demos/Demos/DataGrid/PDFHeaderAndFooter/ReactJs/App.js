@@ -44,7 +44,7 @@ const onExporting = (e) => {
 };
 const App = () => (
   <React.Fragment>
-    <div className="long-title">
+    <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
     </div>
     <DataGrid

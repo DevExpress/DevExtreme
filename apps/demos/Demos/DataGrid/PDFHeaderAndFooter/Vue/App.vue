@@ -1,5 +1,5 @@
 <template>
-  <div class="long-title">
+  <div id="long-title">
     <h3>Country Area, Population, and GDP Structure</h3>
   </div>
   <DxDataGrid
@@ -116,7 +116,7 @@ const onExporting = (e: DxDataGridTypes.ExportingEvent) => {
   line-height: 0;
 }
 
-.long-title h3 {
+#long-title h3 {
   font-family:
     'Segoe UI Light',
     'Helvetica Neue Light',

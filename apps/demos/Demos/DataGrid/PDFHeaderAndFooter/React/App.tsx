@@ -52,7 +52,7 @@ const onExporting = (e: DataGridTypes.ExportingEvent) => {
 
 const App = () => (
 <>
-  <div className="long-title">
+  <div id="long-title">
       <h3>Country Area, Population, and GDP Structure</h3>
   </div>
   <DataGrid
