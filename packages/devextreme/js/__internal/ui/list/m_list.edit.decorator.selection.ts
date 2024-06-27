@@ -190,6 +190,8 @@ registerDecorator(
         this._unselectAllItems();
       }
 
+      this._updateSelectAllAriaLabel();
+
       this._list._createActionByOption('onSelectAllValueChanged')({ value: isSelectedAll });
     },
 
