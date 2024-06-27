@@ -61,6 +61,17 @@ const getSpecificCssPath = (WidgetName: string, demoPath: string) => {
   ).split('\\').join('/');
 };
 
+export const copyVueCustomCss = (demo: Demo): boolean => {
+  const customCssPath = join(getSourcePathByDemo(demo, 'Vue'), 'styles.css');
+  const destinationDir = join(getDestinationPathByDemo(demo, 'Vue'), 'styles.css');
+
+  if (existsSync(customCssPath)) {
+      copyFileSync(customCssPath, destinationDir);
+      return true;
+  }
+  return false;
+};
+
 export const createDemoLayout = (demo: Demo, framework: Framework) => {
   const demoPath = getDestinationPathByDemo(demo, framework);
   const demoHtmlPath = framework !== 'Angular'
@@ -77,7 +88,12 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
       specific_css = specific_css.concat('\n', resource.link)
     }
   });
-  
+
+  let hasCustomCss = false;
+
+  if (framework === 'Vue') {
+    hasCustomCss = copyVueCustomCss(demo);
+  }
   
   const options = {
     css_bundle_path: getBundlePath(demoPath, 'bundle', '.css'),
@@ -86,6 +102,7 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
     js_bundle_path: getBundlePath(demoPath, 'bundle', '.js'),
     init_theme: getBundlePath(metadataScripts, 'init-theme', '.js'),
     specific_css,
+    custom_css: hasCustomCss ? '<link rel="stylesheet" type="text/css" href="styles.css" />' : '',
   };
 
   let result = templateContent;
