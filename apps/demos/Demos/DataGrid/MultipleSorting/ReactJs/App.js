@@ -30,9 +30,7 @@ const App = () => {
           dataField="FirstName"
           defaultSortOrder="asc"
         />
-        <Column
-          dataField="LastName"
-        />
+        <Column dataField="LastName" />
         <Column dataField="City" />
         <Column dataField="State" />
         <Column
