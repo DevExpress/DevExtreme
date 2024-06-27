@@ -316,7 +316,8 @@ const SKIPPED_TESTS = {
       }
     }
     // remove when tests enabled not only for datagrid
-    if (widgetName === 'DataGrid') {
+    const excluded = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];
+    if (widgetName === 'DataGrid' && !excluded.includes(demoName)) {
       const theme = process.env.THEME.replace('generic.', '');
       runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`)
       .clientScripts(clientScriptSource)(testName, async (t) => {

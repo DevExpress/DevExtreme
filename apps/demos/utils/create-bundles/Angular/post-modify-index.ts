@@ -1,0 +1,92 @@
+import fs from 'fs';
+import path from 'path';
+
+const demoProjectsDir = path.join(__dirname, '../../../publish-demos/Demos/');
+
+function modifyIndexHtml(filePath) {
+  fs.readFile(filePath, 'utf8', (err, data) => {
+    if (err) {
+      console.error(`Error reading file ${filePath}:`, err);
+      return;
+    }
+
+    const polyfillRegex = /<script\s+src="([^"]*polyfill[^"]*)"\s+type="module"><\/script>/g;
+    const runtimeRegex = /<script\s+src="([^"]*runtime[^"]*)"\s+type="module"><\/script>/g;
+    const mainRegex = /<script\s+src="([^"]*main[^"]*)"\s+type="module"><\/script>/g;
+    
+
+    const scripts = [];
+    let match;
+    while ((match = polyfillRegex.exec(data)) !== null) {
+      scripts.push(match[1]);
+    }
+    while ((match = runtimeRegex.exec(data)) !== null) {
+        scripts.push(match[1]);
+    }
+    while ((match = mainRegex.exec(data)) !== null) {
+        scripts.push(match[1]);
+    }
+    if (scripts.length === 0) {
+        console.log("There are no bundle scripts to edit");
+        return;
+    }
+
+    const cleanedHtml = data.replace(polyfillRegex, '').replace(runtimeRegex, '').replace(mainRegex, '');
+
+    const newScriptBlock = `
+      <script>
+        window.onload = function() {
+          var scripts = ${JSON.stringify(scripts)};
+
+          scripts.forEach(function(src) {
+            var script = document.createElement('script');
+            script.src = src;
+            script.type = 'module';
+            document.body.appendChild(script);
+          });
+        };
+      </script>
+    </body>`;
+
+    const newHtml = cleanedHtml.replace('</body>', newScriptBlock);
+
+    fs.writeFile(filePath, newHtml, 'utf8', (err) => {
+      if (err) {
+        console.error(`Error writing file ${filePath}:`, err);
+        return;
+      }
+      console.log(`Modified ${filePath} successfully.`);
+    });
+  });
+}
+
+function processDemoProjects(demosDirectory) {
+  fs.readdir(demosDirectory, (err, widgets) => {
+    if (err) {
+      console.error(`Error reading directory ${demosDirectory}:`, err);
+      return;
+    }
+
+    widgets.forEach((widget) => {
+        const widgetPath = path.join(demosDirectory, widget);
+        fs.readdir(widgetPath, (err, demoName) => {
+            if (err) {
+                console.error(`Error reading directory ${widgetPath}:`, err);
+                return;
+            }
+            demoName.forEach((demo) => {
+                const filePath = path.join(widgetPath, demo, 'Angular', 'index.html');
+                if (fs.existsSync(filePath)) {
+                  modifyIndexHtml(filePath);
+                } else {
+                  console.warn(`File not found: ${filePath}`);
+                }
+              });
+        })
+    });
+
+    
+  });
+}
+
+processDemoProjects(demoProjectsDir)
