@@ -163,7 +163,7 @@ QUnit.module('Drawer behavior', () => {
     });
 
     if(devices.real().deviceType === 'desktop') {
-        QUnit.test('drawer panel should have dx-drawer-panel-content-hidden class before it was shown', function(assert) {
+        QUnit.test('drawer panel should have dx-drawer-panel-content-hidden class before it was shown (T1239845)', function(assert) {
             const $element = $('#drawer').dxDrawer({ animationDuration: 0 });
             const instance = $element.dxDrawer('instance');
             const $panel = $element.find(`.${DRAWER_PANEL_CONTENT_CLASS}`);
@@ -171,11 +171,10 @@ QUnit.module('Drawer behavior', () => {
             const done = assert.async();
 
             instance.toggle().then(() => {
-                assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set');
+                assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), false, 'dx-drawer-panel-content-hidden is not set when panel is toggled');
                 done();
             });
 
-            // T1239845
             instance.option('opened', false);
 
             assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden should be set when panel is closed');
