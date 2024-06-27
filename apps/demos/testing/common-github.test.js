@@ -12,7 +12,7 @@ import {
   globalReadFrom,
   waitForAngularLoading,
   shouldSkipDemo,
-} from '../utils/visual-tests/matrix-test-helper';
+} from '../utils/visual-tests/matrix-test-helper-github';
 import {
   getThemePostfix,
   THEME,
