@@ -18,8 +18,6 @@ if (!/localhost/.test(document.location.host)) {
   providers: [Service],
 })
 export class AppComponent {
-  sales: Sale[];
-
   dataSource: DataSourceConfig;
 
   constructor(service: Service) {
