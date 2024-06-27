@@ -173,7 +173,10 @@ QUnit.module('Drawer behavior', () => {
             done();
         });
 
-        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden is set');
+        // T1239845
+        instance.option('opened', false);
+
+        assert.strictEqual($panel.hasClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS), true, 'dx-drawer-panel-content-hidden should be set when panel is closed');
     });
 
     QUnit.test('Check dxresize event: opened:false,animationEnabled:true -> drawer.toggle()', function(assert) {
