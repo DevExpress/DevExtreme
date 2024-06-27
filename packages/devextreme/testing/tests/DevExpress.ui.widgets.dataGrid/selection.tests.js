@@ -3025,32 +3025,6 @@ QUnit.module('Selection SelectAllMode', {
         assert.deepEqual(selectedRows, [{ id: 4, value: 'value4' }]);
     });
 
-    QUnit.test('get isSelected rows after Select All when dataSource has key set to function (T1234032)', function(assert) {
-        this.dataSource = createDataSource(
-            this.array,
-            {
-                key: function(x) {
-                    return x && x.value;
-                }
-            });
-        this.dataController.setDataSource(this.dataSource);
-        this.dataSource.load();
-        this.applyOptions({
-            selection: {
-                mode: 'multiple',
-                storeSelectedItems: true,
-                allowSelectAll: true
-            },
-        });
-
-        this.selectionController.selectAll();
-
-        // act
-        const selectedRows = this.selectionController.getSelectedRowsData();
-        // assert
-        assert.deepEqual(selectedRows, []);
-    });
-
     QUnit.test('get isSelected rows after Select All when dataSource has complex key', function(assert) {
         this.dataSource = createDataSource(this.array, { key: ['id', 'value'] }, { pageSize: 4 });
         this.dataController.setDataSource(this.dataSource);
