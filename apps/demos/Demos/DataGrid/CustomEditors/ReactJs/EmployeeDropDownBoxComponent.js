@@ -7,7 +7,8 @@ import DropDownBox from 'devextreme-react/drop-down-box';
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 const EmployeeDropDownBoxComponent = (props) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState(() => props.data.value ? [props.data.value] : []);
+  const [selectedRowKeys, setSelectedRowKeys] = useState(() => 
+  props.data.value ? [props.data.value] : []);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
   const boxOptionChanged = useCallback((e) => {
     if (e.name === 'opened') {
@@ -18,7 +19,6 @@ const EmployeeDropDownBoxComponent = (props) => {
     const onSelectionChanged = (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
-      
       props.data.setValue(args.selectedRowKeys[0]);
     };
     return (
