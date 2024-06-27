@@ -6827,11 +6827,11 @@ QUnit.module('performance', () => {
             const dataSource = [
                 { id: 1, scheme: 'schema 1', name: 'item1' },
                 { id: 2, scheme: 'schema 2', name: 'item2' },
-                { id: 3, scheme: 'schema 3', name: 'item3' },
             ];
 
             const $tagBox = $('#tagBox').dxTagBox({
                 dataSource,
+                value: [{ id: 0, scheme: 'schema 0', name: 'item0' }],
                 valueExpr(x) {
                     return x && x.name + ' ' + x.scheme;
                 },
@@ -6850,12 +6850,9 @@ QUnit.module('performance', () => {
             tagBox.open();
             $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
 
-            tagBox.open();
-            $($list.find(`.${LIST_ITEM_CLASS}`).eq(0)).trigger('dxclick');
-
             const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
 
-            assert.strictEqual($.trim($tagContainer.text()), 'item1item2item3', 'label values are displayed correctly');
+            assert.strictEqual($.trim($tagContainer.text()), 'item1item0item2', 'label values are displayed correctly');
         });
     });
 
