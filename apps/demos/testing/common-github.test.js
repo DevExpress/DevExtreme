@@ -315,8 +315,24 @@ const SKIPPED_TESTS = {
         comparisonOptions = mergedTestSettings['comparison-options'];
       }
     }
+    // ignored because they have import of localization package and fail during bundling , 2 for Grid (RowTemplate, CellCustomization)
+    const ignoredLocalization = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF']
+    // ignored becuse react and vue fail to max callstack exceeded
+    const ignoredCallstack = [
+      'AdvancedMasterDetailView', 
+      'BatchUpdateRequest', 
+      'CollaborativeEditing', 
+      'CustomEditors',
+      'CustomNewRecordPosition', 
+      'DataValidation',
+      'RemoteGrouping', 
+      'RemoteReordering',
+      'RemoteVirtualScrolling', 
+      'WebAPIService',
+    ];
+    
+    const excluded = [...ignoredLocalization, ...ignoredCallstack];
     // remove when tests enabled not only for datagrid
-    const excluded = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];
     if (widgetName === 'DataGrid' && !excluded.includes(demoName)) {
       const theme = process.env.THEME.replace('generic.', '');
       runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`)

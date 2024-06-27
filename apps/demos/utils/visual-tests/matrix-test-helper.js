@@ -344,7 +344,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
-  const test = testObject.page(`http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`);
+  const test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
 
   test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
