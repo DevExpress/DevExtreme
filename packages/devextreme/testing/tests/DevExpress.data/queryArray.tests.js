@@ -351,8 +351,6 @@ QUnit.test('filter with functional getter', function(assert) {
 });
 
 QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(assert) {
-    assert.expect(1);
-
     const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
     const filterLength = QUERY(input, {
         langParams: {
