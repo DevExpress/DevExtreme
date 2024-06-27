@@ -23,10 +23,10 @@ const EmployeeDropDownBoxComponent = (props) => {
 
   const contentRender = useCallback(() => {
     const onSelectionChanged = (args: DataGridTypes.SelectionChangedEvent) => {
-        setSelectedRowKeys(args.selectedRowKeys);
-        setDropDownOpened(false);
-        
-        props.data.setValue(args.selectedRowKeys[0]);
+      setSelectedRowKeys(args.selectedRowKeys);
+      setDropDownOpened(false);
+
+      props.data.setValue(args.selectedRowKeys[0]);
     };
 
     return (
