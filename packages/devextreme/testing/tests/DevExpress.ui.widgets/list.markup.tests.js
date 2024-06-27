@@ -535,7 +535,8 @@ QUnit.module('decorators markup', {}, () => {
     });
 
     QUnit.test('selectAll text and aria-label attribute should be equal to custom localized text (T1239880)', function(assert) {
-        localization.loadMessages({ 'en': { 'dxList-selectAll': 'custom-select-all' } });
+        const localizedSelectAllText = 'custom-select-all';
+        localization.loadMessages({ 'en': { 'dxList-selectAll': localizedSelectAllText } });
 
         const $list = $($('#list').dxList({
             dataSource: [
@@ -550,10 +551,10 @@ QUnit.module('decorators markup', {}, () => {
         const $selectAllCheckBox = $list.find(toSelector(SELECT_ALL_CHECKBOX_CLASS));
         const $multipleContainer = $list.find(toSelector(SELECT_ALL_CLASS));
 
-        assert.equal($selectAllCheckBox.attr('aria-label'), 'custom-select-all', 'selectAll checkbox aria-label should be equal to localized text');
+        assert.equal($selectAllCheckBox.attr('aria-label'), localizedSelectAllText, 'selectAll checkbox aria-label should be equal to localized text');
 
         assert.equal($multipleContainer.text(), 'custom-select-all', 'text should be equal to localized text');
-        assert.equal($multipleContainer.attr('aria-label'), 'custom-select-all, not checked', 'unchecked checkbox aria-label should be equal to localized text');
+        assert.equal($multipleContainer.attr('aria-label'), `${localizedSelectAllText}, not checked`, 'unchecked checkbox aria-label should be equal to localized text');
     });
 
     QUnit.test('list item markup should be correct, reordering decorator', function(assert) {
