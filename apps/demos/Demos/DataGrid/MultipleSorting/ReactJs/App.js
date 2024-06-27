@@ -23,7 +23,8 @@ const App = () => {
         <Column
           dataField="Prefix"
           caption="Title"
-          width={70}
+          width={100}
+          defaultSortOrder="asc"
         />
         <Column
           dataField="FirstName"
@@ -31,7 +32,6 @@ const App = () => {
         />
         <Column
           dataField="LastName"
-          defaultSortOrder="asc"
         />
         <Column dataField="City" />
         <Column dataField="State" />
