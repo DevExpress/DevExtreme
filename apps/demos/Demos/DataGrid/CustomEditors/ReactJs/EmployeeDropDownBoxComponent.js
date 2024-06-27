@@ -18,6 +18,7 @@ const EmployeeDropDownBoxComponent = (props) => {
     const onSelectionChanged = (args) => {
       setSelectedRowKeys(args.selectedRowKeys);
       setDropDownOpened(false);
+      
       props.data.setValue(args.selectedRowKeys[0]);
     };
     return (
