@@ -25,7 +25,7 @@ export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
                 filterExpr.push(isSelectAll ? 'and' : 'or');
             }
 
-            if(isString(keyExpr) || isFunction(keyExpr)) {
+            if(isString(keyExpr) || (isFunction(keyExpr) && keyExpr.length > 0)) {
                 filterExprPart = getFilterForPlainKey(keyExpr, key);
             } else {
                 filterExprPart = getFilterForCompositeKey(keyExpr, key);
