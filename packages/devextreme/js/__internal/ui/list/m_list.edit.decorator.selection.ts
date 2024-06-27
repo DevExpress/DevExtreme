@@ -56,7 +56,7 @@ registerDecorator(
       // eslint-disable-next-line no-new
       new this._controlWidget($control, extend(this._commonOptions(), {
         value: this._isSelected($itemElement),
-        elementAttr: { 'aria-label': messageLocalization.format('dxList-selectAll') },
+        elementAttr: { 'aria-label': 'Check State' },
         focusStateEnabled: false,
         hoverStateEnabled: false,
         onValueChanged: function (e) {
@@ -152,6 +152,7 @@ registerDecorator(
       this._list.itemsContainer().prepend($selectAll);
 
       this._updateSelectAllState();
+      this._updateSelectAllAriaLabel();
       this._attachSelectAllHandler();
     },
 
@@ -160,6 +161,21 @@ registerDecorator(
 
       eventsEngine.off(this._$selectAll, CLICK_EVENT_NAME);
       eventsEngine.on(this._$selectAll, CLICK_EVENT_NAME, this._selectAllClickHandler.bind(this));
+    },
+
+    _updateSelectAllAriaLabel() {
+      if (!this._$selectAll) {
+        return;
+      }
+
+      const { value } = this._selectAllCheckBox.option();
+
+      const indeterminate = value === undefined;
+
+      const checkedText = indeterminate ? 'half checked' : value ? 'checked' : 'not checked';
+      const label = `${messageLocalization.format('dxList-selectAll')}, ${checkedText}`;
+
+      this._$selectAll.attr({ 'aria-label': label });
     },
 
     _selectAllHandler(e) {
