@@ -6,7 +6,7 @@ The `devextreme-react` package contains the [DevExtreme component suite](http://
 
 * [Documentation](https://js.devexpress.com/React/Documentation/Guide/React_Components/DevExtreme_React_Components/)
 * [Demo Gallery](https://js.devexpress.com/React/Demos/WidgetsGallery/Demo/DataGrid/Overview/React/Light/)
-* [UI Template Gallery](https://js.devexpress.com/React/Templates/UITemplates/)
+* [Responsive UI Templates](https://js.devexpress.com/React/Templates/UITemplates/)
 * [Application Template](https://js.devexpress.com/React/Documentation/Guide/React_Components/Application_Template/)
 
 ## License

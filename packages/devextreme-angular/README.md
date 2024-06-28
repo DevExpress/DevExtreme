@@ -6,7 +6,7 @@ The `devextreme-angular` package contains the [DevExtreme component suite](http:
 
 * [Documentation](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/DevExtreme_Angular_Components/)
 * [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Angular/Light/)
-* [UI Template Gallery](https://js.devexpress.com/Angular/Templates/UITemplates/)
+* [Responsive UI Templates](https://js.devexpress.com/Angular/Templates/UITemplates/)
 * [Application Template](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/Application_Template/)
 
 ## License

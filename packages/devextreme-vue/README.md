@@ -6,7 +6,7 @@ The `devextreme-vue` package contains the [DevExtreme component suite](http://js
 
 * [Documentation](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)
 * [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Vue/Light/)
-* [UI Template Gallery](https://js.devexpress.com/Vue/Templates/UITemplates/)
+* [Responsive UI Templates](https://js.devexpress.com/Vue/Templates/UITemplates/)
 * [Application Template](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/Application_Template/)
 
 ## License
