@@ -2,7 +2,7 @@ import { Observable, Subscribable, Updatable } from "@js/__internal/core/reactiv
 import { ChangedOptionInfo } from "@js/events";
 import Widget, {WidgetOptions} from "@js/ui/widget/ui.widget";
 
-export class OptionsController<TProps extends Record<string, unknown>> {
+export class OptionsController<TProps> {
   private observables: {[TProp in keyof TProps]?: Observable<TProps[TProp]>} = {}
 
   static dependencies = [Widget] as any;
