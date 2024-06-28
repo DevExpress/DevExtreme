@@ -198,7 +198,7 @@ const TextEditorBase = Editor.inherit({
     this.callBase();
 
     this._refreshValueChangeEvent();
-    this._renderEvents();
+    this._refreshEvents();
 
     this._renderEnterKeyAction();
     this._renderEmptinessEvent();
@@ -591,7 +591,6 @@ const TextEditorBase = Editor.inherit({
       if (this.hasActionSubscription(`on${event}`)) {
         const action = this._createActionByOption(`on${event}`, { excludeValidators: ['readOnly'] });
 
-        eventsEngine.off($input, addNamespace(event.toLowerCase(), this.NAME));
         eventsEngine.on($input, addNamespace(event.toLowerCase(), this.NAME), (e) => {
           if (this._disposed) {
             return;

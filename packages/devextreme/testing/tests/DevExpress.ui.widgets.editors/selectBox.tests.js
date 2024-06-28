@@ -6499,9 +6499,6 @@ QUnit.module('onKeyDown', () => {
         }];
         const $element = $('#selectBox').dxSelectBox({
             dataSource: products,
-            displayExpr: 'Name',
-            valueExpr: 'ID',
-            value: products[0].ID,
             onKeyDown: onKeyDownHandler,
             fieldTemplate(data) {
                 const result = $(`<div class='custom-item'><img alt='Product name' src='${
