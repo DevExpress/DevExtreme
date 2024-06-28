@@ -680,6 +680,17 @@
         "Equivalents": "",
         "Demos": [
           {
+            "Title": "Toolbar Customization",
+            "Name": "ToolbarCustomization",
+            "Widget": "DataGrid",
+            "MvcAdditionalFiles": [
+              "/Models/Order.cs",
+              "/Models/SampleData/Orders.cs"
+            ],
+            "DocUrl":"",
+            "DemoType": "Web"
+          },
+          {
             "Title": "Column Template",
             "Name": "ColumnTemplate",
             "Widget": "DataGrid",
@@ -723,16 +734,6 @@
             "MvcAdditionalFiles": [
               "/Models/Intraday.cs",
               "/Models/SampleData/IntradayData.cs"
-            ],
-            "DemoType": "Web"
-          },
-          {
-            "Title": "Toolbar Customization",
-            "Name": "ToolbarCustomization",
-            "Widget": "DataGrid",
-            "MvcAdditionalFiles": [
-              "/Models/Order.cs",
-              "/Models/SampleData/Orders.cs"
             ],
             "DemoType": "Web"
           }
