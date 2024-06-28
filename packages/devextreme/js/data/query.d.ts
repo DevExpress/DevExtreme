@@ -1,4 +1,3 @@
-import { LangParams } from './index';
 import {
     DxPromise,
 } from '../core/utils/deferred';
@@ -168,25 +167,12 @@ export interface Query {
 }
 
 /**
- * @docid
- * @type object
- * @public
- */
-export interface QueryOptions {
-    /**
-     * @docid
-     * @public
-     */
-    langParams?: LangParams;
-}
-
-/**
  * @docid Utils.query
  * @publicName query(array)
  * @namespace DevExpress.data
  * @public
  */
-declare function query(array: Array<any>, queryOptions?: QueryOptions): Query;
+declare function query(array: Array<any>, queryOptions?: any): Query;
 
 /**
  * @docid Utils.query
