@@ -238,11 +238,13 @@ if (Quill) {
       };
       const Delta = Quill.import('delta');
       const startIndex = Math.max(0, caretPosition - markerLength);
+      const currentFormat = this.quill.getFormat(startIndex);
+
       const newDelta = new Delta()
         .retain(startIndex)
         .delete(textLength)
         .insert({ mention: value })
-        .insert(' ');
+        .insert(' ', currentFormat);
 
       this.quill.updateContents(newDelta);
       this.quill.setSelection(startIndex + 2);
