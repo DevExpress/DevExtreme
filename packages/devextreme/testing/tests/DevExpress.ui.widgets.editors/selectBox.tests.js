@@ -6486,24 +6486,20 @@ QUnit.module('onKeyDown', () => {
         const onKeyDownHandler = sinon.spy();
         const products = [{
             ID: 1,
-            Name: 'HD Video Player',
-            ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/1-small.png',
+            Name: 'HD Video Player'
         }, {
             ID: 2,
-            Name: 'SuperHD Player',
-            ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/2-small.png',
+            Name: 'SuperHD Player'
         }, {
             ID: 3,
-            Name: 'SuperPlasma 50',
-            ImageSrc: 'https://js.devexpress.com/jQuery/Demos/WidgetsGallery/JSDemos/images/products/3-small.png',
+            Name: 'SuperPlasma 50'
         }];
+
         const $element = $('#selectBox').dxSelectBox({
             dataSource: products,
             onKeyDown: onKeyDownHandler,
             fieldTemplate(data) {
-                const result = $(`<div class='custom-item'><img alt='Product name' src='${
-                    data ? data.ImageSrc : ''
-                }' /><div class='product-name'></div></div>`);
+                const result = $('<div class=\'custom-item\'><div class=\'product-name\'></div></div>');
                 return result
                     .find('.product-name')
                     .dxTextBox({
