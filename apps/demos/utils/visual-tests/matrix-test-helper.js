@@ -355,7 +355,7 @@ const ignoredDevextreme = ['SignalRService']
 const excluded = [...ignoredLocalization, ...ignoredCallstack, ...ignoredDevextreme];
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  const isGithubDemos = process.ENV.ISGITHUBDEMOS;
+  const isGithubDemos = process.env.ISGITHUBDEMOS;
   if (isGithubDemos && excluded.includes(demo)){
     return;
   }
@@ -367,7 +367,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   if (!shouldRunTest(framework, index, product, demo, SKIPPED_TESTS)) {
     return;
   }
-  
+
   let test;
   if (!isGithubDemos) {
     changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
