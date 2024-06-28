@@ -40,11 +40,9 @@ for (const meta of menu) {
   for (const group of meta.Groups) {
     const demos = group.Demos || [];
     for (const demo of demos) {
-      if (isSkipDemo(demo)) {
-        break;
+      if (!isSkipDemo(demo)) {
+        allDemos.push(demo);
       }
-
-      allDemos.push(demo);
     }
   }
 }

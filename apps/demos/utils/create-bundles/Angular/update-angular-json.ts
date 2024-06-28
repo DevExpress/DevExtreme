@@ -79,16 +79,14 @@ const createAngularJson = () => {
     for (const group of meta.Groups) {
       const demos = group.Demos || [];
       for (const demo of demos) {
-        if (isSkipDemo(demo)) {
-          break;
-        }
-
-        if (existsSync(getSourcePathByDemo(demo, 'Angular'))) {
-          console.log(`Angular Config created: ${demo.Widget} - ${demo.Name}`);
-
-          angularJsonObject.projects[getProjectNameByDemo(demo)] = createConfigForDemo(demo);
-        } else {
-          console.log(`No angular project for: ${demo.Widget} - ${demo.Name}`);
+        if (!isSkipDemo(demo)) {
+          if (existsSync(getSourcePathByDemo(demo, 'Angular'))) {
+            console.log(`Angular Config created: ${demo.Widget} - ${demo.Name}`);
+  
+            angularJsonObject.projects[getProjectNameByDemo(demo)] = createConfigForDemo(demo);
+          } else {
+            console.log(`No angular project for: ${demo.Widget} - ${demo.Name}`);
+          }
         }
       }
     }
