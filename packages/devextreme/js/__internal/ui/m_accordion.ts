@@ -196,8 +196,7 @@ const Accordion = CollectionWidget.inherit({
   },
 
   _renderItemContent(args) {
-    // @ts-expect-error
-    this._deferredTemplateItems[args.index] = new Deferred();
+    this._deferredTemplateItems[args.index] = Deferred();
 
     const itemTitle = this.callBase(extend({}, args, {
       contentClass: ACCORDION_ITEM_TITLE_CLASS,
@@ -207,8 +206,7 @@ const Accordion = CollectionWidget.inherit({
 
     this._attachItemTitleClickAction(itemTitle);
 
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred();
     if (isDefined(this._deferredItems[args.index])) {
       this._deferredItems[args.index] = deferred;
     } else {
@@ -235,7 +233,6 @@ const Accordion = CollectionWidget.inherit({
   _attachItemTitleClickAction(itemTitle) {
     const eventName = addNamespace(clickEventName, this.NAME);
 
-    // @ts-expect-error
     eventsEngine.off(itemTitle, eventName);
     eventsEngine.on(itemTitle, eventName, this._itemTitleClickHandler.bind(this));
   },
@@ -327,8 +324,7 @@ const Accordion = CollectionWidget.inherit({
     let d;
     if (skipAnimation || startHeight === endHeight) {
       $element.css('height', endHeight);
-      // @ts-expect-error
-      d = new Deferred().resolve();
+      d = Deferred().resolve();
     } else {
       d = fx.animate($element, {
         // @ts-expect-error
@@ -441,8 +437,7 @@ const Accordion = CollectionWidget.inherit({
   },
 
   expandItem(index) {
-    // @ts-expect-error
-    this._deferredAnimate = new Deferred();
+    this._deferredAnimate = Deferred();
 
     this.selectItem(index);
 
@@ -450,8 +445,7 @@ const Accordion = CollectionWidget.inherit({
   },
 
   collapseItem(index) {
-    // @ts-expect-error
-    this._deferredAnimate = new Deferred();
+    this._deferredAnimate = Deferred();
 
     this.unselectItem(index);
 

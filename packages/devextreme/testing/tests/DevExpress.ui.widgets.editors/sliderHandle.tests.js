@@ -1,6 +1,6 @@
 import $ from 'jquery';
-import SliderHandle from 'ui/slider/ui.slider_handle';
-import SliderTooltip from 'ui/slider/ui.slider_tooltip';
+import SliderHandle from '__internal/ui/slider/m_slider_handle';
+import SliderTooltip from '__internal/ui/slider/m_slider_tooltip';
 
 QUnit.testStart(() => {
     const markup =

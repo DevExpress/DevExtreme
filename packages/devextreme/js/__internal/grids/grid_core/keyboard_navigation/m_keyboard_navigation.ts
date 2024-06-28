@@ -548,9 +548,11 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private _closeEditCell() {
+    const d = Deferred();
     setTimeout(() => {
-      this._editingController.closeEditCell();
+      this._editingController.closeEditCell().always(d.resolve);
     });
+    return d;
   }
 
   /**
@@ -1039,12 +1041,13 @@ export class KeyboardNavigationController extends modules.ViewController {
     const allowEditingOnEnterKey = this._allowEditingOnEnterKey();
 
     if (isEditing || (!allowEditingOnEnterKey && direction)) {
-      this._handleEnterKeyEditingCell(eventArgs.originalEvent);
-      if (direction === 'next' || direction === 'previous') {
-        this._targetCellTabHandler(eventArgs, direction);
-      } else if (direction === 'upArrow' || direction === 'downArrow') {
-        this._navigateNextCell(eventArgs.originalEvent, direction);
-      }
+      this._handleEnterKeyEditingCell(eventArgs.originalEvent).done(() => {
+        if (direction === 'next' || direction === 'previous') {
+          this._targetCellTabHandler(eventArgs, direction);
+        } else if (direction === 'upArrow' || direction === 'downArrow') {
+          this._navigateNextCell(eventArgs.originalEvent, direction);
+        }
+      });
     } else if (allowEditingOnEnterKey) {
       this._startEditing(eventArgs);
     }
@@ -1067,6 +1070,7 @@ export class KeyboardNavigationController extends modules.ViewController {
   }
 
   private _handleEnterKeyEditingCell(event) {
+    const d = Deferred();
     const { target } = event;
     const $cell = this._getCellElementFromTarget(target);
     const isRowEditMode = this._isRowEditMode();
@@ -1078,13 +1082,16 @@ export class KeyboardNavigationController extends modules.ViewController {
       setTimeout(
         this._editingController.saveEditData.bind(this._editingController),
       );
+      d.resolve();
     } else {
       // @ts-expect-error
       eventsEngine.trigger($(target), 'change');
-      this._closeEditCell();
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      this._closeEditCell().always(d.resolve);
 
       event.preventDefault();
     }
+    return d;
   }
 
   /**
@@ -2109,7 +2116,6 @@ export class KeyboardNavigationController extends modules.ViewController {
           $input.val(inputValue);
 
           const $widgetContainer = $input.closest(`.${WIDGET_CLASS}`);
-          // @ts-expect-error
           eventsEngine.off($widgetContainer, 'focusout'); // for NumberBox to save entered symbol
           // @ts-expect-error
           eventsEngine.one($widgetContainer, 'focusout', () => {

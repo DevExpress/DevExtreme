@@ -1,58 +1,58 @@
-require('../../helpers/includeThemesLinks.js');
+import '../../helpers/includeThemesLinks.js';
 
-const $ = require('jquery');
-const noop = require('core/utils/common').noop;
-let browser = require('core/utils/browser');
-const devices = require('core/devices');
-const themes = require('ui/themes');
-const support = require('core/utils/support');
-const publicComponentUtils = require('core/utils/public_component');
-const getNestedOptionValue = require('core/options/utils').getNestedOptionValue;
+import $ from 'jquery';
+import { noop } from 'core/utils/common';
+import browser from 'core/utils/browser';
+import devices from 'core/devices';
+import themes from 'ui/themes';
+import support from 'core/utils/support';
+import publicComponentUtils from 'core/utils/public_component';
+import { getNestedOptionValue } from 'core/options/utils';
 
-const ActionSheet = require('ui/action_sheet');
-const Accordion = require('ui/accordion');
-const Button = require('ui/button');
-const ColorBox = require('ui/color_box');
-const DataGrid = require('ui/data_grid');
-const DateBox = require('ui/date_box');
-const DateRangeBox = require('ui/date_range_box');
-const DropDownEditor = require('ui/drop_down_editor/ui.drop_down_editor');
-const DropDownBox = require('ui/drop_down_box');
-const DropDownButton = require('ui/drop_down_button');
-const DropDownList = require('ui/drop_down_editor/ui.drop_down_list');
-const DropDownMenu = require('ui/toolbar/internal/ui.toolbar.menu');
-const TextEditor = require('ui/text_box/ui.text_editor');
-const Gallery = require('ui/gallery');
-const Lookup = require('ui/lookup');
-const LoadIndicator = require('ui/load_indicator');
-const LoadPanel = require('ui/load_panel');
-const List = require('ui/list');
-const MenuBase = require('ui/context_menu/ui.menu_base');
-const Menu = require('ui/menu/ui.menu');
-const ContextMenu = require('ui/context_menu/ui.context_menu');
-const NumberBox = require('ui/number_box');
-const Widget = require('ui/widget/ui.widget');
-const Overlay = require('ui/overlay/ui.overlay');
-const Popup = require('ui/popup');
-const Popover = require('ui/popover');
-const Tooltip = require('ui/tooltip');
-const RadioGroup = require('ui/radio_group');
-const Resizable = require('ui/resizable');
-const Scheduler = require('ui/scheduler/ui.scheduler');
-const Scrollable = require('ui/scroll_view/ui.scrollable');
-const ScrollView = require('ui/scroll_view');
-const SelectBox = require('ui/select_box');
-const SliderHandle = require('ui/slider/ui.slider_handle');
-const Tabs = require('ui/tabs');
-const TabPanel = require('ui/tab_panel');
-const TagBox = require('ui/tag_box');
-const Toast = require('ui/toast');
-const TreeList = require('ui/tree_list');
-const TreeView = require('ui/tree_view');
-const TileView = require('ui/tile_view');
-const FileUploader = require('ui/file_uploader');
-const Form = require('ui/form');
-const ValidationMessage = require('ui/validation_message');
+import ActionSheet from 'ui/action_sheet';
+import Accordion from 'ui/accordion';
+import Button from 'ui/button';
+import ColorBox from 'ui/color_box';
+import DataGrid from 'ui/data_grid';
+import DateBox from 'ui/date_box';
+import DateRangeBox from 'ui/date_range_box';
+import DropDownEditor from 'ui/drop_down_editor/ui.drop_down_editor';
+import DropDownBox from 'ui/drop_down_box';
+import DropDownButton from 'ui/drop_down_button';
+import DropDownList from 'ui/drop_down_editor/ui.drop_down_list';
+import DropDownMenu from '__internal/ui/toolbar/internal/m_toolbar.menu';
+import TextEditor from 'ui/text_box/ui.text_editor';
+import Gallery from 'ui/gallery';
+import Lookup from 'ui/lookup';
+import LoadIndicator from 'ui/load_indicator';
+import LoadPanel from 'ui/load_panel';
+import List from 'ui/list';
+import MenuBase from 'ui/context_menu/ui.menu_base';
+import Menu from 'ui/menu';
+import ContextMenu from 'ui/context_menu';
+import NumberBox from 'ui/number_box';
+import Widget from 'ui/widget/ui.widget';
+import Overlay from 'ui/overlay/ui.overlay';
+import Popup from 'ui/popup';
+import Popover from 'ui/popover';
+import Tooltip from 'ui/tooltip';
+import RadioGroup from 'ui/radio_group';
+import Resizable from 'ui/resizable';
+import Scheduler from '__internal/scheduler/m_scheduler';
+import Scrollable from 'ui/scroll_view/ui.scrollable';
+import ScrollView from 'ui/scroll_view';
+import SelectBox from 'ui/select_box';
+import SliderHandle from '__internal/ui/slider/m_slider_handle';
+import Tabs from 'ui/tabs';
+import TabPanel from 'ui/tab_panel';
+import TagBox from 'ui/tag_box';
+import Toast from 'ui/toast';
+import TreeList from 'ui/tree_list';
+import TreeView from 'ui/tree_view';
+import TileView from 'ui/tile_view';
+import FileUploader from 'ui/file_uploader';
+import Form from 'ui/form';
+import ValidationMessage from 'ui/validation_message';
 
 const DEFAULT_MARGIN = 20;
 
@@ -81,7 +81,8 @@ const testComponentDefaults = function(componentClass, forcedDevices, options, b
             if(componentClass.IS_RENOVATED_WIDGET) {
                 componentClass.defaultOptions({});
             }
-            const component = new componentClass('#cmp');
+            const $container = $('#cmp');
+            const component = new componentClass($container);
             options = $.isFunction(options) ? options.call(component) : options;
 
             const defaults = component.option();
@@ -1233,30 +1234,36 @@ testComponentDefaults(TabPanel,
 testComponentDefaults(LoadIndicator,
     {},
     {
-        _animatingSegmentCount: 2,
-        _animatingSegmentInner: true
+        _animatingSegmentCount: 7,
+        _animatingSegmentInner: false
     },
     function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('material');
+        this.origIsMaterialBased = themes.isMaterialBased;
+        this.origIsGeneric = themes.isGeneric;
+        themes.isMaterialBased = function() { return false; };
+        themes.isGeneric = function() { return true; };
     },
     function() {
-        themes.current(this.originalCurrentTheme);
+        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isGeneric = this.origIsGeneric;
     }
 );
 
 testComponentDefaults(LoadIndicator,
     {},
     {
-        _animatingSegmentCount: 7,
-        _animatingSegmentInner: false
+        _animatingSegmentCount: 2,
+        _animatingSegmentInner: true
     },
     function() {
-        this.originalCurrentTheme = themes.current();
-        themes.current('generic');
+        this.origIsMaterialBased = themes.isMaterialBased;
+        this.origIsGeneric = themes.isGeneric;
+        themes.isMaterialBased = function() { return true; };
+        themes.isGeneric = function() { return false; };
     },
     function() {
-        themes.current(this.originalCurrentTheme);
+        themes.isMaterialBased = this.origIsMaterialBased;
+        themes.isGeneric = this.origIsGeneric;
     }
 );
 
@@ -1501,7 +1508,12 @@ testComponentDefaults(Tabs,
         { mode: item.mode },
         function() {
             this.originalRealDevice = devices.real();
-            this._origBrowser = browser;
+            this._origBrowserSettings = {
+                chrome: browser.chrome,
+                safari: browser.safari,
+                version: item.version,
+                [item.name]: browser[item.name]
+            };
 
             delete browser.chrome;
             delete browser.safari;
@@ -1511,7 +1523,11 @@ testComponentDefaults(Tabs,
             devices.real({ platform: 'ios', deviceType: 'phone' });
         },
         function() {
-            browser = this._origBrowser;
+            browser.chrome = this._origBrowserSettings.chrome;
+            browser.safari = this._origBrowserSettings.safari;
+            browser.version = this._origBrowserSettings.version;
+            browser[item.name] = this._origBrowserSettings[item.name];
+
             devices.real(this.originalRealDevice);
         }
     );
