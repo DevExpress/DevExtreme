@@ -13,7 +13,7 @@ export class ColumnsController {
     
   }, [this.columnsConfiguration])
 
-  static deps = [OptionsController]
+  static dependencies = [OptionsController] as const
 
   constructor(
     private options: OptionsController

@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 interface DIItem<T, TDeps extends readonly any[]> {
-  dependencies?: readonly [...{ [P in keyof TDeps]: DIItem<TDeps[P], readonly any[]> }];
+  dependencies: readonly [...{ [P in keyof TDeps]: DIItem<TDeps[P], readonly any[]> }];
 
   new(...deps: TDeps): T;
 }

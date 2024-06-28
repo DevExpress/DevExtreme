@@ -1,9 +1,11 @@
-import { Observable, Subscribable } from "@js/__internal/core/reactive";
+import { Observable, Subscribable, Updatable } from "@js/__internal/core/reactive";
 import { ChangedOptionInfo } from "@js/events";
 import Widget, {WidgetOptions} from "@js/ui/widget/ui.widget";
 
 export class OptionsController<TProps extends Record<string, unknown>> {
   private observables: {[TProp in keyof TProps]?: Observable<TProps[TProp]>} = {}
+
+  static dependencies = [Widget] as any;
 
   constructor(private component: Widget<TProps>) {
     component.on('optionChanged', (e: ChangedOptionInfo) => {
@@ -26,7 +28,7 @@ export class OptionsController<TProps extends Record<string, unknown>> {
     return newObs;
   }
 
-  twoWay(name: string): any {
-
+  twoWay<TProp extends (keyof TProps) & string>(name: TProp): Subscribable<TProps[TProp]> & Updatable<TProps[TProp]> {
+    throw 'not implemented';
   }
 }

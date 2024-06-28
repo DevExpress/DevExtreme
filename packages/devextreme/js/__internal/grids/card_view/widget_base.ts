@@ -4,7 +4,7 @@ import browser from '@js/core/utils/browser';
 import { logger } from '@js/core/utils/console';
 import { extend } from '@js/core/utils/extend';
 import { isString } from '@js/core/utils/type';
-import type { Properties } from '@js/ui/data_grid';
+import type { Properties } from '@js/ui/card_view';
 import { isMaterialBased } from '@js/ui/themes';
 import gridCoreUtils from '@ts/grids/grid_core/m_utils';
 import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
@@ -15,7 +15,7 @@ import { callModuleItemsMethod } from '../grid_core/m_modules';
 gridCore.registerModulesOrder([
 ]);
 
-class DataGrid extends GridCoreWidget<Properties> {
+class CardView extends GridCoreWidget<Properties> {
   private _defaultOptionsRules() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -87,31 +87,15 @@ class DataGrid extends GridCoreWidget<Properties> {
     });
   }
 
-  private static registerModule(name, module) {
-    gridCore.registerModule(name, module);
-  }
-
   protected getGridCoreHelper() {
     return gridCore;
   }
-
-  public _getTemplate(templateName) {
-    let template = templateName;
-
-    if (isString(template) && template.startsWith('#')) {
-      template = $(templateName);
-      logger.warn(DATAGRID_DEPRECATED_TEMPLATE_WARNING);
-    }
-
-    return super._getTemplate(template);
-  }
-
   public focus(element?) {
     this.getController('keyboardNavigation').focus(element);
   }
 }
 
 // @ts-expect-error
-registerComponent('dxDataGrid', DataGrid);
+registerComponent('dxCardView', CardView);
 
-export default DataGrid;
+export default CardView;

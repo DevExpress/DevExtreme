@@ -104,3 +104,7 @@ export function computed<TArgs extends readonly any[], TValue>(
 ): Subscribable<TValue> {
   return interruptableComputed(compute, deps);
 }
+
+export function state<TValue>(value: TValue) {
+  return new Observable<TValue>(value);
+}
