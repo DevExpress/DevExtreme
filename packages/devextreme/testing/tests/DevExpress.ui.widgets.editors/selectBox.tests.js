@@ -6484,23 +6484,14 @@ QUnit.module('valueChanged handler should receive correct event', {
 QUnit.module('onKeyDown', () => {
     QUnit.test('should fire event only once (T1238121)', function(assert) {
         const onKeyDownHandler = sinon.spy();
-        const products = [{
-            Name: 'HD Video Player'
-        }, {
-            Name: 'SuperHD Player'
-        }, {
-            Name: 'SuperPlasma 50'
-        }];
 
         const $element = $('#selectBox').dxSelectBox({
-            dataSource: products,
             onKeyDown: onKeyDownHandler,
-            fieldTemplate(data) {
+            fieldTemplate() {
                 const result = $('<div class=\'custom-item\'><div class=\'product-name\'></div></div>');
                 return result
                     .find('.product-name')
                     .dxTextBox({
-                        value: data && data.Name,
                         readOnly: true,
                     });
             },
