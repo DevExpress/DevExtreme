@@ -6485,13 +6485,10 @@ QUnit.module('onKeyDown', () => {
     QUnit.test('should fire event only once (T1238121)', function(assert) {
         const onKeyDownHandler = sinon.spy();
         const products = [{
-            ID: 1,
             Name: 'HD Video Player'
         }, {
-            ID: 2,
             Name: 'SuperHD Player'
         }, {
-            ID: 3,
             Name: 'SuperPlasma 50'
         }];
 
