@@ -374,7 +374,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
   } else {
     const theme = process.env.THEME.replace('generic.', '');
-    test = testObject.page(`http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`);
+    test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/?theme=dx.${theme}`);
   }
 
   test.before?.(async (t) => {
