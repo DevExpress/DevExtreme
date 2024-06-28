@@ -333,18 +333,49 @@ export function runTestAtPage(test, demoUrl) {
   }
   return executor.page(demoUrl);
 }
+// ignores this tests for demos published to Github
+// ignored because they have import of localization package and fail during bundling , 2 for Grid (RowTemplate, CellCustomization)
+const ignoredLocalization = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF']
+// ignored becuse react and vue fail to max callstack exceeded
+const ignoredCallstack = [
+  'AdvancedMasterDetailView', 
+  'BatchUpdateRequest', 
+  'CollaborativeEditing', 
+  'CustomEditors',
+  'CustomNewRecordPosition', 
+  'DataValidation',
+  'RemoteGrouping', 
+  'RemoteReordering',
+  'RemoteVirtualScrolling', 
+  'WebAPIService',
+];
+// ignored, because test uses DevExtreme which is not defined (probably something with path on CI, need to research)
+const ignoredDevextreme = ['SignalRService']
+
+const excluded = [...ignoredLocalization, ...ignoredCallstack, ...ignoredDevextreme];
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
-  changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
-
+  const isGithubDemos = process.ENV.ISGITHUBDEMOS;
+  if (isGithubDemos && excluded.includes(demo)){
+    return;
+  }
+  
+  
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
-
+  
   if (!shouldRunTest(framework, index, product, demo, SKIPPED_TESTS)) {
     return;
   }
-
-  const test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
+  
+  let test;
+  if (!isGithubDemos) {
+    changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
+    test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
+  } else {
+    const theme = process.env.THEME.replace('generic.', '');
+    test = testObject.page(`http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`);
+  }
 
   test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;

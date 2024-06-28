@@ -66,6 +66,7 @@ jobs:
                 TCQUARANTINE: true
                 CONSTEL: ${{ matrix.CONSTEL }}
                 THEME: ${{ matrix.THEME }}
+                ISGITHUBDEMOS: true
                 # DISABLE_DEMO_TEST_SETTINGS: all # Uncomment to ignore all the visualtestrc.json settings
                 # DISABLE_DEMO_TEST_SETTINGS: ignore # Uncomment to ignore the `ignore` field
                 # DISABLE_DEMO_TEST_SETTINGS: comparison-options # Uncomment to ignore the `comparison-options` field
