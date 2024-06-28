@@ -1,8 +1,8 @@
 # DevExtreme
 
-![DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
+DevExtreme is an enterprise-ready suite of powerful, good-looking UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
 
-DevExtreme is an enterprise-ready suite of UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
+![DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
 
 DevExtreme components are responsive and accessible. They work well across different devices, screen sizes, and input methods. Whether your target audience uses phones, PCs or screen readers - DevExpress components are up to the task.
 
@@ -10,7 +10,7 @@ Our range of powerful, modern JavaScript components includes data grids, interac
 
 - Official website: [js.devexpress.com](https://js.devexpress.com)
 - Pricing: [js.devexpress.com/buy](https://js.devexpress.com/Buy)
-- Licensing FAQ: [js.devexpress.com/licensing](https://js.devexpress.com/Licensing)
+- Licensing: [js.devexpress.com/licensing](https://js.devexpress.com/Licensing)
 - Support: [www.devexpress.com/support](https://www.devexpress.com/support)
 
 ## Getting Started
@@ -34,11 +34,11 @@ The DevExtreme website includes "Getting Started" guides for every flavor of Dev
 
 ## Learn
 
-- [Component Demos](https://js.devexpress.com/Demos/WidgetsGallery)
-- [Ready-To-Run Application Templates](https://js.devexpress.com/Templates/UITemplates)
+- [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery)
+- [Responsive UI Templates](https://js.devexpress.com/Templates/UITemplates)
 - [Documentation](https://js.devexpress.com/Documentation)
 - [Examples on GitHub](https://github.com/DevExpress/DevExtreme-examples)
-- [YouTube videos](https://www.youtube.com/user/DeveloperExpress/)
+- [YouTube videos](https://www.youtube.com/playlist?list=PL8h4jt35t1wjGvgflbHEH_e3b23AA30-z)
 
 ## Contributing
 
