@@ -350,6 +350,12 @@ QUnit.test('filter with functional getter', function(assert) {
     });
 });
 
+QUnit.test('filter with undefined "langParams"', function(assert) {
+    const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+    const filterLength = QUERY(input).filter(['ID', '=', 'aaa']).toArray().length;
+    assert.equal(filterLength, 2);
+});
+
 QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(assert) {
     const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
     const filterLength = QUERY(input, {
