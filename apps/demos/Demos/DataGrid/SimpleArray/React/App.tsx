@@ -4,7 +4,6 @@ import { customers } from './data.ts';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
 
-
 const App = () => (
   <DataGrid
     dataSource={customers}
