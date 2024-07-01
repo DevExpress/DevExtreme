@@ -10,13 +10,13 @@ $(() => {
       {
         dataField: 'Prefix',
         caption: 'Title',
-        width: 70,
+        width: 100,
+        sortOrder: 'asc'
       }, {
         dataField: 'FirstName',
         sortOrder: 'asc',
       }, {
         dataField: 'LastName',
-        sortOrder: 'asc',
       }, 'City',
       'State', {
         dataField: 'Position',
