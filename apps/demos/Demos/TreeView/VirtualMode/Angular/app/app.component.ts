@@ -9,9 +9,15 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: `.${modulePrefix}/app.component.html`,
 })
 export class AppComponent {
   dataSource = new DataSource({

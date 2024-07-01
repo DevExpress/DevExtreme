@@ -4,10 +4,16 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'detail-view',
-  templateUrl: 'app/detail-view/detail-view.component.html',
-  styleUrls: ['app/detail-view/detail-view.component.css'],
+  templateUrl: `.${modulePrefix}/detail-grid/detail-grid.component.html`,
+  styleUrls: [`.${modulePrefix}/detail-grid/detail-grid.component.css`],
   providers: [],
 })
 export class DetailViewComponent implements AfterViewInit {

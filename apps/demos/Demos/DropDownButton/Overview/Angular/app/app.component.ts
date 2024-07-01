@@ -12,10 +12,16 @@ if (!document.location.host.includes('localhost')) {
 
 type Color = string;
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 export class AppComponent {
