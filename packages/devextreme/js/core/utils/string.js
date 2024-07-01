@@ -71,16 +71,6 @@ export function format(template, ...values) {
     return template;
 }
 
-export const replaceAll = (function() {
-    const quote = function(str) {
-        return (str + '').replace(/([+*?.[^\]$(){}><|=!:])/g, '\\$1'); // lgtm[js/incomplete-sanitization]
-    };
-
-    return function(text, searchToken, replacementToken) {
-        return text.replace(new RegExp('(' + quote(searchToken) + ')', 'gi'), replacementToken);
-    };
-})();
-
 export const isEmpty = (function() {
     const SPACE_REGEXP = /\s/g;
 

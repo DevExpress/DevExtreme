@@ -33,7 +33,7 @@ export const viewFunction = ({
     <NumberBox
       className={PAGER_PAGE_INDEX_CLASS}
       min={1}
-      max={pageCount}
+      max={Math.max(pageCount, value)}
       width={width}
       value={value}
       valueChange={valueChange}

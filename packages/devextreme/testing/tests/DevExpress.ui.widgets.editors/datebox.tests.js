@@ -17,10 +17,11 @@ import ja from 'localization/messages/ja.json!';
 import pointerMock from '../../helpers/pointerMock.js';
 import support from 'core/utils/support';
 import typeUtils from 'core/utils/type';
-import uiDateUtils from 'ui/date_box/ui.date_utils';
+import uiDateUtils from '__internal/ui/date_box/m_date_utils';
 import { noop } from 'core/utils/common';
 import { logger } from 'core/utils/console';
 import { normalizeKeyName } from 'events/utils/index';
+import browser from 'core/utils/browser';
 
 import '../../helpers/calendarFixtures.js';
 
@@ -58,6 +59,8 @@ const STATE_FOCUSED_CLASS = 'dx-state-focused';
 const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const GESTURE_COVER_CLASS = 'dx-gesture-cover';
 const DROP_DOWN_BUTTON_CLASS = 'dx-dropdowneditor-button';
+const BUTTON_CLASS = 'dx-button';
+const TODAY_BUTTON_CLASS = 'dx-button-today';
 const DROP_DOWN_BUTTON_VISIBLE_CLASS = 'dx-dropdowneditor-button-visible';
 const OVERLAY_CONTENT_CLASS = 'dx-overlay-content';
 const OVERLAY_WRAPPER_CLASS = 'dx-overlay-wrapper';
@@ -74,7 +77,7 @@ const SHOW_INVALID_BADGE_CLASS = 'dx-show-invalid-badge';
 
 const APPLY_BUTTON_SELECTOR = '.dx-popup-done.dx-button';
 const CANCEL_BUTTON_SELECTOR = '.dx-popup-cancel.dx-button';
-const TODAY_BUTTON_SELECTOR = '.dx-button-today.dx-button';
+const TODAY_BUTTON_SELECTOR = `.${TODAY_BUTTON_CLASS}.${BUTTON_CLASS}`;
 const BUTTON_SELECTOR = '.dx-button';
 const TEXTBOX_SELECTOR = '.dx-textbox';
 
@@ -537,6 +540,19 @@ QUnit.module('toolbar buttons', {}, () => {
     ];
 
     types.forEach(type => {
+        QUnit.test(`Today button should have "dx-button-today" class (type=${type})`, function(assert) {
+            const dateBox = $('#dateBox').dxDateBox({
+                type,
+                pickerType: 'calendar',
+                opened: true,
+                applyValueMode: 'useButtons',
+            }).dxDateBox('instance');
+            const $overlayContent = $(dateBox.content()).parent();
+            const $todayButton = $overlayContent.find(`.${TODAY_BUTTON_CLASS}`);
+
+            assert.strictEqual($todayButton.length, 1);
+        });
+
         buttons.forEach(button => {
             QUnit.test(`"${button.optionName}" should customize ${button.name} button on init when type="${type}"`, function(assert) {
                 const $dateBox = $('#dateBox').dxDateBox({
@@ -2065,6 +2081,46 @@ QUnit.module('datebox and calendar integration', () => {
 
         instance.option('calendarOptions.visible', true);
         assert.strictEqual($(instance.content()).parent().find('.dx-button-today').length, 1);
+    });
+
+    QUnit.test('change year via scroll should log proper year in on value change event (T1229926)', function(assert) {
+        if(devices.real().deviceType !== 'desktop') {
+            assert.ok(true, 'device is not desktop');
+            return;
+        }
+
+        const valueChangedHandle = sinon.spy();
+        const date = new Date();
+        const currentYear = date.getFullYear();
+        const datebox = $('#dateBox').dxDateBox({
+            type: 'date',
+            value: date,
+            displayFormat: 'M/dd/yyyy',
+            valueChangeEvent: 'dxmousewheel',
+            useMaskBehavior: true,
+            onValueChanged: valueChangedHandle
+        }).dxDateBox('instance');
+
+        const $input = $(datebox.element()).find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const pointer = pointerMock($input);
+        const keyboard = keyboardMock($input, true);
+
+        keyboard.caret({ start: 12, end: 15 });
+
+        $input.trigger('dxclick');
+
+        pointer.wheel(1);
+
+        let changedValue = valueChangedHandle.getCall(0).args[0];
+        assert.strictEqual(valueChangedHandle.callCount, 1, 'handler has been called once');
+        assert.deepEqual(new Date(changedValue.value).getFullYear(), currentYear + 1, 'value year is correct'); assert.deepEqual(new Date(changedValue.previousValue).getFullYear(), currentYear, 'previous value year is correct');
+
+        pointer.wheel(1);
+
+        changedValue = valueChangedHandle.getCall(1).args[0];
+        assert.strictEqual(valueChangedHandle.callCount, 2, 'handler has been called twice');
+        assert.deepEqual(new Date(changedValue.value).getFullYear(), currentYear + 2, 'value year is correct');
+        assert.deepEqual(new Date(changedValue.previousValue).getFullYear(), currentYear + 1, 'previous value year is correct');
     });
 });
 
@@ -6401,5 +6457,28 @@ QUnit.module('validation', {
         });
 
         assert.strictEqual(this.$dateBox.hasClass(SHOW_INVALID_BADGE_CLASS), false, 'validation icon is be hidden');
+    });
+});
+
+QUnit.module('Device specific tests', {
+    beforeEach: function() {
+        this._savedDevice = devices.real();
+        devices.real({ platform: 'android', deviceType: 'phone', version: [4, 4, 2], android: true });
+    },
+    afterEach: function() {
+        devices.real(this._savedDevice);
+    },
+}, () => {
+    QUnit.test('DateBox should not render dropDownButton in Mozilla on android(T1197922)', function(assert) {
+        const dateValue = new Date(2016, 6, 15, 14, 30);
+        const isMozilla = browser.mozilla;
+        const $dateBox = $('#dateBox').dxDateBox({
+            pickerType: 'native',
+            value: dateValue
+        });
+
+        const $dropDownButton = $dateBox.find(`.${DROP_DOWN_BUTTON_CLASS}`);
+
+        assert.strictEqual($dropDownButton.length, isMozilla ? 0 : 1, `dropDownButton is ${isMozilla ? 'not' : ''} rendered`);
     });
 });

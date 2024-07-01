@@ -1,24 +1,29 @@
 @use "../icons" as *;
 
 @mixin dx-lookup-arrow(
-  $arrow-icon,
-  $arrow-icon-glyph-rtl,
-  $arrow-width,
-  $arrow-color,
-  $arrow-icon-size,
+  $spin-icon-glyph,
+  $spin-icon-glyph-rtl,
+  $arror-width,
+  $icon-color,
+  $icon-color-active,
+  $icon-size,
 ) {
   .dx-lookup-arrow {
-    @include dx-icon($arrow-icon);
+    @include dx-icon($spin-icon-glyph);
   
     .dx-rtl & {
       &::before {
-        content: $arrow-icon-glyph-rtl;
+        content: $spin-icon-glyph-rtl;
       }
     }
   
-    width: $arrow-width;
-    color: $arrow-color;
+    width: $arror-width;
+    color: $icon-color;
+
+    .dx-dropdowneditor-active & {
+      color: $icon-color-active;
+    }
   
-    @include dx-icon-font-centered-sizing($arrow-icon-size);
+    @include dx-icon-font-centered-sizing($icon-size);
   }
 }

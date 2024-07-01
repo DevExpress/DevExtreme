@@ -1,7 +1,7 @@
 import { refreshPaths } from './core/renderers/renderer';
 import { each as _each } from '../core/utils/iterator';
+const { floor } = Math;
 
-// 'var' because JSHint throws W021 error
 export let prepareSegmentRectPoints = function(left, top, width, height, borderOptions) {
     const maxSW = ~~((width < height ? width : height) / 2);
     const sw = borderOptions.width || 0;
@@ -65,6 +65,25 @@ export let prepareSegmentRectPoints = function(left, top, width, height, borderO
 
 export {
     refreshPaths
+};
+
+export const areCanvasesDifferent = function(canvas1, canvas2) {
+    const sizeChangingThreshold = 1;
+
+    const sizeLessThreshold = ['width', 'height']
+        .every((key) => Math.abs(canvas1[key] - canvas2[key]) < sizeChangingThreshold);
+
+    const canvasCoordsIsEqual = ['left', 'right', 'top', 'bottom'].every((key) => canvas1[key] === canvas2[key]);
+
+    return !(sizeLessThreshold && canvasCoordsIsEqual);
+};
+
+export const floorCanvasDimensions = function(canvas) {
+    return {
+        ...canvas,
+        height: floor(canvas.height),
+        width: floor(canvas.width),
+    };
 };
 
 ///#DEBUG

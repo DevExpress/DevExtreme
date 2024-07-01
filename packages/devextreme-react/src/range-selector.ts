@@ -1,3 +1,4 @@
+"use client"
 import dxRangeSelector, {
     Properties
 } from "devextreme/viz/range_selector";
@@ -31,9 +32,9 @@ type IRangeSelectorOptionsNarrowedEvents = {
 
 type IRangeSelectorOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IRangeSelectorOptionsNarrowedEvents> & IHtmlOptions & {
   defaultLoadingIndicator?: Record<string, any>;
-  defaultValue?: Array<any | number | string> | CommonChartTypes.VisualRange;
+  defaultValue?: Array<Date | number | string> | CommonChartTypes.VisualRange;
   onLoadingIndicatorChange?: (value: Record<string, any>) => void;
-  onValueChange?: (value: Array<any | number | string> | CommonChartTypes.VisualRange) => void;
+  onValueChange?: (value: Array<Date | number | string> | CommonChartTypes.VisualRange) => void;
 }>
 
 class RangeSelector extends BaseComponent<React.PropsWithChildren<IRangeSelectorOptions>> {
@@ -168,8 +169,8 @@ class AggregationInterval extends NestedOption<IAggregationIntervalProps> {
 // CommonSeriesSettingsLabel
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -242,8 +243,8 @@ class Border extends NestedOption<IBorderProps> {
 // owners:
 // Scale
 type IBreakProps = React.PropsWithChildren<{
-  endValue?: any | number | string;
-  startValue?: any | number | string;
+  endValue?: Date | number | string;
+  startValue?: Date | number | string;
 }>
 class Break extends NestedOption<IBreakProps> {
   public static OptionName = "breaks";
@@ -271,7 +272,7 @@ type IChartProps = React.PropsWithChildren<{
   dataPrepareSettings?: Record<string, any> | {
     checkTypeForAllData?: boolean;
     convertToAxisDataType?: boolean;
-    sortingMethod?: boolean | ((a: { arg: any | number | string, val: any | number | string }, b: { arg: any | number | string, val: any | number | string }) => number);
+    sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number);
   };
   maxBubbleSize?: number;
   minBubbleSize?: number;
@@ -644,7 +645,7 @@ class Connector extends NestedOption<IConnectorProps> {
 type IDataPrepareSettingsProps = React.PropsWithChildren<{
   checkTypeForAllData?: boolean;
   convertToAxisDataType?: boolean;
-  sortingMethod?: boolean | ((a: { arg: any | number | string, val: any | number | string }, b: { arg: any | number | string, val: any | number | string }) => number);
+  sortingMethod?: boolean | ((a: { arg: Date | number | string, val: Date | number | string }, b: { arg: Date | number | string, val: Date | number | string }) => number);
 }>
 class DataPrepareSettings extends NestedOption<IDataPrepareSettingsProps> {
   public static OptionName = "dataPrepareSettings";
@@ -690,8 +691,8 @@ class Font extends NestedOption<IFontProps> {
 // SliderMarker
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -872,7 +873,7 @@ class Margin extends NestedOption<IMarginProps> {
 // Scale
 type IMarkerProps = React.PropsWithChildren<{
   label?: Record<string, any> | {
-    customizeText?: ((markerValue: { value: any | number, valueText: string }) => string);
+    customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
     format?: LocalizationTypes.Format;
   };
   separatorHeight?: number;
@@ -892,7 +893,7 @@ class Marker extends NestedOption<IMarkerProps> {
 // owners:
 // Marker
 type IMarkerLabelProps = React.PropsWithChildren<{
-  customizeText?: ((markerValue: { value: any | number, valueText: string }) => string);
+  customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
   format?: LocalizationTypes.Format;
 }>
 class MarkerLabel extends NestedOption<IMarkerLabelProps> {
@@ -1133,21 +1134,21 @@ type IScaleProps = React.PropsWithChildren<{
   };
   allowDecimals?: boolean;
   breaks?: Array<ScaleBreak> | {
-    endValue?: any | number | string;
-    startValue?: any | number | string;
+    endValue?: Date | number | string;
+    startValue?: Date | number | string;
   }[];
   breakStyle?: Record<string, any> | {
     color?: string;
     line?: "straight" | "waved";
     width?: number;
   };
-  categories?: Array<any | number | string>;
+  categories?: Array<Date | number | string>;
   discreteAxisDivisionMode?: "betweenLabels" | "crossLabels";
   endOnTick?: boolean;
-  endValue?: any | number | string;
-  holidays?: Array<any | string> | Array<number>;
+  endValue?: Date | number | string;
+  holidays?: Array<Date | string> | Array<number>;
   label?: Record<string, any> | {
-    customizeText?: ((scaleValue: { value: any | number | string, valueText: string }) => string);
+    customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
     font?: ChartsFont;
     format?: LocalizationTypes.Format;
     overlappingBehavior?: "hide" | "none";
@@ -1158,7 +1159,7 @@ type IScaleProps = React.PropsWithChildren<{
   logarithmBase?: number;
   marker?: Record<string, any> | {
     label?: Record<string, any> | {
-      customizeText?: ((markerValue: { value: any | number, valueText: string }) => string);
+      customizeText?: ((markerValue: { value: Date | number, valueText: string }) => string);
       format?: LocalizationTypes.Format;
     };
     separatorHeight?: number;
@@ -1209,8 +1210,8 @@ type IScaleProps = React.PropsWithChildren<{
   };
   placeholderHeight?: number;
   showCustomBoundaryTicks?: boolean;
-  singleWorkdays?: Array<any | string> | Array<number>;
-  startValue?: any | number | string;
+  singleWorkdays?: Array<Date | string> | Array<number>;
+  startValue?: Date | number | string;
   tick?: Record<string, any> | {
     color?: string;
     opacity?: number;
@@ -1253,7 +1254,7 @@ class Scale extends NestedOption<IScaleProps> {
 // owners:
 // Scale
 type IScaleLabelProps = React.PropsWithChildren<{
-  customizeText?: ((scaleValue: { value: any | number | string, valueText: string }) => string);
+  customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
   format?: LocalizationTypes.Format;
   overlappingBehavior?: "hide" | "none";
@@ -1528,7 +1529,7 @@ class SliderHandle extends NestedOption<ISliderHandleProps> {
 // RangeSelector
 type ISliderMarkerProps = React.PropsWithChildren<{
   color?: string;
-  customizeText?: ((scaleValue: { value: any | number | string, valueText: string }) => string);
+  customizeText?: ((scaleValue: { value: Date | number | string, valueText: string }) => string);
   font?: ChartsFont;
   format?: LocalizationTypes.Format;
   invalidRangeColor?: string;
@@ -1635,7 +1636,7 @@ class Url extends NestedOption<IUrlProps> {
 // owners:
 // RangeSelector
 type IValueProps = React.PropsWithChildren<{
-  endValue?: any | number | string;
+  endValue?: Date | number | string;
   length?: number | Record<string, any> | "day" | "hour" | "millisecond" | "minute" | "month" | "quarter" | "second" | "week" | "year" | {
     days?: number;
     hours?: number;
@@ -1647,11 +1648,11 @@ type IValueProps = React.PropsWithChildren<{
     weeks?: number;
     years?: number;
   };
-  startValue?: any | number | string;
-  defaultEndValue?: any | number | string;
-  onEndValueChange?: (value: any | number | string) => void;
-  defaultStartValue?: any | number | string;
-  onStartValueChange?: (value: any | number | string) => void;
+  startValue?: Date | number | string;
+  defaultEndValue?: Date | number | string;
+  onEndValueChange?: (value: Date | number | string) => void;
+  defaultStartValue?: Date | number | string;
+  onStartValueChange?: (value: Date | number | string) => void;
 }>
 class Value extends NestedOption<IValueProps> {
   public static OptionName = "value";

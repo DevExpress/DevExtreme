@@ -29,10 +29,21 @@
     }
   }
 
-  &:not(.dx-tabs-vertical) {
+  &.dx-tab-indicator-position-top {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(top);
+    }
+  }
+
+  &.dx-tab-indicator-position-bottom {
     .dx-tab {
       @include dx-tabs-indicator-primary(bottom);
+    }
+  }
 
+  &.dx-tab-indicator-position-top,
+  &.dx-tab-indicator-position-bottom {
+    .dx-tab {
       &.dx-state-hover {
         @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
       }
@@ -63,10 +74,21 @@
     }
   }
 
-  &.dx-tabs-vertical {
+  &.dx-tab-indicator-position-right {
     .dx-tab {
       @include dx-tabs-indicator-primary(right);
+    }
+  }
 
+  &.dx-tab-indicator-position-left {
+    .dx-tab {
+      @include dx-tabs-indicator-primary(left);
+    }
+  }
+
+  &.dx-tab-indicator-position-right,
+  &.dx-tab-indicator-position-left {
+    .dx-tab {
       &.dx-state-hover {
         @include dx-tabs-indicator-background($tabs-tab-border-color-hover);
       }

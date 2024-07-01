@@ -7,11 +7,11 @@ import {
 import { BaseWidgetProps } from '../common/base_props';
 
 // eslint-disable-next-line import/named
-import { ItemClickEvent, SelectionChangedEvent } from '../../../ui/button_group';
+import type { ItemClickEvent, SelectionChangedEvent } from '../../../ui/button_group';
 
 // eslint-disable-next-line import/named
-import { ButtonClickEvent } from '../../../ui/drop_down_button';
-import { EventCallback } from '../common/event_callback';
+import type { ButtonClickEvent } from '../../../ui/drop_down_button';
+import type { EventCallback } from '../common/event_callback';
 
 @ComponentBindings()
 export class CollectionWidgetItem {

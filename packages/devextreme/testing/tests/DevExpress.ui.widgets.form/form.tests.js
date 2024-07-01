@@ -6,7 +6,7 @@ import resizeCallbacks from 'core/utils/resize_callbacks';
 import typeUtils from 'core/utils/type';
 import { extend } from 'core/utils/extend';
 import visibilityEventsModule from 'events/visibility_change';
-import { EDITORS_WITHOUT_LABELS } from 'ui/form/ui.form.layout_manager.utils';
+import { EDITORS_WITHOUT_LABELS } from '__internal/ui/form/m_form.layout_manager.utils';
 import 'generic_light.css!';
 import $ from 'jquery';
 import 'ui/autocomplete';
@@ -18,9 +18,8 @@ import 'ui/slider';
 import 'ui/range_slider';
 
 import windowModule from 'core/utils/window';
-import Form from 'ui/form/ui.form.js';
+import Form from 'ui/form';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base.js';
-import { renderLabel } from 'ui/form/components/label.js';
 
 import {
     FIELD_ITEM_CLASS,
@@ -33,20 +32,21 @@ import {
     FORM_GROUP_CAPTION_CLASS,
     FORM_UNDERLINED_CLASS,
     FORM_VALIDATION_SUMMARY
-} from 'ui/form/constants';
+} from '__internal/ui/form/constants';
 
 import {
     GET_LABEL_WIDTH_BY_TEXT_CLASS,
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
     FIELD_ITEM_LABEL_TEXT_CLASS,
-} from 'ui/form/components/label';
+    renderLabel,
+} from '__internal/ui/form/components/m_label';
 
 const EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const EDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const FIELD_ITEM_HELP_TEXT_CLASS = 'dx-field-item-help-text';
 
-import { TOOLBAR_CLASS } from 'ui/toolbar/constants';
+import { TOOLBAR_CLASS } from '__internal/ui/toolbar/m_constants';
 
 import 'ui/html_editor';
 import '../../helpers/ignoreQuillTimers.js';
@@ -630,6 +630,22 @@ QUnit.test('form.option("onFieldDataChanged", "newHandler") -> check new handler
 
     form.getEditor('field1').option('value', 'some value 2');
     assert.equal(onFieldDataChangedStub.callCount, 2, 'new handler is called after editor value is changed');
+});
+
+QUnit.test('onFieldDataChanged must be called once if new formData contains "length" property (T1213983)', function(assert) {
+    const onFieldDataChangedStub = sinon.stub();
+
+    const form = $('#form').dxForm({
+        formData: {},
+        items: [{
+            dataField: 'length',
+        }],
+        onFieldDataChanged: onFieldDataChangedStub,
+    }).dxForm('instance');
+
+    form.option({ formData: { length: 10 } });
+
+    assert.strictEqual(onFieldDataChangedStub.callCount, 1);
 });
 
 
@@ -1239,7 +1255,7 @@ QUnit.test('Update layout inside a tab (T1040296)', function(assert) {
         { title: 'Window' }
     ]);
 
-    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['General', 'Window'], 'dx-tab-text elements');
+    assert.deepEqual([...document.querySelectorAll('.dx-tab-text')].map(e => e.textContent), ['GeneralGeneral', 'WindowWindow'], 'dx-tab-text elements');
 });
 
 QUnit.module('Align labels', {
@@ -4719,5 +4735,41 @@ QUnit.module('reset', () => {
         const summaryItemsAfterValidate = $(`.${FORM_VALIDATION_SUMMARY}`).children();
 
         assert.strictEqual(summaryItemsAfterValidate.length, 2, 'form has validation summary after validation');
+    });
+
+    QUnit.test('DropDownBox should not lose its value if form resized (T1196835)', function(assert) {
+        let screen = 'lg';
+
+        const value = 'VINET';
+        const text = 'Vins et alcools Chevalier (France)';
+        const $form = $('#form').dxForm({
+            formData: { CustomerID: value },
+            screenByWidth: function() { return screen; },
+            colCountByScreen: {
+                sm: 1,
+                lg: 2
+            },
+            items: [
+                {
+                    itemType: 'simple',
+                    cssClass: 'test-ddbox',
+                    dataField: 'CustomerID',
+                    editorOptions: {
+                        displayExpr: 'Text',
+                        valueExpr: 'Value',
+                        showClearButton: true,
+                        dataSource: [{ Value: value, Text: text }],
+                    },
+                    editorType: 'dxDropDownBox',
+                },
+            ]
+        });
+        const $input = $form.find(`.test-ddbox .${EDITOR_INPUT_CLASS}`);
+
+        screen = 'sm';
+        $input.focus();
+        resizeCallbacks.fire();
+
+        assert.strictEqual($input.val(), text, 'ddBox contain correct value');
     });
 });

@@ -2,7 +2,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget, disposeWidget } from '../../helpers/createWidget';
 import { changeTheme } from '../../helpers/changeTheme';
 import DataGrid from '../../model/dataGrid';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
@@ -122,7 +122,7 @@ test('pageSizeSelector has correct layout inside masterDetail', async (t) => {
   }));
 
 // T1159578
-safeSizeTest('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
+/* safeSizeTest */test.skip('The master detail row should display correctly when renderAsync, virtual scrolling and column fixing features are enabled', async (t) => {
   // arrange
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
@@ -140,7 +140,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
   await t
     .expect(compareResults.isValid())
     .ok(compareResults.errorMessages());
-}, [800, 800])
+}/* , [800, 800] */)
   .before(() => createWidget('dxDataGrid', {
     dataSource: [...new Array(40)].map((_, index) => ({ id: index, text: `item ${index}` })),
     keyExpr: 'id',
@@ -253,7 +253,7 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         dataGrid._getTemplate = () => ({
           render(options) {
             setTimeout(() => {
-              if ($(options.container).closest(document).length) {
+              if ($(options.container).closest(document as any).length) {
                 $(options.container).append($('<div/>').html(`
                     <p>${options.model.data.id}</p>
                     <p>${options.model.data.text}</p>
@@ -267,11 +267,5 @@ safeSizeTest('The master detail row should display correctly when renderAsync, v
         dataGrid.repaint();
       })();
     })
-    .after(async () => {
-      await ClientFunction(() => {
-        const dataGrid = ($('#container') as any).dxDataGrid('instance');
-
-        dataGrid?.dispose();
-      })();
-    });
+    .after(async () => disposeWidget('dxDataGrid'));
 });

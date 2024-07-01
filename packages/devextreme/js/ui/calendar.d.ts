@@ -223,7 +223,14 @@ export interface dxCalendarOptions extends EditorOptions<dxCalendar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxCalendar extends Editor<dxCalendarOptions> { }
+export default class dxCalendar extends Editor<dxCalendarOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Date | number | string | Array<Date | number | string> | null): void;
+}
 
 /** @public */
 export type Properties = dxCalendarOptions;

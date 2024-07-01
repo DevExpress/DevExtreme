@@ -30,7 +30,7 @@
   pointer-events: auto;
   z-index: $overlay-zindex;
   outline: 0;
-  overflow: hidden;
+  overflow: clip;
 
   & > .dx-template-wrapper {
     height: 100%;

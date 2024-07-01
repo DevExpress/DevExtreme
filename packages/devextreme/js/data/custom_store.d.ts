@@ -1,5 +1,5 @@
 import { FilterDescriptor, GroupDescriptor, LoadOptions } from './index';
-import { Options as StoreOptions, Store } from './abstract_store';
+import { Store, Options as StoreOptions } from './store';
 import { DxExtendedPromise, DxPromise } from '../core/utils/deferred';
 import { GroupItem as CustomStoreGroupItem, LoadResult } from '../common/data/custom-store';
 
@@ -26,9 +26,9 @@ export type ResolvedData<TItem = any> = LoadResult<TItem>;
 type LoadFunctionResult<T> = T | DxPromise<T> | PromiseLike<T>;
 
 /**
+ * @docid
  * @namespace DevExpress.data
  * @deprecated Use Options instead
- * @docid
  */
 export interface CustomStoreOptions<
     TItem = any,
@@ -70,6 +70,14 @@ export interface CustomStoreOptions<
     loadMode?: 'processed' | 'raw';
     /**
      * @docid
+     * @type_function_param1 result:LoadResult
+     * @type_function_param2 loadOptions:LoadOptions
+     * @action
+     * @public
+     */
+    onLoaded?: ((result: LoadResult<TItem>, loadOptions: LoadOptions<TItem>) => void);
+    /**
+     * @docid
      * @type_function_param1 key:object|string|number
      * @type_function_return Promise<void>
      * @public
@@ -98,6 +106,7 @@ export interface CustomStoreOptions<
      */
     useDefaultSearch?: boolean;
 }
+
 /**
  * @docid
  * @inherits Store

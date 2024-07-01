@@ -1,6 +1,6 @@
+/* eslint-disable max-classes-per-file */
 import { getPublicElement } from '@js/core/element';
 import $ from '@js/core/renderer';
-import { noop } from '@js/core/utils/common';
 import { each } from '@js/core/utils/iterator';
 import ContextMenu from '@js/ui/context_menu';
 
@@ -14,14 +14,14 @@ const viewName = {
   footerView: 'footer',
   headerPanel: 'headerPanel',
 };
-const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'];
+const VIEW_NAMES = ['columnHeadersView', 'rowsView', 'footerView', 'headerPanel'] as const;
 
-const ContextMenuController = modules.ViewController.inherit({
-  init() {
+export class ContextMenuController extends modules.ViewController {
+  public init() {
     this.createAction('onContextMenuPreparing');
-  },
+  }
 
-  getContextMenuItems(dxEvent) {
+  public getContextMenuItems(dxEvent) {
     if (!dxEvent) {
       return false;
     }
@@ -48,11 +48,13 @@ const ContextMenuController = modules.ViewController.inherit({
           targetElement: getPublicElement($targetElement),
           target: viewName[this],
           rowIndex,
+          // @ts-expect-error
           row: view._getRows()[rowIndex],
           columnIndex,
           column: rowOptions?.cells?.[columnIndex]?.column,
         };
 
+        // @ts-expect-error
         options.items = view.getContextMenuItems && view.getContextMenuItems(options);
 
         that.executeAction('onContextMenuPreparing', options);
@@ -68,14 +70,26 @@ const ContextMenuController = modules.ViewController.inherit({
     });
 
     return menuItems;
-  },
-  _contextMenuPrepared: noop,
-});
+  }
 
-const ContextMenuView = modules.View.inherit({
-  _renderCore() {
-    const that = this;
-    const $element = that.element().addClass(CONTEXT_MENU);
+  /**
+   * @extended: selection
+   */
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  protected _contextMenuPrepared(options) {}
+}
+
+export class ContextMenuView extends modules.View {
+  private _contextMenuController!: ContextMenuController;
+
+  public init() {
+    super.init();
+
+    this._contextMenuController = this.getController('contextMenu');
+  }
+
+  protected _renderCore() {
+    const $element = this.element().addClass(CONTEXT_MENU);
 
     this.setAria('role', 'presentation', $element);
 
@@ -83,28 +97,30 @@ const ContextMenuView = modules.View.inherit({
       $element,
       ContextMenu,
       {
-        onPositioning(actionArgs) {
+        onPositioning: (actionArgs) => {
           const { event } = actionArgs;
           const contextMenuInstance = actionArgs.component;
-          const items = that.getController('contextMenu').getContextMenuItems(event);
+          const items = this._contextMenuController.getContextMenuItems(event);
 
           if (items) {
             contextMenuInstance.option('items', items);
-            event.stopPropagation();
+            event!.stopPropagation();
           } else {
+            // @ts-expect-error
             actionArgs.cancel = true;
           }
         },
         onItemClick(params) {
-          params.itemData.onItemClick && params.itemData.onItemClick(params);
+          // @ts-expect-error
+          params.itemData?.onItemClick?.(params);
         },
 
-        cssClass: that.getWidgetContainerClass(),
-        target: that.component.$element(),
+        cssClass: this.getWidgetContainerClass(),
+        target: this.component.$element(),
       },
     );
-  },
-});
+  }
+}
 
 export const contextMenuModule = {
   defaultOptions() {

@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import Calendar from '../../../model/calendar';
 import {
@@ -213,6 +213,7 @@ test('Calendar with multiview rendered correct', async (t) => {
     return createWidget('dxCalendar', {
       value: new Date(2021, 9, 17),
       zoomLevel,
+      _todayDate: () => new Date(2023, 9, 17),
     }, '#calendar');
   });
 
@@ -232,6 +233,7 @@ test('Calendar with multiview rendered correct', async (t) => {
       value: new Date(2021, 9, 17),
       zoomLevel,
       rtlEnabled: true,
+      _todayDate: () => new Date(2023, 9, 17),
     }, '#calendar');
   });
 
@@ -253,6 +255,7 @@ test('Calendar with multiview rendered correct', async (t) => {
       height: 450,
       zoomLevel,
       showTodayButton: true,
+      _todayDate: () => new Date(2023, 9, 17),
     }, '#calendar');
   });
 });
@@ -394,6 +397,7 @@ test('Calendar with disabled dates rendered correct', async (t) => {
     return createWidget('dxCalendar', {
       currentDate: new Date(2021, 9, 17),
       zoomLevel,
+      _todayDate: () => new Date(2023, 9, 17),
     }, '#calendar');
   });
 

@@ -21,7 +21,7 @@ export default {
         return value;
     },
 
-    translate: function(bp, direction, interval) {
+    translate: function(bp, direction, skipRound, interval) {
         const that = this;
         const specialValue = that.translateSpecialCase(bp);
 
@@ -35,7 +35,7 @@ export default {
             return null;
         }
 
-        return that.to(bp, direction, interval);
+        return that.to(bp, direction, skipRound, interval);
     },
 
     getInterval: function() {
@@ -85,14 +85,14 @@ export default {
         return true;
     },
 
-    to: function(bp, direction, interval) {
+    to: function(bp, direction, skipRound, interval) {
         const that = this;
 
         interval = interval || that._options.interval;
         const v1 = that._intervalize(bp, interval);
         const v2 = dateUtils.addInterval(v1, interval);
-        let res = that._to(v1);
-        const p2 = that._to(v2);
+        let res = that._to(v1, skipRound);
+        const p2 = that._to(v2, skipRound);
 
         if(!direction) {
             res = floor((res + p2) / 2);
@@ -102,7 +102,7 @@ export default {
         return res;
     },
 
-    _to: function(value) {
+    _to: function(value, skipRound) {
         const co = this._canvasOptions;
         const rMin = co.rangeMinVisible;
         const rMax = co.rangeMaxVisible;
@@ -114,7 +114,9 @@ export default {
             offset = dateUtils.addInterval(rMax, this._options.interval) - rMin;
         }
 
-        return this._conversionValue(this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange));
+        const projectedValue = this._calculateProjection(offset * this._canvasOptions.ratioOfCanvasRange);
+
+        return this._conversionValue(projectedValue, skipRound);
     },
 
     from: function(position, direction) {

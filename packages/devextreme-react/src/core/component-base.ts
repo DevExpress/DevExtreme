@@ -1,19 +1,26 @@
 import * as events from 'devextreme/events';
 import * as React from 'react';
 import { createPortal } from 'react-dom';
+import { requestAnimationFrame } from 'devextreme/animation/frame';
+import { deferUpdate } from 'devextreme/core/utils/common';
 
-import TemplatesManager from './templates-manager';
-import { TemplatesRenderer } from './templates-renderer';
-import { TemplatesStore } from './templates-store';
-
+import { TemplateManager } from './template-manager';
 import { OptionsManager, scheduleGuards, unscheduleGuards } from './options-manager';
 import { ITemplateMeta } from './template';
 import { elementPropNames, getClassName } from './widget-config';
-
 import { IConfigNode } from './configuration/config-node';
 import { IExpectedChild } from './configuration/react/element';
 import { buildConfigTree } from './configuration/react/tree';
 import { isIE } from './configuration/utils';
+
+import {
+  DXRemoveCustomArgs,
+  DXTemplateCreator,
+  InitArgument,
+  UpdateLocker,
+} from './types';
+
+import { RemovalLockerContext } from './helpers';
 
 const DX_REMOVE_EVENT = 'dxremove';
 
@@ -35,6 +42,10 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       : { display: 'contents' };
   }
 
+  static contextType: React.Context<UpdateLocker> = RemovalLockerContext;
+
+  declare context: React.ContextType<typeof RemovalLockerContext> | undefined;
+
   protected _WidgetClass: any;
 
   protected _instance: any;
@@ -55,13 +66,13 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected readonly independentEvents: string[];
 
+  private _createDXTemplates: DXTemplateCreator | undefined;
+
+  private _clearInstantiationModels: (() => void) | undefined;
+
+  private _updateTemplates: ((callback: () => void) => void) | undefined;
+
   private _childNodes: Node[] = [];
-
-  private _templatesRendererRef: TemplatesRenderer | null;
-
-  private readonly _templatesStore: TemplatesStore;
-
-  private readonly _templatesManager: TemplatesManager;
 
   private readonly _optionsManager: OptionsManager;
 
@@ -69,19 +80,15 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   protected useDeferUpdateForTemplates = false;
 
+  protected guardsUpdateScheduled = false;
+
   constructor(props: P) {
     super(props);
 
-    this._setTemplatesRendererRef = this._setTemplatesRendererRef.bind(this);
     this._createWidget = this._createWidget.bind(this);
+    this._setTemplateManagerHooks = this._setTemplateManagerHooks.bind(this);
 
-    this._templatesStore = new TemplatesStore(() => {
-      if (this._templatesRendererRef) {
-        this._templatesRendererRef.scheduleUpdate(this.useDeferUpdateForTemplates);
-      }
-    });
-    this._templatesManager = new TemplatesManager(this._templatesStore);
-    this._optionsManager = new OptionsManager(this._templatesManager);
+    this._optionsManager = new OptionsManager();
   }
 
   public componentDidMount(): void {
@@ -101,34 +108,55 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
   public componentDidUpdate(prevProps: P): void {
     this._updateCssClasses(prevProps, this.props);
+
     const config = this._getConfig();
-    this._optionsManager.update(config);
-    if (this._templatesRendererRef) {
-      this._templatesRendererRef.scheduleUpdate(this.useDeferUpdateForTemplates, scheduleGuards);
-    }
-    unscheduleGuards();
+    const templateOptions = this._optionsManager.getTemplateOptions(config);
+    const dxTemplates = this._createDXTemplates?.(templateOptions) || {};
+
+    this._optionsManager.update(config, dxTemplates);
+    this._scheduleTemplatesUpdate();
   }
 
   public componentWillUnmount(): void {
+    this._lockParentOnRemoved();
+
     if (this._instance) {
+      const dxRemoveArgs: DXRemoveCustomArgs = { isUnmounting: true };
+
       this._childNodes?.forEach((child) => child.parentNode?.removeChild(child));
-      events.triggerHandler(this._element, DX_REMOVE_EVENT);
+      events.triggerHandler(this._element, DX_REMOVE_EVENT, dxRemoveArgs);
       this._instance.dispose();
     }
     this._optionsManager.dispose();
+
+    this._unlockParentOnRemoved();
   }
 
   protected _createWidget(element?: Element): void {
     element = element || this._element;
 
     const config = this._getConfig();
-    this._instance = new this._WidgetClass(
-      element,
-      {
-        templatesRenderAsynchronously: true,
-        ...this._optionsManager.getInitialOptions(config),
-      },
-    );
+
+    let options: any = {
+      templatesRenderAsynchronously: true,
+      ...this._optionsManager.getInitialOptions(config),
+    };
+
+    const templateOptions = this._optionsManager.getTemplateOptions(config);
+    const dxTemplates = this._createDXTemplates?.(templateOptions);
+
+    if (dxTemplates && Object.keys(dxTemplates).length) {
+      options = {
+        ...options,
+        integrationOptions: {
+          templates: dxTemplates,
+        },
+      };
+    }
+
+    this._clearInstantiationModels?.();
+
+    this._instance = new this._WidgetClass(element, options);
 
     if (!this.useRequestAnimationFrameFlag) {
       this.useDeferUpdateForTemplates = this._instance.option(
@@ -138,6 +166,24 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
 
     this._optionsManager.setInstance(this._instance, config, this.subscribableOptions, this.independentEvents);
     this._instance.on('optionChanged', this._optionsManager.onOptionChanged);
+  }
+
+  private _scheduleTemplatesUpdate() {
+    if (this.guardsUpdateScheduled) {
+      return;
+    }
+
+    this.guardsUpdateScheduled = true;
+
+    const updateFunc = this.useDeferUpdateForTemplates ? deferUpdate : requestAnimationFrame;
+
+    updateFunc(() => {
+      this.guardsUpdateScheduled = false;
+
+      this._updateTemplates?.(() => scheduleGuards());
+    });
+
+    unscheduleGuards();
   }
 
   private _getConfig(): IConfigNode {
@@ -150,10 +196,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
       },
       this.props,
     );
-  }
-
-  private _setTemplatesRendererRef(instance: TemplatesRenderer | null) {
-    this._templatesRendererRef = instance;
   }
 
   private _getElementProps(): Record<string, any> {
@@ -199,6 +241,24 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
     }
   }
 
+  private _lockParentOnRemoved() {
+    this.context?.lock();
+  }
+
+  private _unlockParentOnRemoved() {
+    this.context?.unlock();
+  }
+
+  private _setTemplateManagerHooks({
+    createDXTemplates,
+    clearInstantiationModels,
+    updateTemplates,
+  }: InitArgument) {
+    this._createDXTemplates = createDXTemplates;
+    this._clearInstantiationModels = clearInstantiationModels;
+    this._updateTemplates = updateTemplates;
+  }
+
   protected renderChildren(): React.ReactNode {
     // @ts-expect-error TS2339
     const { children } = this.props;
@@ -223,7 +283,6 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
   }
 
   protected renderPortal(): React.ReactNode {
-    // @ts-expect-error TS2322
     return this.portalContainer && createPortal(
       this.renderChildren(),
       this.portalContainer,
@@ -238,9 +297,8 @@ abstract class ComponentBase<P extends IHtmlOptions> extends React.PureComponent
         'div',
         this._getElementProps(),
         this.renderContent(),
-        React.createElement(TemplatesRenderer, {
-          templatesStore: this._templatesStore,
-          ref: this._setTemplatesRendererRef,
+        React.createElement(TemplateManager, {
+          init: this._setTemplateManagerHooks,
         }),
       ),
       this.isPortalComponent && this.renderPortal(),

@@ -55,13 +55,11 @@ QUnit.module('aria accessibility', {
     }
 }, () => {
     QUnit.test('aria role', function(assert) {
-        assert.equal(this.$element.attr('role'), 'tree', 'role is correct');
-    });
+        assert.strictEqual(this.$element.attr('role'), 'tree', 'role is correct');
 
-    QUnit.test('scrollable should have role treeitem attribute', function(assert) {
-        const $scrollable = this.$element.find('.' + SCROLLABLE_CLASS);
+        this.instance.option({ items: [] });
 
-        assert.equal($scrollable.attr('role'), 'treeitem', 'role is correct');
+        assert.strictEqual(this.$element.attr('role'), undefined, 'role is not set');
     });
 
     QUnit.test('aria role for items', function(assert) {
@@ -394,8 +392,8 @@ QUnit.module('markup', {
             }]
         });
 
-        const $rootNode = $treeView.find('.' + NODE_CONTAINER_CLASS + ':first-child');
-        const $icon = $rootNode.find('.' + NODE_CLASS).eq(0).children('.' + TOGGLE_ITEM_VISIBILITY_CLASS).eq(0);
+        const $rootNode = $treeView.find(`.${NODE_CONTAINER_CLASS}:first-child`);
+        const $icon = $rootNode.find(`.${ITEM_CLASS}`).eq(0).children(`.${TOGGLE_ITEM_VISIBILITY_CLASS}`).eq(0);
 
         assert.ok($icon.hasClass('dx-state-disabled'));
     });
@@ -613,18 +611,9 @@ QUnit.module('markup', {
         assert.ok($selectAll.hasClass('dx-checkbox-indeterminate'));
     });
 
-    QUnit.test('TreeView icon image should have alt attribute with item text if it specified', function(assert) {
+    QUnit.test('TreeView icon image should have alt attribute with "dxTreeView item icon" text', function(assert) {
         const $treeView = initTree({
             items: [{ text: 'Item text', icon: 'some_icon.jpg' }]
-        });
-        const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
-
-        assert.strictEqual($icon.attr('alt'), 'Item text');
-    });
-
-    QUnit.test('TreeView icon image should have alt attribute with "dxTreeView item icon" if item text is not specified', function(assert) {
-        const $treeView = initTree({
-            items: [{ icon: 'some_icon.jpg' }]
         });
         const $icon = $treeView.find(`.${ITEM_CLASS} .${ICON_CLASS}`);
 

@@ -2064,6 +2064,24 @@ QUnit.module('Keyboard keys', {
         assert.ok(!this.editingController.hasEditData(), 'grid hasn\'t unsaved data');
     });
 
+    // T1202731
+    QUnit.testInActiveWindow('Escape should bubble up when any grid action was not executed', function(assert) {
+        // arrange
+        const $container = $('#container');
+
+        setupModules(this);
+
+        this.gridView.render($container);
+        this.focusFirstCell();
+
+        const e = $.Event('keydown', { key: 'escape' });
+        $($container.find('.dx-datagrid-rowsview')).trigger(e);
+        this.clock.tick(10);
+
+        // assert
+        assert.ok(!e.isPropagationStopped(), 'propagation is not stopped');
+    });
+
     QUnit.testInActiveWindow('Editing by enter key is not worked when editing is disabled', function(assert) {
         // arrange
         const $container = $('#container');
@@ -4206,5 +4224,51 @@ QUnit.module('Keyboard keys', {
             // assert
             assert.equal($('.dx-data-row').eq(0).find('td:eq(0) textarea:focus').length, 1, 'first cell is still focused');
         });
+    });
+
+    // T1203057
+    QUnit.testInActiveWindow('Focus next cell when navigating by tab key from boolean column', function(assert) {
+        // arrange
+        this.options = {
+            editing: {
+                mode: 'row',
+                allowUpdating: true,
+                texts: {
+                    editRow: 'Edit Row'
+                }
+            },
+            commonColumnSettings: {
+                allowEditing: true
+            },
+            columns: ['name', { dataField: 'boolType', dataType: 'boolean' }, 'lastName'],
+            dataSource: {
+                asyncLoadEnabled: false,
+                store: [
+                    { name: 'Alex', lastName: 'John', boolType: false },
+                    { name: 'Dan', lastName: 'Skip', boolType: true },
+                ]
+            }
+        };
+
+        setupModules(this, { initViews: true });
+
+        const $testElement = $('#container');
+
+        this.gridView.render($testElement);
+
+        // act
+        this.focusCell(0, 0);
+        this.triggerKeyDown('tab', false, false, this.getCellElement(0, 0));
+        this.clock.tick(10);
+
+        // assert
+        assert.ok($(this.getCellElement(0, 1)).is(':focus'), 'second column is focused');
+
+        // act
+        this.triggerKeyDown('tab', false, false, this.getCellElement(0, 1));
+        this.clock.tick(10);
+
+        // assert
+        assert.ok($(this.getCellElement(0, 2)).is(':focus'), 'third column is focused');
     });
 });

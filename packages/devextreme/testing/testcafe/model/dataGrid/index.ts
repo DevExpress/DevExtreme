@@ -12,7 +12,7 @@ import DataCell from './data/cell';
 import Headers from './headers';
 import ContextMenu from '../contextMenu';
 
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import { Overlay } from './overlay';
 // eslint-disable-next-line import/no-cycle
 import MasterRow from './masterRow';
@@ -34,6 +34,7 @@ export const CLASS = {
   filterPanel: 'filter-panel',
   filterRow: 'filter-row',
   filterRangeOverlay: 'filter-range-overlay',
+  focusOverlay: 'focus-overlay',
   pager: 'pager',
   editFormRow: 'edit-form',
   button: 'dx-button',
@@ -49,6 +50,7 @@ export const CLASS = {
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
+  loadPanelWrapper: 'dx-loadpanel-wrapper',
   revertTooltip: 'revert-tooltip',
   invalidMessage: 'invalid-message',
 
@@ -182,6 +184,10 @@ export default class DataGrid extends Widget {
     return this.body.find(`.${this.addWidgetPrefix(CLASS.filterRangeOverlay)}`);
   }
 
+  getFocusOverlay(): Selector {
+    return this.body.find(`.${this.addWidgetPrefix(CLASS.focusOverlay)}`);
+  }
+
   getFilterEditor<T>(
     columnIndex: number,
     EditorType: new(mainElement: Selector) => T,
@@ -195,6 +201,10 @@ export default class DataGrid extends Widget {
 
   getOverlay(): Overlay {
     return new Overlay(this.element.find(`.${CLASS.overlayWrapper}`));
+  }
+
+  getLoadPanel(): Overlay {
+    return new Overlay(this.element.find(`.${CLASS.loadPanelWrapper}`));
   }
 
   getConfirmDeletionButton(): Selector {
@@ -356,6 +366,15 @@ export default class DataGrid extends Widget {
 
   getColumnChooserButton(): Selector {
     return this.element.find(`.${this.addWidgetPrefix(CLASS.columnChooserButton)}`);
+  }
+
+  apiClearFilter(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).clearFilter(),
+      { dependencies: { getInstance } },
+    )();
   }
 
   apiColumnOption(id: string, name: string, value: any = 'empty'): Promise<any> {
@@ -539,6 +558,26 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiBeginCustomLoading(messageText: string): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        (getInstance() as DataGridInstance).beginCustomLoading(messageText);
+      },
+      { dependencies: { getInstance, messageText } },
+    )();
+  }
+
+  apiRefresh(): Promise<void> {
+    const { getInstance } = this;
+    return ClientFunction(
+      () => {
+        (getInstance() as DataGridInstance).refresh().catch(() => {});
+      },
+      { dependencies: { getInstance } },
+    )();
+  }
+
   apiToggleKeyboardNavigation(value: boolean): Promise<void> {
     const { getInstance } = this;
 
@@ -548,6 +587,19 @@ export default class DataGrid extends Widget {
         dependencies: {
           getInstance,
           value,
+        },
+      },
+    )();
+  }
+
+  apiPush(values: any[]): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as DataGridInstance).getDataSource().store().push(values),
+      {
+        dependencies: {
+          getInstance, values,
         },
       },
     )();
@@ -591,6 +643,25 @@ export default class DataGrid extends Widget {
         },
       },
     )();
+  }
+
+  moveColumnChooserColumn(columnIndex: number, x: number, y: number, isStart = false):
+  Promise<void> {
+    const columnChooser = this.getColumnChooser();
+    const column = columnChooser.getColumn(columnIndex);
+
+    return ClientFunction(
+      (cell) => {
+        const $column = $(cell());
+
+        moveElement($column, x, y, isStart);
+      },
+      {
+        dependencies: {
+          column, x, y, isStart, moveElement,
+        },
+      },
+    )(column);
   }
 
   hide(): Promise<void> {

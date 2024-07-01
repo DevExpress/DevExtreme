@@ -1,7 +1,10 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
+import { Themes } from '../../helpers/themes';
+import { changeTheme } from '../../helpers/changeTheme';
+import { getData } from './helpers/generateDataSourceData';
 
 fixture.disablePageReloads`Header Panel`
   .page(url(__dirname, '../container.html'));
@@ -74,5 +77,77 @@ test('Drop-down window should be positioned correctly after resizing the toolbar
         },
       },
     ],
+  },
+}));
+
+[
+  Themes.genericLight,
+  Themes.genericDark,
+  Themes.materialBlue,
+  Themes.materialBlueDark,
+  Themes.fluentBlue,
+  Themes.fluentBlueDark,
+].forEach((theme) => {
+  test(`Disabled toolbar buttons are not grayed out in Material themes (T1217416) in ${theme}`, async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const dataGrid = new DataGrid('#container');
+
+    await t
+      .expect(await takeScreenshot(`disabled-toolbar-buttons-${theme}.png`, dataGrid.element))
+      .ok()
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => {
+    await changeTheme(theme);
+
+    return createWidget('dxDataGrid', {
+      dataSource: getData(5, 3),
+      keyExpr: 'field_0',
+      showBorders: true,
+      toolbar: {
+        items: ['saveButton', 'revertButton', 'applyFilterButton'],
+      },
+      filterRow: { visible: true, applyFilter: 'onClick' },
+      editing: {
+        mode: 'batch',
+        allowUpdating: true,
+      },
+    });
+  }).after(async () => {
+    await changeTheme(Themes.genericLight);
+  });
+});
+
+test('Toolbar should render on changing visibility if visibility is false initially', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.getHeaderPanel().element.visible)
+    .notOk();
+
+  await dataGrid.option('toolbar.visible', true);
+
+  await t
+    .expect(dataGrid.getHeaderPanel().element.visible)
+    .ok()
+    .expect(dataGrid.getHeaderPanel().element.find('.dx-button').textContent)
+    .eql('myTestButton');
+
+  await dataGrid.option('toolbar.visible', false);
+
+  await t
+    .expect(dataGrid.getHeaderPanel().element.visible)
+    .notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  showBorders: true,
+  toolbar: {
+    items: [{
+      location: 'before',
+      widget: 'dxButton',
+      options: {
+        text: 'myTestButton',
+      },
+    }],
+    visible: false,
   },
 }));

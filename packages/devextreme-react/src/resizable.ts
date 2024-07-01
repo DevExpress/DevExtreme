@@ -1,3 +1,4 @@
+"use client"
 import dxResizable, {
     Properties
 } from "devextreme/ui/resizable";

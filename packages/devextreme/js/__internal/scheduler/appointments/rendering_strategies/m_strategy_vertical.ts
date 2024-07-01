@@ -2,9 +2,8 @@ import dateUtils from '@js/core/utils/date';
 import { extend } from '@js/core/utils/extend';
 import { roundFloatPart } from '@js/core/utils/math';
 import { isNumeric } from '@js/core/utils/type';
-import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
-import getSkippedHoursInRange from '@js/renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+import { getAppointmentTakesAllDay, getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
 
 import { createAppointmentAdapter } from '../../m_appointment_adapter';
 import { ExpressionUtils } from '../../m_expression_utils';
@@ -56,13 +55,14 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     return this._customizeCoordinates(coordinates, config.height, config.appointmentCountPerCell, config.offset);
   }
 
-  _getItemPosition(appointment) {
-    const allDay = this.isAllDay(appointment);
+  _getItemPosition(initialAppointment) {
+    const allDay = this.isAllDay(initialAppointment);
 
     if (allDay) {
-      return super._getItemPosition(appointment);
+      return super._getItemPosition(initialAppointment);
     }
 
+    const appointment = super.shiftAppointmentByViewOffset(initialAppointment);
     const adapter = createAppointmentAdapter(appointment, this.dataAccessors, this.timeZoneCalculator);
     const isRecurring = !!adapter.recurrenceRule;
 
@@ -210,10 +210,11 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
     const hasTailPart = this.options.endViewDate > appointmentSettings.info.appointment.endDate;
     let left = Math.round(appointmentSettings.left + offset);
     let tailHeight = this._getTailHeight(appointmentGeometry, appointmentSettings);
+    let { columnIndex } = appointmentSettings;
 
     while (tailHeight > 0 && left < hMax) {
       tailHeight = Math.max(minHeight, tailHeight);
-      const columnIndex = appointmentSettings.columnIndex + cellsDiff;
+      columnIndex += cellsDiff;
       const height = Math.min(tailHeight, vMax);
 
       result.push({
@@ -309,8 +310,6 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
   isAllDay(appointmentData) {
     return getAppointmentTakesAllDay(
       createAppointmentAdapter(appointmentData, this.dataAccessors, this.timeZoneCalculator),
-      this.startDayHour,
-      this.endDayHour,
       this.allDayPanelMode,
     );
   }
@@ -324,15 +323,20 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-    const { normalizedEndDate } = position.info.appointment;
+    const {
+      startDate: startDateWithTime,
+      endDate,
+      normalizedEndDate,
+    } = position.info.appointment;
+    const startDate = dateUtils.trimTime(startDateWithTime);
 
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
     const durationInHours = (normalizedEndDate.getTime() - startDate.getTime()) / toMs('hour');
 
     const skippedHours = getSkippedHoursInRange(
-      position.info.appointment.startDate,
-      position.info.appointment.endDate,
+      startDate,
+      endDate,
+      appointment.allDay,
       this.viewDataProvider,
     );
 
@@ -347,8 +351,10 @@ class VerticalRenderingStrategy extends BaseAppointmentsStrategy {
       return 0;
     }
 
-    const { startDate } = position.info.appointment;
-    const { normalizedEndDate } = position.info.appointment;
+    const {
+      startDate,
+      normalizedEndDate,
+    } = position.info.appointment;
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
     const duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
     const durationInMinutes = this._adjustDurationByDaylightDiff(duration, startDate, normalizedEndDate) / toMs('minute');

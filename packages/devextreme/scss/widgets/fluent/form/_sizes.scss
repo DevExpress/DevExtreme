@@ -12,6 +12,7 @@ $fluent-form-default-top-padding: null !default;
 $fluent-form-help-text-font-size: 12px !default;
 $fluent-form-layout-manager-horizontal-padding: null !default;
 $fluent-form-layout-manager-vertical-padding: null !default;
+$fluent-form-layout-manager-tabpanel-content-padding: null !default;
 
 $fluent-form-label-font-size: $fluent-base-font-size !default;
 $fluent-form-label-icon-size: $fluent-base-icon-size !default;
@@ -25,6 +26,7 @@ $fluent-form-label-icon-size: $fluent-base-icon-size !default;
   $fluent-form-top-label-bottom-margin: 4px !default;
   $fluent-form-layout-manager-horizontal-padding: 12px !default;
   $fluent-form-layout-manager-vertical-padding: 8px !default;
+  $fluent-form-layout-manager-tabpanel-content-padding: 24px !default;
 }
 
 @else if $size == "compact" {
@@ -36,4 +38,5 @@ $fluent-form-label-icon-size: $fluent-base-icon-size !default;
   $fluent-form-top-label-bottom-margin: 2px !default;
   $fluent-form-layout-manager-horizontal-padding: 8px !default;
   $fluent-form-layout-manager-vertical-padding: 6px !default;
+  $fluent-form-layout-manager-tabpanel-content-padding: 16px !default;
 }

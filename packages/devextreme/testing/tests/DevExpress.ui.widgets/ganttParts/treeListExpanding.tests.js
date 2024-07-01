@@ -242,5 +242,54 @@ QUnit.module('Expand state T1105252', moduleConfig, () => {
         assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 4);
         assert.equal(this.instance._treeList.getVisibleRows().length, 4);
     });
+
+    test('check state after insert subtask in auto parent mode (T1219427)', function(assert) {
+        const my_tasks = [
+            { 'id': 1, 'parentId': -1, 'title': 'Software Development', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-07-04T12:00:00.000Z'), 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-21T09:00:00.000Z'), 'progress': 100 },
+        ];
+        const options = {
+            tasks: { dataSource: my_tasks },
+            rootValue: -1,
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true }
+        };
+
+        this.createInstance(options);
+        this.clock.tick(10);
+        const expandedElement = this.$element.find(Consts.TREELIST_EXPANDED_SELECTOR).first();
+        expandedElement.trigger('dxclick');
+        this.clock.tick(10);
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 1);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 1);
+
+        this.instance.insertTask({
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New Task',
+            progress: 0,
+            parentId: -1
+        });
+        this.clock.tick(10);
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 2);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 2);
+        const keys = this.instance.getVisibleTaskKeys();
+        const insertedTaskKey = keys[keys.length - 1];
+
+        this.instance.insertTask({
+            start: new Date('2019-02-21'),
+            end: new Date('2019-02-22'),
+            title: 'New Task',
+            progress: 0,
+            parentId: insertedTaskKey
+        });
+        this.clock.tick(10);
+
+        assert.equal(this.$element.find(Consts.TASK_WRAPPER_SELECTOR).length, 3);
+        assert.equal(this.instance._treeList.getVisibleRows().length, 3);
+    });
 });
 

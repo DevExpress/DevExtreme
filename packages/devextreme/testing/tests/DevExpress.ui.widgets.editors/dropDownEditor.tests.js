@@ -16,6 +16,8 @@ import dxButton from 'ui/button';
 import domAdapter from 'core/dom_adapter';
 
 import 'generic_light.css!';
+import 'ui/validator';
+
 QUnit.testStart(function() {
     const markup =
         `<div id="dropDownEditorLazy"></div>
@@ -29,8 +31,10 @@ const DROP_DOWN_EDITOR_BUTTON_CLASS = 'dx-dropdowneditor-button';
 const DROP_DOWN_EDITOR_OVERLAY = 'dx-dropdowneditor-overlay';
 const DROP_DOWN_EDITOR_ACTIVE = 'dx-dropdowneditor-active';
 const TEXT_EDITOR_INPUT_CLASS = 'dx-texteditor-input';
+const TEXT_EDITOR_LABEL_CLASS = 'dx-texteditor-label';
 const TEXT_EDITOR_BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER = 'dx-dropdowneditor-field-template-wrapper';
+const DROP_DOWN_EDITOR_INPUT_WRAPPER = 'dx-dropdowneditor-input-wrapper';
 const POPUP_CONTENT = 'dx-popup-content';
 const TAB_KEY_CODE = 'Tab';
 const ESC_KEY_CODE = 'Escape';
@@ -241,7 +245,7 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
     QUnit.test('correct buttons order after option change', function(assert) {
         this.dropDownEditor.option('showClearButton', true);
 
-        const $buttonsContainer = this.$dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttonsContainer = this.$dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`);
         const $buttons = $buttonsContainer.children();
 
         assert.equal($buttons.length, 2, 'clear button and drop button were rendered');
@@ -364,6 +368,18 @@ QUnit.module('dxDropDownEditor', testEnvironment, () => {
         assert.ok($field.hasClass('dx-texteditor-input'), 'field has class dx-texteditor-input');
         assert.ok($field.hasClass('dx-texteditor-input'), 'field has class dx-texteditor-input');
     });
+
+    QUnit.test('Popup should be closed on root parent scroll (T1195950)', function(assert) {
+        const $parent = $('#dropDownEditorLazy');
+        const $element = $('<div>').appendTo($parent);
+        const instance = $element.dxDropDownEditor({
+            opened: true,
+        }).dxDropDownEditor('instance');
+
+        $parent.trigger('scroll');
+
+        assert.strictEqual(instance.option('opened'), false, 'popup is hidden');
+    });
 });
 
 QUnit.module('focus policy', () => {
@@ -431,7 +447,7 @@ QUnit.module('focus policy', () => {
 
         assert.ok($dropDownEditor.find('.dx-texteditor').hasClass('dx-state-focused'), 'Widget is focused');
 
-        const $buttonsContainer = $dropDownEditor.find('.dx-texteditor-buttons-container');
+        const $buttonsContainer = $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`);
         const $buttons = $buttonsContainer.children();
 
         $buttons.eq(1).trigger('dxclick');
@@ -1075,7 +1091,7 @@ QUnit.module('Templates', () => {
         });
         const dropDownEditor = $dropDownEditor.dxDropDownEditor('instance');
 
-        $dropDownEditor.find('.dx-texteditor-buttons-container').remove();
+        $dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).remove();
 
         try {
             dropDownEditor.option('value', 2);
@@ -1085,30 +1101,149 @@ QUnit.module('Templates', () => {
         }
     });
 
-    QUnit.testInActiveWindow('widget should detach focus events before fieldTemplate rerender', function(assert) {
-        const focusOutSpy = sinon.stub();
-        const $dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
-            dataSource: [1, 2],
-            fieldTemplate(value, container) {
-                const $textBoxContainer = $('<div>').appendTo(container);
-                $('<div>').dxTextBox().appendTo($textBoxContainer);
 
-                $($textBoxContainer).one('dxremove', () => {
-                    $textBoxContainer.detach();
+    QUnit.module('fieldTemplate rerendering', {
+        beforeEach: function() {
+            const init = (options = {}) => {
+                this.$dropDownEditor = $('#dropDownEditorLazy').dxDropDownEditor({
+                    acceptCustomValue: true,
+                    fieldTemplate(value, fieldElement) {
+                        const $textBox = $('<div>').dxTextBox({ value });
+                        fieldElement.append($textBox);
+                        return $textBox;
+                    },
+                    buttons: [{
+                        name: 'after',
+                    }],
+                    ...options
+                });
+                this.instance = this.$dropDownEditor.dxDropDownEditor('instance');
+                this.$input = this.$dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                this.keyboard = keyboardMock(this.$input);
+                this.$buttonsContainer = this.$dropDownEditor.find(`.${TEXT_EDITOR_BUTTONS_CONTAINER_CLASS}`).eq(1);
+            };
+
+            init();
+            this.reinit = (options) => {
+                this.instance.dispose();
+                init(options);
+            };
+            this.triggerFieldTemplateRendering = () => {
+                this.keyboard
+                    .type('123')
+                    .change();
+            };
+        }
+    }, () => {
+        QUnit.module('should not recreate', {
+            beforeEach: function() {
+                this.mutationCallbacks = [];
+
+                this.observer = new MutationObserver((mutationsList) => {
+                    this.mutationCallbacks.forEach(callback => {
+                        callback(mutationsList);
+                    });
                 });
             },
-            onFocusOut: focusOutSpy,
-            opened: true
+            afterEach: function() {
+                this.observer.disconnect();
+            }
+        }, () => {
+            QUnit.test('buttons container (T1225549)', function(assert) {
+                assert.expect(0);
+
+                this.mutationCallbacks.push((mutationsList) => {
+                    mutationsList.forEach(mutation => {
+                        if(mutation.type === 'childList') {
+                            mutation.removedNodes.forEach(node => {
+                                if(node === this.$buttonsContainer.get(0)) {
+                                    assert.ok(false, 'buttons container should not be reattached on field template rendering');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                this.observer.observe(this.$buttonsContainer.parent().get(0), { childList: true });
+
+                this.triggerFieldTemplateRendering();
+            });
+
+            QUnit.test('template wrapper, only empty it', function(assert) {
+                assert.expect(0);
+
+                const $templateWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER}`).eq(0);
+                this.mutationCallbacks.push((mutationsList) => {
+                    mutationsList.forEach(mutation => {
+                        if(mutation.type === 'childList') {
+                            mutation.removedNodes.forEach(node => {
+                                if(node === $templateWrapper.get(0)) {
+                                    assert.ok(false, 'template wrapper should not be recreated');
+                                }
+                            });
+                        }
+                    });
+                });
+
+                this.observer.observe($templateWrapper.parent().get(0), { childList: true });
+
+                this.triggerFieldTemplateRendering();
+            });
         });
 
-        const $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
-        const keyboard = keyboardMock($input);
+        QUnit.test('should keep elements correct order when custom buttons are used', function(assert) {
+            this.reinit({
+                buttons: [{
+                    name: 'before',
+                    location: 'before'
+                }, {
+                    name: 'after'
+                }]
+            });
 
-        $input.focus();
-        keyboard.press('down');
-        keyboard.press('enter');
+            this.triggerFieldTemplateRendering();
 
-        assert.strictEqual(focusOutSpy.callCount, 0, 'there\'s no focus outs from deleted field container');
+            const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
+            const $children = $inputWrapper.children();
+            assert.strictEqual($children.length, 3, 'element count is correct');
+            assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
+            assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
+            assert.ok($children.eq(2).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+        });
+
+        QUnit.test('should keep elements correct order when hidden input is used', function(assert) {
+            this.reinit({
+                useHiddenSubmitElement: true,
+                buttons: [{
+                    name: 'before',
+                    location: 'before'
+                }, {
+                    name: 'after'
+                }]
+            });
+
+            this.triggerFieldTemplateRendering();
+
+            const $inputWrapper = this.$dropDownEditor.find(`.${DROP_DOWN_EDITOR_INPUT_WRAPPER}`).eq(0);
+            const $children = $inputWrapper.children();
+            assert.strictEqual($children.length, 4, 'element count is correct');
+            assert.ok($children.eq(0).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'before buttons container');
+            assert.ok($children.eq(1).hasClass(DROP_DOWN_EDITOR_FIELD_TEMPLATE_WRAPPER), 'template wrapper');
+            assert.strictEqual($children.get(2).tagName, 'INPUT', 'hidden input');
+            assert.ok($children.eq(3).hasClass(TEXT_EDITOR_BUTTONS_CONTAINER_CLASS), 'after buttons container');
+        });
+
+        QUnit.testInActiveWindow('should not trigger focusout event (T751314)', function(assert) {
+            const focusOutStub = sinon.stub();
+            this.reinit({
+                onFocusOut: focusOutStub,
+            });
+
+            this.$input.trigger('focus');
+            this.triggerFieldTemplateRendering();
+
+            assert.strictEqual(focusOutStub.callCount, 0, 'there is no focusout from deleted field container');
+        });
     });
 
     QUnit.test('fieldTemplate item element should have 100% width (T826516)', function(assert) {
@@ -1244,6 +1379,34 @@ QUnit.module('Templates', () => {
             });
         });
     }
+
+    QUnit.test('component with fieldTemplate should trigger _onMarkupRendered correctly (T1230696)', function(assert) {
+        const markupRenderedStub = sinon.stub();
+
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            valueChangeEvent: 'keyup',
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            _onMarkupRendered: markupRenderedStub
+        });
+
+        assert.strictEqual(markupRenderedStub.callCount, 2, 'initial render should call _onMarkupRendered twice');
+        markupRenderedStub.reset();
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .type('a');
+
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after typing');
+        markupRenderedStub.reset();
+
+        keyboardMock($dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`))
+            .caret(1)
+            .press('backspace');
+
+        assert.strictEqual(markupRenderedStub.callCount, 1, '_onMarkupRendered should be called once after deleting');
+    });
 });
 
 QUnit.module('options', () => {
@@ -2091,6 +2254,222 @@ QUnit.module('aria accessibility', () => {
         instance.close();
 
         assert.strictEqual($dropDownEditor.attr('aria-owns'), undefined, 'owns does not exist');
+    });
+
+    [
+        { attribute: 'aria-required', value: 'true' },
+        { attribute: 'aria-haspopup', value: 'true' },
+        { attribute: 'aria-autocomplete', value: 'list' },
+    ].forEach(({ attribute, value }) => {
+        QUnit.test(`component with fieldTemplate should have proper ${attribute} attribute after interaction (T1230696, T1230971)`, function(assert) {
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: (data) => {
+                    return $('<div>').dxTextBox({ value: data });
+                },
+                valueChangeEvent: 'keyup',
+            }).dxValidator({
+                validationRules: [ { type: 'required' } ]
+            });
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr(attribute), value, `initial render should have ${attribute} attribute set to ${value}`);
+
+            keyboardMock($input)
+                .type('a');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after typing`);
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.strictEqual($input.attr(attribute), value, `${attribute} attribute should remain ${value} after deleting`);
+        });
+    });
+
+    QUnit.module('aria-invalid', {}, () => {
+        [
+            { valueRequired: true, emptyValue: 'true', nonEmptyValue: undefined },
+            { valueRequired: false, emptyValue: undefined, nonEmptyValue: undefined }
+        ].forEach(({ valueRequired, emptyValue, nonEmptyValue }) => {
+            QUnit.test(`component with fieldTemplate should have proper aria-invalid attribute when validator is used and value is ${!valueRequired ? 'not' : ''} required (T1230706)`, function(assert) {
+                const clock = sinon.useFakeTimers();
+
+                const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                    dataSource: ['one', 'two', 'three'],
+                    searchEnabled: true,
+                    fieldTemplate: 'field',
+                    templatesRenderAsynchronously: true,
+                    integrationOptions: {
+                        templates: {
+                            field: {
+                                render: function({ model, container, onRendered }) {
+                                    const $input = $('<div>').appendTo(container);
+
+                                    setTimeout(() => {
+                                        $input.dxTextBox({ value: model });
+                                        onRendered();
+                                    }, 0);
+                                }
+                            }
+                        }
+                    },
+                    valueChangeEvent: 'keyup',
+                }).dxValidator({
+                    validationRules: valueRequired ? [{ type: 'required', message: 'required' }] : [],
+                });
+
+                clock.tick(500);
+
+                let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `initial render should set aria-invalid to ${nonEmptyValue}`);
+
+                keyboardMock($input)
+                    .type('a');
+
+                clock.tick(500);
+
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.equal($input.val(), 'a', 'input value is not empty');
+                assert.strictEqual($input.attr('aria-invalid'), nonEmptyValue, `input should set 'aria-invalid' to ${nonEmptyValue} after typing`);
+
+                keyboardMock($input)
+                    .caret(1)
+                    .press('backspace');
+
+                clock.tick(500);
+
+                $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+                assert.equal($input.val(), '', 'input value is empty');
+                assert.strictEqual($input.attr('aria-invalid'), emptyValue, `input should set 'aria-invalid' to ${emptyValue} after deleting`);
+
+                clock.restore();
+            });
+        });
+
+        QUnit.test('component with fieldTemplate should not have aria-invalid attribute when validator is not used (T1230706)', function(assert) {
+            const clock = sinon.useFakeTimers();
+
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                searchEnabled: true,
+                fieldTemplate: 'field',
+                templatesRenderAsynchronously: true,
+                integrationOptions: {
+                    templates: {
+                        field: {
+                            render: function({ model, container, onRendered }) {
+                                const $input = $('<div>').appendTo(container);
+
+                                setTimeout(() => {
+                                    $input.dxTextBox({ value: model });
+                                    onRendered();
+                                }, 0);
+                            }
+                        }
+                    }
+                },
+                valueChangeEvent: 'keyup',
+            });
+
+            clock.tick(500);
+
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'initial render should set aria-invalid to undefined');
+
+            keyboardMock($input)
+                .type('a');
+
+            clock.tick(500);
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.equal($input.val(), 'a', 'input value is not empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after typing');
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            clock.tick(500);
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            assert.equal($input.val(), '', 'input value is empty');
+            assert.strictEqual($input.attr('aria-invalid'), undefined, 'input should set \'aria-invalid\' to undefined after deleting');
+
+            clock.restore();
+        });
+    });
+
+    QUnit.test('component with fieldTemplate should have proper role attribute after interaction (T1230635)', function(assert) {
+        const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+            dataSource: ['one', 'two', 'three'],
+            fieldTemplate: (data) => {
+                return $('<div>').dxTextBox({ value: data });
+            },
+            valueChangeEvent: 'keyup',
+        });
+        let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'initial render should have role attribute set to combobox');
+
+        keyboardMock($input)
+            .type('a');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should retain to combobox after typing');
+
+        keyboardMock($input)
+            .caret(1)
+            .press('backspace');
+
+        $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('role'), 'combobox', 'role attribute should remain assigned to the combobox after deleting');
+    });
+
+    [
+        { label: 'Label' },
+        { label: 'Label', inputAttr: { 'aria-label': 'Label' } },
+        { label: undefined },
+        { label: '' },
+    ].forEach((options) => {
+        QUnit.test(`component with fieldTemplate should have proper aria-labelledby attribute, options: ${JSON.stringify(options)} (T1230635)`, function(assert) {
+            const $dropDownEditor = $('#dropDownEditorSecond').dxDropDownEditor({
+                dataSource: ['one', 'two', 'three'],
+                fieldTemplate: (data) => {
+                    return $('<div>').dxTextBox({ value: data });
+                },
+                valueChangeEvent: 'keyup',
+                ...options
+            });
+            let $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+            const $label = $dropDownEditor.find(`.${TEXT_EDITOR_LABEL_CLASS}`);
+
+            const expectedAriaLabeledByValue = !options.inputAttr && options.label ? $label.attr('id') : undefined;
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after initialization');
+
+            keyboardMock($input)
+                .type('a');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after typing');
+
+            keyboardMock($input)
+                .caret(1)
+                .press('backspace');
+
+            $input = $dropDownEditor.find(`.${TEXT_EDITOR_INPUT_CLASS}`);
+
+            assert.strictEqual($input.attr('aria-labelledby'), expectedAriaLabeledByValue, 'aria-labelledby attribute value after deleting');
+        });
     });
 
     QUnit.module('aria-controls', {}, () => {

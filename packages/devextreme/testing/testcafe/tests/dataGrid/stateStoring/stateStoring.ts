@@ -2,7 +2,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import { getData } from '../helpers/generateDataSourceData';
 import { makeRowsViewTemplatesAsync } from '../helpers/asyncTemplates';

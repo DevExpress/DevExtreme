@@ -86,9 +86,9 @@ class FileManagerFolderChooserDialog extends FileManagerDialogBase {
         super._onPopupShown();
     }
 
-    _onPopupHidden() {
+    _onPopupHiding() {
         this._toggleUnavailableLocationsDisabled(false);
-        super._onPopupHidden();
+        super._onPopupHiding();
     }
 
     _toggleUnavailableLocationsDisabled(isDisabled) {

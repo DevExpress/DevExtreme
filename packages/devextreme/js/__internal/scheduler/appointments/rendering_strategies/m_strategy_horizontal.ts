@@ -1,5 +1,5 @@
 import dateUtils from '@js/core/utils/date';
-import getSkippedHoursInRange from '@js/renovation/ui/scheduler/view_model/appointments/utils/getSkippedHoursInRange';
+import { getSkippedHoursInRange } from '@ts/scheduler/r1/utils/index';
 
 import { ExpressionUtils } from '../../m_expression_utils';
 import BaseAppointmentsStrategy from './m_strategy_base';
@@ -18,9 +18,11 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
   calculateAppointmentWidth(appointment, position) {
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
     const allDay = ExpressionUtils.getField(this.dataAccessors, 'allDay', appointment);
-    const { startDate } = position.info.appointment;
-    const { endDate } = position.info.appointment;
-    const { normalizedEndDate } = position.info.appointment;
+    const {
+      startDate,
+      endDate,
+      normalizedEndDate,
+    } = position.info.appointment;
 
     let duration = this.getAppointmentDurationInMs(startDate, normalizedEndDate, allDay);
 
@@ -30,6 +32,7 @@ class HorizontalRenderingStrategy extends BaseAppointmentsStrategy {
     const skippedHours = getSkippedHoursInRange(
       startDate,
       endDate,
+      appointment.allDay,
       this.viewDataProvider,
     );
     const durationInCells = (duration - skippedHours * toMs('hour')) / cellDuration;

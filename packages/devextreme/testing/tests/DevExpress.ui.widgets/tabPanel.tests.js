@@ -42,6 +42,7 @@ const DISABLED_FOCUSED_TAB_CLASS = 'dx-disabled-focused-tab';
 const FOCUSED_DISABLED_NEXT_TAB_CLASS = 'dx-focused-disabled-next-tab';
 const FOCUSED_DISABLED_PREV_TAB_CLASS = 'dx-focused-disabled-prev-tab';
 const FOCUS_STATE_CLASS = 'dx-state-focused';
+const TABPANEL_CONTAINER_CLASS = 'dx-tabpanel-container';
 
 const TABPANEL_TABS_POSITION_CLASS = {
     top: 'dx-tabpanel-tabs-position-top',
@@ -60,6 +61,20 @@ const TABS_POSITION = {
 const TABS_ORIENTATION = {
     horizontal: 'horizontal',
     vertical: 'vertical',
+};
+
+const TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION = {
+    top: 'dx-tab-indicator-position-bottom',
+    right: 'dx-tab-indicator-position-left',
+    bottom: 'dx-tab-indicator-position-top',
+    left: 'dx-tab-indicator-position-right',
+};
+
+const TABS_INDICATOR_POSITION_CLASS = {
+    top: 'dx-tab-indicator-position-top',
+    right: 'dx-tab-indicator-position-right',
+    bottom: 'dx-tab-indicator-position-bottom',
+    left: 'dx-tab-indicator-position-left',
 };
 
 const toSelector = cssClass => {
@@ -85,8 +100,8 @@ QUnit.module('rendering', {
         const $contents = $tabPanel.find('.dx-multiview-item-content');
 
         assert.equal($tabTexts.length, 2, 'two tabs are rendered');
-        assert.equal($tabTexts.eq(0).text(), 'Test1', 'first tab text');
-        assert.equal($tabTexts.eq(0).text(), 'Test1', 'secon tab text');
+        assert.equal($tabTexts.eq(0).text(), 'Test1Test1', 'first tab text');
+        assert.equal($tabTexts.eq(1).text(), 'Test2Test2', 'secon tab text');
 
         assert.equal($contents.length, 1, 'one content is rendered');
         assert.equal($contents.eq(0).text(), 'Test1', 'first item content is rendered');
@@ -142,6 +157,32 @@ QUnit.module('rendering', {
                 ? iconRect.right - textRect.right - iconRect.width
                 : textRect.left - iconRect.left - iconRect.width;
             assert.strictEqual(horizontalMargin, 8, `correct horizontal alignment of icon ${JSON.stringify(iconRect)} and text ${JSON.stringify(textRect)}`);
+        });
+    });
+
+    ['top', 'right', 'left', 'bottom'].forEach(tabsPosition => {
+        QUnit.test(`TabPanel container has correct height when tabsPosition=${tabsPosition}`, function(assert) {
+            const items = [
+                {
+                    title: 1,
+                    text: 'Mariya Elizabeth Thomas Grace Sophia Rose Alexandra Victoria Isabella Natalie Olivia Emily Jennifer Margaret Stephanie',
+                },
+            ];
+
+            const $tabPanel = $('<div>').appendTo('#qunit-fixture').dxTabPanel({
+                items,
+                width: 100,
+                height: 100,
+                tabsPosition,
+            });
+
+            const $tabPanelContainer = $tabPanel.find(`.${TABPANEL_CONTAINER_CLASS}`);
+
+            if(tabsPosition === 'top' || tabsPosition === 'bottom') {
+                assert.strictEqual($tabPanelContainer.get(0).clientHeight, 62);
+            } else {
+                assert.strictEqual($tabPanelContainer.get(0).clientWidth, 72);
+            }
         });
     });
 });
@@ -606,10 +647,10 @@ QUnit.module('keyboard navigation', {
 
         const multiViewFocusedIndex = $(this.instance.option('focusedElement')).index();
 
-        assert.equal(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.equal(isRenderer(this.tabs.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.equal(multiViewFocusedIndex, 1, 'second multiView element has been focused');
-        assert.equal(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
+        assert.strictEqual(isRenderer(this.instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
+        assert.strictEqual(isRenderer(this.tabs.option('focusedElement')), false, 'focusedElement is correct');
+        assert.strictEqual(multiViewFocusedIndex, 1, 'second multiView element has been focused');
+        assert.strictEqual(multiViewFocusedIndex, $(this.tabs.option('focusedElement')).index(), 'tabs focused element is equal multiView focused element');
     });
 
     QUnit.test('click on available tab removed specific tab classes if previous item is disabled', function(assert) {
@@ -666,7 +707,6 @@ QUnit.module('keyboard navigation', {
         registerKeyHandlerTestHelper.runTests({ createWidget: createWidget, keyPressTargetElement: (widget) => widget._tabs.$element().eq(0), checkInitialize: false, testNamePrefix: 'Tabs: ' });
     }
 });
-
 
 QUnit.module('Disabled items', {
     beforeEach() {
@@ -732,7 +772,6 @@ QUnit.module('Disabled items', {
     });
 });
 
-
 QUnit.module('aria accessibility', () => {
     QUnit.test('active tab should have aria-controls attribute pointing to active multiview item', function(assert) {
         const $element = $('#tabPanel').dxTabPanel({
@@ -773,5 +812,57 @@ QUnit.module('dataSource integration', () => {
         });
 
         assert.equal(dataSourceLoadCalled, 1, 'dataSource load called once');
+    });
+});
+
+QUnit.module('Tabs Indicator position', () => {
+    ['top', 'right', 'bottom', 'left'].forEach(tabsPosition => {
+        QUnit.test(`The tabs element must have the correct indicator position class when tabsPosition=${tabsPosition}`, function(assert) {
+            const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3], tabsPosition });
+            const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+
+            assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION[tabsPosition]));
+        });
+    });
+
+    QUnit.test('The tabs element must have the correct indicator position class when tabsPosition was changed', function(assert) {
+        const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
+        const tabPanel = $tabPanel.dxTabPanel('instance');
+        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
+
+        tabPanel.option({ tabsPosition: 'left' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+
+        tabPanel.option({ tabsPosition: 'bottom' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['left']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+
+        tabPanel.option({ tabsPosition: 'right' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['bottom']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+
+        tabPanel.option({ tabsPosition: 'top' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['right']));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS_BY_TABS_POSITION['top']));
+    });
+
+    QUnit.test('The tabs element must have the correct indicator position class when _tabsIndicatorPosition was changed', function(assert) {
+        const $tabPanel = $('#tabPanel').dxTabPanel({ items: [1, 2, 3] });
+        const tabPanel = $tabPanel.dxTabPanel('instance');
+        const $tabs = $tabPanel.find(toSelector(TABS_CLASS));
+
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+
+        tabPanel.option({ _tabsIndicatorPosition: 'left' });
+
+        assert.notOk($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.bottom));
+        assert.ok($tabs.hasClass(TABS_INDICATOR_POSITION_CLASS.left));
     });
 });

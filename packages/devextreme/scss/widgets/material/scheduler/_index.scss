@@ -125,6 +125,18 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
   }
 }
 
+.dx-scheduler-appointment-recurrence {
+  .dx-scheduler-appointment-content {
+    padding: baseScheduler.$scheduler-appointment-recurrence-content-padding;
+  }
+}
+
+.dx-rtl .dx-scheduler-appointment-recurrence {
+  .dx-scheduler-appointment-content {
+    padding: baseScheduler.$scheduler-appointment-recurrence-content-padding-rtl;
+  }
+}
+
 .dx-scheduler-appointment-content { // stylelint-disable-line no-duplicate-selectors
   padding: $material-scheduler-appointment-content-padding;
 }
@@ -288,6 +300,10 @@ $material-scheduler-agenda-time-panel-cell-padding: 8px;
 
   .dx-scheduler-header-panel {
     border-bottom: none;
+  }
+
+  .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+    min-height: 600px;
   }
 
   .dx-scheduler-date-table-cell {

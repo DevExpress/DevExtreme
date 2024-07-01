@@ -457,6 +457,13 @@ declare module DevExpress.viz {
     export type dxChartSeriesTypesCommonSeriesPoint = DevExpress.common.charts.SeriesPoint;
     /** @deprecated Use DevExpress.common.charts.SeriesLabel instead */
     export type dxChartSeriesTypesCommonSeriesLabel = DevExpress.common.charts.SeriesLabel;
+    /** @deprecated Use DevExpress.common.charts.LegendItem instead */
+    export type BaseChartLegendItem = DevExpress.common.charts.LegendItem;
+}
+
+declare namespace DevExpress.data {
+    /** @deprecated Use DevExpress.data.Store.Options instead */
+    export type StoreOptions = Store.Options;
 }
 
 // v23.1
@@ -758,4 +765,55 @@ declare module DevExpress.ui.dxDataGrid {
     /** @deprecated Use DevExpress.ui.dxDataGrid.EditingTexts instead */
     export type EditingTextsBase = DevExpress.ui.dxDataGrid.EditingTexts;
 
+}
+
+// v23.2
+
+declare module DevExpress.ui {
+    /** @deprecated DevExpress.ui.dxDiagram.CustomCommand instead */
+    export type dxDiagramCustomCommand = DevExpress.ui.dxDiagram.CustomCommand;
+}
+
+declare module DevExpress.ui.dxDiagram {
+    /** @deprecated Use DevExpress.ui.dxDiagram.AutoZoomMode instead */
+    export type DiagramAutoZoomMode = DevExpress.ui.dxDiagram.AutoZoomMode;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.Command instead */
+    export type DiagramCommand = DevExpress.ui.dxDiagram.Command;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ConnectorLineEnd instead */
+    export type DiagramConnectorLineEnd = DevExpress.ui.dxDiagram.ConnectorLineEnd;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ConnectorLineType instead */
+    export type DiagramConnectorLineType = DevExpress.ui.dxDiagram.ConnectorLineType;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ConnectorPosition instead */
+    export type DiagramConnectorPosition = DevExpress.ui.dxDiagram.ConnectorPosition;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.DataLayoutType instead */
+    export type DiagramDataLayoutType = DevExpress.ui.dxDiagram.DataLayoutType;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ItemType instead */
+    export type DiagramItemType = DevExpress.ui.dxDiagram.ItemType;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ModelOperation instead */
+    export type DiagramModelOperation = DevExpress.ui.dxDiagram.ModelOperation;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.PanelVisibility instead */
+    export type DiagramPanelVisibility = DevExpress.ui.dxDiagram.PanelVisibility;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.RequestEditOperationReason instead */
+    export type DiagramRequestEditOperationReason = DevExpress.ui.dxDiagram.RequestEditOperationReason;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ShapeCategory instead */
+    export type DiagramShapeCategory = DevExpress.ui.dxDiagram.ShapeCategory;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ShapeType instead */
+    export type DiagramShapeType = DevExpress.ui.dxDiagram.ShapeType;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.ToolboxDisplayMode instead */
+    export type DiagramToolboxDisplayMode = DevExpress.ui.dxDiagram.ToolboxDisplayMode;
+
+    /** @deprecated Use DevExpress.ui.dxDiagram.Units instead */
+    export type DiagramUnits = DevExpress.ui.dxDiagram.Units;
 }

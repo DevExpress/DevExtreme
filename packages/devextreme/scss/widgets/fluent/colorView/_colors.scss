@@ -14,7 +14,7 @@ $colorbox-palette-cell-bg: $colorbox-overlay-bg !default;
 $colorview-border-color: $base-border-color !default;
 $colorview-label-color: $base-label-color !default;
 $colorview-handle-color: $base-bg !default;
-$colorview-handle-border-color: color.change($base-inverted-bg, $alpha: 0.2) !default;
+$colorview-handle-border-color: $base-border-color !default;
 $colorbox-preview-empty-bg: null !default;
 
 

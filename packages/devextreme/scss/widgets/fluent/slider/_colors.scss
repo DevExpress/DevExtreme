@@ -6,10 +6,10 @@
 // adduse
 
 /**
-* $name 10. Slider bar background color
+* $name 10. Bar background color
 * $type color
 */
-$fluent-slider-bar-bg: $base-neutral-foreground3 !default;
+$fluent-slider-bar-bg: $base-border-color-accessible !default;
 
 /**
 * $name 20. Selected range background color
@@ -24,11 +24,10 @@ $slider-invalid-color-hover: $base-invalid-color-hover !default;
 $slider-invalid-color-focused: $base-invalid-color-selected !default;
 
 $fluent-slider-disabled-bg: $base-foreground-disabled !default;
-$fluent-slider-bar-disabled-bg: $base-neutral-background-disabled !default;
-$fluent-slider-tooltip-bg: $base-accent !default;
+$fluent-slider-bar-disabled-bg: $base-background-disabled !default;
 
 /**
 * $name 30. Slider tooltip text color
 * $type color
 */
-$fluent-slider-tooltip-color: $base-inverted-text-color !default;
+$fluent-slider-tooltip-color: $base-text-color !default;

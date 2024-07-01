@@ -141,6 +141,10 @@ $generic-scheduler-agenda-group-header-padding: $generic-scheduler-agenda-time-c
     border-left: $scheduler-first-of-month-border;
     border-top: $scheduler-first-of-month-border;
   }
+
+  .dx-scheduler-date-table-scrollable .dx-scrollable-content {
+    min-height: 300px;
+  }
 }
 
 .dx-scheduler-header {

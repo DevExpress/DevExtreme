@@ -15,7 +15,6 @@
 }
 
 .dx-accordion-item {
-  box-shadow: $accordion-item-shadow;
   transition: margin 200ms cubic-bezier(0.4, 0, 0.2, 1);
   will-change: margin, height;
 
@@ -35,6 +34,8 @@
 }
 
 .dx-accordion-item-opened {
+  margin-block: $fluent-accordion-item-opened-margin;
+
   & > .dx-accordion-item-title {
     &::before {
       content: "\f014";

@@ -165,6 +165,7 @@ $material-editor-custom-button-margin: 5px;
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-placeholder::before,
+    .dx-lookup-field,
     .dx-texteditor-input {
       padding: $material-filled-texteditor-input-padding;
     }
@@ -359,7 +360,7 @@ $material-editor-custom-button-margin: 5px;
 @include dx-editor-outlined(
   $texteditor-input-border-radius,
   $material-texteditor-label-font-size,
-  1px,
+  $material-base-border-width,
   2px,
   solid,
   $material-texteditor-label-font-size + 2,
@@ -374,6 +375,7 @@ $material-editor-custom-button-margin: 5px;
   $texteditor-border-color,
   $texteditor-border-color,
   $texteditor-disabled-color,
+  $texteditor-disabled-color,
   $texteditor-hover-border-color,
   $texteditor-hover-border-color,
   $texteditor-focused-border-color,
@@ -386,7 +388,6 @@ $material-editor-custom-button-margin: 5px;
   0,
   $material-texteditor-label-outside-font-size,
   $material-texteditor-label-outside-height,
-  $material-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

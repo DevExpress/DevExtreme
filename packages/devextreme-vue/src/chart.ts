@@ -381,7 +381,7 @@ const DxAnnotation = createConfigurationComponent({
   },
   props: {
     allowDragging: Boolean,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     axis: String,
@@ -407,7 +407,7 @@ const DxAnnotation = createConfigurationComponent({
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
     type: String,
-    value: {},
+    value: [Date, Number, String],
     width: Number,
     wordWrap: String,
     x: Number,
@@ -529,7 +529,7 @@ const DxArgumentAxis = createConfigurationComponent({
     color: String,
     constantLines: Array,
     constantLineStyle: Object,
-    customPosition: {},
+    customPosition: [Date, Number, String],
     customPositionAxis: String,
     discreteAxisDivisionMode: String,
     endOnTick: Boolean,
@@ -763,8 +763,8 @@ const DxBreak = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
-    startValue: {}
+    endValue: [Date, Number, String],
+    startValue: [Date, Number, String]
   }
 });
 (DxBreak as any).$_optionName = "breaks";
@@ -890,7 +890,7 @@ const DxCommonAnnotationSettings = createConfigurationComponent({
   },
   props: {
     allowDragging: Boolean,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     axis: String,
@@ -915,7 +915,7 @@ const DxCommonAnnotationSettings = createConfigurationComponent({
     tooltipEnabled: Boolean,
     tooltipTemplate: {},
     type: String,
-    value: {},
+    value: [Date, Number, String],
     width: Number,
     wordWrap: String,
     x: Number,
@@ -1378,7 +1378,7 @@ const DxConstantLine = createConfigurationComponent({
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    value: {},
+    value: [Date, Number, String],
     width: Number
   }
 });
@@ -2390,11 +2390,11 @@ const DxStrip = createConfigurationComponent({
   },
   props: {
     color: String,
-    endValue: {},
+    endValue: [Date, Number, String],
     label: Object,
     paddingLeftRight: Number,
     paddingTopBottom: Number,
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxStrip as any).$_optionName = "strips";
@@ -2697,7 +2697,7 @@ const DxValueAxis = createConfigurationComponent({
     color: String,
     constantLines: Array,
     constantLineStyle: Object,
-    customPosition: {},
+    customPosition: [Date, Number, String],
     discreteAxisDivisionMode: String,
     endOnTick: Boolean,
     grid: Object,
@@ -2816,9 +2816,9 @@ const DxVisualRange = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
+    endValue: [Date, Number, String],
     length: [Number, Object, String],
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxVisualRange as any).$_optionName = "visualRange";
@@ -2831,9 +2831,9 @@ const DxWholeRange = createConfigurationComponent({
     "update:startValue": null,
   },
   props: {
-    endValue: {},
+    endValue: [Date, Number, String],
     length: [Number, Object, String],
-    startValue: {}
+    startValue: [Date, Number, String]
   }
 });
 (DxWholeRange as any).$_optionName = "wholeRange";

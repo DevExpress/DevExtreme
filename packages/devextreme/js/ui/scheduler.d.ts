@@ -963,6 +963,7 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default false
      * @default true &for(Android|iOS)
      * @default true &for(Material)
+     * @default true &for(Fluent)
      * @public
      */
     useDropDownViewSwitcher?: boolean;
@@ -971,6 +972,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
      * @default "all"
      */
     allDayPanelMode?: AllDayPanelMode;
+    /**
+     * @docid
+     * @default 0
+     * @public
+     */
+    offset?: number;
     /**
      * @docid
      * @default ['day', 'week']
@@ -1103,6 +1110,12 @@ export interface dxSchedulerOptions extends WidgetOptions<dxScheduler> {
        * @default "all"
        */
        allDayPanelMode?: AllDayPanelMode;
+       /**
+        * @docid
+        * @default 0
+        * @public
+        */
+       offset?: number;
     }>;
 }
 /**

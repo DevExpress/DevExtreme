@@ -1,21 +1,23 @@
 import dateUtils from '@js/core/utils/date';
+import { dateUtilsTs } from '@ts/core/utils/date';
 import {
   calculateCellIndex,
   calculateDayDuration,
   getDisplayedCellCount,
-  getDisplayedRowCount,
+  getDisplayedRowCount, getGroupCount,
+  getIsGroupedAllDayPanel,
+  getKeyByGroup,
   getStartViewDateWithoutDST,
   getTotalCellCountByCompleteData,
   getTotalRowCountByCompleteData,
   isHorizontalView,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { getIsGroupedAllDayPanel, getKeyByGroup } from '@js/renovation/ui/scheduler/workspaces/utils';
+} from '@ts/scheduler/r1/utils/index';
 
 import { HORIZONTAL_GROUP_ORIENTATION } from '../../m_constants';
-import { getAllGroups, getGroupCount } from '../../resources/m_utils';
+import timezoneUtils from '../../m_utils_time_zone';
+import { getAllGroups } from '../../resources/m_utils';
 
-const HOUR_MS = dateUtils.dateToMilliseconds('hour');
-const DAY_MS = dateUtils.dateToMilliseconds('day');
+const toMs = dateUtils.dateToMilliseconds;
 
 export class ViewDataGenerator {
   readonly daysInInterval: number = 1;
@@ -38,7 +40,7 @@ export class ViewDataGenerator {
     return this._calculateStartViewDate(options);
   }
 
-  getCompleteViewDataMap(options) {
+  getCompleteViewDataMap(options: any): any {
     const {
       groups,
       isGroupedByDate,
@@ -74,10 +76,21 @@ export class ViewDataGenerator {
     });
 
     let viewDataMap: any[] = [];
-    const allDayPanelData = this._generateAllDayPanelData(options, rowCountInGroup, cellCountInGroupRow);
-    const viewCellsData = this._generateViewCellsData(options, rowCountInGroup, cellCountInGroupRow);
+    const allDayPanelData = this._generateAllDayPanelData(
+      options,
+      rowCountInGroup,
+      cellCountInGroupRow,
+    );
+    const viewCellsData = this._generateViewCellsData(
+      options,
+      rowCountInGroup,
+      cellCountInGroupRow,
+    );
 
-    allDayPanelData && viewDataMap.push(allDayPanelData);
+    if (allDayPanelData) {
+      viewDataMap.push(allDayPanelData);
+    }
+
     viewDataMap.push(...viewCellsData);
 
     if (isHorizontalGrouping && !isGroupedByDate) {
@@ -92,9 +105,7 @@ export class ViewDataGenerator {
       viewDataMap = this._transformViewDataMapForGroupingByDate(viewDataMap, groupsList);
     }
 
-    const completeViewDataMap = this._addKeysToCells(viewDataMap);
-
-    return completeViewDataMap;
+    return this._addKeysToCells(viewDataMap);
   }
 
   _transformViewDataMapForHorizontalGrouping(viewDataMap, groupsList) {
@@ -368,7 +379,6 @@ export class ViewDataGenerator {
       groups,
       startDayHour,
       endDayHour,
-      interval,
       hoursInterval,
     } = options;
 
@@ -380,7 +390,7 @@ export class ViewDataGenerator {
       columnIndex,
       this.getCellCountInDay(startDayHour, endDayHour, hoursInterval),
     );
-    const endDate = this.calculateEndDate(startDate, interval, endDayHour);
+    const endDate = this.getCellEndDate(startDate, options);
 
     const data: any = {
       startDate,
@@ -397,34 +407,45 @@ export class ViewDataGenerator {
     return data;
   }
 
-  prepareAllDayCellData(options, rowIndex, columnIndex) {
-    const data = this.prepareCellData(options, rowIndex, columnIndex);
+  prepareAllDayCellData(options: any, rowIndex: number, columnIndex: number): any {
+    const data = this.prepareCellData({
+      ...options,
+      // NOTE: For all-day cells we should shift cell's dates
+      // after trimming these dates time.
+      viewOffset: 0,
+    }, rowIndex, columnIndex);
+    const { viewOffset } = options;
     const startDate = dateUtils.trimTime(data.startDate);
+    const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [viewOffset]);
 
     return {
       ...data,
-      startDate,
-      endDate: startDate,
+      startDate: shiftedStartDate,
+      endDate: shiftedStartDate,
       allDay: true,
     };
   }
 
-  getDateByCellIndices(options, rowIndex, columnIndex, cellCountInDay) {
+  getDateByCellIndices(
+    options: any,
+    rowIndex: number,
+    columnIndex: number,
+    cellCountInDay: number,
+  ): Date {
     let { startViewDate } = options;
     const {
       startDayHour,
       interval,
       firstDayOfWeek,
       intervalCount,
+      viewOffset,
     } = options;
 
     const isStartViewDateDuringDST = startViewDate.getHours() !== Math.floor(startDayHour);
 
     if (isStartViewDateDuringDST) {
       const dateWithCorrectHours = getStartViewDateWithoutDST(startViewDate, startDayHour);
-
-      // @ts-expect-error
-      startViewDate = new Date(dateWithCorrectHours - dateUtils.dateToMilliseconds('day'));
+      startViewDate = new Date(dateWithCorrectHours.getTime() - toMs('day'));
     }
 
     const columnCountBase = this.getCellCount(options);
@@ -441,7 +462,9 @@ export class ViewDataGenerator {
       ) : 0;
 
     const startViewDateTime = startViewDate.getTime();
-    const currentDate = new Date(startViewDateTime + millisecondsOffset + offsetByCount);
+    const currentDate = new Date(
+      startViewDateTime + millisecondsOffset + offsetByCount + viewOffset,
+    );
 
     const timeZoneDifference = isStartViewDateDuringDST
       ? 0
@@ -464,15 +487,12 @@ export class ViewDataGenerator {
     const columnsInWeek = columnCount / intervalCount;
     const weekendCount = Math.floor((columnIndex + firstDayOfWeekDiff) / columnsInWeek);
 
-    return DAY_MS * weekendCount * 2;
+    return weekendCount * 2 * toMs('day');
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  calculateEndDate(startDate, interval, endDayHour?: any) {
-    const result = new Date(startDate);
-    result.setMilliseconds(result.getMilliseconds() + Math.round(interval));
-
-    return result;
+  calculateEndDate(startDate: Date, interval: number, endDayHour?: any): Date {
+    return this.getCellEndDate(startDate, { interval });
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -641,11 +661,11 @@ export class ViewDataGenerator {
   }
 
   getInterval(hoursInterval) {
-    return hoursInterval * HOUR_MS;
+    return hoursInterval * toMs('hour');
   }
 
   _getIntervalDuration(intervalCount) {
-    return dateUtils.dateToMilliseconds('day') * intervalCount;
+    return toMs('day') * intervalCount;
   }
 
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -691,16 +711,21 @@ export class ViewDataGenerator {
   }
 
   setHiddenInterval(startDayHour, endDayHour, hoursInterval) {
-    this.hiddenInterval = DAY_MS - this.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
+    this.hiddenInterval = toMs('day') - this.getVisibleDayDuration(startDayHour, endDayHour, hoursInterval);
   }
 
   getVisibleDayDuration(startDayHour, endDayHour, hoursInterval) {
     const cellCountInDay = this.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
 
-    return hoursInterval * cellCountInDay * HOUR_MS;
+    return hoursInterval * cellCountInDay * toMs('hour');
   }
 
   getFirstDayOfWeek(firstDayOfWeekOption) {
     return firstDayOfWeekOption;
+  }
+
+  protected getCellEndDate(cellStartDate: Date, options: any): Date {
+    const durationMs = Math.round(options.interval);
+    return timezoneUtils.addOffsetsWithoutDST(cellStartDate, durationMs);
   }
 }

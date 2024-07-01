@@ -255,4 +255,11 @@ QUnit.module('the "hint" option', () => {
 
         assert.strictEqual($input.attr('title'), newHint, 'the input "title" attribute has changed');
     });
+
+    QUnit.test('input should not have title attr when hint option is not specified (T1218499)', function(assert) {
+        const $element = $('#fileuploader').dxFileUploader({});
+        const $input = $element.find(`.${FILEUPLOADER_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('title'), undefined);
+    });
 });

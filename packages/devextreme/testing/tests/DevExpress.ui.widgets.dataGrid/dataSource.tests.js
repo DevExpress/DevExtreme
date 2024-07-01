@@ -4094,7 +4094,6 @@ QUnit.module('Remote group paging', {
 
             if(moduleIndex === 1) {
                 QUnit.test('grouping with paginate. Group is collapsed. Async loading', function(assert) {
-                    const clock = sinon.useFakeTimers();
                     let changedCount = 0;
                     const source = this.createDataSource({
                         group: [{ selector: 'field2', isExpanded: false }],
@@ -4110,7 +4109,7 @@ QUnit.module('Remote group paging', {
                     });
 
                     source.load();
-                    clock.tick(10);
+                    this.clock.tick(10);
 
                     assert.equal(changedCount, 1);
                     assert.equal(source.totalItemsCount(), 3);
@@ -4119,11 +4118,9 @@ QUnit.module('Remote group paging', {
                     }, {
                         key: 3, items: null
                     }]);
-                    clock.restore();
                 });
 
                 QUnit.test('grouping with paginate. Group is expanded. Async loading', function(assert) {
-                    const clock = sinon.useFakeTimers();
                     const loadArgs = [];
                     let changedCount = 0;
                     const source = this.createDataSource({
@@ -4146,7 +4143,7 @@ QUnit.module('Remote group paging', {
                     assert.equal(loadArgs.length, 1);
 
                     // act
-                    clock.tick(10);
+                    this.clock.tick(10);
 
                     // assert
                     assert.equal(loadArgs.length, 2);
@@ -4168,7 +4165,7 @@ QUnit.module('Remote group paging', {
                     assert.deepEqual(this.processItems(source.items()), []);
 
                     // act
-                    clock.tick(10);
+                    this.clock.tick(10);
 
                     // assert
                     assert.equal(changedCount, 1);
@@ -4179,12 +4176,9 @@ QUnit.module('Remote group paging', {
                             { field2: 2, field3: 4 }
                         ]
                     }]);
-
-                    clock.restore();
                 });
 
                 QUnit.test('grouping with paginate. Several groups are expanded. Async loading', function(assert) {
-                    const clock = sinon.useFakeTimers();
                     const loadArgs = [];
                     const source = this.createDataSource({
                         group: [{ selector: 'field1', isExpanded: true }, { selector: 'field2', isExpanded: true }],
@@ -4202,7 +4196,7 @@ QUnit.module('Remote group paging', {
                     assert.equal(loadArgs.length, 1);
 
                     // act
-                    clock.tick(10);
+                    this.clock.tick(10);
 
                     // assert
                     assert.equal(loadArgs.length, 2);
@@ -4216,8 +4210,6 @@ QUnit.module('Remote group paging', {
                     assert.deepEqual(loadArgs[1].filter, [['field1', '=', 1], 'and', ['field2', '=', 2]]);
                     assert.strictEqual(loadArgs[1].skip, undefined);
                     assert.strictEqual(loadArgs[1].take, 1);
-
-                    clock.restore();
                 });
             }
             QUnit.test('grouping without paginate', function(assert) {

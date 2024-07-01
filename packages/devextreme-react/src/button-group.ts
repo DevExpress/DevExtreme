@@ -1,3 +1,4 @@
+"use client"
 import dxButtonGroup, {
     Properties
 } from "devextreme/ui/button_group";

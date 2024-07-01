@@ -1,3 +1,4 @@
+"use client"
 import dxRecurrenceEditor, {
     Properties
 } from "devextreme/ui/recurrence_editor";

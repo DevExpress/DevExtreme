@@ -1,3 +1,4 @@
+"use client"
 import dxLookup, {
     Properties
 } from "devextreme/ui/lookup";
@@ -550,7 +551,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;

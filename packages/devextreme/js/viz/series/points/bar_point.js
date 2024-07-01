@@ -52,8 +52,8 @@ export default _extend({}, symbolPoint, {
     },
 
     _cacheVisibility: function(x, y, minY, rotated) {
-        y = Math.min(y, minY);
         const size = Math.abs(y - minY);
+        y = Math.min(y, minY);
 
         if(rotated) {
             this._calculateVisibility(y, x, size, this.height);

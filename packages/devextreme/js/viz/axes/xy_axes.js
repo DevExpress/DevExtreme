@@ -1002,7 +1002,11 @@ export default {
         },
 
         _getTranslatedValue: function(value, offset) {
-            const pos1 = this._translator.translate(value, offset, this._options.type === 'semidiscrete' && this._options.tickInterval);
+            let interval;
+            if(this._options.type === 'semidiscrete') {
+                interval = this._options.tickInterval;
+            }
+            const pos1 = this._translator.translate(value, offset, false, interval);
             const pos2 = this._axisPosition;
             const isHorizontal = this._isHorizontal;
             return {

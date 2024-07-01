@@ -98,7 +98,8 @@ const dxVectorMap = BaseWidget.inherit({
         let bounds = this._getBoundingBoxFromDataSource();
 
         if(!bounds) {
-            const boundsByData = getMaxBound(this.getLayers().map(l => l.getBounds()));
+            const layersBounds = this.getLayers().map(l => l.getBounds()).filter(x => x !== undefined);
+            const boundsByData = getMaxBound(layersBounds);
             if(boundsByData) {
                 bounds = boundsByData;
             }

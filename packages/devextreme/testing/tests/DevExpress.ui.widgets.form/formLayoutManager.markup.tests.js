@@ -7,7 +7,7 @@ import {
     FIELD_ITEM_LABEL_CLASS,
     FIELD_ITEM_CONTENT_CLASS,
     LAYOUT_MANAGER_ONE_COLUMN,
-} from 'ui/form/constants';
+} from '__internal/ui/form/constants';
 
 import {
     FIELD_ITEM_HELP_TEXT_CLASS,
@@ -18,17 +18,17 @@ import {
     FIELD_ITEM_LABEL_ALIGN_CLASS,
     LABEL_VERTICAL_ALIGNMENT_CLASS,
     LABEL_HORIZONTAL_ALIGNMENT_CLASS,
-} from 'ui/form/components/field_item';
+} from '__internal/ui/form/components/m_field_item';
 
 import {
     FIELD_ITEM_OPTIONAL_MARK_CLASS,
     FIELD_ITEM_LABEL_LOCATION_CLASS,
     FIELD_ITEM_REQUIRED_MARK_CLASS,
-} from 'ui/form/components/label';
+} from '__internal/ui/form/components/m_label';
 
 import {
     FIELD_EMPTY_ITEM_CLASS,
-} from 'ui/form/components/empty_item';
+} from '__internal/ui/form/components/m_empty_item';
 
 import config from 'core/config';
 import { isFunction, isDefined, isRenderer } from 'core/utils/type';
@@ -52,7 +52,6 @@ import '../../helpers/ignoreQuillTimers.js';
 
 
 const READONLY_STATE_CLASS = 'dx-state-readonly';
-const TEXTEDITOR_PLACEHOLDER_CLASS = 'dx-placeholder';
 
 const { test } = QUnit;
 
@@ -2462,7 +2461,6 @@ QUnit.module('Accessibility', () => {
             const editor = layoutManager.getEditor(dataField);
             const $ariaTarget = isFunction(editor._getAriaTarget) ? editor._getAriaTarget() : editor.$element();
             const $label = editor.$element().closest(`.${FIELD_ITEM_CLASS}`).children().first();
-            const $placeholder = editor.$element().find(`.${TEXTEDITOR_PLACEHOLDER_CLASS}`);
             const editorClassName = `dx-${editorType.toLowerCase().substr(2)}`;
 
             if(editorClassesRequiringIdForLabel.includes(editorClassName)) {
@@ -2472,9 +2470,7 @@ QUnit.module('Accessibility', () => {
                     assert.strictEqual($ariaTarget.attr('aria-labelledby'), $label.attr('id'), 'attributes aria-labelledby and labelID are equal');
                 }
             } else {
-                const expectedTargetValue = $placeholder.length ? $placeholder.attr('id') : null;
-
-                assert.equal($ariaTarget.eq(0).attr('aria-labelledby'), expectedTargetValue, `aria-labelledby attribute ${editorClassName}`);
+                assert.equal($ariaTarget.eq(0).attr('aria-labelledby'), null, `aria-labeledby attribute ${editorClassName}`);
                 assert.equal($label.attr('id'), null, `label id attribute for ${editorClassName}`);
             }
         });
@@ -2668,7 +2664,7 @@ QUnit.module('Supported editors', () => {
         const errorMessage = consoleErrorStub.getCall(0).args[0];
         assert.equal(consoleErrorStub.callCount, 1, 'error was raised for item without dataField and editorType');
         assert.equal(errorMessage.indexOf('E1035 - The editor cannot be created'), 0);
-        assert.ok(errorMessage.indexOf('See:\nhttp://js.devexpress.com/error/') > 0);
+        assert.ok(errorMessage.indexOf('\n\nFor additional information on this error message, see: https://js.devexpress.com/error/') > 0);
         consoleErrorStub.restore();
     });
 

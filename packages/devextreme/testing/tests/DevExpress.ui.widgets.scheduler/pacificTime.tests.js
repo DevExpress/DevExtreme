@@ -26,8 +26,19 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
             fx.off = false;
         }
     };
+    const moduleConfigWithClock = {
+        beforeEach() {
+            fx.off = true;
+            this.clock = sinon.useFakeTimers();
+        },
 
-    module('Day light saving time in native JS Date', moduleConfig, () => {
+        afterEach() {
+            fx.off = false;
+            this.clock.restore();
+        }
+    };
+
+    module('Day light saving time in native JS Date', moduleConfigWithClock, () => {
         const testCase1AmTo2AmSummerTime = {
             name: 'Summer time:source appointment from 1:00 AM to 2:00 AM',
             result: [
@@ -142,10 +153,9 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     startDayHour: 0,
                     height: 600,
                     width: 600
-                });
+                }, this.clock);
 
                 const appointmentCount = scheduler.appointments.getAppointmentCount();
-
                 testCase.result.forEach((expectedText, index) => {
                     const currentText = scheduler.appointments.getDateText(index);
                     assert.equal(currentText, expectedText, `'${currentText}' should be equal expected text`);
@@ -399,7 +409,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
         });
     });
 
-    module('Common', moduleConfig, () => {
+    module('Common', moduleConfigWithClock, () => {
         [{
             currentDate: new Date(2021, 2, 14),
             text: 'summer time'
@@ -423,7 +433,7 @@ if((new Date(2020, 2, 7)).getTimezoneOffset() === pacificTimezoneOffset) {
                     firstDayOfWeek: 5,
                     startDayHour: 9,
                     height: 600
-                });
+                }, this.clock);
 
                 scheduler.appointmentList.forEach(appointment => {
                     assert.equal(appointment.date, etalonDateText, `date of appointment should be equal '${etalonDateText}'`);

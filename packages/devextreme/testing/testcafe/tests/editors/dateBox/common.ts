@@ -7,7 +7,7 @@ import {
   removeClassAttribute,
 } from '../../../helpers/domUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import Guid from '../../../../../js/core/guid';
 import { testScreenshot } from '../../../helpers/themeUtils';
 

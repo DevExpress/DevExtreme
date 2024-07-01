@@ -13,12 +13,6 @@ $fluent-base-border-radius: null !default;
 $fluent-html-editor-add-image-dialog-base-padding: 5px !default;
 
 /**
-* $name 50. Item opened margin
-* $type text
-*/
-$fluent-accordion-item-opened-margin: null !default;
-
-/**
 * $name 11. Button height
 * $type text
 */
@@ -43,12 +37,11 @@ $fluent-button-icon-margin: null !default;
   $fluent-base-font-size: 14px !default;
 
   // Base sizes
-  $fluent-base-inline-widget-height: 32px !default; // 48px !default;
-  $fluent-base-inline-block-height: 20px !default; // 19px !default;
-  $fluent-base-icon-size: 20px !default; // 24px !default
-  $fluent-base-inline-horizontal-padding: 12px !default; // 10px !default;
+  $fluent-base-inline-widget-height: 32px !default;
+  $fluent-base-inline-block-height: 20px !default;
+  $fluent-base-icon-size: 20px !default;
+  $fluent-base-inline-horizontal-padding: 12px !default;
   $fluent-base-border-radius: 4px !default;
-  $fluent-accordion-item-opened-margin: 0 !default;
   $fluent-button-height: 32px !default;
   $fluent-button-icon-size: 20px !default;
   $fluent-button-icon-margin: 8px !default;
@@ -58,15 +51,14 @@ $fluent-button-icon-margin: null !default;
   $fluent-size-postfix: ".compact" !default;
 
   // Font sizes
-  $fluent-base-font-size: 12px !default; // 13px !default;
+  $fluent-base-font-size: 12px !default;
 
   // Base sizes
-  $fluent-base-inline-widget-height: 24px !default; // 32px !default;
-  $fluent-base-inline-block-height: 16px !default;// 15px !default;
-  $fluent-base-icon-size: 16px !default; // 18px !default;
+  $fluent-base-inline-widget-height: 24px !default;
+  $fluent-base-inline-block-height: 16px !default;
+  $fluent-base-icon-size: 16px !default;
   $fluent-base-inline-horizontal-padding: 8px !default;
-  $fluent-base-border-radius: 4px !default; // 2px !default;
-  $fluent-accordion-item-opened-margin: 8px !default;
+  $fluent-base-border-radius: 4px !default;
   $fluent-button-height: 24px !default;
   $fluent-button-icon-size: 16px !default;
   $fluent-button-icon-margin: 4px !default;
@@ -77,10 +69,9 @@ $fluent-base-border-width: 1px !default;
 
 
 /**
-* $name 120. Border radius
+* $name 200. Border radius
 * $type text
 */
 $base-border-radius: $fluent-base-border-radius !default;
-$fluent-grid-base-border-radius: $base-border-radius * 3 !default;
 
 $fluent-base-standard-texteditor-input-horizontal-padding: 0 !default;

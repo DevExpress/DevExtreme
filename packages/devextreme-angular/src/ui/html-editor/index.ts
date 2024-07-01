@@ -83,7 +83,7 @@ const CUSTOM_VALUE_ACCESSOR_PROVIDER = {
     ]
 })
 export class DxHtmlEditorComponent extends DxComponent implements OnDestroy, ControlValueAccessor, OnChanges, DoCheck {
-    instance: DxHtmlEditor;
+    instance: DxHtmlEditor = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

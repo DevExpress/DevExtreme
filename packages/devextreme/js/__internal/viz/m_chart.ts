@@ -1230,7 +1230,7 @@ const dxChart = AdvancedChart.inherit({
 
   _forceResize(width, height) {
     this._renderer.resize(width, height);
-    this._updateSize();
+    this._updateSize(true);
     this._setContentSize();
     this._preserveOriginalCanvas();
     this._updateCanvasClipRect(this._canvas);

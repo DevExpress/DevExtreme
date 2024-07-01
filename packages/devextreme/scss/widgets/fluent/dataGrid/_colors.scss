@@ -4,3 +4,18 @@
 
 // adduse
 
+$fluent-datagrid-grouppanel-item-bg: null !default;
+
+@if $mode == "light" {
+  @if $color == "blue"{
+    $fluent-datagrid-grouppanel-item-bg: darken($base-bg, 5.88) !default;
+  }
+  
+  @if $color == "saas" {
+    $fluent-datagrid-grouppanel-item-bg: color.change($base-hover-bg, $alpha: 0.4) !default;
+  } 
+}
+
+@if $mode == "dark" {
+  $fluent-datagrid-grouppanel-item-bg: darken($base-bg, 12.16) !default;
+}

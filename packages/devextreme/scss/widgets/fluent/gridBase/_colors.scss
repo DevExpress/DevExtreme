@@ -8,12 +8,11 @@
 $datagrid-base-color: $base-text-color !default;
 
 /**
-* $name 60. Background color
+* $name 15. Background color
 * $type color
 */
 $datagrid-base-background-color: $base-bg !default;
-$datagrid-border-color: $base-neutral-border-color3 !default;
-$datagrid-border: 1px solid $datagrid-border-color !default;
+$datagrid-border-color: $base-border-color !default;
 
 /**
 * $name 20. Header text color
@@ -42,13 +41,13 @@ $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
 
 /**
-* $name 55. Selected row background color
+* $name 51. Selected row background color
 * $type color
 */
-$datagrid-selection-bg: null !default;
+$datagrid-selection-bg: $button-default-outlined-hover-bg !default;
 
 /**
-* $name 60. Selected row border color
+* $name 52. Selected row border color
 * $type color
 */
 $datagrid-row-selected-border-color: $datagrid-border-color !default;
@@ -63,18 +62,18 @@ $datagrid-row-selected-color: $datagrid-base-color !default;
 * $name 65. Focused row text color
 * $type color
 */
-$datagrid-row-focused-color: $base-inverted-text-color !default;
+$datagrid-row-focused-color: $base-text-color !default;
 
 /**
 * $name 70. Focused row background color
 * $type color
 */
-$datagrid-row-focused-bg: mix($base-bg, $base-accent, 20%) !default;
+$datagrid-row-focused-bg: null !default;
 $datagrid-hover-bg: $base-hover-bg !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
 
 /**
-* $name 30. Context menu icons color
+* $name 30. Context menu icon color
 * $type color
 */
 $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
@@ -85,15 +84,15 @@ $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
 */
 $datagrid-cell-modified-border-color: $button-success-text-hover-bg !default;
 $datagrid-cell-removed-border-color: $datagrid-border-color !default;
-$datagrid-row-removed-bg: $datagrid-border-color !default;
+$datagrid-row-removed-bg: $datagrid-hover-bg !default;
 $datagrid-cell-removed-text-color: null !default;
 
 /**
-* $name 45. Invalidate data faded color
+* $name 45. Invalid data faded color
 * $type color
 */
 $datagrid-row-invalid-faded-border-color: $button-danger-text-hover-bg !default;
-$datagrid-nodata-color: lighten($datagrid-base-color, 40%) !default;
+$datagrid-nodata-color: $base-label-color !default;
 
 /**
 * $name 90. Group row text color
@@ -141,7 +140,7 @@ $datagrid-link-color: $base-link-color !default;
 $datagrid-focused-border-color: mix($base-bg, $base-accent, 20%) !default;
 
 /**
-* $name 80. Editor background
+* $name 80. Editor background color
 * $type color
 */
 $datagrid-editor-bg: color.change($datagrid-base-background-color, $alpha: 0) !default;
@@ -151,7 +150,7 @@ $datagrid-columnchooser-bg: $base-element-bg !default;
 $datagrid-columnchooser-item-bg: null !default;
 
 /**
-* $name 85. Row alternation background color
+* $name 85. Alternate row background color
 * $type color
 */
 $datagrid-row-alternation-bg: null !default;
@@ -164,7 +163,7 @@ $datagrid-summary-color: color.change($datagrid-base-color, $alpha: 0.7) !defaul
 $datagrid-columnchooser-message-color: lighten($datagrid-base-color, 26%) !default;
 $datagrid-summary-bg: $datagrid-base-background-color !default;
 $datagrid-column-separator-bg: $base-accent !default;
-$datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
+$datagrid-filter-row-background-color: null !default;
 $datagrid-active-header-filter-icon-color: $base-accent !default;
 $datagrid-text-stub-background-image-path: null !default;
 $datagrid-filter-panel-color: $base-accent !default;
@@ -173,6 +172,15 @@ $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 
 @if $mode == "light" {
+  @if $color == "blue"{
+    $datagrid-row-focused-bg: lighten(desaturate(adjust-hue($base-accent, 3), 0.98), 50.00) !default; // #d0e5fb
+    $datagrid-filter-row-background-color: darken($datagrid-base-background-color, 2%) !default;
+  }
+  
+  @if $color == "saas" {
+    $datagrid-row-focused-bg: lighten(adjust-hue($base-accent, -1), 26.47) !default; // #dbe6ff
+    $datagrid-filter-row-background-color: $base-typography-bg !default;
+  } 
   $datagrid-columnchooser-item-color: $datagrid-base-color !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: darken($datagrid-base-background-color, 12%) !default;
@@ -180,7 +188,6 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.2) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
   $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.72) !default;
-  $datagrid-selection-bg: color.change(darken($base-element-bg, 100%), $alpha: 0.08) !default;
   $datagrid-row-error-color: $base-inverted-text-color !default;
   $datagrid-columnchooser-item-bg: $datagrid-columnchooser-bg !default;
   $datagrid-row-alternation-bg: darken($datagrid-base-background-color, 4%) !default;
@@ -189,6 +196,7 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
 }
 
 @if $mode == "dark" {
+  $datagrid-row-focused-bg: #0c3b5e !default;
   $datagrid-columnchooser-item-color: color.change($datagrid-base-color, $alpha: 0.6) !default;
   $datagrid-group-row-color: $datagrid-columnchooser-item-color !default;
   $datagrid-block-separator-bg: lighten($datagrid-base-background-color, 12%) !default;
@@ -196,11 +204,12 @@ $datagrid-icon-link-disabled-opacity: $button-disabled-icon-opacity;
   $datagrid-drag-header-second-shadow-color: color.change($base-shadow-color, $alpha: 0.4) !default;
   $header-filter-color: $datagrid-columnchooser-item-color !default;
   $header-filter-color-empty: color.change($header-filter-color, $alpha: 0.38) !default;
-  $datagrid-selection-bg: color.change(lighten($base-element-bg, 100%), $alpha: 0.08) !default;
   $datagrid-row-error-color: rgba(255, 255, 255, 1) !default;
   $datagrid-columnchooser-item-bg: lighten($datagrid-columnchooser-bg, 3%) !default;
   $datagrid-row-alternation-bg: lighten($datagrid-base-background-color, 4%) !default;
   $datagrid-text-stub-background-image-path: data-uri('images/widgets/fluent/color-schemes/dark/grid/text-stub.png') !default;
   $datagrid-cell-removed-text-color: $datagrid-columnchooser-item-color !default;
 }
+
+$datagrid-border: 1px solid $datagrid-border-color !default;
 

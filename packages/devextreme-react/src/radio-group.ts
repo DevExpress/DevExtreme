@@ -1,3 +1,4 @@
+"use client"
 import dxRadioGroup, {
     Properties
 } from "devextreme/ui/radio_group";

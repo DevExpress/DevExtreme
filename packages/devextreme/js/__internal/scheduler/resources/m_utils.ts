@@ -8,8 +8,8 @@ import { deepExtendArraySafe } from '@js/core/utils/object';
 import { isDefined } from '@js/core/utils/type';
 import { DataSource } from '@js/data/data_source/data_source';
 import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
-import { hasResourceValue } from '@js/renovation/ui/scheduler/resources/hasResourceValue';
 import { current, isFluent } from '@js/ui/themes';
+import { getGroupCount, hasResourceValue } from '@ts/scheduler/r1/utils/index';
 
 export const getValueExpr = (resource) => resource.valueExpr || 'id';
 export const getDisplayExpr = (resource) => resource.displayExpr || 'text';
@@ -116,20 +116,6 @@ export const getCellGroups = (groupIndex, groups) => {
         name: groups[i].name,
         id: path[i],
       });
-    }
-  }
-
-  return result;
-};
-
-export const getGroupCount = (groups) => {
-  let result = 0;
-
-  for (let i = 0, len = groups.length; i < len; i++) {
-    if (!i) {
-      result = groups[i].items.length;
-    } else {
-      result *= groups[i].items.length;
     }
   }
 

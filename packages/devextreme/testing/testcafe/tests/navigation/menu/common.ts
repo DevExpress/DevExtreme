@@ -5,7 +5,7 @@ import {
 } from '../../../helpers/domUtils';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/menu.d';
 import Menu from '../../../model/menu';
 import { safeSizeTest } from '../../../helpers/safeSizeTest';
@@ -58,7 +58,14 @@ test('Menu items render', async (t) => {
       text: 'remove',
       icon: 'remove',
       items: [
-        { text: 'user', icon: 'user' },
+        {
+          text: 'user',
+          icon: 'user',
+          disabled: true,
+          items: [{
+            text: 'user_1',
+          }],
+        },
         {
           text: 'save',
           icon: 'save',
@@ -70,7 +77,11 @@ test('Menu items render', async (t) => {
       ],
     },
     { text: 'user', icon: 'user' },
-    { text: 'coffee', icon: 'coffee' },
+    {
+      text: 'coffee',
+      icon: 'coffee',
+      disabled: true,
+    },
   ] as Item[];
 
   return createWidget('dxMenu', { items: menuItems, cssClass: 'custom-class' }, '#menu');

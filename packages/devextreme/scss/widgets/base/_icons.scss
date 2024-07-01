@@ -18,10 +18,15 @@
 .dx-icon-clock,
 .dx-icon-close,
 .dx-icon-comment,
+.dx-icon-dataarea,
+.dx-icon-datapie,
+.dx-icon-datatrending,
+.dx-icon-datausage,
 .dx-icon-doc,
 .dx-icon-download,
 .dx-icon-edit,
 .dx-icon-email,
+.dx-icon-errorcircle,
 .dx-icon-event,
 .dx-icon-eventall,
 .dx-icon-favorites,
@@ -448,6 +453,11 @@ $icons: (
     "description": '\f171',
     "belloutline": '\f172',
     "to": '\f173',
+    "errorcircle": '\f174',
+    "datatrending": '\f175',
+    "dataarea": '\f176',
+    "datausage": '\f177',
+    "datapie": '\f178',
 );
 
 // stylelint-enable

@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/multi_view";
 import dxMultiView, {
     Properties

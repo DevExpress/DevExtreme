@@ -544,6 +544,12 @@ export default class dxFileUploader extends Editor<dxFileUploaderOptions> {
      * @public
      */
     removeFile(file: File): void;
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Array<File>): void;
 }
 
 /** @public */

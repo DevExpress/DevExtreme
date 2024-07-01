@@ -300,7 +300,7 @@
         "dxCalendar-captionYearLabel": "Year selection",
         "dxCalendar-captionDecadeLabel": "Decade selection",
         "dxCalendar-captionCenturyLabel": "Century selection",
-        
+
         "dxColorView-ariaRed": "Красный",
         "dxColorView-ariaGreen": "Зеленый",
         "dxColorView-ariaBlue": "Синий",
@@ -423,6 +423,16 @@
         "dxHtmlEditor-right": "По правому краю",
         "dxHtmlEditor-indent": "Отступ",
         "dxHtmlEditor-justify": "По ширине",
+        "dxHtmlEditor-borderStyleNone": "none",
+        "dxHtmlEditor-borderStyleHidden": "hidden",
+        "dxHtmlEditor-borderStyleDotted": "dotted",
+        "dxHtmlEditor-borderStyleDashed": "dashed",
+        "dxHtmlEditor-borderStyleSolid": "solid",
+        "dxHtmlEditor-borderStyleDouble": "double",
+        "dxHtmlEditor-borderStyleGroove": "groove",
+        "dxHtmlEditor-borderStyleRidge": "ridge",
+        "dxHtmlEditor-borderStyleInset": "inset",
+        "dxHtmlEditor-borderStyleOutset": "outset",
 
         "dxFileManager-newDirectoryName": "Без названия",
         "dxFileManager-rootDirectoryName": "Файлы",

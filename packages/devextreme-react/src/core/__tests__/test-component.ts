@@ -1,5 +1,5 @@
 /* eslint-disable max-classes-per-file */
-import { Component } from '../component';
+import { Component, IHtmlOptions } from '../component';
 import DOMComponent from 'devextreme/core/dom_component';
 const eventHandlers: { [index: string]: ((e?: any) => void)[] } = {};
 
@@ -29,12 +29,22 @@ const Widget = {
   skipOptionsRollBack: false,
 };
 
-const WidgetClass = jest.fn(() => Widget);
+const WidgetClass = jest.fn<typeof Widget, any>(() => Widget);
 
-class TestComponent<P = any> extends Component<P> {
+class TestComponent<P = any> extends Component<P & IHtmlOptions> {
   protected _WidgetClass = WidgetClass;
 
   protected useDeferUpdateFlag = true;
+
+  get element(): HTMLElement {
+    return this._element;
+  }
+
+  get instance(): any {
+    return {
+      element: () => this.element,
+    };
+  }
 
   _createWidget(element?: Element): void {
     eventHandlers.optionChanged = [];

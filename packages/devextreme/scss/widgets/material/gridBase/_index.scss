@@ -305,7 +305,10 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
         &.dx-editor-cell:not(.dx-command-select) {
           padding-right: 0;
-          padding-left: 0;
+
+          &:not(.dx-#{$widget-name}-cell-expandable) {
+            padding-left: 0;
+          }
         }
       }
     }
@@ -509,6 +512,12 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     &.dx-#{$widget-name}-column-chooser-mode-select {
       .dx-popup-content {
         padding: $material-grid-base-column-chooser-paddings;
+      }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $material-grid-base-treeview-select-all-item-offset;
+        }
       }
     }
 
@@ -767,18 +776,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
     border-bottom: $datagrid-border;
     padding: $material-grid-base-header-panel-padding;
 
-    .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
-    }
-
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
       border-radius: 50%;
-    }
-
-    .dx-#{$widget-name}-toolbar-button {
-      .dx-icon {
-        color: $base-text-color;
-      }
     }
   }
 
@@ -953,7 +952,7 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
 
     .dx-row-focused {
       &.dx-data-row {
-        & > td:not(.dx-focused):not(.dx-cell-modified),
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
           background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
@@ -979,8 +978,8 @@ $material-grid-base-group-panel-message-line-height: $material-button-text-line-
       }
 
       &.dx-data-row.dx-edit-row {
-        & > td.dx-editor-cell:not(.dx-command-select),
-        & > tr > td.dx-editor-cell:not(.dx-command-select) {
+        & > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
+        & > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
           background-color: $datagrid-base-background-color;
           color: $datagrid-base-color;
         }

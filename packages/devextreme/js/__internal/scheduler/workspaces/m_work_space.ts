@@ -28,32 +28,26 @@ import {
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, isMouseEvent } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
-import { getMemoizeScrollTo } from '@js/renovation/ui/common/utils/scroll/getMemoizeScrollTo';
-import {
-  calculateIsGroupedAllDayPanel,
-  calculateViewStartDate,
-  getCellDuration,
-  getStartViewDateTimeOffset,
-  getViewStartByOptions,
-  isDateAndTimeView,
-  validateDayHours,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import errors from '@js/ui/widget/ui.errors';
+import { getMemoizeScrollTo } from '@ts/core/utils/scroll';
+import {
+  AllDayPanelTitleComponent,
+  AllDayTableComponent,
+  DateTableComponent,
+  GroupPanelComponent,
+  HeaderPanelComponent,
+  TimePanelComponent,
+} from '@ts/scheduler/r1/components/index';
+import type { ViewContext } from '@ts/scheduler/r1/components/types';
+import type { ViewType } from '@ts/scheduler/r1/types';
+import {
+  calculateIsGroupedAllDayPanel,
+  calculateViewStartDate, getCellDuration, getGroupCount, getStartViewDateTimeOffset,
+  getViewStartByOptions,
+  isDateAndTimeView,
+} from '@ts/scheduler/r1/utils/index';
 
-// NOTE: Renovation component section
-// @ts-expect-error
-import dxrAllDayPanelTable from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/table.j';
-// @ts-expect-error
-import dxrAllDayPanelTitle from '../../../renovation/ui/scheduler/workspaces/base/date_table/all_day_panel/title.j';
-// @ts-expect-error
-import dxrDateTableLayout from '../../../renovation/ui/scheduler/workspaces/base/date_table/layout.j';
-// @ts-expect-error
-import dxrGroupPanel from '../../../renovation/ui/scheduler/workspaces/base/group_panel/group_panel.j';
-// @ts-expect-error
-import dxrDateHeader from '../../../renovation/ui/scheduler/workspaces/base/header_panel/layout.j';
-// @ts-expect-error
-import dxrTimePanelTableLayout from '../../../renovation/ui/scheduler/workspaces/base/time_panel/layout.j';
 import WidgetObserver from '../base/m_widget_observer';
 import AppointmentDragBehavior from '../m_appointment_drag_behavior';
 import {
@@ -70,7 +64,7 @@ import { APPOINTMENT_SETTINGS_KEY } from '../m_constants';
 import tableCreatorModule from '../m_table_creator';
 import { utils } from '../m_utils';
 import {
-  createResourcesTree, getCellGroups, getGroupCount, getGroupsObjectFromGroupsArray,
+  createResourcesTree, getCellGroups, getGroupsObjectFromGroupsArray,
 } from '../resources/m_utils';
 import VerticalShader from '../shaders/m_current_time_shader_vertical';
 import {
@@ -87,6 +81,18 @@ import { VirtualScrollingDispatcher, VirtualScrollingRenderer } from './m_virtua
 import HorizontalGroupedStrategy from './m_work_space_grouped_strategy_horizontal';
 import VerticalGroupedStrategy from './m_work_space_grouped_strategy_vertical';
 import ViewDataProvider from './view_model/m_view_data_provider';
+
+interface RenderComponentOptions {
+  header?: boolean;
+  timePanel?: boolean;
+  dateTable?: boolean;
+  allDayPanel?: boolean;
+}
+
+interface RenderRWorkspaceOptions {
+  renderComponents: RenderComponentOptions;
+  generateNewData: boolean;
+}
 
 const { tableCreator } = tableCreatorModule;
 
@@ -165,6 +171,16 @@ const DRAG_AND_DROP_SELECTOR = `.${DATE_TABLE_CLASS} td, .${ALL_DAY_TABLE_CLASS}
 const CELL_SELECTOR = `.${DATE_TABLE_CELL_CLASS}, .${ALL_DAY_TABLE_CELL_CLASS}`;
 
 const CELL_INDEX_CALCULATION_EPSILON = 0.05;
+
+const DEFAULT_WORKSPACE_RENDER_OPTIONS: RenderRWorkspaceOptions = {
+  renderComponents: {
+    header: true,
+    timePanel: true,
+    dateTable: true,
+    allDayPanel: true,
+  },
+  generateNewData: true,
+};
 
 class SchedulerWorkSpace extends WidgetObserver {
   _viewDataProvider: any;
@@ -282,7 +298,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   get viewDataProvider() {
     if (!this._viewDataProvider) {
-      this._viewDataProvider = new ViewDataProvider(this.type);
+      this._viewDataProvider = new ViewDataProvider(this.type as ViewType);
     }
     return this._viewDataProvider;
   }
@@ -343,7 +359,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   readonly viewDirection: 'vertical' | 'horizontal' = 'vertical';
 
-  get renovatedHeaderPanelComponent() { return dxrDateHeader; }
+  get renovatedHeaderPanelComponent() { return HeaderPanelComponent; }
 
   get timeZoneCalculator(): any {
     return this.option('timeZoneCalculator');
@@ -789,6 +805,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       focusedCell: this.cellsSelectionState.focusedCell,
       headerCellTextFormat: this._getFormat(),
       getDateForHeaderText: (_, date) => date,
+      viewOffset: this.option('viewOffset'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
       cellDuration: this.getCellDuration(),
@@ -798,6 +815,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       currentDate: this.option('currentDate'),
       startDate: this.option('startDate'),
       firstDayOfWeek: this.option('firstDayOfWeek'),
+      showCurrentTimeIndicator: this.option('showCurrentTimeIndicator'),
 
       ...this.virtualScrollingDispatcher.getRenderState(),
     };
@@ -1048,7 +1066,7 @@ class SchedulerWorkSpace extends WidgetObserver {
   }
 
   _getGroupCount() {
-    return getGroupCount(this.option('groups'));
+    return getGroupCount(this.option('groups') as any);
   }
 
   _attachTablesEvents() {
@@ -1562,12 +1580,18 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   // NOTE: refactor leftIndex calculation
   getCellIndexByCoordinates(coordinates, allDay) {
-    const cellCount = this._getTotalCellCount(this._getGroupCount());
+    const { horizontalScrollingState, verticalScrollingState } = this.virtualScrollingDispatcher;
+
+    const cellCount = horizontalScrollingState?.itemCount ?? this._getTotalCellCount(this._getGroupCount());
+
     const cellWidth = this.getCellWidth();
     const cellHeight = allDay ? this.getAllDayHeight() : this.getCellHeight();
 
-    const topIndex = Math.floor(Math.floor(coordinates.top) / Math.floor(cellHeight));
-    let leftIndex = coordinates.left / cellWidth;
+    const leftCoordinateOffset = horizontalScrollingState?.virtualItemSizeBefore ?? 0;
+    const topCoordinateOffset = verticalScrollingState?.virtualItemSizeBefore ?? 0;
+
+    const topIndex = Math.floor(Math.floor(coordinates.top - topCoordinateOffset) / Math.floor(cellHeight));
+    let leftIndex = (coordinates.left - leftCoordinateOffset) / cellWidth;
     leftIndex = Math.floor(leftIndex + CELL_INDEX_CALCULATION_EPSILON);
 
     if (this._isRTL()) {
@@ -1864,10 +1888,20 @@ class SchedulerWorkSpace extends WidgetObserver {
   _getRDateTableProps() {
     return {
       viewData: this.viewDataProvider.viewData,
+      viewContext: this.getR1ComponentsViewContext(),
       dataCellTemplate: this.option('dataCellTemplate'),
       addDateTableClass: !this.option('crossScrollingEnabled') || this.isVirtualScrolling(),
       groupOrientation: this.option('groupOrientation'),
       addVerticalSizesClassToRows: false,
+    };
+  }
+
+  protected getR1ComponentsViewContext(): ViewContext {
+    return {
+      view: {
+        type: this.type as ViewType,
+      },
+      crossScrollingEnabled: !!this.option('crossScrollingEnabled'),
     };
   }
 
@@ -2020,23 +2054,34 @@ class SchedulerWorkSpace extends WidgetObserver {
   // Methods that render renovated components. Useless in renovation
   // ------------
 
-  renderRWorkSpace(componentsToRender?: any) {
-    const allComponents = {
-      header: true, timePanel: true, dateTable: true, allDayPanel: true,
-    };
-    const components = componentsToRender ?? allComponents;
+  renderRWorkSpace({
+    header,
+    timePanel,
+    dateTable,
+    allDayPanel,
+  }: RenderComponentOptions = DEFAULT_WORKSPACE_RENDER_OPTIONS.renderComponents) {
+    if (header) {
+      this.renderRHeaderPanel();
+    }
 
-    components.header && this.renderRHeaderPanel();
-    components.timePanel && this.renderRTimeTable();
-    components.dateTable && this.renderRDateTable();
-    components.allDayPanel && this.renderRAllDayPanel();
+    if (timePanel) {
+      this.renderRTimeTable();
+    }
+
+    if (dateTable) {
+      this.renderRDateTable();
+    }
+
+    if (allDayPanel) {
+      this.renderRAllDayPanel();
+    }
   }
 
   renderRDateTable() {
     utils.renovation.renderComponent(
       this,
       this._$dateTable,
-      dxrDateTableLayout,
+      DateTableComponent,
       'renovatedDateTable',
       this._getRDateTableProps(),
     );
@@ -2044,6 +2089,7 @@ class SchedulerWorkSpace extends WidgetObserver {
 
   renderRGroupPanel() {
     const options = {
+      viewContext: this.getR1ComponentsViewContext(),
       groups: this.option('groups'),
       groupOrientation: this.option('groupOrientation'),
       groupByDate: this.isGroupedByDate(),
@@ -2059,7 +2105,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       utils.renovation.renderComponent(
         this,
         this._getGroupHeaderContainer(),
-        dxrGroupPanel,
+        GroupPanelComponent,
         'renovatedGroupPanel',
         options,
       );
@@ -2076,13 +2122,14 @@ class SchedulerWorkSpace extends WidgetObserver {
 
       const options = {
         viewData: this.viewDataProvider.viewData,
+        viewContext: this.getR1ComponentsViewContext(),
         dataCellTemplate: this.option('dataCellTemplate'),
         startCellIndex: 0,
         ...this.virtualScrollingDispatcher.horizontalVirtualScrolling?.getRenderState() || {},
       };
 
-      utils.renovation.renderComponent(this, this._$allDayTable, dxrAllDayPanelTable, 'renovatedAllDayPanel', options);
-      utils.renovation.renderComponent(this, this._$allDayTitle, dxrAllDayPanelTitle, 'renovatedAllDayPanelTitle', {});
+      utils.renovation.renderComponent(this, this._$allDayTable, AllDayTableComponent, 'renovatedAllDayPanel', options);
+      utils.renovation.renderComponent(this, this._$allDayTitle, AllDayPanelTitleComponent, 'renovatedAllDayPanelTitle', {});
     }
 
     this._toggleAllDayVisibility(true);
@@ -2092,9 +2139,10 @@ class SchedulerWorkSpace extends WidgetObserver {
     utils.renovation.renderComponent(
       this,
       this._$timePanel,
-      dxrTimePanelTableLayout,
+      TimePanelComponent,
       'renovatedTimePanel',
       {
+        viewContext: this.getR1ComponentsViewContext(),
         timePanelData: this.viewDataProvider.timePanelData,
         timeCellTemplate: this.option('timeCellTemplate'),
         groupOrientation: this.option('groupOrientation'),
@@ -2115,6 +2163,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       this.renovatedHeaderPanelComponent,
       'renovatedHeaderPanel',
       {
+        viewContext: this.getR1ComponentsViewContext(),
         dateHeaderData: this.viewDataProvider.dateHeaderData,
         groupPanelData: this.viewDataProvider.getGroupPanelData(
           this.generateRenderOptions(),
@@ -2141,7 +2190,9 @@ class SchedulerWorkSpace extends WidgetObserver {
       const $rootElement = $(scheduler.element());
 
       this._createDragBehavior(this.getWorkArea(), $rootElement);
-      this._createDragBehavior(this._$allDayPanel, $rootElement);
+      if (!this._isVerticalGroupedWorkSpace()) {
+        this._createDragBehavior(this._$allDayPanel, $rootElement);
+      }
     }
   }
 
@@ -2211,6 +2262,7 @@ class SchedulerWorkSpace extends WidgetObserver {
       firstDayOfWeek: undefined,
       startDayHour: 0,
       endDayHour: 24,
+      viewOffset: 0,
       hoursInterval: 0.5,
       activeStateEnabled: true,
       hoverStateEnabled: true,
@@ -2251,13 +2303,8 @@ class SchedulerWorkSpace extends WidgetObserver {
   _optionChanged(args) {
     switch (args.name) {
       case 'startDayHour':
-        validateDayHours(args.value, this.option('endDayHour')!);
-        this._cleanWorkSpace();
-        break;
       case 'endDayHour':
-        validateDayHours(this.option('startDayHour')!, args.value);
-        this._cleanWorkSpace();
-        break;
+      case 'viewOffset':
       case 'dateCellTemplate':
       case 'resourceCellTemplate':
       case 'dataCellTemplate':
@@ -2729,11 +2776,13 @@ class SchedulerWorkSpace extends WidgetObserver {
     });
   }
 
-  _renderDateTimeIndication() { return noop(); }
+  protected _renderDateTimeIndication() { return noop(); }
 
-  _setIndicationUpdateInterval() { return noop(); }
+  protected renderCurrentDateTimeLineAndShader(): void { return noop(); }
 
-  _refreshDateTimeIndication() { return noop(); }
+  protected renderCurrentDateTimeIndication(): void { return noop(); }
+
+  protected _setIndicationUpdateInterval() { return noop(); }
 
   _detachGroupCountClass() {
     [
@@ -2779,7 +2828,7 @@ class SchedulerWorkSpace extends WidgetObserver {
     this._$allDayTitle && this._$allDayTitle.remove();
   }
 
-  _cleanView() {
+  _cleanView(): void {
     this.cache.clear();
     this._cleanTableWidths();
     this.cellsSelectionState.clearSelectedAndFocusedCells();
@@ -2892,14 +2941,18 @@ class SchedulerWorkSpace extends WidgetObserver {
     }
   }
 
-  renderWorkSpace(isGenerateNewViewData = true) {
+  renderWorkSpace({
+    generateNewData,
+    renderComponents,
+  } = DEFAULT_WORKSPACE_RENDER_OPTIONS): void {
     this.cache.clear();
 
-    this.viewDataProvider.update(this.generateRenderOptions(), isGenerateNewViewData);
+    this.viewDataProvider.update(this.generateRenderOptions(), generateNewData);
 
     if (this.isRenovatedRender()) {
-      this.renderRWorkSpace();
+      this.renderRWorkSpace(renderComponents);
     } else {
+      // TODO Old render: Delete this old render block after the SSR tests check.
       this._renderDateHeader();
       this._renderTimePanel();
       this._renderGroupAllDayPanel();

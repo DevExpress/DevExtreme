@@ -58,13 +58,13 @@ class TreeViewTestWrapper {
 
         selectedIndexes.forEach((index) => {
             assert.equal(this.hasSelectedClass($node.eq(index)), true, `item ${index} has selected class`);
-            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).children()), true, `checkbox ${index} has checked class` + (additionalErrorMessage || ''));
+            if(this.isCheckBoxMode) assert.equal(this.hasCheckboxCheckedClass($node.eq(index).find(`.${ITEM_CLASS}`).eq(0).children()), true, `checkbox ${index} has checked class` + (additionalErrorMessage || ''));
         });
 
         $node.each((index) => {
             if(selectedIndexes.indexOf(index) === -1) {
                 assert.equal(this.hasSelectedClass($node.eq(index)), false, `item ${index} has no selected class`);
-                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).children()), false, `checkbox ${index} has not checked class` + (additionalErrorMessage || ''));
+                if(this.isCheckBoxMode) assert.equal(!!this.hasCheckboxCheckedClass($node.eq(index).find(`.${ITEM_CLASS}`).eq(0).children()), false, `checkbox ${index} has not checked class` + (additionalErrorMessage || ''));
             }
         });
     }

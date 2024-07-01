@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/data_grid";
 import dxDataGrid, {
     Properties
@@ -14,7 +15,7 @@ import type { ContentReadyEvent as FormContentReadyEvent, DisposingEvent as Form
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 import type { PositionConfig } from "devextreme/animation/position";
 import type { dxPopupOptions, dxPopupToolbarItem } from "devextreme/ui/popup";
 import type { event, EventInfo } from "devextreme/events/index";
@@ -507,10 +508,10 @@ type IColumnProps = React.PropsWithChildren<{
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-    height?: number;
+    height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
     searchMode?: "contains" | "startswith" | "equals";
-    width?: number;
+    width?: number | string;
   };
   hidingPriority?: number;
   isBand?: boolean;
@@ -630,7 +631,7 @@ type IColumnChooserProps = React.PropsWithChildren<{
   container?: any | string;
   emptyPanelText?: string;
   enabled?: boolean;
-  height?: number;
+  height?: number | string;
   mode?: "dragAndDrop" | "select";
   position?: PositionConfig;
   search?: ColumnChooserSearchConfig;
@@ -638,7 +639,7 @@ type IColumnChooserProps = React.PropsWithChildren<{
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: "asc" | "desc";
   title?: string;
-  width?: number;
+  width?: number | string;
 }>
 class ColumnChooser extends NestedOption<IColumnChooserProps> {
   public static OptionName = "columnChooser";
@@ -711,10 +712,10 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number;
+  height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number;
+  width?: number | string;
 }>
 class ColumnHeaderFilter extends NestedOption<IColumnHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -783,9 +784,9 @@ class CursorOffset extends NestedOption<ICursorOffsetProps> {
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -827,7 +828,7 @@ class CustomRule extends NestedOption<ICustomRuleProps> {
 type IDataGridHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  height?: number;
+  height?: number | string;
   search?: HeaderFilterSearchConfig;
   searchTimeout?: number;
   texts?: Record<string, any> | {
@@ -836,7 +837,7 @@ type IDataGridHeaderFilterProps = React.PropsWithChildren<{
     ok?: string;
   };
   visible?: boolean;
-  width?: number;
+  width?: number | string;
 }>
 class DataGridHeaderFilter extends NestedOption<IDataGridHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -1009,11 +1010,11 @@ class ExportTexts extends NestedOption<IExportTextsProps> {
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
   dataField?: string;
   dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
   format?: LocalizationTypes.Format;
@@ -1373,8 +1374,8 @@ class Form extends NestedOption<IFormProps> {
 // Field
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1491,7 +1492,7 @@ class GroupingTexts extends NestedOption<IGroupingTextsProps> {
 type IGroupItemProps = React.PropsWithChildren<{
   alignByColumn?: boolean;
   column?: string;
-  customizeText?: ((itemInfo: { value: string | number | any, valueText: string }) => string);
+  customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
   displayFormat?: string;
   name?: string;
   showInColumn?: string;
@@ -1544,10 +1545,10 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number;
+  height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number;
+  width?: number | string;
   searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
@@ -1597,7 +1598,7 @@ type IItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;
@@ -1660,14 +1661,14 @@ class Label extends NestedOption<ILabelProps> {
 // DataGrid
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean | "auto";
-  height?: number;
+  height?: number | string;
   indicatorSrc?: string;
   shading?: boolean;
   shadingColor?: string;
   showIndicator?: boolean;
   showPane?: boolean;
   text?: string;
-  width?: number;
+  width?: number | string;
 }>
 class LoadPanel extends NestedOption<ILoadPanelProps> {
   public static OptionName = "loadPanel";
@@ -1803,7 +1804,7 @@ class Paging extends NestedOption<IPagingProps> {
 type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  pattern?: any | string;
+  pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
 class PatternRule extends NestedOption<IPatternRuleProps> {
@@ -1950,9 +1951,9 @@ class Position extends NestedOption<IPositionProps> {
 // Column
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
-  max?: any | number;
+  max?: Date | number | string;
   message?: string;
-  min?: any | number;
+  min?: Date | number | string;
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
@@ -2191,7 +2192,7 @@ type ISummaryProps = React.PropsWithChildren<{
   groupItems?: Array<Record<string, any>> | {
     alignByColumn?: boolean;
     column?: string;
-    customizeText?: ((itemInfo: { value: string | number | any, valueText: string }) => string);
+    customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
     displayFormat?: string;
     name?: string;
     showInColumn?: string;
@@ -2217,7 +2218,7 @@ type ISummaryProps = React.PropsWithChildren<{
     alignment?: "center" | "left" | "right";
     column?: string;
     cssClass?: string;
-    customizeText?: ((itemInfo: { value: string | number | any, valueText: string }) => string);
+    customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
     displayFormat?: string;
     name?: string;
     showInColumn?: string;
@@ -2347,7 +2348,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;
@@ -2377,7 +2378,7 @@ type ITotalItemProps = React.PropsWithChildren<{
   alignment?: "center" | "left" | "right";
   column?: string;
   cssClass?: string;
-  customizeText?: ((itemInfo: { value: string | number | any, valueText: string }) => string);
+  customizeText?: ((itemInfo: { value: string | number | Date, valueText: string }) => string);
   displayFormat?: string;
   name?: string;
   showInColumn?: string;
@@ -2401,13 +2402,13 @@ type IValidationRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   ignoreEmptyValue?: boolean;
-  max?: any | number;
-  min?: any | number;
+  max?: Date | number | string;
+  min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
-  pattern?: any | string;
+  pattern?: RegExp | string;
 }>
 class ValidationRule extends NestedOption<IValidationRuleProps> {
   public static OptionName = "validationRules";
@@ -2422,8 +2423,8 @@ class ValidationRule extends NestedOption<IValidationRuleProps> {
 // TotalItem
 type IValueFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;

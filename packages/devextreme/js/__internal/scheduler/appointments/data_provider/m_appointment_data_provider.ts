@@ -1,5 +1,5 @@
 import config from '@js/core/config';
-import combineRemoteFilter from '@js/renovation/ui/scheduler/utils/filtering/remote';
+import { combineRemoteFilter } from '@ts/scheduler/r1/filterting/index';
 
 import { AppointmentDataSource } from './m_appointment_data_source';
 import { AppointmentFilterBaseStrategy, AppointmentFilterVirtualStrategy } from './m_appointment_filter';
@@ -61,6 +61,7 @@ export class AppointmentDataProvider {
       dataAccessors: this.dataAccessors,
       startDayHour: this.options.startDayHour,
       endDayHour: this.options.endDayHour,
+      viewOffset: this.options.viewOffset,
       showAllDayPanel: this.options.showAllDayPanel,
       timeZoneCalculator: this.options.timeZoneCalculator,
       //

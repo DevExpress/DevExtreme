@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/responsive_box";
 import dxResponsiveBox, {
     Properties
@@ -99,7 +100,7 @@ class ResponsiveBox<TItem = any, TKey = any> extends BaseComponent<React.PropsWi
 // owners:
 // ResponsiveBox
 type IColProps = React.PropsWithChildren<{
-  baseSize?: number | "auto";
+  baseSize?: number | string;
   ratio?: number;
   screen?: string;
   shrink?: number;
@@ -159,7 +160,7 @@ class Location extends NestedOption<ILocationProps> {
 // owners:
 // ResponsiveBox
 type IRowProps = React.PropsWithChildren<{
-  baseSize?: number | "auto";
+  baseSize?: number | string;
   ratio?: number;
   screen?: string;
   shrink?: number;

@@ -121,3 +121,100 @@ test('Resize should work correctly when cell\'s width is not an integer', async 
   startDayHour: 0,
   endDayHour: 24,
 }));
+
+test('Resize in the "timelineDay" view with start and end day hour (T1134583)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appointment = scheduler.getAppointment('Appointment');
+
+  await t
+    .drag(appointment.resizableHandle.right, 200, 0)
+    .expect(appointment.size.width)
+    .eql('600px')
+    .expect(appointment.date.time)
+    .eql('9:30 AM - 11:00 AM');
+
+  await t
+    .drag(appointment.resizableHandle.left, -200, 0)
+    .expect(appointment.size.width)
+    .eql('800px')
+    .expect(appointment.date.time)
+    .eql('11:00 AM - 11:00 AM');
+}).before(async () => createScheduler({
+  dataSource: [{
+    text: 'Appointment',
+    startDate: new Date(2024, 0, 3, 9, 30),
+    endDate: new Date(2024, 0, 3, 12, 30),
+  }],
+  views: [{
+    type: 'timelineDay',
+    intervalCount: 3,
+  }],
+  currentView: 'timelineDay',
+  currentDate: new Date(2024, 0, 2),
+  cellDuration: 60,
+  startDayHour: 10,
+  endDayHour: 12,
+  width: 1200,
+}));
+
+['timelineWeek', 'timelineWorkWeek'].forEach((view) => {
+  test(`Resize in the "${view}" view with start and end day hour (T1134583)`, async (t) => {
+    const scheduler = new Scheduler('#container');
+    const appointment = scheduler.getAppointment('Appointment');
+
+    await t
+      .drag(appointment.resizableHandle.right, 200, 0)
+      .expect(appointment.size.width)
+      .eql('600px')
+      .expect(appointment.date.time)
+      .eql('9:30 AM - 11:00 AM');
+
+    await t
+      .drag(appointment.resizableHandle.left, -200, 0)
+      .expect(appointment.size.width)
+      .eql('800px').expect(appointment.date.time)
+      .eql('11:00 AM - 11:00 AM');
+  }).before(async () => createScheduler({
+    dataSource: [{
+      text: 'Appointment',
+      startDate: new Date(2024, 0, 3, 9, 30),
+      endDate: new Date(2024, 0, 3, 12, 30),
+    }],
+    views: [view],
+    currentView: view,
+    currentDate: new Date(2024, 0, 2),
+    cellDuration: 60,
+    startDayHour: 10,
+    endDayHour: 12,
+  }));
+});
+
+test('Resize in the "timelineMonth" view with start and end day hour (T1134583)', async (t) => {
+  const scheduler = new Scheduler('#container');
+  const appointment = scheduler.getAppointment('Appointment');
+
+  await t
+    .drag(appointment.resizableHandle.right, 200, 0)
+    .expect(appointment.size.width)
+    .eql('400px')
+    .expect(appointment.date.time)
+    .eql('9:30 AM - 12:30 PM');
+
+  await t
+    .drag(appointment.resizableHandle.left, -200, 0)
+    .expect(appointment.size.width)
+    .eql('600px').expect(appointment.date.time)
+    .eql('9:30 AM - 12:30 PM');
+}).before(async () => createScheduler({
+  dataSource: [{
+    text: 'Appointment',
+    startDate: new Date(2024, 0, 3, 9, 30),
+    endDate: new Date(2024, 0, 3, 12, 30),
+  }],
+  views: ['timelineMonth'],
+  currentView: 'timelineMonth',
+  currentDate: new Date(2024, 0, 2),
+  cellDuration: 60,
+  startDayHour: 10,
+  endDayHour: 12,
+}));

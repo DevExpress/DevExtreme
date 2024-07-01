@@ -42,11 +42,9 @@ const getNodeItemId = $node => $node.data('itemId');
 module('Expanded items', {
     beforeEach() {
         fx.off = true;
-        this.clock = sinon.useFakeTimers();
     },
     afterEach() {
         fx.off = false;
-        this.clock.restore();
     }
 }, () => {
     test('Some item has\'expanded\' field', function(assert) {
@@ -141,7 +139,7 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
         const event = new $.Event('dxclick');
-        $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
+        $firstItem.find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
 
         const args = itemExpandedHandler.getCall(0).args[0];
         checkFunctionArguments(assert, args, {
@@ -193,7 +191,7 @@ module('Expanded items', {
 
         const $firstItem = $treeView.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0);
         const event = new $.Event('dxclick');
-        $firstItem.parent().find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
+        $firstItem.find(`> .${TREEVIEW_TOGGLE_ITEM_VISIBILITY_CLASS}`).trigger(event);
 
         const args = itemCollapsedHandler.getCall(0).args[0];
         checkFunctionArguments(assert, args, {
@@ -341,22 +339,6 @@ module('Expanded items', {
         treeView.option('items', items);
 
         assert.ok(treeView.option('items')[0].expanded, 'disabled item was not expanded');
-    });
-
-    test('ui expand and collapse work correctly', function(assert) {
-        const data = $.extend(true, [], DATA[5]);
-        data[0].items[1].expanded = true;
-        const $treeView = initTree({
-            items: data
-        });
-        const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
-
-        $toggleExpandIcon.trigger('dxclick');
-        assert.ok(!$toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
-
-        $toggleExpandIcon.trigger('dxclick');
-        this.clock.tick(100);
-        assert.ok($toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
     });
 
     test('itemExpanded should be fired when expanding item', function(assert) {
@@ -543,6 +525,41 @@ module('Expanded items', {
         const nodeElements = $treeView.find(`.${TREEVIEW_NODE_CONTAINER_CLASS}`);
         assert.ok(nodeElements.eq(1).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 11');
         assert.ok(nodeElements.eq(2).hasClass(TREEVIEW_NODE_CONTAINER_OPENED_CLASS), 'item 111');
+    });
+
+    test('onItemCollapsed event should be rised when collapseItem called after expandAll(T1202248)', function(assert) {
+        const itemCollapsedSpy = sinon.spy();
+        const done = assert.async();
+        assert.expect(1);
+        const items = [{
+            text: '1',
+            id: 1,
+            items: [{
+                text: '11',
+                id: 11,
+                items: [{
+                    text: '111',
+                    id: 111
+                }]
+            }]
+        }];
+
+        const treeView = initTree({
+            items: items,
+            onItemCollapsed: itemCollapsedSpy,
+        }).dxTreeView('instance');
+
+        treeView.on('contentReady', () => {
+            itemCollapsedSpy.resetHistory();
+            treeView
+                .collapseItem(11)
+                .done(()=> {
+                    assert.strictEqual(itemCollapsedSpy.callCount, 1);
+                    done();
+                });
+        });
+
+        treeView.expandAll();
     });
 
     test('expand childless item in recursive case', function(assert) {
@@ -744,7 +761,8 @@ module('Expanded items', {
     });
 
     test('Content ready event is thrown once when the expandAll is called', function(assert) {
-        const contentReadyStub = sinon.stub();
+        const done = assert.async();
+        assert.expect(1);
         const $treeView = initTree({
             items: [{
                 text: '1',
@@ -758,17 +776,21 @@ module('Expanded items', {
                     }]
                 }]
             }],
-            onContentReady: contentReadyStub
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        treeView.expandAll();
+        treeView.on('contentReady', () => {
+            assert.ok(true, 'event is thrown once');
+            done();
+        });
 
-        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
+        treeView.expandAll();
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source', function(assert) {
         const contentReadyStub = sinon.stub();
+        const done = assert.async();
+        assert.expect(1);
         const $treeView = initTree({
             dataSource: makeSlowDataSource($.extend(true, [],
                 [
@@ -783,17 +805,18 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        this.clock.tick(400);
+        treeView.on('contentReady', () => {
+            assert.ok(true, 'event is thrown once');
+            done();
+        });
 
         treeView.expandAll();
-
-        this.clock.tick(400);
-
-        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with the slow data source and the virtual mode', function(assert) {
         const contentReadyStub = sinon.stub();
+        const done = assert.async();
+        assert.expect(1);
         const $treeView = initTree({
             dataSource: makeSlowDataSource($.extend(true, [],
                 [
@@ -809,17 +832,18 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        this.clock.tick(400);
+        treeView.on('contentReady', () => {
+            assert.ok(true, 'event is thrown once');
+            done();
+        });
 
         treeView.expandAll();
-
-        this.clock.tick(400);
-
-        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
     test('Content ready event is thrown once when the expandAll is called with load data on demand', function(assert) {
         const contentReadyStub = sinon.stub();
+        const done = assert.async();
+        assert.expect(1);
         const data = [
             { id: 1, parentID: 0, text: 'Animals' },
             { id: 2, parentID: 1, text: 'Cat' },
@@ -838,21 +862,46 @@ module('Expanded items', {
         });
         const treeView = $treeView.dxTreeView('instance');
 
-        this.clock.tick(400);
+        treeView.on('contentReady', () => {
+            assert.ok(true, 'event is thrown once');
+            done();
+        });
 
         treeView.expandAll();
-
-        this.clock.tick(400);
-
-        assert.equal(contentReadyStub.callCount, 1, 'event is thrown once');
     });
 
+    module('Expanded items. Fake timer', {
+        beforeEach() {
+            fx.off = true;
+            this.clock = sinon.useFakeTimers();
+        },
+        afterEach() {
+            fx.off = false;
+            this.clock.restore();
+        }
+    }, () => {
+        test('ui expand and collapse work correctly', function(assert) {
+            const data = $.extend(true, [], DATA[5]);
+            data[0].items[1].expanded = true;
+            const $treeView = initTree({
+                items: data
+            });
+            const $toggleExpandIcon = $($treeView.find('.dx-treeview-toggle-item-visibility').eq(0));
+
+            $toggleExpandIcon.trigger('dxclick');
+            assert.ok(!$toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
+
+            $toggleExpandIcon.trigger('dxclick');
+            this.clock.tick(100);
+            assert.ok($toggleExpandIcon.hasClass('dx-treeview-toggle-item-visibility-opened'));
+        });
+    });
 
     ['items', 'dataSource', 'createChildren'].forEach((dataSourceOption) => {
         [false, true].forEach((virtualModeEnabled) => {
-            QUnit.module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
+            module(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled} (T832760)`, () => {
                 [false, true].forEach((expanded) => {
-                    QUnit.test('Initialization', function(assert) {
+                    test('Initialization', function(assert) {
                         const options = createOptions(
                             { virtualModeEnabled, dataSourceOption },
                             [{ id: 1, text: 'item1', parentId: 2, expanded }, { id: 2, text: 'item1_1', parentId: 1, expanded }]
@@ -886,18 +935,18 @@ module('Expanded items', {
                 }
 
                 [false, true].forEach((isExpanded) => {
-                    QUnit.test('expandItem($node)', function(assert) {
+                    test('expandItem($node)', function(assert) {
                         runExpandItemTest(assert, isExpanded, $parent => $parent);
                     });
-                    QUnit.test('expandItem(DOMElement)', function(assert) {
+                    test('expandItem(DOMElement)', function(assert) {
                         runExpandItemTest(assert, isExpanded, $parent => $parent.get(0));
                     });
-                    QUnit.test('expandItem(Key)', function(assert) {
+                    test('expandItem(Key)', function(assert) {
                         runExpandItemTest(assert, isExpanded, _ => 2);
                     });
                 });
 
-                QUnit.test('ExpandAll', function(assert) {
+                test('ExpandAll', function(assert) {
                     const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: false },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: false }]);
@@ -931,18 +980,18 @@ module('Expanded items', {
                 }
 
                 [false, true].forEach((expanded) => {
-                    QUnit.test('collapseItem($node)', function(assert) {
+                    test('collapseItem($node)', function(assert) {
                         runCollapseItemTest(assert, expanded, $parent => $parent);
                     });
-                    QUnit.test('collapseItem(DOMElement)', function(assert) {
+                    test('collapseItem(DOMElement)', function(assert) {
                         runCollapseItemTest(assert, expanded, $parent => $parent.get(0));
                     });
-                    QUnit.test('collapseItem(Key)', function(assert) {
+                    test('collapseItem(Key)', function(assert) {
                         runCollapseItemTest(assert, expanded, _ => 2);
                     });
                 });
 
-                QUnit.test('CollapseAll', function(assert) {
+                test('CollapseAll', function(assert) {
                     const options = createOptions({ dataSourceOption, virtualModeEnabled }, [
                         { id: 1, text: 'item1', parentId: 2, expanded: true },
                         { id: 2, text: 'item1_1', parentId: 1, expanded: true }]);
@@ -957,7 +1006,7 @@ module('Expanded items', {
                 });
             });
 
-            QUnit.test(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. ExpandItem(1) -> CollapseItem(1) -> repaint() -> expandItem(1) //T920415`, function(assert) {
+            test(`DataSource: ${dataSourceOption}. VirtualModeEnabled: ${virtualModeEnabled}. ExpandItem(1) -> CollapseItem(1) -> repaint() -> expandItem(1) //T920415`, function(assert) {
                 const options = createOptions(
                     { virtualModeEnabled, dataSourceOption, rootValue: 0 },
                     [{ id: 1, text: 'item1', parentId: 0 }, { id: 2, text: 'item1_1', parentId: 1 }]

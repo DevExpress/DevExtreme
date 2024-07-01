@@ -6,7 +6,7 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { DiagramCommand } from 'devextreme/ui/diagram';
+import { Command } from 'devextreme/ui/diagram';
 import { FileManagerPredefinedContextMenuItem } from 'devextreme/ui/file_manager';
 import { GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
 
@@ -14,10 +14,10 @@ import { GanttPredefinedContextMenuItem } from 'devextreme/ui/gantt';
     template: ''
 })
 export abstract class DxoFileManagerContextMenu extends NestedOption {
-    get commands(): Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand> {
+    get commands(): Array<Command | DevExpress.ui.dxDiagram.CustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>) {
+    set commands(value: Array<Command | DevExpress.ui.dxDiagram.CustomCommand>) {
         this._setOption('commands', value);
     }
 

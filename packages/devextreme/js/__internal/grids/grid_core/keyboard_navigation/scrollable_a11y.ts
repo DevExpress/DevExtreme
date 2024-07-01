@@ -10,41 +10,16 @@ This fix makes first cell in not fixed table to always have tabIndex, so checker
 And to make navigation via Tab key working properly some focus event handlers are added.
 */
 
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { isDefined, isEmptyObject } from '@js/core/utils/type';
-import eventsEngine from '@js/events/core/events_engine';
-import { ModuleType } from '@ts/grids/grid_core/m_types';
+import type { ModuleType } from '@ts/grids/grid_core/m_types';
 
 import type { KeyboardNavigationController } from './m_keyboard_navigation';
 
 // eslint-disable-next-line max-len
 export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<KeyboardNavigationController>): ModuleType<KeyboardNavigationController> => class ScrollableA11yExtender extends Base {
   private _$firstNotFixedCell: dxElementWrapper | undefined;
-
-  private rowsViewFocusOutHandlerContext!: (event: Event) => void;
-
-  init(): void {
-    super.init();
-
-    // eslint-disable-next-line max-len
-    this.rowsViewFocusOutHandlerContext = this.rowsViewFocusOutHandlerContext ?? this.rowsViewFocusOutHandler.bind(this);
-  }
-
-  protected subscribeToRowsViewFocusEvent(): void {
-    super.subscribeToRowsViewFocusEvent();
-
-    const $rowsView = this._rowsView?.element();
-
-    eventsEngine.on($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
-  }
-
-  protected unsubscribeFromRowsViewFocusEvent(): void {
-    super.unsubscribeFromRowsViewFocusEvent();
-
-    const $rowsView = this._rowsView?.element();
-
-    eventsEngine.off($rowsView, 'focusout', this.rowsViewFocusOutHandlerContext);
-  }
 
   protected rowsViewFocusHandler(event: any): void {
     const $target = $(event.target);
@@ -54,7 +29,8 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.rowsViewFocusHandler(event);
   }
 
-  private rowsViewFocusOutHandler(): void {
+  protected rowsViewFocusOutHandler(): void {
+    super.rowsViewFocusOutHandler();
     this.makeScrollableFocusableIfNeed();
   }
 
@@ -86,7 +62,7 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
     super.renderCompleted(e);
   }
 
-  protected _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
+  public _focus($cell: any, disableFocus?: any, skipFocusEvent?: any): void {
     super._focus($cell, disableFocus, skipFocusEvent);
 
     this.makeScrollableFocusableIfNeed();
@@ -113,11 +89,12 @@ export const keyboardNavigationScrollableA11yExtender = (Base: ModuleType<Keyboa
 
     return columnIndex === -1
       ? undefined
-      : this._rowsView._getCellElement(0, columnIndex) as dxElementWrapper | undefined;
+      : this._rowsView._getCellElement(0, columnIndex);
   }
 
   private isScrollableNeedFocusable(): boolean {
     const hasScrollable = !!this._rowsView.getScrollable();
+    // @ts-expect-error rowsView types issue, this field comes from extender
     const hasFixedTable = !!this._rowsView._fixedTableElement?.length;
     const isCellsRendered = !!this._rowsView.getCellElements(0)?.length;
 

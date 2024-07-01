@@ -27,12 +27,12 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     .dx-list-item {
       opacity: 1;
-      color: $base-disabled-color;
+      color: $base-foreground-disabled;
     }
   }
 
   .dx-list-select-all-label {
-    color: $base-disabled-color;
+    color: $base-foreground-disabled;
 
     &::after {
       color: $base-border-color-disabled;
@@ -95,9 +95,17 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   row-gap: $fluent-list-item-gap;
 }
 
-.dx-list-collapsible-groups .dx-list-group-header {
-  &::before {
-    content: none;
+.dx-list {
+  .dx-list-group-header-indicator {
+    display: none;
+  }
+}
+
+.dx-list-collapsible-groups {
+  .dx-list-group-header {
+    &::before {
+      content: none;
+    }
   }
 }
 
@@ -140,7 +148,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     }
 
     &.dx-list-with-search .dx-scrollable-wrapper {
-      height: calc(100% - #{$fluent-list-item-height + $fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
+      height: calc(100% - #{$fluent-texteditor-input-height + $fluent-list-searchbox-margin-bottom});
     }
 
     .dx-empty-message {
@@ -241,13 +249,21 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
     &.dx-list-group-collapsed {
       .dx-list-group-header-indicator {
         .dx-list-collapsible-groups & {
-          @include dx-icon(chevrondown);
+          @include dx-icon(chevronright);
           @include dx-icon-sizing($fluent-base-icon-size);
         }
       }
 
       .dx-list-group-header {
         color: $list-group-color;
+      }
+    }
+    
+    &:last-of-type {
+      .dx-list-item {
+        &:last-of-type {
+          margin-bottom: $fluent-list-bottom-padding;
+        }
       }
     }
 
@@ -275,11 +291,12 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     .dx-list-group-header-indicator {
       color: $list-header-indicator-color;
-      display: flex;
-      align-items: center;
-
+     
       .dx-list-collapsible-groups & {
-        @include dx-icon(chevronright);
+        display: flex;
+        align-items: center;
+        
+        @include dx-icon(chevrondown);
         @include dx-icon-sizing($fluent-base-icon-size);
       }
     }
@@ -426,6 +443,7 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
 
     &.dx-list-static-delete-button-container {
       width: $item-horizontal-padding + $fluent-button-icon-size;
+      padding: 0;
     }
 
     .dx-list-reorder-handle {
@@ -464,6 +482,8 @@ $fluent-list-item-border: $fluent-list-item-border-width solid $list-border-colo
   }
 
   .dx-list-static-delete-button {
+    padding: 0;
+
     &.dx-button {
       box-shadow: none;
       background-color: transparent;

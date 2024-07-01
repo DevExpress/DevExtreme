@@ -12,7 +12,7 @@ module.exports = {
         // General TS rules.
         {
             files: [
-                '**/*.ts'
+                '**/*.ts?(x)'
             ],
             parser: '@typescript-eslint/parser',
             parserOptions: {
@@ -21,6 +21,12 @@ module.exports = {
                 tsconfigRootDir: __dirname,
             },
             rules: {
+                '@typescript-eslint/consistent-type-imports': [
+                    'error',
+                    {
+                        'disallowTypeAnnotations': false
+                    }
+                ],
                 'no-restricted-globals': [
                     'warn',
                     {
@@ -57,13 +63,15 @@ module.exports = {
                 'simple-import-sort/imports': 'error',
                 'simple-import-sort/exports': 'error',
                 'no-param-reassign': ['error', { 'props': false }],
-                'no-underscore-dangle': 'off'
+                'no-underscore-dangle': 'off',
+                'no-console': ['error', { 'allow': ['warn', 'error'] }],
+                'class-methods-use-this': 'off',
             }
         },
         // Rules for a new TS files.
         {
             files: [
-                '**/*.ts',
+                '**/*.ts?(x)',
             ],
             excludedFiles: '**/m_*.ts',
             parser: '@typescript-eslint/parser',
@@ -121,6 +129,72 @@ module.exports = {
                 '@typescript-eslint/no-implied-eval': 'warn',
                 '@typescript-eslint/ban-ts-comment': 'warn',
                 '@typescript-eslint/prefer-for-of': 'warn',
+            }
+        },
+        // Rules for grid controls
+        {
+            files: [
+                '**/grid_core/**/**.ts?(x)',
+                '**/data_grid/**/**.ts?(x)',
+                '**/tree_list/**/**.ts?(x)',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/explicit-member-accessibility': [
+                    'error',
+                    {
+                        'accessibility': 'explicit',
+                        'overrides': {
+                            'constructors': 'off',
+                        },
+                    }
+                ],
+                // '@typescript-eslint/member-ordering': [
+                //     'error',
+                //     {
+                //         'default': [
+                //             'private-field',
+                //             'protected-field',
+                //             'public-field',
+                //             'constructor',
+                //             'private-method',
+                //             'protected-method',
+                //             'public-method'
+                //         ]
+                //     },
+                // ],
+                'no-restricted-syntax': [
+                    'error',
+                    {
+                        'selector': 'MethodDefinition[kind = "get"]',
+                    },
+                    {
+                        'selector': 'MethodDefinition[kind = "set"]',
+                    }
+                ],
+                '@typescript-eslint/lines-between-class-members': 'off',
+            }
+        },
+        // Rules for Jest tests.
+        {
+            files: [
+                '**/*test.ts',
+            ],
+            parser: '@typescript-eslint/parser',
+            parserOptions: {
+                createDefaultProgram: true,
+                project: './tsconfig.json',
+                tsconfigRootDir: __dirname,
+            },
+            rules: {
+                '@typescript-eslint/no-unsafe-return': 'warn',
+                '@typescript-eslint/no-explicit-any': 'warn',
+                '@typescript-eslint/explicit-function-return-type': 'warn'
             }
         },
     ],

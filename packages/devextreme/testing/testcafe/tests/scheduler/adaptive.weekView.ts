@@ -1,4 +1,4 @@
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import Scheduler from '../../model/scheduler';

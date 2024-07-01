@@ -46,7 +46,6 @@
 .dx-toast-stack {
   position: fixed;
   display: flex;
-  overflow: hidden;
   gap: 3px;
   align-items: center;
   z-index: 9500;
@@ -59,7 +58,6 @@
     width: auto !important;
 
     .dx-toast-content {
-      transform: translate(0) !important;
       position: static !important;
     }
   }

@@ -1,3 +1,4 @@
+"use client"
 import dxButton, {
     Properties
 } from "devextreme/ui/button";

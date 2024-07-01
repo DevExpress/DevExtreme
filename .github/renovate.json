@@ -4,10 +4,6 @@
     ],
     "prConcurrentLimit": 2,
     "semanticCommits": "enabled",
-    "baseBranches": [
-        "23_2",
-        "23_1"
-    ],
     "labels": [
         "dependencies"
     ],
@@ -49,20 +45,24 @@
             "excludePackagePrefixes": [ "cldr-", "chrome", "firefox" ],
             "matchUpdateTypes": [ "major" ],
             "dependencyDashboardApproval": true
+        },
+        {
+            "matchPackagePatterns": [ "*" ],
+            "matchUpdateTypes": [ "minor", "patch" ],
+            "automerge": true,
+            "matchDatasources": [ "npm" ],
+            "minimumReleaseAge": "7 days"
         }
     ],
     "lockFileMaintenance": {
         "enabled": true,
         "schedule": ["before 4am on Thursday"]
     },
-    "constraints": {
-        "node": "^16.3.0"
-    },
     "regexManagers": [
         {
             "fileMatch": ["^\\.github\\/.+\\.ya?ml$"],
             "matchStrings": [
-                "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)+)['\"]?(\\s|$)"
+                "node-version:\\s*['\"]?(?<currentValue>\\d+([\\.-]\\d+)*)['\"]?(\\s|$)"
             ],
             "depNameTemplate": "node",
             "versioningTemplate": "node",

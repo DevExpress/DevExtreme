@@ -39,8 +39,6 @@ $scheduler-all-day-table-cell-height: $scheduler-workspace-date-table-cell-heigh
 $scheduler-collapsed-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height * 0.5;
 $scheduler-vertical-grouped-all-day-table-cell-height: $scheduler-workspace-date-table-cell-height;
 $scheduler-vertical-group-header-content-top-offset: 16px;
-$scheduler-month-workspace-rows-count: 6;
-$scheduler-month-workspace-date-table-height: $scheduler-workspace-date-table-cell-height * $scheduler-month-workspace-rows-count;
 $scheduler-header-panel-table-cell-height: $scheduler-workspace-date-table-cell-height - 10px;
 $scheduler-group-header-table-cell-height: 30px;
 
@@ -57,7 +55,6 @@ $scheduler-month-date-text-padding: 6px;
   $scheduler-base-border: $scheduler-base-border,
   $scheduler-base-border-color: $scheduler-base-border-color,
   $scheduler-workspace-accent-color: $scheduler-workspace-accent-color,
-  $scheduler-month-workspace-date-table-height: $scheduler-month-workspace-date-table-height,
   $scheduler-workspace-date-table-cell-height: $scheduler-workspace-date-table-cell-height,
   $scheduler-month-date-text-size: $scheduler-month-date-text-size,
   $scheduler-workspace-month-text-color: $scheduler-workspace-month-text-color,
@@ -310,7 +307,7 @@ $scheduler-month-date-text-padding: 6px;
     .dx-scheduler-group-header {
       @include flex-container(row, nowrap);
 
-      flex: 1 1 100%;
+      flex: 1 1 0;
       padding: 0 5px;
       height: auto;
       width: $scheduler-left-column-width;

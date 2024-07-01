@@ -3,10 +3,10 @@ import $ from 'jquery';
 import 'generic_light.css!';
 
 import 'ui/select_box';
-import 'ui/color_box/color_view';
+import '__internal/ui/color_box/m_color_view';
 
-import Toolbar from 'ui/html_editor/modules/toolbar';
-import FormDialog from 'ui/html_editor/ui/formDialog';
+import Toolbar from '__internal/ui/html_editor/modules/m_toolbar';
+import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
 import { noop } from 'core/utils/common';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import fx from 'animation/fx';
@@ -390,6 +390,23 @@ testModule('Toolbar module', simpleModuleConfig, () => {
             }]
         );
         assert.equal(placeholder, 'Test', 'widget has a custom placeholder');
+    });
+
+    QUnit.test('textbox should be focused on mousedown (T1196805)', function(assert) {
+        this.options.items = [{
+            widget: 'dxTextBox',
+        }];
+
+        new Toolbar(this.quillMock, this.options);
+
+        const $textBox = $(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        $textBox.trigger('mousedown');
+
+        const root = document.querySelector('#qunit-fixture');
+        const activeElement = root.shadowRoot ? root.shadowRoot.activeElement : document.activeElement;
+
+        assert.strictEqual(activeElement, $textBox[0]);
     });
 
     test('handle align formatting', function(assert) {

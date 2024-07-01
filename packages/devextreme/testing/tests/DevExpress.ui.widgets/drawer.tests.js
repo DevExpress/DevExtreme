@@ -11,7 +11,7 @@ import visibilityChange from 'events/visibility_change';
 import $ from 'jquery';
 import Button from 'ui/button';
 import Drawer from 'ui/drawer';
-import { animation } from 'ui/drawer/ui.drawer.animation';
+import { animation } from '__internal/ui/drawer/m_drawer.animation';
 import Overlay from 'ui/overlay/ui.overlay';
 
 
@@ -1255,7 +1255,6 @@ QUnit.module('CloseOnOutsideClick', {
     }
 }, () => {
     QUnit.test('drawer should be hidden after click on content', function(assert) {
-        const clock = sinon.useFakeTimers();
         const drawer = $('#drawer').dxDrawer({
             closeOnOutsideClick: false,
             opened: true,
@@ -1271,7 +1270,7 @@ QUnit.module('CloseOnOutsideClick', {
         const $shader = drawer.$element().find('.' + DRAWER_SHADER_CLASS);
 
         $($content).trigger('dxclick');
-        clock.tick(10);
+        this.clock.tick(10);
 
         assert.equal(drawer.option('opened'), false, 'drawer is hidden');
         assert.ok($shader.is(':hidden'), 'shader is hidden');

@@ -726,7 +726,7 @@ const DxColumnChooser = createConfigurationComponent({
     container: {},
     emptyPanelText: String,
     enabled: Boolean,
-    height: Number,
+    height: [Number, String],
     mode: String,
     position: Object,
     search: Object,
@@ -734,7 +734,7 @@ const DxColumnChooser = createConfigurationComponent({
     selection: Object,
     sortOrder: String,
     title: String,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxColumnChooser as any).$_optionName = "columnChooser";
@@ -827,10 +827,10 @@ const DxColumnHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: Number,
+    height: [Number, String],
     search: Object,
     searchMode: String,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
@@ -977,12 +977,12 @@ const DxDataGridHeaderFilter = createConfigurationComponent({
   props: {
     allowSearch: Boolean,
     allowSelectAll: Boolean,
-    height: Number,
+    height: [Number, String],
     search: Object,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxDataGridHeaderFilter as any).$_optionName = "headerFilter";
@@ -1835,13 +1835,13 @@ const DxHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: Number,
+    height: [Number, String],
     search: Object,
     searchMode: String,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxHeaderFilter as any).$_optionName = "headerFilter";
@@ -1968,14 +1968,14 @@ const DxLoadPanel = createConfigurationComponent({
   },
   props: {
     enabled: [Boolean, String],
-    height: Number,
+    height: [Number, String],
     indicatorSrc: String,
     shading: Boolean,
     shadingColor: String,
     showIndicator: Boolean,
     showPane: Boolean,
     text: String,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxLoadPanel as any).$_optionName = "loadPanel";
@@ -2141,7 +2141,7 @@ const DxPatternRule = createConfigurationComponent({
   props: {
     ignoreEmptyValue: Boolean,
     message: String,
-    pattern: {},
+    pattern: [RegExp, String],
     type: String
   }
 });
@@ -2304,9 +2304,9 @@ const DxRangeRule = createConfigurationComponent({
   },
   props: {
     ignoreEmptyValue: Boolean,
-    max: {},
+    max: [Date, Number, String],
     message: String,
-    min: {},
+    min: [Date, Number, String],
     reevaluate: Boolean,
     type: String
   }
@@ -2881,10 +2881,10 @@ const DxValidationRule = createConfigurationComponent({
     comparisonTarget: Function,
     comparisonType: String,
     ignoreEmptyValue: Boolean,
-    max: {},
+    max: [Date, Number, String],
     message: String,
-    min: {},
-    pattern: {},
+    min: [Date, Number, String],
+    pattern: [RegExp, String],
     reevaluate: Boolean,
     trim: Boolean,
     type: String,

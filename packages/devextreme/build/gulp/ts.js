@@ -38,7 +38,6 @@ function compileTS(settings) {
 const packagePath = `${context.RESULT_NPM_PATH}/${packageDir}`;
 const packageBundlesPath = path.join(packagePath, 'bundles');
 
-
 gulp.task('ts-copy-vendor', function() {
     return gulp.src('./ts/vendor/*')
         .pipe(gulp.dest(OUTPUT_ARTIFACTS_DIR));
@@ -124,7 +123,7 @@ gulp.task('ts-copy-modules', function() {
         .pipe(file('events/swipe.d.ts', BUNDLE_IMPORT))
         .pipe(file('events/transform.d.ts', BUNDLE_IMPORT))
         .pipe(file('integration/jquery.d.ts', 'import \'jquery\';'))
-        
+
         .pipe(compressionPipes.removeDebug())
         .pipe(headerPipes.starLicense())
         .pipe(gulp.dest(packagePath));
@@ -185,10 +184,17 @@ gulp.task('test-ts', gulp.series(
                 'skipLibCheck': true,
                 'typeRoots': [],
                 'target': 'es2015',
+                'lib': [
+                    'ES2017',
+                    'ES2020.BigInt',
+                    'DOM'
+                ],
                 'baseUrl': `${TS_TESTS_PATH}`,
                 'paths': {
-                    '*': ['node_modules/*']
-                },
+                    '@js/*': ['../../js/*'],
+                    '@ts/*': ['../../js/__internal/*'],
+                    '*': ['node_modules/*'],
+                }
             }));
     }
 ));

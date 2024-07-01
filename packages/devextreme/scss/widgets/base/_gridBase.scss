@@ -56,8 +56,11 @@
     }
 
     > .dx-#{$widget-name}-rowsview.dx-last-row-border {
-      tbody:last-child > .dx-data-row:nth-last-child(2) > td {
-        border-bottom-width: 0;
+      tbody:last-child > .dx-data-row:nth-last-child(2) {
+        &,
+        & > td {
+          border-bottom-width: 0;
+        }
       }
     }
   }
@@ -227,16 +230,10 @@
     }
 
     &.dx-#{$widget-name}-column-chooser-mode-select {
-      .dx-#{$widget-name}-column-chooser-plain {
-        .dx-treeview-select-all-item {
-          padding-left: 4px;
-        }
-
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
         .dx-treeview-node {
-          padding-left: 0;
-
-          .dx-checkbox {
-            left: 4px;
+          .dx-treeview-item {
+            padding-inline-start: 4px;
           }
         }
       }
@@ -461,8 +458,14 @@
 
       .dx-editor-cell {
         max-width: 0;
-        padding: 0;
         vertical-align: middle;
+        padding-top: 0;
+        padding-right: 0;
+        padding-bottom: 0;
+
+        &:not(.dx-#{$widget-name}-cell-expandable) {
+          padding-left: 0;
+        }
 
         .dx-texteditor,
         .dx-texteditor-container {

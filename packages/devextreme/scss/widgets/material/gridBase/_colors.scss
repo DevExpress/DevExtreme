@@ -8,7 +8,7 @@
 $datagrid-base-color: $base-text-color !default;
 
 /**
-* $name 60. Background color
+* $name 15. Background color
 * $type color
 */
 $datagrid-base-background-color: $base-bg !default;
@@ -42,13 +42,13 @@ $header-filter-color: null !default;
 $header-filter-color-empty: null !default;
 
 /**
-* $name 55. Selected row background color
+* $name 51. Selected row background color
 * $type color
 */
 $datagrid-selection-bg: null !default;
 
 /**
-* $name 60. Selected row border color
+* $name 52. Selected row border color
 * $type color
 */
 $datagrid-row-selected-border-color: $datagrid-border-color !default;
@@ -69,12 +69,12 @@ $datagrid-row-focused-color: $base-text-color !default;
 * $name 70. Focused row background color
 * $type color
 */
-$datagrid-row-focused-bg: color.change($base-accent, $alpha: 0.2) !default;
+$datagrid-row-focused-bg: mix($base-accent, $base-bg, 20%) !default;
 $datagrid-hover-bg: $base-hover-bg !default;
 $datagrid-row-hovered-color: $base-hover-color !default;
 
 /**
-* $name 30. Context menu icons color
+* $name 30. Context menu icon color
 * $type color
 */
 $datagrid-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
@@ -89,7 +89,7 @@ $datagrid-row-removed-bg: $datagrid-border-color !default;
 $datagrid-cell-removed-text-color: null !default;
 
 /**
-* $name 45. Invalidate data faded color
+* $name 45. Invalid data faded color
 * $type color
 */
 $datagrid-row-invalid-faded-border-color: color.change($base-invalid-faded-border-color, $alpha: 0.32) !default;
@@ -141,7 +141,7 @@ $datagrid-link-color: $base-link-color !default;
 $datagrid-focused-border-color: mix($base-bg, $base-accent, 20%) !default;
 
 /**
-* $name 80. Editor background
+* $name 80. Editor background color
 * $type color
 */
 $datagrid-editor-bg: color.change($datagrid-base-background-color, $alpha: 0) !default;
@@ -151,7 +151,7 @@ $datagrid-columnchooser-bg: $base-element-bg !default;
 $datagrid-columnchooser-item-bg: null !default;
 
 /**
-* $name 85. Row alternation background color
+* $name 85. Alternate row background color
 * $type color
 */
 $datagrid-row-alternation-bg: null !default;

@@ -1,5 +1,5 @@
 import registerComponent from '@js/core/component_registrator';
-import { calculateViewStartDate } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/week';
+import { weekUtils } from '@ts/scheduler/r1/utils/index';
 
 import { VIEWS } from '../m_constants';
 import SchedulerWorkSpaceVertical from './m_work_space_vertical';
@@ -13,7 +13,7 @@ class SchedulerWorkSpaceWeek extends SchedulerWorkSpaceVertical {
   }
 
   _calculateViewStartDate() {
-    return calculateViewStartDate(this.option('startDate') as any, this._firstDayOfWeek());
+    return weekUtils.calculateViewStartDate(this.option('startDate') as any, this._firstDayOfWeek());
   }
 }
 

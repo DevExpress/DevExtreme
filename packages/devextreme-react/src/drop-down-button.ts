@@ -1,3 +1,4 @@
+"use client"
 import dxDropDownButton, {
     Properties
 } from "devextreme/ui/drop_down_button";
@@ -322,7 +323,7 @@ type IItemProps = React.PropsWithChildren<{
   disabled?: boolean;
   html?: string;
   icon?: string;
-  onClick?: ((e: ItemClickEvent | { component: dxDropDownButton, element: any, event: event, itemData: Record<string, any>, itemElement: any, model: any }) => void);
+  onClick?: ((e: ItemClickEvent) => void);
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
@@ -438,7 +439,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;

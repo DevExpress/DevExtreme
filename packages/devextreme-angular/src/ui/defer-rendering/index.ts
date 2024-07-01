@@ -20,7 +20,7 @@ import {
 
 import { AnimationConfig } from 'devextreme/animation/fx';
 import { DxPromise } from 'devextreme/core/utils/deferred';
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent } from 'devextreme/ui/defer_rendering';
+import { ContentReadyEvent, DisposingEvent, InitializedEvent, OptionChangedEvent, RenderedEvent, ShownEvent } from 'devextreme/ui/defer_rendering';
 
 import DxDeferRendering from 'devextreme/ui/defer_rendering';
 
@@ -61,7 +61,7 @@ import { DxoToModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxDeferRenderingComponent extends DxComponent implements OnDestroy {
-    instance: DxDeferRendering;
+    instance: DxDeferRendering = null;
 
     /**
      * [descr:WidgetOptions.accessKey]
@@ -308,7 +308,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
     
      */
-    @Output() onRendered: EventEmitter<any>;
+    @Output() onRendered: EventEmitter<RenderedEvent>;
 
     /**
     
@@ -316,7 +316,7 @@ export class DxDeferRenderingComponent extends DxComponent implements OnDestroy 
     
     
      */
-    @Output() onShown: EventEmitter<any>;
+    @Output() onShown: EventEmitter<ShownEvent>;
 
     /**
     

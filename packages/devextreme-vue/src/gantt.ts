@@ -91,7 +91,7 @@ const DxGantt = createComponent({
     disabled: Boolean,
     editing: Object,
     elementAttr: Object,
-    endDateRange: {},
+    endDateRange: Date,
     filterRow: Object,
     firstDayOfWeek: {
       type: Number,
@@ -151,7 +151,7 @@ const DxGantt = createComponent({
     showResources: Boolean,
     showRowLines: Boolean,
     sorting: Object,
-    startDateRange: {},
+    startDateRange: Date,
     stripLines: Array,
     tabIndex: Number,
     taskContentTemplate: {},
@@ -367,10 +367,10 @@ const DxColumnHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: Number,
+    height: [Number, String],
     search: Object,
     searchMode: String,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxColumnHeaderFilter as any).$_optionName = "headerFilter";
@@ -609,13 +609,13 @@ const DxHeaderFilter = createConfigurationComponent({
     allowSelectAll: Boolean,
     dataSource: {},
     groupInterval: [Number, String],
-    height: Number,
+    height: [Number, String],
     search: Object,
     searchMode: String,
     searchTimeout: Number,
     texts: Object,
     visible: Boolean,
-    width: Number
+    width: [Number, String]
   }
 });
 (DxHeaderFilter as any).$_optionName = "headerFilter";
@@ -794,8 +794,8 @@ const DxStripLine = createConfigurationComponent({
   },
   props: {
     cssClass: String,
-    end: {},
-    start: {},
+    end: [Date, Function, Number, String],
+    start: [Date, Function, Number, String],
     title: String
   }
 });

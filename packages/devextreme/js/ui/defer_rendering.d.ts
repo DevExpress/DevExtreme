@@ -3,10 +3,6 @@ import {
 } from '../animation/fx';
 
 import {
-    DxElement,
-} from '../core/element';
-
-import {
     EventInfo,
     InitializedEventInfo,
     ChangedOptionInfo,
@@ -79,17 +75,19 @@ export interface dxDeferRenderingOptions extends WidgetOptions<dxDeferRendering>
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:{ui/defer_rendering:RenderedEvent}
      * @action
      * @public
      */
-    onRendered?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
+    onRendered?: ((e: RenderedEvent) => void);
     /**
      * @docid
      * @default null
+     * @type_function_param1 e:{ui/defer_rendering:ShownEvent}
      * @action
      * @public
      */
-    onShown?: ((e: { component?: dxDeferRendering; element?: DxElement; model?: any }) => void);
+    onShown?: ((e: ShownEvent) => void);
     /**
      * @docid
      * @type DxPromise|bool

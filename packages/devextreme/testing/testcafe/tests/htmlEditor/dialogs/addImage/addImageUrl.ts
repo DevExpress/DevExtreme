@@ -1,12 +1,37 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
 import { isMaterial, testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor - add image url`
   .page(url(__dirname, '../../../containerQuill.html'));
+
+const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
+
+test('Image uploader from url appearance', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const htmlEditor = new HtmlEditor('#container');
+
+  await t
+    .click(htmlEditor.toolbar.getItemByName('image'));
+
+  await t
+    .click(htmlEditor.dialog.addImageUrlForm.lockButton.element);
+
+  await t
+    .click(htmlEditor.dialog.addImageUrlForm.url.element);
+
+  await testScreenshot(t, takeScreenshot, 'Image uploader from url appearance.png', { element: ADD_IMAGE_POPUP_CONTENT_SELECTOR });
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxHtmlEditor', {
+  height: 600,
+  width: 800,
+  toolbar: { items: ['image'] },
+}));
 
 test('Image url should be validate before wil be inserted by add button click', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

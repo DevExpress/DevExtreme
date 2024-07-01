@@ -1,7 +1,8 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { removeStylesheetRulesFromPage, insertStylesheetRulesToPage } from '../../helpers/domUtils';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames as CLASS } from '../../model/dataGrid/classNames';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
@@ -1615,7 +1616,7 @@ test('Restoring focus on re-rendering should be done without unexpected scrollin
   });
 });
 
-test('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
+test.skip('Warning should be thrown if scrolling is virtual and height is not specified', async (t) => {
   const consoleMessages = await t.getBrowserConsoleMessages();
   const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
 
@@ -1624,4 +1625,88 @@ test('Warning should be thrown if scrolling is virtual and height is not specifi
   scrolling: {
     mode: 'virtual',
   },
+  dataSource: [
+    { column: 'value' },
+  ],
 }));
+
+test('Warning should not be thrown if scrolling is virtual and height is specified with option', async (t) => {
+  const consoleMessages = await t.getBrowserConsoleMessages();
+  const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+  await t.expect(warningExists).notOk();
+}).before(async () => createWidget('dxDataGrid', {
+  scrolling: {
+    mode: 'virtual',
+  },
+  dataSource: [
+    { column: 'value' },
+  ],
+  height: 200,
+}));
+
+['height', 'max-height'].forEach((cssOption) => {
+  test(`Warning should not be thrown if scrolling is virtual and height is specified with css (${cssOption})`, async (t) => {
+    const consoleMessages = await t.getBrowserConsoleMessages();
+    const warningExists = !!consoleMessages?.warn.find((message) => message.startsWith('W1025'));
+
+    await t.expect(warningExists).notOk();
+  }).before(async () => {
+    await insertStylesheetRulesToPage(`
+      #container {
+        ${cssOption}: 200px;
+      }
+    `);
+
+    await createWidget('dxDataGrid', {
+      scrolling: {
+        mode: 'virtual',
+      },
+      dataSource: [
+        { column: 'value' },
+      ],
+    });
+  }).after(async () => {
+    await removeStylesheetRulesFromPage();
+  });
+});
+
+// T1194796
+test('The row alternation should display correctly when grouping and virtual scrolling are enabled', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(dataGrid.hasScrollable())
+    .ok();
+
+  // act
+  await dataGrid.scrollTo(t, { y: 100 });
+  await dataGrid.scrollTo(t, { y: 200 });
+  await dataGrid.scrollTo(t, { y: 300 });
+  await dataGrid.scrollTo(t, { y: 400 });
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok()
+    .expect(await takeScreenshot('T1194796-row-alternation-with-grouping-and-virtual-scrolling', '#container'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', () => ({
+  dataSource: new Array(20).fill(null).map((_, index) => ({
+    groupField: index < 2 ? index : 2,
+    field: `test${index}`,
+  })),
+  height: 400,
+  paging: {
+    pageSize: 5,
+  },
+  columns: [{ dataField: 'groupField', groupIndex: 0 }, 'field'],
+  rowAlternationEnabled: true,
+  grouping: { autoExpandAll: true },
+  scrolling: { mode: 'virtual', useNative: false },
+})));

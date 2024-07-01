@@ -60,18 +60,18 @@ export class DxiValidationRuleComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get max(): Date | number {
+    get max(): Date | number | string {
         return this._getOption('max');
     }
-    set max(value: Date | number) {
+    set max(value: Date | number | string) {
         this._setOption('max', value);
     }
 
     @Input()
-    get min(): Date | number {
+    get min(): Date | number | string {
         return this._getOption('min');
     }
-    set min(value: Date | number) {
+    set min(value: Date | number | string) {
         this._setOption('min', value);
     }
 

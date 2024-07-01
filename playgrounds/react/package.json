@@ -2,15 +2,15 @@
   "author": "Developer Express Inc.",
   "name": "devextreme-react-playground",
   "private": true,
-  "version": "23.2.0",
+  "version": "23.2.7",
   "description": "DevExtreme React UI and Visualization Components Sandbox",
   "repository": {
     "type": "git",
     "url": "https://github.com/DevExpress/devextreme-react.git"
   },
   "dependencies": {
-    "devextreme": "~23.2.0",
-    "devextreme-react": "~23.2.0",
+    "devextreme": "~23.2.7",
+    "devextreme-react": "~23.2.7",
     "react": "~18.0.0",
     "react-dom": "~18.0.0"
   },
@@ -25,7 +25,7 @@
     "url-loader": "0.6.2",
     "webpack": "5.88.2",
     "webpack-cli": "3.3.12",
-    "webpack-dev-server": "3.11.3"
+    "webpack-dev-server": "4.15.1"
   },
   "scripts": {
     "start": "webpack-dev-server",

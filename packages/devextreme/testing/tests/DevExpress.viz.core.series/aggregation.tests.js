@@ -538,7 +538,7 @@ QUnit.test('getPointsByArg should create all points if there are not point on ar
     series.updateData(this.data);
     series.createPoints();
 
-    customMethod.reset();
+    customMethod.resetHistory();
 
     series.getPointsByArg(100);
 
@@ -556,7 +556,7 @@ QUnit.test('getPointsByArg should not create all points if there are not point o
     series.updateData(this.data);
     series.createPoints();
 
-    customMethod.reset();
+    customMethod.resetHistory();
 
     series.getPointsByArg(100, true);
 

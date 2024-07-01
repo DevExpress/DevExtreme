@@ -106,7 +106,7 @@ export interface dxResponsiveBoxOptions<
        * @docid
        * @default 0
        */
-      baseSize?: number | Mode;
+      baseSize?: number | string;
       /**
        * @docid
        * @default 1
@@ -152,7 +152,7 @@ export interface dxResponsiveBoxOptions<
        * @docid
        * @default 0
        */
-      baseSize?: number | Mode;
+      baseSize?: number | string;
       /**
        * @docid
        * @default 1

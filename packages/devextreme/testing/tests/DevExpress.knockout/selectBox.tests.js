@@ -93,7 +93,6 @@ QUnit.test('dropDownButton should be rendered when fieldTemplate is specified', 
 });
 
 QUnit.testInActiveWindow('select box should correctly update computed value', function(assert) {
-    const clock = sinon.useFakeTimers();
     const $selectBox = $('#selectBoxWithCustomConfig');
     const getVM = function() {
         const that = this;
@@ -131,9 +130,9 @@ QUnit.testInActiveWindow('select box should correctly update computed value', fu
         .first()
         .trigger('focusin')
         .trigger('dxclick');
-    clock.tick(300);
+    this.clock.tick(300);
 
     assert.equal(selectBox.option('value'), 1, 'select box correctly updates the value');
     assert.equal($selectBox.find('.dx-texteditor-input').val(), 1, 'input value is correct');
-    clock.restore();
+    this.clock.restore();
 });

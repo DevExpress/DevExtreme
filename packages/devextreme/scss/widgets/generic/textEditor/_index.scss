@@ -241,8 +241,8 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
 @include dx-editor-outlined(
   $texteditor-input-border-radius,
   $generic-texteditor-label-size,
-  1px,
-  1px,
+  $generic-base-border-width,
+  $generic-base-border-width,
   dashed,
   $generic-base-inline-block-height,
   $generic-base-inline-block-height,
@@ -255,7 +255,8 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   none,
   $texteditor-border-color,
   $texteditor-border-color,
-  color.change($texteditor-color, $alpha: 0.5),
+  $texteditor-disabled-border-color,
+  $texteditor-readonly-border-color,
   $texteditor-hover-border-color,
   $texteditor-hover-border-color,
   $texteditor-focused-border-color,
@@ -268,7 +269,6 @@ $generic-texteditor-invalid-badge-size: $generic-invalid-badge-size + 2 * $gener
   1px,
   $generic-texteditor-label-outside-font-size,
   $generic-texteditor-label-outside-height,
-  $generic-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

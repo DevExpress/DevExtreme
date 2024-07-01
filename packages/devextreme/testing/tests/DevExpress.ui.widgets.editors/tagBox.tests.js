@@ -22,7 +22,7 @@ import { normalizeKeyName } from 'events/utils/index';
 import { getWidth, getHeight } from 'core/utils/size';
 import Guid from 'core/guid';
 
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 import 'generic_light.css!';
 
@@ -1565,6 +1565,77 @@ QUnit.module('the \'onCustomItemCreating\' option', moduleSetup, () => {
         assert.equal($tags.length, 0, 'tags should not be rendered before button click');
         assert.equal($listItems.length, 1, 'list item should be selected after enter press');
         assert.equal(checkbox.option('value'), true, 'checkbox is checked');
+    });
+
+    [true, false].forEach((deferRendering) => {
+        QUnit.test(`No errors should be encountored when new item is added, items option is empty, deferRendering is ${deferRendering} [T1230995]`, function(assert) {
+            try {
+                const $element = $('#tagBox').dxTagBox({
+                    applyValueMode: 'useButtons',
+                    acceptCustomValue: true,
+                    onCustomItemCreating(args) {
+                        const newValue = args.text;
+                        const { component } = args;
+                        const currentItems = component.option('items');
+                        const isItemInDataSource = currentItems.some((item) => item === newValue);
+                        if(!isItemInDataSource) {
+                            currentItems.unshift(newValue);
+                            component.option('items', currentItems);
+                        }
+                        args.customItem = newValue;
+                    },
+                    deferRendering
+                });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                keyboardMock($input, true)
+                    .focus()
+                    .type('test 1')
+                    .press('enter');
+
+                const instance = $element.dxTagBox('instance');
+
+                assert.deepEqual(instance.option('selectedItems'), []);
+                assert.deepEqual(instance.option('items'), ['test 1']);
+            } catch(error) {
+                assert.ok(false, `Error encountered is: ${error.message}`);
+            }
+        });
+
+        QUnit.test(`No errors should be encountored when new item is added, deferRendering is ${deferRendering} [T1230995]`, function(assert) {
+            try {
+                const $element = $('#tagBox').dxTagBox({
+                    items: ['Item_1', 'Item_2', 'Item_3'],
+                    applyValueMode: 'useButtons',
+                    acceptCustomValue: true,
+                    onCustomItemCreating(args) {
+                        const newValue = args.text;
+                        const { component } = args;
+                        const currentItems = component.option('items');
+                        const isItemInDataSource = currentItems.some((item) => item === newValue);
+                        if(!isItemInDataSource) {
+                            currentItems.unshift(newValue);
+                            component.option('items', currentItems);
+                        }
+                        args.customItem = newValue;
+                    },
+                    deferRendering
+                });
+                const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+                keyboardMock($input, true)
+                    .focus()
+                    .type('test 1')
+                    .press('enter');
+
+                const instance = $element.dxTagBox('instance');
+
+                assert.deepEqual(instance.option('selectedItems'), []);
+                assert.deepEqual(instance.option('items'), ['test 1', 'Item_1', 'Item_2', 'Item_3']);
+            } catch(error) {
+                assert.ok(false, `Error encountered is: ${error.message}`);
+            }
+        });
     });
 });
 
@@ -4770,6 +4841,39 @@ QUnit.module('the \'acceptCustomValue\' option', moduleSetup, () => {
         assert.strictEqual($tags.length, 2, 'only two tags are added');
         assert.deepEqual(tagBoxInstance.option('selectedItems'), ['custom', 1], 'selected items are correct');
     });
+
+    QUnit.test('The editor must have the actual value after this value has been entered following its deletion(T1197444)', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({
+            acceptCustomValue: true,
+            searchEnabled: false,
+            openOnFieldClick: false,
+            onCustomItemCreating: function(args) {
+                const newValue = args.text;
+                const component = args.component;
+                const currentItems = component.option('items');
+                currentItems.unshift(newValue);
+                component.option('items', currentItems);
+                args.customItem = newValue;
+            }
+        });
+
+        const tagBoxInstance = $tagBox.dxTagBox('instance');
+
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        const keyboard = keyboardMock($input);
+
+        keyboard.type('1');
+        $input.trigger('change');
+
+        $(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`)
+            .last()
+            .trigger('dxclick');
+
+        keyboard.type('1');
+        $input.trigger('change');
+
+        assert.deepEqual(tagBoxInstance.option('value'), ['1']);
+    });
 });
 
 QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
@@ -4869,7 +4973,7 @@ QUnit.module('the \'selectedItems\' option', moduleSetup, () => {
         $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
         $(`.${LIST_CHECKBOX_CLASS}`).first().trigger('dxclick');
-        $('.dx-tag-remove-button').last().trigger('dxclick');
+        $(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).last().trigger('dxclick');
 
         $(`.${SELECT_ALL_CHECKBOX_CLASS}`).trigger('dxclick');
 
@@ -5006,7 +5110,7 @@ QUnit.module('the \'onSelectionChanged\' option', moduleSetup, () => {
             onSelectionChanged: spy
         }).dxTagBox('instance');
 
-        const $removeButtons = tagBox.$element().find('.dx-tag-remove-button');
+        const $removeButtons = tagBox.$element().find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`);
 
         $($removeButtons.eq(2)).trigger('dxclick');
 
@@ -5083,7 +5187,7 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
             focusStateEnabled: true
         });
 
-        fieldTemplateSpy.reset();
+        fieldTemplateSpy.resetHistory();
         keyboardMock($tagBox.find('.dx-texteditor-input'))
             .focus()
             .press('down');
@@ -5173,7 +5277,6 @@ QUnit.module('the \'fieldTemplate\' option', moduleSetup, () => {
         assert.strictEqual(tagBoxWithFieldTemplate.option('value').length, 1);
     });
 });
-
 
 QUnit.module('the "customItemCreateEvent" option', {
     beforeEach: function() {
@@ -6778,7 +6881,7 @@ QUnit.module('performance', () => {
         let filter = load.lastCall.args[0].filter;
         assert.deepEqual(filter, [['!', ['id', 1]]], 'filter is correct');
 
-        $($tagBox.find('.dx-tag-remove-button').eq(0)).trigger('dxclick');
+        $($tagBox.find(`.${TAGBOX_TAG_REMOVE_BUTTON_CLASS}`).eq(0)).trigger('dxclick');
 
         filter = load.lastCall.args[0].filter;
         assert.deepEqual(filter, null, 'filter is correct');
@@ -7035,7 +7138,7 @@ QUnit.module('maxFilterQueryLength', {
         };
 
         this.stubLogger = (assert) => {
-            this.stub = sinon.stub(uiErrors, 'log', (warning) => {
+            this.stub = sinon.stub(uiErrors, 'log').callsFake((warning) => {
                 assert.strictEqual(warning, 'W1019', 'warning is correct');
             });
         };
@@ -7099,8 +7202,6 @@ QUnit.module('regression', {
     }
 }, () => {
     QUnit.test('Selection refreshing process should wait for the items data will be loaded from the data source (T673636)', function(assert) {
-        const clock = sinon.useFakeTimers();
-
         const tagBox = $('#tagBox').dxTagBox({
             valueExpr: 'id',
             dataSource: {
@@ -7117,9 +7218,8 @@ QUnit.module('regression', {
         tagBox.option('value', [1]);
 
         assert.notOk(tagBox.option('selectedItems').length);
-        clock.tick(10);
+        this.clock.tick(10);
         assert.ok(tagBox.option('selectedItems').length);
-        clock.restore();
     });
 
     QUnit.test('should render function item template that returns default template\'s name (T726777)', function(assert) {
@@ -7734,10 +7834,9 @@ QUnit.module('label integration', () => {
                 label: 'some'
             });
 
-            const borderWidth = 2;
             const $tagContainer = $tagBox.find(`.${TAGBOX_TAG_CONTAINER_CLASS}`);
             const tagContainerWidth = getWidth($tagContainer);
-            assert.strictEqual(this.labelArgs.containerWidth + borderWidth, tagContainerWidth);
+            assert.strictEqual(this.labelArgs.getContainerWidth(), tagContainerWidth);
         } finally {
             TagBox.restoreTextEditorLabel();
         }
@@ -7745,19 +7844,21 @@ QUnit.module('label integration', () => {
 });
 
 QUnit.module('accessibility', () => {
-    QUnit.test('input should have a correct aria-labelledby', function(assert) {
+    QUnit.test('input should have aria-labelledby with a labelId if label specified', function(assert) {
         const $tagBox = $('#tagBox').dxTagBox({ label: 'custom-label' });
-        const tagBox = $tagBox.dxTagBox('instance');
         const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
         const labelId = $tagBox.find(`.${TEXTEDITOR_LABEL_CLASS}`).attr('id');
-        const placeholderId = $tagBox.find(`.${PLACEHOLDER_CLASS}`).attr('id');
 
-        const expectedAria = `${labelId} ${placeholderId}`;
+        const expectedAria = `${labelId}`;
 
         assert.strictEqual($input.attr('aria-labelledby'), expectedAria, 'aria-labelledby was set correctly');
+    });
 
-        tagBox.option('label', null);
-        assert.strictEqual($input.attr('aria-labelledby'), placeholderId, 'aria-labelledby is equal placeholder id');
+    QUnit.test('input should not have aria-labelledby attr if label is not specified', function(assert) {
+        const $tagBox = $('#tagBox').dxTagBox({ });
+        const $input = $tagBox.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+
+        assert.strictEqual($input.attr('aria-labelledby'), undefined, 'aria-labelledby was set correctly');
     });
 
     QUnit.test('select should have a correct aria-label', function(assert) {

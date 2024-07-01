@@ -266,7 +266,7 @@ const DxAnnotation = createConfigurationComponent({
   },
   props: {
     allowDragging: Boolean,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     border: Object,
@@ -420,7 +420,7 @@ const DxCommonAnnotationSettings = createConfigurationComponent({
   },
   props: {
     allowDragging: Boolean,
-    argument: {},
+    argument: [Date, Number, String],
     arrowLength: Number,
     arrowWidth: Number,
     border: Object,

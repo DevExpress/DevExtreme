@@ -2,7 +2,7 @@
 import { DataSource } from './data/data_source/data_source';
 import { extend } from './core/utils/extend';
 import { normalizeDataSourceOptions } from './data/data_source/utils';
-import DataController from './ui/collection/data_controller';
+import DataController from './__internal/ui/collection/m_data_controller';
 
 const DATA_SOURCE_OPTIONS_METHOD = '_dataSourceOptions';
 const DATA_SOURCE_CHANGED_METHOD = '_dataSourceChangedHandler';
@@ -85,9 +85,10 @@ const DataHelperMixin = {
     },
 
     _addReadyWatcher: function() {
-        this._dataSource.on('loadingChanged', (function(isLoading) {
+        this.readyWatcher = (function(isLoading) {
             this._ready && this._ready(!isLoading);
-        }).bind(this));
+        }).bind(this);
+        this._dataSource.on('loadingChanged', this.readyWatcher);
     },
 
     _addDataSourceChangeHandler: function() {
@@ -140,6 +141,10 @@ const DataHelperMixin = {
                 this._proxiedDataSourceChangedHandler && this._dataSource.off('changed', this._proxiedDataSourceChangedHandler);
                 this._proxiedDataSourceLoadErrorHandler && this._dataSource.off('loadError', this._proxiedDataSourceLoadErrorHandler);
                 this._proxiedDataSourceLoadingChangedHandler && this._dataSource.off('loadingChanged', this._proxiedDataSourceLoadingChangedHandler);
+
+                if(this._dataSource._eventsStrategy) {
+                    this._dataSource._eventsStrategy.off('loadingChanged', this.readyWatcher);
+                }
             } else {
                 this._dataSource.dispose();
             }

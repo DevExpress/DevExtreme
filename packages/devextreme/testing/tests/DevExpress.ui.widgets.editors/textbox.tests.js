@@ -6,7 +6,7 @@ import { getWidth, getOuterWidth } from 'core/utils/size';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import keyboardMock from '../../helpers/keyboardMock.js';
 
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label.js';
+import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 
 import 'generic_light.css!';
 
@@ -33,6 +33,17 @@ const BUTTONS_CONTAINER_CLASS = 'dx-texteditor-buttons-container';
 const TEXTEDITOR_INPUT_CONTAINER_CLASS = 'dx-texteditor-input-container';
 
 QUnit.module('common', {}, () => {
+    QUnit.test('should not generate any error if inputAttr is undefined', function(assert) {
+        try {
+            $('#textbox').dxTextBox({
+                inputAttr: undefined
+            });
+            assert.ok(true, 'Encountered no errors');
+        } catch(e) {
+            assert.ok(false, `The error is thrown: ${e.message}`);
+        }
+    });
+
     QUnit.test('onContentReady fired after the widget is fully ready', function(assert) {
         assert.expect(1);
 
@@ -377,7 +388,7 @@ QUnit.module('label integration', {
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedBeforeWidth = buttonsContainerWidth + searchIconOuterWidth;
 
-        assert.strictEqual(this.labelArgs.beforeWidth, expectedBeforeWidth);
+        assert.strictEqual(this.labelArgs.getBeforeWidth(), expectedBeforeWidth);
     });
 
     QUnit.test('editor should pass containerWidth equal to input container width - buttons container width - search icon outer width', function(assert) {
@@ -393,9 +404,8 @@ QUnit.module('label integration', {
         const buttonsContainerWidth = getWidth($(`.${BUTTONS_CONTAINER_CLASS}`));
         const searchIconOuterWidth = getOuterWidth($(`.${SEARCH_ICON_CLASS}`));
         const expectedContainerWidth = inputContainerWidth - buttonsContainerWidth - searchIconOuterWidth;
-        const borderWidth = 2;
 
-        assert.strictEqual(this.labelArgs.containerWidth + borderWidth, expectedContainerWidth);
+        assert.strictEqual(this.labelArgs.getContainerWidth(), expectedContainerWidth);
     });
 
     QUnit.test('mode option change should call label updateMaxWidth and updateBeforeWidth methods with correct parameters', function(assert) {

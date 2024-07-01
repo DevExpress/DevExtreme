@@ -1,9 +1,10 @@
 import { ClientFunction } from 'testcafe';
-import { isMaterialBased, isFluent } from '../../../helpers/themeUtils';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { isMaterialBased, isFluent, testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
 import List from '../../../model/list';
-import createWidget from '../../../helpers/createWidget';
-import { a11yCheck } from '../../../helpers/accessibilityUtils';
+import { createWidget } from '../../../helpers/createWidget';
+import { a11yCheck } from '../../../helpers/accessibility/utils';
 
 fixture`List`
   .page(url(__dirname, '../../container.html'));
@@ -321,6 +322,49 @@ test('Disabled item should be focused on tab press to match accessibility criter
 }).before(async () => createWidget('dxList', {
   dataSource: [{ text: 'item1' }, { text: 'item2' }],
   searchEnabled: true,
+}));
+
+test('The delete button should be displayed correctly after the list item focused (T1216108)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
+
+  await list.focus();
+
+  await testScreenshot(t, takeScreenshot, 'List delete button when item is focused.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+  dataSource: [{
+    text: 'item 1',
+    icon: 'user',
+  }],
+  allowItemDeleting: true,
+  itemDeleteMode: 'static',
+}));
+
+test('The button icon in custom template should be displayed correctly after the list item focused (T1216108)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const list = new List('#container');
+
+  await list.focus();
+
+  await testScreenshot(t, takeScreenshot, 'List icon in button when item is focused.png');
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxList', {
+  dataSource: [{ text: 'item 1' }],
+  itemTemplate: (_, __, element) => {
+    const button = ($('<div>') as any).dxButton({
+      text: 'custom',
+      icon: 'home',
+    });
+
+    element.append(button);
+  },
 }));
 
 test('Checking simple list with selectAll and "more" button via aXe', async (t) => {

@@ -13,8 +13,13 @@ const getPageIndex = function (dataController) {
   return 1 + (parseInt(dataController.pageIndex()) || 0);
 };
 
-const PagerView = modules.View.inherit({
-  init() {
+// TODO getController
+export class PagerView extends modules.View {
+  private _pager: any;
+
+  private _pageSizes: any;
+
+  public init() {
     const dataController = this.getController('data');
 
     dataController.changed.add((e) => {
@@ -36,12 +41,46 @@ const PagerView = modules.View.inherit({
         this.render();
       }
     });
-  },
+  }
 
-  _renderCore() {
+  public dispose() {
+    this._pager = null;
+  }
+
+  public optionChanged(args) {
+    const { name } = args;
+    const isPager = name === 'pager';
+    const isPaging = name === 'paging';
+    const isDataSource = name === 'dataSource';
+    const isScrolling = name === 'scrolling';
+    const dataController = this.getController('data');
+
+    if (isPager || isPaging || isScrolling || isDataSource) {
+      args.handled = true;
+
+      if (dataController.skipProcessingPagingChange(args.fullName)) {
+        return;
+      }
+
+      if (isPager || isPaging) {
+        this._pageSizes = null;
+      }
+
+      if (!isDataSource) {
+        this._pager = null;
+        this._invalidate();
+        if (hasWindow() && isPager && this.component) {
+          // @ts-expect-error
+          this.component.resize();
+        }
+      }
+    }
+  }
+
+  protected _renderCore() {
     const that = this;
     const $element = that.element().addClass(that.addWidgetPrefix(PAGER_CLASS));
-    const pagerOptions = that.option('pager') || {};
+    const pagerOptions = that.option('pager') ?? {};
     const dataController = that.getController('data');
     const keyboardController = that.getController('keyboardNavigation');
     const options: any = {
@@ -87,13 +126,13 @@ const PagerView = modules.View.inherit({
         .addClass('dx-pager')
         .html('<div class="dx-pages"><div class="dx-page"></div></div>');
     }
-  },
+  }
 
-  getPager() {
+  private getPager() {
     return this._pager;
-  },
+  }
 
-  getPageSizes() {
+  private getPageSizes() {
     const that = this;
     const dataController = that.getController('data');
     const pagerOptions = that.option('pager');
@@ -111,61 +150,29 @@ const PagerView = modules.View.inherit({
       }
     }
     return that._pageSizes;
-  },
+  }
 
-  isVisible() {
+  public isVisible() {
     const dataController = this.getController('data');
     const pagerOptions = this.option('pager');
     let pagerVisible = pagerOptions && pagerOptions.visible;
     const scrolling = this.option('scrolling');
 
     if (pagerVisible === 'auto') {
+      // @ts-expect-error
       if (scrolling && (scrolling.mode === 'virtual' || scrolling.mode === 'infinite')) {
         pagerVisible = false;
       } else {
         pagerVisible = dataController.pageCount() > 1 || (dataController.isLoaded() && !dataController.hasKnownLastPage());
       }
     }
-    return pagerVisible;
-  },
+    return !!pagerVisible;
+  }
 
-  getHeight() {
+  private getHeight() {
     return this.getElementHeight();
-  },
-
-  optionChanged(args) {
-    const { name } = args;
-    const isPager = name === 'pager';
-    const isPaging = name === 'paging';
-    const isDataSource = name === 'dataSource';
-    const isScrolling = name === 'scrolling';
-    const dataController = this.getController('data');
-
-    if (isPager || isPaging || isScrolling || isDataSource) {
-      args.handled = true;
-
-      if (dataController.skipProcessingPagingChange(args.fullName)) {
-        return;
-      }
-
-      if (isPager || isPaging) {
-        this._pageSizes = null;
-      }
-
-      if (!isDataSource) {
-        this._pager = null;
-        this._invalidate();
-        if (hasWindow() && isPager && this.component) {
-          this.component.resize();
-        }
-      }
-    }
-  },
-
-  dispose() {
-    this._pager = null;
-  },
-});
+  }
+}
 
 export const pagerModule = {
   defaultOptions() {

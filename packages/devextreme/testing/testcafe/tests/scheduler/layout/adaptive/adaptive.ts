@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import { safeSizeTest } from '../../../../helpers/safeSizeTest';
 import Scheduler from '../../../../model/scheduler';
@@ -27,7 +27,7 @@ const createScheduler = async (
   });
 };
 
-['generic.light', 'material.blue.light'].forEach((theme) => {
+['generic.light', 'material.blue.light', 'fluent.blue.light'].forEach((theme) => {
   const themePrefix = theme.split('.')[0];
 
   [false, true].forEach((rtlEnabled) => {

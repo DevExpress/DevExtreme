@@ -8,6 +8,16 @@ function isIgnoredProp(name: string) {
   return name === 'children' || name === classNamePropName || elementPropNames.includes(name);
 }
 
+function getRefElement(value: any): HTMLElement {
+  if (value?.current) {
+    if (value.current.instance?.element()) {
+      return value.current.instance.element();
+    }
+    return value.current;
+  }
+  return value;
+}
+
 function separateProps(
   props: Record<string, any>,
   defaultsProps: Record<string, string>,
@@ -46,7 +56,7 @@ function separateProps(
     }
 
     if (refPropName.includes(key)) {
-      options[key] = value && value.current ? value.current : value;
+      options[key] = getRefElement(value);
       return;
     }
 

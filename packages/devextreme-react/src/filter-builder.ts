@@ -1,3 +1,4 @@
+"use client"
 import dxFilterBuilder, {
     Properties
 } from "devextreme/ui/filter_builder";
@@ -9,7 +10,7 @@ import NestedOption from "./core/nested-option";
 import type { ContentReadyEvent, DisposingEvent, EditorPreparedEvent, EditorPreparingEvent, InitializedEvent, ValueChangedEvent, dxFilterBuilderField } from "devextreme/ui/filter_builder";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 
 import type * as LocalizationTypes from "devextreme/localization";
 
@@ -104,9 +105,9 @@ class FilterBuilder extends BaseComponent<React.PropsWithChildren<IFilterBuilder
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -130,11 +131,11 @@ class CustomOperation extends NestedOption<ICustomOperationProps> {
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
   dataField?: string;
   dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
   format?: LocalizationTypes.Format;
@@ -190,8 +191,8 @@ class FilterOperationDescriptions extends NestedOption<IFilterOperationDescripti
 // Field
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;

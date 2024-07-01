@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 
 fixture.disablePageReloads`Form`
@@ -23,7 +23,7 @@ fixture.disablePageReloads`Form`
               return;
             }
 
-            const testName = `Form,lMode=${formLabelMode},lLoc=${formLabelLocation},lVis=${labelVisible},lAl=${labelAlignment},e.lMode=${editorLabelMode},e.sMode=${editorStylingMode}`;
+            const testName = `Form,lMode=${formLabelMode},lLoc=${formLabelLocation},lVis=${labelVisible},lAl=${labelAlignment},e.lMode=${editorLabelMode ?? 'undef'},e.sMode=${editorStylingMode}`;
 
             test(testName, async (t) => {
               const { takeScreenshot, compareResults } = createScreenshotsComparer(t);

@@ -24,7 +24,6 @@
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-lookup-field {
-      padding: $fluent-filled-texteditor-input-padding;
       padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
       padding-inline-end: $fluent-filled-texteditor-input-horizontal-padding + $fluent-base-icon-size;
     }
@@ -38,15 +37,13 @@
 
   &.dx-editor-underlined {
     .dx-lookup-field {
-      padding-top: $fluent-standard-texteditor-input-top-padding;
-      padding-bottom: $fluent-standard-texteditor-input-top-padding;
       padding-inline-start: $fluent-base-standard-texteditor-input-horizontal-padding;
-      padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size;
+      padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size + $texteditor-spin-button-horizontal-padding;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2;
+        padding-inline-end: $fluent-base-standard-texteditor-input-horizontal-padding + $fluent-base-icon-size * 2 + $texteditor-spin-button-horizontal-padding;
       }
     }
   }
@@ -81,6 +78,8 @@
 .dx-lookup-field {
   min-height: $lookup-field-height;
   line-height: $fluent-texteditor-line-height;
+  padding-top: $fluent-filled-texteditor-input-top-padding;
+  padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
 
   &::before {
     line-height: normal;
@@ -111,12 +110,9 @@
   "\f001",
   $fluent-base-icon-size,
   $lookup-icon-color,
+  $lookup-icon-color-active,
   $fluent-base-icon-size,
 );
-
-.dx-state-readonly .dx-lookup-field::before {
-  opacity: 0.5;
-}
 
 .dx-lookup-popup-wrapper {
   @include dx-dropdownlist-list-appearance();

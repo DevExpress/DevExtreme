@@ -9,6 +9,7 @@ import publicComponentUtils from 'core/utils/public_component';
 import resizeCallbacks from 'core/utils/resize_callbacks';
 import eventsEngine from 'events/core/events_engine';
 import { triggerResizeEvent } from 'events/visibility_change';
+import licenseModule, { setLicenseCheckSkipCondition } from '__internal/core/license/license_validation';
 import $ from 'jquery';
 
 const nameSpace = {};
@@ -1168,5 +1169,61 @@ QUnit.module('default', {
         assert.strictEqual(instance.option('width'), 20);
         assert.equal(element.style.width, '20px', 'width is correct');
         assert.equal(element.style.height, '10px', 'height is correct');
+    });
+});
+
+QUnit.module('License check', {
+    beforeEach: function() {
+        this.TestComponent = DOMComponent.inherit();
+        sinon.spy(licenseModule, 'validateLicense');
+        setLicenseCheckSkipCondition(false);
+    },
+    afterEach: function() {
+        licenseModule.validateLicense.restore();
+    }
+}, () => {
+    QUnit.test('validateLicense() method should be called once', function(assert) {
+        new this.TestComponent('#component');
+
+        assert.ok(licenseModule.validateLicense.calledOnce);
+    });
+
+    QUnit.test('validateLicense() method should be called with license from config', function(assert) {
+        try {
+            const licenseKey = 'license key';
+            config({ licenseKey });
+
+            new this.TestComponent('#component');
+
+            assert.ok(licenseModule.validateLicense.calledWith(licenseKey));
+        } finally {
+            config({ licenseKey: null });
+        }
+    });
+
+    QUnit.test('license should be removed from config after validateLicense() executed', function(assert) {
+        try {
+            const licenseKey = 'license key';
+            config({ licenseKey });
+            new this.TestComponent('#component');
+
+            assert.strictEqual(config().licenseKey, '');
+        } finally {
+            config({ licenseKey: null });
+        }
+    });
+
+    QUnit.test('license should be removed from config once', function(assert) {
+        try {
+            const licenseKey = 'license key';
+
+            new this.TestComponent('#component');
+            config({ licenseKey });
+            new this.TestComponent('#component');
+
+            assert.strictEqual(config().licenseKey, licenseKey);
+        } finally {
+            config({ licenseKey: null });
+        }
     });
 });

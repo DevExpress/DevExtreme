@@ -21,6 +21,7 @@ $generic-command-edit-icon-size: null !default;
 $generic-command-edit-icon-margin: null !default;
 $generic-grid-base-nodata-font-size: null !default;
 $generic-grid-base-checkbox-padding-bottom: null !default;
+$generic-grid-base-treeview-select-all-item-offset: null !default;
 
 $datagrid-text-link-disabled-opacity: $base-disabled-opacity;
 $datagrid-icon-link-disabled-opacity: 0.6;
@@ -44,6 +45,7 @@ $datagrid-icon-link-disabled-opacity: 0.6;
   $generic-command-edit-icon-margin: 3px !default;
   $generic-grid-base-nodata-font-size: 17px !default;
   $generic-grid-base-checkbox-padding-bottom: 2px;
+  $generic-grid-base-treeview-select-all-item-offset: 34px;
 }
 
 @else if $size == "compact" {
@@ -65,6 +67,7 @@ $datagrid-icon-link-disabled-opacity: 0.6;
   $generic-command-edit-icon-margin: 1px !default;
   $generic-grid-base-nodata-font-size: 14px !default;
   $generic-grid-base-checkbox-padding-bottom: 0;
+  $generic-grid-base-treeview-select-all-item-offset: 28px;
 }
 
 $generic-grid-base-column-chooser-paddings: 0 $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding $generic-grid-base-column-chooser-padding !default;

@@ -1,16 +1,19 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { insertStylesheetRulesToPage } from '../../helpers/domUtils';
-import { isMaterial, testScreenshot } from '../../helpers/themeUtils';
+import { isMaterialBased, testScreenshot } from '../../helpers/themeUtils';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 // eslint-disable-next-line import/extensions
 import { virtualData } from './virtualData.js';
 // eslint-disable-next-line import/extensions
 import { dataOptions } from './virtualDataOptions.js';
+// eslint-disable-next-line import/extensions
+import { sales } from './data.js';
 import PivotGrid from '../../model/pivotGrid';
+import { generateOptionMatrix } from '../../helpers/generateOptionMatrix';
 
 const testFixture = () => {
-  if (isMaterial()) {
+  if (isMaterialBased()) {
     return fixture.disablePageReloads.skip;
   }
   return fixture.disablePageReloads;
@@ -134,4 +137,62 @@ testFixture()`PivotGrid_scrolling`
       },
     });
   });
+});
+
+generateOptionMatrix({
+  rtlEnabled: [false, true],
+  nativeScrolling: [false, true],
+}).forEach(({ rtlEnabled, nativeScrolling }) => {
+  test('Should set margin for scroll-bar correctly (T1214743)', async (t) => {
+    const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+    const pivotGrid = new PivotGrid('#container');
+
+    const firstCellToClick = pivotGrid.getRowsArea().getCell(1);
+    await t.click(firstCellToClick);
+    await takeScreenshot(`scrollbar-margin_step-0_useNative-${nativeScrolling}_rtl-${rtlEnabled}`, pivotGrid.element);
+
+    const secondCellToClick = pivotGrid.getRowsArea().getCell(6);
+    await t.click(secondCellToClick);
+    await takeScreenshot(`scrollbar-margin_step-1_useNative-${nativeScrolling}_rtl-${rtlEnabled}`, pivotGrid.element);
+
+    await t.click(secondCellToClick);
+    await takeScreenshot(`scrollbar-margin_step-2_useNative-${nativeScrolling}_rtl-${rtlEnabled}`, pivotGrid.element);
+
+    await t
+      .expect(compareResults.isValid())
+      .ok(compareResults.errorMessages());
+  }).before(async () => createWidget('dxPivotGrid', {
+    height: 400,
+    scrolling: { useNative: nativeScrolling },
+    showBorders: true,
+    rtlEnabled,
+    dataSource: {
+      fields: [{
+        caption: 'Region',
+        width: 120,
+        dataField: 'region',
+        area: 'row',
+      }, {
+        caption: 'City',
+        dataField: 'city',
+        width: 150,
+        area: 'row',
+        selector(data) {
+          return `${data.city} (${data.country})`;
+        },
+      }, {
+        dataField: 'date',
+        dataType: 'date',
+        area: 'column',
+      }, {
+        caption: 'Sales',
+        dataField: 'amount',
+        dataType: 'number',
+        summaryType: 'sum',
+        format: 'currency',
+        area: 'data',
+      }],
+      store: sales,
+    },
+  }));
 });

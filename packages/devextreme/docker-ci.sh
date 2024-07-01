@@ -20,7 +20,7 @@ function run_test {
 
 function run_test_impl {
     local port=`node -e "console.log(require('./ports.json').qunit)"`
-    local url="http://localhost:$port/run?notimers=true"
+    local url="http://0.0.0.0:$port/run?notimers=true"
     local runner_pid
     local runner_result=0
 

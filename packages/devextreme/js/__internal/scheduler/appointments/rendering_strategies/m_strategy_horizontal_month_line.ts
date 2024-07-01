@@ -10,9 +10,12 @@ const MILLISECONDS_IN_MINUTE = 60000;
 const ZERO_APPOINTMENT_DURATION_IN_DAYS = 1;
 
 class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrategy {
-  calculateAppointmentWidth(appointment, position) {
-    const startDate = dateUtils.trimTime(position.info.appointment.startDate);
-    const { normalizedEndDate } = position.info.appointment;
+  calculateAppointmentWidth(_, position) {
+    const {
+      startDate: startDateWithTime,
+      normalizedEndDate,
+    } = position.info.appointment;
+    const startDate = dateUtils.trimTime(startDateWithTime);
     const cellWidth = this.cellWidth || this.getAppointmentMinSize();
     const duration = Math.ceil(this._getDurationInDays(startDate, normalizedEndDate));
 
@@ -30,6 +33,11 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     }
 
     return width;
+  }
+
+  _columnCondition(a, b) {
+    const conditions = this._getConditions(a, b);
+    return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
   }
 
   _getDurationInDays(startDate, endDate) {
@@ -69,12 +77,11 @@ class HorizontalMonthLineRenderingStrategy extends HorizontalAppointmentsStrateg
     return false;
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  getPositionShift(timeShift?) {
+  getPositionShift(timeShift) {
     return {
       top: 0,
       left: 0,
-      cellPosition: 0,
+      cellPosition: timeShift * this.cellWidth,
     };
   }
 }

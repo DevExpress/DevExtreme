@@ -6,7 +6,7 @@ import dateSerialization from 'core/utils/date_serialization';
 import { noop } from 'core/utils/common';
 import swipeEvents from 'events/swipe';
 import fx from 'animation/fx';
-import Views from 'ui/calendar/ui.calendar.views';
+import Views from '__internal/ui/calendar/m_calendar.views';
 import Calendar from 'ui/calendar';
 import pointerMock from '../../helpers/pointerMock.js';
 import keyboardMock from '../../helpers/keyboardMock.js';
@@ -1269,22 +1269,20 @@ QUnit.module('Keyboard navigation', {
 
         const calendar = this.calendar;
         const keyboard = keyboardMock($(calendar._$viewsWrapper));
-        const clock = sinon.useFakeTimers();
 
         calendar.focus();
 
         try {
             keyboard.press('up');
-            clock.tick(VIEW_ANIMATION_DURATION / 5);
+            this.clock.tick(VIEW_ANIMATION_DURATION / 5);
             keyboard.press('up');
-            clock.tick(VIEW_ANIMATION_DURATION * 2);
+            this.clock.tick(VIEW_ANIMATION_DURATION * 2);
 
             assert.deepEqual(this.calendar.option('currentDate'), new Date(2013, 8, 17), 'current date is correct');
             assert.deepEqual(getCurrentViewInstance(this.calendar).option('date'), new Date(2013, 8, 1), 'correct view is shown');
             assert.equal(getCurrentViewInstance(this.calendar).$element().find(toSelector(CALENDAR_CONTOURED_DATE_CLASS)).length, 1, 'contoured date is rendered');
         } finally {
             fx.off = fxOrigState;
-            clock.restore();
         }
     });
 
@@ -3474,7 +3472,7 @@ QUnit.module('disabledDates option', {
             const $viewsWrapper = $(calendar._$viewsWrapper);
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             const lastAvailableDateOnJanuary = new Date(2020, 0, 19);
             const firstAvailableDateOnFebruary = new Date(2020, 1, 20);
@@ -3531,7 +3529,7 @@ QUnit.module('disabledDates option', {
             const $viewsWrapper = $(calendar._$viewsWrapper);
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             calendar.focus();
 
@@ -3797,7 +3795,7 @@ QUnit.module('disabledDates option', {
             const $viewsWrapper = $(calendar._$viewsWrapper);
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             calendar.focus();
 
@@ -3960,7 +3958,7 @@ QUnit.module('disabledDates option', {
             const $viewsWrapper = $(calendar._$viewsWrapper);
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             calendar.focus();
 
@@ -3999,7 +3997,7 @@ QUnit.module('disabledDates option', {
             const $viewsWrapper = $(calendar._$viewsWrapper);
 
             fx.off = false;
-            animationSpy.reset();
+            animationSpy.resetHistory();
 
             calendar.focus();
 
@@ -4090,6 +4088,32 @@ QUnit.module('disabledDates option', {
         });
 
         assert.deepEqual(this.calendar.option('currentDate'), new Date(2010, 10, 10), 'currentDate is the closest available date');
+    });
+
+    QUnit.test('It should not be possible to focus dates that are disabled using combination of disabledDates+min/max', function(assert) {
+        const calendar = this.calendar;
+
+        calendar.option({
+            value: new Date('2023/09/11'),
+            max: new Date('2023/09/16'),
+            min: new Date('2023/09/10'),
+            disabledDates: (d) => {
+                const day = d.date.getDay();
+
+                return d.view === 'month' && day === 0 || day === 6;
+            },
+        });
+        const $viewsWrapper = $(calendar._$viewsWrapper);
+
+        calendar.focus();
+
+        triggerKeydown($viewsWrapper, LEFT_ARROW_KEY_CODE);
+        assert.deepEqual(calendar.option('currentDate'), new Date('2023/09/11'), 'left disabledDate is not focused');
+
+        calendar.option('value', new Date('2023/09/15'));
+
+        triggerKeydown($viewsWrapper, RIGHT_ARROW_KEY_CODE);
+        assert.deepEqual(calendar.option('currentDate'), new Date('2023/09/15'), 'right disabledDate is not focused');
     });
 });
 
@@ -4184,7 +4208,6 @@ QUnit.module('Current date', {
         iterateViews($.proxy((_, type) => {
             this.reinit();
 
-            const $element = this.$element;
             const calendar = this.$element.dxCalendar($.extend(
                 {},
                 { zoomLevel: type, focusStateEnabled: true },

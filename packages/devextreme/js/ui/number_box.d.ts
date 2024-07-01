@@ -225,7 +225,14 @@ export interface dxNumberBoxOptions extends dxTextEditorOptions<dxNumberBox> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> { }
+export default class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: number): void;
+}
 
 /** @public */
 export type Properties = dxNumberBoxOptions;

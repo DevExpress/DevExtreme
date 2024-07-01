@@ -1,11 +1,12 @@
 import { ClientFunction } from 'testcafe';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
 import ColumnHeaderArea from './columnHeaderArea';
 import DataHeaderArea from './dataHeaderArea';
 import FieldChooser from './fieldChooser';
 import Popup from '../popup';
 import RowHeaderArea from './rowHeaderArea';
+import RowsArea from './rowsArea';
 
 const CLASS = {
   fieldChooser: 'dx-pivotgridfieldchooser',
@@ -64,6 +65,10 @@ export default class PivotGrid extends Widget {
 
   getRowHeaderArea(): RowHeaderArea {
     return new RowHeaderArea(this.element);
+  }
+
+  getRowsArea(idx?: number): RowsArea {
+    return new RowsArea(this.element, idx);
   }
 
   getDataHeaderArea(): DataHeaderArea {

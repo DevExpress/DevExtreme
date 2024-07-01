@@ -5,7 +5,6 @@ import { PostponedOperations } from 'core/postponed_operations';
 import errors from 'core/errors';
 import devices from 'core/devices';
 import config from 'core/config';
-import licenseModule, { setLicenseCheckSkipCondition } from '__internal/core/license/license_validation';
 
 const TestComponent = Component.inherit({
 
@@ -1729,34 +1728,5 @@ QUnit.module('action API', {}, () => {
         assert.equal(count, 2);
 
         config({ wrapActionsBeforeExecute: originFlag });
-    });
-});
-
-QUnit.module('License check', {
-    beforeEach: function() {
-        sinon.spy(licenseModule, 'validateLicense');
-        setLicenseCheckSkipCondition(false);
-    },
-    afterEach: function() {
-        licenseModule.validateLicense.restore();
-    }
-}, () => {
-    QUnit.test('validateLicense() method should be called once', function(assert) {
-        new TestComponent();
-
-        assert.ok(licenseModule.validateLicense.calledOnce);
-    });
-
-    QUnit.test('validateLicense() method should be called with license from config', function(assert) {
-        try {
-            const licenseKey = 'license key';
-            config({ licenseKey });
-
-            new TestComponent();
-
-            assert.ok(licenseModule.validateLicense.calledWith(licenseKey));
-        } finally {
-            config({ licenseKey: null });
-        }
     });
 });

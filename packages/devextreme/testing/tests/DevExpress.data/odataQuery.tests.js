@@ -223,7 +223,7 @@ QUnit.test('slice', function(assert) {
 QUnit.test('select', function(assert) {
     const done = assert.async();
 
-    QUERY('odata.org')
+    QUERY('odata.org', { version: 2 })
         .select('a.x', 'a.y', 'b')
         .enumerate()
         .fail(function() {
@@ -239,7 +239,7 @@ QUnit.test('select', function(assert) {
 QUnit.test('expand to third level', function(assert) {
     const done = assert.async();
 
-    QUERY('odata.org')
+    QUERY('odata.org', { version: 2 })
         .select('a.b.c')
         .enumerate()
         .fail(function() {
@@ -366,7 +366,7 @@ QUnit.test('works', function(assert) {
     });
 
     const promises = [
-        QUERY('odata.org')
+        QUERY('odata.org', { version: 2 })
             .filter([
                 ['date', new Date(1996, 6, 4, 1, 1, 1, 1)],
                 ['date', new Date(1996, 6, 4, 1, 1, 1, 10)],
@@ -375,7 +375,7 @@ QUnit.test('works', function(assert) {
             ])
             .enumerate(),
 
-        QUERY('odata4.org', { version: 4 })
+        QUERY('odata4.org')
             .filter([
                 ['date', new Date(1996, 6, 4, 1, 1, 1, 1)],
                 ['date', new Date(1996, 6, 4, 1, 1, 1, 10)],
@@ -705,7 +705,7 @@ QUnit.test('string functions', function(assert) {
     const done = assert.async();
 
     const check = function(operation, expectation) {
-        return QUERY('odata.org')
+        return QUERY('odata.org', { version: 2 })
             .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
@@ -733,7 +733,7 @@ QUnit.test('string functions with filterToLower equal false', function(assert) {
     const done = assert.async();
 
     const check = function(operation, expectation) {
-        return QUERY('odata.org', { filterToLower: false })
+        return QUERY('odata.org', { filterToLower: false, version: 2 })
             .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
@@ -763,7 +763,7 @@ QUnit.test('string functions with global filterToLower equal false', function(as
     config({ oDataFilterToLower: false });
 
     const check = function(operation, expectation) {
-        return QUERY('odata.org')
+        return QUERY('odata.org', { version: 2 })
             .filter('f.p', operation, 'Ab')
             .enumerate()
             .done(function(r) {
@@ -895,7 +895,7 @@ QUnit.test('Explicit Edm literals (Q441230 case)', function(assert) {
 QUnit.test('Edm literals for case conversion (Q522002)', function(assert) {
     const done = assert.async();
 
-    QUERY('odata.org')
+    QUERY('odata.org', { version: 2 })
         .filter(new EdmLiteral('tolower(Name)'), 'contains', new EdmLiteral('tolower(\'abc\')'))
         .enumerate()
         .fail(function() {
@@ -1087,13 +1087,13 @@ QUnit.test('enumerate with/without requireTotalCount', function(assert) {
     });
 
     const promises = [
-        QUERY('odata.org')
+        QUERY('odata.org', { version: 2 })
             .enumerate()
             .done(function(r, extra) {
                 assert.ok(!extra);
             }),
 
-        QUERY('odata.org/count', { requireTotalCount: true })
+        QUERY('odata.org/count', { requireTotalCount: true, version: 2 })
             .enumerate()
             .done(function(r, extra) {
                 assert.equal(extra.totalCount, 123);

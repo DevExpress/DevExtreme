@@ -161,7 +161,7 @@ export class FileManagerWrapper {
         let result = null;
         const targetNode = this.getFolderNodes(inDialog).filter(function() { return $(this).text() === text; }).eq(0).parent();
         if(targetNode.length) {
-            const itemToggle = targetNode.children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
+            const itemToggle = targetNode.children('.dx-treeview-item').children(`.${Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_CLASS}`);
             if(itemToggle.length) {
                 result = itemToggle.hasClass(Consts.FOLDERS_TREE_VIEW_ITEM_TOGGLE_OPENED_CLASS);
             }

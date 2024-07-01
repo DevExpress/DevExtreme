@@ -100,7 +100,14 @@ export interface dxProgressBarOptions extends dxTrackBarOptions<dxProgressBar> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> { }
+export default class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: Number | false): void;
+}
 
 /** @public */
 export type Properties = dxProgressBarOptions;

@@ -50,8 +50,7 @@ describe('useLegacyTemplateEngine', () => {
         <div ref={ref} />
       </ComponentWithTemplates>,
     );
-
-    // @ts-ignore
+    
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
     act(() => {
@@ -88,7 +87,6 @@ describe('useLegacyTemplateEngine', () => {
       </ComponentWithTemplates>,
     );
 
-    // @ts-ignore
     const { render } = WidgetClass.mock.calls[0][1].integrationOptions.templates.item;
 
     act(() => render({

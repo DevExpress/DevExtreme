@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/tab_panel";
 import dxTabPanel, {
     Properties

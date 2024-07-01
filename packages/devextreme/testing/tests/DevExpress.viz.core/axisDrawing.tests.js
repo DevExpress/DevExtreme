@@ -69,7 +69,7 @@ const environment = {
         const gridGroup = this.renderer.g();
         const scaleBreaksGroup = this.renderer.g();
 
-        this.renderer.g.reset();
+        this.renderer.g.resetHistory();
 
         this.templateRender = sinon.spy();
         this.axis = new Axis($.extend(true, {
@@ -852,9 +852,9 @@ QUnit.test('Check calls to translator. Major ticks. Categories, discreteAxisDivi
     this.axis.draw(this.canvas);
 
     assert.deepEqual(this.translator.translate.callCount, 6); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 1, false]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 1, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 1, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 1, false, undefined]);
 });
 
 QUnit.test('Check calls to translator. Major ticks. Categories, discreteAxisDivisionMode crossLabels', function(assert) {
@@ -881,9 +881,9 @@ QUnit.test('Check calls to translator. Major ticks. Categories, discreteAxisDivi
     this.axis.draw(this.canvas);
 
     assert.deepEqual(this.translator.translate.callCount, 6); // 3 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 0, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 0, false]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 0, false]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, ['a', 0, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, ['b', 0, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, ['c', 0, false, undefined]);
 });
 
 QUnit.test('Horizontal. Ticks (major and minor) are outside canvas (on zoom) - do not draw outside tick marks', function(assert) {
@@ -1420,8 +1420,8 @@ QUnit.test('Check calls to translator. Boundary ticks', function(assert) {
     this.axis.draw(this.canvas);
 
     assert.deepEqual(this.translator.translate.callCount, 4); // 2 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, [1, -1, false]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, [3, 1, false]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, [1, -1, false, undefined]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, [3, 1, false, undefined]);
 });
 
 QUnit.test('showCustomBoundaryTicks true, first majorTick on bound - do not render first boundary tick', function(assert) {
@@ -1545,7 +1545,7 @@ QUnit.test('showCustomBoundaryTicks true, customBoundTicks, double drawing, seco
     });
     this.axis.setBusinessRange({ min: undefined, max: undefined });
     this.translator.stub('translate').reset();
-    this.renderer.path.reset();
+    this.renderer.path.resetHistory();
 
     // act
     this.axis.draw(this.canvas);
@@ -1645,7 +1645,7 @@ QUnit.test('Template container coords after drawing template', function(assert) 
     this.translator.stub('translate').withArgs(1).returns(40);
     this.translator.stub('translate').withArgs(2).returns(60);
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
     // act
     this.renderer.bBoxTemplate = function() {
         return { x: 1, y: 2, width: 18, height: 18 };
@@ -1680,7 +1680,7 @@ QUnit.test('Template container bbox on adjusting labels. Horizontal = true, top'
     this.translator.stub('translate').withArgs(1).returns(40);
     this.translator.stub('translate').withArgs(2).returns(60);
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
     // act
     this.renderer.bBoxTemplate = function() {
         return { x: 1, y: 2, width: 18, height: 18 };
@@ -1714,7 +1714,7 @@ QUnit.test('Template container bbox on adjusting labels. Horizontal = true, bott
     this.translator.stub('translate').withArgs(1).returns(40);
     this.translator.stub('translate').withArgs(2).returns(60);
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
     // act
     this.renderer.bBoxTemplate = function() {
         return { x: 1, y: 2, width: 18, height: 18 };
@@ -1748,7 +1748,7 @@ QUnit.test('Template container bbox on adjusting labels. Horizontal = false, lef
     this.translator.stub('translate').withArgs(1).returns(40);
     this.translator.stub('translate').withArgs(2).returns(60);
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
     // act
     this.renderer.bBoxTemplate = function() {
         return { x: 1, y: 2, width: 18, height: 18 };
@@ -1782,7 +1782,7 @@ QUnit.test('Template container bbox on adjusting labels. Horizontal = false, rig
     this.translator.stub('translate').withArgs(1).returns(40);
     this.translator.stub('translate').withArgs(2).returns(60);
 
-    renderer.g.reset();
+    renderer.g.resetHistory();
     // act
     this.renderer.bBoxTemplate = function() {
         return { x: 1, y: 2, width: 18, height: 18 };
@@ -1847,7 +1847,7 @@ QUnit.test('Hint on template container', function(assert) {
 
     this.translator.stub('translate').withArgs(1).returns(40);
     this.translator.stub('translate').withArgs(2).returns(60);
-    renderer.g.reset();
+    renderer.g.resetHistory();
 
     // act
     this.axis.draw(this.canvas);
@@ -1876,7 +1876,7 @@ QUnit.test('store data in template container', function(assert) {
     this.translator.stub('translate').withArgs(123).returns(40);
     this.translator.stub('translate').withArgs(345).returns(80);
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     // act
     this.axis.draw(this.canvas);
 
@@ -10204,7 +10204,7 @@ QUnit.test('Axis has title - hideTitle removes title and throws incident', funct
         title: { text: 'text' }
     });
     this.axis.draw(this.canvas);
-    this.renderer.g.getCall(5).returnValue.clear.reset();
+    this.renderer.g.getCall(5).returnValue.clear.resetHistory();
 
     this.axis.hideTitle();
 
@@ -10227,7 +10227,7 @@ QUnit.test('Axis has no title - hideTitle does nothing', function(assert) {
         return value;
     };
     this.axis.draw(this.canvas);
-    this.renderer.g.getCall(5).returnValue.clear.reset();
+    this.renderer.g.getCall(5).returnValue.clear.resetHistory();
 
     this.axis.hideTitle();
 
@@ -10248,7 +10248,7 @@ QUnit.test('Axis has labels - hideOuterElements removes labels and throws incide
         }
     });
     this.axis.draw(this.canvas);
-    this.renderer.g.getCall(3).returnValue.clear.reset();
+    this.renderer.g.getCall(3).returnValue.clear.resetHistory();
 
     this.axis.hideOuterElements();
 
@@ -10344,7 +10344,7 @@ QUnit.test('Axis has no visible labels nor outside constantLines - hideOuterElem
         return value;
     };
     this.axis.draw(this.canvas);
-    this.renderer.g.getCall(3).returnValue.clear.reset();
+    this.renderer.g.getCall(3).returnValue.clear.resetHistory();
 
     this.axis.hideOuterElements();
 
@@ -10367,7 +10367,7 @@ QUnit.test('Axis with empty range - hideOuterElements does nothing', function(as
     });
     this.axis.setBusinessRange({ });
     this.axis.draw(this.canvas);
-    this.renderer.g.getCall(3).returnValue.clear.reset();
+    this.renderer.g.getCall(3).returnValue.clear.resetHistory();
 
     this.axis.hideOuterElements();
 
@@ -10902,13 +10902,13 @@ QUnit.test('Update grid points, but distance between grids and borders less than
     const grid2 = path.getCall(1).returnValue;
     const grid3 = path.getCall(2).returnValue;
 
-    grid1.attr.reset();
-    grid2.attr.reset();
-    grid3.attr.reset();
+    grid1.attr.resetHistory();
+    grid2.attr.resetHistory();
+    grid3.attr.resetHistory();
 
-    grid1.stub('remove').reset();
-    grid2.stub('remove').reset();
-    grid3.stub('remove').reset();
+    grid1.resetStub('remove');
+    grid2.resetStub('remove');
+    grid3.resetStub('remove');
 
     // act
     this.axis.updateSize(this.canvas);
@@ -11450,11 +11450,11 @@ QUnit.test('Recreate group for breaks', function(assert) {
 
     this.translator.stub('isInverted').returns(false);
     this.translator.stub('translate').withArgs(20).returns(20);
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     this.axis.drawScaleBreaks();
     const oldGroup = this.renderer.g.getCall(0).returnValue;
     // act
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
     this.axis.drawScaleBreaks();
 
     // assert
@@ -11483,8 +11483,8 @@ QUnit.test('Recreate group for breaks if shifted axis', function(assert) {
     const oldAdditionGroup = this.renderer.g.getCall(13).returnValue;
     const oldAdditionClipRect = this.renderer.clipRect.getCall(1).returnValue;
 
-    this.renderer.clipRect.reset();
-    this.renderer.g.reset();
+    this.renderer.clipRect.resetHistory();
+    this.renderer.g.resetHistory();
     // act
     this.axis.drawScaleBreaks();
 
@@ -11890,7 +11890,7 @@ QUnit.test('Fade out unnecessary tick', function(assert) {
 
     // act
     this.generatedTicks = [];
-    tick.append.reset();
+    tick.append.resetHistory();
 
     this.axis.draw(this.zeroMarginCanvas);
 
@@ -12164,7 +12164,7 @@ QUnit.test('Fade out unnecessary grid line', function(assert) {
 
     // act
     this.generatedTicks = [];
-    gridLine.append.reset();
+    gridLine.append.resetHistory();
 
     this.axis.draw(this.zeroMarginCanvas);
 
@@ -12231,8 +12231,8 @@ QUnit.test('Animate label to the new position on second drawing', function(asser
     this.axis.updateSize(this.canvas, true);
 
     const label = renderer.text.lastCall.returnValue;
-    label.append.reset();
-    label.attr.reset();
+    label.append.resetHistory();
+    label.attr.resetHistory();
     // act
     this.translator.stub('translate').withArgs(1).returns(45);
 
@@ -12471,7 +12471,7 @@ QUnit.test('Fade out unnecessary label', function(assert) {
 
     // act
     this.generatedTicks = [];
-    label.append.reset();
+    label.append.resetHistory();
 
     this.axis.draw(this.zeroMarginCanvas);
 
@@ -12714,7 +12714,7 @@ QUnit.test('Fade out unnecessary minor tick', function(assert) {
 
     // act
     this.generatedMinorTicks = [];
-    tick.append.reset();
+    tick.append.resetHistory();
 
     this.axis.draw(this.zeroMarginCanvas);
 
@@ -12940,7 +12940,7 @@ QUnit.test('Fade out unnecessary minor grid line', function(assert) {
 
     // act
     this.generatedMinorTicks = [];
-    minorGridLine.append.reset();
+    minorGridLine.append.resetHistory();
 
     this.axis.draw(this.zeroMarginCanvas);
 
@@ -13054,8 +13054,8 @@ QUnit.test('Animate constant line on second drawing', function(assert) {
     const line = renderer.path.lastCall.returnValue;
     const text = renderer.text.lastCall.returnValue;
 
-    line.attr.reset();
-    text.attr.reset();
+    line.attr.resetHistory();
+    text.attr.resetHistory();
 
     this.translator.stub('translate').withArgs(1).returns(60);
 
@@ -13208,8 +13208,8 @@ QUnit.test('Do not animate constant line if it position go out from canvas', fun
     const line = renderer.path.lastCall.returnValue;
     const text = renderer.text.lastCall.returnValue;
 
-    line.attr.reset();
-    text.attr.reset();
+    line.attr.resetHistory();
+    text.attr.resetHistory();
 
     this.axis.updateSize(this.canvas, true);
     // assert
@@ -13285,8 +13285,8 @@ QUnit.test('Animate strip to new position on second drawing', function(assert) {
     const rect = renderer.rect.lastCall.returnValue;
     const text = renderer.text.lastCall.returnValue;
 
-    rect.attr.reset();
-    text.attr.reset();
+    rect.attr.resetHistory();
+    text.attr.resetHistory();
     this.axis.updateSize(this.canvas, true);
     // assert
 
@@ -13628,7 +13628,7 @@ QUnit.test('Update skikipped categories on second drawing', function(assert) {
     }.bind(this));
 
     this.axis.draw(this.canvas);
-    this.renderer.path.reset();
+    this.renderer.path.resetHistory();
 
     // act
     this.generatedTicks = categories;

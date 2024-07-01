@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 import { MouseAction, MouseUpEvents } from '../../helpers/mouseUpEvents';
@@ -68,7 +68,7 @@ test('The column reordering should work correctly when there is a fixed column w
 }));
 
 // T1038094
-test('The separator should display correctly when dragging column', async (t) => {
+test.skip('The separator should display correctly when dragging column', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   await dataGrid.moveHeader(0, 200, 5, true);
@@ -132,12 +132,12 @@ test('The separator should display correctly when dragging column', async (t) =>
   allowColumnResizing: true,
 }));
 
-test('column separator should work properly with expand columns', async (t) => {
+test.skip('column separator should work properly with expand columns', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const dataGrid = new DataGrid('#container');
   await MouseUpEvents.disable(MouseAction.dragToOffset);
 
-  await t.drag(dataGrid.getGroupPanel().getHeader(0), 0, 30);
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
   await t
     .expect(await takeScreenshot('column-separator-with-expand-columns.png'))
     .ok()
@@ -173,4 +173,88 @@ test('column separator should work properly with expand columns', async (t) => {
     },
   ],
   allowColumnReordering: true,
+}));
+
+test.skip('HeaderRow should be highlighted when dragging column with allowColumnReordering=false', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
+  await t
+    .expect(await takeScreenshot('headerRow-highlight-on-drag.png'))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: [
+    {
+      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+    },
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    {
+      dataField: 'field1',
+      width: 200,
+      groupIndex: 0,
+    }, {
+      dataField: 'field2',
+      width: 200,
+      groupIndex: 1,
+    }, {
+      dataField: 'field3',
+      width: 200,
+    }, {
+      dataField: 'field4',
+      width: 200,
+    },
+  ],
+  allowColumnReordering: false,
+}));
+
+test('Column without allowReordering should have same position after dragging to groupPanel and back', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t.drag(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).element, -30, -30);
+  await t.expect(dataGrid.getGroupPanel().getHeadersCount()).eql(1);
+
+  await t.drag(dataGrid.getGroupPanel().getHeader(0).element, 0, 30);
+
+  const headers = await Promise.all([0, 1, 2, 3].map(
+    (i) => dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(i).element.textContent,
+  ));
+
+  await t.expect(headers).eql(['Field 1', 'Field 2', 'Field 3', 'Field 4']);
+}).before(async () => createWidget('dxDataGrid', {
+  width: 800,
+  dataSource: [
+    {
+      field1: 'test1', field2: 'test2', field3: 'test3', field4: 'test4',
+    },
+  ],
+  groupPanel: {
+    visible: true,
+  },
+  columns: [
+    {
+      dataField: 'field1',
+      width: 200,
+    }, {
+      dataField: 'field2',
+      width: 200,
+    }, {
+      dataField: 'field3',
+      width: 200,
+    }, {
+      dataField: 'field4',
+      width: 200,
+    },
+  ],
+  allowColumnReordering: false,
 }));

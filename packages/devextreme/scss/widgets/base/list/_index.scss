@@ -27,27 +27,8 @@ $list-searchbox-margin-bottom: 5px;
 }
 
 .dx-list-group-header {
-  &::before {
-    width: 0;
-    height: 0;
-    display: block;
-    float: right;
-    margin-top: 6px;
-    border-style: solid;
-    border-color: transparent;
-    border-width: 5px 5px 0 5px;
-  }
-
   .dx-list-collapsible-groups & {
     cursor: pointer;
-
-    &::before {
-      content: ' ';
-    }
-  }
-
-  .dx-list-group-collapsed &::before {
-    border-width: 0 5px 5px 5px;
   }
 }
 

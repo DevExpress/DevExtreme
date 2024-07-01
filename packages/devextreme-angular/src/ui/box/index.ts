@@ -25,7 +25,6 @@ import {
 export { ExplicitTypes } from 'devextreme/ui/box';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Mode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
@@ -65,7 +64,7 @@ import { DxiItemComponent } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxBox<TItem, TKey>;
+    instance: DxBox<TItem, TKey> = null;
 
     /**
      * [descr:dxBoxOptions.align]
@@ -189,10 +188,10 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
     
      */
     @Input()
-    get items(): Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 
@@ -380,7 +379,7 @@ export class DxBoxComponent<TItem = any, TKey = any> extends DxComponent impleme
      * This member supports the internal infrastructure and is not intended to be used directly from your code.
     
      */
-    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
+    @Output() itemsChange: EventEmitter<Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>>;
 
     /**
     

@@ -5,7 +5,27 @@
 // adduse
 
 /**
-* $name 10. Load indicator color
+* $name 10. Indicator color
 * $type color
 */
 $load-indicator-segment-bg-color: $base-accent !default;
+
+/**
+* $name 20. Indicator background color
+* $type color
+*/
+$load-indicator-inner-segment-border-color: null !default;
+
+@if $mode == "light" {
+  @if $color == "blue" {
+    $load-indicator-inner-segment-border-color: lighten(saturate(adjust-hue($load-indicator-segment-bg-color, 2.9), 2.2), 44.3) !default;
+  }
+
+  @if $color == "saas" {
+    $load-indicator-inner-segment-border-color: mix($base-bg, $load-indicator-segment-bg-color, 68.82%) !default;
+  }
+}
+
+@if $mode == "dark" {
+  $load-indicator-inner-segment-border-color: $base-accent-selected !default; 
+}

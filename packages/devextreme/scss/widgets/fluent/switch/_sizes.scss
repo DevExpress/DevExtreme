@@ -12,7 +12,7 @@ $switch-handle-height: null !default;
 $switch-container-height: null !default;
 
 $fluent-switch-shadow-blur-radius: 0 !default;
-$fluent-switch-handle-shadow: none !default; // 0 1px 4px 0 rgba(0, 0, 0, 0.2) !default;
+$fluent-switch-handle-shadow: none !default;
 $fluent-switch-container-adjustment: 6px !default;
 
 @if $size == "default" {

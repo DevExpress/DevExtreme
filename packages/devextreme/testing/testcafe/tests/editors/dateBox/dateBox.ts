@@ -1,8 +1,9 @@
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
 import DateBox from '../../../model/dateBox';
 import asyncForEach from '../../../helpers/asyncForEach';
-import createWidget from '../../../helpers/createWidget';
-import { isMaterialBased } from '../../../helpers/themeUtils';
+import { createWidget } from '../../../helpers/createWidget';
+import { isMaterialBased, testScreenshot } from '../../../helpers/themeUtils';
 
 fixture.disablePageReloads`DateBox`
   .page(url(__dirname, '../../container.html'));
@@ -52,3 +53,21 @@ if (!isMaterialBased()) {
     }));
   });
 }
+
+test('DateBox with datetime and root element as container (T1193495)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  await testScreenshot(t, takeScreenshot, 'DateBox with datetime and root element as container.png', { element: '#container' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDateBox', {
+  value: new Date(2022, 10, 23, 17, 23),
+  type: 'datetime',
+  pickerType: 'calendar',
+  opened: true,
+  width: 300,
+  dropDownOptions: {
+    container: '#container',
+  },
+}, '#container'));

@@ -10,6 +10,7 @@ on:
     branches: [23_2]
 
 env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
 
 jobs:
@@ -23,7 +24,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -73,7 +74,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Download artifacts
       uses: actions/download-artifact@v3
@@ -124,7 +125,7 @@ jobs:
       matrix:
         CONSTEL: [jquery(1/4), jquery(2/4), jquery(3/4), jquery(4/4)]
 
-    runs-on: devextreme-shr2
+    runs-on: ubuntu-latest
     name: Demos visual tests ${{ matrix.CONSTEL }}
     timeout-minutes: 30
 
@@ -135,12 +136,12 @@ jobs:
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '118.0.5993.70'
+        chrome-version: '120.0.6099.71'
 
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Clone devextreme-demos repo from PR author fork
       continue-on-error: true
@@ -157,6 +158,10 @@ jobs:
       run: |
         BASE_BRANCH=$(node -p -e "require('./package.json').version.slice(0, 4).replace('.', '_')")
         test -d ./devextreme-demos || git clone -b $BASE_BRANCH https://github.com/devexpress/devextreme-demos ./devextreme-demos
+
+    - name: Log devextreme-demos top commit
+      working-directory: ./devextreme-demos
+      run: git log -1 --oneline
 
     - name: Download artifacts
       uses: actions/download-artifact@v3

@@ -12,6 +12,7 @@
   .dx-overlay-content {
     background-color: $tooltip-bg;
     color: $tooltip-color;
+    border: 1px solid transparent;
     border-radius: $tooltip-border-radius;
     min-height: auto;
 

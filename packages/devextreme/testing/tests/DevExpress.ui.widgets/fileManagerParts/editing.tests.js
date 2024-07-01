@@ -2353,4 +2353,107 @@ QUnit.module('Editing operations', moduleConfig, () => {
         assert.strictEqual(this.wrapper.getDetailsItemName(0), newFileName, '1st file is still in the initial dir');
         assert.strictEqual(this.wrapper.getDetailsItemName(1), fileName2, '2nd file is still in the initial dir');
     });
+
+    test('create folder from fast re-opened dialog (T1202022)', function(assert) {
+        fx.off = false;
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+
+        $('.dx-overlay-shader').trigger('dxpointerdown');
+        this.clock.tick(50);
+
+        this.wrapper.getToolbarButton('New directory').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogButton('Create').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNode = this.wrapper.getFolderNode(4);
+        assert.equal($folderNode.find('span').text(), 'Untitled directory', 'folder created');
+        assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        fx.off = true;
+    });
+
+    test('rename item from fast re-opened dialog (T1202022)', function(assert) {
+        fx.off = false;
+        const newFileName = 'File 123.txt';
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+
+        $('.dx-overlay-shader').trigger('dxpointerdown');
+        this.clock.tick(50);
+
+        this.wrapper.getToolbarButton('Rename').trigger('dxclick');
+        this.clock.tick(400);
+        this.wrapper.getDialogTextInput().val(newFileName).trigger('change');
+        this.wrapper.getDialogButton('Save').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.equal(this.wrapper.getFocusedItemText(), 'Files', 'root folder selected');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), newFileName, 'file is renamed');
+        fx.off = true;
+    });
+
+    test('copy item from fast re-opened dialog (T1202022)', function(assert) {
+        fx.off = false;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        $('.dx-overlay-shader').trigger('dxpointerdown');
+        this.clock.tick(50);
+
+        this.wrapper.getToolbarButton('Copy to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(3).trigger('dxclick');
+
+        this.wrapper.getDialogButton('Copy').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, 'Folder 3', 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file copied');
+        fx.off = true;
+    });
+
+    test('move item from fast re-opened dialog (T1202022)', function(assert) {
+        fx.off = false;
+
+        const $cell = this.wrapper.getRowNameCellInDetailsView(1);
+        assert.equal(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'has target file');
+        $cell.trigger(CLICK_EVENT).click();
+        this.clock.tick(400);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+
+        $('.dx-overlay-shader').trigger('dxpointerdown');
+        this.clock.tick(50);
+
+        this.wrapper.getToolbarButton('Move to').trigger('dxclick');
+        this.clock.tick(400);
+
+        const $folderNodes = this.wrapper.getFolderNodes(true);
+        $folderNodes.eq(3).trigger('dxclick');
+
+        this.wrapper.getDialogButton('Move').trigger('dxclick');
+        this.clock.tick(400);
+
+        assert.strictEqual(this.wrapper.getFocusedItemText(), 'Folder 3', 'initial folder should be selected');
+        assert.strictEqual(this.fileManager.getCurrentDirectory().name, 'Folder 3', 'current folder is the initial folder');
+        assert.strictEqual(this.wrapper.getDetailsItemName(0), 'File 1.txt', 'file moved');
+        fx.off = true;
+    });
 });

@@ -493,7 +493,7 @@ QUnit.module('State storing', baseModuleConfig, () => {
         assert.strictEqual(columns[2].index, 2, 'third column index');
 
         // act
-        customizeColumnsSpy.reset();
+        customizeColumnsSpy.resetHistory();
         dataGrid.state(null);
         this.clock.tick(100);
 

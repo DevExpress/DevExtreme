@@ -1,5 +1,5 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import url from '../../../../helpers/getPageUrl';
 import Scheduler from '../../../../model/scheduler';
 
@@ -61,7 +61,7 @@ const setViewOptions = (startDayHour, endDayHour) => {
           currentView: view,
           currentDate: '2023-01-01T00:00:00',
           height: 800,
-          cellDuration: 320,
+          cellDuration: 360,
           maxAppointmentsPerCell: 2,
           ...setViewOptions(startDayHour, endDayHour),
         },

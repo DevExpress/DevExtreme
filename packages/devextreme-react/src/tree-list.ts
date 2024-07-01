@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/tree_list";
 import dxTreeList, {
     Properties
@@ -15,7 +16,7 @@ import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { event, EventInfo } from "devextreme/events/index";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 import type { PositionConfig } from "devextreme/animation/position";
 import type { dxPopupOptions, dxPopupToolbarItem } from "devextreme/ui/popup";
 import type { Component } from "devextreme/core/component";
@@ -488,10 +489,10 @@ type IColumnProps = React.PropsWithChildren<{
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-    height?: number;
+    height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
     searchMode?: "contains" | "startswith" | "equals";
-    width?: number;
+    width?: number | string;
   };
   hidingPriority?: number;
   isBand?: boolean;
@@ -599,7 +600,7 @@ type IColumnChooserProps = React.PropsWithChildren<{
   container?: any | string;
   emptyPanelText?: string;
   enabled?: boolean;
-  height?: number;
+  height?: number | string;
   mode?: "dragAndDrop" | "select";
   position?: PositionConfig;
   search?: ColumnChooserSearchConfig;
@@ -607,7 +608,7 @@ type IColumnChooserProps = React.PropsWithChildren<{
   selection?: ColumnChooserSelectionConfig;
   sortOrder?: "asc" | "desc";
   title?: string;
-  width?: number;
+  width?: number | string;
 }>
 class ColumnChooser extends NestedOption<IColumnChooserProps> {
   public static OptionName = "columnChooser";
@@ -680,10 +681,10 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number;
+  height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number;
+  width?: number | string;
 }>
 class ColumnHeaderFilter extends NestedOption<IColumnHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -752,9 +753,9 @@ class CursorOffset extends NestedOption<ICursorOffsetProps> {
 type ICustomOperationProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, field: dxFilterBuilderField) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { field: dxFilterBuilderField, value: string | number | Date, valueText: string }) => string);
   dataTypes?: Array<"string" | "number" | "date" | "boolean" | "object" | "datetime">;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   hasValue?: boolean;
   icon?: string;
   name?: string;
@@ -886,11 +887,11 @@ class EmailRule extends NestedOption<IEmailRuleProps> {
 type IFieldProps = React.PropsWithChildren<{
   calculateFilterExpression?: ((filterValue: any, selectedFilterOperation: string) => string | (() => any) | Array<any>);
   caption?: string;
-  customizeText?: ((fieldInfo: { value: string | number | any, valueText: string }) => string);
+  customizeText?: ((fieldInfo: { value: string | number | Date, valueText: string }) => string);
   dataField?: string;
   dataType?: "string" | "number" | "date" | "boolean" | "object" | "datetime";
   editorOptions?: any;
-  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | any }, container: any) => string | any) | template;
+  editorTemplate?: ((conditionInfo: { field: dxFilterBuilderField, filterOperation: string, setValue: (() => void), value: string | number | Date }, container: any) => string | any) | template;
   falseText?: string;
   filterOperations?: Array<"=" | "<>" | "<" | "<=" | ">" | ">=" | "contains" | "endswith" | "isblank" | "isnotblank" | "notcontains" | "startswith" | "between" | string>;
   format?: LocalizationTypes.Format;
@@ -1250,8 +1251,8 @@ class Form extends NestedOption<IFormProps> {
 // Field
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -1347,10 +1348,10 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number;
+  height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number;
+  width?: number | string;
   searchTimeout?: number;
   texts?: Record<string, any> | {
     cancel?: string;
@@ -1400,7 +1401,7 @@ type IItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;
@@ -1463,14 +1464,14 @@ class Label extends NestedOption<ILabelProps> {
 // TreeList
 type ILoadPanelProps = React.PropsWithChildren<{
   enabled?: boolean | "auto";
-  height?: number;
+  height?: number | string;
   indicatorSrc?: string;
   shading?: boolean;
   shadingColor?: string;
   showIndicator?: boolean;
   showPane?: boolean;
   text?: string;
-  width?: number;
+  width?: number | string;
 }>
 class LoadPanel extends NestedOption<ILoadPanelProps> {
   public static OptionName = "loadPanel";
@@ -1586,7 +1587,7 @@ class Paging extends NestedOption<IPagingProps> {
 type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  pattern?: any | string;
+  pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
 class PatternRule extends NestedOption<IPatternRuleProps> {
@@ -1733,9 +1734,9 @@ class Position extends NestedOption<IPositionProps> {
 // Column
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
-  max?: any | number;
+  max?: Date | number | string;
   message?: string;
-  min?: any | number;
+  min?: Date | number | string;
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
@@ -2024,7 +2025,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;
@@ -2053,7 +2054,7 @@ class ToolbarItem extends NestedOption<IToolbarItemProps> {
 type ITreeListHeaderFilterProps = React.PropsWithChildren<{
   allowSearch?: boolean;
   allowSelectAll?: boolean;
-  height?: number;
+  height?: number | string;
   search?: HeaderFilterSearchConfig;
   searchTimeout?: number;
   texts?: Record<string, any> | {
@@ -2062,7 +2063,7 @@ type ITreeListHeaderFilterProps = React.PropsWithChildren<{
     ok?: string;
   };
   visible?: boolean;
-  width?: number;
+  width?: number | string;
 }>
 class TreeListHeaderFilter extends NestedOption<ITreeListHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -2116,13 +2117,13 @@ type IValidationRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   ignoreEmptyValue?: boolean;
-  max?: any | number;
-  min?: any | number;
+  max?: Date | number | string;
+  min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
-  pattern?: any | string;
+  pattern?: RegExp | string;
 }>
 class ValidationRule extends NestedOption<IValidationRuleProps> {
   public static OptionName = "validationRules";

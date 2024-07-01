@@ -6,7 +6,6 @@ import {
 } from '@angular/core';
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { Mode } from 'devextreme/common';
 import { Store } from 'devextreme/data';
 import DataSource, { Options as DataSourceOptions } from 'devextreme/data/data_source';
 import { BoxDirection, ContentReadyEvent, CrosswiseDistribution, DisposingEvent, Distribution, dxBoxOptions, InitializedEvent, ItemClickEvent, ItemContextMenuEvent, ItemHoldEvent, ItemRenderedEvent, OptionChangedEvent } from 'devextreme/ui/box';
@@ -78,10 +77,10 @@ export abstract class DxoBoxOptions extends NestedOption {
         this._setOption('itemHoldTimeout', value);
     }
 
-    get items(): Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
+    get items(): Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }> {
         return this._getOption('items');
     }
-    set items(value: Array<string | any | { baseSize?: Mode | number, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
+    set items(value: Array<string | any | { baseSize?: number | string, box?: dxBoxOptions | undefined, disabled?: boolean, html?: string, ratio?: number, shrink?: number, template?: any, text?: string, visible?: boolean }>) {
         this._setOption('items', value);
     }
 

@@ -1,3 +1,4 @@
+"use client"
 import dxCalendar, {
     Properties
 } from "devextreme/ui/calendar";
@@ -21,9 +22,9 @@ type ICalendarOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IC
   cellRender?: (...params: any) => React.ReactNode;
   cellComponent?: React.ComponentType<any>;
   cellKeyFn?: (data: any) => string;
-  defaultValue?: any | Array<any | number | string> | number | string;
+  defaultValue?: Array<Date | number | string> | Date | number | string;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
-  onValueChange?: (value: any | Array<any | number | string> | number | string) => void;
+  onValueChange?: (value: Array<Date | number | string> | Date | number | string) => void;
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
 }>
 
@@ -82,6 +83,11 @@ class Calendar extends BaseComponent<React.PropsWithChildren<ICalendarOptions>> 
   hoverStateEnabled: PropTypes.bool,
   isDirty: PropTypes.bool,
   isValid: PropTypes.bool,
+  max: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
+  ]),
   maxZoomLevel: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.oneOf([
@@ -89,6 +95,11 @@ class Calendar extends BaseComponent<React.PropsWithChildren<ICalendarOptions>> 
       "decade",
       "month",
       "year"])
+  ]),
+  min: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
   ]),
   minZoomLevel: PropTypes.oneOfType([
     PropTypes.string,
@@ -137,6 +148,12 @@ class Calendar extends BaseComponent<React.PropsWithChildren<ICalendarOptions>> 
       "valid",
       "invalid",
       "pending"])
+  ]),
+  value: PropTypes.oneOfType([
+    PropTypes.array,
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
   ]),
   visible: PropTypes.bool,
   weekNumberRule: PropTypes.oneOfType([

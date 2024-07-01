@@ -18,7 +18,8 @@ QUnit.testStart(() => {
 const TABS_CLASS = 'dx-tabs';
 const TABS_WRAPPER_CLASS = 'dx-tabs-wrapper';
 const TABS_ITEM_TEXT_CLASS = 'dx-tab-text';
-const TABS_DATA_DX_TEXT_ATTRIBUTE = 'data-dx_text';
+const TABS_ITEM_TEXT_SPAN_CLASS = 'dx-tab-text-span';
+const TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS = 'dx-tab-text-span-pseudo';
 
 const toSelector = cssClass => '.' + cssClass;
 
@@ -31,25 +32,17 @@ QUnit.module('Tabs markup', () => {
         assert.ok($tabsElement.hasClass(TABS_CLASS), 'tabs has correct class');
     });
 
-    QUnit.test(`Tabs item should have a correct ${TABS_DATA_DX_TEXT_ATTRIBUTE} attribute`, function(assert) {
-        const $tabs = $('#tabs').dxTabs({
-            items: [{ text: '1' }],
+    [[{ text: '1' }], ['1']].forEach(items => {
+        QUnit.test(`Tabs item should have a correct span elements when items are ${items}`, function(assert) {
+            const $tabs = $('#tabs').dxTabs({ items });
+            const $tabsTextSpan = $tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).children();
+
+            assert.strictEqual($tabsTextSpan.hasClass(TABS_ITEM_TEXT_SPAN_CLASS), true);
+
+            const $tabsTextSpanPseudo = $tabs.find(`.${TABS_ITEM_TEXT_SPAN_CLASS}`).children();
+
+            assert.strictEqual($tabsTextSpanPseudo.hasClass(TABS_ITEM_TEXT_SPAN_PSEUDO_CLASS), true);
         });
-        const tabs = $tabs.dxTabs('instance');
-
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item text`);
-
-        tabs.option({ items: ['1'] });
-
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item when item is string`);
-
-        tabs.option({ items: [1] });
-
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), '1', `${TABS_DATA_DX_TEXT_ATTRIBUTE} is equal item when item is number`);
-
-        tabs.option({ items: [{ title: '1' }] });
-
-        assert.strictEqual($tabs.find(`.${TABS_ITEM_TEXT_CLASS}`).attr(TABS_DATA_DX_TEXT_ATTRIBUTE), undefined, `${TABS_DATA_DX_TEXT_ATTRIBUTE} is undefined`);
     });
 
     QUnit.test('tabs should have wrapper with correct class', function(assert) {
@@ -74,7 +67,7 @@ QUnit.module('Tabs markup', () => {
 
         assert.equal(tabsInstance.option('selectedIndex'), -1);
 
-        assert.equal($.trim(tabsElement.text()), '012');
+        assert.strictEqual($.trim(tabsElement.text()), '001122');
 
         assert.equal(tabElements.find('.dx-icon-custom').length, 1);
 
@@ -233,25 +226,25 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with text', function(assert) {
         const $content = this.prepareItemTest('custom');
 
-        assert.equal($content.text(), 'custom');
+        assert.strictEqual($content.text(), 'customcustom');
     });
 
     QUnit.test('template should be rendered correctly with boolean', function(assert) {
         const $content = this.prepareItemTest(true);
 
-        assert.equal($.trim($content.text()), 'true');
+        assert.strictEqual($.trim($content.text()), 'truetrue');
     });
 
     QUnit.test('template should be rendered correctly with number', function(assert) {
         const $content = this.prepareItemTest(1);
 
-        assert.equal($.trim($content.text()), '1');
+        assert.strictEqual($.trim($content.text()), '11');
     });
 
     QUnit.test('template should be rendered correctly with object that contains the "text" property', function(assert) {
         const $content = this.prepareItemTest({ text: 'custom' });
 
-        assert.equal($.trim($content.text()), 'custom');
+        assert.strictEqual($.trim($content.text()), 'customcustom');
     });
 
     QUnit.test('template should be rendered correctly with html', function(assert) {
@@ -265,7 +258,7 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with htmlstring', function(assert) {
         const $content = this.prepareItemTest('<span>test</span>');
 
-        assert.equal($content.text(), '<span>test</span>');
+        assert.strictEqual($content.text(), '<span>test</span><span>test</span>');
     });
 
     QUnit.test('template should be rendered correctly with html & text', function(assert) {
@@ -280,13 +273,13 @@ QUnit.module('Default template', moduleConfig, () => {
     QUnit.test('template should be rendered correctly with tab text wrapper for data with text field', function(assert) {
         const $content = this.prepareItemTest({ text: 'test' });
 
-        assert.equal($content.filter('.' + TABS_ITEM_TEXT_CLASS).text(), 'test');
+        assert.strictEqual($content.filter(`.${TABS_ITEM_TEXT_CLASS}`).text(), 'testtest');
     });
 
     QUnit.test('template should be rendered correctly with tab text wrapper for string data', function(assert) {
         const $content = this.prepareItemTest('test');
 
-        assert.equal($content.filter('.' + TABS_ITEM_TEXT_CLASS).text(), 'test');
+        assert.strictEqual($content.filter(`.${TABS_ITEM_TEXT_CLASS}`).text(), 'testtest');
     });
 
     QUnit.test('template should be rendered correctly with icon', function(assert) {

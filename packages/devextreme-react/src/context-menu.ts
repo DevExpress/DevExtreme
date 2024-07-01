@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/context_menu";
 import dxContextMenu, {
     Properties

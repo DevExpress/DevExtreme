@@ -1,4 +1,4 @@
-import { formatWeekdayAndDay } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { formatWeekdayAndDay } from '@ts/scheduler/r1/utils/index';
 
 import SchedulerWorkSpaceIndicator from './m_work_space_indicator';
 

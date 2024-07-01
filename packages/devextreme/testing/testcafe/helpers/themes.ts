@@ -37,4 +37,8 @@ export const Themes = {
   materialTealDarkCompact: 'material.teal.dark.compact',
   fluentBlue: 'fluent.blue.light',
   fluentBlueDark: 'fluent.blue.dark',
+  // eslint-disable-next-line spellcheck/spell-checker
+  fluentSaaS: 'fluent.saas.light',
+  // eslint-disable-next-line spellcheck/spell-checker
+  fluentSaaSDark: 'fluent.saas.dark',
 };

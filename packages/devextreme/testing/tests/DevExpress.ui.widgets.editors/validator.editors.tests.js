@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import Class from 'core/class';
 import Editor from 'ui/editor/editor';
-import DefaultAdapter from 'ui/validation/default_adapter';
+import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import TextEditorBase from 'ui/text_box/ui.text_editor.base';
 import { Deferred } from 'core/utils/deferred';

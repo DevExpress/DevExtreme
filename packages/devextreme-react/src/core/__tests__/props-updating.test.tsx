@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable max-classes-per-file */
 import { cleanup, render } from '@testing-library/react';
 import * as React from 'react';
@@ -13,8 +12,6 @@ import {
   Widget,
   WidgetClass,
 } from './test-component';
-import TemplatesManager from '../templates-manager';
-import { TemplatesStore } from '../templates-store';
 
 jest.useFakeTimers();
 jest.mock('devextreme/core/utils/common', () => ({
@@ -32,7 +29,7 @@ interface IControlledComponentProps {
   complexOption?: Record<string, unknown>;
 }
 
-class ControlledComponent extends TestComponent<IControlledComponentProps> {
+class ControlledComponent extends TestComponent<IControlledComponentProps & React.PropsWithChildren> {
   protected _defaults = {
     defaultControlledOption: 'controlledOption',
   };
@@ -47,7 +44,7 @@ class NestedComponent extends ConfigurationComponent<{
   complexValue?: Record<string, unknown>;
   value?: number;
   onValueChange?: (value: number) => void;
-}> {
+} & React.PropsWithChildren> {
   public static DefaultsProps = {
     defaultC: 'c',
   };
@@ -58,7 +55,7 @@ class NestedComponent extends ConfigurationComponent<{
 class CollectionNestedComponent extends ConfigurationComponent<{
   a?: number;
   onAChange?: (value: number) => void;
-}> {}
+} & React.PropsWithChildren> {}
 (CollectionNestedComponent as any).OptionName = 'items';
 (CollectionNestedComponent as any).IsCollectionItem = true;
 (CollectionNestedComponent as any).ExpectedChildren = {
@@ -120,11 +117,34 @@ describe('option update', () => {
     <div>
       <div ref={ref}></div>
       <TestComponent dropZone={ref} dialogTrigger={ref} />
-    </div>,);
+    </div>,
+    );
 
     expect(Widget.option.mock.calls.length).toBe(2);
     expect(Widget.option.mock.calls[0][1]).toEqual(ref.current);
     expect(Widget.option.mock.calls[1][1]).toEqual(ref.current);
+  });
+
+  it('component use component ref as target element', () => {
+    const ref = React.createRef<TestComponent>();
+    const { rerender } = render(
+      <div>
+        <TestComponent ref={ref} />
+        <TestComponent/>
+      </div>,
+    );
+
+    rerender(
+    <div>
+      <TestComponent ref={ref}/>
+      <TestComponent dropZone={ref} dialogTrigger={ref} />
+    </div>,
+    );
+
+    expect(Widget.option.mock.calls.length).toBe(2);
+
+    expect(Widget.option.mock.calls[0][1]).toEqual(ref.current?.instance.element());
+    expect(Widget.option.mock.calls[1][1]).toEqual(ref.current?.instance.element());
   });
 
   it('updates nested collection item', () => {
@@ -302,6 +322,22 @@ describe('option control', () => {
     });
   });
 
+  it('rolls back controlled options on second timer (to account for async React 18+ updates)', () => {
+    render(
+      <ControlledComponent everyOption={123} />,
+    );
+
+    fireOptionChange('everyOption', 234);
+    jest.runOnlyPendingTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(0);
+
+    jest.runAllTimers();
+
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 123]);
+  });
+
   it('rolls back controlled complex option', () => {
     render(
       <ControlledComponent complexOption={{ a: 123, b: 234 }} />,
@@ -407,6 +443,25 @@ describe('option control', () => {
     );
 
     fireOptionChange('everyOption', 234);
+    rerender(
+      <ControlledComponent everyOption={234} />,
+    );
+
+    jest.runAllTimers();
+    expect(Widget.option.mock.calls.length).toBe(1);
+    expect(Widget.option.mock.calls[0]).toEqual(['everyOption', 234]);
+  });
+
+  it('applies option change with async React 18+ update', () => {
+    const { rerender } = render(
+      <ControlledComponent everyOption={123} />,
+    );
+
+    fireOptionChange('everyOption', 234);
+
+    jest.runOnlyPendingTimers();
+    expect(Widget.option.mock.calls.length).toBe(0);
+
     rerender(
       <ControlledComponent everyOption={234} />,
     );
@@ -621,11 +676,30 @@ describe('cfg-component option control', () => {
     expect(Widget.option.mock.calls[1]).toEqual(['nestedOption.b', 'const']);
   });
 
+  it('invokes option change guard handlers in strict mode', () => {
+    const TestContainer = ({ value }: { value: number }) => {
+      return (
+        <React.StrictMode>
+          <ControlledComponent>
+            <NestedComponent a={value} />
+          </ControlledComponent>
+        </React.StrictMode>
+      );
+    };
+
+    const { rerender } = render(<TestContainer value={123} />);
+
+    fireOptionChange('nestedOption.a', 234);
+
+    rerender(<TestContainer value={123} />);
+    jest.runAllTimers();
+
+    expect(Widget.option).toHaveBeenCalledWith('nestedOption.a', 123);
+  });
+
   // T1106899
   it('apply cfg-component option value if value has changes', () => {
-    const optionsManager = new OptionsManagerModule.OptionsManager(
-      new TemplatesManager(new TemplatesStore(() => {})),
-    );
+    const optionsManager = new OptionsManagerModule.OptionsManager();
     const config = {
       fullName: '',
       predefinedOptions: {},
@@ -678,7 +752,7 @@ describe('cfg-component option control', () => {
     expect(OptionsManagerModule.scheduleGuards).toBeCalled();
     const updatedConfig = { ...config, options: { value: 2 } };
     // value changed and options manager set value and remove scheduled guard
-    optionsManager.update(updatedConfig);
+    optionsManager.update(updatedConfig, {});
     expect((optionsManager as any).setValue).toBeCalled();
     jest.runAllTimers();
     expect((optionsManager as any).setValue).toHaveBeenCalledTimes(1);
@@ -896,7 +970,7 @@ describe('onXXXChange', () => {
     });
 
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isOptionSubscribable: () => boolean }, 'isOptionSubscribable'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean },
         'isOptionSubscribable',
@@ -1132,7 +1206,7 @@ describe('onXXXChange', () => {
 
   describe('non-subscribable options', () => {
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isOptionSubscribable: () => boolean }, 'isOptionSubscribable'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isOptionSubscribable: () => boolean },
         'isOptionSubscribable',
@@ -1173,7 +1247,7 @@ describe('onXXXChange', () => {
 
   describe('independent events', () => {
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isIndependentEvent: () => boolean }, 'isIndependentEvent'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
         'isIndependentEvent',
@@ -1230,7 +1304,7 @@ describe('onXXXChange', () => {
 
   describe('dependent events', () => {
     beforeAll(() => {
-      jest.spyOn(
+      jest.spyOn<{ isIndependentEvent: () => boolean }, 'isIndependentEvent'>(
         OptionsManagerModule.OptionsManager.prototype as
         OptionsManagerModule.OptionsManager & { isIndependentEvent: () => boolean },
         'isIndependentEvent',

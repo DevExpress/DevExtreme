@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
 const TEST_IMAGE_PATH_1 = './images/test-image-1.png';
@@ -32,7 +32,7 @@ test('Image from device should be inserted', async (t) => {
     .eql('test-image-1.png')
 
     .expect(file.fileSize)
-    .eql('7 kb')
+    .eql('7 KB')
 
     .expect(file.statusMessage)
     .eql('Ready to upload');
@@ -87,7 +87,7 @@ test('Image should be validated and inserted from device', async (t) => {
     .eql('test-image-2.png')
 
     .expect(file.fileSize)
-    .eql('10 kb')
+    .eql('10 KB')
 
     .expect(file.validationMessage)
     .eql('File is too large');
@@ -108,7 +108,7 @@ test('Image should be validated and inserted from device', async (t) => {
     .eql('test-image-1.png')
 
     .expect(file.fileSize)
-    .eql('7 kb')
+    .eql('7 KB')
 
     .expect(file.statusMessage)
     .eql('Ready to upload');

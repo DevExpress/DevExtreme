@@ -20,7 +20,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -52,7 +52,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -97,7 +97,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -129,7 +129,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -155,7 +155,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -181,7 +181,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Check package-lock
       run: |
@@ -200,7 +200,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -228,6 +228,41 @@ jobs:
             echo "Generated component reexports are outdated. Execute 'npm run update-ts-reexports' and commit changes."
             exit 1
         fi
+
+  wrappers:
+    runs-on: devextreme-shr2
+    timeout-minutes: 10
+
+    steps:
+    - name: Get sources
+      uses: actions/checkout@v4
+
+    - name: Use Node.js
+      uses: actions/setup-node@v3
+      with:
+        node-version: '20'
+
+    - name: Restore npm cache
+      uses: actions/cache@v3
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: ${{ runner.os }}-node-modules
+
+    - name: Install dependencies
+      run: npm install --no-audit --no-fund
+
+    - name: Lint devextreme-angular
+      working-directory: ./packages/devextreme-angular
+      run: npm run lint
+
+    - name: Lint devextreme-react
+      working-directory: ./packages/devextreme-react
+      run: npm run lint
+
+    - name: Lint devextreme-vue
+      working-directory: ./packages/devextreme-vue
+      run: npm run lint
 
   notify:
     runs-on: devextreme-shr2

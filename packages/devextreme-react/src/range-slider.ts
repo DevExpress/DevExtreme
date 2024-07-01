@@ -1,3 +1,4 @@
+"use client"
 import dxRangeSlider, {
     Properties
 } from "devextreme/ui/range_slider";
@@ -124,8 +125,8 @@ class RangeSlider extends BaseComponent<React.PropsWithChildren<IRangeSliderOpti
 // Tooltip
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;

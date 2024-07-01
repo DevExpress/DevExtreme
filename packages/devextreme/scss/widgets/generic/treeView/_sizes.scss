@@ -3,82 +3,40 @@
 // adduse
 
 $generic-treeview-container-with-border-offset: null !default;
-$generic-treeview-node-offset: null !default;
+$generic-treeview-base-container-size: null !default;
 $generic-treeview-toggle-item-width: null !default;
-$generic-treeview-item-with-checkbox-offset: null !default;
-$generic-select-all-item-offset: null !default;
+$generic-treeview-item-height: null !default;
 $generic-select-all-item-padding: null !default;
-$generic-select-all-item-left-padding: null !default;
 $generic-treeview-item-padding: null !default;
-$generic-treeview-min-item-height: null !default;
-$generic-treeview-checkbox-offset: null !default;
-$generic-treeview-item-visibility-icon-size: null !default;
-$generic-treeview-loadincicator-size: null !default;
-$generic-select-all-text-offset: null !default;
-$generic-treeview-arrow-icon-size: null !default;
+$generic-treeview-load-indicator-size: null !default;
+$generic-checkbox-container-size: null !default;
 $generic-treeview-searchbox-margin-bottom: null !default;
-
 $generic-treeview-border-padding: 1px !default;
-$generic-treeview-loadincicator-offset-top: 8px !default;
-$generic-treeview-loadincicator-offset-left: -1px !default;
-
-$generic-treeview-item-side-padding: 6px !default;
-
-$generic-treeview-custom-expander-icon-offset: null !default;
+$generic-treeview-item-element-gap: 8px !default;
+$generic-select-all-item-border-visible-padding: 20px !default;
 
 @if $size == "default" {
+  $generic-treeview-item-height: 32px;
+  $generic-treeview-base-container-size: 22px !default;
   $generic-treeview-container-with-border-offset: 7px !default;
-
-  $generic-treeview-node-offset: 15px !default;
-  $generic-treeview-custom-expander-icon-offset: 20px;
-  $generic-treeview-toggle-item-width: 21px !default;
-
-  $generic-treeview-item-with-checkbox-offset: 36px !default;
-  $generic-select-all-item-offset: 20px !default;
-
-  $generic-select-all-item-padding: 9px 0 11px $generic-select-all-item-offset !default;
-  $generic-select-all-item-left-padding: 26px !default;
-
-  $generic-treeview-item-padding: 5px 6px !default;
-  $generic-treeview-min-item-height: 32px !default;
-
-  $generic-treeview-checkbox-offset: 19px !default;
-
-  $generic-treeview-item-visibility-icon-size: 10px !default;
-
-  $generic-treeview-loadincicator-size: 14px !default;
-  $generic-select-all-text-offset: 9px !default;
-
-  $generic-treeview-arrow-icon-size: 22px !default;
-
+  $generic-checkbox-container-size: 22px !default;
+  $generic-treeview-toggle-item-width: 22px !default;
+  $generic-select-all-item-padding: 9px 40px 11px 40px !default;
+  $generic-treeview-item-padding: 5px 10px !default;
+  $generic-treeview-load-indicator-size: $generic-treeview-toggle-item-width !default;
   $generic-treeview-searchbox-margin-bottom: 5px !default;
 }
 
 @else if $size == "compact" {
+  $generic-treeview-item-height: 28px;
   $generic-treeview-container-with-border-offset: 6px !default;
-
-  $generic-treeview-node-offset: 10px !default;
-  $generic-treeview-custom-expander-icon-offset: 16px;
+  $generic-treeview-base-container-size: 16px !default;
+  $generic-checkbox-container-size: 16px !default;
   $generic-treeview-toggle-item-width: 16px !default;
-
-  $generic-treeview-item-with-checkbox-offset: 31px !default;
-  $generic-select-all-item-offset: 15px !default;
-
-  $generic-select-all-item-padding: 6px 0 8px $generic-select-all-item-offset !default;
-  $generic-select-all-item-left-padding: 20px !default;
-
+  $generic-select-all-item-padding: 6px 30px 8px 30px !default;
   $generic-treeview-item-padding: 4px 6px !default;
-  $generic-treeview-min-item-height: 28px !default;
-
-  $generic-treeview-checkbox-offset: 14px !default;
-
-  $generic-treeview-item-visibility-icon-size: 8px !default;
-
-  $generic-treeview-loadincicator-size: 11px !default;
-  $generic-select-all-text-offset: 26px !default;
-
-  $generic-treeview-arrow-icon-size: 18px !default;
-
+  $generic-treevieew-item-padding: 4px 6px !default;
+  $generic-treeview-load-indicator-size: $generic-treeview-toggle-item-width !default;
   $generic-treeview-searchbox-margin-bottom: 3px !default;
 }
 

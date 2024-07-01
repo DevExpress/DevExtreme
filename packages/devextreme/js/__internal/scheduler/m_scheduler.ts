@@ -1,6 +1,8 @@
 import registerComponent from '@js/core/component_registrator';
 import config from '@js/core/config';
 import devices from '@js/core/devices';
+import { getPublicElement } from '@js/core/element';
+import type { dxElementWrapper } from '@js/core/renderer';
 import $ from '@js/core/renderer';
 import { BindableTemplate } from '@js/core/templates/bindable_template';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
@@ -28,30 +30,29 @@ import DataHelperMixin from '@js/data_helper';
 import { triggerResizeEvent } from '@js/events/visibility_change';
 import dateLocalization from '@js/localization/date';
 import messageLocalization from '@js/localization/message';
-import { getAppointmentTakesAllDay } from '@js/renovation/ui/scheduler/appointment/utils/getAppointmentTakesAllDay';
-import { renovationGetCurrentView } from '@js/renovation/ui/scheduler/model/untyped_getCurrentView';
-import { createTimeZoneCalculator } from '@js/renovation/ui/scheduler/timeZoneCalculator/createTimeZoneCalculator';
-import { getPreparedDataItems } from '@js/renovation/ui/scheduler/utils/data';
-import { excludeFromRecurrence } from '@js/renovation/ui/scheduler/utils/recurrence/excludeFromRecurrence';
-import {
-  isDateAndTimeView,
-  isTimelineView,
-  validateDayHours,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
 import { custom as customDialog } from '@js/ui/dialog';
+import type { AppointmentTooltipShowingEvent } from '@js/ui/scheduler';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
 import errors from '@js/ui/widget/ui.errors';
 import Widget from '@js/ui/widget/ui.widget';
+import { dateUtilsTs } from '@ts/core/utils/date';
+import { createTimeZoneCalculator } from '@ts/scheduler/r1/timezone_calculator/index';
+import {
+  excludeFromRecurrence,
+  getAppointmentTakesAllDay,
+  getPreparedDataItems,
+  isDateAndTimeView, isTimelineView, viewsUtils,
+} from '@ts/scheduler/r1/utils/index';
 
 import { AppointmentForm } from './appointment_popup/m_form';
 import { ACTION_TO_APPOINTMENT, AppointmentPopup } from './appointment_popup/m_popup';
 import { AppointmentDataProvider } from './appointments/data_provider/m_appointment_data_provider';
 import AppointmentCollection from './appointments/m_appointment_collection';
-import { renderAppointments } from './appointments/m_render';
 import { SchedulerHeader } from './header/m_header';
 import { createAppointmentAdapter } from './m_appointment_adapter';
 import AppointmentLayoutManager from './m_appointments_layout_manager';
 import { CompactAppointmentsHelper } from './m_compact_appointments_helper';
+import { VIEWS } from './m_constants';
 import { AppointmentTooltipInfo } from './m_data_structures';
 import { ExpressionUtils } from './m_expression_utils';
 import { hide as hideLoading, show as showLoading } from './m_loading';
@@ -59,6 +60,7 @@ import { getRecurrenceProcessor } from './m_recurrence';
 import subscribes from './m_subscribes';
 import { utils } from './m_utils';
 import timeZoneUtils from './m_utils_time_zone';
+import { SchedulerOptionsValidator, SchedulerOptionsValidatorErrorsHandler } from './options_validator/index';
 import { AgendaResourceProcessor } from './resources/m_agenda_resource_processor';
 import {
   createExpressions,
@@ -80,7 +82,8 @@ import SchedulerWorkSpaceMonth from './workspaces/m_work_space_month';
 import SchedulerWorkSpaceWeek from './workspaces/m_work_space_week';
 import SchedulerWorkSpaceWorkWeek from './workspaces/m_work_space_work_week';
 
-const MINUTES_IN_HOUR = 60;
+const toMs = dateUtils.dateToMilliseconds;
+
 const DEFAULT_AGENDA_DURATION = 7;
 
 const WIDGET_CLASS = 'dx-scheduler';
@@ -211,6 +214,10 @@ class Scheduler extends Widget<any> {
 
   _editAppointmentData: any;
 
+  private _optionsValidator!: SchedulerOptionsValidator;
+
+  private _optionsValidatorErrorHandler!: SchedulerOptionsValidatorErrorsHandler;
+
   _getDefaultOptions() {
     // @ts-expect-error
     const defaultOptions = extend(super._getDefaultOptions(), {
@@ -250,6 +257,8 @@ class Scheduler extends Widget<any> {
       startDayHour: 0,
 
       endDayHour: 24,
+
+      offset: 0,
 
       editing: {
         allowAdding: true,
@@ -405,7 +414,7 @@ class Scheduler extends Widget<any> {
   }
 
   get currentView() {
-    return renovationGetCurrentView(
+    return viewsUtils.getCurrentView(
       this.option('currentView'),
       this.option('views'),
     );
@@ -520,6 +529,8 @@ class Scheduler extends Widget<any> {
   }
 
   _optionChanged(args) {
+    this.validateOptions();
+
     let { value } = args;
     const { name } = args;
 
@@ -571,10 +582,6 @@ class Scheduler extends Widget<any> {
         this._header?.option(name, value);
         break;
       case 'currentView':
-        this._validateDayHours();
-
-        this._validateCellDuration();
-
         this._appointments.option({
           items: [],
           allowDrag: this._allowDragging(),
@@ -623,12 +630,23 @@ class Scheduler extends Widget<any> {
         break;
       case 'startDayHour':
       case 'endDayHour':
-        this._validateDayHours();
 
         this.updateInstances();
 
         this._appointments.option('items', []);
         this._updateOption('workSpace', name, value);
+        this._appointments.repaint();
+        this._filterAppointmentsByDate();
+
+        this._postponeDataSourceLoading();
+        break;
+        // TODO Vinogradov refactoring: merge it with startDayHour / endDayHour
+      case 'offset':
+
+        this.updateInstances();
+
+        this._appointments.option('items', []);
+        this._updateOption('workSpace', 'viewOffset', this.normalizeViewOffsetValue(value));
         this._appointments.repaint();
         this._filterAppointmentsByDate();
 
@@ -677,7 +695,6 @@ class Scheduler extends Widget<any> {
         });
         break;
       case 'cellDuration':
-        this._validateCellDuration();
         this._updateOption('workSpace', name, value);
         this._appointments.option('items', []);
         if (this._readyToRenderAppointments) {
@@ -781,6 +798,7 @@ class Scheduler extends Widget<any> {
         this._updateOption('workSpace', args.fullName, value);
         break;
       case 'allDayPanelMode':
+        this.updateInstances();
         this._updateOption('workSpace', args.fullName, value);
         break;
       case 'renovateRender':
@@ -855,6 +873,7 @@ class Scheduler extends Widget<any> {
   }
 
   _supportAllDayResizing() {
+    // @ts-expect-error
     return this.currentViewType !== 'day' || this.currentView.intervalCount > 1;
   }
 
@@ -1027,6 +1046,10 @@ class Scheduler extends Widget<any> {
     this._subscribes = subscribes;
 
     this.agendaResourceProcessor = new AgendaResourceProcessor(this.option('resources'));
+
+    this._optionsValidator = new SchedulerOptionsValidator();
+
+    this._optionsValidatorErrorHandler = new SchedulerOptionsValidatorErrorsHandler();
   }
 
   createAppointmentDataProvider() {
@@ -1039,6 +1062,7 @@ class Scheduler extends Widget<any> {
       resources: this.option('resources'),
       startDayHour: this._getCurrentViewOption('startDayHour'),
       endDayHour: this._getCurrentViewOption('endDayHour'),
+      viewOffset: this.getViewOffsetMs(),
       appointmentDuration: this._getCurrentViewOption('cellDuration'),
       allDayPanelMode: this._getCurrentViewOption('allDayPanelMode'),
       showAllDayPanel: this.option('showAllDayPanel'),
@@ -1174,16 +1198,7 @@ class Scheduler extends Widget<any> {
       viewModel = this._getAppointmentsToRepaint();
     }
 
-    if (this.option('isRenovatedAppointments')) {
-      renderAppointments({
-        instance: this,
-        $dateTable: this.getWorkSpace()._getDateTable(),
-        viewModel,
-      });
-    } else {
-      this._appointments.option('items', viewModel);
-    }
-
+    this._appointments.option('items', viewModel);
     this.appointmentDataProvider.cleanState();
   }
 
@@ -1191,15 +1206,6 @@ class Scheduler extends Widget<any> {
     const layoutManager = this.getLayoutManager();
 
     const appointmentsMap = layoutManager.createAppointmentsMap(this.filteredItems);
-    if (this.option('isRenovatedAppointments')) {
-      const appointmentTemplate = this.option('appointmentTemplate') !== DEFAULT_APPOINTMENT_TEMPLATE_NAME
-        ? this.option('appointmentTemplate')
-        : undefined;
-      return {
-        appointments: appointmentsMap,
-        appointmentTemplate,
-      };
-    }
 
     return layoutManager.getRepaintedAppointments(
       appointmentsMap,
@@ -1301,9 +1307,6 @@ class Scheduler extends Widget<any> {
   _initMarkup() {
     // @ts-expect-error
     super._initMarkup();
-
-    this._validateDayHours();
-    this._validateCellDuration();
 
     this._renderMainContainer();
 
@@ -1574,7 +1577,6 @@ class Scheduler extends Widget<any> {
       rtlEnabled: this.option('rtlEnabled'),
       currentView: this.currentView,
       groups: this._getCurrentViewOption('groups'),
-      isRenovatedAppointments: this.option('isRenovatedAppointments'),
       timeZoneCalculator: this.timeZoneCalculator,
       getResizableStep: () => (this._workSpace ? this._workSpace.positionHelper.getResizableStep() : 0),
       getDOMElementsMetaData: () => this._workSpace?.getDOMElementsMetaData(),
@@ -1652,7 +1654,7 @@ class Scheduler extends Widget<any> {
     this._workSpaceRecalculation = new Deferred();
     this._waitAsyncTemplate(() => {
       triggerResizeEvent(this._workSpace.$element());
-      this._workSpace._refreshDateTimeIndication();
+      this._workSpace.renderCurrentDateTimeLineAndShader();
     });
   }
 
@@ -1682,6 +1684,7 @@ class Scheduler extends Widget<any> {
       firstDayOfWeek: this.option('firstDayOfWeek'),
       startDayHour: this.option('startDayHour'),
       endDayHour: this.option('endDayHour'),
+      viewOffset: this.getViewOffsetMs(),
       tabIndex: this.option('tabIndex'),
       accessKey: this.option('accessKey'),
       focusStateEnabled: this.option('focusStateEnabled'),
@@ -1717,7 +1720,6 @@ class Scheduler extends Widget<any> {
 
       // TODO: SSR does not work correctly with renovated render
       renovateRender: this._isRenovatedRender(isVirtualScrolling),
-      isRenovatedAppointments: this.option('isRenovatedAppointments'),
     }, currentViewOptions);
 
     result.observer = this;
@@ -1961,11 +1963,18 @@ class Scheduler extends Widget<any> {
   }
 
   _getUpdatedData(rawAppointment) {
-    const getConvertedFromGrid = (date) => (date
-      ? this.timeZoneCalculator.createDate(date, { path: 'fromGrid' })
-      : undefined);
+    const viewOffset = this.getViewOffsetMs();
 
-    const isValidDate = (date) => !isNaN(new Date(date).getTime());
+    const getConvertedFromGrid = (date: any): Date | undefined => {
+      if (!date) {
+        return undefined;
+      }
+
+      const result = this.timeZoneCalculator.createDate(date, { path: 'fromGrid' });
+      return dateUtilsTs.addOffsets(result, [-viewOffset]);
+    };
+
+    const isValidDate = (date: any): boolean => !isNaN(new Date(date).getTime());
 
     const targetCell = this.getTargetCellData();
     const appointment = createAppointmentAdapter(
@@ -1978,15 +1987,17 @@ class Scheduler extends Widget<any> {
     const cellEndDate = getConvertedFromGrid(targetCell.endDate);
 
     let appointmentStartDate = new Date(appointment.startDate);
+    appointmentStartDate = dateUtilsTs.addOffsets(appointmentStartDate, [-viewOffset]);
     let appointmentEndDate = new Date(appointment.endDate);
-    let resultedStartDate = cellStartDate || appointmentStartDate;
+    appointmentEndDate = dateUtilsTs.addOffsets(appointmentEndDate, [-viewOffset]);
+    let resultedStartDate = cellStartDate ?? appointmentStartDate;
 
     if (!isValidDate(appointmentStartDate)) {
       appointmentStartDate = resultedStartDate;
     }
 
     if (!isValidDate(appointmentEndDate)) {
-      appointmentEndDate = cellEndDate;
+      appointmentEndDate = cellEndDate!;
     }
 
     const duration = appointmentEndDate.getTime() - appointmentStartDate.getTime();
@@ -1996,12 +2007,11 @@ class Scheduler extends Widget<any> {
             && isValidDate(cellStartDate);
 
     if (isKeepAppointmentHours) {
-      const { trimTime } = dateUtils;
+      const startDate = this.timeZoneCalculator.createDate(appointmentStartDate, { path: 'toGrid' });
+      const timeInMs = startDate.getTime() - dateUtils.trimTime(startDate).getTime();
 
-      const startDate = this.timeZoneCalculator.createDate(appointment.startDate, { path: 'toGrid' });
-      const timeInMs = startDate.getTime() - trimTime(startDate).getTime();
-
-      resultedStartDate = new Date(trimTime(targetCell.startDate).getTime() + timeInMs);
+      const targetCellStartDate = dateUtilsTs.addOffsets(targetCell.startDate, [-viewOffset]);
+      resultedStartDate = new Date(dateUtils.trimTime(targetCellStartDate).getTime() + timeInMs);
       resultedStartDate = this.timeZoneCalculator.createDate(resultedStartDate, { path: 'fromGrid' });
     }
 
@@ -2033,9 +2043,8 @@ class Scheduler extends Widget<any> {
       }
     }
 
-    const timeZoneOffset = timeZoneUtils.getTimezoneOffsetChangeInMs(appointmentStartDate, appointmentEndDate, resultedStartDate, resultedEndDate);
-    result.endDate = new Date(resultedEndDate.getTime() - timeZoneOffset);
-
+    result.startDate = dateUtilsTs.addOffsets(result.startDate, [viewOffset]);
+    result.endDate = dateUtilsTs.addOffsets(resultedEndDate, [viewOffset]);
     const rawResult = result.source();
 
     setResourceToAppointment(this.option('resources'), this.getResourceDataAccessors(), rawResult, targetCell.groups);
@@ -2223,8 +2232,6 @@ class Scheduler extends Widget<any> {
 
     return getAppointmentTakesAllDay(
       appointment,
-      this._getCurrentViewOption('startDayHour'),
-      this._getCurrentViewOption('endDayHour'),
       this._getCurrentViewOption('allDayPanelMode'),
     );
   }
@@ -2412,8 +2419,8 @@ class Scheduler extends Widget<any> {
     };
   }
 
-  showAppointmentTooltipCore(target, data, options?: any) {
-    const arg = {
+  showAppointmentTooltipCore(target: dxElementWrapper, data, options?: any) {
+    const arg: Omit<AppointmentTooltipShowingEvent, 'component' | 'element'> = {
       cancel: false,
       appointments: data.map((item) => {
         const result = {
@@ -2431,7 +2438,7 @@ class Scheduler extends Widget<any> {
 
         return result;
       }),
-      targetElement: target,
+      targetElement: getPublicElement(target),
     };
 
     this._createActionByOption('onAppointmentTooltipShowing')(arg);
@@ -2582,25 +2589,39 @@ class Scheduler extends Widget<any> {
     }
   }
 
-  _validateCellDuration() {
-    const endDayHour = this._getCurrentViewOption('endDayHour');
-    const startDayHour = this._getCurrentViewOption('startDayHour');
-    const cellDuration = this._getCurrentViewOption('cellDuration');
-
-    if ((endDayHour - startDayHour) * MINUTES_IN_HOUR % cellDuration !== 0) {
-      errors.log('W1015');
-    }
-  }
-
-  _validateDayHours() {
-    const startDayHour = this._getCurrentViewOption('startDayHour');
-    const endDayHour = this._getCurrentViewOption('endDayHour');
-
-    validateDayHours(startDayHour, endDayHour);
-  }
-
   _getDragBehavior() {
     return this._workSpace.dragBehavior;
+  }
+
+  getViewOffsetMs(): number {
+    const offsetFromOptions = this._getCurrentViewOption('offset');
+    return this.normalizeViewOffsetValue(offsetFromOptions);
+  }
+
+  private normalizeViewOffsetValue(viewOffset?: number): number {
+    if (!isDefined(viewOffset)
+      || this.currentViewType === VIEWS.AGENDA) {
+      return 0;
+    }
+
+    return viewOffset * toMs('minute');
+  }
+
+  private validateOptions(): void {
+    const currentViewOptions = {
+      ...this.option(),
+      // TODO: Check it before 24.1 release
+      // NOTE: We override this.option values here
+      // because the old validation logic checked only current view options.
+      // Changing it and validate all views configuration will be a BC.
+      startDayHour: this._getCurrentViewOption('startDayHour'),
+      endDayHour: this._getCurrentViewOption('endDayHour'),
+      offset: this._getCurrentViewOption('offset'),
+      cellDuration: this._getCurrentViewOption('cellDuration'),
+    };
+
+    const validationResult = this._optionsValidator.validate(currentViewOptions);
+    this._optionsValidatorErrorHandler.handleValidationResult(validationResult);
   }
 }
 

@@ -330,7 +330,6 @@ export type GlobalConfig = {
      * @default false
      */
     shading?: boolean;
-    licenseKey?: string;
   };
   /**
    * @docid
@@ -344,6 +343,10 @@ export type GlobalConfig = {
    * @public
    */
   oDataFilterToLower?: boolean;
+  /**
+   * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+   */
+  pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
   /**
    * @docid
    * @default false
@@ -375,6 +378,11 @@ export type GlobalConfig = {
    * @public
    */
   useLegacyVisibleIndex?: boolean;
+  /**
+   * @docid
+   * @public
+   */
+  licenseKey?: string;
 };
 
 /**
@@ -513,7 +521,7 @@ export type RangeRule = {
   * @docid
   * @public
   */
-  max?: Date | number;
+  max?: Date | number | string;
   /**
   * @docid
   * @default 'Value is out of range'
@@ -524,7 +532,7 @@ export type RangeRule = {
   * @docid
   * @public
   */
-  min?: Date | number;
+  min?: Date | number | string;
   /**
   * @docid
   * @default false
@@ -761,7 +769,7 @@ export type TextEditorButtonLocation = 'after' | 'before';
  * @public
  * @namespace DevExpress.common
  */
-export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxCheckBox' | 'dxDateBox' | 'dxMenu' | 'dxSelectBox' | 'dxTabs' | 'dxTextBox' | 'dxButtonGroup' | 'dxDropDownButton';
+export type ToolbarItemComponent = 'dxAutocomplete' | 'dxButton' | 'dxButtonGroup' | 'dxCheckBox' | 'dxDateBox' | 'dxDropDownButton' | 'dxMenu' | 'dxSelectBox' | 'dxSwitch' | 'dxTabs' | 'dxTextBox';
 
 /**
  * @public

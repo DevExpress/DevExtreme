@@ -23,7 +23,6 @@
   &.dx-editor-filled,
   &.dx-editor-outlined {
     .dx-lookup-field {
-      padding: $material-filled-texteditor-input-padding;
       padding-inline-start: $material-filled-texteditor-input-horizontal-padding;
       padding-inline-end: $material-filled-texteditor-input-horizontal-padding + $material-base-icon-size;
     }
@@ -37,14 +36,13 @@
 
   &.dx-editor-underlined {
     .dx-lookup-field {
-      padding: $material-standard-texteditor-input-padding;
       padding-inline-start: $material-base-standard-texteditor-input-horizontal-padding;
-      padding-inline-end: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size;
+      padding-inline-end: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size + $material-filled-texteditor-spin-button-horizontal-padding;
     }
 
     &.dx-invalid {
       .dx-lookup-field {
-        padding-inline-end: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2;
+        padding-inline-end: $material-base-standard-texteditor-input-horizontal-padding + $material-base-icon-size * 2 + $material-filled-texteditor-spin-button-horizontal-padding;
       }
     }
   }
@@ -81,6 +79,8 @@
 .dx-lookup-field {
   font-size: $material-lookup-font-size;
   line-height: normal;
+  padding-top: $material-filled-texteditor-input-top-padding;
+  padding-bottom: $material-filled-texteditor-input-bottom-padding;
 
   &::before {
     line-height: normal;
@@ -111,12 +111,9 @@
   "\f001",
   $material-base-icon-size,
   $lookup-icon-color,
+  $lookup-icon-color-active,
   $material-base-icon-size,
 );
-
-.dx-state-readonly .dx-lookup-field::before {
-  opacity: 0.5;
-}
 
 .dx-lookup-popup-wrapper {
   .dx-list-item {

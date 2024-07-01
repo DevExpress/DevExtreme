@@ -296,8 +296,7 @@ QUnit.test('Jsonp request (same domain)', function(assert) {
 });
 
 QUnit.test('Send data with request (jsonp)', function(assert) {
-
-    const random = sinon.stub(Math, 'random', function() {
+    const random = sinon.stub(Math, 'random').callsFake(function() {
         return 0.5555555555;
     });
 

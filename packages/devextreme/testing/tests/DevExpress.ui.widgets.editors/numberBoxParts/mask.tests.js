@@ -4,12 +4,14 @@ import config from 'core/config';
 import devices from 'core/devices';
 import keyboardMock from '../../../helpers/keyboardMock.js';
 import numberLocalization from 'localization/number';
+import errors from 'core/errors';
 
 import 'ui/text_box/ui.text_editor';
 
 const INPUT_CLASS = 'dx-texteditor-input';
 const PLACEHOLDER_CLASS = 'dx-placeholder';
 const CARET_TIMEOUT_DURATION = 0;
+const CARET_NO_DBLCLICK_DURATION = 300;
 
 const DROP_EVENT_NAME = 'drop';
 
@@ -516,21 +518,6 @@ QUnit.module('format: fixed point format', moduleConfig, () => {
         this.keyboard.caret({ start: 0, end: 6 }).type('12345678').change();
         assert.equal(this.input.val(), '678.00', 'input value is right');
         assert.equal(this.instance.option('value'), 678, 'value option is right');
-    });
-
-    QUnit.test('value option should have right value after inserting when format is enabled and decimalSeparator is \',\' (T829935)', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-        config({ decimalSeparator: ',' });
-
-        this.instance.option('format', '000.00');
-
-        try {
-            this.keyboard.caret({ start: 0, end: 6 }).type('12345678').change();
-            assert.equal(this.input.val(), '678,00', 'input value is right');
-            assert.equal(this.instance.option('value'), 678, 'value option is right');
-        } finally {
-            config({ decimalSeparator: oldDecimalSeparator });
-        }
     });
 
     QUnit.test('extra decimal points should be ignored', function(assert) {
@@ -1288,6 +1275,20 @@ QUnit.module('format: incomplete value', moduleConfig, () => {
         assert.equal(this.input.val(), '1.0', 'zero has not been removed');
     });
 
+    QUnit.test('NumberBox should not accept entering letters if mask is "#0.0#" (T1211093)', function(assert) {
+        this.instance.option({
+            format: '#0.0#',
+            value: '14.30',
+        });
+
+        this.keyboard
+            .caret(4)
+            .press('backspace')
+            .type('b');
+
+        assert.strictEqual(this.input.val(), '14.0', 'letter is not accepted');
+    });
+
     QUnit.test('incomplete values should be reformatted on enter', function(assert) {
         this.keyboard.type('123.').press('enter');
         assert.equal(this.input.val(), '123', 'input was reformatted');
@@ -1363,23 +1364,6 @@ QUnit.module('format: percent format', moduleConfig, () => {
         this.keyboard.caret(0).type('45');
 
         assert.equal(this.input.val(), '450%', 'text is correct');
-    });
-
-    QUnit.test('dot should not be ignored in percent format when the value has been parsed correctly', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        config({ decimalSeparator: ',' });
-
-        try {
-            this.instance.option('format', '#0.00%');
-            this.instance.option('value', 0.256);
-
-            this.keyboard.caret(2).type('.5');
-
-            assert.equal(this.input.val(), '25,56%', 'text is correct');
-        } finally {
-            config({ decimalSeparator: oldDecimalSeparator });
-        }
     });
 
     [
@@ -1708,45 +1692,6 @@ QUnit.module('format: removing', moduleConfig, () => {
         assert.equal(this.input.val(), '12 kg', 'decimal separator has been removed');
     });
 
-    QUnit.test('removing decimal separator if decimal separator is not default', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        config({ decimalSeparator: ',' });
-
-        try {
-            this.instance.option({
-                format: '#0.00',
-                value: 1
-            });
-
-            this.keyboard.caret(2).press('backspace');
-
-            assert.equal(this.input.val(), '1,00', 'text is correct');
-            assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is moved');
-        } finally {
-            config({ decimalSeparator: oldDecimalSeparator });
-        }
-    });
-
-    QUnit.test('caret should be moved to the float part by \'.\' even when decimal separator is not \'.\'', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-
-        config({ decimalSeparator: ',' });
-
-        try {
-            this.instance.option({
-                format: '#0.00',
-                value: null
-            });
-
-            this.keyboard.type('123.45');
-
-            assert.equal(this.input.val(), '123,45', 'text is correct');
-        } finally {
-            config({ decimalSeparator: oldDecimalSeparator });
-        }
-    });
-
     [',', '.'].forEach((separator) => {
         QUnit.test(`caret should be moved to the float part by "${separator}"`, function(assert) {
             this.instance.option({
@@ -1764,27 +1709,6 @@ QUnit.module('format: removing', moduleConfig, () => {
 
             assert.strictEqual(this.instance.option('value'), 0.45, 'Value is correct');
         });
-    });
-
-    QUnit.test('should parse float numbers with the \',\' separator', function(assert) {
-        const oldDecimalSeparator = config().decimalSeparator;
-        const input = this.input;
-
-        config({ decimalSeparator: ',' });
-
-        this.instance.option({ format: '#.##' });
-
-        try {
-            this.keyboard.type('2,333');
-            assert.strictEqual(input.val(), '2,33');
-
-            this.keyboard.caret({ start: 0, end: 4 }).press('backspace');
-
-            this.keyboard.type('2,666');
-            assert.strictEqual(input.val(), '2,66');
-        } finally {
-            config({ decimalSeparator: oldDecimalSeparator });
-        }
     });
 
     QUnit.test('removing a stub in the end or begin of the text should lead to remove minus sign', function(assert) {
@@ -2165,10 +2089,11 @@ QUnit.module('format: caret boundaries', moduleConfig, () => {
 
         this.input.focus();
         this.clock.tick(CARET_TIMEOUT_DURATION);
+
         for(let i = 0; i < 2; ++i) {
             this.keyboard.caret(3);
             this.input.trigger('dxclick');
-            this.clock.tick(CARET_TIMEOUT_DURATION);
+            this.clock.tick(CARET_NO_DBLCLICK_DURATION);
         }
 
         assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
@@ -2402,11 +2327,10 @@ QUnit.module('ShadowDOM', {}, function() {
         for(let i = 0; i < 2; ++i) {
             keyboard.caret(3);
             input.trigger('dxclick');
-            clock.tick(CARET_TIMEOUT_DURATION);
+            clock.tick(CARET_NO_DBLCLICK_DURATION);
         }
 
         assert.deepEqual(keyboard.caret(), { start: 1, end: 1 }, 'caret is on integer part end');
-
         clock.restore();
     });
 });
@@ -2423,5 +2347,101 @@ QUnit.module('drag text', moduleConfig, () => {
         this.input.trigger(event);
 
         assert.strictEqual(event.isDefaultPrevented(), true, `the ${DROP_EVENT_NAME} event is prevented`);
+    });
+});
+
+QUnit.module('format: "," as a decimal separator', {
+    executeActionWithSuppressErrors: function(action) {
+        const logErrorsStub = sinon.stub(errors, 'log');
+        action();
+        logErrorsStub.restore();
+    },
+    beforeEach: function(data) {
+        this.$element = $('#numberbox').dxNumberBox({
+            format: '#0.##',
+            value: '',
+            useMaskBehavior: true
+        });
+        this.input = this.$element.find('.dx-texteditor-input');
+        this.instance = this.$element.dxNumberBox('instance');
+        this.keyboard = keyboardMock(this.input, true);
+
+        data.oldDecimalSeparator = config().decimalSeparator;
+        this.executeActionWithSuppressErrors(() => config({ decimalSeparator: ',' }));
+    },
+    afterEach: function(data) {
+        this.executeActionWithSuppressErrors(() => config({ decimalSeparator: data.oldDecimalSeparator }));
+    },
+}, () => {
+    QUnit.test('value option should have right value after inserting when format is enabled and decimalSeparator is \',\' (T829935)', function(assert) {
+        this.instance.option('format', '000.00');
+
+        this.keyboard.caret({ start: 0, end: 6 }).type('12345678').change();
+
+        assert.equal(this.input.val(), '678,00', 'input value is right');
+        assert.equal(this.instance.option('value'), 678, 'value option is right');
+    });
+
+    QUnit.test('dot should not be ignored in percent format when the value has been parsed correctly', function(assert) {
+        this.instance.option('format', '#0.00%');
+        this.instance.option('value', 0.256);
+
+        this.keyboard.caret(2).type('.5');
+
+        assert.equal(this.input.val(), '25,56%', 'text is correct');
+    });
+
+    QUnit.test('removing decimal separator if decimal separator is not default', function(assert) {
+        this.instance.option({
+            format: '#0.00',
+            value: 1
+        });
+
+        this.keyboard.caret(2).press('backspace');
+
+        assert.equal(this.input.val(), '1,00', 'text is correct');
+        assert.deepEqual(this.keyboard.caret(), { start: 1, end: 1 }, 'caret is moved');
+    });
+
+    QUnit.test('caret should be moved to the float part by \'.\' even when decimal separator is not \'.\'', function(assert) {
+        this.instance.option({
+            format: '#0.00',
+            value: null
+        });
+
+        this.keyboard.type('123.45');
+
+        assert.equal(this.input.val(), '123,45', 'text is correct');
+    });
+
+    QUnit.test('should parse float numbers with the \',\' separator', function(assert) {
+        this.instance.option({ format: '#.##' });
+
+        this.keyboard.type('2,333');
+
+        assert.strictEqual(this.input.val(), '2,33');
+
+        this.keyboard.caret({ start: 0, end: 4 }).press('backspace');
+
+        this.keyboard.type('2,666');
+
+        assert.strictEqual(this.input.val(), '2,66');
+    });
+});
+
+QUnit.module('deprecation error logging', () => {
+    QUnit.test('deprecated separator warning should be logged on config change', function(assert) {
+        const originalConfig = config();
+        const logErrorsStub = sinon.stub(errors, 'log');
+
+        try {
+            config({ decimalSeparator: ',' });
+
+            const message = 'Now, the decimalSeparator is selected based on the specified locale.';
+            assert.ok(logErrorsStub.calledWith('W0003', 'config', 'decimalSeparator', '19.2', message), 'Message was logged correctly');
+        } finally {
+            config(originalConfig);
+            logErrorsStub.restore();
+        }
     });
 });

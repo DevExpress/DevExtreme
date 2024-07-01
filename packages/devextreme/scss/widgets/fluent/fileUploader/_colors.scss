@@ -5,10 +5,12 @@
 // adduse
 
 /**
-* $name 10. Filename text color
+* $name 10. File name text color
 * $type color
 */
 $fileuploader-filename-color: $base-text-color !default;
+$fileuploader-progressbar-status-color: $base-text-color !default;
+$fluent-fileuploader-files-container-bg-color: $base-bg !default;
 
 /**
 * $name 20. File status text color
@@ -17,7 +19,7 @@ $fileuploader-filename-color: $base-text-color !default;
 $fileuploader-falename-status-color: $base-label-color !default;
 
 /**
-* $name 30. Border color on dragover
+* $name 30. Drag-and-drop border color
 * $type color
 */
 $fileuploader-border-color: $base-border-color !default;

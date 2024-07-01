@@ -66,7 +66,7 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
         const cellBackgroundColor = 'rgba(0, 0, 0, 0)';
         const $groupedRow = $(dataGrid.getRowElement(0)[0]);
-        assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgba(51, 122, 183, 0.2)', 'focused grouped row has correct background color in rtl mode');
+        assert.equal(window.getComputedStyle($groupedRow[0]).backgroundColor, 'rgb(214, 228, 241)', 'focused grouped row has correct background color in rtl mode');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[0]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
         assert.equal(window.getComputedStyle($groupedRow.find('td')[1]).backgroundColor, cellBackgroundColor, 'cell in focused row has no background color');
     });

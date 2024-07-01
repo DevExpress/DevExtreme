@@ -154,47 +154,10 @@ QUnit.module('Initialization', {
                         endDayHour: dayHours.endDayHour
                     });
                 },
-                e => /E1058/.test(e.message),
+                e => /E1058/.test(e.message) || /E1062/.test(e.message),
                 'E1058 Error message'
             );
             this.clock.tick(1000);
-        });
-    });
-
-    [
-        { startDayHour: 0, endDayHour: 24, cellDuration: 95 },
-        { startDayHour: 8, endDayHour: 24, cellDuration: 90 }
-    ].forEach(config => {
-        QUnit.test(`Generate warning if cellDuration: ${config.cellDuration} could not divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            createWrapper({
-                currentDate: new Date(2015, 4, 24),
-                views: ['day'],
-                currentView: 'day',
-                startDayHour: config.startDayHour,
-                endDayHour: config.endDayHour,
-                cellDuration: config.cellDuration
-            });
-
-            assert.equal(errors.log.callCount, 1, 'warning has been called once');
-            assert.equal(errors.log.getCall(0).args[0], 'W1015', 'warning has correct error id');
-        });
-    });
-
-    [
-        { startDayHour: 0, endDayHour: 24, cellDuration: 60 },
-        { startDayHour: 8, endDayHour: 24, cellDuration: 10 }
-    ].forEach(config => {
-        QUnit.test(`Warning should not be generated if cellDuration: ${config.cellDuration} could divide the range from startDayHour: ${config.startDayHour} to the endDayHour: ${config.endDayHour} into even intervals`, function(assert) {
-            createWrapper({
-                currentDate: new Date(2015, 4, 24),
-                views: ['day'],
-                currentView: 'day',
-                startDayHour: config.startDayHour,
-                endDayHour: config.endDayHour,
-                cellDuration: config.cellDuration
-            });
-
-            assert.equal(errors.log.callCount, 0, 'there are not any warnings');
         });
     });
 

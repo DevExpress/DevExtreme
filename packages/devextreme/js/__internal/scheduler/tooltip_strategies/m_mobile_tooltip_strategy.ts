@@ -4,7 +4,10 @@ import Overlay from '@js/ui/overlay/ui.overlay';
 
 import { TooltipStrategyBase } from './m_tooltip_strategy_base';
 
-const SLIDE_PANEL_CLASS_NAME = 'dx-scheduler-overlay-panel';
+const CLASS = {
+  slidePanel: 'dx-scheduler-overlay-panel',
+  scrollableContent: '.dx-scrollable-content',
+};
 
 const MAX_TABLET_OVERLAY_HEIGHT_FACTOR = 0.9;
 
@@ -65,17 +68,31 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
     return false;
   }
 
-  _onShowing() {
+  private setTooltipConfig(): void {
     const isTabletWidth = getWidth(getWindow()) > 700;
 
-    this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
-    const listHeight = getOuterHeight(this._list.$element());
+    const listHeight = getOuterHeight(this._list.$element().find(CLASS.scrollableContent));
+    this._tooltip.option(
+      isTabletWidth
+        ? createTabletDeviceConfig(listHeight)
+        : createPhoneDeviceConfig(listHeight),
+    );
+  }
 
-    this._tooltip.option(isTabletWidth ? createTabletDeviceConfig(listHeight) : createPhoneDeviceConfig(listHeight));
+  private async _onShowing(): Promise<void> {
+    this._tooltip.option('height', MAX_HEIGHT.DEFAULT);
+    /*
+    NOTE: there are two setTooltipConfig calls to reduce blinking of overlay.
+    The first one sets initial sizes, the second updates them after rendering async templates
+    */
+    this.setTooltipConfig();
+
+    await Promise.all([...this.asyncTemplatePromises]);
+    this.setTooltipConfig();
   }
 
   _createTooltip(target, dataList) {
-    const element = this._createTooltipElement(SLIDE_PANEL_CLASS_NAME);
+    const element = this._createTooltipElement(CLASS.slidePanel);
 
     return this._options.createComponent(element, Overlay, {
       target: getWindow(),
@@ -85,7 +102,7 @@ export class MobileTooltipStrategy extends TooltipStrategyBase {
       onShowing: () => this._onShowing(),
       onShown: this._onShown.bind(this),
       contentTemplate: this._getContentTemplate(dataList),
-      wrapperAttr: { class: SLIDE_PANEL_CLASS_NAME },
+      wrapperAttr: { class: CLASS.slidePanel },
     });
   }
 }

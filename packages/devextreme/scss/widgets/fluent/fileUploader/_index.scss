@@ -10,6 +10,7 @@
 // adduse
 
 $fluent-fileuploader-file-wrapper-border-size: 3px;
+$fluent-fileuploader-file-container-boxshadow: 0 1px 3px 0 color.change($base-shadow-color, $alpha: 0.1);
 
 .dx-fileuploader-wrapper {
   padding: $fluent-fileuploader-vertical-padding;
@@ -100,10 +101,12 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
   }
 
   .dx-fileuploader-file-container {
-    box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+    display: flex;
     padding: $fluent-fileuploader-file-container-padding;
     margin-bottom: 4px;
     border-radius: $fluent-fileuploader-files-container-rounding;
+    background-color: $fluent-fileuploader-files-container-bg-color;
+    box-shadow: $fluent-fileuploader-file-container-boxshadow;
 
     .dx-fileuploader-button-container + .dx-fileuploader-button-container {
       .dx-button {
@@ -114,6 +117,12 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
           margin-right: 0;
         }
       }
+    }
+
+    .dx-fileuploader-button-container {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .dx-button {
@@ -129,7 +138,12 @@ $fluent-fileuploader-file-wrapper-border-size: 3px;
   }
 }
 
+.dx-fileuploader .dx-progressbar-status {
+  color: $fileuploader-progressbar-status-color;
+}
+
 .dx-fileuploader-file {
+  display: block;
   padding-top: 5px;
   line-height: 13px;
 }

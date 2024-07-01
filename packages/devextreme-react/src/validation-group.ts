@@ -1,3 +1,4 @@
+"use client"
 import dxValidationGroup, {
     Properties
 } from "devextreme/ui/validation_group";

@@ -1,10 +1,9 @@
 import { getBoundingRect } from '@js/core/utils/position';
-import { calculateDayDuration, getVerticalGroupCountClass } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import { calculateDayDuration, getVerticalGroupCountClass } from '@ts/scheduler/r1/utils/index';
+import { WORK_SPACE_BORDER_PX } from '@ts/scheduler/workspaces/const';
 
 import { FIRST_GROUP_CELL_CLASS, LAST_GROUP_CELL_CLASS } from '../m_classes';
 import { Cache } from './m_cache';
-
-const WORK_SPACE_BORDER = 1;
 
 class VerticalGroupedStrategy {
   cache = new Cache();
@@ -59,7 +58,11 @@ class VerticalGroupedStrategy {
 
   getWorkSpaceMinWidth() {
     let minWidth = this._workSpace._getWorkSpaceWidth();
-    const workspaceContainerWidth = getBoundingRect(this._workSpace.$element().get(0)).width - this._workSpace.getTimePanelWidth() - this._workSpace.getGroupTableWidth() - 2 * WORK_SPACE_BORDER;
+    const workSpaceElementWidth = getBoundingRect(this._workSpace.$element().get(0)).width;
+    const workspaceContainerWidth = workSpaceElementWidth
+      - this._workSpace.getTimePanelWidth()
+      - this._workSpace.getGroupTableWidth()
+      - 2 * WORK_SPACE_BORDER_PX;
 
     if (minWidth < workspaceContainerWidth) {
       minWidth = workspaceContainerWidth;

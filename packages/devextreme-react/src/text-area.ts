@@ -1,3 +1,4 @@
+"use client"
 import dxTextArea, {
     Properties
 } from "devextreme/ui/text_area";

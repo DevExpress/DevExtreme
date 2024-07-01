@@ -18,19 +18,19 @@ $button-shadow-color: null !default;
 $button-normal-color: $base-text-color !default;
 
 /**
-* $name 10. Selected item text color
+* $name 20. Selected state text color
 * $type color
 */
 $button-normal-selected-color: $base-text-color !default;
 
 /**
-* $name 20. Background color
+* $name 15. Background color
 * $type color
 */
 $button-normal-bg: $base-element-bg !default;
 
 /**
-* $name 30. Hovered state background color
+* $name 30. Hover state background color
 * $type color
 */
 $button-normal-hover-bg: null !default;
@@ -48,7 +48,7 @@ $button-normal-focused-bg: null !default;
 $button-normal-active-bg: null !default;
 
 /**
-* $name 20. Selected item background color
+* $name 25. Selected state background color
 * $type color
 */
 $button-normal-selected-bg: null !default;
@@ -62,19 +62,19 @@ $button-normal-bg-inverted: null !default;
 $button-default-color: $base-inverted-text-color !default;
 
 /**
-* $name 10. Selected item text color
+* $name 20. Selected state text color
 * $type color
 */
 $button-default-selected-color: $base-inverted-text-color !default;
 
 /**
-* $name 20. Background color
+* $name 15. Background color
 * $type color
 */
 $button-default-bg: $base-accent !default;
 
 /**
-* $name 30. Hovered state background color
+* $name 30. Hover state background color
 * $type color
 */
 $button-default-hover-bg: null !default;
@@ -92,7 +92,7 @@ $button-default-focused-bg: null !default;
 $button-default-active-bg: null !default;
 
 /**
-* $name 20. Selected item background color
+* $name 25. Selected state background color
 * $type color
 */
 $button-default-selected-bg: null !default;
@@ -116,19 +116,19 @@ $button-default-text-selected-color: $button-default-bg !default;
 $button-danger-color: $base-inverted-text-color !default;
 
 /**
-* $name 10. Selected item text color
+* $name 20. Selected state text color
 * $type color
 */
 $button-danger-selected-color: $base-inverted-text-color !default;
 
 /**
-* $name 20. Background color
+* $name 15. Background color
 * $type color
 */
 $button-danger-bg: $base-danger !default;
 
 /**
-* $name 30. Hovered state background color
+* $name 30. Hover state background color
 * $type color
 */
 $button-danger-hover-bg: null !default;
@@ -146,7 +146,7 @@ $button-danger-focused-bg: null !default;
 $button-danger-active-bg: null !default;
 
 /**
-* $name 20. Selected item background color
+* $name 25. Selected state background color
 * $type color
 */
 $button-danger-selected-bg: null !default;
@@ -170,19 +170,19 @@ $button-danger-text-selected-color: $button-danger-bg !default;
 $button-success-color: $base-inverted-text-color !default;
 
 /**
-* $name 10. Selected item text color
+* $name 20. Selected state text color
 * $type color
 */
 $button-success-selected-color: $base-inverted-text-color !default;
 
 /**
-* $name 20. Background color
+* $name 15. Background color
 * $type color
 */
 $button-success-bg: $base-success !default;
 
 /**
-* $name 30. Hovered state background color
+* $name 30. Hover state background color
 * $type color
 */
 $button-success-hover-bg: null !default;
@@ -200,7 +200,7 @@ $button-success-focused-bg: null !default;
 $button-success-active-bg: null !default;
 
 /**
-* $name 20. Selected item background color
+* $name 25. Selected state background color
 * $type color
 */
 $button-success-selected-bg: null !default;

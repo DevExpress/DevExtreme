@@ -7,6 +7,9 @@ import { isDefined, isEmptyObject, isPlainObject } from '@js/core/utils/type';
 import { getWindow } from '@js/core/utils/window';
 import eventsEngine from '@js/events/core/events_engine';
 import errors from '@js/ui/widget/ui.errors';
+import type { ExportController } from '@ts/grids/data_grid/export/m_export';
+import type { ColumnsController } from '@ts/grids/grid_core/columns_controller/m_columns_controller';
+import type { DataController } from '@ts/grids/grid_core/data_controller/m_data_controller';
 
 import modules from '../m_modules';
 
@@ -26,139 +29,160 @@ const parseDates = function (state) {
   });
 };
 
-const StateStoringController = modules.ViewController.inherit((function () {
-  const getStorage = function (options) {
-    const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
+const getStorage = function (options) {
+  const storage = options.type === 'sessionStorage' ? sessionStorage() : getWindow().localStorage;
 
-    if (!storage) {
-      throw new Error('E1007');
+  if (!storage) {
+    throw new Error('E1007');
+  }
+
+  return storage;
+};
+
+const getUniqueStorageKey = function (options) {
+  return isDefined(options.storageKey) ? options.storageKey : 'storage';
+};
+
+export class StateStoringController extends modules.ViewController {
+  protected _state: any;
+
+  private _isLoaded: any;
+
+  private _isLoading: any;
+
+  private _windowUnloadHandler: any;
+
+  private _savingTimeoutID: any;
+
+  // TODO getController
+  // NOTE: sometimes fields empty in the runtime
+  // getter here is a temporary solution
+  protected getDataController(): DataController {
+    return this.getController('data');
+  }
+
+  protected getExportController(): ExportController {
+    return this.getController('export');
+  }
+
+  protected getColumnsController(): ColumnsController {
+    return this.getController('columns');
+  }
+
+  public init() {
+    this._state = {};
+    this._isLoaded = false;
+    this._isLoading = false;
+
+    this._windowUnloadHandler = () => {
+      if (this._savingTimeoutID !== undefined) {
+        this._saveState(this.state());
+      }
+    };
+
+    eventsEngine.on(getWindow(), 'unload', this._windowUnloadHandler);
+
+    return this; // needed by pivotGrid mocks
+  }
+
+  public optionChanged(args) {
+    const that = this;
+
+    switch (args.name) {
+      case 'stateStoring':
+        if (that.isEnabled() && !that.isLoading()) {
+          that.load();
+        }
+
+        args.handled = true;
+        break;
+      default:
+        super.optionChanged(args);
     }
+  }
 
-    return storage;
-  };
+  public dispose() {
+    clearTimeout(this._savingTimeoutID);
+    eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
+  }
 
-  const getUniqueStorageKey = function (options) {
-    return isDefined(options.storageKey) ? options.storageKey : 'storage';
-  };
+  private _loadState() {
+    const options = this.option('stateStoring')!;
 
-  return {
-    _loadState() {
-      const options = this.option('stateStoring');
+    if (options.type === 'custom') {
+      return options.customLoad && options.customLoad();
+    }
+    try {
+      // @ts-expect-error
+      return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
+    } catch (e: any) {
+      errors.log('W1022', 'State storing', e.message);
+    }
+  }
 
-      if (options.type === 'custom') {
-        return options.customLoad && options.customLoad();
+  private _saveState(state) {
+    const options = this.option('stateStoring')!;
+
+    if (options.type === 'custom') {
+      options.customSave && options.customSave(state);
+      return;
+    }
+    try {
+      getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
+    } catch (e: any) {
+      errors.log(e.message);
+    }
+  }
+
+  public publicMethods() {
+    return ['state'];
+  }
+
+  public isEnabled() {
+    return this.option('stateStoring.enabled');
+  }
+
+  public isLoaded() {
+    return this._isLoaded;
+  }
+
+  public isLoading() {
+    return this._isLoading;
+  }
+
+  public load() {
+    this._isLoading = true;
+    const loadResult = fromPromise(this._loadState());
+    loadResult.always(() => {
+      this._isLoaded = true;
+      this._isLoading = false;
+    }).done((state) => {
+      if (state !== null && !isEmptyObject(state)) {
+        this.state(state);
       }
-      try {
-        // @ts-expect-error
-        return JSON.parse(getStorage(options).getItem(getUniqueStorageKey(options)));
-      } catch (e: any) {
-        errors.log('W1022', 'State storing', e.message);
-      }
-    },
+    });
+    return loadResult;
+  }
 
-    _saveState(state) {
-      const options = this.option('stateStoring');
+  protected state(state?) {
+    const that = this;
 
-      if (options.type === 'custom') {
-        options.customSave && options.customSave(state);
-        return;
-      }
-      try {
-        getStorage(options).setItem(getUniqueStorageKey(options), JSON.stringify(state));
-      } catch (e: any) {
-        errors.log(e.message);
-      }
-    },
+    if (!arguments.length) {
+      return extend(true, {}, that._state);
+    }
+    that._state = extend({}, state);
+    parseDates(that._state);
+  }
 
-    publicMethods() {
-      return ['state'];
-    },
+  protected save() {
+    const that = this;
 
-    isEnabled() {
-      return this.option('stateStoring.enabled');
-    },
-
-    init() {
-      const that = this;
-
-      that._state = {};
-      that._isLoaded = false;
-      that._isLoading = false;
-
-      that._windowUnloadHandler = function () {
-        if (that._savingTimeoutID !== undefined) {
-          that._saveState(that.state());
-        }
-      };
-
-      eventsEngine.on(getWindow(), 'unload', that._windowUnloadHandler);
-
-      return that;
-    },
-
-    isLoaded() {
-      return this._isLoaded;
-    },
-
-    isLoading() {
-      return this._isLoading;
-    },
-
-    load() {
-      this._isLoading = true;
-      const loadResult = fromPromise(this._loadState());
-      loadResult.always(() => {
-        this._isLoaded = true;
-        this._isLoading = false;
-      }).done((state) => {
-        if (state !== null && !isEmptyObject(state)) {
-          this.state(state);
-        }
-      });
-      return loadResult;
-    },
-
-    state(state) {
-      const that = this;
-
-      if (!arguments.length) {
-        return extend(true, {}, that._state);
-      }
-      that._state = extend({}, state);
-      parseDates(that._state);
-    },
-
-    save() {
-      const that = this;
-
-      clearTimeout(that._savingTimeoutID);
-      that._savingTimeoutID = setTimeout(() => {
-        that._saveState(that.state());
-        that._savingTimeoutID = undefined;
-      }, that.option('stateStoring.savingTimeout'));
-    },
-
-    optionChanged(args) {
-      const that = this;
-
-      switch (args.name) {
-        case 'stateStoring':
-          if (that.isEnabled() && !that.isLoading()) {
-            that.load();
-          }
-
-          args.handled = true;
-          break;
-        default:
-          that.callBase(args);
-      }
-    },
-
-    dispose() {
-      clearTimeout(this._savingTimeoutID);
-      eventsEngine.off(getWindow(), 'unload', this._windowUnloadHandler);
-    },
-  };
-})());
+    clearTimeout(that._savingTimeoutID);
+    that._savingTimeoutID = setTimeout(() => {
+      that._saveState(that.state());
+      that._savingTimeoutID = undefined;
+    }, that.option('stateStoring.savingTimeout'));
+  }
+}
 
 export default { StateStoringController };

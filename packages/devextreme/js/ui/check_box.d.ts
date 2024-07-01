@@ -119,6 +119,12 @@ export default class dxCheckBox extends Editor<dxCheckBoxOptions> {
      * @public
      */
      blur(): void;
+    /**
+     * @docid
+     * @publicName reset(value)
+     * @public
+     */
+    reset(value?: boolean | null | undefined): void;
 }
 
 /** @public */

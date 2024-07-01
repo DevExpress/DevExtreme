@@ -1,3 +1,4 @@
+"use client"
 import dxFileManager, {
     Properties
 } from "devextreme/ui/file_manager";
@@ -204,7 +205,7 @@ type IFileSelectionItemProps = React.PropsWithChildren<{
   showText?: "always" | "inMenu";
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
 }>
 class FileSelectionItem extends NestedOption<IFileSelectionItemProps> {
   public static OptionName = "fileSelectionItems";
@@ -231,7 +232,7 @@ type IItemProps = React.PropsWithChildren<{
   location?: "after" | "before" | "center";
   options?: any;
   showText?: "always" | "inMenu";
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
 }>
 class Item extends NestedOption<IItemProps> {
   public static OptionName = "items";
@@ -308,7 +309,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   showText?: "always" | "inMenu";
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
 }>
 class ToolbarItem extends NestedOption<IToolbarItemProps> {
   public static OptionName = "items";

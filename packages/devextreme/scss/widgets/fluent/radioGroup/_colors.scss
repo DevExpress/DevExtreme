@@ -21,5 +21,3 @@ $radiobutton-invalid-color-focused: $base-invalid-color-selected !default;
 $radiogroup-readonly-border-color: $radiogroup-border-color !default;
 
 $radiobutton-focused-bg: color.change($base-text-color, $alpha: 0.1) !default;
-$radiobutton-focused-ripple-bg: color.change($radiogroup-accent-color, $alpha: 0.1) !default;
-$radiobutton-invalid-focused-ripple-bg: color.change($base-invalid-color, $alpha: 0.1) !default;

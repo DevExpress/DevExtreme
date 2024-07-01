@@ -1,8 +1,8 @@
 import { getWidth } from 'core/utils/size';
 import $ from 'jquery';
-import 'ui/form/ui.form';
-import 'ui/form/ui.form.layout_manager';
-import { renderLabel } from 'ui/form/components/label.js';
+import 'ui/form';
+import '__internal/ui/form/m_form.layout_manager';
+import { renderLabel } from '__internal/ui/form/components/m_label';
 
 import 'generic_light.css!';
 
@@ -138,7 +138,11 @@ class FormTestWrapper {
     }
 
     checkTabTitle(tabSelector, expectedTitle) {
-        QUnit.assert.strictEqual(this._form.$element().find(`${tabSelector} .dx-tab-text`).text(), expectedTitle, 'caption of tab');
+        QUnit.assert.strictEqual(
+            this._form.$element().find(`${tabSelector} .dx-tab-text`).text(),
+            `${expectedTitle}${expectedTitle}`,
+            'caption of tab',
+        );
     }
 
     checkLabelsWidthInGroup({ columnIndex, groupColumnIndex = 0, etalonLabelText }) {

@@ -1679,7 +1679,7 @@ QUnit.test('filterToLower option equal false for OData store', function(assert) 
         filter: ['prop.nested.prop', 'contains', 'O']
     }).load()
         .done(function(data) {
-            assert.equal(data[0].data.$filter, 'substringof(\'O\',prop/nested/prop)');
+            assert.equal(data[0].data.$filter, 'contains(prop/nested/prop,\'O\')');
         })
         .always(function() {
             ajaxMock.clear();

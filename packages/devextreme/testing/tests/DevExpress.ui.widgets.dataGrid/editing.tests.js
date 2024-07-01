@@ -11,6 +11,8 @@ import typeUtils from 'core/utils/type';
 import { addShadowDomStyles } from 'core/utils/shadow_dom';
 import eventsEngine from 'events/core/events_engine';
 import pointerEvents from 'events/pointer';
+import { name as clickEventName } from 'events/click';
+import { name as dblClickEventName } from 'events/dblclick';
 import { triggerResizeEvent } from 'events/visibility_change';
 import 'generic_light.css!';
 import $ from 'jquery';
@@ -2696,7 +2698,7 @@ QUnit.module('Editing', {
         rowsView.render($testElement);
 
         // act
-        $testElement.find('td').first().trigger('dxdblclick');
+        $testElement.find('td').first().trigger(dblClickEventName);
 
         // assert
         assert.strictEqual(that.editingController.editCell.callCount, 1, 'count call editCell');
@@ -2707,12 +2709,45 @@ QUnit.module('Editing', {
         sinon.spy(that.editingController, 'closeEditCell');
 
         // act
-        $testElement.find('td').eq(1).trigger('dxclick');
+        $testElement.find('td').eq(1).trigger(pointerEvents.down);
+        $testElement.find('td').eq(1).trigger(clickEventName);
         that.clock.tick(10);
 
         // assert
         assert.strictEqual(that.editingController.closeEditCell.callCount, 1, 'count call closeEditCell');
         assert.strictEqual(getInputElements($testElement).length, 0, 'hasn\'t input');
+    });
+
+    // T1203250
+    QUnit.test('Batch mode with startEditAction is \'dblClick\' - Editing cell should not be closed when mouse pointer is dragged to copy data to other cells of the current row', function(assert) {
+        // arrange
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        $.extend(this.options.editing, {
+            allowUpdating: true,
+            mode: 'batch',
+            startEditAction: 'dblClick'
+        });
+        sinon.spy(this.editingController, 'closeEditCell');
+
+        rowsView.render($testElement);
+
+        // act
+        $(this.getCellElement(0, 0)).trigger(dblClickEventName);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual($(this.getCellElement(0, 0)).find('input').length, 1, 'has input');
+
+        // act
+        $(this.getCellElement(0, 0)).trigger(pointerEvents.down);
+        $(this.getCellElement(0, 1)).trigger(clickEventName);
+        this.clock.tick(10);
+
+        // assert
+        assert.strictEqual(this.editingController.closeEditCell.callCount, 0, 'count call closeEditCell');
+        assert.strictEqual($(this.getCellElement(0, 0)).find('input').length, 1, 'has input');
     });
 
     QUnit.test('Batch mode - Clicking on the edited cell should not close it when startEditAction is \'dblClick\'', function(assert) {
@@ -2754,7 +2789,7 @@ QUnit.module('Editing', {
             startEditAction: 'dblClick'
         });
         rowsView.render(that.gridContainer);
-        allowUpdating.reset();
+        allowUpdating.resetHistory();
 
         // act
         that.gridContainer.find('td').first().trigger('click');
@@ -8476,7 +8511,7 @@ QUnit.module('Editing with real dataController', {
         $testElement.find('.dx-texteditor-input').first().val('Test11');
         $testElement.find('.dx-texteditor-input').first().trigger('change');
 
-        template.reset();
+        template.resetHistory();
         that.editingController.closeEditCell();
         that.clock.tick(10);
 
@@ -8885,6 +8920,53 @@ QUnit.module('Editing with real dataController', {
         checkClassInstances(items);
         assert.strictEqual(items[0].data.prop1.prop2.field, 'test', 'item prop value');
         assert.strictEqual(dataSource[0].prop1.prop2.field, 'test', 'datasource item prop value');
+    });
+
+    // T1196383
+    QUnit.test('Watchers should be destroyed after rows are repainted when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        const disposeFuncs = [];
+        const rowsView = this.rowsView;
+        const $testElement = $('#container');
+
+        this.options.repaintChangesOnly = true;
+        $.extend(this.options.editing, {
+            mode: 'row',
+            allowUpdating: true,
+            allowDeleting: true
+        });
+        this.editingController.init();
+
+        sinon.stub(rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = commonUtils.noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        // act
+        rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 14, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        rowsView.render($testElement);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
     });
 
     QUnit.module('Editing state', {
@@ -18902,6 +18984,50 @@ QUnit.module('Edit Form', {
             oldValue = newValue;
         }
     });
+
+    // T1196383
+    QUnit.test('Watchers should be destroyed after repainting the edit row when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        let disposeFuncs = [];
+        const $testElement = $('#container');
+
+        this.options.repaintChangesOnly = true;
+        this.setupModules(this);
+
+        sinon.stub(this.rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = commonUtils.noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        this.rowsView.render($testElement);
+        disposeFuncs = [];
+
+        // act
+        this.editRow(0);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 5, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
+    });
 });
 
 QUnit.module('Editing - "popup" mode', {
@@ -19840,6 +19966,28 @@ QUnit.module('Editing - "popup" mode', {
 
         // assert
         assert.equal(spy.callCount, 1, 'Edit form has repainted only once');
+    });
+
+    // T1198534
+    QUnit.test('No exceptions on editing row whene there is unbound column', function(assert) {
+        // arrange
+        this.options.repaintChangesOnly = true;
+        this.columns.push({ name: 'test' });
+        this.setupModules(this);
+        this.renderRowsView();
+
+        try {
+            // act
+            this.editRow(0);
+            this.clock.tick(10);
+
+            // assert
+            this.preparePopupHelpers();
+            assert.ok(this.isEditingPopupVisible(), 'Edit popup is visible');
+        } catch(e) {
+            // assert
+            assert.ok(false, 'exception');
+        }
     });
 });
 
@@ -21706,11 +21854,8 @@ QUnit.module('Editing - public arguments of the events/templates', {
             assert.strictEqual(args.rowType, editMode === 'form' ? 'detail' : 'data', 'rowType arg');
             assert.strictEqual(typeof args.setValue, 'function', 'setValue arg');
             assert.strictEqual(args.value, 'Alex', 'value arg');
-
-            if(editMode !== 'form' && editMode !== 'popup') {
-                assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
-                assert.strictEqual(args.text, 'Alex', 'text arg');
-            }
+            assert.strictEqual(args.displayValue, 'Alex', 'displayValue arg');
+            assert.strictEqual(args.text, 'Alex', 'text arg');
         });
 
         // T1118182

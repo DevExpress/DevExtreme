@@ -284,7 +284,7 @@ QUnit.test('prevent hover on touch device', function(assert) {
 });
 
 QUnit.test('hover should be prevented in simulator', function(assert) {
-    sinon.stub(devices, 'isSimulator', function() { return true; });
+    sinon.stub(devices, 'isSimulator').callsFake(function() { return true; });
 
     try {
         let hoverStartFired = 0;

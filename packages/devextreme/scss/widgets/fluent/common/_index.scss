@@ -42,6 +42,10 @@
   fill: $base-bg !important;
 }
 
+.dx-theme-typography-background-color {
+  background-color: $base-typography-bg !important;
+}
+
 .dx-theme-border-color-as-background-color {
   background-color: $base-border-color !important;
   fill: $base-border-color !important;
@@ -61,36 +65,4 @@
 
 .dx-theme-border-color {
   border-color: $base-border-color !important;
-}
-
-// stylelint-enable declaration-no-important
-
-.dx-inkripple {
-  position: absolute;
-  height: 100%;
-  width: 100%;
-  top: 0;
-  left: 0;
-  pointer-events: none;
-}
-
-.dx-inkripple-wave {
-  position: absolute;
-  background-color: rgba(0, 0, 0, 0.16);
-  border-radius: 50%;
-  opacity: 0;
-  transform: scale(0);
-  pointer-events: none;
-}
-
-.dx-inkripple-showing {
-  transition: transform 0.1s linear;
-  opacity: 1;
-  transform: scale(1);
-}
-
-.dx-inkripple-hiding {
-  transition: transform 0.1s linear, opacity 0.1s linear;
-  transform: scale(1.01);
-  opacity: 0;
 }

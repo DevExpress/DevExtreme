@@ -569,7 +569,6 @@ QUnit.module('widget options', moduleSetup, () => {
 
     QUnit.test('closed items should have correct height if async template is used (T1166943)', function(assert) {
         const $element = $('#html-template-accordion');
-        const clock = sinon.useFakeTimers();
         const items = [
             { ID: 1 },
             { ID: 2 },
@@ -594,7 +593,7 @@ QUnit.module('widget options', moduleSetup, () => {
             }
         });
 
-        clock.tick(50);
+        this.clock.tick(50);
 
         const closedItems = $element.find(`.${ACCORDION_ITEM_CLOSED_CLASS}`);
 
@@ -603,13 +602,10 @@ QUnit.module('widget options', moduleSetup, () => {
         for(let i = 0; i < closedItems.length; i++) {
             assert.roughEqual(closedItems.eq(i).outerHeight(), 42.4219, 1);
         }
-
-        clock.restore();
     });
 
     QUnit.test('should not be errors if dispose widget was called and async template is used', function(assert) {
         const $element = $('#html-template-accordion');
-        const clock = sinon.useFakeTimers();
         const items = [
             { ID: 1 },
             { ID: 2 },
@@ -637,13 +633,12 @@ QUnit.module('widget options', moduleSetup, () => {
 
             instance.dispose();
 
-            clock.tick(50);
+            this.clock.tick(50);
 
             assert.ok(true);
         } catch(e) {
             assert.ok(false, `error is raised: ${e.message}`);
         }
-        clock.restore();
     });
 });
 
@@ -944,6 +939,29 @@ QUnit.module('widget options changed', moduleSetup, () => {
 });
 
 QUnit.module('widget behavior', moduleSetup, () => {
+    QUnit.test('updating accordion items shouldnt throw any error (T1239052)', function(assert) {
+        const instance = this.$element.dxAccordion({
+            items: [
+                { id: 1, title: 'Title 1', text: 'text 1' },
+                { id: 2, title: 'Title 2', text: 'text 2' },
+            ],
+            keyExpr: 'id',
+        }).dxAccordion('instance');
+
+        const items = [...instance.option('items')];
+        items.push({ id: 3, title: 'Title 3', text: 'text 3' });
+
+        const selectedItemKeys = instance.option('selectedItemKeys');
+        selectedItemKeys.push(3);
+
+        try {
+            instance.option({ items, selectedItemKeys });
+        } catch(error) {
+            assert.ok(false, 'error encountered');
+        }
+        assert.strictEqual(instance.option('items').length, 3, 'Items length should be 3');
+    });
+
     QUnit.test('item selection', function(assert) {
         const instance = this.$element.dxAccordion({
             items: this.items

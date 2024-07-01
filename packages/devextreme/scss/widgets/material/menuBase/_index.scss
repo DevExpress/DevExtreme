@@ -21,6 +21,10 @@ $material-menu-arrow-image-size: 7px;
     color: $typography-link-color;
   }
 
+  &.dx-state-disabled {
+    opacity: 0.5;
+  }
+
   &.dx-state-hover {
     background-color: $menu-item-hover-bg;
   }
@@ -64,24 +68,6 @@ $material-menu-arrow-image-size: 7px;
       .dx-menu-item-popout {
         min-width: $material-menu-arrow-image-size;
         min-height: $material-menu-arrow-image-size;
-      }
-    }
-  }
-
-  &.dx-rtl {
-    .dx-menu-item-content {
-      .dx-icon {
-        margin-left: auto;
-        margin-right: auto;
-      }
-
-      .dx-menu-item-popout-container {
-        margin-left: 0;
-        margin-right: auto;
-
-        .dx-menu-item-popout {
-          @include flip-horizontally();
-        }
       }
     }
   }

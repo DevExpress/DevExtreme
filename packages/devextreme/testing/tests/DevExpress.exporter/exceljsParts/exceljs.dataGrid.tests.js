@@ -6435,6 +6435,56 @@ const moduleConfig = {
                 done();
             });
         });
+
+        [false, true].forEach((remoteOperations) => {
+            QUnit.test(`Composite keys, export selected rows with remoteOperations:${remoteOperations}`, function(assert) {
+                const done = assert.async();
+                const dataSource = [
+                    { pk: { id1: 0, id2: 0 }, title: 'title 0' },
+                    { pk: { id1: 1, id2: 1 }, title: 'title 1' },
+                    { pk: { id1: 2, id2: 2 }, title: 'title 2' },
+                ];
+
+                const dataGrid = $('#dataGrid').dxDataGrid({
+                    dataSource,
+                    remoteOperations,
+                    keyExpr: ['pk.id1', 'pk.id2'],
+                    columns: ['pk.id1', 'pk.id2', 'title'],
+                    selection: {
+                        mode: 'multiple'
+                    },
+                    selectedRowKeys: [
+                        { pk: { id1: 1, id2: 1 } },
+                        { pk: { id1: 2, id2: 2 } },
+                    ],
+                    export: {
+                        enabled: true,
+                        allowExportSelectedData: true
+                    },
+                    loadingTimeout: null
+                }).dxDataGrid('instance');
+
+                const expectedCells = [[
+                    { excelCell: { value: 'Pk id 1' }, gridCell: { rowType: 'header', column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: 'Pk id 2' }, gridCell: { rowType: 'header', column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: 'Title' }, gridCell: { rowType: 'header', column: dataGrid.columnOption(2) } }
+                ], [
+                    { excelCell: { value: 1 }, gridCell: { rowType: 'data', data: dataSource[1], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: 1 }, gridCell: { rowType: 'data', data: dataSource[1], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: 'title 1' }, gridCell: { rowType: 'data', data: dataSource[1], column: dataGrid.columnOption(2) } }
+                ], [
+                    { excelCell: { value: 2 }, gridCell: { rowType: 'data', data: dataSource[2], column: dataGrid.columnOption(0) } },
+                    { excelCell: { value: 2 }, gridCell: { rowType: 'data', data: dataSource[2], column: dataGrid.columnOption(1) } },
+                    { excelCell: { value: 'title 2' }, gridCell: { rowType: 'data', data: dataSource[2], column: dataGrid.columnOption(2) } }
+                ]];
+
+                helper._extendExpectedCells(expectedCells, topLeft);
+                exportDataGrid(getOptions(this, dataGrid, expectedCells, { selectedRowsOnly: true })).then(() => {
+                    helper.checkValues(expectedCells);
+                    done();
+                });
+            });
+        });
     });
 });
 

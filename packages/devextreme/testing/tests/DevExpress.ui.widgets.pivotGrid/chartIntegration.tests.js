@@ -930,7 +930,7 @@ QUnit.module('Value Axis Options', {
 
         this.createBinding({
             customizeSeries: function() {
-                customizeText.reset();
+                customizeText.resetHistory();
             }
         });
 

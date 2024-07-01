@@ -1,3 +1,4 @@
+"use client"
 export { ExplicitTypes } from "devextreme/ui/box";
 import dxBox, {
     Properties
@@ -116,7 +117,7 @@ class Box<TItem = any, TKey = any> extends BaseComponent<React.PropsWithChildren
 // owners:
 // Box
 type IItemProps = React.PropsWithChildren<{
-  baseSize?: number | "auto";
+  baseSize?: number | string;
   box?: dxBoxOptions;
   disabled?: boolean;
   html?: string;

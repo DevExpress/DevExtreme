@@ -1,15 +1,16 @@
 import { Selector } from 'testcafe';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import Widget from '../internal/widget';
 import Field from './field';
 
-type FieldType = 'item' | 'groupOperation';
+type FieldType = 'item' | 'groupOperation' | 'itemOperation';
 const CLASS = {
   item: 'dx-filterbuilder-item-field',
   popupContent: 'dx-popup-content',
   treeView: 'dx-treeview',
   treeViewLeaf: 'dx-treeview-node-is-leaf',
   groupOperation: 'dx-filterbuilder-group-operation',
+  itemOperation: 'dx-filterbuilder-item-operation',
 };
 
 export default class FilterBuilder extends Widget {

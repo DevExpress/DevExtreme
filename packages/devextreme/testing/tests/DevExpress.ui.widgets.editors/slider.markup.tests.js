@@ -4,11 +4,13 @@ import 'ui/slider';
 
 
 const SLIDER_CLASS = 'dx-slider';
+const SLIDER_WRAPPER_CLASS = SLIDER_CLASS + '-wrapper';
 const SLIDER_HANDLE_CLASS = 'dx-slider-handle';
 const SLIDER_RANGE_CLASS = SLIDER_CLASS + '-range';
 const SLIDER_BAR_CLASS = 'dx-slider-bar';
 const SLIDER_RANGE_VISIBLE_CLASS = SLIDER_RANGE_CLASS + '-visible';
 const SLIDER_LABEL_CLASS = SLIDER_CLASS + '-label';
+const DX_RTL_CLASS = 'dx-rtl';
 
 const { module, testStart, test } = QUnit;
 
@@ -152,6 +154,24 @@ module('widget sizing render', () => {
 
         assert.strictEqual($element[0].style.width, customWidth + 'px', 'outer width of the element must be equal to custom width');
     });
+
+    test('Slider wrapper should not have "dx-rtl" class, rtl enabled on init (T1215799)', function(assert) {
+        const $slider = $('#widget').dxSlider({ rtlEnabled: true });
+        const $wrapper = $slider.find(`.${SLIDER_WRAPPER_CLASS}`);
+
+        assert.notOk($wrapper.hasClass(DX_RTL_CLASS));
+    });
+
+    test('Slider wrapper should not have "dx-rtl" class, rtl enabled on runtime (T1215799)', function(assert) {
+        const $slider = $('#widget').dxSlider({ rtlEnabled: false });
+        const slider = $slider.dxSlider('instance');
+        const $wrapper = $slider.find(`.${SLIDER_WRAPPER_CLASS}`);
+
+        slider.option('rtlEnabled', true);
+
+        assert.notOk($wrapper.hasClass(DX_RTL_CLASS));
+    });
+
 });
 
 module('hidden input', () => {

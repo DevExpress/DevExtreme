@@ -16,11 +16,11 @@ const moduleConfig = {
 };
 
 QUnit.module('ctor');
-QUnit.test('use second version by default', function(assert) {
+QUnit.test('use fourth version by default', function(assert) {
     assert.expect(2);
 
-    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' }).version(), 2);
-    assert.equal(new ODataContext({ url: 'odata.org/EntitySet/' }).version(), 2);
+    assert.equal(new ODataStore({ url: 'odata.org/EntitySet/' }).version(), 4);
+    assert.equal(new ODataContext({ url: 'odata.org/EntitySet/' }).version(), 4);
 });
 
 QUnit.test('fieldTypes are updated correctly', function(assert) {
@@ -231,7 +231,7 @@ QUnit.test('with params', function(assert) {
     };
 
     const promises = [
-        new ODataStore({ url: 'odata2.org' })
+        new ODataStore({ version: 2, url: 'odata2.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
@@ -255,7 +255,7 @@ QUnit.test('with params', function(assert) {
                 }]);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
@@ -294,14 +294,14 @@ QUnit.test('with explicit expand', function(assert) {
     const options = { expand: ['a', 'b.c'] };
 
     const promises = [
-        new ODataStore({ url: 'odata.org' })
+        new ODataStore({ version: 2, url: 'odata.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
                 assert.deepEqual(r, ['a,b/c']);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load(options)
             .done(function(r, extra) {
                 assert.ok(!extra);
@@ -334,7 +334,7 @@ QUnit.test('with requireTotalCount', function(assert) {
     });
 
     const promises = [
-        new ODataStore({ url: 'odata.org' })
+        new ODataStore({ version: 2, url: 'odata.org' })
             .load({ requireTotalCount: true })
             .done(function(r, extra) {
                 assert.deepEqual(r, ['allpages']);
@@ -343,7 +343,7 @@ QUnit.test('with requireTotalCount', function(assert) {
                 });
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load({ requireTotalCount: true })
             .done(function(r, extra) {
                 assert.deepEqual(r, ['true']);
@@ -376,7 +376,7 @@ QUnit.test('works', function(assert) {
 
     const assertFunc = function(count) { assert.equal(count, 123); };
     const promises = [
-        new ODataStore({ url: 'odata2.org' })
+        new ODataStore({ version: 2, url: 'odata2.org' })
             .totalCount()
             .done(assertFunc),
 
@@ -384,7 +384,7 @@ QUnit.test('works', function(assert) {
             .totalCount()
             .done(assertFunc),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .totalCount()
             .done(assertFunc)
     ];
@@ -409,7 +409,7 @@ QUnit.test('respects customQueryParams (T413790)', function(assert) {
         }
     });
 
-    new ODataStore({ url: 'example.com' })
+    new ODataStore({ version: 2, url: 'example.com' })
         .totalCount({
             customQueryParams: {
                 p1: 42
@@ -484,7 +484,7 @@ QUnit.test('with expand', function(assert) {
     };
 
     const promises = [
-        new ODataStore({ url: 'odata2.org' })
+        new ODataStore({ url: 'odata2.org', version: 2 })
             .byKey(42, { expand: ['prop1.subprop', 'prop2'] })
             .done(assertFunc),
 
@@ -492,7 +492,7 @@ QUnit.test('with expand', function(assert) {
             .byKey(42, { expand: ['prop1.subprop', 'prop2'] })
             .done(assertFunc),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .byKey(42, { expand: ['prop1.subprop', 'prop2'] })
             .done((value) => {
                 assert.deepEqual(value, { expandClause: 'prop1($expand=subprop),prop2' });
@@ -606,7 +606,7 @@ QUnit.test('compound key', function(assert) {
     };
 
     const promises = [
-        new ODataStore({ url: 'odata2.org' })
+        new ODataStore({ version: 2, url: 'odata2.org' })
             .byKey({ key1: 42, key2: 'abc' })
             .done(assertFunc),
 
@@ -614,7 +614,7 @@ QUnit.test('compound key', function(assert) {
             .byKey({ key1: 42, key2: 'abc' })
             .done(assertFunc),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .byKey({ key1: 42, key2: 'abc' })
             .done(assertFunc)
     ];
@@ -675,7 +675,7 @@ QUnit.test('Guid as key', function(assert) {
     });
 
     const promises = [
-        new ODataStore({ url: 'odata2.org' })
+        new ODataStore({ version: 2, url: 'odata2.org' })
             .byKey(new Guid(guid))
             .done(function(r) {
                 assert.ok(r.url.indexOf('(guid\'' + guid + '\')') > -1);
@@ -687,7 +687,7 @@ QUnit.test('Guid as key', function(assert) {
                 assert.ok(r.url.indexOf('(guid\'' + guid + '\')') > -1);
             }),
 
-        new ODataStore({ version: 4, url: 'odata2.org' })
+        new ODataStore({ url: 'odata4.org' })
             .byKey(new Guid(guid))
             .done(function(r) {
                 assert.strictEqual(r.url.indexOf('(guid\'' + guid + '\')'), -1);
@@ -764,50 +764,50 @@ QUnit.test('key type conversions by keyType option', function(assert) {
 
     const promises = [
         // v2 and v3
-        new ODataStore({ url: 'odata.org', keyType: 'Int32' })
+        new ODataStore({ version: 2, url: 'odata.org', keyType: 'Int32' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(42)') > -1);
             }),
 
-        new ODataStore({ url: 'odata.org', keyType: 'Int64' })
+        new ODataStore({ version: 2, url: 'odata.org', keyType: 'Int64' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(42L)') > -1);
             }),
 
-        new ODataStore({ url: 'odata.org', keyType: 'Guid' })
+        new ODataStore({ version: 2, url: 'odata.org', keyType: 'Guid' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(guid\'42000000-0000-0000-0000-000000000000\')') > -1);
             }),
 
-        new ODataStore({ url: 'odata.org', keyType: 'String' })
+        new ODataStore({ version: 2, url: 'odata.org', keyType: 'String' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(\'42\')') > -1);
             }),
 
         // v4
-        new ODataStore({ version: 4, url: 'odata4.org', keyType: 'Int32' })
+        new ODataStore({ url: 'odata4.org', keyType: 'Int32' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(42)') > -1);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org', keyType: 'Int64' })
+        new ODataStore({ url: 'odata4.org', keyType: 'Int64' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(42L)') > -1);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org', keyType: 'Guid' })
+        new ODataStore({ url: 'odata4.org', keyType: 'Guid' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(42000000-0000-0000-0000-000000000000)') > -1);
             }),
 
-        new ODataStore({ version: 4, url: 'odata4.org', keyType: 'String' })
+        new ODataStore({ url: 'odata4.org', keyType: 'String' })
             .byKey(42)
             .done(function(r) {
                 assert.ok(decodeURIComponent(r.url).indexOf('(\'42\')') > -1);
@@ -836,7 +836,7 @@ QUnit.test('Should show E4024 error when searching or filtering an Int32 field (
 
     function assertFunc(message, operation) {
         assert.equal(message.replace(/\d+_\d+/, '[VERSION]'),
-            `E4024 - String function ${operation} cannot be used with the data field id of type Int32. See:\nhttp://js.devexpress.com/error/[VERSION]/E4024`);
+            `E4024 - String function ${operation} cannot be used with the data field id of type Int32.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/[VERSION]/E4024`);
     }
 
     const promises = [
@@ -1236,6 +1236,7 @@ QUnit.test('works', function(assert) {
 
     const promises = [
         new ODataStore({
+            version: 2,
             url: 'odata.org/DataSet',
 
             beforeSend: function(request) {
@@ -1275,7 +1276,6 @@ QUnit.test('works', function(assert) {
             .done(compileLoggerFor('done')),
 
         new ODataStore({
-            version: 4,
             url: 'odata.org/DataSet',
 
             beforeSend: function(request) {
@@ -1295,7 +1295,6 @@ QUnit.test('works', function(assert) {
             .done(compileLoggerFor('done')),
 
         new ODataStore({
-            version: 4,
             url: 'odata2.org/DataSet',
 
             beforeSend: function(request) {
@@ -1376,6 +1375,7 @@ QUnit.test('works with useLegacyStoreResult', function(assert) {
 
     const promises = [
         new ODataStore({
+            version: 2,
             url: 'odata.org/DataSet',
 
             beforeSend: function(request) {
@@ -1415,7 +1415,6 @@ QUnit.test('works with useLegacyStoreResult', function(assert) {
             .done(compileLoggerFor('done')),
 
         new ODataStore({
-            version: 4,
             url: 'odata.org/DataSet',
 
             beforeSend: function(request) {
@@ -1604,13 +1603,13 @@ QUnit.test('Dates, on loading', function(assert) {
 
     const promises = [
         // v2
-        new ODataStore({ url: 'odata2.org', key: 'id' })
+        new ODataStore({ version: 2, url: 'odata2.org', key: 'id' })
             .load({ filter: ['date', new Date(1945, 4, 9, 14, 25, 1, 1)] }),
 
-        new ODataContext({ url: 'odata2.org' })
+        new ODataContext({ version: 2, url: 'odata2.org' })
             .get('methodToGet', { date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
-        new ODataContext({ url: 'odata2.org' })
+        new ODataContext({ version: 2, url: 'odata2.org' })
             .invoke('methodToInvoke', { date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
         // v3
@@ -1618,13 +1617,13 @@ QUnit.test('Dates, on loading', function(assert) {
             .load({ filter: ['date', new Date(1945, 4, 9, 14, 25, 1, 1)] }),
 
         // v4
-        new ODataStore({ version: 4, url: 'odata4.org', key: 'id' })
+        new ODataStore({ url: 'odata4.org', key: 'id' })
             .load({ filter: ['date', new Date(1945, 4, 9, 14, 25, 1, 1)] }),
 
-        new ODataContext({ version: 4, url: 'odata4.org' })
+        new ODataContext({ url: 'odata4.org' })
             .get('function', { date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
-        new ODataContext({ version: 4, url: 'odata4.org' })
+        new ODataContext({ url: 'odata4.org' })
             .invoke('action', { date: new Date(1945, 4, 9, 14, 25, 1, 1) })
     ];
 
@@ -1660,13 +1659,13 @@ QUnit.test('Dates, on inserting', function(assert) {
     });
 
     const promises = [
-        new ODataStore({ url: 'odata2.org', key: 'id' })
+        new ODataStore({ version: 2, url: 'odata2.org', key: 'id' })
             .insert({ date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
         new ODataStore({ version: 3, url: 'odata3.org', key: 'id' })
             .insert({ date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
-        new ODataStore({ version: 4, url: 'odata4.org', key: 'id' })
+        new ODataStore({ url: 'odata4.org', key: 'id' })
             .insert({ date: new Date(1945, 4, 9, 14, 25, 1, 1) })
     ];
 
@@ -1700,13 +1699,13 @@ QUnit.test('Dates, on updating', function(assert) {
     });
 
     const promises = [
-        new ODataStore({ url: 'odata2.org', key: 'id' })
+        new ODataStore({ version: 2, url: 'odata2.org', key: 'id' })
             .update(1, { date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
         new ODataStore({ version: 3, url: 'odata3.org', key: 'id' })
             .update(1, { date: new Date(1945, 4, 9, 14, 25, 1, 1) }),
 
-        new ODataStore({ version: 4, url: 'odata4.org', key: 'id' })
+        new ODataStore({ url: 'odata4.org', key: 'id' })
             .update(1, { date: new Date(1945, 4, 9, 14, 25, 1, 1) })
     ];
 
@@ -2213,7 +2212,7 @@ QUnit.test('get', function(assert) {
 
     const promises = [
         // v2 and v3
-        new ODataContext({ url: 'odata.org' })
+        new ODataContext({ version: 2, url: 'odata.org' })
             .get('operation', {
                 Int: -42,
                 Null: null,
@@ -2242,7 +2241,7 @@ QUnit.test('get', function(assert) {
             }),
 
         // v4
-        new ODataContext({ version: 4, url: 'odata.org' })
+        new ODataContext({ url: 'odata.org' })
             .get('function', {
                 Int: -42,
                 Null: null,
@@ -2283,13 +2282,13 @@ QUnit.test('T213119: The ODataContext.get method crashes when return value is a 
     });
 
     const promises = [
-        new ODataContext({ url: 'odata.org' })
+        new ODataContext({ version: 2, url: 'odata.org' })
             .get('true')
             .done(function(r) {
                 assert.strictEqual(r, true);
             }),
 
-        new ODataContext({ url: 'odata.org' })
+        new ODataContext({ version: 2, url: 'odata.org' })
             .get('false')
             .done(function(r) {
                 assert.strictEqual(r, false);
@@ -2330,7 +2329,7 @@ QUnit.test('invoke for service operation', function(assert) {
 
     const promises = [
         // v2 and 3
-        new ODataContext({ url: 'odata.org' })
+        new ODataContext({ version: 2, url: 'odata.org' })
             .invoke('operation', { n: 13 })
             .done(function(r) {
                 assert.deepEqual(r, {
@@ -2341,7 +2340,7 @@ QUnit.test('invoke for service operation', function(assert) {
             }),
 
         // v4
-        new ODataContext({ version: 4, url: 'odata4.org' })
+        new ODataContext({ url: 'odata4.org' })
             .invoke('action', { n: 13 })
             .done(function(r) {
                 assert.deepEqual(r, {
@@ -2368,13 +2367,13 @@ QUnit.test('invoke and get methods should understand scalar types in result', fu
     });
 
     const promises = [
-        new ODataContext({ url: 'odata.org' })
+        new ODataContext({ version: 2, url: 'odata.org' })
             .get('scalar')
             .done(function(r) {
                 assert.strictEqual(r, 'scalar value');
             }),
 
-        new ODataContext({ url: 'odata.org' })
+        new ODataContext({ version: 2, url: 'odata.org' })
             .invoke('scalar')
             .done(function(r) {
                 assert.equal(r, 'scalar value');
@@ -2409,13 +2408,13 @@ QUnit.test('works', function(assert) {
     });
 
     const promises = [
-        new ODataStore({ url: 'odata.org' })
+        new ODataStore({ version: 2, url: 'odata.org' })
             .load({ customQueryParams: { customName: 'customValue' } }),
 
         new ODataStore({ version: 3, url: 'odata.org' })
             .load({ customQueryParams: { customName: 'customValue' } }),
 
-        new ODataStore({ version: 4, url: 'odata4.org' })
+        new ODataStore({ url: 'odata4.org' })
             .load({ customQueryParams: { customName: 'customValue' } })
     ];
 
@@ -2686,7 +2685,7 @@ QUnit.test('filterToLower equal false', function(assert) {
         }
     });
 
-    new ODataStore({ url: 'odata.org', filterToLower: false })
+    new ODataStore({ version: 2, url: 'odata.org', filterToLower: false })
         .load({ filter: ['B', 'contains', 'O'] });
 });
 

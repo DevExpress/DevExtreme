@@ -4,7 +4,8 @@ import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
 import DOMComponent from '@js/core/dom_component';
 import { getPublicElement } from '@js/core/element';
-import $, { dxElementWrapper } from '@js/core/renderer';
+import type { dxElementWrapper } from '@js/core/renderer';
+import $ from '@js/core/renderer';
 import { EmptyTemplate } from '@js/core/templates/empty_template';
 // @ts-expect-error
 import { noop, splitPair } from '@js/core/utils/common';
@@ -31,7 +32,8 @@ import {
 } from '@js/events/drag';
 import pointerEvents from '@js/events/pointer';
 import { addNamespace, needSkipEvent } from '@js/events/utils/index';
-import Animator from '@js/ui/scroll_view/animator';
+
+import Animator from './ui/scroll_view/m_animator';
 
 const window = getWindow();
 const KEYDOWN_EVENT = 'keydown';
@@ -529,9 +531,7 @@ const Draggable = (DOMComponent as any).inherit({
   },
 
   _detachEventHandlers() {
-    // @ts-expect-error
     eventsEngine.off(this._$content(), `.${DRAGGABLE}`);
-    // @ts-expect-error
     eventsEngine.off(this._getArea(), `.${DRAGGABLE}`);
   },
 

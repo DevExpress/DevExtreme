@@ -1,3 +1,4 @@
+"use client"
 import dxScrollView, {
     Properties
 } from "devextreme/ui/scroll_view";

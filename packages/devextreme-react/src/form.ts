@@ -1,3 +1,4 @@
+"use client"
 import dxForm, {
     Properties
 } from "devextreme/ui/form";
@@ -12,7 +13,7 @@ import type { ContentReadyEvent as TabPanelContentReadyEvent, DisposingEvent as 
 import type { template } from "devextreme/core/templates/template";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 
 import type DataSource from "devextreme/data/data_source";
 
@@ -465,7 +466,7 @@ class NumericRule extends NestedOption<INumericRuleProps> {
 type IPatternRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
   message?: string;
-  pattern?: any | string;
+  pattern?: RegExp | string;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
 class PatternRule extends NestedOption<IPatternRuleProps> {
@@ -480,9 +481,9 @@ class PatternRule extends NestedOption<IPatternRuleProps> {
 // SimpleItem
 type IRangeRuleProps = React.PropsWithChildren<{
   ignoreEmptyValue?: boolean;
-  max?: any | number;
+  max?: Date | number | string;
   message?: string;
-  min?: any | number;
+  min?: Date | number | string;
   reevaluate?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
 }>
@@ -791,13 +792,13 @@ type IValidationRuleProps = React.PropsWithChildren<{
   trim?: boolean;
   type?: "required" | "numeric" | "range" | "stringLength" | "custom" | "compare" | "pattern" | "email" | "async";
   ignoreEmptyValue?: boolean;
-  max?: any | number;
-  min?: any | number;
+  max?: Date | number | string;
+  min?: Date | number | string;
   reevaluate?: boolean;
   validationCallback?: ((options: { column: Record<string, any>, data: Record<string, any>, formItem: Record<string, any>, rule: Record<string, any>, validator: Record<string, any>, value: string | number }) => boolean);
   comparisonTarget?: (() => any);
   comparisonType?: "!=" | "!==" | "<" | "<=" | "==" | "===" | ">" | ">=";
-  pattern?: any | string;
+  pattern?: RegExp | string;
 }>
 class ValidationRule extends NestedOption<IValidationRuleProps> {
   public static OptionName = "validationRules";

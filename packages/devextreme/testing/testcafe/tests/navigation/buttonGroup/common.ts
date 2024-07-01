@@ -3,7 +3,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { setStyleAttribute, appendElementTo, setAttribute } from '../../../helpers/domUtils';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { Item, ButtonType } from '../../../../../js/ui/button_group.d';
 
 interface ButtonGroupItem extends Item {

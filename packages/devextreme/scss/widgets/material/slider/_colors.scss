@@ -6,7 +6,7 @@
 // adduse
 
 /**
-* $name 10. Slider bar background color
+* $name 10. Bar background color
 * $type color
 */
 $material-slider-bar-bg: color.change($base-accent, $alpha: 0.24) !default;
@@ -19,10 +19,17 @@ $material-slider-bg: $base-accent !default;
 $material-slider-active: color.change($base-accent, $alpha: 0.24) !default;
 $material-slider-disabled-bg: color.change($base-text-color, $alpha: 0.24) !default;
 $material-slider-bar-disabled-bg: color.change($base-text-color, $alpha: 0.24) !default;
-$material-slider-tooltip-bg: $base-accent !default;
 
 /**
 * $name 30. Slider tooltip text color
 * $type color
 */
-$material-slider-tooltip-color: $base-inverted-text-color !default;
+$material-slider-tooltip-color: null !default;
+
+@if $mode == "light" {
+  $material-slider-tooltip-color: $base-inverted-text-color !default;
+}
+
+@if $mode == "dark" {
+  $material-slider-tooltip-color: $base-text-color !default;
+}

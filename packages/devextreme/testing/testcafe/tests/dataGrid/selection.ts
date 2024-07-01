@@ -4,7 +4,7 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import DataGrid from '../../model/dataGrid';
 import CheckBox from '../../model/checkBox';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 
 fixture.disablePageReloads`Selection`
   .page(url(__dirname, '../container.html'));
@@ -93,3 +93,66 @@ test.skip('The Select All checkbox should be visible when a column headerCellTem
 
   await t.wait(300);
 });
+
+// T1214734
+test('Select rows by shift should work when grid has real time updates', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const secondRow = dataGrid.getDataRow(1);
+  const seventhRow = dataGrid.getDataRow(6);
+  const checkRowSelectionStates = async (startRowIndex: number, endRowIndex: number) => {
+    for (let i = startRowIndex; i <= endRowIndex; i += 1) {
+      await t
+        .expect(dataGrid.getDataRow(i).isSelected)
+        .ok();
+    }
+  };
+
+  // act
+  await t
+    .click(secondRow.element);
+
+  // assert
+  await checkRowSelectionStates(1, 1);
+  await t
+    .expect(dataGrid.getDataCell(2, 3).element.textContent)
+    .eql('test123');
+
+  // act
+  await t.click(seventhRow.element, { modifiers: { shift: true } });
+
+  // assert
+  await checkRowSelectionStates(1, 6);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: {
+    store: {
+      data: [...new Array(50)].map((_, i) => ({
+        ID: i + 1,
+        CompanyName: `company name ${i + 1}`,
+        City: `city ${i + 1}`,
+      })),
+      type: 'array',
+      key: 'ID',
+    },
+    reshapeOnPush: true,
+    pushAggregationTimeout: 0,
+  },
+  height: 600,
+  repaintChangesOnly: true,
+  selection: {
+    mode: 'multiple',
+  },
+  onSelectionChanged(e) {
+    e.component.getDataSource().store().push([{
+      type: 'update',
+      key: 3,
+      data: {
+        City: 'test123',
+      },
+    }]);
+  },
+  columnAutoWidth: true,
+  showBorders: true,
+  paging: {
+    pageSize: 10,
+  },
+}));

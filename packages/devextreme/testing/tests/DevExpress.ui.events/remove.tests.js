@@ -22,6 +22,8 @@ QUnit.test('dxremove event should be fired on element removing', function(assert
 });
 
 QUnit.test('dxremove event should be fired for nested removing element', function(assert) {
+    assert.expect(2);
+
     $('#inner')
         .data('testData', true)
         .on(removeEvent, function(e) {

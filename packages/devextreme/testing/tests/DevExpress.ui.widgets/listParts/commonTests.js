@@ -18,7 +18,7 @@ import ArrayStore from 'data/array_store';
 import CustomStore from 'data/custom_store';
 import DOMComponent from 'core/dom_component';
 import List from 'ui/list';
-import { setScrollView } from 'ui/list/ui.list.base';
+import { setScrollView } from '__internal/ui/list/m_list.base';
 import ScrollView from 'ui/scroll_view';
 import eventsEngine from 'events/core/events_engine';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
@@ -32,6 +32,7 @@ const LIST_GROUP_BODY_CLASS = 'dx-list-group-body';
 const LIST_NEXT_BUTTON_CLASS = 'dx-list-next-button';
 const LIST_SELECT_CHECKBOX_CLASS = 'dx-list-select-checkbox';
 const LIST_SELECT_RADIOBUTTON_CLASS = 'dx-list-select-radiobutton';
+const LIST_SELECT_ALL_CLASS = 'dx-list-select-all';
 const LIST_SELECT_ALL_CHECKBOX_CLASS = 'dx-list-select-all-checkbox';
 const LIST_CONTEXT_MENUCONTENT_CLASS = 'dx-list-context-menucontent';
 const LIST_SELECT_ALL_LABEL_CLASS = 'dx-list-select-all-label';
@@ -39,10 +40,10 @@ const INKRIPPLE_WAVE_SHOWING_CLASS = 'dx-inkripple-showing';
 const LIST_ITEM_CHEVRON_CLASS = 'dx-list-item-chevron';
 const LIST_ITEM_BADGE_CLASS = 'dx-list-item-badge';
 const LIST_ITEM_SELECTED_CLASS = 'dx-list-item-selected';
-
-const toSelector = cssClass => {
-    return '.' + cssClass;
-};
+const STATIC_DELETE_BUTTON_CLASS = 'dx-list-static-delete-button';
+const TOGGLE_DELETE_SWITCH_CLASS = 'dx-list-toggle-delete-switch';
+const SWITCHABLE_DELETE_BUTTON_CLASS = 'dx-list-switchable-delete-button';
+const FOCUSED_STATE_CLASS = 'dx-state-focused';
 
 const isDeviceDesktop = function(assert) {
     if(devices.real().deviceType !== 'desktop') {
@@ -207,18 +208,22 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             collapsibleGroups: true
         });
 
-        const $headers = $element.find(toSelector(LIST_GROUP_HEADER_CLASS));
-        const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
 
         const instance = $element.dxList('instance');
-
         $element.trigger('focusin');
 
+
         $headers.eq(1).trigger('dxclick');
         $headers.eq(1).trigger('dxclick');
+
+        const secondGroupItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
+        const firstItemIsFocused = $items.eq(0).hasClass(FOCUSED_STATE_CLASS);
+
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
-        assert.ok($items.eq(2).hasClass('dx-state-focused'), 'first item of the second group is focused');
-        assert.notOk($items.eq(0).hasClass('dx-state-focused'), 'first item of the first group lost focus');
+        assert.ok(secondGroupItemIsFocused, 'first item of the second group is focused');
+        assert.notOk(firstItemIsFocused, 'first item of the first group lost focus');
     });
 
     QUnit.test('focus class should not be added to any item when expanding group via api', function(assert) {
@@ -229,11 +234,13 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             collapsibleGroups: true
         }).dxList('instance');
 
-        const $items = this.element.find(toSelector(LIST_ITEM_CLASS));
+        const $items = this.element.find(`.${LIST_ITEM_CLASS}`);
 
         element.expandGroup(0);
 
-        assert.notOk($items.eq(0).hasClass('dx-state-focused'), 'first item has not focused class');
+        const firstItemIsFocused = $items.eq(0).hasClass(FOCUSED_STATE_CLASS);
+
+        assert.notOk(firstItemIsFocused, 'first item has not focused class');
     });
 
     QUnit.test('focus class should not be added to first group item when focusStateEnabled is false', function(assert) {
@@ -244,14 +251,16 @@ QUnit.module('collapsible groups', moduleSetup, () => {
             collapsibleGroups: true
         });
 
-        const $headers = $element.find(toSelector(LIST_GROUP_HEADER_CLASS));
-        const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $headers = $element.find(`.${LIST_GROUP_HEADER_CLASS}`);
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
 
         $element.trigger('focusin');
+        $headers.eq(1).trigger('dxclick');
+        $headers.eq(1).trigger('dxclick');
 
-        $headers.eq(1).trigger('dxclick');
-        $headers.eq(1).trigger('dxclick');
-        assert.notOk($items.eq(2).hasClass('dx-state-focused'), 'first item of the second group is focused');
+        const secondGroupItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
+
+        assert.notOk(secondGroupItemIsFocused, 'first item of the second group is focused');
     });
 
     QUnit.test('group body should be collapsed by click on header', function(assert) {
@@ -301,35 +310,16 @@ QUnit.module('collapsible groups', moduleSetup, () => {
 
     const LIST_GROUP_HEADER_INDICATOR_CLASS = 'dx-list-group-header-indicator';
 
-    QUnit.test('group header collapsed indicator element for the Material theme', function(assert) {
-        const origIsMaterialBased = themes.isMaterialBased;
-        themes.isMaterialBased = () => {
-            return true;
-        };
-
+    QUnit.test('group header collapsed indicator element', function(assert) {
         const $element = this.element.dxList({
             items: [{ key: 'a', items: ['0'] }],
             grouped: true,
             collapsibleGroups: true
         });
 
-        const $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + ' ' + toSelector(LIST_GROUP_HEADER_CLASS));
+        const $groupHeader = $element.find(`.${LIST_GROUP_CLASS} .${LIST_GROUP_HEADER_CLASS}`);
 
-        assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 1, 'group header has the collapsed indicator element for the Material theme');
-
-        themes.isMaterialBased = origIsMaterialBased;
-    });
-
-    QUnit.test('no group header collapsed indicator element for the Generic theme', function(assert) {
-        const $element = this.element.dxList({
-            items: [{ key: 'a', items: ['0'] }],
-            grouped: true,
-            collapsibleGroups: true
-        });
-
-        const $groupHeader = $element.find(toSelector(LIST_GROUP_CLASS) + ' ' + toSelector(LIST_GROUP_HEADER_CLASS));
-
-        assert.equal($groupHeader.find(toSelector(LIST_GROUP_HEADER_INDICATOR_CLASS)).length, 0, 'group header should not have collapsed indicator element for the Generic theme');
+        assert.equal($groupHeader.find(`.${LIST_GROUP_HEADER_INDICATOR_CLASS}`).length, 1, 'group header has the collapsed indicator element for the Material theme');
     });
 
     QUnit.test('group collapsing is animated', function(assert) {
@@ -762,9 +752,9 @@ QUnit.module('next button', moduleSetup, () => {
         }).dxList('instance');
         const nextButton = $('.dx-list-next-button ', this.element);
 
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2, 'first page loaded');
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 2, 'first page loaded');
         $('.dx-button', nextButton).trigger('dxclick');
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 3, 'second page loaded');
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 3, 'second page loaded');
     });
 
     QUnit.test('showNextButton', function(assert) {
@@ -777,7 +767,7 @@ QUnit.module('next button', moduleSetup, () => {
             scrollingEnabled: true
         }).dxList('instance');
 
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2, 'first page loaded');
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 2, 'first page loaded');
         assert.ok(isElementHidden($('.dx-list-next-button', this.element)), 'no nextButton showed, if option = false');
         assert.ok(!this.element.hasClass('dx-has-next'));
 
@@ -791,13 +781,13 @@ QUnit.module('next button', moduleSetup, () => {
             return true;
         };
         $('.dx-button', nextButton).trigger('dxclick');
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2, 'ignore nextButton click when data loading');
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 2, 'ignore nextButton click when data loading');
         list._dataSource.isLoading = () => {
             return false;
         };
 
         $('.dx-button', nextButton).trigger('dxclick');
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 3, 'second page loaded');
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 3, 'second page loaded');
         assert.ok(isElementHidden($('.dx-list-next-button', this.element)), 'no nextButton showed, if all data is loaded');
     });
 
@@ -907,9 +897,9 @@ QUnit.module('next button', moduleSetup, () => {
             searchEnabled: true
         }).dxList('instance');
 
-        assert.ok(this.element.find(toSelector(LIST_NEXT_BUTTON_CLASS)).length, 'nextButton is shown');
+        assert.ok(this.element.find(`.${LIST_NEXT_BUTTON_CLASS}`).length, 'nextButton is shown');
         list.option('searchValue', '1');
-        assert.notOk(this.element.find(toSelector(LIST_NEXT_BUTTON_CLASS)).length, 'nextButton is removed');
+        assert.notOk(this.element.find(`.${LIST_NEXT_BUTTON_CLASS}`).length, 'nextButton is removed');
     });
 });
 
@@ -976,6 +966,7 @@ QUnit.module('options', moduleSetup, () => {
         });
     });
 });
+
 
 QUnit.module('options changed', moduleSetup, () => {
     QUnit.test('dataSource', function(assert) {
@@ -1050,7 +1041,7 @@ QUnit.module('options changed', moduleSetup, () => {
         }).dxList('instance');
 
         const item = $.proxy(function() {
-            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            return this.element.find(`.${LIST_ITEM_CLASS}`).eq(0);
         }, this);
         const swipeItem = () => {
             pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
@@ -1079,7 +1070,7 @@ QUnit.module('options changed', moduleSetup, () => {
         }).dxList('instance');
 
         const item = $.proxy(function() {
-            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            return this.element.find(`.${LIST_ITEM_CLASS}`).eq(0);
         }, this);
         const swipeItem = () => {
             pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
@@ -1103,7 +1094,7 @@ QUnit.module('options changed', moduleSetup, () => {
         list.on('itemSwipe', swipeHandler);
 
         const item = $.proxy(function() {
-            return this.element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+            return this.element.find(`.${LIST_ITEM_CLASS}`).eq(0);
         }, this);
         const swipeItem = () => {
             pointerMock(item()).start().swipeStart().swipe(0.5).swipeEnd(1);
@@ -1523,7 +1514,6 @@ QUnit.module('options changed', moduleSetup, () => {
     });
 
     QUnit.test('useInkRipple can be changed to false', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: true
@@ -1531,20 +1521,18 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('useInkRipple', false);
-        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         const pointer = pointerMock($item);
         pointer.start('touch').down();
-        clock.tick(100);
-        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        this.clock.tick(100);
+        const inkRippleShowingWave = $item.find(`.${INKRIPPLE_WAVE_SHOWING_CLASS}`);
 
         assert.strictEqual(inkRippleShowingWave.length, 0, 'inkripple feedback does not work');
 
         pointer.start('touch').up();
-        clock.restore();
     });
 
     QUnit.test('useInkRipple can be changed to true', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: false
@@ -1552,20 +1540,18 @@ QUnit.module('options changed', moduleSetup, () => {
         const list = $list.dxList('instance');
 
         list.option('useInkRipple', true);
-        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         const pointer = pointerMock($item);
         pointer.start('touch').down();
-        clock.tick(100);
-        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        this.clock.tick(100);
+        const inkRippleShowingWave = $item.find(`.${INKRIPPLE_WAVE_SHOWING_CLASS}`);
 
         assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
 
         pointer.start('touch').up();
-        clock.restore();
     });
 
     QUnit.test('useInkRipple can be changed to false and then back to true at runtime', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $list = $('#templated-list').dxList({
             items: ['0'],
             useInkRipple: true
@@ -1574,16 +1560,15 @@ QUnit.module('options changed', moduleSetup, () => {
 
         list.option('useInkRipple', false);
         list.option('useInkRipple', true);
-        const $item = $list.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $item = $list.find(`.${LIST_ITEM_CLASS}`).eq(0);
         const pointer = pointerMock($item);
         pointer.start('touch').down();
-        clock.tick(100);
-        const inkRippleShowingWave = $item.find(toSelector(INKRIPPLE_WAVE_SHOWING_CLASS));
+        this.clock.tick(100);
+        const inkRippleShowingWave = $item.find(`.${INKRIPPLE_WAVE_SHOWING_CLASS}`);
 
         assert.strictEqual(inkRippleShowingWave.length, 1, 'inkripple feedback works');
 
         pointer.start('touch').up();
-        clock.restore();
     });
 
     QUnit.test('groupTemplate', function(assert) {
@@ -1628,22 +1613,6 @@ QUnit.module('options changed', moduleSetup, () => {
         assert.deepEqual(list.option('items'), [1, 2, 3, 4], 'item is not deleted');
     });
 
-    QUnit.test('allowItemDeleting option changed from false to true', function(assert) {
-        const $list = $('#list').dxList({
-            items: [1, 2, 3, 4],
-            allowItemDeleting: false,
-            focusStateEnabled: true
-        });
-        const list = $list.dxList('instance');
-
-        list.option('allowItemDeleting', true);
-        list.focus();
-        const keyboard = getListKeyboard($list);
-        keyboard.keyDown('del');
-
-        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
-    });
-
     QUnit.test('allowItemDeleting option changed twice', function(assert) {
         const $list = $('#list').dxList({
             items: [1, 2, 3, 4],
@@ -1670,7 +1639,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
         list.option('itemDragging', { allowReordering: false });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 0);
     });
 
@@ -1683,7 +1652,7 @@ QUnit.module('options changed', moduleSetup, () => {
 
         list.option('itemDragging', { allowReordering: true });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 1);
     });
 
@@ -1696,7 +1665,7 @@ QUnit.module('options changed', moduleSetup, () => {
         list.option('itemDragging', { allowReordering: true });
         list.option('itemDragging', { allowReordering: false });
 
-        const $items = $list.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
         assert.strictEqual($items.eq(0).find('.dx-list-reorder-handle').length, 0);
     });
 
@@ -1748,9 +1717,45 @@ QUnit.module('options changed', moduleSetup, () => {
     });
 });
 
+QUnit.module('focus on deleting', () => {
+    const items = ['item 1', 'item 2', 'item 3'];
+    QUnit.test('first item should not be focused after deleting when focusStateEnabled = false (T1226030)', function(assert) {
+        const $element = $('#list').dxList({
+            items,
+            focusStateEnabled: false,
+            allowItemDeleting: true,
+            itemDeleteMode: 'static',
+        });
+        let $listItems = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        $listItems.eq(0).find(`.${STATIC_DELETE_BUTTON_CLASS}`).trigger('dxclick');
+        $listItems = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        const firstItemIsFocused = $listItems.eq(0).hasClass(FOCUSED_STATE_CLASS);
+
+        assert.notOk(firstItemIsFocused, 'Next Item is not focused');
+    });
+
+    QUnit.test('first item should be focus when deleting when focusStateEnabled = true (T1226030)', function(assert) {
+        const $element = $('#list').dxList({
+            items,
+            focusStateEnabled: true,
+            allowItemDeleting: true,
+            itemDeleteMode: 'static',
+        });
+        let $listItems = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        $listItems.eq(0).find(`.${STATIC_DELETE_BUTTON_CLASS}`).trigger('dxclick');
+        $listItems = $element.find(`.${LIST_ITEM_CLASS}`);
+
+        const firstItemIsFocused = $listItems.eq(0).hasClass(FOCUSED_STATE_CLASS);
+
+        assert.ok(firstItemIsFocused, 'Next Item is focused');
+    });
+});
+
 QUnit.module('selection', moduleSetup, () => {
     QUnit.test('should select item from invisible page', function(assert) {
-        const clock = sinon.useFakeTimers();
         const done = assert.async();
 
         $('#list').dxList({
@@ -1775,7 +1780,7 @@ QUnit.module('selection', moduleSetup, () => {
             }
         });
 
-        clock.tick(10);
+        this.clock.tick(10);
     });
 
     QUnit.test('selection should not be removed after second click if selectionMode is single', function(assert) {
@@ -1784,7 +1789,7 @@ QUnit.module('selection', moduleSetup, () => {
             selectionMode: 'single'
         });
 
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(0);
 
         $item.trigger('dxclick');
         $item.trigger('dxclick');
@@ -1941,7 +1946,6 @@ QUnit.module('selectByClick', {
     });
 });
 
-
 QUnit.module('events', moduleSetup, () => {
     QUnit.test('onItemClick should be fired when item is clicked in ungrouped list', function(assert) {
         let actionFired;
@@ -1956,7 +1960,7 @@ QUnit.module('events', moduleSetup, () => {
             }
         });
 
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`);
 
         $item.trigger('dxclick');
         assert.ok(actionFired, 'action fired');
@@ -1987,7 +1991,7 @@ QUnit.module('events', moduleSetup, () => {
                 actionData = args;
             }
         });
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(3);
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(3);
 
         $item.trigger('dxclick');
 
@@ -2013,7 +2017,7 @@ QUnit.module('events', moduleSetup, () => {
             }]
         });
 
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`);
 
         $item.trigger('dxpointerdown');
         this.clock.tick(10);
@@ -2032,7 +2036,7 @@ QUnit.module('events', moduleSetup, () => {
             }
         });
 
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`);
 
         $item.trigger(holdEvent.name);
         assert.ok(actionFired, 'action fired');
@@ -2052,7 +2056,7 @@ QUnit.module('events', moduleSetup, () => {
             }
         });
 
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`);
 
         $item.trigger({
             type: swipeEvents.end,
@@ -2673,15 +2677,15 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
         assert.equal(element.text(), '12', 'correct items generated');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2], 'correct items presented in options');
 
-        element.find(toSelector(LIST_ITEM_CLASS)).data('rendered', true);
+        element.find(`.${LIST_ITEM_CLASS}`).data('rendered', true);
 
         element.dxScrollView('instance').scrollBottom();
 
         assert.equal(element.text(), '1234', 'correct items generated');
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4], 'correct items presented in options');
 
-        assert.strictEqual(element.find(toSelector(LIST_ITEM_CLASS)).eq(0).data('rendered'), true, 'first item is not rerendered');
-        assert.strictEqual(element.find(toSelector(LIST_ITEM_CLASS)).eq(1).data('rendered'), true, 'first item is not rerendered');
+        assert.strictEqual(element.find(`.${LIST_ITEM_CLASS}`).eq(0).data('rendered'), true, 'first item is not rerendered');
+        assert.strictEqual(element.find(`.${LIST_ITEM_CLASS}`).eq(1).data('rendered'), true, 'first item is not rerendered');
 
         element.dxScrollView('instance').scrollBottom();
 
@@ -2700,14 +2704,14 @@ QUnit.module('infinite list scenario', moduleSetup, () => {
 
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2], 'correct items presented in options');
 
-        element.find(toSelector(LIST_ITEM_CLASS)).data('rendered', true);
+        element.find(`.${LIST_ITEM_CLASS}`).data('rendered', true);
 
         element.find('.dx-list-next-button .dx-button').trigger('dxclick');
 
         assert.deepEqual(element.dxList('instance').option('items'), [1, 2, 3, 4], 'correct items presented in options');
 
-        assert.strictEqual(element.find(toSelector(LIST_ITEM_CLASS)).eq(0).data('rendered'), true, 'first item is not rerendered');
-        assert.strictEqual(element.find(toSelector(LIST_ITEM_CLASS)).eq(1).data('rendered'), true, 'first item is not rerendered');
+        assert.strictEqual(element.find(`.${LIST_ITEM_CLASS}`).eq(0).data('rendered'), true, 'first item is not rerendered');
+        assert.strictEqual(element.find(`.${LIST_ITEM_CLASS}`).eq(1).data('rendered'), true, 'first item is not rerendered');
 
         element.find('.dx-list-next-button .dx-button').trigger('dxclick');
 
@@ -3145,7 +3149,7 @@ QUnit.module('scrollView integration', {
         });
 
         this.clock.tick(1);
-        const listItems = $(toSelector(LIST_ITEM_CLASS), $list);
+        const listItems = $(`.${LIST_ITEM_CLASS}`, $list);
         const itemHeight = listItems.height();
         assert.ok(itemHeight * listItems.length >= listHeight);
         assert.ok(itemHeight * listItems.length <= listHeight + itemHeight);
@@ -3172,7 +3176,7 @@ QUnit.module('scrollView integration', {
         });
 
         this.clock.tick(801); // NOTE: wait for two pages 400ms per one
-        const listItems = $(toSelector(LIST_ITEM_CLASS), $list);
+        const listItems = $(`.${LIST_ITEM_CLASS}`, $list);
         assert.equal(listItems.eq(0).text(), '0');
         assert.equal(listItems.eq(1).text(), '1');
     });
@@ -3490,7 +3494,7 @@ QUnit.module('scrollView integration', {
         });
 
         this.clock.tick(10);
-        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+        const getListItemsCount = () => $(`.${LIST_ITEM_CLASS}`, $list).length;
 
         assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
 
@@ -3519,7 +3523,7 @@ QUnit.module('scrollView integration', {
         });
 
         this.clock.tick(10);
-        const getListItemsCount = () => $(toSelector(LIST_ITEM_CLASS), $list).length;
+        const getListItemsCount = () => $(`.${LIST_ITEM_CLASS}`, $list).length;
 
         assert.strictEqual(getListItemsCount(), 5, 'first page loaded');
 
@@ -3540,10 +3544,10 @@ QUnit.module('regressions', moduleSetup, () => {
 
         this.element.dxList({ dataSource });
 
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 2);
 
         dataSource.load();
-        assert.equal(this.element.find(toSelector(LIST_ITEM_CLASS)).length, 2);
+        assert.equal(this.element.find(`.${LIST_ITEM_CLASS}`).length, 2);
     });
 
     QUnit.test('correctly handle data source errors (B230041)', function(assert) {
@@ -3573,7 +3577,7 @@ QUnit.module('regressions', moduleSetup, () => {
             disabled: true
         }).dxList('instance');
 
-        this.element.find(toSelector(LIST_ITEM_CLASS)).each(function() {
+        this.element.find(`.${LIST_ITEM_CLASS}`).each(function() {
             $(this).click();
             assert.ok(!clicked);
         });
@@ -3627,7 +3631,7 @@ QUnit.module('regressions', moduleSetup, () => {
         });
 
         let item = element
-            .find(toSelector(LIST_ITEM_CLASS))
+            .find(`.${LIST_ITEM_CLASS}`)
             .last();
 
         item.trigger('dxclick');
@@ -3635,7 +3639,7 @@ QUnit.module('regressions', moduleSetup, () => {
         assert.equal(count, 1);
 
         item = element
-            .find(toSelector(LIST_ITEM_CLASS))
+            .find(`.${LIST_ITEM_CLASS}`)
             .first();
 
         item.trigger('dxclick');
@@ -3679,7 +3683,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        let $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2).trigger('dxpointerdown');
+        let $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(2).trigger('dxpointerdown');
         this.clock.tick(10);
         let keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
@@ -3690,7 +3694,7 @@ QUnit.module('keyboard navigation', {
         keyboard.keyDown('down');
         assert.equal(instance.scrollTop(), itemHeight, 'item scrolled to visible area at bottom when down arrow were pressed');
 
-        $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(1);
+        $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(1);
         $item.trigger('dxpointerdown');
         this.clock.tick(10);
         keyboard = getListKeyboard($element);
@@ -3714,14 +3718,14 @@ QUnit.module('keyboard navigation', {
         const keyboard = getListKeyboard($element);
         const $selectAllCheckBox = $element.find(`.${LIST_SELECT_ALL_CHECKBOX_CLASS}`);
         const $selectAllItem = $element.find('.dx-list-select-all');
-        const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
+        const $firstItem = $element.find(`.${LIST_ITEM_CLASS}`).eq(0);
 
         $firstItem.trigger('dxpointerdown');
         this.clock.tick(10);
 
         keyboard.keyDown('up');
         this.clock.tick(10);
-        assert.ok($selectAllItem.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
+        assert.ok($selectAllItem.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox is focused');
 
         keyboard.keyDown('enter');
 
@@ -3747,30 +3751,31 @@ QUnit.module('keyboard navigation', {
 
         const keyboard = getListKeyboard($element);
         const $selectAllCheckBox = $element.find('.dx-list-select-all');
-        const $firstItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(0);
-        const $lastItem = $element.find(toSelector(LIST_ITEM_CLASS)).eq(4);
+        const $firstItem = $element.find(`.${LIST_ITEM_CLASS}`).eq(0);
+        const $lastItem = $element.find(`.${LIST_ITEM_CLASS}`).eq(4);
 
         $firstItem.trigger('dxpointerdown');
         this.clock.tick(10);
 
         keyboard.keyDown('up');
         this.clock.tick(10);
-        assert.ok($selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
+        assert.ok($selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox is focused');
 
         keyboard.keyDown('up');
         this.clock.tick(10);
 
-        assert.ok(!$selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox isn\'t focused');
-        assert.ok($lastItem.hasClass('dx-state-focused'), 'last item is focused');
+        assert.ok(!$selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox isn\'t focused');
+        assert.ok($lastItem.hasClass(FOCUSED_STATE_CLASS), 'last item is focused');
 
         keyboard.keyDown('down');
         this.clock.tick(10);
-        assert.ok($selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox is focused');
+        assert.ok($selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox is focused');
 
         keyboard.keyDown('down');
         this.clock.tick(10);
-        assert.ok(!$selectAllCheckBox.hasClass('dx-state-focused'), 'selectAll checkbox isn\'t focused');
-        assert.ok($firstItem.hasClass('dx-state-focused'), 'first item is focused');
+
+        assert.ok(!$selectAllCheckBox.hasClass(FOCUSED_STATE_CLASS), 'selectAll checkbox isn\'t focused');
+        assert.ok($firstItem.hasClass(FOCUSED_STATE_CLASS), 'first item is focused');
     });
 
     QUnit.test('Select all when disabled item is null (T832581)', function(assert) {
@@ -3800,7 +3805,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS)).eq(2);
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`).eq(2);
         const itemHeight = $item.outerHeight();
 
         instance.option('height', itemHeight * 2.5);
@@ -3821,7 +3826,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        const $item = $element.find(toSelector(LIST_ITEM_CLASS)).first();
+        const $item = $element.find(`.${LIST_ITEM_CLASS}`).first();
         const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
 
@@ -3844,7 +3849,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.first();
         const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
@@ -3853,20 +3858,23 @@ QUnit.module('keyboard navigation', {
         instance.option('height', itemHeight * 3);
 
         keyboard.keyDown('pageDown');
+        const thirdItemIsFocused = $items.eq(2).hasClass(FOCUSED_STATE_CLASS);
 
         assert.equal(isRenderer(instance.option('focusedElement')), !!config().useJQuery, 'focusedElement is correct');
         assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled, when focusedItem is not last visible item on this page');
-        assert.ok($items.eq(2).hasClass('dx-state-focused'), 'focused item change to last visible item on this page');
+        assert.ok(thirdItemIsFocused, 'focused item change to last visible item on this page');
 
         keyboard.keyDown('pageDown');
+        const fifthItemIsFocused = $items.eq(4).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 2, 1.0001, 'list scrolled to next page');
-        assert.ok($items.eq(4).hasClass('dx-state-focused'), 'last item on new page obtained focus');
+        assert.ok(fifthItemIsFocused, 'last item on new page obtained focus');
 
         keyboard.keyDown('pageDown');
+        const sixthItemIsFocused = $items.eq(5).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to last page');
-        assert.ok($items.eq(5).hasClass('dx-state-focused'), 'last item on last page obtained focus');
+        assert.ok(sixthItemIsFocused, 'last item on last page obtained focus');
     });
 
     QUnit.test('list scroll to hidden focused item after press pageDown', function(assert) {
@@ -3878,7 +3886,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.first();
         const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
@@ -3891,9 +3899,10 @@ QUnit.module('keyboard navigation', {
         assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list is not scrolled');
 
         keyboard.keyDown('pageDown');
+        const sixthItemIsFocused = $items.eq(5).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list scrolled to previous focusedItem');
-        assert.ok($items.eq(5).hasClass('dx-state-focused'), 'focused item change to last visible item on new page');
+        assert.ok(sixthItemIsFocused, 'focused item change to last visible item on new page');
     });
 
     QUnit.test('list scroll to focused item after press pageUp', function(assert) {
@@ -3905,7 +3914,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.first();
         const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
@@ -3916,19 +3925,22 @@ QUnit.module('keyboard navigation', {
         instance.scrollToItem($items.last());
 
         keyboard.keyDown('pageUp');
+        const fourthItemIsFocused = $items.eq(3).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight * 3, 1.0001, 'list is not scrolled, when focusedItem is not first visible item on this page');
-        assert.ok($items.eq(3).hasClass('dx-state-focused'), 'focused item change to first visible item on this page');
+        assert.ok(fourthItemIsFocused, 'focused item change to first visible item on this page');
 
         keyboard.keyDown('pageUp');
+        const secondItemIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to next page');
-        assert.ok($items.eq(1).hasClass('dx-state-focused'), 'first item on new page obtained focus');
+        assert.ok(secondItemIsFocused, 'first item on new page obtained focus');
 
         keyboard.keyDown('pageUp');
+        const firstItemIsFocused = $items.eq(0).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), 0, 1.0001, 'list scrolled to first page');
-        assert.ok($items.eq(0).hasClass('dx-state-focused'), 'first item on first page obtained focus');
+        assert.ok(firstItemIsFocused, 'first item on first page obtained focus');
     });
 
     QUnit.test('list scroll to hidden focused item after press pageUp', function(assert) {
@@ -3940,7 +3952,7 @@ QUnit.module('keyboard navigation', {
         });
 
         const instance = $element.dxList('instance');
-        const $items = $element.find(toSelector(LIST_ITEM_CLASS));
+        const $items = $element.find(`.${LIST_ITEM_CLASS}`);
         const $item = $items.first();
         const keyboard = getListKeyboard($element);
         const itemHeight = $item.outerHeight();
@@ -3953,9 +3965,10 @@ QUnit.module('keyboard navigation', {
         assert.roughEqual(instance.scrollTop(), itemHeight * 4, 1.0001, 'list is not scrolled');
 
         keyboard.keyDown('pageUp');
+        const secondItemIsFocused = $items.eq(1).hasClass(FOCUSED_STATE_CLASS);
 
         assert.roughEqual(instance.scrollTop(), itemHeight, 1.0001, 'list scrolled to previous focusedItem');
-        assert.ok($items.eq(1).hasClass('dx-state-focused'), 'focused item change to last visible item on new page');
+        assert.ok(secondItemIsFocused, 'focused item change to last visible item on new page');
     });
 
     QUnit.test('list should attach keyboard events even if focusStateEnabled is false when the widget\'s onKeyboardHandled is defined', function(assert) {
@@ -3977,6 +3990,24 @@ QUnit.module('keyboard navigation', {
         instance.option('onKeyboardHandled', () => true);
         $itemContainer.trigger($.Event('keydown', { key: 'Enter' }));
         assert.equal(handler.callCount, 1);
+    });
+
+    QUnit.test('allow delete item using keyboard after set allowItemDeleting option from false to true', function(assert) {
+        const $list = $('#list').dxList({
+            items: [1, 2, 3, 4],
+            allowItemDeleting: false,
+            focusStateEnabled: true
+        });
+        const list = $list.dxList('instance');
+
+        list.option('allowItemDeleting', true);
+        list.focus();
+
+        const $itemContainer = $list.find(`.${LIST_ITEMS_CLASS}`).eq(0).parent();
+
+        $itemContainer.trigger($.Event('keydown', { key: 'Delete' }));
+
+        assert.deepEqual(list.option('items'), [2, 3, 4], 'item is deleted');
     });
 });
 
@@ -4021,7 +4052,7 @@ QUnit.module('Search', () => {
 
         instance.focus();
 
-        assert.ok($element.children('.dx-list-search').hasClass('dx-state-focused'), 'search editor is focused');
+        assert.ok($element.children('.dx-list-search').hasClass(FOCUSED_STATE_CLASS), 'search editor is focused');
     });
 
     QUnit.test('Show warning when dataSource is not specified', function(assert) {
@@ -4278,7 +4309,7 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
         },
 
         getItems: function() {
-            return this.$list.find(toSelector(LIST_ITEM_CLASS));
+            return this.$list.find(`.${LIST_ITEM_CLASS}`);
         },
 
         createEvent: function(eventName) {
@@ -4308,8 +4339,7 @@ if(QUnit.urlParams['nojquery'] && QUnit.urlParams['shadowDom']) {
 
             this.clock.tick(10);
 
-            assert.ok(this.getItems().eq(1).hasClass('dx-state-focused'));
+            assert.ok(this.getItems().eq(1).hasClass(FOCUSED_STATE_CLASS));
         });
     });
 }
-

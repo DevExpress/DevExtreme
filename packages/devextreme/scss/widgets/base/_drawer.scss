@@ -17,6 +17,10 @@
   position: absolute;
   top: 0;
   bottom: 0;
+
+  .dx-overlay-content {
+    overflow: hidden;
+  }
 }
 
 .dx-drawer-right .dx-drawer-panel-content {

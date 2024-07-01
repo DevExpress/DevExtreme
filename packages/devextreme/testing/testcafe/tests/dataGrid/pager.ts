@@ -2,7 +2,7 @@ import { createScreenshotsComparer, compareScreenshot } from 'devextreme-screens
 import { safeSizeTest } from '../../helpers/safeSizeTest';
 import DataGrid from '../../model/dataGrid';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import SelectBox from '../../model/selectBox';
 import TextBox from '../../model/textBox';
 import { changeTheme } from '../../helpers/changeTheme';
@@ -209,3 +209,32 @@ test('Changing pageSize to \'all\' with rowRenderingMode=\'virtual\' should work
     },
     height: 400,
   }));
+
+test('Page index should not reset when scrolling while the grid is being refreshed (T1196099)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(dataGrid.option('paging.pageIndex'))
+    .eql(2);
+
+  await dataGrid.apiRefresh();
+  await dataGrid.scrollBy({ y: 20 });
+
+  await t
+    .expect(dataGrid.option('paging.pageIndex'))
+    .eql(2);
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(100).keys()].map((i) => ({ id: i })),
+  keyExpr: 'id',
+  showBorders: true,
+  scrolling: {
+    mode: 'standard',
+    rowRenderingMode: 'virtual',
+  },
+  paging: { pageIndex: 2 },
+  pager: {
+    visible: true,
+    displayMode: 'compact',
+  },
+  height: 440,
+}));

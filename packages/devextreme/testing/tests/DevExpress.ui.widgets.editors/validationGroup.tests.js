@@ -2,7 +2,7 @@ import Class from 'core/class';
 import { Deferred } from 'core/utils/deferred';
 import { triggerShownEvent } from 'events/visibility_change';
 import $ from 'jquery';
-import DefaultAdapter from 'ui/validation/default_adapter';
+import DefaultAdapter from '__internal/ui/validation/m_default_adapter';
 import ValidationEngine from 'ui/validation_engine';
 import 'ui/validation_group';
 
@@ -305,6 +305,20 @@ QUnit.module('General', {
             assert.ok(isValid, 'validation is correct');
         });
         ValidationEngine.removeRegisteredValidator(group, validator2);
+    });
+
+    QUnit.test('group should not be removed after its validators are removed (T1233487)', function(assert) {
+        const $container = $('#dxValidationGroup');
+        const group = this.fixture.createGroup($container);
+        const adapter = sinon.createStubInstance(DefaultAdapter);
+        const $validator1 = $('<div>').dxValidator({
+            adapter: adapter
+        });
+        const validator1 = $validator1.dxValidator('instance');
+
+        ValidationEngine.removeRegisteredValidator(group, validator1);
+
+        assert.ok(ValidationEngine.getGroupConfig(group), 'group is not removed');
     });
 
     QUnit.test('group should be validated positively with a new validator (async)', function(assert) {

@@ -1,6 +1,7 @@
 @forward "./variables";
 @use "./variables" as *;
 @use "sass:color";
+
 $color: null !default;
 $mode: null !default;
 
@@ -24,54 +25,34 @@ $fluent-color-theme-modificator: null !default;
 $base-font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, avenir next, avenir, helvetica neue, helvetica, Cantarell, Ubuntu, roboto, noto, arial, sans-serif !default; // stylelint-disable-line value-keyword-case
 
 /**
-* $name 30. Background color
+* $name 30. Page background color
+* $type color
+*/
+$base-typography-bg: null !default;
+
+/**
+* $name 31. Component background color
 * $type color
 */
 $base-bg: null !default;
-$base-bg-hover: null !default;
-$base-bg-active: null !default;
-$base-bg-selected: null !default;
 
-$base-brand-bg: null !default;
-$base-brand-bg-hover: null !default;
-$base-brand-bg-active: null !default;
-$base-brand-bg-selected: null !default;
+/**
+* $name 90. Hover state background color
+* $type color
+*/
+$base-hover-bg: null !default;
 
-$base-brand2-bg: null !default;
-$base-brand2-bg-hover: null !default;
-$base-brand2-bg-active: null !default;
-$base-brand2-bg-selected: null !default;
+/**
+* $name 120. Active state background color
+* $type color
+*/
+$base-active-bg: null !default;
 
-$base-accent-foreground: null !default;
-$base-accent-foreground2: null !default;
-$base-accent-foreground2-hover: null !default;
-$base-accent-foreground2-active: null !default;
-
-$base-foreground-inverted: null !default;
-$base-foreground-inverted-hover: null !default;
-$base-foreground-inverted-focused: null !default;
-
-$base-neutral-background: null !default;
-$base-neutral-background1: null !default;
-$base-neutral-background1-hover: null !default;
-$base-neutral-background1-active: null !default;
-$base-neutral-background1-selected: null !default;
-$base-neutral-background2: null !default;
-$base-neutral-background2-hover: null !default;
-$base-neutral-background2-active: null !default;
-$base-neutral-background2-selected: null !default;
-$base-neutral-background3: null !default;
-$base-neutral-background3-hover: null !default;
-$base-neutral-background3-active: null !default;
-$base-neutral-background3-selected: null !default;
-$base-neutral-background4: null !default;
-$base-neutral-background4-hover: null !default;
-$base-neutral-background6: null !default;
-$base-neutral-foreground1: null !default;
-$base-neutral-foreground2: null !default;
-$base-neutral-foreground3: null !default;
-$base-neutral-foreground4: null !default;
-$base-neutral-background-hover: null !default;
+/**
+* $name 130. Selected state background color
+* $type color
+*/
+$base-selected-bg: null !default;
 
 /**
 * $name 40. Border color
@@ -80,28 +61,28 @@ $base-neutral-background-hover: null !default;
 $base-border-color: null !default;
 $base-border-color-hover: null !default;
 $base-border-color-focused: null !default;
+
+/**
+* $name 41. Border color accessible
+* $type color
+*/
 $base-border-color-accessible: null !default;
 $base-border-color-accessible-hover: null !default;
 $base-border-color-accessible-focused: null !default;
-$base-neutral-border-color2: null !default;
-$base-neutral-border-color3: null !default;
-$base-neutral-border-color4: rgba(209, 209, 209, 1) !default; // #d1d1d1
+
+$base-separator-color: null !default;
 
 $base-inverted-bg: null !default;
-$base-element-bg: null !default;
 $base-shadow-color: null !default;
 
 $base-foreground-disabled: null !default;
-$base-neutral-background-disabled: null !default;
+$base-background-disabled: null !default;
 
 /**
 * $name 50. Success color
 * $type color
 */
 $base-success: null !default;
-$base-success-hover: null !default;
-$base-success-active: null !default;
-$base-success-selected: null !default;
 
 /**
 * $name 60. Warning color
@@ -119,28 +100,27 @@ $base-danger-active: null !default;
 $base-danger-selected: null !default;
 
 /**
-* $name 90. Hovered state background color
+* $name 20. Text color
 * $type color
 */
-$base-hover-bg: null !default;
+$base-text-color: null !default;
 $base-inverted-text-color: null !default;
 
 /**
-* $name 100. Focused state text color
+* $name 20. Label color
 * $type color
 */
-$base-focus-color: null !default;
+$base-label-color: null !default;
 
 /**
-* $name 110. Focused state background color
+* $name 40. Icon color
 * $type color
 */
-$base-focus-bg: null !default;
-$typography-bg: null !default;
-$base-inverted-icon-color: null !default;
+$base-icon-color: null !default;
+
 $base-disabled-opacity: 0.38 !default;
-$base-disabled-color: null !default;
 $base-border-color-disabled: null !default;
+
 $scrollview-pulldown-path: null !default;
 
 
@@ -148,219 +128,158 @@ $scrollview-pulldown-path: null !default;
   $fluent-color-accent-modificator: "blue" !default;
 }
 
+@if $color == "saas" {
+  $fluent-color-accent-modificator: "saas" !default;
+}
+
 @if $mode == "light" {
-  $base-accent: rgba(15, 108, 189, 1) !default; // #0f6cbd
-  $base-accent-hover: rgba(17, 94, 163, 1) !default; // #115ea3
-  $base-accent-active: rgba(15, 84, 140, 1) !default; // #0f548c
-  $base-accent-selected: rgba(14, 71, 117, 1) !default; // #0E4775
-
-  $base-accent-foreground: #0F6CBD !default;
-  $base-accent-foreground2: #115EA3 !default;
-  $base-accent-foreground2-hover: #0F548C !default;
-  $base-accent-foreground2-active: #0A2E4A !default;
-
   $fluent-color-theme-modificator: "light" !default;
-  $base-disabled-color: rgba(224, 224, 224, 1) !default; // e0e0e0
-  $base-border-color-disabled: rgba(224, 224, 224, 1) !default; // e0e0e0
-  $base-neutral-background-disabled: rgb(240, 240, 240) !default; // f0f0f0
-  $base-foreground-disabled: rgba(189, 189, 189, 1) !default; // bdbdbd
-  $base-neutral-foreground1: rgba(36, 36, 36, 1) !default; // #242424;
-  $base-neutral-foreground2: rgba(66, 66, 66, 1) !default; // #424242;
-  $base-neutral-foreground3: rgba(97, 97, 97, 1) !default; // #616161;
-  $base-neutral-foreground4: rgba(112, 112, 112, 1) !default; // #707070
 
-  $base-brand-bg: rgba(15, 108, 189, 1) !default; // #0F6CBD
-  $base-brand-bg-hover: rgba(17, 94, 163, 1) !default; // #115EA3
-  $base-brand-bg-active: rgba(12, 59, 94, 1) !default; // #0C3B5E
-  $base-brand-bg-selected: rgba(15, 84, 140, 1) !default; // #0F548C
+  $base-bg: rgba(255, 255, 255, 1) !default;
 
-  $base-brand2-bg: rgba(235, 243, 252, 1) !default; // #EBF3FC
-  $base-brand2-bg-hover: rgba(207, 228, 250, 1) !default; // #EBF3FC
-  $base-brand2-bg-active: rgba(150, 198, 250, 1) !default; // #B4D6FA
-  $base-brand2-bg-selected: rgba(208, 229, 251, 1) !default; // #d0e5fb
+  @if $color == "blue" {
+    $base-hover-bg: darken($base-bg, 3.9) !default;
+    $base-typography-bg: rgba(250, 250, 250, 1) !default;
 
-  $base-neutral-background: rgba(245, 245, 245, 1) !default; // #f5f5f5
-  $base-neutral-background1: rgba(255, 255, 255, 1) !default; // #FFFFFF
-  $base-neutral-background1-hover: rgba(245, 245, 245, 1) !default; // #F5F5F5
-  $base-neutral-background1-active: rgba(224, 224, 224, 1) !default; // #E0E0E0
-  $base-neutral-background1-selected: rgba(235, 235, 235, 1) !default; // #EBEBEB
-  $base-neutral-background2: rgba(250, 250, 250, 1) !default; // #FAFAFA
-  $base-neutral-background2-hover: rgba(240, 240, 240, 1) !default; // #F0F0F0
-  $base-neutral-background2-active: rgba(219, 219, 219, 1) !default; // #DBDBDB
-  $base-neutral-background2-selected: rgba(230, 230, 230, 1) !default; // #E6E6E6
-  $base-neutral-background3: rgba(245, 245, 245, 1) !default; // #F5F5F5
-  $base-neutral-background3-hover: rgba(235, 235, 235, 1) !default; // #EBEBEB
-  $base-neutral-background3-active: rgba(214, 214, 214, 1) !default; // #D6D6D6
-  $base-neutral-background3-selected: rgba(224, 224, 224, 1) !default; // #E0E0E0
-  $base-neutral-background4: rgba(240, 240, 240, 1) !default; // #f0f0f0
-  $base-neutral-background4-hover: rgba(250, 250, 250, 1) !default; // #fafafa
-  $base-neutral-background6: rgba(230, 230, 230, 1) !default; // #e6e6e6
+    $base-accent: rgba(15, 108, 189, 1) !default;
+    $base-success: rgba(16, 124, 16, 1) !default;
+    $base-danger: rgba(209, 52, 56, 1) !default;
+    $base-text-color: rgba(36, 36, 36, 1) !default;
+    $base-label-color: lighten($base-text-color, 29.80) !default;
+    $base-icon-color: lighten($base-text-color, 23.92) !default;
+    $base-border-color: rgba(224, 224, 224, 1) !default;
+    $base-border-color-accessible: darken($base-border-color, 49.8) !default;
+    $base-shadow-color: #000 !default;
+  }
 
-  $base-bg: $base-neutral-background1 !default;
-  $base-bg-hover: $base-neutral-background1-hover !default;
-  $base-bg-selected: $base-neutral-background1-active !default;
-  $base-bg-active: $base-neutral-background1-selected !default;
+  @if $color == "saas" {
+    $base-accent: #5486ff !default;
+    $base-typography-bg: #FAFBFF !default;
 
-  $base-foreground-inverted: rgba(71, 158, 245, 1) !default; // #479EF5
-  $base-foreground-inverted-hover: rgba(98, 171, 245, 1) !default; // #62ABF5
-  $base-foreground-inverted-focused: rgba(71, 158, 245, 1) !default; // #479EF5
+    $base-hover-bg: mix(#FFF, $base-accent, 85%) !default;
 
-  $base-neutral-background-hover: rgba(235, 235, 235, 1) !default; // #ebebeb
-  $base-border-color: rgba(224, 224, 224, 1) !default; // #e0e0e0
-  $base-border-color-hover: darken($base-border-color, 3.92) !default; // #c7c7c7
-  $base-border-color-focused: darken($base-border-color, 11.76) !default; // #b3b3b3
-  $base-border-color-accessible: rgba(97, 97, 97, 1) !default; // #616161
-  $base-border-color-accessible-hover: rgba(87, 87, 87, 1) !default; // #575757
-  $base-border-color-accessible-focused: rgba(77, 77, 77, 1) !default; // #4d4d4d
+    $base-success: #19914B !default;
+    $base-danger: #DC2828 !default;
+    $base-text-color: #21293b !default;
+    $base-label-color: lighten($base-text-color, 19) !default;
+    $base-icon-color: lighten($base-text-color, 10) !default;
+    $base-border-color: #e5e8f0 !default;
+    $base-border-color-accessible: darken($base-border-color, 20) !default;
+    $base-shadow-color: #3D4A6C !default;
+  }
 
-  $base-neutral-border-color2: rgba(224, 224, 224, 1) !default; // #E0E0E0
-  $base-neutral-border-color3: rgba(240, 240, 240, 1) !default; // #F0F0F0
+  $base-accent-hover: darken(desaturate($base-accent, 4.18), 4.71) !default;
+  $base-accent-active: darken(desaturate(adjust-hue($base-accent, -1), 4.65), 9.61) !default;
+  $base-accent-selected: darken(desaturate($base-accent-active, 2.02), 4.71) !default;
+
+  $base-foreground-disabled: lighten($base-text-color, 60) !default;
+
+  $base-selected-bg: darken($base-hover-bg, 3.92) !default;
+  $base-active-bg: darken($base-hover-bg, 8.24) !default;
+  $base-background-disabled: darken($base-hover-bg, 1.96) !default;
+
+  $base-border-color-hover: darken($base-border-color, 9.8) !default;
+  $base-border-color-focused: darken($base-border-color, 17.65) !default;
+
+  $base-border-color-accessible-hover: darken($base-border-color-accessible, 3.92) !default;
+  $base-border-color-accessible-focused: darken($base-border-color-accessible-hover, 3.92) !default;
+  $base-border-color-disabled: $base-border-color !default;
+
+  $base-separator-color: $base-border-color !default;
 
   $base-inverted-bg: darken($base-bg, 100%) !default;
-  $base-element-bg: $base-bg !default;
-  $base-shadow-color: $base-inverted-bg !default;
-  $base-hover-bg: $base-bg-hover !default;
+  
   $base-inverted-text-color: #fff !default;
-  $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: $base-bg-selected !default;
-  $typography-bg: $base-neutral-background2 !default;
-  $base-inverted-icon-color: $base-inverted-text-color !default;
 
-  $base-danger: rgba(209, 52, 56, 1) !default; // #d13438
-  $base-danger-hover: rgba(188, 47, 50, 1) !default; // #bc2f32
-  $base-danger-active: rgba(63, 16, 17, 1) !default; // #3f1011
-  $base-danger-selected: rgba(160, 39, 41, 1) !default; // #A02729
-
-  $base-success: rgba(16, 124, 16, 1) !default; // #107c10
-  $base-success-hover: rgba(14, 112, 14, 1) !default; // #0e700e
-  $base-success-active: rgba(5, 37, 5, 1) !default; // #052505
-  $base-success-selected: rgba(11, 81, 11, 1) !default; // #0B510B
+  $base-danger-hover: darken(desaturate($base-danger, 3.05), 5.10) !default;
+  $base-danger-active: darken(desaturate($base-danger, 3.56), 35.69) !default;
+  $base-danger-selected: darken(desaturate($base-danger, 2.78), 22.55) !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/light/pulldown.png') !default;
 }
 
 @if $mode == "dark" {
-  $base-accent: rgba(71, 158, 245, 1) !default; // #479EF5
-  $base-accent-hover: rgba(98, 171, 245, 1) !default; // #62ABF5
-  $base-accent-active: rgba(40, 134, 222, 1) !default; // #2886DE
-  $base-accent-selected: rgba(15, 84, 140, 1) !default; // #0f548c
-
-  $base-accent-foreground: #479EF5 !default;
-  $base-accent-foreground2: #62ABF5 !default;
-  $base-accent-foreground2-hover: #B4D6F5 !default;
-  $base-accent-foreground2-active: #B4D6F5 !default;
-
   $fluent-color-theme-modificator: "dark" !default;
-  $base-disabled-color: rgba(66, 66, 66, 1) !default; // #424242
-  $base-border-color-disabled: rgba(66, 66, 66, 1) !default; // #424242
-  $base-neutral-background-disabled: rgba(20, 20, 20, 1) !default; // #141414
-  $base-foreground-disabled: rgba(92, 92, 92, 1) !default; // #5c5c5c
-  $base-neutral-foreground1: rgba(255, 255, 255, 1) !default; // #ffffff;
-  $base-neutral-foreground2: rgba(214, 214, 214, 1) !default; // #d6d6d6;
-  $base-neutral-foreground3: rgba(173, 173, 173, 1) !default; // #adadad;
-  $base-neutral-foreground4: rgba(153, 153, 153, 1) !default; // #999999
 
-  $base-brand-bg: rgba(17, 94, 163, 1) !default; // #115EA3
-  $base-brand-bg-hover: rgba(15, 108, 189, 1) !default; // #0F6CBD
-  $base-brand-bg-active: rgba(12, 59, 94, 1) !default; // #0C3B5E
-  $base-brand-bg-selected: rgba(15, 84, 140, 1) !default; // #0F548C
+  @if $color == "blue" {
+    $base-bg: rgba(41, 41, 41, 1) !default;
+    $base-accent: rgba(71, 158, 245, 1) !default;
+    $base-success: #54B054 !default;
+    $base-danger: rgba(227, 125, 128, 1) !default;
+    $base-border-color: rgba(97, 97, 97, 1) !default;
 
-  $base-brand2-bg: rgba(8, 35, 56, 1) !default; // #082338
-  $base-brand2-bg-hover: rgba(6, 23, 36, 1) !default; // #061724
-  $base-brand2-bg-active: rgba(10, 46, 74, 1) !default; // #0A2E4A
-  $base-brand2-bg-selected: rgba(10, 46, 74, 1) !default; // #0a2e4a
+    $base-typography-bg: #1F1F1F !default;
+  }
 
-  $base-foreground-inverted: rgba(15, 108, 189, 1) !default; // #0F6CBD
-  $base-foreground-inverted-hover: rgba(17, 94, 163, 1) !default; // #115EA3
-  $base-foreground-inverted-focused: rgba(15, 84, 140, 1) !default; // #0F548C
+  @if $color == "saas" {
+    $base-bg: rgba(30, 40, 50, 1) !default;
+    $base-accent: #5492F6 !default;
+    $base-success: #10B230 !default;
+    $base-danger: #F92F2F !default;
+    $base-border-color: #414B5F !default;
+  
+    $base-typography-bg: #141E28 !default;
+  }
 
-  $base-neutral-background: rgba(20, 20, 20, 1) !default; // #f5f5f5
-  $base-neutral-background1: rgba(41, 41, 41, 1) !default; // #292929
-  $base-neutral-background1-hover: rgba(61, 61, 61, 1) !default; // #3D3D3D
-  $base-neutral-background1-active: rgba(31, 31, 31, 1) !default; // #1F1F1F
-  $base-neutral-background1-selected: rgba(56, 56, 56, 1) !default; // #383838
-  $base-neutral-background2: rgba(31, 31, 31, 1) !default; // #1F1F1F
-  $base-neutral-background2-hover: rgba(51, 51, 51, 1) !default; // #333333
-  $base-neutral-background2-active: rgba(20, 20, 20, 1) !default; // #141414
-  $base-neutral-background2-selected: rgba(46, 46, 46, 1) !default; // #2E2E2E
-  $base-neutral-background3: rgba(20, 20, 20, 1) !default; // #1F1F1F
-  $base-neutral-background3-hover: rgba(41, 41, 41, 1) !default; // #292929
-  $base-neutral-background3-active: rgba(10, 10, 10, 1) !default; // #0A0A0A
-  $base-neutral-background3-selected: rgba(36, 36, 36, 1) !default; // #242424
+  $base-accent-hover: lighten(desaturate($base-accent, 1.67), 5.29) !default;
+  $base-accent-active: darken(desaturate(adjust-hue($base-accent, -1), 16.30), 10.59) !default;
+  $base-accent-selected: darken(desaturate(adjust-hue($base-accent, -3), 9.05), 31.57) !default;
+  
+  $base-text-color: rgba(255, 255, 255, 1) !default;
+  $base-label-color: darken($base-text-color, 40.00) !default;
+  $base-icon-color: darken($base-text-color, 32.16) !default;
+  $base-foreground-disabled: darken($base-text-color, 63.9) !default;
 
-  $base-neutral-background4: rgba(10, 10, 10, 1) !default; // #0A0A0A
-  $base-neutral-background4-hover: rgb(4, 3, 3) !default; // #1F1F1F
-  $base-neutral-background6: rgba(51, 51, 51, 1) !default; // #e6e6e6
+  $base-bg: rgba(41, 41, 41, 1) !default;
+  $base-hover-bg: lighten($base-bg, 7.8) !default;
+  $base-selected-bg: lighten($base-bg, 5.9) !default;
+  $base-active-bg: darken($base-bg, 3.9) !default;
+  $base-background-disabled: darken($base-bg, 8.2) !default;
 
-  $base-bg: $base-neutral-background1 !default;
-  $base-bg-hover: $base-neutral-background1-hover !default;
-  $base-bg-selected: $base-neutral-background1-selected !default;
-  $base-bg-active: $base-neutral-background1-active !default;
+  $base-border-color-hover: lighten($base-border-color, 7.84) !default;
+  $base-border-color-focused: lighten($base-border-color, 3.92) !default;
+  $base-border-color-accessible: lighten($base-border-color, 29.8) !default;
+  $base-border-color-accessible-hover: lighten($base-border-color-accessible, 6.27) !default;
+  $base-border-color-accessible-focused: lighten($base-border-color-accessible-hover, 3.92) !default;
+  $base-border-color-disabled: darken($base-border-color, 12.16) !default;
 
-  $base-neutral-background-hover: rgba(41, 41, 41, 1) !default; // #292929
-  $base-border-color: rgba(97, 97, 97, 1) !default; // #616161
-  $base-border-color-hover: lighten( $base-border-color, 5.88) !default; // #757575
-  $base-border-color-focused: lighten( $base-border-color, 1.96) !default; // #6b6b6b
-  $base-border-color-accessible: rgba(173, 173, 173, 1) !default; // #adadad
-  $base-border-color-accessible-hover: rgba(189, 189, 189, 1) !default; // #bdbdbd
-  $base-border-color-accessible-focused: rgba(179, 179, 179, 1) !default; // #b3b3b3
-
-  $base-neutral-border-color2: rgba(82, 82, 82, 1) !default; // #525252
-  $base-neutral-border-color3: rgba(61, 61, 61, 1) !default; // #3d3d33d
+  $base-separator-color: darken($base-border-color, 5.88) !default;
 
   $base-inverted-bg: lighten($base-bg, 100%) !default;
-  $base-element-bg: $base-bg !default;
   $base-shadow-color: #000 !default;
-  $base-hover-bg: $base-bg-hover !default;
   $base-inverted-text-color: #000 !default;
-  $base-focus-color: $base-inverted-text-color !default;
-  $base-focus-bg: $base-bg-selected !default;
-  $typography-bg: $base-neutral-background2 !default;
-  $base-inverted-icon-color: $base-inverted-text-color !default;
 
-  $base-danger: rgba(227, 125, 128, 1) !default; // #e37d80
-  $base-danger-hover: rgba(234, 156, 158, 1) !default; // #EA9C9E
-  $base-danger-selected: rgba(241, 187, 188, 1); // #F1BBBC
-  $base-danger-active: rgba(253, 246, 246, 1) !default; // #FDF6F6
-
-  $base-success: #54B054 !default; // #107c10
-  $base-success-hover: #9FD89F !default; // #0e700e
-  $base-success-active: #F1FAF1 !default; // #052505
-  $base-success-selected: #C9E9C9 !default; // #0B510B
+  $base-danger-hover: lighten(saturate($base-danger, 0.44), 7.45) !default;
+  $base-danger-active: lighten(desaturate(adjust-hue($base-danger, 1.8), 0.9), 28.8) !default;
+  $base-danger-selected: lighten(saturate(adjust-hue($base-danger, 0.7), 1.3), 14.9);
 
   $scrollview-pulldown-path: data-uri('images/widgets/fluent/color-schemes/dark/pulldown.png') !default;
 }
 
-/**
-* $name 20. Text color
-* $type color
-*/
-$base-text-color: $base-neutral-foreground1 !default;
 
 /**
-* $name 80. Hovered state text color
+* $name 80. Hover state text color
 * $type color
 */
 $base-hover-color: $base-text-color !default;
-$typography-color: $base-text-color !default;
 
 /**
-* $name 20. Label color
+* $name 100. Focused state text color
 * $type color
 */
-$base-label-color: $base-neutral-foreground4 !default;
+$base-focus-color: $base-inverted-text-color !default;
 
 /**
-* $name 40. Icon color
+* $name 110. Focused state background color
 * $type color
 */
-$base-icon-color: $base-neutral-foreground3 !default;
+$base-focus-bg: $base-hover-bg !default;
 
 /**
-* $name 50. Spin icon color
+* $name 50. Arrow icon color
 * $type color
 */
-$base-spin-icon-color: $base-neutral-foreground3 !default;
+$base-spin-icon-color: $base-icon-color !default;
 
 /**
 * $name 30. Link color
@@ -369,10 +288,9 @@ $base-spin-icon-color: $base-neutral-foreground3 !default;
 $base-link-color: $base-accent !default;
 $typography-link-color: $base-link-color !default;
 
+$base-element-bg: $base-bg !default;
+
 $base-invalid-color: $base-danger !default;
 $base-invalid-color-hover: $base-danger-hover !default;
 $base-invalid-color-active: $base-danger-active !default;
 $base-invalid-color-selected: $base-danger-selected !default;
-$base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-
-$base-separator-color: $base-neutral-border-color2 !default;

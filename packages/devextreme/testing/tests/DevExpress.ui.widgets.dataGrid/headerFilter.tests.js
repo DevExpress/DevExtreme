@@ -18,6 +18,8 @@ import messageLocalization from 'localization/message';
 import dateSerialization from 'core/utils/date_serialization';
 import { ListSearchBoxWrapper } from '../../helpers/wrappers/searchBoxWrappers.js';
 
+const TREEVIEW_ITEM_CLASS = 'dx-treeview-item';
+
 function getListOrTreeView() {
     const $popupContent = this.headerFilterView.getPopupContainer().$content();
     const list = $popupContent.find('.dx-list');
@@ -778,26 +780,26 @@ QUnit.module('Header Filter', {
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
         assert.equal($popupContent.find('.dx-treeview-select-all-item').length, 1, 'has treeview select all');
         assert.equal($popupContent.find('.dx-checkbox').length, 3, 'count checkboxes');
-        assert.equal($popupContent.find('.dx-treeview-item').length, 2, 'count treeview item');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').eq(0).text(), '(Blanks)', 'empty text treeview item');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').eq(1).text(), '1986', 'text treeview item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 2, 'count treeview item');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0).text(), '(Blanks)', 'empty text treeview item');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(1).text(), '1986', 'text treeview item');
 
         // act
         $($popupContent.find('.dx-treeview-toggle-item-visibility')).trigger('dxclick'); // expanded first item
 
         // assert
         assert.equal($popupContent.find('.dx-treeview-node-container-opened').length, 1, 'treeview node container opened');
-        assert.equal($popupContent.find('.dx-treeview-item').length, 3, 'has treeview items');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').last().text(), 'January', 'text the nested treeview item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 3, 'has treeview items');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().text(), 'January', 'text the nested treeview item');
 
         // act
         $($popupContent.find('.dx-treeview-toggle-item-visibility').last()).trigger('dxclick'); // expanded nested item
 
         // assert
         assert.equal($popupContent.find('.dx-treeview-node-container-opened').length, 2, 'treeview node container opened');
-        assert.equal($popupContent.find('.dx-treeview-item').length, 5, 'has treeview items');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').eq(3).text(), '1', 'text the nested treeview item');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').eq(4).text(), '4', 'text the nested treeview item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 5, 'has treeview items');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(3).text(), '1', 'text the nested treeview item');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(4).text(), '4', 'text the nested treeview item');
     });
 
     // T274290
@@ -915,21 +917,21 @@ QUnit.module('Header Filter', {
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
-        assert.equal($popupContent.find('.dx-treeview-item').length, 1, 'count treeview item');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').text(), '1986', 'text treeview item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 1, 'count treeview item');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).text(), '1986', 'text treeview item');
 
         // act
         $($popupContent.find('.dx-treeview-toggle-item-visibility')).trigger('dxclick'); // expanded first item
 
         // assert
-        assert.equal($popupContent.find('.dx-treeview-item').length, 2, 'count treeview items');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 2, 'count treeview items');
 
         // act
         $($popupContent.find('.dx-treeview-toggle-item-visibility').last()).trigger('dxclick'); // expanded nested item
 
         // assert
-        assert.equal($popupContent.find('.dx-treeview-item').length, 4, 'count treeview items');
-        assert.ok($popupContent.find('.dx-treeview-node').last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'checked checkbox in last item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 4, 'count treeview items');
+        assert.ok($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'checked checkbox in last item');
         assert.equal($popupContent.find('.dx-checkbox-checked').length, 1, 'count checked checkboxes');
     });
 
@@ -1233,20 +1235,20 @@ QUnit.module('Header Filter', {
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
-        assert.equal($popupContent.find('.dx-treeview-item').length, 1, 'count treeview item');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').text(), '1986', 'text treeview item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 1, 'count treeview item');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).text(), '1986', 'text treeview item');
 
         // act
         $($popupContent.find('.dx-treeview-toggle-item-visibility')).trigger('dxclick'); // expanded first item
 
         // assert
-        assert.equal($popupContent.find('.dx-treeview-item').length, 3, 'count treeview items');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 3, 'count treeview items');
 
         // act
-        $($popupContent.find('.dx-treeview-node').last().children('.dx-checkbox')).trigger('dxclick'); // select second item
+        $($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().children('.dx-checkbox')).trigger('dxclick'); // select second item
 
         // assert
-        assert.ok($popupContent.find('.dx-treeview-node').last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'selected last item');
+        assert.ok($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'selected last item');
 
         // act
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
@@ -1274,8 +1276,8 @@ QUnit.module('Header Filter', {
         $($popupContent.find('.dx-treeview-toggle-item-visibility')).trigger('dxclick'); // expanded first item
 
         // assert
-        assert.equal($popupContent.find('.dx-treeview-item').length, 3, 'count treeview items');
-        assert.ok($popupContent.find('.dx-treeview-node').last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'checked checkbox in last item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 3, 'count treeview items');
+        assert.ok($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'checked checkbox in last item');
         assert.equal($popupContent.find('.dx-checkbox-checked').length, 1, 'count checked checkboxes');
     });
 
@@ -1299,20 +1301,20 @@ QUnit.module('Header Filter', {
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         assert.ok($popupContent.find('.dx-treeview').length, 'has treeview in header filter menu');
-        assert.equal($popupContent.find('.dx-treeview-item').length, 1, 'count treeview item');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').text(), '1986', 'text treeview item');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 1, 'count treeview item');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).text(), '1986', 'text treeview item');
 
         // act
         $($popupContent.find('.dx-treeview-toggle-item-visibility')).trigger('dxclick'); // expanded first item
         that.clock.tick(500);
         // assert
-        assert.equal($popupContent.find('.dx-treeview-item').length, 3, 'count treeview items');
+        assert.equal($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 3, 'count treeview items');
 
         // act
-        $($popupContent.find('.dx-treeview-node').last().children('.dx-checkbox')).trigger('dxclick'); // uncheck second item
+        $($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().children('.dx-checkbox')).trigger('dxclick'); // uncheck second item
         that.clock.tick(500);
         // assert
-        assert.ok(!$popupContent.find('.dx-treeview-node').last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'unchecked last item');
+        assert.ok(!$popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).last().children('.dx-checkbox').hasClass('dx-checkbox-checked'), 'unchecked last item');
 
         // act
         $($popupContent.parent().find('.dx-button').eq(0)).trigger('dxclick'); // OK button
@@ -1964,7 +1966,7 @@ QUnit.module('Header Filter', {
         // act
         treeView.option('searchValue', 'March');
 
-        $(treeView.$element()).find('.dx-treeview-node').eq(0).children('.dx-checkbox').trigger('dxclick');
+        $(treeView.$element()).find(`.${TREEVIEW_ITEM_CLASS}`).eq(0).children('.dx-checkbox').trigger('dxclick');
 
         // assert
         assert.notOk(treeView.$element().find('.dx-treeview-select-all-item').is(':visible'), 'selectAll is not visible');
@@ -2006,7 +2008,7 @@ QUnit.module('Header Filter', {
         treeView.option('searchValue', '1987'); // search by year
 
         // assert
-        const $itemElements = $($popupContent.find('.dx-treeview-node'));
+        const $itemElements = $($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`));
         assert.strictEqual($itemElements.length, 1, 'item count');
 
         // act
@@ -2040,7 +2042,7 @@ QUnit.module('Header Filter', {
         treeView.option('searchValue', 'April'); // search by month
 
         // assert
-        const $itemElements = $($popupContent.find('.dx-treeview-node'));
+        const $itemElements = $($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`));
         assert.strictEqual($itemElements.length, 2, 'item count');
 
         // act
@@ -3044,8 +3046,8 @@ QUnit.module('Header Filter with real columnsController', {
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
 
         // assert
-        assert.strictEqual($popupContent.find('.dx-treeview-item').length, 1, 'header items count');
-        assert.strictEqual($popupContent.find('.dx-treeview-item').eq(0).text(), '0 - 100', 'item 1 text');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).length, 1, 'header items count');
+        assert.strictEqual($popupContent.find(`.${TREEVIEW_ITEM_CLASS}`).eq(0).text(), '0 - 100', 'item 1 text');
         assert.strictEqual(loadArgs.length, 2, 'load count');
         assert.deepEqual(loadArgs[1].group, [{ selector: 'Test1', groupInterval: 100, isExpanded: true }, { selector: 'Test1', groupInterval: 10, isExpanded: false }], 'header filter load group');
         assert.deepEqual(loadArgs[1].skip, undefined, 'header filter load skip');
@@ -3429,7 +3431,7 @@ QUnit.module('Header Filter with real columnsController', {
 
 
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $treeViewItems = $popupContent.find('.dx-treeview-item');
+        $treeViewItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
 
         // assert
         assert.equal($treeViewItems.length, 3, 'count item');
@@ -3438,14 +3440,14 @@ QUnit.module('Header Filter with real columnsController', {
         assert.strictEqual($treeViewItems.eq(2).text(), '1994', 'text of the third item');
 
         $($popupContent.find('.dx-treeview-toggle-item-visibility').first()).trigger('dxclick'); // expanded first item
-        $treeViewItems = $popupContent.find('.dx-treeview-item');
+        $treeViewItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
 
         // assert
         assert.equal($treeViewItems.length, 4, 'count item');
         assert.strictEqual($treeViewItems.eq(1).text(), 'August', 'text of the second item');
 
         $($popupContent.find('.dx-treeview-toggle-item-visibility').eq(1)).trigger('dxclick'); // expanded nested item
-        $treeViewItems = $popupContent.find('.dx-treeview-item');
+        $treeViewItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
 
         // assert
         assert.equal($treeViewItems.length, 6, 'count item');
@@ -3472,7 +3474,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.find('.dx-treeview-toggle-item-visibility').eq(1)).trigger('dxclick'); // expanded nested item
 
         // assert
-        $treeViewItems = $popupContent.find('.dx-treeview-item');
+        $treeViewItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
         assert.equal($treeViewItems.length, 6, 'count item');
         assert.ok($treeViewItems.eq(3).parent().find('.dx-checkbox').hasClass('dx-checkbox-checked'), 'checkbox checked');
     });
@@ -3562,7 +3564,7 @@ QUnit.module('Header Filter with real columnsController', {
 
 
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-treeview-item');
+        $listItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
 
         assert.equal($listItems.length, 1, 'count treeview item');
         assert.strictEqual($listItems.eq(0).text(), '1992', 'text of the first item');
@@ -3570,7 +3572,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.find('.dx-treeview-toggle-item-visibility').first()).trigger('dxclick'); // expanded first item
 
         // assert
-        $listItems = $popupContent.find('.dx-treeview-item');
+        $listItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
         assert.equal($popupContent.find('.dx-treeview-node-container-opened').length, 1, 'treeview node container opened');
         assert.equal($listItems.length, 3, 'has treeview items');
         assert.strictEqual($listItems.eq(1).text(), 'Custom Text 1', 'text the nested treeview item');
@@ -3744,7 +3746,7 @@ QUnit.module('Header Filter with real columnsController', {
 
 
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-treeview-item');
+        $listItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
 
         assert.equal($listItems.length, 1, 'count treeview item');
         assert.strictEqual($listItems.eq(0).text(), '1992', 'text of the first item');
@@ -3752,7 +3754,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.find('.dx-treeview-toggle-item-visibility').first()).trigger('dxclick'); // expanded first item
 
         // assert
-        $listItems = $popupContent.find('.dx-treeview-item');
+        $listItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
         assert.equal($popupContent.find('.dx-treeview-node-container-opened').length, 1, 'treeview node container opened');
         assert.equal($listItems.length, 4, 'has treeview items');
         assert.strictEqual($listItems.eq(1).text(), 'Q1', 'text of the nested treeview item');
@@ -3834,7 +3836,7 @@ QUnit.module('Header Filter with real columnsController', {
 
 
         const $popupContent = that.headerFilterView.getPopupContainer().$content();
-        $listItems = $popupContent.find('.dx-treeview-item');
+        $listItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
 
         assert.equal($listItems.length, 2, 'count treeview item');
         assert.strictEqual($listItems.eq(0).text(), '0 - 100', 'text of the first item');
@@ -3843,7 +3845,7 @@ QUnit.module('Header Filter with real columnsController', {
         $($popupContent.find('.dx-treeview-toggle-item-visibility').first()).trigger('dxclick'); // expanded first item
 
         // assert
-        $listItems = $popupContent.find('.dx-treeview-item');
+        $listItems = $popupContent.find(`.${TREEVIEW_ITEM_CLASS}`);
         assert.equal($popupContent.find('.dx-treeview-node-container-opened').length, 1, 'treeview node container opened');
         assert.equal($listItems.length, 4, 'has treeview items');
         assert.strictEqual($listItems.eq(1).text(), '0 - 10', 'text of the nested treeview item');
@@ -4346,7 +4348,7 @@ QUnit.module('Header Filter with real columnsController', {
         }];
         this.options.dataSource = { load: spy };
         this.setupDataGrid();
-        spy.reset();
+        spy.resetHistory();
 
         // act
         this.columnOption('date', 'filterValues', [['date', '=', '2018/01/01']]);
@@ -4598,7 +4600,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(loadSpy.callCount, 1);
-        loadSpy.reset();
+        loadSpy.resetHistory();
 
         // act
         this.headerFilterController.showHeaderFilterMenu(0);
@@ -4613,7 +4615,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(loadSpy.callCount, 1);
-        loadSpy.reset();
+        loadSpy.resetHistory();
 
         // act
         const list = this.getListOrTreeView();
@@ -4626,7 +4628,7 @@ QUnit.module('Header Filter with real columnsController', {
 
         // assert
         assert.strictEqual(loadSpy.callCount, 0);
-        loadSpy.reset();
+        loadSpy.resetHistory();
     });
 
 

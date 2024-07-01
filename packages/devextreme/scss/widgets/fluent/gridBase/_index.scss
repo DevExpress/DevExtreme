@@ -45,13 +45,13 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   .dx-#{$widget-name},
   .dx-#{$widget-name}-container {
     .dx-bordered-top-view {
-      border-top-left-radius: $fluent-grid-base-border-radius;
-      border-top-right-radius: $fluent-grid-base-border-radius;
+      border-top-left-radius: $datagrid-border-radius;
+      border-top-right-radius: $datagrid-border-radius;
     }
 
     .dx-bordered-bottom-view {
-      border-bottom-left-radius: $fluent-grid-base-border-radius;
-      border-bottom-right-radius: $fluent-grid-base-border-radius;
+      border-bottom-left-radius: $datagrid-border-radius;
+      border-bottom-right-radius: $datagrid-border-radius;
     }
 
     .dx-menu {
@@ -129,7 +129,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     .dx-sort-up,
     .dx-sort-down,
     .dx-header-filter {
-      @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+      @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
     }
 
     .dx-header-filter:not(.dx-header-filter-empty) {
@@ -196,7 +196,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       }
 
       > div {
-        @include dx-icon-sizing($fluent-grid-base-header-icon-size);
+        @include dx-icon-sizing($fluent-grid-base-header-icon-size, $fluent-grid-base-header-icon-container-size);
       }
 
       > span {
@@ -267,11 +267,11 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
       padding-bottom: $fluent-grid-base-header-cell-vertical-padding;
 
       &:first-child {
-        border-top-left-radius: $fluent-grid-base-border-radius;
+        border-top-left-radius: $datagrid-border-radius;
       }
 
       &:last-child {
-        border-top-right-radius: $fluent-grid-base-border-radius;
+        border-top-right-radius: $datagrid-border-radius;
       }
     }
 
@@ -327,7 +327,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
         &.dx-editor-cell:not(.dx-command-select) {
           padding-right: 0;
-          padding-left: 0;
+
+          &:not(.dx-#{$widget-name}-cell-expandable) {
+            padding-left: 0;
+          }
         }
       }
     }
@@ -531,6 +534,12 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     &.dx-#{$widget-name}-column-chooser-mode-select {
       .dx-popup-content {
         padding: $fluent-grid-base-column-chooser-paddings;
+      }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $fluent-grid-base-treeview-select-all-item-offset;
+        }
       }
     }
 
@@ -794,18 +803,8 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
     border-bottom: $datagrid-border;
     padding: $fluent-grid-base-header-panel-padding;
 
-    .dx-apply-button {
-      @include dx-button-flat-color-styling($button-success-color, $button-success-color, $button-success-color, $button-success-text-hover-bg, $button-success-text-focused-bg, $button-success-text-active-bg);
-    }
-
     .dx-toolbar-text-auto-hide .dx-button.dx-button-has-icon {
       border-radius: $fluent-base-border-radius;
-    }
-
-    .dx-#{$widget-name}-toolbar-button {
-      .dx-icon {
-        color: $base-text-color;
-      }
     }
   }
 
@@ -938,9 +937,17 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-removed > td {
       background-color: $datagrid-row-removed-bg;
+      color: $datagrid-cell-removed-text-color;
+    }
+
+    .dx-row-removed.dx-row-lines > td {
       border-top: 1px solid $datagrid-cell-removed-border-color;
       border-bottom: 1px solid $datagrid-cell-removed-border-color;
-      color: $datagrid-cell-removed-text-color;
+    }
+
+    .dx-row-removed:not(.dx-row-lines) > td {
+      border-top: 1px solid $datagrid-hover-bg;
+      border-bottom: 1px solid $datagrid-hover-bg;
     }
 
     .dx-adaptive-detail-row {
@@ -980,7 +987,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
 
     .dx-row-focused {
       &.dx-data-row {
-        & > td:not(.dx-focused):not(.dx-cell-modified),
+        & > td:not(.dx-focused):not(.dx-cell-modified):not(.dx-#{$widget-name}-invalid),
         & .dx-command-edit .dx-link {
           background-color: $datagrid-row-focused-bg;
           color: $datagrid-row-focused-color;
@@ -990,29 +997,18 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
             color: $datagrid-row-focused-color;
           }
         }
+      }
 
-        & .dx-command-edit .dx-link:focus {
-          background-color: $datagrid-base-background-color;
-          color: $datagrid-link-color;
-        }
-
+      &:not(.dx-row-lines) {
         & > td,
-        & > tr:last-child > td {
-          border-bottom: 2px solid $datagrid-focused-border-color;
-        }
-
-        &:not(.dx-row-lines) {
-          & > td,
-          & > tr:first-child > td {
-            border-top: 1px solid $datagrid-focused-border-color;
-            border-bottom: 1px solid $datagrid-focused-border-color;
-          }
+        & > tr:first-child > td {
+          border-bottom: 1px solid $datagrid-row-focused-bg;
         }
       }
 
       &.dx-data-row.dx-edit-row {
-        & > td.dx-editor-cell:not(.dx-command-select),
-        & > tr > td.dx-editor-cell:not(.dx-command-select) {
+        & > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid),
+        & > tr > td.dx-editor-cell:not(.dx-command-select):not(.dx-#{$widget-name}-invalid) {
           background-color: $datagrid-base-background-color;
           color: $datagrid-base-color;
         }
@@ -1219,6 +1215,7 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-#{$widget-name}-filter-panel {
+    background-color: $datagrid-base-background-color;
     padding: 18px $fluent-grid-base-cell-horizontal-padding;
 
     .dx-#{$widget-name}-filter-panel-text,
@@ -1246,10 +1243,10 @@ $fluent-grid-base-group-panel-message-line-height: $fluent-button-text-line-heig
   }
 
   .dx-#{$widget-name}-dragview {
-    border-radius: $fluent-grid-base-border-radius;
+    border-radius: $datagrid-border-radius;
 
     .dx-#{$widget-name}-borders {
-      border-radius: $fluent-grid-base-border-radius;
+      border-radius: $datagrid-border-radius;
     }
   }
 }

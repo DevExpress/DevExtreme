@@ -5,24 +5,26 @@
 // adduse
 
 /**
-* $name 130. Badge text color
+* $name 140. Badge text color
 * $type color
 */
 $badge-color: null !default;
 
 /**
-* $name 140. Badge background color
+* $name 150. Badge background color
 * $type color
 */
-$badge-bg: $base-brand-bg !default;
+$badge-bg: null !default;
 
 $badge-text-color-disabled: $base-foreground-disabled !default;
-$badge-background-color-disabled: $base-neutral-background-disabled !default;
+$badge-background-color-disabled: $base-background-disabled !default;
 
 @if $mode == "light" {
+  $badge-bg: $base-accent !default;
   $badge-color: $base-inverted-text-color !default;
 }
 
 @if $mode == "dark" {
+  $badge-bg: darken(desaturate(adjust-hue($base-accent, 358.4), 8.6), 26.7) !default;
   $badge-color: $base-text-color !default;
 }

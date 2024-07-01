@@ -1,3 +1,4 @@
+"use client"
 import dxFileUploader, {
     Properties
 } from "devextreme/ui/file_uploader";

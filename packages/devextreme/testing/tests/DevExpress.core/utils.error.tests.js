@@ -41,12 +41,12 @@ const mockVersion = function(s) {
 
 QUnit.test('\'log\' method logs error on console if ID is matched to error id pattern', function(assert) {
     errors.log('E1');
-    assert.deepEqual(mockVersion(this.log[0].error), 'E1 - Error 1. See:\nhttp://js.devexpress.com/error/[VERSION]/E1');
+    assert.deepEqual(mockVersion(this.log[0].error), 'E1 - Error 1.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/[VERSION]/E1');
 });
 
 QUnit.test('\'log\' method logs warning on console if ID is matched to warning id pattern', function(assert) {
     errors.log('W1');
-    assert.deepEqual(mockVersion(this.log[0].warn), 'W1 - Warning 1. See:\nhttp://js.devexpress.com/error/[VERSION]/W1');
+    assert.deepEqual(mockVersion(this.log[0].warn), 'W1 - Warning 1.\n\nFor additional information on this warning message, see: https://js.devexpress.com/error/[VERSION]/W1');
 });
 
 QUnit.test('\'log\' method logs message on console if ID is not matched to any patterns', function(assert) {
@@ -57,7 +57,7 @@ QUnit.test('\'log\' method logs message on console if ID is not matched to any p
 QUnit.test('\'Error\' method creates Error instance', function(assert) {
     const error = errors.Error('E1');
     assert.ok(error instanceof Error);
-    assert.equal(mockVersion(error.message), 'E1 - Error 1. See:\nhttp://js.devexpress.com/error/[VERSION]/E1');
+    assert.equal(mockVersion(error.message), 'E1 - Error 1.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/[VERSION]/E1');
 });
 
 QUnit.test('\'Error\' method called with \'new\' returns Error instance', function(assert) {
@@ -73,13 +73,13 @@ QUnit.test('\'Error\' method creates Error with \'__details\' and \'__id\' prope
 
 QUnit.test('\'Error\' method create Error with no unnecessary dots', function(assert) {
     const error = errors.Error('E2');
-    assert.equal(mockVersion(error.message), 'E2 - Error 2. See:\nhttp://js.devexpress.com/error/[VERSION]/E2');
+    assert.equal(mockVersion(error.message), 'E2 - Error 2.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/[VERSION]/E2');
 });
 
 QUnit.test('\'log\' and \'error\' method support string formatting', function(assert) {
     errors.log('W2', 'Core');
-    assert.deepEqual(mockVersion(this.log[0].warn), 'W2 - Core module is not initialized. See:\nhttp://js.devexpress.com/error/[VERSION]/W2');
+    assert.deepEqual(mockVersion(this.log[0].warn), 'W2 - Core module is not initialized.\n\nFor additional information on this warning message, see: https://js.devexpress.com/error/[VERSION]/W2');
 
     const error = errors.Error('W2', 'Core');
-    assert.equal(mockVersion(error.message), 'W2 - Core module is not initialized. See:\nhttp://js.devexpress.com/error/[VERSION]/W2');
+    assert.equal(mockVersion(error.message), 'W2 - Core module is not initialized.\n\nFor additional information on this warning message, see: https://js.devexpress.com/error/[VERSION]/W2');
 });

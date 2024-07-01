@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { ClientFunction } from 'testcafe';
+import { ClientFunction, Selector } from 'testcafe';
+import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
+import { safeSizeTest } from '../../helpers/safeSizeTest';
+import { MouseUpEvents, MouseAction } from '../../helpers/mouseUpEvents';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS as DataGridClassNames } from '../../model/dataGrid';
 import { ClassNames } from '../../model/dataGrid/classNames';
 
@@ -545,6 +548,46 @@ test('The draggable element should be displayed correctly after horizontal scrol
   });
 });
 
+test.skip('Dragging with scrolling should be prevented by e.cancel (T1179555)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await dataGrid.scrollBy({ top: 10000 });
+  await t.expect(dataGrid.isReady()).ok();
+
+  await MouseUpEvents.disable(MouseAction.dragToOffset);
+
+  await t.drag(dataGrid.getDataRow(98).getDragCommand(), 0, -180, { speed: 0.01 });
+
+  await t.wait(300); // wait for scroll on drag
+  await t.expect(Selector('.dx-sortable-placeholder').visible).notOk();
+
+  await MouseUpEvents.enable(MouseAction.dragToOffset);
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    dataSource: [...new Array(100)].map((_, i) => ({
+      value1: i,
+      value2: 1000 + i,
+    })),
+    keyExpr: 'value1',
+    height: 300,
+    scrolling: {
+      mode: 'virtual',
+    },
+    rowDragging: {
+      allowDropInsideItem: true,
+      allowReordering: true,
+      onDragChange(e) {
+        const row = e.component.getVisibleRows()[e.toIndex];
+        if (row.key < 95) {
+          e.cancel = true;
+        }
+      },
+    },
+
+  });
+});
+
 // T1085143
 test('The placeholder should have correct position after dragging the row to the end when there is free space in grid and dataRowTemplate is set', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -701,5 +744,42 @@ test.skip('Item should appear in a correct spot when dragging to a different pag
       }, { dependencies: { items } }),
     },
     showBorders: true,
+  });
+});
+
+// T1179218
+safeSizeTest('Rows should appear correctly during dragging when virtual scrolling is enabled and rowDragging.dropFeedbackMode = "push"', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // drag the row down
+  await dataGrid.moveRow(0, 30, 150, true);
+  await dataGrid.moveRow(0, 30, 350);
+
+  // waiting for autoscrolling
+  await t.wait(2000);
+
+  // drag the row up
+  await dataGrid.moveRow(0, 30, 75);
+
+  await t
+    .expect(await takeScreenshot('T1179218-virtual-scrolling-dragging-row.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async (t) => {
+  await t.maximizeWindow();
+  return createWidget('dxDataGrid', {
+    height: 440,
+    keyExpr: 'id',
+    scrolling: {
+      mode: 'virtual',
+    },
+    dataSource: [...new Array(100)].fill(null).map((_, index) => ({ id: index })),
+    columns: ['id'],
+    rowDragging: {
+      allowReordering: true,
+      dropFeedbackMode: 'push',
+    },
   });
 });

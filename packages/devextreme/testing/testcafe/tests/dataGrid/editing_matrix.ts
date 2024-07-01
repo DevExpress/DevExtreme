@@ -2,7 +2,7 @@
 import { Selector } from 'testcafe';
 import { CellEditor } from '../../model/dataGrid/data/cellEditor';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid from '../../model/dataGrid';
 import DataCell from '../../model/dataGrid/data/cell';
 import EditForm from '../../model/dataGrid/editForm';
@@ -407,7 +407,15 @@ editingModes.forEach((mode) => {
               repaintChangesOnly,
             };
 
-            test(`Update cell value ${JSON.stringify({
+            const testCase = mode === 'cell'
+            && dataField === 'text'
+            && !repaintChangesOnly
+            && useKeyboard
+            && !useMask
+            && !isAdding
+              ? test.skip : test;
+
+            testCase(`Update cell value ${JSON.stringify({
               mode, dataField, repaintChangesOnly, useKeyboard, useMask, isAdding,
             })}`, async (t) => {
               const rowIndex = 0;

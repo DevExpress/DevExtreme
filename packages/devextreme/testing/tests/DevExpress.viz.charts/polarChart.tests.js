@@ -245,11 +245,11 @@ const environment = {
         this.createLayoutManager.resetHistory();
         this.createLayoutManager.restore();
 
-        trackerModule.ChartTracker.reset();
-        legendModule.Legend.reset();
-        exportModule.ExportMenu.reset();
+        trackerModule.ChartTracker.resetHistory();
+        legendModule.Legend.resetHistory();
+        exportModule.ExportMenu.resetHistory();
 
-        stubLayoutManager.layoutElements.reset();
+        stubLayoutManager.layoutElements.resetHistory();
     },
     createPolarChart: function(options) {
         const polarChart = new dxPolarChart(this.$container, options);
@@ -260,7 +260,57 @@ const environment = {
         return this.createPolarChart($.extend({}, { dataSource: [], series: {}, argumentAxis: { startAngle: 0 } }, options));
     }
 };
+QUnit.module('create Polar Chart with default configurations');
 
+QUnit.test('test if polarChart correctly labels axis and stack with default if not setted', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ type: 'stackedbar' }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.strictEqual(series.length, 1, 'count of series');
+
+    assert.strictEqual(series[0].getStackName(), 'axis_default_stack_default');
+});
+
+QUnit.test('test if polarChart correctly labels axisName without stackName', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ axis: 'axisName', type: 'stackedbar' }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.strictEqual(series.length, 1, 'count of series');
+
+    assert.strictEqual(series[0].getStackName(), 'axis_axisName_stack_default');
+});
+
+QUnit.test('test if polarChart correctly labels axisName with stackName', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ axis: 'axisName', type: 'stackedbar', stack: 'stackName' }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.strictEqual(series.length, 1, 'count of series');
+
+    assert.strictEqual(series[0].getStackName(), 'axis_axisName_stack_stackName');
+});
+
+QUnit.test('Series of PolarChart should have correct stackName when stackName is set(T1215023)', function(assert) {
+    const chart = new dxPolarChart('#chartContainer', {
+        series: [{ type: 'stackedbar', stack: 'first' },
+            { type: 'stackedbar', stack: 'second' }]
+    });
+
+    const series = chart.getAllSeries();
+
+    assert.strictEqual(series.length, 2, 'count of series');
+
+    assert.strictEqual(series[0].getStackName(), 'axis_default_stack_first');
+    assert.strictEqual(series[1].getStackName(), 'axis_default_stack_second');
+});
 QUnit.module('create Polar chart', environment);
 
 QUnit.test('create empty polar chart', function(assert) {

@@ -1,7 +1,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { appendElementTo } from '../../../helpers/domUtils';
 
 fixture.disablePageReloads`Appointment (T1080232)`

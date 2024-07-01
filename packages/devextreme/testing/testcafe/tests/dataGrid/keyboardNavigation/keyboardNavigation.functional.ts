@@ -1,7 +1,7 @@
 import { Selector, ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import CommandCell from '../../../model/dataGrid/commandCell';
 import { ClassNames } from '../../../model/dataGrid/classNames';
@@ -11,6 +11,194 @@ const CLASS = ClassNames;
 
 fixture.disablePageReloads`Keyboard Navigation - common`
   .page(url(__dirname, '../../container.html'));
+
+test('Changing keyboardNavigation options should not invalidate the entire content (T1197829)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(ClientFunction(() => (window as any).invalidateCounter)())
+    .eql(0)
+    .expect(ClientFunction(() => (window as any).renderTableCounter)())
+    .eql(2)
+    // test enter key behavior
+    .click(dataGrid.getDataCell(1, 1).element) // set initial focus
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 1).isEditCell)
+    .ok()
+    .pressKey('enter') // move focus to next cell
+    .expect(dataGrid.getDataCell(2, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(2, 1).isEditCell)
+    .notOk()
+    .pressKey('enter') // switch cell to the editing state
+    .expect(dataGrid.getDataCell(2, 1).isEditCell)
+    .ok()
+    .pressKey('enter') // move focus to next cell
+    .expect(dataGrid.getDataCell(3, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(3, 1).isEditCell)
+    .notOk()
+    .pressKey('enter') // move focus to next cell again
+    .expect(dataGrid.getDataCell(4, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(4, 1).isEditCell)
+    .notOk()
+    .pressKey('enter') // switch cell to the editing state
+    .expect(dataGrid.getDataCell(4, 1).isEditCell)
+    .ok()
+
+    // test tab key behavior
+    .click(dataGrid.getDataCell(1, 1).element) // set initial focus
+    .expect(dataGrid.getDataCell(1, 1).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(1, 1).isEditCell)
+    .ok()
+    .pressKey('tab')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok()
+    .expect(dataGrid.getDataCell(2, 0).isEditCell)
+    .ok()
+
+    .expect(ClientFunction(() => (window as any).invalidateCounter)())
+    .eql(0)
+    .expect(ClientFunction(() => (window as any).renderTableCounter)())
+    .eql(10);
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).invalidateCounter = 0;
+    (window as any).renderTableCounter = 0;
+  })();
+
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(5)].map((_, index) => ({ id: index, text: `item ${index}` })),
+    keyExpr: 'id',
+    columns: [
+      { dataField: 'id' },
+      { dataField: 'text' },
+    ],
+    focusedRowEnabled: true,
+    keyboardNavigation: {
+      editOnKeyPress: true,
+      enterKeyAction: 'startEdit',
+      enterKeyDirection: 'column',
+    },
+    editing: {
+      mode: 'cell',
+      allowUpdating: true,
+    },
+    onFocusedRowChanging(e) {
+      if ((e.newRowIndex + 1) % 2 === 0) {
+        e.component.option('keyboardNavigation.enterKeyAction', 'moveFocus');
+      } else {
+        e.component.option('keyboardNavigation.enterKeyAction', 'startEdit');
+      }
+    },
+    onInitialized(e) {
+      const dataGrid: any = e.component;
+      const rowsView = dataGrid.getView('rowsView');
+      // eslint-disable-next-line no-underscore-dangle
+      const defaultInvalidate = rowsView._invalidate;
+      // eslint-disable-next-line no-underscore-dangle
+      dataGrid.getView('rowsView')._invalidate = (...args) => {
+        ((window as any).invalidateCounter as number) += 1;
+        return defaultInvalidate.apply(rowsView, args);
+      };
+
+      // eslint-disable-next-line no-underscore-dangle
+      const defaultRenderTable = rowsView._renderTable;
+      // eslint-disable-next-line no-underscore-dangle
+      dataGrid.getView('rowsView')._renderTable = (...args) => {
+        ((window as any).renderTableCounter as number) += 1;
+        return defaultRenderTable.apply(rowsView, args);
+      };
+    },
+  });
+});
+
+test('Navigation via the Tab key should work when cellRender/cellComponent is used (T1207684)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element)
+    .pressKey('tab')
+    .expect(dataGrid.getDataCell(0, 0).isFocused)
+    .ok();
+}).before(async () => {
+  await createWidget('dxDataGrid', {
+    dataSource: [...new Array(2)].map((_, index) => ({ id: index, text: `item ${index}` })),
+    keyExpr: 'id',
+    columns: [
+      { dataField: 'id' },
+      { dataField: 'text', allowSorting: false, cellTemplate: '#test' },
+    ],
+    // @ts-expect-error private option
+    templatesRenderAsynchronously: true,
+  });
+
+  // simulating async rendering in React
+  await ClientFunction(() => {
+    const dataGrid = ($('#container') as any).dxDataGrid('instance');
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid.getView('rowsView')._templatesCache = {};
+
+    // eslint-disable-next-line no-underscore-dangle
+    dataGrid._getTemplate = () => ({
+      render(options) {
+        setTimeout(() => {
+          options.deferred?.resolve();
+        }, 100);
+      },
+    });
+
+    dataGrid.repaint();
+  })();
+});
+
+test('Next cell should be focused immediately on a single Enter key press if showEditorAlways is enabled in cell mode (T1196539)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .typeText(dataGrid.getDataCell(0, 0).element, 'test')
+    .pressKey('enter')
+    .expect(dataGrid.getDataCell(1, 0).isFocused)
+    .ok();
+
+  await t.pressKey('enter');
+
+  await takeScreenshot('cell-focus-showEditorAlways-T1196539.png', dataGrid.element);
+
+  await t.pressKey('enter')
+    .expect(dataGrid.getDataCell(2, 0).isFocused)
+    .ok();
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { name: 'Alex', phone: '555555', room: 1 },
+    { name: 'Dan', phone: '553355', room: 2 },
+    { name: 'Joe', phone: '335533', room: 3 },
+  ],
+  columns: [{
+    dataField: 'name',
+    showEditorAlways: true,
+  }, 'phone', 'room'],
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    selectTextOnEditStart: true,
+  },
+  keyboardNavigation: {
+    enterKeyAction: 'startEdit',
+    enterKeyDirection: 'column',
+  },
+  repaintChangesOnly: true,
+}));
 
 test('Cell should not highlighted after editing another cell when startEditAction: dblClick and editing.mode: batch', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -4071,7 +4259,7 @@ test('DataGrid - focusedRowIndex is -1 when the first data cell is focused with 
     visible: true,
   },
   onKeyDown(e) {
-    const eventKey = e.event.key.toLowerCase();
+    const eventKey = e.event?.key?.toLowerCase?.();
     if (eventKey === 'enter') {
       const focusedRowIndex = e.component.option('focusedRowIndex');
       ($('#otherContainer') as any).text(focusedRowIndex);
@@ -4415,4 +4603,33 @@ test('Keyboard navigation should work after opening-closing master-detal', async
   masterDetail: {
     enabled: true,
   },
+}));
+
+test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includes a DropDownButton item (T1225005)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .click(dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(1).element)
+    .pressKey('tab')
+
+    .expect(dataGrid.getFocusOverlay().exists)
+    .ok();
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(1, 2),
+  toolbar: {
+    items: [
+      {
+        widget: 'dxDropDownButton',
+        location: 'before',
+        options: {
+          text: 'Clear Batch',
+          items: [
+            { text: 'Delete All Lines' },
+            { text: 'Zero All Values' },
+          ],
+        },
+      },
+    ],
+  },
+  keyExpr: 'field_0',
+  showBorders: true,
 }));

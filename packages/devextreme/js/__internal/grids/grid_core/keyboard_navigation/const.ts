@@ -38,7 +38,7 @@ export const INTERACTIVE_ELEMENTS_SELECTOR = `
   select:not([disabled]),
   button:not([disabled]),
   [tabindex]:not([disabled]),
-  .dx-checkbox:not([disabled])
+  .dx-checkbox:not([disabled],.dx-state-readonly)
 `;
 export const NON_FOCUSABLE_ELEMENTS_SELECTOR = `${INTERACTIVE_ELEMENTS_SELECTOR}, .dx-dropdowneditor-icon`;
 

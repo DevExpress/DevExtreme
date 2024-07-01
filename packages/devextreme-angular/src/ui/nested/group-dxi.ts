@@ -16,7 +16,7 @@ import {
 
 
 import DevExpress from 'devextreme/bundles/dx.all';
-import { DiagramCommand, DiagramShapeCategory, DiagramShapeType, DiagramToolboxDisplayMode } from 'devextreme/ui/diagram';
+import { Command, ShapeCategory, ShapeType, ToolboxDisplayMode } from 'devextreme/ui/diagram';
 
 import {
     NestedOptionHost,
@@ -33,10 +33,10 @@ import { DxiCommandComponent } from './command-dxi';
 })
 export class DxiGroupComponent extends CollectionNestedOption {
     @Input()
-    get commands(): Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand> {
+    get commands(): Array<Command | DevExpress.ui.dxDiagram.CustomCommand> {
         return this._getOption('commands');
     }
-    set commands(value: Array<DiagramCommand | DevExpress.ui.dxDiagramCustomCommand>) {
+    set commands(value: Array<Command | DevExpress.ui.dxDiagram.CustomCommand>) {
         this._setOption('commands', value);
     }
 
@@ -49,18 +49,18 @@ export class DxiGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get category(): DiagramShapeCategory | string {
+    get category(): ShapeCategory | string {
         return this._getOption('category');
     }
-    set category(value: DiagramShapeCategory | string) {
+    set category(value: ShapeCategory | string) {
         this._setOption('category', value);
     }
 
     @Input()
-    get displayMode(): DiagramToolboxDisplayMode {
+    get displayMode(): ToolboxDisplayMode {
         return this._getOption('displayMode');
     }
-    set displayMode(value: DiagramToolboxDisplayMode) {
+    set displayMode(value: ToolboxDisplayMode) {
         this._setOption('displayMode', value);
     }
 
@@ -73,10 +73,10 @@ export class DxiGroupComponent extends CollectionNestedOption {
     }
 
     @Input()
-    get shapes(): Array<DiagramShapeType | string> {
+    get shapes(): Array<ShapeType | string> {
         return this._getOption('shapes');
     }
-    set shapes(value: Array<DiagramShapeType | string>) {
+    set shapes(value: Array<ShapeType | string>) {
         this._setOption('shapes', value);
     }
 

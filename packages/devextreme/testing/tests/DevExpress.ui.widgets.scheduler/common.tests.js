@@ -706,6 +706,13 @@ QUnit.module('View with configuration', {
             endDate: new Date(2015, 5, 4, 23)
         });
 
+        assert.ok(!result, 'Appointment doesn\'t takes all day');
+
+        result = scheduler.instance.appointmentTakesAllDay({
+            startDate: new Date(2015, 5, 4, 7),
+            endDate: new Date(2015, 5, 5, 7)
+        });
+
         assert.ok(result, 'Appointment takes all day');
     });
 

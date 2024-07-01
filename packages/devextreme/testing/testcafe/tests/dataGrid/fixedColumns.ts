@@ -1,7 +1,7 @@
 import { ClientFunction } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { safeSizeTest } from '../../helpers/safeSizeTest';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import url from '../../helpers/getPageUrl';
 import DataGrid from '../../model/dataGrid';
 import { makeRowsViewTemplatesAsync } from './helpers/asyncTemplates';
@@ -322,3 +322,41 @@ test.skip('Hovering over a row should work correctly after scrolling when there 
 
   await makeRowsViewTemplatesAsync(DATA_GRID_SELECTOR, 100);
 });
+
+// T1193153
+safeSizeTest('The grid layout should be correct after resizing the window when there are fixed and band columns', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  // assert
+  await t
+    .expect(dataGrid.isReady())
+    .ok();
+
+  // act
+  await takeScreenshot('T1193153-layout-with-fixed-and-band-columns-1.png', dataGrid.element);
+  await t.resizeWindow(400, 400);
+  await takeScreenshot('T1193153-layout-with-fixed-and-band-columns-2.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}, [800, 800]).before(async () => createWidget('dxDataGrid', {
+  columnAutoWidth: true,
+  dataSource: [{}],
+  columns: [{
+    caption: 'Fixed column',
+    fixed: true,
+    columns: [{
+      caption: 'Banded column',
+      width: 150,
+    }],
+  }, {
+    caption: 'Default column',
+  }, {
+    type: 'buttons',
+    width: 50,
+  }],
+}));

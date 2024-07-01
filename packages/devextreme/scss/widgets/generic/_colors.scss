@@ -86,13 +86,13 @@ $typography-color: null !default;
 $typography-link-color: null !default;
 
 /**
-* $name 80. Hovered state text color
+* $name 80. Hover state text color
 * $type color
 */
 $base-hover-color: null !default;
 
 /**
-* $name 90. Hovered state background color
+* $name 90. Hover state background color
 * $type color
 */
 $base-hover-bg: null !default;
@@ -128,17 +128,6 @@ $base-invalid-color: null !default;
 $base-invalid-faded-border-color: null !default;
 $base-header-color: null !default;
 
-/**
-* $name 70. Border radius
-* $type text
-*/
-$base-border-radius-small: null !default;
-
-/**
-* $name 30. Border radius
-* $type text
-*/
-$base-border-radius-large: null !default;
 $scrollview-pulldown-path: null !default;
 $base-default: null !default;
 $base-info: null !default;
@@ -183,8 +172,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
   $base-header-color: #627789 !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/carmine/pulldown.png') !default;
 }
@@ -251,8 +238,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/dark/pulldown.png') !default;
 }
@@ -290,8 +275,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
   $screen-text-color: extcolor.screen($base-bg, #686868) !default;
   $base-grid-selected-border-color: #45c7de !default;
 
@@ -333,8 +316,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/darkviolet/pulldown.png') !default;
 }
@@ -370,8 +351,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/greenmist/pulldown.png') !default;
 }
@@ -407,8 +386,6 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/light/pulldown.png') !default;
 }
@@ -449,9 +426,10 @@ $base-grid-selectedrow-border-color: null !default;
   $base-dropdown-shadow-color: color.change($base-shadow-color, $alpha: 0.175) !default;
   $base-invalid-color: $base-danger !default;
   $base-invalid-faded-border-color: color.change($base-invalid-color, $alpha: 0.4) !default;
-  $base-border-radius-small: $base-border-radius - 1px !default;
-  $base-border-radius-large: $base-border-radius + 2px !default;
 
   $scrollview-pulldown-path: data-uri('images/widgets/generic/color-schemes/softblue/pulldown.png') !default;
 }
+
+$base-border-radius-small: $base-border-radius - 1px !default;
+$base-border-radius-large: $base-border-radius + 2px !default;
 

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import { TextEditorLabel } from 'ui/text_box/ui.text_editor.label';
+import { TextEditorLabel } from '__internal/ui/text_box/m_text_editor.label';
 import { getWidth } from 'core/utils/size';
 
 const TEXTEDITOR_LABEL_CLASS = 'dx-texteditor-label';
@@ -19,14 +19,15 @@ QUnit.testStart(function() {
 
 QUnit.module('textEditorLabel', {
     beforeEach: function() {
+        this.spy = sinon.spy();
         this.$editor = $('#textEditor');
         this.labelInitialConfig = {
             $editor: this.$editor,
             text: 'Label',
             mark: '*',
             mode: 'static',
-            beforeWidth: 7,
-            containerWidth: 180,
+            getBeforeWidth: () => 7,
+            getContainerWidth: () => 180,
             containsButtonsBefore: false
         };
         this.init = (options) => {
@@ -70,13 +71,13 @@ QUnit.module('textEditorLabel', {
         QUnit.test('label before element should have width equal to beforeWidth prop', function(assert) {
             const beforeWidth = getWidth(this.getBeforeElement());
 
-            assert.strictEqual(beforeWidth, this.labelInitialConfig.beforeWidth, 'before element width is correct');
+            assert.strictEqual(beforeWidth, this.labelInitialConfig.getBeforeWidth(), 'before element width is correct');
         });
 
         QUnit.test('label internal element should have max-width equal to containerWidth prop', function(assert) {
             const labelWidth = Number.parseInt(this.getLabelElement().css('maxWidth'), 10);
 
-            assert.strictEqual(labelWidth, this.labelInitialConfig.containerWidth, 'label internal element width is correct');
+            assert.strictEqual(labelWidth, this.labelInitialConfig.getContainerWidth(), 'label internal element width is correct');
         });
 
         QUnit.module('markup visibility', function(assert) {
@@ -90,6 +91,95 @@ QUnit.module('textEditorLabel', {
                 this.reinit({ text: '' });
 
                 assert.notOk(this.$editor.find(LABEL_SELECTOR).length, 'markup is detached');
+            });
+        });
+    });
+
+    QUnit.module('Outside labelMode', () => {
+        ['init', 'runtime'].forEach((scenario) => {
+            [
+                {
+                    eventName: 'dxclick',
+                    handlerName: 'onClickHandler',
+                },
+                {
+                    eventName: 'dxhoverstart',
+                    handlerName: 'onHoverHandler',
+                },
+                {
+                    eventName: 'dxactive',
+                    handlerName: 'onActiveHandler',
+                }
+            ].forEach(({ eventName, handlerName }) => {
+                QUnit.test(`${handlerName} should be called on label ${eventName} when mode is set to "outside" on ${scenario}`, function(assert) {
+                    const setOnInit = scenario === 'init';
+                    this.reinit({
+                        [handlerName]: this.spy,
+                        mode: setOnInit ? 'outside' : 'static',
+                    });
+
+                    if(!setOnInit) {
+                        this.label.updateMode('outside');
+                    }
+                    $(this.getSpan()).trigger(eventName);
+
+                    assert.strictEqual(this.spy.callCount, 1, `${handlerName} was called`);
+                });
+            });
+
+            QUnit.test(`onClickHandler should not be called on label with empty text click when mode is set to "outside" on ${scenario}`, function(assert) {
+                const setOnInit = scenario === 'init';
+                this.reinit({
+                    onClickHandler: this.spy,
+                    mode: setOnInit ? 'outside' : 'static',
+                    text: '',
+                });
+
+                if(!setOnInit) {
+                    this.label.updateMode('outside');
+                }
+                $(this.getSpan()).trigger('dxclick');
+
+                assert.strictEqual(this.spy.callCount, 0, 'onClick handler was not called on label click');
+            });
+
+            QUnit.test(`label should have tranform styles when "outside" mode is set on ${scenario}`, function(assert) {
+                const setOnInit = scenario === 'init';
+                this.reinit({
+                    mode: setOnInit ? 'outside' : 'static',
+                });
+
+                if(!setOnInit) {
+                    this.label.updateMode('outside');
+                }
+                const transformStyles = $(this.getSpan()).css('transform');
+
+                assert.ok(transformStyles, 'transform inline styles are set');
+            });
+        });
+
+        QUnit.test('label should not have tranform styles when "outside" mode is disabled on runtime', function(assert) {
+            this.reinit({
+                mode: 'outside',
+            });
+
+            this.label.updateMode('static');
+            const transformStyles = $(this.getSpan()).css('transform');
+
+            assert.strictEqual(transformStyles, 'none', 'transform inline style are not set');
+        });
+
+        [false, true].forEach((rtlEnabled) => {
+            QUnit.test(`label transform translateX should be ${rtlEnabled ? 'positive' : 'negative'} (rtlEnabled=${rtlEnabled})`, function(assert) {
+                this.reinit({
+                    mode: 'outside',
+                    rtlEnabled,
+                });
+
+                const transformStyles = $(this.getSpan()).css('transform');
+                const translateX = transformStyles.split(',')[4].trim();
+
+                assert.ok(rtlEnabled ? translateX > 0 : translateX < 0);
             });
         });
     });

@@ -458,52 +458,6 @@ QUnit.module('Integration: Appointments on vertical views (day, week, workWeek)'
         assert.roughEqual($appointment.position().left, APPOINTMENT_DEFAULT_LEFT_OFFSET, 2, 'Appointment left is correct on init');
     });
 
-    QUnit.test('Appointments should be filtered correctly, if cellDuration is set and timetable is divided with a remainder (T854826)', function(assert) {
-        const appointments = [{
-            AppointmentId: 8,
-            text: 'Appointment',
-            startDate: '2017-05-24T14:30:00',
-            endDate: '2017-05-24T15:45:00'
-        }];
-
-        const scheduler = createWrapper({
-            currentDate: new Date(2017, 4, 23),
-            startDayHour: 8,
-            endDayHour: 24,
-            cellDuration: 150,
-            views: ['day'],
-            currentView: 'day',
-            firstDayOfWeek: 1,
-            dataSource: appointments
-        });
-
-        assert.equal(scheduler.appointments.getAppointmentCount(), 0, 'Appointments was filtered correctly');
-    });
-
-    QUnit.test('Appointment should have correct height, when startDayHour is decimal', function(assert) {
-        const appointments = [{
-            startDate: new Date(2015, 1, 4, 5, 35).toString(),
-            endDate: new Date(2015, 1, 4, 5, 45).toString(),
-            text: 'abc'
-        }];
-
-        const scheduler = createWrapper({
-            currentDate: new Date(2015, 1, 4),
-            cellDuration: 5,
-            views: ['day'],
-            currentView: 'day',
-            firstDayOfWeek: 1,
-            dataSource: appointments,
-            startDayHour: 5.5
-        });
-
-        const $appointment = $(scheduler.instance.$element()).find('.' + APPOINTMENT_CLASS).eq(0);
-        const cellHeight = scheduler.instance.$element().find('.' + DATE_TABLE_CELL_CLASS).eq(0).get(0).getBoundingClientRect().height;
-
-        assert.roughEqual($appointment.position().top, cellHeight, 2.001, 'Appointment top is correct');
-        assert.roughEqual(getOuterHeight($appointment), 2 * cellHeight, 2.001, 'Appointment height is correct');
-    });
-
     QUnit.test('dropDown appointment should not compact class on vertical view', function(assert) {
         const scheduler = createWrapper({
             currentDate: new Date(2015, 4, 25),

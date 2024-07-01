@@ -46,9 +46,9 @@
     font-weight: $fluent-datagrid-grouppanel-item-font-weight;
     font-size: $fluent-grid-base-header-cell-font-size;
     line-height: $fluent-grid-base-header-line-height;
-    background: $base-neutral-background4;
-    border-radius: 16px;
-    padding: 8px 10px;
+    background: $fluent-datagrid-grouppanel-item-bg;
+    border-radius: $area-field-border-radius;
+    padding: $area-field-top-bottom-padding 10px;
     border-width: 1px;
     border-style: solid;
     border-color: $base-border-color-disabled;

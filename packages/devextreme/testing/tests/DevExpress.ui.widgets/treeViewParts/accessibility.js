@@ -1,9 +1,11 @@
 import $ from 'jquery';
-import TreeView from 'ui/tree_view/ui.tree_view.search';
+import TreeView from 'ui/tree_view';
 import ariaAccessibilityTestHelper from '../../../helpers/ariaAccessibilityTestHelper.js';
 import eventsEngine from 'events/core/events_engine';
 
 const { module, test } = QUnit;
+
+const CHECK_BOX_CLASS = 'dx-checkbox';
 
 let helper;
 [true, false].forEach((searchEnabled) => {
@@ -146,14 +148,15 @@ let helper;
         test('Selected: [], selectionMode: "single", click checkbox ["Item_1"] -> ["Item_1_1"]', function() {
             helper.createWidget({ items: this.items, selectionMode: 'single' });
 
-            eventsEngine.trigger(helper.getItems().eq(0).prev(), 'dxclick');
-            eventsEngine.trigger(helper.getItems().eq(0).prev(), 'dxpointerdown');
+            eventsEngine.trigger(helper.getItems().eq(0).find(`.${CHECK_BOX_CLASS}`), 'dxclick');
+            eventsEngine.trigger(helper.getItems().eq(0).find(`.${CHECK_BOX_CLASS}`), 'dxpointerdown');
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
+
             helper.checkItemsAttributes([0], { focusedNodeIndex: 0, });
 
-            eventsEngine.trigger(helper.getItems().eq(1).prev(), 'dxclick');
-            eventsEngine.trigger(helper.getItems().eq(1).prev(), 'dxpointerdown');
+            eventsEngine.trigger(helper.getItems().eq(1).find(`.${CHECK_BOX_CLASS}`), 'dxclick');
+            eventsEngine.trigger(helper.getItems().eq(1).find(`.${CHECK_BOX_CLASS}`), 'dxpointerdown');
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([1], { focusedNodeIndex: 1, });
@@ -162,14 +165,15 @@ let helper;
         test('Selected: [], selectionMode: "multiple", selectNodesRecursive: true, click checkbox ["Item_1"] -> ["Item_1_1"]', function() {
             helper.createWidget({ items: this.items, selectionMode: 'multiple', selectNodesRecursive: true });
 
-            eventsEngine.trigger(helper.getItems().eq(0).prev(), 'dxclick');
-            eventsEngine.trigger(helper.getItems().eq(0).prev(), 'dxpointerdown');
+            eventsEngine.trigger(helper.getItems().eq(0).find(`.${CHECK_BOX_CLASS}`), 'dxclick');
+            eventsEngine.trigger(helper.getItems().eq(0).find(`.${CHECK_BOX_CLASS}`), 'dxpointerdown');
+
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0, 1, 2], { focusedNodeIndex: 0, });
 
-            eventsEngine.trigger(helper.getItems().eq(1).prev(), 'dxclick');
-            eventsEngine.trigger(helper.getItems().eq(1).prev(), 'dxpointerdown');
+            eventsEngine.trigger(helper.getItems().eq(1).find(`.${CHECK_BOX_CLASS}`), 'dxclick');
+            eventsEngine.trigger(helper.getItems().eq(1).find(`.${CHECK_BOX_CLASS}`), 'dxpointerdown');
             helper.checkAttributes(searchEnabled ? helper.$itemContainer : helper.$widget, { role: 'tree', 'aria-activedescendant': helper.focusedItemId, tabindex: '0' });
             helper.checkAttributes(searchEnabled ? helper.$widget : helper.widget._itemContainer(true), { });
             helper.checkItemsAttributes([0, 2], { focusedNodeIndex: 1, selectionMode: 'multiple' });

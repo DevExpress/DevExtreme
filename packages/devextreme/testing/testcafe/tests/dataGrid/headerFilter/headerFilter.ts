@@ -1,6 +1,6 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import DataGrid from '../../../model/dataGrid';
 import HeaderFilter from '../../../model/dataGrid/headers/headerFilter';
 import { getData } from '../helpers/generateDataSourceData';
@@ -9,6 +9,39 @@ fixture.disablePageReloads`Header Filter`
   .page(url(__dirname, '../../container.html'));
 
 const GRID_CONTAINER = '#container';
+
+test('HeaderFilter icon should be grayed out after the clearFilter call (T1193648)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+
+  // act
+  await dataGrid.apiClearFilter();
+
+  // assert
+  await t
+    .expect(await takeScreenshot('header-filter-icon-clear-filter.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    Name: 'A',
+  }, {
+    ID: 2,
+    Name: 'B',
+  }],
+  keyExpr: 'ID',
+  showBorders: true,
+  headerFilter: { visible: true },
+  filterRow: { visible: true },
+  columns: [{
+    dataField: 'Name',
+    filterValues: ['A'],
+    filterValue: 'A',
+  }],
+  height: 140,
+}));
 
 test('The header filter should fit inside the viewport if the grid is scrolled horizontally (T1156848)', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
@@ -99,4 +132,39 @@ test('Should correctly change values (T1161941)', async (t) => {
     visible: true,
   },
   columns: ['Name', 'Amount'],
+}));
+
+test('Header filter should support string height and width', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const firstFilterIcon = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(0).getFilterIcon();
+  const thirdFilterIcon = dataGrid.getHeaders().getHeaderRow(0).getHeaderCell(2).getFilterIcon();
+
+  await t
+    .click(firstFilterIcon)
+    .expect(new HeaderFilter().getContent().getStyleProperty('height'))
+    .eql('400px')
+    .expect(new HeaderFilter().getContent().getStyleProperty('width'))
+    .eql('330px')
+    .click(thirdFilterIcon)
+    .expect(new HeaderFilter().getContent().getStyleProperty('height'))
+    .eql('450px')
+    .expect(new HeaderFilter().getContent().getStyleProperty('width'))
+    .eql('380px');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [],
+  columns: [
+    'field1', 'field2', {
+      dataField: 'field3',
+      headerFilter: {
+        height: '450px',
+        width: '380px',
+      },
+    },
+  ],
+  width: 700,
+  headerFilter: {
+    visible: true,
+    height: '400px',
+    width: '330px',
+  },
 }));

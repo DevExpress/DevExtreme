@@ -10,6 +10,7 @@ on:
     branches: [23_2]
 
 env:
+  NX_CLOUD_ACCESS_TOKEN: ${{ secrets.NX_TOKEN }}
   NX_SKIP_NX_CACHE: ${{ (github.event_name != 'pull_request' || contains( github.event.pull_request.labels.*.name, 'skip-cache')) && 'true' || 'false' }}
 
 jobs:
@@ -28,7 +29,7 @@ jobs:
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3
@@ -62,6 +63,9 @@ jobs:
       fail-fast: false
       matrix:
         ARGS: [
+          { componentFolder: "accessibility", name: "accessibility" },
+          { componentFolder: "accessibility", name: "accessibility - material", theme: 'material.blue.light' },
+          { componentFolder: "accessibility", name: "accessibility - fluent", theme: 'fluent.blue.light' },
           { componentFolder: "common", name: "common" },
           { componentFolder: "common", name: "common - material", theme: 'material.blue.light' },
           { componentFolder: "common", name: "common - fluent", theme: 'fluent.blue.light' },
@@ -70,11 +74,14 @@ jobs:
           { componentFolder: "dataGrid", name: "dataGrid (2/2)", indices: "2/2" },
           { componentFolder: "pivotGrid", name: "pivotGrid", concurrency: 1 },
           { componentFolder: "pivotGrid", name: "pivotGrid - material", theme: 'material.blue.light', concurrency: 1 },
+          { componentFolder: "pivotGrid", name: "pivotGrid - fluent", theme: 'fluent.blue.light', concurrency: 1 },
           { componentFolder: "scheduler", name: "scheduler (1/5)", indices: "1/5" },
           { componentFolder: "scheduler", name: "scheduler (2/5)", indices: "2/5" },
           { componentFolder: "scheduler", name: "scheduler (3/5)", indices: "3/5" },
           { componentFolder: "scheduler", name: "scheduler (4/5)", indices: "4/5" },
           { componentFolder: "scheduler", name: "scheduler (5/5)", indices: "5/5" },
+          { componentFolder: "scheduler/timezones", name: "scheduler (Europe/Berlin)", timezone: "Europe/Berlin" },
+          { componentFolder: "scheduler/timezones", name: "scheduler (America/Los_Angeles)", timezone: "America/Los_Angeles" },
           { componentFolder: "form", name: "form (1/2)", indices: "1/2" },
           { componentFolder: "form", name: "form (2/2)", indices: "2/2" },
           { componentFolder: "form", name: "form - material (1/2)", theme: 'material.blue.light', indices: "1/2" },
@@ -93,23 +100,34 @@ jobs:
           { componentFolder: "navigation", name: "navigation" },
           { componentFolder: "navigation", name: "navigation - material", theme: 'material.blue.light' },
           { componentFolder: "navigation", name: "navigation - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "fileManager", name: "fileManager" },
+          { componentFolder: "fileManager", name: "fileManager - material", theme: 'material.blue.light' },
+          { componentFolder: "fileManager", name: "fileManager - fluent", theme: 'fluent.blue.light' },
+          { componentFolder: "filterBuilder", name: "filterBuilder" },
+          { componentFolder: "filterBuilder", name: "filterBuilder - material", theme: 'material.blue.light' },
+          { componentFolder: "filterBuilder", name: "filterBuilder - fluent", theme: 'fluent.blue.light' },
         ]
     runs-on: devextreme-shr2
     timeout-minutes: 90
 
     steps:
+    - name: Set machine timezone
+      run: |
+        sudo ln -sf "/usr/share/zoneinfo/$([ "${{ matrix.ARGS.timezone }}" != "" ] && echo "${{ matrix.ARGS.timezone }}" || echo "GMT")" /etc/localtime
+        date
+
     - name: Get sources
       uses: actions/checkout@v4
 
     - name: Setup Chrome
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '118.0.5993.70'
+        chrome-version: '120.0.6099.71'
 
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3

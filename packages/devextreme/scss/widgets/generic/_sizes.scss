@@ -68,3 +68,5 @@ $generic-base-inline-borderedwidget-horizontal-padding:
 $generic-base-inline-borderedwidget-bottom-padding:
   $generic-base-inline-widget-bottom-padding -
   $generic-base-border-width !default;
+
+$generic-treeview-search-editor-height: round($generic-base-line-height * $generic-base-font-size) + $generic-base-inline-borderedwidget-top-padding + $generic-base-inline-borderedwidget-bottom-padding + 2 * $generic-base-border-width;

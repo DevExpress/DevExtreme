@@ -1,3 +1,4 @@
+"use client"
 import dxDraggable, {
     Properties
 } from "devextreme/ui/draggable";

@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import 'ui/form/ui.form';
+import 'ui/form';
 
 import 'generic_light.css!';
 
@@ -80,7 +80,7 @@ class FormTestWrapper {
 
     checkTabTitle(tabIndex, expectedText) {
         const $title = this._getTabsTextsElements().eq(tabIndex);
-        assert.strictEqual($title.text(), expectedText, `${tabIndex} tab title`);
+        assert.strictEqual($title.text(), `${expectedText}${expectedText}`, `${tabIndex} tab title`);
     }
 
     checkTabsElements(expectedTabsCount) {

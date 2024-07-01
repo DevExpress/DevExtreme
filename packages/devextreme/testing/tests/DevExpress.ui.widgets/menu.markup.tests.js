@@ -1,8 +1,8 @@
 import $ from 'jquery';
 import fx from 'animation/fx';
 
-import Menu from 'ui/menu/ui.menu';
-import 'ui/menu/ui.submenu';
+import Menu from '__internal/ui/menu/m_menu';
+import '__internal/ui/menu/m_submenu';
 
 import ariaAccessibilityTestHelper from '../../helpers/ariaAccessibilityTestHelper.js';
 
@@ -75,19 +75,9 @@ QUnit.module('Menu rendering', {
         assert.equal(root.length, 0, 'no root');
     });
 
-    QUnit.test('Menu icon image should have alt attribute with item text if it specified', function(assert) {
+    QUnit.test('Menu icon image should have alt attribute with "dxMenu item icon" text', function(assert) {
         const menu = createMenu({
             items: [{ text: 'Item text', icon: 'some_icon.jpg' }]
-        });
-
-        const $icon = menu.element.find(`.${MENU_ITEM_CLASS} .${ICON_CLASS}`);
-
-        assert.strictEqual($icon.attr('alt'), 'Item text');
-    });
-
-    QUnit.test('Menu icon image should have alt attribute with "dxMenu item icon" if item text is not specified', function(assert) {
-        const menu = createMenu({
-            items: [{ icon: 'some_icon.jpg' }]
         });
 
         const $icon = menu.element.find(`.${MENU_ITEM_CLASS} .${ICON_CLASS}`);

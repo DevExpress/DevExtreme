@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import 'ui/html_editor';
 
-import { getFormatHandlers } from 'ui/html_editor/utils/toolbar_helper';
+import { getFormatHandlers } from '__internal/ui/html_editor/utils/m_toolbar_helper';
 
 const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';

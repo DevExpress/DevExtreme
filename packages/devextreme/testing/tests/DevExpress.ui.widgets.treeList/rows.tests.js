@@ -14,6 +14,7 @@ import 'generic_light.css!';
 import 'ui/tree_list/ui.tree_list';
 import $ from 'jquery';
 import fx from 'animation/fx';
+import { noop } from 'core/utils/common';
 import { setupTreeListModules, MockColumnsController, MockDataController } from '../../helpers/treeListMocks.js';
 
 fx.off = true;
@@ -224,6 +225,47 @@ QUnit.module('Expand/Collapse rows', {
 
         // assert
         assert.equal($testElement.find('tbody > .dx-data-row').length, 1, 'count data row');
+    });
+
+    // T1196383
+    QUnit.test('Watchers should be destroyed after rows are repainted when repaintChangesOnly is enabled', function(assert) {
+        // arrange
+        const disposeFuncs = [];
+        const $testElement = $('#treeList');
+
+        this.options.repaintChangesOnly = true;
+
+        this.setupTreeList();
+
+        sinon.stub(this.rowsView, '_addWatchMethod').callsFake((options, row) => {
+            const source = row || options;
+
+            source.watch = () => {
+                disposeFuncs.push(sinon.spy());
+
+                return disposeFuncs[disposeFuncs.length - 1];
+            };
+            source.update = noop;
+
+            if(source !== options) {
+                options.watch = source.watch.bind(source);
+            }
+        });
+
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.strictEqual(disposeFuncs.length, 2, 'count dispose function');
+        assert.notOk(disposeFuncs.some((dispose) => dispose.called), 'dispose functions were not called');
+
+        // arrange
+        const prevDisposeFuncs = disposeFuncs.slice();
+
+        // act
+        this.rowsView.render($testElement);
+
+        // assert
+        assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
     });
 });
 

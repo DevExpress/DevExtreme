@@ -6,7 +6,6 @@
 @use "../sizes" as *;
 @use "../../base/form";
 @use "../../base/icons" as *;
-@use "../textEditor/sizes" as *;
 
 // adduse
 @use "../scrollable";
@@ -50,8 +49,7 @@
   }
 
   .dx-tabpanel .dx-multiview-item-content {
-    padding-left: 0;
-    padding-right: 0;
+    padding: $fluent-form-layout-manager-tabpanel-content-padding;
   }
 }
 
@@ -70,17 +68,6 @@
 
   .dx-switch {
     vertical-align: middle;
-  }
-
-  &.dx-label-v-align {
-    .dx-invalid-message > .dx-overlay-wrapper,
-    .dx-invalid-message > .dx-overlay-content {
-      transform: translate(0, 0) !important; // stylelint-disable-line declaration-no-important
-    }
-  }
-
-  .dx-toggle-controls-paddings {
-    padding-inline-start: $fluent-filled-texteditor-input-horizontal-padding;
   }
 }
 

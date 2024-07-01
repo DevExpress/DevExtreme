@@ -1,7 +1,12 @@
 import dateUtils from '@js/core/utils/date';
-import { getGroupPanelData } from '@js/renovation/ui/scheduler/view_model/group_panel/utils';
-import { calculateIsGroupedAllDayPanel } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
-import { isGroupingByDate, isHorizontalGroupingApplied, isVerticalGroupingApplied } from '@js/renovation/ui/scheduler/workspaces/utils';
+import { dateUtilsTs } from '@ts/core/utils/date';
+import type { ViewCellData, ViewType } from '@ts/scheduler/r1/types';
+import {
+  calculateIsGroupedAllDayPanel,
+  getGroupPanelData, isGroupingByDate,
+  isHorizontalGroupingApplied, isHorizontalView,
+  isVerticalGroupingApplied,
+} from '@ts/scheduler/r1/utils/index';
 
 import timeZoneUtils from '../../m_utils_time_zone';
 import { DateHeaderDataGenerator } from './m_date_header_data_generator';
@@ -9,6 +14,7 @@ import { GroupedDataMapProvider } from './m_grouped_data_map_provider';
 import { TimePanelDataGenerator } from './m_time_panel_data_generator';
 import { getViewDataGeneratorByViewType } from './m_utils';
 
+// TODO: Vinogradov types refactoring.
 export default class ViewDataProvider {
   viewDataGenerator: any;
 
@@ -20,7 +26,7 @@ export default class ViewDataProvider {
 
   viewDataMap: any;
 
-  _groupedDataMapProvider: any;
+  _groupedDataMapProvider!: GroupedDataMapProvider;
 
   _options: any;
 
@@ -32,13 +38,13 @@ export default class ViewDataProvider {
 
   viewDataMapWithSelection: any;
 
-  constructor(viewType) {
+  constructor(public readonly viewType: ViewType) {
     this.viewDataGenerator = getViewDataGeneratorByViewType(viewType);
     this.viewData = {};
     this.completeViewDataMap = [];
     this.completeDateHeaderMap = [];
     this.viewDataMap = {};
-    this._groupedDataMapProvider = null;
+    this._groupedDataMapProvider = null as unknown as GroupedDataMapProvider;
   }
 
   get groupedDataMap() { return this._groupedDataMapProvider.groupedDataMap; }
@@ -79,6 +85,7 @@ export default class ViewDataProvider {
       {
         isVerticalGrouping: renderOptions.isVerticalGrouping,
         viewType: renderOptions.viewType,
+        viewOffset: options.viewOffset,
       },
     );
 
@@ -123,6 +130,7 @@ export default class ViewDataProvider {
       groupOrientation,
       groupByDate,
       isAllDayPanelVisible,
+      viewOffset,
       ...restOptions
     } = renderOptions;
 
@@ -136,6 +144,7 @@ export default class ViewDataProvider {
       groups,
       groupOrientation,
       isAllDayPanelVisible,
+      viewOffset,
     };
   }
 
@@ -166,12 +175,12 @@ export default class ViewDataProvider {
     return this._groupedDataMapProvider.findGroupCellStartDate(groupIndex, startDate, endDate, isFindByDate);
   }
 
-  findAllDayGroupCellStartDate(groupIndex, startDate) {
-    return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex, startDate);
+  findAllDayGroupCellStartDate(groupIndex: number): Date | null {
+    return this._groupedDataMapProvider.findAllDayGroupCellStartDate(groupIndex);
   }
 
-  findCellPositionInMap(cellInfo) {
-    return this._groupedDataMapProvider.findCellPositionInMap(cellInfo);
+  findCellPositionInMap(cellInfo: any, isAppointmentRender = false): any {
+    return this._groupedDataMapProvider.findCellPositionInMap(cellInfo, isAppointmentRender);
   }
 
   hasAllDayPanel() {
@@ -255,7 +264,7 @@ export default class ViewDataProvider {
   }
 
   isGroupIntersectDateInterval(groupIndex, startDate, endDate) {
-    const groupStartDate = this.getGroupStartDate(groupIndex);
+    const groupStartDate = this.getGroupStartDate(groupIndex)!;
     const groupEndDate = this.getGroupEndDate(groupIndex);
 
     return startDate < groupEndDate && endDate > groupStartDate;
@@ -297,16 +306,15 @@ export default class ViewDataProvider {
     return undefined;
   }
 
-  _compareDatesAndAllDay(date, cellStartDate, cellEndDate, allDay) {
-    const time = date.getTime();
-    const trimmedTime = dateUtils.trimTime(date).getTime();
-    const cellStartTime = cellStartDate.getTime();
-    const cellEndTime = cellEndDate.getTime();
-
-    return (!allDay
-            && time >= cellStartTime
-            && time < cellEndTime)
-            || (allDay && trimmedTime === cellStartTime);
+  private _compareDatesAndAllDay(
+    date: Date,
+    cellStartDate: Date,
+    cellEndDate: Date,
+    allDay: boolean,
+  ): boolean {
+    return allDay
+      ? dateUtils.sameDate(date, cellStartDate)
+      : date >= cellStartDate && date < cellEndDate;
   }
 
   getSkippedDaysCount(groupIndex, startDate, endDate, daysCount) {
@@ -421,9 +429,10 @@ export default class ViewDataProvider {
   }
 
   getLastCellEndDate() {
-    return new Date(
+    const lastEndDate = new Date(
       this.getLastViewDate().getTime() - dateUtils.dateToMilliseconds('minute'),
     );
+    return dateUtilsTs.addOffsets(lastEndDate, [-this._options.viewOffset]);
   }
 
   getLastViewDateByEndDayHour(endDayHour) {
@@ -485,5 +494,78 @@ export default class ViewDataProvider {
   getViewPortGroupCount() {
     const { dateTableGroupedMap } = this.groupedDataMap;
     return dateTableGroupedMap?.length || 0;
+  }
+
+  getCellsBetween(
+    first: ViewCellData,
+    last: ViewCellData,
+  ): ViewCellData[] {
+    const [firstCell, lastCell] = this.normalizeCellsOrder(first, last);
+    const { index: firstIdx } = firstCell;
+    const { index: lastIdx } = lastCell;
+
+    const cellMatrix = this.getCellsByGroupIndexAndAllDay(
+      firstCell.groupIndex ?? 0,
+      lastCell.allDay ?? false,
+    );
+
+    return isHorizontalView(this.viewType)
+      ? this.getCellsBetweenHorizontalView(cellMatrix, firstIdx, lastIdx)
+      : this.getCellsBetweenVerticalView(cellMatrix, firstIdx, lastIdx);
+  }
+
+  private getCellsBetweenHorizontalView(
+    cellMatrix: ViewCellData[][],
+    firstIdx: number,
+    lastIdx: number,
+  ): ViewCellData[] {
+    return cellMatrix.reduce(
+      (result, row) => result.concat(
+        row.filter(({ index }) => firstIdx <= index && index <= lastIdx),
+      ),
+      [],
+    );
+  }
+
+  private getCellsBetweenVerticalView(
+    cellMatrix: ViewCellData[][],
+    firstIdx: number,
+    lastIdx: number,
+  ): ViewCellData[] {
+    const result: ViewCellData[] = [];
+    const matrixHeight = cellMatrix.length;
+    const matrixWidth = cellMatrix[0]?.length ?? 0;
+    let inSegment = false;
+
+    for (let columnIdx = 0; columnIdx < matrixWidth; columnIdx += 1) {
+      for (let rowIdx = 0; rowIdx < matrixHeight; rowIdx += 1) {
+        const cell = cellMatrix[rowIdx][columnIdx];
+        const { index: cellIdx } = cell;
+
+        if (cellIdx === firstIdx) {
+          inSegment = true;
+        }
+
+        if (inSegment) {
+          result.push(cell);
+        }
+
+        if (cellIdx === lastIdx) {
+          return result;
+        }
+      }
+    }
+
+    // NOTE: It's redundant return, but a function must always have a return statement.
+    return result;
+  }
+
+  private normalizeCellsOrder(
+    firstSelectedCell: ViewCellData,
+    lastSelectedCell: ViewCellData,
+  ): [first: ViewCellData, last: ViewCellData] {
+    return firstSelectedCell.startDate > lastSelectedCell.startDate
+      ? [lastSelectedCell, firstSelectedCell]
+      : [firstSelectedCell, lastSelectedCell];
   }
 }

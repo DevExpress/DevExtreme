@@ -2,9 +2,10 @@ import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { Selector, ClientFunction } from 'testcafe';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import { Item } from '../../../../../js/ui/tabs.d';
 import { appendElementTo, setAttribute } from '../../../helpers/domUtils';
+import Tabs from '../../../model/tabs';
 
 const TAB_CLASS = 'dx-tab';
 
@@ -37,6 +38,67 @@ test('Tabs nav buttons', async (t) => {
   return createWidget('dxTabs', { dataSource, width: 200, showNavButtons: true }, '#tabs');
 });
 
+test('Tabs text-overflow with vertical orientation', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const tabs = new Tabs('#tabs');
+
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow.png', { element: '#tabs' });
+
+  await tabs.option({ iconPosition: 'top' } as any);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow when iconPosition is top.png', { element: '#tabs' });
+
+  await tabs.option({ height: 300 } as any);
+
+  await testScreenshot(t, takeScreenshot, 'Tabs text-overflow when height is limited.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'width: 600px; height: 400px;');
+
+  const dataSource = [
+    { icon: 'user', text: 'John Heart' },
+    { icon: 'user', text: 'Marina Elizabeth Thomas Grace Sophia Alexander Benjamin Olivia Nicholas Victoria Michael Emily' },
+    { icon: 'user', text: 'Robert Reagan' },
+    { icon: 'user', text: 'Greta Sims' },
+  ] as Item[];
+
+  const options = {
+    dataSource,
+    width: 130,
+    showNavButtons: true,
+    orientation: 'vertical',
+  };
+
+  return createWidget('dxTabs', options, '#tabs');
+});
+
+test('Tab item width in secondary stylingMode', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await testScreenshot(t, takeScreenshot, 'Tab item width in secondary stylingMode.png', { element: '#tabs' });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await appendElementTo('#container', 'div', 'tabs');
+  await setAttribute('#container', 'style', 'display: flex; width: 800px; height: 600px;');
+
+  const dataSource = [
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+    { text: 'user' },
+  ] as Item[];
+
+  return createWidget('dxTabs', { dataSource, width: 'auto', stylingMode: 'secondary' }, '#tabs');
+});
+
 [true, false].forEach((rtlEnabled) => {
   ['start', 'top', 'end', 'bottom'].forEach((iconPosition) => {
     test('Tabs icon position', async (t) => {
@@ -66,7 +128,7 @@ test('Tabs nav buttons', async (t) => {
 test('Tabs with width: auto in flex container', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 
-  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs' });
+  await testScreenshot(t, takeScreenshot, 'Tabs with width auto.png', { element: '#tabs', shouldTestInCompact: true });
 
   await t
     .expect(compareResults.isValid())

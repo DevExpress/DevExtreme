@@ -1,5 +1,5 @@
 import $ from 'jquery';
-import caret from 'ui/text_box/utils.caret';
+import caret from '__internal/ui/text_box/m_utils.caret';
 import keyboardMock from '../../helpers/keyboardMock.js';
 import domAdapter from 'core/dom_adapter';
 import devices from 'core/devices';
@@ -93,7 +93,7 @@ testModule('caret', () => {
             const itShouldBePrevented = !forceSetCaret && (ios || mac);
             const $input = $('<input>').val('12345').appendTo('#qunit-fixture');
             const otherInput = $('<input>').appendTo('#qunit-fixture').get(0);
-            const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement', () => itShouldBePrevented ? otherInput : $input.get(0));
+            const getActiveElementStub = sinon.stub(domAdapter, 'getActiveElement').callsFake(() => itShouldBePrevented ? otherInput : $input.get(0));
 
             $input.focus();
             const initialStartPosition = caret($input).start;

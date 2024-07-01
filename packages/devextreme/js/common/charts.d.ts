@@ -1,5 +1,7 @@
 import { HorizontalAlignment } from '../common';
 import { Format } from '../localization';
+import { BaseLegendItem } from '../viz/common';
+import { baseSeriesObject } from '../viz/chart';
 
 /**
  * @public
@@ -738,4 +740,19 @@ export interface SeriesLabel {
      * @public
      */
      displayFormat?: string;
+}
+
+/**
+ * @public
+ * @docid
+ * @type object
+ * @inherits BaseLegendItem
+ * @namespace DevExpress.common.charts
+ */
+export interface LegendItem extends BaseLegendItem {
+  /**
+   * @docid
+   * @public
+   */
+  series?: baseSeriesObject;
 }

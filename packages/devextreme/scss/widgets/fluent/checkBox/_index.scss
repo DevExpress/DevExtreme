@@ -9,7 +9,6 @@
 
 // adduse
 
-$fluent-checkbox-ripple-transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
 $icon-position: relative;
 
 .dx-checkbox-icon {
@@ -32,8 +31,6 @@ $icon-position: relative;
 }
 
 .dx-checkbox {
-  line-height: 0;
-
   .dx-checkbox-container {
     overflow: visible;
   }
@@ -46,7 +43,7 @@ $icon-position: relative;
 
   &.dx-state-readonly {
     .dx-checkbox-icon {
-      border-color: $checkbox-disabled-color;
+      border-color: $checkbox-border-color-disabled;
     }
   }
 
@@ -88,7 +85,7 @@ $icon-position: relative;
     opacity: 1; 
 
     .dx-checkbox-icon {
-      border-color: $checkbox-disabled-color;
+      border-color: $checkbox-border-color-disabled;
     }
   }
 }

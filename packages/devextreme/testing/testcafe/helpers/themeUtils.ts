@@ -14,7 +14,9 @@ export const isFluent = (): boolean => process.env.theme === 'fluent.blue.light'
 
 export const isMaterialBased = (): boolean => isMaterial() || isFluent();
 
-export const getThemeName = (): string => (process.env.theme ?? defaultThemeName).split('.')[0];
+export const getFullThemeName = (): string => process.env.theme ?? defaultThemeName;
+
+export const getThemeName = (): string => getFullThemeName().split('.')[0];
 
 export async function testScreenshot(
   t: TestController,

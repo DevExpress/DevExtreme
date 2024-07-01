@@ -952,7 +952,7 @@ declare module DevExpress {
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  type ExternalFormat = never;
+  type ExternalFormat = Intl.DateTimeFormatOptions | Intl.NumberFormatOptions;
   /**
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -1497,7 +1497,6 @@ declare module DevExpress.common {
        * [descr:GlobalConfig.floatingActionButtonConfig.shading]
        */
       shading?: boolean;
-      licenseKey?: string;
     };
     /**
      * [descr:GlobalConfig.forceIsoDateParsing]
@@ -1507,6 +1506,10 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.oDataFilterToLower]
      */
     oDataFilterToLower?: boolean;
+    /**
+     * @deprecated Attention! This field is not documented and should only be specified in a limited number of use cases. For more information, please submit a ticket to our Support Center.
+     */
+    pointerEventStrategy?: 'mouse-and-touch' | 'mouse' | 'touch';
     /**
      * [descr:GlobalConfig.rtlEnabled]
      */
@@ -1528,6 +1531,10 @@ declare module DevExpress.common {
      * [descr:GlobalConfig.useLegacyVisibleIndex]
      */
     useLegacyVisibleIndex?: boolean;
+    /**
+     * [descr:GlobalConfig.licenseKey]
+     */
+    licenseKey?: string;
   };
   /**
    * [descr:GroupItem]
@@ -1669,7 +1676,7 @@ declare module DevExpress.common {
     /**
      * [descr:RangeRule.max]
      */
-    max?: Date | number;
+    max?: Date | number | string;
     /**
      * [descr:RangeRule.message]
      */
@@ -1677,7 +1684,7 @@ declare module DevExpress.common {
     /**
      * [descr:RangeRule.min]
      */
-    min?: Date | number;
+    min?: Date | number | string;
     /**
      * [descr:RangeRule.reevaluate]
      */
@@ -1789,14 +1796,15 @@ declare module DevExpress.common {
   export type ToolbarItemComponent =
     | 'dxAutocomplete'
     | 'dxButton'
+    | 'dxButtonGroup'
     | 'dxCheckBox'
     | 'dxDateBox'
+    | 'dxDropDownButton'
     | 'dxMenu'
     | 'dxSelectBox'
+    | 'dxSwitch'
     | 'dxTabs'
-    | 'dxTextBox'
-    | 'dxButtonGroup'
-    | 'dxDropDownButton';
+    | 'dxTextBox';
   export type ToolbarItemLocation = 'after' | 'before' | 'center';
   export type TooltipShowMode = 'always' | 'onHover';
   export type ValidationCallbackData = {
@@ -2120,6 +2128,15 @@ declare module DevExpress.common.charts {
   export type LabelOverlap = 'hide' | 'none';
   export type LabelPosition = 'columns' | 'inside' | 'outside';
   export type LegendHoverMode = 'excludePoints' | 'includePoints' | 'none';
+  /**
+   * [descr:LegendItem]
+   */
+  export interface LegendItem extends BaseLegendItem {
+    /**
+     * [descr:LegendItem.series]
+     */
+    series?: DevExpress.viz.baseSeriesObject;
+  }
   export type LegendMarkerState = 'normal' | 'hovered' | 'selected';
   export type Palette =
     | 'Bright'
@@ -2851,7 +2868,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseOptions.columnChooser.mode]
      */
@@ -2880,7 +2897,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.columnChooser.width]
      */
-    width?: number;
+    width?: number | string;
     /**
      * [descr:GridBaseOptions.columnChooser.sortOrder]
      */
@@ -2987,7 +3004,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseColumn.headerFilter.search]
      */
@@ -3000,7 +3017,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseColumn.headerFilter.width]
      */
-    width?: number;
+    width?: number | string;
   };
   /**
    * [descr:ColumnHeaderFilterSearchConfig]
@@ -4049,7 +4066,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.headerFilter.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseOptions.headerFilter.search]
      */
@@ -4070,7 +4087,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.headerFilter.width]
      */
-    width?: number;
+    width?: number | string;
   };
   export type HeaderFilterGroupInterval =
     | 'day'
@@ -4160,7 +4177,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.height]
      */
-    height?: number;
+    height?: number | string;
     /**
      * [descr:GridBaseOptions.loadPanel.indicatorSrc]
      */
@@ -4188,7 +4205,7 @@ declare module DevExpress.common.grids {
     /**
      * [descr:GridBaseOptions.loadPanel.width]
      */
-    width?: number;
+    width?: number | string;
   };
   /**
    * [descr:NewRowInfo]
@@ -4999,7 +5016,6 @@ declare module DevExpress.data {
      * [descr:Store.load()]
      */
     load(): DevExpress.core.utils.DxExtendedPromise<Array<TItem>>;
-
     /**
      * [descr:Store.load(options)]
      */
@@ -5011,22 +5027,20 @@ declare module DevExpress.data {
     /**
      * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
      */
-    type EventName =
-      | 'loaded'
-      | 'loading'
-      | 'inserted'
-      | 'inserting'
-      | 'updated'
-      | 'updating'
-      | 'push'
-      | 'removed'
-      | 'removing'
-      | 'modified'
-      | 'modifying';
+    export type Options<TItem = any, TKey = any> = AbstractStoreOptions<
+      TItem,
+      TKey
+    >;
+  }
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  interface AbstractStoreOptions<TItem = any, TKey = any>
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+     * [descr:StoreOptions.onLoaded]
      */
-    export type Options<TItem = any, TKey = any> = StoreOptions<TItem, TKey>;
+    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
   }
   /**
    * [descr:Utils.applyChanges(data, changes, options)]
@@ -5138,7 +5152,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface CustomStoreOptions<TItem = any, TKey = any>
-    extends DevExpress.data.AbstractStore.Options<TItem, TKey> {
+    extends DevExpress.data.Store.Options<TItem, TKey> {
     /**
      * [descr:CustomStoreOptions.byKey]
      */
@@ -5166,6 +5180,13 @@ declare module DevExpress.data {
      * [descr:CustomStoreOptions.loadMode]
      */
     loadMode?: 'processed' | 'raw';
+    /**
+     * [descr:CustomStoreOptions.onLoaded]
+     */
+    onLoaded?: (
+      result: DevExpress.common.LoadResult<TItem>,
+      loadOptions: LoadOptions<TItem>
+    ) => void;
     /**
      * [descr:CustomStoreOptions.remove]
      */
@@ -5529,6 +5550,21 @@ declare module DevExpress.data {
    * @deprecated [depNote:Utils.errorHandler]
    */
   export function errorHandler(e: Error): void;
+  /**
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  type EventName =
+    | 'loaded'
+    | 'loading'
+    | 'inserted'
+    | 'inserting'
+    | 'updated'
+    | 'updating'
+    | 'push'
+    | 'removed'
+    | 'removing'
+    | 'modified'
+    | 'modifying';
   /**
    * [descr:FilterDescriptor]
    */
@@ -5894,10 +5930,6 @@ declare module DevExpress.data {
       | 'Single'
       | 'Decimal'
       | any;
-    /**
-     * [descr:ODataStoreOptions.onLoading]
-     */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
     /**
      * [descr:ODataStoreOptions.url]
      */
@@ -6327,7 +6359,6 @@ declare module DevExpress.data {
   export function query(url: string, queryOptions: any): Query;
   /**
    * [descr:Query]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export interface Query {
     /**
@@ -6460,7 +6491,7 @@ declare module DevExpress.data {
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
   export class Store<TItem = any, TKey = any> {
-    constructor(options?: DevExpress.data.AbstractStore.Options<TItem, TKey>);
+    constructor(options?: DevExpress.data.Store.Options<TItem, TKey>);
     /**
      * [descr:Store.insert(values)]
      */
@@ -6476,27 +6507,19 @@ declare module DevExpress.data {
     /**
      * [descr:Store.off(eventName)]
      */
-    off(eventName: DevExpress.data.AbstractStore.EventName): this;
+    off(eventName: EventName): this;
     /**
      * [descr:Store.off(eventName, eventHandler)]
      */
-    off(
-      eventName: DevExpress.data.AbstractStore.EventName,
-      eventHandler: Function
-    ): this;
+    off(eventName: EventName, eventHandler: Function): this;
     /**
      * [descr:Store.on(eventName, eventHandler)]
      */
-    on(
-      eventName: DevExpress.data.AbstractStore.EventName,
-      eventHandler: Function
-    ): this;
+    on(eventName: EventName, eventHandler: Function): this;
     /**
      * [descr:Store.on(events)]
      */
-    on(
-      events: { [key in DevExpress.data.AbstractStore.EventName]?: Function }
-    ): this;
+    on(events: { [key in EventName]?: Function }): this;
     /**
      * [descr:Store.push(changes)]
      */
@@ -6526,65 +6549,6 @@ declare module DevExpress.data {
       key: TKey,
       values: DevExpress.core.DeepPartial<TItem>
     ): DevExpress.core.utils.DxExtendedPromise<TItem>;
-  }
-  /**
-   * [descr:StoreOptions]
-   * @deprecated [depNote:StoreOptions]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface StoreOptions<TItem = any, TKey = any> {
-    /**
-     * [descr:StoreOptions.errorHandler]
-     */
-    errorHandler?: Function;
-    /**
-     * [descr:StoreOptions.key]
-     */
-    key?: string | Array<string>;
-    /**
-     * [descr:StoreOptions.onInserted]
-     */
-    onInserted?: (values: TItem, key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onInserting]
-     */
-    onInserting?: (values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onLoaded]
-     */
-    onLoaded?: (result: Array<TItem>, loadOptions: LoadOptions<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onLoading]
-     */
-    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onModified]
-     */
-    onModified?: Function;
-    /**
-     * [descr:StoreOptions.onModifying]
-     */
-    onModifying?: Function;
-    /**
-     * [descr:StoreOptions.onPush]
-     */
-    onPush?: (changes: Array<TItem>) => void;
-    /**
-     * [descr:StoreOptions.onRemoved]
-     */
-    onRemoved?: (key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onRemoving]
-     */
-    onRemoving?: (key: TKey) => void;
-    /**
-     * [descr:StoreOptions.onUpdated]
-     */
-    onUpdated?: (key: TKey, values: TItem) => void;
-    /**
-     * [descr:StoreOptions.onUpdating]
-     */
-    onUpdating?: (key: TKey, values: TItem) => void;
   }
   /**
    * [descr:SummaryDescriptor]
@@ -6635,6 +6599,62 @@ declare module DevExpress.data.PivotGridDataSource {
    * [descr:PivotGridDataSourceOptions.fields]
    */
   export type Field = PivotGridDataSourceField;
+}
+declare module DevExpress.data.Store {
+  /**
+   * [descr:StoreOptions]
+   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
+   */
+  export type Options<TItem = any, TKey = any> = {
+    /**
+     * [descr:StoreOptions.errorHandler]
+     */
+    errorHandler?: Function;
+    /**
+     * [descr:StoreOptions.key]
+     */
+    key?: string | Array<string>;
+    /**
+     * [descr:StoreOptions.onInserted]
+     */
+    onInserted?: (values: TItem, key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onInserting]
+     */
+    onInserting?: (values: TItem) => void;
+    /**
+     * [descr:StoreOptions.onLoading]
+     */
+    onLoading?: (loadOptions: LoadOptions<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onModified]
+     */
+    onModified?: Function;
+    /**
+     * [descr:StoreOptions.onModifying]
+     */
+    onModifying?: Function;
+    /**
+     * [descr:StoreOptions.onPush]
+     */
+    onPush?: (changes: Array<TItem>) => void;
+    /**
+     * [descr:StoreOptions.onRemoved]
+     */
+    onRemoved?: (key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onRemoving]
+     */
+    onRemoving?: (key: TKey) => void;
+    /**
+     * [descr:StoreOptions.onUpdated]
+     */
+    onUpdated?: (key: TKey, values: TItem) => void;
+    /**
+     * [descr:StoreOptions.onUpdating]
+     */
+    onUpdating?: (key: TKey, values: TItem) => void;
+  };
 }
 declare module DevExpress.data.utils {
   /**
@@ -8182,7 +8202,10 @@ declare module DevExpress.ui {
     (new (
       element: DevExpress.core.UserDefinedElement,
       options?: DevExpress.ui.dxDateRangeBox.Properties
-    ) => Omit<DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties>, 'field'>);
+    ) => Omit<
+      DateBoxBase<DevExpress.ui.dxDateRangeBox.Properties>,
+      'field' | 'reset'
+    >);
   /**
    * [descr:DraggableBase]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
@@ -8682,7 +8705,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxAutocomplete]
    */
-  export class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> {}
+  export class dxAutocomplete extends dxDropDownList<dxAutocompleteOptions> {
+    /**
+     * [descr:dxAutocomplete.reset(value)]
+     */
+    reset(value?: string | null): void;
+  }
   module dxAutocomplete {
     /**
      * [descr:_ui_autocomplete_ChangeEvent]
@@ -8954,7 +8982,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxBoxItem.baseSize]
      */
-    baseSize?: number | DevExpress.common.Mode;
+    baseSize?: number | string;
     /**
      * [descr:dxBoxItem.box]
      */
@@ -9218,7 +9246,14 @@ declare module DevExpress.ui {
   /**
    * [descr:dxCalendar]
    */
-  export class dxCalendar extends Editor<dxCalendarOptions> {}
+  export class dxCalendar extends Editor<dxCalendarOptions> {
+    /**
+     * [descr:dxCalendar.reset(value)]
+     */
+    reset(
+      value?: Date | number | string | Array<Date | number | string> | null
+    ): void;
+  }
   module dxCalendar {
     export type CalendarSelectionMode = 'single' | 'multiple' | 'range';
     export type CalendarZoomLevel = 'century' | 'decade' | 'month' | 'year';
@@ -9368,6 +9403,10 @@ declare module DevExpress.ui {
      * [descr:dxCheckBox.blur()]
      */
     blur(): void;
+    /**
+     * [descr:dxCheckBox.reset(value)]
+     */
+    reset(value?: boolean | null | undefined): void;
   }
   module dxCheckBox {
     /**
@@ -9440,7 +9479,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxColorBox]
    */
-  export class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {}
+  export class dxColorBox extends dxDropDownEditor<dxColorBoxOptions> {
+    /**
+     * [descr:dxColorBox.reset(value)]
+     */
+    reset(value?: string | null): void;
+  }
   module dxColorBox {
     /**
      * [descr:_ui_color_box_ChangeEvent]
@@ -9590,7 +9634,6 @@ declare module DevExpress.ui {
      * [descr:dxColorBoxOptions.value]
      */
     value?: string;
-
     /**
      * [descr:dxColorBoxOptions.dropDownOptions]
      */
@@ -12102,7 +12145,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxDateBox]
    */
-  export class dxDateBox extends DateBoxBase<DevExpress.ui.dxDateBox.Properties> {}
+  export class dxDateBox extends DateBoxBase<DevExpress.ui.dxDateBox.Properties> {
+    /**
+     * [descr:dxDateBox.reset(value)]
+     */
+    reset(value?: Date | number | string | null): void;
+  }
   module dxDateBox {
     /**
      * [descr:_ui_date_box_ChangeEvent]
@@ -12301,6 +12349,10 @@ declare module DevExpress.ui {
      * [descr:dxDateRangeBox.startDateField()]
      */
     startDateField(): DevExpress.core.DxElement;
+    /**
+     * [descr:dxDateRangeBox.reset(value)]
+     */
+    reset(value?: Array<Date | number | string | null>): void;
   }
   module dxDateRangeBox {
     /**
@@ -12549,19 +12601,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDeferRenderingOptions.onRendered]
      */
-    onRendered?: (e: {
-      component?: dxDeferRendering;
-      element?: DevExpress.core.DxElement;
-      model?: any;
-    }) => void;
+    onRendered?: (e: DevExpress.ui.dxDeferRendering.RenderedEvent) => void;
     /**
      * [descr:dxDeferRenderingOptions.onShown]
      */
-    onShown?: (e: {
-      component?: dxDeferRendering;
-      element?: DevExpress.core.DxElement;
-      model?: any;
-    }) => void;
+    onShown?: (e: DevExpress.ui.dxDeferRendering.ShownEvent) => void;
     /**
      * [descr:dxDeferRenderingOptions.renderWhen]
      */
@@ -12668,173 +12712,6 @@ declare module DevExpress.ui {
       readonly item: dxDiagramShape;
     };
     /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramAutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramCommand =
-      | 'separator'
-      | 'exportSvg'
-      | 'exportPng'
-      | 'exportJpg'
-      | 'undo'
-      | 'redo'
-      | 'cut'
-      | 'copy'
-      | 'paste'
-      | 'selectAll'
-      | 'delete'
-      | 'fontName'
-      | 'fontSize'
-      | 'bold'
-      | 'italic'
-      | 'underline'
-      | 'fontColor'
-      | 'lineStyle'
-      | 'lineWidth'
-      | 'lineColor'
-      | 'fillColor'
-      | 'textAlignLeft'
-      | 'textAlignCenter'
-      | 'textAlignRight'
-      | 'lock'
-      | 'unlock'
-      | 'sendToBack'
-      | 'bringToFront'
-      | 'insertShapeImage'
-      | 'editShapeImage'
-      | 'deleteShapeImage'
-      | 'connectorLineType'
-      | 'connectorLineStart'
-      | 'connectorLineEnd'
-      | 'layoutTreeTopToBottom'
-      | 'layoutTreeBottomToTop'
-      | 'layoutTreeLeftToRight'
-      | 'layoutTreeRightToLeft'
-      | 'layoutLayeredTopToBottom'
-      | 'layoutLayeredBottomToTop'
-      | 'layoutLayeredLeftToRight'
-      | 'layoutLayeredRightToLeft'
-      | 'fullScreen'
-      | 'zoomLevel'
-      | 'showGrid'
-      | 'snapToGrid'
-      | 'gridSize'
-      | 'units'
-      | 'pageSize'
-      | 'pageOrientation'
-      | 'pageColor'
-      | 'simpleView'
-      | 'toolbox';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramConnectorLineEnd =
-      | 'none'
-      | 'arrow'
-      | 'outlinedTriangle'
-      | 'filledTriangle';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramConnectorLineType = 'straight' | 'orthogonal';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramConnectorPosition = 'start' | 'end';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramDataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramItemType = 'shape' | 'connector';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramPanelVisibility =
-      | 'auto'
-      | 'visible'
-      | 'collapsed'
-      | 'disabled';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramRequestEditOperationReason =
-      | 'checkUIElementAvailability'
-      | 'modelModification';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramShapeCategory =
-      | 'general'
-      | 'flowchart'
-      | 'orgChart'
-      | 'containers'
-      | 'custom';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramShapeType =
-      | 'text'
-      | 'rectangle'
-      | 'ellipse'
-      | 'cross'
-      | 'triangle'
-      | 'diamond'
-      | 'heart'
-      | 'pentagon'
-      | 'hexagon'
-      | 'octagon'
-      | 'star'
-      | 'arrowLeft'
-      | 'arrowTop'
-      | 'arrowRight'
-      | 'arrowBottom'
-      | 'arrowNorthSouth'
-      | 'arrowEastWest'
-      | 'process'
-      | 'decision'
-      | 'terminator'
-      | 'predefinedProcess'
-      | 'document'
-      | 'multipleDocuments'
-      | 'manualInput'
-      | 'preparation'
-      | 'data'
-      | 'database'
-      | 'hardDisk'
-      | 'internalStorage'
-      | 'paperTape'
-      | 'manualOperation'
-      | 'delay'
-      | 'storedData'
-      | 'display'
-      | 'merge'
-      | 'connector'
-      | 'or'
-      | 'summingJunction'
-      | 'verticalContainer'
-      | 'horizontalContainer'
-      | 'cardWithImageOnLeft'
-      | 'cardWithImageOnTop'
-      | 'cardWithImageOnRight';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramToolboxDisplayMode = 'icons' | 'texts';
-    /**
-     * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-     */
-    export type DiagramUnits = 'in' | 'cm' | 'px';
-    /**
      * [descr:_ui_diagram_DisposingEvent]
      */
     export type DisposingEvent = DevExpress.events.EventInfo<dxDiagram>;
@@ -12901,7 +12778,7 @@ declare module DevExpress.ui {
         /**
          * [descr:_ui_diagram_RequestEditOperationEvent.reason]
          */
-        readonly reason: DiagramRequestEditOperationReason;
+        readonly reason: RequestEditOperationReason;
         /**
          * [descr:_ui_diagram_RequestEditOperationEvent.allowed]
          */
@@ -12963,7 +12840,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramAddShapeFromToolboxArgs.shapeType]
      */
-    shapeType?: DevExpress.ui.dxDiagram.DiagramShapeType | string;
+    shapeType?: DevExpress.ui.dxDiagram.ShapeType | string;
   }
   /**
    * [descr:dxDiagramBeforeChangeConnectorTextArgs]
@@ -13013,7 +12890,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramChangeConnectionArgs.connectorPosition]
      */
-    connectorPosition?: DevExpress.ui.dxDiagram.DiagramConnectorPosition;
+    connectorPosition?: DevExpress.ui.dxDiagram.ConnectorPosition;
   }
   /**
    * [descr:dxDiagramChangeConnectorPointsArgs]
@@ -13132,32 +13009,6 @@ declare module DevExpress.ui {
     toPointIndex?: number;
   }
   /**
-   * [descr:dxDiagramCustomCommand]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface dxDiagramCustomCommand {
-    /**
-     * [descr:dxDiagramCustomCommand.name]
-     */
-    name?: string;
-    /**
-     * [descr:dxDiagramCustomCommand.text]
-     */
-    text?: string;
-    /**
-     * [descr:dxDiagramCustomCommand.icon]
-     */
-    icon?: string;
-    /**
-     * [descr:dxDiagramCustomCommand.items]
-     */
-    items?: Array<dxDiagramCustomCommand>;
-    /**
-     * [descr:dxDiagramCustomCommand.location]
-     */
-    location?: DevExpress.common.ToolbarItemLocation;
-  }
-  /**
    * [descr:dxDiagramDeleteConnectorArgs]
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
@@ -13197,7 +13048,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramItem.itemType]
      */
-    itemType?: DevExpress.ui.dxDiagram.DiagramItemType;
+    itemType?: DevExpress.ui.dxDiagram.ItemType;
   }
   /**
    * [descr:dxDiagramMoveShapeArgs]
@@ -13244,7 +13095,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.autoZoomMode]
      */
-    autoZoomMode?: DevExpress.ui.dxDiagram.DiagramAutoZoomMode;
+    autoZoomMode?: DevExpress.ui.dxDiagram.AutoZoomMode;
     /**
      * [descr:dxDiagramOptions.contextMenu]
      */
@@ -13252,7 +13103,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextMenu.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.contextMenu.enabled]
        */
@@ -13265,11 +13118,11 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.category]
        */
-      category?: DevExpress.ui.dxDiagram.DiagramShapeCategory | string;
+      category?: DevExpress.ui.dxDiagram.ShapeCategory | string;
       /**
        * [descr:dxDiagramOptions.contextToolbox.displayMode]
        */
-      displayMode?: DevExpress.ui.dxDiagram.DiagramToolboxDisplayMode;
+      displayMode?: DevExpress.ui.dxDiagram.ToolboxDisplayMode;
       /**
        * [descr:dxDiagramOptions.contextToolbox.enabled]
        */
@@ -13281,7 +13134,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.contextToolbox.shapes]
        */
-      shapes?: Array<DevExpress.ui.dxDiagram.DiagramShapeType> | Array<string>;
+      shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
       /**
        * [descr:dxDiagramOptions.contextToolbox.width]
        */
@@ -13352,7 +13205,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.customShapes.baseType]
        */
-      baseType?: DevExpress.ui.dxDiagram.DiagramShapeType | string;
+      baseType?: DevExpress.ui.dxDiagram.ShapeType | string;
       /**
        * [descr:dxDiagramOptions.customShapes.category]
        */
@@ -13500,15 +13353,15 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineType]
        */
-      connectorLineType?: DevExpress.ui.dxDiagram.DiagramConnectorLineType;
+      connectorLineType?: DevExpress.ui.dxDiagram.ConnectorLineType;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineStart]
        */
-      connectorLineStart?: DevExpress.ui.dxDiagram.DiagramConnectorLineEnd;
+      connectorLineStart?: DevExpress.ui.dxDiagram.ConnectorLineEnd;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.connectorLineEnd]
        */
-      connectorLineEnd?: DevExpress.ui.dxDiagram.DiagramConnectorLineEnd;
+      connectorLineEnd?: DevExpress.ui.dxDiagram.ConnectorLineEnd;
       /**
        * [descr:dxDiagramOptions.defaultItemProperties.shapeMinWidth]
        */
@@ -13672,7 +13525,7 @@ declare module DevExpress.ui {
        * [descr:dxDiagramOptions.nodes.autoLayout]
        */
       autoLayout?:
-        | DevExpress.ui.dxDiagram.DiagramDataLayoutType
+        | DevExpress.ui.dxDiagram.DataLayoutType
         | {
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.orientation]
@@ -13681,7 +13534,7 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.nodes.autoLayout.type]
              */
-            type?: DevExpress.ui.dxDiagram.DiagramDataLayoutType;
+            type?: DevExpress.ui.dxDiagram.DataLayoutType;
           };
       /**
        * [descr:dxDiagramOptions.nodes.autoSizeEnabled]
@@ -13839,7 +13692,10 @@ declare module DevExpress.ui {
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.commands]
          */
-        commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+        commands?: Array<
+          | DevExpress.ui.dxDiagram.CustomCommand
+          | DevExpress.ui.dxDiagram.Command
+        >;
         /**
          * [descr:dxDiagramOptions.propertiesPanel.tabs.groups]
          */
@@ -13847,7 +13703,10 @@ declare module DevExpress.ui {
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.commands]
            */
-          commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+          commands?: Array<
+            | DevExpress.ui.dxDiagram.CustomCommand
+            | DevExpress.ui.dxDiagram.Command
+          >;
           /**
            * [descr:dxDiagramOptions.propertiesPanel.tabs.groups.title]
            */
@@ -13861,7 +13720,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.propertiesPanel.visibility]
        */
-      visibility?: DevExpress.ui.dxDiagram.DiagramPanelVisibility;
+      visibility?: DevExpress.ui.dxDiagram.PanelVisibility;
     };
     /**
      * [descr:dxDiagramOptions.readOnly]
@@ -13890,7 +13749,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.mainToolbar.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.mainToolbar.visible]
        */
@@ -13903,7 +13764,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.historyToolbar.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.historyToolbar.visible]
        */
@@ -13916,7 +13779,9 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.viewToolbar.commands]
        */
-      commands?: Array<DevExpress.ui.dxDiagram.DiagramCommand>;
+      commands?: Array<
+        DevExpress.ui.dxDiagram.CustomCommand | DevExpress.ui.dxDiagram.Command
+      >;
       /**
        * [descr:dxDiagramOptions.viewToolbar.visible]
        */
@@ -13934,11 +13799,11 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.category]
              */
-            category?: DevExpress.ui.dxDiagram.DiagramShapeCategory | string;
+            category?: DevExpress.ui.dxDiagram.ShapeCategory | string;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.displayMode]
              */
-            displayMode?: DevExpress.ui.dxDiagram.DiagramToolboxDisplayMode;
+            displayMode?: DevExpress.ui.dxDiagram.ToolboxDisplayMode;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.expanded]
              */
@@ -13946,15 +13811,13 @@ declare module DevExpress.ui {
             /**
              * [descr:dxDiagramOptions.toolbox.groups.shapes]
              */
-            shapes?:
-              | Array<DevExpress.ui.dxDiagram.DiagramShapeType>
-              | Array<string>;
+            shapes?: Array<DevExpress.ui.dxDiagram.ShapeType> | Array<string>;
             /**
              * [descr:dxDiagramOptions.toolbox.groups.title]
              */
             title?: string;
           }>
-        | Array<DevExpress.ui.dxDiagram.DiagramShapeCategory>;
+        | Array<DevExpress.ui.dxDiagram.ShapeCategory>;
       /**
        * [descr:dxDiagramOptions.toolbox.shapeIconsPerRow]
        */
@@ -13966,7 +13829,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxDiagramOptions.toolbox.visibility]
        */
-      visibility?: DevExpress.ui.dxDiagram.DiagramPanelVisibility;
+      visibility?: DevExpress.ui.dxDiagram.PanelVisibility;
       /**
        * [descr:dxDiagramOptions.toolbox.width]
        */
@@ -13975,11 +13838,11 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramOptions.units]
      */
-    units?: DevExpress.ui.dxDiagram.DiagramUnits;
+    units?: DevExpress.ui.dxDiagram.Units;
     /**
      * [descr:dxDiagramOptions.viewUnits]
      */
-    viewUnits?: DevExpress.ui.dxDiagram.DiagramUnits;
+    viewUnits?: DevExpress.ui.dxDiagram.Units;
     /**
      * [descr:dxDiagramOptions.zoomLevel]
      */
@@ -14044,7 +13907,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxDiagramShape.type]
      */
-    type?: DevExpress.ui.dxDiagram.DiagramShapeType | string;
+    type?: DevExpress.ui.dxDiagram.ShapeType | string;
     /**
      * [descr:dxDiagramShape.position]
      */
@@ -15833,6 +15696,10 @@ declare module DevExpress.ui {
      * [descr:dxFileUploader.removeFile(file)]
      */
     removeFile(file: File): void;
+    /**
+     * [descr:dxFileUploader.reset(value)]
+     */
+    reset(value?: Array<File>): void;
   }
   module dxFileUploader {
     /**
@@ -19256,7 +19123,7 @@ declare module DevExpress.ui {
     /**
      * [descr:dxHtmlEditorMention.dataSource]
      */
-    dataSource?: DevExpress.data.DataSource.DataSourceLike<string> | null;
+    dataSource?: DevExpress.data.DataSource.DataSourceLike<any> | null;
     /**
      * [descr:dxHtmlEditorMention.displayExpr]
      */
@@ -21288,7 +21155,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxNumberBox]
    */
-  export class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {}
+  export class dxNumberBox extends dxTextEditor<dxNumberBoxOptions> {
+    /**
+     * [descr:dxNumberBox.reset(value)]
+     */
+    reset(value?: number): void;
+  }
   module dxNumberBox {
     /**
      * [descr:_ui_number_box_ChangeEvent]
@@ -22840,7 +22712,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxProgressBar]
    */
-  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {}
+  export class dxProgressBar extends dxTrackBar<dxProgressBarOptions> {
+    /**
+     * [descr:dxProgressBar.reset(value)]
+     */
+    reset(value?: Number | false): void;
+  }
   module dxProgressBar {
     /**
      * [descr:_ui_progress_bar_CompleteEvent]
@@ -22969,7 +22846,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxRangeSlider]
    */
-  export class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {}
+  export class dxRangeSlider extends dxTrackBar<dxRangeSliderOptions> {
+    /**
+     * [descr:dxRangeSlider.reset(value)]
+     */
+    reset(value?: Array<number>): void;
+  }
   module dxRangeSlider {
     /**
      * [descr:_ui_range_slider_ContentReadyEvent]
@@ -23366,7 +23248,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.cols.baseSize]
        */
-      baseSize?: number | DevExpress.common.Mode;
+      baseSize?: number | string;
       /**
        * [descr:dxResponsiveBoxOptions.cols.ratio]
        */
@@ -23399,7 +23281,7 @@ declare module DevExpress.ui {
       /**
        * [descr:dxResponsiveBoxOptions.rows.baseSize]
        */
-      baseSize?: number | DevExpress.common.Mode;
+      baseSize?: number | string;
       /**
        * [descr:dxResponsiveBoxOptions.rows.ratio]
        */
@@ -24319,6 +24201,10 @@ declare module DevExpress.ui {
      */
     allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
     /**
+     * [descr:dxSchedulerOptions.offset]
+     */
+    offset?: number;
+    /**
      * [descr:dxSchedulerOptions.views]
      */
     views?: Array<
@@ -24474,6 +24360,10 @@ declare module DevExpress.ui {
            * [descr:dxSchedulerOptions.views.allDayPanelMode]
            */
           allDayPanelMode?: DevExpress.ui.dxScheduler.AllDayPanelMode;
+          /**
+           * [descr:dxSchedulerOptions.views.offset]
+           */
+          offset?: number;
         }
     >;
   }
@@ -24929,7 +24819,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxSlider]
    */
-  export class dxSlider extends dxTrackBar<dxSliderOptions> {}
+  export class dxSlider extends dxTrackBar<dxSliderOptions> {
+    /**
+     * [descr:dxSlider.reset(value)]
+     */
+    reset(value?: number): void;
+  }
   module dxSlider {
     /**
      * [descr:_ui_slider_ContentReadyEvent]
@@ -25542,7 +25437,12 @@ declare module DevExpress.ui {
   /**
    * [descr:dxSwitch]
    */
-  export class dxSwitch extends Editor<dxSwitchOptions> {}
+  export class dxSwitch extends Editor<dxSwitchOptions> {
+    /**
+     * [descr:dxSwitch.reset(value)]
+     */
+    reset(value?: boolean): void;
+  }
   module dxSwitch {
     /**
      * [descr:_ui_switch_ContentReadyEvent]
@@ -25769,7 +25669,8 @@ declare module DevExpress.ui {
    * @deprecated Use Item instead
    * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
    */
-  export interface dxTabPanelItem extends DevExpress.ui.dxMultiView.Item {
+  export interface dxTabPanelItem
+    extends Omit<DevExpress.ui.dxMultiView.Item, 'visible'> {
     /**
      * [descr:dxTabPanelItem.badge]
      */
@@ -26425,7 +26326,12 @@ declare module DevExpress.ui {
    */
   export class dxTextBox<
     TProperties = DevExpress.ui.dxTextBox.Properties
-  > extends dxTextEditor<TProperties> {}
+  > extends dxTextEditor<TProperties> {
+    /**
+     * [descr:dxTextBox.reset(value)]
+     */
+    reset(value?: string): void;
+  }
   module dxTextBox {
     /**
      * [descr:_ui_text_box_ChangeEvent]
@@ -30243,10 +30149,169 @@ declare module DevExpress.ui.dxDataGrid {
   };
 }
 declare module DevExpress.ui.dxDiagram {
+  export type AutoZoomMode = 'fitContent' | 'fitWidth' | 'disabled';
+  export type Command =
+    | 'separator'
+    | 'exportSvg'
+    | 'exportPng'
+    | 'exportJpg'
+    | 'undo'
+    | 'redo'
+    | 'cut'
+    | 'copy'
+    | 'paste'
+    | 'selectAll'
+    | 'delete'
+    | 'fontName'
+    | 'fontSize'
+    | 'bold'
+    | 'italic'
+    | 'underline'
+    | 'fontColor'
+    | 'lineStyle'
+    | 'lineWidth'
+    | 'lineColor'
+    | 'fillColor'
+    | 'textAlignLeft'
+    | 'textAlignCenter'
+    | 'textAlignRight'
+    | 'lock'
+    | 'unlock'
+    | 'sendToBack'
+    | 'bringToFront'
+    | 'insertShapeImage'
+    | 'editShapeImage'
+    | 'deleteShapeImage'
+    | 'connectorLineType'
+    | 'connectorLineStart'
+    | 'connectorLineEnd'
+    | 'layoutTreeTopToBottom'
+    | 'layoutTreeBottomToTop'
+    | 'layoutTreeLeftToRight'
+    | 'layoutTreeRightToLeft'
+    | 'layoutLayeredTopToBottom'
+    | 'layoutLayeredBottomToTop'
+    | 'layoutLayeredLeftToRight'
+    | 'layoutLayeredRightToLeft'
+    | 'fullScreen'
+    | 'zoomLevel'
+    | 'showGrid'
+    | 'snapToGrid'
+    | 'gridSize'
+    | 'units'
+    | 'pageSize'
+    | 'pageOrientation'
+    | 'pageColor'
+    | 'simpleView'
+    | 'toolbox';
+  export type ConnectorLineEnd =
+    | 'none'
+    | 'arrow'
+    | 'outlinedTriangle'
+    | 'filledTriangle';
+  export type ConnectorLineType = 'straight' | 'orthogonal';
+  export type ConnectorPosition = 'start' | 'end';
+  /**
+   * [descr:CustomCommand]
+   */
+  export type CustomCommand = {
+    /**
+     * [descr:CustomCommand.name]
+     */
+    name?: string | Command;
+    /**
+     * [descr:CustomCommand.text]
+     */
+    text?: string;
+    /**
+     * [descr:CustomCommand.icon]
+     */
+    icon?: string;
+    /**
+     * [descr:CustomCommand.items]
+     */
+    items?: Array<CustomCommand | Command>;
+    /**
+     * [descr:CustomCommand.location]
+     */
+    location?: DevExpress.common.ToolbarItemLocation;
+  };
+  export type DataLayoutType = 'auto' | 'off' | 'tree' | 'layered';
+  export type DiagramExportFormat = 'svg' | 'png' | 'jpg';
   /**
    * [descr:dxDiagramItem]
    */
   export type Item = dxDiagramItem;
+  export type ItemType = 'shape' | 'connector';
+  export type ModelOperation =
+    | 'addShape'
+    | 'addShapeFromToolbox'
+    | 'deleteShape'
+    | 'deleteConnector'
+    | 'changeConnection'
+    | 'changeConnectorPoints'
+    | 'beforeChangeShapeText'
+    | 'changeShapeText'
+    | 'beforeChangeConnectorText'
+    | 'changeConnectorText'
+    | 'resizeShape'
+    | 'moveShape';
+  export type PanelVisibility = 'auto' | 'visible' | 'collapsed' | 'disabled';
+  export type RequestEditOperationReason =
+    | 'checkUIElementAvailability'
+    | 'modelModification';
+  export type ShapeCategory =
+    | 'general'
+    | 'flowchart'
+    | 'orgChart'
+    | 'containers'
+    | 'custom';
+  export type ShapeType =
+    | 'text'
+    | 'rectangle'
+    | 'ellipse'
+    | 'cross'
+    | 'triangle'
+    | 'diamond'
+    | 'heart'
+    | 'pentagon'
+    | 'hexagon'
+    | 'octagon'
+    | 'star'
+    | 'arrowLeft'
+    | 'arrowTop'
+    | 'arrowRight'
+    | 'arrowBottom'
+    | 'arrowNorthSouth'
+    | 'arrowEastWest'
+    | 'process'
+    | 'decision'
+    | 'terminator'
+    | 'predefinedProcess'
+    | 'document'
+    | 'multipleDocuments'
+    | 'manualInput'
+    | 'preparation'
+    | 'data'
+    | 'database'
+    | 'hardDisk'
+    | 'internalStorage'
+    | 'paperTape'
+    | 'manualOperation'
+    | 'delay'
+    | 'storedData'
+    | 'display'
+    | 'merge'
+    | 'connector'
+    | 'or'
+    | 'summingJunction'
+    | 'verticalContainer'
+    | 'horizontalContainer'
+    | 'cardWithImageOnLeft'
+    | 'cardWithImageOnTop'
+    | 'cardWithImageOnRight';
+  export type ToolboxDisplayMode = 'icons' | 'texts';
+  export type Units = 'in' | 'cm' | 'px';
 }
 declare module DevExpress.ui.dxDropDownButton {
   export type Item = dxDropDownButtonItem;
@@ -30521,28 +30586,17 @@ declare module DevExpress.viz {
      * [descr:BaseChartOptions.legend.customizeItems]
      */
     customizeItems?: (
-      items: Array<BaseChartLegendItem>
-    ) => Array<BaseChartLegendItem>;
+      items: Array<DevExpress.common.charts.LegendItem>
+    ) => Array<DevExpress.common.charts.LegendItem>;
     /**
      * [descr:BaseChartOptions.legend.markerTemplate]
      */
     markerTemplate?:
       | DevExpress.core.template
       | ((
-          legendItem: BaseChartLegendItem,
+          legendItem: DevExpress.common.charts.LegendItem,
           element: SVGGElement
         ) => string | DevExpress.core.UserDefinedElement<SVGElement>);
-  }
-  /**
-   * [descr:BaseChartLegendItem]
-   * @deprecated Attention! This type is for internal purposes only. If you used it previously, please submit a ticket to our {@link https://supportcenter.devexpress.com/ticket/create Support Center}. We will check if there is an alternative solution.
-   */
-  export interface BaseChartLegendItem
-    extends DevExpress.common.charts.BaseLegendItem {
-    /**
-     * [descr:BaseChartLegendItem.series]
-     */
-    series?: baseSeriesObject;
   }
   /**
    * [descr:BaseChartOptions]
@@ -38442,13 +38496,7 @@ declare module DevExpress.viz {
      * [descr:dxPolarChartOptions.onArgumentAxisClick]
      */
     onArgumentAxisClick?:
-      | ((e: {
-          component?: dxPolarChart;
-          element?: DevExpress.core.DxElement;
-          model?: any;
-          event?: DevExpress.events.DxEvent;
-          argument?: Date | number | string;
-        }) => void)
+      | ((e: DevExpress.viz.dxPolarChart.ArgumentAxisClickEvent) => void)
       | string;
     /**
      * [descr:dxPolarChartOptions.onLegendClick]

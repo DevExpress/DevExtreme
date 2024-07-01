@@ -437,9 +437,9 @@ QUnit.module('Order of methods calls', $.extend({}, environment, {
     reset: function() {
         const test = this;
         $.each(test.spies, function(_, name) {
-            test[name].reset();
+            test[name].resetHistory();
         });
-        this.renderer.stub('resize').reset();
+        this.renderer.resetStub('resize');
     },
     checkResized: function(assert) {
         this.checkOrder(assert, [
@@ -865,7 +865,7 @@ QUnit.module('Redraw on resize', $.extend({}, environment, {
 
     createWidget: function() {
         const result = environment.createWidget.apply(this, arguments);
-        this.onApplySize.reset();
+        this.onApplySize.resetHistory();
         return result;
     },
 
@@ -952,7 +952,7 @@ QUnit.module('ResizeObserver', Object.assign({}, environment, {
         sinon.stub(resizeObserverSingleton, 'unobserve');
     },
     afterEach() {
-        this.onApplySize.reset();
+        this.onApplySize.resetHistory();
         environment.afterEach.apply(this, arguments);
         resizeObserverSingleton.observe.restore();
         resizeObserverSingleton.unobserve.restore();
@@ -1004,7 +1004,7 @@ QUnit.test('Unobserve arguments', function(assert) {
 QUnit.test('Rerender chart from observer callback', function(assert) {
     this.createWidget();
 
-    this.onApplySize.reset();
+    this.onApplySize.resetHistory();
     this.$container.width(255);
 
     resizeObserverSingleton.observe.lastCall.args[1]();
@@ -1137,7 +1137,7 @@ QUnit.test('in default output message with url in logger. without arguments', fu
     this.triggerIncident('E100');
 
     assert.ok(this.error.calledOnce);
-    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/E100');
+    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: {0}, Templated text 2: {1}.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/0_1/E100');
 });
 
 QUnit.test('default incidentOccurred show warning', function(assert) {
@@ -1146,7 +1146,7 @@ QUnit.test('default incidentOccurred show warning', function(assert) {
     this.triggerIncident('W100');
 
     assert.ok(this.warn.calledOnce);
-    assert.equal(this.warn.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'W100 - Warning: Templated text 1: {0}, Templated text 2: {1}. See:\nhttp://js.devexpress.com/error/0_1/W100');
+    assert.equal(this.warn.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'W100 - Warning: Templated text 1: {0}, Templated text 2: {1}.\n\nFor additional information on this warning message, see: https://js.devexpress.com/error/0_1/W100');
 });
 
 QUnit.test('in default output message with url in logger', function(assert) {
@@ -1155,7 +1155,7 @@ QUnit.test('in default output message with url in logger', function(assert) {
     this.triggerIncident('E100', ['argument1', 'argument2']);
 
     assert.ok(this.error.calledOnce);
-    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: argument1, Templated text 2: argument2. See:\nhttp://js.devexpress.com/error/0_1/E100');
+    assert.equal(this.error.firstCall.args[0].replace(/\d+_\d+/, '0_1'), 'E100 - Templated text 1: argument1, Templated text 2: argument2.\n\nFor additional information on this error message, see: https://js.devexpress.com/error/0_1/E100');
 });
 
 QUnit.module('drawn', $.extend({}, environment, {

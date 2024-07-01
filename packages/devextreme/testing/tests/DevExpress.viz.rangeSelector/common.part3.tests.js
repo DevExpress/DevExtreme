@@ -1668,7 +1668,7 @@ QUnit.test('Render. Container size is changed - redraw widget', function(assert)
     const widget = this.createWidget({ onDrawn: spy });
 
     setHeight(widget.$element(), getHeight(widget.$element()) + 1);
-    spy.reset();
+    spy.resetHistory();
     widget.render();
 
     assert.strictEqual(spy.callCount, 1);
@@ -1678,7 +1678,7 @@ QUnit.test('Render. Container size is not changed - do not redraw widget', funct
     const spy = sinon.spy();
     const widget = this.createWidget({ onDrawn: spy });
 
-    spy.reset();
+    spy.resetHistory();
     widget.render();
 
     assert.strictEqual(spy.callCount, 0);

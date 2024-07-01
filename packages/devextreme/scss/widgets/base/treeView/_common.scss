@@ -1,17 +1,13 @@
 @use "../mixins" as *;
+@use "../../base/icons" as *;
 
 // adduse
-
 
 $treeview-searchbox-margin-bottom: 5px;
 $tree-view-icon-size: 24px;
 
 .dx-treeview-loadindicator-wrapper {
   text-align: center;
-}
-
-.dx-treeview-node-loadindicator {
-  position: absolute;
 }
 
 .dx-treeview-search {
@@ -31,6 +27,10 @@ $tree-view-icon-size: 24px;
 
   .dx-empty-message {
     line-height: normal;
+  }
+
+  .dx-treeview-node.dx-treeview-root-node {
+    padding-inline-start: 0;
   }
 }
 
@@ -58,7 +58,6 @@ $tree-view-icon-size: 24px;
 
 .dx-treeview-node {
   list-style-type: none;
-  position: relative;
 
   @include user-select(none);
 
@@ -69,27 +68,35 @@ $tree-view-icon-size: 24px;
   }
 
   .dx-checkbox {
-    position: absolute;
+    order: 1;
     margin: 0;
   }
 }
 
 .dx-treeview-item {
-  display: block;
+  display: flex;
+  align-items: center;
   cursor: pointer;
 
   .dx-treeview-item-content {
+    flex: 1 1 auto;
+    order: 2;
+
     .dx-icon {
-      display: inline-block;
-      width: $tree-view-icon-size;
-      height: $tree-view-icon-size;
-      vertical-align: middle;
-      margin-right: 5px;
-      background-size: $tree-view-icon-size $tree-view-icon-size;
+      margin-inline-end: 8px;
     }
 
-    span {
-      vertical-align: middle;
+    .dx-button-has-icon {
+      .dx-icon {
+        margin-inline-end: 0;
+      }
+    }
+  }
+
+  .dx-item-content {
+    .dx-item-url {
+      display: flex;
+      align-items: center;
     }
   }
 
@@ -101,8 +108,8 @@ $tree-view-icon-size: 24px;
 .dx-treeview-toggle-item-visibility,
 .dx-treeview-custom-expand-icon,
 .dx-treeview-custom-collapse-icon {
-  position: absolute;
   cursor: pointer;
+  order: 0;
 
   &.dx-state-disabled {
     cursor: default;
@@ -110,38 +117,9 @@ $tree-view-icon-size: 24px;
 }
 
 .dx-rtl {
-  .dx-treeview-node-container {
-    &:first-child {
-      > .dx-treeview-node {
-        padding-left: 0;
-      }
-    }
-
-    .dx-treeview-node {
-      padding-left: 0;
-
-      &.dx-treeview-item-with-checkbox {
-        .dx-treeview-item {
-          padding-left: 0;
-        }
-      }
-
-      .dx-treeview-item {
-        .dx-treeview-item-content {
-          .dx-icon {
-            margin-right: 0;
-          }
-        }
-      }
-    }
-  }
-
   .dx-treeview-toggle-item-visibility,
   .dx-treeview-custom-expand-icon,
   .dx-treeview-custom-collapse-icon {
-    left: auto;
-    right: 0;
-
     @include flip-horizontally();
   }
 }

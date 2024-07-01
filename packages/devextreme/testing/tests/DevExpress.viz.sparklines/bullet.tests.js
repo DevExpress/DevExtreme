@@ -28,7 +28,7 @@ QUnit.begin(function() {
 });
 
 QUnit.testStart(function() {
-    translator2DModule.Translator2D.reset();
+    translator2DModule.Translator2D.resetHistory();
 });
 
 rendererModule.Renderer = sinon.spy(function(parameters) {

@@ -21,6 +21,7 @@ import { name as dblclickEvent } from '@js/events/double_click';
 import { addNamespace, isFakeClickEvent } from '@js/events/utils/index';
 import CollectionWidget from '@js/ui/collection/ui.collection_widget.edit';
 import timeZoneUtils from '@js/ui/scheduler/utils.timeZone';
+import { dateUtilsTs } from '@ts/core/utils/date';
 
 import { createAppointmentAdapter } from '../m_appointment_adapter';
 import { APPOINTMENT_CONTENT_CLASSES, APPOINTMENT_DRAG_SOURCE_CLASS, APPOINTMENT_ITEM_CLASS } from '../m_classes';
@@ -204,10 +205,6 @@ class SchedulerAppointments extends CollectionWidget {
   }
 
   _optionChanged(args) {
-    if (this.option('isRenovatedAppointments')) {
-      return;
-    }
-
     switch (args.name) {
       case 'items':
         (this as any)._cleanFocusState();
@@ -419,7 +416,7 @@ class SchedulerAppointments extends CollectionWidget {
     const formatText = this.invoke(
       'getTextAndFormatDate',
       model.appointmentData,
-      this._currentAppointmentSettings.agendaSettings || model.targetedAppointmentData,
+      this._currentAppointmentSettings?.agendaSettings || model.targetedAppointmentData,
       'TIME',
     );
 
@@ -670,15 +667,20 @@ class SchedulerAppointments extends CollectionWidget {
 
     const { allDay, info } = $element.data('dxAppointmentSettings') as any;
     const sourceAppointment = (this as any)._getItemData($element);
-    let dateRange = {};
+    const viewOffset = this.invoke('getViewOffsetMs');
+    let dateRange: { startDate: Date; endDate: Date };
 
     if (allDay) {
       dateRange = this.resizeAllDay(e);
     } else {
       const startDate = this._getEndResizeAppointmentStartDate(e, sourceAppointment, info.appointment);
       const { endDate } = info.appointment;
+      const shiftedStartDate = dateUtilsTs.addOffsets(startDate, [-viewOffset]);
+      const shiftedEndDate = dateUtilsTs.addOffsets(endDate, [-viewOffset]);
 
-      dateRange = this._getDateRange(e, startDate, endDate);
+      dateRange = this._getDateRange(e, shiftedStartDate, shiftedEndDate);
+      dateRange.startDate = dateUtilsTs.addOffsets(dateRange.startDate, [viewOffset]);
+      dateRange.endDate = dateUtilsTs.addOffsets(dateRange.endDate, [viewOffset]);
     }
 
     this.updateResizedAppointment(
@@ -709,6 +711,7 @@ class SchedulerAppointments extends CollectionWidget {
       dataAccessors,
       rtlEnabled: this.option('rtlEnabled'),
       DOMMetaData: this.option('getDOMElementsMetaData')(),
+      viewOffset: this.invoke('getViewOffsetMs'),
     });
   }
 
@@ -797,23 +800,29 @@ class SchedulerAppointments extends CollectionWidget {
   _correctEndDateByDelta(endDate, deltaTime) {
     const endDayHour = this.invoke('getEndDayHour');
     const startDayHour = this.invoke('getStartDayHour');
-    let result = endDate.getTime() + deltaTime;
+
+    const maxDate = new Date(endDate);
+    const minDate = new Date(endDate);
+    const correctEndDate = new Date(endDate);
+
+    minDate.setHours(startDayHour, 0, 0, 0);
+    maxDate.setHours(endDayHour, 0, 0, 0);
+
+    if (correctEndDate > maxDate) {
+      correctEndDate.setHours(endDayHour, 0, 0, 0);
+    }
+
+    let result = correctEndDate.getTime() + deltaTime;
     const visibleDayDuration = (endDayHour - startDayHour) * toMs('hour');
 
     const daysCount = deltaTime > 0
       ? Math.ceil(deltaTime / visibleDayDuration)
       : Math.floor(deltaTime / visibleDayDuration);
 
-    const maxDate = new Date(endDate);
-    const minDate = new Date(endDate);
-
-    minDate.setHours(startDayHour, 0, 0, 0);
-    maxDate.setHours(endDayHour, 0, 0, 0);
-
     if (result > maxDate.getTime() || result <= minDate.getTime()) {
-      const tailOfCurrentDay = maxDate.getTime() - endDate.getTime();
+      const tailOfCurrentDay = maxDate.getTime() - correctEndDate.getTime();
       const tailOfPrevDays = deltaTime - tailOfCurrentDay;
-      const correctedEndDate = new Date(endDate).setDate(endDate.getDate() + daysCount);
+      const correctedEndDate = new Date(correctEndDate).setDate(correctEndDate.getDate() + daysCount);
       const lastDay = new Date(correctedEndDate);
       lastDay.setHours(startDayHour, 0, 0, 0);
 
@@ -825,24 +834,31 @@ class SchedulerAppointments extends CollectionWidget {
   _correctStartDateByDelta(startDate, deltaTime) {
     const endDayHour = this.invoke('getEndDayHour');
     const startDayHour = this.invoke('getStartDayHour');
-    let result = startDate.getTime() - deltaTime;
+
+    const maxDate = new Date(startDate);
+    const minDate = new Date(startDate);
+    const correctStartDate = new Date(startDate);
+
+    minDate.setHours(startDayHour, 0, 0, 0);
+    maxDate.setHours(endDayHour, 0, 0, 0);
+
+    if (correctStartDate < minDate) {
+      correctStartDate.setHours(startDayHour, 0, 0, 0);
+    }
+
+    let result = correctStartDate.getTime() - deltaTime;
+
     const visibleDayDuration = (endDayHour - startDayHour) * toMs('hour');
 
     const daysCount = deltaTime > 0
       ? Math.ceil(deltaTime / visibleDayDuration)
       : Math.floor(deltaTime / visibleDayDuration);
 
-    const maxDate = new Date(startDate);
-    const minDate = new Date(startDate);
-
-    minDate.setHours(startDayHour, 0, 0, 0);
-    maxDate.setHours(endDayHour, 0, 0, 0);
-
     if (result < minDate.getTime() || result >= maxDate.getTime()) {
-      const tailOfCurrentDay = startDate.getTime() - minDate.getTime();
+      const tailOfCurrentDay = correctStartDate.getTime() - minDate.getTime();
       const tailOfPrevDays = deltaTime - tailOfCurrentDay;
 
-      const firstDay = new Date(startDate.setDate(startDate.getDate() - daysCount));
+      const firstDay = new Date(correctStartDate.setDate(correctStartDate.getDate() - daysCount));
       firstDay.setHours(endDayHour, 0, 0, 0);
 
       result = firstDay.getTime() - tailOfPrevDays + visibleDayDuration * (daysCount - 1);

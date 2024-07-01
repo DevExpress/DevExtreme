@@ -2,7 +2,7 @@ import { Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot, isMaterialBased } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import ContextMenu from '../../../model/contextMenu';
 import { Item } from '../../../../../js/ui/context_menu.d';
 import {
@@ -58,5 +58,8 @@ test('ContextMenu items render', async (t) => {
     cssClass: 'custom-class',
     items: menuItems,
     target: 'body',
+    position: {
+      offset: '10 10',
+    },
   }, '#contextMenu');
 });

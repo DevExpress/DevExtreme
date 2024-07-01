@@ -432,10 +432,10 @@ QUnit.test('translates coordinates with tickInterval info', function(assert) {
     });
 
     assert.equal(this.translator.translate.callCount, 8); // 4 for labels
-    assert.deepEqual(this.translator.translate.getCall(0).args, [1, 0, 5]);
-    assert.deepEqual(this.translator.translate.getCall(2).args, [2, 0, 5]);
-    assert.deepEqual(this.translator.translate.getCall(4).args, [3, 0, 5]);
-    assert.deepEqual(this.translator.translate.getCall(6).args, [4, 0, 5]);
+    assert.deepEqual(this.translator.translate.getCall(0).args, [1, 0, false, 5]);
+    assert.deepEqual(this.translator.translate.getCall(2).args, [2, 0, false, 5]);
+    assert.deepEqual(this.translator.translate.getCall(4).args, [3, 0, false, 5]);
+    assert.deepEqual(this.translator.translate.getCall(6).args, [4, 0, false, 5]);
 });
 
 QUnit.module('checkAlignmentConstantLineLabels', environment2DTranslator);
@@ -1478,7 +1478,7 @@ QUnit.test('Do not update removed label position on update size', function(asser
 
     const removedLabel = this.renderer.text.getCall(1).returnValue;
 
-    removedLabel.attr.reset();
+    removedLabel.attr.resetHistory();
 
     // act
     axis.updateSize(this.canvas);
@@ -1700,7 +1700,7 @@ QUnit.test('Auto mode. After first draw - rotate, after second - stagger. Reset 
 
     let texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
-        texts.getCall(i).returnValue.rotate.reset();
+        texts.getCall(i).returnValue.rotate.resetHistory();
     }
     markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
@@ -1815,7 +1815,7 @@ QUnit.test('Rotated mode with positive angle. No overlapping after second draw. 
 
     let texts = this.renderer.text;
     for(i = 0; i < texts.callCount; i++) {
-        texts.getCall(i).returnValue.rotate.reset();
+        texts.getCall(i).returnValue.rotate.resetHistory();
     }
     markersBBoxes = [
         { x: 0, y: 0, width: 10, height: 5 },
@@ -2607,7 +2607,7 @@ QUnit.test('Estimate draws constant lines with outside labels', function(assert)
         }]
     });
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     axis.estimateMargins(this.canvas);
 
@@ -2670,7 +2670,7 @@ QUnit.test('Include constant line labels in bottom margin', function(assert) {
         }]
     });
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2696,7 +2696,7 @@ QUnit.test('Include constant line labels in top margin', function(assert) {
         }]
     });
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2731,7 +2731,7 @@ QUnit.test('Label is wider than constant line label - get label as margin', func
         width: 16
     }];
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2767,7 +2767,7 @@ QUnit.test('Constant line label is wider than label - get constant line label as
         width: 44
     }];
 
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     const margins = axis.estimateMargins(this.canvas);
 
@@ -2915,7 +2915,7 @@ QUnit.test('All margins are zero', function(assert) {
     this.options.multipleAxesSpacing = 5;
     const axis = this.createDrawnAxis();
 
-    this.renderer.g.getCall(6).returnValue.attr.reset();
+    this.renderer.g.getCall(6).returnValue.attr.resetHistory();
 
     axis.shift({ top: 0, bottom: 0, left: 0, right: 0 });
     // T548860
@@ -3042,7 +3042,7 @@ QUnit.test('Inside constant line group is not shifted', function(assert) {
     this.options.isHorizontal = true;
     const axis = this.createDrawnAxis();
     const group = this.renderer.g.getCall(11).returnValue;
-    group.attr.reset();
+    group.attr.resetHistory();
 
     axis.shift({ top: 64, bottom: 45, left: 50, right: 76 });
 
@@ -3338,7 +3338,7 @@ QUnit.test('Remove groups on disposing', function(assert) {
     axis.createTicks(this.canvas);
 
     axis.shift({ left: -10 });
-    this.renderer.g.reset();
+    this.renderer.g.resetHistory();
 
     axis.drawScaleBreaks();
     // act

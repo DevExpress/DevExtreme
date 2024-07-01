@@ -22,6 +22,7 @@ $material-grid-base-nodata-font-size: null !default;
 $material-command-edit-icon-size: null !default;
 $material-filter-row-between-editor-padding: null !default;
 $material-command-column-additional-right-margin: null !default;
+$material-grid-base-treeview-select-all-item-offset: null !default;
 
 $material-grid-base-header-line-height: 16px !default;
 $material-grid-base-header-icon-size: 15px !default;
@@ -53,6 +54,8 @@ $material-command-edit-icon-margin: 2px !default;
 
   $material-filter-row-between-editor-padding: 12px !default;
   $material-command-column-additional-right-margin: 0 !default;
+
+  $material-grid-base-treeview-select-all-item-offset: 43px !default;
 }
 
 @else if $size == "compact" {
@@ -80,6 +83,8 @@ $material-command-edit-icon-margin: 2px !default;
 
   $material-filter-row-between-editor-padding: 8px !default;
   $material-command-column-additional-right-margin: 2px !default;
+
+  $material-grid-base-treeview-select-all-item-offset: 35px !default;
 }
 
 $material-grid-base-header-panel-padding: 0 $material-grid-base-cell-horizontal-padding !default;

@@ -13,6 +13,7 @@
 @use "../common/mixins" as *;
 @use "../common/sizes" as *;
 @use "../fileUploader/sizes" as *;
+@use "../popup/sizes" as *;
 @use "../../base/htmlEditor";
 
 // adduse
@@ -56,7 +57,7 @@
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-focused-border-color;
+      border-bottom: 2px solid $texteditor-indicator-border-color;
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -238,15 +239,21 @@
     padding-inline-start: 0;
   }
 
+  .dx-tabs {
+    padding: 0 $fluent-html-editor-add-image-dialog-tabs-padding;
+  }
+
   .dx-fileuploader-input-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
     gap: 8px;
     padding: $fluent-html-editor-add-image-dialog-fileuploader-padding;
-    border: 1px dashed $htmleditor-fileuploader-input-wrapper-border-color;
-    background-color: $htmleditor-fileuploader-input-wrapper-bg-color;
+    border-width: $fluent-html-editor-fileuploader-input-wrapper-border-size;
+    border-style: dashed;
+    border-color: $htmleditor-fileuploader-input-wrapper-border-color;
     border-radius: $fluent-html-editor-fileuploader-input-wrapper-border-radius;
+    background-color: $htmleditor-fileuploader-input-wrapper-bg-color;
 
     &::after,
     &::before {
@@ -273,6 +280,10 @@
   }
 }
 
+.dx-formdialog-field-target .dx-field-item-content {
+  text-align: start;
+}
+
 .dx-mention {
   background-color: $htmleditor-mention-bg;
 }
@@ -286,4 +297,8 @@
   > .dx-draggable-dragging + .dx-htmleditor-highlighted-row {
     background-color: color.change($base-accent, $alpha: 0.5);
   }
+}
+
+.dx-formdialog.dx-dropdowneditor-overlay.dx-popup-wrapper .dx-overlay-content {
+  box-shadow: $fluent-popup-content-shadow;
 }

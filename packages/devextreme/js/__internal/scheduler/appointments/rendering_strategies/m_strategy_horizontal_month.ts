@@ -87,7 +87,8 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     const [firstChunkWidth, fullChunksWidth, withoutFirstChunkWidth] = this._getChunkWidths(geometry, settings, weekWidth);
     const leftPosition = this._getLeftPosition(settings);
 
-    const hasTailChunk = this.endViewDate > settings.info.appointment.endDate;
+    const { endDate } = settings.info.appointment;
+    const hasTailChunk = this.endViewDate > endDate;
     const chunkCount = this._getChunkCount(fullChunksWidth, firstChunkWidth, weekWidth, settings);
 
     const [tailChunkWidth, tailChunkLeftPosition] = this._getTailChunkSettings(withoutFirstChunkWidth, weekWidth, leftPosition);
@@ -145,11 +146,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
     return this._getAppointmentDefaultHeight();
   }
 
-  _columnCondition(a, b) {
-    const conditions = this._getConditions(a, b);
-    return conditions.rowCondition || conditions.columnCondition || conditions.cellPositionCondition;
-  }
-
   createTaskPositionMap(items) {
     return super.createTaskPositionMap(items, true);
   }
@@ -188,14 +184,6 @@ class HorizontalMonthRenderingStrategy extends HorizontalMonthLineRenderingStrat
 
   _needHorizontalGroupBounds() {
     return true;
-  }
-
-  getPositionShift(timeShift) {
-    return {
-      cellPosition: timeShift * this.cellWidth,
-      top: 0,
-      left: 0,
-    };
   }
 }
 

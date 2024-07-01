@@ -6,6 +6,9 @@ import errors from 'core/errors';
 import 'viz/chart';
 import 'viz/polar_chart';
 
+const SERIES_POINT_MARKER_SELECTOR = '.dxc-series circle';
+const LEGEND_TEXT_SELECTOR = '.dxc-legend .dxc-title text';
+
 QUnit.testStart(function() {
     const markup =
         '<div class="tooltipInteraction">\
@@ -186,7 +189,7 @@ QUnit.test('number of rendering on updating dataSource', function(assert) {
         onDrawn: drawn
     }).dxChart('instance');
 
-    drawn.reset();
+    drawn.resetHistory();
 
     chart.option({ dataSource: data });
     data.load();
@@ -219,6 +222,44 @@ QUnit.test('Legend\'s title as string', function(assert) {
     });
 
     assert.strictEqual(drawn.callCount, 1);
+});
+
+QUnit.test('Legend title position should not change after legend visibility change (T1210271)', function(assert) {
+    const chart = $('#chart').dxChart({
+        legend: {
+            title: 'Legend',
+            visible: true
+        },
+        series: [{}],
+    });
+
+    const initialTextY = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
+
+    assert.roughEqual(initialTextY, 17, 2);
+
+    const chartInstance = chart.dxChart('instance');
+    chartInstance.option('legend.visible', false);
+    chartInstance.option('legend.visible', true);
+
+    const textYAfterVisibilityChange = Number(chart.find(LEGEND_TEXT_SELECTOR).attr('y'));
+    assert.roughEqual(textYAfterVisibilityChange, 17, 2);
+});
+
+QUnit.test('Old title should be disposed upon creating a new one', function(assert) {
+    const chart = $('#chart').dxChart({
+        legend: {
+            title: 'Legend',
+            visible: true
+        },
+        series: [{}],
+    }).dxChart('instance');
+
+    const disposeSpy = sinon.spy(chart._legend._title, 'dispose');
+
+    chart.option('legend.visible', false);
+    chart.option('legend.visible', true);
+
+    assert.strictEqual(disposeSpy.callCount, 1);
 });
 
 // T999609
@@ -505,7 +546,7 @@ QUnit.test('clearHover', function(assert) {
     const hoverChanged = this.options.onSeriesHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].hover();
-    hoverChanged.reset();
+    hoverChanged.resetHistory();
     // act
     this.chart.getAllSeries()[0].clearHover();
 
@@ -530,7 +571,7 @@ QUnit.test('clearPointHover', function(assert) {
     const pointHover = this.options.onPointHoverChanged = sinon.spy();
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
-    pointHover.reset();
+    pointHover.resetHistory();
 
     // act
     this.chart.getAllSeries()[0].getAllPoints()[0].clearHover();
@@ -560,7 +601,7 @@ QUnit.test('onPointhoverChanged on hover second', function(assert) {
 
     this.createChart(this.options);
     this.chart.getAllSeries()[0].getAllPoints()[0].hover();
-    pointHover.reset();
+    pointHover.resetHistory();
     // act
     this.chart.getAllSeries()[0].getAllPoints()[1].hover();
 
@@ -754,7 +795,7 @@ QUnit.module('Resizing (T1156890)', {
                     onDrawn: drawnHandler
                 });
 
-                drawnHandler.reset();
+                drawnHandler.resetHistory();
 
                 chart.option(`size.${dimension}`, initialSize[dimension] + sign * 0.98);
 
@@ -811,5 +852,88 @@ QUnit.module('Deprecated options', {
                 '23.1',
                 'Specify another value'
             ]);
+    });
+});
+
+QUnit.module('Series translation', {
+    createChart(options) {
+        const hiddenAxisOptions = {
+            visible: false,
+            grid: {
+                visible: false
+            },
+            label: {
+                visible: false
+            },
+            tick: {
+                visible: false
+            }
+        };
+        const defaultOptions = {
+            series: {},
+            legend: {
+                visible: false
+            },
+            size: {
+                width: 300,
+                height: 300
+            },
+            valueAxis: {
+                visualRange: [1, 1000],
+                ...hiddenAxisOptions
+            },
+            argumentAxis: {
+
+                visualRange: [1, 1000],
+                ...hiddenAxisOptions
+            },
+            dataSource: [{
+                arg: 1,
+                val: 500
+            }, {
+                arg: 1.05,
+                val: 500.01
+            }]
+        };
+
+        return $('#chart').dxChart($.extend(true, {}, defaultOptions, options)).dxChart('instance');
+    }
+}, () => {
+    function getMarkerCoordinates(element) {
+        const transformAttribute = element.getAttribute('transform');
+
+        const coordinatesFromAttribute = transformAttribute
+            .replace('translate(', '')
+            .replace(')', '');
+
+        return coordinatesFromAttribute
+            .split(',')
+            .map((coord) => parseFloat(coord));
+    }
+
+    QUnit.test('Coordinates of points should be different when distance between values is too small.(T1195064)', function(assert) {
+        const chart = this.createChart({});
+
+        const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
+        const firstPointCoordinates = getMarkerCoordinates(pointsMarkers[0]);
+        const secondPointCoordinates = getMarkerCoordinates(pointsMarkers[1]);
+
+        assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
+        assert.ok((firstPointCoordinates[0] - secondPointCoordinates[0]) < 0, 'points should have different x coordinates');
+        assert.ok((secondPointCoordinates[1] - firstPointCoordinates[1]) < 0, 'points should have different y coordinates');
+    });
+
+    QUnit.test('Coordinates of points should be different when distance between values is too small. Rotated = true.(T1195064)', function(assert) {
+        const chart = this.createChart({
+            rotated: true
+        });
+
+        const pointsMarkers = $(chart.element()).find(SERIES_POINT_MARKER_SELECTOR);
+        const firstPointCoordinates = getMarkerCoordinates(pointsMarkers[0]);
+        const secondPointCoordinates = getMarkerCoordinates(pointsMarkers[1]);
+
+        assert.strictEqual(pointsMarkers.length, 2, 'Chart should has two points');
+        assert.ok((firstPointCoordinates[0] - secondPointCoordinates[0]) < 0, 'points should have different x coordinates');
+        assert.ok((secondPointCoordinates[1] - firstPointCoordinates[1]) < 0, 'points should have different y coordinates');
     });
 });

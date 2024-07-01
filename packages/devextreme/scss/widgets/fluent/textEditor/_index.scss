@@ -18,12 +18,15 @@
 $fluent-base-standard-texteditor-input-horizontal-padding: 0;
 $fluent-texteditor-invalid-badge-size: $fluent-invalid-badge-size + 2 * $fluent-invalid-badge-horizontal-padding;
 $fluent-editor-custom-button-margin: 6px;
+$fluent-editor-border-width: 1px;
 
 @mixin texteditor-outlined-styling() {
-  background-color: $texteditor-bg;
+  background-color: $texteditor-outlined-bg;
   border-radius: $texteditor-input-border-radius;
-  border: 1px solid $texteditor-border-color;
-  border-bottom: 1px solid $base-border-color-accessible;
+  border-width: $fluent-editor-border-width;
+  border-style: solid;
+  border-color: $texteditor-border-color;
+  border-bottom-color: $texteditor-border-bottom-color;
 
   &::before {
     box-sizing: border-box;
@@ -33,10 +36,10 @@ $fluent-editor-custom-button-margin: 6px;
     bottom: -1px;
     right: -1px;
     height: $texteditor-input-border-radius;
-    width: calc(100% + 2px);
+    width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
     border-bottom-right-radius: $texteditor-input-border-radius;
-    border-bottom: 2px solid $texteditor-focused-border-color;
+    border-bottom-color: $texteditor-indicator-border-color;
     clip-path: inset(calc(100% - 2px) 0 0);
     transform: scaleX(0);
     transition-property: transform;
@@ -44,25 +47,11 @@ $fluent-editor-custom-button-margin: 6px;
     transition-timing-function: cubic-bezier(0.7, 0, 1, 0.5);
   }
 
-  &.dx-texteditor-with-label:not(.dx-texteditor-label-outside),
-  &.dx-texteditor-with-floating-label {
-    .dx-placeholder::before,
-    .dx-texteditor-input {
-      padding-top: $fluent-filled-texteditor-input-top-padding;
-      padding-bottom: $fluent-filled-texteditor-input-bottom-padding;
-    }
-  }
-
   &.dx-texteditor-with-label,
   &.dx-texteditor-with-floating-label {
-    &::before {
-      width: 100%;
-      left: 0;
-      right: 0;
-    }
-
     .dx-texteditor-label {
-      inset-block: -1px;
+      width: calc(100% + 2 * $fluent-editor-border-width);
+      inset: -1px;
     }
 
     .dx-datebox {
@@ -73,7 +62,7 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $texteditor-disabled-color;
+    border-color: $texteditor-border-color-disabled;
   }
   
   &.dx-invalid {
@@ -90,17 +79,20 @@ $fluent-editor-custom-button-margin: 6px;
   }
 
   &.dx-state-hover {
+    background-color: $texteditor-outlined-bg-hover;
     border-left-color: $texteditor-border-color-hover;
     border-right-color: $texteditor-border-color-hover;
     border-top-color: $texteditor-border-color-hover;
-    border-bottom-color: $base-border-color-accessible-hover;
+    border-bottom-color: $texteditor-border-bottom-color-hover;
   }
 
-  &.dx-state-focused {
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $texteditor-outlined-bg-focused;
     border-left-color: $texteditor-border-color-focused;
     border-right-color: $texteditor-border-color-focused;
     border-top-color: $texteditor-border-color-focused;
-    border-bottom-color: $base-border-color-accessible-focused;
+    border-bottom-color: $texteditor-border-bottom-color-focused;
 
     &::before {        
       transform: scaleX(1);
@@ -109,17 +101,14 @@ $fluent-editor-custom-button-margin: 6px;
       transition-timing-function: cubic-bezier(0.1, 0.9, 0.2, 1);
     }
   }
-
-  &.dx-state-focused,
-  &.dx-state-active {
-    background-color: $texteditor-focused-bg;
-  }
 }
 
 @mixin texteditor-filled-styling() {
   background-color: $texteditor-filled-bg;
   border-radius: $texteditor-input-border-radius;
-  border: 1px solid transparent;
+  border-width: $fluent-editor-border-width;
+  border-style: solid;
+  border-color: transparent;
 
   .dx-placeholder::before,
   .dx-texteditor-input {
@@ -132,22 +121,26 @@ $fluent-editor-custom-button-margin: 6px;
     bottom: -1px;
     right: -1px;
     height: $texteditor-input-border-radius;
-    width: calc(100% + 2px);
+    width: calc(100% + 2 * $fluent-editor-border-width);
     border-bottom-left-radius: $texteditor-input-border-radius;
     border-bottom-right-radius: $texteditor-input-border-radius;
-    border-bottom: 2px solid $texteditor-focused-border-color;
+    border-bottom-color: $texteditor-indicator-border-color;
     clip-path: inset(calc(100% - 2px) 0 0);
   }
 
-  &.dx-state-hover,
-  &.dx-state-active {
-    background-color: $texteditor-hover-bg;
+  &.dx-state-hover {
+    background-color: $texteditor-filled-bg-hover;
   }
 
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $texteditor-filled-bg-focused;
+  }
+  
   &.dx-state-disabled,
   &.dx-state-readonly {
     background-color: transparent;
-    border-color: $texteditor-disabled-color;
+    border-color: $texteditor-border-color-disabled;
   }
 
   &.dx-invalid {
@@ -161,17 +154,26 @@ $fluent-editor-custom-button-margin: 6px;
 }
 
 @mixin texteditor-underlined-styling() {
-  background-color: transparent;
+  background-color: $texteditor-underlined-bg;
   border-radius: 0;
 
   &::after {
-    border-bottom: 1px solid $base-border-color-accessible;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    border-bottom-color: $texteditor-border-bottom-color;
   }
 
   &.dx-state-hover {
+    background-color: $texteditor-underlined-bg-hover;
+
     &::after {
-      border-bottom: 1px solid $base-border-color-accessible-hover;
+      border-bottom-color: $texteditor-border-bottom-color-hover;
     }
+  }
+
+  &.dx-state-focused,
+  &.dx-state-active {
+    background-color: $texteditor-underlined-bg-focused;
   }
 
   .dx-texteditor-input,
@@ -190,7 +192,7 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-disabled,
   &.dx-state-readonly {
     &::after {
-      border-bottom-color: $texteditor-disabled-color;
+      border-bottom-color: $texteditor-border-color-disabled;
     }
   }
 
@@ -303,7 +305,7 @@ $fluent-editor-custom-button-margin: 6px;
 
   &.dx-state-focused {
     .dx-texteditor-label {
-      color: $base-accent;
+      color: $texteditor-label-color-focused;
       font-size: $fluent-texteditor-label-font-size;
     }
 
@@ -316,7 +318,7 @@ $fluent-editor-custom-button-margin: 6px;
 
   &.dx-texteditor-label-outside {
     .dx-texteditor-label {
-      color: $base-text-color;
+      color: $texteditor-color;
     }
 
     &.dx-invalid {
@@ -329,7 +331,9 @@ $fluent-editor-custom-button-margin: 6px;
   &.dx-state-focused,
   &.dx-state-active {
     &::before {
-      border-bottom: 2px solid $texteditor-focused-border-color;
+      border-bottom-width: 2px;
+      border-bottom-style: solid;
+      border-bottom-color: $texteditor-indicator-border-color;
       transform: scale(1);
       transition-property: transform;
       transition-duration: 0.2s;
@@ -494,25 +498,26 @@ $fluent-editor-custom-button-margin: 6px;
 @include dx-editor-outlined(
   $texteditor-input-border-radius,
   $fluent-texteditor-label-font-size,
-  1px,
-  1px,
+  $fluent-base-border-width,
+  $fluent-base-border-width,
   solid,
   $fluent-base-inline-block-height,
   $fluent-base-inline-block-height,
   math.div(1px + $fluent-texteditor-font-size, 2),
   $fluent-texteditor-label-outside-top-offset,
-  1.5px,
+  0.5px,
   $fluent-filled-texteditor-input-horizontal-padding,
   $fluent-filled-texteditor-input-horizontal-padding,
-  $base-bg,
+  $texteditor-outlined-bg,
   1px solid transparent,
   $texteditor-border-color,
-  $base-border-color-accessible,
-  $texteditor-disabled-color,
+  $texteditor-border-bottom-color,
+  $texteditor-border-color-disabled,
+  $texteditor-border-color-disabled,
   $texteditor-border-color-hover,
-  $base-border-color-accessible-hover,
+  $texteditor-border-bottom-color-hover,
   $texteditor-border-color-focused,
-  $base-border-color-accessible-focused,
+  $texteditor-border-bottom-color-focused,
   $texteditor-invalid-faded-border-color,
   $texteditor-invalid-focused-border-color,
   $texteditor-label-transition,
@@ -521,7 +526,6 @@ $fluent-editor-custom-button-margin: 6px;
   1px,
   $fluent-texteditor-font-size,
   $fluent-texteditor-label-outside-height,
-  $fluent-colorbox-preview-width,
 );
 @include dx-editor-filled(
   $texteditor-label-transition,

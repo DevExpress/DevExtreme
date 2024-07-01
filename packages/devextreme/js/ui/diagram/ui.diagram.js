@@ -14,7 +14,7 @@ import eventsEngine from '../../events/core/events_engine';
 import { addNamespace } from '../../events/utils/index';
 import messageLocalization from '../../localization/message';
 import numberLocalization from '../../localization/number';
-import * as zIndexPool from '../overlay/z_index';
+import * as zIndexPool from '../../__internal/ui/overlay/m_z_index';
 import Overlay from '../overlay/ui.overlay';
 
 import DiagramToolbar from './ui.diagram.toolbar';
@@ -996,7 +996,9 @@ class Diagram extends Widget {
             },
             layoutParameters: this._getDataBindingLayoutParameters()
         };
-        this._executeDiagramCommand(DiagramCommand.BindDocument, data);
+        if(data.nodeDataSource) {
+            this._executeDiagramCommand(DiagramCommand.BindDocument, data);
+        }
     }
     _reloadContentByChanges(changes, isExternalChanges) {
         const keys = this._getChangesKeys(changes);

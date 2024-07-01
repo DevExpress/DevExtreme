@@ -4,68 +4,87 @@
 const themeKey = 'currentThemeId';
 
 const themeList = [
-    'light',
-    'light.compact',
+    {
+        group: 'Fluent',
+        list: [
+            { theme: 'fluent.blue.light' },
+            { theme: 'fluent.blue.light.compact' },
+            { theme: 'fluent.blue.dark' },
+            { theme: 'fluent.blue.dark.compact' },
+            { theme: 'fluent.saas.light' },
+            { theme: 'fluent.saas.light.compact' },
+            { theme: 'fluent.saas.dark' },
+            { theme: 'fluent.saas.dark.compact' },
+        ]
+    },
 
-    'carmine.compact',
-    'carmine',
+    {
+        group: 'Material',
+        list: [
+            { theme: 'material.purple.dark.compact' },
+            { theme: 'material.purple.dark' },
+            { theme: 'material.purple.light.compact' },
+            { theme: 'material.purple.light' },
 
-    'contrast.compact',
-    'contrast',
+            { theme: 'material.teal.dark.compact' },
+            { theme: 'material.teal.dark' },
+            { theme: 'material.teal.light.compact' },
+            { theme: 'material.teal.light' },
 
-    'dark.compact',
-    'dark',
+            { theme: 'material.orange.dark.compact' },
+            { theme: 'material.orange.dark' },
+            { theme: 'material.orange.light.compact' },
+            { theme: 'material.orange.light' },
 
-    'darkmoon.compact',
-    'darkmoon',
+            { theme: 'material.lime.dark.compact' },
+            { theme: 'material.lime.dark' },
+            { theme: 'material.lime.light.compact' },
+            { theme: 'material.lime.light' },
 
-    'darkviolet.compact',
-    'darkviolet',
+            { theme: 'material.blue.dark.compact' },
+            { theme: 'material.blue.dark' },
+            { theme: 'material.blue.light.compact' },
+            { theme: 'material.blue.light' },
+        ]
+    },
 
-    'fluent.blue.dark.compact',
-    'fluent.blue.dark',
-    'fluent.blue.light.compact',
-    'fluent.blue.light',
-
-    'greenmist.compact',
-    'greenmist',
-
-    'softblue.compact',
-    'softblue',
-
-    'material.blue.dark.compact',
-    'material.blue.dark',
-    'material.blue.light.compact',
-    'material.blue.light',
-
-    'material.lime.dark.compact',
-    'material.lime.dark',
-    'material.lime.light.compact',
-    'material.lime.light',
-
-    'material.orange.dark.compact',
-    'material.orange.dark',
-    'material.orange.light.compact',
-    'material.orange.light',
-
-    'material.purple.dark.compact',
-    'material.purple.dark',
-    'material.purple.light.compact',
-    'material.purple.light',
-
-    'material.teal.dark.compact',
-    'material.teal.dark',
-    'material.teal.light.compact',
-    'material.teal.light'
+    {
+        group: 'Generic',
+        list: [
+            { theme: 'light' },
+            { theme: 'light.compact' },
+            { theme: 'carmine.compact' },
+            { theme: 'carmine' },
+            { theme: 'contrast.compact' },
+            { theme: 'contrast' },
+            { theme: 'dark.compact' },
+            { theme: 'dark' },
+            { theme: 'darkmoon.compact' },
+            { theme: 'darkmoon' },
+            { theme: 'darkviolet.compact' },
+            { theme: 'darkviolet' },
+            { theme: 'softblue.compact' },
+            { theme: 'softblue' },
+            { theme: 'greenmist.compact' },
+            { theme: 'greenmist' },
+        ]
+    },
 ];
 
 const initThemes = (dropDownList) => {
-    themeList.forEach(theme => {
-        const item = document.createElement('option');
-        item.value = theme;
-        item.text = theme;
+    themeList.forEach(({ group, list }) => {
+        const parent = document.createElement('optgroup');
+        parent.setAttribute('label', group);
+        dropDownList.add(parent);
 
-        dropDownList.add(item);
+        list.forEach(({ theme }) => {
+            const child = document.createElement('option');
+
+            child.value = theme;
+            child.text = theme.replaceAll('.', ' ');
+
+            parent.appendChild(child);
+        });
     });
 };
 

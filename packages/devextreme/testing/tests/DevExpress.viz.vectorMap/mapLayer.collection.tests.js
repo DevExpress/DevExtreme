@@ -160,7 +160,7 @@ QUnit.test('Items collection should be empty after updating to empty array', fun
 // T660942
 QUnit.test('Update hovered layer', function(assert) {
     this.target.setOptions([{ name: 'layer-2' }]);
-    this.params.tracker.reset.reset();
+    this.params.tracker.reset.resetHistory();
 
     this.target.setOptions([{ name: 'layer-1' }, { name: 'layer-2' }]);
 

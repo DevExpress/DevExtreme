@@ -426,7 +426,6 @@ QUnit.module('Initialization', baseModuleConfig, () => {
 
     QUnit.test('Should not cut border of selected cell by \'Add row\' (T748046)', function(assert) {
         // arrange
-        const clock = sinon.useFakeTimers();
         const dataGrid = createDataGrid({
             width: 400,
             height: 200,
@@ -438,25 +437,22 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
         });
 
-        clock.tick(10);
+        this.clock.tick(10);
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
         scrollable.scrollTo({ y: 5 });
-        clock.tick(10);
+        this.clock.tick(10);
 
         // act
         dataGrid.addRow();
-        clock.tick(10);
+        this.clock.tick(10);
 
         // assert
         assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
-
-        clock.restore();
     });
 
     QUnit.test('Added row should be scrolled to the top of the grid (T748046)', function(assert) {
         // arrange
-        const clock = sinon.useFakeTimers();
         const dataGrid = createDataGrid({
             width: 400,
             height: 200,
@@ -468,20 +464,18 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             dataSource: [...new Array(20)].map((x, i) => ({ name: i }))
         });
 
-        clock.tick(10);
+        this.clock.tick(10);
         const scrollable = $('.dx-scrollable').dxScrollable('instance');
 
         scrollable.scrollTo({ y: 10 });
-        clock.tick(10);
+        this.clock.tick(10);
 
         // act
         dataGrid.addRow();
-        clock.tick(10);
+        this.clock.tick(10);
 
         // assert
         assert.ok(scrollable.scrollTop() <= 1, 'first row is not overlayed by parent container');
-
-        clock.restore();
     });
 
     // T315857
@@ -4087,8 +4081,12 @@ QUnit.module('Editing', baseModuleConfig, () => {
 
         // assert
         const $popupContent = dataGrid.getController('editing').getPopupContent() || [];
+        const $commandButton = dataGrid.$element().find('.dx-command-edit .dx-link');
 
-        assert.equal($popupContent.length, 1, 'There is editing popup');
+        assert.strictEqual($popupContent.length, 1, 'There is editing popup');
+        assert.strictEqual($commandButton.length, 1, 'command button count');
+        assert.ok($commandButton.hasClass('dx-link-edit'), 'edit button');
+        assert.notOk($(dataGrid.getRowElement(0)).hasClass('dx-edit-row'), 'row is not edited');
     });
 
     // T1136955

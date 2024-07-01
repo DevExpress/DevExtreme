@@ -1,3 +1,4 @@
+"use client"
 import dxGantt, {
     Properties
 } from "devextreme/ui/gantt";
@@ -10,7 +11,7 @@ import type { ContentReadyEvent, ContextMenuPreparingEvent, CustomCommandEvent, 
 import type { dxTreeListColumn, dxTreeListRowObject } from "devextreme/ui/tree_list";
 import type { template } from "devextreme/core/templates/template";
 import type { DataSourceOptions } from "devextreme/data/data_source";
-import type { Store } from "devextreme/data/abstract_store";
+import type { Store } from "devextreme/data/store";
 import type { ColumnHeaderFilterSearchConfig, HeaderFilterSearchConfig } from "devextreme/common/grids";
 import type { dxContextMenuItem } from "devextreme/ui/context_menu";
 import type { CollectionWidgetItem } from "devextreme/ui/collection/ui.collection_widget.base";
@@ -131,6 +132,7 @@ class Gantt extends BaseComponent<React.PropsWithChildren<IGanttOptions>> {
   disabled: PropTypes.bool,
   editing: PropTypes.object,
   elementAttr: PropTypes.object,
+  endDateRange: PropTypes.instanceOf(Date),
   filterRow: PropTypes.object,
   firstDayOfWeek: PropTypes.oneOfType([
     PropTypes.number,
@@ -203,6 +205,7 @@ class Gantt extends BaseComponent<React.PropsWithChildren<IGanttOptions>> {
   showResources: PropTypes.bool,
   showRowLines: PropTypes.bool,
   sorting: PropTypes.object,
+  startDateRange: PropTypes.instanceOf(Date),
   stripLines: PropTypes.array,
   tabIndex: PropTypes.number,
   taskListWidth: PropTypes.number,
@@ -255,10 +258,10 @@ type IColumnProps = React.PropsWithChildren<{
     allowSelectAll?: boolean;
     dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
     groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-    height?: number;
+    height?: number | string;
     search?: ColumnHeaderFilterSearchConfig;
     searchMode?: "contains" | "startswith" | "equals";
-    width?: number;
+    width?: number | string;
   };
   minWidth?: number;
   selectedFilterOperation?: "<" | "<=" | "<>" | "=" | ">" | ">=" | "between" | "contains" | "endswith" | "notcontains" | "startswith";
@@ -327,10 +330,10 @@ type IColumnHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number;
+  height?: number | string;
   search?: ColumnHeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number;
+  width?: number | string;
 }>
 class ColumnHeaderFilter extends NestedOption<IColumnHeaderFilterProps> {
   public static OptionName = "headerFilter";
@@ -449,8 +452,8 @@ class FilterRow extends NestedOption<IFilterRowProps> {
 // Column
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -500,10 +503,10 @@ type IHeaderFilterProps = React.PropsWithChildren<{
   allowSelectAll?: boolean;
   dataSource?: Array<any> | DataSourceOptions | ((options: { component: Record<string, any>, dataSource: DataSourceOptions | null }) => void) | null | Store;
   groupInterval?: number | "day" | "hour" | "minute" | "month" | "quarter" | "second" | "year";
-  height?: number;
+  height?: number | string;
   search?: ColumnHeaderFilterSearchConfig | HeaderFilterSearchConfig;
   searchMode?: "contains" | "startswith" | "equals";
-  width?: number;
+  width?: number | string;
   searchTimeout?: number;
   texts?: dxGanttHeaderFilterTexts;
   visible?: boolean;
@@ -534,7 +537,7 @@ type IItemProps = React.PropsWithChildren<{
   menuItemTemplate?: (() => string | any) | template;
   options?: any;
   showText?: "always" | "inMenu";
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   render?: (...params: any) => React.ReactNode;
   component?: React.ComponentType<any>;
   keyFn?: (data: any) => string;
@@ -642,8 +645,8 @@ class Sorting extends NestedOption<ISortingProps> {
 // Gantt
 type IStripLineProps = React.PropsWithChildren<{
   cssClass?: string;
-  end?: any | (() => any | number | string) | number | string;
-  start?: any | (() => any | number | string) | number | string;
+  end?: Date | (() => Date | number | string) | number | string;
+  start?: Date | (() => Date | number | string) | number | string;
   title?: string;
 }>
 class StripLine extends NestedOption<IStripLineProps> {
@@ -706,7 +709,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   template?: ((itemData: CollectionWidgetItem, itemIndex: number, itemElement: any) => string | any) | template;
   text?: string;
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;

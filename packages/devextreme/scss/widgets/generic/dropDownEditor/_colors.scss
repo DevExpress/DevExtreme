@@ -26,24 +26,28 @@ $dropdowneditor-filled-button-invalid-active-bg: color.change($texteditor-invali
 $dropdowneditor-button-active-border-color: transparent !default;
 
 /**
-* $name 80. Spin icon color
+* $name 80. Arrow icon color
 * $type color
 */
 $dropdowneditor-icon-color: $base-icon-color !default;
 
 /**
-* $name 90. Spin active icon color
+* $name 90. Active arrow icon color
 * $type color
 */
 $dropdowneditor-icon-active-color: null !default;
-$dropdowneditor-icon-border-radius: null !default;
+
+/**
+* $name 100. Dropdown button border radius
+* $type text
+*/
+$dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 
 @if $color == "carmine" {
   $dropdowneditor-button-hover-bg: darken($base-bg, 4%) !default; // #fff => #f5f6f7
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "contrast" {
@@ -51,7 +55,6 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-bg: $base-bg !default;
   $dropdowneditor-button-active-bg: $base-inverted-bg !default;
   $dropdowneditor-icon-active-color: $base-inverted-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius - 1px !default;
 }
 
 @if $color == "dark" {
@@ -59,7 +62,6 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "darkmoon" {
@@ -67,7 +69,6 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "darkviolet" {
@@ -75,7 +76,6 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "greenmist" {
@@ -83,7 +83,6 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "light" {
@@ -91,7 +90,6 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 
 @if $color == "softblue" {
@@ -99,6 +97,5 @@ $dropdowneditor-icon-border-radius: null !default;
   $dropdowneditor-button-hover-border-color: transparent !default;
   $dropdowneditor-button-active-bg: darken($button-normal-bg, 30%) !default;
   $dropdowneditor-icon-active-color: $base-icon-color !default;
-  $dropdowneditor-icon-border-radius: $base-border-radius-small !default;
 }
 

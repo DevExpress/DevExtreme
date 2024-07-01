@@ -30,6 +30,6 @@ $filemanager-progressbox-shadow-color: null !default;
 
 @if $mode == "dark" {
   $filemanager-dirs-tree-item-focus-bg: lighten($base-bg, 8%) !default;
-  $filemanager-progressbox-shadow-color: color.change(darken($base-shadow-color, 100%), $alpha: 0.3) !default;
+  $filemanager-progressbox-shadow-color: color.change($base-shadow-color, $alpha: 0.3) !default;
 }
 

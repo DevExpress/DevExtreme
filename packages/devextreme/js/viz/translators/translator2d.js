@@ -151,6 +151,7 @@ _Translator2d.prototype = {
         const canvasOptions = that._prepareCanvasOptions();
         const visibleCategories = getCategoriesInfo(categories, range.minVisible, range.maxVisible).categories;
         const categoriesLength = visibleCategories.length;
+        const conditionalRound = (value, skipRound) => skipRound ? value : Math.round(value);
 
         if(range.isEmpty()) {
             script = dummyTranslator;
@@ -184,7 +185,10 @@ _Translator2d.prototype = {
         });
         that._oldMethods = Object.keys(script);
         extend(that, script);
-        that._conversionValue = options.conversionValue ? function(value) { return value; } : function(value) { return Math.round(value); };
+
+        that._conversionValue = options.conversionValue
+            ? (value) => value
+            : conditionalRound;
 
         that.sc = {};
         that._checkingMethodsAboutBreaks = [
@@ -279,8 +283,10 @@ _Translator2d.prototype = {
         canvasOptions.ratioOfCanvasRange = canvasOptions.canvasLength / (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible);
 
         if(breaks !== undefined) {
-            canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) /
-                (canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length);
+            const visibleRangeLength = canvasOptions.rangeMaxVisible - canvasOptions.rangeMinVisible - breaks[breaks.length - 1].length;
+            if(visibleRangeLength !== 0) {
+                canvasOptions.ratioOfCanvasRange = (canvasOptions.canvasLength - breaks[breaks.length - 1].cumulativeWidth) / visibleRangeLength;
+            }
         }
 
         return canvasOptions;
@@ -389,7 +395,7 @@ _Translator2d.prototype = {
         return _abs(value) < minShownValue ? value >= 0 ? minShownValue : -minShownValue : value;
     },
 
-    translate(bp, direction) {
+    translate(bp, direction, skipRound) {
         const specialValue = this.translateSpecialCase(bp);
 
         if(isDefined(specialValue)) {
@@ -399,7 +405,7 @@ _Translator2d.prototype = {
         if(isNaN(bp)) {
             return null;
         }
-        return this.to(bp, direction);
+        return this.to(bp, direction, skipRound);
     },
 
     getInterval: function(interval) {
@@ -564,7 +570,7 @@ _Translator2d.prototype = {
         return that.toValue(value);
     },
 
-    to: function(bp, direction) {
+    to: function(bp, direction, skipRound) {
         const range = this.getBusinessRange();
 
         if(isDefined(range.maxVisible) && isDefined(range.minVisible) &&
@@ -596,7 +602,7 @@ _Translator2d.prototype = {
             }
         }
         return that._conversionValue(that._calculateProjection((bp - canvasOptions.rangeMinVisible - prop.length) *
-            canvasOptions.ratioOfCanvasRange + commonBreakSize));
+            canvasOptions.ratioOfCanvasRange + commonBreakSize), skipRound);
     },
 
     from: function(pos, direction) {

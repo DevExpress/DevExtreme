@@ -1,3 +1,5 @@
+@use "sass:color";
+@use "../colors" as *;
 @use "../sizes" as *;
 
 // adduse
@@ -10,6 +12,11 @@ $material-popup-toolbar-height: null !default;
 
 $material-popup-button-margin: 0 8px !default;
 $material-popup-toolbar-item-spacing: 8px !default;
+$material-popup-overlay-content-shadow:
+  0 11px 15px -7px color.change($base-shadow-color, $alpha: 0.2),
+  0 24px 38px 3px color.change($base-shadow-color, $alpha: 0.14),
+  0 9px 46px 8px color.change($base-shadow-color, $alpha: 0.12) !default;
+$material-popup-focused-content-shadow: 0 8px 40px 6px color.change($base-shadow-color, $alpha: 0.4) !default;
 
 @if $size == "default" {
   $material-popup-content-padding: 24px !default;

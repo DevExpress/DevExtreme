@@ -925,9 +925,9 @@ module.exports = function($, gridCore, columnResizingReordering, domUtils, commo
         };
     };
 
-    exports.TestDraggingHeader = columnResizingReordering && columnResizingReordering.DraggingHeaderView.inherit({
-        _subscribeToEvents: function(rootElement) { }
-    });
+    exports.TestDraggingHeader = columnResizingReordering && class extends columnResizingReordering.DraggingHeaderView {
+        _subscribeToEvents(rootElement) { }
+    };
 
     exports['setup' + nameWidget + 'Modules'] = function(that, moduleNames, options) {
         const modules = [];

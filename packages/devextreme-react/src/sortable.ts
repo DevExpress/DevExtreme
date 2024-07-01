@@ -1,3 +1,4 @@
+"use client"
 import dxSortable, {
     Properties
 } from "devextreme/ui/sortable";

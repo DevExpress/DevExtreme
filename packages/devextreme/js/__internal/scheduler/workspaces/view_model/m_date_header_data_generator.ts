@@ -1,13 +1,13 @@
 import dateUtils from '@js/core/utils/date';
+import { VIEWS } from '@ts/scheduler/m_constants';
 import {
-  formatWeekdayAndDay,
-  getDisplayedCellCount,
+  formatWeekdayAndDay, getDisplayedCellCount, getGroupCount,
   getHeaderCellText,
-  getHorizontalGroupCount,
-  getTotalCellCountByCompleteData,
-} from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+  getHorizontalGroupCount, getTotalCellCountByCompleteData,
+  isTimelineView,
+} from '@ts/scheduler/r1/utils/index';
 
-import { getGroupCount } from '../../resources/m_utils';
+import timeZoneUtils from '../../m_utils_time_zone';
 
 export class DateHeaderDataGenerator {
   constructor(public _viewDataGenerator) {
@@ -42,6 +42,7 @@ export class DateHeaderDataGenerator {
       hoursInterval,
       isHorizontalGrouping,
       intervalCount,
+      viewOffset,
     } = options;
 
     const cellCountInDay = this._viewDataGenerator.getCellCountInDay(startDayHour, endDayHour, hoursInterval);
@@ -61,11 +62,12 @@ export class DateHeaderDataGenerator {
 
     for (let dayIndex = 0; dayIndex < daysInView; dayIndex += 1) {
       const cell = completeViewDataMap[index][dayIndex * colSpan];
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(cell.startDate, -viewOffset);
 
       weekDaysRow.push({
         ...cell,
         colSpan,
-        text: formatWeekdayAndDay(cell.startDate),
+        text: formatWeekdayAndDay(shiftedStartDate),
         isFirstGroupCell: false,
         isLastGroupCell: false,
       });
@@ -90,12 +92,14 @@ export class DateHeaderDataGenerator {
       intervalCount,
       currentDate,
       viewType,
+      viewOffset,
     } = options;
 
     const horizontalGroupCount = getHorizontalGroupCount(groups, groupOrientation);
     const index = completeViewDataMap[0][0].allDay ? 1 : 0;
     const colSpan = isGroupedByDate ? horizontalGroupCount : 1;
     const isVerticalGrouping = groupOrientation === 'vertical';
+
     const cellCountInGroupRow = this._viewDataGenerator.getCellCount({
       intervalCount,
       currentDate,
@@ -110,16 +114,25 @@ export class DateHeaderDataGenerator {
       ? completeViewDataMap[index].filter((_, columnIndex) => columnIndex % horizontalGroupCount === 0)
       : completeViewDataMap[index];
 
+    // NOTE: Should leave dates as is when creating time row in timelines.
+    const shouldShiftDatesForHeaderText = !isTimelineView(viewType)
+      || viewType === VIEWS.TIMELINE_MONTH;
+
     return slicedByColumnsData.map(({
       startDate,
       endDate,
       isFirstGroupCell,
       isLastGroupCell,
       ...restProps
-    }, index) => {
+    }, idx: number) => {
+      const shiftedStartDate = timeZoneUtils.addOffsetsWithoutDST(startDate, -viewOffset);
+      const shiftedStartDateForHeaderText = shouldShiftDatesForHeaderText
+        ? shiftedStartDate
+        : startDate;
+
       const text = getHeaderCellText(
-        index % cellCountInGroupRow,
-        startDate,
+        idx % cellCountInGroupRow,
+        shiftedStartDateForHeaderText,
         headerCellTextFormat,
         getDateForHeaderText,
         {
@@ -127,6 +140,7 @@ export class DateHeaderDataGenerator {
           startViewDate,
           startDayHour,
           cellCountInDay,
+          viewOffset,
         },
       );
 
@@ -134,7 +148,7 @@ export class DateHeaderDataGenerator {
         ...restProps,
         startDate,
         text,
-        today: dateUtils.sameDate(startDate, today),
+        today: dateUtils.sameDate(shiftedStartDate, today),
         colSpan,
         isFirstGroupCell: isGroupedByDate || (isFirstGroupCell && !isVerticalGrouping),
         isLastGroupCell: isGroupedByDate || (isLastGroupCell && !isVerticalGrouping),

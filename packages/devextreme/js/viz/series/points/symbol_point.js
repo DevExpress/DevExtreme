@@ -573,14 +573,14 @@ export default {
         const argTranslator = that._getArgTranslator();
 
         if(that._options.rotated) {
-            that.vx = that.x = valTranslator.translate(that.value);
-            that.vy = that.y = argTranslator.translate(that.argument);
-            that.minX = valTranslator.translate(that.minValue);
+            that.vx = that.x = valTranslator.translate(that.value, undefined, true);
+            that.vy = that.y = argTranslator.translate(that.argument, undefined, true);
+            that.minX = valTranslator.translate(that.minValue, undefined, true);
             that.defaultX = valTranslator.translate(CANVAS_POSITION_DEFAULT);
         } else {
-            that.vy = that.y = valTranslator.translate(that.value);
-            that.vx = that.x = argTranslator.translate(that.argument);
-            that.minY = valTranslator.translate(that.minValue);
+            that.vy = that.y = valTranslator.translate(that.value, undefined, true);
+            that.vx = that.x = argTranslator.translate(that.argument, undefined, true);
+            that.minY = valTranslator.translate(that.minValue, undefined, true);
             that.defaultY = valTranslator.translate(CANVAS_POSITION_DEFAULT);
         }
         that._translateErrorBars();

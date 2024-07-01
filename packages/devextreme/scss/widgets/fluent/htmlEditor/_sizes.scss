@@ -9,12 +9,15 @@ $fluent-html-editor-horizontal-padding: null !default;
 $fluent-html-editor-add-image-dialog-fileuploader-padding: null !default;
 $fluent-html-editor-toolbar-menu-separator-margin: 4px !default;
 $fluent-html-editor-fileuploader-input-wrapper-border-radius: 8px !default;
+$fluent-html-editor-fileuploader-input-wrapper-border-size: 1.5px !default;
+$fluent-html-editor-add-image-dialog-tabs-padding: null !default;
 
 @if $size == "default" {
   $fluent-toolbar-size-editor-width: 120px !default;
   $fluent-html-editor-vertical-padding: 16px !default;
   $fluent-html-editor-horizontal-padding: 16px !default;
   $fluent-html-editor-add-image-dialog-fileuploader-padding: 48px 0 24px;
+  $fluent-html-editor-add-image-dialog-tabs-padding: 14px !default;
 }
 
 @else if $size == "compact" {
@@ -22,6 +25,7 @@ $fluent-html-editor-fileuploader-input-wrapper-border-radius: 8px !default;
   $fluent-html-editor-vertical-padding: 12px !default;
   $fluent-html-editor-horizontal-padding: 12px !default;
   $fluent-html-editor-add-image-dialog-fileuploader-padding: 40px 0 18px;
+  $fluent-html-editor-add-image-dialog-tabs-padding: 8px !default;
 }
 
 $fluent-htmleditor-toolbar-padding: $fluent-html-editor-horizontal-padding !default;

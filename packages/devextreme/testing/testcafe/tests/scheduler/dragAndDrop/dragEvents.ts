@@ -1,7 +1,7 @@
 import { CallbackTestHelper, WindowCallbackExtended } from '../../../helpers/callbackTestHelper';
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler dragging - drag events`
   .page(url(__dirname, '../../container.html'));

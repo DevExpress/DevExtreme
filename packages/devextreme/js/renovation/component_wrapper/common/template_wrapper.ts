@@ -103,7 +103,7 @@ function removeDifferentElements(
     const hasOldChild = !!oldChildren.find((oldElement) => newElement === oldElement);
 
     if (!hasOldChild && newElement.parentNode) {
-      newElement.parentNode.removeChild(newElement);
+      $(newElement).remove();
     }
   });
 }

@@ -18,7 +18,7 @@ import {
     isUnaryOperation
 } from '../utils';
 
-const DEFAULT_PROTOCOL_VERSION = 2;
+const DEFAULT_PROTOCOL_VERSION = 4;
 const STRING_FUNCTIONS = ['contains', 'notcontains', 'startswith', 'endswith'];
 
 const compileCriteria = (() => {

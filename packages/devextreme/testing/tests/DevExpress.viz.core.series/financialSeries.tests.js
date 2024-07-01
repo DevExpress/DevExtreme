@@ -77,7 +77,7 @@ const createSeries = function(options, renderSettings) {
         incidentOccurred: $.noop
     }, renderSettings);
 
-    renderer.stub('g').reset();
+    renderer.stub('g').resetHistory();
     return new Series(renderSettings, options);
 };
 
@@ -616,7 +616,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -753,7 +753,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -847,7 +847,7 @@ const checkGroups = function(assert, series) {
 
         const styles = series._getPointOptions().styles;
 
-        assert.strictEqual(styles.labelColor, 'innerColor', 'label color');
+        assert.strictEqual(styles.labelColor, 'mainSeriesColor', 'label color');
 
         assert.deepEqual(styles.hover, {
             fill: 'color_1',
@@ -938,7 +938,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'seriesColor',
                 stroke: 'seriesColor',
@@ -1034,7 +1034,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'seriesColor',
                 stroke: 'seriesColor',
@@ -1129,7 +1129,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(series._getPointOptions().styles, {
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'h-color',
                 stroke: 'h-color',
@@ -1243,7 +1243,7 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'c-h-color',
                 stroke: 'c-h-color',
@@ -1919,7 +1919,7 @@ const checkGroups = function(assert, series) {
         series.createPoints();
 
         assert.deepEqual(this.createPoint.getCall(0).args[2].styles, {
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'mainSeriesColor',
                 stroke: 'mainSeriesColor',
@@ -2258,7 +2258,7 @@ const checkGroups = function(assert, series) {
         assert.deepEqual(series.getAllPoints()[0].updateOptions.lastCall.args[0].styles, {
             usePointCustomOptions: true,
             useLabelCustomOptions: undefined,
-            labelColor: 'innerColor',
+            labelColor: 'mainSeriesColor',
             hover: {
                 fill: 'c-h-color',
                 stroke: 'c-h-color',

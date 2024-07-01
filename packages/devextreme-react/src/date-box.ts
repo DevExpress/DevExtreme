@@ -1,3 +1,4 @@
+"use client"
 import dxDateBox, {
     Properties
 } from "devextreme/ui/date_box";
@@ -49,9 +50,9 @@ type IDateBoxOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDa
   dropDownButtonComponent?: React.ComponentType<any>;
   dropDownButtonKeyFn?: (data: any) => string;
   defaultOpened?: boolean;
-  defaultValue?: any | number | string;
+  defaultValue?: Date | number | string;
   onOpenedChange?: (value: boolean) => void;
-  onValueChange?: (value: any | number | string) => void;
+  onValueChange?: (value: Date | number | string) => void;
 }>
 
 class DateBox extends BaseComponent<React.PropsWithChildren<IDateBoxOptions>> {
@@ -138,7 +139,17 @@ class DateBox extends BaseComponent<React.PropsWithChildren<IDateBoxOptions>> {
       "hidden",
       "outside"])
   ]),
+  max: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
+  ]),
   maxLength: PropTypes.oneOfType([
+    PropTypes.number,
+    PropTypes.string
+  ]),
+  min: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
     PropTypes.number,
     PropTypes.string
   ]),
@@ -218,6 +229,11 @@ class DateBox extends BaseComponent<React.PropsWithChildren<IDateBoxOptions>> {
       "invalid",
       "pending"])
   ]),
+  value: PropTypes.oneOfType([
+    PropTypes.instanceOf(Date),
+    PropTypes.number,
+    PropTypes.string
+  ]),
   valueChangeEvent: PropTypes.string,
   visible: PropTypes.bool,
   width: PropTypes.oneOfType([
@@ -283,10 +299,10 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   accessKey?: string;
   activeStateEnabled?: boolean;
   bindingOptions?: Record<string, any>;
-  cellTemplate?: ((itemData: { date: any, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template;
+  cellTemplate?: ((itemData: { date: Date, text: string, view: string }, itemIndex: number, itemElement: any) => string | any) | template;
   dateSerializationFormat?: string;
   disabled?: boolean;
-  disabledDates?: Array<any> | ((data: DisabledDate) => boolean);
+  disabledDates?: Array<Date> | ((data: DisabledDate) => boolean);
   elementAttr?: Record<string, any>;
   firstDayOfWeek?: 0 | 1 | 2 | 3 | 4 | 5 | 6;
   focusStateEnabled?: boolean;
@@ -295,9 +311,9 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   hoverStateEnabled?: boolean;
   isDirty?: boolean;
   isValid?: boolean;
-  max?: any | number | string;
+  max?: Date | number | string;
   maxZoomLevel?: "century" | "decade" | "month" | "year";
-  min?: any | number | string;
+  min?: Date | number | string;
   minZoomLevel?: "century" | "decade" | "month" | "year";
   name?: string;
   onDisposing?: ((e: CalendarDisposingEvent) => void);
@@ -316,13 +332,13 @@ type ICalendarOptionsProps = React.PropsWithChildren<{
   validationMessageMode?: "always" | "auto";
   validationMessagePosition?: "bottom" | "left" | "right" | "top";
   validationStatus?: "valid" | "invalid" | "pending";
-  value?: any | Array<any | number | string> | number | string;
+  value?: Array<Date | number | string> | Date | number | string;
   visible?: boolean;
   weekNumberRule?: "auto" | "firstDay" | "fullWeek" | "firstFourDays";
   width?: (() => number | string) | number | string;
   zoomLevel?: "century" | "decade" | "month" | "year";
-  defaultValue?: any | Array<any | number | string> | number | string;
-  onValueChange?: (value: any | Array<any | number | string> | number | string) => void;
+  defaultValue?: Array<Date | number | string> | Date | number | string;
+  onValueChange?: (value: Array<Date | number | string> | Date | number | string) => void;
   defaultZoomLevel?: "century" | "decade" | "month" | "year";
   onZoomLevelChange?: (value: "century" | "decade" | "month" | "year") => void;
   cellRender?: (...params: any) => React.ReactNode;
@@ -357,8 +373,8 @@ class Collision extends NestedOption<ICollisionProps> {
 // DateBox
 type IDisplayFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -643,7 +659,7 @@ type IToolbarItemProps = React.PropsWithChildren<{
   text?: string;
   toolbar?: "bottom" | "top";
   visible?: boolean;
-  widget?: "dxAutocomplete" | "dxButton" | "dxCheckBox" | "dxDateBox" | "dxMenu" | "dxSelectBox" | "dxTabs" | "dxTextBox" | "dxButtonGroup" | "dxDropDownButton";
+  widget?: "dxAutocomplete" | "dxButton" | "dxButtonGroup" | "dxCheckBox" | "dxDateBox" | "dxDropDownButton" | "dxMenu" | "dxSelectBox" | "dxSwitch" | "dxTabs" | "dxTextBox";
   menuItemRender?: (...params: any) => React.ReactNode;
   menuItemComponent?: React.ComponentType<any>;
   menuItemKeyFn?: (data: any) => string;

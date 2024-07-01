@@ -484,7 +484,7 @@ QUnit.module('Menu rendering', () => {
         assert.strictEqual(content.text, 'Item text');
     });
 
-    QUnit.test('Link should not be programmatically clicked if item.url is set and text inside link is clicked', function(assert) {
+    QUnit.test('Link should be programmatically clicked if item.url is set and text inside link is clicked', function(assert) {
         const clickSpy = sinon.spy();
         const menuBase = createMenu({
             items: [{ text: 'Item text', url: 'http://some_url' }],
@@ -502,7 +502,7 @@ QUnit.module('Menu rendering', () => {
 
         $itemText.trigger('dxclick');
 
-        assert.notOk(clickSpy.calledOnce);
+        assert.ok(clickSpy.calledOnce);
     });
 
     QUnit.test('Link should be programmatically clicked if item.url is set and item is clicked', function(assert) {

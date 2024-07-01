@@ -23,6 +23,7 @@ import * as UpdatePropsImmutable from '../../utils/update_props_immutable';
 import registerEvent from '../../../../events/core/event_registrator';
 import { one } from '../../../../events';
 import KeyboardProcessor from '../../../../events/core/keyboard_processor';
+import { removeEvent } from '../../../../events/remove';
 
 const fakeEventSingleton = new class {
   handlerCount = 0;
@@ -923,18 +924,23 @@ describe('templates and slots', () => {
   });
 
   it('remove old template content between renders', () => {
+    let dxRemoveFired = false;
+
     $('#component').dxTemplatedTestWidget({
       template(data, element) {
         $(element).append(`<span>Template - ${data.simpleTemplate}</span>` as any);
       },
     });
-    const templateRoot = $('#component').children('.templates-root')[0];
+    const templateRoot = $('#component').children('.templates-root');
+
+    one(templateRoot.children()[0], removeEvent, () => { dxRemoveFired = true; });
 
     $('#component').dxTemplatedTestWidget({
       text: 'new data',
     });
 
-    expect(templateRoot.innerHTML).toBe('<span>Template - new data</span>');
+    expect(templateRoot[0].innerHTML).toBe('<span>Template - new data</span>');
+    expect(dxRemoveFired).toBeTruthy();
   });
 
   it('correctly change template at runtime', () => {

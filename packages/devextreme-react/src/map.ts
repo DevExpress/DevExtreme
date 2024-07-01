@@ -1,3 +1,4 @@
+"use client"
 import dxMap, {
     Properties
 } from "devextreme/ui/map";

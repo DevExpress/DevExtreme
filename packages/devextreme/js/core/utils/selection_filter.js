@@ -1,5 +1,6 @@
 import { getKeyHash, equalByValue } from './common';
 import { isString, isObject } from './type';
+import { compileGetter } from './data';
 
 export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
@@ -110,7 +111,8 @@ export const SelectionFilterCreator = function(selectedItemKeys, isSelectAll) {
 
         for(let i = 0, length = keyExpr.length; i < length; i++) {
             const currentKeyExpr = keyExpr[i];
-            const currentKeyValue = itemKeyValue && itemKeyValue[currentKeyExpr];
+            const keyValueGetter = compileGetter(currentKeyExpr);
+            const currentKeyValue = itemKeyValue && keyValueGetter(itemKeyValue);
             const filterExprPart = getFilterForPlainKey(currentKeyExpr, currentKeyValue);
 
             if(!filterExprPart) {

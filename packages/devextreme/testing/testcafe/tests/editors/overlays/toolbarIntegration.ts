@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import { testScreenshot } from '../../../helpers/themeUtils';
 import url from '../../../helpers/getPageUrl';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 import Popup from '../../../model/popup';
 import Popover from '../../../model/popover';
 import Toolbar from '../../../model/toolbar/toolbar';

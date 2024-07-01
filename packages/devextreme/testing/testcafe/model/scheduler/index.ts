@@ -7,7 +7,7 @@ import Appointment from './appointment';
 import Toolbar from './toolbar';
 import Collectors from './collectors';
 import ReducedIconTooltip from './appointment/tooltip/reducedIconTooltip';
-import { WidgetName } from '../../helpers/createWidget';
+import type { WidgetName } from '../../helpers/widgetTypings';
 import { GroupRow } from './groupRow';
 import { HeaderPanel } from './headerPanel';
 
@@ -19,11 +19,15 @@ export const CLASS = {
   allDayTableCell: 'dx-scheduler-all-day-table-cell',
   allDayTitle: 'dx-scheduler-all-day-title',
   allDayRow: 'dx-scheduler-all-day-table-row',
+  allDayCollapsed: 'dx-scheduler-work-space-all-day-collapsed',
   focusedCell: 'dx-scheduler-focused-cell',
   selectedCell: 'dx-state-focused',
+  hoverCell: 'dx-state-hover',
+  activeCell: 'dx-state-active',
   droppableCell: 'dx-scheduler-date-table-droppable-cell',
   dateTableRow: 'dx-scheduler-date-table-row',
   dateTableScrollable: 'dx-scheduler-date-table-scrollable',
+  dateTableScrollableContainer: 'dx-scrollable-container',
   headerScrollable: 'dx-scheduler-header-scrollable',
   scrollableContainer: 'dx-scrollable-container',
   workspaceBothScrollbar: 'dx-scheduler-work-space-both-scrollbar',
@@ -58,6 +62,8 @@ export default class Scheduler extends Widget {
   readonly dateTable: Selector;
 
   readonly dateTableScrollable: Selector;
+
+  readonly dateTableScrollableContainer: Selector;
 
   readonly headerPanel: HeaderPanel;
 
@@ -94,6 +100,7 @@ export default class Scheduler extends Widget {
     this.dateTable = this.element.find(`.${CLASS.dateTable}`);
     this.dateTableRows = this.element.find(`.${CLASS.dateTableRow}`);
     this.dateTableScrollable = this.element.find(`.${CLASS.dateTableScrollable}`);
+    this.dateTableScrollableContainer = this.dateTableScrollable.find(`.${CLASS.dateTableScrollableContainer}`);
     this.workspaceScrollable = this.dateTableScrollable.find(`.${CLASS.scrollableContainer}`);
 
     const headerSpaceScroll = this.element.find(`.${CLASS.headerScrollable} .${CLASS.scrollableContainer}`);
@@ -202,5 +209,9 @@ export default class Scheduler extends Widget {
 
   checkViewType(type: string): Promise<boolean> {
     return this.workSpace.hasClass(ViewTypeClassesMap[type]);
+  }
+
+  isAllDayPanelCollapsed(): Promise<boolean> {
+    return this.workSpace.hasClass(CLASS.allDayCollapsed);
   }
 }

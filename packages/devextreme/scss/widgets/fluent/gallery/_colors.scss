@@ -25,7 +25,7 @@ $gallery-indicator-focused-bg: $base-accent !default;
 $gallery-indicator-item-border-color: color.change(#000, $alpha: 0.2) !default;
 $gallery-indicator-selected-border-color: color.change($gallery-indicator-bg, $alpha: 0.8) !default;
 $gallery-navbutton-color: color.change($base-text-color, $alpha: 0.54) !default;
-$gallery-nav-arrow-color: $base-inverted-icon-color !default;
+$gallery-nav-arrow-color: $base-inverted-text-color !default;
 
 /**
 * $name 40. Hovered navigation button color

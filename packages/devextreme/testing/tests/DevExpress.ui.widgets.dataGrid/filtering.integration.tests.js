@@ -396,9 +396,9 @@ QUnit.module('Initialization', baseModuleConfig, () => {
             }]
         });
 
-        assert.equal(calculateFilterExpressionCallCount, 5, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 3, 'calculateFilterExpression call count');
         assert.ok(grid.getCombinedFilter(), 'combined filter');
-        assert.equal(calculateFilterExpressionCallCount, 6, 'calculateFilterExpression call count');
+        assert.equal(calculateFilterExpressionCallCount, 4, 'calculateFilterExpression call count');
     });
 
     function createRemoteDataSourceWithGroupPaging(arrayStore, key) {
@@ -1845,5 +1845,89 @@ QUnit.module('Initialization', baseModuleConfig, () => {
         } catch(err) {
             assert.ok(false, 'error is thrown');
         }
+    });
+
+    // T1195882
+    QUnit.test('Remote data source - check the number of requests when filterValue is specified for a column without dataType, and filterSyncEnabled and syncLookupFilterValues are enabled', function(assert) {
+        // arrange, act
+        const store = new ArrayStore([{ CustomerID: 0 }, { CustomerID: 1 }]);
+        const lookupStore = new ArrayStore([{ value: 0, text: 'test1' }, { value: 1, text: 'test2' }]);
+        const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+        const lookupLoadSpy = sinon.spy((loadOptions) => lookupStore.load(loadOptions));
+
+        createDataGrid({
+            dataSource: {
+                load: loadSpy,
+                totalCount: () => 2,
+            },
+            columns: [{
+                dataField: 'CustomerID',
+                lookup: {
+                    dataSource: {
+                        load: lookupLoadSpy
+                    },
+                    valueExpr: 'value',
+                    displayExpr: 'text'
+                },
+                filterValue: 0
+            }],
+            headerFilter: { visible: true },
+            filterRow: { visible: true },
+            filterSyncEnabled: true,
+            syncLookupFilterValues: true,
+            remoteOperations: true
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        // first load - load all lookup data
+        // second load - load data without filter
+        // third load - load relevant lookup data
+        // fourth load - load data with filter
+        assert.strictEqual(lookupLoadSpy.callCount, 1, 'lookup load count');
+        assert.strictEqual(loadSpy.callCount, 3, 'load count');
+    });
+
+    // T1195882
+    QUnit.test('Remote data source - check the number of requests when filterValue is specified for a column with dataType, and filterSyncEnabled and syncLookupFilterValues are enabled', function(assert) {
+        // arrange, act
+        const store = new ArrayStore([{ CustomerID: 0 }, { CustomerID: 1 }]);
+        const lookupStore = new ArrayStore([{ value: 0, text: 'test1' }, { value: 1, text: 'test2' }]);
+        const loadSpy = sinon.spy((loadOptions) => store.load(loadOptions));
+        const lookupLoadSpy = sinon.spy((loadOptions) => lookupStore.load(loadOptions));
+
+        createDataGrid({
+            dataSource: {
+                load: loadSpy,
+                totalCount: () => 2,
+            },
+            columns: [{
+                dataField: 'CustomerID',
+                dataType: 'number',
+                lookup: {
+                    dataSource: {
+                        load: lookupLoadSpy
+                    },
+                    valueExpr: 'value',
+                    displayExpr: 'text'
+                },
+                filterValue: 0
+            }],
+            headerFilter: { visible: true },
+            filterRow: { visible: true },
+            filterSyncEnabled: true,
+            syncLookupFilterValues: true,
+            remoteOperations: true
+        });
+
+        this.clock.tick(100);
+
+        // assert
+        // first load - load all lookup data
+        // second load - load data with filter
+        // third load - load relevant lookup data
+        assert.strictEqual(lookupLoadSpy.callCount, 1, 'lookup load count');
+        assert.strictEqual(loadSpy.callCount, 2, 'load count');
     });
 });

@@ -37,7 +37,7 @@
 }
 
 .dx-datebox-datetime-time-side {
-  background-color: $timeview-bg;
+  justify-content: flex-end;
 }
 
 .dx-datebox-wrapper-rollers.dx-datebox-wrapper-time .dx-popup-content {
@@ -66,14 +66,6 @@
 
 .dx-datebox-datetime {
   @include dx-dropdowneditor-button-icon-styling(eventall);
-}
-
-.dx-datebox-calendar {
-  &.dx-dropdowneditor-active {
-    &.dx-editor-filled {
-      background: $texteditor-hover-bg;
-    }
-  }
 }
 
 .dx-datebox-wrapper-calendar {

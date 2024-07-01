@@ -1,10 +1,11 @@
 import Widget from './internal/widget';
 import ActionButton from './internal/actionButton';
-import { WidgetName } from '../helpers/createWidget';
+import type { WidgetName } from '../helpers/widgetTypings';
 
 const CLASS = {
   input: 'dx-texteditor-input',
   isInvalid: 'dx-invalid',
+  label: 'dx-label',
 };
 export default class TextBox extends Widget {
   input: Selector;
@@ -31,5 +32,13 @@ export default class TextBox extends Widget {
 
   getButton(index: number): ActionButton {
     return new ActionButton(this.element, index);
+  }
+
+  getLabel(): Selector {
+    return this.element.find(`.${CLASS.label}`);
+  }
+
+  getLabelSpan(): Selector {
+    return this.getLabel().find('span');
   }
 }

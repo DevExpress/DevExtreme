@@ -1,3 +1,4 @@
+"use client"
 import dxPieChart, {
     Properties
 } from "devextreme/viz/pie_chart";
@@ -233,7 +234,7 @@ class Animation extends NestedOption<IAnimationProps> {
 // PieChart
 type IAnnotationProps = React.PropsWithChildren<{
   allowDragging?: boolean;
-  argument?: any | number | string;
+  argument?: Date | number | string;
   arrowLength?: number;
   arrowWidth?: number;
   border?: Record<string, any> | {
@@ -330,8 +331,8 @@ class AnnotationBorder extends NestedOption<IAnnotationBorderProps> {
 // Tooltip
 type IArgumentFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;
@@ -376,7 +377,7 @@ class Color extends NestedOption<IColorProps> {
 // PieChart
 type ICommonAnnotationSettingsProps = React.PropsWithChildren<{
   allowDragging?: boolean;
-  argument?: any | number | string;
+  argument?: Date | number | string;
   arrowLength?: number;
   arrowWidth?: number;
   border?: Record<string, any> | {
@@ -591,8 +592,8 @@ class Font extends NestedOption<IFontProps> {
 // Tooltip
 type IFormatProps = React.PropsWithChildren<{
   currency?: string;
-  formatter?: ((value: number | any) => string);
-  parser?: ((value: string) => number | any);
+  formatter?: ((value: number | Date) => string);
+  parser?: ((value: string) => number | Date);
   precision?: number;
   type?: "billions" | "currency" | "day" | "decimal" | "exponential" | "fixedPoint" | "largeNumber" | "longDate" | "longTime" | "millions" | "millisecond" | "month" | "monthAndDay" | "monthAndYear" | "percent" | "quarter" | "quarterAndYear" | "shortDate" | "shortTime" | "thousands" | "trillions" | "year" | "dayOfWeek" | "hour" | "longDateLongTime" | "minute" | "second" | "shortDateShortTime";
   useCurrencyAccountingStyle?: boolean;

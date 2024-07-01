@@ -105,7 +105,7 @@ const environment = {
     },
     afterEach: function() {
         this.$container.remove();
-        rendererModule.Renderer.reset();
+        rendererModule.Renderer.resetHistory();
         this.renderer = null;
     },
     getBarsGroup: function() {
@@ -1072,6 +1072,38 @@ QUnit.test('Font color', function(assert) {
     this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, 'blue');
 });
 
+[0, .5, 1].forEach(opacity => {
+    QUnit.test('Font opacity should be set correctly at initialization (T1238556)', function(assert) {
+        this.$container.dxBarGauge({
+            values: [10, 20, 30],
+            palette: 'office',
+            label: {
+                font: {
+                    color: 'blue',
+                    opacity: opacity
+                }
+            }
+        });
+        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, `rgba(0,0,255,${opacity})`);
+    });
+
+    QUnit.test('Font opacity should be set correctly at runtime change (T1238556)', function(assert) {
+        this.$container.dxBarGauge({
+            values: [10, 20, 30],
+            palette: 'office',
+            label: {
+                font: {
+                    color: 'blue',
+                }
+            }
+        });
+
+        this.$container.dxBarGauge('instance').option('label.font.opacity', opacity);
+
+        this.checkColors(assert, '#e0e0e0', ['#5f8b95', '#ba4d51', '#af8a53'], null, `rgba(0,0,255,${opacity})`);
+    });
+});
+
 QUnit.module('Animation', $.extend({}, environment, {
     check: function(assert, angle) {
         assert.strictEqual(this.getBarsGroup().children[1]._stored_settings.startAngle, angle, 'bar position');
@@ -1207,7 +1239,7 @@ QUnit.test('set values', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.values([10, '20', 30]);
 
@@ -1222,7 +1254,7 @@ QUnit.test('set "values" option', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.option('values', [10, '20', 30]);
 
@@ -1237,7 +1269,7 @@ QUnit.test('set values - scalar', function(assert) {
         values: [50],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.values(80);
 
@@ -1252,7 +1284,7 @@ QUnit.test('set values - not valid', function(assert) {
         values: [60, 70],
         onDrawn: spy
     });
-    spy.reset();
+    spy.resetHistory();
 
     gauge.values({});
 

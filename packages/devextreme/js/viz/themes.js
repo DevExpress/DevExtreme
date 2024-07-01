@@ -12,6 +12,7 @@ import darkVioletThemes from './core/themes/generic.darkviolet';
 import greenMistThemes from './core/themes/generic.greenmist';
 import softBlueThemes from './core/themes/generic.softblue';
 import materialThemes from './core/themes/material';
+import fluentThemes from './core/themes/fluent';
 
 const themes = {};
 const themesMapping = {};
@@ -216,7 +217,8 @@ if(isEmptyObject(themes) && isEmptyObject(themesMapping) && !defaultTheme) {
         darkVioletThemes,
         greenMistThemes,
         softBlueThemes,
-        materialThemes
+        materialThemes,
+        fluentThemes
     ).forEach(t => {
         registerTheme(t.theme, t.baseThemeName);
     });

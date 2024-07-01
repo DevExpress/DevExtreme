@@ -15,7 +15,7 @@ module.exports = {
         }
     },
     collectCoverageFrom: [
-        './js/renovation/(ui|utils|viz|common)/**/*.ts?(x)',
+        './js/renovation/(ui|utils|common)/**/*.ts?(x)',
         './js/renovation/component_wrapper/common/component.ts',
         './js/renovation/component_wrapper/common/template_wrapper.ts',
         '!**/*.j.tsx',
@@ -28,17 +28,15 @@ module.exports = {
         './js/renovation/ui/scheduler/appointment_edit_form/layout.tsx', // NOTE: covering with TestCafe
         './js/renovation/ui/scheduler/workspaces/utils.ts',
         './js/renovation/utils/get_computed_style.ts',
+        './js/renovation/utils/get_element_offset.ts',
         './js/renovation/utils/dom.ts',
         './js/renovation/utils/render_template.ts', // TODO: this is temporary file
-        './js/renovation/viz/common/renderers/utils.ts',
-        './js/renovation/viz/common/tooltip_utils.ts',
-        './js/renovation/viz/common/utils.ts',
-        './js/renovation/viz/sparklines/utils.ts',
+        './js/renovation/ui/scheduler/', // NOTE: disabled coverage for migration
+        './js/renovation/utils/diagnostic' // NOTE: unused after the scheduler's code migration
     ],
     coverageDirectory: './js/renovation/code_coverage',
     coverageThreshold: {
         './js/renovation/ui/**/*.ts?(x)': full,
-        './js/renovation/viz/**/*.ts?(x)': full,
         './js/renovation/utils/**/*.ts?(x)': full,
         './js/renovation/common/**/*.ts?(x)': full,
         './js/renovation/component_wrapper/common/template_wrapper.ts': full,

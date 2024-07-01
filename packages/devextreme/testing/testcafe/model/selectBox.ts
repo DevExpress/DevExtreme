@@ -1,4 +1,4 @@
-import { WidgetName } from '../helpers/createWidget';
+import type { WidgetName } from '../helpers/widgetTypings';
 import DropDownList from './internal/dropDownList';
 
 export default class SelectBox extends DropDownList {

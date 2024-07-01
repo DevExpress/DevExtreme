@@ -326,11 +326,16 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
       .dx-popup-content {
         padding: $generic-grid-base-column-chooser-paddings;
       }
+
+      .dx-#{$widget-name}-column-chooser-plain, .dx-#{$widget-name}-column-chooser-list {
+        .dx-treeview-select-all-item {
+          padding-inline-start: $generic-grid-base-treeview-select-all-item-offset;
+        }
+      }
     }
 
     .dx-overlay-content {
       background-color: $datagrid-columnchooser-bg;
-      border-radius: $datagrid-columnchooser-overlay-border-radius;
       box-shadow: 0 1px 3px $datagrid-columnchooser-shadow-color;
 
       .dx-popup-title {
@@ -587,17 +592,6 @@ $generic-grid-base-group-panel-message-line-height: $generic-button-text-line-he
 
     .dx-toolbar {
       margin-bottom: $generic-grid-base-header-panel-margin-bottom;
-    }
-
-    .dx-apply-button {
-      @include dx-button-styling-variant(
-        $button-success-bg, $button-success-border-color, $button-success-color,
-        darken($button-success-bg, 10%),
-        darken($button-success-bg, 15%),
-        darken($button-success-bg, 20%),
-        $button-success-color,
-        $button-success-color
-      );
     }
   }
 

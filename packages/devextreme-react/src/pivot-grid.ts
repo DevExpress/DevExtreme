@@ -1,3 +1,4 @@
+"use client"
 import dxPivotGrid, {
     Properties
 } from "devextreme/ui/pivot_grid";

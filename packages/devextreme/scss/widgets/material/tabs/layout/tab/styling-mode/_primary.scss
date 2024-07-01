@@ -15,23 +15,24 @@
 
 
 .dx-tabs-styling-mode-primary {
-  &:not(.dx-tabs-vertical) {
-    .dx-tab-selected {
-      @include dx-tabs-indicator-primary(bottom, $tabs-selected-tab-border-color);
-  
-      &.dx-state-disabled {
-        @include dx-tabs-indicator-primary(bottom, $tabs-disabled-tab-border-color);
-      }
-    }
+  &.dx-tabs:not(.dx-tabs-vertical) .dx-tabs-scrollable .dx-tab {
+    flex-basis: auto;
+    min-width: $material-tab-min-width;
   }
 
-  &.dx-tabs-vertical {
-    .dx-tab-selected {
-      @include dx-tabs-indicator-primary(right, $tabs-selected-tab-border-color);
-  
-      &.dx-state-disabled {
-        @include dx-tabs-indicator-primary(right, $tabs-disabled-tab-border-color);
-      }
-    }
+  &.dx-tab-indicator-position-top {
+    @include dx-tabs-indicator-primary-base(top);
+  }
+
+  &.dx-tab-indicator-position-right {
+    @include dx-tabs-indicator-primary-base(right);
+  }
+
+  &.dx-tab-indicator-position-bottom {
+    @include dx-tabs-indicator-primary-base(bottom);
+  }
+
+  &.dx-tab-indicator-position-left {
+    @include dx-tabs-indicator-primary-base(left);
   }
 }

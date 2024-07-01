@@ -358,8 +358,8 @@ QUnit.test('On/trigger/off event listeners', function(assert) {
     const removeListener = sinon.spy(HTMLElement.prototype, 'removeEventListener');
 
     eventNames.forEach(function(eventName) {
-        addListener.reset();
-        removeListener.reset();
+        addListener.resetHistory();
+        removeListener.resetHistory();
         eventsEngine.on(div, eventName, function(e) {
             callbackIsCalled = true;
         });
@@ -386,7 +386,7 @@ QUnit.test('On/trigger/off event listeners', function(assert) {
 });
 
 QUnit.test('Passive event listeners support detection, positive case', function(assert) {
-    const addEventListenerStub = sinon.stub(window, 'addEventListener', (name, handler, options) => {
+    const addEventListenerStub = sinon.stub(window, 'addEventListener').callsFake((name, handler, options) => {
         options.passive;
     });
 
@@ -397,7 +397,7 @@ QUnit.test('Passive event listeners support detection, positive case', function(
 });
 
 QUnit.test('Passive event listeners support detection, negative case', function(assert) {
-    const addEventListenerStub = sinon.stub(window, 'addEventListener', (name, handler) => {
+    const addEventListenerStub = sinon.stub(window, 'addEventListener').callsFake((name, handler) => {
     });
 
     const isPassiveEventListenerSupported = eventsEngine.detectPassiveEventHandlersSupport();

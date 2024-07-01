@@ -67,7 +67,7 @@ import { DxoUploadModule } from 'devextreme-angular/ui/nested';
     ]
 })
 export class DxFileManagerComponent extends DxComponent implements OnDestroy, OnChanges, DoCheck {
-    instance: DxFileManager;
+    instance: DxFileManager = null;
 
     /**
      * [descr:WidgetOptions.accessKey]

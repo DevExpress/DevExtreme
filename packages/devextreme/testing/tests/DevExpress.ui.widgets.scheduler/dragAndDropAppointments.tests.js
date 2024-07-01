@@ -715,6 +715,16 @@ module('Common', commonModuleConfig, () => {
 
     // Timezone-sensitive test, use US/Pacific for proper testing
     QUnit.test('Appointment should have correct dates after dragging through timezone change (T835544)', function(assert) {
+        const isPacificTimezone = new Date('2024-01-01T08:00:00Z').getTimezoneOffset() === 480;
+        const expectedTimeText = !isPacificTimezone
+            ? '12:00 AM - 12:00 AM'
+            // NOTE: It's okay that after drag-n-drop through DST appointment time is "reduced" by an hour
+            // Because summer -> winter DST change has one specific nuance - the DST day has 25 hours
+            // The clock's arrow goes back for the hour, so we can see the interval 02:00AM -> 03:00AM twice in one day (+1 hour)
+            // If we drag-n-drop this appointment one day left, everything will be ok and it will be 12:00AM -> 12:00AM
+            // Because the appointment's duration wasn't changed.
+            : '12:00 AM - 11:00 PM';
+
         const scheduler = createWrapper({
             _draggingMode: 'default',
             dataSource: [{
@@ -738,14 +748,14 @@ module('Common', commonModuleConfig, () => {
         pointer.up();
 
         let appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging to timezone change are correct');
+        assert.equal(appointmentContent, expectedTimeText, 'Dates when dragging to timezone change are correct');
 
         elementPosition = getAbsolutePosition($element);
         pointer.down(elementPosition.left, elementPosition.top).move(cellWidth * 2, 0);
         pointer.up();
 
         appointmentContent = scheduler.appointments.getAppointment().find('.dx-scheduler-appointment-content-date').text();
-        assert.equal(appointmentContent, '12:00 AM - 12:00 AM', 'Dates when dragging from timezone change are correct');
+        assert.equal(appointmentContent, expectedTimeText, 'Dates when dragging from timezone change are correct');
     });
 
     QUnit.test('The appointment should be dragged into the all-day panel when there is a scroll offset(T851985)', function(assert) {
@@ -2540,8 +2550,8 @@ module('Appointment dragging', {
                 const updatedItem = {
                     'text': 'Google AdWords Strategy',
                     'ownerId': [2],
-                    'startDate': new Date(2017, 4, 1, 8, 0),
-                    'endDate': new Date(2017, 4, 1, 9, 30),
+                    'startDate': new Date(2017, 4, 1, 9, 0),
+                    'endDate': new Date(2017, 4, 1, 10, 30),
                     'priority': 1
                 };
 

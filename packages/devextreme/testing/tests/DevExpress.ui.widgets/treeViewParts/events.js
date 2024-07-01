@@ -570,6 +570,19 @@ QUnit.test('onItemClick should not be fired when clicking on the checkbox', func
     assert.equal(clickHandler.callCount, 0, 'onItemClick was not fired');
 });
 
+QUnit.test('onItemClick should not be fired when clicking on the checkbox icon', function(assert) {
+    const clickHandler = sinon.spy(commonUtils.noop);
+    const $treeView = initTree({
+        items: [{ id: 1, text: 'Item 1', items: [{ id: 11, text: 'Item 11' }] }],
+        showCheckBoxesMode: 'normal',
+        onItemClick: clickHandler
+    });
+    const $checkBox = $treeView.find('.dx-checkbox-icon').eq(0);
+
+    $checkBox.trigger('dxclick');
+
+    assert.equal(clickHandler.callCount, 0, 'onItemClick was not fired');
+});
 
 QUnit.test('T177595', function(assert) {
     const handle = sinon.spy(commonUtils.noop);
@@ -945,7 +958,7 @@ QUnit.test('onItemRendered event arguments', function(assert) {
         node: treeView.instance.getNodes()[0]
     });
 
-    onItemRenderedHandler.reset();
+    onItemRenderedHandler.resetHistory();
     treeView.instance.expandItem('1');
 
     assert.strictEqual(onItemRenderedHandler.callCount, 2);

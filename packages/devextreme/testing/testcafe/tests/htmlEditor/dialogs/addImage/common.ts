@@ -1,7 +1,7 @@
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import HtmlEditor from '../../../../model/htmlEditor';
 import url from '../../../../helpers/getPageUrl';
-import createWidget from '../../../../helpers/createWidget';
+import { createWidget } from '../../../../helpers/createWidget';
 import { BASE64_IMAGE_1 } from './images/base64';
 import { testScreenshot } from '../../../../helpers/themeUtils';
 
@@ -18,7 +18,10 @@ test('TabPanel in HtmlEditor must have correct borders', async (t) => {
 
   await t.click(htmlEditor.toolbar.getItemByName('image'));
 
-  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', { element: ADD_IMAGE_POPUP_CONTENT_SELECTOR });
+  await testScreenshot(t, takeScreenshot, 'tabpanel-in-htmleditor.png', {
+    element: ADD_IMAGE_POPUP_CONTENT_SELECTOR,
+    shouldTestInCompact: true,
+  });
 
   await t
     .expect(compareResults.isValid())

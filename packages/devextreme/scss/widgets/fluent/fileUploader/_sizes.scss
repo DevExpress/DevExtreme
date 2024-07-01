@@ -18,7 +18,7 @@ $fluent-fileuploader-files-container-rounding: 4px !default;
   $fluent-fileuploader-file-container-button-margin: 8px !default;
   $fluent-fileuploader-file-container-button-size: 32px !default;
   $fluent-fileuploader-files-container-padding: 12px 4px 0 !default;
-  $fluent-fileuploader-file-size-margin: 0 8px 0 4px !default;
+  $fluent-fileuploader-file-size-margin: 0 0 0 4px !default;
 }
 
 @else if $size == "compact" {
@@ -27,5 +27,5 @@ $fluent-fileuploader-files-container-rounding: 4px !default;
   $fluent-fileuploader-file-container-button-margin: 2px !default;
   $fluent-fileuploader-file-container-button-size: 28px !default;
   $fluent-fileuploader-files-container-padding: 12px 4px 0 !default;
-  $fluent-fileuploader-file-size-margin: 0 8px 4px !default;
+  $fluent-fileuploader-file-size-margin: 0 0 4px !default;
 }

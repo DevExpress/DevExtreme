@@ -54,7 +54,7 @@ runs:
       if: ${{ inputs.browser == 'chrome' }}
       uses: ./.github/actions/setup-chrome
       with:
-        chrome-version: '118.0.5993.70'
+        chrome-version: '120.0.6099.71'
 
     - name: Setup Firefox profile
       if: ${{ inputs.browser == 'firefox' }}
@@ -73,12 +73,12 @@ runs:
       id: setup-firefox
       uses: browser-actions/setup-firefox@v1
       with:
-        firefox-version: '117.0.1'
+        firefox-version: '120.0.1'
 
     - name: Use Node.js
       uses: actions/setup-node@v3
       with:
-        node-version: '18.16.1'
+        node-version: '20'
 
     - name: Restore npm cache
       uses: actions/cache@v3

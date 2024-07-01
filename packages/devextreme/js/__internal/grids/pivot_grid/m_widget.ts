@@ -16,7 +16,8 @@ import { name as clickEventName } from '@js/events/click';
 import eventsEngine from '@js/events/core/events_engine';
 import { addNamespace } from '@js/events/utils/index';
 import localizationMessage from '@js/localization/message';
-import Button, { Properties } from '@js/ui/button';
+import type { Properties } from '@js/ui/button';
+import Button from '@js/ui/button';
 import ContextMenu from '@js/ui/context_menu';
 import Popup from '@js/ui/popup/ui.popup';
 import { current, isFluent } from '@js/ui/themes';
@@ -1270,10 +1271,8 @@ const PivotGrid = (Widget as any).inherit({
       }
 
       const scrollBarWidth = that._dataArea.getScrollbarWidth();
-      const hasVerticalScrollbar = calculateHasScroll(
-        dataAreaHeight,
-        getHeight(that._dataArea.tableElement()),
-      );
+      const correctDataTableHeight = getHeight(that._dataArea.tableElement()) - getHeight(that._dataArea.headElement());
+      const hasVerticalScrollbar = calculateHasScroll(dataAreaHeight, correctDataTableHeight);
 
       that._dataArea.tableElement().css({
         width: that._hasHeight && hasVerticalScrollbar && scrollBarWidth

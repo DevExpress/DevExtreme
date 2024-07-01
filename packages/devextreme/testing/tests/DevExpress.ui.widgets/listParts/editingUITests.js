@@ -9,9 +9,9 @@ import config from 'core/config';
 import pointerMock from '../../../helpers/pointerMock.js';
 import contextMenuEvent from 'events/contextmenu';
 import keyboardMock from '../../../helpers/keyboardMock.js';
-import decoratorRegistry from 'ui/list/ui.list.edit.decorator_registry';
-import SwitchableEditDecorator from 'ui/list/ui.list.edit.decorator.switchable';
-import SwitchableButtonEditDecorator from 'ui/list/ui.list.edit.decorator.switchable.button';
+import { registry, register } from '__internal/ui/list/m_list.edit.decorator_registry';
+import SwitchableEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable';
+import SwitchableButtonEditDecorator from '__internal/ui/list/m_list.edit.decorator.switchable.button';
 import themes from 'ui/themes';
 import { DataSource } from 'data/data_source/data_source';
 import ArrayStore from 'data/array_store';
@@ -23,6 +23,7 @@ import { implementationsMap } from 'core/utils/size';
 
 const LIST_ITEM_CLASS = 'dx-list-item';
 const LIST_ITEM_ICON_CONTAINER_CLASS = 'dx-list-item-icon-container';
+const LIST_ITEM_ICON_CLASS = 'dx-list-item-icon';
 const LIST_ITEM_CONTENT_CLASS = 'dx-list-item-content';
 const LIST_ITEM_BEFORE_BAG_CLASS = 'dx-list-item-before-bag';
 
@@ -57,10 +58,10 @@ QUnit.module('switchable menu decorator', {
 
         });
 
-        decoratorRegistry.register('menu', 'test', testDecorator);
+        register('menu', 'test', testDecorator);
     },
     afterEach: function() {
-        delete decoratorRegistry.registry.menu.test;
+        delete registry.menu.test;
     }
 });
 
@@ -288,12 +289,12 @@ QUnit.module('switchable button delete decorator', {
             }
 
         });
-        decoratorRegistry.register('menu', 'test', testDecorator);
+        register('menu', 'test', testDecorator);
     },
     afterEach: function() {
         fx.off = false;
 
-        delete decoratorRegistry.registry.menu.test;
+        delete registry.menu.test;
     }
 });
 
@@ -562,6 +563,16 @@ QUnit.test('icon should not be rendered when custom item template is used', func
     });
 
     assert.strictEqual($list.find('.' + LIST_ITEM_ICON_CONTAINER_CLASS).length, 0, 'item content has not been rendered');
+});
+
+QUnit.test('it should be possible to define custom icon class with colon symbol (T1212049)', function(assert) {
+    const $list = $('#list').dxList({
+        items: [{ icon: 'some:class', text: 'Item 1' }],
+    });
+
+    const $itemIcon = $list.find(`.${LIST_ITEM_ICON_CLASS}`);
+
+    assert.ok($itemIcon.hasClass('some:class'));
 });
 
 QUnit.test('swipe should prepare item for delete', function(assert) {

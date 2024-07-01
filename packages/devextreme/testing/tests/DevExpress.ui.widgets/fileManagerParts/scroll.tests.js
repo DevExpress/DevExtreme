@@ -158,7 +158,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.clock.tick(400);
 
         this.wrapper.getDetailsViewScrollable().dxScrollable('instance').scrollTo({ top: 500 });
-        const scrollPosition = this.wrapper.getDetailsViewScrollableContainer().scrollTop();
+        const scrollPosition = Math.floor(this.wrapper.getDetailsViewScrollableContainer().scrollTop());
         this.clock.tick(400);
 
         this.wrapper.getRowNameCellInDetailsView(10).trigger(CLICK_EVENT).click();
@@ -166,7 +166,7 @@ QUnit.module('Scroll', moduleConfig, () => {
         this.wrapper.getDetailsViewScrollableContainer().trigger('scroll');
         this.clock.tick(400);
 
-        assert.strictEqual(this.wrapper.getDetailsViewScrollableContainer().scrollTop(), scrollPosition, 'scroll position is the same');
+        assert.strictEqual(Math.floor(this.wrapper.getDetailsViewScrollableContainer().scrollTop()), scrollPosition, 'scroll position is the same');
     });
 
     test('Thumbnails view must keep scroll position when selection is changed', function(assert) {

@@ -6,7 +6,7 @@ import dateLocalization from 'localization/date';
 import fx from 'animation/fx';
 import pointerMock from '../../helpers/pointerMock.js';
 import Color from 'color';
-import tooltip from 'ui/tooltip/ui.tooltip';
+import { hide } from '__internal/ui/tooltip/m_tooltip';
 import { DataSource } from 'data/data_source/data_source';
 import CustomStore from 'data/custom_store';
 import dataUtils from 'core/element_data';
@@ -39,7 +39,7 @@ const createInstanceBase = (options, clock) => {
     const scheduler = createWrapper({
         height: 600,
         ...options,
-    });
+    }, clock);
 
     clock.tick(300);
     scheduler.instance.focus();
@@ -246,7 +246,7 @@ module('Integration: Appointment Day, Week views', {
                     assert.deepEqual(args.startDate, startDate, 'Start date is OK');
                     assert.deepEqual(args.endDate, endDate, 'End date is OK');
 
-                    tooltip.hide();
+                    hide();
                 } finally {
                     scheduler.instance._appointmentPopup.show.restore();
                 }
@@ -1131,7 +1131,7 @@ module('Integration: Appointment Day, Week views', {
                         dataSource: priorityData,
                         label: 'Priority'
                     }]
-                });
+                }, this.clock);
 
                 scheduler.appointments.click(0);
                 scheduler.appointments.click(1);
@@ -1196,7 +1196,7 @@ module('Integration: Appointment Day, Week views', {
                 startDate: new Date(2018, 4, 22, 9, 0),
                 priorityId: 1,
             }],
-        });
+        }, this.clock);
 
         const appointments = scheduler.appointmentList;
 

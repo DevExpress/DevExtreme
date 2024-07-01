@@ -65,4 +65,4 @@ $filterbuilder-item-operator-focus-color: color.adjust($filterbuilder-item-opera
 $filterbuilder-item-value-color: color.change($base-border-color, $alpha: 0.5) !default;
 $filterbuilder-item-value-hover-color: $filterbuilder-item-value-color !default;
 $filterbuilder-item-value-focus-color: color.adjust($filterbuilder-item-value-color, $alpha: 0.7) !default;
-$filterbuilder-menu-icon-color: lighten($base-icon-color, 33.7%) !default;
+$filterbuilder-menu-icon-color: $base-text-color !default;

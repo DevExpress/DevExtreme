@@ -1,3 +1,4 @@
+"use client"
 import dxDeferRendering, {
     Properties
 } from "devextreme/ui/defer_rendering";
@@ -6,7 +7,7 @@ import * as PropTypes from "prop-types";
 import { Component as BaseComponent, IHtmlOptions } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { ContentReadyEvent, DisposingEvent, InitializedEvent } from "devextreme/ui/defer_rendering";
+import type { ContentReadyEvent, DisposingEvent, InitializedEvent, RenderedEvent, ShownEvent } from "devextreme/ui/defer_rendering";
 import type { AnimationConfig, AnimationState } from "devextreme/animation/fx";
 import type { PositionConfig } from "devextreme/animation/position";
 
@@ -18,6 +19,8 @@ type IDeferRenderingOptionsNarrowedEvents = {
   onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
+  onRendered?: ((e: RenderedEvent) => void);
+  onShown?: ((e: ShownEvent) => void);
 }
 
 type IDeferRenderingOptions = React.PropsWithChildren<ReplaceFieldTypes<Properties, IDeferRenderingOptionsNarrowedEvents> & IHtmlOptions>

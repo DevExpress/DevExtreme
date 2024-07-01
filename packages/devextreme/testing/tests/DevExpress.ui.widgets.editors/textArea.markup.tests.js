@@ -113,6 +113,17 @@ QUnit.module('widget sizing render', () => {
 
         assert.equal(elementStyles.maxHeight, '30px', 'widget max-height is correct');
     });
+
+    QUnit.test('textarea with height option should not have min-height inline style', function(assert) {
+        const $element = $('#textarea').dxTextArea({
+            height: 50,
+            value: 'First'
+        });
+
+        const $input = $element.find(`.${INPUT_CLASS}`);
+
+        assert.strictEqual($input.get(0).style.minHeight, '', 'min-height inline style is not defined');
+    });
 });
 
 QUnit.module('aria accessibility', () => {

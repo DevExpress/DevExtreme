@@ -55,7 +55,7 @@ module('Integration: Appointment tooltip', {
                 }],
                 currentDate: new Date(2021, 4, 24),
                 height: 600
-            });
+            }, this.clock);
 
             const getAppointmentDisabled = sinon.spy(scheduler.instance._appointmentTooltip._options, 'getAppointmentDisabled');
 

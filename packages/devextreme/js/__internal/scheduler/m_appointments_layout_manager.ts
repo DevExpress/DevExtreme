@@ -1,10 +1,11 @@
 import { equalByValue } from '@js/core/utils/common';
-import { getAppointmentRenderingStrategyName } from '@js/renovation/ui/scheduler/model/utils';
-import { getCellDuration } from '@js/renovation/ui/scheduler/view_model/to_test/views/utils/base';
+import dateUtils from '@js/core/utils/date';
+import { getAppointmentRenderingStrategyName, getCellDuration, getGroupCount } from '@ts/scheduler/r1/utils/index';
 
 import { AppointmentViewModelGenerator } from './appointments/m_view_model_generator';
-import { getGroupCount } from './resources/m_utils';
 import { getAllDayHeight, getCellHeight, getCellWidth } from './workspaces/helpers/m_position_helper';
+
+const toMs = dateUtils.dateToMilliseconds;
 
 class AppointmentLayoutManager {
   appointmentViewModel = new AppointmentViewModelGenerator();
@@ -64,12 +65,12 @@ class AppointmentLayoutManager {
       loadedResources: this.instance.option('loadedResources'),
       getAppointmentColor: this.instance.createGetAppointmentColor(),
       dataAccessors: this.instance._dataAccessors,
-      isRenovatedAppointments: this.instance.option('isRenovatedAppointments'),
       appointmentRenderingStrategyName: this.appointmentRenderingStrategyName,
       adaptivityEnabled: this.instance.option('adaptivityEnabled'),
       rtlEnabled: this.instance.option('rtlEnabled'),
       startDayHour: this.instance._getCurrentViewOption('startDayHour'),
       endDayHour: this.instance._getCurrentViewOption('endDayHour'),
+      viewOffset: this.instance._getCurrentViewOption('offset') * toMs('minute'),
       maxAppointmentsPerCell: this.instance._getCurrentViewOption('maxAppointmentsPerCell'),
       currentDate: this.instance.option('currentDate'),
       isVirtualScrolling: this.instance.isVirtualScrolling(),

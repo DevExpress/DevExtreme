@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import FormDialog from 'ui/html_editor/ui/formDialog';
+import FormDialog from '__internal/ui/html_editor/ui/m_formDialog';
 import { isPromise } from 'core/utils/type';
 import devices from 'core/devices';
 import { getCurrentScreenFactor, hasWindow } from 'core/utils/window';
@@ -11,6 +11,7 @@ const FORM_CLASS = 'dx-formdialog-form';
 const FIELD_ITEM_CLASS = 'dx-field-item';
 const TEXTEDITOR_INPUT_CLASS = 'dx-texteditor-input';
 const BUTTON_WITH_TEXT_CLASS = 'dx-button-has-text';
+const DROPDOWN_EDITOR_OVERLAY_CLASS = 'dx-dropdowneditor-overlay';
 const CUSTOM_CLASS = 'custom-class';
 
 const moduleConfig = {
@@ -45,14 +46,24 @@ QUnit.module('FormDialog', moduleConfig, () => {
         assert.strictEqual(wrapperHasDialogClass, true, 'Wrapper with the FormDialog class');
     });
 
+    test('Dialog wrapper has dx-dropdowneditor-overlay class (T1141075)', function(assert) {
+        const formDialog = new FormDialog(this.componentMock, { container: this.$element });
+
+        formDialog.show();
+
+        const $wrapper = this.$element.find(`.${DIALOG_CLASS}`);
+
+        assert.ok($wrapper.hasClass(DROPDOWN_EDITOR_OVERLAY_CLASS), 'wrapper has dx-dropdowneditor-overlay class');
+    });
+
     test('render FormDialog', function(assert) {
         const formDialog = new FormDialog(this.componentMock);
         const $dialog = this.$element.find(`.${DIALOG_CLASS}`);
         const $form = $dialog.find(`.${FORM_CLASS}`);
 
         assert.ok(formDialog, 'constructor return an instance');
-        assert.equal($dialog.length, 1, 'There is element with the FormDialog class');
-        assert.equal($form.length, 1, 'There is element with the Form class inside FormDialog');
+        assert.strictEqual($dialog.length, 1, 'There is element with the FormDialog class');
+        assert.strictEqual($form.length, 1, 'There is element with the Form class inside FormDialog');
     });
 
     test('render FormDialog with popup options', function(assert) {

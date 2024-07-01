@@ -168,4 +168,28 @@ QUnit.module('DataSources', moduleConfig, () => {
         assert.ok(startDate - data.start < 1, 'new task start is right');
         assert.ok(endDate - data.end < 1, 'new task end is right');
     });
+    test('check treeList with null start end data in autoparent mode', function(assert) {
+        const tasks = [
+            { 'id': 1, 'title': 'Software Development', 'start': null, 'end': null, 'progress': 31, 'color': 'red' },
+            { 'id': 2, 'parentId': 1, 'title': 'Scope', 'start': new Date('2019-02-21T05:00:00.000Z'), 'end': new Date('2019-02-26T09:00:00.000Z'), 'progress': 60 },
+            { 'id': 3, 'parentId': 2, 'title': 'Determine project scope', 'start': null, 'end': null, 'progress': 100 }
+        ];
+        this.createInstance({
+            tasks: { dataSource: tasks },
+            editing: { enabled: true },
+            validation: { autoUpdateParentTasks: true },
+            columns: [
+                { dataField: 'title', caption: 'Subject' },
+                { dataField: 'start', caption: 'Start' },
+                { dataField: 'end', caption: 'End Date' }
+            ]
+        });
+        this.clock.tick(10);
+
+
+        const startText = $(this.instance._treeList.getCellElement(2, 1)).text().trimEnd();
+        const endText = $(this.instance._treeList.getCellElement(2, 2)).text().trimEnd();
+        assert.notOk(!!startText, 'start text is not empty');
+        assert.notOk(!!endText, 'end text is not empty');
+    });
 });

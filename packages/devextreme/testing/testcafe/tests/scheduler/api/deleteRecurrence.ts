@@ -1,6 +1,6 @@
 import url from '../../../helpers/getPageUrl';
 import Scheduler from '../../../model/scheduler';
-import createWidget from '../../../helpers/createWidget';
+import { createWidget } from '../../../helpers/createWidget';
 
 fixture.disablePageReloads`Scheduler API - deleteRecurrence`
   .page(url(__dirname, '../../container.html'));
@@ -29,7 +29,7 @@ test('should delete recurrent appointment if mode is "series"', async (t) => {
     currentView: 'day',
     currentDate: new Date(2022, 3, 12),
     startDayHour: 8,
-    endDayHour: 12.5,
+    endDayHour: 13,
     onAppointmentDeleting: (e) => {
       e.component.deleteRecurrence(
         e.appointmentData,
@@ -88,7 +88,7 @@ test('should exclude from recurrence if mode is "occurrence"', async (t) => {
     currentView: 'day',
     currentDate: new Date(2022, 3, 12),
     startDayHour: 8,
-    endDayHour: 12.5,
+    endDayHour: 12,
     onAppointmentDeleting: (e) => {
       e.component.deleteRecurrence(
         e.appointmentData,

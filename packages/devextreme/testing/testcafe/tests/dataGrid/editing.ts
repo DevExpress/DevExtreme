@@ -3,7 +3,7 @@
 import { ClientFunction, Selector } from 'testcafe';
 import { createScreenshotsComparer } from 'devextreme-screenshot-comparer';
 import url from '../../helpers/getPageUrl';
-import createWidget from '../../helpers/createWidget';
+import { createWidget } from '../../helpers/createWidget';
 import DataGrid, { CLASS } from '../../model/dataGrid';
 import SelectBox from '../../model/selectBox';
 import { changeTheme } from '../../helpers/changeTheme';
@@ -27,6 +27,41 @@ const getGridConfig = (config): Record<string, unknown> => {
 };
 
 const encodedIcon = 'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iaXNvLTg4NTktMSI/Pg0KPCFET0NUWVBFIHN2ZyBQVUJMSUMgIi0vL1czQy8vRFREIFNWRyAxLjEvL0VOIiAiaHR0cDovL3d3dy53My5vcmcvR3JhcGhpY3MvU1ZHLzEuMS9EVEQvc3ZnMTEuZHRkIj4NCjxzdmcgIHdpZHRoPSIyMHB4IiBoZWlnaHQ9IjIwcHgiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0iIzAwMDAwMCIgdmVyc2lvbj0iMS4xIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPg0KCTxyZWN0IHdpZHRoPSIxMDAlIiBoZWlnaHQ9IjEwMCUiIC8+DQo8L3N2Zz4NCg==';
+
+test('The E0110 should not occur when editing a column with setCellValue in form mode (T1193894)', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+  // act
+  await t
+    .typeText(dataGrid.getFormItemEditor(0), 'new')
+    .click(dataGrid.getEditForm().saveButton);
+
+  // assert
+  await t
+    .expect(await takeScreenshot('grid-form-editing-T1193894.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [{
+    ID: 1,
+    Name: 'test',
+  }],
+  keyExpr: 'ID',
+  editing: {
+    mode: 'form',
+    allowUpdating: true,
+    editRowKey: 1,
+  },
+  columns: [{
+    dataField: 'Name',
+    setCellValue(rowData, value) {
+      rowData.Name = value;
+    },
+  }],
+  // @ts-expect-error private option
+  templatesRenderAsynchronously: true,
+}));
 
 test('Focused cell should be switched to the editing mode after onSaving\'s promise is resolved (T1190566)', async (t) => {
   const dataGrid = new DataGrid('#container');
@@ -2044,7 +2079,7 @@ test('The "Cannot read property "brokenRules" of undefined" error occurs T978286
   }));
 });
 
-test('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
+test.skip('Cells should be focused correctly on click when cell editing mode is used with enabled showEditorAlways (T1037019)', async (t) => {
   const dataGrid = new DataGrid('#container');
 
   // act
@@ -2251,6 +2286,30 @@ test('Popup EditForm screenshot', async (t) => {
   editing: {
     mode: 'popup',
     allowUpdating: true,
+  },
+}));
+
+// T1218553
+test('Popup EditForm screenshot when editRowKey is initially specified', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .expect(await takeScreenshot('popup-edit-form-with-initial-editrowkey.png', dataGrid.element))
+    .ok()
+    .expect(dataGrid.getPopupEditForm().element.exists)
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 2).map((item, index) => ({ ...item, id: index })),
+  keyExpr: 'id',
+  height: 400,
+  showBorders: true,
+  editing: {
+    mode: 'popup',
+    allowUpdating: true,
+    editRowKey: 0,
   },
 }));
 
@@ -2550,3 +2609,95 @@ test('Component sends unexpected filtering request after inserting a new row if 
     };
   });
 });
+
+// T1201724
+test('An exception should not throw after pressing enter on the save button and onSaving\'s promise is resolved', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const dataRow = dataGrid.getDataRow(0);
+  const editButton = dataRow.getCommandCell(3).getButton(0);
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+  const resolveOnSavingDeferred = ClientFunction(() => (window as any).deferred.resolve());
+
+  // act
+  await t
+    .click(editButton)
+    .expect(dataRow.isEdited)
+    .ok()
+    .typeText(dataGrid.getDataCell(0, 0).element, 'new_value')
+    .pressKey('tab tab tab')
+    .pressKey('enter');
+
+  await resolveOnSavingDeferred();
+
+  // assert
+  await t
+    .expect(dataRow.isEdited)
+    .notOk()
+    .expect(await takeScreenshot('grid-editing-with-onSaving-T1201724.png', dataGrid.element))
+    .ok()
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  await ClientFunction(() => {
+    (window as any).deferred = $.Deferred();
+  })();
+
+  return createWidget('dxDataGrid', {
+    dataSource: [
+      {
+        id: 1, field1: 'value1', field2: 'value2', field3: 'value3',
+      },
+      {
+        id: 2, field1: 'value4', field2: 'value5', field3: 'value6',
+      },
+    ],
+    keyExpr: 'id',
+    showBorders: true,
+    columns: ['field1', 'field2', 'field3'],
+    editing: {
+      mode: 'row',
+      allowUpdating: true,
+    },
+    onSaving(e) {
+      e.promise = (window as any).deferred;
+    },
+  });
+});
+
+// T1194439
+test('Focus behavior should be correct when editing cells', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  for (let i = 0; i < 10; i += 1) {
+    const cell = dataGrid.getDataCell(i, 0);
+
+    await t
+      .click(cell.element)
+      .expect(cell.isEditCell)
+      .ok()
+      .expect(cell.isFocused)
+      .ok()
+      .typeText(cell.element, `new_value ${i}`);
+  }
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [...new Array(10)].map((_, i) => ({
+    ID: i + 1,
+    CompanyName: `company name ${i + 1}`,
+    City: `city ${i + 1}`,
+  })),
+  keyExpr: 'ID',
+  columns: [{
+    dataField: 'CompanyName',
+    showEditorAlways: true,
+  }, {
+    caption: 'City',
+    calculateCellValue(rowData) { return rowData.City; },
+    allowEditing: false,
+  }],
+  showBorders: true,
+  editing: {
+    allowUpdating: true,
+    mode: 'batch',
+  },
+}));

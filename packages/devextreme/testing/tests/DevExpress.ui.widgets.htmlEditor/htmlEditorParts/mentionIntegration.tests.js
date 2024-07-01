@@ -604,5 +604,42 @@ export default function() {
             this.$element.find('p').first().text('@');
             this.clock.tick(10);
         });
+
+        test('Mention content should be rendered to embed container (T1187274)', function(assert) {
+            const done = assert.async();
+            const that = this;
+            const valueChangeSpy = sinon.spy(({ value }) => {
+                if(valueChangeSpy.calledOnce) {
+                    that.getItems().eq(1).trigger('dxclick');
+                    that.clock.tick(POPUP_TIMEOUT);
+                } else {
+                    const mentionContainerText = that.$element.find(`.${MENTION_CLASS}`).children().text();
+                    assert.strictEqual(mentionContainerText, '@John');
+
+                    done();
+                }
+            });
+
+            this.options.onValueChanged = valueChangeSpy;
+            this.options.templatesRenderAsynchronously = true;
+            this.options.integrationOptions = {
+                templates: {
+                    mention: {
+                        render: function({ model, container, onRendered }) {
+                            setTimeout(() => {
+                                const $span = $('<span>');
+                                $span.text(`${model.marker}${model.value}`);
+                                container.append($span);
+                            }, 10);
+                        }
+                    }
+                }
+            };
+
+            this.createWidget();
+            this.instance.focus();
+            this.$element.find('p').first().text('@');
+            this.clock.tick(10);
+        });
     });
 }

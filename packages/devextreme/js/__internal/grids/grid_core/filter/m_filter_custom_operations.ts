@@ -3,10 +3,10 @@ import { Deferred } from '@js/core/utils/deferred';
 import { extend } from '@js/core/utils/extend';
 import { DataSource } from '@js/data/data_source/data_source';
 import messageLocalization from '@js/localization/message';
+import errors from '@js/ui/widget/ui.errors';
 import {
   getFilterExpression, isCondition, isGroup, renderValueText,
-} from '@js/ui/filter_builder/utils';
-import errors from '@js/ui/widget/ui.errors';
+} from '@ts/filter_builder/m_utils';
 
 function baseOperation(grid) {
   const calculateFilterExpression = function (filterValue, field, fields) {
@@ -45,6 +45,7 @@ function baseOperation(grid) {
   };
 
   const headerFilterController = grid && grid.getController('headerFilter');
+  // Override in the private API WA [T1232532]
   const customizeText = function (fieldInfo, options) {
     options = options || {};
     const { value } = fieldInfo;
