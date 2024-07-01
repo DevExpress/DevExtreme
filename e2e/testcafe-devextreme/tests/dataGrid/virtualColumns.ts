@@ -288,3 +288,63 @@ test('Columns should be rendered correctly after reinit of columns controller', 
     columnRenderingMode: 'virtual',
   },
 }));
+
+test('Group row should have right colspan with summary, virtual columns and fixed columns (T1221369)', async (t) => {
+  const grid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_0.png', grid.element);
+
+  // NOTE: There is an issue with Scrollable
+  // So, we should scroll two times to reach maximum right scroll position
+  await grid.scrollTo(t, { x: 10000 });
+  await grid.scrollTo(t, { x: 10000 });
+
+  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_1.png', grid.element);
+
+  await grid.scrollTo(t, { x: 0 });
+
+  await takeScreenshot('T1221369_fixed-summary-with-virtual-cols_2.png', grid.element);
+
+  await t.expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => {
+  const generatedColumns = generateColumns(20);
+  const columns = [
+    {
+      ...generatedColumns[0],
+      groupIndex: 0,
+    },
+    {
+      ...generatedColumns[1],
+      fixed: true,
+    },
+    {
+      ...generatedColumns[2],
+      fixed: true,
+    },
+    ...generatedColumns.splice(3),
+  ];
+  const data = generateData(10, 20);
+
+  await createWidget('dxDataGrid', {
+    dataSource: data,
+    width: 400,
+    height: 400,
+    columns,
+    columnFixing: {
+      enabled: true,
+    },
+    columnMinWidth: 100,
+    scrolling: {
+      columnRenderingMode: 'virtual',
+    },
+    summary: {
+      groupItems: [{
+        column: columns[2].dataField,
+        summaryType: 'count',
+        alignByColumn: true,
+      }],
+    },
+  });
+});

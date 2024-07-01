@@ -42,10 +42,10 @@
         v-model:selected-index="tabPanelIndex"
         :data-source="citiesData"
         :animation-enabled="true"
-        item-title-template="title"
+        item-title-template="itemTitle"
         item-template="cityTemplate"
       >
-        <template #title="{ data: item }">
+        <template #itemTitle="{ data: item }">
           <span class="tab-panel-title">{{ item.text }}</span>
         </template>
         <template #cityTemplate="{ data: city }">
