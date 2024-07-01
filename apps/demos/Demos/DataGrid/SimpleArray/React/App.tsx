@@ -11,8 +11,8 @@ const App = () => (
     defaultColumns={columns}
     showBorders={true}
   >
-		{ columns.map((column, index) => <Column dataField={column} key={index} />) }
-	</DataGrid>
+    { columns.map((column, index) => <Column dataField={column} key={index} />) }
+  </DataGrid>
 );
 
 export default App;
