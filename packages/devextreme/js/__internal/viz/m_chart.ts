@@ -170,11 +170,11 @@ function getAxisMargins(axis) {
 
 function getHorizontalAxesMargins(axes, getMarginsFunc) {
   return axes.reduce((margins, axis) => {
-    const { position, placeholderSize } = axis._options;
-
     const axisMargins = getMarginsFunc(axis);
 
-    if (axis._options?.placeholderSize) {
+    if (axis._options && axis._options?.placeholderSize) {
+      const { position, placeholderSize } = axis._options;
+
       axisMargins[position] = placeholderSize;
     }
 
