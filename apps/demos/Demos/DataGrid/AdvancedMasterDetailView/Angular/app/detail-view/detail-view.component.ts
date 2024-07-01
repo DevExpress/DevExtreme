@@ -4,6 +4,12 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'detail-view',
   templateUrl: `.${modulePrefix}/detail-view/detail-view.component.html`,
