@@ -8,7 +8,7 @@ const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
 const EmployeeDropDownBoxComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState(() =>
-    (props.data.value ? [props.data.value] : []));
+    (props.data.value !== null && props.data.value !== undefined ? [props.data.value] : []));
   const [isDropDownOpened, setDropDownOpened] = useState(false);
   const boxOptionChanged = useCallback((e) => {
     if (e.name === 'opened') {

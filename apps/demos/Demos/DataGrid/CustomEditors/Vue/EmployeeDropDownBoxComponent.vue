@@ -58,7 +58,7 @@ const dropDownBoxRef = ref<DxDropDownBox | null>(null);
 const dropDownOptions: DxDropDownBoxTypes.Properties['dropDownOptions'] = { width: 500 };
 
 const getSelectedRowKeys = (value: any): any[] => {
-  return value ? [value] : [];
+  return value !== null && value !== undefined ? [value] : [];
 };
 
 const onSelectionChanged = (e: DxDataGridTypes.SelectionChangedEvent) => {

@@ -54,7 +54,7 @@ export class AppComponent {
   }
   
   getSelectedRowKeys(value: any): any[] {
-    return value ? [value] : [];
+    return value !== null && value !== undefined ? [value] : [];
   }
 
   onSelectionChanged(selectedRowKeys, cellInfo, dropDownBoxComponent) {
