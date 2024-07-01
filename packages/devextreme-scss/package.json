@@ -24,11 +24,5 @@
     "test": "jest --no-coverage --runInBand --config=./tests/jest.config.json",
     "watch": "gulp watch"
   },
-  "version": "24.1.3",
-  "browserslist": [
-    "last 2 versions",
-    "ios > 9",
-    "> 1%",
-    "not dead"
-  ]
+  "version": "24.1.3"
 }
