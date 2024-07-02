@@ -3,10 +3,16 @@ import DataSource from 'devextreme/data/data_source';
 import ArrayStore from 'devextreme/data/array_store';
 import { Service, Task } from '../app.service';
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'detail-grid',
-  templateUrl: 'app/detail-grid/detail-grid.component.html',
-  styleUrls: ['app/detail-grid/detail-grid.component.css'],
+  templateUrl: `.${modulePrefix}/detail-grid/detail-grid.component.html`,
+  styleUrls: [`.${modulePrefix}/detail-grid/detail-grid.component.css`],
   providers: [Service],
 })
 export class DetailGridComponent implements AfterViewInit {
