@@ -11,6 +11,7 @@ import {
   shouldRunFramework,
   shouldRunTestAtIndex,
   globalReadFrom,
+  changeTheme,
   waitForAngularLoading,
   shouldSkipDemo,
 } from '../utils/visual-tests/matrix-test-helper';
