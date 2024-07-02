@@ -1,3 +1,4 @@
+/* eslint-disable spellcheck/spell-checker */
 import { glob } from 'glob';
 import { ClientFunction } from 'testcafe';
 import { join } from 'path';
@@ -10,7 +11,6 @@ import {
   shouldRunFramework,
   shouldRunTestAtIndex,
   globalReadFrom,
-  changeTheme,
   waitForAngularLoading,
   shouldSkipDemo,
 } from '../utils/visual-tests/matrix-test-helper';
@@ -316,10 +316,51 @@ const SKIPPED_TESTS = {
         comparisonOptions = mergedTestSettings['comparison-options'];
       }
     }
+    // ignored because they have import of localization package and fail during bundling
+    // 2 for Grid (RowTemplate, CellCustomization)
+    const ignoredLocalization = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF'];
+    // ignored becuse react and vue fail to max callstack exceeded
 
-    changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+    const ignoredCallstack = [
+      'AdvancedMasterDetailView',
+      'BatchUpdateRequest',
+      'CollaborativeEditing',
+      'CustomEditors',
+      'CustomNewRecordPosition',
+      'DataValidation',
+      'EditStateManagement', // fail only in vue
+      'RemoteGrouping',
+      'RemoteReordering',
+      'RemoteVirtualScrolling',
+      'WebAPIService',
+    ];
 
-    runTestAtPage(test, `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`)
+    // ignored, because test uses DevExtreme which is not defined (probably something with path on CI, need to research)
+    const ignoredDevextreme = ['SignalRService']
+
+    // ignored vue some problems with template + 1 miss style
+    const ignoredVue = [
+      "FilteringAPI",
+      "MultiRowHeadersBands",
+      "RightToLeftSupport",
+    ]
+
+    const excluded = [...ignoredLocalization, ...ignoredCallstack, ...ignoredDevextreme, ...ignoredVue];
+
+    const isGithubDemos = process.env.ISGITHUBDEMOS;
+    let pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
+    const theme = process.env.THEME.replace('generic.', '');
+    if (isGithubDemos){
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
+    }
+    else {
+      changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
+    }
+    // remove when tests enabled not only for datagrid
+    if (isGithubDemos && (widgetName !== 'DataGrid' || excluded.includes(demoName))) {
+      return;
+    }
+    runTestAtPage(test, pageURL)
       .clientScripts(clientScriptSource)(testName, async (t) => {
         if (visualTestStyles) {
           await execCode(visualTestStyles);
