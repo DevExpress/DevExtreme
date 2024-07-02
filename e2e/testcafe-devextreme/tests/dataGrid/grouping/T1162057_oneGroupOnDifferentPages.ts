@@ -6,7 +6,7 @@ import url from '../../../helpers/getPageUrl';
 // import { safeSizeTest } from '../../../helpers/safeSizeTest';
 
 fixture`Grouping Panel - One group on different pages`
-  .page(url(__dirname, '../../containerAspNet.html'));
+  .page(url(__dirname, '../../container.html'));
 
 const GRID_SELECTOR = '#container';
 

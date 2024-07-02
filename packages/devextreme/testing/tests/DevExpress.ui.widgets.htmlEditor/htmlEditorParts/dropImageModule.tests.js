@@ -1,6 +1,6 @@
 import $ from 'jquery';
 
-import DropImage from 'ui/html_editor/modules/dropImage';
+import DropImage from '__internal/ui/html_editor/modules/m_dropImage';
 import { createBlobFile } from '../../../helpers/fileHelper.js';
 import browser from 'core/utils/browser';
 

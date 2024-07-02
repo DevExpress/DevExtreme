@@ -1,5 +1,4 @@
 The [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExportDataGridProps/#customizeCell) function allows you to modify cell data and value formatting in exported worksheets.
-<!--split-->
 
 You can access and change the following attributes:
 
@@ -10,3 +9,4 @@ You can access and change the following attributes:
 - <a href="https://github.com/exceljs/exceljs#number-formats" target="_blank">Formatting</a> properties    
 
 The [customizeCell](/Documentation/ApiReference/Common/Object_Structures/ExportDataGridProps/#customizeCell) function also allows you to identify row types. For example, this demo changes the background color and font weight for cells with the "group" [rowType](/Documentation/ApiReference/UI_Components/dxDataGrid/Row/#rowType).
+<!--split-->

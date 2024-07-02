@@ -1,4 +1,5 @@
 import * as events from 'devextreme/events';
+import config from 'devextreme/core/config';
 import * as testingLib from '@testing-library/react';
 import * as React from 'react';
 import { useLayoutEffect } from 'react';
@@ -6,7 +7,9 @@ import * as ReactDOM from 'react-dom';
 import {
   fireOptionChange,
   TestComponent,
+  TestComponentRef,
   TestPortalComponent,
+  TestRestoreTreeComponent,
   Widget,
   WidgetClass,
 } from './test-component';
@@ -117,6 +120,10 @@ describe('rendering', () => {
 
       testingLib.render(<MyComponent />);
     });
+
+    it('correctly sets the buy now link', () => {
+      expect(config().buyNowLink).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeReact.aspx');
+    });
   });
 
   describe('nested full components', () => {
@@ -146,6 +153,31 @@ describe('rendering', () => {
       testingLib.render(component);
   
       expect(didRenderToDetachedBranch).toBeFalsy();
+    });
+
+    it('does not restore the parent tree if its child elements are still attached', () => {
+      testingLib.configure({ reactStrictMode: true });
+
+      const TreeComponentRef = React.createRef<{ restoreTree?: () => void }>();
+      const ParentComponentRef = React.createRef<TestComponentRef>();
+
+      const component = (
+        <TestComponent ref={ParentComponentRef}>
+          <span>Span Element</span>
+          <TestRestoreTreeComponent ref={TreeComponentRef} />
+        </TestComponent>
+      );
+
+      testingLib.render(component);
+
+      const element = ParentComponentRef.current!.instance().element()!;
+      const appendFn = jest.spyOn(element, 'append');
+
+      testingLib.act(() => {
+        TreeComponentRef.current?.restoreTree?.();
+      });
+
+      expect(appendFn).toHaveBeenCalledTimes(0);
     });
   });
 
