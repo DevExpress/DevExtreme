@@ -4,9 +4,7 @@ import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 import { DxFormTypes } from 'devextreme-angular/ui/form';
 import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'detail-view',
   templateUrl: './detail-view.component.html',
   styleUrls: ['./detail-view.component.css'],

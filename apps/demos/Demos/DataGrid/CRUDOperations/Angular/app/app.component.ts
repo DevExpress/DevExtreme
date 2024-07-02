@@ -13,9 +13,7 @@ if (!/localhost/.test(document.location.host)) {
 
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],

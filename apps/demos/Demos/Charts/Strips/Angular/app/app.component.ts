@@ -10,9 +10,7 @@ if (!/localhost/.test(document.location.host)) {
 
 const customizeText: DxChartTypes.ArgumentAxisLabel['customizeText'] = ({ valueText }) => `${valueText}&#176F`;
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: './app.component.html',

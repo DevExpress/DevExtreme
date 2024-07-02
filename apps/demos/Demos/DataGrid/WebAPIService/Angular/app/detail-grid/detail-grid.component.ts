@@ -2,9 +2,7 @@ import { Component, Input, AfterViewInit } from '@angular/core';
 import DataSource from 'devextreme/data/data_source';
 import * as AspNetData from 'devextreme-aspnet-data-nojquery';
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'detail-grid',
   templateUrl: './detail-grid.component.html',
   styleUrls: ['./detail-grid.component.css'],

@@ -10,9 +10,7 @@ if (!/localhost/.test(document.location.host)) {
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   templateUrl: './app.component.html',
 })

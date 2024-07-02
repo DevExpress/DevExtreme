@@ -17,9 +17,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: './app.component.html',

@@ -16,9 +16,7 @@ function isNotEmpty(value: unknown): boolean {
   return value !== undefined && value !== null && value !== '';
 }
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   providers: [Service],
   templateUrl: './app.component.html',

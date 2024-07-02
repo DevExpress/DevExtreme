@@ -15,9 +15,7 @@ if (!/localhost/.test(document.location.host)) {
 
 type CellData = DxPivotGridTypes.CellPreparedEvent['cell'] & { area?: string };
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   providers: [Service],

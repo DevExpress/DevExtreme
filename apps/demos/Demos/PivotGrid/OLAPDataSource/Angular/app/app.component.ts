@@ -10,9 +10,7 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   styleUrls: ['./app.component.css'],
   selector: 'demo-app',
   templateUrl: './app.component.html',

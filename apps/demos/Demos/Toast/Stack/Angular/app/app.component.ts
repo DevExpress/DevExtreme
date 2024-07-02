@@ -17,9 +17,7 @@ if (!/localhost/.test(document.location.host)) {
 type Position = Parameters<typeof notify>[1]['position'];
 type Direction = Parameters<typeof notify>[1]['direction'];
 
-declare var __moduleName: string;
 @Component({
-  moduleId: __moduleName,
   selector: 'demo-app',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
