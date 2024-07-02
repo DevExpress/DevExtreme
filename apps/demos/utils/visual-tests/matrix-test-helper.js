@@ -2,6 +2,7 @@ import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
+import { githubIgnored } from './github-ignored-list';
 
 const settings = {
   concurrency: undefined,
@@ -333,37 +334,11 @@ export function runTestAtPage(test, demoUrl) {
   }
   return executor.page(demoUrl);
 }
-// ignores this tests for demos published to Github
-// ignored because they have import of localization package and fail during bundling , 2 for Grid (RowTemplate, CellCustomization)
-const ignoredLocalization = ['Localization', 'RowTemplate', 'CellCustomization', 'TimeZonesSupport', 'ExportToPDF']
-// ignored becuse react and vue fail to max callstack exceeded
-const ignoredCallstack = [
-  'AdvancedMasterDetailView', 
-  'BatchUpdateRequest', 
-  'CollaborativeEditing', 
-  'CustomEditors',
-  'CustomNewRecordPosition', 
-  'DataValidation',
-  'RemoteGrouping', 
-  'RemoteReordering',
-  'RemoteVirtualScrolling', 
-  'WebAPIService',
-];
-// ignored, because test uses DevExtreme which is not defined (probably something with path on CI, need to research)
-const ignoredDevextreme = ['SignalRService']
 
-// ignored vue some problems with template + 1 miss style
-const ignoredVue = [
-  "FilteringAPI",
-  "MultiRowHeadersBands",
-  "RightToLeftSupport",
-]
-
-const excluded = [...ignoredLocalization, ...ignoredCallstack, ...ignoredDevextreme, ...ignoredVue];
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
   const isGithubDemos = process.env.ISGITHUBDEMOS;
-  if (isGithubDemos && excluded.includes(demo)){
+  if (isGithubDemos && githubIgnored.includes(demo)){
     return;
   }
   
@@ -375,14 +350,16 @@ export function runManualTestCore(testObject, product, demo, framework, callback
     return;
   }
 
-  let test;
+  let testURL = '';
   if (!isGithubDemos) {
     changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
-    test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/`);
+    testURL = `http://localhost:8080/Demos/${product}/${demo}/${framework}/`;
   } else {
     const theme = process.env.THEME.replace('generic.', '');
-    test = testObject.page(`http://localhost:8080/Demos/${product}/${demo}/${framework}/?theme=dx.${theme}`);
+    testURL = `http://localhost:8080/Demos/${product}/${demo}/${framework}/?theme=dx.${theme}`;
   }
+  
+  const test = testObject.page(testURL);
 
   test.before?.(async (t) => {
     const [width, height] = t.fixtureCtx.initialWindowSize;
