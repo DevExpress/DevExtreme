@@ -22,9 +22,9 @@ const App = () => {
       >
         <Sorting mode="multiple" />
 
-        <Column dataField="Prefix" caption="Title" width={70} />
+        <Column dataField="Prefix" caption="Title" width={100} defaultSortOrder="asc" />
         <Column dataField="FirstName" defaultSortOrder="asc" />
-        <Column dataField="LastName" defaultSortOrder="asc" />
+        <Column dataField="LastName" />
         <Column dataField="City" />
         <Column dataField="State" />
         <Column

@@ -5,9 +5,14 @@
   [showBorders]="true"
 >
   <dxo-sorting mode="multiple"></dxo-sorting>
-  <dxi-column dataField="Prefix" caption="Title" [width]="70"></dxi-column>
+  <dxi-column
+    dataField="Prefix"
+    caption="Title"
+    [width]="100"
+    sortOrder="asc"
+  ></dxi-column>
   <dxi-column dataField="FirstName" sortOrder="asc"></dxi-column>
-  <dxi-column dataField="LastName" sortOrder="asc"></dxi-column>
+  <dxi-column dataField="LastName"></dxi-column>
   <dxi-column dataField="City"></dxi-column>
   <dxi-column dataField="State"></dxi-column>
   <dxi-column

@@ -7,9 +7,10 @@
       key-expr="ID"
     >
       <DxColumn
-        :width="70"
+        :width="100"
         data-field="Prefix"
         caption="Title"
+        sort-order="asc"
       />
       <DxColumn
         data-field="FirstName"
@@ -17,7 +18,6 @@
       />
       <DxColumn
         data-field="LastName"
-        sort-order="asc"
       />
       <DxColumn data-field="City"/>
       <DxColumn data-field="State"/>

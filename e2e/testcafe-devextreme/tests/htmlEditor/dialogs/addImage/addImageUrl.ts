@@ -6,7 +6,7 @@ import { BASE64_IMAGE_1, BASE64_IMAGE_2 } from './images/base64';
 import { isMaterial, testScreenshot } from '../../../../helpers/themeUtils';
 
 fixture.disablePageReloads`HtmlEditor - add image url`
-  .page(url(__dirname, '../../../containerQuill.html'));
+  .page(url(__dirname, '../../../container.html'));
 
 const ADD_IMAGE_POPUP_CONTENT_SELECTOR = '.dx-htmleditor-add-image-popup .dx-overlay-content';
 

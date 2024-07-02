@@ -136,3 +136,51 @@ test('Column chooser should support string height and width', async (t) => {
     width: '330px',
   },
 }));
+
+// T1219785
+test('Check the behavior of pressing the Esc button when dragging a column from the column chooser', async (t) => {
+  // arrange
+  const dataGrid = new DataGrid('#container');
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t
+    .click(dataGrid.getColumnChooserButton());
+
+  await takeScreenshot('T1219785-column-chooser-1.png', dataGrid.element);
+
+  await dataGrid.getColumnChooser().focusList();
+  await dataGrid.moveColumnChooserColumn(0, -25, -25, true);
+  await dataGrid.moveColumnChooserColumn(0, -50, -50);
+
+  await takeScreenshot('T1219785-column-chooser-2.png', dataGrid.element);
+
+  // act
+  await t.pressKey('esc');
+  await dataGrid.moveColumnChooserColumn(0, -75, -75);
+
+  await takeScreenshot('T1219785-column-chooser-3.png', dataGrid.element);
+
+  // assert
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(20, 3),
+  height: 400,
+  showBorders: true,
+  columns: [{
+    dataField: 'field_0',
+    dataType: 'string',
+  }, {
+    dataField: 'field_1',
+    dataType: 'string',
+  }, {
+    dataField: 'field_2',
+    dataType: 'string',
+    visible: false,
+  }],
+  columnChooser: {
+    enabled: true,
+    mode: 'dragAndDrop',
+  },
+}));

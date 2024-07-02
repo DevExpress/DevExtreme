@@ -1,3 +1,4 @@
+import config from '@js/core/config';
 import errors from '@js/core/errors';
 
 import { base } from '../../ui/overlay/m_z_index';
@@ -7,7 +8,7 @@ import {
   setLicenseCheckSkipCondition,
   validateLicense,
 } from './license_validation';
-import * as trialPanel from './trial_panel';
+import * as trialPanel from './trial_panel.client';
 
 jest.mock('./key', () => ({
   PUBLIC_KEY: {
@@ -362,6 +363,17 @@ describe('license check', () => {
   ])('Trial panel should not be displayed if license is valid', ({ token, version }) => {
     validateLicense(token, version);
     expect(trialPanelSpy).not.toHaveBeenCalled();
+  });
+
+  test('Trial panel "Buy Now" link must use the jQuery link if no config has been set', () => {
+    validateLicense('', '1.2');
+    expect(trialPanelSpy?.mock.calls[0][0]).toBe('https://go.devexpress.com/Licensing_Installer_Watermark_DevExtremeJQuery.aspx');
+  });
+
+  test('Trial panel "Buy Now" link must use the value from the config', () => {
+    config({ buyNowLink: 'trial-panel-link.com' });
+    validateLicense('', '1.2');
+    expect(trialPanelSpy?.mock.calls[0][0]).toBe('trial-panel-link.com');
   });
 
   test('Message should be logged only once', () => {

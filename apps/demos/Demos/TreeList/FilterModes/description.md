@@ -1,5 +1,4 @@
 Filter and search results depend on the [filterMode](/Documentation/ApiReference/UI_Components/dxTreeList/Configuration/#filterMode) property.
-<!--split-->
 
 The TreeList supports the following modes:
  
@@ -11,3 +10,4 @@ The TreeList supports the following modes:
 
 - *"fullBranch"*    
   The results include rows that meet the filter condition and their ancestors and descendants.
+<!--split-->

@@ -1,5 +1,4 @@
 Use the [dropDownButtonTemplate](/Documentation/ApiReference/UI_Components/dxSelectBox/Configuration/#dropDownButtonTemplate) to customize the drop-down button.
-<!--split-->
 
 This demo illustrates three customization cases:
 
@@ -11,3 +10,4 @@ Declare the load indicator and a regular icon in the template. Display the load 
 
 - **Icon that depends on the selected value**     
 Declare the default and the selected item's icon in the template. If there is a selected item, display its icon; otherwise, show the default icon.
+<!--split-->
