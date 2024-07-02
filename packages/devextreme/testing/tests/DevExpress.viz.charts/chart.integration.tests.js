@@ -2978,6 +2978,20 @@ QUnit.test('Legend outside position. Zooming', function(assert) {
     checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
+QUnit.test('placeholderSize should be taken into account on margins estimation', function(assert) {
+    const placeholderSize = 80;
+
+    const chart = createChartInstance({
+        argumentAxis: {
+            placeholderSize,
+        }
+    }, $('#chartContainer'));
+
+    const margins = chart._argumentAxes[0].estimateMargins({ 'default': chart.panes[0].canvas });
+
+    assert.strictEqual(margins.bottom, placeholderSize);
+});
+
 QUnit.test('ScrollBar', function(assert) {
     const chart = this.createChart({
         dataSource: [{ arg: 1, val: 1 }, { arg: 2, val: 2 }],

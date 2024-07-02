@@ -742,6 +742,9 @@ export default {
 
         estimateMargins: function(canvas) {
             this.updateCanvas(canvas);
+
+            const { position, placeholderSize } = this._options;
+
             const that = this;
             const range = that._getViewportRange();
             const ticksData = this._createTicksAndLabelFormat(range);
@@ -771,6 +774,10 @@ export default {
                 top: (options.position === 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'top', constantLinesHeight),
                 bottom: (options.position !== 'top' ? height : 0) + getConstantLineLabelMarginForVerticalAlignment(constantLineOptions, 'bottom', constantLinesHeight)
             };
+
+            if(placeholderSize) {
+                margins[position] = placeholderSize;
+            }
 
             labelElement && labelElement.remove();
             titleElement && titleElement.remove();
