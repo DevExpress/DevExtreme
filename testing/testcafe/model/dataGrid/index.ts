@@ -46,6 +46,7 @@ export const CLASS = {
   headerRow: 'dx-header-row',
   footerRow: 'dx-footer-row',
   groupFooterRow: 'group-footer',
+  freeSpaceRow: 'dx-freespace-row',
 
   overlayContent: 'dx-overlay-content',
   overlayWrapper: 'dx-overlay-wrapper',
@@ -231,6 +232,10 @@ export default class DataGrid extends Widget {
 
   getGroupFooterRow(): Selector {
     return this.element.find(`.${CLASS.dataGrid}-${CLASS.groupFooterRow}`);
+  }
+
+  getFreeSpaceRow(): Selector {
+    return this.element.find(`.${CLASS.freeSpaceRow}`);
   }
 
   getColumnChooser(): ColumnChooser {
