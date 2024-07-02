@@ -359,14 +359,10 @@ function updateRangeSeriesValues() {
                 if(!point.hasValue()) {
                     return;
                 }
-                const data = singleSeries._getData();
-
-                const originalValue = data[index].value;
-                const originalMinValue = data[index].minValue;
 
                 if(point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
-                    point.value = valueAxisTranslator.toValue(originalValue.valueOf() + minShownBusinessValue / 2);
-                    point.minValue = valueAxisTranslator.toValue(originalMinValue.valueOf() - minShownBusinessValue / 2);
+                    point.value = valueAxisTranslator.toValue(point.value.valueOf() + minShownBusinessValue / 2);
+                    point.minValue = valueAxisTranslator.toValue(point.minValue.valueOf() - minShownBusinessValue / 2);
                 }
             });
         }
