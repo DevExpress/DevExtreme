@@ -2978,7 +2978,7 @@ QUnit.test('Legend outside position. Zooming', function(assert) {
     checkOrder(assert, groups, VALIDATE_CHART_GROUPS);
 });
 
-QUnit.test('placeholderSize should be taken into account on margins estimation', function(assert) {
+QUnit.test('placeholderSize should be taken into account on margins estimation (T1232664)', function(assert) {
     const placeholderSize = 80;
 
     const chart = createChartInstance({
