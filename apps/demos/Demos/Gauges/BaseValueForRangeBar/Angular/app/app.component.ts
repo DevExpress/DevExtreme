@@ -12,8 +12,8 @@ type ScaleLabel = DxLinearGaugeTypes.ScaleLabel | DxCircularGaugeTypes.ScaleLabe
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
   customizeText: ScaleLabel['customizeText'] = ({ valueText }) => `${valueText}°`;

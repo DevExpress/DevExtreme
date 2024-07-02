@@ -13,8 +13,8 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/TreeListTasks';
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
   preserveWhitespaces: true,
 })
 export class AppComponent {

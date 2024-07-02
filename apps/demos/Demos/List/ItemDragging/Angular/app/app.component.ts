@@ -14,8 +14,8 @@ type DxoItemDraggingProperties = DxSortableTypes.Properties;
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
   preserveWhitespaces: true,
 })
 export class AppComponent {

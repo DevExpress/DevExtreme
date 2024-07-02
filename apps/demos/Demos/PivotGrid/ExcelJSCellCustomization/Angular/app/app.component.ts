@@ -17,7 +17,7 @@ type CellData = DxPivotGridTypes.CellPreparedEvent['cell'] & { area?: string };
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
+  templateUrl: 'app/app.component.html',
   providers: [Service],
 })
 export class AppComponent {

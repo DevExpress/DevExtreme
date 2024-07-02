@@ -10,9 +10,9 @@ if (!/localhost/.test(document.location.host)) {
 }
 
 @Component({
-  styleUrls: ['./app.component.css'],
+  styleUrls: ['app/app.component.css'],
   selector: 'demo-app',
-  templateUrl: './app.component.html',
+  templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
   dataSource: DataSourceConfig = {

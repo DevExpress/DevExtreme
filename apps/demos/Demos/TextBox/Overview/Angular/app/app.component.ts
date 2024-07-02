@@ -9,7 +9,7 @@ if (!/localhost/.test(document.location.host)) {
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
+  templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
   emailValue = 'smith@corp.com';

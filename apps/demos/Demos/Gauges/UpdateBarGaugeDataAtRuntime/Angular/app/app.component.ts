@@ -12,8 +12,8 @@ if (!/localhost/.test(document.location.host)) {
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
   providers: [Service],
 })
 

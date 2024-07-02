@@ -37,8 +37,8 @@ const sendRequest = function (value) {
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
   @ViewChild(DxFormComponent, { static: false }) form: DxFormComponent;

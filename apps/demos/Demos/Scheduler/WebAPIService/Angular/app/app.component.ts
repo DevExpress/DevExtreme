@@ -12,7 +12,7 @@ const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
+  templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
   currentDate = new Date(2021, 3, 27);

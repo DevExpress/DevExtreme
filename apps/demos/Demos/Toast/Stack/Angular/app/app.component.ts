@@ -19,8 +19,8 @@ type Direction = Parameters<typeof notify>[1]['direction'];
 
 @Component({
   selector: 'demo-app',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'],
+  templateUrl: 'app/app.component.html',
+  styleUrls: ['app/app.component.css'],
 })
 export class AppComponent {
   types: string[] = ['error', 'info', 'success', 'warning'];

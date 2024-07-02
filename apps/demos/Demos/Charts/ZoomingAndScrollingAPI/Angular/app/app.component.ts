@@ -15,7 +15,7 @@ if (!/localhost/.test(document.location.host)) {
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: './app.component.html',
+  templateUrl: 'app/app.component.html',
 })
 export class AppComponent {
   zoomingData: ZoomingData[];
