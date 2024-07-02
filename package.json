@@ -27,7 +27,6 @@
     "all:build": "ts-node tools/scripts/build-all.ts",
     "all:build-dev": "pnpm run all:build --dev",
     "all:pack-and-copy": "nx run-many -t pack-and-copy",
-    "overwrite-wrappers-packages": "ts-node tools/scripts/overwrite-wrappers-packages.ts",
     "webserver": "http-server --port 8080 -c-1"
   },
   "nx": {},
@@ -54,6 +53,7 @@
     "nx": "19.0.4",
     "nx-cloud": "19.0.0",
     "postcss": "^8.4.31",
+    "shelljs": "0.8.5",
     "shx": "0.3.4",
     "source-map": "0.7.4",
     "tar-fs": "^3.0.4",

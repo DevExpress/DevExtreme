@@ -24,7 +24,7 @@ const config: StorybookConfig = {
   docs: {
     autodocs: "tag",
   },
-  staticDirs: ['../stories/assets', '../../../node_modules/devextreme/dist'],
+  staticDirs: ['../stories/assets', '../node_modules/devextreme/dist'],
   async webpackFinal(config) {
     if (config != null && config.resolve != null) {
       config.resolve.alias = {
