@@ -24,7 +24,7 @@ const tasksT1228650 = [{
 test('TreeList - Expand/collapse mechanism breaks after dragging action in the space between the last row and the border (T1228650)', async (t) => {
   const treeList = new TreeList('#container');
   const dataRow = treeList.getDataRow(0);
-  const expandButton = (dataRow.getDataCell(0) as ExpandableCell).getExpandButton();
+  const expandButton = new ExpandableCell(dataRow.getDataCell(0)).getExpandButton();
   const freeSpaceRow = treeList.getFreeSpaceRow();
   await t
     .dragToElement(freeSpaceRow, dataRow.element)
