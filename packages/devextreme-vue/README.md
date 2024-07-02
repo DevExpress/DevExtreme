@@ -23,6 +23,6 @@ DevExpress offers a [free trial](https://js.devexpress.com/Download/) of the pro
 
 ## Support & Feedback
 
-For more information on the Vue framework and how to use it, see the [official documentation](https://vuejs.org/guide/introduction.html).
+For more information on the Vue framework and how to use it, see [official documentation](https://vuejs.org/guide/introduction.html).
 
 If you own an [active DevExtreme license](https://js.devexpress.com/Licensing/#Commercial), submit your questions, suggestions, and bug reports to the [DevExpress Support Center](https://www.devexpress.com/sc).

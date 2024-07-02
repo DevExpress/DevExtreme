@@ -16,7 +16,7 @@ If you discover a **security issue**, send an [email](mailto:info@devexpress.com
 
 Important: **Before you submit a contribution, read the [Source Code section](https://js.devexpress.com/Licensing/) of the DevExtreme lincesing FAQ.
 
-The team decides the product's [development schedule](https://js.devexpress.com/React/Roadmap/) in advance. We may not be able to accept pull requests from outside contributors in a timely manner. Licensed users have the right to fork the repository, modify the source code, and create their own private builds.
+The team decides the product's [development schedule](https://js.devexpress.com/React/Roadmap/) in advance. We may not be able to accept pull requests from outside contributors in a timely manner. Licensed users have the right to fork the repository, modify source code, and create their own private builds.
 
 Third party pull requests are subject to the following requirements:
 

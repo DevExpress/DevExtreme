@@ -1,6 +1,6 @@
 # DevExtreme
 
-DevExtreme is an enterprise-ready suite of powerful, good-looking UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
+DevExtreme is an enterprise-ready suite of powerful, engaging UI components for popular front-end frameworks: Angular, React, Vue, and jQuery.
 
 ![DevExtreme components](https://js.devexpress.com/Content/Images/Main/modern/AdaptivityDesktop.png)
 
@@ -15,7 +15,7 @@ Our range of powerful, modern JavaScript components includes data grids, interac
 
 ## Getting Started
 
-The DevExtreme website includes "Getting Started" guides for every flavor of DevExtreme:
+The DevExtreme website includes "Getting Started" guides for every aspect of DevExtreme:
 
 - Angular
     - [Create a DevExtreme Angular Application](https://js.devexpress.com/Angular/Documentation/Guide/Angular_Components/Getting_Started/Create_a_DevExtreme_Application/)
@@ -42,4 +42,4 @@ The DevExtreme website includes "Getting Started" guides for every flavor of Dev
 
 ## Contributing
 
-The DevExtreme team welcomes outside contributions - bug reports and feature requests. Read our [contribution guidelines](CONTRIBUTING.md) for more information.
+The DevExtreme team welcomes outside contributions of bug reports and feature requests. Read our [contribution guidelines](CONTRIBUTING.md) for more information.
