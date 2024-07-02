@@ -6,8 +6,8 @@ import { DxSelectBoxTypes } from 'devextreme-angular/ui/select-box';
 
 @Component({
   selector: 'detail-view',
-  templateUrl: './detail-view.component.html',
-  styleUrls: ['./detail-view.component.css'],
+  templateUrl: 'app/detail-view/detail-view.component.html',
+  styleUrls: ['app/detail-view/detail-view.component.css'],
   providers: [],
 })
 export class DetailViewComponent implements AfterViewInit {
