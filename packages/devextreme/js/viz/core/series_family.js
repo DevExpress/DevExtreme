@@ -355,7 +355,7 @@ function updateRangeSeriesValues() {
         const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
         const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
         if(minShownBusinessValue) {
-            _each(singleSeries.getPoints(), function(index, point) {
+            _each(singleSeries.getPoints(), function(_, point) {
                 if(!point.hasValue()) {
                     return;
                 }
