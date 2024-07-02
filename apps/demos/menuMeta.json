@@ -734,7 +734,6 @@
               "/Models/Order.cs",
               "/Models/SampleData/Orders.cs"
             ],
-            "DocUrl":"",
             "DemoType": "Web"
           }
         ]
