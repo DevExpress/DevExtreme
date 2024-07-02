@@ -355,13 +355,18 @@ function updateRangeSeriesValues() {
         const valueAxisTranslator = singleSeries.getValueAxis().getTranslator();
         const minShownBusinessValue = minBarSize && valueAxisTranslator.getMinBarSize(minBarSize);
         if(minShownBusinessValue) {
-            _each(singleSeries.getPoints(), function(_, point) {
+            _each(singleSeries.getPoints(), function(index, point) {
                 if(!point.hasValue()) {
                     return;
                 }
+                const data = singleSeries._getData();
+
+                const originalValue = data[index].value;
+                const originalMinValue = data[index].minValue;
+
                 if(point.value.valueOf() - point.minValue.valueOf() < minShownBusinessValue) {
-                    point.value = point.value.valueOf() + minShownBusinessValue / 2;
-                    point.minValue = point.minValue.valueOf() - minShownBusinessValue / 2;
+                    point.value = valueAxisTranslator.toValue(originalValue.valueOf() + minShownBusinessValue / 2);
+                    point.minValue = valueAxisTranslator.toValue(originalMinValue.valueOf() - minShownBusinessValue / 2);
                 }
             });
         }
