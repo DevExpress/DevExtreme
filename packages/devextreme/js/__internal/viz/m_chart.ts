@@ -171,7 +171,6 @@ function getAxisMargins(axis) {
 function getHorizontalAxesMargins(axes, getMarginsFunc) {
   return axes.reduce((margins, axis) => {
     const axisMargins = getMarginsFunc(axis);
-
     const paneMargins = margins.panes[axis.pane] = margins.panes[axis.pane] || {};
     const spacing = axis.getMultipleAxesSpacing();
 
