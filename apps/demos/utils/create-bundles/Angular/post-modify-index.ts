@@ -13,19 +13,16 @@ function modifyIndexHtml(filePath) {
     const polyfillRegex = /<script\s+src="([^"]*polyfill[^"]*)"\s+type="module"><\/script>/g;
     const runtimeRegex = /<script\s+src="([^"]*runtime[^"]*)"\s+type="module"><\/script>/g;
     const mainRegex = /<script\s+src="([^"]*main[^"]*)"\s+type="module"><\/script>/g;
-    
 
     const scripts = [];
-    let match;
-    while ((match = polyfillRegex.exec(data)) !== null) {
-      scripts.push(match[1]);
-    }
-    while ((match = runtimeRegex.exec(data)) !== null) {
+
+    [polyfillRegex, runtimeRegex, mainRegex].forEach(regex => {
+      const match = regex.exec(data);
+      if (match) {
         scripts.push(match[1]);
-    }
-    while ((match = mainRegex.exec(data)) !== null) {
-        scripts.push(match[1]);
-    }
+      }
+    }); 
+    
     if (scripts.length === 0) {
         console.log("There are no bundle scripts to edit");
         return;
