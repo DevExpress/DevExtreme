@@ -307,7 +307,7 @@ const SKIPPED_TESTS = {
     const isGithubDemos = process.env.ISGITHUBDEMOS;
     let pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
     const theme = process.env.THEME.replace('generic.', '');
-    if (isGithubDemos){
+    if (isGithubDemos) {
       pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
     }
     else {

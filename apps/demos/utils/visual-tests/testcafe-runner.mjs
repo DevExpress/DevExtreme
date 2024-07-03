@@ -1,15 +1,5 @@
 import createTestCafe from 'testcafe';
 import fs from 'fs';
-import { resolve, join, dirname } from 'path';
-import { fileURLToPath } from 'url';
-
-const __filename = fileURLToPath(import.meta.url);
-
-const _dirname = dirname(__filename);
-
-const testingPath = resolve(_dirname, '..', '..', 'testing');
-const commonTestPath = join(testingPath, 'common.test.js');
-const widgetTestsPath = join(testingPath, 'widgets');
 
 function reporter() {
   return {
@@ -226,7 +216,6 @@ async function main() {
 
   const failedCount = await runner
     .reporter(reporters)
-    .src([commonTestPath, `${widgetTestsPath}/**/*.test.js`])
     .browsers(process.env.BROWSERS || 'chrome --disable-partial-raster --disable-skia-runtime-opts --run-all-compositor-stages-before-draw --disable-new-content-rendering-timeout --disable-threaded-animation --disable-threaded-scrolling --disable-checker-imaging --disable-image-animation-resync --use-gl="swiftshader" --disable-features=PaintHolding --js-flags=--random-seed=2147483647 --font-render-hinting=none --disable-font-subpixel-positioning')
     .concurrency(concurrency || 1)
     .run({
