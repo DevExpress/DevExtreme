@@ -309,8 +309,7 @@ const SKIPPED_TESTS = {
     const theme = process.env.THEME.replace('generic.', '');
     if (isGithubDemos) {
       pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
-    }
-    else {
+    } else {
       changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
     }
     // remove when tests enabled not only for datagrid
