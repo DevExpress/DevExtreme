@@ -131,7 +131,7 @@ module('Resizing module', moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, ['video'], '\'allowedTargets\' option has been applied');
     });
 
-    test('apply enabled option as a object on runtime change and still render resize frame', function(assert) {
+    test('apply enabled option as a object on runtime change and still render resize frame (T1241439)', function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
         resizingInstance.option('mediaResizing', { enabled: true });
 
