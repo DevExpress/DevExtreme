@@ -4629,3 +4629,64 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   keyExpr: 'field_0',
   showBorders: true,
 }));
+
+
+test("Enter key should not trigger other function besides the function assigned on the clicked button", async (t) => {
+
+  const dataGrid = new DataGrid("#container");
+
+  await t.click(dataGrid.getDataCell(0, 0).element);
+
+  const buttonContainer = Selector(".button-container");
+  await t.expect(buttonContainer.exists).ok({ timeout: 10000 });
+
+  await t.pressKey("tab tab tab tab tab tab tab tab").pressKey("enter");
+
+  await t.wait(3000);
+
+  const message = await Selector("#otherContainer").innerText;
+  const focusButtonMessage = message.includes('Text from the "Focus me..." button');
+
+  await t.expect(focusButtonMessage).ok("Focus me and press Enter button message should be shown in otherContainer");
+}).before(async () =>
+  createWidget("dxDataGrid", {
+    dataSource: [
+      {
+        ID: 1,
+        Prefix: "Mr.",
+        FirstName: "John",
+      },
+    ],
+    keyExpr: "ID",
+    columns: [
+      {
+        dataField: "Prefix",
+        caption: "Title",
+        width: 70,
+      },
+      "FirstName",
+    ],
+    masterDetail: {
+      enabled: true,
+      template(container, options) {
+        const buttonContainer = $("<div>")
+          .addClass("button-container")
+          .appendTo(container);
+
+        $("<button>")
+          .text("Edit")
+          .on("click", function () {
+            $("#otherContainer").append('<div>Text from the "Edit" button</div>');
+          })
+          .appendTo(buttonContainer);
+
+        $("<button>")
+          .text("Focus me and press Enter")
+          .on("click", function () {
+            $("#otherContainer").append('<div>Text from the "Focus me..." button</div>');
+          })
+          .appendTo(buttonContainer);
+      },
+    },
+  })
+);
