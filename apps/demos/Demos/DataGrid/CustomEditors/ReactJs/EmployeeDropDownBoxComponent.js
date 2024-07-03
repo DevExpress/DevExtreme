@@ -1,17 +1,16 @@
-import React, { useCallback, useState } from 'react';
-import DataGrid, {
-  Column, Paging, Scrolling, Selection,
-} from 'devextreme-react/data-grid';
-import DropDownBox from 'devextreme-react/drop-down-box';
+import React, { useCallback, useState } from "react";
+import DataGrid, { Column, Paging, Scrolling, Selection } from "devextreme-react/data-grid";
+import DropDownBox from "devextreme-react/drop-down-box";
 
 const dropDownOptions = { width: 500 };
-const ownerLabel = { 'aria-label': 'Owner' };
+const ownerLabel = { "aria-label": "Owner" };
 const EmployeeDropDownBoxComponent = (props) => {
-  const [selectedRowKeys, setSelectedRowKeys] = useState(() =>
-    (props.data.value !== null && props.data.value !== undefined ? [props.data.value] : []));
+  const {data: { value: dataValue }} = props;
+  const initialSelectedRowKeys = dataValue !== null && dataValue !== undefined ? [dataValue] : [];
+  const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
   const boxOptionChanged = useCallback((e) => {
-    if (e.name === 'opened') {
+    if (e.name === "opened") {
       setDropDownOpened(e.value);
     }
   }, []);
@@ -35,10 +34,7 @@ const EmployeeDropDownBoxComponent = (props) => {
         <Column dataField="FullName" />
         <Column dataField="Title" />
         <Column dataField="Department" />
-        <Paging
-          enabled={true}
-          defaultPageSize={10}
-        />
+        <Paging enabled={true} defaultPageSize={10} />
         <Scrolling mode="virtual" />
         <Selection mode="single" />
       </DataGrid>

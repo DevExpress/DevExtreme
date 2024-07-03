@@ -97,6 +97,7 @@ $(() => {
   });
 
   function dropDownBoxEditorTemplate(cellElement, cellInfo) {
+    const selectedRowKeys = cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : []
     return $('<div>').dxDropDownBox({
       dropDownOptions: { width: 500 },
       dataSource: employees,
@@ -113,7 +114,7 @@ $(() => {
           scrolling: { mode: 'virtual' },
           height: 250,
           selection: { mode: 'single' },
-          selectedRowKeys: cellInfo.value !== null && cellInfo.value !== undefined ? [cellInfo.value] : [],
+          selectedRowKeys: selectedRowKeys,
           focusedRowEnabled: true,
           focusedRowKey: cellInfo.value,
           onSelectionChanged(selectionChangedArgs) {
