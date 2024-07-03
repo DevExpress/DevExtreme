@@ -337,7 +337,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 
   let testURL = '';
   if (!isGithubDemos) {
-    testURL = `http://localhost:8080/Demos/${product}/${demo}/${framework}/`;
+    testURL = `http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`;
   } else {
     const theme = process.env.THEME.replace('generic.', '');
     testURL = `http://localhost:8080/Demos/${product}/${demo}/${framework}/?theme=dx.${theme}`;
