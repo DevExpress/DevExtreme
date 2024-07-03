@@ -115,8 +115,10 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewRowDraggingExtend
 
           rowDragging.onDragStart?.(e);
         },
-        onDragEnter: () => {
-          togglePointerEventsStyle(true);
+        onDragEnter: (e) => {
+          if (e.fromComponent !== e.toComponent) {
+            togglePointerEventsStyle(true);
+          }
         },
         onDragLeave: () => {
           togglePointerEventsStyle(false);
