@@ -209,7 +209,9 @@ export default class ResizingModule extends BaseModule {
       this.enabled = value;
       if (value) {
         this._attachEvents();
-        this._createResizeFrame();
+        if (!this.resizable) {
+          this._createResizeFrame();
+        }
       } else {
         this._detachEvents();
       }
