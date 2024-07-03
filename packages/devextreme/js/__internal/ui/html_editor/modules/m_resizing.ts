@@ -207,7 +207,12 @@ export default class ResizingModule extends BaseModule {
 
     if (option === 'enabled') {
       this.enabled = value;
-      value ? this._attachEvents() : this._detachEvents();
+      if (value) {
+        this._attachEvents();
+        this._createResizeFrame();
+      } else {
+        this._detachEvents();
+      }
     } else if (option === 'allowedTargets' && Array.isArray(value)) {
       this.allowedTargets = value;
     }

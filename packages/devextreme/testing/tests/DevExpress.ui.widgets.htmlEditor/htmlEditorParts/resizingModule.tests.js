@@ -131,6 +131,14 @@ module('Resizing module', moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, ['video'], '\'allowedTargets\' option has been applied');
     });
 
+    test('apply enabled option as a object on runtime change and still render resize frame', function(assert) {
+        const resizingInstance = new Resizing(this.quillMock, this.options);
+        resizingInstance.option('mediaResizing', { enabled: true });
+
+        assert.ok(resizingInstance.enabled, '\'enabled\' option has been applied');
+        assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 1, 'There is resize frame element');
+    });
+
     test('click on an image with default module options', function(assert) {
         const resizingInstance = new Resizing(this.quillMock, this.options);
 
