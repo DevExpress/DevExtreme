@@ -555,6 +555,19 @@ export default class DataGrid extends Widget {
     )();
   }
 
+  apiExpandAll(): Promise<void> {
+    const { getInstance } = this;
+
+    return ClientFunction(
+      () => (getInstance() as any).expandAll(),
+      {
+        dependencies: {
+          getInstance,
+        },
+      },
+    )();
+  }
+
   apiCollapseAllGroups(): Promise<void> {
     const { getInstance } = this;
 
