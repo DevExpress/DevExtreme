@@ -311,7 +311,7 @@ const SKIPPED_TESTS = {
       pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
     } else {
       changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
-      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`
+      pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
     }
     // remove when tests enabled not only for datagrid
     if (isGithubDemos && (widgetName !== 'DataGrid' || githubIgnored.includes(demoName))) {
