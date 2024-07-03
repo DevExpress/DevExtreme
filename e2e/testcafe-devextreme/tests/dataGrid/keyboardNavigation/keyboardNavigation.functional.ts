@@ -4630,64 +4630,61 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   showBorders: true,
 }));
 
-
-test("Enter key should not trigger other function besides the function assigned on the clicked button", async (t) => {
-  const dataGrid = new DataGrid("#container");
+test('Enter key should not trigger other function besides the function assigned on the clicked button', async (t) => {
+  const dataGrid = new DataGrid('#container');
 
   await t
     .click(dataGrid.getDataCell(0, 0).element)
-    .click(Selector("#editButton"))
-    .pressKey("tab")
-    .pressKey("enter");
+    .click(Selector('#editButton'))
+    .pressKey('tab')
+    .pressKey('enter');
 
-  const message = await Selector("#otherContainer").innerText;
+  const message = await Selector('#otherContainer').innerText;
   const focusButtonMessage = message.includes(
-    'second button'
+    'second button',
   );
 
   await t
     .expect(focusButtonMessage)
     .ok();
-}).before(async () =>
-  createWidget("dxDataGrid", {
-    dataSource: [
-      {
-        ID: 1,
-        Prefix: "Mr.",
-        FirstName: "John",
-      },
-    ],
-    keyExpr: "ID",
-    columns: [
-      {
-        dataField: "Prefix",
-        caption: "Title",
-        width: 70,
-      },
-      "FirstName",
-    ],
-    masterDetail: {
-      enabled: true,
-      template(container, options) {
-        const buttonContainer = $("<div>")
-          .addClass("button-container")
-          .appendTo(container);
-
-        $("<button>")
-          .text("Edit")
-          .attr("id", "editButton")
-          .on("click", function () {
-            $("#otherContainer").text('first button');
-          })
-          .appendTo(buttonContainer);
-
-        $("<button>")
-          .text("Focus me and press Enter")
-          .on("click", function () {
-            $("#otherContainer").text('second button');
-          })
-          .appendTo(buttonContainer);
-      },
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      ID: 1,
+      Prefix: 'Mr.',
+      FirstName: 'John',
     },
-  })
-);
+  ],
+  keyExpr: 'ID',
+  columns: [
+    {
+      dataField: 'Prefix',
+      caption: 'Title',
+      width: 70,
+    },
+    'FirstName',
+  ],
+  masterDetail: {
+    enabled: true,
+    template(container) {
+      const buttonContainer = $('<div>')
+        .addClass('button-container')
+        .appendTo(container);
+
+      $('<button>')
+        .text('Edit')
+        .attr('id', 'editButton')
+        .on('click', () => {
+          $('#otherContainer').text('first button');
+        })
+        .appendTo(buttonContainer);
+
+      $('<button>')
+        .text('Focus me and press Enter')
+        .on('click', () => {
+          $('#otherContainer').text('second button');
+        })
+        .appendTo(buttonContainer);
+    },
+  },
+}));
