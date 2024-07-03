@@ -320,6 +320,9 @@ export function runTestAtPage(test, demoUrl) {
 
 export function runManualTestCore(testObject, product, demo, framework, callback) {
   const isGithubDemos = process.env.ISGITHUBDEMOS;
+  if (!isGithubDemos){
+    changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
+  }
   if (isGithubDemos && githubIgnored.includes(demo)){
     return;
   }
@@ -334,7 +337,6 @@ export function runManualTestCore(testObject, product, demo, framework, callback
 
   let testURL = '';
   if (!isGithubDemos) {
-    changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
     testURL = `http://localhost:8080/Demos/${product}/${demo}/${framework}/`;
   } else {
     const theme = process.env.THEME.replace('generic.', '');
