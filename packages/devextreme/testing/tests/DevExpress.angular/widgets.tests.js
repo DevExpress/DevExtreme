@@ -637,34 +637,40 @@ QUnit.test('Scope refreshing count on init', function(assert) {
 QUnit.module('Adaptive menu');
 
 QUnit.test('Adaptive menu should support angular integration', function(assert) {
-    const $markup = $('\
-        <div dx-menu="menuOptions"></div>\
-        <div id="testDiv" ng-bind="test"></div>\
-    ');
+    this.clock = sinon.useFakeTimers();
 
-    const controller = function($scope) {
-        $scope.test = 'Test text 1';
+    try {
+        const $markup = $('\
+            <div dx-menu="menuOptions"></div>\
+            <div id="testDiv" ng-bind="test"></div>\
+        ');
 
-        $scope.menuOptions = {
-            adaptivityEnabled: true,
-            items: [{ text: 'item 1' }],
-            onItemClick: function() {
-                $scope.test = 'Test text 2';
-            }
+        const controller = function($scope) {
+            $scope.test = 'Test text 1';
+
+            $scope.menuOptions = {
+                adaptivityEnabled: true,
+                items: [{ text: 'item 1' }],
+                onItemClick: function() {
+                    $scope.test = 'Test text 2';
+                }
+            };
+            assert.strictEqual($scope.selectedRowKeysInstance, $scope.selectedRowKeys, 'selectedRowKeys instance is not changed');
         };
-        assert.strictEqual($scope.selectedRowKeysInstance, $scope.selectedRowKeys, 'selectedRowKeys instance is not changed');
-    };
 
-    initMarkup($markup, controller, this);
+        initMarkup($markup, controller, this);
 
-    const scope = $markup.scope();
+        const scope = $markup.scope();
 
-    const $treeViewItem = $markup.find('.dx-treeview-item').eq(0);
+        const $treeViewItem = $markup.find('.dx-treeview-item').eq(0);
 
-    $($treeViewItem).trigger('dxclick');
+        $($treeViewItem).trigger('dxclick');
 
-    assert.equal(scope.test, 'Test text 2', 'scope value is updated');
-    assert.equal($('#testDiv').text(), 'Test text 2', 'test div is updated');
+        assert.equal(scope.test, 'Test text 2', 'scope value is updated');
+        assert.equal($('#testDiv').text(), 'Test text 2', 'test div is updated');
+    } finally {
+        this.clock.restore();
+    }
 });
 
 QUnit.test('Component can change itself options on init (T446364)', function(assert) {
@@ -1214,7 +1220,15 @@ QUnit.test('T228219 dxValidationSummary should be disposed properly', function(a
     assert.ok(true, 'We should not fall on previous statement');
 });
 
-QUnit.module('Drawer', () => {
+QUnit.module('Drawer', hooks => {
+    hooks.beforeEach(function() {
+        this.clock = sinon.useFakeTimers();
+    });
+
+    hooks.afterEach(function() {
+        this.clock.restore();
+    });
+
     const DRAWER_WRAPPER_CLASS = 'dx-drawer-wrapper';
     const DRAWER_PANEL_CONTENT_CLASS = 'dx-drawer-panel-content';
     const DRAWER_VIEW_CONTENT_CLASS = 'dx-drawer-content';
