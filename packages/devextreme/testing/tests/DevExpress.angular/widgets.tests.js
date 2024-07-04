@@ -668,6 +668,7 @@ QUnit.test('Adaptive menu should support angular integration', function(assert) 
 
         assert.equal(scope.test, 'Test text 2', 'scope value is updated');
         assert.equal($('#testDiv').text(), 'Test text 2', 'test div is updated');
+        this.clock.tick(1000);
     } finally {
         this.clock.restore();
     }
@@ -1321,6 +1322,8 @@ QUnit.module('Drawer', hooks => {
         assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
 
         checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements);
+
+        this.clock.tick(1000);
     });
 
 
@@ -1387,5 +1390,7 @@ QUnit.module('Drawer', hooks => {
         assert.strictEqual($(buttonElement).dxButton('instance') instanceof Button, true, 'button.instance');
 
         checkNodeEquals(assert, nestedElementsAfterRepaint, nestedElements);
+
+        this.clock.tick(1000);
     });
 });
