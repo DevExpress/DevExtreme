@@ -62,6 +62,8 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
   const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
 
+  const collection = instantiationModels.collection;
+
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
     model: data,
     index,
@@ -72,15 +74,15 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
     const key = createMapKey(data, containerElement);
 
     const onRemoved = (): void => {
-      if (instantiationModels.collection.get(key)) {
-        instantiationModels.collection.delete(key);
-        setInstantiationModels({ ...instantiationModels });
+      if (collection.get(key)) {
+        collection.delete(key);
+        setInstantiationModels({ collection });
       }
     };
 
     const hostWidgetId = widgetId.current;
 
-    instantiationModels.collection.set(key, {
+    collection.set(key, {
       templateKey,
       index,
       componentKey: getRandomId(),
@@ -94,10 +96,10 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
       onRemoved,
     });
 
-    setInstantiationModels({ ...instantiationModels });
+    setInstantiationModels({ collection });
 
     return containerElement;
-  }, [unsubscribeOnRemoval, createMapKey, instantiationModels]);
+  }, [unsubscribeOnRemoval, createMapKey, collection]);
 
   useMemo(() => {
     function getTemplateFunction(template: ITemplate): TemplateFunc {
