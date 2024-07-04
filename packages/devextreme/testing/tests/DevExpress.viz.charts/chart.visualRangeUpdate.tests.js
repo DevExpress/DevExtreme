@@ -113,6 +113,48 @@ QUnit.test('No data -> set visualRange - take given range', function(assert) {
     assert.deepEqual(onOptionChanged.getCall(1).args[0].value, { startValue: undefined, endValue: undefined }, 'Case 5');
 });
 
+QUnit.test('chart should not crash when hiding series if minBarSize is set (T1236326)', function(assert) {
+    const [chart] = this.createChart({
+        dataSource: [
+            {
+                timeStamp: new Date('2024-04-26T06:28:00Z'),
+                key: 'Spacing',
+                end: new Date('2024-04-26T07:22:00Z'),
+            },
+            {
+                timeStamp: new Date('2024-04-25T19:27:00Z'),
+                key: 'Spacing',
+                end: new Date('2024-04-25T19:28:00Z'),
+            },
+        ],
+        rotated: true,
+        commonSeriesSettings: {
+            argumentField: 'key',
+            type: 'rangeBar',
+            minBarSize: '4',
+        },
+        series: [
+            {
+                rangeValue1Field: 'timeStamp',
+                rangeValue2Field: 'end'
+            }
+        ],
+    });
+
+    const series = chart.series[0];
+
+    series.hide();
+
+    let error = false;
+    try {
+        series.show();
+    } catch(e) {
+        error = true;
+    }
+
+    assert.notOk(error);
+});
+
 QUnit.test('No data -> set visualRange -> set data - keep visual range', function(assert) {
     const dataSource = [
         { arg: 1, val: 10 },
