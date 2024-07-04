@@ -4471,7 +4471,7 @@ QUnit.module('Accessibility', () => {
         let $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
         checkButtonAttributes(assert, $switchableButton);
 
-        $($switchableButton).trigger('dxclick');
+        $switchableButton.trigger('dxclick');
 
         pointerMock($item2).start().swipeEnd(1);
         $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
