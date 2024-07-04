@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from "react";
-import DataGrid, { 
-  Column, Paging, Scrolling, Selection, 
+import DataGrid, {
+  Column, Paging, Scrolling, Selection,
 } from "devextreme-react/data-grid";
 import DropDownBox from "devextreme-react/drop-down-box";
 
@@ -14,7 +14,7 @@ const EmployeeDropDownBoxComponent = (props) => {
   const [selectedRowKeys, setSelectedRowKeys] = useState(initialSelectedRowKeys);
   const [isDropDownOpened, setDropDownOpened] = useState(false);
   const boxOptionChanged = useCallback((e) => {
-    if (e.name === "opened") {
+    if (e.name === 'opened') {
       setDropDownOpened(e.value);
     }
   }, []);
@@ -38,9 +38,9 @@ const EmployeeDropDownBoxComponent = (props) => {
         <Column dataField="FullName" />
         <Column dataField="Title" />
         <Column dataField="Department" />
-        <Paging 
-          enabled={true} 
-          defaultPageSize={10} 
+        <Paging
+          enabled={true}
+          defaultPageSize={10}
         />
         <Scrolling mode="virtual" />
         <Selection mode="single" />
