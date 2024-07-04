@@ -4086,6 +4086,7 @@ QUnit.module('Rows view', {
 
 QUnit.module('Rows view with real dataController and columnController', {
     beforeEach: function() {
+        this.clock = sinon.useFakeTimers();
         this.items = [
             { name: 'Alex', age: 15 },
             { name: 'Dan', age: 16 },
@@ -4116,6 +4117,8 @@ QUnit.module('Rows view with real dataController and columnController', {
         };
     },
     afterEach: function() {
+        this.clock.tick(1000);
+        this.clock.restore();
         this.dispose && this.dispose();
     }
 }, () => {
@@ -4169,7 +4172,6 @@ QUnit.module('Rows view with real dataController and columnController', {
         }
 
         let rowClickCount = 0;
-        const clock = sinon.useFakeTimers();
 
         this.options.dataSource.group = 'name';
 
@@ -4200,12 +4202,10 @@ QUnit.module('Rows view with real dataController and columnController', {
         nativePointerMock($targetTouchCell).start().touchStart().touchEnd();
         nativePointerMock($targetClickCell).start().click(true);
 
-        clock.tick(10);
+        this.clock.tick(10);
 
         // assert
         assert.equal(rowClickCount, 1);
-
-        clock.restore();
     });
 
     QUnit.testInActiveWindow('ScrollToPage when virtual scrolling mode', function(assert) {
@@ -4233,6 +4233,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         // act
         this.rowsView.scrollToPage(1);
+        this.clock.runAll();
     });
 
     QUnit.test('set pageIndex scroll content when virtual scrolling mode', function(assert) {
@@ -4319,6 +4320,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         // act
         this.dataController.pageSize(2);
+        this.clock.runAll();
     });
 
     QUnit.test('reset scroll position on set pageIndex when standard scrolling mode', function(assert) {
@@ -4348,6 +4350,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                     // act
                     that.dataController.pageIndex(1);
                 });
+                that.clock.runAll();
             } else {
                 assert.equal(scrollOffsetChangedCallCount, 2, 'scrollChanged Call Count');
                 assert.equal(e.top, 0, 'scroll position is 0');
@@ -4356,6 +4359,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         });
 
         this.rowsView.scrollTo(5);
+        this.clock.runAll();
     });
 
     QUnit.test('ScrollToPage when standard scrolling mode reset position to 0', function(assert) {
@@ -4383,6 +4387,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                     // act
                     that.rowsView.scrollToPage(1);
                 });
+                that.clock.runAll();
             } else {
                 assert.equal(scrollOffsetChangedCallCount, 2, 'scrollChanged Call Count');
                 assert.equal(e.top, 0, 'scroll position is 0');
@@ -4391,6 +4396,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         });
 
         this.rowsView.scrollTo(5);
+        this.clock.runAll();
     });
 
     // T225097
@@ -4426,6 +4432,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         // act
         this.rowsView.scrollTo({ y: 150 });
+        this.clock.runAll();
     });
 
     // T225097, T290984
@@ -4463,6 +4470,7 @@ QUnit.module('Rows view with real dataController and columnController', {
                 setTimeout(function() {
                     that.dataController.optionChanged({ name: 'dataSource' });
                 });
+                that.clock.runAll();
             } else {
                 assert.equal(scrollOffsetChangedCallCount, 2, 'scrollChanged Call Count');
                 assert.equal(e.top, 150, 'scroll position is 150');
@@ -4473,6 +4481,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         // act
         this.rowsView.scrollTo({ y: 150 });
+        this.clock.runAll();
     });
 
     QUnit.test('Reset scroll position on change filter when virtual scrolling enabled', function(assert) {
@@ -4502,17 +4511,20 @@ QUnit.module('Rows view with real dataController and columnController', {
                 setTimeout(function() {
                     that.dataController.filter(['age', '>', 10]);
                 });
+                that.clock.runAll();
             } else {
                 const scrollTop = e.top;
                 setTimeout(function() {
                     assert.equal(scrollTop, 0, 'scroll position is 0');
                     done();
                 });
+                that.clock.runAll();
             }
         });
 
         // act
         this.rowsView.scrollTo({ y: 100 });
+        this.clock.runAll();
     });
 
     QUnit.test('click expand/collapse group', function(assert) {
@@ -5367,7 +5379,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     // T436424
     QUnit.test('Show load panel after replace dataSource when scrolling mode is \'virtual\'', function(assert) {
         // arrange
-        const clock = sinon.useFakeTimers();
         let isDataLoading;
         const $testElement = $('#container');
 
@@ -5392,17 +5403,14 @@ QUnit.module('Rows view with real dataController and columnController', {
         // assert
         assert.ok($testElement.parent().find('.dx-loadpanel-content').first().is(':visible'), 'load panel is visible');
         assert.ok(isDataLoading, 'data loading');
-        clock.tick(200);
+        this.clock.tick(200);
         assert.ok(!$testElement.parent().find('.dx-loadpanel-content').first().is(':visible'), 'load panel isn\'t visible');
-
-        clock.restore();
     });
 
     // T604344
     QUnit.test('Scrollbar should be correct updated when specified a remote data', function(assert) {
         // arrange
         const that = this;
-        const clock = sinon.useFakeTimers();
         const $testElement = $('#container');
 
         that.options.dataSource = {
@@ -5428,7 +5436,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         that.rowsView.element = function() { return $testElement; };
         that.rowsView.render($testElement);
         that.rowsView.resize();
-        clock.tick(100);
+        this.clock.tick(100);
 
         // act
         that.rowsView.resize();
@@ -5438,7 +5446,6 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         assert.strictEqual($scrollableContainer.find('.dx-scrollbar-vertical').is(':hidden'), true, 'vertical scrollbar is hidden');
         assert.strictEqual($scrollableContainer.find('.dx-scrollbar-horizontal').is(':hidden'), true, 'horizontal scrollbar is hidden');
-        clock.restore();
     });
 
     // T341394
@@ -5533,60 +5540,54 @@ QUnit.module('Rows view with real dataController and columnController', {
     // T712541
     QUnit.test('Rows should be rendered properly on scrolling when virtual scrolling is enabled and a row template is used', function(assert) {
         // arrange
-        const clock = sinon.useFakeTimers();
         const $testElement = $('#container');
         const store = new ArrayStore(generateItems(10000));
 
-        try {
-            this.options.columns = undefined;
-            this.options.remoteOperations = true;
-            this.options.dataSource = {
-                load: function(loadOptions) {
-                    const d = $.Deferred();
+        this.options.columns = undefined;
+        this.options.remoteOperations = true;
+        this.options.dataSource = {
+            load: function(loadOptions) {
+                const d = $.Deferred();
 
-                    setTimeout(() => {
-                        store.load(loadOptions).done((items) => {
-                            d.resolve({ data: items, totalCount: 10000 });
-                        });
-                    }, 100);
+                setTimeout(() => {
+                    store.load(loadOptions).done((items) => {
+                        d.resolve({ data: items, totalCount: 10000 });
+                    });
+                }, 100);
 
-                    return d.promise();
-                }
-            };
-            this.options.scrolling = {
-                mode: 'virtual',
-                useNative: false,
-                removeInvisiblePages: true,
-                rowPageSize: 5,
-                rowRenderingMode: 'standard'
-            };
-            this.options.rowTemplate = (_, options) => {
-                return $('<tbody>').addClass('dx-row').html('<tr><td colspan=5>' + options.data.id + '</td></tr>');
-            };
+                return d.promise();
+            }
+        };
+        this.options.scrolling = {
+            mode: 'virtual',
+            useNative: false,
+            removeInvisiblePages: true,
+            rowPageSize: 5,
+            rowRenderingMode: 'standard'
+        };
+        this.options.rowTemplate = (_, options) => {
+            return $('<tbody>').addClass('dx-row').html('<tr><td colspan=5>' + options.data.id + '</td></tr>');
+        };
 
-            this.setupDataGridModules();
-            clock.tick(200);
+        this.setupDataGridModules();
+        this.clock.tick(200);
 
-            this.rowsView.render($testElement);
-            this.rowsView.height(200);
-            this.rowsView.resize();
+        this.rowsView.render($testElement);
+        this.rowsView.height(200);
+        this.rowsView.resize();
 
-            const scrollable = this.rowsView._scrollable;
-            scrollable.scrollTo({ y: 2500 });
-            $(scrollable.container()).trigger('scroll');
-            clock.tick(500);
+        const scrollable = this.rowsView._scrollable;
+        scrollable.scrollTo({ y: 2500 });
+        $(scrollable.container()).trigger('scroll');
+        this.clock.tick(500);
 
-            // assert
-            assert.strictEqual(this.pageIndex(), 3, 'current pageIndex');
-            assert.strictEqual($testElement.find('tbody.dx-virtual-row').length, 2, 'virtual tbody count');
-            assert.strictEqual($testElement.find('tbody').children('.dx-virtual-row').length, 2, 'virtual row count');
-        } finally {
-            clock.restore();
-        }
+        // assert
+        assert.strictEqual(this.pageIndex(), 3, 'current pageIndex');
+        assert.strictEqual($testElement.find('tbody.dx-virtual-row').length, 2, 'virtual tbody count');
+        assert.strictEqual($testElement.find('tbody').children('.dx-virtual-row').length, 2, 'virtual row count');
     });
 
     QUnit.test('Continuation text in an expanded group row should be updated when repaintChangesOnly is enabled (T893032)', function(assert) {
-        const clock = sinon.useFakeTimers();
         const $testElement = $('#container');
         this.options = {
             dataSource: {
@@ -5625,7 +5626,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         // act
         this.setupDataGridModules();
         this.rowsView.render($testElement);
-        clock.tick(10);
+        this.clock.tick(10);
 
         let firstItem = this.dataController.items()[0];
 
@@ -5636,7 +5637,7 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.ok(firstItem.cells[1].groupContinuesMessage, 'continues text is defined');
 
         this.pageIndex(1);
-        clock.tick(10);
+        this.clock.tick(10);
 
         // act
         firstItem = this.dataController.items()[0];
@@ -5646,14 +5647,11 @@ QUnit.module('Rows view with real dataController and columnController', {
         assert.deepEqual(firstItem.key, ['category']);
         assert.notOk(firstItem.cells[1].groupContinuesMessage, 'continues text is not defined');
         assert.ok(firstItem.cells[1].groupContinuedMessage, 'continued text is defined');
-
-        clock.restore();
     });
 
     // T969363
     ['form', 'popup'].forEach(editMode => {
         QUnit.test(`Column name should not be highlighted in form (${editMode} edit mode)`, function(assert) {
-            const clock = sinon.useFakeTimers();
             const $testElement = $('#container');
 
             // arrange
@@ -5671,7 +5669,7 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             this.setupDataGridModules(['data', 'columns', 'rows', 'editing', 'editingRowBased', 'editingFormBased', 'editorFactory', 'masterDetail', 'search']);
             this.rowsView.render($testElement);
-            clock.tick(10);
+            this.clock.tick(10);
 
             this.$element = () => {
                 return $testElement;
@@ -5679,14 +5677,12 @@ QUnit.module('Rows view with real dataController and columnController', {
 
             // act
             this.editRow(0);
-            clock.tick(10);
+            this.clock.tick(10);
 
             // assert
             const $form = $('.dx-form');
             assert.ok($form.length, 'form was rendered');
             assert.notOk($form.find('.dx-datagrid-search-text').length, 'no search text');
-
-            clock.restore();
         });
     });
 
@@ -5694,7 +5690,6 @@ QUnit.module('Rows view with real dataController and columnController', {
     QUnit.test('Watchers should be destroyed after rows are repainted when repaintChangesOnly is enabled', function(assert) {
         // arrange
         const disposeFuncs = [];
-        const clock = sinon.useFakeTimers();
         const $testElement = $('#container');
 
         this.options.repaintChangesOnly = true;
@@ -5727,11 +5722,10 @@ QUnit.module('Rows view with real dataController and columnController', {
 
         // act
         this.rowsView.render($testElement);
-        clock.tick(10);
+        this.clock.tick(10);
 
         // assert
         assert.ok(prevDisposeFuncs.every((dispose) => dispose.called), 'dispose functions were called');
-        clock.restore();
     });
 });
 
