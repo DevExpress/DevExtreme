@@ -438,6 +438,7 @@ class Menu extends MenuBase {
       selectNodesRecursive: false,
       selectByClick: this.option('selectByClick'),
       expandEvent: 'click',
+      _supportItemUrl: true,
     });
   }
 
