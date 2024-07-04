@@ -10,10 +10,16 @@ if (!/localhost/.test(document.location.host)) {
 const msInDay = 1000 * 60 * 60 * 24;
 const now = new Date();
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 
 export class AppComponent {
