@@ -4442,6 +4442,10 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
+            if(!isDeviceDesktop(assert)) {
+                return;
+            }
+
             $('#list').dxList({
                 itemDeleteMode,
                 dataSource: ['text 1', 'text 2'],
@@ -4459,6 +4463,10 @@ QUnit.module('Accessibility', () => {
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
         const $list = $('#list').dxList({
             dataSource: ['text 1', 'text 2'],
             itemDeleteMode: 'slideButton',
