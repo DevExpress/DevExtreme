@@ -1,7 +1,7 @@
 Scale breaks (wavy stripes you see on the chart) cut out ranges from the value axis. This technique may enhance chart readability if values differ greatly. As you can see in this demo, you can easily compare smaller values if scale breaks are enabled. If you disable scale breaks, the smaller values are indistinguishable. 
-<!--split-->
 
 The Chart component can generate scale breaks on the [valueAxis](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/). The Chart detects large gaps between side-by-side points, cuts them out, and displays scale breaks instead. Scale breaks are available only for *'continuous'* or *'logarithmic'* [axis types](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/#type).
+<!--split-->
 
 To enable auto-calculated scale breaks, set the [autoBreaksEnabled](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/#autoBreaksEnabled) property to `true`. Use the [maxAutoBreakCount](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/#maxAutoBreakCount) property to limit the number of automatically created scale breaks. To configure scale break appearance, use the [breakStyle](/Documentation/ApiReference/UI_Components/dxChart/Configuration/valueAxis/breakStyle/) object. You can test all these options in the demo.
 

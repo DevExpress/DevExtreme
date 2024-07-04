@@ -1,5 +1,4 @@
 The Diagram can adapt its layout to narrow screens. In this demo, the component's **Height** property is set to 100% to fit a screen.
-<!--split-->
 
 Note the following changes to the toolbox and properties panel:
 
@@ -9,3 +8,4 @@ Note the following changes to the toolbox and properties panel:
 * Only one tool can be displayed at a time.
 
 You can switch between landscape and portrait layouts to see the Diagram's appearance and behavior on wide and narrow screens.
+<!--split-->

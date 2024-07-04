@@ -1,4 +1,4 @@
-import '@js/ui/list/modules/selection';
+import '@ts/ui/list/modules/m_selection';
 
 import registerComponent from '@js/core/component_registrator';
 import domAdapter from '@js/core/dom_adapter';
@@ -284,8 +284,7 @@ const SelectBox = (DropDownList as any).inherit({
     this._renderInputValue();
     this._setSubmitValue();
 
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred().resolve();
   },
 
   _renderInputValue() {
@@ -304,8 +303,7 @@ const SelectBox = (DropDownList as any).inherit({
   _renderInputValueImpl() {
     this._renderField();
 
-    // @ts-expect-error
-    return new Deferred().resolve();
+    return Deferred().resolve();
   },
 
   _setNextItem(step) {
@@ -317,8 +315,7 @@ const SelectBox = (DropDownList as any).inherit({
 
   _setNextValue(e) {
     const dataSourceIsLoaded = this._dataController.isLoaded()
-    // @ts-expect-error
-      ? new Deferred().resolve()
+      ? Deferred().resolve()
       : this._dataController.load();
 
     dataSourceIsLoaded.done(() => {
@@ -703,8 +700,7 @@ const SelectBox = (DropDownList as any).inherit({
 
   _loadItem(value, cache) {
     const that = this;
-    // @ts-expect-error
-    const deferred = new Deferred();
+    const deferred = Deferred();
 
     this.callBase(value, cache)
       .done((item) => {

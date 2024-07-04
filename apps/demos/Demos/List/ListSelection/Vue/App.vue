@@ -19,6 +19,7 @@
       <div class="caption">Options</div>
       <div class="option">
         <span>Selection Mode </span>
+        {{ " " }}
         <DxSelectBox
           v-model:value="selectionMode"
           :items="['none', 'single', 'multiple', 'all']"
@@ -27,6 +28,7 @@
       </div>
       <div class="option">
         <span>Select All Mode </span>
+        {{ " " }}
         <DxSelectBox
           v-model:value="selectAllMode"
           :disabled="selectionMode !== 'all'"
@@ -35,7 +37,8 @@
         />
       </div>
       <div class="option">
-        <span>Select By Click</span>
+        <span>Select By Click </span>
+        {{ " " }}
         <DxCheckBox
           v-model:value="selectByClick"
           :element-attr="{ 'aria-label': 'Selection By Click' }"
@@ -84,7 +87,7 @@ const selectByClick = ref(false);
 }
 
 .option > span {
-  width: 124px;
+  width: 120px;
   display: inline-block;
 }
 

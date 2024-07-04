@@ -1,7 +1,7 @@
 In many cases, you need to process data on the server before a chart displays it. The Chart component supports this scenario. 
-<!--split-->
 
 In this demo, the data source of the Chart loads weather data for a selected month from an OData service. Each time you select a different month in the drop-down menu, the data source sends a new query to the service. To implement this functionality, assign a [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/) object to the Chart's [dataSource](/Documentation/ApiReference/UI_Components/dxChart/Configuration/#dataSource) property. 
+<!--split-->
 
 In the [DataSource](/Documentation/ApiReference/Data_Layer/DataSource/), implement the [ODataStore](/Documentation/ApiReference/Data_Layer/ODataStore/). An OData service can include multiple entity collections related to each other, but the [ODataStore](/Documentation/ApiReference/Data_Layer/ODataStore/) specifies only one collection. To load multiple collections at once, set the [expand](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#expand) property to an array with the additional collection titles. Then, call the [postProcess](/Documentation/ApiReference/Data_Layer/DataSource/Configuration/#postProcess) function to process additional data.
 

@@ -24,9 +24,9 @@ import Editor from '@js/ui/editor/editor';
 import Scrollable from '@js/ui/scroll_view/ui.scrollable';
 import TabPanel from '@js/ui/tab_panel';
 import { isMaterial, isMaterialBased } from '@js/ui/themes';
-import { TOOLBAR_CLASS } from '@js/ui/toolbar/constants';
 import ValidationEngine from '@js/ui/validation_engine';
 import Widget from '@js/ui/widget/ui.widget';
+import { TOOLBAR_CLASS } from '@ts/ui/toolbar/m_constants';
 
 import {
   setLabelWidthByMaxLabelWidth,
@@ -264,7 +264,7 @@ const Form = Widget.inherit({
 
   _initMarkup() {
     // @ts-expect-error
-    ValidationEngine.addGroup(this._getValidationGroup());
+    ValidationEngine.addGroup(this._getValidationGroup(), false);
     this._clearCachedInstances();
     this._prepareFormData();
     this.$element().addClass(FORM_CLASS);
@@ -879,7 +879,7 @@ const Form = Widget.inherit({
     const optionName = getOptionNameFromFullName(fullName);
     if (ITEM_OPTIONS_FOR_VALIDATION_UPDATING.includes(optionName)) {
       // @ts-expect-error
-      ValidationEngine.addGroup(this._getValidationGroup());
+      ValidationEngine.addGroup(this._getValidationGroup(), false);
       if (this.option('showValidationSummary')) {
         this._validationSummary?.refreshValidationGroup();
       }
