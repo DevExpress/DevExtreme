@@ -814,6 +814,8 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
         );
 
         $container.append(link);
+      } else {
+        this.callBase($container, itemData);
       }
     } else {
       this.callBase($container, itemData);
