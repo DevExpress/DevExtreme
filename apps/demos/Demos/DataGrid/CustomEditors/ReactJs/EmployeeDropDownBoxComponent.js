@@ -1,8 +1,8 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState } from 'react';
 import DataGrid, {
   Column, Paging, Scrolling, Selection,
-} from "devextreme-react/data-grid";
-import DropDownBox from "devextreme-react/drop-down-box";
+} from 'devextreme-react/data-grid';
+import DropDownBox from 'devextreme-react/drop-down-box';
 
 const dropDownOptions = { width: 500 };
 const ownerLabel = { 'aria-label': 'Owner' };
