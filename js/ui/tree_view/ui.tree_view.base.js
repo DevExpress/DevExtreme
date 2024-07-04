@@ -177,7 +177,8 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             expandEvent: 'dblclick',
             selectByClick: false,
             createChildren: null,
-            onSelectAllValueChanged: null
+            onSelectAllValueChanged: null,
+            _supportItemUrl: false,
 
             /**
             * @name dxTreeViewOptions.selectedItem
@@ -328,6 +329,7 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
             case 'animationEnabled':
             case 'virtualModeEnabled':
             case 'selectByClick':
+            case '_supportItemUrl':
                 break;
             case 'selectionMode':
                 this._initDataAdapter();
@@ -785,9 +787,13 @@ const TreeViewBase = HierarchicalCollectionWidget.inherit({
     _addContent: function($container, itemData) {
         const { html, url } = itemData;
 
-        if(url) {
+        if(this.option('_supportItemUrl') && url) {
             $container.html(html);
-            const link = this._getLinkContainer(this._getIconContainer(itemData), this._getTextContainer(itemData), itemData);
+            const link = this._getLinkContainer(
+                this._getIconContainer(itemData),
+                this._getTextContainer(itemData),
+                itemData,
+            );
             $container.append(link);
         } else {
             this.callBase($container, itemData);
