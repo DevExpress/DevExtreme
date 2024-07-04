@@ -369,7 +369,7 @@ QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(ass
 });
 
 QUnit.test('filter with collatorOptions.sensitivity set to "base"', function(assert) {
-    const input = [{ ID: 'AAA', Name: 'Name 1' }, { ID: 'ááá', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+    const input = [{ ID: 'bbb', Name: 'Name 1' }, { ID: 'ááá', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
     const filterLength = QUERY(input, {
         langParams: {
             collatorOptions: {
