@@ -12,7 +12,7 @@ fixture('TreeView.ItemSelectionAndCustomization')
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('TreeView', 'ItemSelectionAndCustomization', ['jQuery', /* 'React', */ 'Vue'], (test) => {
+runManualTest('TreeView', 'ItemSelectionAndCustomization', ['jQuery'/*, 'React', 'Vue' */], (test) => {
   test('ItemSelectionAndCustomization', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

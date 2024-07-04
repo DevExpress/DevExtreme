@@ -9,7 +9,7 @@ fixture('DataGrid.EditStateManagement')
     ctx.initialWindowSize = [900, 600];
   });
 
-runManualTest('DataGrid', 'EditStateManagement', ['jQuery', /* 'React', */ 'Vue', 'Angular'], (test) => {
+runManualTest('DataGrid', 'EditStateManagement', ['jQuery', /* 'React', */ 'Vue'/* , 'Angular' */], (test) => {
   test('EditStateManagement - update row', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

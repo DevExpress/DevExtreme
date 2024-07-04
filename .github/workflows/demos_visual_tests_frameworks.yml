@@ -49,7 +49,7 @@ jobs:
             .nx/cache
           key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
           restore-keys: |
-            ${{ runner.os }}-pnpm-store-
+            ${{ runner.os }}-pnpm-store
 
       - name: Install dependencies
         run: |
@@ -120,7 +120,7 @@ jobs:
           .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+          ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
       working-directory: apps/demos
@@ -237,7 +237,7 @@ jobs:
           .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+          ${{ runner.os }}-pnpm-store
 
     - name: Install packages
       run: pnpm add -w ./devextreme-installer.tgz ./devextreme-dist-installer.tgz ./devextreme-react-installer.tgz ./devextreme-vue-installer.tgz ./devextreme-angular-installer.tgz
@@ -306,7 +306,7 @@ jobs:
           .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+          ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
       run: |
@@ -397,7 +397,7 @@ jobs:
           .nx/cache
         key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
         restore-keys: |
-          ${{ runner.os }}-pnpm-store-
+          ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
       working-directory: apps/demos
