@@ -368,6 +368,18 @@ QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(ass
     assert.equal(filterLength, 1);
 });
 
+QUnit.test('filter with collatorOptions.sensitivity set to "base"', function(assert) {
+    const input = [{ ID: 'AAA', Name: 'Name 1' }, { ID: 'ááá', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+    const filterLength = QUERY(input, {
+        langParams: {
+            collatorOptions: {
+                sensitivity: 'base'
+            }
+        }
+    }).filter(['ID', '=', 'aaa']).toArray().length;
+    assert.equal(filterLength, 2);
+});
+
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 
