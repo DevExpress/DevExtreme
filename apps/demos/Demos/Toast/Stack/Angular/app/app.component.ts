@@ -48,7 +48,7 @@ export class AppComponent {
 
   predefinedPosition: Position = 'bottom center';
 
-  coordinatePosition: Position = {
+  coordinatePosition = {
     top: undefined,
     bottom: undefined,
     left: undefined,

@@ -45,29 +45,38 @@ if (window && window.config.packageConfigPaths) {
 export class AppComponent {
   stylingMode = !themes.current().startsWith('generic') ? 'text' : undefined;
 
-  fontSizes: FontSize[] = this.service.getFontSizes();
+  fontSizes: FontSize[] = [];
 
-  lineHeights: LineHeight[] = this.service.getLineHeights();
+  lineHeights: LineHeight[] = [];
 
-  lineHeight: number[] = [this.lineHeights[1].lineHeight];
+  lineHeight: number[] = [this.lineHeights[1]?.lineHeight];
 
-  fontFamilies: FontFamily[] = this.service.getFontFamilies();
+  fontFamilies: FontFamily[] = [];
 
-  headings: Heading[] = this.service.getHeadings();
+  headings: Heading[] = [];
 
-  heading = this.headings[0].text;
+  heading = this.headings[0]?.text;
 
-  fontStyles: FontStyle[] = this.service.getFontStyles();
+  fontStyles: FontStyle[] = [];
 
-  textAlignItems: TextAlign[] = this.service.getTextAlign();
+  textAlignItems: TextAlign[] = [];
 
-  textAlignItemsExtended: TextAlignExtended[] = this.service.getTextAlignExtended();
+  textAlignItemsExtended: TextAlignExtended[] = [];
 
-  selectedTextAlign = [this.textAlignItems[0].alignment];
+  selectedTextAlign = [this.textAlignItems[0]?.alignment];
 
-  listTypes: ListType[] = this.service.getListType();
+  listTypes: ListType[] = [];
 
-  constructor(private service: Service) {}
+  constructor(private service: Service) {
+    this.fontSizes = service.getFontSizes();
+    this.lineHeights = service.getLineHeights();
+    this.fontFamilies = service.getFontFamilies();
+    this.headings = service.getHeadings();
+    this.fontStyles = service.getFontStyles();
+    this.textAlignItems = service.getTextAlign(); 
+    this.textAlignItemsExtended = service.getTextAlignExtended();
+    this.listTypes = service.getListType(); 
+  }
 
   onTextAlignChanged(e: { itemData: { hint: string } }): void {
     this.onButtonClick(e.itemData.hint);
