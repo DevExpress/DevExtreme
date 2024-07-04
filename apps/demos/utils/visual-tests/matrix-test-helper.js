@@ -318,27 +318,27 @@ export function runTestAtPage(test, demoUrl) {
 }
 
 
-export function runManualTestCore(testObject, product, demo, framework, callback) {
+export function runManualTestCore(testObject, widget, demo, framework, callback) {
   const isGithubDemos = process.env.ISGITHUBDEMOS;
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
   
-  if (!shouldRunTest(framework, index, product, demo, SKIPPED_TESTS)) {
+  if (!shouldRunTest(framework, index, widget, demo, SKIPPED_TESTS)) {
     return;
   }
 
   let testURL = '';
 
   if (isGithubDemos) {
-    if (githubIgnored.includes(demo)) {
+    if (widget !== 'DataGrid' || githubIgnored.includes(demo)) {
       return;
     }
     const theme = process.env.THEME.replace('generic.', '');
-    testURL = `http://localhost:8080/Demos/${product}/${demo}/${framework}/?theme=dx.${theme}`;
+    testURL = `http://localhost:8080/Demos/${widget}/${demo}/${framework}/?theme=dx.${theme}`;
   } else {
-    changeTheme(__dirname, `../../Demos/${product}/${demo}/${framework}/index.html`, process.env.THEME);
-    testURL = `http://localhost:8080/apps/demos/Demos/${product}/${demo}/${framework}/`;
+    changeTheme(__dirname, `../../Demos/${widget}/${demo}/${framework}/index.html`, process.env.THEME);
+    testURL = `http://localhost:8080/apps/demos/Demos/${widget}/${demo}/${framework}/`;
   }
   
   const test = testObject.page(testURL);
@@ -354,7 +354,7 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   });
 
   if (settings.explicitTests) {
-    if (shouldRunTestExplicitlyInternal(framework, product, demo)) {
+    if (shouldRunTestExplicitlyInternal(framework, widget, demo)) {
       callback(test.only);
     }
     return;
@@ -363,17 +363,17 @@ export function runManualTestCore(testObject, product, demo, framework, callback
   callback(test);
 }
 
-export function runManualTest(product, demo, framework, callback) {
+export function runManualTest(widget, demo, framework, callback) {
   if (process.env.STRATEGY === 'accessibility') {
     return;
   }
 
   if (Array.isArray(framework)) {
     framework.forEach((i) => {
-      runManualTestCore(test, product, demo, i, callback);
+      runManualTestCore(test, widget, demo, i, callback);
     });
   } else {
-    runManualTestCore(test, product, demo, framework, callback);
+    runManualTestCore(test, widget, demo, framework, callback);
   }
 }
 

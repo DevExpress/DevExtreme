@@ -46,7 +46,7 @@ const getTemplateContent = (framework: Framework) => {
 const getBundlePath = (demoPath: string, prefix: string, postfix: string) => readdirSync(demoPath)
   .find((item) => item.startsWith(prefix) && item.endsWith(postfix));
 
-  // refactor with new paths
+
 const getSpecificCssPath = (WidgetName: string, demoPath: string) => {
   if (WidgetName !== 'Gantt' && WidgetName !== 'Diagram') {
     return '';
