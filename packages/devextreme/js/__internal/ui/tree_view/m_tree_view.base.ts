@@ -803,20 +803,15 @@ const TreeViewBase = (HierarchicalCollectionWidget as any).inherit({
 
   _addContent($container, itemData) {
     const { html, url } = itemData;
-    if (this.option('_supportItemUrl')) {
-      if (url) {
-        $container.html(html);
 
-        const link = this._getLinkContainer(
-          this._getIconContainer(itemData),
-          this._getTextContainer(itemData),
-          itemData,
-        );
-
-        $container.append(link);
-      } else {
-        this.callBase($container, itemData);
-      }
+    if (this.option('_supportItemUrl') && url) {
+      $container.html(html);
+      const link = this._getLinkContainer(
+        this._getIconContainer(itemData),
+        this._getTextContainer(itemData),
+        itemData,
+      );
+      $container.append(link);
     } else {
       this.callBase($container, itemData);
     }
