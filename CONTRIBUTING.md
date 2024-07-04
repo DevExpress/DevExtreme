@@ -1,24 +1,24 @@
-# Guidelines for Contributing
+# Contribution Guidelines
 
-## Issues and Feature Requests
+## Bug Reports and Feature Requests
 
-Important: **We do not provide customer support on GitHub.**
+Important: **DevExtreme does not offer customer support on GitHub.**
 
-Although we monitor issues reported on GitHub, we cannot guarantee to process them as soon and in the same manner as tickets submitted to the [Support Center](https://www.devexpress.com/sc).
+The DevExtreme team uses the [DevExpress Support Center](https://www.devexpress.com/sc) to track bug reports and answer user questions. We monitor GitHub issues, but always give priority to Support Center tickets.
 
-Our official bug tracker is the [Support Center](https://www.devexpress.com/sc). Please submit your questions, bug reports, and feature requests there if you have an active [commercial](https://js.devexpress.com/Licensing/#Commercial) license.
+If you own an [active license](https://js.devexpress.com/Licensing/), submit your inquiries to the Support Center website.
 
-If you find a security bug, please report it by sending an email to info@devexpress.com.
+## Vulnerability disclosure
+
+If you discover a **security issue**, send an [email](mailto:info@devexpress.com) with the description to info@devexpress.com.
 
 ## Contributing Code and Content
 
-Important: **Read Section 5 of the [LICENSE AGREEMENT](LICENSE.md#5-submission-of-contributions) before submitting any contribution.** 
+Important: **Before you submit a contribution, read the [Source Code section](https://js.devexpress.com/Licensing/) of the DevExtreme lincesing FAQ.
 
-Please keep in mind that DevExtreme has a development schedule; we are unable to accept every pull request from non-DevExpress contributors.
+The team decides the product's [development schedule](https://js.devexpress.com/React/Roadmap/) in advance. We may not be able to accept pull requests from outside contributors in a timely manner. Licensed users have the right to fork the repository, modify source code, and create their own private builds.
 
-However, you are welcome to fork the repository, modify the source code in your fork, and make your builds.
+Third party pull requests are subject to the following requirements:
 
-To submit a pull request, follow these guidelines:
-
-1. Describe all applied changes in detail 
-2. Make sure that all automatic checks pass
+1. The PR needs to contain a detailed description of proposed changes.
+2. The PR needs to pass all automatic checks.
