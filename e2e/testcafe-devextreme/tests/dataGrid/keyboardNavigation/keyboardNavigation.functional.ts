@@ -4630,7 +4630,7 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   showBorders: true,
 }));
 
-//T1240353
+// T1240353
 test('Enter key should not trigger other function besides the function assigned on the clicked button', async (t) => {
   const dataGrid = new DataGrid('#container');
 
