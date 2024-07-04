@@ -42,7 +42,7 @@ jobs:
           mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: devextreme-sources
           path: |
@@ -106,7 +106,7 @@ jobs:
         run: npm run make-demos-bundle -- --framework Vue
 
       - name: Save publish-demos directory for ES as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
@@ -197,7 +197,7 @@ jobs:
         run: npm run post-modify-angular
       
       - name: Save publish-demos directory for Angular as an artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos

@@ -75,7 +75,7 @@ jobs:
 
             - name: Copy screenshots artifacts
               if: ${{ failure() }}
-              uses: actions/upload-artifact@v4
+              uses: actions/upload-artifact@v3
               with:
                 name: screenshots
                 path: ${{ github.workspace }}/devextreme/apps/demos/testing/artifacts/compared-screenshots/**/*
