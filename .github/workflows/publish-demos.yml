@@ -106,7 +106,7 @@ jobs:
         run: npm run make-demos-bundle -- --framework Vue
 
       - name: Save publish-demos directory for ES as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
@@ -140,12 +140,12 @@ jobs:
             command: CONSTEL=10/10 npm run make-demos-bundle -- --framework Angular
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Setup Node.js v18
-        uses: actions/setup-node@v3
+      - name: Setup Node.js v20
+        uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install Dependencies
         run: npm install
@@ -197,7 +197,7 @@ jobs:
         run: npm run post-modify-angular
       
       - name: Save publish-demos directory for Angular as an artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
@@ -207,12 +207,12 @@ jobs:
     needs: [build-devextreme, publish-ES, publish-angular]
     steps: 
       - name: Download publish-demos artifact
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: publish-demos
           path: ./apps/demos/publish-demos
       - name: Deploy to gh-pages
-        uses: peaceiris/actions-gh-pages@v3
+        uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./apps/demos/publish-demos
