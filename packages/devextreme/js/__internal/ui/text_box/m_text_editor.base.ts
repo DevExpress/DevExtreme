@@ -198,7 +198,7 @@ const TextEditorBase = Editor.inherit({
     this.callBase();
 
     this._refreshValueChangeEvent();
-    this._renderEvents();
+    this._refreshEvents();
 
     this._renderEnterKeyAction();
     this._renderEmptinessEvent();
