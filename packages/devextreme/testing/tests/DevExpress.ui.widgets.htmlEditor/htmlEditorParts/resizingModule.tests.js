@@ -130,13 +130,32 @@ module('Resizing module', moduleConfig, () => {
         assert.ok(resizingInstance.enabled, '\'enabled\' option has been applied');
         assert.deepEqual(resizingInstance.allowedTargets, ['video'], '\'allowedTargets\' option has been applied');
     });
+    QUnit.module('on runtime change', () => {
+        test('apply enabled option as a object on runtime change and still render resize frame (T1241439)', function(assert) {
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+            resizingInstance.option('mediaResizing', { enabled: true });
 
-    test('apply enabled option as a object on runtime change and still render resize frame (T1241439)', function(assert) {
-        const resizingInstance = new Resizing(this.quillMock, this.options);
-        resizingInstance.option('mediaResizing', { enabled: true });
+            assert.ok(resizingInstance.enabled, '\'enabled\' option has been applied');
+            assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 1, 'There is resize frame element');
+            assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');
+            assert.ok(this.detachEventsSpy.notCalled, 'events hasn\'t detached');
+        });
 
-        assert.ok(resizingInstance.enabled, '\'enabled\' option has been applied');
-        assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 1, 'There is resize frame element');
+        test('Ensure the \'enabled\' option can be disabled at runtime and correctly removes the resize frame (T1241439)', function(assert) {
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+
+            resizingInstance.option('mediaResizing', { enabled: true });
+            assert.ok(resizingInstance.enabled, '\'enabled\' option should be active');
+            assert.ok(this.attachEventsSpy.calledOnce, 'Events should be attached once.');
+
+            resizingInstance.option('mediaResizing', { enabled: false });
+            assert.notOk(resizingInstance.enabled, '\'enabled\' option should be disabled');
+            assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 0, 'There should be no resize frame element');
+            assert.ok(this.detachEventsSpy.calledOnce, 'Events should be detached once.');
+        });
+
     });
 
     test('click on an image with default module options', function(assert) {

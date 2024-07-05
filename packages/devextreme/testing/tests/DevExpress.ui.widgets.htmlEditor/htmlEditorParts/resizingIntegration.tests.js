@@ -87,7 +87,7 @@ module('Resizing integration', {
 
         const $resizeFrame = this.$element.find(`.${RESIZE_FRAME_CLASS}`);
 
-        assert.strictEqual($resizeFrame.length, 1, 'There is resize frame');
+        assert.strictEqual($resizeFrame.length, 0, 'There is resize frame');
     });
 
     test('Click on an image with enabled resizing but remove \'image\' from allowed resizing targets', function(assert) {

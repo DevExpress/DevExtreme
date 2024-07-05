@@ -72,7 +72,7 @@ export default class ResizingModule extends BaseModule {
 
   _clickHandler(e) {
     if (this._isAllowedTarget(e.target)) {
-      if (this._$target === e.target) {
+      if (this._$target === e.target || !this._$resizeFrame) {
         return;
       }
 
@@ -209,11 +209,9 @@ export default class ResizingModule extends BaseModule {
       this.enabled = value;
       if (value) {
         this._attachEvents();
-        if (!this.resizable) {
-          this._createResizeFrame();
-        }
+        this._createResizeFrame();
       } else {
-        this._detachEvents();
+        this.clean();
       }
     } else if (option === 'allowedTargets' && Array.isArray(value)) {
       this.allowedTargets = value;
