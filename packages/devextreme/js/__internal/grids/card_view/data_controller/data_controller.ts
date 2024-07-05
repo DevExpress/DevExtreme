@@ -1,4 +1,4 @@
-import { computed, state } from "@js/__internal/core/reactive"
+import { Subscribable, computed, state } from "@js/__internal/core/reactive"
 import { OptionsController } from "../options_controller/options_controller"
 import DataSource, { DataSourceLike } from "@js/data/data_source";
 
@@ -8,30 +8,23 @@ export function normalizeDataSource(dataSourceLike: DataSourceLike<unknown, unkn
 }
 
 export class DataController {
-  private dataSource = this.options.oneWay('dataSource');
+  private dataSourceConfiguration = this.options.oneWay('dataSource');
 
-  private dataSourceNormalized = computed(
+  private dataSource = computed(
     normalizeDataSource,
-    [this.dataSource]
+    [this.dataSourceConfiguration]
   )
 
-  private paging = this.options.oneWay('paging')
-
-  private pageIndex = computed(
-    (paging) => {
-      return paging?.pageIndex ?? 0
-    },
-    [this.paging]
+  private paging = computed(
+    (paging) => paging ?? {},
+    [this.options.oneWay('paging')]
   )
 
-  private pageSize = computed(
-    (paging) => {
-      return paging?.pageSize ?? 0
-    },
-    [this.paging]
-  )
+  private pageIndex = this.options.oneWay('paging.pageIndex')
 
-  private dataSourceOptions = computed(
+  private pageSize = this.options.oneWay('paging.pageSize')
+
+  private loadOptions = computed(
     (pageIndex, pageSize) => ({
       pageIndex,
       pageSize
@@ -45,5 +38,12 @@ export class DataController {
 
   constructor(
     private options: OptionsController,
-  ) {}
+  ) {
+    computed(
+      (loadOptions, dataSource) => {
+        dataSource
+      },
+      [this.loadOptions, this.dataSource]
+    );
+  }
 }

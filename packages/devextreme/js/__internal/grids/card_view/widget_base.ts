@@ -1,21 +1,33 @@
+import { DIContext } from "@ts/core/di";
+import { DataController } from "./data_controller/data_controller";
+import { ColumnsController } from "./columns_controller/columns_controller";
+import { OptionsController } from "./options_controller/options_controller";
+import { HeaderPanelController } from "./header_panel/controller";
+import { HeaderPanelView } from "./header_panel/view";
+import { EditingController } from "./editing/controller";
 import registerComponent from '@js/core/component_registrator';
-import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
-import { logger } from '@js/core/utils/console';
-import { extend } from '@js/core/utils/extend';
-import { isString } from '@js/core/utils/type';
 import type { Properties } from '@js/ui/card_view';
 import { isMaterialBased } from '@js/ui/themes';
-import gridCoreUtils from '@ts/grids/grid_core/m_utils';
-import GridCoreWidget from '@ts/grids/grid_core/m_widget_base';
+import Widget from '@js/ui/widget/ui.widget';
+import $ from '@js/core/renderer';
+import { ContentView } from "./content_view/content_view";
 
-import gridCore from './core_helper';
-import { callModuleItemsMethod } from '../grid_core/m_modules';
+class CardView extends Widget<Properties> {
+  private diContext = new DIContext();
 
-gridCore.registerModulesOrder([
-]);
+  constructor(element: Element, options: Properties) {
+    super(element, options);
 
-class CardView extends GridCoreWidget<Properties> {
+    this.diContext.register(DataController);
+    this.diContext.register(ColumnsController);  
+    this.diContext.register(HeaderPanelController);
+    this.diContext.register(HeaderPanelView);
+    this.diContext.register(EditingController);
+    this.diContext.register(ContentView);
+    this.diContext.registerInstance(OptionsController, new OptionsController(this));
+  }
+
   private _defaultOptionsRules() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
@@ -58,40 +70,12 @@ class CardView extends GridCoreWidget<Properties> {
     ]);
   }
 
-  private _init() {
-    const that = this;
-
-    // @ts-expect-error
-    super._init();
-
-    // @ts-expect-error
-    // eslint-disable-next-line @typescript-eslint/no-unnecessary-type-assertion
-    gridCore.processModules(that, gridCore as any);
-
-    callModuleItemsMethod(that, 'init');
-  }
-
-  private _initMarkup() {
+  protected _initMarkup() {
     // @ts-expect-error
     super._initMarkup.apply(this, arguments);
-    this.getView('gridView').render(this.$element());
-  }
-
-  protected _setDeprecatedOptions() {
-    super._setDeprecatedOptions();
-
-    // @ts-expect-error
-    extend(this._deprecatedOptions, {
-      useKeyboard: { since: '19.2', alias: 'keyboardNavigation.enabled' },
-      rowTemplate: { since: '21.2', message: 'Use the "dataRowTemplate" option instead' },
-    });
-  }
-
-  protected getGridCoreHelper() {
-    return gridCore;
-  }
-  public focus(element?) {
-    this.getController('keyboardNavigation').focus(element);
+    
+    const $contentView = $('<div>').appendTo(this.$element());
+    this.diContext.get(ContentView).render($contentView.get(0));
   }
 }
 

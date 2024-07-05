@@ -16,14 +16,15 @@ export class ContentView extends View {
     }))
   }, [this.dataController.items]);
   
+  static dependencies = [DataController] as const;
+
   constructor(
     private dataController: DataController,
   ) {
     super();
   }
 
-  public getVDOM(): Subscribable<InfernoNode> {
-    return computed((items) => {
+  protected vdom = computed((items) => {
       return <div className={CLASSES.content}>
         {
           items.map(
@@ -32,5 +33,4 @@ export class ContentView extends View {
         }
       </div>
     }, [this.items]) 
-  }
 }

@@ -4,7 +4,7 @@ import { View } from "../core/view";
 import { HeaderPanelController } from "./controller";
 
 export class HeaderPanelView extends View{
-  static dependencies = [HeaderPanelController];
+  static dependencies = [HeaderPanelController] as const;
   public vdom = computed((items) => {
     return 
   }, [this.controller.items])
