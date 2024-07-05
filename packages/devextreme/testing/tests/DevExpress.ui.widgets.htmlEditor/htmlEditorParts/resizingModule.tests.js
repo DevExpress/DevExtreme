@@ -130,6 +130,7 @@ module('Resizing module', moduleConfig, () => {
         assert.ok(resizingInstance.enabled, '\'enabled\' option has been applied');
         assert.deepEqual(resizingInstance.allowedTargets, ['video'], '\'allowedTargets\' option has been applied');
     });
+
     QUnit.module('on runtime change', () => {
         test('apply enabled option as a object on runtime change and still render resize frame (T1241439)', function(assert) {
             const resizingInstance = new Resizing(this.quillMock, this.options);
