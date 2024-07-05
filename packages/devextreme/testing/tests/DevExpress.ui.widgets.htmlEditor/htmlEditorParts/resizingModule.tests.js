@@ -132,7 +132,7 @@ module('Resizing module', moduleConfig, () => {
     });
 
     QUnit.module('on runtime change', () => {
-        test('apply enabled option as a object on runtime change and still render resize frame (T1241439)', function(assert) {
+        test('to { enabled: true } should render resize frame and attach events (T1241439)', function(assert) {
             const resizingInstance = new Resizing(this.quillMock, this.options);
             this.attachSpies(resizingInstance);
             resizingInstance.option('mediaResizing', { enabled: true });
@@ -143,20 +143,16 @@ module('Resizing module', moduleConfig, () => {
             assert.ok(this.detachEventsSpy.notCalled, 'events hasn\'t detached');
         });
 
-        test('Ensure the \'enabled\' option can be disabled at runtime and correctly removes the resize frame (T1241439)', function(assert) {
+        test('to { enabled: false } should remove resize frame and detach events (T1241439)', function(assert) {
+            this.options.enabled = true;
             const resizingInstance = new Resizing(this.quillMock, this.options);
             this.attachSpies(resizingInstance);
-
-            resizingInstance.option('mediaResizing', { enabled: true });
-            assert.ok(resizingInstance.enabled, '\'enabled\' option should be active');
-            assert.ok(this.attachEventsSpy.calledOnce, 'Events should be attached once.');
 
             resizingInstance.option('mediaResizing', { enabled: false });
             assert.notOk(resizingInstance.enabled, '\'enabled\' option should be disabled');
             assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 0, 'There should be no resize frame element');
             assert.ok(this.detachEventsSpy.calledOnce, 'Events should be detached once.');
         });
-
     });
 
     test('click on an image with default module options', function(assert) {

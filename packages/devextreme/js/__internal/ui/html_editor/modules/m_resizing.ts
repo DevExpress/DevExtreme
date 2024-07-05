@@ -65,14 +65,14 @@ export default class ResizingModule extends BaseModule {
   }
 
   _detachEvents() {
-    eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
+    eventsEngine.off(this.quill.root, `.${MODULE_NAMESPACE}`);
     this.editorInstance.off('focusOut', this._hideFrameWithContext);
     this.quill.off('text-change', this._framePositionChangedHandler);
   }
 
   _clickHandler(e) {
     if (this._isAllowedTarget(e.target)) {
-      if (this._$target === e.target || !this._$resizeFrame) {
+      if (this._$target === e.target) {
         return;
       }
 
