@@ -2419,7 +2419,7 @@ class Scheduler extends Widget<any> {
     };
   }
 
-  showAppointmentTooltipCore(target: dxElementWrapper, data, options?: any) {
+  showAppointmentTooltipCore(target: dxElementWrapper | HTMLElement, data, options?: any) {
     const arg: Omit<AppointmentTooltipShowingEvent, 'component' | 'element'> = {
       cancel: false,
       appointments: data.map((item) => {
@@ -2438,7 +2438,7 @@ class Scheduler extends Widget<any> {
 
         return result;
       }),
-      targetElement: getPublicElement(target),
+      targetElement: target instanceof HTMLElement ? target : getPublicElement(target),
     };
 
     this._createActionByOption('onAppointmentTooltipShowing')(arg);
