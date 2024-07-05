@@ -10,9 +10,15 @@ if (!/localhost/.test(document.location.host)) {
 
 const url = 'https://js.devexpress.com/Demos/Mvc/api/SchedulerData';
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: `.${modulePrefix}/app.component.html`,
 })
 export class AppComponent {
   currentDate = new Date(2021, 3, 27);

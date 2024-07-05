@@ -15,11 +15,17 @@ const getOrderDay = function ({ OrderDate }): number {
   return (new Date(OrderDate)).getDay();
 };
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 
 export class AppComponent {

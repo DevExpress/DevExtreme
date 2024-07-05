@@ -8,11 +8,17 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
-  styleUrls: ['app/app.component.css'],
+  styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 export class AppComponent {
   dataSource: Employee[];

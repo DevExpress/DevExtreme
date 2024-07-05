@@ -175,7 +175,7 @@ const Drawer = (Widget as any).inherit({
       this._$panelContentWrapper.toggleClass(DRAWER_PANEL_CONTENT_HIDDEN_CLASS, shouldBeSet);
     };
 
-    if (this._whenAnimationCompleted) {
+    if (this._whenAnimationCompleted && !this.option('opened')) {
       when(this._whenAnimationCompleted).done(callback);
     } else {
       callback();
