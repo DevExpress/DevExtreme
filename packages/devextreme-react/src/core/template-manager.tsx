@@ -62,7 +62,7 @@ export const TemplateManager: FC<TemplateManagerProps> = ({ init }) => {
 
   const getRandomId = useCallback(() => `${generateID()}${generateID()}${generateID()}`, []);
 
-  const collection = instantiationModels.collection;
+  const { collection } = instantiationModels;
 
   const getRenderFunc: GetRenderFuncFn = useCallback((templateKey) => ({
     model: data,
