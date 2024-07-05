@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxVectorMapComponent, DxVectorMapModule, DxButtonModule } from 'devextreme-angular';
+import { DxButtonModule } from 'devextreme-angular';
+import { DxVectorMapModule, DxVectorMapComponent, DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { Marker, Service } from './app.service';
 
