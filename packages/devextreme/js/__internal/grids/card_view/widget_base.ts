@@ -15,11 +15,10 @@ import { EditingController } from './editing/controller';
 import { OptionsController } from './options_controller/options_controller';
 
 class CardView extends Widget<Properties> {
-  private readonly diContext = new DIContext();
+  private diContext!: DIContext;
 
-  constructor(element: Element, options: Properties) {
-    super(element, options);
-
+  protected _init() {
+    this.diContext = new DIContext();
     this.diContext.register(DataController);
     this.diContext.register(ColumnsController);
     // this.diContext.register(HeaderPanelController);

@@ -8,7 +8,7 @@ import {
 import { OptionsController } from '../options_controller/options_controller';
 
 export function normalizeDataSource(dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined): DataSource<unknown, unknown> {
-  throw 'not implemented';
+  throw new Error('not implemented');
 }
 
 export class DataController {

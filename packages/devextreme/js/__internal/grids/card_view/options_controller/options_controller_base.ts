@@ -61,6 +61,6 @@ export class OptionsController<TProps> {
   }
 
   twoWay<TProp extends keyof TProps>(name: TProp): Subscribable<TProps[TProp]> & Updatable<TProps[TProp]> {
-    throw 'not implemented';
+    throw new Error('not implemented');
   }
 }
