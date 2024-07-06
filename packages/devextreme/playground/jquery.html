@@ -49,12 +49,16 @@
         <select id="theme-selector" style="display: block;">
         </select>
         <br />
-        <div id="button"></div>
+        <div id="cardview"></div>
         <script>
             $(function() {
-                $("#button").dxButton({
-                    text: 'Click me!',
-                    onClick: function() { alert("clicked"); }
+                $("#cardview").dxCardView({
+                    dataSource: [
+                        {a: 1, b: 2},
+                        {a: 1, b: 2},
+                        {a: 1, b: 2},
+                        {a: 1, b: 2},
+                    ]
                 });
             });
         </script>
