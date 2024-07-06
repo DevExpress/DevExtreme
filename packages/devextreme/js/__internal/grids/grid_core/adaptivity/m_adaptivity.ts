@@ -26,7 +26,7 @@ import type { DataController } from '../data_controller/m_data_controller';
 import type { EditingController } from '../editing/m_editing';
 import type { EditorFactory } from '../editor_factory/m_editor_factory';
 import type { KeyboardNavigationController } from '../keyboard_navigation/m_keyboard_navigation';
-import modules, { ViewController } from '../m_modules';
+import modules from '../m_modules';
 import type { Module, ModuleType } from '../m_types';
 import gridCoreUtils from '../m_utils';
 import type { RowsView } from '../views/m_rows_view';
@@ -97,7 +97,7 @@ function focusCellHandler(e) {
   eventsEngine.trigger($nextCell, 'dxclick');
 }
 
-export class AdaptiveColumnsController extends ViewController {
+export class AdaptiveColumnsController extends modules.ViewController {
   private _keyboardNavigationController!: KeyboardNavigationController;
 
   private _columnsController!: ColumnsController;
