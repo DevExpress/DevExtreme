@@ -1,49 +1,65 @@
-import { Subscribable, computed, state } from "@js/__internal/core/reactive"
-import { OptionsController } from "../options_controller/options_controller"
-import DataSource, { DataSourceLike } from "@js/data/data_source";
+import type { DataSourceLike } from '@js/data/data_source';
+import type DataSource from '@js/data/data_source';
+import type { Subscribable } from '@ts/core/reactive';
+import {
+  computed, effect, state,
+} from '@ts/core/reactive';
 
+import { OptionsController } from '../options_controller/options_controller';
 
 export function normalizeDataSource(dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined): DataSource<unknown, unknown> {
   throw 'not implemented';
 }
 
 export class DataController {
-  private dataSourceConfiguration = this.options.oneWay('dataSource');
+  private readonly dataSourceConfiguration = this.options.oneWay('dataSource');
 
-  private dataSource = computed(
+  private readonly dataSource = computed(
     normalizeDataSource,
-    [this.dataSourceConfiguration]
-  )
+    [this.dataSourceConfiguration],
+  );
 
-  private paging = computed(
+  private readonly paging = computed(
     (paging) => paging ?? {},
-    [this.options.oneWay('paging')]
-  )
+    [this.options.oneWay('paging')],
+  );
 
-  private pageIndex = this.options.oneWay('paging.pageIndex')
+  // @ts-expect-error
+  private readonly pageIndex = this.options.oneWay('paging.pageIndex');
 
-  private pageSize = this.options.oneWay('paging.pageSize')
+  // @ts-expect-error
+  private readonly pageSize = this.options.oneWay('paging.pageSize');
 
-  private loadOptions = computed(
-    (pageIndex, pageSize) => ({
-      pageIndex,
-      pageSize
-    }),
-    [this.pageIndex, this.pageSize]
-  )
+  private readonly _items = state<unknown[]>([]);
 
-  public items = state([])
-  
-  static dependencies = [OptionsController] as const
+  public readonly items: Subscribable<unknown[]> = this._items;
+
+  static dependencies = [OptionsController] as const;
 
   constructor(
-    private options: OptionsController,
+    private readonly options: OptionsController,
   ) {
-    computed(
-      (loadOptions, dataSource) => {
-        dataSource
+    effect(
+      (dataSource) => {
+        const changedCallback = (): void => {
+          this._items.update(dataSource.items());
+        };
+        changedCallback();
+        // @ts-expect-error
+        dataSource.changed.add(changedCallback);
+        // @ts-expect-error
+        return (): void => dataSource.changed.remove(changedCallback);
       },
-      [this.loadOptions, this.dataSource]
+      [this.dataSource],
+    );
+
+    effect(
+      (pageIndex, pageSize, dataSource) => {
+        dataSource.pageIndex(pageIndex);
+        dataSource.pageSize(pageSize);
+        dataSource.load();
+      },
+      [this.pageIndex, this.pageSize, this.dataSource],
     );
   }
 }

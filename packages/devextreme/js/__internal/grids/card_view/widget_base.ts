@@ -1,28 +1,29 @@
-import { DIContext } from "@ts/core/di";
-import { DataController } from "./data_controller/data_controller";
-import { ColumnsController } from "./columns_controller/columns_controller";
-import { OptionsController } from "./options_controller/options_controller";
-import { HeaderPanelController } from "./header_panel/controller";
-import { HeaderPanelView } from "./header_panel/view";
-import { EditingController } from "./editing/controller";
 import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
 import browser from '@js/core/utils/browser';
 import type { Properties } from '@js/ui/card_view';
 import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
-import $ from '@js/core/renderer';
-import { ContentView } from "./content_view/content_view";
+import { DIContext } from '@ts/core/di';
+
+import { ColumnsController } from './columns_controller/columns_controller';
+import { ContentView } from './content_view/content_view';
+import { DataController } from './data_controller/data_controller';
+import { EditingController } from './editing/controller';
+// import { HeaderPanelController } from './header_panel/controller';
+// import { HeaderPanelView } from './header_panel/view';
+import { OptionsController } from './options_controller/options_controller';
 
 class CardView extends Widget<Properties> {
-  private diContext = new DIContext();
+  private readonly diContext = new DIContext();
 
   constructor(element: Element, options: Properties) {
     super(element, options);
 
     this.diContext.register(DataController);
-    this.diContext.register(ColumnsController);  
-    this.diContext.register(HeaderPanelController);
-    this.diContext.register(HeaderPanelView);
+    this.diContext.register(ColumnsController);
+    // this.diContext.register(HeaderPanelController);
+    // this.diContext.register(HeaderPanelView);
     this.diContext.register(EditingController);
     this.diContext.register(ContentView);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
@@ -73,7 +74,7 @@ class CardView extends Widget<Properties> {
   protected _initMarkup() {
     // @ts-expect-error
     super._initMarkup.apply(this, arguments);
-    
+
     const $contentView = $('<div>').appendTo(this.$element());
     this.diContext.get(ContentView).render($contentView.get(0));
   }

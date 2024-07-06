@@ -1,12 +1,13 @@
-import { Column } from "../types";
-import { NumberDataType } from "./number";
+// @ts-nocheck
+import type { Column } from '../types';
+import type { NumberDataType } from './number';
 
 export type DataType = {
   name?: string;
-} & Pick<Column, 'fieldTemplate'>
+} & Pick<Column, 'fieldTemplate'>;
 
-export type PredefinedTypes = {
-  number: NumberDataType
-};
+export interface PredefinedTypes {
+  number: NumberDataType;
+}
 
 export type PredefinedTypesEnum = keyof PredefinedTypes;

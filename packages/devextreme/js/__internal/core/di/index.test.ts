@@ -1,3 +1,4 @@
+// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/init-declarations */

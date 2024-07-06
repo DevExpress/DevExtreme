@@ -1,4 +1,4 @@
-import { DataType, PredefinedTypesEnum } from "./data_types/types";
+import type { DataType, PredefinedTypesEnum } from './data_types/types';
 
 export interface Column {
   dataField?: string;
@@ -12,6 +12,6 @@ export interface Column {
 
 export type ColumnSettings = Partial<Column> & {
   dataType?: PredefinedTypesEnum | string | DataType;
-}
+};
 
 export type ColumnConfiguration = ColumnSettings | string;

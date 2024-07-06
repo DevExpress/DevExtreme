@@ -108,3 +108,31 @@ export function computed<TArgs extends readonly any[], TValue>(
 export function state<TValue>(value: TValue) {
   return new Observable<TValue>(value);
 }
+
+export function effect<TArgs extends readonly any[]>(
+  compute: (...args: TArgs) => ((() => void) | void),
+  deps: { [I in keyof TArgs]: Subscribable<TArgs[I]> },
+): Subscription {
+  const depValues: [...TArgs] = deps.map(() => undefined) as any;
+  const depInitialized = deps.map(() => false);
+  let isInitialized = false;
+
+  const subscription = new SubscriptionBag();
+
+  deps.forEach((dep, i) => {
+    subscription.add(dep.subscribe((v) => {
+      depValues[i] = v;
+
+      if (!isInitialized) {
+        depInitialized[i] = true;
+        isInitialized = depInitialized.every((e) => e);
+      }
+
+      if (isInitialized) {
+        compute(...depValues);
+      }
+    }));
+  });
+
+  return subscription;
+}
