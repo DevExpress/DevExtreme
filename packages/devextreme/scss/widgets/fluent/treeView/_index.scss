@@ -13,6 +13,28 @@
   @include dx-icon-sizing($fluent-base-icon-size);
 }
 
+.dx-treeview-item-with-checkbox {
+  &.dx-state-focused > .dx-treeview-item {
+    .dx-checkbox {
+      .dx-checkbox-icon {
+        border-color: $checkbox-accent-color-focused;
+      }
+
+      &.dx-checkbox-checked {
+        .dx-checkbox-icon {
+          background-color: $checkbox-accent-color-focused;
+        }
+      }
+
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::before {
+          background-color: $checkbox-accent-color-focused;
+        }
+      }
+    }
+  }
+}
+
 @include default-expander-icon(
   'chevrondown',
   'chevronright',
