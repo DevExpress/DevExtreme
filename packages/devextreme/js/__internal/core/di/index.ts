@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-interface DIItem<T, TDeps extends readonly any[]> {
-  dependencies: readonly [...{ [P in keyof TDeps]: DIItem<TDeps[P], readonly any[]> }];
+type Constructor<T, TDeps extends readonly any[]> = new(...deps: TDeps) => T;
 
-  new(...deps: TDeps): T;
+interface DIItem<T, TDeps extends readonly any[]> extends Constructor<T, TDeps> {
+  dependencies: readonly [...{ [P in keyof TDeps]: Constructor<TDeps[P], readonly any[]> }];
 }
 
 export class DIContext {
@@ -24,14 +24,14 @@ export class DIContext {
   }
 
   public registerInstance<T, TDeps extends readonly any[]>(
-    id: DIItem<T, TDeps>,
+    id: Constructor<T, TDeps>,
     instance: T,
   ): void {
     this.instances.set(id, instance);
   }
 
   public get<T, TDeps extends readonly any[]>(
-    id: DIItem<T, TDeps>,
+    id: Constructor<T, TDeps>,
   ): T {
     if (this.instances.get(id)) {
       return this.instances.get(id) as T;
@@ -48,7 +48,7 @@ export class DIContext {
   }
 
   public tryGet<T, TDeps extends readonly any[]>(
-    id: DIItem<T, TDeps>,
+    id: Constructor<T, TDeps>,
   ): T | null {
     const res = this.instances.get(id);
     return res as T;

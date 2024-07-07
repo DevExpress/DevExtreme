@@ -1,4 +1,3 @@
-// @ts-nocheck
 /* eslint-disable @typescript-eslint/no-extraneous-class */
 /* eslint-disable prefer-const */
 /* eslint-disable @typescript-eslint/init-declarations */
@@ -8,6 +7,8 @@ import { DIContext } from './index';
 
 describe('basic', () => {
   class MyClass {
+    static dependencies = [] as const;
+
     getNumber(): number {
       return 1;
     }
@@ -28,6 +29,8 @@ describe('basic', () => {
 
 describe('dependencies', () => {
   class MyUtilityClass {
+    static dependencies = [] as const;
+
     getNumber(): number {
       return 2;
     }
@@ -59,12 +62,16 @@ describe('dependencies', () => {
 
 describe('mocks', () => {
   class MyClass {
+    static dependencies = [] as const;
+
     getNumber(): number {
       return 1;
     }
   }
 
   class MyClassMock implements MyClass {
+    static dependencies = [] as const;
+
     getNumber(): number {
       return 2;
     }
@@ -81,6 +88,8 @@ describe('mocks', () => {
 
 it('should work regardless of registration order', () => {
   class MyClass {
+    static dependencies = [] as const;
+
     getNumber(): number {
       return 1;
     }

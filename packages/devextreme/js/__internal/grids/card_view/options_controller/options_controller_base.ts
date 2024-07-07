@@ -32,7 +32,7 @@ export class OptionsController<TProps> {
 
   private readonly props: Observable<TProps>;
 
-  static dependencies = [Component] as any;
+  static dependencies = [Component];
 
   constructor(
     private readonly component: Component<TProps>,
