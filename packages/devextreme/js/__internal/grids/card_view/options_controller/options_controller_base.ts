@@ -28,6 +28,8 @@ function updateImmutable<T extends Record<string, unknown> | unknown[]>(
 }
 
 export class OptionsController<TProps> {
+  private readonly isControlledMode = false;
+
   private readonly props: Observable<TProps>;
 
   static dependencies = [Component] as any;
@@ -52,7 +54,7 @@ export class OptionsController<TProps> {
       let v: any = props;
       // @ts-expect-error
       for (const pathPart of getPathParts(name)) {
-        v = v[pathPart];
+        v = v?.[pathPart];
       }
       return v;
     }, [this.props]);
@@ -61,6 +63,21 @@ export class OptionsController<TProps> {
   }
 
   twoWay<TProp extends keyof TProps>(name: TProp): Subscribable<TProps[TProp]> & Updatable<TProps[TProp]> {
-    throw new Error('not implemented');
+    const obs = state<TProps[TProp]>(this.component.option(name));
+    this.oneWay(name).subscribe(obs.update.bind(obs));
+    return {
+      subscribe: obs.subscribe.bind(obs),
+      update: (value: TProps[TProp]): void => {
+        const callbackName = `on${name}Change`;
+        const callback = this.component.option(callbackName);
+        const isControlled = this.isControlledMode && this.component.option(name) !== undefined;
+        if (isControlled) {
+          callback?.(value);
+        } else {
+          this.component.option(name, value);
+          callback?.(value);
+        }
+      },
+    };
   }
 }

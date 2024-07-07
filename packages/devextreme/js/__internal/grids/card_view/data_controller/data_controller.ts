@@ -1,5 +1,6 @@
 import type { DataSourceLike } from '@js/data/data_source';
-import type DataSource from '@js/data/data_source';
+import DataSource from '@js/data/data_source';
+import { normalizeDataSourceOptions } from '@js/data/data_source/utils';
 import type { Subscribable } from '@ts/core/reactive';
 import {
   computed, effect, state,
@@ -7,8 +8,14 @@ import {
 
 import { OptionsController } from '../options_controller/options_controller';
 
-export function normalizeDataSource(dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined): DataSource<unknown, unknown> {
-  throw new Error('not implemented');
+export function normalizeDataSource(
+  dataSourceLike: DataSourceLike<unknown, unknown> | null | undefined,
+): DataSource<unknown, unknown> {
+  if (dataSourceLike instanceof DataSource) {
+    return dataSourceLike;
+  }
+
+  return new DataSource(normalizeDataSourceOptions(dataSourceLike));
 }
 
 export class DataController {
@@ -25,14 +32,23 @@ export class DataController {
   );
 
   // @ts-expect-error
-  private readonly pageIndex = this.options.oneWay('paging.pageIndex');
+  public readonly pageIndex = this.options.twoWay('paging.pageIndex');
 
   // @ts-expect-error
-  private readonly pageSize = this.options.oneWay('paging.pageSize');
+  public readonly pageSize = this.options.twoWay('paging.pageSize');
 
   private readonly _items = state<unknown[]>([]);
 
   public readonly items: Subscribable<unknown[]> = this._items;
+
+  private readonly _totalCount = state<number>(0);
+
+  public readonly totalCount: Subscribable<number> = this._totalCount;
+
+  public readonly pageCount = computed(
+    (totalCount, pageSize) => Math.ceil(totalCount / pageSize),
+    [this.totalCount, this.pageSize],
+  );
 
   static dependencies = [OptionsController] as const;
 
@@ -43,12 +59,11 @@ export class DataController {
       (dataSource) => {
         const changedCallback = (): void => {
           this._items.update(dataSource.items());
+          this._totalCount.update(dataSource.totalCount());
         };
         changedCallback();
-        // @ts-expect-error
-        dataSource.changed.add(changedCallback);
-        // @ts-expect-error
-        return (): void => dataSource.changed.remove(changedCallback);
+        dataSource.on('changed', changedCallback);
+        return () => dataSource.off('changed', changedCallback);
       },
       [this.dataSource],
     );
@@ -56,6 +71,7 @@ export class DataController {
     effect(
       (pageIndex, pageSize, dataSource) => {
         dataSource.pageIndex(pageIndex);
+        dataSource.requireTotalCount(true);
         dataSource.pageSize(pageSize);
         dataSource.load();
       },

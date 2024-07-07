@@ -1,5 +1,7 @@
 import { computed } from '@ts/core/reactive';
 
+import { ColumnsController } from '../columns_controller/columns_controller';
+import type { Column } from '../columns_controller/types';
 import { View } from '../core/view';
 import { DataController } from '../data_controller/data_controller';
 import { Card } from './card';
@@ -10,29 +12,32 @@ export const CLASSES = {
 
 export class ContentView extends View {
   private readonly items = computed(
-    (dataItems) => {
-      let index = 0;
-      return dataItems.map((dataItem) => ({
-        index: index++,
-      }));
-    },
-    [this.dataController.items],
+    (dataItems, columns: Column[]) => dataItems.map(
+      (item) => this.columnsController.createDataRow(
+        item,
+        columns,
+      ),
+    ),
+    [this.dataController.items, this.columnsController.columns],
   );
 
   protected vdom = computed(
     (items) => (
       <div className={CLASSES.content}>
         {items.map((item) => (
-          <Card index={item.index}></Card>
+          <Card row={item}></Card>
         ))}
       </div>
     ),
     [this.items],
   );
 
-  static dependencies = [DataController] as const;
+  static dependencies = [DataController, ColumnsController] as const;
 
-  constructor(private readonly dataController: DataController) {
+  constructor(
+    private readonly dataController: DataController,
+    private readonly columnsController: ColumnsController,
+  ) {
     super();
   }
 }

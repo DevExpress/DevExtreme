@@ -13,11 +13,17 @@ import { EditingController } from './editing/controller';
 // import { HeaderPanelController } from './header_panel/controller';
 // import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller/options_controller';
+import { PagerView } from './pager';
 
 class CardView extends Widget<Properties> {
   private diContext!: DIContext;
 
+  private dataController!: DataController;
+
   protected _init() {
+    // @ts-expect-error
+    super._init();
+
     this.diContext = new DIContext();
     this.diContext.register(DataController);
     this.diContext.register(ColumnsController);
@@ -25,10 +31,24 @@ class CardView extends Widget<Properties> {
     // this.diContext.register(HeaderPanelView);
     this.diContext.register(EditingController);
     this.diContext.register(ContentView);
+    this.diContext.register(PagerView);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
+
+    this.dataController = this.diContext.get(DataController);
   }
 
-  private _defaultOptionsRules() {
+  protected _getDefaultOptions() {
+    return {
+      // @ts-expect-error
+      ...super._getDefaultOptions(),
+      paging: {
+        pageSize: 5,
+        pageIndex: 0,
+      },
+    };
+  }
+
+  protected _defaultOptionsRules() {
     // @ts-expect-error
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     return super._defaultOptionsRules().concat([
@@ -76,6 +96,9 @@ class CardView extends Widget<Properties> {
 
     const $contentView = $('<div>').appendTo(this.$element());
     this.diContext.get(ContentView).render($contentView.get(0));
+
+    const $pagerView = $('<div>').appendTo(this.$element());
+    this.diContext.get(PagerView).render($pagerView.get(0));
   }
 }
 

@@ -44,10 +44,14 @@ export class Observable<T> implements Subscribable<T>, Updatable<T> {
   update(value: T): void;
   update(callback: (oldValue: T) => T): void;
   update(value: T | ((oldValue: T) => T)): void {
-    this.value = isFunction(value) ? value(this.value) : value;
+    const newValue = isFunction(value) ? value(this.value) : value;
+    if (this.value === newValue) {
+      return;
+    }
+    this.value = newValue;
 
     this.callbacks.forEach((c) => {
-      c(this.value);
+      c(newValue);
     });
   }
 
