@@ -9,7 +9,7 @@ import { DIContext } from '@ts/core/di';
 import { ColumnsController } from './columns_controller/columns_controller';
 import { ContentView } from './content_view/content_view';
 import { DataController } from './data_controller/data_controller';
-import { EditingController } from './editing/controller';
+import type { EditingController } from './editing/controller';
 // import { HeaderPanelController } from './header_panel/controller';
 // import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller/options_controller';
@@ -20,6 +20,14 @@ class CardView extends Widget<Properties> {
 
   private dataController!: DataController;
 
+  private columnsController!: ColumnsController;
+
+  private readonly editingController!: EditingController;
+
+  private contentView!: ContentView;
+
+  private pagerView!: PagerView;
+
   protected _init() {
     // @ts-expect-error
     super._init();
@@ -29,12 +37,18 @@ class CardView extends Widget<Properties> {
     this.diContext.register(ColumnsController);
     // this.diContext.register(HeaderPanelController);
     // this.diContext.register(HeaderPanelView);
-    this.diContext.register(EditingController);
+    // this.diContext.register(EditingController);
     this.diContext.register(ContentView);
     this.diContext.register(PagerView);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
 
     this.dataController = this.diContext.get(DataController);
+    this.columnsController = this.diContext.get(ColumnsController);
+    // this.headerPanelController = this.diContext.get(HeaderPanelController);
+    // this.headerPanelView = this.diContext.get(HeaderPanelView);
+    // this.editingController = this.diContext.get(EditingController);
+    this.contentView = this.diContext.get(ContentView);
+    this.pagerView = this.diContext.get(PagerView);
   }
 
   protected _getDefaultOptions() {

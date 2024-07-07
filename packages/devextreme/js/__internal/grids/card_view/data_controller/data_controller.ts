@@ -61,7 +61,9 @@ export class DataController {
           this._items.update(dataSource.items());
           this._totalCount.update(dataSource.totalCount());
         };
-        changedCallback();
+        if (dataSource.isLoaded()) {
+          changedCallback();
+        }
         dataSource.on('changed', changedCallback);
         return () => dataSource.off('changed', changedCallback);
       },
