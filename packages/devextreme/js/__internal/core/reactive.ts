@@ -140,3 +140,20 @@ export function effect<TArgs extends readonly any[]>(
 
   return subscription;
 }
+
+export function iif<T>(
+  cond: MaybeSubscribable<boolean>,
+  ifTrue: MaybeSubscribable<T>,
+  ifFalse: MaybeSubscribable<T>,
+): Subscribable<T> {
+  const obs = state<T>(undefined as any);
+  let subscription: Subscription | undefined;
+
+  toSubscribable(cond).subscribe((cond) => {
+    subscription?.unsubscribe();
+    const newSource = cond ? ifTrue : ifFalse;
+    subscription = toSubscribable(newSource).subscribe(obs.update.bind(obs));
+  });
+
+  return obs;
+}
