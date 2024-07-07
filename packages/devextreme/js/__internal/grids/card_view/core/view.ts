@@ -1,14 +1,35 @@
-import type { Subscribable } from '@ts/core/reactive';
+import type { Subscribable, Subscription } from '@ts/core/reactive';
 import { toSubscribable } from '@ts/core/reactive';
 import type { InfernoNode } from 'inferno';
-import { render } from 'inferno';
+import { Component, render } from 'inferno';
 
 export abstract class View {
-  protected abstract vdom: InfernoNode | Subscribable<InfernoNode>;
+  public readonly abstract vdom: InfernoNode | Subscribable<InfernoNode>;
 
   public render(root: Element): void {
     toSubscribable(this.vdom).subscribe((node: InfernoNode) => {
       render(node, root);
     });
   }
+}
+
+export function asInferno(view: View) {
+  interface State {
+    vdom: InfernoNode;
+  }
+
+  return class InfernoView extends Component<{}, State> {
+    private readonly subscription: Subscription;
+
+    constructor() {
+      super();
+      this.subscription = toSubscribable(view.vdom).subscribe((vdom) => {
+        this.setState({ vdom });
+      });
+    }
+
+    render(): InfernoNode | undefined {
+      return this.state?.vdom;
+    }
+  };
 }

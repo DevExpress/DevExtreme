@@ -10,6 +10,7 @@ import { ColumnsController } from './columns_controller/columns_controller';
 import { ContentView } from './content_view/content_view';
 import { DataController } from './data_controller/data_controller';
 import type { EditingController } from './editing/controller';
+import { MainView } from './main_view';
 // import { HeaderPanelController } from './header_panel/controller';
 // import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller/options_controller';
@@ -40,6 +41,7 @@ class CardView extends Widget<Properties> {
     // this.diContext.register(EditingController);
     this.diContext.register(ContentView);
     this.diContext.register(PagerView);
+    this.diContext.register(MainView);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
 
     this.dataController = this.diContext.get(DataController);
@@ -107,12 +109,8 @@ class CardView extends Widget<Properties> {
   protected _initMarkup() {
     // @ts-expect-error
     super._initMarkup.apply(this, arguments);
-
-    const $contentView = $('<div>').appendTo(this.$element());
-    this.diContext.get(ContentView).render($contentView.get(0));
-
-    const $pagerView = $('<div>').appendTo(this.$element());
-    this.diContext.get(PagerView).render($pagerView.get(0));
+    // @ts-expect-error
+    this.diContext.get(MainView).render(this.$element().get(0));
   }
 }
 

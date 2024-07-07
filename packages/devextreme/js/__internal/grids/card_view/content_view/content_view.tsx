@@ -2,7 +2,7 @@ import { computed } from '@ts/core/reactive';
 
 import { ColumnsController } from '../columns_controller/columns_controller';
 import type { Column } from '../columns_controller/types';
-import { View } from '../core/view';
+import { asInferno, View } from '../core/view';
 import { DataController } from '../data_controller/data_controller';
 import { Card } from './card';
 
@@ -21,7 +21,7 @@ export class ContentView extends View {
     [this.dataController.items, this.columnsController.columns],
   );
 
-  protected vdom = computed(
+  public vdom = computed(
     (items) => (
       <div className={CLASSES.content}>
         {items.map((item) => (

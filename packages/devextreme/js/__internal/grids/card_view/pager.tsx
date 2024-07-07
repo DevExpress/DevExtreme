@@ -25,7 +25,7 @@ const Pager = createWidgetWrapper<PagerProps, any>(PagerWidget);
 const Button = createWidgetWrapper(ButtonWidget);
 
 export class PagerView extends View {
-  protected vdom = computed(
+  public vdom = computed(
     (pageIndex, pageSize, totalCount, pageCount) => <div>
       <Pager
         pageIndex={pageIndex}
