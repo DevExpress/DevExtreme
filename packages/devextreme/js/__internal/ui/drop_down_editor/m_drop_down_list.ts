@@ -515,6 +515,7 @@ const DropDownList = DropDownEditor.inherit({
       _dataController: this._dataController,
       hoverStateEnabled: this._isDesktopDevice() ? this.option('hoverStateEnabled') : false,
       focusStateEnabled: this._isDesktopDevice() ? this.option('focusStateEnabled') : false,
+      _onItemsRendered: this._listItemsRendered.bind(this),
     };
 
     if (!this._canListHaveFocus()) {
@@ -523,6 +524,10 @@ const DropDownList = DropDownEditor.inherit({
     }
 
     return options;
+  },
+
+  _listItemsRendered() {
+    this._popup?.repaint();
   },
 
   _canListHaveFocus: () => false,

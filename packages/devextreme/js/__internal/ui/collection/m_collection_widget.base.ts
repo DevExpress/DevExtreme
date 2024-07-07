@@ -814,6 +814,9 @@ const CollectionWidget = Widget.inherit({
 
   _renderItems(items) {
     if (items.length) {
+      this._itemsToRenderCount = items.length;
+      this._itemsRenderedCount = 0;
+
       each(items, (index, itemData) => {
         // @ts-expect-error
         this._renderItem(this._renderedItemsCount + index, itemData);
@@ -1008,7 +1011,13 @@ const CollectionWidget = Widget.inherit({
   },
 
   _onItemTemplateRendered() {
-    return noop;
+    return () => {
+      this._itemsRenderedCount += 1;
+
+      if (this._itemsRenderedCount === this._itemsToRenderCount) {
+        this.option('_onItemsRendered')?.();
+      }
+    };
   },
 
   _emptyMessageContainer() {
