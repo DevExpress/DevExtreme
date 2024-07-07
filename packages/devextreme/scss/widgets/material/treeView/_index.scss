@@ -13,6 +13,25 @@
   @include dx-icon-sizing($material-base-icon-size);
 }
 
+.dx-treeview-item-with-checkbox {
+  &.dx-state-focused > .dx-treeview-item {
+    .dx-checkbox {
+      .dx-checkbox-icon::after {
+        background-color: color.change($checkbox-border-color, $alpha: 0.1);
+        transform: scale(1);
+      }
+  
+      &.dx-checkbox-checked,
+      &.dx-checkbox-indeterminate {
+        .dx-checkbox-icon::after {
+          background-color: color.change($checkbox-bg, $alpha: 0.1);
+          transform: scale(1);
+        }
+      }
+    }
+  }
+}
+
 @include treeview-item(
   $material-treeview-item-element-gap,
   $material-treeview-item-padding,
