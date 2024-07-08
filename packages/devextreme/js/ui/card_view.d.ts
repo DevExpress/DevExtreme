@@ -1,5 +1,5 @@
-import {GridBase, GridBaseOptions} from '../common/grids';
-import { Item as ToolbarItem} from '@js/ui/toolbar'
+import { Item as ToolbarItem } from './toolbar';
+import { GridBase, GridBaseOptions } from '../common/grids';
 
 export interface CardView extends GridBase {
 
