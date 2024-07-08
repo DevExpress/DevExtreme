@@ -131,7 +131,7 @@ module('Resizing module', moduleConfig, () => {
         assert.deepEqual(resizingInstance.allowedTargets, ['video'], '\'allowedTargets\' option has been applied');
     });
 
-    QUnit.module('on runtime change', () => {
+    QUnit.module('moduleResizing runtime change', () => {
         test('to { enabled: true } should render resize frame and attach events (T1241439)', function(assert) {
             const resizingInstance = new Resizing(this.quillMock, this.options);
             this.attachSpies(resizingInstance);
@@ -152,6 +152,15 @@ module('Resizing module', moduleConfig, () => {
             assert.notOk(resizingInstance.enabled, '\'enabled\' option should be disabled');
             assert.strictEqual(this.$element.find(`.${RESIZE_FRAME_CLASS}`).length, 0, 'There should be no resize frame element');
             assert.ok(this.detachEventsSpy.calledOnce, 'Events should be detached once.');
+        });
+
+        test('should not cause errors when repeatedly disabling enabled option (T1241439)', function(assert) {
+            this.options.enabled = true;
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            resizingInstance.option('mediaResizing', { enabled: false });
+            resizingInstance.option('enabled', false);
+
+            assert.ok(true, 'No errors should occur when disabling multiple times');
         });
     });
 

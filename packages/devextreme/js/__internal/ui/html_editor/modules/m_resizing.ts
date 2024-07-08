@@ -206,6 +206,9 @@ export default class ResizingModule extends BaseModule {
     }
 
     if (option === 'enabled') {
+      if (this.enabled === value) {
+        return;
+      }
       this.enabled = value;
       if (value) {
         this._attachEvents();
