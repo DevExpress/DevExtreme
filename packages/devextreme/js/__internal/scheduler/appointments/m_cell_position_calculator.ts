@@ -134,6 +134,7 @@ class BaseStrategy {
       columnIndex: position.columnIndex,
       hMax: horizontalHMax,
       vMax: verticalMax,
+      vMin: position.top,
       groupIndex: validGroupIndex,
     };
   }
