@@ -1,4 +1,3 @@
-import $ from 'jquery';
 import fx from 'animation/fx';
 import CustomStore from 'data/custom_store';
 import { DataSource } from 'data/data_source/data_source';
@@ -672,7 +671,7 @@ QUnit.module('Methods', {
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
-        scheduler.instance.showAppointmentTooltipCore($(), [], 'options');
+        scheduler.instance.showAppointmentTooltipCore('target', [], 'options');
 
         assert.ok(!scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is not called');
         assert.ok(scheduler.instance._appointmentTooltip.show.called, 'show tooltip is called');
@@ -683,7 +682,7 @@ QUnit.module('Methods', {
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
-        scheduler.instance.showAppointmentTooltipCore($(), [], 'options');
+        scheduler.instance.showAppointmentTooltipCore('target', [], 'options');
 
         assert.ok(scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
         assert.ok(!scheduler.instance._appointmentTooltip.show.called, 'show tooltip is not called');
@@ -694,7 +693,7 @@ QUnit.module('Methods', {
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(false);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
-        scheduler.instance.showAppointmentTooltip('appointmentData', $(), 'currentAppointmentData');
+        scheduler.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
 
         assert.ok(!scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is not called');
         assert.ok(scheduler.instance._appointmentTooltip.show.called, 'show tooltip is called');
@@ -705,7 +704,7 @@ QUnit.module('Methods', {
         scheduler.instance._appointmentTooltip.isAlreadyShown = sinon.stub().returns(true);
         scheduler.instance._appointmentTooltip.show = sinon.stub();
         scheduler.instance._appointmentTooltip.hide = sinon.stub();
-        scheduler.instance.showAppointmentTooltip('appointmentData', $(), 'currentAppointmentData');
+        scheduler.instance.showAppointmentTooltip('appointmentData', 'target', 'currentAppointmentData');
 
         assert.ok(scheduler.instance._appointmentTooltip.hide.called, 'hide tooltip is called');
         assert.ok(!scheduler.instance._appointmentTooltip.show.called, 'show tooltip is not called');

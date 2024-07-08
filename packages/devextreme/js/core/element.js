@@ -1,5 +1,5 @@
 let strategy = function(element) {
-    return element && element.get(0);
+    return element && jQuery(element).get(0);
 };
 
 export function getPublicElement(element) {
