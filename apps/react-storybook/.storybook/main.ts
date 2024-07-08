@@ -25,16 +25,5 @@ const config: StorybookConfig = {
     autodocs: "tag",
   },
   staticDirs: ['../stories/assets', '../node_modules/devextreme/dist'],
-  async webpackFinal(config) {
-    if (config != null && config.resolve != null) {
-      config.resolve.alias = {
-        'devextreme-react': path.join(getAbsolutePath('devextreme-react'), 'npm'),
-        'react': path.join(getAbsolutePath('devextreme-react'), 'node_modules', 'react'),
-        'react-dom': path.join(getAbsolutePath('devextreme-react'), 'node_modules', 'react-dom'),
-        ...config.resolve.alias
-      }
-    }
-    return config;
-  },
 };
 export default config;
