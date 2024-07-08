@@ -1042,7 +1042,9 @@ export class KeyboardNavigationController extends modules.ViewController {
 
       this._updateFocusedCellPosition($cell);
     } else if (this.getMasterDetailCell($cell)?.is($cell)) {
-      this.focusFirstInteractiveElementInside($cell);
+      if ($cell.is(':focus')) {
+        this.focusFirstInteractiveElementInside($cell);
+      }
     } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
