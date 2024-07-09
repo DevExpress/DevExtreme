@@ -177,7 +177,7 @@ module('Resizing module', moduleConfig, () => {
                 resizingInstance.option('enabled', true);
 
                 assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');
-                assert.ok(true, 'No errors should occur when disabling multiple times');
+                assert.ok(true, 'no error occurs when enabling multiple times');
             } catch(e) {
                 assert.ok(false, 'errors have been encountered when enabling multiple times');
             }
