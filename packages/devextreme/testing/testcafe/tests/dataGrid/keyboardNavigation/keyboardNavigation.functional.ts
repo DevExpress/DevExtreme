@@ -4633,3 +4633,22 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   keyExpr: 'field_0',
   showBorders: true,
 }));
+
+test('DataGrid - Data rows are skipped during Tab navigation if the first column is hidden via hidingPriority (T1228477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.getDataCell(0, 2).element.getAttribute('tabindex'))
+    .eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(3, 5),
+  keyExpr: 'field_0',
+  columns: [{
+    dataField: 'field_0',
+    hidingPriority: 0,
+  }, {
+    dataField: 'field_1',
+    hidingPriority: 1,
+  }, 'field_2', 'field_3', 'field_4'],
+  showBorders: true,
+  width: 300,
+}));
