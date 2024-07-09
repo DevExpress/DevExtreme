@@ -41,9 +41,13 @@ export class DataController {
 
   public readonly items: Subscribable<unknown[]> = this._items;
 
-  private readonly _totalCount = state<number>(0);
+  private readonly _totalCount = state(0);
 
   public readonly totalCount: Subscribable<number> = this._totalCount;
+
+  private readonly _isLoading = state(false);
+
+  public readonly isLoading: Subscribable<boolean> = this._isLoading;
 
   public readonly pageCount = computed(
     (totalCount, pageSize) => Math.ceil(totalCount / pageSize),
@@ -61,11 +65,19 @@ export class DataController {
           this._items.update(dataSource.items());
           this._totalCount.update(dataSource.totalCount());
         };
+        const loadingChangedCallback = (): void => {
+          this._isLoading.update(dataSource.isLoading());
+        };
         if (dataSource.isLoaded()) {
           changedCallback();
         }
         dataSource.on('changed', changedCallback);
-        return () => dataSource.off('changed', changedCallback);
+        dataSource.on('loadingChanged', loadingChangedCallback);
+
+        return () => {
+          dataSource.off('changed', changedCallback);
+          dataSource.off('loadingChanged', loadingChangedCallback);
+        };
       },
       [this.dataSource],
     );
