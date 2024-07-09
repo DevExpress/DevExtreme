@@ -22,6 +22,8 @@ if (window && window.config.packageConfigPaths) {
 export class AppComponent {
   customers: Customer[];
 
+  columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
+
   constructor(service: Service) {
     this.customers = service.getCustomers();
   }
