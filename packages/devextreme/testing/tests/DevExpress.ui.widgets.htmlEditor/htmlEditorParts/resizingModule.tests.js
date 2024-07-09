@@ -179,7 +179,7 @@ module('Resizing module', moduleConfig, () => {
                 assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');
                 assert.ok(true, 'No errors should occur when disabling multiple times');
             } catch(e) {
-                assert.ok(false, 'errors have been  encountered when disabling multiple times');
+                assert.ok(false, 'errors have been encountered when enabling multiple times');
             }
         });
     });
