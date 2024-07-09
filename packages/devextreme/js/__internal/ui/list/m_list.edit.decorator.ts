@@ -81,14 +81,6 @@ const EditDecorator = Class.inherit({
     };
   },
 
-  _updateButtonAttributes($button) {
-    $button.attr({
-      tabindex: -1,
-      role: null,
-      'aria-label': null,
-    });
-  },
-
   modifyElement(config) {
     if (this._shouldHandleSwipe) {
       this._attachSwipeEvent(config);
