@@ -169,7 +169,7 @@ module('Resizing module', moduleConfig, () => {
             }
         });
 
-        test('should not cause errors when repeatedly enabling enabled option (T1241439)', function(assert) {
+        test('should not cause errors and attach excess listeners when repeatedly enabling enabled option (T1241439)', function(assert) {
             const resizingInstance = new Resizing(this.quillMock, this.options);
             this.attachSpies(resizingInstance);
             try {
