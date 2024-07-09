@@ -206,6 +206,9 @@ export default class ResizingModule extends BaseModule {
     }
 
     if (option === 'enabled') {
+      if (this.enabled === value) {
+        return;
+      }
       this.enabled = value;
       if (value) {
         this._attachEvents();
@@ -220,7 +223,7 @@ export default class ResizingModule extends BaseModule {
 
   clean() {
     this._detachEvents();
-    this._$resizeFrame?.remove();
+    this._$resizeFrame.remove();
     // @ts-expect-error
     this._$resizeFrame = undefined;
   }

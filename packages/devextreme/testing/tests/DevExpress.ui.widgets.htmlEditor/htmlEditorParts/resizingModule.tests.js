@@ -157,10 +157,30 @@ module('Resizing module', moduleConfig, () => {
         test('should not cause errors when repeatedly disabling enabled option (T1241439)', function(assert) {
             this.options.enabled = true;
             const resizingInstance = new Resizing(this.quillMock, this.options);
-            resizingInstance.option('mediaResizing', { enabled: false });
-            resizingInstance.option('enabled', false);
+            this.attachSpies(resizingInstance);
+            try {
+                resizingInstance.option('mediaResizing', { enabled: false });
+                resizingInstance.option('enabled', false);
 
-            assert.ok(true, 'No errors should occur when disabling multiple times');
+                assert.ok(this.detachEventsSpy.calledOnce, 'events has been detached');
+                assert.ok(true, 'No errors should occur when disabling multiple times');
+            } catch(e) {
+                assert.ok(false, 'errors have been encountered when disabling multiple times');
+            }
+        });
+
+        test('should not cause errors when repeatedly enabling enabled option (T1241439)', function(assert) {
+            const resizingInstance = new Resizing(this.quillMock, this.options);
+            this.attachSpies(resizingInstance);
+            try {
+                resizingInstance.option('mediaResizing', { enabled: true });
+                resizingInstance.option('enabled', true);
+
+                assert.ok(this.attachEventsSpy.calledOnce, 'events has been attached');
+                assert.ok(true, 'No errors should occur when disabling multiple times');
+            } catch(e) {
+                assert.ok(false, 'errors have been  encountered when disabling multiple times');
+            }
         });
     });
 
