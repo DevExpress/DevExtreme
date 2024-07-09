@@ -170,6 +170,8 @@ export class RowsView extends ColumnsView {
     }
   }
 
+  public renderFocusState(params) { }
+
   private _getDefaultGroupTemplate(column) {
     const that = this;
     const summaryTexts = that.option('summary.texts');
