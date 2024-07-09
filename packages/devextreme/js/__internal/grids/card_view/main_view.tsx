@@ -19,7 +19,6 @@ export class MainView extends View {
     const PagerView = asInferno(_pagerView);
 
     this.vdom = <>
-      <div>lol</div>
       <ContentView></ContentView>
       <PagerView></PagerView>
     </>;
