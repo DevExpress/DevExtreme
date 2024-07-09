@@ -136,6 +136,9 @@ window.config = {
     '@angular/common/http': {
       'esModule': true,
     },
+    '@angular/compiler': {
+      'esModule': true,
+    },
     '@angular/animations': {
       'esModule': true,
     },
