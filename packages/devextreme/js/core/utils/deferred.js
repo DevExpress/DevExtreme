@@ -100,6 +100,10 @@ deferredConfig.forEach(function(config) {
             this[methodName + 'Context'] = context;
             if(state) this._state = state;
             callbacks.fire(context, args);
+            if(state !== 'pending') {
+                this.resolveCallbacks.empty();
+                this.rejectCallbacks.empty();
+            }
         }
 
         return this;
