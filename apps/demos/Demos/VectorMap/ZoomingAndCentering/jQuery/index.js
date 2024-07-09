@@ -11,7 +11,8 @@ $(() => {
     },
     onClick(e) {
       if (e.target && e.target.layer.type === 'marker') {
-        e.component.center(e.target.coordinates()).zoomFactor(10);
+        e.component.center(e.target.coordinates());
+        e.component.zoomFactor(10);
       }
     },
     bounds: [-180, 85, 180, -60],
