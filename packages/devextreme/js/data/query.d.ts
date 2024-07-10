@@ -168,7 +168,8 @@ export interface Query {
 
 /**
  * @docid Utils.query
- * @publicName query(array)
+ * @publicName query(array, queryOptions)
+ * @param2 queryOptions:object
  * @namespace DevExpress.data
  * @public
  */
