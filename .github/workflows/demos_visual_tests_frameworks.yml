@@ -54,7 +54,7 @@ jobs:
           mv ./packages/devextreme-vue/npm/*.tgz ./devextreme-vue-installer.tgz
 
       - name: Copy build artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: devextreme-sources
           path: |
@@ -118,7 +118,7 @@ jobs:
       run: tsc --noEmit
 
     - name: Copy build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: devextreme-bundles
         path: |
@@ -144,7 +144,7 @@ jobs:
           result: apps/demos/changed-files.json
 
       - name: Upload artifacts
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: changed-demos
           path: apps/demos/changed-files.json
