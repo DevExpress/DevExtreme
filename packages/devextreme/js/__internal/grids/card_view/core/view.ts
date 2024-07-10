@@ -24,7 +24,12 @@ export function asInferno(view: View) {
     constructor() {
       super();
       this.subscription = toSubscribable(view.vdom).subscribe((vdom) => {
-        this.setState({ vdom });
+        this.state ??= {
+          vdom,
+        };
+        if (this.state.vdom !== vdom) {
+          this.setState({ vdom });
+        }
       });
     }
 
