@@ -18,7 +18,7 @@ QUnit.module('getPublicElement', () => {
         QUnit.test(
             `Should return ${resultType} if the input argument is ${inputType} using non-jQuery strategy`,
             function(assert) {
-                const result = expected instanceof HTMLElement ? getPublicElement(args) : expected;
+                const result = expected instanceof HTMLElement && QUnit.urlParams['nojquery'] ? getPublicElement(args) : expected;
                 assert.strictEqual(expected, result, `Expected: ${expected}, Result: ${result}`);
             }
         );
