@@ -1,7 +1,7 @@
 import $ from 'jquery';
 import { getPublicElement } from 'core/element';
 
-const testcaseArray = [
+const testCaseArray = [
     [null, null, 'Null', 'Null'],
     ['body', document.querySelector('body'), 'String', 'HTML Element'],
     [
@@ -14,7 +14,7 @@ const testcaseArray = [
 ];
 
 QUnit.module('getPublicElement', () => {
-    testcaseArray.forEach(([args, expected, inputType, resultType]) => {
+    testCaseArray.forEach(([args, expected, inputType, resultType]) => {
         QUnit.test(
             `Should return ${resultType} if the input argument is ${inputType} using non-jQuery strategy`,
             function(assert) {
