@@ -1,17 +1,17 @@
 import { writeFileSync, existsSync } from 'fs-extra';
 import { relative, join } from 'path';
 import { Demo, Item } from '../helper/types';
-import { getSourcePathByDemoRelative,getSourcePathByDemo, getDestinationPathByDemoRelative, isSkipDemo } from '../helper';
+import { getSourcePathByDemo, getDestinationPathByDemo, isSkipDemo } from '../helper';
 import * as menuMeta from '../../../menuMeta.json';
-import { getProjectNameByDemo, getIndexHtmlPath } from './helper';
+import { getProjectNameByDemo, getIndexHtmlPath } from './utils';
 
 // use this script either from npm, or from devextreme-demos root folder
 const rootFolder = process.cwd();
 
 const createConfigForDemo = (Demo: Demo) => {
   const demoSourcePath = getSourcePathByDemo(Demo, 'Angular').split('\\').join('/');
-  const demoSourcePathRelative = getSourcePathByDemoRelative(Demo, 'Angular').split('\\').join('/');
-  const demoDestinationPathRelative = getDestinationPathByDemoRelative(Demo, 'Angular').split('\\').join('/');
+  const demoSourcePathRelative = getSourcePathByDemo(Demo, 'Angular', true).split('\\').join('/');
+  const demoDestinationPathRelative = getDestinationPathByDemo(Demo, 'Angular', true).split('\\').join('/');
   const indexPath = relative(
     rootFolder,
     join(getIndexHtmlPath(Demo), 'index.html'),

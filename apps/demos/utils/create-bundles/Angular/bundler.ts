@@ -2,8 +2,8 @@ import { exec } from 'child_process';
 import { BuildOptions, build } from 'esbuild';
 import { existsSync, mkdirSync, removeSync } from 'fs-extra';
 import { Demo, Framework } from '../helper/types';
-import { createDemoLayout, getDestinationPathByDemo, getSourcePathByDemo } from '../helper/index';
-import { getIndexHtmlPath, getProjectNameByDemo } from './helper';
+import { createDemoLayout, getDestinationPathByDemo, getSourcePathByDemo } from '../helper';
+import { getIndexHtmlPath, getProjectNameByDemo } from './utils';
 
 interface Bundler {
   framework: Framework;

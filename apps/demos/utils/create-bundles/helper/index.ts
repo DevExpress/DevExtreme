@@ -21,11 +21,21 @@ export const isSkipDemo = (demo: Demo) => {
 const sourceDemosDir = join(__dirname, '..', '..', '..', 'Demos');
 const destinationPublishDir = join(__dirname, '..', '..', '..', 'publish-demos');
 
-export const getSourcePathByDemo = (demo: Demo, framework: string) => join(sourceDemosDir, demo.Widget, demo.Name, framework);
-export const getSourcePathByDemoRelative = (demo: Demo, framework: string) => join('Demos', demo.Widget, demo.Name, framework);
-export const getDestinationPathByDemo = (demo: Demo, framework: string) => join(destinationPublishDir, 'Demos', demo.Widget, demo.Name, framework);
-export const getDestinationPathByDemoRelative = (demo: Demo, framework: string) => join('publish-demos', 'Demos', demo.Widget, demo.Name, framework);
+const demoPath = (demo: Demo, framework: string) => join(demo.Widget, demo.Name, framework);
 
+export const getSourcePathByDemo = (demo: Demo, framework: string, relative = false) => {
+  if (relative) {
+    return join('Demos', demoPath(demo, framework));
+  }
+  return join(sourceDemosDir, demoPath(demo, framework));
+}
+
+export const getDestinationPathByDemo = (demo: Demo, framework: string, relative = false) => {
+  if (relative) {
+    return join('publish-demos', 'Demos', demoPath(demo, framework));
+  }
+  return join(destinationPublishDir, 'Demos', demoPath(demo, framework));
+}
 
 const getFileHash = (fileContent: string) => {
   const hash = createHash('shake256', { outputLength: 4 }).update(fileContent);
@@ -46,9 +56,10 @@ const getTemplateContent = (framework: Framework) => {
 const getBundlePath = (demoPath: string, prefix: string, postfix: string) => readdirSync(demoPath)
   .find((item) => item.startsWith(prefix) && item.endsWith(postfix));
 
+const widgetsWithSpecificCss = ['Gantt', 'Diagram'];
 
 const getSpecificCssPath = (WidgetName: string, demoPath: string) => {
-  if (WidgetName !== 'Gantt' && WidgetName !== 'Diagram') {
+  if (!widgetsWithSpecificCss.includes(WidgetName)) {
     return '';
   }
   return relative(

@@ -3,7 +3,9 @@ import path from 'path';
 
 const demoProjectsDir = path.join(__dirname, '../../../publish-demos/Demos/');
 
-function modifyIndexHtml(filePath) {
+// In the demo, we need to wait, while themes are loaded
+// Angular build add scripts to the end of index.html, here we are wrapping them in onload callback
+function wrapBundleScripts(filePath) {
   fs.readFile(filePath, 'utf8', (err, data) => {
     if (err) {
       console.error(`Error reading file ${filePath}:`, err);
@@ -30,7 +32,7 @@ function modifyIndexHtml(filePath) {
 
     const cleanedHtml = data.replace(polyfillRegex, '').replace(runtimeRegex, '').replace(mainRegex, '');
 
-    const newScriptBlock = `
+    const wrappedBundleScripts = `
       <script>
         window.onload = function() {
           var scripts = ${JSON.stringify(scripts)};
@@ -45,7 +47,7 @@ function modifyIndexHtml(filePath) {
       </script>
     </body>`;
 
-    const newHtml = cleanedHtml.replace('</body>', newScriptBlock);
+    const newHtml = cleanedHtml.replace('</body>', wrappedBundleScripts);
 
     fs.writeFile(filePath, newHtml, 'utf8', (err) => {
       if (err) {
@@ -74,7 +76,7 @@ function processDemoProjects(demosDirectory) {
             demoName.forEach((demo) => {
                 const filePath = path.join(widgetPath, demo, 'Angular', 'index.html');
                 if (fs.existsSync(filePath)) {
-                  modifyIndexHtml(filePath);
+                  wrapBundleScripts(filePath);
                 } else {
                   console.warn(`File not found: ${filePath}`);
                 }
