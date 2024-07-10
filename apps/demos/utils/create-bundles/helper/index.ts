@@ -18,23 +18,25 @@ export const isSkipDemo = (demo: Demo) => {
   return shouldSkip;
 };
 
-const sourceDemosDir = join(__dirname, '..', '..', '..', 'Demos');
-const destinationPublishDir = join(__dirname, '..', '..', '..', 'publish-demos');
+const demosRootDir = join(__dirname, '..', '..', '..');
+const destinationPublishDir = join(demosRootDir, 'publish-demos');
 
-const demoPath = (demo: Demo, framework: string) => join(demo.Widget, demo.Name, framework);
+export const getDemoPath = (path: string = '', demo: Demo, framework: string) => {
+  return join(path, 'Demos', demo.Widget, demo.Name, framework);
+}
 
 export const getSourcePathByDemo = (demo: Demo, framework: string, relative = false) => {
   if (relative) {
-    return join('Demos', demoPath(demo, framework));
+    return getDemoPath('', demo, framework);
   }
-  return join(sourceDemosDir, demoPath(demo, framework));
+  return getDemoPath(demosRootDir, demo, framework);
 }
 
 export const getDestinationPathByDemo = (demo: Demo, framework: string, relative = false) => {
   if (relative) {
-    return join('publish-demos', 'Demos', demoPath(demo, framework));
+    return getDemoPath('publish-demos', demo, framework);
   }
-  return join(destinationPublishDir, 'Demos', demoPath(demo, framework));
+  return getDemoPath(destinationPublishDir, demo, framework);
 }
 
 const getFileHash = (fileContent: string) => {
@@ -193,7 +195,7 @@ export const copyMetadata = () => {
   const ganttCssPath = join(nodeModulesPath, 'devexpress-gantt', 'dist', 'dx-gantt.css');
   copySync(ganttCssPath, join(destinationCss, 'dx-gantt.css'));
 
-  const sourceData = join(sourceDemosDir, '..', 'data');
+  const sourceData = join(demosRootDir, '..', 'data');
   const destinationData = join(destinationPublishDir, 'data');
   copySync(sourceData, destinationData);
 };
