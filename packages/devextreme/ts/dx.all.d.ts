@@ -6361,7 +6361,7 @@ declare module DevExpress.data {
         };
   }
   /**
-   * [descr:Utils.query(array)]
+   * [descr:Utils.query(array, queryOptions)]
    */
   export function query(array: Array<any>, queryOptions?: any): Query;
   /**
