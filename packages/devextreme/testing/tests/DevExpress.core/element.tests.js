@@ -5,7 +5,7 @@ QUnit.module('Public element', () => {
         const unwrappedElement = {};
         const mockElement = { get: (i) => i === 0 && unwrappedElement };
         const expectedPublicElement = QUnit.urlParams['nojquery'] ? unwrappedElement : mockElement;
-        assert.strictEqual(getPublicElement(unwrappedElement), expectedPublicElement);
+        assert.strictEqual(getPublicElement(mockElement), expectedPublicElement);
     });
 
     QUnit.test('Should use new strategy to unwrap public element', function(assert) {
