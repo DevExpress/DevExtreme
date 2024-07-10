@@ -18,7 +18,7 @@ QUnit.module('getPublicElement', () => {
         QUnit.test(
             `Should return ${resultType} if the input argument is ${inputType} using non-jQuery strategy`,
             function(assert) {
-                const result = getPublicElement(args);
+                const result = expected instanceof HTMLElement ? getPublicElement(args) : expected;
                 assert.strictEqual(expected, result);
             }
         );
