@@ -3,14 +3,14 @@ import { getPublicElement } from 'core/element';
 
 const testCaseArray = [
     [null, null, 'Null', 'Null'],
-    ['body', document.querySelector('body'), 'String', 'HTML Element'],
+    ['body', document.querySelector('body'), 'String', 'HTMLElement'],
     [
         document.querySelector('body'),
         document.querySelector('body'),
-        'HTML Element',
-        'HTML Element',
+        'HTMLElement',
+        'HTMLElement',
     ],
-    [$('body'), document.querySelector('body'), 'jQuery', 'HTML Element'],
+    [$('body'), document.querySelector('body'), 'jQuery', 'HTMLElement'],
 ];
 
 QUnit.module('getPublicElement', () => {
@@ -19,7 +19,7 @@ QUnit.module('getPublicElement', () => {
             `Should return ${resultType} if the input argument is ${inputType} using non-jQuery strategy`,
             function(assert) {
                 const result = expected instanceof HTMLElement ? getPublicElement(args) : expected;
-                assert.strictEqual(expected, result);
+                assert.strictEqual(expected, result, `Expected: ${expected}, Result: ${result}`);
             }
         );
     });
