@@ -194,7 +194,7 @@ jobs:
 
       - name: Angular post process index.html
         working-directory: apps/demos
-        run: npm run post-modify-angular
+        run: npm run post-process-angular
       
       - name: Save publish-demos directory for Angular as an artifact
         uses: actions/upload-artifact@v3

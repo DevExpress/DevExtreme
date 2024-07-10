@@ -72,6 +72,17 @@ export const copyVueCustomCss = (demo: Demo): boolean => {
   return false;
 };
 
+const addExternalResources = (demo: Demo, framework: Framework, cssLinks: string) => {
+  let newCssLinks = cssLinks;
+  const externalResources = resourceLinks[demo.Widget]?.[demo.Name];
+  externalResources?.resources?.forEach(resource => {
+    if (resource.frameworks.includes(framework)){
+      newCssLinks = newCssLinks.concat('\n', resource.link)
+    }
+  });
+  return newCssLinks;
+}
+
 export const createDemoLayout = (demo: Demo, framework: Framework) => {
   const demoPath = getDestinationPathByDemo(demo, framework);
   const demoHtmlPath = framework !== 'Angular'
@@ -80,14 +91,9 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
   const templateContent = getTemplateContent(framework);
 
   const metadataScripts = join(destinationPublishDir, 'scripts');
-  let specific_css = `<link href="${getSpecificCssPath(demo.Widget, demoPath)}" rel="stylesheet" />`;
+  let cssLinks = `<link href="${getSpecificCssPath(demo.Widget, demoPath)}" rel="stylesheet" />`;
 
-  const externalResources = resourceLinks[demo.Widget]?.[demo.Name];
-  externalResources?.resources?.forEach(resource => {
-    if (resource.frameworks.includes(framework)){
-      specific_css = specific_css.concat('\n', resource.link)
-    }
-  });
+  cssLinks = addExternalResources(demo, framework, cssLinks);
 
   let hasCustomCss = false;
 
@@ -101,7 +107,7 @@ export const createDemoLayout = (demo: Demo, framework: Framework) => {
     dx_version: DX_Version,
     js_bundle_path: getBundlePath(demoPath, 'bundle', '.js'),
     init_theme: getBundlePath(metadataScripts, 'init-theme', '.js'),
-    specific_css,
+    additional_css: cssLinks,
     custom_css: hasCustomCss ? '<link rel="stylesheet" type="text/css" href="styles.css" />' : '',
   };
 

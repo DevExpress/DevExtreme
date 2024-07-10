@@ -135,10 +135,10 @@
         "create-typestat-cfg": "cd ./utils/internal && node ./create-typestat-cfg.js",
         "make-demos-bundle": "ts-node ./utils/create-bundles",
         "update-angular-json": "ts-node ./utils/create-bundles/Angular/update-angular-json.ts",
-        "build-angular": "ng build",
         "launch-ngcc": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points",
-        "webserver-gh": "cd ./publish-demos && http-server --port 5645",
-        "post-modify-angular": "ts-node ./utils/create-bundles/Angular/post-modify-index.ts"
+        "build-angular": "ng build",
+        "post-process-angular": "ts-node ./utils/create-bundles/Angular/post-modify-index.ts",
+        "webserver-gh": "cd ./publish-demos && http-server --port 5645"
     },
     "license": "SEE LICENSE IN README.md",
     "keywords": [

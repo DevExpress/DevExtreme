@@ -2,7 +2,7 @@ import { readFileSync, existsSync, writeFileSync } from 'fs';
 import { join } from 'path';
 import { ClientFunction } from 'testcafe';
 import { THEME } from './helpers/theme-utils';
-import { githubIgnored } from './github-ignored-list';
+import { gitHubIgnored } from './github-ignored-list';
 
 const settings = {
   concurrency: undefined,
@@ -319,7 +319,7 @@ export function runTestAtPage(test, demoUrl) {
 
 
 export function runManualTestCore(testObject, widget, demo, framework, callback) {
-  const isGithubDemos = process.env.ISGITHUBDEMOS;
+  const isGitHubDemos = process.env.ISGITHUBDEMOS;
 
   const index = settings.manualTestIndex;
   settings.manualTestIndex += 1;
@@ -330,8 +330,8 @@ export function runManualTestCore(testObject, widget, demo, framework, callback)
 
   let testURL = '';
 
-  if (isGithubDemos) {
-    if (widget !== 'DataGrid' || githubIgnored.includes(demo)) {
+  if (isGitHubDemos) {
+    if (widget !== 'DataGrid' || gitHubIgnored.includes(demo)) {
       return;
     }
     const theme = process.env.THEME.replace('generic.', '');

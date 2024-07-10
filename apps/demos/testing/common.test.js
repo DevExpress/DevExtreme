@@ -23,7 +23,7 @@ import {
 import { createMdReport, createTestCafeReport } from '../utils/axe-reporter/reporter';
 import knownWarnings from './known-warnings.json';
 
-import { githubIgnored } from '../utils/visual-tests/github-ignored-list';
+import { gitHubIgnored } from '../utils/visual-tests/github-ignored-list';
 
 const execCode = ClientFunction((code) => {
   // eslint-disable-next-line no-eval
@@ -304,17 +304,17 @@ const SKIPPED_TESTS = {
       }
     }
 
-    const isGithubDemos = process.env.ISGITHUBDEMOS;
+    const isGitHubDemos = process.env.ISGITHUBDEMOS;
     let pageURL = '';
     const theme = process.env.THEME.replace('generic.', '');
-    if (isGithubDemos) {
+    if (isGitHubDemos) {
       pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/Demos/${widgetName}/${demoName}/${approach}/?theme=dx.${theme}`;
     } else {
       changeTheme(__dirname, `../${demoPath}/index.html`, process.env.THEME);
       pageURL = `http://127.0.0.1:808${getPortByIndex(index)}/apps/demos/Demos/${widgetName}/${demoName}/${approach}/`;
     }
     // remove when tests enabled not only for datagrid
-    if (isGithubDemos && (widgetName !== 'DataGrid' || githubIgnored.includes(demoName))) {
+    if (isGitHubDemos && (widgetName !== 'DataGrid' || gitHubIgnored.includes(demoName))) {
       return;
     }
     runTestAtPage(test, pageURL)

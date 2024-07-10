@@ -28,4 +28,4 @@ const ignoredVue = [
     "EditStateManagement"
 ]
 
-export const githubIgnored = [...ignoredLocalization, ...ignoredCallstack, ...ignoredDevextreme, ...ignoredVue];
+export const gitHubIgnored = [...ignoredLocalization, ...ignoredCallstack, ...ignoredDevextreme, ...ignoredVue];
