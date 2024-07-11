@@ -3,28 +3,32 @@ import type { InfernoNode } from 'inferno';
 
 import { ContentView } from './content_view/content_view';
 import { asInferno, View } from './core/view';
-import { PagerView } from './pager';
 import { HeaderPanelView } from './header_panel/view';
+import { HeadersView } from './headers/view';
+import { PagerView } from './pager';
 
 export class MainView extends View {
   public vdom: InfernoNode | Subscribable<InfernoNode>;
 
-  static dependencies = [ContentView, PagerView, HeaderPanelView] as const;
+  static dependencies = [ContentView, PagerView, HeaderPanelView, HeadersView] as const;
 
   constructor(
-    _contentView: ContentView,
-    _pagerView: PagerView,
+    _content: ContentView,
+    _pager: PagerView,
     _headerPanel: HeaderPanelView,
+    _headers: HeadersView,
   ) {
     super();
-    const HeaderPanelView = asInferno(_headerPanel);
-    const ContentView = asInferno(_contentView);
-    const PagerView = asInferno(_pagerView);
+    const HeaderPanel = asInferno(_headerPanel);
+    const Content = asInferno(_content);
+    const Pager = asInferno(_pager);
+    const Headers = asInferno(_headers);
 
     this.vdom = <>
-      <HeaderPanelView></HeaderPanelView>
-      <ContentView></ContentView>
-      <PagerView></PagerView>
+      <HeaderPanel></HeaderPanel>
+      <Headers></Headers>
+      <Content></Content>
+      <Pager></Pager>
     </>;
   }
 }

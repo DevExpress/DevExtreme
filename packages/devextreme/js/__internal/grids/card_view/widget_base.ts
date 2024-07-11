@@ -8,11 +8,13 @@ import { DIContext } from '@ts/core/di';
 
 import { ColumnsChooser } from './columns_chooser/columns_chooser';
 import { ColumnsController } from './columns_controller/columns_controller';
+import { ColumnsDraggingController } from './columns_dragging/columns_dragging';
 import { ContentView } from './content_view/content_view';
 import { DataController } from './data_controller/data_controller';
 import type { EditingController } from './editing/controller';
 import { HeaderPanelController } from './header_panel/controller';
 import { HeaderPanelView } from './header_panel/view';
+import { HeadersView } from './headers/view';
 import { MainView } from './main_view';
 import { OptionsController } from './options_controller/options_controller';
 import { PagerView } from './pager';
@@ -50,6 +52,8 @@ class CardView extends Widget<Properties> {
     this.diContext.register(PagerView);
     this.diContext.register(MainView);
     this.diContext.register(ColumnsChooser);
+    this.diContext.register(ColumnsDraggingController);
+    this.diContext.register(HeadersView);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
 
     this.columnsChooser = this.diContext.get(ColumnsChooser);

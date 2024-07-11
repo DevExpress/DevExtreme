@@ -1,15 +1,23 @@
 import type { Subscribable, Subscription } from '@ts/core/reactive';
-import { toSubscribable } from '@ts/core/reactive';
+import { state, toSubscribable } from '@ts/core/reactive';
 import type { InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';
 
 export abstract class View {
+  private canUpdate = true;
+
   public readonly abstract vdom: InfernoNode | Subscribable<InfernoNode>;
+
+  public lockedVdom = state<InfernoNode>(undefined as any);
 
   public render(root: Element): void {
     toSubscribable(this.vdom).subscribe((node: InfernoNode) => {
       render(node, root);
     });
+  }
+
+  public setCanUpdate(v: boolean): void {
+    this.canUpdate = v;
   }
 }
 
