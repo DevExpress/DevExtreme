@@ -119,6 +119,7 @@ class DataGrid extends GridCoreWidget<Properties> {
 
   private _init() {
     const that = this;
+    this._activeStateUnit = '.dx-row';
 
     // @ts-expect-error
     super._init();
