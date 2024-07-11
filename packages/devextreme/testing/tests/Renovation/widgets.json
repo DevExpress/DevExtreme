@@ -1,0 +1,849 @@
+[
+  {
+    "widgetName": "dxButton",
+    "name": "Button",
+    "decorator": {
+      "defaultOptionRules": "defaultOptionRules",
+      "jQuery": {
+        "component": "BaseComponent",
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "activeStateEnabled",
+        "hoverStateEnabled",
+        "icon",
+        "iconPosition",
+        "onClick",
+        "onSubmit",
+        "pressed",
+        "stylingMode",
+        "template",
+        "iconTemplate",
+        "children",
+        "text",
+        "type",
+        "useInkRipple",
+        "useSubmitBehavior",
+        "templateData",
+        "className",
+        "accessKey",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "onKeyDown",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width"
+      ],
+      "oneWay": [
+        "activeStateEnabled",
+        "hoverStateEnabled",
+        "icon",
+        "iconPosition",
+        "pressed",
+        "stylingMode",
+        "text",
+        "type",
+        "useInkRipple",
+        "useSubmitBehavior",
+        "templateData",
+        "className",
+        "accessKey",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width"
+      ],
+      "twoWay": [],
+      "template": [
+        "template",
+        "iconTemplate"
+      ],
+      "event": [
+        "onClick",
+        "onSubmit",
+        "onKeyDown"
+      ],
+      "ref": [],
+      "slot": [
+        "children"
+      ]
+    },
+    "api": [
+      "focus",
+      "activate",
+      "deactivate"
+    ],
+    "path": "../../../js/renovation/ui/button.tsx"
+  },
+  {
+    "widgetName": "dxBox",
+    "name": "Box",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "direction",
+        "align",
+        "crossAlign"
+      ],
+      "oneWay": [
+        "direction",
+        "align",
+        "crossAlign"
+      ],
+      "twoWay": [],
+      "template": [],
+      "event": [],
+      "ref": [],
+      "slot": []
+    },
+    "api": [],
+    "path": "../../../js/renovation/ui/box/box.tsx"
+  },
+  {
+    "widgetName": "dxWidget",
+    "name": "Widget",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "rootElementRef",
+        "_feedbackHideTimeout",
+        "_feedbackShowTimeout",
+        "activeStateUnit",
+        "cssText",
+        "aria",
+        "children",
+        "classes",
+        "name",
+        "addWidgetClass",
+        "onActive",
+        "onDimensionChanged",
+        "onInactive",
+        "onVisibilityChange",
+        "onFocusIn",
+        "onFocusOut",
+        "onHoverStart",
+        "onHoverEnd",
+        "onRootElementRendered",
+        "className",
+        "accessKey",
+        "activeStateEnabled",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "hoverStateEnabled",
+        "onClick",
+        "onKeyDown",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width"
+      ],
+      "oneWay": [
+        "_feedbackHideTimeout",
+        "_feedbackShowTimeout",
+        "activeStateUnit",
+        "cssText",
+        "aria",
+        "classes",
+        "name",
+        "addWidgetClass",
+        "className",
+        "accessKey",
+        "activeStateEnabled",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "hoverStateEnabled",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width"
+      ],
+      "twoWay": [],
+      "template": [],
+      "event": [
+        "onActive",
+        "onDimensionChanged",
+        "onInactive",
+        "onVisibilityChange",
+        "onFocusIn",
+        "onFocusOut",
+        "onHoverStart",
+        "onHoverEnd",
+        "onRootElementRendered",
+        "onClick",
+        "onKeyDown"
+      ],
+      "ref": [],
+      "slot": [
+        "children"
+      ]
+    },
+    "api": [
+      "focus",
+      "blur",
+      "activate",
+      "deactivate"
+    ],
+    "path": "../../../js/renovation/ui/common/widget.tsx"
+  },
+  {
+    "widgetName": "dxForm",
+    "name": "Form",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "scrollingEnabled",
+        "useNativeScrolling",
+        "screenByWidth"
+      ],
+      "oneWay": [
+        "scrollingEnabled",
+        "useNativeScrolling",
+        "screenByWidth"
+      ],
+      "twoWay": [],
+      "template": [],
+      "event": [],
+      "ref": [],
+      "slot": []
+    },
+    "api": [],
+    "path": "../../../js/renovation/ui/form/form.tsx"
+  },
+  {
+    "widgetName": "dxPager",
+    "name": "Pager",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true",
+        "component": "GridPagerWrapper"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "pageSize",
+        "pageIndex",
+        "defaultPageSize",
+        "pageSizeChange",
+        "defaultPageIndex",
+        "pageIndexChange",
+        "gridCompatibility",
+        "className",
+        "showInfo",
+        "infoText",
+        "lightModeEnabled",
+        "displayMode",
+        "maxPagesCount",
+        "pageCount",
+        "pagesCountText",
+        "visible",
+        "hasKnownLastPage",
+        "pagesNavigatorVisible",
+        "showPageSizes",
+        "pageSizes",
+        "rtlEnabled",
+        "showNavigationButtons",
+        "totalCount",
+        "label",
+        "onKeyDown"
+      ],
+      "oneWay": [
+        "defaultPageSize",
+        "defaultPageIndex",
+        "gridCompatibility",
+        "className",
+        "showInfo",
+        "infoText",
+        "lightModeEnabled",
+        "displayMode",
+        "maxPagesCount",
+        "pageCount",
+        "pagesCountText",
+        "visible",
+        "hasKnownLastPage",
+        "pagesNavigatorVisible",
+        "showPageSizes",
+        "pageSizes",
+        "rtlEnabled",
+        "showNavigationButtons",
+        "totalCount",
+        "label"
+      ],
+      "twoWay": [
+        "pageSize",
+        "pageIndex"
+      ],
+      "template": [],
+      "event": [
+        "pageSizeChange",
+        "pageIndexChange",
+        "onKeyDown"
+      ],
+      "ref": [],
+      "slot": []
+    },
+    "api": [],
+    "path": "../../../js/renovation/ui/pager/pager.tsx"
+  },
+  {
+    "widgetName": "dxResponsiveBox",
+    "name": "ResponsiveBox",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "screenByWidth"
+      ],
+      "oneWay": [
+        "screenByWidth"
+      ],
+      "twoWay": [],
+      "template": [],
+      "event": [],
+      "ref": [],
+      "slot": []
+    },
+    "api": [],
+    "path": "../../../js/renovation/ui/responsive_box/responsive_box.tsx"
+  },
+  {
+    "widgetName": "dxScrollable",
+    "name": "Scrollable",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true",
+        "component": "ScrollableWrapper"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "useNative",
+        "useSimulatedScrollbar",
+        "refreshStrategy",
+        "inertiaEnabled",
+        "useKeyboard",
+        "showScrollbar",
+        "scrollByThumb",
+        "onVisibilityChange",
+        "onStart",
+        "onEnd",
+        "onBounce",
+        "scrollLocationChange",
+        "loadPanelTemplate",
+        "children",
+        "aria",
+        "addWidgetClass",
+        "disabled",
+        "height",
+        "width",
+        "visible",
+        "rtlEnabled",
+        "classes",
+        "direction",
+        "bounceEnabled",
+        "scrollByContent",
+        "pullDownEnabled",
+        "reachBottomEnabled",
+        "forceGeneratePockets",
+        "needScrollViewContentWrapper",
+        "needRenderScrollbars",
+        "onScroll",
+        "onUpdated",
+        "onPullDown",
+        "onReachBottom",
+        "pullingDownText",
+        "pulledDownText",
+        "refreshingText",
+        "reachBottomText"
+      ],
+      "oneWay": [
+        "useNative",
+        "useSimulatedScrollbar",
+        "refreshStrategy",
+        "inertiaEnabled",
+        "useKeyboard",
+        "showScrollbar",
+        "scrollByThumb",
+        "aria",
+        "addWidgetClass",
+        "disabled",
+        "height",
+        "width",
+        "visible",
+        "rtlEnabled",
+        "classes",
+        "direction",
+        "bounceEnabled",
+        "scrollByContent",
+        "pullDownEnabled",
+        "reachBottomEnabled",
+        "forceGeneratePockets",
+        "needScrollViewContentWrapper",
+        "needRenderScrollbars",
+        "pullingDownText",
+        "pulledDownText",
+        "refreshingText",
+        "reachBottomText"
+      ],
+      "twoWay": [],
+      "template": [
+        "loadPanelTemplate"
+      ],
+      "event": [
+        "onVisibilityChange",
+        "onStart",
+        "onEnd",
+        "onBounce",
+        "scrollLocationChange",
+        "onScroll",
+        "onUpdated",
+        "onPullDown",
+        "onReachBottom"
+      ],
+      "ref": [],
+      "slot": [
+        "children"
+      ]
+    },
+    "api": [
+      "content",
+      "container",
+      "scrollTo",
+      "scrollBy",
+      "updateHandler",
+      "release",
+      "refresh",
+      "scrollToElement",
+      "scrollHeight",
+      "scrollWidth",
+      "scrollOffset",
+      "scrollTop",
+      "scrollLeft",
+      "clientHeight",
+      "clientWidth",
+      "getScrollElementPosition",
+      "startLoading",
+      "finishLoading"
+    ],
+    "path": "../../../js/renovation/ui/scroll_view/scrollable.tsx"
+  },
+  {
+    "widgetName": "dxScrollView",
+    "name": "ScrollView",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true",
+        "component": "ScrollViewWrapper"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "pullDownEnabled",
+        "reachBottomEnabled",
+        "useNative",
+        "useSimulatedScrollbar",
+        "refreshStrategy",
+        "inertiaEnabled",
+        "useKeyboard",
+        "showScrollbar",
+        "scrollByThumb",
+        "onVisibilityChange",
+        "onStart",
+        "onEnd",
+        "onBounce",
+        "scrollLocationChange",
+        "loadPanelTemplate",
+        "children",
+        "aria",
+        "addWidgetClass",
+        "disabled",
+        "height",
+        "width",
+        "visible",
+        "rtlEnabled",
+        "classes",
+        "direction",
+        "bounceEnabled",
+        "scrollByContent",
+        "forceGeneratePockets",
+        "needScrollViewContentWrapper",
+        "needRenderScrollbars",
+        "onScroll",
+        "onUpdated",
+        "onPullDown",
+        "onReachBottom",
+        "pullingDownText",
+        "pulledDownText",
+        "refreshingText",
+        "reachBottomText"
+      ],
+      "oneWay": [
+        "pullDownEnabled",
+        "reachBottomEnabled",
+        "useNative",
+        "useSimulatedScrollbar",
+        "refreshStrategy",
+        "inertiaEnabled",
+        "useKeyboard",
+        "showScrollbar",
+        "scrollByThumb",
+        "aria",
+        "addWidgetClass",
+        "disabled",
+        "height",
+        "width",
+        "visible",
+        "rtlEnabled",
+        "classes",
+        "direction",
+        "bounceEnabled",
+        "scrollByContent",
+        "forceGeneratePockets",
+        "needScrollViewContentWrapper",
+        "needRenderScrollbars",
+        "pullingDownText",
+        "pulledDownText",
+        "refreshingText",
+        "reachBottomText"
+      ],
+      "twoWay": [],
+      "template": [
+        "loadPanelTemplate"
+      ],
+      "event": [
+        "onVisibilityChange",
+        "onStart",
+        "onEnd",
+        "onBounce",
+        "scrollLocationChange",
+        "onScroll",
+        "onUpdated",
+        "onPullDown",
+        "onReachBottom"
+      ],
+      "ref": [],
+      "slot": [
+        "children"
+      ]
+    },
+    "api": [
+      "release",
+      "refresh",
+      "content",
+      "container",
+      "scrollBy",
+      "scrollTo",
+      "scrollToElement",
+      "scrollHeight",
+      "scrollWidth",
+      "scrollOffset",
+      "scrollTop",
+      "scrollLeft",
+      "clientHeight",
+      "clientWidth",
+      "toggleLoading",
+      "startLoading",
+      "finishLoading",
+      "updateHandler"
+    ],
+    "path": "../../../js/renovation/ui/scroll_view/scroll_view.tsx"
+  },
+  {
+    "widgetName": "dxCheckBox",
+    "name": "CheckBox",
+    "decorator": {
+      "jQuery": {
+        "component": "BaseComponent",
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "text",
+        "iconSize",
+        "enableThreeStateBehavior",
+        "activeStateEnabled",
+        "hoverStateEnabled",
+        "focusStateEnabled",
+        "value",
+        "saveValueChangeEvent",
+        "defaultValue",
+        "valueChange",
+        "readOnly",
+        "name",
+        "validationError",
+        "validationErrors",
+        "validationMessageMode",
+        "validationMessagePosition",
+        "validationStatus",
+        "isValid",
+        "isDirty",
+        "inputAttr",
+        "onFocusIn",
+        "className",
+        "accessKey",
+        "disabled",
+        "height",
+        "hint",
+        "onClick",
+        "onKeyDown",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width",
+        "aria"
+      ],
+      "oneWay": [
+        "text",
+        "iconSize",
+        "enableThreeStateBehavior",
+        "activeStateEnabled",
+        "hoverStateEnabled",
+        "focusStateEnabled",
+        "saveValueChangeEvent",
+        "defaultValue",
+        "readOnly",
+        "name",
+        "validationError",
+        "validationErrors",
+        "validationMessageMode",
+        "validationMessagePosition",
+        "validationStatus",
+        "isValid",
+        "isDirty",
+        "inputAttr",
+        "className",
+        "accessKey",
+        "disabled",
+        "height",
+        "hint",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width",
+        "aria"
+      ],
+      "twoWay": [
+        "value"
+      ],
+      "template": [],
+      "event": [
+        "valueChange",
+        "onFocusIn",
+        "onClick",
+        "onKeyDown"
+      ],
+      "ref": [],
+      "slot": []
+    },
+    "api": [
+      "focus",
+      "blur"
+    ],
+    "path": "../../../js/renovation/ui/editors/check_box/check_box.tsx"
+  },
+  {
+    "widgetName": "dxEditor",
+    "name": "Editor",
+    "decorator": {
+      "jQuery": {
+        "component": "EditorWrapperComponent",
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "readOnly",
+        "name",
+        "value",
+        "validationError",
+        "validationErrors",
+        "validationMessageMode",
+        "validationMessagePosition",
+        "validationStatus",
+        "isValid",
+        "isDirty",
+        "inputAttr",
+        "onFocusIn",
+        "defaultValue",
+        "valueChange",
+        "className",
+        "accessKey",
+        "activeStateEnabled",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "hoverStateEnabled",
+        "onClick",
+        "onKeyDown",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width",
+        "aria",
+        "children",
+        "classes"
+      ],
+      "oneWay": [
+        "readOnly",
+        "name",
+        "validationError",
+        "validationErrors",
+        "validationMessageMode",
+        "validationMessagePosition",
+        "validationStatus",
+        "isValid",
+        "isDirty",
+        "inputAttr",
+        "defaultValue",
+        "className",
+        "accessKey",
+        "activeStateEnabled",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "hoverStateEnabled",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width",
+        "aria",
+        "classes"
+      ],
+      "twoWay": [
+        "value"
+      ],
+      "template": [],
+      "event": [
+        "onFocusIn",
+        "valueChange",
+        "onClick",
+        "onKeyDown"
+      ],
+      "ref": [],
+      "slot": [
+        "children"
+      ]
+    },
+    "api": [
+      "focus",
+      "blur"
+    ],
+    "path": "../../../js/renovation/ui/editors/common/editor.tsx"
+  },
+  {
+    "widgetName": "dxForm",
+    "name": "Form",
+    "decorator": {
+      "defaultOptionRules": "null",
+      "jQuery": {
+        "register": "true"
+      },
+      "view": "viewFunction"
+    },
+    "props": {
+      "allProps": [
+        "showValidationSummary",
+        "scrollingEnabled",
+        "showColonAfterLabel",
+        "labelLocation",
+        "colCountByScreen",
+        "colCount",
+        "items",
+        "formData",
+        "className",
+        "accessKey",
+        "activeStateEnabled",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "hoverStateEnabled",
+        "onClick",
+        "onKeyDown",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width"
+      ],
+      "oneWay": [
+        "showValidationSummary",
+        "scrollingEnabled",
+        "showColonAfterLabel",
+        "labelLocation",
+        "colCountByScreen",
+        "colCount",
+        "items",
+        "formData",
+        "className",
+        "accessKey",
+        "activeStateEnabled",
+        "disabled",
+        "focusStateEnabled",
+        "height",
+        "hint",
+        "hoverStateEnabled",
+        "rtlEnabled",
+        "tabIndex",
+        "visible",
+        "width"
+      ],
+      "twoWay": [],
+      "template": [],
+      "event": [
+        "onClick",
+        "onKeyDown"
+      ],
+      "ref": [],
+      "slot": []
+    },
+    "api": [],
+    "path": "../../../js/renovation/ui/form/wrapper/form.tsx"
+  }
+]

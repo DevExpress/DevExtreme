@@ -1,0 +1,12 @@
+@use "../widgets/fluent/colors" with ($color: "saas", $mode: "dark");
+@use "../widgets/fluent/sizes" with ($size: "default");
+@use "../widgets/fluent/typography";
+@use "../widgets/fluent/icons";
+@use "../widgets/fluent/widget";
+@use "../widgets/fluent/card";
+@use "../widgets/fluent/fieldset";
+@use "../widgets/fluent/common";
+@use "../widgets/base/resizable";
+@use "../widgets/base/draggable";
+@use "../widgets/base/ui";
+@use "../widgets/fluent";

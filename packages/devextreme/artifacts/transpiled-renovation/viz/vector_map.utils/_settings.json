@@ -1,0 +1,20 @@
+{
+    "commonFiles": [
+        "parsing",
+        "parser-shp",
+        "parser-dbf"
+    ],
+    "browser": {
+        "fileName": "dx.vectormaputils",
+        "files": [
+            "js-stream"
+        ]
+    },
+    "node": {
+        "fileName": "dx.vectormaputils.node",
+        "files": [
+            "node-stream",
+            "node-cmd"
+        ]
+    }
+}

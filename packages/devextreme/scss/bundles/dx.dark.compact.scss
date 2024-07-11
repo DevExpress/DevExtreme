@@ -1,0 +1,12 @@
+@use "../widgets/generic/colors" with ($color: "dark");
+@use "../widgets/generic/sizes" with ($size: "compact");
+@use "../widgets/generic/typography";
+@use "../widgets/generic/icons";
+@use "../widgets/generic/widget";
+@use "../widgets/generic/card";
+@use "../widgets/generic/fieldset";
+@use "../widgets/generic/common";
+@use "../widgets/base/resizable";
+@use "../widgets/base/draggable";
+@use "../widgets/base/ui";
+@use "../widgets/generic";

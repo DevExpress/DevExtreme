@@ -1,0 +1,12 @@
+@use "../widgets/material/colors" with ($color: "orange", $mode: "light");
+@use "../widgets/material/sizes" with ($size: "default");
+@use "../widgets/material/typography";
+@use "../widgets/material/icons";
+@use "../widgets/material/widget";
+@use "../widgets/material/card";
+@use "../widgets/material/fieldset";
+@use "../widgets/material/common";
+@use "../widgets/base/resizable";
+@use "../widgets/base/draggable";
+@use "../widgets/base/ui";
+@use "../widgets/material";
