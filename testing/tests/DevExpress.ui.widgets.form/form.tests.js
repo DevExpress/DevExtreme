@@ -62,6 +62,7 @@ const INVALID_CLASS = 'dx-invalid';
 const FORM_GROUP_CONTENT_CLASS = 'dx-form-group-content';
 const MULTIVIEW_ITEM_CONTENT_CLASS = 'dx-multiview-item-content';
 const LAST_COL_CLASS = 'dx-last-col';
+const SLIDER_LABEL = 'dx-slider-label';
 
 QUnit.testStart(function() {
     const markup =
@@ -319,6 +320,52 @@ QUnit.test('The \'dataField\' option of a simple item should not affect existing
     }).dxForm('instance');
 
     assert.equal(form.getEditor('firstName').option('name'), 'UserName', 'Editor name is OK');
+});
+
+QUnit.test('rangeSlider labels should be rendered when used in forms (T1240185)', function(assert) {
+    const form = $('#form').dxForm({
+        items: [{
+            dataField: 'test',
+            editorType: 'dxRangeSlider',
+            editorOptions: {
+                label: {
+                    visible: true,
+                    position: 'top',
+                },
+            }
+        }]
+    });
+
+    const labelExist = form.find(`.${SLIDER_LABEL}`).length > 0;
+    const minLabel = form.find(`.${SLIDER_LABEL}`).eq(0).text();
+    const maxLabel = form.find(`.${SLIDER_LABEL}`).eq(1).text();
+
+    assert.ok(labelExist, 'label is rendered');
+    assert.strictEqual(minLabel, '0', 'min label has correct value');
+    assert.strictEqual(maxLabel, '100', 'max label has correct value');
+});
+
+QUnit.test('slider labels should be rendered when used in forms (T1240185)', function(assert) {
+    const form = $('#form').dxForm({
+        items: [{
+            dataField: 'test',
+            editorType: 'dxSlider',
+            editorOptions: {
+                label: {
+                    visible: true,
+                    position: 'top',
+                },
+            }
+        }]
+    });
+
+    const labelExist = form.find(`.${SLIDER_LABEL}`).length > 0;
+    const minLabel = form.find(`.${SLIDER_LABEL}`).eq(0).text();
+    const maxLabel = form.find(`.${SLIDER_LABEL}`).eq(1).text();
+
+    assert.ok(labelExist, 'label is rendered');
+    assert.strictEqual(minLabel, '0', 'min label has correct value');
+    assert.strictEqual(maxLabel, '100', 'max label has correct value');
 });
 
 QUnit.test('Don\'t refresh form when visibility changed to \'true\'', function(assert) {
