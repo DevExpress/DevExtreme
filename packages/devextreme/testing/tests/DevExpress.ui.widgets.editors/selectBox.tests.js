@@ -1228,6 +1228,31 @@ QUnit.module('widget options', moduleSetup, () => {
         assert.equal(callCount, 1, 'the "fieldTemplate" called only one on value change');
     });
 
+    QUnit.test('fieldTemplate is not called after the TextBox has been focused and removed (T1233530)', function(assert) {
+        let textBoxInstance = null;
+        let callCount = 0;
+
+        $('#selectBoxWithItemTemplate').dxSelectBox({
+            items: [1, 2],
+            fieldTemplate: () => {
+                callCount++;
+
+                const textBox = $('<div>').dxTextBox();
+
+                textBoxInstance = textBox.dxTextBox('instance');
+
+                return textBox;
+            }
+        }).dxSelectBox('instance');
+
+        assert.equal(callCount, 1, 'fieldTemplate was called once on init');
+
+        textBoxInstance.focus();
+        textBoxInstance.dispose();
+
+        assert.equal(callCount, 1, 'call count still 1');
+    });
+
     QUnit.test('popup should not prevent closing when fieldTemplate is used', function(assert) {
         const $selectBox = $('#selectBoxFieldTemplate').dxSelectBox({
             items: [1, 2],
