@@ -603,11 +603,7 @@ const HtmlEditor = Editor.inherit({
         this._moduleOptionChanged('tableContextMenu', args);
         break;
       case 'mediaResizing':
-        if (!args.previousValue || !args.value) {
-          this._invalidate();
-        } else {
-          this.getModule('resizing').option(args.name, args.value);
-        }
+        this._moduleOptionChanged('resizing', args);
         break;
       case 'width':
         this.callBase(args);
