@@ -359,3 +359,58 @@ safeSizeTest('The grid layout should be correct after resizing the window when t
     width: 50,
   }],
 }));
+
+test('DataGrid - Group summary is not updated when a column is fixed on the right side (T1223764)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  const editCell = dataGrid.getDataRow(1).getDataCell(2);
+
+  await t
+    .click(editCell.element)
+    .typeText(editCell.getEditor().element, '11')
+    .pressKey('enter')
+    .expect(dataGrid.getGroupRow(0).element.textContent)
+    .eql('A: group 0 (Count: 3, Sum of B is 113)');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    { id: 0, A: 'group 0', B: 1 },
+    { id: 1, A: 'group 0', B: 1 },
+    { id: 2, A: 'group 0', B: 1 },
+  ],
+  keyExpr: 'id',
+  repaintChangesOnly: true,
+  columnFixing: { enabled: true },
+  groupPanel: {
+    visible: true,
+  },
+  summary: {
+    recalculateWhileEditing: true,
+    groupItems: [
+      {
+        column: 'B',
+        summaryType: 'count',
+      },
+      {
+        column: 'B',
+        summaryType: 'sum',
+      },
+    ],
+  },
+  editing: {
+    mode: 'cell',
+    allowUpdating: true,
+    allowAdding: true,
+    allowDeleting: true,
+  },
+  columns: [
+    {
+      dataField: 'id',
+      width: 50,
+    }, {
+      dataField: 'A',
+      groupIndex: 0,
+    }, {
+      dataField: 'B',
+      dataType: 'number',
+    },
+  ],
+}));

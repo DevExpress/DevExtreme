@@ -97,9 +97,16 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const transparentColspan = fixedColumns[transparentColumnIndex].colspan;
     const columnIndices = change && change.columnIndices;
+    const rowTypes = change?.items?.map(({ rowType }) => rowType);
 
     if (columnIndices) {
-      change.columnIndices = columnIndices.map((columnIndices) => {
+      change.columnIndices = columnIndices.map((columnIndices, idx) => {
+        const isGroupRow = rowTypes[idx] === 'group';
+
+        if (isGroupRow) {
+          return [...columnIndices];
+        }
+
         if (columnIndices) {
           return columnIndices.map((columnIndex) => {
             if (columnIndex < transparentColumnIndex) {
