@@ -1,24 +1,20 @@
 import $ from 'jquery';
 import { getPublicElementJQuery } from 'integration/jquery/element';
 
-const jQueryBody = $('body');
+const jQueryDiv = $('div');
+const HTMLDiv = document.createElement('div');
 
 const testCaseArrayJQuery = [
-    [null, null, 'Null', 'Null'],
-    ['body', 'body', 'String', 'String'],
-    [
-        document.querySelector('body'),
-        document.querySelector('body'),
-        'HTML Element',
-        'HTML Element',
-    ],
-    [jQueryBody, jQueryBody, 'jQuery Element', 'jQuery Element'],
+    [null, null, 'Null'],
+    ['body', 'body', 'String'],
+    [ HTMLDiv, HTMLDiv, 'HTML Element'],
+    [jQueryDiv, jQueryDiv, 'jQuery Element'],
 ];
 
 QUnit.module('getPublicElement', () => {
-    testCaseArrayJQuery.forEach(([args, expected, inputType, resultType]) => {
+    testCaseArrayJQuery.forEach(([args, expected, inputType]) => {
         QUnit.test(
-            `Should return ${resultType} if the input argument is ${inputType} using jQuery strategy`,
+            `Should return ${inputType} if the input argument is ${inputType} using jQuery strategy`,
             function(assert) {
                 const result = getPublicElementJQuery(args);
                 assert.strictEqual(expected, result);

@@ -1,25 +1,23 @@
 import $ from 'jquery';
-import { getPublicElement } from 'core/element';
+import { getPublicElementNonJquery } from 'core/element';
+
+const HTMLDiv = document.createElement('div');
+const jQueryDiv = $('div')[0];
 
 const testCaseArray = [
-    [null, null, 'Null', 'Null'],
-    ['body', document.querySelector('body'), 'String', 'HTMLElement'],
-    [
-        document.querySelector('body'),
-        document.querySelector('body'),
-        'HTMLElement',
-        'HTMLElement',
-    ],
-    [$('body'), document.querySelector('body'), 'jQuery', 'HTMLElement'],
+    [null, null, 'Null'],
+    ['div', 'div', 'String'],
+    [HTMLDiv, HTMLDiv, 'HTMLElement'],
+    [jQueryDiv, jQueryDiv, 'jQuery'],
 ];
 
-QUnit.module('getPublicElement', () => {
-    testCaseArray.forEach(([args, expected, inputType, resultType]) => {
+QUnit.module('getPublicElementNonJquery', () => {
+    testCaseArray.forEach(([args, expected, inputType]) => {
         QUnit.test(
-            `Should return ${resultType} if the input argument is ${inputType} using non-jQuery strategy`,
+            `Should return ${inputType} if the input argument is ${inputType} using non-jQuery strategy`,
             function(assert) {
-                const result = expected instanceof HTMLElement && QUnit.urlParams['nojquery'] ? getPublicElement(args) : expected;
-                assert.strictEqual(expected, result, `Expected: ${expected}, Result: ${result}`);
+                const result = getPublicElementNonJquery(args);
+                assert.strictEqual(expected, result);
             }
         );
     });

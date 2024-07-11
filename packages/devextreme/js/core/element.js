@@ -1,10 +1,8 @@
-/* eslint-disable no-restricted-imports */
-import $ from 'jquery';
-/* eslint-enable no-restricted-imports */
+export function getPublicElementNonJquery(element) {
+    return element?.get?.(0) ?? element;
+}
 
-let strategy = function(element) {
-    return element && $(element).get(0);
-};
+let strategy = getPublicElementNonJquery;
 
 export function getPublicElement(element) {
     return strategy(element);
