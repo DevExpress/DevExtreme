@@ -6,7 +6,8 @@ import Guid from '../../core/guid';
 
 import { SIMPLE_ITEM_TYPE } from './constants';
 
-const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider'];
+const EDITORS_WITH_ARRAY_VALUE = ['dxTagBox', 'dxRangeSlider', 'dxDateRangeBox'];
+const EDITORS_WITH_SPECIFIC_LABELS = ['dxRangeSlider', 'dxSlider'];
 export const EDITORS_WITHOUT_LABELS = ['dxCalendar', 'dxCheckBox', 'dxHtmlEditor', 'dxRadioGroup', 'dxRangeSlider', 'dxSlider', 'dxSwitch'];
 
 export function convertToRenderFieldItemOptions({
@@ -144,6 +145,7 @@ function _convertToEditorOptions({
     }
 
     const stylingMode = externalEditorOptions?.stylingMode || editorStylingMode;
+    const useSpecificLabelOptions = EDITORS_WITH_SPECIFIC_LABELS.includes(editorType);
 
     const result = extend(true, editorOptionsWithValue,
         externalEditorOptions,
@@ -151,7 +153,7 @@ function _convertToEditorOptions({
             inputAttr: { id: editorInputId },
             validationBoundary: editorValidationBoundary,
             stylingMode,
-            label: labelText,
+            label: useSpecificLabelOptions ? externalEditorOptions?.label : labelText,
             labelMode,
             labelMark,
         },
