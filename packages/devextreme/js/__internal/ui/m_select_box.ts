@@ -571,13 +571,17 @@ const SelectBox = (DropDownList as any).inherit({
     return this._preventNestedFocusEvent(e) || this._valueChangeEventIncludesBlur();
   },
 
-  _focusOutHandler(e) {
-    const customTextBox = this._$templateWrapper?.find(`.${TEXTBOX_CLASS}`).get(0);
-    const instance = TextBox.getInstance(customTextBox);
+  _isFieldTemplateTextBoxDisposed() {
+    const fieldTemplateTextBox = this._$templateWrapper?.find(`.${TEXTBOX_CLASS}`).get(0);
+    const instance = TextBox.getInstance(fieldTemplateTextBox);
     // @ts-expect-error ts-error
     const isDisposed = instance?._disposed;
 
-    if (isDisposed) {
+    return isDisposed;
+  },
+
+  _focusOutHandler(e) {
+    if (this._isFieldTemplateTextBoxDisposed()) {
       return;
     }
 
