@@ -21,7 +21,7 @@
         <DxFont :size="14"/>
       </DxLabel>
     </DxLayer>
-    <dx-loading-indicator :show="true"/>
+    <DxLoadingIndicator :show="true"/>
   </DxVectorMap>
 </template>
 <script setup lang="ts">
@@ -31,6 +31,7 @@ import {
   DxLabel,
   DxLayer,
   DxFont,
+  DxLoadingIndicator
 } from 'devextreme-vue/vector-map';
 import { weatherData } from './data.ts';
 
