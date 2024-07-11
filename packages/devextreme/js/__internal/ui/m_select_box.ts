@@ -573,6 +573,11 @@ const SelectBox = (DropDownList as any).inherit({
 
   _isFieldTemplateTextBoxDisposed() {
     const fieldTemplateTextBox = this._$templateWrapper?.find(`.${TEXTBOX_CLASS}`).get(0);
+
+    if (!fieldTemplateTextBox) {
+      return false;
+    }
+
     const instance = TextBox.getInstance(fieldTemplateTextBox);
     // @ts-expect-error ts-error
     const isDisposed = instance?._disposed;
