@@ -101,9 +101,12 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
 
     if (columnIndices) {
       change.columnIndices = columnIndices.map((columnIndices, idx) => {
-        const isGroupRow = rowTypes[idx] === 'group';
+        const isGroupRow = rowTypes && rowTypes[idx] === 'group';
 
         if (isGroupRow) {
+          if (columnIndices === undefined) {
+            return undefined;
+          }
           return [...columnIndices];
         }
 
