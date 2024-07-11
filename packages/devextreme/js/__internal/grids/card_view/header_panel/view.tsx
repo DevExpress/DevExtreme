@@ -1,17 +1,23 @@
-import { Subscribable, computed } from "@js/__internal/core/reactive";
-import { InfernoNode } from "inferno";
-import { View } from "../core/view";
-import { HeaderPanelController } from "./controller";
+import type { dxToolbarOptions } from '@js/ui/toolbar';
+import dxToolbar from '@js/ui/toolbar';
+import { computed, Subscribable } from '@ts/core/reactive';
+import { InfernoNode } from 'inferno';
 
-export class HeaderPanelView extends View{
+import { View } from '../core/view';
+import { createWidgetWrapper } from '../core/widget_wrapper';
+import { HeaderPanelController } from './controller';
+
+const Toolbar = createWidgetWrapper<dxToolbarOptions, dxToolbar>(dxToolbar);
+
+export class HeaderPanelView extends View {
   static dependencies = [HeaderPanelController] as const;
-  public vdom = computed((items) => {
-    return 
-  }, [this.controller.items])
 
-  constructor(
-    private controller: HeaderPanelController,
-  ) {
+  public vdom = computed(
+    (items) => <Toolbar items={items}></Toolbar>,
+    [this.controller.items],
+  );
+
+  constructor(private readonly controller: HeaderPanelController) {
     super();
   }
 }

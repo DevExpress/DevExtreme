@@ -71,37 +71,6 @@ export class ColumnChooserController extends modules.ViewController {
     this._rowsView = this.getView('rowsView');
   }
 
-  private renderShowColumnChooserButton($element) {
-    const that = this;
-    const columnChooserButtonClass = that.addWidgetPrefix(COLUMN_CHOOSER_BUTTON_CLASS);
-    const columnChooserEnabled = that.option('columnChooser.enabled');
-    const $showColumnChooserButton = $element.find(`.${columnChooserButtonClass}`);
-    let $columnChooserButton;
-
-    if (columnChooserEnabled) {
-      if (!$showColumnChooserButton.length) {
-        $columnChooserButton = $('<div>')
-          .addClass(columnChooserButtonClass)
-          .appendTo($element);
-
-        that._createComponent($columnChooserButton, Button, {
-          icon: COLUMN_CHOOSER_ICON_NAME,
-          onClick() {
-            // TODO getView
-            that.getView('columnChooserView').showColumnChooser();
-          },
-          hint: that.option('columnChooser.title'),
-          // @ts-expect-error
-          integrationOptions: {},
-        });
-      } else {
-        $showColumnChooserButton.show();
-      }
-    } else {
-      $showColumnChooserButton.hide();
-    }
-  }
-
   public getPosition() {
     const position = this.option('columnChooser.position');
 

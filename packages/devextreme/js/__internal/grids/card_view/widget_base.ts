@@ -6,13 +6,14 @@ import { isMaterialBased } from '@js/ui/themes';
 import Widget from '@js/ui/widget/ui.widget';
 import { DIContext } from '@ts/core/di';
 
+import { ColumnsChooser } from './columns_chooser/columns_chooser';
 import { ColumnsController } from './columns_controller/columns_controller';
 import { ContentView } from './content_view/content_view';
 import { DataController } from './data_controller/data_controller';
 import type { EditingController } from './editing/controller';
+import { HeaderPanelController } from './header_panel/controller';
+import { HeaderPanelView } from './header_panel/view';
 import { MainView } from './main_view';
-// import { HeaderPanelController } from './header_panel/controller';
-// import { HeaderPanelView } from './header_panel/view';
 import { OptionsController } from './options_controller/options_controller';
 import { PagerView } from './pager';
 
@@ -29,6 +30,12 @@ class CardView extends Widget<Properties> {
 
   private pagerView!: PagerView;
 
+  private columnsChooser!: ColumnsChooser;
+
+  private headerPanelController!: HeaderPanelController;
+
+  private headerPanelView!: HeaderPanelView;
+
   protected _init() {
     // @ts-expect-error
     super._init();
@@ -36,18 +43,20 @@ class CardView extends Widget<Properties> {
     this.diContext = new DIContext();
     this.diContext.register(DataController);
     this.diContext.register(ColumnsController);
-    // this.diContext.register(HeaderPanelController);
-    // this.diContext.register(HeaderPanelView);
+    this.diContext.register(HeaderPanelController);
+    this.diContext.register(HeaderPanelView);
     // this.diContext.register(EditingController);
     this.diContext.register(ContentView);
     this.diContext.register(PagerView);
     this.diContext.register(MainView);
+    this.diContext.register(ColumnsChooser);
     this.diContext.registerInstance(OptionsController, new OptionsController(this));
 
+    this.columnsChooser = this.diContext.get(ColumnsChooser);
     this.dataController = this.diContext.get(DataController);
     this.columnsController = this.diContext.get(ColumnsController);
-    // this.headerPanelController = this.diContext.get(HeaderPanelController);
-    // this.headerPanelView = this.diContext.get(HeaderPanelView);
+    this.headerPanelController = this.diContext.get(HeaderPanelController);
+    this.headerPanelView = this.diContext.get(HeaderPanelView);
     // this.editingController = this.diContext.get(EditingController);
     this.contentView = this.diContext.get(ContentView);
     this.pagerView = this.diContext.get(PagerView);

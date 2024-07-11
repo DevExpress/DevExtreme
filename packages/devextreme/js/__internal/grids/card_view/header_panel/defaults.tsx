@@ -3,5 +3,6 @@
  */
 export const DEFAULT_TOOLBAR_ITEMS = [
   'saveButton',
-  'revertButton'
+  'revertButton',
+  'columnsChooserButton',
 ] as const;
