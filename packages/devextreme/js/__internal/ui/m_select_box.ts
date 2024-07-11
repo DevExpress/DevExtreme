@@ -14,12 +14,14 @@ import { isDefined, isPromise } from '@js/core/utils/type';
 import { normalizeKeyName } from '@js/events/utils/index';
 import messageLocalization from '@js/localization/message';
 import DropDownList from '@js/ui/drop_down_editor/ui.drop_down_list';
+import TextBox from '@js/ui/text_box';
 
 const DISABLED_STATE_SELECTOR = '.dx-state-disabled';
 const SELECTBOX_CLASS = 'dx-selectbox';
 const SELECTBOX_POPUP_CLASS = 'dx-selectbox-popup';
 const SELECTBOX_CONTAINER_CLASS = 'dx-selectbox-container';
 const SELECTBOX_POPUP_WRAPPER_CLASS = 'dx-selectbox-popup-wrapper';
+const TEXTBOX_CLASS = 'dx-textbox';
 
 const SelectBox = (DropDownList as any).inherit({
 
@@ -570,10 +572,12 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _focusOutHandler(e) {
-    const { fieldTemplate } = this.option();
-    const input = this._input().get(0);
+    const customTextBox = this._$templateWrapper?.find(`.${TEXTBOX_CLASS}`).get(0);
+    const instance = TextBox.getInstance(customTextBox);
+    // @ts-expect-error ts-error
+    const isDisposed = instance?._disposed;
 
-    if (fieldTemplate && e.target === input) {
+    if (isDisposed) {
       return;
     }
 
