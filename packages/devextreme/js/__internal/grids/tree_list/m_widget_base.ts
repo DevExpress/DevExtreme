@@ -89,7 +89,6 @@ class TreeList extends GridCoreWidget<dxTreeListOptions> {
   protected _init() {
     const that = this;
 
-    // @ts-expect-error
     super._init();
 
     if (!this.option('_disableDeprecationWarnings')) {

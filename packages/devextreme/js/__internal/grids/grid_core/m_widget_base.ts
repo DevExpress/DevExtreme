@@ -5,7 +5,7 @@ import { isFunction } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 
 export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
-  public _activeStateUnit;
+  private _activeStateUnit;
 
   private readonly _controllers: any;
 
@@ -22,6 +22,12 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
     });
 
     return result;
+  }
+
+  protected _init() {
+    this._activeStateUnit = '.dx-row';
+    // @ts-expect-error
+    super._init();
   }
 
   protected _setDeprecatedOptions() {
