@@ -548,7 +548,10 @@ const SelectBox = (DropDownList as any).inherit({
         }
       }
 
-      if (this._isValueEqualInputText()) {
+      const isFieldTemplateTextBoxDisposed = this._isFieldTemplateTextBoxDisposed();
+      const isValueEqualInputText = this._isValueEqualInputText();
+
+      if (isFieldTemplateTextBoxDisposed || isValueEqualInputText) {
         return;
       }
 
@@ -586,10 +589,6 @@ const SelectBox = (DropDownList as any).inherit({
   },
 
   _focusOutHandler(e) {
-    if (this._isFieldTemplateTextBoxDisposed()) {
-      return;
-    }
-
     if (!this._isPreventedFocusOutEvent(e)) {
       const isOverlayTarget = this._isOverlayNestedTarget(e.relatedTarget);
 
