@@ -3,6 +3,8 @@ const common = require('./commonParts/common.js');
 const createSankey = common.createSankey;
 const environment = common.environment;
 
+const getHorizontalOffset = labels => labels.map(label => label.children[0].attr.lastCall.args[0].translateX);
+
 QUnit.module('Node labels', environment);
 
 QUnit.test('Create label group on initialization', function(assert) {
@@ -224,7 +226,7 @@ QUnit.test('Labels offsets', function(assert) {
     assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
 });
 
-QUnit.test('label horizontalOffset option should be updated and re-painted on runtime. (T1243009)', function(assert) {
+QUnit.test('label horizontalOffset option runtime change should update the layout (T1243009)', function(assert) {
     const instance = createSankey({
         dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
         label: {
@@ -232,14 +234,14 @@ QUnit.test('label horizontalOffset option should be updated and re-painted on ru
         }
     });
 
-    const x1 = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
+    const initialX = getHorizontalOffset(this.labels());
 
     instance.option('label', {
         horizontalOffset: 30,
     });
 
-    const x2 = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
-    const xDifference = [x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]];
+    const updatedX = getHorizontalOffset(this.labels());
+    const xDifference = [updatedX[0] - initialX[0], updatedX[1] - initialX[1], updatedX[2] - initialX[2]];
 
     assert.deepEqual(xDifference, [30, 30, -30], 'horizontal offset applied');
 });
