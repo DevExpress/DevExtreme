@@ -168,11 +168,12 @@ export interface Query {
 
 /**
  * @docid Utils.query
- * @publicName query(array)
+ * @publicName query(array, queryOptions)
+ * @param2 queryOptions:object
  * @namespace DevExpress.data
  * @public
  */
-declare function query(array: Array<any>): Query;
+declare function query(array: Array<any>, queryOptions?: any): Query;
 
 /**
  * @docid Utils.query
