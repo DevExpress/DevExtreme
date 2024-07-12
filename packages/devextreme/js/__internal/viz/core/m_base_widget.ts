@@ -640,6 +640,7 @@ const baseWidget = isServerSide ? getEmptyComponent() : (DOMComponent as any).in
     encodeHtml: 'THEME',
     elementAttr: 'ELEMENT_ATTR',
     disabled: 'DISABLED',
+    label: 'LABELS',
   },
 
   _partialOptionChangesMap: { },

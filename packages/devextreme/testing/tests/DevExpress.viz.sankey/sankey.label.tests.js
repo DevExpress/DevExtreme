@@ -224,6 +224,26 @@ QUnit.test('Labels offsets', function(assert) {
     assert.deepEqual(yDifference, [30, 30, 30], 'vertical offset applied');
 });
 
+QUnit.test('label horizontalOffset option should be updated and re-painted on runtime. (T1243009)', function(assert) {
+    const instance = createSankey({
+        dataSource: [{ source: 'A', target: 'Z', weight: 1 }, { source: 'B', target: 'Z', weight: 1 }],
+        label: {
+            horizontalOffset: 0,
+        }
+    });
+
+    const x1 = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
+
+    instance.option('label', {
+        horizontalOffset: 30,
+    });
+
+    const x2 = this.labels().map(function(label) { return label.children[0].attr.lastCall.args[0].translateX; });
+    const xDifference = [x2[0] - x1[0], x2[1] - x1[1], x2[2] - x1[2]];
+
+    assert.deepEqual(xDifference, [30, 30, -30], 'horizontal offset applied');
+});
+
 // T669620
 QUnit.test('Label drawing on bottom border of widget', function(assert) {
     this.renderer.bBoxTemplate = sinon.stub();
