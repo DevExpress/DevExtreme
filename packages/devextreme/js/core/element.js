@@ -1,5 +1,8 @@
 export function getPublicElementNonJquery(element) {
-    return element?.get?.(0) ?? element;
+    if(element && element.get) {
+        return element.get(0);
+    }
+    return element;
 }
 
 let strategy = getPublicElementNonJquery;
