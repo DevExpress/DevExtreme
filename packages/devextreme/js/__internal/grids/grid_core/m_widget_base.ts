@@ -4,6 +4,8 @@ import { each } from '@js/core/utils/iterator';
 import { isFunction } from '@js/core/utils/type';
 import Widget from '@js/ui/widget/ui.widget';
 
+const GRID_CORE_ROW_SELECTOR = '.dx-row';
+
 export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
   private _activeStateUnit;
 
@@ -25,7 +27,7 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
   }
 
   protected _init() {
-    this._activeStateUnit = '.dx-row';
+    this._activeStateUnit = GRID_CORE_ROW_SELECTOR;
     // @ts-expect-error
     super._init();
   }
