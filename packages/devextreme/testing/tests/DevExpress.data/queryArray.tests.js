@@ -350,6 +350,44 @@ QUnit.test('filter with functional getter', function(assert) {
     });
 });
 
+QUnit.test('filter with undefined "langParams"', function(assert) {
+    const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+    const filterLength = QUERY(input).filter(['ID', '=', 'aaa']).toArray().length;
+    assert.equal(filterLength, 2);
+});
+
+QUnit.test('filter with collatorOptions.sensitivity set to "case"', function(assert) {
+    const input = [{ ID: 'AAA', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+
+    const array = QUERY(input, {
+        langParams: {
+            collatorOptions: {
+                sensitivity: 'case'
+            }
+        }
+    }).filter(['ID', '=', 'aaa']).toArray();
+
+    assert.equal(array.length, 1);
+    assert.equal(array[0].ID, 'aaa');
+});
+
+QUnit.test('filter with collatorOptions.sensitivity set to "base"', function(assert) {
+    const input = [{ ID: 'bbb', Name: 'Name 1' }, { ID: 'ááá', Name: 'Name 2' }, { ID: 'aaa', Name: 'Name 3' }];
+
+    const array = QUERY(input, {
+        langParams: {
+            collatorOptions: {
+                sensitivity: 'base'
+            }
+        }
+    }).filter(['ID', '=', 'aaa']).toArray();
+
+    assert.equal(array.length, 2);
+
+    const containsUnwantedValue = array.some(item => item.ID === 'bbb');
+    assert.false(containsUnwantedValue);
+});
+
 QUnit.test('missing operation means equal', function(assert) {
     assert.expect(1);
 

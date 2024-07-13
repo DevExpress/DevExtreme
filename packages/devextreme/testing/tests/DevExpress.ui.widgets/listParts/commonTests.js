@@ -4442,32 +4442,47 @@ QUnit.module('Accessibility', () => {
         const itemDeleteMode = buttonClass === STATIC_DELETE_BUTTON_CLASS ? 'static' : 'toggle';
 
         QUnit.test(`List item ${itemDeleteMode} button should have a correct role, aria-label, tabindex`, function(assert) {
+            if(!isDeviceDesktop(assert)) {
+                return;
+            }
+
             $('#list').dxList({
                 itemDeleteMode,
-                items: ['text 1'],
+                dataSource: ['text 1', 'text 2'],
                 allowItemDeleting: true,
             });
 
-            const $button = $(`.${buttonClass}`);
+            const [$button1, $button2] = $(`.${buttonClass}`);
 
-            checkButtonAttributes(assert, $button);
+            checkButtonAttributes(assert, $($button1));
+
+            $($button1).trigger('dxclick');
+
+            checkButtonAttributes(assert, $($button2));
         });
     });
 
     QUnit.test('List item switchable button should have a correct role, aria-label, tabindex', function(assert) {
+        if(!isDeviceDesktop(assert)) {
+            return;
+        }
+
         const $list = $('#list').dxList({
-            items: ['text 1'],
+            dataSource: ['text 1', 'text 2'],
             itemDeleteMode: 'slideButton',
             allowItemDeleting: true,
         });
 
-        const $items = $list.find(`.${LIST_ITEM_CLASS}`);
-        const $item = $items.eq(0);
+        const [$item1, $item2] = $list.find(`.${LIST_ITEM_CLASS}`);
 
-        pointerMock($item).start().swipeEnd(1);
+        pointerMock($item1).start().swipeEnd(1);
+        let $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
+        checkButtonAttributes(assert, $switchableButton);
 
-        const $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
+        $switchableButton.trigger('dxclick');
 
+        pointerMock($item2).start().swipeEnd(1);
+        $switchableButton = $(`.${SWITCHABLE_DELETE_BUTTON_CLASS}`);
         checkButtonAttributes(assert, $switchableButton);
     });
 });

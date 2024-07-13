@@ -1728,7 +1728,7 @@ QUnit.module('AdaptiveColumns', {
         this.clock.tick(10);
 
         // assert
-        assert.ok(this.rowsView._getRowElements.calledOnce);
+        assert.ok(this.rowsView._getRowElements.calledTwice);
     });
 
     QUnit.test('Form has 2 columns in material theme', function(assert) {
