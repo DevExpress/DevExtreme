@@ -32,6 +32,7 @@ const PATTERN_GETTERS = {
   m: 'getMinutes',
   s: 'getSeconds',
   S: 'getMilliseconds',
+  x: 'getTimeZoneOffset',
 };
 
 const PATTERN_SETTERS = extend({}, getPatternSetters(), {
@@ -78,6 +79,11 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
     const newValue = parseInt(String(currentYear).substr(0, maxLimitLength - valueLength) + value);
 
     date.setFullYear(newValue);
+  },
+  x: (date, value) => {
+    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
+    const adjustedMinutes = date.getMinutes() + value + date.getTimezoneOffset();
+    return new Date(date.setMinutes(adjustedMinutes));
   },
 });
 
@@ -134,6 +140,7 @@ const getLimits = (pattern, date, forcedPattern) => {
     s: { min: 0, max: 59 },
     S: { min: 0, max: 999 },
     a: { min: 0, max: 1 },
+    x: { min: -720, max: 840 },
   };
   // @ts-expect-error
   return limits[forcedPattern || pattern] || limits.getAmPm;

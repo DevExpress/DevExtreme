@@ -1266,6 +1266,23 @@ module('Date AM/PM Handling', setupModule, () => {
     });
 });
 
+module('TimeZone Handling', setupModule, () => {
+    QUnit.module('regex tests', () => {
+        test('should support \'x\' in date pattern and not generate errors (T1241387)', function(assert) {
+            try {
+                this.instance.option({
+                    displayFormat: 'yyyy-MM-dd\'T\'HH:mm:ssxxx',
+                    useMaskBehavior: true,
+                    type: 'date',
+                });
+                assert.ok(true, 'no error shown');
+            } catch(e) {
+                assert.ok(false, 'error exists');
+            }
+        });
+    });
+});
+
 module('Empty dateBox', {
     beforeEach: function() {
         setupModule.beforeEach.call(this);
