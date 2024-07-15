@@ -15,6 +15,7 @@ const ctx = require('./context.js');
 const headerPipes = require('./header-pipes.js');
 const webpackConfig = require('../../webpack.config.js');
 const env = require('./env-variables.js');
+const { moduleReplacementPlugin } = require('./internal-build');
 
 const namedDebug = lazyPipe()
     .pipe(named, (file) => path.basename(file.path, path.extname(file.path)) + '.debug');
@@ -31,11 +32,7 @@ const processBundles = (bundles, pathPrefix) => bundles.map((bundle) => pathPref
 const muteWebPack = () => undefined;
 const getWebpackConfig = () => env.BUILD_INTERNAL_PACKAGE || env.BUILD_TEST_INTERNAL_PACKAGE ?
     Object.assign({
-        plugins: [
-            new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {
-                resource.request = resource.request.replace('license_validation', 'license_validation_internal');
-            })
-        ]
+        plugins: [ moduleReplacementPlugin ]
     }, webpackConfig) :
     webpackConfig;
 

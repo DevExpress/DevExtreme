@@ -3,14 +3,18 @@
 const gulp = require('gulp');
 const Vinyl = require('vinyl');
 const env = require('./env-variables');
+const {
+    INTERNAL_PACKAGE_DIR,
+    INTERNAL_PACKAGE_DIST_DIR,
+} = require('./internal-build');
 
 gulp.task('skippedTask', done => done());
 
 const isEsmPackage = env.BUILD_ESM_PACKAGE;
 const devextremeDir = 'devextreme';
 const devextremeDistDir = 'devextreme-dist';
-const packageDir = env.BUILD_INTERNAL_PACKAGE ? 'devextreme-internal' : devextremeDir;
-const packageDistDir = env.BUILD_INTERNAL_PACKAGE ? 'devextreme-dist-internal' : devextremeDistDir;
+const packageDir = env.BUILD_INTERNAL_PACKAGE ? INTERNAL_PACKAGE_DIR : devextremeDir;
+const packageDistDir = env.BUILD_INTERNAL_PACKAGE ? INTERNAL_PACKAGE_DIST_DIR : devextremeDistDir;
 
 const runTaskByCondition = (condition, task) => {
     if(condition) {
