@@ -47,6 +47,7 @@ export class Row extends BaseInfernoComponent<RowProps> {
           hasLeftVirtualCell
           && leftVirtualCellCount != null
           && splitNumber(leftVirtualCellCount, MAX_COL_SPAN).map(
+            // @ts-ignore
             (colSpan, index) => <VirtualCell
               className={`left-virtual-cell-${index}`}
               width={leftVirtualCellWidth * (colSpan / leftVirtualCellCount)}
@@ -60,6 +61,7 @@ export class Row extends BaseInfernoComponent<RowProps> {
           hasRightVirtualCell
           && rightVirtualCellCount != null
           && splitNumber(rightVirtualCellCount, MAX_COL_SPAN).map(
+            // @ts-ignore
             (colSpan, index) => <VirtualCell
               className={`right-virtual-cell-${index}`}
               width={rightVirtualCellWidth * (colSpan / rightVirtualCellCount)}

@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react';
 import Scheduler, { Editing } from 'devextreme-react/scheduler';
 import SelectBox from 'devextreme-react/select-box';
-import timeZoneUtils from 'devextreme/time_zone_utils';
+import * as timeZoneUtils from 'devextreme/time_zone_utils';
 import { data, locations } from './data.js';
 
 const timeZoneLabel = { 'aria-label': 'Time zone' };

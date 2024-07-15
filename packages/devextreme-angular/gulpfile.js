@@ -160,9 +160,9 @@ gulp.task('npm.content', gulp.series(
 gulp.task('npm.pack', gulp.series(
   'npm.content',
   (cb) => {
-    argv.withDescriptions ? exec('npm --prefix ../../ run angular:inject-descriptions', (err) => cb(err)) : cb();
+    argv.withDescriptions ? exec('pnpm run angular:inject-descriptions', { cwd: '../..' }, (err) => cb(err)) : cb();
   },
-  (cb) => { exec('npm pack', { cwd: buildConfig.npm.distPath }, (err) => cb(err)); },
+  (cb) => { exec('pnpm pack', { }, (err) => cb(err)); },
   () => gulp.src(buildConfig.npm.distPath)
     .pipe(gulp.dest('./node_modules/devextreme-angular')),
 ));
