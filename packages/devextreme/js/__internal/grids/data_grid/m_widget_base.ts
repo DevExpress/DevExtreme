@@ -117,10 +117,9 @@ class DataGrid extends GridCoreWidget<Properties> {
     ]);
   }
 
-  private _init() {
+  protected _init() {
     const that = this;
 
-    // @ts-expect-error
     super._init();
 
     gridCoreUtils.logHeaderFilterDeprecatedWarningIfNeed(that);
