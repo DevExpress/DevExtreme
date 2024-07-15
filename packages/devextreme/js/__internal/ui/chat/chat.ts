@@ -1,7 +1,10 @@
 import registerComponent from '@js/core/component_registrator';
+import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
+
+const CHAT_CLASS = 'dx-chat';
 
 export interface ChatOptions extends WidgetOptions<Chat> {
   items: [];
@@ -27,6 +30,8 @@ class Chat extends Widget<ChatOptions> {
   }
 
   _initMarkup(): void {
+    $(this.element()).addClass(CHAT_CLASS);
+
     super._initMarkup();
   }
 
