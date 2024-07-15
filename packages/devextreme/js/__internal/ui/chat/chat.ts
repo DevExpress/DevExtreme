@@ -8,8 +8,7 @@ const CHAT_CLASS = 'dx-chat';
 
 export interface ChatOptions extends WidgetOptions<Chat> {
   items: [];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  onMessageSend: any;
+  onMessageSend: null;
 }
 
 class Chat extends Widget<ChatOptions> {
@@ -18,8 +17,7 @@ class Chat extends Widget<ChatOptions> {
       ...super._getDefaultOptions(),
       ...{
         items: [],
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        onMessageSend: (e: any): any => e,
+        onMessageSend: null,
       },
     };
   }
