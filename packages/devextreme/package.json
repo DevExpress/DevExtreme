@@ -227,5 +227,9 @@
     "ios > 9",
     "> 1%",
     "not dead"
-  ]
+  ],
+  "publishConfig": {
+    "directory": "artifacts/npm/devextreme",
+    "linkDirectory": true
+  }
 }
