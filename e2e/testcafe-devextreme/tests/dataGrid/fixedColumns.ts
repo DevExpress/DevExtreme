@@ -366,10 +366,10 @@ test('DataGrid - Group summary is not updated when a column is fixed on the righ
 
   await t
     .click(editCell.element)
-    .typeText(editCell.getEditor().element, '11')
+    .typeText(editCell.getEditor().element, '5', { replace: true })
     .pressKey('enter')
     .expect(dataGrid.getGroupRow(0).element.textContent)
-    .eql('A: group 0 (Count: 3, Sum of B is 113)');
+    .eql('A: group 0 (Count: 3, Sum of B is 7)');
 }).before(async () => createWidget('dxDataGrid', {
   dataSource: [
     { id: 0, A: 'group 0', B: 1 },
