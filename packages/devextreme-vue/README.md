@@ -1,24 +1,28 @@
-# DevExtreme Vue UI and Visualization Components #
+# DevExtreme for Vue
 
-[![Run Status](https://api.shippable.com/projects/5ab4c6354a24a207009ec636/badge?branch=master)](https://app.shippable.com/github/DevExpress/devextreme-vue)
-[![NPM](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
+[![NPM version](https://img.shields.io/npm/v/devextreme-vue.svg?maxAge=43200)](https://www.npmjs.com/package/devextreme-vue)
 
-This project allows you to use [DevExtreme components](http://js.devexpress.com/Demos/WidgetsGallery/) in [Vue](https://vuejs.org) applications.
+The `devextreme-vue` package contains the [DevExtreme component suite](http://js.devexpress.com/Demos/WidgetsGallery/) for the [Vue](https://vuejs.org) framework.
 
-* [Documentation](https://js.devexpress.com/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)
-* [Technical Demos](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Vue/Light/)
-* [API Reference](http://js.devexpress.com/Documentation/ApiReference/)
-* [DevExtreme Vue Application Template](https://github.com/DevExpress/devextreme-vue-template)
-* [Live example](https://codesandbox.io/s/github/lukyanovas/devextreme-vue-example)
+* [Documentation](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/DevExtreme_Vue_Components/)
+* [Demo Gallery](https://js.devexpress.com/Demos/WidgetsGallery/Demo/DataGrid/Overview/Vue/Light/)
+* [Responsive UI Templates](https://js.devexpress.com/Vue/Templates/UITemplates/)
+* [Application Template](https://js.devexpress.com/Vue/Documentation/Guide/Vue_Components/Application_Template/)
 
-## License ##
+## License
 
-**DevExtreme Vue UI Components are released as an MIT-licensed (free and open-source) add-on to DevExtreme.**
+DevExpress distributes the `devextreme-vue` package under the free and open-source **MIT** license.
 
-Familiarize yourself with the [DevExtreme License](https://js.devexpress.com/Licensing/). [Free trial is available!](http://js.devexpress.com/Buy/)
+For more information on licensing requirements, read the following articles:
 
-## Support & Feedback ##
+* [Licensing Guide](https://js.devexpress.com/Angular/Documentation/Guide/Common/Licensing/) 
+* [Licensing FAQ](https://js.devexpress.com/Licensing/)
+* [EULA](https://js.devexpress.com/EULAs/DevExtremeComplete/)
 
-If you have questions regarding Vue functionality, consult [Vue docs](https://vuejs.org/v2/guide/).
+DevExpress offers a [free trial](https://js.devexpress.com/Download/) of the product.
 
-If you want to report a bug, request a feature, or ask a question, submit an [issue](https://github.com/DevExpress/devextreme-vue/issues) to this repo. Alternatively, you can contact us at the [DevExpress Support Center](https://www.devexpress.com/Support/Center) if you own an active DevExtreme license.
+## Support & Feedback
+
+For more information on the Vue framework and how to use it, see [official documentation](https://vuejs.org/guide/introduction.html).
+
+If you own an [active DevExtreme license](https://js.devexpress.com/Licensing/#Commercial), submit your questions, suggestions, and bug reports to the [DevExpress Support Center](https://www.devexpress.com/sc).

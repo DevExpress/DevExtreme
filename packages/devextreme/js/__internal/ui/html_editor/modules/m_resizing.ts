@@ -65,7 +65,7 @@ export default class ResizingModule extends BaseModule {
   }
 
   _detachEvents() {
-    eventsEngine.off(this.quill.root, MODULE_NAMESPACE);
+    eventsEngine.off(this.quill.root, `.${MODULE_NAMESPACE}`);
     this.editorInstance.off('focusOut', this._hideFrameWithContext);
     this.quill.off('text-change', this._framePositionChangedHandler);
   }
@@ -206,8 +206,16 @@ export default class ResizingModule extends BaseModule {
     }
 
     if (option === 'enabled') {
+      if (this.enabled === value) {
+        return;
+      }
       this.enabled = value;
-      value ? this._attachEvents() : this._detachEvents();
+      if (value) {
+        this._attachEvents();
+        this._createResizeFrame();
+      } else {
+        this.clean();
+      }
     } else if (option === 'allowedTargets' && Array.isArray(value)) {
       this.allowedTargets = value;
     }

@@ -231,3 +231,41 @@ test('TreeView: height should be calculated correctly when searchEnabled is true
     }));
   });
 });
+
+test('TreeView checkBox focus styles', async (t) => {
+  const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
+
+  await t.pressKey('tab');
+
+  await testScreenshot(t, takeScreenshot, 'Treeview indeterminate CheckBox focus.png', { element: '#container', shouldTestInCompact: true });
+
+  await t.pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Treeview checked CheckBox focus.png', { element: '#container', shouldTestInCompact: true });
+
+  await t.pressKey('down');
+
+  await testScreenshot(t, takeScreenshot, 'Treeview unchecked CheckBox focus.png', { element: '#container', shouldTestInCompact: true });
+
+  await t
+    .expect(compareResults.isValid())
+    .ok(compareResults.errorMessages());
+}).before(async () => createWidget('dxTreeView', {
+  items: [{
+    ID: '1',
+    text: 'Item 1',
+    expanded: true,
+    items: [
+      {
+        ID: '1_1',
+        text: 'Item 1_1',
+        selected: true,
+      }, {
+        ID: '1_2',
+        text: 'Item 1_2',
+      },
+    ],
+  }],
+  width: 300,
+  showCheckBoxesMode: 'normal',
+}));
