@@ -12,11 +12,6 @@ export interface ChatOptions extends WidgetOptions<Chat> {
   onMessageSend: any;
 }
 
-export interface User {
-  id: string;
-  name: string;
-}
-
 class Chat extends Widget<ChatOptions> {
   _getDefaultOptions(): ChatOptions {
     return {
