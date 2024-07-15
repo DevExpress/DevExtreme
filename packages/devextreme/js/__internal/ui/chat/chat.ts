@@ -32,6 +32,8 @@ class Chat extends Widget<ChatOptions> {
     const { name } = args;
 
     switch (name) {
+      case 'items':
+        break;
       case 'onMessageSend':
         break;
       default:
