@@ -301,6 +301,12 @@
     }
   },
   {
+    "name": "ui/chat",
+    "exports": {
+      "default": { "path": "ui.dxChat", "isWidget": true }
+    }
+  },
+  {
     "name": "ui/context_menu",
     "exports": {
       "default": { "path": "ui.dxContextMenu", "isWidget": true }

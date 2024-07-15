@@ -79,6 +79,12 @@ declare global {
     dxColorBox(options: string): any;
     dxColorBox(options: string, ...params: any[]): any;
 
+    dxChat(): JQuery;
+    dxChat(options: 'instance'): DevExpress.ui.dxChat;
+    dxChat(options: DevExpress.ui.dxChat.Properties): JQuery;
+    dxChat(options: string): any;
+    dxChat(options: string, ...params: any[]): any;
+
     dxContextMenu(): JQuery;
     dxContextMenu(options: 'instance'): DevExpress.ui.dxContextMenu;
     dxContextMenu(options: DevExpress.ui.dxContextMenu.Properties): JQuery;
@@ -9405,6 +9411,79 @@ declare module DevExpress.ui {
      * [descr:dxCalendarOptions.zoomLevel]
      */
     zoomLevel?: DevExpress.ui.dxCalendar.CalendarZoomLevel;
+  }
+  /**
+   * [descr:dxChat]
+   */
+  export class dxChat extends Widget<dxChatOptions> {}
+  module dxChat {
+    /**
+     * [descr:_ui_chat_ContentReadyEvent]
+     */
+    export type ContentReadyEvent = DevExpress.events.EventInfo<dxChat>;
+    /**
+     * [descr:_ui_chat_DisposingEvent]
+     */
+    export type DisposingEvent = DevExpress.events.EventInfo<dxChat>;
+    export type ExplicitTypes = {
+      Properties: Properties;
+      ContentReadyEvent: ContentReadyEvent;
+      DisposingEvent: DisposingEvent;
+      InitializedEvent: InitializedEvent;
+      OptionChangedEvent: OptionChangedEvent;
+    };
+    /**
+     * [descr:_ui_chat_InitializedEvent]
+     */
+    export type InitializedEvent =
+      DevExpress.events.InitializedEventInfo<dxChat>;
+    /**
+     * [descr:_ui_chat_Message]
+     */
+    export interface Message {
+      timestamp: string;
+      author: User;
+      text: string;
+      typing?: boolean;
+    }
+    /**
+     * [descr:_ui_chat_MessageSendEvent]
+     */
+    export type MessageSendEvent = DevExpress.events.Cancelable &
+      DevExpress.events.NativeEventInfo<
+        dxChat,
+        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+      > &
+      Message;
+    /**
+     * [descr:_ui_chat_OptionChangedEvent]
+     */
+    export type OptionChangedEvent = DevExpress.events.EventInfo<dxChat> &
+      DevExpress.events.ChangedOptionInfo;
+    export type Properties = dxChatOptions;
+    /**
+     * [descr:_ui_chat_User]
+     */
+    export interface User {
+      id: number;
+      firstName: string;
+      lastName: string;
+      avatarUrl?: string;
+    }
+  }
+  /**
+   * [descr:dxChatOptions]
+   * @deprecated [depNote:dxChatOptions]
+   */
+  export interface dxChatOptions extends WidgetOptions<dxChat> {
+    /**
+     * [descr:dxChatOptions.items]
+     */
+    items?: Array<DevExpress.ui.dxChat.Message>;
+    /**
+     * [descr:dxChatOptions.onMessageSend]
+     */
+    onMessageSend?: (e: DevExpress.ui.dxChat.MessageSendEvent) => void;
   }
   /**
    * [descr:dxCheckBox]
