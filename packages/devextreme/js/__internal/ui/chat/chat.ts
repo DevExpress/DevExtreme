@@ -15,12 +15,6 @@ export interface User {
 }
 
 class Chat extends Widget<ChatOptions> {
-  _supportedKeys(): Record<string, (e: KeyboardEvent) => void> {
-    return {
-      ...super._supportedKeys(),
-    };
-  }
-
   _getDefaultOptions(): ChatOptions {
     return {
       ...super._getDefaultOptions(),
@@ -32,20 +26,8 @@ class Chat extends Widget<ChatOptions> {
     };
   }
 
-  _init(): void {
-    super._init();
-  }
-
   _initMarkup(): void {
     super._initMarkup();
-  }
-
-  _render(): void {
-    super._render();
-  }
-
-  _clean(): void {
-    super._clean();
   }
 
   _optionChanged(args: Record<string, unknown>): void {
