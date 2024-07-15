@@ -1,4 +1,5 @@
 export {
+  ContentReadyEvent,
   DisposingEvent,
   InitializedEvent,
   OptionChangedEvent,

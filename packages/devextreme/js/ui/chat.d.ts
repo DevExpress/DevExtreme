@@ -1,5 +1,51 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
-import { Cancelable, NativeEventInfo } from '../events/index';
+import {
+    Cancelable,
+    EventInfo,
+    NativeEventInfo,
+    InitializedEventInfo,
+    ChangedOptionInfo,
+} from '../events/index';
+
+/**
+ * @docid _ui_chat_ContentReadyEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type ContentReadyEvent = EventInfo<dxChat>;
+
+/**
+ * @docid _ui_chat_DisposingEvent
+ * @public
+ * @type object
+ * @inherits EventInfo
+ */
+export type DisposingEvent = EventInfo<dxChat>;
+
+/**
+ * @docid _ui_chat_InitializedEvent
+ * @public
+ * @type object
+ * @inherits InitializedEventInfo
+ */
+export type InitializedEvent = InitializedEventInfo<dxChat>;
+
+/**
+ * @docid _ui_chat_OptionChangedEvent
+ * @public
+ * @type object
+ * @inherits EventInfo,ChangedOptionInfo
+ */
+export type OptionChangedEvent = EventInfo<dxChat> & ChangedOptionInfo;
+
+/**
+ * @docid _ui_chat_MessageSendEvent
+ * @public
+ * @type object
+ * @inherits Cancelable,NativeEventInfo,_ui_chat_Message
+ */
+export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & Message;
 
 /**
  * @docid _ui_chat_User
@@ -18,20 +64,12 @@ export interface User {
  * @public
  * @type object
  */
-export type Message = {
-    timestamp: Date;
+export interface Message {
+    timestamp: string;
     author: User;
     text: string;
     typing?: boolean;
-};
-
-/**
- * @docid _ui_chat_MessageSendEvent
- * @public
- * @type object
- * @inherits Cancelable,NativeEventInfo,_ui_chat_Message
- */
-export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEvent | PointerEvent | MouseEvent | TouchEvent> & Message;
+}
 
 /**
  * @deprecated use Properties instead
@@ -65,4 +103,48 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
 export default class dxChat extends Widget<dxChatOptions> { }
 
 /** @public */
+export type ExplicitTypes = {
+    Properties: Properties;
+    ContentReadyEvent: ContentReadyEvent;
+    DisposingEvent: DisposingEvent;
+    InitializedEvent: InitializedEvent;
+    OptionChangedEvent: OptionChangedEvent;
+};
+
+/** @public */
 export type Properties = dxChatOptions;
+
+///#DEBUG
+// eslint-disable-next-line import/first
+import { CheckedEvents } from '../core';
+
+type FilterOutHidden<T> = Omit<T, 'onFocusIn' | 'onFocusOut' >;
+
+type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, Required<Events>, 'onMessageSend'>;
+
+/**
+* @hidden
+*/
+type Events = {
+/**
+ * @docid dxChatOptions.onContentReady
+ * @type_function_param1 e:{ui/chat:ContentReadyEvent}
+ */
+onContentReady?: ((e: ContentReadyEvent) => void);
+/**
+ * @docid dxChatOptions.onDisposing
+ * @type_function_param1 e:{ui/chat:DisposingEvent}
+ */
+onDisposing?: ((e: DisposingEvent) => void);
+/**
+ * @docid dxChatOptions.onInitialized
+ * @type_function_param1 e:{ui/chat:InitializedEvent}
+ */
+onInitialized?: ((e: InitializedEvent) => void);
+/**
+ * @docid dxChatOptions.onOptionChanged
+ * @type_function_param1 e:{ui/chat:OptionChangedEvent}
+ */
+onOptionChanged?: ((e: OptionChangedEvent) => void);
+};
+///#ENDDEBUG
