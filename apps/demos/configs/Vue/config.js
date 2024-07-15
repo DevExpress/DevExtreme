@@ -37,14 +37,15 @@ window.config = {
     /**/
   },
   paths: {
-    'root:': '../../../../',
-    'npm:': '../../../../../../node_modules/',
+    'project:': '../../../../',
+    'npm:': '../../../../node_modules/',
   },
   map: {
     'vue': 'npm:vue/dist/vue.esm-browser.js',
+    '@vue/shared': 'npm:@vue/shared/dist/shared.cjs.prod.js',
     'vue-loader': 'npm:dx-systemjs-vue-browser/index.js',
-    'demo-ts-loader': 'root:utils/demo-ts-loader.js',
-    'svg-loader': 'root:utils/svg-loader.js',
+    'demo-ts-loader': 'project:utils/demo-ts-loader.js',
+    'svg-loader': 'project:utils/svg-loader.js',
 
     /** signalr */
     '@aspnet/signalr': 'npm:@aspnet/signalr/dist/cjs',

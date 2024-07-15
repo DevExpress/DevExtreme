@@ -7,7 +7,7 @@
     "build": {
       "executor": "nx:run-script",
       "options": {
-        "script": "build-npm-devextreme"
+        "script": "build"
       },
       "inputs": [
         { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
@@ -22,6 +22,22 @@
         "{projectRoot}/js/renovation/**/*.j.tsx",
         "{projectRoot}/scss/bundles"
       ]
+    },
+    "build-dist": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build-dist"
+      },
+      "inputs": [
+        { "env": "BUILD_TEST_INTERNAL_PACKAGE" },
+        "default",
+        "test"
+      ],
+      "outputs": [
+        "{projectRoot}/artifacts",
+        "{projectRoot}/scss/bundles"
+      ],
+      "cache": true
     },
     "build:dev": {
       "executor": "nx:run-script",

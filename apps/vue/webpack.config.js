@@ -40,8 +40,8 @@ module.exports = {
       {
         test: /\.js$/,
         loader: "source-map-loader",
+        enforce: "pre",
         options: {
-          enforce: "pre",
           filterSourceMappingUrl: (url, resourcePath) => {
             return true;
           },
@@ -72,10 +72,10 @@ module.exports = {
       }
     ]
   },
-  ignoreWarnings: [{
-    message: /source-map-loader/,
-    module: /node_modules\/rrule/,
-  }],
+  // ignoreWarnings: [{
+  //   message: /source-map-loader/,
+  //   module: /node_modules\/rrule/,
+  // }],
   plugins: [
     new VueLoaderPlugin()
   ]

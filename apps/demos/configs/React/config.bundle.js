@@ -38,11 +38,11 @@ const bundleConfig = {
   packages: {
     'react': {
       defaultExtension: 'js',
-      main: '../../../../../../../node_modules/react/umd/react.development.js',
+      main: '../../../../../node_modules/react/umd/react.development.js',
     },
     'react-dom': {
       defaultExtension: 'js',
-      main: '../../../../../../../node_modules/react-dom/umd/react-dom.development.js',
+      main: '../../../../../node_modules/react-dom/umd/react-dom.development.js',
     },
   },
 };

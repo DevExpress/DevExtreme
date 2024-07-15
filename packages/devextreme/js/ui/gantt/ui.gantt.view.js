@@ -429,7 +429,7 @@ export class GanttView extends Widget {
 
     getVisualStateToRestore() {
         return {
-            [fullScreenModeKey]: this._ganttViewCore?.isInFullScreenMode()
+            [fullScreenModeKey]: this._ganttViewCore?.isInFullScreenMode?.()
         };
     }
 }

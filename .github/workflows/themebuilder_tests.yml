@@ -22,35 +22,55 @@ jobs:
     - name: Get sources
       uses: actions/checkout@v4
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - name: Use Node.js
+      uses: actions/setup-node@v4
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        node-version: '20'
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build etalon bundles
       working-directory: ./packages/devextreme
-      run: npx gulp style-compiler-themes-ci
+      run: pnpx gulp style-compiler-themes-ci
 
     - name: Build
       working-directory: ./packages/devextreme-themebuilder
-      run: npx nx build
+      run: pnpx nx build
 
     - name: Run themebuilder tests (full set, node)
       working-directory: ./packages/devextreme-themebuilder
-      run: npx nx test
+      run: pnpx nx test
 
     - name: Check styles for duplicate rules (generic)
       working-directory: ./packages/devextreme
-      run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.light.css"
+      run: pnpx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.light.css"
 
     - name: Check styles for duplicate rules (material)
       working-directory: ./packages/devextreme
-      run: npx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
+      run: pnpx stylelint --config testing/styles/bundles-stylelint-config.json "artifacts/**/dx.material.blue.light.css"
 
   notify:
     runs-on: devextreme-shr2

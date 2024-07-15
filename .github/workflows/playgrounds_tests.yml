@@ -31,19 +31,34 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npx nx build
+      run: pnpx nx build
 
     - name: Zip artifacts
       working-directory: ./packages/devextreme
@@ -84,16 +99,6 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v3
-      with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
-
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
-
     - name: Download artifacts
       uses: actions/download-artifact@v3
       with:
@@ -104,15 +109,40 @@ jobs:
       working-directory: ./packages/devextreme
       run: 7z x artifacts.zip -aoa
 
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
+
     - name: Build
       working-directory: ./packages/devextreme-${{ matrix.ARGS.platform }}
-      run: npm run pack
+      run: pnpx nx pack
 
     - name: Check sources compilation
       working-directory: ./apps/${{ matrix.ARGS.platform }}
-      run: npx nx build
+      run: pnpx nx build
 
 #    - name: Run test
 #      if: ${{ matrix.ARGS.platform != 'angular' }}
 #      working-directory: ./apps/${{ matrix.ARGS.platform }}
-#      run: npm run test
+#      run: pnpm run test

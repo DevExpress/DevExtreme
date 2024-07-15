@@ -116,7 +116,7 @@ module.exports = {
             }
         },
         {
-            files: ['*.ts?(x)'],
+            files: ['**/*.ts?(x)'],
             excludedFiles: ['*.d.ts'],
             parser: '@typescript-eslint/parser',
             parserOptions: {

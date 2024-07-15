@@ -26,25 +26,40 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Compile renovation
       working-directory: ./packages/devextreme
       run: |
-        npx nx compile:r
+        pnpx nx compile:r
 # Remove package install after upgrade to TypeScript >= 4.6
 
     - name: Lint renovation
       working-directory: ./packages/devextreme
-      run: npx nx lint-renovation
+      run: pnpx nx lint-renovation
 
   TS:
     runs-on: devextreme-shr2
@@ -58,37 +73,52 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npx nx build
+      run: pnpx nx build
 
     - name: Lint TS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint-ts
+      run: pnpx nx lint-ts
 
     - name: Lint .d.ts
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint-dts
+      run: pnpx nx lint-dts
 
     - name: Lint Testcafe tests
       working-directory: ./e2e/testcafe-devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint
+      run: pnpx nx lint
 
   JS:
     runs-on: devextreme-shr2
@@ -102,25 +132,40 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Build
       working-directory: ./packages/devextreme
-      run: npx nx build
+      run: pnpx nx build
 
     - name: Lint JS
       working-directory: ./packages/devextreme
       env:
         DEBUG: eslint:cli-engine
-      run: npx nx lint-js
+      run: pnpx nx lint-js
 
   texts:
     runs-on: devextreme-shr2
@@ -134,19 +179,34 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Check texts
       working-directory: ./packages/devextreme
-      run: npx nx lint-texts
+      run: pnpx nx lint-texts
 
   CSS:
     runs-on: devextreme-shr2
@@ -160,21 +220,36 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
 
-    - name: Run npm install
-      run: npm install --no-audit --no-fund
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Install dependencies
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Lint CSS
       working-directory: ./packages/devextreme
-      run: npx nx lint-css
+      run: pnpx nx lint-css
 
-  package_lock:
+  pnpm_lock:
     runs-on: devextreme-shr2
     timeout-minutes: 10
     steps:
@@ -186,21 +261,41 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Update package-lock
+    - uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
+
+    - name: Update lock-file
       run: |
         node -v
-        npm -v
-        npm install --no-audit --no-fund --ignore-scripts
+        pnpm -v
+        pnpm install
 
-    - name: Upload package-lock
+    - name: Upload lock-file
       uses: actions/upload-artifact@v3
       with:
         name: package-lock.json
         path: ./package-lock.json
         retention-days: 1
 
-    - name: Check package-lock
-      run: git diff --exit-code package-lock.json
+    - name: Check lock-file
+      run: git diff --exit-code pnpm-lock.yaml
 
   component_exports:
     runs-on: devextreme-shr2
@@ -214,30 +309,42 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
       run: |
-        node -v
-        npm -v
-        npm install --no-audit --no-fund --ignore-scripts
+        corepack enable
+        pnpm install
 
     - name: Check generated component reexports
       working-directory: ./packages/devextreme
       run: |
-        npm run update-ts-reexports
+        pnpm run update-ts-reexports
 
         git add . -N
 
         if git diff --exit-code ; then
           echo "Generated component reexports are up-to-date"
         else
-            echo "Generated component reexports are outdated. Execute 'npm run update-ts-reexports' and commit changes."
+            echo "Generated component reexports are outdated. Execute 'pnpm run update-ts-reexports' and commit changes."
             exit 1
         fi
 
@@ -254,23 +361,38 @@ jobs:
       with:
         node-version: '20'
 
-    - name: Restore npm cache
-      uses: actions/cache@v4
+    - uses: pnpm/action-setup@v3
       with:
-        path: '**/node_modules'
-        key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
-        restore-keys: ${{ runner.os }}-node-modules
+        version: 9
+        run_install: false
+
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: |
+          ${{ env.STORE_PATH }}
+          .nx/cache
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store
 
     - name: Install dependencies
-      run: npm install --no-audit --no-fund
+      run: |
+        corepack enable
+        pnpm install
 
     - name: Lint wrappers
-      run: npx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
+      run: pnpx nx run-many -t lint -p devextreme-angular devextreme-react devextreme-vue
 
   notify:
     runs-on: devextreme-shr2
     name: Send notifications
-    needs: [Renovation, TS, JS, CSS, texts, package_lock, component_exports]
+    needs: [Renovation, TS, JS, CSS, texts, pnpm_lock, component_exports]
     if: github.event_name != 'pull_request' && contains(needs.*.result, 'failure')
 
     steps:
