@@ -4,7 +4,7 @@
   "sourceRoot": "packages/devextreme-angular",
   "projectType": "library",
   "implicitDependencies": [
-    "devextreme-main"
+    "devextreme"
   ],
   "targets": {
     "build": {

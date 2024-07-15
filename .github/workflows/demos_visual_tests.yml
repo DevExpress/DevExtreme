@@ -57,7 +57,7 @@ jobs:
           pnpm install
 
       - name: DevExtreme - Build
-        run: pnpx nx build devextreme-main
+        run: pnpx nx build devextreme
 
   testcafe:
     needs:
@@ -115,7 +115,7 @@ jobs:
         pnpm install
 
     - name: DevExtreme - Build
-      run: pnpx nx build devextreme-main
+      run: pnpx nx build devextreme
 
     - name: Run Web Server
       run: |
