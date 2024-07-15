@@ -46,7 +46,7 @@
     "codelyzer": "^6.0.2",
     "devextreme-internal-tools": "14.0.0-beta.6",
     "http-server": "14.1.1",
-    "husky": "^8.0.3",
+    "husky": "^9.0.0",
     "jest": "29.7.0",
     "jspdf-autotable": "3.8.2",
     "lint-staged": "14.0.1",
