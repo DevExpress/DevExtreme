@@ -184,7 +184,6 @@
     "yargs": "17.7.2"
   },
   "scripts": {
-    "preinstall": "node build/preinstall.js",
     "clean": "gulp clean",
     "lint": "npm-run-all -p -c lint-js lint-ts lint-renovation lint-dts lint-texts",
     "lint-js": "eslint --quiet --ext .js .",
