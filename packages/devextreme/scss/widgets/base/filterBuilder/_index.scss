@@ -95,10 +95,18 @@ $filterbuilder-menu-icon-color: null !default;
       color: $filterbuilder-menu-icon-color;
     }
   }
-}
 
-.dx-treeview-node{
   .dx-treeview-expander-icon-stub {
     display: none;
+  }
+}
+
+.dx-filterbuilder-overlay {
+  .dx-widget {
+    .dx-treeview-node {
+      .dx-treeview-expander-icon-stub {
+        display: none;
+      }
+    }
   }
 }
