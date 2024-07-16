@@ -5,23 +5,38 @@ const replace = require('gulp-replace');
 const lazyPipe = require('lazypipe');
 const webpack = require('webpack');
 
-const moduleReplacementPlugin = new webpack.NormalModuleReplacementPlugin(/(.*)\/license_validation/, resource => {
-    resource.request = resource.request.replace('license_validation', 'license_validation_internal');
-});
+const internalModules = [
+    {
+        dir: 'license',
+        publicName: 'license_validation',
+        internalName: 'license_validation_internal',
+    },
+]
+
+const moduleReplacementPlugin = new webpack.NormalModuleReplacementPlugin(
+    new RegExp('(.*)/(' + internalModules.map(e => `${e.dir}/${e.publicName}`).join('|') + ')'),
+    resource => {
+        const renaming = internalModules.find(e => resource.request.includes(e.publicName));
+        if(renaming) {
+            resource.request = resource.request.replace(renaming.publicName, renaming.internalName);
+        }
+    }
+);
 
 const overwriteInternalPackageName = lazyPipe()
     .pipe(() => replace(/"devextreme(-.*)?"/, '"devextreme$1-internal"'));
 
 const useInternalModules = lazyPipe()
-    .pipe(() => gulpFilter(['**', '!**/license/license_validation.js']))
+    .pipe(() => gulpFilter(['**'].concat(internalModules.map(e => `!**/${e.dir}/${e.publicName}.js`))))
     .pipe(() => gulpRename(path => {
-        if(path.basename.includes('license_validation_internal')) {
-            path.basename = 'license_validation';
+        const renaming = internalModules.find(e => path.basename.includes(e.internalName));
+        if(renaming) {
+            path.basename = renaming.publicName;
         }
     }));
 
 const usePublicModules = lazyPipe()
-    .pipe(() => gulpFilter(['**', '!**/license/license_validation_internal.js']));
+    .pipe(() => gulpFilter(['**'].concat(internalModules.map(e => `!**/${e.dir}/${e.internalName}.js`))));
 
 module.exports = {
     INTERNAL_PACKAGE: 'BUILD_INTERNAL_PACKAGE',
