@@ -84,22 +84,22 @@ export type Message = {
     /**
      * @docid
      * @public
-     */    
+     */
     timestamp: string;
     /**
      * @docid
      * @public
-     */    
+     */
     author: User;
     /**
      * @docid
      * @public
-     */    
+     */
     text: string;
     /**
      * @docid
      * @public
-     */    
+     */
     typing?: boolean;
 };
 
