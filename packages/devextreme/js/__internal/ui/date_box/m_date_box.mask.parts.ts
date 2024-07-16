@@ -32,7 +32,7 @@ const PATTERN_GETTERS = {
   m: 'getMinutes',
   s: 'getSeconds',
   S: 'getMilliseconds',
-  x: 'getTimeZoneOffset',
+  x: 'getTimezoneOffset',
 };
 
 const PATTERN_SETTERS = extend({}, getPatternSetters(), {
