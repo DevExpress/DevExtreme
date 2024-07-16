@@ -125,6 +125,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
      */
     onMessageSend?: ((e: MessageSendEvent) => void);
 }
+
 /**
  * @docid
  * @inherits Widget
