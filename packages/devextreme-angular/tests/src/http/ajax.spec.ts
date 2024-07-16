@@ -1,7 +1,7 @@
 import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 import {
-  HttpRequest, HttpInterceptor, HTTP_INTERCEPTORS, HttpHandler,
+  HttpRequest, HttpInterceptor, HTTP_INTERCEPTORS, HttpHandler, HttpEvent,
 } from '@angular/common/http';
 import { Component, Injectable, ViewChild } from '@angular/core';
 
@@ -11,6 +11,7 @@ import DataSource from 'devextreme/data/data_source';
 import ODataStore from 'devextreme/data/odata/store';
 import ajax from 'devextreme/core/utils/ajax';
 import { DxFileUploaderComponent, DxFileUploaderModule } from 'devextreme-angular';
+import { Observable } from 'rxjs';
 import createSpy = jasmine.createSpy;
 
 const interceptors: Record<string, () => void> = {};
@@ -21,7 +22,7 @@ jasmine.DEFAULT_TIMEOUT_INTERVAL = 1000;
 
 @Injectable()
 export class TestInterceptor implements HttpInterceptor {
-  intercept(req: HttpRequest<any>, next: HttpHandler) {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     interceptors.interceptorFn();
     return next.handle(req);
   }

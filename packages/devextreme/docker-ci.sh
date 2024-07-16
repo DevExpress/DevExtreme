@@ -47,8 +47,8 @@ function run_test_impl {
 
     if [ "$LOCAL" != "true" ]; then
         if [ "$GITHUBACTION" != "true" ]; then
-        npm i
-        npm run build
+        pnpm i
+        pnpm run build
         fi
 
         dotnet ./testing/runner/bin/runner.dll --single-run & runner_pid=$!
@@ -192,7 +192,7 @@ function start_runner_watchdog {
     done &
 }
 
-echo "node $(node -v), npm $(npm -v), dotnet $(dotnet --version)"
+echo "node $(node -v), pnpm $(pnpm -v), dotnet $(dotnet --version)"
 
 TARGET_FUNC="run_$TARGET"
 

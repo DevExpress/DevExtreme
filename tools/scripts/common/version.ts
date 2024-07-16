@@ -10,14 +10,17 @@ export function updateVersion(version: string | undefined): void {
     process.exit(1);
   }
 
-  const workspacesFolders = ['packages', 'apps', 'e2e'];
-  const workspacesPaths = workspacesFolders.map(folder => path.join(ROOT_DIR, folder, '**', 'package.json'));
+  const workspacesFolders = ['packages', 'apps', 'e2e', 'packages/devextreme/artifacts/npm'];
 
-  sh.exec(`npm version ${version} -ws --allow-same-version --include-workspace-root --git-tag-version=false --workspaces-update=false`);
+  const rootWorkspacePath = path.join(ROOT_DIR, 'package.json')
+  const workspacesPaths = workspacesFolders
+      .map(folder => path.join(ROOT_DIR, folder, '*', 'package.json'))
+      .concat([rootWorkspacePath]);
 
+  sh.sed('-i', /"version": ".*"/, `"version": "${version}"`, workspacesPaths);
   sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, workspacesPaths);
 
-  sh.exec('npm i --legacy-peer-deps');
+  sh.exec('pnpm install');
 }
 
 export function updateVersionJs(version: string | undefined, build?: string | undefined): void {

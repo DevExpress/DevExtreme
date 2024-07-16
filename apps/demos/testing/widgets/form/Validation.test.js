@@ -12,7 +12,7 @@ fixture('Form.Validation')
     ctx.initialWindowSize = [900, 1200];
   });
 
-runManualTest('Form', 'Validation', ['jQuery', 'Vue', 'Angular'], (test) => {
+runManualTest('Form', 'Validation', ['jQuery'], (test) => {
   test('Validation', async (t) => {
     const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
 

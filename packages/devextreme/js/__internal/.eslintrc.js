@@ -66,6 +66,8 @@ module.exports = {
                 'no-underscore-dangle': 'off',
                 'no-console': ['error', { 'allow': ['warn', 'error'] }],
                 'class-methods-use-this': 'off',
+                '@typescript-eslint/ban-ts-comment': 'off',
+                '@typescript-eslint/prefer-ts-expect-error': 'off',
             }
         },
         // Rules for a new TS files.

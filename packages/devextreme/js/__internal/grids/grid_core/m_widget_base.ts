@@ -8,7 +8,7 @@ import { callModuleItemsMethod } from './m_modules';
 const GRID_CORE_ROW_SELECTOR = '.dx-row';
 
 export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
-  private readonly _activeStateUnit = GRID_CORE_ROW_SELECTOR;
+  private _activeStateUnit;
 
   private readonly _controllers: any;
 
@@ -25,6 +25,12 @@ export default class GridCoreWidget<TProperties> extends Widget<TProperties> {
     });
 
     return result;
+  }
+
+  protected _init() {
+    this._activeStateUnit = GRID_CORE_ROW_SELECTOR;
+    // @ts-expect-error
+    super._init();
   }
 
   protected _setDeprecatedOptions() {

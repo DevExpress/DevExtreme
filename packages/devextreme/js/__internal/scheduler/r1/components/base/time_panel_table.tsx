@@ -49,6 +49,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
     const TimeCellTemplateComponent = getTemplate(timeCellTemplate);
 
     return (
+      // @ts-ignore
       <Table
         {...restProps}
         className="dx-scheduler-time-panel"
@@ -67,10 +68,12 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
             <Fragment key={fragmentKey}>
               {
                 isGroupedAllDayPanel && (
+                  // @ts-ignore
                   <Row
                     leftVirtualCellWidth={RowDefaultProps.leftVirtualCellWidth}
                     rightVirtualCellWidth={RowDefaultProps.rightVirtualCellWidth}
                   >
+                    {/* @ts-ignore */}
                     <CellBase
                       className="dx-scheduler-time-panel-title-cell"
                       viewContext={viewContext}
@@ -78,6 +81,7 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                       endDate={CellBaseDefaultProps.endDate}
                       index={CellBaseDefaultProps.index}
                     >
+                      {/* @ts-ignore */}
                       <AllDayPanelTitle/>
                     </CellBase>
                   </Row>
@@ -94,12 +98,14 @@ export class TimePanelTable extends InfernoWrapperComponent<TimePanelTableProps>
                   startDate,
                   text,
                 }) => (
+                  // @ts-ignore
                   <Row
                     key={key}
                     className="dx-scheduler-time-panel-row"
                     leftVirtualCellWidth={RowDefaultProps.leftVirtualCellWidth}
                     rightVirtualCellWidth={RowDefaultProps.rightVirtualCellWidth}
                   >
+                    {/* @ts-ignore */}
                     <TimePanelCell
                       viewContext={viewContext}
                       startDate={startDate}
