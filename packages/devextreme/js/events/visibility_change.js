@@ -1,4 +1,4 @@
-import { triggerVisibilityChangeEvent } from '../__internal/events/visibility_change';
+import { triggerVisibilityChangeEvent } from '../__internal/events/m_visibility_change';
 
 export const triggerShownEvent = triggerVisibilityChangeEvent('dxshown');
 export const triggerHidingEvent = triggerVisibilityChangeEvent('dxhiding');
