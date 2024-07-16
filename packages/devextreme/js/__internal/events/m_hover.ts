@@ -1,10 +1,10 @@
-import eventsEngine from '../events/core/events_engine';
-import { removeData, data as elementData } from '../core/element_data';
-import Class from '../core/class';
-import devices from '../core/devices';
-import registerEvent from './core/event_registrator';
-import { addNamespace, isTouchEvent, fireEvent } from './utils/index';
-import pointerEvents from './pointer';
+import Class from '@js/core/class';
+import devices from '@js/core/devices';
+import { data as elementData, removeData } from '@js/core/element_data';
+import registerEvent from '@js/events/core/event_registrator';
+import eventsEngine from '@js/events/core/events_engine';
+import pointerEvents from '@js/events/pointer';
+import { addNamespace, fireEvent, isTouchEvent } from '@js/events/utils/index';
 
 const HOVERSTART_NAMESPACE = 'dxHoverStart';
 const HOVERSTART = 'dxhoverstart';
@@ -14,100 +14,85 @@ const HOVEREND_NAMESPACE = 'dxHoverEnd';
 const HOVEREND = 'dxhoverend';
 const POINTERLEAVE_NAMESPACED_EVENT_NAME = addNamespace(pointerEvents.leave, HOVEREND_NAMESPACE);
 
-
 const Hover = Class.inherit({
 
-    noBubble: true,
+  noBubble: true,
 
-    ctor: function() {
-        this._handlerArrayKeyPath = this._eventNamespace + '_HandlerStore';
-    },
+  ctor() {
+    this._handlerArrayKeyPath = `${this._eventNamespace}_HandlerStore`;
+  },
 
-    setup: function(element) {
-        elementData(element, this._handlerArrayKeyPath, {});
-    },
+  setup(element) {
+    elementData(element, this._handlerArrayKeyPath, {});
+  },
 
-    add: function(element, handleObj) {
-        const that = this;
-        const handler = function(e) {
-            that._handler(e);
-        };
+  add(element, handleObj) {
+    const that = this;
+    const handler = function (e) {
+      that._handler(e);
+    };
 
-        eventsEngine.on(element, this._originalEventName, handleObj.selector, handler);
-        elementData(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
-    },
+    eventsEngine.on(element, this._originalEventName, handleObj.selector, handler);
+    elementData(element, this._handlerArrayKeyPath)[handleObj.guid] = handler;
+  },
 
-    _handler: function(e) {
-        if(isTouchEvent(e) || devices.isSimulator()) {
-            return;
-        }
-
-        fireEvent({
-            type: this._eventName,
-            originalEvent: e,
-            delegateTarget: e.delegateTarget
-        });
-    },
-
-    remove: function(element, handleObj) {
-        const handler = elementData(element, this._handlerArrayKeyPath)[handleObj.guid];
-
-        eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
-    },
-
-    teardown: function(element) {
-        removeData(element, this._handlerArrayKeyPath);
+  _handler(e) {
+    if (isTouchEvent(e) || devices.isSimulator()) {
+      return;
     }
+
+    fireEvent({
+      type: this._eventName,
+      originalEvent: e,
+      delegateTarget: e.delegateTarget,
+    });
+  },
+
+  remove(element, handleObj) {
+    const handler = elementData(element, this._handlerArrayKeyPath)[handleObj.guid];
+    // @ts-expect-error
+    eventsEngine.off(element, this._originalEventName, handleObj.selector, handler);
+  },
+
+  teardown(element) {
+    removeData(element, this._handlerArrayKeyPath);
+  },
 
 });
 
 const HoverStart = Hover.inherit({
 
-    ctor: function() {
-        this._eventNamespace = HOVERSTART_NAMESPACE;
-        this._eventName = HOVERSTART;
-        this._originalEventName = POINTERENTER_NAMESPACED_EVENT_NAME;
-        this.callBase();
-    },
+  ctor() {
+    this._eventNamespace = HOVERSTART_NAMESPACE;
+    this._eventName = HOVERSTART;
+    this._originalEventName = POINTERENTER_NAMESPACED_EVENT_NAME;
+    this.callBase();
+  },
 
-    _handler: function(e) {
-        const pointers = e.pointers || [];
-        if(!pointers.length) {
-            this.callBase(e);
-        }
+  _handler(e) {
+    const pointers = e.pointers || [];
+    if (!pointers.length) {
+      this.callBase(e);
     }
+  },
 
 });
 
 const HoverEnd = Hover.inherit({
 
-    ctor: function() {
-        this._eventNamespace = HOVEREND_NAMESPACE;
-        this._eventName = HOVEREND;
-        this._originalEventName = POINTERLEAVE_NAMESPACED_EVENT_NAME;
-        this.callBase();
-    }
+  ctor() {
+    this._eventNamespace = HOVEREND_NAMESPACE;
+    this._eventName = HOVEREND;
+    this._originalEventName = POINTERLEAVE_NAMESPACED_EVENT_NAME;
+    this.callBase();
+  },
 
 });
-
-/**
- * @name UI Events.dxhoverstart
- * @type eventType
- * @type_function_param1 event:event
- * @module events/hover
-*/
-
-/**
- * @name UI Events.dxhoverend
- * @type eventType
- * @type_function_param1 event:event
- * @module events/hover
-*/
 
 registerEvent(HOVERSTART, new HoverStart());
 registerEvent(HOVEREND, new HoverEnd());
 
 export {
-    HOVERSTART as start,
-    HOVEREND as end
+  HOVEREND as end,
+  HOVERSTART as start,
 };

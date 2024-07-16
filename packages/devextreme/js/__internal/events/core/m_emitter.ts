@@ -1,105 +1,105 @@
-import $ from '../../core/renderer';
-import { noop } from '../../core/utils/common';
-import Class from '../../core/class';
-import Callbacks from '../../core/utils/callbacks';
-import { extend } from '../../core/utils/extend';
-import { isDxMouseWheelEvent, hasTouches, fireEvent } from '../utils/index';
+import Class from '@js/core/class';
+import $ from '@js/core/renderer';
+import Callbacks from '@js/core/utils/callbacks';
+import { noop } from '@js/core/utils/common';
+import { extend } from '@js/core/utils/extend';
+import { fireEvent, hasTouches, isDxMouseWheelEvent } from '@js/events/utils/index';
 
 const Emitter = Class.inherit({
 
-    ctor: function(element) {
-        this._$element = $(element);
+  ctor(element) {
+    this._$element = $(element);
 
-        this._cancelCallback = Callbacks();
-        this._acceptCallback = Callbacks();
-    },
+    this._cancelCallback = Callbacks();
+    this._acceptCallback = Callbacks();
+  },
 
-    getElement: function() {
-        return this._$element;
-    },
+  getElement() {
+    return this._$element;
+  },
 
-    validate: function(e) {
-        return !isDxMouseWheelEvent(e);
-    },
+  validate(e) {
+    return !isDxMouseWheelEvent(e);
+  },
 
-    validatePointers: function(e) {
-        return hasTouches(e) === 1;
-    },
+  validatePointers(e) {
+    return hasTouches(e) === 1;
+  },
 
-    allowInterruptionByMouseWheel: function() {
-        return true;
-    },
+  allowInterruptionByMouseWheel() {
+    return true;
+  },
 
-    configure: function(data) {
-        extend(this, data);
-    },
+  configure(data) {
+    extend(this, data);
+  },
 
-    addCancelCallback: function(callback) {
-        this._cancelCallback.add(callback);
-    },
+  addCancelCallback(callback) {
+    this._cancelCallback.add(callback);
+  },
 
-    removeCancelCallback: function() {
-        this._cancelCallback.empty();
-    },
+  removeCancelCallback() {
+    this._cancelCallback.empty();
+  },
 
-    _cancel: function(e) {
-        this._cancelCallback.fire(this, e);
-    },
+  _cancel(e) {
+    this._cancelCallback.fire(this, e);
+  },
 
-    addAcceptCallback: function(callback) {
-        this._acceptCallback.add(callback);
-    },
+  addAcceptCallback(callback) {
+    this._acceptCallback.add(callback);
+  },
 
-    removeAcceptCallback: function() {
-        this._acceptCallback.empty();
-    },
+  removeAcceptCallback() {
+    this._acceptCallback.empty();
+  },
 
-    _accept: function(e) {
-        this._acceptCallback.fire(this, e);
-    },
+  _accept(e) {
+    this._acceptCallback.fire(this, e);
+  },
 
-    _requestAccept: function(e) {
-        this._acceptRequestEvent = e;
-    },
+  _requestAccept(e) {
+    this._acceptRequestEvent = e;
+  },
 
-    _forgetAccept: function() {
-        this._accept(this._acceptRequestEvent);
-        this._acceptRequestEvent = null;
-    },
+  _forgetAccept() {
+    this._accept(this._acceptRequestEvent);
+    this._acceptRequestEvent = null;
+  },
 
-    start: noop,
-    move: noop,
-    end: noop,
+  start: noop,
+  move: noop,
+  end: noop,
 
-    cancel: noop,
-    reset: function() {
-        if(this._acceptRequestEvent) {
-            this._accept(this._acceptRequestEvent);
-        }
-    },
+  cancel: noop,
+  reset() {
+    if (this._acceptRequestEvent) {
+      this._accept(this._acceptRequestEvent);
+    }
+  },
 
-    _fireEvent: function(eventName, e, params) {
-        const eventData = extend({
-            type: eventName,
-            originalEvent: e,
-            target: this._getEmitterTarget(e),
-            delegateTarget: this.getElement().get(0)
-        }, params);
+  _fireEvent(eventName, e, params) {
+    const eventData = extend({
+      type: eventName,
+      originalEvent: e,
+      target: this._getEmitterTarget(e),
+      delegateTarget: this.getElement().get(0),
+    }, params);
 
-        e = fireEvent(eventData);
+    e = fireEvent(eventData);
 
-        if(e.cancel) {
-            this._cancel(e);
-        }
+    if (e.cancel) {
+      this._cancel(e);
+    }
 
-        return e;
-    },
+    return e;
+  },
 
-    _getEmitterTarget: function(e) {
-        return (this.delegateSelector ? $(e.target).closest(this.delegateSelector) : this.getElement()).get(0);
-    },
+  _getEmitterTarget(e) {
+    return (this.delegateSelector ? $(e.target).closest(this.delegateSelector) : this.getElement()).get(0);
+  },
 
-    dispose: noop
+  dispose: noop,
 
 });
 

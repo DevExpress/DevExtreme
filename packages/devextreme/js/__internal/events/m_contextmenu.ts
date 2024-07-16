@@ -1,11 +1,11 @@
-import $ from '../core/renderer';
-import eventsEngine from '../events/core/events_engine';
-import { touch } from '../core/utils/support';
-import devices from '../core/devices';
-import Class from '../core/class';
-import registerEvent from './core/event_registrator';
-import { addNamespace, fireEvent, isMouseEvent } from './utils/index';
-import holdEvent from './hold';
+import Class from '@js/core/class';
+import devices from '@js/core/devices';
+import $ from '@js/core/renderer';
+import { touch } from '@js/core/utils/support';
+import registerEvent from '@js/events/core/event_registrator';
+import eventsEngine from '@js/events/core/events_engine';
+import holdEvent from '@js/events/hold';
+import { addNamespace, fireEvent, isMouseEvent } from '@js/events/utils/index';
 
 const CONTEXTMENU_NAMESPACE = 'dxContexMenu';
 
@@ -14,50 +14,42 @@ const HOLD_NAMESPACED_EVENT_NAME = addNamespace(holdEvent.name, CONTEXTMENU_NAME
 
 const CONTEXTMENU_EVENT_NAME = 'dxcontextmenu';
 
-
 const ContextMenu = Class.inherit({
 
-    setup: function(element) {
-        const $element = $(element);
+  setup(element) {
+    const $element = $(element);
 
-        eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
+    eventsEngine.on($element, CONTEXTMENU_NAMESPACED_EVENT_NAME, this._contextMenuHandler.bind(this));
 
-        if(touch || devices.isSimulator()) {
-            eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
-        }
-    },
+    if (touch || devices.isSimulator()) {
+      eventsEngine.on($element, HOLD_NAMESPACED_EVENT_NAME, this._holdHandler.bind(this));
+    }
+  },
 
-    _holdHandler: function(e) {
-        if(isMouseEvent(e) && !devices.isSimulator()) {
-            return;
-        }
-
-        this._fireContextMenu(e);
-    },
-
-    _contextMenuHandler: function(e) {
-        this._fireContextMenu(e);
-    },
-
-    _fireContextMenu: function(e) {
-        return fireEvent({
-            type: CONTEXTMENU_EVENT_NAME,
-            originalEvent: e
-        });
-    },
-
-    teardown: function(element) {
-        eventsEngine.off(element, '.' + CONTEXTMENU_NAMESPACE);
+  _holdHandler(e) {
+    if (isMouseEvent(e) && !devices.isSimulator()) {
+      return;
     }
 
-});
+    this._fireContextMenu(e);
+  },
 
-/**
-  * @name UI Events.dxcontextmenu
-  * @type eventType
-  * @type_function_param1 event:event
-  * @module events/contextmenu
-*/
+  _contextMenuHandler(e) {
+    this._fireContextMenu(e);
+  },
+
+  _fireContextMenu(e) {
+    return fireEvent({
+      type: CONTEXTMENU_EVENT_NAME,
+      originalEvent: e,
+    });
+  },
+
+  teardown(element) {
+    eventsEngine.off(element, `.${CONTEXTMENU_NAMESPACE}`);
+  },
+
+});
 
 registerEvent(CONTEXTMENU_EVENT_NAME, new ContextMenu());
 
