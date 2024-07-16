@@ -80,11 +80,7 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
 
     date.setFullYear(newValue);
   },
-  x: (date, value) => {
-    // eslint-disable-next-line @typescript-eslint/restrict-plus-operands
-    const adjustedMinutes = date.getMinutes() + value + date.getTimezoneOffset();
-    return new Date(date.setMinutes(adjustedMinutes));
-  },
+  x: (date) => date,
 });
 
 const getPatternGetter = (patternChar) => {
@@ -140,7 +136,7 @@ const getLimits = (pattern, date, forcedPattern) => {
     s: { min: 0, max: 59 },
     S: { min: 0, max: 999 },
     a: { min: 0, max: 1 },
-    x: { min: -720, max: 840 },
+    x: { min: 0, max: 0 },
   };
   // @ts-expect-error
   return limits[forcedPattern || pattern] || limits.getAmPm;
