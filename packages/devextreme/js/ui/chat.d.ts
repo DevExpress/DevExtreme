@@ -50,7 +50,6 @@ export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEven
 /**
  * @docid
  * @public
- * @type object
  */
 export interface User {
     id: number;
@@ -62,7 +61,6 @@ export interface User {
 /**
  * @docid
  * @public
- * @type object
  */
 export interface Message {
     timestamp: string;
@@ -80,7 +78,6 @@ export interface Message {
 export interface dxChatOptions extends WidgetOptions<dxChat> {
     /**
      * @docid
-     * @type Array<Message>
      * @fires dxChatOptions.onOptionChanged
      * @public
      */
