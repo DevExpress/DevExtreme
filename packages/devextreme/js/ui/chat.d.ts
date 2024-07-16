@@ -52,24 +52,24 @@ export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEven
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export interface User {
+export type User = {
     id: number;
     firstName: string;
     lastName: string;
     avatarUrl?: string;
-}
+};
 
 /**
  * @docid
  * @namespace DevExpress.ui.dxChat
  * @public
  */
-export interface Message {
+export type Message = {
     timestamp: string;
     author: User;
     text: string;
     typing?: boolean;
-}
+};
 
 /**
  * @deprecated use Properties instead
