@@ -1,9 +1,8 @@
 import React from 'react';
 import DataGrid, { Column } from 'devextreme-react/data-grid';
-import { customers } from './data.ts';
+import { customers } from './data.js';
 
 const columns = ['CompanyName', 'City', 'State', 'Phone', 'Fax'];
-
 const App = () => (
   <DataGrid
     dataSource={customers}
@@ -19,5 +18,4 @@ const App = () => (
     ))}
   </DataGrid>
 );
-
 export default App;
