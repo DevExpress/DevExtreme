@@ -110,6 +110,15 @@ class BaseStrategy {
       inAllDayRow && !this.isVerticalGrouping,
     );
 
+    const groupEdgeIndices = this.viewDataProvider.getGroupEdgeIndices(validGroupIndex);
+    const vMin = this.getCellPosition(
+      {
+        columnIndex: positionByMap.columnIndex,
+        rowIndex: groupEdgeIndices.firstRowIndex,
+      },
+      inAllDayRow && !this.isVerticalGrouping,
+    ).top;
+
     const timeShift = inAllDayRow
       ? 0
       : this.getTimeShiftRatio(positionByMap, date);
@@ -134,7 +143,7 @@ class BaseStrategy {
       columnIndex: position.columnIndex,
       hMax: horizontalHMax,
       vMax: verticalMax,
-      vMin: position.top,
+      vMin,
       groupIndex: validGroupIndex,
     };
   }
