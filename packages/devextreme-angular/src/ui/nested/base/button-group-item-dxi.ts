@@ -147,10 +147,10 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('hint', value);
     }
 
-    get author(): User | undefined {
+    get author(): User {
         return this._getOption('author');
     }
-    set author(value: User | undefined) {
+    set author(value: User) {
         this._setOption('author', value);
     }
 

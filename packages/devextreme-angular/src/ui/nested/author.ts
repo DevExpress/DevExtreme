@@ -28,8 +28,9 @@ import { DxoUser } from './base/user';
     providers: [NestedOptionHost],
     inputs: [
         'avatarUrl',
+        'firstName',
         'id',
-        'name'
+        'lastName'
     ]
 })
 export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit  {

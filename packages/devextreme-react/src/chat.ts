@@ -8,13 +8,14 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User } from "devextreme/ui/chat";
+import type { Message, ContentReadyEvent, DisposingEvent, InitializedEvent, MessageSendEvent, User } from "devextreme/ui/chat";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
 
 type IChatOptionsNarrowedEvents = {
+  onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
   onMessageSend?: ((e: MessageSendEvent) => void);
@@ -43,7 +44,7 @@ const Chat = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageSend"]), []);
+      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onMessageSend"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
@@ -73,8 +74,9 @@ const Chat = memo(
 // Item
 type IAuthorProps = React.PropsWithChildren<{
   avatarUrl?: string;
+  firstName?: string;
   id?: number;
-  name?: string;
+  lastName?: string;
 }>
 const _componentAuthor = memo(
   (props: IAuthorProps) => {

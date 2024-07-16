@@ -9437,15 +9437,6 @@ declare namespace DevExpress.ui {
     export type InitializedEvent =
       events.InitializedEventInfo<dxChat>;
     /**
-     * [descr:_ui_chat_Message]
-     */
-    export interface Message {
-      timestamp: string;
-      author: User;
-      text: string;
-      typing?: boolean;
-    }
-    /**
      * [descr:_ui_chat_MessageSendEvent]
      */
     export type MessageSendEvent = events.Cancelable &
@@ -9460,15 +9451,6 @@ declare namespace DevExpress.ui {
     export type OptionChangedEvent = events.EventInfo<dxChat> &
     events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
-    /**
-     * [descr:_ui_chat_User]
-     */
-    export interface User {
-      id: number;
-      firstName: string;
-      lastName: string;
-      avatarUrl?: string;
-    }
   }
   /**
    * [descr:dxChatOptions]
@@ -30436,15 +30418,15 @@ declare namespace DevExpress.ui.dxChat {
     /**
      * [descr:Message.timestamp]
      */
-    timestamp?: string;
+    timestamp: string;
     /**
      * [descr:Message.author]
      */
-    author?: User;
+    author: User;
     /**
      * [descr:Message.text]
      */
-    text?: string;
+    text: string;
     /**
      * [descr:Message.typing]
      */
@@ -30457,11 +30439,15 @@ declare namespace DevExpress.ui.dxChat {
     /**
      * [descr:User.id]
      */
-    id?: number;
+    id: number;
     /**
-     * [descr:User.name]
+     * [descr:User.firstName]
      */
-    name?: string;
+    firstName: string;
+    /**
+     * [descr:User.lastName]
+     */
+    lastName: string;
     /**
      * [descr:User.avatarUrl]
      */
