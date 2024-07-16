@@ -1,77 +1,71 @@
-import { eventData, eventDelta } from './utils/index';
-import Emitter from './core/emitter';
-import registerEmitter from './core/emitter_registrator';
-const abs = Math.abs;
+import Emitter from '@js/events/core/emitter';
+import registerEmitter from '@js/events/core/emitter_registrator';
+import { eventData, eventDelta } from '@js/events/utils/index';
+
+const { abs } = Math;
 
 const HOLD_EVENT_NAME = 'dxhold';
 const HOLD_TIMEOUT = 750;
 const TOUCH_BOUNDARY = 5;
 
-
 const HoldEmitter = Emitter.inherit({
 
-    start: function(e) {
-        this._startEventData = eventData(e);
+  start(e) {
+    this._startEventData = eventData(e);
 
-        this._startTimer(e);
-    },
+    this._startTimer(e);
+  },
 
-    _startTimer: function(e) {
-        const holdTimeout = ('timeout' in this) ? this.timeout : HOLD_TIMEOUT;
-        this._holdTimer = setTimeout((function() {
-            this._requestAccept(e);
-            this._fireEvent(HOLD_EVENT_NAME, e, {
-                target: e.target
-            });
-            this._forgetAccept();
-        }).bind(this), holdTimeout);
-    },
+  _startTimer(e) {
+    const holdTimeout = 'timeout' in this ? this.timeout : HOLD_TIMEOUT;
+    this._holdTimer = setTimeout(() => {
+      this._requestAccept(e);
+      this._fireEvent(HOLD_EVENT_NAME, e, {
+        target: e.target,
+      });
+      this._forgetAccept();
+    }, holdTimeout);
+  },
 
-    move: function(e) {
-        if(this._touchWasMoved(e)) {
-            this._cancel(e);
-        }
-    },
-
-    _touchWasMoved: function(e) {
-        const delta = eventDelta(this._startEventData, eventData(e));
-
-        return abs(delta.x) > TOUCH_BOUNDARY || abs(delta.y) > TOUCH_BOUNDARY;
-    },
-
-    end: function() {
-        this._stopTimer();
-    },
-
-    _stopTimer: function() {
-        clearTimeout(this._holdTimer);
-    },
-
-    cancel: function() {
-        this._stopTimer();
-    },
-
-    dispose: function() {
-        this._stopTimer();
+  move(e) {
+    if (this._touchWasMoved(e)) {
+      this._cancel(e);
     }
+  },
+
+  _touchWasMoved(e) {
+    // @ts-expect-error
+    const delta = eventDelta(this._startEventData, eventData(e));
+
+    return abs(delta.x) > TOUCH_BOUNDARY || abs(delta.y) > TOUCH_BOUNDARY;
+  },
+
+  end() {
+    this._stopTimer();
+  },
+
+  _stopTimer() {
+    clearTimeout(this._holdTimer);
+  },
+
+  cancel() {
+    this._stopTimer();
+  },
+
+  dispose() {
+    this._stopTimer();
+  },
 
 });
 
-/**
-  * @name UI Events.dxhold
-  * @type eventType
-  * @type_function_param1 event:event
-  * @module events/hold
-*/
-
 registerEmitter({
-    emitter: HoldEmitter,
-    bubble: true,
-    events: [
-        HOLD_EVENT_NAME
-    ]
+  emitter: HoldEmitter,
+  bubble: true,
+  events: [
+    HOLD_EVENT_NAME,
+  ],
 });
 
 export default {
-    name: HOLD_EVENT_NAME
+  name: HOLD_EVENT_NAME,
 };
