@@ -91,25 +91,47 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     return super._createCol(column).toggleClass(FIXED_COL_CLASS, !!(this._isFixedTableRendering && (column.fixed || column.command && column.command !== COMMAND_TRANSPARENT)));
   }
 
+  private isIndicesArray(arr): boolean {
+    return Array.isArray(arr) && arr.length > 0;
+  }
+
   private _correctColumnIndicesForFixedColumns(fixedColumns, change) {
+    const columnIndicesArray = change?.columnIndices;
+    if (!this.isIndicesArray(columnIndicesArray)) {
+      return;
+    }
+
     const transparentColumnIndex = getTransparentColumnIndex(fixedColumns);
     const transparentColspan = fixedColumns[transparentColumnIndex].colspan;
-    const columnIndices = change && change.columnIndices;
+    const transparentOffset = transparentColumnIndex + transparentColspan;
+    const rowTypes = change?.items?.map(({ rowType }) => rowType);
 
-    if (columnIndices) {
-      change.columnIndices = columnIndices.map((columnIndices) => {
-        if (columnIndices) {
-          return columnIndices.map((columnIndex) => {
-            if (columnIndex < transparentColumnIndex) {
-              return columnIndex;
-            } if (columnIndex >= transparentColumnIndex + transparentColspan) {
-              return columnIndex - transparentColspan + 1;
-            }
-            return -1;
-          }).filter((columnIndex) => columnIndex >= 0);
+    change.columnIndices = columnIndicesArray.map((columnIndices, idx) => {
+      if (!this.isIndicesArray(columnIndices)) {
+        return columnIndices;
+      }
+
+      const isGroupRow = rowTypes && rowTypes[idx] === 'group';
+
+      if (isGroupRow) {
+        return [...columnIndices];
+      }
+
+      return columnIndices.reduce((result, colIdx) => {
+        switch (true) {
+          case colIdx < transparentColumnIndex:
+            result.push(colIdx);
+            break;
+          case colIdx >= transparentOffset:
+            result.push(colIdx - transparentColspan + 1);
+            break;
+          default:
+            break;
         }
-      });
-    }
+
+        return result;
+      }, []);
+    });
   }
 
   private _partialUpdateFixedTable(fixedColumns) {
