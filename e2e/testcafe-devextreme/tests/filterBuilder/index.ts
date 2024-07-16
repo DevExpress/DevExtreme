@@ -48,7 +48,7 @@ test('operation dropdown popup', async (t) => {
 test('Dropdown Treeview should have no empty space', async (t) => {
   const { takeScreenshot, compareResults } = createScreenshotsComparer(t);
   const filterBuilder = new FilterBuilder('#container');
-  await t.click(filterBuilder.getField(0, 'item').element);
+  await t.click(filterBuilder.getField(0, 'itemAction').element);
 
   await testScreenshot(t, takeScreenshot, 'dropdown-space.png', { element: filterBuilder.element });
 
