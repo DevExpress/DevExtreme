@@ -49,6 +49,7 @@ export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEven
 
 /**
  * @docid
+ * @namespace DevExpress.ui.dxChat
  * @public
  */
 export interface User {
@@ -60,6 +61,7 @@ export interface User {
 
 /**
  * @docid
+ * @namespace DevExpress.ui.dxChat
  * @public
  */
 export interface Message {
