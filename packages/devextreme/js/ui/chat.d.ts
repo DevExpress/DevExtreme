@@ -132,7 +132,7 @@ export interface dxChatOptions extends WidgetOptions<dxChat> {
  * @namespace DevExpress.ui
  * @public
  */
-export default class dxChat extends Widget<dxChatOptions> { }
+export default class dxChat extends Widget<Properties> { }
 
 /** @public */
 export type ExplicitTypes = {

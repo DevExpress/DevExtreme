@@ -9414,8 +9414,13 @@ declare namespace DevExpress.ui {
   /**
    * [descr:dxChat]
    */
+<<<<<<< HEAD
   export class dxChat extends Widget<dxChatOptions> {}
   namespace dxChat {
+=======
+  export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {}
+  module dxChat {
+>>>>>>> 9bab50757c (component refer to public props type)
     /**
      * [descr:_ui_chat_ContentReadyEvent]
      */
