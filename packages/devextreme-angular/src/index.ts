@@ -13,6 +13,7 @@ export { DxButtonGroupComponent, DxButtonGroupModule } from 'devextreme-angular/
 export { DxButtonComponent, DxButtonModule } from 'devextreme-angular/ui/button';
 export { DxCalendarComponent, DxCalendarModule } from 'devextreme-angular/ui/calendar';
 export { DxChartComponent, DxChartModule } from 'devextreme-angular/ui/chart';
+export { DxChatComponent, DxChatModule } from 'devextreme-angular/ui/chat';
 export { DxCheckBoxComponent, DxCheckBoxModule } from 'devextreme-angular/ui/check-box';
 export { DxCircularGaugeComponent, DxCircularGaugeModule } from 'devextreme-angular/ui/circular-gauge';
 export { DxColorBoxComponent, DxColorBoxModule } from 'devextreme-angular/ui/color-box';

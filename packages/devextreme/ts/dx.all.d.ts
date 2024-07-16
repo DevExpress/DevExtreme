@@ -9438,15 +9438,6 @@ declare module DevExpress.ui {
     export type InitializedEvent =
       DevExpress.events.InitializedEventInfo<dxChat>;
     /**
-     * [descr:_ui_chat_Message]
-     */
-    export interface Message {
-      timestamp: string;
-      author: User;
-      text: string;
-      typing?: boolean;
-    }
-    /**
      * [descr:_ui_chat_MessageSendEvent]
      */
     export type MessageSendEvent = DevExpress.events.Cancelable &
@@ -9461,15 +9452,6 @@ declare module DevExpress.ui {
     export type OptionChangedEvent = DevExpress.events.EventInfo<dxChat> &
       DevExpress.events.ChangedOptionInfo;
     export type Properties = dxChatOptions;
-    /**
-     * [descr:_ui_chat_User]
-     */
-    export interface User {
-      id: number;
-      firstName: string;
-      lastName: string;
-      avatarUrl?: string;
-    }
   }
   /**
    * [descr:dxChatOptions]
@@ -30490,6 +30472,50 @@ declare module DevExpress.ui.dxBox {
 }
 declare module DevExpress.ui.dxButtonGroup {
   export type Item = dxButtonGroupItem;
+}
+declare module DevExpress.ui.dxChat {
+  /**
+   * [descr:Message]
+   */
+  export type Message = {
+    /**
+     * [descr:Message.timestamp]
+     */
+    timestamp: string;
+    /**
+     * [descr:Message.author]
+     */
+    author: User;
+    /**
+     * [descr:Message.text]
+     */
+    text: string;
+    /**
+     * [descr:Message.typing]
+     */
+    typing?: boolean;
+  };
+  /**
+   * [descr:User]
+   */
+  export type User = {
+    /**
+     * [descr:User.id]
+     */
+    id: number;
+    /**
+     * [descr:User.firstName]
+     */
+    firstName: string;
+    /**
+     * [descr:User.lastName]
+     */
+    lastName: string;
+    /**
+     * [descr:User.avatarUrl]
+     */
+    avatarUrl?: string;
+  };
 }
 declare module DevExpress.ui.dxContextMenu {
   export type Item = dxContextMenuItem;
