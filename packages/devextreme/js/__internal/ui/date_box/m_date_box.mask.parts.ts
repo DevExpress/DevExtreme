@@ -136,7 +136,7 @@ const getLimits = (pattern, date, forcedPattern) => {
     s: { min: 0, max: 59 },
     S: { min: 0, max: 999 },
     a: { min: 0, max: 1 },
-    x: { min: 0, max: 0 },
+    x: { min: 0, max: 0 }, // NOTE: Timezone part is ready only.
   };
   // @ts-expect-error
   return limits[forcedPattern || pattern] || limits.getAmPm;
