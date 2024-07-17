@@ -1279,6 +1279,7 @@ module('TimeZone Handling', setupModule, () => {
             assert.ok(false, 'error exists');
         }
     });
+
     test('should not show error when changing timezone on runtime via up/down buttons (T1241387)', function(assert) {
         try {
             this.instance.option({
@@ -1286,13 +1287,13 @@ module('TimeZone Handling', setupModule, () => {
                 useMaskBehavior: true,
                 type: 'date',
             });
-            const oldValue = this.instance.option('value');
-            this.keyboard.caret(24);
+            const oldValue = this.$input.value;
+            this.keyboard.caret({ start: 20, end: 24 });
             this.$input.focus().trigger('dxclick');
             this.keyboard.press('up');
 
             assert.ok(true, 'no error shown');
-            assert.strictEqual(this.instance.option('value'), oldValue, 'value has not been modified');
+            assert.strictEqual(this.$input.value, oldValue, 'value has not been modified');
         } catch(e) {
             assert.ok(false, 'error exists');
         }
