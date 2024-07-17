@@ -32,9 +32,3 @@ export default Chat;
  * @name dxChatOptions.tabIndex
  * @hidden
  */
-
-/**
- * @name dxChat.focus
- * @publicName focus()
- * @hidden
- */
