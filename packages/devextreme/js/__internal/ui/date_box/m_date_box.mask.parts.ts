@@ -32,6 +32,7 @@ const PATTERN_GETTERS = {
   m: 'getMinutes',
   s: 'getSeconds',
   S: 'getMilliseconds',
+  x: 'getTimezoneOffset',
 };
 
 const PATTERN_SETTERS = extend({}, getPatternSetters(), {
@@ -79,6 +80,7 @@ const PATTERN_SETTERS = extend({}, getPatternSetters(), {
 
     date.setFullYear(newValue);
   },
+  x: (date) => date,
 });
 
 const getPatternGetter = (patternChar) => {
@@ -133,6 +135,7 @@ const getLimits = (pattern, date, forcedPattern) => {
     s: { min: 0, max: 59 },
     S: { min: 0, max: 999 },
     a: { min: 0, max: 1 },
+    x: { min: 0, max: 0 }, // NOTE: Timezone part is read only.
   };
   // @ts-expect-error
   return limits[forcedPattern || pattern] || limits.getAmPm;
