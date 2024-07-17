@@ -1267,6 +1267,40 @@ module('Date AM/PM Handling', setupModule, () => {
     });
 });
 
+module('TimeZone Handling', setupModule, () => {
+    test('should support \'x\' in date pattern and not generate errors (T1241387)', function(assert) {
+        try {
+            this.instance.option({
+                displayFormat: 'yyyy-MM-dd\'T\'HH:mm:ssxxx',
+                useMaskBehavior: true,
+                type: 'date',
+            });
+            assert.ok(true, 'no error shown');
+        } catch(e) {
+            assert.ok(false, 'error exists');
+        }
+    });
+
+    test('should not show error when changing timezone on runtime via up/down buttons (T1241387)', function(assert) {
+        try {
+            this.instance.option({
+                displayFormat: 'yyyy-MM-dd\'T\'HH:mm:ssxxx',
+                useMaskBehavior: true,
+                type: 'date',
+            });
+            const oldValue = this.$input.val();
+            this.keyboard.caret({ start: 20, end: 24 });
+            this.$input.focus().trigger('dxclick');
+            this.keyboard.press('up');
+
+            assert.ok(true, 'no error shown');
+            assert.strictEqual(this.$input.val(), oldValue, 'value has not been modified');
+        } catch(e) {
+            assert.ok(false, 'error exists');
+        }
+    });
+});
+
 module('Empty dateBox', {
     beforeEach: function() {
         setupModule.beforeEach.call(this);

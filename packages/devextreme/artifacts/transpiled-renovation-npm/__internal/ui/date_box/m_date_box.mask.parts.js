@@ -35,7 +35,8 @@ const PATTERN_GETTERS = {
   h: 'getHours',
   m: 'getMinutes',
   s: 'getSeconds',
-  S: 'getMilliseconds'
+  S: 'getMilliseconds',
+  x: 'getTimezoneOffset',
 };
 const PATTERN_SETTERS = (0, _extend.extend)({}, (0, _date.getPatternSetters)(), {
   a: (date, value) => {
@@ -76,7 +77,8 @@ const PATTERN_SETTERS = (0, _extend.extend)({}, (0, _date.getPatternSetters)(), 
     // eslint-disable-next-line radix
     const newValue = parseInt(String(currentYear).substr(0, maxLimitLength - valueLength) + value);
     date.setFullYear(newValue);
-  }
+  },
+  x: (date) => date,
 });
 const getPatternGetter = patternChar => {
   const unsupportedCharGetter = () => patternChar;
@@ -165,7 +167,8 @@ const getLimits = (pattern, date, forcedPattern) => {
     a: {
       min: 0,
       max: 1
-    }
+    },
+	x: { min: 0, max: 0 }, // NOTE: Timezone part is read only.
   };
   // @ts-expect-error
   return limits[forcedPattern || pattern] || limits.getAmPm;
