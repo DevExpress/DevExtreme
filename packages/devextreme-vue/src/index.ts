@@ -8,6 +8,7 @@ export { DxButton } from "./button";
 export { DxButtonGroup } from "./button-group";
 export { DxCalendar } from "./calendar";
 export { DxChart } from "./chart";
+export { DxChat } from "./chat";
 export { DxCheckBox } from "./check-box";
 export { DxCircularGauge } from "./circular-gauge";
 export { DxColorBox } from "./color-box";
