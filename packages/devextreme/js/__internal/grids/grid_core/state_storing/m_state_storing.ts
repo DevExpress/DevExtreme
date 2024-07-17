@@ -177,7 +177,7 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
     }
 
     if (!this.option('selection.deferred')) {
-      if (selectedRowKeys && selectedRowKeys.length !== 0) {
+      if (selectedRowKeys) {
         this.option('selectedRowKeys', selectedRowKeys || []);
       }
     }
