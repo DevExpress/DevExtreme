@@ -8,7 +8,6 @@ type AccessibleOptions = Pick<Properties,
   "height" |
   "hoverStateEnabled" |
   "items" |
-  "onContentReady" |
   "onDisposing" |
   "onInitialized" |
   "onMessageSend" |
@@ -28,7 +27,6 @@ const DxChat = createComponent({
     height: [Function, Number, String],
     hoverStateEnabled: Boolean,
     items: Array,
-    onContentReady: Function,
     onDisposing: Function,
     onInitialized: Function,
     onMessageSend: Function,
@@ -45,7 +43,6 @@ const DxChat = createComponent({
     "update:height": null,
     "update:hoverStateEnabled": null,
     "update:items": null,
-    "update:onContentReady": null,
     "update:onDisposing": null,
     "update:onInitialized": null,
     "update:onMessageSend": null,

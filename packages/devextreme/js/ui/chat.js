@@ -23,6 +23,11 @@ export default Chat;
  */
 
 /**
+ * @name dxChatOptions.onContentReady
+ * @hidden
+ */
+
+/**
  * @name dxChatOptions.tabIndex
  * @hidden
  */

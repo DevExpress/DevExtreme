@@ -43,7 +43,7 @@ const Chat = memo(
       ), [baseRef.current]);
 
       const subscribableOptions = useMemo(() => (["items"]), []);
-      const independentEvents = useMemo(() => (["onContentReady","onDisposing","onInitialized","onMessageSend"]), []);
+      const independentEvents = useMemo(() => (["onDisposing","onInitialized","onMessageSend"]), []);
 
       const defaults = useMemo(() => ({
         defaultItems: "items",
