@@ -2537,6 +2537,23 @@ QUnit.module('Visibility of control elements', {
 });
 
 QUnit.module('Events', moduleConfig, () => {
+    QUnit.test('should output correct size value for panes in onResizeEnd event (T1240125)', function(assert) {
+        const resizeHandlerStub = sinon.stub().callsFake(function(eventArgs) {
+            // Access the items and their sizes from eventArgs if that's how they're passed
+            const newItems = eventArgs.component.option('items');
+            assert.notStrictEqual(newItems[0].size, oldItems, 'Size of the first item should be updated');
+        });
+
+        this.reinit({
+            onResizeEnd: resizeHandlerStub,
+            dataSource: [{ text: 'Pane_1' }, { text: 'Pane_2' }]
+        });
+        const oldItems = this.instance.option('items')[0].size;
+        const pointer = pointerMock(this.getResizeHandles(false).eq(0));
+        pointer.start().dragStart().drag(90, 0).dragEnd();
+
+        assert.ok(resizeHandlerStub.called, 'onResizeEnd should be called after resizing');
+    });
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
         QUnit.test(`${eventHandler} should be called when handle dragged`, function(assert) {
             const resizeHandlerStub = sinon.stub();
