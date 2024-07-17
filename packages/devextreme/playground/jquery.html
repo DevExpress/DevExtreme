@@ -35,10 +35,31 @@
             box-sizing: border-box;
         }
 
+        .dx-chat-message-inner-list {
+            display: flex;
+            flex-direction: column;
+            padding: 0;
+            margin: 0;
+        }
+
+        .dx-chat-message-inner-list-item {
+            display: inline-block;
+        }
+
+        .dx-chat-message-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: rgb(135, 135, 135);
+        }
+
         .dx-chat-message-box {
             display: flex;
             height: 65px;
-            border-top: 1px solid #b3afc8;
+            border-top: 1px solid rgb(240 240 240);
         }
 
         .dx-chat-message-box-text-area {
