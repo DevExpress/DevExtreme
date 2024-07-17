@@ -1267,19 +1267,17 @@ module('Date AM/PM Handling', setupModule, () => {
 });
 
 module('TimeZone Handling', setupModule, () => {
-    module('regex tests', () => {
-        test('should support \'x\' in date pattern and not generate errors (T1241387)', function(assert) {
-            try {
-                this.instance.option({
-                    displayFormat: 'yyyy-MM-dd\'T\'HH:mm:ssxxx',
-                    useMaskBehavior: true,
-                    type: 'date',
-                });
-                assert.ok(true, 'no error shown');
-            } catch(e) {
-                assert.ok(false, 'error exists');
-            }
-        });
+    test('should support \'x\' in date pattern and not generate errors (T1241387)', function(assert) {
+        try {
+            this.instance.option({
+                displayFormat: 'yyyy-MM-dd\'T\'HH:mm:ssxxx',
+                useMaskBehavior: true,
+                type: 'date',
+            });
+            assert.ok(true, 'no error shown');
+        } catch(e) {
+            assert.ok(false, 'error exists');
+        }
     });
     test('should not show error when changing timezone on runtime via up/down buttons (T1241387)', function(assert) {
         try {
@@ -1287,18 +1285,14 @@ module('TimeZone Handling', setupModule, () => {
                 displayFormat: 'yyyy-MM-dd\'T\'HH:mm:ssxxx',
                 useMaskBehavior: true,
                 type: 'date',
-                value: new Date(),
             });
-            this.$input.trigger('dxclick');
-            this.keyboard.press('right')
-                .press('right')
-                .press('right')
-                .press('right')
-                .press('right')
-                .press('right');
+            const oldValue = this.instance.option('value');
+            this.keyboard.caret(24);
+            this.$input.focus().trigger('dxclick');
             this.keyboard.press('up');
 
             assert.ok(true, 'no error shown');
+            assert.strictEqual(this.instance.option('value'), oldValue, 'value has not been modified');
         } catch(e) {
             assert.ok(false, 'error exists');
         }
