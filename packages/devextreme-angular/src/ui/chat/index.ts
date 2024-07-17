@@ -22,7 +22,7 @@ import {
 } from '@angular/core';
 
 
-import { ContentReadyEvent, DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent } from 'devextreme/ui/chat';
+import { DisposingEvent, InitializedEvent, Message, MessageSendEvent, OptionChangedEvent } from 'devextreme/ui/chat';
 
 import DxChat from 'devextreme/ui/chat';
 
@@ -166,11 +166,11 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:dxChatOptions.onContentReady]
+     * [descr:WidgetOptions.onContentReady]
     
     
      */
-    @Output() onContentReady: EventEmitter<ContentReadyEvent>;
+    @Output() onContentReady: EventEmitter<any>;
 
     /**
     

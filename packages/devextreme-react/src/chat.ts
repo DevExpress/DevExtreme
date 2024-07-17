@@ -8,14 +8,13 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, ContentReadyEvent, DisposingEvent, InitializedEvent, MessageSendEvent, User } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User } from "devextreme/ui/chat";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
 }
 
 type IChatOptionsNarrowedEvents = {
-  onContentReady?: ((e: ContentReadyEvent) => void);
   onDisposing?: ((e: DisposingEvent) => void);
   onInitialized?: ((e: InitializedEvent) => void);
   onMessageSend?: ((e: MessageSendEvent) => void);

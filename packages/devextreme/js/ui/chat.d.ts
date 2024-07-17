@@ -8,14 +8,6 @@ import {
 } from '../events/index';
 
 /**
- * @docid _ui_chat_ContentReadyEvent
- * @public
- * @type object
- * @inherits EventInfo
- */
-export type ContentReadyEvent = EventInfo<dxChat>;
-
-/**
  * @docid _ui_chat_DisposingEvent
  * @public
  * @type object
@@ -137,7 +129,6 @@ export default class dxChat extends Widget<Properties> { }
 /** @public */
 export type ExplicitTypes = {
     Properties: Properties;
-    ContentReadyEvent: ContentReadyEvent;
     DisposingEvent: DisposingEvent;
     InitializedEvent: InitializedEvent;
     OptionChangedEvent: OptionChangedEvent;
@@ -158,11 +149,6 @@ type EventsIntegrityCheckingHelper = CheckedEvents<FilterOutHidden<Properties>, 
 * @hidden
 */
 type Events = {
-/**
- * @docid dxChatOptions.onContentReady
- * @type_function_param1 e:{ui/chat:ContentReadyEvent}
- */
-onContentReady?: ((e: ContentReadyEvent) => void);
 /**
  * @docid dxChatOptions.onDisposing
  * @type_function_param1 e:{ui/chat:DisposingEvent}

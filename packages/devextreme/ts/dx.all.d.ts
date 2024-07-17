@@ -9422,16 +9422,18 @@ declare namespace DevExpress.ui {
   module dxChat {
 >>>>>>> 9bab50757c (component refer to public props type)
     /**
+<<<<<<< HEAD
      * [descr:_ui_chat_ContentReadyEvent]
      */
     export type ContentReadyEvent = events.EventInfo<dxChat>;
     /**
+=======
+>>>>>>> 9b771988f1 (refactor(chat): Remove ContentReady)
      * [descr:_ui_chat_DisposingEvent]
      */
     export type DisposingEvent = events.EventInfo<dxChat>;
     export interface ExplicitTypes {
       Properties: Properties;
-      ContentReadyEvent: ContentReadyEvent;
       DisposingEvent: DisposingEvent;
       InitializedEvent: InitializedEvent;
       OptionChangedEvent: OptionChangedEvent;
