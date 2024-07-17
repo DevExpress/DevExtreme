@@ -8,7 +8,7 @@ import dxChat, {
 import { Component as BaseComponent, IHtmlOptions, ComponentRef, IElementDescriptor } from "./core/component";
 import NestedOption from "./core/nested-option";
 
-import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User } from "devextreme/ui/chat";
+import type { Message, DisposingEvent, InitializedEvent, MessageSendEvent, User as ChatUser } from "devextreme/ui/chat";
 
 type ReplaceFieldTypes<TSource, TReplacement> = {
   [P in keyof TSource]: P extends keyof TReplacement ? TReplacement[P] : TSource[P];
@@ -70,30 +70,12 @@ const Chat = memo(
 
 
 // owners:
-// Item
-type IAuthorProps = React.PropsWithChildren<{
-  avatarUrl?: string;
-  firstName?: string;
-  id?: number;
-  lastName?: string;
-}>
-const _componentAuthor = memo(
-  (props: IAuthorProps) => {
-    return React.createElement(NestedOption<IAuthorProps>, { ...props });
-  }
-);
-
-const Author: typeof _componentAuthor & IElementDescriptor = Object.assign(_componentAuthor, {
-  OptionName: "author",
-})
-
-// owners:
 // Chat
 type IItemProps = React.PropsWithChildren<{
-  author?: User;
   text?: string;
   timestamp?: string;
   typing?: boolean;
+  user?: ChatUser;
 }>
 const _componentItem = memo(
   (props: IItemProps) => {
@@ -105,8 +87,25 @@ const Item: typeof _componentItem & IElementDescriptor = Object.assign(_componen
   OptionName: "items",
   IsCollectionItem: true,
   ExpectedChildren: {
-    author: { optionName: "author", isCollectionItem: false }
+    user: { optionName: "user", isCollectionItem: false }
   },
+})
+
+// owners:
+// Item
+type IUserProps = React.PropsWithChildren<{
+  avatarUrl?: string;
+  id?: number;
+  name?: string;
+}>
+const _componentUser = memo(
+  (props: IUserProps) => {
+    return React.createElement(NestedOption<IUserProps>, { ...props });
+  }
+);
+
+const User: typeof _componentUser & IElementDescriptor = Object.assign(_componentUser, {
+  OptionName: "user",
 })
 
 export default Chat;
@@ -114,10 +113,10 @@ export {
   Chat,
   IChatOptions,
   ChatRef,
-  Author,
-  IAuthorProps,
   Item,
-  IItemProps
+  IItemProps,
+  User,
+  IUserProps
 };
 import type * as ChatTypes from 'devextreme/ui/chat_types';
 export { ChatTypes };
