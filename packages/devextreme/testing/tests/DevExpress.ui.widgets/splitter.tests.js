@@ -2554,6 +2554,7 @@ QUnit.module('Events', moduleConfig, () => {
 
         assert.ok(resizeHandlerStub.called, 'onResizeEnd should be called after resizing');
     });
+
     ['onResizeStart', 'onResize', 'onResizeEnd'].forEach(eventHandler => {
         QUnit.test(`${eventHandler} should be called when handle dragged`, function(assert) {
             const resizeHandlerStub = sinon.stub();
