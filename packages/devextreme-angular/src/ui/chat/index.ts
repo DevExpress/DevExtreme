@@ -38,7 +38,7 @@ import {
 } from 'devextreme-angular/core';
 
 import { DxiItemModule } from 'devextreme-angular/ui/nested';
-import { DxoUserModule } from 'devextreme-angular/ui/nested';
+import { DxoAuthorModule } from 'devextreme-angular/ui/nested';
 
 import { DxiItemComponent } from 'devextreme-angular/ui/nested';
 
@@ -335,7 +335,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 @NgModule({
   imports: [
     DxiItemModule,
-    DxoUserModule,
+    DxoAuthorModule,
     DxIntegrationModule,
     DxTemplateModule
   ],
@@ -345,7 +345,7 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
   exports: [
     DxChatComponent,
     DxiItemModule,
-    DxoUserModule,
+    DxoAuthorModule,
     DxTemplateModule
   ]
 })

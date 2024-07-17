@@ -30427,9 +30427,9 @@ declare namespace DevExpress.ui.dxChat {
      */
     timestamp?: string;
     /**
-     * [descr:Message.user]
+     * [descr:Message.author]
      */
-    user?: User;
+    author?: User;
     /**
      * [descr:Message.text]
      */

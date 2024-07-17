@@ -66,6 +66,7 @@ const DxChat = createComponent({
 });
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 const DxAuthor = createConfigurationComponent({
   emits: {
     'update:isActive': null,
@@ -124,6 +125,9 @@ DxItem.$_expectedChildren = {
 >>>>>>> 9de0c11d9b (feat(chat): Add default values && Set not required)
 };
 const DxUser = createConfigurationComponent({
+=======
+const DxAuthor = createConfigurationComponent({
+>>>>>>> 6748d12586 (refactor(chat))
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -137,11 +141,33 @@ const DxUser = createConfigurationComponent({
     name: String
   }
 });
-(DxUser as any).$_optionName = "user";
+(DxAuthor as any).$_optionName = "author";
+const DxItem = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:author": null,
+    "update:text": null,
+    "update:timestamp": null,
+    "update:typing": null,
+  },
+  props: {
+    author: Object,
+    text: String,
+    timestamp: String,
+    typing: Boolean
+  }
+});
+(DxItem as any).$_optionName = "items";
+(DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  author: { isCollectionItem: false, optionName: "author" }
+};
 
 export default DxChat;
 export {
   DxChat,
+<<<<<<< HEAD
 <<<<<<< HEAD
   DxAuthor,
   DxItem,
@@ -149,5 +175,9 @@ export {
   DxItem,
   DxUser
 >>>>>>> 9de0c11d9b (feat(chat): Add default values && Set not required)
+=======
+  DxAuthor,
+  DxItem
+>>>>>>> 6748d12586 (refactor(chat))
 };
 export { DxChatTypes };

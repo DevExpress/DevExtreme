@@ -22,7 +22,7 @@ import { DxoUser } from './base/user';
 
 
 @Component({
-    selector: 'dxo-user',
+    selector: 'dxo-author',
     template: '',
     styles: [''],
     providers: [NestedOptionHost],
@@ -32,10 +32,10 @@ import { DxoUser } from './base/user';
         'name'
     ]
 })
-export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit  {
+export class DxoAuthorComponent extends DxoUser implements OnDestroy, OnInit  {
 
     protected get _optionPath() {
-        return 'user';
+        return 'author';
     }
 
 
@@ -60,10 +60,10 @@ export class DxoUserComponent extends DxoUser implements OnDestroy, OnInit  {
 
 @NgModule({
   declarations: [
-    DxoUserComponent
+    DxoAuthorComponent
   ],
   exports: [
-    DxoUserComponent
+    DxoAuthorComponent
   ],
 })
-export class DxoUserModule { }
+export class DxoAuthorModule { }
