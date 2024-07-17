@@ -1,11 +1,6 @@
-export function getPublicElementNonJquery(element) {
-    if(element && element.get) {
-        return element.get(0);
-    }
-    return element;
-}
-
-let strategy = getPublicElementNonJquery;
+let strategy = function(element) {
+    return element && element.get(0);
+};
 
 export function getPublicElement(element) {
     return strategy(element);
