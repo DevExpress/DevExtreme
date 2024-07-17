@@ -9418,16 +9418,11 @@ declare module DevExpress.ui {
   export class dxChat extends Widget<DevExpress.ui.dxChat.Properties> {}
   module dxChat {
     /**
-     * [descr:_ui_chat_ContentReadyEvent]
-     */
-    export type ContentReadyEvent = DevExpress.events.EventInfo<dxChat>;
-    /**
      * [descr:_ui_chat_DisposingEvent]
      */
     export type DisposingEvent = DevExpress.events.EventInfo<dxChat>;
     export type ExplicitTypes = {
       Properties: Properties;
-      ContentReadyEvent: ContentReadyEvent;
       DisposingEvent: DisposingEvent;
       InitializedEvent: InitializedEvent;
       OptionChangedEvent: OptionChangedEvent;
