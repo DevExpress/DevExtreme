@@ -13,6 +13,7 @@ import ActionSheet from 'ui/action_sheet';
 import Accordion from 'ui/accordion';
 import Button from 'ui/button';
 import ColorBox from 'ui/color_box';
+import Chat from 'ui/chat';
 import DataGrid from 'ui/data_grid';
 import DateBox from 'ui/date_box';
 import DateRangeBox from 'ui/date_range_box';
@@ -1329,6 +1330,13 @@ testComponentDefaults(ColorBox,
     { },
     {
         valueChangeEvent: 'change'
+    }
+);
+
+testComponentDefaults(Chat,
+    {},
+    {
+        onMessageSend: null,
     }
 );
 

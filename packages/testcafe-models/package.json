@@ -3,5 +3,8 @@
   "peerDependencies": {
     "testcafe": "*"
   },
+  "devDependencies": {
+    "devextreme": "~24.2.0"
+  },
   "version": "24.2.0"
 }

@@ -74,7 +74,7 @@
           [dataSource]="employees"
           [remoteOperations]="true"
           [height]="250"
-          [selectedRowKeys]="[cellInfo.value]"
+          [selectedRowKeys]="getSelectedRowKeys(cellInfo.value)"
           [focusedRowEnabled]="true"
           [focusedRowKey]="cellInfo.value"
           [hoverStateEnabled]="true"

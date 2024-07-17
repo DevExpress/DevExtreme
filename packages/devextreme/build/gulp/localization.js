@@ -72,7 +72,7 @@ const accountingFormats = function() {
     const result = {};
 
     locales.forEach(function(locale) {
-        const dataFilePath = `../../../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`;
+        const dataFilePath = `../../node_modules/cldr-numbers-full/main/${locale}/numbers.json`;
 
         if(fs.existsSync(path.join(__dirname, dataFilePath))) {
             const numbersData = require(dataFilePath);

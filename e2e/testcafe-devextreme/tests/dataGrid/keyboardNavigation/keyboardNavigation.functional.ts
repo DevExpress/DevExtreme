@@ -4629,3 +4629,71 @@ test('TreeList/DataGrid - Focus indicator is not visible when the Toolbar includ
   keyExpr: 'field_0',
   showBorders: true,
 }));
+
+// T1240353
+test('Enter key should not trigger other function besides the function assigned on the clicked button', async (t) => {
+  const dataGrid = new DataGrid('#container');
+
+  await t
+    .click(dataGrid.getDataCell(0, 0).element)
+    .click(Selector('#editButton'))
+    .pressKey('tab')
+    .pressKey('enter');
+
+  const message = await Selector('#otherContainer').innerText;
+  await t
+    .expect(message)
+    .eql('second button');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: [
+    {
+      ID: 1,
+      Prefix: 'Mr.',
+      FirstName: 'John',
+    },
+  ],
+  keyExpr: 'ID',
+  columns: ['Prefix', 'FirstName'],
+  masterDetail: {
+    enabled: true,
+    template(container) {
+      const buttonContainer = $('<div>')
+        .addClass('button-container')
+        .appendTo(container);
+
+      $('<button>')
+        .text('Edit')
+        .attr('id', 'editButton')
+        .on('click', () => {
+          $('#otherContainer').text('first button');
+        })
+        .appendTo(buttonContainer);
+
+      $('<button>')
+        .text('Focus me and press Enter')
+        .on('click', () => {
+          $('#otherContainer').text('second button');
+        })
+        .appendTo(buttonContainer);
+    },
+  },
+}));
+
+test('DataGrid - Data rows are skipped during Tab navigation if the first column is hidden via hidingPriority (T1228477)', async (t) => {
+  const dataGrid = new DataGrid('#container');
+  await t
+    .expect(dataGrid.getDataCell(0, 2).element.getAttribute('tabindex'))
+    .eql('0');
+}).before(async () => createWidget('dxDataGrid', {
+  dataSource: getData(3, 5),
+  keyExpr: 'field_0',
+  columns: [{
+    dataField: 'field_0',
+    hidingPriority: 0,
+  }, {
+    dataField: 'field_1',
+    hidingPriority: 1,
+  }, 'field_2', 'field_3', 'field_4'],
+  showBorders: true,
+  width: 300,
+}));

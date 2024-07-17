@@ -49,6 +49,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
           }) => (
               <Fragment key={fragmentKey}>
                 {
+                  // @ts-ignore
                   isGroupedAllDayPanel && <AllDayPanelTableBody
                     viewData={allDayPanel ?? AllDayPanelTableBodyDefaultProps.viewData}
                     viewContext={viewContext}
@@ -67,6 +68,7 @@ export class DateTableBody extends BaseInfernoComponent<DateTableBodyProps> {
                     cells,
                     key: rowKey,
                   }) => (
+                    // @ts-ignore
                       <Row
                         key={rowKey}
                         className={rowClasses}

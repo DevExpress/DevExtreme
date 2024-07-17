@@ -30,6 +30,7 @@ import {
   DxVectorMap,
   DxLayer,
   DxTooltip,
+  DxVectorMapTypes,
 } from 'devextreme-vue/vector-map';
 import {
   DxButton,
@@ -46,9 +47,10 @@ function customizeTooltip(info) {
   }
   return null;
 }
-function markerClick(e) {
+function markerClick(e: DxVectorMapTypes.ClickEvent) {
   if (e.target?.layer.type === 'marker') {
-    e.component.center(e.target.coordinates()).zoomFactor(10);
+    e.component.center(e.target.coordinates());
+    e.component.zoomFactor(10);
   }
 }
 function reset() {

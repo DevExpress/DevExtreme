@@ -4737,6 +4737,26 @@ QUnit.module('hide on blur', moduleSetup, () => {
 });
 
 QUnit.module('keyboard navigation', moduleSetup, () => {
+    QUnit.test('keydown event should be fired only once even if fieldTemplate is used (T1238121)', function(assert) {
+        const onKeyDownHandler = sinon.spy();
+
+        const $element = $('#selectBox').dxSelectBox({
+            onKeyDown: onKeyDownHandler,
+            fieldTemplate() {
+                const result = $('<div class=\'custom-item\'><div class=\'product-name\'></div></div>');
+                return result
+                    .find('.product-name')
+                    .dxTextBox({
+                        readOnly: true,
+                    });
+            },
+        });
+
+        const $input = $element.find(`.${TEXTEDITOR_INPUT_CLASS}`);
+        keyboardMock($input).type('a').change();
+
+        assert.strictEqual(onKeyDownHandler.callCount, 1, 'handler has been called once');
+    });
 
     QUnit.test('upArrow and downArrow on textbox change value', function(assert) {
 

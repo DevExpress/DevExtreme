@@ -50,6 +50,7 @@ export class GroupPanel extends InfernoWrapperComponent<GroupPanelProps> {
     const Layout = isVerticalLayout ? GroupPanelVertical : GroupPanelHorizontal;
 
     return (
+    // @ts-ignore
      <Layout
        viewContext={viewContext}
        height={height}

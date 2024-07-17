@@ -1599,6 +1599,7 @@ module('CellTemplate tests', moduleConfig, () => {
                 });
 
                 test('dateCellTemplate should have unique date in data (T732376)', function(assert) {
+                    this.clock = sinon.useFakeTimers();
                     this.createInstance({
                         views: ['timelineWorkWeek'],
                         currentView: 'timelineWorkWeek',
@@ -1628,6 +1629,8 @@ module('CellTemplate tests', moduleConfig, () => {
                     const $button = this.instance.$element().find('.dx-scheduler-header-panel-cell .dx-button').eq(2);
 
                     $($button).trigger('dxclick');
+                    this.clock.tick(1000);
+                    this.clock.restore();
                 });
 
                 test('dateCellTemplate should work correctly in workWeek view', function(assert) {

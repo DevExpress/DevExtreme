@@ -19,8 +19,8 @@
             "polyfills": "src/polyfills.ts",
             "tsConfig": "src/tsconfig.app.json",
             "styles": [
-              "../../node_modules/devextreme/dist/css/dx.common.css",
-              "../../node_modules/devextreme/dist/css/dx.light.css"
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.light.css"
             ],
             "scripts": []
           },
@@ -85,8 +85,8 @@
             "karmaConfig": "karma.conf.js",
             "assets": [],
             "styles": [
-              "../../node_modules/devextreme/dist/css/dx.common.css",
-              "../../node_modules/devextreme/dist/css/dx.light.css"
+              "node_modules/devextreme/dist/css/dx.common.css",
+              "node_modules/devextreme/dist/css/dx.light.css"
             ],
             "scripts": []
           }

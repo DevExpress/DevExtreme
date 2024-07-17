@@ -90,6 +90,7 @@ export class DateHeaderCell extends BaseInfernoComponent<DateHeaderCellProps> {
         </>
     )
       : (
+        // @ts-ignore
         <DateHeaderText
           splitText={splitText}
           text={text}
