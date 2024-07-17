@@ -7,6 +7,51 @@
 
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
+
+    <style>
+        .dx-chat {
+            display: flex;
+            flex-direction: column;
+            width: 400px;
+            height: 600px;
+            border: 1px solid #b3afc8;
+        }
+
+        .dx-chat-header {
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            height: 65px;
+            padding: 4px 20px;
+            border-bottom: 1px solid #b3afc8;
+        }
+
+        .dx-chat-header-text {
+            margin: 0;
+        }
+
+        .dx-chat-message-list {
+            flex: 1;
+            box-sizing: border-box;
+        }
+
+        .dx-chat-message-box {
+            display: flex;
+            height: 65px;
+            border-top: 1px solid #b3afc8;
+        }
+
+        .dx-chat-message-box-text-area {
+            flex-grow: 1;
+            border: none;
+            outline: none;
+        }
+
+        .dx-chat-message-box-button {
+            border: none;
+            outline: none;
+        }
+    </style>
 </head>
 <body class="dx-surface">
     <div role="main">
