@@ -16,6 +16,20 @@ const makeLocalStorageJsonInvalid = ClientFunction(() => {
   window.localStorage.testStorageKey = '{]';
 });
 
+const localConfig = (rows:number = 1): any => ({
+    dataSource: Array.from(new Array(rows).keys()).map((i) => ({ id: i })),
+    width: '100%',
+    keyExpr: 'id',
+    showBorders: true,
+    selectedRowKeys: [0],
+    selection: {mode: 'multiple'},
+    stateStoring: {
+      enabled: true,
+      storageKey: 'storage_custom',
+    },
+    columns: [{dataField: 'id'}, 'column2', 'column3', 'column4', 'column5'],
+})
+
 test('The Grid should load if JSON in localStorage is invalid and stateStoring enabled', async (t) => {
   const dataGrid = new DataGrid(GRID_CONTAINER);
   const secondCell = dataGrid.getDataCell(1, 1);
@@ -82,3 +96,23 @@ test('The rows should render correctly when cellTemplates are used and the selec
   // simulating async rendering in React
   await makeRowsViewTemplatesAsync(GRID_CONTAINER);
 });
+
+// T1233556
+test('Should select selectedRowKeys value if state.selectedRowKeys is null, undefined, or empty array', async (t) => {
+  const dataGrid = new DataGrid(GRID_CONTAINER);
+
+  await t
+  .click(dataGrid.getDataCell(0, 0).element())
+
+  await t
+  .eval(() => location.reload())
+
+  await createWidget('dxDataGrid', localConfig);
+
+  await t
+  .expect(dataGrid.getDataRow(0).isSelected)
+  .ok();
+  
+}).before(async () => {
+  await createWidget('dxDataGrid', localConfig(10));
+})
