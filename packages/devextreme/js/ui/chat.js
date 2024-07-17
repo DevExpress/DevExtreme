@@ -24,7 +24,8 @@ export default Chat;
 
 /**
  * @name dxChatOptions.onContentReady
- * @hidden
+ * @hidden true
+ * @action
  */
 
 /**
