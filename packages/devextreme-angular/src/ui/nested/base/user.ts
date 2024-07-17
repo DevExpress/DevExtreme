@@ -17,24 +17,17 @@ export abstract class DxoUser extends NestedOption {
         this._setOption('avatarUrl', value);
     }
 
-    get firstName(): string {
-        return this._getOption('firstName');
-    }
-    set firstName(value: string) {
-        this._setOption('firstName', value);
-    }
-
-    get id(): number {
+    get id(): number | undefined {
         return this._getOption('id');
     }
-    set id(value: number) {
+    set id(value: number | undefined) {
         this._setOption('id', value);
     }
 
-    get lastName(): string {
-        return this._getOption('lastName');
+    get name(): string {
+        return this._getOption('name');
     }
-    set lastName(value: string) {
-        this._setOption('lastName', value);
+    set name(value: string) {
+        this._setOption('name', value);
     }
 }

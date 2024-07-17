@@ -30425,15 +30425,15 @@ declare namespace DevExpress.ui.dxChat {
     /**
      * [descr:Message.timestamp]
      */
-    timestamp: string;
+    timestamp?: string;
     /**
-     * [descr:Message.author]
+     * [descr:Message.user]
      */
-    author: User;
+    user?: User;
     /**
      * [descr:Message.text]
      */
-    text: string;
+    text?: string;
     /**
      * [descr:Message.typing]
      */
@@ -30446,15 +30446,11 @@ declare namespace DevExpress.ui.dxChat {
     /**
      * [descr:User.id]
      */
-    id: number;
+    id?: number;
     /**
-     * [descr:User.firstName]
+     * [descr:User.name]
      */
-    firstName: string;
-    /**
-     * [descr:User.lastName]
-     */
-    lastName: string;
+    name?: string;
     /**
      * [descr:User.avatarUrl]
      */

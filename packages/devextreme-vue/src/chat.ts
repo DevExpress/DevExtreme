@@ -65,6 +65,7 @@ const DxChat = createComponent({
   },
 });
 
+<<<<<<< HEAD
 const DxAuthor = createConfigurationComponent({
   emits: {
     'update:isActive': null,
@@ -90,24 +91,63 @@ const DxItem = createConfigurationComponent({
     'update:text': null,
     'update:timestamp': null,
     'update:typing': null,
+=======
+const DxItem = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:text": null,
+    "update:timestamp": null,
+    "update:typing": null,
+    "update:user": null,
+>>>>>>> 9de0c11d9b (feat(chat): Add default values && Set not required)
   },
   props: {
-    author: Object,
     text: String,
     timestamp: String,
     typing: Boolean,
+<<<<<<< HEAD
   },
 });
 DxItem.$_optionName = 'items';
 DxItem.$_isCollectionItem = true;
 DxItem.$_expectedChildren = {
   author: { isCollectionItem: false, optionName: 'author' },
+=======
+    user: Object
+  }
+});
+(DxItem as any).$_optionName = "items";
+(DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  user: { isCollectionItem: false, optionName: "user" }
+>>>>>>> 9de0c11d9b (feat(chat): Add default values && Set not required)
 };
+const DxUser = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:avatarUrl": null,
+    "update:id": null,
+    "update:name": null,
+  },
+  props: {
+    avatarUrl: String,
+    id: Number,
+    name: String
+  }
+});
+(DxUser as any).$_optionName = "user";
 
 export default DxChat;
 export {
   DxChat,
+<<<<<<< HEAD
   DxAuthor,
   DxItem,
+=======
+  DxItem,
+  DxUser
+>>>>>>> 9de0c11d9b (feat(chat): Add default values && Set not required)
 };
 export { DxChatTypes };

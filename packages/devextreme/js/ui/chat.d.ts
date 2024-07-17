@@ -47,21 +47,19 @@ export type MessageSendEvent = Cancelable & NativeEventInfo<dxChat, KeyboardEven
 export type User = {
     /**
      * @docid
+     * @default undefined
      * @public
      */
-    id: number;
+    id?: number;
     /**
      * @docid
+     * @default ''
      * @public
      */
-    firstName: string;
+    name?: string;
     /**
      * @docid
-     * @public
-     */
-    lastName: string;
-    /**
-     * @docid
+     * @default ''
      * @public
      */
     avatarUrl?: string;
@@ -75,21 +73,25 @@ export type User = {
 export type Message = {
     /**
      * @docid
+     * @default undefined
      * @public
      */
-    timestamp: string;
+    timestamp?: string;
     /**
      * @docid
+     * @default undefined
      * @public
      */
-    author: User;
+    user?: User;
     /**
      * @docid
+     * @default ''
      * @public
      */
-    text: string;
+    text?: string;
     /**
      * @docid
+     * @default false
      * @public
      */
     typing?: boolean;
