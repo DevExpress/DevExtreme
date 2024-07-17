@@ -166,14 +166,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
 
     /**
     
-     * [descr:WidgetOptions.onContentReady]
-    
-    
-     */
-    @Output() onContentReady: EventEmitter<any>;
-
-    /**
-    
      * [descr:dxChatOptions.onDisposing]
     
     
@@ -284,7 +276,6 @@ export class DxChatComponent extends DxComponent implements OnDestroy, OnChanges
         super(elementRef, ngZone, templateHost, _watcherHelper, transferState, platformId);
 
         this._createEventEmitters([
-            { subscribe: 'contentReady', emit: 'onContentReady' },
             { subscribe: 'disposing', emit: 'onDisposing' },
             { subscribe: 'initialized', emit: 'onInitialized' },
             { subscribe: 'messageSend', emit: 'onMessageSend' },
