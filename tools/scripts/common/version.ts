@@ -20,7 +20,7 @@ export function updateVersion(version: string | undefined): void {
   sh.sed('-i', /"version": ".*"/, `"version": "${version}"`, workspacesPaths);
   sh.sed('-i', /"devextreme(-angular|-react|-vue|-dist)?": ".*"/, `"devextreme$1": "~${version}"`, workspacesPaths);
 
-  sh.exec('pnpm install');
+  sh.exec('pnpm install --no-frozen-lockfile');
 }
 
 export function updateVersionJs(version: string | undefined, build?: string | undefined): void {
