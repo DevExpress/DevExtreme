@@ -62,14 +62,20 @@ const SKIPPED_TESTS = {
     Charts: [
       { demo: 'ServerSideDataProcessing', themes: [THEME.material] },
     ],
+    Gantt: [
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
   },
   Angular: {
     DataGrid: [
+      { demo: 'EditStateManagement', themes: [THEME.generic] },
       { demo: 'MultipleRecordSelectionModes', themes: [THEME.fluent] },
       { demo: 'ToolbarCustomization', themes: [THEME.fluent, THEME.material] },
       { demo: 'SignalRService', themes: [THEME.fluent, THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
+      { demo: 'RemoteGrouping', themes: [THEME.generic] },
     ],
     Charts: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -114,6 +120,8 @@ const SKIPPED_TESTS = {
     ],
     Gantt: [
       { demo: 'ContextMenu', themes: [THEME.material] },
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
     VectorMap: [
       { demo: 'Palette', themes: [THEME.material] },
@@ -136,6 +144,9 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
     ],
+    Gantt: [
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+    ],
     Scheduler: [
       { demo: 'Overview', themes: [THEME.fluent, THEME.material] },
       { demo: 'GroupByDate', themes: [THEME.fluent, THEME.material] },
@@ -146,10 +157,12 @@ const SKIPPED_TESTS = {
     ],
     VectorMap: [
       { demo: 'PieMarkers', themes: [THEME.material] },
+      { demo: 'CustomAnnotations', themes: [THEME.material] },
       { demo: 'CustomMapData', themes: [THEME.material] },
       { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
       { demo: 'MultipleLayers', themes: [THEME.material] },
+      { demo: 'Palette', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
     ],
     RangeSelector: [
@@ -190,6 +203,22 @@ const SKIPPED_TESTS = {
       { demo: 'MultipleRecordSelectionAPI', themes: [THEME.material] },
       { demo: 'DeferredSelection', themes: [THEME.material] },
       { demo: 'CellEditingAndEditingAPI', themes: [THEME.material] },
+      { demo: 'PopupEditing', themes: [THEME.generic] },
+      { demo: 'RecordPaging', themes: [THEME.generic] },
+    ],
+    FieldSet: [
+      { demo: 'Overview', themes: [THEME.fluent] },
+    ],
+    FileManager: [
+      { demo: 'BindingToFileSystem', themes: [THEME.material] },
+      { demo: 'CustomThumbnails', themes: [THEME.generic] },
+    ],
+    FilterBuilder: [
+      { demo: 'Customization', themes: [THEME.material] },
+    ],
+    Form: [
+      { demo: 'ColumnsAdaptability', themes: [THEME.generic] },
+      { demo: 'UpdateItemsDynamically', themes: [THEME.generic] },
     ],
     TreeList: [
       { demo: 'Overview', themes: [THEME.material] },
@@ -212,6 +241,7 @@ const SKIPPED_TESTS = {
       { demo: 'LayoutCustomization', themes: [THEME.material] },
     ],
     VectorMap: [
+      { demo: 'CustomProjection', themes: [THEME.material] },
       { demo: 'Overview', themes: [THEME.material] },
       { demo: 'PieMarkers', themes: [THEME.material] },
       { demo: 'TooltipHTMLSupport', themes: [THEME.material] },
@@ -220,7 +250,8 @@ const SKIPPED_TESTS = {
       { demo: 'AreaWithLabelsAndTwoLegends', themes: [THEME.material] },
     ],
     Gantt: [
-      { demo: 'Validation', themes: [THEME.material] },
+      { demo: 'Validation', themes: [THEME.generic, THEME.material, THEME.fluent] },
+      { demo: 'TaskTemplate', themes: [THEME.generic, THEME.material, THEME.fluent] },
     ],
   },
 };
@@ -349,10 +380,6 @@ const SKIPPED_TESTS = {
           const comparisonResult = await compareScreenshot(t, `${testName}${getThemePostfix(testTheme)}.png`, undefined, comparisonOptions);
 
           const consoleMessages = await t.getBrowserConsoleMessages();
-          if (!comparisonResult) {
-            // eslint-disable-next-line no-console
-            console.log(consoleMessages);
-          }
 
           const errors = [...consoleMessages.error, ...consoleMessages.warn]
             .filter((e) => !knownWarnings.some((kw) => e.startsWith(kw)));

@@ -13,10 +13,16 @@ if (!/localhost/.test(document.location.host)) {
 
 const URL = 'https://js.devexpress.com/Demos/Mvc/api/DataGridWebApi';
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   preserveWhitespaces: true,
 })
 export class AppComponent {

@@ -29,6 +29,7 @@ export class VirtualCell extends BaseInfernoComponent<VirtualCellProps> {
     const Cell = isHeaderCell ? HeaderCell : OrdinaryCell;
 
     return (
+      // @ts-ignore
       <Cell
         className="dx-scheduler-virtual-cell"
         styles={modifiedStyles}

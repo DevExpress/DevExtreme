@@ -3,7 +3,8 @@ import {
 } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
-import { DxVectorMapComponent, DxVectorMapModule, DxButtonModule } from 'devextreme-angular';
+import { DxButtonModule } from 'devextreme-angular';
+import { DxVectorMapModule, DxVectorMapComponent, DxVectorMapTypes } from 'devextreme-angular/ui/vector-map';
 import * as mapsData from 'devextreme-dist/js/vectormap-data/world.js';
 import { Marker, Service } from './app.service';
 
@@ -11,11 +12,17 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
   providers: [Service],
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
 })
 
 export class AppComponent {
@@ -37,9 +44,10 @@ export class AppComponent {
     }
   }
 
-  markerClick({ target, component }) {
-    if (target?.layer.type === 'marker') {
-      component.center(target.coordinates()).zoomFactor(10);
+  markerClick(e: DxVectorMapTypes.ClickEvent) {
+    if (e.target?.layer.type === 'marker') {
+      e.component.center(e.target.coordinates());
+      e.component.zoomFactor(10);
     }
   }
 

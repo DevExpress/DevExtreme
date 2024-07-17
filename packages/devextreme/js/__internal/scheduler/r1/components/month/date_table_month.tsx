@@ -27,6 +27,7 @@ export class DateTableMonth extends InfernoWrapperComponent<DateTableProps> {
     const DataCellTemplateComponent = getTemplate(dataCellTemplate);
 
     return (
+      // @ts-ignore
       <DateTable
         {...restProps}
         viewData={viewData}

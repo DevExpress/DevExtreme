@@ -11,10 +11,16 @@ if (!/localhost/.test(document.location.host)) {
   enableProdMode();
 }
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
-  styleUrls: ['app/app.component.css'],
+  templateUrl: `.${modulePrefix}/app.component.html`,
+  styleUrls: [`.${modulePrefix}/app.component.css`],
   providers: [Service],
 })
 
@@ -51,6 +57,10 @@ export class AppComponent {
         ajaxOptions.xhrFields = { withCredentials: true };
       },
     });
+  }
+  
+  getSelectedRowKeys<T>(value: T): T[] {
+    return value !== null && value !== undefined ? [value] : [];
   }
 
   onSelectionChanged(selectedRowKeys, cellInfo, dropDownBoxComponent) {

@@ -66,6 +66,7 @@ export class GroupPanelHorizontal extends BaseInfernoComponent<GroupPanelBasePro
     return (
       <>
         {
+          // @ts-ignore
           groupPanelItems.map((group) => <GroupPanelHorizontalRow
               key={group[0].key}
               groupItems={group}

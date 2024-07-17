@@ -68,6 +68,7 @@ import {
   MASTER_DETAIL_CELL_CLASS,
   NON_FOCUSABLE_ELEMENTS_SELECTOR,
   REVERT_BUTTON_CLASS,
+  ROWS_VIEW,
   ROWS_VIEW_CLASS,
   WIDGET_CLASS,
 } from './const';
@@ -1042,7 +1043,9 @@ export class KeyboardNavigationController extends modules.ViewController {
 
       this._updateFocusedCellPosition($cell);
     } else if (this.getMasterDetailCell($cell)?.is($cell)) {
-      this.focusFirstInteractiveElementInside($cell);
+      if ($cell.is(':focus')) {
+        this.focusFirstInteractiveElementInside($cell);
+      }
     } else if (!$cell?.hasClass(COMMAND_EDIT_CLASS)) {
       this._processEnterKeyForDataCell(eventArgs, isEditing);
     }
@@ -1658,7 +1661,6 @@ export class KeyboardNavigationController extends modules.ViewController {
     this._isNeedScroll = false;
     this._focusedCellPosition = {};
     clearTimeout(this._updateFocusTimeout);
-    // @ts-expect-error
     this._focusedView?.renderFocusState({ preventScroll });
   }
 
@@ -2633,7 +2635,9 @@ const rowsView = (Base: ModuleType<RowsView>) => class RowsViewKeyboardExtender 
     }
   }
 
-  private renderFocusState(params) {
+  public renderFocusState(params) {
+    super.renderFocusState(params);
+
     const { preventScroll, pageSizeChanged } = params ?? {};
     const $rowsViewElement = this.element();
 
@@ -2903,6 +2907,13 @@ const adaptiveColumns = (Base: ModuleType<AdaptiveColumnsController>) => class A
 
     if (viewName === COLUMN_HEADERS_VIEW && !isCommandColumn && isCellInHeaderRow($cell)) {
       $cell.removeAttr('tabindex');
+    }
+  }
+
+  protected _hideVisibleColumnInView({ view, isCommandColumn, visibleIndex }) {
+    super._hideVisibleColumnInView({ view, isCommandColumn, visibleIndex });
+    if (view.name === ROWS_VIEW) {
+      this._rowsView.renderFocusState(null);
     }
   }
 };

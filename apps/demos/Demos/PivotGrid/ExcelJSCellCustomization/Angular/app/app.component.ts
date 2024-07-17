@@ -15,9 +15,15 @@ if (!/localhost/.test(document.location.host)) {
 
 type CellData = DxPivotGridTypes.CellPreparedEvent['cell'] & { area?: string };
 
+let modulePrefix = '';
+// @ts-ignore
+if (window && window.config.packageConfigPaths) {
+  modulePrefix = '/app';
+}
+
 @Component({
   selector: 'demo-app',
-  templateUrl: 'app/app.component.html',
+  templateUrl: `.${modulePrefix}/app.component.html`,
   providers: [Service],
 })
 export class AppComponent {

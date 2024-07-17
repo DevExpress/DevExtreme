@@ -1,18 +1,18 @@
 /* eslint-disable max-classes-per-file, no-restricted-syntax */
-import { createContext } from 'react';
+import { createContext, Context } from 'react';
 import { TemplateInstantiationModel, UpdateLocker } from './types';
 
-export const RemovalLockerContext = createContext<UpdateLocker | undefined>(undefined);
+export const RemovalLockerContext: Context<UpdateLocker | undefined> = createContext<UpdateLocker | undefined>(undefined);
 
 // eslint-disable-next-line @typescript-eslint/no-extra-parens
-export const RestoreTreeContext = createContext<(() => void) | undefined>(undefined);
+export const RestoreTreeContext: Context<(() => void) | undefined> = createContext<(() => void) | undefined>(undefined);
 
 export function generateID(): string {
   return Math.random().toString(36).substring(2);
 }
 
 export class DoubleKeyMap<TKey1, TKey2, TValue> {
-  private _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
+  private readonly _map: Map<TKey1, Map<TKey2, TValue>> = new Map();
 
   public set({ key1, key2 }: { key1: TKey1; key2: TKey2 }, value: TValue): void {
     let innerMap = this._map.get(key1);
@@ -41,15 +41,12 @@ export class DoubleKeyMap<TKey1, TKey2, TValue> {
     }
   }
 
-  public get empty(): boolean {
-    return this._map.size === 0;
+  public clear(): void {
+    this._map.clear();
   }
 
-  public shallowCopy(): DoubleKeyMap<TKey1, TKey2, TValue> {
-    const copy = new DoubleKeyMap<TKey1, TKey2, TValue>();
-
-    copy._map = this._map;
-    return copy;
+  public get empty(): boolean {
+    return this._map.size === 0;
   }
 
   * [Symbol.iterator](): Generator<[{ key1: TKey1; key2: TKey2 }, TValue]> {
