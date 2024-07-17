@@ -65,28 +65,7 @@ const DxChat = createComponent({
   }
 });
 
-const DxItem = createConfigurationComponent({
-  emits: {
-    "update:isActive": null,
-    "update:hoveredElement": null,
-    "update:text": null,
-    "update:timestamp": null,
-    "update:typing": null,
-    "update:user": null,
-  },
-  props: {
-    text: String,
-    timestamp: String,
-    typing: Boolean,
-    user: Object
-  }
-});
-(DxItem as any).$_optionName = "items";
-(DxItem as any).$_isCollectionItem = true;
-(DxItem as any).$_expectedChildren = {
-  user: { isCollectionItem: false, optionName: "user" }
-};
-const DxUser = createConfigurationComponent({
+const DxAuthor = createConfigurationComponent({
   emits: {
     "update:isActive": null,
     "update:hoveredElement": null,
@@ -100,13 +79,34 @@ const DxUser = createConfigurationComponent({
     name: String
   }
 });
-(DxUser as any).$_optionName = "user";
+(DxAuthor as any).$_optionName = "author";
+const DxItem = createConfigurationComponent({
+  emits: {
+    "update:isActive": null,
+    "update:hoveredElement": null,
+    "update:author": null,
+    "update:text": null,
+    "update:timestamp": null,
+    "update:typing": null,
+  },
+  props: {
+    author: Object,
+    text: String,
+    timestamp: String,
+    typing: Boolean
+  }
+});
+(DxItem as any).$_optionName = "items";
+(DxItem as any).$_isCollectionItem = true;
+(DxItem as any).$_expectedChildren = {
+  author: { isCollectionItem: false, optionName: "author" }
+};
 
 export default DxChat;
 export {
   DxChat,
-  DxItem,
-  DxUser
+  DxAuthor,
+  DxItem
 };
 import type * as DxChatTypes from "devextreme/ui/chat_types";
 export { DxChatTypes };

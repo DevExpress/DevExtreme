@@ -147,10 +147,17 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
         this._setOption('hint', value);
     }
 
-    get timestamp(): string | undefined {
+    get author(): User | undefined {
+        return this._getOption('author');
+    }
+    set author(value: User | undefined) {
+        this._setOption('author', value);
+    }
+
+    get timestamp(): string {
         return this._getOption('timestamp');
     }
-    set timestamp(value: string | undefined) {
+    set timestamp(value: string) {
         this._setOption('timestamp', value);
     }
 
@@ -159,13 +166,6 @@ export abstract class DxiButtonGroupItem extends CollectionNestedOption {
     }
     set typing(value: boolean) {
         this._setOption('typing', value);
-    }
-
-    get user(): User | undefined {
-        return this._getOption('user');
-    }
-    set user(value: User | undefined) {
-        this._setOption('user', value);
     }
 
     get beginGroup(): boolean {
