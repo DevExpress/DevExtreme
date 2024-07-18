@@ -18,5 +18,5 @@
       "dependsOn": []
     }
   },
-  "implicitDependencies": ["devextreme-main"]
+  "implicitDependencies": ["devextreme"]
 }
