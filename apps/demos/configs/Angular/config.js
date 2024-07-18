@@ -13,7 +13,6 @@ const componentNames = [
   'button',
   'calendar',
   'chart',
-  'chat',
   'check-box',
   'circular-gauge',
   'color-box',
