@@ -123,7 +123,7 @@ export default class DependencyCollector {
 
   validate(): void {
     this.themes.forEach((theme) => {
-      const indexFileName = path.resolve(__dirname, `../../../devextreme/scss/widgets/${theme}/_index.scss`);
+      const indexFileName = path.resolve(__dirname, `../../../devextreme-scss/scss/widgets/${theme}/_index.scss`);
       const indexContent = readFileSync(indexFileName, 'utf8');
       const indexPublicWidgetsList = new WidgetsHandler([], '', {})
         .getIndexWidgetItems(indexContent)
