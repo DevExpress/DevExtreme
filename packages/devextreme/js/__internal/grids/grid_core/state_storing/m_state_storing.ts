@@ -157,10 +157,9 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
    * @extended: TreeList's state_storing
    */
   protected applyState(state) {
-    const { allowedPageSizes } = state;
-    const { searchText } = state;
-    const { selectedRowKeys } = state;
-    const { selectionFilter } = state;
+    const {
+      allowedPageSizes, searchText, selectedRowKeys, selectionFilter,
+    } = state;
     const scrollingMode = this.option('scrolling.mode');
     const isVirtualScrollingMode = scrollingMode === 'virtual' || scrollingMode === 'infinite';
     const showPageSizeSelector = this.option('pager.visible') === true && this.option('pager.showPageSizeSelector');
@@ -178,7 +177,9 @@ const stateStoring = (Base: ModuleType<StateStoringController>) => class StateSt
     }
 
     if (!this.option('selection.deferred')) {
-      this.option('selectedRowKeys', selectedRowKeys || []);
+      if (selectedRowKeys && selectedRowKeys.length !== 0) {
+        this.option('selectedRowKeys', selectedRowKeys || []);
+      }
     }
 
     // @ts-expect-error
