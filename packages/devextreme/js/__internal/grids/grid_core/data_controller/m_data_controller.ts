@@ -597,7 +597,7 @@ export class DataController extends DataHelperMixin(modules.Controller) {
     this.dataErrorOccurred.fire(e);
   }
 
-  private _handleDataPushed(changes) {
+  protected _handleDataPushed(changes) {
     this.pushed.fire(changes);
   }
 
