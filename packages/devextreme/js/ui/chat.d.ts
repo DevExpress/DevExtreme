@@ -1,4 +1,5 @@
 import Widget, { WidgetOptions } from './widget/ui.widget';
+
 import {
     Cancelable,
     EventInfo,
