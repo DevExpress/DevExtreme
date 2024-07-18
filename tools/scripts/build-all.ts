@@ -53,10 +53,10 @@ if (!devMode) {
 }
 
 if (devMode) {
-    sh.exec('pnpx nx build devextreme-main');
+    sh.exec('pnpx nx build devextreme');
 } else {
     sh.exec('npm run build -w devextreme-scss', sh);
-    sh.exec('pnpx nx build-dist devextreme-main --skipNxCache', {
+    sh.exec('pnpx nx build-dist devextreme --skipNxCache', {
         env: {
             ...sh.env,
             BUILD_INTERNAL_PACKAGE: 'false'
@@ -100,7 +100,7 @@ sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-react', 'npm', '*.tgz'), NPM_D
 sh.cp(path.join(ROOT_DIR, 'packages', 'devextreme-vue', 'npm', '*.tgz'), NPM_DIR);
 
 if (sh.env.BUILD_INTERNAL_PACKAGE === 'true') {
-    sh.exec('pnpx nx build-dist devextreme-main');
+    sh.exec('pnpx nx build-dist devextreme');
 
     sh.pushd(path.join(DEVEXTREME_NPM_DIR, 'devextreme-internal'));
         sh.exec(`pnpm pkg set version="${devextremeNpmVersion}"`);

@@ -3,9 +3,6 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "e2e/testcafe-devextreme",
   "projectType": "application",
-  "implicitDependencies": [
-    "devextreme-main"
-  ],
   "targets": {
     "lint": {
       "executor": "nx:run-script",
