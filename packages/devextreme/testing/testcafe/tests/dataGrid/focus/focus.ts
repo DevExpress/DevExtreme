@@ -81,4 +81,70 @@ test('Should remove dx-focused class on blur event from the cell', async (t) => 
   }, {
     dependencies: { reshapeOnPush },
   })));
+
+  // T1233973
+  test(`DataGrid should restore focused row by index after row removed via push API' (reshapeOnPush=${reshapeOnPush})`, async (t) => {
+    const dataGrid = new DataGrid(GRID_SELECTOR);
+
+    await t
+      .expect(dataGrid.getDataRow(2).isFocusedRow)
+      .ok()
+      .expect(dataGrid.getDataRow(2).element.textContent)
+      .eql('Item 3')
+      .expect(dataGrid.option('focusedRowKey'))
+      .eql(2)
+      .expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)())
+      .eql(1);
+
+    await dataGrid.apiPush([{
+      type: 'remove',
+      key: 2,
+    }]);
+
+    await t
+      .expect(dataGrid.getDataRow(2).isFocusedRow)
+      .ok()
+      .expect(dataGrid.getDataRow(2).element.textContent)
+      .eql('Item 4')
+      .expect(dataGrid.option('focusedRowKey'))
+      .eql(3)
+      .expect(ClientFunction(() => (window as any).onFocusedRowChangedCounter)())
+      .eql(2);
+  }).before(async () => createWidget('dxDataGrid', ClientFunction(() => {
+    const { DevExpress } = (window as any);
+    const store = new DevExpress.data.ArrayStore({
+      data: [
+        { id: 0, name: 'Item 1 ' },
+        { id: 1, name: 'Item 2' },
+        { id: 2, name: 'Item 3' },
+        { id: 3, name: 'Item 4' },
+        { id: 4, name: 'Item 5' },
+      ],
+      key: 'id',
+    });
+    const dataSource = new DevExpress.data.DataSource({ store, reshapeOnPush });
+
+    return {
+      columns: ['name'],
+      dataSource,
+      keyExpr: 'id',
+      focusedRowEnabled: true,
+      focusedRowKey: 2,
+      onFocusedRowChanged: () => {
+        const global = window as Window & typeof globalThis
+        & { onFocusedRowChangedCounter: number };
+
+        if (!global.onFocusedRowChangedCounter) {
+          global.onFocusedRowChangedCounter = 0;
+        }
+        global.onFocusedRowChangedCounter += 1;
+      },
+    };
+  }, {
+    dependencies: { reshapeOnPush },
+  }))).after(async () => {
+    await ClientFunction(() => {
+      delete (window as any).onFocusedRowChangedCounter;
+    })();
+  });
 });
