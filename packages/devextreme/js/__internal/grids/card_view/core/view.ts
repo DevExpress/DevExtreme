@@ -1,4 +1,5 @@
-import type { Subscribable, Subscription } from '@ts/core/reactive';
+import type { Subscription } from '@js/__internal/core/reactive/subscription';
+import type { Subscribable } from '@ts/core/reactive';
 import { state, toSubscribable } from '@ts/core/reactive';
 import type { InfernoNode } from 'inferno';
 import { Component, render } from 'inferno';

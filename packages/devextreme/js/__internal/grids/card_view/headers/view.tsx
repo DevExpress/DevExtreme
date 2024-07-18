@@ -31,9 +31,9 @@ export class HeadersView extends View {
   ) {
     super();
     // TODO: move to onMounted
-    setTimeout(() => {
-      this.registerDragging();
-    }, 1000);
+    // setTimeout(() => {
+    //   this.registerDragging();
+    // }, 1000);
   }
 
   private registerDragging(): void {
