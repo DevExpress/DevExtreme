@@ -29,6 +29,7 @@ ui.dxButtonGroup = require('../../../ui/button_group');
 ui.dxCalendar = require('../../../ui/calendar');
 ui.dxCheckBox = require('../../../ui/check_box');
 ui.dxColorBox = require('../../../ui/color_box');
+ui.dxChat = require('../../../ui/chat');
 ui.dxDateBox = require('../../../ui/date_box');
 ui.dxDateRangeBox = require('../../../ui/date_range_box');
 ui.dxDrawer = require('../../../ui/drawer');

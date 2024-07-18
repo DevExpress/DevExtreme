@@ -7,6 +7,7 @@ import dxButtonGroup, { Properties as ButtonGroupProperties } from '../ui/button
 import dxCalendar, { Properties as CalendarProperties } from '../ui/calendar';
 import dxCheckBox, { Properties as CheckBoxProperties } from '../ui/check_box';
 import dxColorBox, { Properties as ColorBoxProperties } from '../ui/color_box';
+import dxChat, { Properties as ChatProperties } from '../ui/chat';
 import dxContextMenu, { Properties as ContextMenuProperties } from '../ui/context_menu';
 import dxDataGrid, { Properties as DataGridProperties } from '../ui/data_grid';
 import dxDateBox, { Properties as DateBoxProperties } from '../ui/date_box';
@@ -183,6 +184,12 @@ declare global {
         dxColorBox(options: ColorBoxProperties): JQuery;
         dxColorBox(options: string): any;
         dxColorBox(options: string, ...params: any[]): any;
+
+        dxChat(): JQuery;
+        dxChat(options: 'instance'): dxChat;
+        dxChat(options: ChatProperties): JQuery;
+        dxChat(options: string): any;
+        dxChat(options: string, ...params: any[]): any;
 
         dxContextMenu(): JQuery;
         dxContextMenu(options: 'instance'): dxContextMenu;
