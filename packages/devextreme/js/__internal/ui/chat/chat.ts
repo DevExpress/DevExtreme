@@ -5,11 +5,12 @@ import type { Properties } from '@js/ui/chat';
 import Widget from '../widget';
 import { renderHeader } from './chat_header';
 import { renderMessageBox } from './chat_message_box';
-import { renderMessageList, setItems } from './chat_message_list';
+import { renderMessageList, setCurrentUserId, setItems } from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
 const MOCK_CHAT_HEADER_TEXT = new Date();
+const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 
 class Chat extends Widget<Properties> {
   _getDefaultOptions(): Properties {
@@ -40,6 +41,7 @@ class Chat extends Widget<Properties> {
     const { items } = this.option();
 
     setItems(items);
+    setCurrentUserId(MOCK_CURRENT_USER_ID);
     renderMessageList(this.element());
   }
 

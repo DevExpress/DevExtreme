@@ -31,8 +31,9 @@
         }
 
         .dx-chat-message-list {
-            flex: 1;
             box-sizing: border-box;
+            flex: 1;
+            overflow: auto;
         }
 
         .dx-chat-message-inner-list {
@@ -40,10 +41,32 @@
             flex-direction: column;
             padding: 0;
             margin: 0;
+            overflow-y: auto;
+        }
+
+        .dx-chat-message-wrapper {
+            display: flex;
+            flex-direction: column;
+            margin: 10px;
+        }
+
+        .dx-chat-message-wrapper-current {
+            align-items: flex-end;
         }
 
         .dx-chat-message-inner-list-item {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            margin-bottom: 4px;
+        }
+
+        .dx-chat-message-wrapper-current .dx-chat-message-inner-list-item {
+            justify-content: flex-end;
+        }
+
+        .dx-chat-message-time {
+            font-size: 12px;
+            color: #a9a9a9;
         }
 
         .dx-chat-message-avatar {
@@ -54,6 +77,11 @@
             height: 40px;
             border-radius: 50%;
             background-color: rgb(135, 135, 135);
+        }
+
+        .dx-chat-message-text {
+            margin: 0;
+            padding: 0 8px;
         }
 
         .dx-chat-message-box {
@@ -79,6 +107,8 @@
         <div id="chat"></div>
 
         <script>
+            const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID'
+
             const userFirst = {
                 id: Math.random(),
                 firstName: 'user',
@@ -86,7 +116,7 @@
             }
 
             const userSecond = {
-                id: Math.random(),
+                id: MOCK_CURRENT_USER_ID,
                 firstName: 'user',
                 lastName: 'Second',
             }
