@@ -333,7 +333,7 @@ test('SVG icon set', async (t) => {
 
     await ClientFunction(() => {
       $(`#${id}`)
-        .append($(`<img src="../../../packages/devextreme/images/icons/${themeName}/${iconName}.svg">`))
+        .append($(`<img src="../../../packages/devextreme-scss/images/icons/${themeName}/${iconName}.svg">`))
         .append($('<div>').text(`${iconName}`));
     }, {
       dependencies: {
