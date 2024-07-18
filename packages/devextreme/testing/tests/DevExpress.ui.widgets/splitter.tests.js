@@ -2538,6 +2538,8 @@ QUnit.module('Visibility of control elements', {
 
 QUnit.module('Events', moduleConfig, () => {
     QUnit.test('items sizes should be already updated when onResizeEnd is raised (T1240125)', function(assert) {
+        assert.expect(1);
+
         this.reinit({
             onResizeEnd: (eventArgs) => {
                 const newItems = eventArgs.component.option('items');
