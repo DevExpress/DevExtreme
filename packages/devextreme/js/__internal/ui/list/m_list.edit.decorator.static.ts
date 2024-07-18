@@ -24,13 +24,16 @@ registerDecorator(
           this._deleteItem($itemElement);
         }.bind(this),
         integrationOptions: {},
+        elementAttr: {
+          role: null,
+          'aria-label': null,
+        },
+        tabIndex: -1,
       });
 
       $container
         .addClass(STATIC_DELETE_BUTTON_CONTAINER_CLASS)
         .append($button);
-
-      this._updateButtonAttributes($button);
     },
 
     _deleteItem($itemElement) {

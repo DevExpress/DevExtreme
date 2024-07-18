@@ -35,6 +35,11 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
         e.event.stopPropagation();
       }.bind(this),
       integrationOptions: {},
+      elementAttr: {
+        role: null,
+        'aria-label': null,
+      },
+      tabIndex: -1,
     });
 
     $buttonContainer.append($buttonWrapper);
@@ -42,8 +47,6 @@ const SwitchableButtonEditDecorator = SwitchableEditDecorator.inherit({
     $buttonInnerWrapper.append($button);
 
     this._$buttonContainer = $buttonContainer;
-
-    this._updateButtonAttributes($button);
   },
 
   _enablePositioning($itemElement) {
@@ -133,12 +136,15 @@ registerDecorator(
           e.event.stopPropagation();
         }.bind(this),
         integrationOptions: {},
+        elementAttr: {
+          role: null,
+          'aria-label': null,
+        },
+        tabIndex: -1,
       });
 
       $container.addClass(TOGGLE_DELETE_SWITCH_CONTAINER_CLASS);
       $container.append($toggle);
-
-      this._updateButtonAttributes($toggle);
     },
 
   }),

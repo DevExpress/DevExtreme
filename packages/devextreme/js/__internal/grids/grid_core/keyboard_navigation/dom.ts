@@ -6,8 +6,14 @@ import { ATTRIBUTES } from './const';
 
 const isDragCell = ($cell) => $cell.attr(ATTRIBUTES.dragCell) !== undefined;
 
+const getFocusableCellSelector = (columnIndex: number): string => [
+  `[${ATTRIBUTES.ariaColIndex}="${columnIndex + 1}"]`,
+  `:not([${ATTRIBUTES.dragCell}])`,
+  ':not([aria-hidden=true])',
+].join('');
+
 const getCellToFocus = ($cellElements, columnIndex) => $cellElements
-  .filter(`[${ATTRIBUTES.ariaColIndex}="${columnIndex + 1}"]:not([${ATTRIBUTES.dragCell}])`)
+  .filter(getFocusableCellSelector(columnIndex))
   .first();
 
 export const GridCoreKeyboardNavigationDom = {
