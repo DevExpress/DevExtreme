@@ -36,7 +36,7 @@
             overflow: auto;
         }
 
-        .dx-chat-message-inner-list {
+        .dx-chat-message-list-content {
             display: flex;
             flex-direction: column;
             padding: 0;
@@ -44,32 +44,42 @@
             overflow-y: auto;
         }
 
-        .dx-chat-message-wrapper {
-            display: flex;
-            flex-direction: column;
+        .dx-chat-message-group {
+            display: grid;
+            align-items: start;
             margin: 10px;
         }
 
-        .dx-chat-message-wrapper-current {
-            align-items: flex-end;
+        .dx-chat-message-group-alignment-start {
+            justify-items: start;
+            grid-template-columns: 50px 1fr;
         }
 
-        .dx-chat-message-inner-list-item {
+        .dx-chat-message-group-alignment-end {
+            justify-items: end;
+        }
+
+        .dx-chat-message-group-information {
             display: flex;
-            align-items: center;
-            margin-bottom: 4px;
+            grid-row: 1;
         }
 
-        .dx-chat-message-wrapper-current .dx-chat-message-inner-list-item {
-            justify-content: flex-end;
+        .dx-chat-message-group-alignment-start .dx-chat-message-group-information {
+            grid-column: 2;
         }
 
-        .dx-chat-message-time {
+        .dx-chat-message-time,
+        .dx-chat-message-name {
             font-size: 12px;
             color: #a9a9a9;
         }
 
+        .dx-chat-message-name {
+            margin-right: 8px;
+        }
+
         .dx-chat-message-avatar {
+            grid-row: span 3;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -79,9 +89,13 @@
             background-color: rgb(135, 135, 135);
         }
 
-        .dx-chat-message-text {
+        .dx-chat-message-bubble {
             margin: 0;
-            padding: 0 8px;
+            padding: 0;
+        }
+
+        .dx-chat-message-group-alignment-start .dx-chat-message-bubble {
+            grid-column: 2;
         }
 
         .dx-chat-message-box {
@@ -111,22 +125,20 @@
 
             const userFirst = {
                 id: Math.random(),
-                firstName: 'user',
-                lastName: 'First',
+                name: 'First',
             }
 
             const userSecond = {
                 id: MOCK_CURRENT_USER_ID,
-                firstName: 'user',
-                lastName: 'Second',
+                name: 'Second',
             }
 
             const now = Date.now()
 
-            const messages = Array.from({ length: 10 }, (_, i) => {
+            const messages = Array.from({ length: 20 }, (_, i) => {
                 const item = {
                     timestamp: String(now + i),
-                    author: i % 2 === 0 ? userSecond : userFirst,
+                    author: i % 3 === 0 ? userSecond : userFirst,
                     text: String(Math.random() + i),
                 }
 

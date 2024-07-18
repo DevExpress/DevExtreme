@@ -5,7 +5,7 @@ import type { Properties } from '@js/ui/chat';
 import Widget from '../widget';
 import { renderHeader } from './chat_header';
 import { renderMessageBox } from './chat_message_box';
-import { renderMessageList, setCurrentUserId, setItems } from './chat_message_list';
+import { renderMessageListInit, setCurrentUserId, setItems } from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
@@ -42,7 +42,7 @@ class Chat extends Widget<Properties> {
 
     setItems(items);
     setCurrentUserId(MOCK_CURRENT_USER_ID);
-    renderMessageList(this.element());
+    renderMessageListInit(this.element());
   }
 
   _renderMessageBox(): void {
