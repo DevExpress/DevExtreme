@@ -25611,11 +25611,10 @@ declare module DevExpress.ui {
     /**
      * [descr:_ui_splitter_ResizeEndEvent]
      */
-    export type ResizeEndEvent<TKey = any> = DevExpress.events.Cancelable &
-      DevExpress.events.NativeEventInfo<
-        dxSplitter<TKey>,
-        KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
-      > &
+    export type ResizeEndEvent<TKey = any> = DevExpress.events.NativeEventInfo<
+      dxSplitter<TKey>,
+      KeyboardEvent | PointerEvent | MouseEvent | TouchEvent
+    > &
       ResizeInfo;
     /**
      * [descr:_ui_splitter_ResizeEvent]
