@@ -1,23 +1,18 @@
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
-import type { WidgetOptions } from '@js/ui/widget/ui.widget';
+import type { Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 
 const CHAT_CLASS = 'dx-chat';
 
-export interface ChatOptions extends WidgetOptions<Chat> {
-  items: [];
-  onMessageSend: null;
-}
-
-class Chat extends Widget<ChatOptions> {
-  _getDefaultOptions(): ChatOptions {
+class Chat extends Widget<Properties> {
+  _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       ...{
         items: [],
-        onMessageSend: null,
+        onMessageSend: undefined,
       },
     };
   }
