@@ -2,7 +2,9 @@
 import { Component } from '@js/core/component';
 import { getPathParts } from '@js/core/utils/data';
 import type { ChangedOptionInfo } from '@js/events';
-import type { Observable, Subscribable, Updatable } from '@ts/core/reactive';
+import type {
+  Gettable, Observable, Subscribable, Updatable,
+} from '@ts/core/reactive';
 import { computed, state } from '@ts/core/reactive';
 
 function cloneObjectValue<T extends Record<string, unknown> | unknown[]>(
@@ -49,7 +51,7 @@ export class OptionsController<TProps> {
     });
   }
 
-  oneWay<TProp extends keyof TProps>(name: TProp): Subscribable<TProps[TProp]> {
+  oneWay<TProp extends keyof TProps>(name: TProp): Subscribable<TProps[TProp]> & Gettable<TProps[TProp]> {
     const obs = computed((props) => {
       let v: any = props;
       // @ts-expect-error
