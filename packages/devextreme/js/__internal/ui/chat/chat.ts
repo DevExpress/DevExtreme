@@ -1,6 +1,6 @@
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
-import type { Message, Properties } from '@js/ui/chat';
+import type { Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
@@ -72,7 +72,6 @@ class Chat extends Widget<Properties> {
         this._chatHeader?.option(name, (value as string));
         break;
       case 'items':
-        this.option(name, (value as Message[]));
         break;
       case 'onMessageSend':
         break;
