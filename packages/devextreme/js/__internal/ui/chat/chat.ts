@@ -1,12 +1,11 @@
 import registerComponent from '@js/core/component_registrator';
 import $ from '@js/core/renderer';
-import type { Properties } from '@js/ui/chat';
+import type { Message, Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
 import MessageBox from './chat_message_box';
-// import { renderMessageBox } from './chat_message_box';
-import { renderMessageListInit, setCurrentUserId, setItems } from './chat_message_list';
+import MessageList from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
@@ -16,6 +15,8 @@ class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
 
   _messageBox?: MessageBox;
+
+  _messageList?: MessageList;
 
   _getDefaultOptions(): Properties {
     return {
@@ -49,9 +50,12 @@ class Chat extends Widget<Properties> {
   _renderMessageList(): void {
     const { items } = this.option();
 
-    setItems(items);
-    setCurrentUserId(MOCK_CURRENT_USER_ID);
-    renderMessageListInit(this.element());
+    this._messageList = this._createComponent($('<div>'), MessageList, {
+      items,
+      currentUserId: MOCK_CURRENT_USER_ID,
+    });
+
+    $(this._messageList.element()).appendTo(this.element());
   }
 
   _renderMessageBox(): void {
@@ -68,6 +72,7 @@ class Chat extends Widget<Properties> {
         this._chatHeader?.option(name, (value as string));
         break;
       case 'items':
+        this.option(name, (value as Message[]));
         break;
       case 'onMessageSend':
         break;

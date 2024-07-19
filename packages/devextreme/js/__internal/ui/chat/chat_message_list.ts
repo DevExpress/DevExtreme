@@ -2,75 +2,100 @@
 /* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import $ from '@js/core/renderer';
+import type { Message } from '@js/ui/chat';
+import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
+import Widget from '../widget';
 import { renderMessageGroup } from './chat_message_group';
 
 const CHAT_MESSAGE_LIST_CLASS = 'dx-chat-message-list';
 const CHAT_MESSAGE_LIST_CONTENT_CLASS = 'dx-chat-message-list-content';
 
-const data = {
-  items: [
-    {
-      author: {
-        id: null,
+export interface MessageListOptions extends WidgetOptions<MessageList> {
+  items?: Message[];
+  currentUserId?: string;
+}
+
+class MessageList extends Widget<MessageListOptions> {
+  _getDefaultOptions(): MessageListOptions {
+    return {
+      ...super._getDefaultOptions(),
+      ...{
+        items: [],
+        currentUserId: '',
       },
-    },
-  ],
-  currentUserId: null,
-};
+    };
+  }
 
-export const setItems = (messages) => {
-  data.items = messages;
-};
+  _initMarkup(): void {
+    $(this.element()).addClass(CHAT_MESSAGE_LIST_CLASS);
 
-export const setCurrentUserId = (userId) => {
-  data.currentUserId = userId;
-};
+    super._initMarkup();
 
-const isCurrentUser = (id) => data.currentUserId === id;
-const messageGroupAlignment = (id) => (isCurrentUser(id) ? 'end' : 'start');
+    this._renderMessageListContent();
+  }
 
-const renderMessageListContent = (element) => {
-  const $content = $('<ul>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
+  _isCurrentUser(id) {
+    const { currentUserId } = this.option();
 
-  let currentMessageGroupUserId = data.items[0].author.id;
-  let currentMessageGroupItems: any = [];
+    return currentUserId === id;
+  }
 
-  data.items.forEach((item, index) => {
-    const { id } = item.author;
+  _messageGroupAlignment(id) {
+    return this._isCurrentUser(id) ? 'end' : 'start';
+  }
 
-    if (id === currentMessageGroupUserId) {
-      currentMessageGroupItems.push(item);
-    } else {
-      renderMessageGroup(
-        currentMessageGroupItems,
-        messageGroupAlignment(currentMessageGroupUserId),
-        $content,
-      );
+  _renderMessageListContent() {
+    const $content = $('<ul>').addClass(CHAT_MESSAGE_LIST_CONTENT_CLASS);
 
-      currentMessageGroupUserId = id;
-      currentMessageGroupItems = [];
-      currentMessageGroupItems.push(item);
+    const { items } = this.option();
+
+    let currentMessageGroupUserId = (items?.[0] as any).author.id;
+    let currentMessageGroupItems: any = [];
+
+    items?.forEach((item, index) => {
+      const { id } = (item as any).author;
+
+      if (id === currentMessageGroupUserId) {
+        currentMessageGroupItems.push(item);
+      } else {
+        renderMessageGroup(
+          currentMessageGroupItems,
+          this._messageGroupAlignment(currentMessageGroupUserId),
+          $content,
+        );
+
+        currentMessageGroupUserId = id;
+        currentMessageGroupItems = [];
+        currentMessageGroupItems.push(item);
+      }
+
+      if (items.length - 1 === index) {
+        renderMessageGroup(
+          currentMessageGroupItems,
+          this._messageGroupAlignment(currentMessageGroupUserId),
+          $content,
+        );
+      }
+    });
+
+    $content.appendTo(this.element());
+  }
+
+  _optionChanged(args: Record<string, unknown>): void {
+    const { name, value } = args;
+
+    switch (name) {
+      case 'items':
+        this.option(name, (value as Message[]));
+        break;
+      case 'currentUserId':
+        this.option(name, (value as any));
+        break;
+      default:
+        super._optionChanged(args);
     }
+  }
+}
 
-    if (data.items.length - 1 === index) {
-      renderMessageGroup(
-        currentMessageGroupItems,
-        messageGroupAlignment(currentMessageGroupUserId),
-        $content,
-      );
-    }
-  });
-
-  $content.appendTo(element);
-};
-
-const renderMessageList = (element) => $('<div>')
-  .addClass(CHAT_MESSAGE_LIST_CLASS)
-  .appendTo(element);
-
-export const renderMessageListInit = (element) => {
-  const $list = renderMessageList(element);
-
-  renderMessageListContent($list);
-};
+export default MessageList;
