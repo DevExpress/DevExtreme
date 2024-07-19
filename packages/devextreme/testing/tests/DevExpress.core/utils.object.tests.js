@@ -188,7 +188,7 @@ QUnit.test('deepExtendArraySafe sets undefined', function(assert) {
 });
 
 
-QUnit.test('deepExtendArraySafe clones array inside object deeply', function(assert) {
+QUnit.test('deepExtendArraySafe copies array into object property deeply', function(assert) {
     const objWithValue = { time: undefined };
     const complexTime = { complexTime: 2 };
     const timeArray = [1, complexTime, 3];
