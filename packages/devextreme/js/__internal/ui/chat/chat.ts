@@ -3,20 +3,22 @@ import $ from '@js/core/renderer';
 import type { Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
-import { renderHeader } from './chat_header';
+import ChatHeader from './chat_header';
 import { renderMessageBox } from './chat_message_box';
 import { renderMessageListInit, setCurrentUserId, setItems } from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
 
-const MOCK_CHAT_HEADER_TEXT = new Date();
 const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 
 class Chat extends Widget<Properties> {
+  _chatHeader?: ChatHeader;
+
   _getDefaultOptions(): Properties {
     return {
       ...super._getDefaultOptions(),
       ...{
+        title: '',
         items: [],
         onMessageSend: undefined,
       },
@@ -34,7 +36,11 @@ class Chat extends Widget<Properties> {
   }
 
   _renderHeader(): void {
-    renderHeader(this.element(), MOCK_CHAT_HEADER_TEXT);
+    const { title } = this.option();
+
+    this._chatHeader = this._createComponent($('<div>'), ChatHeader, { title });
+
+    $(this._chatHeader.element()).appendTo(this.element());
   }
 
   _renderMessageList(): void {
@@ -50,9 +56,12 @@ class Chat extends Widget<Properties> {
   }
 
   _optionChanged(args: Record<string, unknown>): void {
-    const { name } = args;
+    const { name, value } = args;
 
     switch (name) {
+      case 'title':
+        this._chatHeader?.option(name, (value as string));
+        break;
       case 'items':
         break;
       case 'onMessageSend':

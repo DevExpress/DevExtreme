@@ -121,6 +121,7 @@
         <div id="chat"></div>
 
         <script>
+            const MOCK_CHAT_HEADER_TEXT = 'Chat title';
             const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID'
 
             const userFirst = {
@@ -146,9 +147,12 @@
             })
 
             $(() => {
-                $("#chat").dxChat({
+                const dxChat = $("#chat").dxChat({
+                    title: MOCK_CHAT_HEADER_TEXT,
                     items: messages,
-                });
+                }).dxChat('instance');
+
+                dxChat.option({ title: 'New Title' })
             });
         </script>
     </div>
