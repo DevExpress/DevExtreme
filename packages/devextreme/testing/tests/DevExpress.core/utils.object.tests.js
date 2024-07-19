@@ -192,7 +192,7 @@ QUnit.test('deepExtendArraySafe clones array inside object deeply', function(ass
     const objWithValue = { time: undefined };
     const complexTime = { complexTime: 2 };
     const timeArray = [1, complexTime, 3];
-    objectUtils.deepExtendArraySafe(objWithValue, { time: timeArray }, true);
+    objectUtils.deepExtendArraySafe(objWithValue, { time: timeArray }, true, false);
 
     assert.deepEqual(objWithValue.time, timeArray);
     assert.notStrictEqual(objWithValue.time, timeArray);

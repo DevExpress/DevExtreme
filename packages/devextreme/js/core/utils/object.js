@@ -61,7 +61,7 @@ const assignValueToProperty = function(target, property, value, extendComplexObj
 };
 
 // B239679, http://bugs.jquery.com/ticket/9477
-const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference, shouldCopyUndefined) {
+const deepExtendArraySafe = function(target, changes, extendComplexObject, assignByReference = true, shouldCopyUndefined) {
     let prevValue;
     let newValue;
 
@@ -78,13 +78,11 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
             newValue = deepExtendArraySafe(goDeeper ? prevValue : {}, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
 
-        if(Array.isArray(newValue) && !assignByReference) {
-            assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
-        }
-
-        if(shouldCopyUndefined && (prevValue !== newValue || prevValue === undefined)) {
-            assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
-        } else if((newValue !== undefined) && prevValue !== newValue) {
+        if(
+            Array.isArray(newValue) && !assignByReference ||
+            shouldCopyUndefined && (prevValue !== newValue || prevValue === undefined) ||
+            newValue !== undefined && prevValue !== newValue
+        ) {
             assignValueToProperty(target, name, newValue, extendComplexObject, assignByReference, shouldCopyUndefined);
         }
     }
