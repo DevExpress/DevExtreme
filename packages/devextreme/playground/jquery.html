@@ -5,16 +5,32 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <script type="text/javascript">
+        const currentThemeId = localStorage.getItem("currentThemeId") || "light";
+
+        const link = document.createElement("link");
+        link.href = `../artifacts/css/dx.${currentThemeId}.css`;
+        link.type = "text/css";
+        link.rel = "stylesheet";
+
+        document.getElementsByTagName("head")[0].appendChild(link);
+    </script>
+
     <script type="text/javascript" src="../artifacts/js/jquery.js"></script>
+    <script type="text/javascript" src="./themeSelector.js"></script>
     <script type="text/javascript" src="../artifacts/js/dx.all.debug.js" charset="utf-8"></script>
 
     <style>
         .dx-chat {
             display: flex;
             flex-direction: column;
-            width: 400px;
-            height: 600px;
-            border: 1px solid #b3afc8;
+            width: 480px;
+            height: 660px;
+            padding: 20px;
+            border-radius: 24px;
+            box-shadow:
+                0px 0px 2px 0px #0000001F,
+                0px 4px 8px 0px #00000014;
         }
 
         .dx-chat-header {
@@ -100,24 +116,25 @@
 
         .dx-chat-message-box {
             display: flex;
-            height: 65px;
-            border-top: 1px solid rgb(240 240 240);
+            align-items: center;
         }
 
         .dx-chat-message-box-text-area {
             flex-grow: 1;
-            border: none;
-            outline: none;
+            height: 40px;
         }
 
         .dx-chat-message-box-button {
-            border: none;
-            outline: none;
+            margin-left: 8px;
         }
     </style>
 </head>
 <body class="dx-surface">
     <div role="main">
+        <select id="theme-selector" style="display: block;"></select>
+
+        <br />
+
         <div id="chat"></div>
 
         <script>

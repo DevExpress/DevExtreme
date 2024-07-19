@@ -4,7 +4,8 @@ import type { Properties } from '@js/ui/chat';
 
 import Widget from '../widget';
 import ChatHeader from './chat_header';
-import { renderMessageBox } from './chat_message_box';
+import MessageBox from './chat_message_box';
+// import { renderMessageBox } from './chat_message_box';
 import { renderMessageListInit, setCurrentUserId, setItems } from './chat_message_list';
 
 const CHAT_CLASS = 'dx-chat';
@@ -13,6 +14,8 @@ const MOCK_CURRENT_USER_ID = 'CURRENT_USER_ID';
 
 class Chat extends Widget<Properties> {
   _chatHeader?: ChatHeader;
+
+  _messageBox?: MessageBox;
 
   _getDefaultOptions(): Properties {
     return {
@@ -52,7 +55,9 @@ class Chat extends Widget<Properties> {
   }
 
   _renderMessageBox(): void {
-    renderMessageBox(this.element());
+    this._messageBox = this._createComponent($('<div>'), MessageBox, {});
+
+    $(this._messageBox.element()).appendTo(this.element());
   }
 
   _optionChanged(args: Record<string, unknown>): void {

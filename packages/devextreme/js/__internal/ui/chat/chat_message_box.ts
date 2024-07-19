@@ -1,28 +1,47 @@
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import $ from '@js/core/renderer';
+import Button from '@js/ui/button';
+
+import TextArea from '../m_text_area';
+import Widget from '../widget';
 
 const CHAT_MESSAGE_BOX_CLASS = 'dx-chat-message-box';
 const CHAT_MESSAGE_BOX_TEXTAREA_CLASS = 'dx-chat-message-box-text-area';
 const CHAT_MESSAGE_BOX_BUTTON_CLASS = 'dx-chat-message-box-button';
 
-const renderTextArea = ($messageBox) => {
-  const $textArea = $('<textarea>').addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS);
+class MessageBox extends Widget<any> {
+  // TODO chech ts
+  _textArea?: any;
 
-  $textArea.appendTo($messageBox);
-};
+  _button?: Button;
 
-const renderButton = ($messageBox) => {
-  const $button = $('<button>').addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS).text('send');
+  _initMarkup(): void {
+    $(this.element()).addClass(CHAT_MESSAGE_BOX_CLASS);
 
-  $button.appendTo($messageBox);
-};
+    super._initMarkup();
 
-export const renderMessageBox = (element) => {
-  const $messageBox = $('<div>').addClass(CHAT_MESSAGE_BOX_CLASS);
+    this._renderTextArea();
+    this._renderButton();
+  }
 
-  renderTextArea($messageBox);
-  renderButton($messageBox);
+  _renderTextArea(): void {
+    this._textArea = this._createComponent($('<div>'), TextArea, {});
 
-  $messageBox.appendTo(element);
-};
+    $(this._textArea.element())
+      .addClass(CHAT_MESSAGE_BOX_TEXTAREA_CLASS)
+      .appendTo(this.element());
+  }
+
+  _renderButton(): void {
+    this._button = this._createComponent($('<div>'), Button, {
+      icon: 'send',
+      stylingMode: 'text',
+    });
+
+    $(this._button.element())
+      .addClass(CHAT_MESSAGE_BOX_BUTTON_CLASS)
+      .appendTo(this.element());
+  }
+}
+
+export default MessageBox;
