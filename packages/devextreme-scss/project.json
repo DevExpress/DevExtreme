@@ -1,0 +1,38 @@
+{
+  "name": "devextreme-scss",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/devextreme-scss",
+  "projectType": "library",
+  "targets": {
+    "build": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "build"
+      },
+      "inputs": [
+        "{projectRoot}/build/**/*",
+        "{projectRoot}/fonts/**/*",
+        "{projectRoot}/icons/**/*",
+        "{projectRoot}/images/**/*",
+        "{projectRoot}/scss/**/*",
+        "{projectRoot}/gulpfile.js"
+      ],
+      "outputs": [
+        "{projectRoot}/scss/bundles",
+        "{workspaceRoot}/packages/devextreme/artifacts/css"
+      ],
+      "cache": true
+    },
+    "lint": {
+      "executor": "nx:run-script",
+      "options": {
+        "script": "lint"
+      },
+      "inputs": [
+        "{projectRoot}/widgets/**/*"
+      ],
+      "cache": true
+    }
+  },
+  "tags": []
+}

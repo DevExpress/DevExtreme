@@ -55,6 +55,7 @@ if (!devMode) {
 if (devMode) {
     sh.exec('pnpx nx build devextreme-main');
 } else {
+    sh.exec('npm run build -w devextreme-scss', sh);
     sh.exec('pnpx nx build-dist devextreme-main --skipNxCache', {
         env: {
             ...sh.env,
