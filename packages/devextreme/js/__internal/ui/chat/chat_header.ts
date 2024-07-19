@@ -31,8 +31,7 @@ class ChatHeader extends Widget<ChatHeaderOptions> {
 
     $('<p>')
       .addClass(CHAT_HEADER_TEXT_CLASS)
-      // TODO check ts
-      .text(title ?? '')
+      .text((title as any))
       .appendTo(this.element());
   }
 

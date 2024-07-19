@@ -5,7 +5,7 @@ import type { Message } from '@js/ui/chat';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
 
 import Widget from '../widget';
-import { renderMessageBubble } from './chat_message_bubble';
+import MessageBubble from './chat_message_bubble';
 
 const CHAT_MESSAGE_GROUP_CLASS = 'dx-chat-message-group';
 const CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS = 'dx-chat-message-group-alignment-start';
@@ -22,6 +22,8 @@ export interface MessageGroupOptions extends WidgetOptions<MessageGroup> {
 }
 
 class MessageGroup extends Widget<MessageGroupOptions> {
+  _messageBubble?: MessageBubble;
+
   _getDefaultOptions(): MessageGroupOptions {
     return {
       ...super._getDefaultOptions(),
@@ -57,7 +59,11 @@ class MessageGroup extends Widget<MessageGroupOptions> {
 
   _renderMessageBubbles(messages): void {
     messages.forEach((message) => {
-      renderMessageBubble(message, this.element());
+      this._messageBubble = this._createComponent($('<div>'), MessageBubble, {
+        text: message.text,
+      });
+
+      $(this._messageBubble.element()).appendTo(this.element());
     });
   }
 
