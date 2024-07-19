@@ -89,19 +89,6 @@ const deepExtendArraySafe = function(target, changes, extendComplexObject, assig
         }
     }
 
-    if(Array.isArray(target) && !assignByReference) {
-        let changesTarget = changes;
-        if(!assignByReference) {
-            if(Array.isArray(changes)) {
-                changesTarget = [];
-            }
-            if(isObject(changes)) {
-                changesTarget = {};
-            }
-        }
-        return deepExtendArraySafe(changesTarget, changes, extendComplexObject, assignByReference, shouldCopyUndefined);
-    }
-
     return target;
 };
 
