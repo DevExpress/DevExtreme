@@ -203,7 +203,7 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
     let $fixedTable;
     const fixedColumns = this.getFixedColumns();
 
-    this._isFixedColumns = !!fixedColumns.length;
+    this._isFixedColumns = this.isFixedColumns();
     const $table = super._renderTable(options);
 
     if (this._isFixedColumns) {
@@ -488,7 +488,10 @@ const baseFixedColumns = <T extends ModuleType<ColumnsView>>(Base: T) => class B
   }
 
   private isFixedColumns() {
-    return this._isFixedColumns;
+    const fixedColumns = this.getFixedColumns();
+    const legacyMode = this.option('columnFixing.legacyMode');
+
+    return legacyMode === true && !!fixedColumns.length;
   }
 
   protected _resizeCore() {
@@ -1200,6 +1203,7 @@ export const columnFixingModule = {
     return {
       columnFixing: {
         enabled: false,
+        legacyMode: false,
         texts: {
           fix: messageLocalization.format('dxDataGrid-columnFixingFix'),
           unfix: messageLocalization.format('dxDataGrid-columnFixingUnfix'),

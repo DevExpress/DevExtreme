@@ -29,7 +29,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             dataSource: [{ id: 1 }],
             columnHidingEnabled: true,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             columnAutoWidth: true,
             width: 1000,
@@ -469,6 +470,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                         columns: [{ dataField: 'id', width: 1000 }]
                     }).appendTo(container);
                 }
+            },
+            columnFixing: {
+                legacyMode: true
             }
         });
 
@@ -516,6 +520,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 dataField: 'ShipCity',
                 width: 1000
             }],
+            columnFixing: {
+                legacyMode: true
+            },
             masterDetail: {
                 enabled: true,
                 template: function(container) {
@@ -554,7 +561,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
 
         const dataGrid = createDataGrid({
             columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
-            columnFixing: { enabled: true },
+            columnFixing: { enabled: true, legacyMode: true },
             columnAutoWidth: true,
             keyExpr: 'id',
             dataSource: [{ id: 1 }, { id: 2 }],
@@ -563,7 +570,7 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 template: function(container) {
                     nestedDataGrid = $('<div>').appendTo(container).dxDataGrid({
                         columns: [{ dataField: 'field1' }, { dataField: 'field2' }],
-                        columnFixing: { enabled: true },
+                        columnFixing: { enabled: true, legacyMode: true },
                         columnAutoWidth: true,
                         keyExpr: 'id',
                         dataSource: [{ id: 1 }, { id: 2 }],
@@ -633,6 +640,9 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                 cssClass: 'first-column',
                 fixed: true
             }, 'text'],
+            columnFixing: {
+                legacyMode: true
+            },
             masterDetail: {
                 enabled: true,
                 template: masterDetailTemplate
@@ -973,7 +983,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             keyExpr: 'id',
             dataSource: [{ id: 1 }],
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             masterDetail: {
                 enabled: true,
@@ -1046,7 +1057,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             keyExpr: 'id',
             height: 400,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             customizeColumns: function(columns) {
                 columns[0].fixed = true;
@@ -1063,7 +1075,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                             dataSource: getData(),
                             keyExpr: 'id',
                             columnFixing: {
-                                enabled: true
+                                enabled: true,
+                                legacyMode: true
                             },
                             customizeColumns: function(columns) {
                                 columns[0].fixed = true;
@@ -1076,7 +1089,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
                                             dataSource: getData(),
                                             keyExpr: 'id',
                                             columnFixing: {
-                                                enabled: true
+                                                enabled: true,
+                                                legacyMode: true
                                             },
                                             customizeColumns: function(columns) {
                                                 columns[0].fixed = true;
@@ -1142,7 +1156,8 @@ QUnit.module('Master Detail', baseModuleConfig, () => {
             keyExpr: 'id',
             height: 400,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             masterDetail: {
                 enabled: true,

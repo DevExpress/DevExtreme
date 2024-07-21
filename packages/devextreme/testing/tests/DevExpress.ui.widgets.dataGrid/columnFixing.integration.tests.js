@@ -37,7 +37,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 fixed: true
             }],
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             selection: {
                 mode: 'multiple'
@@ -65,7 +66,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 ]
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             filterRow: {
                 visible: true
@@ -111,6 +113,9 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                     { id: 2, value: 'value 2' }
                 ]
             },
+            columnFixing: {
+                legacyMode: true
+            },
             columns: ['id', {
                 dataField: 'value',
                 fixed: true
@@ -132,7 +137,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             loadingTimeout: null,
             columnHidingEnabled: true,
             dataSource: [{ firstName: 'Blablablablablablablablablabla', lastName: 'Psy', age: 40 }],
-            columns: [{ dataField: 'firstName', fixed: true, fixedPosition: 'left' }, 'lastName', 'age']
+            columns: [{ dataField: 'firstName', fixed: true, fixedPosition: 'left' }, 'lastName', 'age'],
+            columnFixing: {
+                legacyMode: true
+            }
         });
         const instance = dataGrid.dxDataGrid('instance');
         const adaptiveColumnsController = instance.getController('adaptiveColumns');
@@ -182,7 +190,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'id', width: 100, fixed: true },
                 'c0',
                 'c1'
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         }).dxDataGrid('instance');
 
         // act
@@ -223,7 +234,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 }
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             columns: [
                 {
@@ -255,7 +267,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'field1', width: 100 },
                 { dataField: 'field2', width: 100 },
                 { dataField: 'field3', width: 100, fixed: true, fixedPosition: 'right' }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
         const instance = $dataGrid.dxDataGrid('instance');
 
@@ -288,7 +303,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'field1', width: 250 },
                 { dataField: 'field2', width: 100 },
                 { dataField: 'field3', width: 100, fixed: true, fixedPosition: 'right' }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
         const instance = $dataGrid.dxDataGrid('instance');
 
@@ -314,7 +332,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'field1', width: 50, fixed: true },
                 { dataField: 'field2', width: 50, allowResizing: false },
                 { dataField: 'field3', width: 50, allowResizing: false }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
 
         // assert
@@ -335,6 +356,9 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                     { field1: 1, field2: 2, field3: 3, fixedField: 4 },
                     { field1: 5, field2: 6, field3: 7, fixedField: 8 }
                 ]
+            },
+            columnFixing: {
+                legacyMode: true
             }
         });
 
@@ -357,7 +381,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'C0', minWidth: 100, fixed: true },
                 { dataField: 'C1', minWidth: 100 },
                 { dataField: 'C2', minWidth: 100 }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
 
         this.clock.tick(10);
@@ -382,6 +409,9 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                     { dataField: 'field2', width: 200 },
                     { dataField: 'field3', width: 50, fixed: true, fixedPosition: 'right' }
                 ],
+                columnFixing: {
+                    legacyMode: true
+                },
                 editing: {
                     allowUpdating: true,
                     mode: 'row'
@@ -424,7 +454,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'field2' },
                 { dataField: 'field3' },
                 { dataField: 'field4', fixed: true, fixedPosition: 'right' }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
 
         const $firstCell = $(dataGrid.getCellElement(0, 0));
@@ -462,7 +495,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 { dataField: 'id', width: 100, fixed: true },
                 { dataField: 'c0', width: 200 },
                 { dataField: 'c1', width: 100 }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         }).dxDataGrid('instance');
 
         // act
@@ -500,7 +536,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             dataSource: [{ field1: '1', field2: '2', field3: '3', field4: '4', field5: '5' }],
             columns: ['field1', 'field2'],
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             selection: {
                 mode: 'multiple'
@@ -533,6 +570,9 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                     { field1: 1, field2: 2, field3: 3, fixedField: 4 },
                     { field1: 4, field2: 5, field3: 3, fixedField: 6 }
                 ]
+            },
+            columnFixing: {
+                legacyMode: true
             }
         });
 
@@ -584,7 +624,10 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                     caption: 'B',
                     columns: ['field5', 'field6']
                 }
-            ]
+            ],
+            columnFixing: {
+                legacyMode: true
+            }
         });
         this.clock.tick(10);
 
@@ -623,7 +666,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             keyExpr: 'id',
             height: 400,
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             columns: [{
                 dataField: 'id',
@@ -680,7 +724,8 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
                 mode: 'virtual',
             },
             columnFixing: {
-                enabled: true
+                enabled: true,
+                legacyMode: true
             },
             selection: {
                 mode: 'multiple'
@@ -714,6 +759,9 @@ QUnit.module('Fixed columns', baseModuleConfig, () => {
             },
             scrolling: {
                 columnRenderingMode: 'virtual',
+            },
+            columnFixing: {
+                legacyMode: true
             }
         }).dxDataGrid('instance');
 
