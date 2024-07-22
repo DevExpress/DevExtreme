@@ -1,5 +1,4 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/explicit-function-return-type */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 import $ from '@js/core/renderer';
 import type { WidgetOptions } from '@js/ui/widget/ui.widget';
@@ -25,7 +24,6 @@ class MessageBubble extends Widget<MessageBubbleOptions> {
   _initMarkup(): void {
     const { text } = this.option();
 
-    // $('<p>')
     $(this.element())
       .addClass(CHAT_MESSAGE_BUBBLE_CLASS)
       .text((text as any));

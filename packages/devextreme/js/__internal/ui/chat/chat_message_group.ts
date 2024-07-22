@@ -34,12 +34,20 @@ class MessageGroup extends Widget<MessageGroupOptions> {
     };
   }
 
-  _initMarkup(): void {
-    const { alignment, messages } = this.option();
+  _getAlignmentClass(): string {
+    const { alignment } = this.option();
 
     const alignmentClass = alignment === 'start'
       ? CHAT_MESSAGE_GROUP_ALIGNMENT_START_CLASS
       : CHAT_MESSAGE_GROUP_ALIGNMENT_END_CLASS;
+
+    return alignmentClass;
+  }
+
+  _initMarkup(): void {
+    const { alignment, messages } = this.option();
+
+    const alignmentClass = this._getAlignmentClass();
 
     $(this.element())
       .addClass(CHAT_MESSAGE_GROUP_CLASS)
@@ -119,6 +127,19 @@ class MessageGroup extends Widget<MessageGroupOptions> {
       .appendTo($avatar);
 
     $avatar.appendTo(this.element());
+  }
+
+  _optionChanged(args: Record<string, unknown>): void {
+    const { name } = args;
+
+    switch (name) {
+      case 'messages':
+      case 'alignment':
+        this._invalidate();
+        break;
+      default:
+        super._optionChanged(args);
+    }
   }
 }
 

@@ -51,11 +51,11 @@ class MessageList extends Widget<MessageListOptions> {
 
     const { items } = this.option();
 
-    let currentMessageGroupUserId = (items?.[0] as any).author.id;
+    let currentMessageGroupUserId = (items?.[0] as any)?.author.id;
     let currentMessageGroupItems: any = [];
 
     items?.forEach((item, index) => {
-      const { id } = (item as any).author;
+      const id = (item as any)?.author.id;
 
       if (id === currentMessageGroupUserId) {
         currentMessageGroupItems.push(item);
